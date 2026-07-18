@@ -1,6 +1,44 @@
-# Agent Skills Curated
+# Agent Autonomy Harness
 
 English | [简体中文](README.zh-CN.md)
+
+An agent-neutral autonomy, collaboration, and capability-orchestration harness.
+Its north star is to move Agent learning, capability selection, resource
+scheduling, context continuity, and engineering coordination out of the user's
+head so the user can focus on creation, decisions, and bounded authorization.
+
+## Current phase
+
+This private repository was bootstrapped on 2026-07-18 from the complete Git
+history of `agent-skills-curated`. The inherited capability-curation system is
+preserved below as the first governed component and evidence base; it is not the
+whole product identity.
+
+Current work is research and proof, not a claim that every host already exposes
+the required control surfaces. The first three proof lanes are:
+
+1. context lifecycle -> timely repository-anchored handoff -> same-workspace continuation;
+2. task topology -> branch/worktree judgment -> bounded execution and cleanup;
+3. task-scoped MCP activation -> lease/idle release -> failure recovery.
+
+Native and official capabilities are evaluated first, then maintained external
+implementations, and only then residual-gap authoring. Host approval dialogs
+remain the permission enforcement surface; this project should minimize and
+respect them, not replace them.
+
+## Start here
+
+- [Product north star](docs/strategy/PRODUCT-NORTH-STAR.md)
+- [Research and PoC plan](docs/strategy/RESEARCH-AND-POC-PLAN.md)
+- [Continuation handoff](docs/operations/CONTINUATION.md)
+- [Bootstrap authority record](registry/agent-autonomy-harness-bootstrap-2026-07-18.json)
+
+Run `python -B scripts/verify_bootstrap.py` to verify the new repository identity
+and migration anchors.
+
+---
+
+## Inherited capability-curation component
 
 A public-safe, cross-agent authority for reviewed Skill content, provenance,
 governance evidence, capability topology, and deterministic release manifests.

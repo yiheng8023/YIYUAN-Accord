@@ -1,6 +1,38 @@
-# Agent Skills Curated
+# Agent Autonomy Harness
 
 [English](README.md) | 简体中文
+
+一个跨 Agent 的自治协作与能力编排底座。它的北极星是把 Agent 学习、能力选择、
+资源调度、上下文连续性和工程协作负担从用户头脑中移走，让用户主要聚焦创造、
+决策和有边界的授权。
+
+## 当前阶段
+
+本私有仓库于 2026-07-18 从 `agent-skills-curated` 的完整 Git 历史启动。既有能力
+策展系统作为第一个受治理组件和证据基础完整保留，但它不再代表整个产品身份。
+
+当前阶段是外部调研和可证伪验证，不预先宣称所有 Agent 宿主都提供所需控制面。
+首批三条验证链路是：
+
+1. 上下文生命周期 -> 适时生成仓库锚定交接 -> 同工作区新线程接续；
+2. 任务拓扑 -> 分支/工作树判断 -> 有边界执行和清理；
+3. MCP 按任务启用 -> 租约/空闲释放 -> 故障恢复。
+
+先验证原生与官方能力，再比较成熟外部实现，最后才对确有证据的残余缺口自研。
+宿主原生授权弹窗继续负责权限强制；本项目只应减少并尊重授权交互，不重复造审批系统。
+
+## 从这里开始
+
+- [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md)
+- [外部调研与 PoC 计划](docs/strategy/RESEARCH-AND-POC-PLAN.md)
+- [接续交接](docs/operations/CONTINUATION.md)
+- [启动权威记录](registry/agent-autonomy-harness-bootstrap-2026-07-18.json)
+
+运行 `python -B scripts/verify_bootstrap.py` 可验证新仓库身份和迁移锚点。
+
+---
+
+## 继承的能力策展组件
 
 这是一个公开安全、跨 Agent 的权威仓库，负责经过审查的 Skill 正文、来源、治理证据、
 能力拓扑和确定性发布清单。
