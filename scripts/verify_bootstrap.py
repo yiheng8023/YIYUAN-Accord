@@ -33,6 +33,21 @@ require(document.get("migration", {}).get("sourceCommit") == "a5f4451dcdaf897dc8
 require(document.get("migration", {}).get("sourceRepositoryDeletedByThisTask") is False, "source deletion boundary drifted")
 require(len(document.get("firstProofLanes", [])) == 3, "first proof-lane inventory drifted")
 require(not any(document.get("claimLimits", {}).values()), "an unproven bootstrap claim was promoted")
+require(
+    document.get("codexWorkspaceHandoff")
+    == {
+        "localRepositoryCreated": True,
+        "projectRegisteredInCodex": False,
+        "projectRegistrationToolAvailable": False,
+        "projectScopedContinuationThreadCreated": False,
+    },
+    "Codex workspace handoff boundary drifted",
+)
+require(
+    document.get("verificationState", {}).get("remoteActionsState")
+    == "billing-blocked-jobs-not-started",
+    "remote CI boundary drifted",
+)
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
 readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")

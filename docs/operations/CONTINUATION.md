@@ -40,3 +40,17 @@ for the three PoCs before broad external discovery or implementation.
 - Fresh-session invocation of the source-backed `handoff` Skill remains open.
 - Cross-device equality after CC Switch WebDAV sync remains open.
 - The old GitHub repository has not been deleted by this migration task.
+
+## Host and remote handoff limits observed at bootstrap
+
+The Codex project list did not yet include `C:\Projects\agent-autonomy-harness`,
+and the current app tools expose project listing and project-thread creation but
+no project-registration action. Do not create a projectless scratch substitute.
+Add this existing folder as a Codex project once, then start the continuation as
+a local project thread.
+
+GitHub Actions for bootstrap commit `280a2080e167b32eadafa2cd672a64b63e24b8d4`
+did not start on Ubuntu, Windows, or macOS because GitHub reported failed account
+payments or an insufficient Actions spending limit. Local bootstrap validation,
+the inherited verifier, 366 tests, 105 routing scenarios, manifest checks, and
+topology checks passed. Remote CI remains billing-blocked rather than code-red.

@@ -41,6 +41,19 @@
     "sourceBackedHandoffFreshSessionInvocationProven": false,
     "ccSwitchCrossDeviceEqualityProven": false
   },
+  "codexWorkspaceHandoff": {
+    "localRepositoryCreated": true,
+    "projectRegisteredInCodex": false,
+    "projectRegistrationToolAvailable": false,
+    "projectScopedContinuationThreadCreated": false
+  },
+  "verificationState": {
+    "bootstrapVerifierPassed": true,
+    "inheritedVerifierPassed": true,
+    "localTestsPassed": 366,
+    "routingScenariosPassed": 105,
+    "remoteActionsState": "billing-blocked-jobs-not-started"
+  },
   "continuation": "docs/operations/CONTINUATION.md",
   "verification": "scripts/verify_bootstrap.py"
 }
