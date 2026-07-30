@@ -2103,7 +2103,39 @@ continued before and after those events but did not record a Skill-state
 change. This supports an explicit host-toggle event rather than automatic
 session synchronization; the log does not identify the actor.
 No CC Switch row, Skill, link, global configuration, or user-level state was
-changed. Restoring the prior Codex-only shadow-disable remains an explicit
-mutation gate; until that decision is supplied, do not refresh the
-fourteen-item transaction baseline or calculate a sequential five-item backup
-rotation as if the prior state still held.
+changed. At this checkpoint, restoring the prior CC Switch Codex flags was
+treated as an explicit mutation gate. The canonical-identity checkpoint below
+supersedes that proposed mutation after stronger official implementation
+evidence showed the existing Codex host-disable still applies.
+
+## 2026-07-31 layered doc/pdf identity and fourteen-preflight refresh checkpoint
+
+The prior `doc`/`pdf` diagnosis conflated manager projection state with Codex
+host enablement. Current CC Switch rows and private Codex aliases are enabled,
+but the two official `skills.config enabled=false` entries remain in the Codex
+configuration.
+
+Pinned OpenAI Codex `rust-v0.146.0` source closes the identity question:
+
+- path-based Skill config selectors are canonicalized;
+- discovered `SKILL.md` paths are canonicalized;
+- merged Skill roots deduplicate by canonical `path_to_skills_md`.
+
+The common-root and private Codex aliases therefore resolve to the same
+CC-owned identities, and the existing two disabled selectors continue to
+apply. Alias presence alone does not prove duplicate host exposure. No
+CC Switch toggle, config write, restart, separate app-server, task, turn, or
+model request was needed.
+
+The live preflight now accepts either no private alias or a complete pair of
+private aliases resolving to the protected CC trees, while still requiring
+both canonical host-disable rows. The refreshed contract is:
+
+- `registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json`;
+- `docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-31.md`.
+
+The current read-only preflight passes with 55 database rows, 55 CC trees,
+57 Codex-root entries, 20 backups, all fourteen targets, and
+`docPdfPolicyMode=canonical-host-disable`. It remains a point-in-time drift
+gate and authorizes no uninstall or other mutation. A fresh separate
+app-server exposure result is not claimed.

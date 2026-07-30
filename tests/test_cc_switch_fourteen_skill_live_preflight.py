@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from scripts.preflight_cc_switch_fourteen_skill_subtraction import (
+    ROOT,
     SAFE_SKILL_COLUMNS,
     _tree_identity,
     capture_live_state,
@@ -254,6 +255,41 @@ def make_documents() -> tuple[
 
 
 class CcSwitchFourteenSkillLivePreflightTests(unittest.TestCase):
+    def test_layered_doc_pdf_refresh_contract_document_passes(self) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "registry"
+                / "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json"
+            ).read_text(encoding="utf-8")
+        )
+
+        try:
+            validate_contract_document(document, root=ROOT)
+        except RuntimeError as error:
+            self.fail(f"layered doc/pdf refresh document should pass: {error}")
+
+    def test_accepts_layered_doc_pdf_refresh_contract_identity(self) -> None:
+        _, contract, _, _, _ = make_documents()
+        contract["id"] = (
+            "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31"
+        )
+        contract["status"] = (
+            "read-only-fail-closed-preflight-ready-layered-doc-pdf-override"
+        )
+        contract["mutationAuthority"].update(
+            {
+                "globalCodexConfigMutation": False,
+                "codexDesktopRestart": False,
+                "separateAppServerStart": False,
+            }
+        )
+
+        try:
+            validate_contract_document(contract)
+        except RuntimeError as error:
+            self.fail(f"layered doc/pdf refresh contract should be valid: {error}")
+
     def test_synthetic_current_state_passes(self) -> None:
         state, contract, refresh, first_party, portfolio = make_documents()
         result = validate_live_state(
@@ -349,6 +385,36 @@ class CcSwitchFourteenSkillLivePreflightTests(unittest.TestCase):
                 first_party=first_party,
                 portfolio=portfolio,
             )
+
+    def test_accepts_codex_aliases_under_canonical_host_disable(self) -> None:
+        state, contract, refresh, first_party, portfolio = make_documents()
+        for name in ("doc", "pdf"):
+            state["projections"]["codex"]["entries"][name] = {
+                "path": f"C:/fixture/.codex/skills/{name}",
+                "kind": "symlink",
+                "resolvedTarget": f"C:/fixture/.cc-switch/skills/{name}",
+                "resolvableDirectory": True,
+                "skillMdResolvable": True,
+                "fileCount": 1,
+                "bytes": len(name),
+                "treeManifestSha256": f"tree-{name}",
+            }
+        state["projections"]["codex"]["entryCount"] += 2
+        contract["expectedFingerprints"] = copy.deepcopy(state["fingerprints"])
+
+        try:
+            result = validate_live_state(
+                state,
+                contract=contract,
+                refresh=refresh,
+                first_party=first_party,
+                portfolio=portfolio,
+            )
+        except RuntimeError as error:
+            self.fail(f"canonical host disable should accept Codex aliases: {error}")
+
+        self.assertEqual(result["status"], "pass")
+        self.assertEqual(result["docPdfPolicyMode"], "canonical-host-disable")
 
     def test_tree_identity_uses_case_insensitive_path_order(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

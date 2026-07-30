@@ -1215,6 +1215,8 @@ REQUIRED_FILES = (
     "tests/test_cc_switch_fourteen_skill_subtraction_preview_319_refresh.py",
     "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json",
     "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-30.md",
+    "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json",
+    "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-31.md",
     "scripts/preflight_cc_switch_fourteen_skill_subtraction.py",
     "tests/test_cc_switch_fourteen_skill_live_preflight.py",
     "registry/cc-switch-fourteen-skill-subtraction-preview-2026-07-30.json",
@@ -1867,6 +1869,9 @@ def verify() -> None:
     )
     cc_switch_fourteen_skill_live_preflight_contract_doc = load(
         "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json"
+    )
+    cc_switch_fourteen_skill_live_preflight_contract_layered_doc_pdf_doc = load(
+        "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json"
     )
     cc_switch_fourteen_skill_subtraction_preview_doc = load(
         "registry/cc-switch-fourteen-skill-subtraction-preview-2026-07-30.json"
@@ -2827,6 +2832,10 @@ def verify() -> None:
     )
     validate_cc_switch_fourteen_skill_live_preflight_contract(
         cc_switch_fourteen_skill_live_preflight_contract_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_fourteen_skill_live_preflight_contract(
+        cc_switch_fourteen_skill_live_preflight_contract_layered_doc_pdf_doc,
         root=ROOT,
     )
     validate_cc_switch_fourteen_skill_subtraction_preview(

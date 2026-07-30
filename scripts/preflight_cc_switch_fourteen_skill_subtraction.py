@@ -28,7 +28,7 @@ REFRESH_PATH = (
 CONTRACT_PATH = (
     ROOT
     / "registry"
-    / "cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json"
+    / "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json"
 )
 FIRST_PARTY_PATH = (
     ROOT
@@ -314,22 +314,45 @@ def validate_contract_document(
     *,
     root: Path | None = None,
 ) -> None:
-    _require(
-        contract.get("schema") == 1
-        and contract.get("id")
-        == "cc-switch-fourteen-skill-live-preflight-contract-2026-07-30"
-        and contract.get("status") == "read-only-fail-closed-preflight-ready",
-        "fourteen-Skill live preflight contract identity drifted",
+    is_layered_refresh = (
+        contract.get("id")
+        == "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31"
     )
     _require(
-        contract.get("mutationAuthority")
-        == {
-            "ccSwitchMutation": False,
-            "hostProjectionMutation": False,
-            "recoveryArchiveCreation": False,
-            "remoteSnapshot": False,
-            "gitCommitOrPush": False,
+        contract.get("schema") == 1
+        and (
+            contract.get("id"),
+            contract.get("status"),
+        )
+        in {
+            (
+                "cc-switch-fourteen-skill-live-preflight-contract-2026-07-30",
+                "read-only-fail-closed-preflight-ready",
+            ),
+            (
+                "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31",
+                "read-only-fail-closed-preflight-ready-layered-doc-pdf-override",
+            ),
         },
+        "fourteen-Skill live preflight contract identity drifted",
+    )
+    expected_mutation_authority = {
+        "ccSwitchMutation": False,
+        "hostProjectionMutation": False,
+        "recoveryArchiveCreation": False,
+        "remoteSnapshot": False,
+        "gitCommitOrPush": False,
+    }
+    if is_layered_refresh:
+        expected_mutation_authority.update(
+            {
+                "globalCodexConfigMutation": False,
+                "codexDesktopRestart": False,
+                "separateAppServerStart": False,
+            }
+        )
+    _require(
+        contract.get("mutationAuthority") == expected_mutation_authority,
         "fourteen-Skill live preflight mutation boundary drifted",
     )
     fingerprints = contract.get("expectedFingerprints", {})
@@ -359,53 +382,146 @@ def validate_contract_document(
         "fourteen-Skill live preflight claim boundary drifted",
     )
     if root is not None:
-        _require(
-            contract.get("inputs")
-            == {
-                "managerRefresh": "registry/cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30.json",
-                "firstPartyCollisionSentinels": "registry/self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30.json",
-                "portfolioPartition": "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
-                "runtime": "scripts/preflight_cc_switch_fourteen_skill_subtraction.py",
+        expected_inputs = {
+            "managerRefresh": "registry/cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30.json",
+            "firstPartyCollisionSentinels": "registry/self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30.json",
+            "portfolioPartition": "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
+            "runtime": "scripts/preflight_cc_switch_fourteen_skill_subtraction.py",
+        }
+        if is_layered_refresh:
+            expected_inputs["priorHostDisableTransaction"] = (
+                "registry/codex-common-root-doc-pdf-host-disable-transaction-2026-07-30.json"
+            )
+        expected_claims = {
+            "provesCurrentReadOnlyPreflightCanPass": False,
+            "provesFuturePreflightWillPass": False,
+            "provesAtomicManagerTransaction": False,
+            "provesRollbackExecution": False,
+            "provesRemoteSnapshot": False,
+            "provesMutationAuthorization": False,
+        }
+        if is_layered_refresh:
+            expected_claims = {
+                "currentReadOnlyPreflightPassed": True,
+                "canonicalHostDisableMechanismSourceProved": True,
+                "freshCurrentHostExposureStateProved": False,
+                "futurePreflightWillPass": False,
+                "atomicManagerTransactionProved": False,
+                "rollbackExecutionProved": False,
+                "remoteSnapshotProved": False,
+                "mutationAuthorizationProved": False,
             }
+        _require(
+            contract.get("inputs") == expected_inputs
             and all(contract.get("identitySurfaces", {}).values())
             and all(contract.get("semanticChecks", {}).values())
             and contract.get("mustStopIfAnyFingerprintOrSemanticCheckFails")
             is True
-            and all(
-                value is False
-                for value in contract.get("claimBoundary", {}).values()
-            ),
+            and contract.get("claimBoundary") == expected_claims,
             "fourteen-Skill live preflight governed surfaces drifted",
         )
         summary = contract.get("observedSummary", {})
+        expected_projection_counts = {
+            "ccSwitch": 55,
+            "agents": 41,
+            "claude": 55,
+            "codex": 57 if is_layered_refresh else 55,
+        }
         _require(
             summary.get("managerBinaryBytes") == 32584192
             and summary.get("databaseRows") == 55
             and summary.get("databaseDistinctNames") == 55
             and summary.get("ccSkillTrees") == 55
-            and summary.get("projectionEntryCounts")
-            == {"ccSwitch": 55, "agents": 41, "claude": 55, "codex": 55}
+            and summary.get("projectionEntryCounts") == expected_projection_counts
             and summary.get("backupCount") == 20
             and summary.get("targetCount") == 14
             and summary.get("firstPartyPhysicalSentinelCount") == 3
             and summary.get("mattPromotedSentinelCount") == 22
-            and summary.get("docPdfPolicySentinelCount") == 2,
+            and summary.get("docPdfPolicySentinelCount") == 2
+            and (
+                not is_layered_refresh
+                or summary.get("docPdfPolicyMode") == "canonical-host-disable"
+            ),
             "fourteen-Skill live preflight observed summary drifted",
         )
+        if is_layered_refresh:
+            official = contract.get("officialCodexIdentityEvidence", {})
+            _require(
+                official.get("release") == "rust-v0.146.0"
+                and official.get("configPathSelectorCanonicalized") is True
+                and official.get("discoveredSkillPathCanonicalized") is True
+                and official.get(
+                    "mergedSkillsDeduplicatedByCanonicalPathToSkillsMd"
+                )
+                is True
+                and official.get("manualDocumentsPathBasedEnablementOverride")
+                is True
+                and all(
+                    str(official.get(key, "")).startswith(
+                        "https://github.com/openai/codex/blob/rust-v0.146.0/"
+                    )
+                    for key in (
+                        "configRulesSource",
+                        "loaderSource",
+                        "rootLoaderSource",
+                    )
+                ),
+                "fourteen-Skill live preflight official identity evidence drifted",
+            )
+            layered = contract.get("docPdfLayeredOverride", {})
+            _require(
+                layered.get("ccSwitchCodexEnabled") == ["doc", "pdf"]
+                and layered.get("codexPrivateAliasesPresent") == ["doc", "pdf"]
+                and layered.get("agentsConfigRows")
+                == [
+                    {
+                        "path": "C:/Users/15521/.agents/skills/doc/SKILL.md",
+                        "enabled": False,
+                    },
+                    {
+                        "path": "C:/Users/15521/.agents/skills/pdf/SKILL.md",
+                        "enabled": False,
+                    },
+                ]
+                and layered.get("allAliasesResolveToCcOwnedTrees") is True
+                and layered.get("hostDisableMatchesCanonicalCcSkillIdentity")
+                is True
+                and layered.get(
+                    "managerProjectionAndHostEnablementAreSeparateLayers"
+                )
+                is True
+                and layered.get("freshSeparateAppServerExposureProbeRun") is False,
+                "fourteen-Skill live preflight layered override drifted",
+            )
         documentation = contract.get("documentation")
+        expected_documentation = (
+            "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-31.md"
+            if is_layered_refresh
+            else "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-30.md"
+        )
         _require(
-            documentation
-            == "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-30.md",
+            documentation == expected_documentation,
             "fourteen-Skill live preflight documentation binding drifted",
         )
         text = (root / documentation).read_text(encoding="utf-8")
-        for phrase in (
-            "repeatable live preflight",
-            "whole-state fingerprint is not a transaction lock",
-            "case-insensitively",
-            "Protected sentinels",
-            "does not authorize uninstall",
-        ):
+        expected_phrases = (
+            (
+                "canonical `path_to_skills_md`",
+                "Manager projection state and Codex host enablement are separate layers.",
+                "no fresh separate app-server",
+                "point-in-time gate",
+                "does not prove",
+            )
+            if is_layered_refresh
+            else (
+                "repeatable live preflight",
+                "whole-state fingerprint is not a transaction lock",
+                "case-insensitively",
+                "Protected sentinels",
+                "does not authorize uninstall",
+            )
+        )
+        for phrase in expected_phrases:
             _require(
                 phrase in text,
                 f"fourteen-Skill live preflight documentation missing: {phrase}",
@@ -536,21 +652,37 @@ def validate_live_state(
         "Matt promoted 22-row sentinel drifted",
     )
 
+    codex_doc_pdf_aliases: list[str] = []
     for name in ("doc", "pdf"):
         cc_entry = state["projections"]["ccSwitch"]["entries"].get(name)
         agents_entry = state["projections"]["agents"]["entries"].get(name)
         claude_entry = state["projections"]["claude"]["entries"].get(name)
         codex_entry = state["projections"]["codex"]["entries"].get(name)
+        expected_target = cc_entry["path"].casefold() if cc_entry is not None else ""
+        if codex_entry is not None:
+            codex_doc_pdf_aliases.append(name)
         _require(
             cc_entry is not None
             and cc_entry["kind"] == "physical"
             and agents_entry is not None
             and agents_entry["kind"] == "symlink"
+            and agents_entry["resolvedTarget"].casefold() == expected_target
             and claude_entry is not None
             and claude_entry["kind"] == "symlink"
-            and codex_entry is None,
+            and claude_entry["resolvedTarget"].casefold() == expected_target
+            and (
+                codex_entry is None
+                or (
+                    codex_entry["kind"] == "symlink"
+                    and codex_entry["resolvedTarget"].casefold() == expected_target
+                )
+            ),
             f"doc/pdf carrier sentinel drifted: {name}",
         )
+    _require(
+        len(codex_doc_pdf_aliases) in (0, 2),
+        "doc/pdf Codex alias set is partial",
+    )
     config_rows = state["codexSkillConfig"]["docPdfRows"]
     _require(
         len(config_rows) == 2
@@ -574,6 +706,11 @@ def validate_live_state(
         "mattPromotedSentinelCount": len(matt_rows),
         "firstPartyPhysicalSentinelCount": len(first_party["packages"]),
         "docPdfPolicySentinelCount": 2,
+        "docPdfPolicyMode": (
+            "canonical-host-disable"
+            if codex_doc_pdf_aliases
+            else "common-root-only-host-disable"
+        ),
         "authorizesMutation": False,
         "pointInTimeOnly": True,
     }
