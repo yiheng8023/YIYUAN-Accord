@@ -1973,3 +1973,26 @@ verifies the result, and asks the user only at a genuine permission, trust,
 cost, shared-ownership, destructive, or host-observability boundary. No cause
 or release claim is accepted without repeated same-workload and idle-control
 telemetry.
+
+## 2026-07-31 Agent resource-pressure attribution continuation checkpoint
+
+The resource-pressure direction now has a machine-checked offline contract:
+
+- `registry/agent-resource-pressure-attribution-protocol-2026-07-31.json`;
+- `scripts/evaluate_agent_resource_pressure_attribution.py`;
+- `tests/fixtures/agent-resource-pressure-attribution-fixtures-2026-07-31.json`;
+- `scripts/validate_agent_resource_pressure_attribution_protocol.py`;
+- 26 deterministic zero-model cases plus unit and protocol tests.
+
+The contract reuses the context-pressure advisory and MCP task-lifecycle
+contracts. It does not treat "zombie thread" as a single state and does not
+infer pressure from persisted-thread count or release from task completion.
+Autonomous action is eligible only inside existing authority with a real host
+actuator, reversibility, bound verification, and no new permission, cost,
+destructive, or shared-owner boundary.
+
+This is not live host telemetry, causation, resource saving, release, weak-Agent
+acceptance, cross-host parity, or proof that a self-authored controller is
+needed. Resume with the validator and targeted tests, then full
+`scripts/verify.py`. Any live observation or actuation needs its own exact
+host, workload, authority, metric, rollback, and claim boundary.

@@ -190,6 +190,9 @@ from validate_mcp_thread_creator_close_observer_acquisition_path_admission impor
 from validate_mcp_thread_creator_connection_close_auto_attach_v2 import (
     load_and_validate as validate_mcp_thread_creator_connection_close_auto_attach_v2,
 )
+from validate_agent_resource_pressure_attribution_protocol import (
+    validate_protocol as validate_agent_resource_pressure_attribution_protocol,
+)
 from assess_process_fidelity_raw_event_trace_eligibility import (
     validate_evidence as validate_process_fidelity_raw_event_trace_eligibility,
 )
@@ -467,6 +470,12 @@ REQUIRED_FILES = (
     "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json",
     "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
     "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+    "scripts/evaluate_agent_resource_pressure_attribution.py",
+    "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json",
+    "tests/fixtures/agent-resource-pressure-attribution-fixtures-2026-07-31.json",
+    "scripts/validate_agent_resource_pressure_attribution_protocol.py",
+    "tests/test_agent_resource_pressure_attribution.py",
+    "tests/test_agent_resource_pressure_attribution_protocol.py",
     "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json",
     "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
     "docs/closeout-cleanup-debt-preview-2026-07-24.md",
@@ -1322,6 +1331,7 @@ REQUIRED_FILES = (
     "docs/strategy/EXPERIMENT-CONTRACT-REUSE-MAP-2026-07-23.md",
     "docs/context-evidence-envelope-2026-07-23.md",
     "docs/context-pressure-advisory-contract-2026-07-23.md",
+    "docs/strategy/AGENT-RESOURCE-PRESSURE-ATTRIBUTION-PROTOCOL-2026-07-31.md",
     "docs/git-host-authorization-trial-contract-2026-07-23.md",
     "docs/skill-ablation-batch-01-selection-2026-07-19.md",
     "docs/skill-ablation-batch-01-protocol-2026-07-19.md",
@@ -1791,6 +1801,9 @@ def verify() -> None:
     )
     mcp_task_lifecycle_contract_doc = load("registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json")
     mcp_task_lifecycle_fixture_doc = load("tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json")
+    agent_resource_pressure_attribution_protocol_doc = load(
+        "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json"
+    )
     skill_portfolio_closeout_gate_doc = load("registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json")
     skill_portfolio_closeout_inventory_doc = load("registry/skill-portfolio-and-closeout-inventory-2026-07-19.json")
     skill_runtime_and_cc_count_drift_snapshot_doc = load(
@@ -2722,6 +2735,11 @@ def verify() -> None:
     validate_mcp_task_lifecycle_evidence_contract(
         mcp_task_lifecycle_contract_doc,
         mcp_task_lifecycle_fixture_doc,
+    )
+    validate_agent_resource_pressure_attribution_protocol(
+        agent_resource_pressure_attribution_protocol_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
     )
     validate_skill_portfolio_and_closeout_gate(skill_portfolio_closeout_gate_doc)
     validate_skill_portfolio_and_closeout_inventory(skill_portfolio_closeout_inventory_doc)

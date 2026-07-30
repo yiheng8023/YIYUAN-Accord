@@ -1434,3 +1434,30 @@ Future temporary roots must be isolated, ignored by Git, and removed or
 promoted into compact governed evidence before a checkpoint. The broader final
 program cleanup gate remains partial and must be re-run at final program
 closeout across all separately bound repositories and external state.
+
+## Agent resource-pressure attribution checkpoint — 2026-07-31
+
+The product target is now explicit: within existing authority, the Agent
+should observe its effective workload, attribute resource pressure, choose the
+smallest reversible scheduling or release action, actuate through a real host
+surface, verify release, and retain cleanup debt. The user should not need to
+learn or manually operate thread, worker, MCP, process, or context mechanics.
+Human input remains necessary only at a new permission or trust boundary,
+shared-owner conflict, destructive scope, meaningful cost, unverifiable
+action, or material host-observability boundary.
+
+The
+[offline attribution protocol](AGENT-RESOURCE-PRESSURE-ATTRIBUTION-PROTOCOL-2026-07-31.md)
+reuses the existing context-pressure advisory and MCP task-lifecycle evidence
+contracts. It separates context, active turn, loaded thread, persisted thread,
+subagent worker, MCP connection, MCP subscription, child process, and host
+cache or renderer identities. Twenty-six zero-model fixtures reject collapsed
+"zombie thread" causation, persisted-thread-count shortcuts, task-completion
+as resource release, missing action receipts, and authority expansion.
+
+This checkpoint adds a decision and falsification layer only. It performs no
+live host read or actuation and does not justify a new supervisor, scheduler,
+Hook, MCP gateway, or self-authored controller. The next gate is a separately
+authorized same-workload read-only observation with exact identities, three
+repetitions, idle and concurrent controls, cancellation, bounded metrics, and
+release-latency evidence.

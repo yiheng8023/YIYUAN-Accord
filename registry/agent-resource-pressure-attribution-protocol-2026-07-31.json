@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "id": "agent-resource-pressure-attribution-protocol-2026-07-31",
+  "date": "2026-07-31",
+  "status": "offline-synthetic-resource-pressure-attribution-and-autonomy-decision-contract-live-not-tested",
+  "evaluator": "scripts/evaluate_agent_resource_pressure_attribution.py",
+  "fixtures": "tests/fixtures/agent-resource-pressure-attribution-fixtures-2026-07-31.json",
+  "validator": "scripts/validate_agent_resource_pressure_attribution_protocol.py",
+  "verification": [
+    "tests/test_agent_resource_pressure_attribution.py",
+    "tests/test_agent_resource_pressure_attribution_protocol.py"
+  ],
+  "documentation": "docs/strategy/AGENT-RESOURCE-PRESSURE-ATTRIBUTION-PROTOCOL-2026-07-31.md",
+  "reuses": [
+    "registry/context-pressure-advisory-contract-2026-07-23.json",
+    "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
+    "docs/strategy/RUNTIME-CAPABILITY-AND-AGENT-LIFECYCLE-ECOSYSTEM-RESEARCH-2026-07-30.md"
+  ],
+  "resourceTypes": [
+    "context",
+    "active-turn",
+    "loaded-thread",
+    "persisted-thread",
+    "subagent-worker",
+    "mcp-connection",
+    "mcp-subscription",
+    "child-process",
+    "host-cache-renderer"
+  ],
+  "stateModel": [
+    "observe",
+    "separate-identities-and-owners",
+    "measure",
+    "attribute-pressure",
+    "decide",
+    "actuate-only-with-existing-authority",
+    "verify-release",
+    "record-cleanup-debt"
+  ],
+  "minimumAttributionEvidence": {
+    "scenarioAndProfiles": [
+      "scenarioBound",
+      "hostProfilePinned",
+      "workloadProfilePinned"
+    ],
+    "identityAndOwnership": [
+      "candidateResourceTypes",
+      "exactResourceIdentityRecorded",
+      "ownerOrLeaseRecorded",
+      "lifecycleStatesSeparated"
+    ],
+    "measurement": [
+      "metricAvailabilityDeclared",
+      "metricClassesRecorded",
+      "timeSeriesRecorded",
+      "lifecycleInventoryRecorded",
+      "measurementUnitsBound",
+      "sampleWindowBounded",
+      "repeatCount>=3",
+      "idleControlRecorded",
+      "concurrentArmRecorded",
+      "cancellationArmRecorded",
+      "releaseLatencyRecorded"
+    ],
+    "pressureAttribution": [
+      "pressureObservedAcrossRepeats",
+      "candidateResourceDeltaCorrelated",
+      "confoundersControlled"
+    ],
+    "releaseAttribution": [
+      "releaseActionBound",
+      "prePostActionStateRecorded",
+      "releaseReceiptRecorded",
+      "resourceReleaseObserved",
+      "sharedOwnerConflict=false"
+    ]
+  },
+  "autonomyDecisionPolicy": {
+    "automaticWithinExistingAuthorityRequires": [
+      "pressureAttributionEligible",
+      "existingAuthority",
+      "hostActuationAvailable",
+      "verificationSurfaceBound",
+      "actionReversible",
+      "newPermissionRequired=false",
+      "sharedOwnerConflict=false",
+      "destructiveScope=false",
+      "meaningfulCostIncrease=false"
+    ],
+    "askUserOnlyFor": [
+      "new-permission-or-trust-boundary",
+      "shared-owner-conflict",
+      "destructive-scope",
+      "meaningful-cost-increase",
+      "missing-existing-authority",
+      "action-not-safely-verifiable"
+    ],
+    "hostActuationUnavailableOutcome": "advisory-only",
+    "taskCompletionIsResourceRelease": false,
+    "persistedThreadCountAloneProvesPressure": false,
+    "zombieThreadIsOneRuntimeState": false
+  },
+  "authorityBoundary": {
+    "hostStateReadAuthorizedByThisProtocol": false,
+    "runtimeActuationAuthorizedByThisProtocol": false,
+    "threadOrWorkerMutationAuthorized": false,
+    "mcpOrProcessMutationAuthorized": false,
+    "hookOrGlobalConfigurationMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "installationOrThirdPartyExecutionAuthorized": false,
+    "selfAuthoredControllerImplementationAuthorized": false
+  },
+  "claimBoundary": {
+    "countsAsLiveHostProof": false,
+    "countsAsWeakAgentAcceptance": false,
+    "countsAsSelfAuthoredControllerGapEvidence": false,
+    "provesZombieThreadsAreMainCause": false,
+    "provesResourceSavings": false,
+    "provesCrossHostParity": false,
+    "provesRuntimeRelease": false
+  },
+  "nextGate": "Run a separately authorized read-only same-workload host observation with three repeats, idle and concurrent controls, cancellation, exact identities, bounded metrics, and release-latency evidence before any live attribution or actuator trial."
+}

@@ -742,7 +742,8 @@
         "evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27",
         "evidence.mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27",
         "evidence.mcp-thread-creator-connection-close-auto-attach-v2-offline-amendment-2026-07-27",
-        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30"
+        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
+        "evidence.agent-resource-pressure-attribution-protocol-2026-07-31"
       ]
     },
     {
@@ -1514,6 +1515,15 @@
         "acceptance.residual-gap-proof",
         "acceptance.dynamic-runtime-control-gap-research",
         "acceptance.discovery-reuse-before-authoring"
+      ]
+    },
+    {
+      "id": "evidence.agent-resource-pressure-attribution-protocol-2026-07-31",
+      "path": "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json",
+      "kind": "offline-synthetic-agent-resource-pressure-attribution-and-bounded-autonomy-decision-contract-no-live-or-implementation-authority",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.dynamic-runtime-control-gap-research"
       ]
     },
     {
