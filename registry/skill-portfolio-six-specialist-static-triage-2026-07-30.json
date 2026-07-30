@@ -41,6 +41,14 @@
     "allSixCurrentlyCodexExposed": true,
     "noNewModelRequestSent": true
   },
+  "treeIdentityContract": {
+    "staticTriageAlgorithm": "aah-tree-manifest-tsv-v1",
+    "staticTriageRecordEncoding": "relativePath UTF-8 + TAB + byteCount ASCII + TAB + fileSha256 ASCII; LF between casefold-then-codepoint ordered records",
+    "livePreflightAlgorithm": "aah-tree-manifest-nul-v1",
+    "livePreflightRecordEncoding": "relativePath UTF-8 + NUL + byteCount ASCII + NUL + fileSha256 ASCII; LF between casefold-then-codepoint ordered records",
+    "directDigestComparisonAllowed": false,
+    "comparisonRule": "Re-encode the same ordered file records with one declared algorithm before comparing digests."
+  },
   "primarySourceRefresh": {
     "openaiSkills": {
       "repository": "https://github.com/openai/skills",

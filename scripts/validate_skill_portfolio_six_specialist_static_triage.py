@@ -89,6 +89,19 @@ def validate_triage(
         and live.get("noNewModelRequestSent") is True,
         "Six-specialist live-state evidence drifted",
     )
+    tree_identity = document.get("treeIdentityContract", {})
+    _require(
+        tree_identity
+        == {
+            "staticTriageAlgorithm": "aah-tree-manifest-tsv-v1",
+            "staticTriageRecordEncoding": "relativePath UTF-8 + TAB + byteCount ASCII + TAB + fileSha256 ASCII; LF between casefold-then-codepoint ordered records",
+            "livePreflightAlgorithm": "aah-tree-manifest-nul-v1",
+            "livePreflightRecordEncoding": "relativePath UTF-8 + NUL + byteCount ASCII + NUL + fileSha256 ASCII; LF between casefold-then-codepoint ordered records",
+            "directDigestComparisonAllowed": False,
+            "comparisonRule": "Re-encode the same ordered file records with one declared algorithm before comparing digests.",
+        },
+        "Six-specialist tree identity contract drifted",
+    )
     refresh = document.get("primarySourceRefresh", {})
     openai = refresh.get("openaiSkills", {})
     _require(

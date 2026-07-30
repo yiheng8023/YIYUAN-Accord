@@ -2076,3 +2076,28 @@ Do not start a separate app-server, mutate tasks, or infer ownership from
 persisted sessions, timestamps, process cohorts, or UI labels. Prefer a
 supported Desktop bridge. An isolated same-version no-model lifecycle trial
 requires separate authorization.
+
+## 2026-07-31 specialist tree-identity reconciliation checkpoint
+
+The six-specialist static triage and the fourteen-Skill live preflight used
+different record encodings for their tree-manifest digests. The static triage
+used TAB between relative path, byte count, and file hash; the live preflight
+used NUL. Both used LF between casefold-then-codepoint ordered records. The
+five removal-preview candidates still match their static `SKILL.md` hashes,
+file counts, byte counts, database content hashes, and CC-owned host links, but
+the two tree digests are not directly comparable.
+
+`registry/skill-portfolio-six-specialist-static-triage-2026-07-30.json` now
+binds both algorithms, forbids direct cross-algorithm comparison, and requires
+future previews to re-encode one ordered record set with one declared
+algorithm. The validator rejects an unlabeled tree identity; the targeted
+eight-test module and full `scripts/verify.py` pass.
+
+The live fourteen-Skill whole-state preflight currently fails closed because
+`doc` and `pdf` are again Codex-enabled and their Codex links are present.
+That is a database/projection baseline drift, not a five-candidate failure.
+No CC Switch row, Skill, link, global configuration, or user-level state was
+changed. Restoring the prior Codex-only shadow-disable remains an explicit
+mutation gate; until that decision is supplied, do not refresh the
+fourteen-item transaction baseline or calculate a sequential five-item backup
+rotation as if the prior state still held.

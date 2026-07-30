@@ -35,6 +35,21 @@ metadata. The dated current-55 no-model inventory already proves that all six
 are exposed to Codex inside the 76-item Plugin-enabled inventory. This review
 sent no new model request and executed no candidate body.
 
+### 2026-07-31 tree-identity reconciliation
+
+The static triage and the later live manager preflight used the same ordered
+file records but encoded each record differently before hashing. This document
+used `relativePath<TAB>bytes<TAB>fileSha256`, while the live preflight used
+`relativePath<NUL>bytes<NUL>fileSha256`; both join records with LF after
+case-insensitive path ordering. Their digest strings therefore must not be
+compared directly.
+
+The registry now names both algorithms and forbids direct cross-algorithm
+digest comparison. A future manager preview must re-encode the same file
+records with one declared algorithm before deciding whether a tree drifted.
+Matching file count, total bytes, or `SKILL.md` hash remains supporting
+evidence, not a substitute for that canonical comparison.
+
 ## Source and carrier findings
 
 ### Retain: `obsidian-open-format-knowledge-files`

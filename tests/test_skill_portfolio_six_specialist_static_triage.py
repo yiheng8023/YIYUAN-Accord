@@ -36,6 +36,12 @@ class SkillPortfolioSixSpecialistStaticTriageTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "Disciplined-coding"):
             validate_triage(document, root=ROOT)
 
+    def test_rejects_unlabeled_tree_manifest_identity(self) -> None:
+        document = deepcopy(self.document)
+        document.pop("treeIdentityContract", None)
+        with self.assertRaisesRegex(RuntimeError, "tree identity contract"):
+            validate_triage(document, root=ROOT)
+
     def test_rejects_playwright_runtime_install_overclaim(self) -> None:
         document = deepcopy(self.document)
         playwright = next(
