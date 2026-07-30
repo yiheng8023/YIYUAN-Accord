@@ -19,6 +19,39 @@ DOCUMENTATION_PATH = (
     "CC-SWITCH-FOURTEEN-SKILL-SUBTRACTION-PREVIEW-3.19-"
     "REFRESH-2026-07-30.md"
 )
+LAYERED_EVIDENCE_PATH = (
+    "registry/"
+    "cc-switch-fourteen-skill-subtraction-preview-3.19-"
+    "layered-refresh-2026-07-31.json"
+)
+LAYERED_DOCUMENTATION_PATH = (
+    "docs/strategy/"
+    "CC-SWITCH-FOURTEEN-SKILL-SUBTRACTION-PREVIEW-3.19-"
+    "LAYERED-REFRESH-2026-07-31.md"
+)
+LAYERED_ID = (
+    "cc-switch-fourteen-skill-subtraction-preview-3.19-"
+    "layered-refresh-2026-07-31"
+)
+LIVE_PREFLIGHT_PATH = (
+    "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-31.json"
+)
+EXACT_AUTHORIZATION = [
+    "uninstall exactly the fourteen named Skills through uninstall_skill_unified",
+    (
+        "allow CC Switch retention to evict exactly the fourteen named oldest "
+        "backups if no concurrent backup appears"
+    ),
+    (
+        "remove exactly the fourteen resulting broken ~/.agents/skills links "
+        "only after full manager success"
+    ),
+    "write and verify one configured CC Switch remote snapshot",
+    (
+        "create then exactly clean the bounded recovery archive and temporary "
+        "CDP/debug helper"
+    ),
+]
 EXPECTED_NAMES = {
     "design-an-interface",
     "edit-article",
@@ -42,11 +75,184 @@ def _require(condition: bool, message: str) -> None:
         raise RuntimeError(message)
 
 
+def _validate_layered_delta_overlay(
+    document: dict[str, Any],
+    *,
+    root: Path | None,
+) -> None:
+    _require(
+        document.get("schema") == 1
+        and document.get("id") == LAYERED_ID
+        and document.get("date") == "2026-07-31"
+        and document.get("status")
+        == (
+            "read-only-manager-319-layered-refresh-awaiting-"
+            "exact-mutation-authorization"
+        ),
+        "CC 3.19 layered refresh identity drifted",
+    )
+    _require(
+        document.get("predecessors")
+        == {
+            "managerRefresh": EVIDENCE_PATH,
+            "livePreflightContract": LIVE_PREFLIGHT_PATH,
+        },
+        "CC 3.19 layered refresh predecessor binding drifted",
+    )
+    posture = document.get("repositoryPosture", {})
+    _require(
+        posture.get("branch") == "main"
+        and posture.get("head")
+        == "6deaf10a5a66322ff9f149734578a77e0fcfb92c"
+        and posture.get("originMain") == posture.get("head")
+        and posture.get("ahead") == 0
+        and posture.get("behind") == 0
+        and posture.get("inheritedChangesPreserved") is True,
+        "CC 3.19 layered repository posture drifted",
+    )
+    authority = document.get("authorityBoundary", {})
+    _require(
+        authority.get("readCurrentPredecessorsAndLivePreflight") is True
+        and authority.get("ccSwitchUninstallRestoreRemoteSyncOrToggle") is False
+        and authority.get("agentsBrokenLinkCleanup") is False
+        and authority.get("recoveryArchiveOrDebugBridgeCreation") is False
+        and authority.get("globalConfigRulesHookOrForeignRootMutation") is False
+        and authority.get("separateAppServerOrModelDispatch") is False,
+        "CC 3.19 layered authority boundary drifted",
+    )
+    reused = document.get("reusedFrozenSurfaces", {})
+    _require(
+        reused.get("managerBinaryAnd319SourceSemantics") is True
+        and reused.get("fourteenNamesRowsContentHashesTreeManifestsAndHostLinks")
+        is True
+        and reused.get("backupCountOrderAndExactFourteenEvictionIds") is True
+        and reused.get("canarySequentialBatchRollbackAndCleanupProcedure") is True
+        and reused.get("exactFivePartAuthorizationBoundary") is True
+        and reused.get("candidateCohortCount") == 14
+        and reused.get("backupCount") == 20
+        and reused.get("expectedEvictionCount") == 14
+        and reused.get("canary") == "edit-article",
+        "CC 3.19 layered frozen surface binding drifted",
+    )
+    live = document.get("liveDelta", {})
+    _require(
+        live.get("priorCodexTopLevelEntries") == 55
+        and live.get("codexTopLevelEntries") == 57
+        and live.get("docPdfPrivateAliasCount") == 2
+        and live.get("docPdfPolicyMode") == "canonical-host-disable"
+        and live.get("targetAndBackupFingerprintsUnchanged") is True
+        and live.get("livePreflightWholeStateFingerprint")
+        == "3245721c8dae1f2008d4c795e6fcbe66da5a64994d25d6ae13d5f4eef2d86c01",
+        "CC 3.19 layered live delta drifted",
+    )
+    post = document.get("expectedPostState", {})
+    _require(
+        post.get("databaseRows") == 41
+        and post.get("ccSwitchEntries") == 41
+        and post.get("agentsEntries") == 27
+        and post.get("claudeEntries") == 41
+        and post.get("codexTopLevelEntries") == 43
+        and post.get("docPdfPrivateAliasCount") == 2
+        and post.get("docPdfPolicyMode") == "canonical-host-disable"
+        and post.get("brokenLinksAcrossFourRoots") == 0
+        and post.get("mattPromotedRowsRemain") == 22
+        and post.get("selfAuthoredRowsRemain") == 3
+        and post.get("diagnoseRemains") is True
+        and post.get("forecastBinding") is True
+        and post.get("invalidatedByConcurrentCcMutation") is True,
+        "CC 3.19 layered expected post-state drifted",
+    )
+    transaction = document.get("transactionAndRollbackDelta", {})
+    _require(
+        transaction.get("managerTransactionUnchanged") is True
+        and transaction.get(
+            "docPdfCanonicalHostDisableMatt22AndTraeRootsAreUnchangedSentinels"
+        )
+        is True
+        and transaction.get("codexCountCorrection") == "57 - 14 = 43"
+        and transaction.get("noDocPdfToggleConfigWriteOrRestartRequired") is True,
+        "CC 3.19 layered transaction delta drifted",
+    )
+    _require(
+        document.get("authorizationRequired") == EXACT_AUTHORIZATION,
+        "CC 3.19 layered exact authorization drifted",
+    )
+    out_of_scope = document.get("explicitlyOutOfScope", [])
+    _require(
+        "any doc or pdf manager toggle, Codex config write, restart, or separate app-server"
+        in out_of_scope
+        and "the three self-authored CC rows or their Claude links"
+        in out_of_scope
+        and "Matt's twenty-two promoted Skills" in out_of_scope
+        and "Trae-owned or Plugin-owned roots" in out_of_scope
+        and "any first-party .agents or .codex physical directory mutation"
+        in out_of_scope,
+        "CC 3.19 layered out-of-scope boundary drifted",
+    )
+    _require(
+        document.get("cleanup")
+        == {
+            "temporarySourceRootCreated": False,
+            "transactionArchiveCreated": False,
+            "debugListenerOrBridgeCreated": False,
+            "managerHostOrConfigMutation": False,
+        },
+        "CC 3.19 layered cleanup boundary drifted",
+    )
+    claims = document.get("claimBoundary", {})
+    _require(
+        claims.get("transactionPredictionCurrent") is True
+        and claims.get("frozenTransactionDesignReused") is True
+        and claims.get("liveUninstallAuthorized") is False
+        and claims.get("liveUninstallExecuted") is False
+        and claims.get("postStateProved") is False
+        and claims.get("rollbackExecutionProved") is False
+        and claims.get("remoteSnapshotProved") is False
+        and claims.get("remainingPortfolioBehavioralValueProved") is False
+        and claims.get("programCloseoutProved") is False,
+        "CC 3.19 layered claim boundary drifted",
+    )
+    if root is None:
+        return
+    _require(
+        document.get("documentation") == LAYERED_DOCUMENTATION_PATH,
+        "CC 3.19 layered documentation binding drifted",
+    )
+    manager_refresh = json.loads(
+        (root / EVIDENCE_PATH).read_text(encoding="utf-8")
+    )
+    live_preflight = json.loads(
+        (root / LIVE_PREFLIGHT_PATH).read_text(encoding="utf-8")
+    )
+    _require(
+        manager_refresh.get("id")
+        == "cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30"
+        and live_preflight.get("id")
+        == "cc-switch-fourteen-skill-live-preflight-contract-2026-07-31",
+        "CC 3.19 layered predecessor identity drifted",
+    )
+    text = (root / LAYERED_DOCUMENTATION_PATH).read_text(encoding="utf-8")
+    for phrase in (
+        "57 → 43",
+        "not a new transaction design",
+        "canonical host-disable",
+        "five-part authorization boundary",
+        "No mutation has been authorized or executed.",
+    ):
+        _require(
+            phrase in text,
+            f"CC 3.19 layered documentation missing: {phrase}",
+        )
+
+
 def validate_refresh(
     document: dict[str, Any],
     *,
-    root: Path = ROOT,
+    root: Path | None = ROOT,
 ) -> None:
+    if document.get("id") == LAYERED_ID:
+        _validate_layered_delta_overlay(document, root=root)
+        return
     _require(
         document.get("schema") == 1
         and document.get("id")
@@ -311,9 +517,14 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=ROOT)
     args = parser.parse_args()
     root = args.root.resolve()
-    document = json.loads((root / EVIDENCE_PATH).read_text(encoding="utf-8"))
-    validate_refresh(document, root=root)
-    print("CC Switch 3.19 fourteen-Skill subtraction refresh passed.")
+    for evidence_path in (EVIDENCE_PATH, LAYERED_EVIDENCE_PATH):
+        document = json.loads(
+            (root / evidence_path).read_text(encoding="utf-8")
+        )
+        validate_refresh(document, root=root)
+    print(
+        "CC Switch 3.19 fourteen-Skill subtraction refreshes passed."
+    )
     return 0
 
 

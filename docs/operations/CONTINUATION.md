@@ -2139,3 +2139,26 @@ The current read-only preflight passes with 55 database rows, 55 CC trees,
 `docPdfPolicyMode=canonical-host-disable`. It remains a point-in-time drift
 gate and authorizes no uninstall or other mutation. A fresh separate
 app-server exposure result is not claimed.
+
+## 2026-07-31 fourteen-Skill layered transaction forecast checkpoint
+
+The 2026-07-30 manager transaction preview still froze the correct fourteen
+targets, CC Switch 3.19 manager semantics, backup rotation, canary, rollback,
+cleanup, and exact authorization boundary. Its Codex post-state count became
+stale after CC Switch restored the two private `doc`/`pdf` aliases.
+
+The compact delta overlay is:
+
+- `registry/cc-switch-fourteen-skill-subtraction-preview-3.19-layered-refresh-2026-07-31.json`;
+- `docs/strategy/CC-SWITCH-FOURTEEN-SKILL-SUBTRACTION-PREVIEW-3.19-LAYERED-REFRESH-2026-07-31.md`.
+
+It reuses the frozen transaction rather than duplicating it. The current Codex
+root forecast is corrected from 57 to 43 after removing the unchanged fourteen
+targets. Database, CC, common agents, and Claude forecasts remain 41, 41, 27,
+and 41. The two `doc`/`pdf` aliases and canonical host-disable rows remain
+unchanged sentinels.
+
+No uninstall, backup eviction, common-link cleanup, remote snapshot, recovery
+archive, debug helper, host toggle, configuration write, restart, or model turn
+was authorized or executed. Rerun the live preflight immediately before any
+separately authorized canary.
