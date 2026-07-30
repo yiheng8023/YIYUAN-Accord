@@ -2096,6 +2096,12 @@ eight-test module and full `scripts/verify.py` pass.
 The live fourteen-Skill whole-state preflight currently fails closed because
 `doc` and `pdf` are again Codex-enabled and their Codex links are present.
 That is a database/projection baseline drift, not a five-candidate failure.
+The local CC Switch log records `show_main` at 2026-07-30 22:37:39, followed
+by explicit Skill-state updates setting `doc` and `pdf` Codex enablement to
+`true` at 22:38:17 and 22:38:23. Periodic Codex session-usage synchronization
+continued before and after those events but did not record a Skill-state
+change. This supports an explicit host-toggle event rather than automatic
+session synchronization; the log does not identify the actor.
 No CC Switch row, Skill, link, global configuration, or user-level state was
 changed. Restoring the prior Codex-only shadow-disable remains an explicit
 mutation gate; until that decision is supplied, do not refresh the
