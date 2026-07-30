@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "kind": "cumulative-accepted-invariant-ledger",
+  "ledgerId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27-ledger-06",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27",
+  "protocolCanonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df",
+  "sourceRegistryCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+  "asOfStageId": "SE-TS-06-observation-incident-handling",
+  "asOfSequence": 6,
+  "previousLedgerSha256": "ae660f80b562e32f7375a4f70eb37c0eedf2e596e78e97bbc0474efca23e84f5",
+  "activeInvariants": [
+    {
+      "invariantId": "inv.source-goal",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "goalRemainsSourceBound": true
+      },
+      "claimCanonicalSha256": "7f69318dfdff48dd2100f55501971932d4c62a85febcb6bfd0954a8a85f6515d",
+      "weight": 1,
+      "sourcePointers": [
+        {
+          "artifactId": "SOURCE-BUNDLE",
+          "artifactCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+          "jsonPointer": "/acceptedInvariants"
+        }
+      ],
+      "firstAcceptedSequence": 1,
+      "lastChangedSequence": 1,
+      "currentAcceptanceBasis": {
+        "kind": "source",
+        "bindingSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535"
+      }
+    },
+    {
+      "invariantId": "inv.no-live-side-effects",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "liveSideEffectsAuthorized": false
+      },
+      "claimCanonicalSha256": "1f928033dd2b5e7466f9f8988a981a4a48f03cd6a4c00b6046b4737374361ed0",
+      "weight": 1,
+      "sourcePointers": [
+        {
+          "artifactId": "SOURCE-BUNDLE",
+          "artifactCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+          "jsonPointer": "/acceptedInvariants"
+        }
+      ],
+      "firstAcceptedSequence": 1,
+      "lastChangedSequence": 1,
+      "currentAcceptanceBasis": {
+        "kind": "source",
+        "bindingSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535"
+      }
+    },
+    {
+      "invariantId": "inv.stage-1-accepted",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "stageId": "SE-TS-01-requirements-domain",
+        "acceptedForSyntheticCalibration": true
+      },
+      "claimCanonicalSha256": "21eb09370e75a9cb0ba945a15cfbfe01bf8bdaae388c24e1f7a90693c63d3a71",
+      "weight": 1,
+      "sourcePointers": [],
+      "firstAcceptedSequence": 1,
+      "lastChangedSequence": 1,
+      "currentAcceptanceBasis": {
+        "kind": "human-authority-receipt",
+        "bindingSha256": "8d1bbae5bf51399388cbd67be4b89af6ab44473be1237ab9e5c7be3230fd2d11"
+      }
+    },
+    {
+      "invariantId": "inv.stage-2-accepted",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "stageId": "SE-TS-02-architecture-design",
+        "acceptedForSyntheticCalibration": true
+      },
+      "claimCanonicalSha256": "11fd47ff6f904983acd202b9d6ca611e8d296151ab0e4ad035f8d9e769fe936a",
+      "weight": 1,
+      "sourcePointers": [],
+      "firstAcceptedSequence": 2,
+      "lastChangedSequence": 2,
+      "currentAcceptanceBasis": {
+        "kind": "human-authority-receipt",
+        "bindingSha256": "9a0441f052cf66ed6278e73660002ea0017203d3ea3e6dfb1b1892df9d12be7e"
+      }
+    },
+    {
+      "invariantId": "inv.stage-4-accepted",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "stageId": "SE-TS-04-independent-review-test-security",
+        "acceptedForSyntheticCalibration": true
+      },
+      "claimCanonicalSha256": "f06680f1809fb335a0e53482959cfccb34d01a8508495abb4560016c104a0c27",
+      "weight": 1,
+      "sourcePointers": [],
+      "firstAcceptedSequence": 4,
+      "lastChangedSequence": 4,
+      "currentAcceptanceBasis": {
+        "kind": "human-authority-receipt",
+        "bindingSha256": "dcf901955690eee7e83dac5bcd593273bef5bf15a4455c863ec5c7ae32b81339"
+      }
+    },
+    {
+      "invariantId": "inv.stage-5-accepted",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "stageId": "SE-TS-05-release-rollback-gating",
+        "acceptedForSyntheticCalibration": true
+      },
+      "claimCanonicalSha256": "58c103eed3c1a27150095f30a86f6bd97ea1d0ca3cfb07c7e57c3e05c4a40fde",
+      "weight": 1,
+      "sourcePointers": [],
+      "firstAcceptedSequence": 5,
+      "lastChangedSequence": 5,
+      "currentAcceptanceBasis": {
+        "kind": "human-authority-receipt",
+        "bindingSha256": "b7961e5830043b6d92b72af19c242660ad24058e5b533483c8cd89b1396d87ca"
+      }
+    },
+    {
+      "invariantId": "inv.stage-6-accepted",
+      "version": 1,
+      "status": "active",
+      "claim": {
+        "stageId": "SE-TS-06-observation-incident-handling",
+        "acceptedForSyntheticCalibration": true
+      },
+      "claimCanonicalSha256": "9a992e2772e9dcc021f42b24790bc7324945bd86e0e61fd8cbb840ea57e449a2",
+      "weight": 1,
+      "sourcePointers": [],
+      "firstAcceptedSequence": 6,
+      "lastChangedSequence": 6,
+      "currentAcceptanceBasis": {
+        "kind": "human-authority-receipt",
+        "bindingSha256": "6be2336a59eaac8d677e30b95b96ca8489e22617da7b6f1a325597f38da69818"
+      }
+    }
+  ],
+  "retiredInvariantIds": [],
+  "transitionHistory": [
+    {
+      "transitionId": "source-add-inv.source-goal",
+      "stageId": "SOURCE",
+      "sequence": 1,
+      "beforeLedgerSha256": null,
+      "proposalArtifactCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "decision": "accepted-source-change",
+      "changes": [
+        {
+          "changeId": "source-add-inv.source-goal",
+          "operation": "add",
+          "invariantId": "inv.source-goal",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "7f69318dfdff48dd2100f55501971932d4c62a85febcb6bfd0954a8a85f6515d",
+          "basis": {
+            "kind": "source",
+            "bindingSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "308189454ef0c8f59dc62f1eacc7fb7e21cc14160e0c93dc4c9e438b126267cc"
+    },
+    {
+      "transitionId": "source-add-inv.no-live-side-effects",
+      "stageId": "SOURCE",
+      "sequence": 1,
+      "beforeLedgerSha256": null,
+      "proposalArtifactCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "decision": "accepted-source-change",
+      "changes": [
+        {
+          "changeId": "source-add-inv.no-live-side-effects",
+          "operation": "add",
+          "invariantId": "inv.no-live-side-effects",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "1f928033dd2b5e7466f9f8988a981a4a48f03cd6a4c00b6046b4737374361ed0",
+          "basis": {
+            "kind": "source",
+            "bindingSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "9f5811bb8ac2fe3778e05cbc59503e6cda1ffe1ef2d9d9f778c8f55a9c950bf1"
+    },
+    {
+      "transitionId": "accept-stage-1",
+      "stageId": "SE-TS-01-requirements-domain",
+      "sequence": 1,
+      "beforeLedgerSha256": "4c8984b8708822e3c53a8b7712e951721bb31a0e9cbbe56a5a93bb7ac1fa960a",
+      "proposalArtifactCanonicalSha256": "180236965292bd3890eeb93f3e7e0bf1eeba970976dc887121ab026b24eca6f2",
+      "decision": "accepted-human-authority-change",
+      "changes": [
+        {
+          "changeId": "accept-stage-1",
+          "operation": "add",
+          "invariantId": "inv.stage-1-accepted",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "21eb09370e75a9cb0ba945a15cfbfe01bf8bdaae388c24e1f7a90693c63d3a71",
+          "basis": {
+            "kind": "human-authority-receipt",
+            "bindingSha256": "8d1bbae5bf51399388cbd67be4b89af6ab44473be1237ab9e5c7be3230fd2d11"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "69aecc4e950113f6e52c20dd26d6a268fcb006f618e8ff86b0c1ac816a4d9dce"
+    },
+    {
+      "transitionId": "accept-stage-2",
+      "stageId": "SE-TS-02-architecture-design",
+      "sequence": 2,
+      "beforeLedgerSha256": "06efb3a1948b94616f7912d1faa9eb74381d8b9cb03e1fc44f8304a5faa4d261",
+      "proposalArtifactCanonicalSha256": "78cae05d74e3b4b9a8c34c5fbd92cd4c6f876e98e29129165bf5dd8232ce127c",
+      "decision": "accepted-human-authority-change",
+      "changes": [
+        {
+          "changeId": "accept-stage-2",
+          "operation": "add",
+          "invariantId": "inv.stage-2-accepted",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "11fd47ff6f904983acd202b9d6ca611e8d296151ab0e4ad035f8d9e769fe936a",
+          "basis": {
+            "kind": "human-authority-receipt",
+            "bindingSha256": "9a0441f052cf66ed6278e73660002ea0017203d3ea3e6dfb1b1892df9d12be7e"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "49fd4c79497f38ad57b83ede0108510447e703ab61518ca877ee0335d01b675f"
+    },
+    {
+      "transitionId": "accept-stage-4",
+      "stageId": "SE-TS-04-independent-review-test-security",
+      "sequence": 4,
+      "beforeLedgerSha256": "7be6b517b6f469587da8f548ee4448ccbdb86b219fe84d8f2281f8be35c51abe",
+      "proposalArtifactCanonicalSha256": "415e90ad90b9d8cab6f70c559fe5da9fb5b0e1398e6fa14d345eaeda2ff88e6d",
+      "decision": "accepted-human-authority-change",
+      "changes": [
+        {
+          "changeId": "accept-stage-4",
+          "operation": "add",
+          "invariantId": "inv.stage-4-accepted",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "f06680f1809fb335a0e53482959cfccb34d01a8508495abb4560016c104a0c27",
+          "basis": {
+            "kind": "human-authority-receipt",
+            "bindingSha256": "dcf901955690eee7e83dac5bcd593273bef5bf15a4455c863ec5c7ae32b81339"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "3a463d9b579d7f03a6949fb88671f7ca8558f8d8f5e8f56b7849f15ee497eaab"
+    },
+    {
+      "transitionId": "accept-stage-5",
+      "stageId": "SE-TS-05-release-rollback-gating",
+      "sequence": 5,
+      "beforeLedgerSha256": "38a39086bdc11a52061ffdb34709088704192e69e58c29c16ee4beee9e4228a6",
+      "proposalArtifactCanonicalSha256": "29f9e1b2a1a058a3b3f9e25819b8e7b4ad179b0c5510a1a395b5c0ccf6550bdd",
+      "decision": "accepted-human-authority-change",
+      "changes": [
+        {
+          "changeId": "accept-stage-5",
+          "operation": "add",
+          "invariantId": "inv.stage-5-accepted",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "58c103eed3c1a27150095f30a86f6bd97ea1d0ca3cfb07c7e57c3e05c4a40fde",
+          "basis": {
+            "kind": "human-authority-receipt",
+            "bindingSha256": "b7961e5830043b6d92b72af19c242660ad24058e5b533483c8cd89b1396d87ca"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "07dfa0f97dba2c51fdb994e679af9172eff8bd113d63b2c62a6e7f01e20b7a80"
+    },
+    {
+      "transitionId": "accept-stage-6",
+      "stageId": "SE-TS-06-observation-incident-handling",
+      "sequence": 6,
+      "beforeLedgerSha256": "ae660f80b562e32f7375a4f70eb37c0eedf2e596e78e97bbc0474efca23e84f5",
+      "proposalArtifactCanonicalSha256": "7223600d8617617a2ba97bc406d7146b81810a58ef37f830b8d5b44d8af1aba9",
+      "decision": "accepted-human-authority-change",
+      "changes": [
+        {
+          "changeId": "accept-stage-6",
+          "operation": "add",
+          "invariantId": "inv.stage-6-accepted",
+          "beforeVersion": null,
+          "afterVersion": 1,
+          "beforeClaimCanonicalSha256": null,
+          "afterClaimCanonicalSha256": "9a992e2772e9dcc021f42b24790bc7324945bd86e0e61fd8cbb840ea57e449a2",
+          "basis": {
+            "kind": "human-authority-receipt",
+            "bindingSha256": "6be2336a59eaac8d677e30b95b96ca8489e22617da7b6f1a325597f38da69818"
+          }
+        }
+      ],
+      "transitionCanonicalSha256": "1344d0ada396507ee4d7c14ee6b330ee7082588174b4202358d89a43baf94a23"
+    }
+  ],
+  "summary": {
+    "activeInvariantCount": 7,
+    "retiredInvariantCount": 0,
+    "acceptedChangeCount": 7,
+    "sourceBackedChangeCount": 2,
+    "humanReceiptBackedChangeCount": 5
+  },
+  "producer": "parent-evaluator",
+  "ledgerSha256": "9607f1a00df67951ecae20283d773fd43cb06c588115170a3801040e45a2ebdb"
+}

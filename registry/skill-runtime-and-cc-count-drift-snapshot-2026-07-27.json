@@ -1,0 +1,275 @@
+{
+  "schema": 1,
+  "id": "skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
+  "date": "2026-07-27",
+  "status": "current-host-read-only-count-and-source-drift-reconciled-no-mutation",
+  "question": "Do the current CC Switch counts and the Superpowers 6.2.0 runtime update change the subtractive Skills portfolio decision or justify copying runtime-owned payloads into CC Switch?",
+  "authorityBoundary": {
+    "localReadOnlyInventory": true,
+    "authenticatedReadOnlyGithubApi": true,
+    "skillBodyExecution": false,
+    "modelRequestSent": false,
+    "ccSwitchMutation": false,
+    "pluginMutation": false,
+    "globalConfigurationMutation": false,
+    "credentialValueRecorded": false,
+    "accountSyncInvoked": false,
+    "installEnableDisableRelinkOrDelete": false,
+    "gitMutation": false
+  },
+  "host": {
+    "platform": "windows",
+    "ccSwitchVersion": "3.18.0",
+    "ccSwitchVersionSurface": "running-executable-file-and-product-version",
+    "inventoryReproducer": {
+      "path": "scripts/inventory_skill_portfolio.py",
+      "bytes": 7346,
+      "fileSha256": "CBEF6D1EF8DDD20F301C55281CE713AC5405F556532DD3EB6C73E795402746CA"
+    },
+    "inventoryObservedAt": "2026-07-27",
+    "inventoryCompactJsonBytes": 102055,
+    "inventoryCompactJsonSha256": "a8842ce553b4f5de8089355a68991d8e824ae2bc1c1f88fdf7bb7f4bfda6bbd1"
+  },
+  "ccSwitchObservation": {
+    "settings": {
+      "skillStorageLocation": "cc_switch",
+      "skillSyncMethod": "symlink",
+      "backupRetainCount": 3,
+      "visibleApps": [
+        "claude",
+        "claude-desktop",
+        "codex"
+      ]
+    },
+    "database": {
+      "rows": 251,
+      "distinctNames": 233,
+      "enabledClaude": 251,
+      "enabledCodex": 251,
+      "duplicateNameGroupCount": 15,
+      "enabledRepositoryCount": 6,
+      "enabledRepositories": [
+        "ComposioHQ/awesome-claude-skills@master",
+        "JimLiu/baoyu-skills@main",
+        "anthropics/skills@main",
+        "cexll/myclaude@master",
+        "larksuite/cli@HEAD",
+        "mattpocock/skills@main"
+      ]
+    },
+    "roots": {
+      "ccSwitch": {
+        "topLevelDirectories": 75,
+        "physical": 75,
+        "resolvableSkillMd": 75
+      },
+      "agents": {
+        "topLevelDirectories": 73,
+        "physical": 30,
+        "symlink": 42,
+        "junction": 1,
+        "resolvableSkillMd": 73
+      },
+      "claude": {
+        "topLevelDirectories": 251,
+        "physical": 1,
+        "symlink": 235,
+        "junction": 15,
+        "resolvableSkillMd": 75,
+        "unresolvedSkillMd": 176
+      },
+      "codex": {
+        "topLevelDirectories": 77,
+        "physical": 6,
+        "symlink": 70,
+        "junction": 1,
+        "resolvableSkillMd": 75,
+        "containerRootsWithoutTopLevelSkillMd": [
+          ".system",
+          "codex-primary-runtime"
+        ]
+      }
+    },
+    "databaseRootPresence": {
+      "ccSwitchRowsWithDirectory": 75,
+      "ccSwitchRowsWithResolvableSkillMd": 75,
+      "agentsRowsWithDirectory": 73,
+      "agentsRowsWithResolvableSkillMd": 73,
+      "claudeRowsWithDirectory": 251,
+      "claudeRowsWithResolvableSkillMd": 75,
+      "codexRowsWithDirectory": 75,
+      "codexRowsWithResolvableSkillMd": 75
+    },
+    "sameNameDifferentSkillMdHashCount": 30,
+    "localBackupDirectoryInventory": {
+      "topLevelEntries": 20,
+      "directories": 76,
+      "files": 480,
+      "bytes": 8927752,
+      "restoreVerifiedByThisSnapshot": false,
+      "crossDeviceEqualityProved": false
+    },
+    "countSemantics": {
+      "uiOrEnabledRowCountEqualsPhysicalUniqueSkillCount": false,
+      "projectionEntryCountEqualsResolvableSkillCount": false,
+      "databaseRowCountProvesLoaderInvocation": false,
+      "ccPhysicalRootIsCurrentBodyCountSurface": true,
+      "consumerProjectionMustBeResolvedSeparately": true
+    },
+    "persistentGap": {
+      "missingBodyDatabaseRows": 176,
+      "claudeBrokenCcTargetLinks": 176,
+      "matchesPriorStaleRowClassification": true,
+      "supportedBulkReconcilerObserved": false,
+      "mutationAuthorized": false
+    }
+  },
+  "externalSourceRevalidation": {
+    "mattPocock": {
+      "repository": "mattpocock/skills",
+      "mainCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "mainCommitDate": "2026-07-21T10:28:51Z",
+      "latestRelease": "v1.1.0",
+      "latestReleasePublishedAt": "2026-07-08T13:20:57Z",
+      "priorPinnedMainStillCurrent": true,
+      "sourceDriftObserved": false
+    },
+    "superpowers": {
+      "repository": "obra/superpowers",
+      "latestRelease": "v6.2.0",
+      "releaseCommit": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
+      "releasePublishedAt": "2026-07-24T00:28:17Z",
+      "mainCommitMatchesReleaseCommit": true,
+      "priorComparisonVersion": "6.1.1",
+      "releaseDeltaCommitCount": 51,
+      "releaseDeltaChangedFileCount": 54,
+      "releaseDeltaSkillPathChangedFileCount": 26,
+      "currentRuntimePackageVersion": "6.2.0",
+      "currentRuntimePackageRootClass": "codex-plugin-cache-home-relative",
+      "currentRuntimePackageRootHomeRelative": ".codex/plugins/cache/openai-curated-remote/superpowers/6.2.0",
+      "hostLocalPathRedacted": true,
+      "currentRuntimePackageFileCount": 72,
+      "currentRuntimePackageTreeSha256": "948ff71f332ad9bb3f1031ad468bf0a6f6a55c80d1c106f92a831b63e6ea7874",
+      "exactUpstreamBlobCount": 55,
+      "openaiPackagingDifferenceCount": 17,
+      "openaiPackagingDifferenceClasses": {
+        "pluginManifest": 1,
+        "pluginAssets": 2,
+        "agentsOpenaiMetadata": 14
+      },
+      "skillEntryCount": 14,
+      "exactReleaseSkillEntryCount": 14,
+      "allSkillEntriesExactReleaseBytes": true,
+      "selectedSkillDigests": {
+        "brainstorming": "4a54a4858b99807f3155ed1614b2f116e35ea5c1b788e793f565dd837fd3891f",
+        "dispatching-parallel-agents": "1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c",
+        "executing-plans": "c4c3d8b628c51114cd165fb8246fe02744cd8be180032328391252e653028d9b",
+        "finishing-a-development-branch": "d0ac8360ed9d59121776ef95c84bcb38e9747de0d7ae7e227dca81e437593b9b",
+        "receiving-code-review": "091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438",
+        "requesting-code-review": "d71cc01ba56d2325cf8af5f7c11837819b63ecd57de0bfdb812f7f3ff7751df8",
+        "subagent-driven-development": "349a08ad8b59b19b86c13a7d2f34a1a38719bf88257004a863eefefa8d9f9e40",
+        "systematic-debugging": "808fc5717aa88ad65efff312b11c186294d3e6ee301afb584e2f86599b137787",
+        "test-driven-development": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54",
+        "using-git-worktrees": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
+        "using-superpowers": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "verification-before-completion": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+        "writing-plans": "72190c88b2b5a67a96b91d66aa72b9161913e10e8769da3f28a226f4cc7b99d0",
+        "writing-skills": "d34db5c8aed6a4e0440132bd0613aace70a693ec7819d5637ad77481d8e10d1b"
+      },
+      "priorSixSkillSample": {
+        "unchanged": [
+          "using-superpowers"
+        ],
+        "changed": [
+          "brainstorming",
+          "writing-plans",
+          "verification-before-completion",
+          "subagent-driven-development",
+          "systematic-debugging"
+        ]
+      }
+    }
+  },
+  "superpowers620GovernanceReview": {
+    "selectiveReuseCandidates": [
+      {
+        "capability": "test-driven-development",
+        "disposition": "retain-source-pinned-single-skill-comparison-arm",
+        "reason": "The current TDD protocol already binds the 6.2.0 Skill and writing-good-tests reference without enabling the full framework."
+      },
+      {
+        "capability": "systematic-debugging",
+        "disposition": "retain-selective-diagnostic-candidate",
+        "reason": "Root-cause tracing is potentially complementary, but value still requires task-scoped exposure and weak-Agent evidence."
+      },
+      {
+        "capability": "verification-before-completion",
+        "disposition": "retain-as-domain-verification-substep-candidate",
+        "reason": "Fresh verification can feed closure evidence but cannot replace cross-domain closure, release authority, or hard acceptance."
+      },
+      {
+        "capability": "subagent-driven-development",
+        "disposition": "retain-pattern-reference-not-default-controller",
+        "reason": "Plan-scoped workspace and review-loop patterns are relevant, but its commit, resume, cleanup, and controller assumptions require separate authority and host adaptation."
+      }
+    ],
+    "globalDefaultRejections": [
+      {
+        "capability": "using-superpowers",
+        "reason": "Mandatory Skill invocation before every response conflicts with native/no-skill minimal sufficiency and task-bound capability routing."
+      },
+      {
+        "capability": "brainstorming",
+        "reason": "Mandatory design approval, design-file write, and commit for every project conflicts with proportional fast paths and separate write or Git authority."
+      },
+      {
+        "capability": "full-superpowers-bootstrap",
+        "reason": "A mandatory end-to-end workflow would confound selective attribution and may cross branch, worktree, commit, cleanup, telemetry, and user-review boundaries."
+      }
+    ],
+    "conditionalExternalEffect": {
+      "surface": "brainstorming visual companion",
+      "automaticAtPluginStartup": false,
+      "requiresOfferAndUserAcceptance": true,
+      "remoteLogoMayCarryVersionTelemetryByDefault": true,
+      "projectPromptOrClickTelemetryClaimed": false,
+      "disableEnvironmentVariablesDocumented": true,
+      "activatedOrTestedHere": false
+    }
+  },
+  "decision": {
+    "oldUiCountWasNecessarilyWrong": false,
+    "oldUiCountWasPhysicalUniqueSkillCount": false,
+    "currentCountMustBeReportedByLayer": true,
+    "ccSwitchStaleRowGapResolved": false,
+    "superpowers611RemainsCurrentComparisonBaseline": false,
+    "superpowers620IsCurrentRuntimeOwnedSourcePackageBaseline": true,
+    "superpowers620IsBehavioralBaseline": false,
+    "executionAdmissionSatisfied": false,
+    "loaderInvocationObserved": false,
+    "copySuperpowersRuntimePayloadsIntoCcForCodex": false,
+    "bulkInstallFromEnabledRepositoriesJustified": false,
+    "currentMattPinnedEvidenceStillFresh": true,
+    "currentTdd620SelectiveProtocolInvalidated": false,
+    "selectiveProtocolSourcePinsDoNotImplyExecutionEligibility": true,
+    "selfAuthoredContractsCanBeRetiredFromStaticEvidence": false,
+    "portfolioMutationAuthorized": false,
+    "nextBoundedAction": "Use Superpowers 6.2.0 only through source-pinned selective arms, keep Matt at the current pinned revision, treat CC counts as database, physical, and projection layers, and require live weak-Agent attribution plus a supported CC stale-row reconciliation path before any deduplication, retirement, or source migration."
+  },
+  "claimBoundary": {
+    "databaseEnablementProvesInvocation": false,
+    "physicalBodyProvesConsumerLoaderUse": false,
+    "sourceRegistrationProvesAllRepositorySkillsInstalled": false,
+    "exactSkillBytesProveBehavioralValue": false,
+    "releaseNotesProveLocalBehavior": false,
+    "runtimePluginPresenceProvesFullFrameworkUse": false,
+    "crossDeviceEqualityProved": false,
+    "staleRowRepairProved": false,
+    "superpowers620WeakAgentValueProved": false,
+    "mattSuperiorityProved": false,
+    "selfAuthoredResidualGapProved": false,
+    "safeCleanupOrMigrationProved": false
+  },
+  "claimLimit": "This is a dated, read-only single-host inventory and primary-source revalidation. It distinguishes enabled rows, physical bodies, projections, runtime packages, and source revisions; it does not prove loader invocation, behavioral value, cross-device equality, repair, migration safety, superiority, or a residual self-authored gap.",
+  "documentation": "docs/strategy/SKILL-RUNTIME-AND-CC-COUNT-DRIFT-SNAPSHOT-2026-07-27.md"
+}

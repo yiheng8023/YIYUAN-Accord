@@ -3,7 +3,7 @@
 ## Result
 
 The repository-side projection is structurally decision-ready, but consumer
-verification remains open. The current governed surface contains 20 approved
+verification remains open. The current governed surface contains 19 approved
 Skill routes and 9 Recipes. Given normalized task facts, the deterministic
 resolver returns one of seven bounded outcomes—native, runtime, curated,
 recipe, no-skill, ask-user, or gap—with selected IDs, confirmation reason,
@@ -16,8 +16,8 @@ ambiguity fail closed to human confirmation.
 
 ## Burden Proxy
 
-The baseline structural enumeration surface is 29 governed payload entries:
-20 Skill routes plus 9 Recipes. The representative decision package returns
+The current baseline structural enumeration surface is 28 governed payload entries:
+19 Skill routes plus 9 Recipes. The representative decision package returns
 one decision class and at most two selected IDs. This supports a bounded claim
 that a consumer can query a decision instead of reading every governed route.
 

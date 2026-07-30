@@ -1,0 +1,27 @@
+{
+  "artifactId": "fixture-control-b1-p1-O3",
+  "values": {
+    "goal": "produce a decision-ready research route without changing external or repository state",
+    "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+    "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+    "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+    "continuity": "preserve source identity and keep recovery anchored to S0"
+  },
+  "provenanceIds": [
+    "goal",
+    "evidence",
+    "authority",
+    "acceptance",
+    "continuity"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": [],
+  "sections": {
+    "fidelitySnapshot": {},
+    "acceptanceDecision": "bounded-pass",
+    "intermediateLossLedger": [],
+    "sourceBackedRecovery": "not-required",
+    "residualUncertainty": [],
+    "nextAuthorizationGate": "none"
+  }
+}

@@ -1,0 +1,2965 @@
+{
+  "schema": 1,
+  "id": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+  "startedAt": "2026-07-26T20:49:55.168770+00:00",
+  "finishedAt": "2026-07-26T20:50:01.409640+00:00",
+  "hostBinding": {
+    "codexVersion": "codex-cli 0.145.0",
+    "nativeCodexExecutable": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+    "probeScript": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_thread_unsubscribe_release_attribution.py",
+    "probeScriptSha256": "870c03ec94d79463713213289ed55af45fd0513af71695623ac3c9c8a9e0d1e3",
+    "sentinelScript": "C:/Projects/agent-autonomy-harness/scripts/mcp_lifecycle_sentinel.py",
+    "sentinelScriptSha256": "48656683eaff80d0162fc230b111880ee59cc619475187531b09c341136ee590",
+    "dependencyBindings": [
+      {
+        "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_idle_unload.py",
+        "sha256": "564c5c3f5964bee6b9bc172077237f7526118eeaf294c4b73b3c6f431c7b5713"
+      },
+      {
+        "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_reload_new_threads.py",
+        "sha256": "839288080ede15e6d70631859a0a2045f3ba889df473c4affa0573c280f1b8ab"
+      },
+      {
+        "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_reload_release_attribution.py",
+        "sha256": "c418737169a3133bc0bfb2df18e7b26600158c2bcd98b28a004f4dec79d83e4b"
+      },
+      {
+        "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_status.py",
+        "sha256": "1e275625304167a721bb419f4aee6186b9f227370396d6b158ab6739e15beb86"
+      },
+      {
+        "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_tool_call.py",
+        "sha256": "4166af04143bd9371010c050ebacc9cd65307479a111b66bac576cfeec4d27e2"
+      }
+    ],
+    "pythonVersion": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "pairDesign": {
+    "independentAppServers": true,
+    "independentCodexHomes": true,
+    "independentThreads": true,
+    "independentSentinelInstances": true,
+    "concurrentMonotonicBarrier": true,
+    "observationSeconds": 5.0,
+    "sampleIntervalSeconds": 0.5,
+    "maximumActionSkewMilliseconds": 100.0,
+    "maximumSampleSkewMilliseconds": 250.0,
+    "windowStartAt": "2026-07-26T20:49:56.127604+00:00",
+    "windowStartMonotonic": 62409.3562551,
+    "unsubscribeIsTaskEnd": false
+  },
+  "attributionBoundary": {
+    "unsubscribeArmAllowedHostMethods": [
+      "thread/unsubscribe"
+    ],
+    "controlArmAllowedHostMethods": [],
+    "bothArmsAllowedParentActions": [
+      "exact-process-sampling",
+      "sentinel-event-log-read",
+      "app-server-liveness-sampling"
+    ],
+    "reloadDuringWindow": false,
+    "configWriteDuringWindow": false,
+    "newThreadDuringWindow": false,
+    "toolCallDuringWindow": false,
+    "turnStartDuringWindow": false,
+    "teardownDuringWindow": false,
+    "cleanupDuringWindow": false,
+    "pidSignalDuringWindow": false
+  },
+  "arms": {
+    "subscribed-control": {
+      "codexHome": "C:/Projects/agent-autonomy-harness/.tmp/mcp-unsubscribe-attribution-formal-20260727-02/subscribed-control/codex-home",
+      "workspace": "C:/Projects/agent-autonomy-harness",
+      "command": [
+        "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "app-server",
+        "--stdio",
+        "--strict-config",
+        "-c",
+        "analytics.enabled=false",
+        "--disable",
+        "plugins",
+        "--disable",
+        "remote_plugin",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugin_sharing"
+      ],
+      "environment": {
+        "allowlistApplied": true,
+        "inheritedKeyNames": [
+          "APPDATA",
+          "CODEX_HOME",
+          "COMSPEC",
+          "HOMEDRIVE",
+          "HOMEPATH",
+          "LOCALAPPDATA",
+          "LOG_FORMAT",
+          "NUMBER_OF_PROCESSORS",
+          "OS",
+          "PATH",
+          "PATHEXT",
+          "PROCESSOR_ARCHITECTURE",
+          "PROGRAMDATA",
+          "PROGRAMFILES",
+          "PROGRAMFILES(X86)",
+          "RUST_LOG",
+          "SYSTEMDRIVE",
+          "SYSTEMROOT",
+          "TEMP",
+          "TMP",
+          "USERDOMAIN",
+          "USERNAME",
+          "USERPROFILE",
+          "WINDIR"
+        ],
+        "valuesRecorded": false,
+        "accountOrProxyKeysInherited": false
+      },
+      "thread": {
+        "id": "019fa031-06e3-7fb3-aa66-1537d5798505",
+        "ephemeralRequested": true,
+        "modelTurnStarted": false
+      },
+      "configuration": {
+        "sha256": "f594a38aeb4a9c0db8edc76f3aeffd70bf3641679bafdf142e42855af66b6beb",
+        "bytes": 619,
+        "enabled": true,
+        "unchangedDuringProbe": true,
+        "currentUserConfigCopied": false
+      },
+      "appServerProcess": {
+        "pid": 28940,
+        "observedAt": "2026-07-26T20:49:55.208690+00:00",
+        "exists": true,
+        "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "creationTime100ns": 134295725951801645,
+        "parentPid": 6516,
+        "workingSetBytes": 2543616,
+        "privateUsageBytes": 1703936,
+        "kernelTime100ns": 0,
+        "userTime100ns": 0
+      },
+      "baselineCall": {
+        "succeeded": true,
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "tool": "identity",
+        "pid": 41708,
+        "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+        "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:1",
+        "arguments": {
+          "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+          "arm": "subscribed-control",
+          "phase": "baseline"
+        }
+      },
+      "baselineProcess": {
+        "pid": 41708,
+        "observedAt": "2026-07-26T20:49:55.646945+00:00",
+        "exists": true,
+        "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "creationTime100ns": 134295725954693509,
+        "parentPid": 28940,
+        "workingSetBytes": 23388160,
+        "privateUsageBytes": 14356480,
+        "kernelTime100ns": 1093750,
+        "userTime100ns": 625000
+      },
+      "requestLedger": [
+        {
+          "id": 0,
+          "method": "initialize",
+          "phase": "initialize",
+          "sentAt": "2026-07-26T20:49:55.222827+00:00",
+          "sentMonotonic": 62408.4514935,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:55.419109+00:00",
+          "responseMonotonic": 62408.6477749,
+          "succeeded": true,
+          "result": {
+            "userAgent": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1/0.145.0 (Windows 10.0.26200; x86_64) unknown (codex-app-server-mcp-thread-unsubscribe-release-attribution-v1; 1.0.0)",
+            "codexHome": "C:\\Projects\\agent-autonomy-harness\\.tmp\\mcp-unsubscribe-attribution-formal-20260727-02\\subscribed-control\\codex-home",
+            "platformFamily": "windows",
+            "platformOs": "windows"
+          },
+          "error": null
+        },
+        {
+          "id": null,
+          "method": "initialized",
+          "phase": "initialized",
+          "sentAt": "2026-07-26T20:49:55.419666+00:00",
+          "sentMonotonic": 62408.6483181,
+          "responseExpected": false
+        },
+        {
+          "id": 1,
+          "method": "thread/start",
+          "phase": "thread-start",
+          "sentAt": "2026-07-26T20:49:55.420091+00:00",
+          "sentMonotonic": 62408.6487513,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:55.471386+00:00",
+          "responseMonotonic": 62408.7000567,
+          "succeeded": true,
+          "result": {
+            "thread": {
+              "id": "019fa031-06e3-7fb3-aa66-1537d5798505",
+              "extra": null,
+              "sessionId": "019fa031-06e3-7fb3-aa66-1537d5798505",
+              "forkedFromId": null,
+              "parentThreadId": null,
+              "preview": "",
+              "ephemeral": true,
+              "historyMode": "legacy",
+              "modelProvider": "openai",
+              "createdAt": 1785098995,
+              "updatedAt": 1785098995,
+              "recencyAt": 1785098995,
+              "status": {
+                "type": "idle"
+              },
+              "path": null,
+              "cwd": "C:\\Projects\\agent-autonomy-harness",
+              "cliVersion": "0.145.0",
+              "source": "vscode",
+              "canAcceptDirectInput": true,
+              "threadSource": null,
+              "agentNickname": null,
+              "agentRole": null,
+              "gitInfo": null,
+              "name": null,
+              "turns": []
+            },
+            "model": "gpt-5.6-sol",
+            "modelProvider": "openai",
+            "serviceTier": null,
+            "cwd": "C:\\Projects\\agent-autonomy-harness",
+            "runtimeWorkspaceRoots": [
+              "C:\\Projects\\agent-autonomy-harness"
+            ],
+            "instructionSources": [
+              "C:\\Projects\\agent-autonomy-harness\\AGENTS.md"
+            ],
+            "approvalPolicy": "never",
+            "approvalsReviewer": "user",
+            "sandbox": {
+              "type": "readOnly",
+              "networkAccess": false
+            },
+            "activePermissionProfile": null,
+            "reasoningEffort": null,
+            "multiAgentMode": "explicitRequestOnly"
+          },
+          "error": null
+        },
+        {
+          "id": 2,
+          "method": "mcpServer/tool/call",
+          "phase": "baseline",
+          "sentAt": "2026-07-26T20:49:55.471438+00:00",
+          "sentMonotonic": 62408.7000962,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:55.646918+00:00",
+          "responseMonotonic": 62408.8755797,
+          "succeeded": true,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":41708,\"instanceId\":\"c15d1f71-e020-45fc-b9f5-8f396018aaa4\",\"callId\":\"c15d1f71-e020-45fc-b9f5-8f396018aaa4:1\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-thread-unsubscribe-release-attribution-v1\",\"arm\":\"subscribed-control\",\"phase\":\"baseline\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:1",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "subscribed-control",
+                "phase": "baseline"
+              }
+            },
+            "isError": false
+          },
+          "error": null
+        },
+        {
+          "id": 4,
+          "method": "mcpServer/tool/call",
+          "phase": "post-window-control-call",
+          "sentAt": "2026-07-26T20:50:01.169913+00:00",
+          "sentMonotonic": 62414.3985778,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:50:01.174134+00:00",
+          "responseMonotonic": 62414.4027936,
+          "succeeded": true,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":41708,\"instanceId\":\"c15d1f71-e020-45fc-b9f5-8f396018aaa4\",\"callId\":\"c15d1f71-e020-45fc-b9f5-8f396018aaa4:2\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-thread-unsubscribe-release-attribution-v1\",\"arm\":\"subscribed-control\",\"phase\":\"post-window\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:2",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "subscribed-control",
+                "phase": "post-window"
+              }
+            },
+            "isError": false
+          },
+          "error": null
+        },
+        {
+          "id": 5,
+          "method": "thread/unsubscribe",
+          "phase": "post-window-control-cleanup-unsubscribe",
+          "sentAt": "2026-07-26T20:50:01.174152+00:00",
+          "sentMonotonic": 62414.4028097,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:50:01.174486+00:00",
+          "responseMonotonic": 62414.4031469,
+          "succeeded": true,
+          "result": {
+            "status": "unsubscribed"
+          },
+          "error": null
+        }
+      ],
+      "requestMethodsDerivedFromLedger": [
+        "initialize",
+        "initialized",
+        "thread/start",
+        "mcpServer/tool/call",
+        "mcpServer/tool/call",
+        "thread/unsubscribe"
+      ],
+      "filesBefore": [
+        {
+          "path": "config.toml",
+          "type": "file",
+          "bytes": 619
+        }
+      ],
+      "windowStartAt": "2026-07-26T20:49:56.127604+00:00",
+      "windowEndAt": "2026-07-26T20:50:01.127604+00:00",
+      "windowStartMonotonic": 62409.3562551,
+      "actionMonotonic": 62409.3563078,
+      "actionSkewMilliseconds": 0.05270000110613182,
+      "inWindowHostMethods": [],
+      "unsubscribeResponse": null,
+      "unsubscribeStatus": null,
+      "processSamples": [
+        {
+          "index": 0,
+          "targetOffsetSeconds": 0.0,
+          "capturedAt": "2026-07-26T20:49:56.127663+00:00",
+          "capturedMonotonic": 62409.3563156,
+          "sampleSkewMilliseconds": 0.060500002291519195,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:56.127670+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:56.151510+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 55451648,
+            "privateUsageBytes": 19849216,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1406250
+          }
+        },
+        {
+          "index": 1,
+          "targetOffsetSeconds": 0.5,
+          "capturedAt": "2026-07-26T20:49:56.628057+00:00",
+          "capturedMonotonic": 62409.8567088,
+          "sampleSkewMilliseconds": 0.45369999861577526,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:56.628067+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:56.645744+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 55828480,
+            "privateUsageBytes": 19542016,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1406250
+          }
+        },
+        {
+          "index": 2,
+          "targetOffsetSeconds": 1.0,
+          "capturedAt": "2026-07-26T20:49:57.128145+00:00",
+          "capturedMonotonic": 62410.3567942,
+          "sampleSkewMilliseconds": 0.5391000013332814,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:57.128163+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:57.145010+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 55828480,
+            "privateUsageBytes": 19542016,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1406250
+          }
+        },
+        {
+          "index": 3,
+          "targetOffsetSeconds": 1.5,
+          "capturedAt": "2026-07-26T20:49:57.627973+00:00",
+          "capturedMonotonic": 62410.8566175,
+          "sampleSkewMilliseconds": 0.36240000190446153,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:57.628006+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:57.645237+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56164352,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 4,
+          "targetOffsetSeconds": 2.0,
+          "capturedAt": "2026-07-26T20:49:58.127882+00:00",
+          "capturedMonotonic": 62411.3565336,
+          "sampleSkewMilliseconds": 0.27850000333273783,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:58.127911+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:58.148957+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56164352,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 5,
+          "targetOffsetSeconds": 2.5,
+          "capturedAt": "2026-07-26T20:49:58.627855+00:00",
+          "capturedMonotonic": 62411.8565063,
+          "sampleSkewMilliseconds": 0.25119999918388203,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:58.627865+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:58.648519+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56164352,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 6,
+          "targetOffsetSeconds": 3.0,
+          "capturedAt": "2026-07-26T20:49:59.128117+00:00",
+          "capturedMonotonic": 62412.3567681,
+          "sampleSkewMilliseconds": 0.51299999904586,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:59.128127+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:59.148936+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56164352,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 7,
+          "targetOffsetSeconds": 3.5,
+          "capturedAt": "2026-07-26T20:49:59.628068+00:00",
+          "capturedMonotonic": 62412.8567128,
+          "sampleSkewMilliseconds": 0.4576999999699183,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:49:59.628094+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:49:59.648963+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56168448,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 8,
+          "targetOffsetSeconds": 4.0,
+          "capturedAt": "2026-07-26T20:50:00.127776+00:00",
+          "capturedMonotonic": 62413.356415,
+          "sampleSkewMilliseconds": 0.1599000024725683,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:50:00.127798+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:50:00.148769+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56168448,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1562500
+          }
+        },
+        {
+          "index": 9,
+          "targetOffsetSeconds": 4.5,
+          "capturedAt": "2026-07-26T20:50:00.628095+00:00",
+          "capturedMonotonic": 62413.8567477,
+          "sampleSkewMilliseconds": 0.4926000037812628,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:50:00.628104+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 625000
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:50:00.647990+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56188928,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1875000
+          }
+        },
+        {
+          "index": 10,
+          "targetOffsetSeconds": 5.0,
+          "capturedAt": "2026-07-26T20:50:01.127833+00:00",
+          "capturedMonotonic": 62414.3564787,
+          "sampleSkewMilliseconds": 0.22360000002663583,
+          "sentinel": {
+            "pid": 41708,
+            "observedAt": "2026-07-26T20:50:01.127860+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725954693509,
+            "parentPid": 28940,
+            "workingSetBytes": 23388160,
+            "privateUsageBytes": 14356480,
+            "kernelTime100ns": 1250000,
+            "userTime100ns": 781250
+          },
+          "appServer": {
+            "pid": 28940,
+            "observedAt": "2026-07-26T20:50:01.148653+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725951801645,
+            "parentPid": 6516,
+            "workingSetBytes": 56188928,
+            "privateUsageBytes": 19664896,
+            "kernelTime100ns": 2343750,
+            "userTime100ns": 1875000
+          }
+        }
+      ],
+      "eventsAtWindowEnd": [
+        {
+          "timestamp": "2026-07-26T20:49:55.640822+00:00",
+          "event": "instance-start",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+        },
+        {
+          "timestamp": "2026-07-26T20:49:55.643268+00:00",
+          "event": "message",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+          "method": "initialize",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:55.644130+00:00",
+          "event": "message",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+          "method": "notifications/initialized",
+          "hasId": false
+        },
+        {
+          "timestamp": "2026-07-26T20:49:55.644704+00:00",
+          "event": "message",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+          "method": "tools/list",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:55.645635+00:00",
+          "event": "message",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+          "method": "tools/call",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:55.646126+00:00",
+          "event": "tool-call",
+          "pid": 41708,
+          "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+          "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+          "version": "1.1.0",
+          "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:1",
+          "tool": "identity",
+          "arguments": {
+            "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+            "arm": "subscribed-control",
+            "phase": "baseline"
+          }
+        }
+      ],
+      "stopEventsInWindow": [],
+      "postWindowCall": {
+        "succeeded": true,
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "tool": "identity",
+        "pid": 41708,
+        "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+        "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:2",
+        "arguments": {
+          "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+          "arm": "subscribed-control",
+          "phase": "post-window"
+        }
+      },
+      "classification": {
+        "classification": "subscribed-control-retained-five-seconds",
+        "valid": true,
+        "invalidReasons": [],
+        "releaseObserved": false,
+        "runtimeRetained": true,
+        "sameIdentityBySample": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "appServerAliveBySample": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "finalSameProcessIdentity": true,
+        "postWindowCallSameInstance": true,
+        "expectedSampleCount": 11,
+        "actualSampleCount": 11,
+        "maximumSampleSkewMilliseconds": 0.5391000013332814
+      },
+      "shutdownAndCleanup": {
+        "eventsBeforeHarnessCleanup": [
+          {
+            "timestamp": "2026-07-26T20:49:55.640822+00:00",
+            "event": "instance-start",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+          },
+          {
+            "timestamp": "2026-07-26T20:49:55.643268+00:00",
+            "event": "message",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "method": "initialize",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:55.644130+00:00",
+            "event": "message",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "method": "notifications/initialized",
+            "hasId": false
+          },
+          {
+            "timestamp": "2026-07-26T20:49:55.644704+00:00",
+            "event": "message",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "method": "tools/list",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:55.645635+00:00",
+            "event": "message",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "method": "tools/call",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:55.646126+00:00",
+            "event": "tool-call",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+            "version": "1.1.0",
+            "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:1",
+            "tool": "identity",
+            "arguments": {
+              "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+              "arm": "subscribed-control",
+              "phase": "baseline"
+            }
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.172229+00:00",
+            "event": "message",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "method": "tools/call",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.172874+00:00",
+            "event": "tool-call",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+            "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+            "version": "1.1.0",
+            "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:2",
+            "tool": "identity",
+            "arguments": {
+              "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+              "arm": "subscribed-control",
+              "phase": "post-window"
+            }
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.264750+00:00",
+            "event": "instance-stop",
+            "pid": 41708,
+            "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+          }
+        ],
+        "appServerReturnCode": 0,
+        "appServerKillSent": false,
+        "cleanup": {
+          "markerCreated": false,
+          "targetInstanceIds": [],
+          "acknowledgedInstanceIds": [],
+          "allTargetsAcknowledged": true,
+          "pidAbsentAfterCleanup": {
+            "41708": true
+          },
+          "cleanupVerified": true,
+          "pidSignalCleanupUsed": false,
+          "cleanupMarkerExitIsNaturalReleaseEvidence": false,
+          "eventsAfterCleanup": [
+            {
+              "timestamp": "2026-07-26T20:49:55.640822+00:00",
+              "event": "instance-start",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+            },
+            {
+              "timestamp": "2026-07-26T20:49:55.643268+00:00",
+              "event": "message",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "method": "initialize",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:55.644130+00:00",
+              "event": "message",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "method": "notifications/initialized",
+              "hasId": false
+            },
+            {
+              "timestamp": "2026-07-26T20:49:55.644704+00:00",
+              "event": "message",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "method": "tools/list",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:55.645635+00:00",
+              "event": "message",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "method": "tools/call",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:55.646126+00:00",
+              "event": "tool-call",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:1",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "subscribed-control",
+                "phase": "baseline"
+              }
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.172229+00:00",
+              "event": "message",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "method": "tools/call",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.172874+00:00",
+              "event": "tool-call",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4",
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "callId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4:2",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "subscribed-control",
+                "phase": "post-window"
+              }
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.264750+00:00",
+              "event": "instance-stop",
+              "pid": 41708,
+              "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+            }
+          ]
+        },
+        "filesAfter": [
+          {
+            "path": ".sandbox_migration",
+            "type": "file",
+            "bytes": 3
+          },
+          {
+            "path": "config.toml",
+            "type": "file",
+            "bytes": 619
+          },
+          {
+            "path": "goals_1.sqlite",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "installation_id",
+            "type": "file",
+            "bytes": 36
+          },
+          {
+            "path": "logs_2.sqlite",
+            "type": "file",
+            "bytes": 49152
+          },
+          {
+            "path": "logs_2.sqlite-shm",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "logs_2.sqlite-wal",
+            "type": "file",
+            "bytes": 119512
+          },
+          {
+            "path": "memories_1.sqlite",
+            "type": "file",
+            "bytes": 40960
+          },
+          {
+            "path": "sentinel-events.jsonl",
+            "type": "file",
+            "bytes": 1942
+          },
+          {
+            "path": "skills",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/.codex-system-skills.marker",
+            "type": "file",
+            "bytes": 17
+          },
+          {
+            "path": "skills/.system/imagegen",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/agents/openai.yaml",
+            "type": "file",
+            "bytes": 281
+          },
+          {
+            "path": "skills/.system/imagegen/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/assets/imagegen-small.svg",
+            "type": "file",
+            "bytes": 2894
+          },
+          {
+            "path": "skills/.system/imagegen/assets/imagegen.png",
+            "type": "file",
+            "bytes": 1711
+          },
+          {
+            "path": "skills/.system/imagegen/LICENSE.txt",
+            "type": "file",
+            "bytes": 10977
+          },
+          {
+            "path": "skills/.system/imagegen/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/references/cli.md",
+            "type": "file",
+            "bytes": 10430
+          },
+          {
+            "path": "skills/.system/imagegen/references/codex-network.md",
+            "type": "file",
+            "bytes": 1812
+          },
+          {
+            "path": "skills/.system/imagegen/references/image-api.md",
+            "type": "file",
+            "bytes": 6169
+          },
+          {
+            "path": "skills/.system/imagegen/references/prompting.md",
+            "type": "file",
+            "bytes": 10014
+          },
+          {
+            "path": "skills/.system/imagegen/references/sample-prompts.md",
+            "type": "file",
+            "bytes": 19672
+          },
+          {
+            "path": "skills/.system/imagegen/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/scripts/image_gen.py",
+            "type": "file",
+            "bytes": 35266
+          },
+          {
+            "path": "skills/.system/imagegen/scripts/remove_chroma_key.py",
+            "type": "file",
+            "bytes": 14276
+          },
+          {
+            "path": "skills/.system/imagegen/SKILL.md",
+            "type": "file",
+            "bytes": 24359
+          },
+          {
+            "path": "skills/.system/openai-docs",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/agents/openai.yaml",
+            "type": "file",
+            "bytes": 612
+          },
+          {
+            "path": "skills/.system/openai-docs/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/assets/openai-small.svg",
+            "type": "file",
+            "bytes": 1094
+          },
+          {
+            "path": "skills/.system/openai-docs/assets/openai.png",
+            "type": "file",
+            "bytes": 1429
+          },
+          {
+            "path": "skills/.system/openai-docs/LICENSE.txt",
+            "type": "file",
+            "bytes": 10977
+          },
+          {
+            "path": "skills/.system/openai-docs/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/references/latest-model.md",
+            "type": "file",
+            "bytes": 2405
+          },
+          {
+            "path": "skills/.system/openai-docs/references/prompting-guide.md",
+            "type": "file",
+            "bytes": 17780
+          },
+          {
+            "path": "skills/.system/openai-docs/references/upgrade-guide.md",
+            "type": "file",
+            "bytes": 1072
+          },
+          {
+            "path": "skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+            "type": "file",
+            "bytes": 23847
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+            "type": "file",
+            "bytes": 16683
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info",
+            "type": "file",
+            "bytes": 1077
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+            "type": "file",
+            "bytes": 4102
+          },
+          {
+            "path": "skills/.system/openai-docs/SKILL.md",
+            "type": "file",
+            "bytes": 22989
+          },
+          {
+            "path": "skills/.system/plugin-creator",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/agents/openai.yaml",
+            "type": "file",
+            "bytes": 345
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+            "type": "file",
+            "bytes": 1322
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets/plugin-creator.png",
+            "type": "file",
+            "bytes": 1563
+          },
+          {
+            "path": "skills/.system/plugin-creator/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/references/installing-and-updating.md",
+            "type": "file",
+            "bytes": 6017
+          },
+          {
+            "path": "skills/.system/plugin-creator/references/plugin-json-spec.md",
+            "type": "file",
+            "bytes": 9397
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+            "type": "file",
+            "bytes": 11509
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+            "type": "file",
+            "bytes": 1545
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+            "type": "file",
+            "bytes": 2764
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/validate_plugin.py",
+            "type": "file",
+            "bytes": 21809
+          },
+          {
+            "path": "skills/.system/plugin-creator/SKILL.md",
+            "type": "file",
+            "bytes": 11283
+          },
+          {
+            "path": "skills/.system/review-agent",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/review-agent/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/review-agent/agents/openai.yaml",
+            "type": "file",
+            "bytes": 258
+          },
+          {
+            "path": "skills/.system/review-agent/SKILL.md",
+            "type": "file",
+            "bytes": 2718
+          },
+          {
+            "path": "skills/.system/skill-creator",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/agents/openai.yaml",
+            "type": "file",
+            "bytes": 188
+          },
+          {
+            "path": "skills/.system/skill-creator/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/assets/skill-creator-small.svg",
+            "type": "file",
+            "bytes": 1322
+          },
+          {
+            "path": "skills/.system/skill-creator/assets/skill-creator.png",
+            "type": "file",
+            "bytes": 1563
+          },
+          {
+            "path": "skills/.system/skill-creator/license.txt",
+            "type": "file",
+            "bytes": 11560
+          },
+          {
+            "path": "skills/.system/skill-creator/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/references/openai_yaml.md",
+            "type": "file",
+            "bytes": 2405
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+            "type": "file",
+            "bytes": 6845
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/init_skill.py",
+            "type": "file",
+            "bytes": 15002
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/quick_validate.py",
+            "type": "file",
+            "bytes": 3394
+          },
+          {
+            "path": "skills/.system/skill-creator/SKILL.md",
+            "type": "file",
+            "bytes": 22463
+          },
+          {
+            "path": "skills/.system/skill-installer",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/agents/openai.yaml",
+            "type": "file",
+            "bytes": 226
+          },
+          {
+            "path": "skills/.system/skill-installer/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/assets/skill-installer-small.svg",
+            "type": "file",
+            "bytes": 926
+          },
+          {
+            "path": "skills/.system/skill-installer/assets/skill-installer.png",
+            "type": "file",
+            "bytes": 1086
+          },
+          {
+            "path": "skills/.system/skill-installer/LICENSE.txt",
+            "type": "file",
+            "bytes": 11560
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/github_utils.py",
+            "type": "file",
+            "bytes": 680
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/install-skill-from-github.py",
+            "type": "file",
+            "bytes": 10404
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/list-skills.py",
+            "type": "file",
+            "bytes": 3074
+          },
+          {
+            "path": "skills/.system/skill-installer/SKILL.md",
+            "type": "file",
+            "bytes": 3425
+          },
+          {
+            "path": "state_5.sqlite",
+            "type": "file",
+            "bytes": 180224
+          },
+          {
+            "path": "tmp",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "tmp/arg0",
+            "type": "directory",
+            "bytes": null
+          }
+        ],
+        "authStateProduced": false,
+        "applicationLogExternalNetworkAttemptObserved": true,
+        "applicationLogExternalNetworkAttemptLines": [
+          "{\"timestamp\":\"2026-07-26T20:49:56.274661Z\",\"level\":\"ERROR\",\"fields\":{\"message\":\"failed to connect to websocket: IO error: invalid peer certificate: UnknownIssuer, url: wss://api.openai.com/v1/responses\"},\"target\":\"codex_api::endpoint::responses_websocket\"}"
+        ]
+      },
+      "stderrLines": [
+        "{\"timestamp\":\"2026-07-26T20:49:55.434263Z\",\"level\":\"WARN\",\"fields\":{\"message\":\"Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\"},\"target\":\"codex_core::shell_snapshot\"}",
+        "{\"timestamp\":\"2026-07-26T20:49:55.650019Z\",\"level\":\"WARN\",\"fields\":{\"message\":\"encountered errors while loading native root certificates\",\"native_root_error_count\":1},\"target\":\"codex_http_client::custom_ca\"}",
+        "{\"timestamp\":\"2026-07-26T20:49:56.274661Z\",\"level\":\"ERROR\",\"fields\":{\"message\":\"failed to connect to websocket: IO error: invalid peer certificate: UnknownIssuer, url: wss://api.openai.com/v1/responses\"},\"target\":\"codex_api::endpoint::responses_websocket\"}"
+      ],
+      "stdoutMessageCount": 9
+    },
+    "thread-unsubscribe": {
+      "codexHome": "C:/Projects/agent-autonomy-harness/.tmp/mcp-unsubscribe-attribution-formal-20260727-02/thread-unsubscribe/codex-home",
+      "workspace": "C:/Projects/agent-autonomy-harness",
+      "command": [
+        "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "app-server",
+        "--stdio",
+        "--strict-config",
+        "-c",
+        "analytics.enabled=false",
+        "--disable",
+        "plugins",
+        "--disable",
+        "remote_plugin",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugin_sharing"
+      ],
+      "environment": {
+        "allowlistApplied": true,
+        "inheritedKeyNames": [
+          "APPDATA",
+          "CODEX_HOME",
+          "COMSPEC",
+          "HOMEDRIVE",
+          "HOMEPATH",
+          "LOCALAPPDATA",
+          "LOG_FORMAT",
+          "NUMBER_OF_PROCESSORS",
+          "OS",
+          "PATH",
+          "PATHEXT",
+          "PROCESSOR_ARCHITECTURE",
+          "PROGRAMDATA",
+          "PROGRAMFILES",
+          "PROGRAMFILES(X86)",
+          "RUST_LOG",
+          "SYSTEMDRIVE",
+          "SYSTEMROOT",
+          "TEMP",
+          "TMP",
+          "USERDOMAIN",
+          "USERNAME",
+          "USERPROFILE",
+          "WINDIR"
+        ],
+        "valuesRecorded": false,
+        "accountOrProxyKeysInherited": false
+      },
+      "thread": {
+        "id": "019fa031-08c9-7153-808d-334670e0414c",
+        "ephemeralRequested": true,
+        "modelTurnStarted": false
+      },
+      "configuration": {
+        "sha256": "1395e41d112dccd7a8371338855fd24c71fb13582f33963a5c5ac5598c60911d",
+        "bytes": 619,
+        "enabled": true,
+        "unchangedDuringProbe": true,
+        "currentUserConfigCopied": false
+      },
+      "appServerProcess": {
+        "pid": 17340,
+        "observedAt": "2026-07-26T20:49:55.701843+00:00",
+        "exists": true,
+        "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "creationTime100ns": 134295725956717427,
+        "parentPid": 6516,
+        "workingSetBytes": 30580736,
+        "privateUsageBytes": 1703936,
+        "kernelTime100ns": 0,
+        "userTime100ns": 0
+      },
+      "baselineCall": {
+        "succeeded": true,
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "tool": "identity",
+        "pid": 41356,
+        "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+        "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1",
+        "arguments": {
+          "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+          "arm": "thread-unsubscribe",
+          "phase": "baseline"
+        }
+      },
+      "baselineProcess": {
+        "pid": 41356,
+        "observedAt": "2026-07-26T20:49:56.112856+00:00",
+        "exists": true,
+        "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "creationTime100ns": 134295725959489408,
+        "parentPid": 17340,
+        "workingSetBytes": 23412736,
+        "privateUsageBytes": 14491648,
+        "kernelTime100ns": 1093750,
+        "userTime100ns": 468750
+      },
+      "requestLedger": [
+        {
+          "id": 0,
+          "method": "initialize",
+          "phase": "initialize",
+          "sentAt": "2026-07-26T20:49:55.715255+00:00",
+          "sentMonotonic": 62408.9439198,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:55.906239+00:00",
+          "responseMonotonic": 62409.1349049,
+          "succeeded": true,
+          "result": {
+            "userAgent": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1/0.145.0 (Windows 10.0.26200; x86_64) unknown (codex-app-server-mcp-thread-unsubscribe-release-attribution-v1; 1.0.0)",
+            "codexHome": "C:\\Projects\\agent-autonomy-harness\\.tmp\\mcp-unsubscribe-attribution-formal-20260727-02\\thread-unsubscribe\\codex-home",
+            "platformFamily": "windows",
+            "platformOs": "windows"
+          },
+          "error": null
+        },
+        {
+          "id": null,
+          "method": "initialized",
+          "phase": "initialized",
+          "sentAt": "2026-07-26T20:49:55.906723+00:00",
+          "sentMonotonic": 62409.1353749,
+          "responseExpected": false
+        },
+        {
+          "id": 1,
+          "method": "thread/start",
+          "phase": "thread-start",
+          "sentAt": "2026-07-26T20:49:55.907082+00:00",
+          "sentMonotonic": 62409.1357418,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:55.950537+00:00",
+          "responseMonotonic": 62409.1792033,
+          "succeeded": true,
+          "result": {
+            "thread": {
+              "id": "019fa031-08c9-7153-808d-334670e0414c",
+              "extra": null,
+              "sessionId": "019fa031-08c9-7153-808d-334670e0414c",
+              "forkedFromId": null,
+              "parentThreadId": null,
+              "preview": "",
+              "ephemeral": true,
+              "historyMode": "legacy",
+              "modelProvider": "openai",
+              "createdAt": 1785098995,
+              "updatedAt": 1785098995,
+              "recencyAt": 1785098995,
+              "status": {
+                "type": "idle"
+              },
+              "path": null,
+              "cwd": "C:\\Projects\\agent-autonomy-harness",
+              "cliVersion": "0.145.0",
+              "source": "vscode",
+              "canAcceptDirectInput": true,
+              "threadSource": null,
+              "agentNickname": null,
+              "agentRole": null,
+              "gitInfo": null,
+              "name": null,
+              "turns": []
+            },
+            "model": "gpt-5.6-sol",
+            "modelProvider": "openai",
+            "serviceTier": null,
+            "cwd": "C:\\Projects\\agent-autonomy-harness",
+            "runtimeWorkspaceRoots": [
+              "C:\\Projects\\agent-autonomy-harness"
+            ],
+            "instructionSources": [
+              "C:\\Projects\\agent-autonomy-harness\\AGENTS.md"
+            ],
+            "approvalPolicy": "never",
+            "approvalsReviewer": "user",
+            "sandbox": {
+              "type": "readOnly",
+              "networkAccess": false
+            },
+            "activePermissionProfile": null,
+            "reasoningEffort": null,
+            "multiAgentMode": "explicitRequestOnly"
+          },
+          "error": null
+        },
+        {
+          "id": 2,
+          "method": "mcpServer/tool/call",
+          "phase": "baseline",
+          "sentAt": "2026-07-26T20:49:55.950572+00:00",
+          "sentMonotonic": 62409.179229,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:56.112830+00:00",
+          "responseMonotonic": 62409.3414921,
+          "succeeded": true,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":41356,\"instanceId\":\"f66512a6-48fd-4d8c-8706-246cfb7dd4ba\",\"callId\":\"f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-thread-unsubscribe-release-attribution-v1\",\"arm\":\"thread-unsubscribe\",\"phase\":\"baseline\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "thread-unsubscribe",
+                "phase": "baseline"
+              }
+            },
+            "isError": false
+          },
+          "error": null
+        },
+        {
+          "id": 3,
+          "method": "thread/unsubscribe",
+          "phase": "attribution-window-unsubscribe",
+          "sentAt": "2026-07-26T20:49:56.127705+00:00",
+          "sentMonotonic": 62409.3563654,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:49:56.128243+00:00",
+          "responseMonotonic": 62409.3569039,
+          "succeeded": true,
+          "result": {
+            "status": "unsubscribed"
+          },
+          "error": null
+        },
+        {
+          "id": 4,
+          "method": "mcpServer/tool/call",
+          "phase": "post-window-control-call",
+          "sentAt": "2026-07-26T20:50:01.170089+00:00",
+          "sentMonotonic": 62414.3987551,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T20:50:01.173860+00:00",
+          "responseMonotonic": 62414.4025232,
+          "succeeded": true,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":41356,\"instanceId\":\"f66512a6-48fd-4d8c-8706-246cfb7dd4ba\",\"callId\":\"f66512a6-48fd-4d8c-8706-246cfb7dd4ba:2\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-thread-unsubscribe-release-attribution-v1\",\"arm\":\"thread-unsubscribe\",\"phase\":\"post-window\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:2",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "thread-unsubscribe",
+                "phase": "post-window"
+              }
+            },
+            "isError": false
+          },
+          "error": null
+        }
+      ],
+      "requestMethodsDerivedFromLedger": [
+        "initialize",
+        "initialized",
+        "thread/start",
+        "mcpServer/tool/call",
+        "thread/unsubscribe",
+        "mcpServer/tool/call"
+      ],
+      "filesBefore": [
+        {
+          "path": "config.toml",
+          "type": "file",
+          "bytes": 619
+        }
+      ],
+      "windowStartAt": "2026-07-26T20:49:56.127604+00:00",
+      "windowEndAt": "2026-07-26T20:50:01.127604+00:00",
+      "windowStartMonotonic": 62409.3562551,
+      "actionMonotonic": 62409.3563654,
+      "actionSkewMilliseconds": 0.11030000314349309,
+      "inWindowHostMethods": [
+        "thread/unsubscribe"
+      ],
+      "unsubscribeResponse": {
+        "id": 3,
+        "result": {
+          "status": "unsubscribed"
+        }
+      },
+      "unsubscribeStatus": "unsubscribed",
+      "processSamples": [
+        {
+          "index": 0,
+          "targetOffsetSeconds": 0.0,
+          "capturedAt": "2026-07-26T20:49:56.127993+00:00",
+          "capturedMonotonic": 62409.3566451,
+          "sampleSkewMilliseconds": 0.39000000106170774,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:56.128002+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:56.151808+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 55033856,
+            "privateUsageBytes": 19828736,
+            "kernelTime100ns": 2031250,
+            "userTime100ns": 2031250
+          }
+        },
+        {
+          "index": 1,
+          "targetOffsetSeconds": 0.5,
+          "capturedAt": "2026-07-26T20:49:56.628007+00:00",
+          "capturedMonotonic": 62409.8566557,
+          "sampleSkewMilliseconds": 0.4006000017398037,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:56.628027+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:56.645988+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 55861248,
+            "privateUsageBytes": 20029440,
+            "kernelTime100ns": 2031250,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 2,
+          "targetOffsetSeconds": 1.0,
+          "capturedAt": "2026-07-26T20:49:57.128078+00:00",
+          "capturedMonotonic": 62410.3567233,
+          "sampleSkewMilliseconds": 0.4681999998865649,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:57.128106+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:57.145181+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56336384,
+            "privateUsageBytes": 19726336,
+            "kernelTime100ns": 2031250,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 3,
+          "targetOffsetSeconds": 1.5,
+          "capturedAt": "2026-07-26T20:49:57.628462+00:00",
+          "capturedMonotonic": 62410.8571126,
+          "sampleSkewMilliseconds": 0.8575000028940849,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:57.628487+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:57.645340+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56336384,
+            "privateUsageBytes": 19726336,
+            "kernelTime100ns": 2031250,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 4,
+          "targetOffsetSeconds": 2.0,
+          "capturedAt": "2026-07-26T20:49:58.127815+00:00",
+          "capturedMonotonic": 62411.35646,
+          "sampleSkewMilliseconds": 0.2049000031547621,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:58.127838+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:58.149121+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56655872,
+            "privateUsageBytes": 19812352,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 5,
+          "targetOffsetSeconds": 2.5,
+          "capturedAt": "2026-07-26T20:49:58.627806+00:00",
+          "capturedMonotonic": 62411.8564451,
+          "sampleSkewMilliseconds": 0.1899999988381751,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:58.627827+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:58.649388+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56655872,
+            "privateUsageBytes": 19812352,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 6,
+          "targetOffsetSeconds": 3.0,
+          "capturedAt": "2026-07-26T20:49:59.128066+00:00",
+          "capturedMonotonic": 62412.3567125,
+          "sampleSkewMilliseconds": 0.45739999768557027,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:59.128088+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:59.148623+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56655872,
+            "privateUsageBytes": 19812352,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 7,
+          "targetOffsetSeconds": 3.5,
+          "capturedAt": "2026-07-26T20:49:59.628118+00:00",
+          "capturedMonotonic": 62412.8567708,
+          "sampleSkewMilliseconds": 0.5156999977771193,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:49:59.628124+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:49:59.649693+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56655872,
+            "privateUsageBytes": 19812352,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 8,
+          "targetOffsetSeconds": 4.0,
+          "capturedAt": "2026-07-26T20:50:00.127824+00:00",
+          "capturedMonotonic": 62413.3564751,
+          "sampleSkewMilliseconds": 0.22000000171829015,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:50:00.127835+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:50:00.149133+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56668160,
+            "privateUsageBytes": 19816448,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 9,
+          "targetOffsetSeconds": 4.5,
+          "capturedAt": "2026-07-26T20:50:00.628043+00:00",
+          "capturedMonotonic": 62413.8566896,
+          "sampleSkewMilliseconds": 0.43449999793665484,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:50:00.628062+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:50:00.648108+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56668160,
+            "privateUsageBytes": 19816448,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        },
+        {
+          "index": 10,
+          "targetOffsetSeconds": 5.0,
+          "capturedAt": "2026-07-26T20:50:01.127891+00:00",
+          "capturedMonotonic": 62414.3565431,
+          "sampleSkewMilliseconds": 0.2880000029108487,
+          "sentinel": {
+            "pid": 41356,
+            "observedAt": "2026-07-26T20:50:01.127898+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+            "creationTime100ns": 134295725959489408,
+            "parentPid": 17340,
+            "workingSetBytes": 23412736,
+            "privateUsageBytes": 14491648,
+            "kernelTime100ns": 1093750,
+            "userTime100ns": 468750
+          },
+          "appServer": {
+            "pid": 17340,
+            "observedAt": "2026-07-26T20:50:01.148878+00:00",
+            "exists": true,
+            "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+            "creationTime100ns": 134295725956717427,
+            "parentPid": 6516,
+            "workingSetBytes": 56668160,
+            "privateUsageBytes": 19816448,
+            "kernelTime100ns": 2187500,
+            "userTime100ns": 2343750
+          }
+        }
+      ],
+      "eventsAtWindowEnd": [
+        {
+          "timestamp": "2026-07-26T20:49:56.107426+00:00",
+          "event": "instance-start",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+        },
+        {
+          "timestamp": "2026-07-26T20:49:56.109655+00:00",
+          "event": "message",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+          "method": "initialize",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:56.110288+00:00",
+          "event": "message",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+          "method": "notifications/initialized",
+          "hasId": false
+        },
+        {
+          "timestamp": "2026-07-26T20:49:56.110805+00:00",
+          "event": "message",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+          "method": "tools/list",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:56.111604+00:00",
+          "event": "message",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+          "method": "tools/call",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T20:49:56.112110+00:00",
+          "event": "tool-call",
+          "pid": 41356,
+          "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+          "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+          "version": "1.1.0",
+          "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1",
+          "tool": "identity",
+          "arguments": {
+            "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+            "arm": "thread-unsubscribe",
+            "phase": "baseline"
+          }
+        }
+      ],
+      "stopEventsInWindow": [],
+      "postWindowCall": {
+        "succeeded": true,
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "tool": "identity",
+        "pid": 41356,
+        "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+        "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:2",
+        "arguments": {
+          "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+          "arm": "thread-unsubscribe",
+          "phase": "post-window"
+        }
+      },
+      "classification": {
+        "classification": "unsubscribe-runtime-retained-five-seconds",
+        "valid": true,
+        "invalidReasons": [],
+        "releaseObserved": false,
+        "runtimeRetained": true,
+        "sameIdentityBySample": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "appServerAliveBySample": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "finalSameProcessIdentity": true,
+        "postWindowCallSameInstance": true,
+        "expectedSampleCount": 11,
+        "actualSampleCount": 11,
+        "maximumSampleSkewMilliseconds": 0.8575000028940849
+      },
+      "shutdownAndCleanup": {
+        "eventsBeforeHarnessCleanup": [
+          {
+            "timestamp": "2026-07-26T20:49:56.107426+00:00",
+            "event": "instance-start",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+          },
+          {
+            "timestamp": "2026-07-26T20:49:56.109655+00:00",
+            "event": "message",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "method": "initialize",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:56.110288+00:00",
+            "event": "message",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "method": "notifications/initialized",
+            "hasId": false
+          },
+          {
+            "timestamp": "2026-07-26T20:49:56.110805+00:00",
+            "event": "message",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "method": "tools/list",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:56.111604+00:00",
+            "event": "message",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "method": "tools/call",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:49:56.112110+00:00",
+            "event": "tool-call",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+            "version": "1.1.0",
+            "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1",
+            "tool": "identity",
+            "arguments": {
+              "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+              "arm": "thread-unsubscribe",
+              "phase": "baseline"
+            }
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.172116+00:00",
+            "event": "message",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "method": "tools/call",
+            "hasId": true
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.172837+00:00",
+            "event": "tool-call",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+            "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+            "version": "1.1.0",
+            "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:2",
+            "tool": "identity",
+            "arguments": {
+              "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+              "arm": "thread-unsubscribe",
+              "phase": "post-window"
+            }
+          },
+          {
+            "timestamp": "2026-07-26T20:50:01.368051+00:00",
+            "event": "instance-stop",
+            "pid": 41356,
+            "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+          }
+        ],
+        "appServerReturnCode": 0,
+        "appServerKillSent": false,
+        "cleanup": {
+          "markerCreated": false,
+          "targetInstanceIds": [],
+          "acknowledgedInstanceIds": [],
+          "allTargetsAcknowledged": true,
+          "pidAbsentAfterCleanup": {
+            "41356": true
+          },
+          "cleanupVerified": true,
+          "pidSignalCleanupUsed": false,
+          "cleanupMarkerExitIsNaturalReleaseEvidence": false,
+          "eventsAfterCleanup": [
+            {
+              "timestamp": "2026-07-26T20:49:56.107426+00:00",
+              "event": "instance-start",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+            },
+            {
+              "timestamp": "2026-07-26T20:49:56.109655+00:00",
+              "event": "message",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "method": "initialize",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:56.110288+00:00",
+              "event": "message",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "method": "notifications/initialized",
+              "hasId": false
+            },
+            {
+              "timestamp": "2026-07-26T20:49:56.110805+00:00",
+              "event": "message",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "method": "tools/list",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:56.111604+00:00",
+              "event": "message",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "method": "tools/call",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:49:56.112110+00:00",
+              "event": "tool-call",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:1",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "thread-unsubscribe",
+                "phase": "baseline"
+              }
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.172116+00:00",
+              "event": "message",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "method": "tools/call",
+              "hasId": true
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.172837+00:00",
+              "event": "tool-call",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba",
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "callId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba:2",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+                "arm": "thread-unsubscribe",
+                "phase": "post-window"
+              }
+            },
+            {
+              "timestamp": "2026-07-26T20:50:01.368051+00:00",
+              "event": "instance-stop",
+              "pid": 41356,
+              "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+            }
+          ]
+        },
+        "filesAfter": [
+          {
+            "path": ".sandbox_migration",
+            "type": "file",
+            "bytes": 3
+          },
+          {
+            "path": "config.toml",
+            "type": "file",
+            "bytes": 619
+          },
+          {
+            "path": "goals_1.sqlite",
+            "type": "file",
+            "bytes": 4096
+          },
+          {
+            "path": "goals_1.sqlite-shm",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "goals_1.sqlite-wal",
+            "type": "file",
+            "bytes": 74192
+          },
+          {
+            "path": "installation_id",
+            "type": "file",
+            "bytes": 36
+          },
+          {
+            "path": "logs_2.sqlite",
+            "type": "file",
+            "bytes": 49152
+          },
+          {
+            "path": "logs_2.sqlite-shm",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "logs_2.sqlite-wal",
+            "type": "file",
+            "bytes": 119512
+          },
+          {
+            "path": "memories_1.sqlite",
+            "type": "file",
+            "bytes": 4096
+          },
+          {
+            "path": "memories_1.sqlite-shm",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "memories_1.sqlite-wal",
+            "type": "file",
+            "bytes": 61832
+          },
+          {
+            "path": "sentinel-events.jsonl",
+            "type": "file",
+            "bytes": 1942
+          },
+          {
+            "path": "skills",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/.codex-system-skills.marker",
+            "type": "file",
+            "bytes": 17
+          },
+          {
+            "path": "skills/.system/imagegen",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/agents/openai.yaml",
+            "type": "file",
+            "bytes": 281
+          },
+          {
+            "path": "skills/.system/imagegen/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/assets/imagegen-small.svg",
+            "type": "file",
+            "bytes": 2894
+          },
+          {
+            "path": "skills/.system/imagegen/assets/imagegen.png",
+            "type": "file",
+            "bytes": 1711
+          },
+          {
+            "path": "skills/.system/imagegen/LICENSE.txt",
+            "type": "file",
+            "bytes": 10977
+          },
+          {
+            "path": "skills/.system/imagegen/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/references/cli.md",
+            "type": "file",
+            "bytes": 10430
+          },
+          {
+            "path": "skills/.system/imagegen/references/codex-network.md",
+            "type": "file",
+            "bytes": 1812
+          },
+          {
+            "path": "skills/.system/imagegen/references/image-api.md",
+            "type": "file",
+            "bytes": 6169
+          },
+          {
+            "path": "skills/.system/imagegen/references/prompting.md",
+            "type": "file",
+            "bytes": 10014
+          },
+          {
+            "path": "skills/.system/imagegen/references/sample-prompts.md",
+            "type": "file",
+            "bytes": 19672
+          },
+          {
+            "path": "skills/.system/imagegen/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/imagegen/scripts/image_gen.py",
+            "type": "file",
+            "bytes": 35266
+          },
+          {
+            "path": "skills/.system/imagegen/scripts/remove_chroma_key.py",
+            "type": "file",
+            "bytes": 14276
+          },
+          {
+            "path": "skills/.system/imagegen/SKILL.md",
+            "type": "file",
+            "bytes": 24359
+          },
+          {
+            "path": "skills/.system/openai-docs",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/agents/openai.yaml",
+            "type": "file",
+            "bytes": 612
+          },
+          {
+            "path": "skills/.system/openai-docs/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/assets/openai-small.svg",
+            "type": "file",
+            "bytes": 1094
+          },
+          {
+            "path": "skills/.system/openai-docs/assets/openai.png",
+            "type": "file",
+            "bytes": 1429
+          },
+          {
+            "path": "skills/.system/openai-docs/LICENSE.txt",
+            "type": "file",
+            "bytes": 10977
+          },
+          {
+            "path": "skills/.system/openai-docs/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/references/latest-model.md",
+            "type": "file",
+            "bytes": 2405
+          },
+          {
+            "path": "skills/.system/openai-docs/references/prompting-guide.md",
+            "type": "file",
+            "bytes": 17780
+          },
+          {
+            "path": "skills/.system/openai-docs/references/upgrade-guide.md",
+            "type": "file",
+            "bytes": 1072
+          },
+          {
+            "path": "skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+            "type": "file",
+            "bytes": 23847
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+            "type": "file",
+            "bytes": 16683
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info",
+            "type": "file",
+            "bytes": 1077
+          },
+          {
+            "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+            "type": "file",
+            "bytes": 4102
+          },
+          {
+            "path": "skills/.system/openai-docs/SKILL.md",
+            "type": "file",
+            "bytes": 22989
+          },
+          {
+            "path": "skills/.system/plugin-creator",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/agents/openai.yaml",
+            "type": "file",
+            "bytes": 345
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+            "type": "file",
+            "bytes": 1322
+          },
+          {
+            "path": "skills/.system/plugin-creator/assets/plugin-creator.png",
+            "type": "file",
+            "bytes": 1563
+          },
+          {
+            "path": "skills/.system/plugin-creator/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/references/installing-and-updating.md",
+            "type": "file",
+            "bytes": 6017
+          },
+          {
+            "path": "skills/.system/plugin-creator/references/plugin-json-spec.md",
+            "type": "file",
+            "bytes": 9397
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+            "type": "file",
+            "bytes": 11509
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+            "type": "file",
+            "bytes": 1545
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+            "type": "file",
+            "bytes": 2764
+          },
+          {
+            "path": "skills/.system/plugin-creator/scripts/validate_plugin.py",
+            "type": "file",
+            "bytes": 21809
+          },
+          {
+            "path": "skills/.system/plugin-creator/SKILL.md",
+            "type": "file",
+            "bytes": 11283
+          },
+          {
+            "path": "skills/.system/review-agent",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/review-agent/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/review-agent/agents/openai.yaml",
+            "type": "file",
+            "bytes": 258
+          },
+          {
+            "path": "skills/.system/review-agent/SKILL.md",
+            "type": "file",
+            "bytes": 2718
+          },
+          {
+            "path": "skills/.system/skill-creator",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/agents/openai.yaml",
+            "type": "file",
+            "bytes": 188
+          },
+          {
+            "path": "skills/.system/skill-creator/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/assets/skill-creator-small.svg",
+            "type": "file",
+            "bytes": 1322
+          },
+          {
+            "path": "skills/.system/skill-creator/assets/skill-creator.png",
+            "type": "file",
+            "bytes": 1563
+          },
+          {
+            "path": "skills/.system/skill-creator/license.txt",
+            "type": "file",
+            "bytes": 11560
+          },
+          {
+            "path": "skills/.system/skill-creator/references",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/references/openai_yaml.md",
+            "type": "file",
+            "bytes": 2405
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+            "type": "file",
+            "bytes": 6845
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/init_skill.py",
+            "type": "file",
+            "bytes": 15002
+          },
+          {
+            "path": "skills/.system/skill-creator/scripts/quick_validate.py",
+            "type": "file",
+            "bytes": 3394
+          },
+          {
+            "path": "skills/.system/skill-creator/SKILL.md",
+            "type": "file",
+            "bytes": 22463
+          },
+          {
+            "path": "skills/.system/skill-installer",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/agents",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/agents/openai.yaml",
+            "type": "file",
+            "bytes": 226
+          },
+          {
+            "path": "skills/.system/skill-installer/assets",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/assets/skill-installer-small.svg",
+            "type": "file",
+            "bytes": 926
+          },
+          {
+            "path": "skills/.system/skill-installer/assets/skill-installer.png",
+            "type": "file",
+            "bytes": 1086
+          },
+          {
+            "path": "skills/.system/skill-installer/LICENSE.txt",
+            "type": "file",
+            "bytes": 11560
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/github_utils.py",
+            "type": "file",
+            "bytes": 680
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/install-skill-from-github.py",
+            "type": "file",
+            "bytes": 10404
+          },
+          {
+            "path": "skills/.system/skill-installer/scripts/list-skills.py",
+            "type": "file",
+            "bytes": 3074
+          },
+          {
+            "path": "skills/.system/skill-installer/SKILL.md",
+            "type": "file",
+            "bytes": 3425
+          },
+          {
+            "path": "state_5.sqlite",
+            "type": "file",
+            "bytes": 4096
+          },
+          {
+            "path": "state_5.sqlite-shm",
+            "type": "file",
+            "bytes": 32768
+          },
+          {
+            "path": "state_5.sqlite-wal",
+            "type": "file",
+            "bytes": 1404952
+          },
+          {
+            "path": "tmp",
+            "type": "directory",
+            "bytes": null
+          },
+          {
+            "path": "tmp/arg0",
+            "type": "directory",
+            "bytes": null
+          }
+        ],
+        "authStateProduced": false,
+        "applicationLogExternalNetworkAttemptObserved": true,
+        "applicationLogExternalNetworkAttemptLines": [
+          "{\"timestamp\":\"2026-07-26T20:49:56.671102Z\",\"level\":\"ERROR\",\"fields\":{\"message\":\"failed to connect to websocket: IO error: invalid peer certificate: UnknownIssuer, url: wss://api.openai.com/v1/responses\"},\"target\":\"codex_api::endpoint::responses_websocket\"}"
+        ]
+      },
+      "stderrLines": [
+        "{\"timestamp\":\"2026-07-26T20:49:55.919698Z\",\"level\":\"WARN\",\"fields\":{\"message\":\"Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\"},\"target\":\"codex_core::shell_snapshot\"}",
+        "{\"timestamp\":\"2026-07-26T20:49:56.114358Z\",\"level\":\"WARN\",\"fields\":{\"message\":\"encountered errors while loading native root certificates\",\"native_root_error_count\":1},\"target\":\"codex_http_client::custom_ca\"}",
+        "{\"timestamp\":\"2026-07-26T20:49:56.671102Z\",\"level\":\"ERROR\",\"fields\":{\"message\":\"failed to connect to websocket: IO error: invalid peer certificate: UnknownIssuer, url: wss://api.openai.com/v1/responses\"},\"target\":\"codex_api::endpoint::responses_websocket\"}"
+      ],
+      "stdoutMessageCount": 9
+    }
+  },
+  "pairClassification": {
+    "classification": "unsubscribe-immediate-release-falsified-bounded",
+    "valid": true,
+    "unsubscribeReleaseAssociated": false,
+    "unsubscribeImmediateReleaseFalsified": true,
+    "controlClassification": "subscribed-control-retained-five-seconds",
+    "unsubscribeClassification": "unsubscribe-runtime-retained-five-seconds",
+    "crossArmActionSkewMilliseconds": 0.057600002037361264
+  },
+  "isolation": {
+    "currentAuthCopied": false,
+    "currentPluginsCopied": false,
+    "currentUserConfigCopied": false,
+    "minimalEnvironmentAllowlistApplied": true,
+    "accountOrProxyEnvironmentValuesRecorded": false,
+    "applicationLogExternalNetworkAttemptCount": 2,
+    "packetLevelNetworkMonitorUsed": false
+  },
+  "claimBoundary": {
+    "provesUnsubscribeRequestAccepted": true,
+    "provesUnsubscribeIsTaskEnd": false,
+    "provesTaskEndImmediateRelease": false,
+    "provesLeaseOrReferenceCountBehavior": false,
+    "provesStableResourceBenefit": false,
+    "provesGenericCrashRecovery": false,
+    "provesArbitraryMcpBehavior": false,
+    "provesCrossHostOrCrossVersionParity": false,
+    "provesResidualNeedForSelfAuthoredController": false,
+    "provesNoNetworkTraffic": false,
+    "modelTurnStarted": false,
+    "modelRequestSent": false
+  }
+}

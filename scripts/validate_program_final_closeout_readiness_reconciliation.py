@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""Validate the current program final-closeout readiness reconciliation."""
+
+from __future__ import annotations
+
+import json
+from collections import Counter
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent.parent
+RECORD_PATH = Path(
+    "registry/program-final-closeout-readiness-reconciliation-2026-07-28.json"
+)
+PROGRAM_MAP_PATH = Path("registry/program-acceptance-map.json")
+
+
+def _require(condition: bool, message: str) -> None:
+    if not condition:
+        raise RuntimeError(message)
+
+
+def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
+    _require(
+        document.get("schema") == 1
+        and document.get("status")
+        == "current-program-closeout-audited-cannot-close",
+        "Program closeout reconciliation identity drifted",
+    )
+    sources = document.get("sourceBindings", {})
+    _require(
+        sources.get("programAcceptanceMap")
+        == str(PROGRAM_MAP_PATH).replace("\\", "/")
+        and all((root / path).is_file() for path in sources.values()),
+        "Program closeout source binding drifted",
+    )
+    program = json.loads((root / PROGRAM_MAP_PATH).read_text(encoding="utf-8"))
+    criteria = program.get("acceptanceCriteria", [])
+    counts = Counter(row.get("assessment") for row in criteria)
+    expected_snapshot = {
+        "totalCriteria": len(criteria),
+        "verified": counts["verified"],
+        "partial": counts["partial"],
+        "planned": counts["planned"],
+        "other": len(criteria)
+        - counts["verified"]
+        - counts["partial"]
+        - counts["planned"],
+        "allCriteriaVerified": all(
+            row.get("assessment") == "verified" for row in criteria
+        ),
+    }
+    _require(
+        document.get("acceptanceSnapshot") == expected_snapshot,
+        "Program acceptance snapshot drifted",
+    )
+    expected_open = {
+        row["id"]: row["assessment"]
+        for row in criteria
+        if row.get("assessment") != "verified"
+    }
+    observed_open = {
+        row["id"]: row["assessment"]
+        for row in document.get("openCriteria", [])
+    }
+    _require(
+        observed_open == expected_open and len(observed_open) == 17,
+        "Program open-criteria reconciliation drifted",
+    )
+    valid_clusters = {
+        "semantic-and-lifecycle-evidence": 4,
+        "residual-gap-and-authoring": 3,
+        "consumer-and-source-governance": 4,
+        "standard-lifecycle": 2,
+        "runtime-hook-and-orchestration": 3,
+        "final-cleanup": 1,
+    }
+    observed_cluster_counts = Counter(
+        row["cluster"] for row in document.get("openCriteria", [])
+    )
+    _require(
+        dict(observed_cluster_counts) == valid_clusters,
+        "Program closeout cluster assignment drifted",
+    )
+    gate_clusters = {
+        row["id"]: row["openCriteriaCount"]
+        for row in document.get("gateClusters", [])
+    }
+    _require(
+        gate_clusters == valid_clusters,
+        "Program closeout gate-cluster coverage drifted",
+    )
+    open_ids = set(expected_open)
+    expected_open_objectives = {
+        row["id"]
+        for row in program.get("objectives", [])
+        if open_ids.intersection(row.get("acceptanceIds", []))
+    }
+    _require(
+        set(document.get("openObjectiveIds", []))
+        == expected_open_objectives
+        and len(expected_open_objectives) == 8,
+        "Program open-objective reconciliation drifted",
+    )
+    premise_checks = document.get("butterflyPremiseChecks", [])
+    _require(
+        len(premise_checks) == 4
+        and all(row.get("result") == "falsified" for row in premise_checks),
+        "Program premise-check coverage drifted",
+    )
+    closeout = document.get("closeoutDecision", {})
+    _require(
+        closeout.get("status") == "cannot-close"
+        and closeout.get("goalComplete") is False
+        and all(
+            closeout.get(key) is False
+            for key in (
+                "exactLoaderDecisionAloneCanCloseProgram",
+                "topLevelVerifierPassCanCloseProgram",
+                "cleanupInventoryPassCanCloseProgram",
+                "programStatusMutationAuthorized",
+            )
+        ),
+        "Program closeout decision overclaimed",
+    )
+    authority = document.get("authorityBoundary", {})
+    _require(
+        authority and all(value is False for value in authority.values()),
+        "Program closeout authority expanded",
+    )
+    documentation = document.get("documentation")
+    _require(
+        isinstance(documentation, str) and (root / documentation).is_file(),
+        "Program closeout documentation binding drifted",
+    )
+
+
+def main() -> int:
+    document = json.loads((ROOT / RECORD_PATH).read_text(encoding="utf-8"))
+    validate_reconciliation(document, root=ROOT)
+    print("Program final-closeout readiness reconciliation verified.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

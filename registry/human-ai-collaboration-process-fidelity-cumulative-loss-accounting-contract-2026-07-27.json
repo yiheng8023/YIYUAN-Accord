@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-process-fidelity-cumulative-loss-accounting-contract-2026-07-27",
+  "date": "2026-07-27",
+  "status": "zero-agent-additive-accounting-contract-live-not-tested",
+  "frozenInputBindings": {
+    "baseProtocol": {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+      "fileSha256": "8E1867505FD6CDB615A66892E6D4DC7553853159F459C366F8535C64E73E02C3"
+    },
+    "formalTraceSchema": {
+      "path": "schemas/process-fidelity-chained-transform-trace-v2.schema.json",
+      "fileSha256": "8AC9BDBCC62B179799C5F31E7D1EB4545CC9F1D1A747A773FCA4777489CC50D3"
+    },
+    "frozenTraceEvaluator": {
+      "path": "scripts/evaluate_process_fidelity_chained_transform_trace.py",
+      "fileSha256": "793BA34148486D57042A09AE357B5F2282D5BE7F4F4C9844B4AC4C3D5C92B999"
+    }
+  },
+  "scoredStagePolicy": {
+    "includedStageIdsInOrder": [
+      "hop-1-decomposition",
+      "edge-controlled-mutation",
+      "hop-2-routing",
+      "hop-3-acceptance-and-recovery"
+    ],
+    "excludedStageIds": [
+      "edge-recovery-envelope"
+    ],
+    "exclusionReason": "The recovery envelope carries both predecessor and source anchor material and is a transport package rather than one comparable semantic state.",
+    "parentRecomputedMetricsOnly": true,
+    "agentReportedCumulativeMetricsEligible": false,
+    "opaqueOrInvalidCaptureProducesTrustedLedger": false
+  },
+  "setAccountingDefinitions": {
+    "new": "active at the current scored stage but not the previous scored stage; a recovered loss that reappears is new at that hop",
+    "carried": "active at both the previous and current scored stages",
+    "recovered": "active at the previous scored stage but not the current scored stage",
+    "firstSeen": "active now and never active at an earlier scored stage",
+    "reintroduced": "new at this hop but already observed before an intervening recovery",
+    "unique": "the union of all active loss ids observed so far, each weighted once",
+    "peak": "the maximum simultaneously active loss weight at any scored stage"
+  },
+  "weightPolicy": {
+    "invariantOmittedOrChanged": "frozen oracle invariant weight",
+    "knownUnauthorizedAssumption": "frozen oracle assumption weight",
+    "unknownAssumptionOrValue": "maximum frozen invariant weight",
+    "provenanceMissingOrFabricated": 1,
+    "unknownLossIdType": "fail-closed",
+    "activeWeightMustEqualParentWeightedDelta": true
+  },
+  "budgetPolicy": {
+    "cumulativeUniqueLossWeightMaxByArm": {
+      "control-identity": 0,
+      "injected-authority-omission": 6
+    },
+    "comparison": "strictly-greater-than",
+    "firstBreachStageRecorded": true,
+    "missingBudgetDisposition": "budgetEvaluated=false-and-budgetExceededAtHop=null",
+    "enforcement": "advisory-only-does-not-change-process-acceptance"
+  },
+  "expectedCalibration": {
+    "control": {
+      "cumulativeUniqueLossWeight": 0,
+      "peakActiveLossWeight": 0,
+      "budgetExceededAtHop": null
+    },
+    "injected": {
+      "cumulativeUniqueLossWeight": 6,
+      "peakActiveLossWeight": 6,
+      "budgetExceededAtHop": null,
+      "newAtMutation": [
+        "invariant-omitted:authority",
+        "provenance-missing:authority"
+      ],
+      "carriedAtHop2": [
+        "invariant-omitted:authority",
+        "provenance-missing:authority"
+      ],
+      "recoveredAtHop3": [
+        "invariant-omitted:authority",
+        "provenance-missing:authority"
+      ]
+    }
+  },
+  "executionBoundary": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "externalAccessUsed": false,
+    "hostConfigurationChanged": false,
+    "formalProcessCohortCount": 0,
+    "liveDispatchAuthorized": false
+  },
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "formalCohortStarted": false,
+    "endToEndProcessFidelityAccepted": false,
+    "humanBoundaryCoverageProved": false,
+    "softwareLifecycleCoverageProved": false,
+    "crossHostPortabilityProved": false,
+    "candidateSkillEffectMeasured": false,
+    "selfAuthoredResidualGapProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CUMULATIVE-LOSS-ACCOUNTING-POC-2026-07-27.md"
+}

@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "id": "skill-overlap-attribution-fixtures-2026-07-23",
+  "date": "2026-07-23",
+  "purpose": "falsify premature Skill value, equivalence, replacement, superiority, and residual-gap attribution before live weak-Agent arms",
+  "hardStandardControl": {
+    "constantAcrossEveryArm": true,
+    "creditedAsSkillValue": false,
+    "waivableBySkill": false
+  },
+  "fixtures": [
+    {
+      "id": "complete-arm-design-binds-intervention-and-attribution",
+      "facts": {
+        "case": "arm-design",
+        "eligibility": "eligible",
+        "intervention": "selective-single-skill",
+        "payloadIdentity": "source-pinned-example",
+        "payloadSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "hostExposureEvidence": "parent-observed-host-exposure",
+        "loaderEvidence": "host-loader-event",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "bounded-single-skill",
+        "primaryMetric": "private-oracle-match",
+        "sharedControlsNotCredited": true
+      },
+      "expected": "arm-design-ready-for-live-packet"
+    },
+    {
+      "id": "arm-design-without-loader-evidence-is-incomplete",
+      "facts": {
+        "case": "arm-design",
+        "eligibility": "eligible",
+        "intervention": "selective-single-skill",
+        "payloadIdentity": "source-pinned-example",
+        "payloadSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "hostExposureEvidence": "parent-observed-host-exposure",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "bounded-single-skill",
+        "primaryMetric": "private-oracle-match",
+        "sharedControlsNotCredited": true
+      },
+      "expected": "arm-design-incomplete"
+    },
+    {
+      "id": "selective-arm-cannot-use-full-bootstrap-trigger",
+      "facts": {
+        "case": "arm-design",
+        "eligibility": "eligible",
+        "intervention": "selective-single-skill",
+        "payloadIdentity": "source-pinned-example",
+        "payloadSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "hostExposureEvidence": "parent-observed-host-exposure",
+        "loaderEvidence": "host-loader-event",
+        "triggerMode": "full-bootstrap",
+        "triggerBoundary": "global-session-bootstrap",
+        "primaryMetric": "private-oracle-match",
+        "sharedControlsNotCredited": true
+      },
+      "expected": "arm-design-trigger-boundary-conflict"
+    },
+    {
+      "id": "ask-matt-cannot-be-cross-ecosystem-top-level-trigger",
+      "facts": {
+        "case": "arm-design",
+        "eligibility": "eligible",
+        "intervention": "selective-single-skill",
+        "payloadIdentity": "matt:ask-matt",
+        "payloadSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "hostExposureEvidence": "parent-observed-host-exposure",
+        "loaderEvidence": "host-loader-event",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "cross-ecosystem-top-level",
+        "primaryMetric": "private-oracle-match",
+        "sharedControlsNotCredited": true
+      },
+      "expected": "arm-design-reject-second-top-level-router-trigger"
+    },
+    {
+      "id": "explicit-not-applicable-arm-is-not-a-residual-gap",
+      "facts": {
+        "case": "arm-design",
+        "eligibility": "not-applicable",
+        "notApplicableReason": "no source-reviewed candidate provides topology judgment"
+      },
+      "expected": "arm-not-applicable-explicit-not-residual-gap"
+    },
+    {
+      "id": "hard-standard-is-not-skill-value",
+      "facts": {
+        "case": "skill-value-attribution",
+        "hardStandardPreventedFailure": true,
+        "skillInvocationObserved": false
+      },
+      "expected": "hard-standard-control-only"
+    },
+    {
+      "id": "payload-presence-is-not-invocation",
+      "facts": {
+        "case": "skill-value-attribution",
+        "payloadPresent": true,
+        "skillInvocationObserved": false
+      },
+      "expected": "skill-invocation-unproved-payload-presence-only"
+    },
+    {
+      "id": "agent-self-report-is-not-invocation",
+      "facts": {
+        "case": "skill-value-attribution",
+        "agentSelfReportedInvocation": true,
+        "skillInvocationObserved": false
+      },
+      "expected": "skill-invocation-unproved-agent-self-report-only"
+    },
+    {
+      "id": "handoff-producer-is-not-receiver-quality",
+      "facts": {
+        "case": "handoff",
+        "hostLoaderEventObserved": true,
+        "producerEvidenceComplete": true,
+        "receiverExecutionObserved": false
+      },
+      "expected": "handoff-producer-evidence-only"
+    },
+    {
+      "id": "handoff-three-independent-runs-remain-bounded",
+      "facts": {
+        "case": "handoff",
+        "hostLoaderEventObserved": true,
+        "producerEvidenceComplete": true,
+        "receiverExecutionObserved": true,
+        "receiverPrivateOracleMatched": true,
+        "independentHostRunCount": 3,
+        "independentHostThreadCount": 3
+      },
+      "expected": "handoff-live-arm-observed-not-superiority"
+    },
+    {
+      "id": "ask-matt-is-not-cross-ecosystem-router",
+      "facts": {
+        "case": "router-scope",
+        "candidate": "ask-matt",
+        "scope": "cross-ecosystem-top-level"
+      },
+      "expected": "reject-second-top-level-router"
+    },
+    {
+      "id": "ask-matt-may-be-bounded-internally",
+      "facts": {
+        "case": "router-scope",
+        "candidate": "ask-matt",
+        "scope": "matt-internal-subflow"
+      },
+      "expected": "eligible-bounded-matt-subflow"
+    },
+    {
+      "id": "full-superpowers-is-a-separate-arm",
+      "facts": {
+        "case": "router-scope",
+        "candidate": "superpowers-full-bootstrap",
+        "nativeTaskSufficient": true
+      },
+      "expected": "separate-full-bootstrap-arm-not-minimal-route"
+    },
+    {
+      "id": "local-verification-does-not-close-remote",
+      "facts": {
+        "case": "closure-scope",
+        "localEngineeringVerificationPassed": true,
+        "remoteOrAcceptanceEvidenceMissing": true,
+        "externalSkillClaimsClosed": true
+      },
+      "expected": "reject-cross-domain-closure-scope-upgrade"
+    },
+    {
+      "id": "worktree-execution-is-not-topology-judgment",
+      "facts": {
+        "case": "git-topology-attribution",
+        "worktreeOrHookExecuted": true,
+        "topologyJudgmentObserved": false
+      },
+      "expected": "execution-does-not-prove-topology-judgment"
+    },
+    {
+      "id": "terra-low-is-diagnostic-only",
+      "facts": {
+        "case": "weak-condition",
+        "actualModel": "gpt-5.6-terra",
+        "actualReasoning": "low"
+      },
+      "expected": "capacity-diagnostic-only-not-weak-acceptance"
+    },
+    {
+      "id": "host-confounded-arm-is-not-residual-gap",
+      "facts": {
+        "case": "residual-gap",
+        "selfAuthoredExposureState": "present",
+        "eligibleExternalCandidatePresent": true,
+        "repeatedWeakAgentFailureObserved": false
+      },
+      "expected": "confounded-self-authored-disabled-arm"
+    },
+    {
+      "id": "missing-candidate-is-not-residual-gap",
+      "facts": {
+        "case": "residual-gap",
+        "selfAuthoredExposureState": "host-disabled",
+        "eligibleExternalCandidatePresent": false,
+        "repeatedWeakAgentFailureObserved": false
+      },
+      "expected": "candidate-gap-not-residual-capability-gap"
+    },
+    {
+      "id": "no-live-failure-is-not-residual-gap",
+      "facts": {
+        "case": "residual-gap",
+        "selfAuthoredExposureState": "absent",
+        "eligibleExternalCandidatePresent": true,
+        "repeatedWeakAgentFailureObserved": false
+      },
+      "expected": "live-residual-gap-evidence-missing"
+    }
+  ],
+  "claimBoundary": {
+    "fixturesProveLiveSkillBehavior": false,
+    "fixturesProveBehavioralEquivalence": false,
+    "fixturesProveSuperiority": false,
+    "fixturesProveResidualGap": false,
+    "terraLowIsSparkWeakAcceptance": false
+  }
+}

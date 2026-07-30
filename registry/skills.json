@@ -29,15 +29,6 @@
       "source": "github:mattpocock/skills"
     },
     {
-      "id": "skill.curated.git-guardrails",
-      "directory": "git-guardrails",
-      "name": "git-guardrails",
-      "description": "Set up hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Works in any agent environment or manual terminal workflow. Use when the user wants to prevent destructive git operations or add git safety guardrails.",
-      "status": "approved",
-      "phase": "general",
-      "source": "github:mattpocock/skills"
-    },
-    {
       "id": "skill.curated.grill-with-docs",
       "directory": "grill-with-docs",
       "name": "grill-with-docs",

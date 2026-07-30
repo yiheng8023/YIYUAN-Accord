@@ -1,0 +1,331 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-thin-slice-zero-model-capture",
+  "mode": "zero-model-scripted-calibration",
+  "protocolBinding": {
+    "path": "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json",
+    "fileSha256": "8fdafbb2da0309e34b8d9ff953e3e8f23c098088ebb9ad8c1782a46156560e56",
+    "canonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df"
+  },
+  "execution": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "dispatchAuthorized": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false
+  },
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27",
+  "sourceArtifactId": "SOURCE-BUNDLE",
+  "domainSuboraclePackArtifactId": "DOMAIN-SUBORACLE-PACK",
+  "stageEnvelopeIds": [
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E1",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E2",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E3",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E4",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E5",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E6",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E7"
+  ],
+  "authorityReceiptIds": [
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G0-source-scope-authority",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G1-requirements-decision",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G2-architecture-security-decision",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G3-implementation-mutation-envelope",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G4-independent-acceptance-and-risk-decision",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G5-simulated-release-and-rollback-decision",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G6-simulated-fault-and-recovery-decision",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G7-maintenance-deprecation-decision"
+  ],
+  "acceptedInvariantLedgerIds": [
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-00",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-01",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-02",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-03",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-04",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-05",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-06",
+    "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-07"
+  ],
+  "rawArtifactIndex": [
+    {
+      "artifactId": "SOURCE-BUNDLE",
+      "path": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "bytes": 658,
+      "rawSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "DOMAIN-SUBORACLE-PACK",
+      "path": "RAW-ARTIFACTS/DOMAIN-SUBORACLE-PACK.json",
+      "bytes": 46643,
+      "rawSha256": "e62cb137b2211a2dafd8335194c948d8ba9e4630cadabcb80960c5c3ed724de6",
+      "canonicalSha256": "c1fe6bb23ccce63d99d93ea33f577fe5ba1e44158c631652f29b6fdee0224b05",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-00",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-00.json",
+      "bytes": 4355,
+      "rawSha256": "1295beb7b015f39786fb15a90c8eaad43910f2a25d8f7ff20d334afe81b1d433",
+      "canonicalSha256": "fa3fe4e4c8501bb47f413b580a005b70a5c25a81683baf52969c52080bbe562a",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O1",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O1.json",
+      "bytes": 1280,
+      "rawSha256": "691cf48a960a1bc02cfed8492085f465071b4070d2556ed1e0a58af3fdbfaca0",
+      "canonicalSha256": "ccfe00e98359b188caa0cfd79b4e5e8a4339d305e39ffde70824992543edb79c",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O2",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O2.json",
+      "bytes": 1694,
+      "rawSha256": "2ffaca36c923efc9e8f03aca813557e5fc88bc361964ff655ecbe6c984d27af6",
+      "canonicalSha256": "7210e50f43e8214ba083ca1d52f8619911a663c0d7a3612e40e40ad21f30bba1",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O3",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O3.json",
+      "bytes": 1597,
+      "rawSha256": "7cca29efe9e4ac7c7e91c66beb39f49f06c4459dfa56a2866f3e711a2edd4540",
+      "canonicalSha256": "803485dc0c8ea6d2a7186f88381c8153e3bb76d26e88d6519d4c1593c25e62fc",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O4",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O4.json",
+      "bytes": 1800,
+      "rawSha256": "631dbeb1b58c64ba979c1a6adff4b80a513f643f8da11725ea8df1847ea3d81b",
+      "canonicalSha256": "e0601c7a8d8f1ee9a54a6a55722e585ac4af2f579a13ed6e2ca0622c476b10d9",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O5",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O5.json",
+      "bytes": 1758,
+      "rawSha256": "b55c2218cff1d1e520b45de0af49f319f623d456ae10368af44df816ea706d4b",
+      "canonicalSha256": "92c5013dce929f513ebb4e60501219d42a69cddc2e87d32d761bad28aace0a1b",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O6",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O6.json",
+      "bytes": 1914,
+      "rawSha256": "3da676aeb1f09b56eeefca456aba8359a8d37311c9f41f24df19b6afe50a32c1",
+      "canonicalSha256": "8f843628e21156be66f988890015d27a28d934bb61813c6e3823342ddc099435",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O7",
+      "path": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O7.json",
+      "bytes": 2114,
+      "rawSha256": "11fe83e06c6ab3894507a7e1f26382e4011c98bc3f016b2359224719e47dde0f",
+      "canonicalSha256": "73604e9c7303df69a7f4da3064aea49e93d3c647a8f7b36e7df25daaf1d275c3",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G0-source-scope-authority",
+      "path": "AUTHORITY-RECEIPTS/G0-source-scope-authority.json",
+      "bytes": 1279,
+      "rawSha256": "c872bde33a929f7479b17cbfb75fa8267d6b885e461e84b21b770db768934e52",
+      "canonicalSha256": "ea3a63705cc6c63bbd7cbf8860de0b645ba8a99e3791010eeadcc764139c830e",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G1-requirements-decision",
+      "path": "AUTHORITY-RECEIPTS/G1-requirements-decision.json",
+      "bytes": 1520,
+      "rawSha256": "8ed5c758c6601aea7e5f67e5ba4e5030b2d86c96b37323d8f2c042196fb9fd07",
+      "canonicalSha256": "4e8bd07ef56e8db3ebd2c3b2c5361848c039b3445492bc3b338e77f055fe5ed1",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-01",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-01.json",
+      "bytes": 6097,
+      "rawSha256": "e411f9e324fe082e75c4e07edb4edcdad924af62db670ec6f0c92e40986f2a6d",
+      "canonicalSha256": "46c16d4dae2a796c08f7c12b46123976a1408b3ff6e6573073d5c16a426dcc06",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G2-architecture-security-decision",
+      "path": "AUTHORITY-RECEIPTS/G2-architecture-security-decision.json",
+      "bytes": 1522,
+      "rawSha256": "57d107f23b7764e5e60e1d198339d7fad8afddc144717168a25432430c100bc2",
+      "canonicalSha256": "0ed25be6069635ba538230ec83a4e64127cc01915fed33afa88a659be0840a4b",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-02",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-02.json",
+      "bytes": 7755,
+      "rawSha256": "a9dbeb8e3ab63925103584519933a4e51f61fe016bdb45870eb3fe0f6163a6c4",
+      "canonicalSha256": "0f1bb11b5dce126ffe45f1c235d92499fb090814bf8091928a336f26624ac818",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G3-implementation-mutation-envelope",
+      "path": "AUTHORITY-RECEIPTS/G3-implementation-mutation-envelope.json",
+      "bytes": 1542,
+      "rawSha256": "d04c04aaef48c3fa7ca003687a760e035ab487b007835a7ae498bf1acf2a3b57",
+      "canonicalSha256": "3bb5c40187ae601f11829c9b3caf5c1ba72d23aaddb0f1a5ee2528d358f6d2be",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-03",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-03.json",
+      "bytes": 7754,
+      "rawSha256": "9a8536057109c53c5e486d3dd00214981db45199d1ee751ae71b5c2a2386df84",
+      "canonicalSha256": "c27edd6b97a8ed1181ac9ff6259d534bb876dba0bbe5e679c182af779ab6c9d7",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G4-independent-acceptance-and-risk-decision",
+      "path": "AUTHORITY-RECEIPTS/G4-independent-acceptance-and-risk-decision.json",
+      "bytes": 1559,
+      "rawSha256": "360836dff983eff371bf910de8bd3ae3523c41896a4e09510cf7315fbd8fb35d",
+      "canonicalSha256": "2711a0aecf1fadd4da3089e74e130fad3d152e322a94e5e1cfefd097a14b8dd1",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-04",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-04.json",
+      "bytes": 9452,
+      "rawSha256": "5c509fb37e1f0a01ac98ff68f34ba7193fbe16d9edef7dc3d5c716d489393aa7",
+      "canonicalSha256": "0939212a0f05e8a8cbb59d58cd3b5f120a0f139770a2b641d81ccc7d78c7440d",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G5-simulated-release-and-rollback-decision",
+      "path": "AUTHORITY-RECEIPTS/G5-simulated-release-and-rollback-decision.json",
+      "bytes": 1564,
+      "rawSha256": "255971ba3c15e27dd6182153e64af1629f9ede1d3521ef16505531274cc22663",
+      "canonicalSha256": "51ae4374e9cc39dceecc7294b1ae62b74edab2f39e963f353c610c750adacc85",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-05",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-05.json",
+      "bytes": 11109,
+      "rawSha256": "cd10763f1b947de38b620b0d768afaf54457ba1794446e038e375556b7fa0dc4",
+      "canonicalSha256": "804b30664b807f1152f3c7847b586010e3d259a2d65c1785339e219bef2f041d",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G6-simulated-fault-and-recovery-decision",
+      "path": "AUTHORITY-RECEIPTS/G6-simulated-fault-and-recovery-decision.json",
+      "bytes": 1594,
+      "rawSha256": "4c526bd7e2044c26b72acb140d8bba47c76c323d4e7c7b22a8b5a05edc2c04d6",
+      "canonicalSha256": "dd4e740884aee0ef790410c73dbed02ef06bc7e97fc9663e49bc0f163f54438b",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-06",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-06.json",
+      "bytes": 12793,
+      "rawSha256": "5aa9a32160785a3ebeb19c020d676c3919af5ca15faed8e560afef2ac51a0c62",
+      "canonicalSha256": "2a552f9a6783de1616cbb2033ecfa54df2f0afe72c8f86ebcedda58fa1bbdf36",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G7-maintenance-deprecation-decision",
+      "path": "AUTHORITY-RECEIPTS/G7-maintenance-deprecation-decision.json",
+      "bytes": 1526,
+      "rawSha256": "f7e226d50c3d816c606839797cda460b777392e7cac8905efc3a4b03077e8005",
+      "canonicalSha256": "20e574056838df8367626a2af1d9d02ed47682559cfa8f1429df9e92ff764265",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-ledger-07",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-07.json",
+      "bytes": 14447,
+      "rawSha256": "88006799b0f03bc2c7a0b35061fb9aba7bb3d8113506a47c4c725273017d279f",
+      "canonicalSha256": "4b10eba7bd7b814bcca2e1f0885244163b81f894e5f5a0aa66ebf4002a6c8395",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E1",
+      "path": "STAGE-ENVELOPES/SE-TS-01-requirements-domain.json",
+      "bytes": 5689,
+      "rawSha256": "7f78ea2787c368f593b23baedf5626b8cab27a57b7b1c1ee7a97468f2b650b6e",
+      "canonicalSha256": "7a42cb3b6b2a75c0066d24a87702af6b2f4b412e7d1ffc2f20e6bd6ace41de94",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E2",
+      "path": "STAGE-ENVELOPES/SE-TS-02-architecture-design.json",
+      "bytes": 6486,
+      "rawSha256": "2f8eaf7b95b9f660c21e31ce792bcc19ab5999f2387a9caa58bc86d2a7f9d825",
+      "canonicalSha256": "bb1de619624f6fb0492c779fadbab268f67aa00b28591c7d733b71d0e1ef9908",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E3",
+      "path": "STAGE-ENVELOPES/SE-TS-03-implementation-tdd.json",
+      "bytes": 6424,
+      "rawSha256": "9069c98658b59ed503abb92c1d833dac02587f79ae19a23fb633c6e87b941da3",
+      "canonicalSha256": "13904013360b2437c44b04a13e4b21d4aa001b01c0769ff7a464d2336e714c5b",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E4",
+      "path": "STAGE-ENVELOPES/SE-TS-04-independent-review-test-security.json",
+      "bytes": 6575,
+      "rawSha256": "24f20c14478ce615828605ac0112065878ae9fb70fea3d0453bfc95e411463bb",
+      "canonicalSha256": "4fd23a3e2198294f8a453d5f2405a28efba1ae28d071e87a2712f70849538d4d",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E5",
+      "path": "STAGE-ENVELOPES/SE-TS-05-release-rollback-gating.json",
+      "bytes": 6531,
+      "rawSha256": "7f9f37ece8f6d9e35ef2dc1e1de2d3a92f260bcf0dfcfea4c38b42f96f362a4b",
+      "canonicalSha256": "897a51267fbd889a86e71d260955f78530a55335e25fc9994cfbe3a95dab90b9",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E6",
+      "path": "STAGE-ENVELOPES/SE-TS-06-observation-incident-handling.json",
+      "bytes": 6537,
+      "rawSha256": "a67c66e79443e24cb4da3a86b9f59d50f3b557bc2c35c025be9611f77ffe13dc",
+      "canonicalSha256": "4763f3205dd431e45d70091c0060abc50ae2da1a53aa1eb3b65e2c232fa32161",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-E7",
+      "path": "STAGE-ENVELOPES/SE-TS-07-maintenance-evolution.json",
+      "bytes": 6512,
+      "rawSha256": "f33c7aff6c77fc1cf492d54f606b210e2eec0940fae0e55a288f577ee550fc14",
+      "canonicalSha256": "ef15ad35d7b8b5bd8563b77794d7b4e93d212367c9c9f04a1a0f574a5c526329",
+      "repositoryLocalAuditPath": true
+    }
+  ],
+  "completion": {
+    "status": "valid-calibration-only",
+    "failureCodes": []
+  },
+  "eligibleForFormalLiveEvidence": false,
+  "claimBoundary": {
+    "provesLiveAgentBehavior": false,
+    "provesHumanDecisionQuality": false,
+    "provesProductionReadiness": false,
+    "provesRealReleaseOrDeployment": false,
+    "provesRemoteGitOrCi": false,
+    "provesDynamicMcpLifecycle": false,
+    "provesCandidateSkillDeliveryCausationPreferenceOrValue": false,
+    "provesSelfAuthoredResidualGap": false,
+    "provesCrossHostPortability": false,
+    "provesAutomaticThreadCreationCompressionOrHandoffInvocation": false,
+    "provesAllLifecycleSlices": false,
+    "provesGeneralSoftwareEngineeringCompetence": false,
+    "provesHumanAuthorityWhenReceiptsAreSimulated": false,
+    "provesLosslessEndToEndProcess": false,
+    "authorizesGitDeploymentMcpCandidateSkillPortfolioOrCleanupMutation": false
+  }
+}

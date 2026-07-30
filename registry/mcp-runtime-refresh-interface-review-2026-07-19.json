@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "mcp-runtime-refresh-interface-review-2026-07-19",
+  "date": "2026-07-19",
+  "status": "observed-single-host-isolated-status-list-live-refresh-unproven",
+  "localHost": {
+    "codexCliVersion": "0.144.6",
+    "schemaCommand": "codex app-server generate-json-schema --out <temporary-stable-directory>",
+    "experimentalFlagUsed": false,
+    "methods": [
+      {"name": "config/mcpServer/reload", "params": "null", "response": "empty-object"},
+      {"name": "mcpServerStatus/list", "params": ["threadId", "detail", "cursor", "limit"], "invoked": true, "evidence": "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json"}
+    ],
+    "generatedFileSha256": {
+      "ClientRequest.json": "AC75A7DD43BF3EBA3681507370C0A218496A79A59FD470A189F4FDA104B1BDAD",
+      "v2/McpServerRefreshResponse.json": "54A77812DB02175DC69053870E582D3B314AF6F161F0C76846F3563B0F9487C4",
+      "v2/ListMcpServerStatusParams.json": "701916A7D444AFBBC68AEF9E72AB4E5C3111A8FD97560072E9B84713ADF9DDC0"
+    }
+  },
+  "officialSource": {
+    "repository": "openai/codex",
+    "revision": "0fb559f0f6e231a88ac02ea002d3ecd248e2b515",
+    "observations": {
+      "enabledFalseSkipsInitialization": true,
+      "enabledToolsIsAllowList": true,
+      "disabledToolsAppliedAfterAllowList": true,
+      "appServerQueuesRefreshForLoadedThreads": true,
+      "refreshBuildsAndPublishesNewRuntimeManager": true,
+      "oldRuntimeMayRemainWhileInflightHandleExists": true,
+      "managerDropCancelsStartupAndClearsClients": true
+    }
+  },
+  "claimClassification": {
+    "staticRefreshImplementationExists": true,
+    "currentBinaryStableProtocolExposesRefresh": true,
+    "currentBinaryStableProtocolExposesThreadAwareStatus": true,
+    "currentDesktopUiInvokesRefresh": "unknown",
+    "liveStatusListObserved": true,
+    "liveRuntimeRefreshObserved": false,
+    "toolSurfaceDeltaObserved": false,
+    "oldRuntimeOrProcessReleaseObserved": false,
+    "perServerProcessOwnershipEstablished": false,
+    "taskEndOrIdleReleaseObserved": false,
+    "leaseOrReferenceCountControlObserved": false,
+    "crashRecoveryObserved": false,
+    "resourceSavingsObserved": false,
+    "crossHostParityObserved": false
+  },
+  "authorityBoundary": {
+    "officialPublicSourceRead": true,
+    "localSchemaGenerationInTemporaryDirectory": true,
+    "appServerStart": true,
+    "statusListCall": true,
+    "configReload": false,
+    "mcpEnableDisable": false,
+    "agentHomeOrAccountConfigMutation": false,
+    "processStop": false,
+    "accountOrSecretRead": false,
+    "temporarySchemaCleanup": false
+  },
+  "nextGate": "separate-authorization-for-disposable-same-config-reload-status-before-and-after"
+}

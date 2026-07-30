@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "id": "cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23",
+  "date": "2026-07-23",
+  "observedAt": "2026-07-23T15:20:45+08:00",
+  "status": "live-drift-observed-management-authorized-but-recovery-gated",
+  "supersedesAsLiveTruthOnly": "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
+  "preservesPreviousRecordAsDatedEvidence": true,
+  "ccSwitch": {
+    "version": "3.18.0",
+    "officialRepository": "farion1231/cc-switch",
+    "tag": "v3.18.0",
+    "commit": "606e7bbe75db7f8285f7a3be006fac22b5d22796",
+    "sourceAuditMode": "read-only-official-tag"
+  },
+  "liveCounts": {
+    "databaseRows": 251,
+    "databaseDistinctNames": 233,
+    "enabledClaude": 251,
+    "enabledCodex": 251,
+    "ccSsotBodies": 75,
+    "databaseDirectoriesMissingSsotBody": 176,
+    "claudeEntries": 251,
+    "claudeResolvable": 75,
+    "claudeBrokenProjections": 176,
+    "codexTopLevelDirectories": 77,
+    "codexResolvableCcBodies": 75,
+    "agentsTopLevelDirectories": 73,
+    "agentsBrokenEntries": 0
+  },
+  "sourceClasses": {
+    "physicalBodiesWithRepositoryAttribution": 29,
+    "larkSuite": 27,
+    "composio": 1,
+    "mattPocock": 1,
+    "physicalBodiesWithoutRepositoryAttribution": 46,
+    "enabledDiscoveryRepositories": 6,
+    "repositoryRegistrationProvesPayloadSource": false
+  },
+  "criticalCohorts": {
+    "repositoryAuthoredContracts": {
+      "skills": ["intent-contract", "capability-router", "closure-contract"],
+      "agentsAndCodexTreeEqual": true,
+      "ccAndClaudeUseDifferentOlderTree": true,
+      "ccIsCanonicalAcrossSupportedHosts": false,
+      "skillLevelCcBackupsPresent": 0
+    },
+    "lark": {
+      "count": 27,
+      "treatAsAtomicCohort": true,
+      "allReferenceLarkShared": true,
+      "substantiveDriftAfterEolNormalization": [
+        "lark-base",
+        "lark-doc",
+        "lark-drive",
+        "lark-im",
+        "lark-wiki"
+      ],
+      "genericPortabilityProved": false
+    }
+  },
+  "backupAndRecovery": {
+    "databaseBackupsObserved": 3,
+    "skillBackupsObserved": 20,
+    "allObservedSkillBackupsAreLarkRelated": true,
+    "webDavManifestEqualityObserved": true,
+    "crossDeviceContentEqualityProved": false,
+    "restoreRehearsalPassed": false,
+    "settingsContainsCredentialExcludedFromEvidence": true
+  },
+  "portfolioDecision": {
+    "ccSpecificManagementAuthorizedByUser": true,
+    "admissionRetentionDisablementUninstallAndCleanupInScope": true,
+    "eligiblePayloadDeletionsNow": 0,
+    "directDatabaseMutationAccepted": false,
+    "bulkDeletionBeforeOwnerDecisionAccepted": false,
+    "copyRuntimePluginCachesIntoCcAccepted": false,
+    "runtimeOwnedContainersExcluded": [".system", "codex-primary-runtime"],
+    "larkPerSkillIndependentCleanupAccepted": false
+  },
+  "orderedTransaction": [
+    "capture-secret-free-live-manifest",
+    "backup-both-contract-trees-and-complete-lark-cohort",
+    "retain-official-isolated-uninstall-restore-fixtures-without-copy-only-canary",
+    "owner-decision-on-stale-row-debt-disposition",
+    "if-separately-authorized-run-one-exact-visible-gui-transaction-and-reinventory",
+    "import-and-distribute-one-canonical-contract-release",
+    "reconcile-lark-as-an-atomic-version-cohort",
+    "resolve-live-duplicate-display-groups",
+    "apply-per-capability-admit-retain-disable-or-uninstall-decisions"
+  ],
+  "acceptance": {
+    "databaseAndSsotReconciled": false,
+    "enabledProjectionsResolve": false,
+    "databaseHashesMatchSsot": false,
+    "contractTreesConverged": false,
+    "larkCohortVersionCoherent": false,
+    "restoreRehearsalPassed": false,
+    "runtimeOwnedDirectoriesUnchanged": true,
+    "secretsExcludedFromRepositoryEvidence": true
+  },
+  "authorityBoundary": {
+    "ccSkillPortfolioManagement": true,
+    "localSecretFreeBackupAndRecoveryEvidence": true,
+    "directSqliteProductionMutation": false,
+    "webDavUploadOrDownload": false,
+    "credentialRotation": false,
+    "accountOrOAuthChange": false,
+    "commitOrPush": false,
+    "releaseOrPublication": false
+  },
+  "nextGate": "owner-decision-on-stale-row-debt-disposition"
+}

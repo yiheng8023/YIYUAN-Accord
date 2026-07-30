@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "id": "skill-ablation-cli-host-preflight-2026-07-23",
+  "date": "2026-07-23",
+  "status": "formal-weak-agent-arms-blocked-cli-not-logged-in-model-unverified",
+  "host": {
+    "surface": "codex-cli-exec",
+    "version": "0.145.0",
+    "workingDirectory": "C:/Projects/agent-autonomy-harness"
+  },
+  "requestedCondition": {
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "silentSubstitutionAllowed": false,
+    "controlPlaneRequestProvesActualModel": false
+  },
+  "attempts": [
+    {
+      "id": "baseline-no-tool-request",
+      "ephemeral": true,
+      "ignoreUserConfig": true,
+      "sandbox": "read-only",
+      "oneOffSkillDisableCount": 0,
+      "oneOffPluginDisableCount": 0,
+      "turnCompleted": true,
+      "actualModel": "unknown",
+      "actualReasoningEffort": "unknown",
+      "commandsRun": 0,
+      "filesRead": 0,
+      "filesWritten": 0,
+      "formalScenarioSent": false,
+      "countsAsWeakAgentAcceptance": false
+    },
+    {
+      "id": "full-optional-capability-disable",
+      "ephemeral": true,
+      "ignoreUserConfig": true,
+      "sandbox": "read-only",
+      "oneOffSkillDisableScope": "all-discovered-agents-and-codex-skill-files",
+      "oneOffPluginDisableCount": 15,
+      "modelMetadataFound": false,
+      "authenticationResult": "401-unauthorized-missing-authentication",
+      "turnCompleted": false,
+      "agentResultReturned": false,
+      "formalScenarioSent": false
+    },
+    {
+      "id": "six-self-authored-projections-disabled",
+      "ephemeral": true,
+      "ignoreUserConfig": true,
+      "sandbox": "read-only",
+      "oneOffSkillDisableCount": 6,
+      "oneOffPluginDisableCount": 0,
+      "modelMetadataFound": false,
+      "authenticationResult": "401-unauthorized-missing-authentication",
+      "turnCompleted": false,
+      "agentResultReturned": false,
+      "formalScenarioSent": false
+    }
+  ],
+  "liveLoginStatus": {
+    "command": "codex login status",
+    "result": "not-logged-in",
+    "loginAttempted": false,
+    "oauthAttempted": false,
+    "apiKeyCreatedOrConfigured": false
+  },
+  "officialSparkAvailabilityReview": {
+    "source": "https://openai.com/index/introducing-gpt-5-3-codex-spark/",
+    "sourcePublished": "2026-02-12",
+    "reviewedAt": "2026-07-23",
+    "researchPreview": true,
+    "announcedAudience": "ChatGPT Pro users",
+    "announcedSurfaces": [
+      "latest Codex app",
+      "latest Codex CLI",
+      "latest VS Code extension"
+    ],
+    "accessMayBeLimitedOrQueued": true,
+    "currentCliLoginStillRequired": true,
+    "currentUserPlanOrSparkEntitlementVerifiedByThisReview": false,
+    "loginOrAccountChangeAttemptedByThisReview": false
+  },
+  "mutationBoundary": {
+    "globalCodexConfigChanged": false,
+    "applicationRestarted": false,
+    "skillInstalledOrProjected": false,
+    "repositoryChangedByTrial": false,
+    "accountStateChanged": false,
+    "oneOffOverridesPersisted": false
+  },
+  "repositoryOnlyEvaluatorHardening": {
+    "completedAfterHostBlock": true,
+    "parentOrHostEvidenceRequiredForActualModelReasoningAndExposure": true,
+    "agentSelfReportAcceptedAsActualConditionEvidence": false,
+    "gitArmAExactPrivateOracleMatchRequired": true,
+    "gitArmAMinimumIndependentRuns": 3,
+    "liveArmExecutedByHardening": false
+  },
+  "desktopSubagentSurfaceReview": {
+    "officialManualSource": "https://learn.chatgpt.com/docs/agent-configuration/subagents.md",
+    "officialSkillsSource": "https://learn.chatgpt.com/docs/build-skills.md",
+    "officialRecommendedLightweightSubagentModel": "gpt-5.6-terra",
+    "officialLowReasoningIsForStraightforwardSpeedSensitiveTasks": true,
+    "explicitSpawnModelAndReasoningOverrideAgentDefaults": true,
+    "customAgentConfigMayContainSkillsConfig": true,
+    "currentCallableSpawnSupportsModelOverride": true,
+    "currentCallableSpawnSupportsReasoningOverride": true,
+    "currentCallableSpawnSupportsCustomAgentSelector": false,
+    "currentCallableSpawnSupportsPerRunSkillsConfig": false,
+    "selfAuthoredSkillsVisibleInCurrentStartupList": true,
+    "requestedFormalModelAvailableOnCurrentCallableSpawn": false,
+    "threeConfoundedDiagnosticRepetitionsExecuted": false,
+    "globalConfigChanged": false,
+    "customAgentConfigWritten": false,
+    "subagentSpawnedByThisReview": false
+  },
+  "judgment": {
+    "requestedModelIndependentlyVerified": false,
+    "requestedReasoningIndependentlyVerified": false,
+    "selfAuthoredDisabledExposureObserved": false,
+    "formalWeakAgentArmExecuted": false,
+    "authenticationFailureIsSkillFailure": false,
+    "baselineResponseProvesExactWeakModel": false,
+    "resultClass": "host-auth-and-model-verification-blocked"
+  },
+  "claimBoundary": {
+    "failedSamplingProvesSkillBehavior": false,
+    "oneOffConfigArgumentsProveSampledDisablement": false,
+    "modelAndReasoningOverrideProvesSkillIsolation": false,
+    "customAgentConfigSupportProvesCurrentSpawnCanSelectIt": false,
+    "visibleSelfAuthoredSkillsCanCountAsDisabledArm": false,
+    "repeatingAConfoundedRunCreatesAblationEvidence": false,
+    "anotherModelMayBeSilentlySubstituted": false,
+    "strongDiagnosticMayReplaceWeakAcceptance": false,
+    "repositoryOnlyWorkMayContinue": true
+  },
+  "nextGate": "user-completes-cli-login-or-host-provides-verified-model-session-then-rerun-exposure-preflight"
+}

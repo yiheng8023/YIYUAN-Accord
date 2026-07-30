@@ -1,0 +1,268 @@
+{
+  "schema": 1,
+  "id": "other-cc-and-external-skill-scenario-coverage-audit-2026-07-27",
+  "date": "2026-07-27",
+  "status": "verified-next-named-scenario-ready-for-offline-protocol-only-no-live-arm",
+  "purpose": "Classify only repository-observed CC and external Skill scenario evidence into behavioral observation, source or exposure or protocol-only evidence, and high-priority uncovered domains, then decide whether one next named scenario is sufficiently bound without generalizing candidate quality.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "bytes": 76246,
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9",
+      "role": "named-scenarios-evidence-states-and-next-batch-rule"
+    },
+    {
+      "path": "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json",
+      "bytes": 16862,
+      "sha256": "6bac95cd7c3c9583199b6de8a63a2f4ce109777a007f5d8089f96963a7965c15",
+      "role": "current-behavioral-cells-and-treatment-fidelity-boundary"
+    },
+    {
+      "path": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+      "bytes": 18610,
+      "sha256": "7b6fcfd9dab80d42a4180c49ed3b3a97162d4d8ac47a24890d86da71ea57ba8c",
+      "role": "historical-static-cc-cohort-and-no-live-ablation-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.json",
+      "bytes": 15944,
+      "sha256": "7ac2c67c200c988a16b0e35acf92b9bd330d4be75daa572dbe74b504e555aeec",
+      "role": "requirements-grill-with-docs-observation"
+    },
+    {
+      "path": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json",
+      "bytes": 11796,
+      "sha256": "4ce4cc26dc17d32344159b23d0748f1a999b9d045c71ce4ebc22690abdb0eca2",
+      "role": "implementation-disciplined-coding-observation"
+    },
+    {
+      "path": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json",
+      "bytes": 14412,
+      "sha256": "6db331c8cf185c0b98e123f51bbd95e7dd5e9753a353f062cb21c4948ab8c40b",
+      "role": "incident-cc-diagnose-observation"
+    },
+    {
+      "path": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.json",
+      "bytes": 17453,
+      "sha256": "24a57daf38e6d38ef354fe3b0992062a73df72ab84aa4045af35a2c0adb1521a",
+      "role": "source-pinned-debugging-observations-and-historical-superpowers-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.json",
+      "bytes": 15520,
+      "sha256": "58c17ef6c1510ad5d0c4425079c5d2323973635469e12da7f04b032c7569ca36",
+      "role": "maintenance-deprecation-and-migration-observation"
+    },
+    {
+      "path": "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json",
+      "bytes": 12011,
+      "sha256": "07bbcf8ebebf0093ad9b85b2b9acf22c4e17e40e3000a2c836ab6068fd352bf6",
+      "role": "current-cc-layered-count-and-current-superpowers-source-boundary"
+    },
+    {
+      "path": "registry/skills.json",
+      "bytes": 9752,
+      "sha256": "6bb7eb9c21529869398acf80714d666d601b459069dd8d0df73dbd5d1b3e5525",
+      "role": "approved-release-scenario-candidate-metadata"
+    },
+    {
+      "path": "registry/admissions.json",
+      "bytes": 21494,
+      "sha256": "428f7e30d8fc9bcb4b89ba7ea5fc6cca0e31cca2c1a35d03012b05785d537eb8",
+      "role": "approved-release-candidate-admission-metadata"
+    },
+    {
+      "path": "release-manifest.json",
+      "bytes": 6835,
+      "sha256": "ca3c87d51ab8215d020f241a280e2dcfa97806dba63c73282b2db21f5daaa587",
+      "role": "approved-release-candidate-file-identities"
+    }
+  ],
+  "coverageSemantics": {
+    "behavioralObservationRequiresValidRepetitions": true,
+    "taskScopedExposureDoesNotProveLoaderInvocation": true,
+    "sourceOrReleaseIdentityDoesNotProveBehavior": true,
+    "ccDatabaseOrPhysicalCountDoesNotProvePerSkillAvailabilityOrInvocation": true,
+    "plannedScenarioDoesNotMeanEvidenceExists": true,
+    "zeroModelCalibrationDoesNotMeanLiveAgentOrDomainEvidence": true,
+    "missingCoverageDoesNotProveResidualCapabilityGap": true
+  },
+  "behaviorallyObservedScenarioCells": [
+    {
+      "scenarioId": "SE-DISCOVERY-REQ-01",
+      "candidateId": "cc.grill-with-docs",
+      "validRepetitions": 3,
+      "classification": "three-valid-pairs-both-arms-fail-hidden-contract",
+      "currentBehavioralEvidence": true,
+      "independentLoaderEventProved": false,
+      "candidateInstructionsReachedModelProved": false,
+      "candidateCausationProved": false
+    },
+    {
+      "scenarioId": "SE-IMPLEMENT-REVIEW-01",
+      "candidateId": "cc.disciplined-coding",
+      "validRepetitions": 3,
+      "classification": "bounded-functional-pass-mixed-process-no-causation",
+      "currentBehavioralEvidence": true,
+      "independentLoaderEventProved": false,
+      "candidateInstructionsReachedModelProved": false,
+      "candidateCausationProved": false
+    },
+    {
+      "scenarioId": "SE-OPS-INCIDENT-01",
+      "candidateId": "cc.diagnose",
+      "validRepetitions": 3,
+      "classification": "bounded-association-not-current-matt-or-causation",
+      "currentBehavioralEvidence": true,
+      "independentLoaderEventProved": false,
+      "candidateInstructionsReachedModelProved": false,
+      "candidateCausationProved": false
+    },
+    {
+      "scenarioId": "SE-OPS-INCIDENT-01",
+      "candidateId": "matt.current-diagnosing-bugs",
+      "validRepetitions": 3,
+      "classification": "source-pinned-mixed-result-no-preference-or-causation",
+      "currentBehavioralEvidence": true,
+      "independentLoaderEventProved": false,
+      "candidateInstructionsReachedModelProved": false,
+      "candidateCausationProved": false
+    },
+    {
+      "scenarioId": "SE-MAINT-MIGRATE-01",
+      "candidateId": "cc.deprecation-and-migration",
+      "validRepetitions": 3,
+      "classification": "bounded-native-association-no-general-preference-or-causation",
+      "currentBehavioralEvidence": true,
+      "independentLoaderEventProved": false,
+      "candidateInstructionsReachedModelProved": false,
+      "candidateCausationProved": false
+    }
+  ],
+  "historicalBehaviorOnly": [
+    {
+      "scenarioId": "SE-OPS-INCIDENT-01",
+      "candidateId": "superpowers.runtime-6.1.1-systematic-debugging",
+      "validRepetitions": 3,
+      "currentBehavioralEvidence": false,
+      "reason": "Observed Superpowers 6.1.1 behavior does not establish current 6.2.0 behavior."
+    }
+  ],
+  "sourceExposureOrProtocolOnly": {
+    "historicalStaticCcCohortWithoutLiveBehavior": [
+      "grill-me",
+      "review"
+    ],
+    "currentRuntimePackageMetadataWithoutBehavioralBaseline": {
+      "candidate": "superpowers.6.2.0",
+      "exactReleaseSkillEntryCount": 14,
+      "allSkillEntriesExactReleaseBytes": true,
+      "executionAdmissionSatisfied": false,
+      "loaderInvocationObserved": false,
+      "behavioralBaselineProved": false
+    },
+    "aggregateCcInventoryOnly": {
+      "databaseRows": 251,
+      "distinctNames": 233,
+      "physicalBodies": 75,
+      "resolvableConsumerBodies": 75,
+      "unresolvedClaudeLinks": 176,
+      "loadedOrInvokedCount": null,
+      "perSkillScenarioCoverageDerivableFromCounts": false,
+      "backupRestoreVerified": false,
+      "crossDeviceEqualityProved": false
+    },
+    "approvedReleaseScenarioCandidateMetadata": [
+      {
+        "scenarioId": "SE-RELEASE-CHANGE-01",
+        "candidateId": "skill.curated.ci-cd-and-automation",
+        "source": "github:addyosmani/agent-skills",
+        "admissionDisposition": "approve",
+        "validated": true,
+        "releasePath": "skills/ci-cd-and-automation/SKILL.md",
+        "releaseSha256": "7aa008e4be26068c9e61ea8a9303711020e376c6cbfdf10d581a9fd400acf8ea",
+        "currentCcBodyIdentityProved": false,
+        "taskScopedExposureProved": false,
+        "behavioralValueProved": false
+      },
+      {
+        "scenarioId": "SE-RELEASE-CHANGE-01",
+        "candidateId": "skill.curated.shipping-and-launch",
+        "source": "github:addyosmani/agent-skills",
+        "admissionDisposition": "approve",
+        "validated": true,
+        "releasePath": "skills/shipping-and-launch/SKILL.md",
+        "releaseSha256": "195a1fad5612627464df4581954727b8ebd649b0ce4bfe91e06655bcc32302b0",
+        "currentCcBodyIdentityProved": false,
+        "taskScopedExposureProved": false,
+        "behavioralValueProved": false
+      }
+    ]
+  },
+  "highPriorityCoverageGaps": {
+    "plannedOnlyNoAgentOrDomainEvidence": [
+      "GEN-CREATIVE-01",
+      "GEN-LEARNING-01",
+      "GEN-ORG-DECISION-01",
+      "GEN-ACCESS-COMMS-01",
+      "SE-RELEASE-CHANGE-01",
+      "SE-MGMT-PRACTICE-01"
+    ],
+    "zeroModelCalibrationOnlyNoLiveAgentOrDomainEvidence": [
+      "SE-ARCH-DESIGN-01",
+      "SE-VERIFY-SECURE-01"
+    ],
+    "liveDomainScenarioEvidenceCount": 0,
+    "crossHostBehavioralEvidenceProved": false,
+    "affectedSubjectOrDomainExpertValidationProved": false,
+    "longitudinalHumanOrMaintenanceEffectProved": false
+  },
+  "nextNamedScenarioDecision": {
+    "scenarioId": "SE-RELEASE-CHANGE-01",
+    "whyThisScenario": [
+      "it is one of only two software-lifecycle slices still planned-only",
+      "release and rollback mistakes are consequential and independently falsifiable",
+      "the matrix already binds task, authority, data, acceptance signals, evidence needs, falsifier, and forbidden claims",
+      "two approved external release payloads provide non-execution candidate metadata without requiring discovery or self-authoring"
+    ],
+    "scenarioContractSufficientForOfflineProtocolDesign": true,
+    "approvedCandidateMetadataSufficientForSourceAdmissionOverlapPreflight": true,
+    "currentCcPerCandidateAvailabilityProved": false,
+    "candidateSpecificExposureProved": false,
+    "candidateLoaderInvocationProved": false,
+    "candidateBehaviorOrValueProved": false,
+    "liveComparativeArmReady": false,
+    "modelDispatchAuthorized": false,
+    "ccMutationAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "nextBoundedAction": "Draft only a zero-model, source-bound scenario protocol and candidate preflight for native, ci-cd-and-automation, and shipping-and-launch. Before any live arm, separately prove exact current candidate identity and availability, freeze one release fixture and hard oracle, bind candidate-specific exposure or explicit unknown attribution, and obtain dispatch authority."
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "externalDiscoveryPerformed": false,
+    "modelRequestCount": 0,
+    "candidateExecutionCount": 0,
+    "installationPerformed": false,
+    "ccSwitchReadOrMutationPerformed": false,
+    "globalConfigurationChanged": false,
+    "programMapChanged": false,
+    "globalVerifierChanged": false
+  },
+  "claimBoundary": {
+    "allCcSkillsEnumeratedByScenario": false,
+    "ccCountProvesPerSkillAvailability": false,
+    "selectedExposureProvesInvocation": false,
+    "observedAssociationProvesCandidateCausation": false,
+    "observedAssociationProvesGeneralPreference": false,
+    "superpowers611Proves620Behavior": false,
+    "approvedReleasePayloadProvesCurrentCcPresence": false,
+    "approvedReleasePayloadProvesBehavioralValue": false,
+    "releaseScenarioCompetenceProved": false,
+    "wholeSoftwareLifecycleCovered": false,
+    "wholeHumanAiCollaborationCovered": false,
+    "liveDomainValueProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "selfAuthoringOrPortfolioMutationAuthorized": false
+  },
+  "documentation": "docs/strategy/OTHER-CC-AND-EXTERNAL-SKILL-SCENARIO-COVERAGE-AUDIT-2026-07-27.md"
+}

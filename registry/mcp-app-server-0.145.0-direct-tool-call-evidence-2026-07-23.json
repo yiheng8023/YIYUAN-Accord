@@ -1,0 +1,267 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23",
+  "date": "2026-07-23",
+  "status": "observed-single-host-direct-local-tool-call-multi-instance-release-gap",
+  "host": {
+    "product": "Codex CLI app-server",
+    "platform": "Windows",
+    "version": "0.145.0",
+    "repositoryHead": "55659f30091990f7c589932e0379880de30dc403"
+  },
+  "officialEvidence": {
+    "tag": "rust-v0.145.0",
+    "commit": "25af12f7e61572b0bc18ddb1008be543b91519b0",
+    "appServerReadme": "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/README.md",
+    "release": "https://github.com/openai/codex/releases/tag/rust-v0.145.0",
+    "sourceFilesReviewed": [
+      "codex-rs/app-server-protocol/src/protocol/v2/mcp.rs",
+      "codex-rs/app-server/src/request_processors/mcp_processor.rs",
+      "codex-rs/app-server/src/mcp_refresh.rs",
+      "codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+      "codex-rs/app-server/tests/suite/v2/mcp_tool.rs",
+      "codex-rs/app-server/tests/suite/v2/thread_unsubscribe.rs"
+    ],
+    "semantics": {
+      "directToolCall": "mcpServer/tool/call loads the named thread and directly calls thread.call_mcp_tool without requiring turn/start.",
+      "reload": "config/mcpServer/reload queues RefreshMcpServers for loaded threads; an empty response is acceptance, not completion or process-release evidence.",
+      "unsubscribe": "The last unsubscribe does not unload immediately. Unload requires no subscribers and no activity for 30 minutes; shutdown timeout can leave the thread loaded.",
+      "threadClosed": "thread/closed follows successful thread shutdown and manager removal; it does not alone prove every child MCP process exited."
+    }
+  },
+  "stableSchemaEvidence": {
+    "experimentalFlagUsed": false,
+    "generatedDirectory": "C:/tmp/codex-app-server-schema-0.145.0-20260723",
+    "files": {
+      "ClientRequest.json": "f3171526a137767aa9350838f441d79e2dc294efecd32faf7932b3b08d223136",
+      "v2/McpServerToolCallParams.json": "35fa0fddcdee23ceb24a39b1e6de62d1594b804b453dda66cc522005393f6477",
+      "v2/McpServerToolCallResponse.json": "83d100ccf933b4a1ce657bc7532a79c783dcde8b4d059a2f2cc985d51538ad88",
+      "v2/McpToolCallProgressNotification.json": "53db836cfa93fecef8968d3b750b936a679d5befed987c72ad6f0bc6e327f60f",
+      "v2/McpServerRefreshResponse.json": "54a77812db02175dc69053870e582d3b314af6f161f0c76846f3563b0f9487c4",
+      "v2/ListMcpServerStatusParams.json": "701916a7d444afbbc68aef9e72ab4e5c3111a8fd97560072e9b84713adf9ddc0",
+      "v2/ThreadUnsubscribeParams.json": "a03dc3d6c5a2f77f164b6bf4250d29f0c81c10c6b5f484fac0b05392dc9c936a",
+      "v2/ThreadClosedNotification.json": "d9978b8a5450dc6ba01cac5ae6641493aa60c558340a718722a78eda990048c8"
+    },
+    "toolCallParameters": {
+      "required": [
+        "threadId",
+        "server",
+        "tool"
+      ],
+      "optional": [
+        "arguments",
+        "_meta"
+      ]
+    }
+  },
+  "primaryLiveProbe": {
+    "probeId": "codex-app-server-isolated-mcp-tool-call-v1",
+    "runner": "scripts/probe_codex_app_server_mcp_tool_call.py",
+    "sentinel": "scripts/mcp_lifecycle_sentinel.py",
+    "tempRoot": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05",
+    "normalizedResultSha256": "36710711b35aec0d92fe7b7326a6f3e5274ac785f586233d1201b12c5a592d2a",
+    "sentinelEventLogSha256": "75697a52bf2cf3a591d82cd41b6679ae8c0f1b0c0351539e2e8d70bc4005b213",
+    "isolatedConfigSha256": "f3bceb0206743cfe4e96356d18aaa32091b001046f3721a3a39acde9a35749a7",
+    "threadId": "019f8e2e-19cc-71e3-962e-0dd740446b83",
+    "modelTurnStarted": false,
+    "accountStateCopied": false,
+    "authStateProduced": false,
+    "configUnchangedDuringProbe": true,
+    "discoveryFeaturesDisabled": [
+      "plugins",
+      "remote_plugin",
+      "apps",
+      "plugin_sharing"
+    ],
+    "applicationLogExternalNetworkAttemptObserved": false,
+    "packetLevelNetworkMonitorUsed": false,
+    "statusConfiguredServerCount": 1,
+    "directToolCall": {
+      "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+      "tool": "identity",
+      "pid": 43368,
+      "instanceId": "4eafdc24-723a-4400-9637-5bc6736d5f74",
+      "callId": "4eafdc24-723a-4400-9637-5bc6736d5f74:1",
+      "succeeded": true
+    },
+    "runtimeInstances": {
+      "observedCount": 2,
+      "toolCallPid": 43368,
+      "instances": [
+        {
+          "pid": 43368,
+          "instanceId": "4eafdc24-723a-4400-9637-5bc6736d5f74",
+          "roleFromObservedMethods": "thread-bound-tool-call-instance"
+        },
+        {
+          "pid": 40724,
+          "instanceId": "676649a5-0374-41ab-9f76-75bb03dd5232",
+          "roleFromObservedMethods": "status-resource-discovery-instance"
+        }
+      ],
+      "singleRuntimeInstanceProved": false
+    },
+    "unsubscribe": {
+      "responseStatus": "unsubscribed",
+      "thirtyMinuteIdleWindowExecuted": false,
+      "threadClosedObserved": false
+    },
+    "shutdownObservation": {
+      "launcherWrapperGracefulWaitTimedOut": true,
+      "launcherWrapperKillSent": true,
+      "launcherWrapperReturnCode": 1,
+      "actualAppServerPidObserved": false,
+      "actualAppServerTerminationObserved": false,
+      "processesPresentAfterLauncherWrapperShutdown": [
+        40724
+      ],
+      "pidOnlyCleanupSignalsSent": [
+        40724
+      ],
+      "processIdentityRevalidatedBeforeSignal": false,
+      "exactInstanceCleanupProved": false,
+      "allSentinelProcessesExitedWithinFiveSeconds": false,
+      "postProbeExactPidReadOnlyCheck": {
+        "pid": 40724,
+        "running": false,
+        "exactExitLatencyKnown": false
+      }
+    }
+  },
+  "repeatedObservation": {
+    "attemptRoots": [
+      "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723",
+      "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run02",
+      "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run03",
+      "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run04",
+      "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05"
+    ],
+    "attemptCount": 5,
+    "directToolCallSucceededCount": 5,
+    "twoSentinelInstancesObservedCount": 5,
+    "normalizedResultRetainedForPrimaryAttemptOnly": true,
+    "perAttemptEventManifests": [
+      {
+        "root": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723",
+        "eventLogSha256": "55a1c9b3f1841f84a6177ca698a4a94e68d8ba89fb4f4bab3099aafc04b5773c",
+        "bytes": 2163,
+        "instanceCount": 2,
+        "toolCallCount": 1,
+        "instances": [
+          {
+            "pid": 50456,
+            "instanceId": "687efa4a-ffdf-42da-9165-6199c742abd4",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance"
+          },
+          {
+            "pid": 41388,
+            "instanceId": "8ec594e2-2062-499c-90ed-a0bf6dc2cac9",
+            "roleFromObservedMethods": "status-resource-discovery-instance"
+          }
+        ]
+      },
+      {
+        "root": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run02",
+        "eventLogSha256": "09712dc9d68e2ee2df2b96bb9e0c0f0f94d193c0eaa38dcd4c534d98f0688eda",
+        "bytes": 2163,
+        "instanceCount": 2,
+        "toolCallCount": 1,
+        "instances": [
+          {
+            "pid": 45592,
+            "instanceId": "fefae2ea-2ad1-4d02-bffb-9682605b14cc",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance"
+          },
+          {
+            "pid": 66732,
+            "instanceId": "98accf5f-7f1c-420d-ab52-5eca3736633d",
+            "roleFromObservedMethods": "status-resource-discovery-instance"
+          }
+        ]
+      },
+      {
+        "root": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run03",
+        "eventLogSha256": "6b100e689f96194fbd9ad233b05f2231e2587855f0bb8d47b1cb7cc1aea8e1ae",
+        "bytes": 2163,
+        "instanceCount": 2,
+        "toolCallCount": 1,
+        "instances": [
+          {
+            "pid": 66156,
+            "instanceId": "f5f508ce-623a-4c73-85d1-a1d20aeaae31",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance"
+          },
+          {
+            "pid": 59196,
+            "instanceId": "eab02204-296d-4ff4-a94d-50cd5d487be9",
+            "roleFromObservedMethods": "status-resource-discovery-instance"
+          }
+        ]
+      },
+      {
+        "root": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run04",
+        "eventLogSha256": "7b49150f66ff5e288877311fdb9b74ac0a2fdd0ea87e7a4f618869e19b7c76b2",
+        "bytes": 2163,
+        "instanceCount": 2,
+        "toolCallCount": 1,
+        "instances": [
+          {
+            "pid": 60756,
+            "instanceId": "e3d6f263-7b43-41e0-b9b2-95c6c8b380d5",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance"
+          },
+          {
+            "pid": 60508,
+            "instanceId": "5f8639f0-4b4f-44d9-afc7-d48c27ffe326",
+            "roleFromObservedMethods": "status-resource-discovery-instance"
+          }
+        ]
+      },
+      {
+        "root": "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05",
+        "eventLogSha256": "75697a52bf2cf3a591d82cd41b6679ae8c0f1b0c0351539e2e8d70bc4005b213",
+        "bytes": 2163,
+        "instanceCount": 2,
+        "toolCallCount": 1,
+        "instances": [
+          {
+            "pid": 43368,
+            "instanceId": "4eafdc24-723a-4400-9637-5bc6736d5f74",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance"
+          },
+          {
+            "pid": 40724,
+            "instanceId": "676649a5-0374-41ab-9f76-75bb03dd5232",
+            "roleFromObservedMethods": "status-resource-discovery-instance"
+          }
+        ]
+      }
+    ],
+    "claimLimit": "Repeated local observations support a multi-instance warning for this path, not a universal Codex or MCP topology rule."
+  },
+  "supportedConclusions": {
+    "stableDirectToolCallMethodExistsInVersionSchema": true,
+    "directLocalMcpToolCallObserved": true,
+    "directCallWithoutModelTurnObserved": true,
+    "directCallWithoutAccountLoginObserved": true,
+    "statusListedConfiguredSentinel": true,
+    "multipleRuntimeInstancesObservedForOneConfiguredServer": true
+  },
+  "claimBoundary": {
+    "noNetworkTrafficProved": false,
+    "sameThreadHotEnableDisableProved": false,
+    "reloadCompletionOrOldProcessReleaseProved": false,
+    "taskLevelLeaseOrReferenceCountProved": false,
+    "thirtyMinuteIdleUnloadProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "crashRecoveryProved": false,
+    "stableResourceSavingsProved": false,
+    "desktopOrCrossHostParityProved": false
+  },
+  "cleanupDebt": {
+    "temporarySchemaAndProbeRootsRetained": true,
+    "deletionAuthorizedByThisRecord": false,
+    "disposition": "Retain as bounded process evidence until the program-wide cleanup gate or a separately authorized evidence migration."
+  },
+  "nextGate": "isolated-config-enable-disable-reload-new-thread-trial-with-explicit-multi-instance-accounting"
+}

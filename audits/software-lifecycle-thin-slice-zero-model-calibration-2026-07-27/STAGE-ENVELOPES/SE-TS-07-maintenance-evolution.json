@@ -1,0 +1,176 @@
+{
+  "schema": 1,
+  "kind": "source-backed-software-lifecycle-stage-envelope",
+  "envelopeId": "SE-E2E-THIN-01-ZERO-001-E7",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "protocolBinding": {
+    "protocolId": "human-ai-collaboration-source-backed-software-lifecycle-thin-slice-v1",
+    "protocolCanonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df",
+    "stageDefinitionCanonicalSha256": "355f5ff8d71cda6c8e65239bb552298804e584ac4986d7967637a194211f67fe"
+  },
+  "stage": {
+    "stageId": "SE-TS-07-maintenance-evolution",
+    "sequence": 7,
+    "stageClass": "maintenance-evolution"
+  },
+  "role": "maintenance-migration-and-deprecation-analyst",
+  "independenceClass": "source-and-consumer-bound-no-removal-delete-or-retirement-authority",
+  "lineage": {
+    "primaryPredecessorEnvelopeSha256": "57faadd9c1ba8ab26cb9736834d628e028a6c98ccb1d9cc0bcb3f22911c372c2",
+    "additionalPredecessorEnvelopeSha256s": [],
+    "previousAcceptedLedgerSha256": "14c559ab86e4457235e7ee58ef434f89ae147f0d58977981f9da97ec75dc24e2"
+  },
+  "sourceBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    }
+  ],
+  "inputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    },
+    {
+      "ordinal": 2,
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O6",
+      "role": "observation-incident-record",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O6.json",
+      "byteLength": 1555,
+      "byteSha256": "dceb1fb1e659d463b83b2cd9e1325a46f70cc585fc1cb1b4f57680aa6c4565ac",
+      "canonicalJsonSha256": "68b55374723dabeda1d20a43de77c6f0d136a5034a37f69b22a0cb9f0c74a3c4",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "inputSetCanonicalSha256": "306228b5411cbf7e447ba57c95a6f2076e4b3345b6d8261585918c678b365587",
+  "outputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O7",
+      "role": "maintenance-deprecation-decision",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O7.json",
+      "byteLength": 1491,
+      "byteSha256": "2f387195dd21fab4ace809e1f54a4d24b2fc207f7bb40fb898b41bef072a0d59",
+      "canonicalJsonSha256": "40c5d5ed70ac13084eebd51eb5d3ad41cf6f75f870bfcf777f6d0c52b81e60cb",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "outputSetCanonicalSha256": "ce123a087afc1f84eb5fbe010430cccb347d489b8cf4cb710f0bd7fd6916eb4f",
+  "sections": [
+    "consumerStates",
+    "knownAndUnknownTelemetry",
+    "compatibilityObligations",
+    "incidentDrivenChange",
+    "retention",
+    "rollbackOwner",
+    "deprecationState",
+    "removalBoundary",
+    "recheckTriggers",
+    "claimBoundary",
+    "nextGate"
+  ],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": [],
+  "acceptanceObligationIds": [
+    "acceptance.maintenance-evolution"
+  ],
+  "humanAuthorityReceiptBindings": [
+    "7524a8dce3811aff2ac7a580c3da6e8f1285aa40e8eda5306d9706b20dd2d4e1"
+  ],
+  "repositoryTruthBefore": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "repositoryTruthAfter": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "allowedMutableFiles": [],
+  "changedFiles": [],
+  "rawEventArtifactIds": [],
+  "absoluteGateResults": [
+    {
+      "gateId": "mechanism.maintenance-evolution",
+      "passed": true,
+      "evidenceArtifactIds": [
+        "SE-E2E-THIN-01-ZERO-001-O7"
+      ]
+    }
+  ],
+  "truthTransition": {
+    "proposalArtifactCanonicalSha256": "40c5d5ed70ac13084eebd51eb5d3ad41cf6f75f870bfcf777f6d0c52b81e60cb",
+    "proposedChangeIds": [
+      "accept-stage-7"
+    ],
+    "acceptedChangeIds": [
+      "accept-stage-7"
+    ],
+    "rejectedChangeIds": [],
+    "basisKindsUsed": [
+      "human-authority-receipt"
+    ],
+    "beforeAcceptedLedgerSha256": "14c559ab86e4457235e7ee58ef434f89ae147f0d58977981f9da97ec75dc24e2",
+    "afterAcceptedLedgerSha256": "cf30ad73a091779061b6ec2edc70f2b8bbc690d8cffb5991cf907fbf67db95eb"
+  },
+  "parentEvaluation": {
+    "evaluatorId": "software-lifecycle-zero-model-calibrator-v1",
+    "evaluatorCanonicalSha256": "e9880346f79e8aeab22bbee4fc19173abc9ab4f2bfad270b492d828fa0ae2e6b",
+    "stageValidators": [
+      "distinct-consumer-states",
+      "unknown-telemetry-not-zero",
+      "compatibility-and-retention",
+      "rollback-owner-and-recheck-trigger",
+      "no-removal-or-production-migration-claim"
+    ],
+    "status": "accepted",
+    "failureCodes": []
+  },
+  "execution": {
+    "mode": "zero-model-scripted-calibration",
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false
+  },
+  "status": "accepted",
+  "stopReason": null,
+  "nextGate": "G7-maintenance-deprecation-decision",
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "productionLifecycleProved": false,
+    "humanDecisionQualityProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "envelopeSha256": "c9ab0bbd3e1a2ec97687913e15aba9c197403aa807f61ac932a21b4eb6835568"
+}

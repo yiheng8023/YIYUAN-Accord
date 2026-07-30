@@ -1,0 +1,73 @@
+{
+  "artifactId": "fixture-injected-b1-p2-R2",
+  "values": {
+    "goal": "produce a decision-ready research route without changing external or repository state",
+    "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+    "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+    "continuity": "preserve source identity and keep recovery anchored to S0"
+  },
+  "provenanceIds": [
+    "goal",
+    "evidence",
+    "acceptance",
+    "continuity"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": [
+    "invariant-omitted:authority",
+    "provenance-missing:authority"
+  ],
+  "predecessorArtifact": {
+    "artifactId": "fixture-injected-b1-p2-O2",
+    "values": {
+      "goal": "produce a decision-ready research route without changing external or repository state",
+      "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+      "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+      "continuity": "preserve source identity and keep recovery anchored to S0"
+    },
+    "provenanceIds": [
+      "goal",
+      "evidence",
+      "acceptance",
+      "continuity"
+    ],
+    "assumptionIds": [],
+    "detectedLossIds": [
+      "invariant-omitted:authority",
+      "provenance-missing:authority"
+    ],
+    "sections": {
+      "fidelitySnapshot": {},
+      "route": "halt-and-recover-from-source",
+      "rejectedAlternatives": [],
+      "uncertainties": [],
+      "nextGate": "source-backed-recovery"
+    }
+  },
+  "sourceAnchorReference": {
+    "artifactId": "S0",
+    "canonicalSha256": "1db895b4b853a399d18101fe8ef0cdd845c3068b282e07562babcd55355b55be"
+  },
+  "sourceAnchorPayloadExposed": true,
+  "triggerReceiptSha256": "03f6d51a635249b539a6f2e915a432fde49af03cb37fec24a090529d2d8a8c3c",
+  "recoveryMode": "source-unsealed-after-valid-detection",
+  "sourceAnchorArtifact": {
+    "artifactId": "S0",
+    "values": {
+      "goal": "produce a decision-ready research route without changing external or repository state",
+      "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+      "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+      "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+      "continuity": "preserve source identity and keep recovery anchored to S0"
+    },
+    "provenanceIds": [
+      "goal",
+      "evidence",
+      "authority",
+      "acceptance",
+      "continuity"
+    ],
+    "assumptionIds": [],
+    "detectedLossIds": []
+  }
+}

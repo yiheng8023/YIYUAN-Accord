@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/agent-autonomy-harness/process-fidelity-chained-transform-trace-v1.schema.json",
+  "title": "Process Fidelity Chained Transform Trace v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "runIdentity",
+    "materialEdges",
+    "hopMetrics",
+    "absoluteLedger",
+    "processLedger",
+    "rawArtifactsDurable",
+    "manualMetricSupplementationUsed"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "runIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocolFileSha256",
+        "runId",
+        "armId",
+        "blockIndex",
+        "positionInBlock",
+        "host",
+        "hostVersion",
+        "model",
+        "reasoningEffort",
+        "startedAt",
+        "completedAt"
+      ],
+      "properties": {
+        "protocolFileSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "armId": {
+          "enum": [
+            "control-identity",
+            "injected-authority-omission"
+          ]
+        },
+        "blockIndex": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "positionInBlock": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hostVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "const": "gpt-5.3-codex-spark"
+        },
+        "reasoningEffort": {
+          "const": "low"
+        },
+        "startedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completedAt": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "materialEdges": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "$ref": "#/$defs/materialEdge"
+      }
+    },
+    "hopMetrics": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/hopMetric"
+      }
+    },
+    "absoluteLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terminalMatchesSourceAnchor",
+        "terminalAcceptancePass"
+      ],
+      "properties": {
+        "terminalMatchesSourceAnchor": {
+          "type": "boolean"
+        },
+        "terminalAcceptancePass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "processLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "firstDeltaStageId",
+        "firstDetectionStageId",
+        "detectionLatencyMaterialHops",
+        "downstreamAffectedHopCount",
+        "amplificationFactor",
+        "sourceBackedRecoveryValid",
+        "recoveryDistanceMaterialHops",
+        "processAcceptancePass"
+      ],
+      "properties": {
+        "firstDeltaStageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "firstDetectionStageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "detectionLatencyMaterialHops": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "downstreamAffectedHopCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "amplificationFactor": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "sourceBackedRecoveryValid": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "recoveryDistanceMaterialHops": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "processAcceptancePass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rawArtifactsDurable": {
+      "const": true
+    },
+    "manualMetricSupplementationUsed": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "materialEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edgeId",
+        "predecessorOutputArtifactId",
+        "predecessorOutputArtifactSha256",
+        "currentInputArtifactId",
+        "currentInputArtifactSha256",
+        "inputEqualsDeclaredPredecessor",
+        "transformContractSha256",
+        "outputArtifactId",
+        "outputArtifactSha256",
+        "opaque"
+      ],
+      "properties": {
+        "edgeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predecessorOutputArtifactId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predecessorOutputArtifactSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "currentInputArtifactId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "currentInputArtifactSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputEqualsDeclaredPredecessor": {
+          "type": "boolean"
+        },
+        "transformContractSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outputArtifactId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outputArtifactSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "opaque": {
+          "type": "boolean"
+        }
+      }
+    },
+    "hopMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stageId",
+        "invariantSurvivalRate",
+        "weightedOmissionScore",
+        "addedAssumptionCount",
+        "provenanceBreakCount",
+        "authorityDriftCount",
+        "weightedDelta",
+        "omittedInvariantIds",
+        "changedInvariantIds",
+        "activeLossIds",
+        "detectedLossIds",
+        "detectionEvidenceValid"
+      ],
+      "properties": {
+        "stageId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "invariantSurvivalRate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "weightedOmissionScore": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "addedAssumptionCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "provenanceBreakCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "authorityDriftCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "weightedDelta": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "omittedInvariantIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "changedInvariantIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "activeLossIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "detectedLossIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "detectionEvidenceValid": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

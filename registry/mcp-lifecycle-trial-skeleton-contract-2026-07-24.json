@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "mcp-lifecycle-trial-skeleton-contract-2026-07-24",
+  "date": "2026-07-24",
+  "status": "verified-offline-selection-to-lifecycle-binding-no-host-actuation",
+  "builder": "scripts/build_mcp_lifecycle_trial_skeleton.py",
+  "fixtures": "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json",
+  "tests": "tests/test_mcp_lifecycle_trial_skeleton.py",
+  "reuses": {
+    "selectionEvaluator": "scripts/evaluate_mcp_task_selection_decision.py",
+    "lifecycleDimensionVocabulary": "scripts/evaluate_mcp_task_lifecycle_evidence.py"
+  },
+  "doesNotReplace": [
+    "MCP selection evaluator",
+    "MCP lifecycle evidence scorer",
+    "host approval",
+    "host activation or release observation"
+  ],
+  "binding": [
+    "valid selected selection-packet digest and status",
+    "upstream MCP-subset routing decision",
+    "target host, version, and adapter version",
+    "exact task, phase, concrete use case, acceptance surface, and task-contract digest",
+    "exact selected MCP identity, source, revision, and digest",
+    "release request and state-compatible fallback",
+    "declared lifecycle dimension subset"
+  ],
+  "offlineBoundary": {
+    "activationState": "unobserved",
+    "approvalState": "unobserved",
+    "eventArrays": "empty",
+    "countsAsLiveHostProof": false,
+    "countsAsWeakAgentAcceptance": false,
+    "countsAsActivationOrReleaseProof": false
+  },
+  "claimBoundary": {
+    "selectionProvesActivation": false,
+    "selectionProvesRelease": false,
+    "selectionProvesLeaseOrReferenceCount": false,
+    "sameSessionSwitchingProved": false,
+    "selectionProvesTaskEndExit": false,
+    "selectionProvesProcessOwnership": false,
+    "selectionProvesResourceBenefit": false,
+    "plannedDimensionSubsetProvesFullLifecycleCoverage": false
+  },
+  "nextGate": "For one separately authorized concrete workload, use the separately designed and verified sameSessionSwitching adapter at scripts/evaluate_mcp_same_thread_refresh_evidence.py; other dimensions still need their own live-host adapters. The current evaluate_mcp_task_lifecycle_evidence.py is an offline synthetic dimension contract only and must not receive or validate live events; do not inherit selection authority as activation, release, or recovery authority."
+}

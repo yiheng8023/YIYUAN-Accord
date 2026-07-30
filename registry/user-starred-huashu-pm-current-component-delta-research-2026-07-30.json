@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "id": "user-starred-huashu-pm-current-component-delta-research-2026-07-30",
+  "date": "2026-07-30",
+  "status": "read-only-current-revision-delta-two-pm-static-candidates-no-huashu-atomic-candidate",
+  "repositoryPosture": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "upstream": "origin/main",
+    "originMain": "55659f30091990f7c589932e0379880de30dc403",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeIntentionallyLargeAndDirty": true,
+    "inheritedChangesPreserved": true
+  },
+  "authorityBoundary": {
+    "readRepositoryEvidence": true,
+    "readPublicPrimarySources": true,
+    "sourceRepositoryCheckoutOrDownload": false,
+    "sourceBodyExecution": false,
+    "dependencyInstall": false,
+    "skillInstallUpdateEnableDisableOrDelete": false,
+    "ccSwitchMutation": false,
+    "globalConfigHookRulesOrForeignRootMutation": false,
+    "modelDispatch": false,
+    "gitCommitOrPush": false
+  },
+  "inputs": [
+    "registry/user-starred-new-source-preflight-2026-07-18.json",
+    "registry/round02-candidate-reviews.json",
+    "registry/round02-huashu-design-guidance-adaptation-gate.json",
+    "registry/round02-huashu-toolchain-media-adaptation-gate.json",
+    "registry/round02-pm-execution-adaptation-gate.json",
+    "registry/round02-pm-analytics-adaptation-gate.json",
+    "registry/round02-pm-market-discovery-adaptation-gate.json",
+    "registry/round02-pm-toolkit-boundary-adaptation-gate.json",
+    "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+    "registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"
+  ],
+  "scenarioBindings": [
+    {
+      "scenarioId": "GEN-CREATIVE-01",
+      "source": "github:alchaincyf/huashu-design",
+      "allowedAction": "draft-and-critique-only",
+      "humanAuthority": "final-aesthetic-selection"
+    },
+    {
+      "scenarioId": "GEN-ORG-DECISION-01",
+      "source": "github:phuryn/pm-skills",
+      "allowedAction": "option-preparation-only",
+      "humanAuthority": "final-organizational-decision"
+    },
+    {
+      "scenarioId": "SE-MGMT-PRACTICE-01",
+      "source": "github:phuryn/pm-skills",
+      "allowedAction": "analysis-and-draft-coordination-only",
+      "humanAuthority": "professional-and-management-accountability"
+    }
+  ],
+  "sources": {
+    "huashuDesign": {
+      "repository": "alchaincyf/huashu-design",
+      "defaultBranch": "master",
+      "revision": "1572d431f1411c82ec0baea94dea6a45f6063b26",
+      "commitDate": "2026-07-27T02:52:54Z",
+      "tree": "04501b8d8ac964e72d6b04afa933d9ab218dbc5f",
+      "license": "MIT",
+      "fileCount": 189,
+      "skillBodyCount": 1,
+      "referenceFileCount": 32,
+      "assetFileCount": 105,
+      "scriptFileCount": 19,
+      "demoFileCount": 23,
+      "hookPath": "scripts/design-gate-hook.sh",
+      "hookOptIn": true,
+      "commitsAheadOfRound02Pin": 26,
+      "changedFilesFromRound02Pin": 39,
+      "commitsAheadOfPreflightPin": 16,
+      "changedFilesFromPreflightPin": 31,
+      "readmeDeclaresSkillOnlyInstallDependencyIncomplete": true,
+      "currentAtomicCandidate": false,
+      "disposition": "retain-source-metadata-and-current-pin",
+      "reason": "single root Skill remains coupled to references, assets, scripts, demos, gate files, and an optional blocking Hook; the bound marginal ideas overlap current OpenAI-official Creative Production and Product Design capabilities",
+      "reopenRequiresFixedComparativeBriefAndNamedMarginalGap": true
+    },
+    "pmSkills": {
+      "repository": "phuryn/pm-skills",
+      "defaultBranch": "main",
+      "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+      "commitDate": "2026-07-03T11:34:34Z",
+      "tree": "514548cbf646ce42fb9ea9a8cc901f05373ab2ff",
+      "license": "MIT",
+      "release": "v2.1.0",
+      "releaseExactAtHead": true,
+      "fileCount": 147,
+      "skillBodyCount": 68,
+      "pluginManifestCount": 9,
+      "hookCount": 0,
+      "repositoryScriptCount": 3,
+      "identicalToPreflightPin": true,
+      "commitsAheadOfRound02Pin": 1,
+      "changedFilesFromRound02Pin": 27,
+      "selectedComponents": [
+        {
+          "name": "stakeholder-map",
+          "path": "pm-execution/skills/stakeholder-map/SKILL.md",
+          "blob": "08e5ad24a830a8faef9942a6fd9acdd274261835",
+          "bytes": 2510,
+          "status": "static-protocol-candidate-only",
+          "hardRuntimeDependency": false
+        },
+        {
+          "name": "strategy-red-team",
+          "path": "pm-execution/skills/strategy-red-team/SKILL.md",
+          "blob": "fe7b7feaaa7a7662d72aac226d40d3abea7e0596",
+          "bytes": 4515,
+          "status": "static-protocol-candidate-only",
+          "hardRuntimeDependency": false
+        }
+      ],
+      "selectedPairDependencyLinked": false,
+      "selectedPairScenarioComplete": false,
+      "individualProjectionOfficiallySupportedByUpstream": false,
+      "excludedFromThisBatch": [
+        {
+          "name": "pre-mortem",
+          "scope": "batch-local"
+        },
+        {
+          "name": "prioritization-frameworks",
+          "scope": "batch-local"
+        },
+        {
+          "name": "outcome-roadmap",
+          "scope": "batch-local"
+        }
+      ]
+    }
+  },
+  "decision": {
+    "huashuCurrentAtomicCandidateCount": 0,
+    "pmStaticProtocolCandidateCount": 2,
+    "wholeSourceInstallAuthorized": false,
+    "selectedComponentInstallAuthorized": false,
+    "sourceAcquisitionOrProjectionAuthorized": false,
+    "pluginEnablementAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "externalLookupOrOrganizationalDataAccessAuthorized": false,
+    "offlineFixedFixtureProtocolAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "selfAuthoredWorkEligible": false
+  },
+  "claimBoundary": {
+    "currentPrimarySourceIdentityAndDriftProved": true,
+    "staticSourceBodyAndOverlapDispositionProved": true,
+    "installationOrAdmissionProved": false,
+    "hostExposureOrInvocationProved": false,
+    "behavioralIncrementProved": false,
+    "crossHostValueProved": false,
+    "residualCapabilityGapProved": false,
+    "selfAuthoredNecessityProved": false,
+    "programCloseoutProved": false
+  },
+  "cleanup": {
+    "temporarySourceRootCreated": false,
+    "temporarySourceRootAbsent": true,
+    "noSourceBodyExecuted": true,
+    "noDependencyInstalled": true,
+    "inheritedTemporaryRootsUntouched": true,
+    "repositoryCleanupInventoryStable": true
+  },
+  "documentation": "docs/strategy/USER-STARRED-HUASHU-PM-CURRENT-COMPONENT-DELTA-RESEARCH-2026-07-30.md"
+}

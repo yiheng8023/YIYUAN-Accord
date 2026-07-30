@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "id": "mcp-thread-creator-connection-close-calibration-attempt-normalized-evidence-2026-07-30",
+  "date": "2026-07-30",
+  "status": "compact-semantic-evidence-preserved-before-temporary-root-cleanup",
+  "sourceArtifacts": {
+    "sentinelEventLog": {
+      "historicalPath": ".tmp/mcp-creator-close-calibration-20260727-01/connected-control/codex-home/sentinel-events.jsonl",
+      "bytes": 789,
+      "sha256": "9630EEA400B3F4D5B60D1472802014197E560FCFA30963183B4658876E2B7AC1"
+    },
+    "isolatedConfig": {
+      "historicalPath": ".tmp/mcp-creator-close-calibration-20260727-01/connected-control/codex-home/config.toml",
+      "bytes": 607,
+      "sha256": "5526767B48F5D20EAC1C96ED16D5820D4E2A63322AF35A45A7F615D419D2C8E2"
+    },
+    "rawArtifactsRetained": false
+  },
+  "sentinelEvents": [
+    {
+      "timestamp": "2026-07-27T01:32:19.527503+00:00",
+      "event": "instance-start",
+      "pid": 34556,
+      "instanceId": "b2456f9a-9163-49ab-9674-b325f3795e23"
+    },
+    {
+      "timestamp": "2026-07-27T01:32:19.529738+00:00",
+      "event": "message",
+      "pid": 34556,
+      "instanceId": "b2456f9a-9163-49ab-9674-b325f3795e23",
+      "method": "initialize",
+      "hasId": true
+    },
+    {
+      "timestamp": "2026-07-27T01:32:19.530441+00:00",
+      "event": "message",
+      "pid": 34556,
+      "instanceId": "b2456f9a-9163-49ab-9674-b325f3795e23",
+      "method": "notifications/initialized",
+      "hasId": false
+    },
+    {
+      "timestamp": "2026-07-27T01:32:19.530890+00:00",
+      "event": "message",
+      "pid": 34556,
+      "instanceId": "b2456f9a-9163-49ab-9674-b325f3795e23",
+      "method": "tools/list",
+      "hasId": true
+    },
+    {
+      "timestamp": "2026-07-27T01:32:50.444071+00:00",
+      "event": "instance-stop",
+      "pid": 34556,
+      "instanceId": "b2456f9a-9163-49ab-9674-b325f3795e23"
+    }
+  ],
+  "isolatedConfigSemantics": {
+    "serverId": "lifecycle_sentinel",
+    "commandClass": "python",
+    "script": "scripts/mcp_lifecycle_sentinel.py",
+    "eventLogWasInsideTemporaryRoot": true,
+    "cleanupMarkerWasInsideTemporaryRoot": true,
+    "startupTimeoutSeconds": 10,
+    "toolTimeoutSeconds": 15,
+    "enabled": true,
+    "accountStateCopied": false,
+    "secretMaterialPreserved": false,
+    "machineAbsolutePathsPreserved": false
+  },
+  "claimBoundary": {
+    "rawByteReconstructionProved": false,
+    "creatorConnectionCloseReleaseObserved": false,
+    "taskEndReleaseProved": false,
+    "resourceBenefitProved": false,
+    "formalProtocolValidityProved": false
+  }
+}

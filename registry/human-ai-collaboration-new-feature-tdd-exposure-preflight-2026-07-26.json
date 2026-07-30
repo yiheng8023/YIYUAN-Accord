@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-new-feature-tdd-exposure-preflight-2026-07-26",
+  "date": "2026-07-26",
+  "status": "pass-current-host-configurable-metadata-selection-only",
+  "parentProtocol": "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json",
+  "purpose": "Prove byte-exact project projections and current-host candidate-specific configurable metadata selection before any TDD task turn, without promoting inventory evidence to Skill body delivery, loader invocation, behavior, causation, or preference.",
+  "authorityBoundary": {
+    "readOnlyExternalSourceObservationUsed": true,
+    "projectLocalDisposableProjectionAuthorized": true,
+    "appServerInitializationAndInventoryAuthorized": true,
+    "threadOrTurnAuthorizedByThisRecord": false,
+    "modelRequestAuthorizedByThisRecord": false,
+    "globalSkillOrPluginConfigurationMutationAuthorized": false,
+    "installedCandidateMutationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "networkUseDuringHostPreflightAuthorized": false,
+    "mcpAppOrHookUseAuthorized": false,
+    "gitMutationAuthorized": false,
+    "commitOrPushAuthorized": false
+  },
+  "host": {
+    "version": "0.145.0",
+    "platform": "Windows 10.0.26200 x86_64",
+    "threadStarted": false,
+    "turnStarted": false,
+    "modelRequestSent": false
+  },
+  "projectionMechanism": {
+    "builder": "scripts/build_source_pinned_skill_projection.py",
+    "observedBuilderSha256": "d1e43ee71a462f97bf0f4eee4387ceb86e70a4619b86774d608d7d9d498ac23f",
+    "preflightProbe": "scripts/probe_source_pinned_skill_projection_preflight.py",
+    "observedPreflightProbeSha256": "2c6d22b19f301a6ef27bc575c4177704cb462c05c98863603f8a60de5268516b",
+    "historicalToolBytesVendored": false,
+    "currentToolContentRequiredToMatchObservation": false,
+    "projectionScope": "project .agents/skills namespace in a disposable root",
+    "sourceMutationAllowed": false,
+    "globalConfigurationMutationAllowed": false,
+    "installedSkillMutationAllowed": false,
+    "fullPluginInstallationOrActivationPerformed": false
+  },
+  "candidateEvidence": [
+    {
+      "candidateId": "tdd.matt.current",
+      "armId": "SE-TDD-MATT-CURRENT",
+      "skillName": "tdd",
+      "sourceClass": "reviewed-maintained-external-public-github-api",
+      "sourceRevisionOrVersion": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "projectedFileCount": 3,
+      "projectedFiles": [
+        {
+          "path": ".agents/skills/tdd/SKILL.md",
+          "bytes": 3213,
+          "sha256": "5363bb2775679fe9311fbb67947f95359169c6e7f1fac77c0f25e190bca6cf2f",
+          "gitBlobSha1": "9a2e1d2a1ad856b0d5903dd002209ff8c32c9a48"
+        },
+        {
+          "path": ".agents/skills/tdd/tests.md",
+          "bytes": 2214,
+          "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a",
+          "gitBlobSha1": "7ab86479f925a1f9e8ba680af33cb3b12e015381"
+        },
+        {
+          "path": ".agents/skills/tdd/mocking.md",
+          "bytes": 1481,
+          "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef",
+          "gitBlobSha1": "71cbfee674d93244ce81d1830b930ca9a69200bd"
+        }
+      ],
+      "license": {
+        "spdx": "MIT",
+        "bytes": 1068,
+        "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+        "gitBlobSha1": "f1dd2c09108dde1a5f56097cee8461b3ea834499"
+      },
+      "projection": {
+        "status": "materialized-no-host-turn",
+        "manifestInternalSha256": "1108dce7a8ee6a166208eabcce792168016c2cb9ab78225a2db17581f28aff54",
+        "manifestFileSha256": "c45524e7b717e3d9986f062fea7ff2c9bd5a95b8670c9ed919e8d80025bac465",
+        "projectedTreeSha256": "4004b864c2c2e472edaf4024aca1e9fb5a2861694b5480775d69c7e0001866c3",
+        "sourceMutated": false,
+        "globalConfigMutated": false,
+        "installedSkillMutated": false,
+        "hostTurnStarted": false
+      },
+      "preflight": {
+        "status": "preflight-pass-no-turn",
+        "reportInternalSha256": "a1e7291d27c413d1e9d2596d57c12d0c65b1a6eaf789f15290a13d0098dc91a4",
+        "reportFileSha256": "a68150ccf17457662552ed9f33a166d89e1ee6c11e40a14f9a577fc6a5032aed",
+        "skillCount": 112,
+        "countsByScope": {
+          "repo": 1,
+          "system": 6,
+          "user": 105
+        },
+        "controlEnabledConfigurableSkillCount": 0,
+        "selectedEnabledConfigurableSkillCount": 1,
+        "sameIdentitySetInBothArms": true,
+        "selectedIdentityPresentInBothArms": true,
+        "onlyExpectedConfigurableSkillEnabledInBothArms": true,
+        "allNonConfigurableStatesPreservedInBothArms": true,
+        "projectionTreeStable": true,
+        "globalConfigStable": true,
+        "repositoryStatusStable": true,
+        "threadStarted": false,
+        "turnStarted": false
+      }
+    },
+    {
+      "candidateId": "tdd.superpowers.6.2.0",
+      "armId": "SE-TDD-SUPERPOWERS-6.2.0",
+      "skillName": "test-driven-development",
+      "sourceClass": "openai-curated-runtime-distributed-third-party",
+      "sourceRevisionOrVersion": "6.2.0",
+      "projectedFileCount": 2,
+      "projectedFiles": [
+        {
+          "path": ".agents/skills/test-driven-development/SKILL.md",
+          "bytes": 9015,
+          "sha256": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54",
+          "gitBlobSha1": "4320d8879a639d0536c2239bb80c9d7257ad8947"
+        },
+        {
+          "path": ".agents/skills/test-driven-development/writing-good-tests.md",
+          "bytes": 8268,
+          "sha256": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1",
+          "gitBlobSha1": "d3c4482fd30b4f9084bb61545fe73939a7502c28"
+        }
+      ],
+      "license": {
+        "spdx": "MIT",
+        "bytes": 1070,
+        "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "gitBlobSha1": "abf0390320aa14406af7a520b9b0739fdda9bf08"
+      },
+      "projection": {
+        "status": "materialized-no-host-turn",
+        "manifestInternalSha256": "6e5a5380dd502539876213e02660a3eba7b4f31d9e5bb01d85a53125733563ea",
+        "manifestFileSha256": "a81c7071ebd33ca0d6735b9eb37b8e23d14d629d6c0e43d41abe487d1b6434bd",
+        "projectedTreeSha256": "a95561fa9bf2ffbd75242e70a1d28d929c67b4d1df2997fa3061dc20c6b29501",
+        "sourceMutated": false,
+        "globalConfigMutated": false,
+        "installedSkillMutated": false,
+        "hostTurnStarted": false
+      },
+      "preflight": {
+        "status": "preflight-pass-no-turn",
+        "reportInternalSha256": "525cb5bffd30af650f500a1b3a7660e51615aa92234c7ca7d7575057e579de7e",
+        "reportFileSha256": "968283bd72be8194875939dafb977c57d3d8eaa9222bd723b6880a3bf9ba656e",
+        "skillCount": 112,
+        "countsByScope": {
+          "repo": 1,
+          "system": 6,
+          "user": 105
+        },
+        "controlEnabledConfigurableSkillCount": 0,
+        "selectedEnabledConfigurableSkillCount": 1,
+        "sameIdentitySetInBothArms": true,
+        "selectedIdentityPresentInBothArms": true,
+        "onlyExpectedConfigurableSkillEnabledInBothArms": true,
+        "allNonConfigurableStatesPreservedInBothArms": true,
+        "projectionTreeStable": true,
+        "globalConfigStable": true,
+        "repositoryStatusStable": true,
+        "threadStarted": false,
+        "turnStarted": false
+      }
+    }
+  ],
+  "rawEvidenceBoundary": {
+    "rawReportsVendored": false,
+    "rawProjectionManifestsVendored": false,
+    "rawArtifactsRemainTemporary": true,
+    "rawArtifactsRequiredForRepositoryValidation": false,
+    "validatorReplaysOriginalAppServerSession": false,
+    "projectionStabilityObservationScope": "projected files listed in each projection manifest only",
+    "portableEvidenceRetained": "exact source identities, projected tree hashes, internal canonical hashes, raw file hashes, inventory counts, stability observations, and claim limits"
+  },
+  "decision": {
+    "mattCurrentExactProjectionProved": true,
+    "superpowers620ExactProjectionProved": true,
+    "currentHostCandidateSpecificSelectedMetadataExposureProved": true,
+    "technicalReadyForNonScoredRawEventNormalizationPilot": true,
+    "candidateSpecificTreatmentDeliveryProved": false,
+    "independentLoaderEventProved": false,
+    "liveTaskTurnStarted": false,
+    "formalWeakAgentRunStarted": false,
+    "candidatePreferenceAllowed": false,
+    "selfAuthoredGapProved": false,
+    "portfolioMutationAuthorized": false,
+    "nextBoundedAction": "Run one non-scored Spark/low TDD task-turn pilot to prove that raw app-server command and file events can be normalized into an ordered RED-to-production timeline without changing the frozen fixture, oracle, candidate content, or hard acceptance."
+  },
+  "claimBoundary": {
+    "provesSkillBodyDelivery": false,
+    "provesIndependentLoaderInvocation": false,
+    "provesSkillInstructionsReachedModel": false,
+    "provesBehavioralCausation": false,
+    "provesInstalledPluginDelivery": false,
+    "provesCandidateSuperiority": false,
+    "provesGeneralTddCompetence": false,
+    "provesCrossHostValue": false,
+    "provesProductionReadiness": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-NEW-FEATURE-TDD-EXPOSURE-PREFLIGHT-2026-07-26.md"
+}

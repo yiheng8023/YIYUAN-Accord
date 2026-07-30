@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27-G6-simulated-fault-and-recovery-decision",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27",
+  "gateId": "G6-simulated-fault-and-recovery-decision",
+  "stageId": "SE-TS-06-observation-incident-handling",
+  "sequence": 6,
+  "decision": "approve",
+  "decisionClass": "simulated-fault-recovery",
+  "proposalArtifactCanonicalSha256": "7223600d8617617a2ba97bc406d7146b81810a58ef37f830b8d5b44d8af1aba9",
+  "beforeAcceptedLedgerSha256": "ae660f80b562e32f7375a4f70eb37c0eedf2e596e78e97bbc0474efca23e84f5",
+  "allowedChangeIds": [
+    "accept-stage-6"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-06-observation-incident-handling"
+    ],
+    "artifactIds": [
+      "lifecycle-zero-model-domain-fixture-calibration-2026-07-27-O6"
+    ],
+    "actions": [
+      "predeclared-disposable-fault-injection",
+      "bounded-local-recovery"
+    ]
+  },
+  "inputArtifactDigests": [
+    "7223600d8617617a2ba97bc406d7146b81810a58ef37f830b8d5b44d8af1aba9"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "operator-and-incident-authority",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:06+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "6be2336a59eaac8d677e30b95b96ca8489e22617da7b6f1a325597f38da69818"
+}

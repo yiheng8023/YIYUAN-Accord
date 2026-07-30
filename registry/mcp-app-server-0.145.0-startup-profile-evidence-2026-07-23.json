@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23",
+  "date": "2026-07-23",
+  "status": "observed-single-host-two-repetition-startup-profile-direct-call-boundary",
+  "host": {
+    "product": "Codex CLI app-server",
+    "platform": "Windows",
+    "version": "0.145.0",
+    "repositoryHead": "55659f30091990f7c589932e0379880de30dc403"
+  },
+  "officialFieldContract": {
+    "sourceRecord": "registry/mcp-runtime-refresh-interface-review-2026-07-19.json",
+    "sourceRevision": "0fb559f0f6e231a88ac02ea002d3ecd248e2b515",
+    "enabledFalseSkipsInitialization": true,
+    "enabledToolsIsAllowList": true,
+    "disabledToolsAppliedAfterAllowList": true,
+    "currentVersionLiveValidationRecordedHere": true
+  },
+  "probe": {
+    "id": "codex-app-server-isolated-mcp-startup-profiles-v1",
+    "runner": "scripts/probe_codex_app_server_mcp_startup_profiles.py",
+    "sentinel": "scripts/mcp_lifecycle_sentinel.py",
+    "tempRoot": "C:/Projects/agent-autonomy-harness/.tmp/mcp-startup-profiles-20260723-run01",
+    "resultSha256": "0c5ca93214fd67d0261081f29d1191adea412cfda62b0daa5bf294c2058136e9",
+    "resultBytes": 109764,
+    "repetitionsPerProfile": 2,
+    "profileCount": 3,
+    "runCount": 6,
+    "acceptedRunCount": 6,
+    "allRunsAccepted": true,
+    "modelTurnStarted": false,
+    "statusDiscoveryCalled": false,
+    "reloadCalled": false,
+    "currentConfigOrAuthCopied": false,
+    "applicationLogExternalNetworkAttemptObserved": false,
+    "packetLevelNetworkMonitorUsed": false
+  },
+  "profiles": {
+    "full": {
+      "config": {
+        "enabled": true,
+        "enabledTools": null,
+        "disabledTools": null
+      },
+      "identitySucceededEveryRun": true,
+      "holdSucceededEveryRun": true,
+      "sentinelInstancesPerRun": [1, 1],
+      "firstCallMilliseconds": [828, 502],
+      "sentinelWorkingSetBytes": [20287488, 20283392]
+    },
+    "filtered": {
+      "config": {
+        "enabled": true,
+        "enabledTools": ["identity", "hold"],
+        "disabledTools": ["hold"]
+      },
+      "identitySucceededEveryRun": true,
+      "holdRejectedEveryRun": true,
+      "holdError": "tool 'hold' is disabled for MCP server 'lifecycle_sentinel'",
+      "sentinelInstancesPerRun": [1, 1],
+      "firstCallMilliseconds": [570, 513],
+      "sentinelWorkingSetBytes": [20135936, 20246528]
+    },
+    "disabled": {
+      "config": {
+        "enabled": false,
+        "enabledTools": null,
+        "disabledTools": null
+      },
+      "identityRejectedEveryRun": true,
+      "holdRejectedEveryRun": true,
+      "callError": "unknown MCP server 'lifecycle_sentinel'",
+      "sentinelInstancesPerRun": [0, 0],
+      "firstCallMilliseconds": [332, 338]
+    }
+  },
+  "processAndCleanup": {
+    "nativeAppServerPerRun": true,
+    "exactSentinelIdentityBoundForEnabledProfiles": true,
+    "allAppServersReturnedNormally": true,
+    "appServerHandleKillSentCount": 0,
+    "allBoundSentinelExactIdentitiesAbsentAfterCleanup": true,
+    "pidOnlySignalUsed": false,
+    "processNameScanOrTerminationUsed": false,
+    "temporaryConfigUnchangedEveryRun": true,
+    "authStateProducedAnyRun": false
+  },
+  "supportedConclusions": {
+    "startupProfileDirectCallBoundaryObservedForThisHostAndSentinel": true,
+    "fullProfileExposedBothToolsAcrossTwoRuns": true,
+    "filteredProfileKeptIdentityAndRejectedHoldAcrossTwoRuns": true,
+    "disabledProfileRejectedBothToolsWithoutSentinelAcrossTwoRuns": true,
+    "startupOrNewThreadConfigurationIsABoundedFallbackForThisHost": true,
+    "toolFilteringDidNotPreventSentinelProcessStartupInThisRun": true,
+    "serverDisablePreventedSentinelProcessStartupInThisRun": true
+  },
+  "claimBoundary": {
+    "sameThreadHotSwitchingProved": false,
+    "reloadCompletionProved": false,
+    "automaticTaskScopedOnDemandSwitchingProved": false,
+    "statusEqualsLoadedRuntimeProved": false,
+    "toolFilteringReducesContextOrTokensProved": false,
+    "toolFilteringReducesStartupLatencyProved": false,
+    "toolFilteringReducesResourceUseProved": false,
+    "serverDisableReleasesEveryProcessProved": false,
+    "stableLatencyBenefitProved": false,
+    "stableResourceBenefitProved": false,
+    "filteringCanAlwaysReplaceDisableProved": false,
+    "disableAlwaysOutperformsFilteringProved": false,
+    "leaseOrReferenceCountProved": false,
+    "crashRecoveryProved": false,
+    "desktopPluginOrCrossHostParityProved": false,
+    "noNetworkTrafficProved": false,
+    "noCredentialWasUsedProved": false
+  },
+  "cleanupDebt": {
+    "temporaryProbeRootRetained": true,
+    "deletionAuthorizedByThisRecord": false,
+    "disposition": "Retain as bounded startup-profile evidence until the program-wide cleanup gate or a separately authorized evidence migration."
+  },
+  "nextGate": "use-startup-or-new-thread-profiles-as-fallback-and-test-same-thread-actuation-only-for-a-concrete-workload-that-cannot-tolerate-that-boundary"
+}

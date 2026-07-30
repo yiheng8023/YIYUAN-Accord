@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23",
+  "date": "2026-07-23",
+  "status": "observed-single-host-new-thread-config-state-disable-reenable-with-status-runtime-divergence-release-unattributed",
+  "host": {
+    "product": "Codex CLI app-server",
+    "platform": "Windows",
+    "version": "0.145.0",
+    "repositoryHead": "55659f30091990f7c589932e0379880de30dc403"
+  },
+  "probe": {
+    "id": "codex-app-server-isolated-mcp-reload-new-threads-v1",
+    "runner": "scripts/probe_codex_app_server_mcp_reload_new_threads.py",
+    "sentinel": "scripts/mcp_lifecycle_sentinel.py",
+    "tempRoot": "C:/tmp/agent-autonomy-mcp-reload-new-threads-0.145.0-20260723-run01",
+    "resultSha256": "3bc40708e0e8378389dc9b9fcfd5fb694812063105ff0ca15d43c876e0d25451",
+    "resultBytes": 33238,
+    "sentinelEventLogSha256": "20ec4305cbe90aef991c111ec71337054939f08adf3edce003e4d9f36549c3dc",
+    "sentinelEventLogBytes": 5457,
+    "finalConfigSha256": "9b5abb4752f4831a3d3e93082ed831b448ef74e1807aa1c1f5e69e2982c536dd",
+    "modelTurnStarted": false,
+    "accountStateCopied": false,
+    "authStateProduced": false,
+    "packetLevelNetworkMonitorUsed": false,
+    "applicationLogExternalNetworkAttemptObserved": false
+  },
+  "configurationTransaction": {
+    "before": {
+      "sha256": "9b5abb4752f4831a3d3e93082ed831b448ef74e1807aa1c1f5e69e2982c536dd",
+      "bytes": 537,
+      "enabled": true
+    },
+    "disabled": {
+      "sha256": "6d493563417ad935ae7c6474c692c568815da4edacd4774f27eada8a030a2cd9",
+      "bytes": 538,
+      "enabled": false
+    },
+    "restored": {
+      "sha256": "9b5abb4752f4831a3d3e93082ed831b448ef74e1807aa1c1f5e69e2982c536dd",
+      "bytes": 537,
+      "enabled": true
+    },
+    "onlyIntendedSemanticDifference": "mcp_servers.lifecycle_sentinel.enabled",
+    "atomicReplacementUsed": true,
+    "restorationAttemptedInFinally": true,
+    "restoredBytesEqualBefore": true
+  },
+  "threadObservations": {
+    "aEnabledThenDisabled": {
+      "threadId": "019f8e4d-613e-7021-a310-6e5b44973437",
+      "baselineStatusToolPresent": true,
+      "baselineCallSucceeded": true,
+      "baselinePid": 38616,
+      "baselineInstanceId": "ebf782ae-4f67-4362-8586-a55c5b9d0210",
+      "afterDisableStatusRowPresent": true,
+      "afterDisableStatusToolPresent": false,
+      "afterDisableCallSucceeded": true,
+      "afterDisablePid": 38616,
+      "afterDisableInstanceId": "ebf782ae-4f67-4362-8586-a55c5b9d0210",
+      "observation": "The status projection lost tools while the already-loaded thread runtime still called the same Sentinel instance."
+    },
+    "bCreatedDisabledThenReenabled": {
+      "threadId": "019f8e4d-6401-7072-8287-7968d4ad6966",
+      "disabledStatusRowPresent": true,
+      "disabledStatusToolPresent": false,
+      "disabledCallSucceeded": false,
+      "disabledCallError": "unknown MCP server 'lifecycle_sentinel'",
+      "afterReenableStatusToolPresent": true,
+      "afterReenableCallSucceeded": false,
+      "afterReenableCallError": "unknown MCP server 'lifecycle_sentinel'",
+      "observation": "The status projection regained tools while the already-loaded disabled thread runtime still rejected the server."
+    },
+    "cCreatedReenabled": {
+      "threadId": "019f8e4d-65f2-7391-9956-349df09172c9",
+      "statusToolPresent": true,
+      "callSucceeded": true,
+      "pid": 43076,
+      "instanceId": "e6e251a4-20a9-4dd7-8298-afa820d191cf",
+      "distinctFromBaselineToolCallInstance": true
+    }
+  },
+  "reloadObservation": {
+    "disableResponse": {},
+    "reenableResponse": {},
+    "acceptanceObserved": true,
+    "responseProvesCompletedActuation": false,
+    "newThreadDisableBoundaryObserved": true,
+    "newThreadReenableBoundaryObserved": true,
+    "newThreadStateChangeCausedByReloadProved": false,
+    "sameThreadImmediateActuationObserved": false,
+    "statusAndLoadedThreadRuntimeDivergenceObserved": true
+  },
+  "processObservation": {
+    "nativeAppServerPid": 61320,
+    "nativeAppServerGracefulShutdownTimedOut": true,
+    "nativeAppServerHandleKillSent": true,
+    "sentinelInstanceCount": 5,
+    "sentinelPids": [
+      38616,
+      43076,
+      48624,
+      58412,
+      61476
+    ],
+    "instances": [
+      {
+        "pid": 38616,
+        "instanceId": "ebf782ae-4f67-4362-8586-a55c5b9d0210",
+        "roleFromObservedMethods": "thread-a-call-capable-runtime",
+        "exitAttribution": "unsubscribe-or-app-server-teardown-window-not-reload"
+      },
+      {
+        "pid": 61476,
+        "instanceId": "173d002f-b8af-4603-bbec-f22980c0228d",
+        "roleFromObservedMethods": "enabled-phase-tools-list-only-status-discovery-candidate",
+        "exitAttribution": "natural-stop-cause-unbound"
+      },
+      {
+        "pid": 58412,
+        "instanceId": "5b66bcda-a69b-432a-86d9-2d5bf139a660",
+        "roleFromObservedMethods": "reenabled-phase-tools-list-only-status-discovery-candidate",
+        "exitAttribution": "app-server-teardown-window-not-reload"
+      },
+      {
+        "pid": 43076,
+        "instanceId": "e6e251a4-20a9-4dd7-8298-afa820d191cf",
+        "roleFromObservedMethods": "thread-c-call-capable-runtime",
+        "exitAttribution": "unsubscribe-or-app-server-teardown-window-not-reload"
+      },
+      {
+        "pid": 48624,
+        "instanceId": "10dfd538-aaf4-4089-b7e4-726c4ea069d7",
+        "roleFromObservedMethods": "post-reenable-tools-list-only-status-discovery-candidate",
+        "exitAttribution": "no-stop-event-final-pid-absence-only"
+      }
+    ],
+    "sentinelInstanceStopEventCountBeforeHarnessCleanup": 4,
+    "sentinelInstancesWithoutStopEventBeforeHarnessCleanup": [
+      "10dfd538-aaf4-4089-b7e4-726c4ea069d7"
+    ],
+    "sentinelPidsAbsentAfterAppServerTeardown": true,
+    "pidSignalCleanupUsed": false,
+    "cleanupMarkerCreated": false,
+    "exitAttributableToReload": false,
+    "oldRuntimeReleaseProved": false
+  },
+  "supportedConclusions": {
+    "newEphemeralThreadReflectedDisabledCallBoundaryInThisIsolatedRun": true,
+    "newEphemeralThreadReflectedReenabledCallBoundaryInThisIsolatedRun": true,
+    "statusProjectionAndLoadedThreadRuntimeDivergedInThisRun": true,
+    "existingThreadWithoutActiveTurnRetainedItsPriorRuntimeStateInThisRun": true,
+    "exactConfigBytesWereRestored": true
+  },
+  "claimBoundary": {
+    "sameThreadHotEnableDisableProved": false,
+    "reloadCompletedActuationForLoadedThreadsProved": false,
+    "newThreadStateChangeCausedByReloadProved": false,
+    "statusEqualsLoadedThreadRuntimeProved": false,
+    "oldRuntimeReleaseCausedByReloadProved": false,
+    "taskLevelLeaseOrReferenceCountProved": false,
+    "thirtyMinuteIdleUnloadProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "crashRecoveryProved": false,
+    "stableResourceSavingsProved": false,
+    "noNetworkTrafficProved": false,
+    "desktopOrCrossHostParityProved": false
+  },
+  "cleanupDebt": {
+    "temporaryProbeRootRetained": true,
+    "deletionAuthorizedByThisRecord": false,
+    "disposition": "Retain as bounded process evidence until the program-wide cleanup gate or a separately authorized evidence migration."
+  },
+  "nextGate": "decide-whether-an-active-turn-same-thread-refresh-trial-is-worth-the-added-model-and-host-cost"
+}

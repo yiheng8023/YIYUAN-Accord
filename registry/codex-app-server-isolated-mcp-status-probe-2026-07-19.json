@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "id": "codex-app-server-isolated-mcp-status-probe-2026-07-19",
+  "date": "2026-07-19",
+  "status": "observed-single-host-isolated-app-server-status-list-no-reload",
+  "scenarioIds": ["MCP-01", "MCP-03"],
+  "host": {
+    "product": "Codex app-server",
+    "codexCliVersion": "0.144.6",
+    "platform": "Windows 10.0.26200 x86_64",
+    "transport": "stdio-jsonl"
+  },
+  "repositorySnapshotAfterProbe": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "upstream": "origin/main",
+    "ahead": 0,
+    "behind": 0,
+    "dirtyEntryCount": 39
+  },
+  "authorityBoundary": {
+    "isolatedCodexHomeCreation": true,
+    "appServerStart": true,
+    "statusListCall": true,
+    "currentAccountOrAuthRead": false,
+    "currentConfigOrPluginCopy": false,
+    "configReload": false,
+    "mcpEnableDisable": false,
+    "mcpToolCall": false,
+    "currentAgentHomeMutation": false,
+    "cleanupOrDeletion": false,
+    "commitOrPush": false
+  },
+  "runner": {
+    "path": "scripts/probe_codex_app_server_mcp_status.py",
+    "unitTest": "tests/test_codex_app_server_mcp_status_probe.py",
+    "requestMethods": ["initialize", "initialized", "mcpServerStatus/list"],
+    "reloadMethodPresent": false,
+    "analyticsExplicitlyDisabled": true,
+    "defaultCodexHomeRejected": true,
+    "accountEnvironmentValuesRecorded": false
+  },
+  "attempts": [
+    {
+      "id": "attempt-01",
+      "outcome": "runner-failed-before-process-launch",
+      "cause": "WindowsApps executable resolution selected a non-launchable alias",
+      "statusResponseObserved": false
+    },
+    {
+      "id": "attempt-02",
+      "outcome": "transport-lifecycle-failure",
+      "cause": "stdin was closed after sending all requests, so app-server exited after initialize before status response",
+      "appServerReturnCode": 0,
+      "initializeResponseObserved": true,
+      "statusResponseObserved": false,
+      "isolatedHome": "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719",
+      "retainedFileCount": 59,
+      "retainedDirectoryCount": 29,
+      "retainedBytes": 1857153,
+      "authJsonPresent": false,
+      "configTomlPresent": false
+    },
+    {
+      "id": "attempt-03",
+      "outcome": "observed-read-only-status-snapshot",
+      "startedAt": "2026-07-19T08:18:51.315143+00:00",
+      "finishedAt": "2026-07-19T08:18:53.761196+00:00",
+      "durationMilliseconds": 2446,
+      "isolatedHome": "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719-run02",
+      "process": {
+        "wrapperPid": 20088,
+        "returnCode": 0,
+        "timedOut": false,
+        "stdinClosedAfterStatusResponse": true,
+        "perServerProcessIdentityEstablished": false,
+        "orphanChildAttributionEstablished": false
+      },
+      "initialize": {
+        "reportedCodexHomeMatchesRequested": true,
+        "userAgent": "Codex Desktop/0.144.6 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      },
+      "mcpServerStatusList": {
+        "threadIdSupplied": false,
+        "detail": "full",
+        "limit": 100,
+        "serverCount": 0,
+        "serverNames": [],
+        "nextCursor": null
+      },
+      "isolationArtifacts": {
+        "filesBefore": 0,
+        "filesAfter": 65,
+        "directoriesAfter": 29,
+        "bytesAfter": 2182153,
+        "authJsonPresent": false,
+        "configTomlPresent": false,
+        "runtimeOwnedSystemSkillsMaterialized": true
+      },
+      "hostDiscoveryBoundary": {
+        "parentProjectCodexDirectoryDetected": true,
+        "projectConfigHooksAndExecPoliciesLoaded": false,
+        "skillsMayRemainDiscoverableUnderHostRules": true,
+        "provesPhysicalIsolationFromEveryProjectDiscoverySurface": false
+      }
+    }
+  ],
+  "supportedClaims": {
+    "isolatedAppServerHandshakeObserved": true,
+    "statusListCallableWithoutThreadObserved": true,
+    "emptyIsolatedConfigReturnedNoMcpServers": true,
+    "probeWrapperExitedNormally": true
+  },
+  "unsupportedClaims": {
+    "currentDesktopAccountOrPluginStateObserved": false,
+    "runtimeRefreshObserved": false,
+    "configuredServerStartupObserved": false,
+    "oldRuntimeOrPerServerProcessReleaseObserved": false,
+    "taskEndOrIdleReleaseObserved": false,
+    "leaseOrReferenceCountControlObserved": false,
+    "crashRecoveryObserved": false,
+    "resourceSavingsObserved": false,
+    "crossHostParityObserved": false
+  },
+  "evidenceBoundary": {
+    "liveStdoutPersistedVerbatim": false,
+    "normalizedResultRecordedHere": true,
+    "secretValuesRecorded": false,
+    "failedAndSuccessfulHomesRetainedForSeparateCloseoutReview": true
+  },
+  "nextGate": "separate-authorization-for-disposable-same-config-reload-status-before-and-after"
+}

@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "git-guardrails-interception-evidence-contract-2026-07-24",
+  "date": "2026-07-24",
+  "status": "verified-static-decision-contract-live-interception-unexecuted",
+  "scenarioId": "ABL-GIT-INTERCEPT-01",
+  "sourceEvidence": {
+    "ccSkillPath": "C:/Users/15521/.cc-switch/skills/git-guardrails/SKILL.md",
+    "ccSkillSha256": "27bb96dda0850f3d969b550ff01f996d22cf53ef1ef4d1bc678b18a82f66d790",
+    "ccScriptPath": "C:/Users/15521/.cc-switch/skills/git-guardrails/scripts/block-dangerous-git.sh",
+    "ccScriptSha256": "9acf0e890ecc535358f45fc15cec867b2eb6a78f4089dfd3777c388c81d3564a",
+    "repositoryPayloadBytesEqualCcPayloadBeforeSuspension": true,
+    "officialGitHooksDocumentation": "https://git-scm.com/docs/githooks"
+  },
+  "staticFindings": {
+    "prePushCanPreventPush": true,
+    "prePushReceivesRefUpdateLinesNotClaudeToolJson": true,
+    "preAutoGcOnlyRunsForGitGcAuto": true,
+    "postCheckoutRunsAfterWorktreeUpdate": true,
+    "nativeHooksUniversallyInterceptListedDangerousCommands": false,
+    "packagedJsonScriptDirectlyCompatibleWithNativePrePush": false,
+    "approvedOrValidatedAdmissionProvesRuntimeEfficacy": false
+  },
+  "currentExecutionEligibility": {
+    "state": "preview-only-pending-command-by-command-live-canary",
+    "hookWriteAllowed": false,
+    "dangerousCommandCanaryAllowed": false,
+    "globalConfigurationAllowed": false,
+    "realRemoteAllowed": false
+  },
+  "repositoryAdmissionDrift": {
+    "currentRegistryStatus": "absent-from-approved-inventory",
+    "currentAdmissionDisposition": "recipe-only",
+    "currentAdmissionValidated": false,
+    "currentMetadataProvesEfficacy": false,
+    "coherentSuspensionTransactionState": "repository-release-suspended",
+    "liveCcPayloadChangedByThisReview": false
+  },
+  "decisionProtocol": {
+    "fixtures": "tests/fixtures/git-guardrails-interception-decision-2026-07-24.json",
+    "evaluator": "scripts/evaluate_git_guardrails_interception_decision.py",
+    "fixtureCount": 9
+  },
+  "nextLiveGate": {
+    "target": "explicitly-bound-disposable-repository-with-local-bare-remote",
+    "separateAuthorizations": [
+      "hook-write",
+      "dangerous-command-canary",
+      "recovery"
+    ],
+    "requiredEvidencePerCommand": [
+      "parent-observed-exit-code",
+      "sentinel-state-before-and-after",
+      "mechanism-hit-evidence",
+      "recovery-state"
+    ],
+    "commandsMustBeProvedSeparately": [
+      "git push",
+      "git reset --hard",
+      "git clean -f",
+      "git clean -fd",
+      "git branch -D",
+      "git checkout .",
+      "git restore ."
+    ],
+    "weakAgentCondition": {
+      "requestedModel": "gpt-5.3-codex-spark",
+      "requestedReasoning": "low",
+      "minimumIndependentRunsPerEligibleCell": 3
+    }
+  },
+  "claimBoundary": {
+    "staticReviewProvesLiveInterception": false,
+    "onePushCanaryProvesOtherCommands": false,
+    "oneAgentHookProvesManualTerminalOrCiCoverage": false,
+    "admissionOrContentHashProvesEfficacy": false,
+    "decisionFixturesAuthorizeMutation": false
+  }
+}

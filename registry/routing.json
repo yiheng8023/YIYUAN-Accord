@@ -159,57 +159,6 @@
       ]
     },
     {
-      "skill": "skill.curated.git-guardrails",
-      "aliases": [
-        "git guardrails",
-        "dangerous git protection",
-        "Git安全护栏"
-      ],
-      "positiveTriggers": [
-        "Prevent destructive Git commands or install repository/user-level Git safety hooks."
-      ],
-      "negativeTriggers": [
-        "A one-time ordinary Git command does not justify installing persistent guardrails."
-      ],
-      "contextRequirements": [
-        "Target scope, protected commands, shell environment, and hook ownership are known."
-      ],
-      "inputs": [
-        "Desired Git safety policy and target repository or user scope."
-      ],
-      "outputs": [
-        "Reviewed guardrail hook/configuration and verification evidence."
-      ],
-      "sideEffects": [
-        "Installs or changes Git hooks or command policy."
-      ],
-      "validation": [
-        "Blocked commands fail safely while allowed commands continue to work."
-      ],
-      "riskLevel": "high",
-      "permissionsRequired": [
-        "Explicit permission to modify hooks or user/repository configuration."
-      ],
-      "fallback": [
-        "Provide a read-only guardrail design and manual commands without installing."
-      ],
-      "humanConfirmWhen": [
-        "Before installing, replacing, or broadening a persistent hook."
-      ],
-      "languages": [
-        "en",
-        "zh-CN",
-        "mixed"
-      ],
-      "agentCompatibility": [
-        "cross-agent instruction following",
-        "optional tools are capability-checked at runtime"
-      ],
-      "lifecycleCapabilities": [
-        "capability.ci-cd"
-      ]
-    },
-    {
       "skill": "skill.curated.grill-with-docs",
       "aliases": [
         "grill with docs",

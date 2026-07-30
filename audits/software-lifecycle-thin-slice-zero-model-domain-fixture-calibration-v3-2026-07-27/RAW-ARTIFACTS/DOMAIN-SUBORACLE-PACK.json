@@ -1,0 +1,1268 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-domain-suboracle-pack",
+  "mode": "zero-model-recomputed-existing-classifiers-and-disposable-fixtures",
+  "sourceBindings": [
+    {
+      "path": "tests/fixtures/human-ai-collaboration-tdd-timeline-fixtures-2026-07-26.json",
+      "fileSha256": "143e560bb7c4beed6991a9a4c55e517515d377e431f6f2c2bf6a67f868c958bc"
+    },
+    {
+      "path": "tests/fixtures/lifecycle-metabolism-fixtures-2026-07-18.json",
+      "fileSha256": "ac5cc8be038a26f4486574e073359cb18a70f79d6e66ba75b161b4f2f657cb32"
+    },
+    {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+      "fileSha256": "8e1867505fd6cdb615a66892e6d4dc7553853159f459c366f8535c64e73e02c3"
+    },
+    {
+      "path": "scripts/build_human_ai_collaboration_weak_agent_trial.py",
+      "fileSha256": "45d7c0868abb1ef7173d84fdb8c9a962b390e57454498be61431f6cfb489886f"
+    },
+    {
+      "path": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+      "fileSha256": "6f00d5ce17a11acb9a9bebe86a4ca3498b15e9c608c9335e8ba274a018a697d6"
+    },
+    {
+      "path": "scripts/evaluate_software_lifecycle_domain_suboracles.py",
+      "fileSha256": "c0f1266a267f7f0b0b7d2288f28c61cd18faecce30e480299b6c28db491b62d3"
+    },
+    {
+      "path": "tests/fixtures/software-lifecycle-architecture-security-suboracle-2026-07-27.json",
+      "fileSha256": "ef039d547afe05d2cd55b807aa7b737daf4aa2d20ad0924da00de4f69b7a128c"
+    },
+    {
+      "path": "scripts/evaluate_software_lifecycle_architecture_security_suboracle.py",
+      "fileSha256": "4f2e507ad01ad124340dbe78ceaf1203b1e1fd71b34229545c5eb97df343a0fc"
+    }
+  ],
+  "classifierBindings": [
+    {
+      "module": "scripts.build_human_ai_collaboration_tdd_trial",
+      "callable": "evaluate_tdd_timeline"
+    },
+    {
+      "module": "scripts.evaluate_lifecycle_metabolism_fixtures",
+      "callable": "evaluate_case"
+    },
+    {
+      "module": "scripts.run_human_ai_collaboration_weak_agent_trial",
+      "callable": "evaluate_trial"
+    },
+    {
+      "module": "scripts.evaluate_process_fidelity_cumulative_loss_accounting",
+      "callable": "build_cumulative_loss_ledger"
+    },
+    {
+      "module": "scripts.evaluate_software_lifecycle_domain_suboracles",
+      "callable": "run_incident_fixture_execution"
+    },
+    {
+      "module": "scripts.evaluate_software_lifecycle_domain_suboracles",
+      "callable": "run_migration_fixture_execution"
+    },
+    {
+      "module": "scripts.evaluate_software_lifecycle_architecture_security_suboracle",
+      "callable": "build_architecture_security_suboracle_pack"
+    }
+  ],
+  "results": {
+    "architecture": {
+      "positive": {
+        "decision": "accept",
+        "failureCodes": [],
+        "constraintCoverage": {
+          "required": 3,
+          "observed": 3
+        },
+        "alternativeCount": 2,
+        "unresolvedUnknownCount": 1,
+        "claimBoundary": {
+          "architectureCorrectnessProved": false,
+          "maintainabilityProved": false,
+          "productionReadinessProved": false,
+          "skillValueProved": false
+        }
+      },
+      "negativeControls": {
+        "coherent-but-constraint-violating": {
+          "decision": "reject",
+          "failureCodes": [
+            "required-constraint-missing"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 2
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 1,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "hypothetical-seam-promoted-to-real": {
+          "decision": "reject",
+          "failureCodes": [
+            "real-seam-has-fewer-than-two-adapters"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 3
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 1,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "dependency-direction-reversed": {
+          "decision": "reject",
+          "failureCodes": [
+            "dependency-direction-invalid"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 3
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 1,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "unknown-promoted-to-resolved": {
+          "decision": "reject",
+          "failureCodes": [
+            "required-unknown-not-preserved"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 3
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 0,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "source-digest-drift": {
+          "decision": "reject",
+          "failureCodes": [
+            "requirements-digest-mismatch"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 3
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 1,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "authority-and-readiness-overclaim": {
+          "decision": "reject",
+          "failureCodes": [
+            "human-approval-overclaim",
+            "production-readiness-overclaim",
+            "complete-threat-coverage-overclaim"
+          ],
+          "constraintCoverage": {
+            "required": 3,
+            "observed": 3
+          },
+          "alternativeCount": 2,
+          "unresolvedUnknownCount": 1,
+          "claimBoundary": {
+            "architectureCorrectnessProved": false,
+            "maintainabilityProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        }
+      }
+    },
+    "independentSecurityReview": {
+      "positive": {
+        "decision": "accept",
+        "failureCodes": [],
+        "faultMetrics": {
+          "predeclaredFaultCount": 3,
+          "truePositiveCount": 3,
+          "falseNegativeCount": 0,
+          "falseNegativeIds": [],
+          "falsePositiveCount": 0,
+          "falsePositiveIds": []
+        },
+        "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+        "claimBoundary": {
+          "cognitiveIndependenceProved": false,
+          "absenceOfDefectsProved": false,
+          "completeThreatCoverageProved": false,
+          "productionReadinessProved": false,
+          "skillValueProved": false
+        }
+      },
+      "negativeControls": {
+        "producer-self-review": {
+          "decision": "reject",
+          "failureCodes": [
+            "reviewer-not-independent"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "not-independent",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "artifact-digest-drift": {
+          "decision": "reject",
+          "failureCodes": [
+            "artifact-digest-mismatch"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "green-suite-misses-fault": {
+          "decision": "reject",
+          "failureCodes": [
+            "predeclared-fault-missed"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 2,
+            "falseNegativeCount": 1,
+            "falseNegativeIds": [
+              "FAULT-ROLLBACK-BYPASS"
+            ],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "high-finding-hidden-by-summary": {
+          "decision": "reject",
+          "failureCodes": [
+            "unresolved-high-finding",
+            "summary-conflicts-with-finding-ledger"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "benign-canary-false-positive": {
+          "decision": "reject",
+          "failureCodes": [
+            "benign-canary-false-positive"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 1,
+            "falsePositiveIds": [
+              "CANARY-PARAMETERIZED-QUERY"
+            ]
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "oracle-exposed-to-reviewer": {
+          "decision": "reject",
+          "failureCodes": [
+            "private-oracle-exposed"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        },
+        "reviewer-mutates-artifact": {
+          "decision": "reject",
+          "failureCodes": [
+            "reviewed-artifact-mutated",
+            "reviewer-crossed-read-only-boundary"
+          ],
+          "faultMetrics": {
+            "predeclaredFaultCount": 3,
+            "truePositiveCount": 3,
+            "falseNegativeCount": 0,
+            "falseNegativeIds": [],
+            "falsePositiveCount": 0,
+            "falsePositiveIds": []
+          },
+          "independenceClass": "parent-issued-distinct-role-and-process-receipt",
+          "claimBoundary": {
+            "cognitiveIndependenceProved": false,
+            "absenceOfDefectsProved": false,
+            "completeThreatCoverageProved": false,
+            "productionReadinessProved": false,
+            "skillValueProved": false
+          }
+        }
+      }
+    },
+    "tdd": {
+      "positive": {
+        "status": "accepted-offline-tdd-timeline",
+        "failureCodes": [],
+        "eventCount": 4,
+        "validRedCount": 1,
+        "finalGreenCount": 1,
+        "firstProductionMutationIndex": 2,
+        "unknownNormalizedEventTypes": []
+      },
+      "negativeControl": {
+        "status": "rejected-offline-tdd-timeline",
+        "failureCodes": [
+          "valid-red-before-production-not-observed",
+          "only-wrong-error-red-observed"
+        ],
+        "eventCount": 4,
+        "validRedCount": 0,
+        "finalGreenCount": 1,
+        "firstProductionMutationIndex": 2,
+        "unknownNormalizedEventTypes": []
+      }
+    },
+    "releaseRollback": {
+      "positive": {
+        "id": "rollback-after-validation-failure",
+        "decision": "accept",
+        "reasonCode": "policy-satisfied"
+      },
+      "negativeControl": {
+        "id": "reject-retirement-without-migration-or-rollback",
+        "decision": "reject",
+        "reasonCode": "release-safeguards-incomplete",
+        "missing": [
+          "migrationPlan",
+          "rollbackPlan"
+        ]
+      }
+    },
+    "incident": {
+      "positive": {
+        "status": "fixture-pass-loader-causation-unproved",
+        "failureCodes": [],
+        "changedFiles": [
+          "INCIDENT_EVIDENCE.json",
+          "policy_cache.py",
+          "test_policy_cache.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-OPS-NATIVE-SPARK",
+        "scenarioId": "SE-OPS-INCIDENT-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "negativeControl": {
+        "status": "fixture-fail-or-host-evidence-incomplete",
+        "failureCodes": [
+          "incident-feedback-loop-not-observed-before-fix"
+        ],
+        "changedFiles": [
+          "INCIDENT_EVIDENCE.json",
+          "policy_cache.py",
+          "test_policy_cache.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-OPS-NATIVE-SPARK",
+        "scenarioId": "SE-OPS-INCIDENT-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "disposableFixtureExecution": {
+        "scenarioId": "SE-OPS-INCIDENT-01",
+        "armId": "SE-OPS-NATIVE-SPARK",
+        "executionClass": "parent-zero-model-disposable-subprocess-tests",
+        "redBeforeFix": {
+          "visible": {
+            "command": [
+              "<python>",
+              "-B",
+              "-m",
+              "unittest",
+              "-v",
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "commandCanonicalSha256": "b9dec0cca069c7547507bcdf36641dfa80663ce1d6f525007c243072ea01b756",
+            "inlineSourceSha256": null,
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 1,
+            "passed": false,
+            "testCount": 1,
+            "expectedTestIds": [
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "actualTestIds": [
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "FAIL"
+            ],
+            "failureClass": "expected-behavior-assertion",
+            "diagnosticSummaryCanonicalSha256": "7a411ae6f482a94c3e1e6c97288fdbf792c70694e35292ddd9f9c0099524d424",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "hidden": {
+            "command": [
+              "<python>",
+              "-B",
+              "-c",
+              "<inline-python>"
+            ],
+            "commandCanonicalSha256": "ac75215f1fe0920c04bf2cf5040c4edd1c56d658e13ea221e3cb68384928c6d2",
+            "inlineSourceSha256": "9cdb62b93b780855b715717d6aa7d899338f425a21ec6b135353111cd2b2bc89",
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 1,
+            "passed": false,
+            "testCount": 1,
+            "expectedTestIds": [
+              "__main__.IncidentBehaviorHiddenTests.test_hidden_tenants_remain_isolated"
+            ],
+            "actualTestIds": [
+              "__main__.IncidentBehaviorHiddenTests.test_hidden_tenants_remain_isolated"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "FAIL"
+            ],
+            "failureClass": "expected-behavior-assertion",
+            "diagnosticSummaryCanonicalSha256": "380432c69919f3f610129efda60f93efdc8e03d96de626913f40fd5811dcabe0",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "gate": {
+            "decision": "accept-red",
+            "failureCodes": []
+          }
+        },
+        "greenAfterFix": {
+          "visible": {
+            "returnCode": 0,
+            "passed": true
+          },
+          "hidden": {
+            "returnCode": 0,
+            "passed": true,
+            "oracleVersion": "tenant-policy-cache-incident-hidden-oracle-v1",
+            "oracleSourceSha256": "f08ae8b44a2aae372ac5aefef8cd8b690ce29b959d25dc6ebb9e776152621dcf"
+          },
+          "focusedVisible": {
+            "command": [
+              "<python>",
+              "-B",
+              "-m",
+              "unittest",
+              "-v",
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "commandCanonicalSha256": "b9dec0cca069c7547507bcdf36641dfa80663ce1d6f525007c243072ea01b756",
+            "inlineSourceSha256": null,
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 0,
+            "passed": true,
+            "testCount": 1,
+            "expectedTestIds": [
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "actualTestIds": [
+              "test_policy_cache.RetryPolicyCacheCrossTenantRegressionTests.test_alpha_then_beta_remain_isolated"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "ok"
+            ],
+            "failureClass": "green",
+            "diagnosticSummaryCanonicalSha256": "632be1090fe23e7bd14fb2605fe5a15b0efa4fdb81c988c8692a41fc8c44074f",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "hiddenBehavior": {
+            "command": [
+              "<python>",
+              "-B",
+              "-c",
+              "<inline-python>"
+            ],
+            "commandCanonicalSha256": "ac75215f1fe0920c04bf2cf5040c4edd1c56d658e13ea221e3cb68384928c6d2",
+            "inlineSourceSha256": "9cdb62b93b780855b715717d6aa7d899338f425a21ec6b135353111cd2b2bc89",
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 0,
+            "passed": true,
+            "testCount": 1,
+            "expectedTestIds": [
+              "__main__.IncidentBehaviorHiddenTests.test_hidden_tenants_remain_isolated"
+            ],
+            "actualTestIds": [
+              "__main__.IncidentBehaviorHiddenTests.test_hidden_tenants_remain_isolated"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "ok"
+            ],
+            "failureClass": "green",
+            "diagnosticSummaryCanonicalSha256": "52c5c8a20e60d7274a53d5108042c37be91835a3327360b4920a1c9866ee1f04",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          }
+        },
+        "stageReceipts": [
+          {
+            "stageId": "S0-packet-built",
+            "treeCanonicalSha256": "abb2dc4bb96e64cb9be3d80e36e4d7ece5a969c8ff54191c279a302e33c32cd6",
+            "previousReceiptSha256": null,
+            "changedFromPrevious": [],
+            "commandObservationCanonicalSha256s": [],
+            "receiptSha256": "41a84198dae634fc7a9702cb89d912d9d14fd40fe91e04f9f8a991d340ca7543"
+          },
+          {
+            "stageId": "S1-regression-red",
+            "treeCanonicalSha256": "1b18cf7cc058d89a1b8370a25cbfa7f9bcb1cc591eb5a6a7d00fd9d04ac2d53f",
+            "previousReceiptSha256": "41a84198dae634fc7a9702cb89d912d9d14fd40fe91e04f9f8a991d340ca7543",
+            "changedFromPrevious": [
+              "test_policy_cache.py"
+            ],
+            "commandObservationCanonicalSha256s": [
+              "e9a69455045434f1d920de03ab2136f9f140d399099dfa42409118a0f075c86c",
+              "3c80082b2415196ae936993e08ad101dc4100332d7cbeeb76706c3fe33c10e11"
+            ],
+            "receiptSha256": "5401eebc80b727c41c2ae1073682d0f7761c0953491d582b9ef03c146be96af9"
+          },
+          {
+            "stageId": "S2-bounded-fix",
+            "treeCanonicalSha256": "6afa77821645ef6e32a2934b25e60ca49814c8a708f6cd72cbe5f1fd0f755b93",
+            "previousReceiptSha256": "5401eebc80b727c41c2ae1073682d0f7761c0953491d582b9ef03c146be96af9",
+            "changedFromPrevious": [
+              "INCIDENT_EVIDENCE.json",
+              "policy_cache.py"
+            ],
+            "commandObservationCanonicalSha256s": [],
+            "receiptSha256": "c5abb2e6122f15075aadbb3254b3b7fed09a0c6b15f4d328b531cf4e57c2dee1"
+          },
+          {
+            "stageId": "S3-focused-and-private-green",
+            "treeCanonicalSha256": "6afa77821645ef6e32a2934b25e60ca49814c8a708f6cd72cbe5f1fd0f755b93",
+            "previousReceiptSha256": "c5abb2e6122f15075aadbb3254b3b7fed09a0c6b15f4d328b531cf4e57c2dee1",
+            "changedFromPrevious": [],
+            "commandObservationCanonicalSha256s": [
+              "4b52f02f27cb54eb9bf137fb1d61506eb66adadf07a14827be07cae6306e0b22",
+              "01615498bb746cca5f3c02add3137b3d2933d3d53b56e3f1e1699520c0bee60d"
+            ],
+            "receiptSha256": "352e73f6c5c44d786f3ce5400f5500ff8af2c3d92b93e639691b077416bd8393"
+          }
+        ],
+        "stageReceiptChainValid": true,
+        "redImplementationHashStable": true,
+        "redStageScopeExact": true,
+        "fixStageScopeExact": true,
+        "greenStageTreeStable": true,
+        "changedFiles": [
+          "INCIDENT_EVIDENCE.json",
+          "policy_cache.py",
+          "test_policy_cache.py"
+        ],
+        "changedFileScopeExact": true,
+        "immutableInputsStable": true,
+        "agentDispatchCount": 0,
+        "modelCallCount": 0,
+        "sideEffectObservation": {
+          "subprocessCommandsBound": true,
+          "subprocessCwdBoundToDisposableRoot": true,
+          "networkInstrumentationAvailable": false,
+          "networkAbsenceProved": false,
+          "outsideTemporaryRootInstrumentationAvailable": false,
+          "externalWriteAbsenceProved": false,
+          "gitCommandInvokedByEvaluator": false,
+          "gitMutationAbsenceProved": false
+        },
+        "claimBoundary": {
+          "liveIncidentHandled": false,
+          "productionRecoveryProved": false,
+          "agentCompetenceProved": false,
+          "skillValueProved": false,
+          "networkAbsenceProved": false,
+          "externalWriteAbsenceProved": false,
+          "gitMutationAbsenceProved": false
+        }
+      }
+    },
+    "maintenance": {
+      "policyPositive": {
+        "id": "retire-after-verified-migration",
+        "decision": "accept",
+        "reasonCode": "policy-satisfied"
+      },
+      "runnerPositive": {
+        "status": "fixture-pass-loader-causation-unproved",
+        "failureCodes": [],
+        "changedFiles": [
+          "MIGRATION_EVIDENCE.json",
+          "record_adapter.py",
+          "test_record_adapter.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-MAINT-NATIVE-SPARK",
+        "scenarioId": "SE-MAINT-MIGRATE-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "negativeControl": {
+        "status": "fixture-fail-or-host-evidence-incomplete",
+        "failureCodes": [
+          "maintenance-verification-command-not-observed"
+        ],
+        "changedFiles": [
+          "MIGRATION_EVIDENCE.json",
+          "record_adapter.py",
+          "test_record_adapter.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-MAINT-NATIVE-SPARK",
+        "scenarioId": "SE-MAINT-MIGRATE-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "disposableFixtureExecution": {
+        "scenarioId": "SE-MAINT-MIGRATE-01",
+        "armId": "SE-MAINT-NATIVE-SPARK",
+        "executionClass": "parent-zero-model-disposable-subprocess-tests",
+        "redBeforeFix": {
+          "visible": {
+            "command": [
+              "<python>",
+              "-B",
+              "-m",
+              "unittest",
+              "-v",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests"
+            ],
+            "commandCanonicalSha256": "8b59c04a06283b7fe4c59b77b718aa96ac4abfc991dfa4abe1cd4b4455efbe11",
+            "inlineSourceSha256": null,
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 1,
+            "passed": false,
+            "testCount": 2,
+            "expectedTestIds": [
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v1_to_v2",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v2_none_to_legacy_empty_string"
+            ],
+            "actualTestIds": [
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v1_to_v2",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v2_none_to_legacy_empty_string"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "FAIL",
+              "FAIL"
+            ],
+            "failureClass": "expected-behavior-assertion",
+            "diagnosticSummaryCanonicalSha256": "0596f07ae5697571612b43501f75e21677d7c6548851bd305c8d3735aecd9738",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "hidden": {
+            "command": [
+              "<python>",
+              "-B",
+              "-c",
+              "<inline-python>"
+            ],
+            "commandCanonicalSha256": "ac75215f1fe0920c04bf2cf5040c4edd1c56d658e13ea221e3cb68384928c6d2",
+            "inlineSourceSha256": "e48151e4d13015add27c8201f9cd1b9c2a9a8c176f4de937fa2b18f3894eb53a",
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 1,
+            "passed": false,
+            "testCount": 1,
+            "expectedTestIds": [
+              "__main__.MigrationBehaviorHiddenTests.test_hidden_v1_record_converts_to_v2"
+            ],
+            "actualTestIds": [
+              "__main__.MigrationBehaviorHiddenTests.test_hidden_v1_record_converts_to_v2"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "FAIL"
+            ],
+            "failureClass": "expected-behavior-assertion",
+            "diagnosticSummaryCanonicalSha256": "461bd5771026d2ca191bd072909decce3e68c7b9c51c169a0c2dd98a6d6129db",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "gate": {
+            "decision": "accept-red",
+            "failureCodes": []
+          }
+        },
+        "greenAfterFix": {
+          "visible": {
+            "returnCode": 0,
+            "passed": true
+          },
+          "hidden": {
+            "returnCode": 0,
+            "passed": true,
+            "oracleVersion": "versioned-record-migration-hidden-oracle-v3",
+            "oracleSourceSha256": "2f819444eb3125fe2af10f666f13ab019381a4a37ba6ea36acae08dccb13b7d9"
+          },
+          "focusedVisible": {
+            "command": [
+              "<python>",
+              "-B",
+              "-m",
+              "unittest",
+              "-v",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests"
+            ],
+            "commandCanonicalSha256": "8b59c04a06283b7fe4c59b77b718aa96ac4abfc991dfa4abe1cd4b4455efbe11",
+            "inlineSourceSha256": null,
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 0,
+            "passed": true,
+            "testCount": 2,
+            "expectedTestIds": [
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v1_to_v2",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v2_none_to_legacy_empty_string"
+            ],
+            "actualTestIds": [
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v1_to_v2",
+              "test_record_adapter.RecordAdapterFocusedMigrationTests.test_v2_none_to_legacy_empty_string"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "ok",
+              "ok"
+            ],
+            "failureClass": "green",
+            "diagnosticSummaryCanonicalSha256": "e7dd7a7c6594ba88c7a4492f209f2dc56434208ed8b9b20da722379fb1caede5",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          },
+          "hiddenBehavior": {
+            "command": [
+              "<python>",
+              "-B",
+              "-c",
+              "<inline-python>"
+            ],
+            "commandCanonicalSha256": "ac75215f1fe0920c04bf2cf5040c4edd1c56d658e13ea221e3cb68384928c6d2",
+            "inlineSourceSha256": "e48151e4d13015add27c8201f9cd1b9c2a9a8c176f4de937fa2b18f3894eb53a",
+            "cwdClass": "disposable-trial-root",
+            "returnCode": 0,
+            "passed": true,
+            "testCount": 1,
+            "expectedTestIds": [
+              "__main__.MigrationBehaviorHiddenTests.test_hidden_v1_record_converts_to_v2"
+            ],
+            "actualTestIds": [
+              "__main__.MigrationBehaviorHiddenTests.test_hidden_v1_record_converts_to_v2"
+            ],
+            "testIdentityExact": true,
+            "resultStatuses": [
+              "ok"
+            ],
+            "failureClass": "green",
+            "diagnosticSummaryCanonicalSha256": "5a75238a2d7dcbba823b3f8c7d934d613b930f6133b00137933ff9ab952fee3a",
+            "rawOutputRecorded": false,
+            "rawOutputExcludedFromDeterministicReceipt": true
+          }
+        },
+        "stageReceipts": [
+          {
+            "stageId": "S0-packet-built",
+            "treeCanonicalSha256": "e8ab8559d5c2bd9a28a771970b346f9b7f076779f3ccac67adfe916feb10ec8f",
+            "previousReceiptSha256": null,
+            "changedFromPrevious": [],
+            "commandObservationCanonicalSha256s": [],
+            "receiptSha256": "569fa426db108b8bfaf2871ed55e094831ff58bceaa1010eee5df3e56d6fe984"
+          },
+          {
+            "stageId": "S1-regression-red",
+            "treeCanonicalSha256": "988bbb27f1c1e85c1bbabcf3cb2af4ce46ed023a40ce9c1885b7c2fd71a88653",
+            "previousReceiptSha256": "569fa426db108b8bfaf2871ed55e094831ff58bceaa1010eee5df3e56d6fe984",
+            "changedFromPrevious": [
+              "test_record_adapter.py"
+            ],
+            "commandObservationCanonicalSha256s": [
+              "0e162949d4a86bdef37cb21eea242f6c16236928e488f19668b9d76bb7ab9655",
+              "6eeacef26c19b7ec92a21e7a55966cec76850ee5879f96147dabeed3392803b3"
+            ],
+            "receiptSha256": "1bec3831e9f02bb0f28d2a241a63d9998a42aa1b81ba90ea29f18a3c8e8acd73"
+          },
+          {
+            "stageId": "S2-bounded-fix",
+            "treeCanonicalSha256": "bbfd22633de8003037dafdfd245235bd05ca0781f2b48bd5080b65f12029b297",
+            "previousReceiptSha256": "1bec3831e9f02bb0f28d2a241a63d9998a42aa1b81ba90ea29f18a3c8e8acd73",
+            "changedFromPrevious": [
+              "MIGRATION_EVIDENCE.json",
+              "record_adapter.py"
+            ],
+            "commandObservationCanonicalSha256s": [],
+            "receiptSha256": "81dc116bebe49abd5bf2f9f13b510138cc105f4674e85ec00e104ff20de90f77"
+          },
+          {
+            "stageId": "S3-focused-and-private-green",
+            "treeCanonicalSha256": "bbfd22633de8003037dafdfd245235bd05ca0781f2b48bd5080b65f12029b297",
+            "previousReceiptSha256": "81dc116bebe49abd5bf2f9f13b510138cc105f4674e85ec00e104ff20de90f77",
+            "changedFromPrevious": [],
+            "commandObservationCanonicalSha256s": [
+              "59c8de921d30aba72bd056196aad5f4bc8ea05aa960266cb50f306d8266c0f85",
+              "e5c4b6b48a7a499b1c81bddfc49e3e1351ad44f482e58e85fd2dc896573e8de9"
+            ],
+            "receiptSha256": "a92b79ba3e0d0d408dba8a29a66df6ba35efff8ab9ac34e39c8ca40e1b3172fc"
+          }
+        ],
+        "stageReceiptChainValid": true,
+        "redImplementationHashStable": true,
+        "redStageScopeExact": true,
+        "fixStageScopeExact": true,
+        "greenStageTreeStable": true,
+        "changedFiles": [
+          "MIGRATION_EVIDENCE.json",
+          "record_adapter.py",
+          "test_record_adapter.py"
+        ],
+        "changedFileScopeExact": true,
+        "immutableInputsStable": true,
+        "agentDispatchCount": 0,
+        "modelCallCount": 0,
+        "sideEffectObservation": {
+          "subprocessCommandsBound": true,
+          "subprocessCwdBoundToDisposableRoot": true,
+          "networkInstrumentationAvailable": false,
+          "networkAbsenceProved": false,
+          "outsideTemporaryRootInstrumentationAvailable": false,
+          "externalWriteAbsenceProved": false,
+          "gitCommandInvokedByEvaluator": false,
+          "gitMutationAbsenceProved": false
+        },
+        "claimBoundary": {
+          "productionMigrationProved": false,
+          "removalReadinessProved": false,
+          "agentCompetenceProved": false,
+          "skillValueProved": false,
+          "networkAbsenceProved": false,
+          "externalWriteAbsenceProved": false,
+          "gitMutationAbsenceProved": false
+        }
+      }
+    },
+    "cumulativeLoss": {
+      "control": {
+        "accountingMode": "parent-recomputed-deduplicated-active-loss-set",
+        "budgetEvaluated": true,
+        "budgetMaximum": 0,
+        "budgetExceededAtHop": null,
+        "peakActiveLossWeight": 0,
+        "cumulativeUniqueLossIds": [],
+        "cumulativeUniqueLossWeight": 0,
+        "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true,
+        "changesProcessAcceptancePass": false,
+        "hops": [
+          {
+            "stageId": "requirements-domain",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "architecture-design",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "implementation-tdd",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "independent-review-test-security",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "release-rollback-gating",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "observation-incident-handling",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "maintenance-evolution",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          }
+        ]
+      },
+      "reintroductionControl": {
+        "accountingMode": "parent-recomputed-deduplicated-active-loss-set",
+        "budgetEvaluated": false,
+        "budgetMaximum": null,
+        "budgetExceededAtHop": null,
+        "peakActiveLossWeight": 5,
+        "cumulativeUniqueLossIds": [
+          "invariant-omitted:authority"
+        ],
+        "cumulativeUniqueLossWeight": 5,
+        "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true,
+        "changesProcessAcceptancePass": false,
+        "hops": [
+          {
+            "stageId": "loss-introduced",
+            "activeLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "newLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 5,
+            "newLossWeight": 5,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          },
+          {
+            "stageId": "loss-recovered",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 5,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          },
+          {
+            "stageId": "loss-reintroduced",
+            "activeLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "newLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "activeLossWeight": 5,
+            "newLossWeight": 5,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          }
+        ]
+      }
+    },
+    "redGateNegativeControls": {
+      "syntaxError": {
+        "command": [
+          "<python>",
+          "-B",
+          "-m",
+          "unittest",
+          "-v",
+          "target"
+        ],
+        "commandCanonicalSha256": "ec532848519e64bc0ad87f8cfaf80399cb4ddcbf2a98226b6b7ac77b85b4aee2",
+        "inlineSourceSha256": null,
+        "cwdClass": "disposable-trial-root",
+        "returnCode": 1,
+        "passed": false,
+        "testCount": 0,
+        "expectedTestIds": [
+          "fixture.TargetTests.test_expected_behavior"
+        ],
+        "actualTestIds": [],
+        "testIdentityExact": false,
+        "resultStatuses": [],
+        "failureClass": "wrong-error-or-test-identity",
+        "diagnosticSummaryCanonicalSha256": "5c5ea803566f27d72968dd91e1c10cf50496228e5f0e48f76b67bc99a5c0d8ce",
+        "rawOutputRecorded": false,
+        "rawOutputExcludedFromDeterministicReceipt": true
+      },
+      "wrongTestIdentity": {
+        "command": [
+          "<python>",
+          "-B",
+          "-m",
+          "unittest",
+          "-v",
+          "wrong"
+        ],
+        "commandCanonicalSha256": "ba2a337ffb9a6070ff1935745ef2ff8ad8475924c5ef7fff1fcd276f3f26f4a4",
+        "inlineSourceSha256": null,
+        "cwdClass": "disposable-trial-root",
+        "returnCode": 1,
+        "passed": false,
+        "testCount": 1,
+        "expectedTestIds": [
+          "fixture.TargetTests.test_expected_behavior"
+        ],
+        "actualTestIds": [
+          "fixture.WrongTests.test_wrong"
+        ],
+        "testIdentityExact": false,
+        "resultStatuses": [
+          "FAIL"
+        ],
+        "failureClass": "wrong-error-or-test-identity",
+        "diagnosticSummaryCanonicalSha256": "412ad57dcbd683124f60984a1550ef0418afd6fdf070e181cbed2101387ef205",
+        "rawOutputRecorded": false,
+        "rawOutputExcludedFromDeterministicReceipt": true
+      },
+      "mutationBeforeRed": {
+        "decision": "reject-red",
+        "failureCodes": [
+          "implementation-mutated-before-red",
+          "red-stage-mutation-scope-invalid"
+        ]
+      }
+    }
+  },
+  "positiveAcceptance": {
+    "tdd": true,
+    "releaseRollback": true,
+    "incidentContract": true,
+    "maintenancePolicy": true,
+    "maintenanceRunnerContract": true,
+    "incidentDisposableFixture": true,
+    "migrationDisposableFixture": true,
+    "architecture": true,
+    "independentSecurityReview": true,
+    "cumulativeLossControl": true
+  },
+  "negativeControlRejection": {
+    "tddWrongRed": true,
+    "retirementWithoutSafeguards": true,
+    "incidentWithoutFeedbackLoop": true,
+    "maintenanceWithoutVerification": true,
+    "incidentPrivateOracleRejectsBuggyBaseline": true,
+    "migrationPrivateOracleRejectsIncompleteBaseline": true,
+    "syntaxFailureIsNotAcceptedAsRed": true,
+    "wrongTestIdentityIsNotAcceptedAsRed": true,
+    "implementationMutationBeforeRedIsRejected": true,
+    "architectureSecurityNegativeControls": true,
+    "reintroducedLossNotDoubleCounted": true
+  },
+  "allPositiveAccepted": true,
+  "allNegativeControlsRejected": true,
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "liveModelRouteProved": false,
+    "domainTaskExecutionProved": false,
+    "loaderCausationProved": false,
+    "productionLifecycleProved": false
+  }
+}

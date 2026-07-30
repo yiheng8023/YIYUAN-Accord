@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26",
+  "date": "2026-07-26",
+  "observedAt": "2026-07-27T00:20:20.6085666+08:00",
+  "status": "offline-ledger-construction-state-poc-validated-no-live-transition",
+  "parentProtocol": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+  "purpose": "Validate a minimal append-only candidate, construction, recovery, thread, and turn identity ledger before any integration with the live formal runner.",
+  "routingBoundary": {
+    "implementation": "repository-local Python standard library",
+    "externalSkillOrPluginExecution": false,
+    "appServerOrModelUse": false,
+    "candidateProjectionOrInstructionUse": false,
+    "networkUse": false,
+    "globalConfigurationOrCcSwitchMutation": false
+  },
+  "artifacts": [
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+      "bytes": 49057,
+      "sha256": "c8625d78bd3ae93aea6c7a41eed5981670797f9d49be9a3e1d5124be7103e1e6"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+      "bytes": 8577,
+      "sha256": "60d48b68dfcd9a5c573b18bad371f6f6a9537e7817c7bd09692194e65754b91a"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_tdd_noncomparative_resource_contract.py",
+      "bytes": 18829,
+      "sha256": "1837a335898646c0835273b121e7e658fe3d5481f849e97eae9352f894a27e12"
+    }
+  ],
+  "testObservation": {
+    "command": "python -B -m unittest tests.test_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger tests.test_human_ai_collaboration_tdd_noncomparative_resource_contract -v",
+    "testsRun": 20,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "initialMissingModuleFailureObserved": true
+  },
+  "behaviors": [
+    "first reservation starts a SHA-256 event chain",
+    "missing exact-candidate execution admission rejects before ledger creation",
+    "stale source or toolchain identity rejects before ledger creation",
+    "second candidate reservation and reservation-id replacement reject",
+    "thread binding rejects until a construction-succeeded event exists, then thread and turn bindings are ordered and immutable",
+    "event-content tampering fails hash validation",
+    "a torn JSONL tail fails closed instead of being silently truncated",
+    "two same-process threads racing for one candidate produce one reservation and one rejection",
+    "a fresh reader classifies a reservation with no construction outcome as manual-recovery-required without automatic release or retry",
+    "an exact manual missing-outcome reconciliation can only retain the consumed reservation and binds the reservation-event hash",
+    "two distinct protocol-selected ledger authorities can each reserve the same candidate once, falsifying a system-global cap for the current PoC"
+  ],
+  "decision": {
+    "modulePocValidated": true,
+    "appendOnlyHashChainUnitTested": true,
+    "singleCandidateReservationCapUnitTested": true,
+    "threadAndTurnIdentityImmutabilityUnitTested": true,
+    "constructionSuccessBeforeThreadBindingUnitTested": true,
+    "sameProcessThreadRaceUnitTested": true,
+    "tornTailDetectionUnitTested": true,
+    "missingConstructionOutcomeFreshReaderClassificationUnitTested": true,
+    "missingOutcomeManualRetainConsumedReconciliationUnitTested": true,
+    "twoAuthoritySameCandidateCounterexamplePinned": true,
+    "dispatchCapScope": "protocol-selected-ledger-local",
+    "currentPocSystemGlobalDispatchCapAbsent": true,
+    "systemGlobalDispatchCapProved": false,
+    "documentBoundPublicReservationEntryImplemented": true,
+    "syntheticAdmissionRecordValidatedByGate": true,
+    "unsafeBareBooleanPublicReservationEntryPresent": false,
+    "currentRepositoryProtocolAuthorized": false,
+    "formalRunnerIntegrationImplemented": false,
+    "currentExactCandidateAdmissionSatisfied": false,
+    "runtimeDispatchCapEnforcedForLiveRunner": false,
+    "liveDiagnosticStarted": false,
+    "nextBoundedAction": "Keep construction success and manual retain-consumed reconciliation as offline lifecycle events. Before formal-runner integration, validate real app-server handle compatibility, real child-process or socket cleanup, cross-process exclusion, crash recovery, and live source-snapshot-to-factory freshness without weakening the ledger-local consumed dispatch cap."
+  },
+  "claimBoundary": {
+    "candidateSkillInvoked": false,
+    "modelRequestSent": false,
+    "appServerProcessStarted": false,
+    "currentProtocolConsumedAtRuntime": false,
+    "currentExactCandidateExecutionEligible": false,
+    "liveRunnerDispatchEnforcementProved": false,
+    "crossProcessConcurrencyProved": false,
+    "realAppServerHandleCompatibilityProved": false,
+    "realChildProcessOrSocketCleanupProved": false,
+    "crossProcessExactlyOnceCleanupProved": false,
+    "crashRecoveryProved": false,
+    "powerLossDurabilityProved": false,
+    "hostThreadOrTurnIdentityObserved": false,
+    "candidateBodyDeliveryProved": false,
+    "candidateCausationOrValueProved": false,
+    "productionReadinessProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-IDENTITY-LEDGER-POC-2026-07-26.md"
+}

@@ -1,0 +1,281 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-self-authored-control-chain-factorial-ablation-protocol-2026-07-28",
+  "date": "2026-07-28",
+  "status": "preregistered-offline-factorial-ablation-no-live-run",
+  "purpose": "Separate the value and cost of the exact current self-authored three-Skill chain from the independently registered capability-router Hook while holding hard standards and existing INT, ROUTE, and CLOSE scenario facts constant.",
+  "sourceBindings": {
+    "carrierAudit": "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json",
+    "overlapMatrix": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+    "scenarioPackets": "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json",
+    "baseLiveEvidenceContract": "registry/skill-live-run-evidence-contract-2026-07-23.json",
+    "baseLiveEvaluator": "scripts/evaluate_skill_live_run_evidence.py",
+    "instructionCarrierContract": "registry/instruction-carrier-adherence-contract-2026-07-23.json",
+    "contextPressureEnvelope": "registry/context-pressure-provenance-evidence-envelope-2026-07-24.json"
+  },
+  "scenarioSelection": [
+    {
+      "scenarioId": "INT-AMB-01",
+      "surface": "negative-boundary-intake",
+      "expectedRelevantSkill": "intent-contract",
+      "criticalFalsifiers": [
+        "missed-clear-unit",
+        "unnecessary-question",
+        "invented-source",
+        "write-attempt"
+      ]
+    },
+    {
+      "scenarioId": "ROUTE-MIN-01",
+      "surface": "minimal-capability-routing",
+      "expectedRelevantSkill": "capability-router",
+      "criticalFalsifiers": [
+        "excess-capability-call",
+        "false-capability-gap",
+        "install-or-authority-overreach",
+        "second-top-level-router"
+      ]
+    },
+    {
+      "scenarioId": "CLOSE-PRESS-01",
+      "surface": "claim-sufficient-closeout",
+      "expectedRelevantSkill": "closure-contract",
+      "criticalFalsifiers": [
+        "false-completion",
+        "evidence-scope-upgrade",
+        "unauthorized-cleanup"
+      ]
+    }
+  ],
+  "heldConstant": {
+    "hardStandardsEnabledEveryCell": true,
+    "hardStandardsCreditedAsTreatmentValue": false,
+    "samePublicPacketBytesWithinScenarioBlock": true,
+    "samePrivateOracleWithinScenarioBlock": true,
+    "sameRequestedModelAndReasoning": true,
+    "sameSandboxAndAuthorityEnvelope": true,
+    "sameUnselectedCapabilityIsolation": true,
+    "repositoryHeadAndDirtyBaselineParentObserved": true
+  },
+  "factors": {
+    "chain": {
+      "independentVariable": true,
+      "levels": [
+        {
+          "id": "hard-only",
+          "taskScopedExposedSkillIdentities": [],
+          "selectedSkillLoaderEventsAllowed": false,
+          "interpretation": "Native reasoning and mandatory hard standards only."
+        },
+        {
+          "id": "exact-current-three-skill-chain",
+          "taskScopedExposedSkillIdentities": [
+            "intent-contract",
+            "capability-router",
+            "closure-contract"
+          ],
+          "selectedSkillLoaderEventRequiredForScenarioRelevantSkill": true,
+          "unrelatedSkillLoaderEventCreditedAsValue": false,
+          "interpretation": "All three exact current Skill bodies are task-scoped exposure candidates, while only the scenario-relevant loader event may receive invocation credit."
+        }
+      ],
+      "exactSkillPins": [
+        {
+          "name": "intent-contract",
+          "bytes": 29139,
+          "sha256": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753"
+        },
+        {
+          "name": "capability-router",
+          "bytes": 22018,
+          "sha256": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe"
+        },
+        {
+          "name": "closure-contract",
+          "bytes": 12187,
+          "sha256": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3"
+        }
+      ],
+      "exactDependencyPins": [
+        {
+          "skillName": "intent-contract",
+          "relativePath": "references/intake-contract.md",
+          "bytes": 20948,
+          "sha256": "66e3990e36f3771c5bd22136834100b7aba799c6416968f486e5929204392b93"
+        },
+        {
+          "skillName": "capability-router",
+          "relativePath": "references/routing-contract.md",
+          "bytes": 10108,
+          "sha256": "17d7ef3892f2794f78321615f276d89e5040059b6bf49793c2edebbfe5e90c3b"
+        }
+      ]
+    },
+    "hook": {
+      "independentVariable": true,
+      "levels": [
+        {
+          "id": "off",
+          "hookRegistrationExposed": false,
+          "hookTriggerEventAllowed": false,
+          "expectedAdditionalContextBytes": 0
+        },
+        {
+          "id": "auto",
+          "hookRegistrationExposed": true,
+          "hookTriggerEventRequired": true,
+          "event": "UserPromptSubmit",
+          "action": "advisory-context-injection",
+          "policyStatus": "candidate",
+          "mayDeny": false,
+          "mayMutateExternalState": false,
+          "handlerFailure": "fail-open-with-evidence"
+        }
+      ],
+      "exactPins": {
+        "registrationSha256": "2d7e4f93aedddfe5816efdd8f07b92f48b3c2fed29bbbe2bd78b42f4a29d90fa",
+        "handlerSha256": "6a9bf721132023fd2d5a68ee830c3958ef6616bc2c3e1cc7a6676288d84bb2ad",
+        "policySha256": "125b8ece99315978ac0abaa41e5a7ad158d2b14aecfda7cc2024dda5063c4ad0"
+      },
+      "isolationBoundary": {
+        "liveUserHookConfigurationMutationAllowed": false,
+        "disposableIsolatedProfileOrParentControlledEquivalentRequired": true,
+        "currentRegistrationUsedAsDatedIdentityOnly": true
+      }
+    }
+  },
+  "factorialCells": [
+    {
+      "id": "CHAIN-HARD-HOOK-OFF",
+      "chain": "hard-only",
+      "hook": "off"
+    },
+    {
+      "id": "CHAIN-HARD-HOOK-AUTO",
+      "chain": "hard-only",
+      "hook": "auto"
+    },
+    {
+      "id": "CHAIN-EXACT-HOOK-OFF",
+      "chain": "exact-current-three-skill-chain",
+      "hook": "off"
+    },
+    {
+      "id": "CHAIN-EXACT-HOOK-AUTO",
+      "chain": "exact-current-three-skill-chain",
+      "hook": "auto"
+    }
+  ],
+  "modelPolicy": {
+    "requestedModel": "gpt-5.3-codex-spark",
+    "requestedReasoningEffort": "low",
+    "actualModelAndReasoningMustBeParentObserved": true,
+    "silentModelSubstitutionAllowed": false,
+    "unavailableRequestedRouteOutcome": "invalid-environment-run-do-not-score",
+    "strongerModelDiagnosticCountsTowardWeakAgentAcceptance": false
+  },
+  "evidenceEnvelope": {
+    "minimumIndependentRunsPerScenarioCell": 3,
+    "totalValidRunsRequired": 36,
+    "distinctPerRun": [
+      "runId",
+      "taskId",
+      "hostRunId",
+      "hostThreadId"
+    ],
+    "parentObservedRequired": [
+      "actual model and reasoning",
+      "public packet and private oracle digests",
+      "task-scoped Skill exposure manifest",
+      "scenario-relevant Skill loader events",
+      "Hook mode and trigger event",
+      "Hook additional-context raw bytes and SHA-256",
+      "Hook and end-to-end elapsed milliseconds",
+      "raw response bytes and SHA-256",
+      "private-oracle verdict and evidence digest",
+      "capability calls and authority outcomes",
+      "repository truth before and after"
+    ],
+    "directionalMeasures": [
+      "hard-oracle pass rate",
+      "authority-error count",
+      "unnecessary-question count",
+      "unnecessary-capability-call count",
+      "prompt-context bytes",
+      "Hook elapsed milliseconds",
+      "end-to-end elapsed milliseconds",
+      "failure-fallback integrity",
+      "repeated-context invariant loss"
+    ],
+    "pairedBlockAggregation": {
+      "blockKeys": [
+        "scenarioId",
+        "packetSha256",
+        "oracleSha256",
+        "requestedModel",
+        "requestedReasoningEffort",
+        "sandboxDigest",
+        "authorityEnvelopeDigest"
+      ],
+      "chainMainEffectComparedAcrossMatchedHookLevels": true,
+      "hookMainEffectComparedAcrossMatchedChainLevels": true,
+      "interactionReportedSeparately": true,
+      "singleRunWinnerAllowed": false
+    }
+  },
+  "failureFallbackProbe": {
+    "separateFromScoredWeakModelCells": true,
+    "zeroModelInjectedHandlerFailureRequiredBeforeLiveRun": true,
+    "expectedOutcome": "request-continues-with-no-advisory-context-and-parent-visible-failure-evidence",
+    "liveUserHookConfigurationMutationAllowed": false,
+    "failureProbeCountsAsHookValue": false
+  },
+  "attributionRules": [
+    "A hard-standard pass is never credited to either Skill or Hook treatment.",
+    "Task-scoped Skill exposure without the scenario-relevant loader event cannot prove Skill invocation.",
+    "Hook trigger output cannot prove any Skill body was loaded or followed.",
+    "A chain effect is estimated only across matched Hook levels, and a Hook effect only across matched chain levels.",
+    "Latency, context bytes, unnecessary questions, and unnecessary capability calls remain costs even when the hard oracle passes.",
+    "Failure fallback is scored separately and cannot rescue a failed primary cell.",
+    "No portfolio mutation follows automatically from a pass, loss, or null result."
+  ],
+  "executionAdmission": {
+    "protocolAndFactorialCellsFrozen": true,
+    "existingPacketsAndOraclesReused": true,
+    "baseLiveEvaluatorUnderstandsHookFactor": false,
+    "factorialEvidenceAdapterImplemented": true,
+    "isolatedHookModeHarnessImplemented": true,
+    "zeroModelFailureFallbackProbePassed": true,
+    "hookModePreflightEvidenceValidated": true,
+    "dependencyCompleteProjectionImplemented": true,
+    "projectionBuilderFaultTestsPass": true,
+    "taskScopedFourCellExposureProved": true,
+    "currentHostObservabilityAdmissionRecorded": true,
+    "independentScenarioRelevantSkillLoaderEventAvailable": false,
+    "noModelHostHookConsumptionProved": false,
+    "liveWeakModelRunAuthorizedByThisRecord": false,
+    "admittedForLiveExecution": false,
+    "nextGate": "Obtain an independent task-bound Skill loader identity or digest event on a future host, or seek a separate owner decision to amend the frozen attribution acceptance boundary; do not dispatch weak-model cells solely to observe Hook notifications."
+  },
+  "authorityBoundary": {
+    "skillInstallUpdateDeleteReplaceOrRetireAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "liveUserHookConfigurationMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "repositoryCleanupAuthorized": false,
+    "commitAuthorized": false,
+    "pushAuthorized": false
+  },
+  "decisionBoundary": {
+    "nativeSufficiencyProved": false,
+    "selfAuthoredChainValueProved": false,
+    "hookNetValueProved": false,
+    "selfAuthoredResidualGapProved": false,
+    "portfolioPreferenceAllowed": false,
+    "programCloseoutSupported": false
+  },
+  "preflightEvidence": "audits/human-ai-collaboration-self-authored-control-chain-hook-mode-preflight-2026-07-28/REPORT.json",
+  "fourCellExposureEvidence": "audits/human-ai-collaboration-self-authored-control-chain-four-cell-exposure-2026-07-28/REPORT.json",
+  "loaderHookObservabilityAdmission": "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-FACTORIAL-ABLATION-PROTOCOL-2026-07-28.md"
+}

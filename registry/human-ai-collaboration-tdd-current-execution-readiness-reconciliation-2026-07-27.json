@@ -1,0 +1,338 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27",
+  "date": "2026-07-27",
+  "status": "current-execution-readiness-blocked-static-admissions-satisfied-offline-control-plane-only",
+  "purpose": "Reconcile the two exact-candidate diagnostic-only admission decisions against the existing non-comparative TDD protocol, dated source preflight, dispatch identity ledger, authorization adapter, runner preflight, resource and preconstruction contracts, and formal runner without materializing or executing either candidate.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+      "sha256": "80086509febcf37665b301ed43d856ce087a30349ca85f7be81a1dfb47bf12f1"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json",
+      "sha256": "cc6f265eeca164b3f26cfa020976776242a4f95a06deff9a9e88b4167f4866cd"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26.json",
+      "sha256": "7b9371ef23de7dce3e3c96ffc4595796e519c30736705012b05b467b3d7efef1"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json",
+      "sha256": "8b12683f86dcecffac5cfd398061f194ccc08578b04247e7631c03a922b131e4"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json",
+      "sha256": "aa763b96a461b1f6a85d4d8329612eee536923c04bf7ba48ac057b75e83c2376"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26.json",
+      "sha256": "e3bed94b75d790b7a18f965b7c8c8e5216205e80544af87df332a4bfd13a0429"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-authorization-adapter-poc-evidence-2026-07-26.json",
+      "sha256": "ef0c43e50ac7be308ff4cdf5d3ad6f190f81b2459b920f185c02131d21372fcd"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json",
+      "sha256": "3565b6bc8b9c9ffa17fff53fc6f12eecb08e725fa4c3fed78ff95c9ee6654e5d"
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26.json",
+      "sha256": "6f69df5d3b8d5acb757b2b6cd9aa0a3f1748ccd6335d38deecc95bd041460521"
+    }
+  ],
+  "authorityBoundary": {
+    "repositoryReconciliationRecordAuthorized": true,
+    "readExistingRepositoryAndInstalledPackageEvidence": true,
+    "candidateMaterialized": false,
+    "candidateSkillInvoked": false,
+    "candidateTaskTurnStarted": false,
+    "appServerStarted": false,
+    "modelRequestSent": false,
+    "networkAccess": false,
+    "dependencyInstalled": false,
+    "globalConfigurationOrCcSwitchMutation": false,
+    "dispatchLedgerCreated": false,
+    "formalRunnerExecuted": false,
+    "externalWrite": false,
+    "gitMutation": false
+  },
+  "currentArtifactIdentities": [
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+      "bytes": 49057,
+      "sha256": "c8625d78bd3ae93aea6c7a41eed5981670797f9d49be9a3e1d5124be7103e1e6"
+    },
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py",
+      "bytes": 14624,
+      "sha256": "a146a95c3e37827e9969cc0bcde2652c01547e19ad44ae2deadad398d5cc454c"
+    },
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_runner_preflight.py",
+      "bytes": 8640,
+      "sha256": "d3aeb2508b7214ce1786f88f79987b0d677e9d8f4c47166cfef453f5f90e6f15"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_tdd_noncomparative_resource_contract.py",
+      "bytes": 18829,
+      "sha256": "1837a335898646c0835273b121e7e658fe3d5481f849e97eae9352f894a27e12"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_tdd_noncomparative_preconstruction_transaction.py",
+      "bytes": 7954,
+      "sha256": "2604a430ea0a2aa73d5a1bb77ba54a4a45c70dbc2886d8330a0901950e745e33"
+    },
+    {
+      "path": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+      "bytes": 24396,
+      "sha256": "e3550b937cfd301a0bd2468c21fe67582a0b3ebceef0f61fbbeccfa0de4e4f80"
+    }
+  ],
+  "candidateReconciliation": [
+    {
+      "candidateId": "tdd.matt.current",
+      "armId": "SE-TDD-MATT-CURRENT",
+      "admissionDecision": "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json",
+      "identityBoundRepositoryGovernanceAdmission": "satisfied",
+      "approvedReleaseAdmission": false,
+      "currentMaterializationAuthorized": false,
+      "currentExecutionAuthorized": false,
+      "currentModelDispatchAuthorized": false,
+      "currentDispatchEligible": false
+    },
+    {
+      "candidateId": "tdd.superpowers.6.2.0",
+      "armId": "SE-TDD-SUPERPOWERS-6.2.0",
+      "admissionDecision": "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json",
+      "identityBoundRepositoryGovernanceAdmission": "satisfied",
+      "approvedReleaseAdmission": false,
+      "currentMaterializationAuthorized": false,
+      "currentExecutionAuthorized": false,
+      "currentModelDispatchAuthorized": false,
+      "currentDispatchEligible": false
+    }
+  ],
+  "gateReconciliation": [
+    {
+      "gateId": "gate.exact-candidate-static-admission",
+      "status": "satisfied-for-both-candidates",
+      "scope": "repository-governance-diagnostic-only",
+      "evidence": [
+        "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json#/decision",
+        "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json#/decision"
+      ],
+      "doesNotProve": [
+        "fresh dispatch authority",
+        "materialization authority",
+        "candidate execution",
+        "model dispatch",
+        "approved release admission"
+      ]
+    },
+    {
+      "gateId": "gate.protocol-execution-eligibility",
+      "status": "blocked",
+      "scope": "current repository protocol document",
+      "blockers": [
+        "protocol decision anyExactCandidateExecutionEligibleNow remains false",
+        "protocol decision governanceAdmissionStillRequired remains true",
+        "protocol decision candidateAdmissionDecisionMade remains false",
+        "protocol has no dispatchLedgerAuthority document binding"
+      ],
+      "evidence": [
+        "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json#/decision",
+        "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py"
+      ]
+    },
+    {
+      "gateId": "gate.dispatch-source-and-toolchain-freshness",
+      "status": "blocked",
+      "scope": "dispatch-time source and toolchain observation",
+      "satisfied": [
+        "dated source identities matched the protocol",
+        "dated toolchain identities were recorded",
+        "both admission decisions bind the dated preflight"
+      ],
+      "blockers": [
+        "rawEvidenceBoundary.freshForDispatch is false",
+        "freshRevalidationStillRequiredAtDispatch is true",
+        "decision.freshForDispatch is false",
+        "no post-admission fresh preflight exists"
+      ],
+      "evidence": [
+        "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/rawEvidenceBoundary",
+        "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/decision"
+      ]
+    },
+    {
+      "gateId": "gate.dispatch-authorization-envelope",
+      "status": "blocked",
+      "scope": "authorization adapter input",
+      "satisfied": [
+        "both exact identities have static diagnostic-only repository decisions",
+        "the adapter rejects stale or mutable synthetic inputs fail closed"
+      ],
+      "blockers": [
+        "the protocol declares diagnosticDesign.replacementDispatchesAllowed while the historical adapter reads replacementDispatchAllowed",
+        "the repository decisions intentionally are not the adapter's short-lived diagnostic-only-exact-candidate-execution-admission documents",
+        "the historical static gap audit permanently binds the dated preflight while the historical adapter requires that audit binding to equal the dispatch-time fresh preflight, so the historical adapter cannot consume a fresh preflight without rewriting history",
+        "no sourceRevalidatedAt, validFrom, or validUntil dispatch window exists",
+        "no candidate identity, fresh preflight, audit, protocol, and ledger-authority bundle has been captured into one current immutable envelope"
+      ],
+      "evidence": [
+        "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py",
+        "registry/human-ai-collaboration-tdd-noncomparative-dispatch-authorization-adapter-poc-evidence-2026-07-26.json#/decision"
+      ]
+    },
+    {
+      "gateId": "gate.dispatch-identity-ledger",
+      "status": "offline-poc-satisfied-live-blocked",
+      "scope": "reservation, construction, thread, and turn identity",
+      "satisfied": [
+        "append-only hash chain is unit tested",
+        "one reservation per candidate per selected ledger is unit tested",
+        "construction success precedes thread binding in the offline contract",
+        "ambiguous reservation remains consumed with manual reconciliation"
+      ],
+      "blockers": [
+        "live ledger authority is not configured",
+        "dispatch cap is protocol-selected-ledger-local rather than system-global",
+        "cross-process exclusion is unproved",
+        "the historical ledger binds host thread and turn identifiers only after host responses and has no durable pre-send thread-start-intent or turn-start-intent record for an accepted-before-bind crash window",
+        "runtime dispatch cap is not enforced by the formal runner"
+      ],
+      "evidence": [
+        "registry/human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26.json#/decision",
+        "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json#/decision"
+      ]
+    },
+    {
+      "gateId": "gate.preconstruction-atomicity",
+      "status": "offline-poc-partial-live-blocked",
+      "scope": "authorization, reservation, factory construction, and durable outcome ordering",
+      "satisfied": [
+        "immutable envelope to reservation document drift is closed in synthetic tests",
+        "reservation before injected fake factory is unit tested",
+        "durable construction success gates thread binding",
+        "primary errors survive bounded secondary failures"
+      ],
+      "blockers": [
+        "source-snapshot-to-factory materialization freshness is unproved",
+        "real app-server factory and handle compatibility are unproved",
+        "cross-process exactly-once construction and cleanup are unproved",
+        "crash or kill recovery is unproved"
+      ],
+      "evidence": [
+        "tests/test_human_ai_collaboration_tdd_noncomparative_preconstruction_transaction.py",
+        "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json#/decision"
+      ]
+    },
+    {
+      "gateId": "gate.resource-ownership-and-cleanup",
+      "status": "offline-poc-partial-live-blocked",
+      "scope": "constructed app-server resources",
+      "satisfied": [
+        "same-process registered cleanup is unit tested in LIFO order",
+        "falsey synthetic handles are rejected",
+        "success append durable readback is unit tested",
+        "automatic reservation release or retry remains disabled"
+      ],
+      "blockers": [
+        "real child process or socket ownership is unproved",
+        "cleanup after process crash is unproved",
+        "cross-process exactly-once cleanup is unproved",
+        "the historical runner preflight transfers a raw handle while its successful-path cleanup callbacks and owner are no longer reachable through the returned value",
+        "automatic real app-server resource cleanup is not implemented"
+      ],
+      "evidence": [
+        "tests/test_human_ai_collaboration_tdd_noncomparative_resource_contract.py",
+        "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json#/claimBoundary"
+      ]
+    },
+    {
+      "gateId": "gate.diagnostic-runner-successor",
+      "status": "blocked",
+      "scope": "future non-comparative diagnostic runner or shared transport core",
+      "satisfied": [
+        "the historical formal runner has candidate arm names and source-pinned materialization support",
+        "a native formal attempt previously proved that one bound app-server and normalization path can run"
+      ],
+      "blockers": [
+        "the non-comparative protocol sets formalAcceptanceContribution false while the historical formal runner sets countsTowardWeakAcceptance true, so its policy shell is excluded from a diagnostic-only successor",
+        "no independent diagnostic runner or shared transport core with a non-comparative policy shell exists",
+        "the historical formal runner does not import or call the authorization adapter, identity ledger, or runner preflight",
+        "the historical formal runner materializes the candidate before app-server construction without the current dispatch gate",
+        "candidate materialization is not atomically bound to a fresh source snapshot and reservation",
+        "the first native attempt does not prove treatment delivery or candidate execution readiness"
+      ],
+      "evidence": [
+        "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+        "registry/human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26.json"
+      ]
+    },
+    {
+      "gateId": "gate.current-human-and-runtime-authority",
+      "status": "blocked",
+      "scope": "current side-effect authority",
+      "blockers": [
+        "both admission decisions set candidateMaterializationAuthorizedNow false",
+        "both admission decisions set candidateExecutionAuthorizedNow false",
+        "both admission decisions set modelDispatchAuthorizedNow false",
+        "this reconciliation authorizes no app-server, candidate, model, or ledger side effect"
+      ],
+      "evidence": [
+        "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json#/decision",
+        "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json#/decision",
+        "#/authorityBoundary"
+      ]
+    }
+  ],
+  "decision": {
+    "mattIdentityBoundDiagnosticAdmissionSatisfied": true,
+    "superpowersIdentityBoundDiagnosticAdmissionSatisfied": true,
+    "bothStaticRepositoryGovernanceAdmissionsSatisfied": true,
+    "currentProtocolExecutionEligibilitySatisfied": false,
+    "currentDispatchFreshnessSatisfied": false,
+    "currentDispatchAuthorizationEnvelopeSatisfied": false,
+    "protocolAdapterFieldContractAligned": false,
+    "liveLedgerAuthorityConfigured": false,
+    "offlineIdentityLedgerPocValidated": true,
+    "offlineAuthorizationAdapterPocValidated": true,
+    "offlineRunnerPreflightPocValidated": true,
+    "offlinePreconstructionAtomicityPartiallyValidated": true,
+    "realAppServerResourceContractSatisfied": false,
+    "sourceSnapshotToMaterializationFreshnessSatisfied": false,
+    "crossProcessAtomicitySatisfied": false,
+    "crashRecoverySatisfied": false,
+    "formalRunnerIntegratedWithDispatchGate": false,
+    "diagnosticRunnerOrSharedTransportIntegrated": false,
+    "currentCandidateMaterializationAuthorized": false,
+    "currentCandidateExecutionAuthorized": false,
+    "currentModelDispatchAuthorized": false,
+    "currentCandidateExecutionReady": false,
+    "liveDiagnosticStarted": false,
+    "candidateInstructionExecuted": false,
+    "modelRequestSent": false,
+    "nextBoundedAction": "Keep both candidates metadata-only. First preregister an offline successor dispatch contract and pure bundle builder that preserve the historical protocol, audit, adapter, ledger, runner preflight, and formal runner as immutable evidence; separate static governance, dispatch-time source freshness, and independent authority; normalize the plural replacement field without accepting the historical singular alias; and exclude the formal weak-acceptance policy shell. A later separately authorized diagnostic runner or shared transport integration must add one live ledger authority, durable pre-send thread and turn intents, snapshot-only materialization after reservation, and an explicit closeable app-server owner. Reconcile cross-process exclusion and crash recovery before any candidate or model request."
+  },
+  "claimBoundary": {
+    "staticAdmissionEqualsCurrentExecutionAuthority": false,
+    "offlinePocEqualsLiveIntegration": false,
+    "candidateMaterializationOccurred": false,
+    "candidateSkillInvoked": false,
+    "candidateBodyDeliveryProved": false,
+    "candidateBehavioralCausationProved": false,
+    "candidateValueProved": false,
+    "candidatePreferenceProved": false,
+    "candidateSuperiorityProved": false,
+    "generalTddCompetenceProved": false,
+    "productionReadinessProved": false,
+    "crossHostPortabilityProved": false,
+    "selfAuthoredResidualGapProved": false,
+    "approvedReleaseAdmissionProved": false,
+    "portfolioMutationAuthorized": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-TDD-CURRENT-EXECUTION-READINESS-RECONCILIATION-2026-07-27.md"
+}

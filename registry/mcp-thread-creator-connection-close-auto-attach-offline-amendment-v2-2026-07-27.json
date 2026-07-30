@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "id": "mcp-thread-creator-connection-close-auto-attach-offline-amendment-v2-2026-07-27",
+  "date": "2026-07-27",
+  "status": "offline-v2-amendment-deterministically-validated-not-live-authorized",
+  "sourceBindings": {
+    "admissionGate": {
+      "path": "registry/mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27.json",
+      "sha256": "CD39E16132771F2D0233DFCD29C818215372A14D0538C0444261F065B4AC241D",
+      "requiredConclusion": "offline-amendment-required-before-live"
+    },
+    "historicalProtocol": {
+      "path": "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json",
+      "sha256": "8A110058AAC75DDC54E2B3795F6F6BE12004E4CDE0262045BEA79D112D157326",
+      "mutationAuthorized": false
+    },
+    "historicalProbe": {
+      "path": "scripts/probe_codex_app_server_mcp_thread_creator_connection_close.py",
+      "sha256": "66CF7066B68D92139653C5E41AD74CAA64D00273C662A2899E396501974C2CF6",
+      "mutationAuthorized": false
+    },
+    "v2Protocol": {
+      "path": "registry/mcp-thread-creator-connection-close-auto-attach-protocol-v2-2026-07-27.json",
+      "sha256": "86974D1684ABCE53DC1114EAEE901BD430D05834C46D044DDEDF4CEB03F8CBAF"
+    },
+    "v2Probe": {
+      "path": "scripts/probe_codex_app_server_mcp_thread_creator_connection_close_auto_attach_v2.py",
+      "sha256": "A4BA8ECCE063DC142CECBE7AA2D248703A4FEDBFD4D21A18105DC5077F8C7B58"
+    },
+    "v2ProbeTests": {
+      "path": "tests/test_codex_app_server_mcp_thread_creator_connection_close_auto_attach_v2_probe.py",
+      "sha256": "867CA0A60B5DBCA85187D77297758F6E642FCD1DB7744BDCDD1823E5159FBBB1"
+    }
+  },
+  "offlineAmendment": {
+    "acquisitionPath": "thread-created-auto-attach",
+    "observerBarrierBeforeCreatorThreadStart": true,
+    "creatorThreadEphemeral": false,
+    "creatorThreadSandbox": "read-only",
+    "observerCallsSameThreadDirectly": true,
+    "observerThreadResumeCalls": 0,
+    "rolloutMaterializationRole": "diagnostic-only",
+    "evidenceSealBeforeObserverPostWindowCall": true,
+    "failureCleanupClosesBothInjectedTransports": true,
+    "failureCleanupInvokesBoundedSentinelCleanup": true,
+    "modelTurnRequests": 0
+  },
+  "deterministicValidation": {
+    "transport": "injected-in-memory-fake-only",
+    "scenarioCount": 16,
+    "exactRpcOrderCovered": true,
+    "observerNoResumeCovered": true,
+    "sameThreadBindingCovered": true,
+    "sameExactSentinelBindingCovered": true,
+    "rolloutAbsenceDiagnosticOnlyCovered": true,
+    "sealBeforePostWindowCallCovered": true,
+    "failureCleanupCovered": true,
+    "liveAppServerStarted": false,
+    "loopbackTransportOpened": false,
+    "modelTurnRequested": false,
+    "externalNetworkUsed": false,
+    "configurationMutated": false
+  },
+  "formalEvidenceBoundary": {
+    "formalLiveRunCount": 0,
+    "formalPairReportCount": 0,
+    "liveHostOutcomeObserved": false,
+    "offlineSimulationIsLiveEvidence": false
+  },
+  "nextGate": {
+    "disposition": "offline-v2-ready-for-integration-review",
+    "liveExecutionRequiresSeparateExplicitAuthorization": true,
+    "liveExecutionAuthorizedByThisRecord": false,
+    "globalVerifierIntegrationDelegatedToMainThread": true
+  },
+  "executionBoundary": {
+    "offlineSourceValidationAuthorized": true,
+    "offlineDeterministicSimulationAuthorized": true,
+    "appServerStartAuthorized": false,
+    "loopbackTransportExecutionAuthorized": false,
+    "modelOrAccountUseAuthorized": false,
+    "externalNetworkUseAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "installationAuthorized": false,
+    "liveProtocolExecutionAuthorized": false
+  },
+  "claimBoundary": {
+    "autoAttachIsSecondSubscriptionProved": false,
+    "autoAttachCreatesIndependentOwnerProved": false,
+    "leaseOrReferenceCountProved": false,
+    "taskEndSemanticsProved": false,
+    "finalReleaseSemanticsProved": false,
+    "resourceBenefitProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "selfAuthoredControllerNeedProved": false,
+    "liveReadinessProved": false
+  },
+  "documentation": "docs/mcp-thread-creator-connection-close-auto-attach-offline-amendment-v2-2026-07-27.md"
+}

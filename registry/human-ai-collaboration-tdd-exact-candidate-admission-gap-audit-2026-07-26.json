@@ -1,0 +1,302 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26",
+  "date": "2026-07-26",
+  "status": "static-gap-audit-complete-both-candidates-blocked-no-admission-decision",
+  "parentProtocol": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+  "sourceGovernancePreflight": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json",
+  "sourceGovernancePreflightSha256": "cc6f265eeca164b3f26cfa020976776242a4f95a06deff9a9e88b4167f4866cd",
+  "candidateIdentityEnvelopeSha256": "6c3eba9238af1907b6c001a4fa94690f76f589c299221f852ebef3fae8d9dc99",
+  "purpose": "Record a read-only static gap audit for exact-candidate diagnostic admission. The audit classifies evidence and remaining gates but neither admits nor rejects a candidate and does not execute either Skill.",
+  "authorityBoundary": {
+    "readOnlyExactSourceReviewPerformed": true,
+    "repositoryGovernanceReviewPerformed": true,
+    "candidateSkillInvoked": false,
+    "candidateTaskTurnStarted": false,
+    "modelRequestSent": false,
+    "projectionMaterialized": false,
+    "candidateAdmissionMutationAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "installedSkillOrPluginMutationAuthorized": false,
+    "globalConfigurationOrCcSwitchMutationAuthorized": false,
+    "gitMutationAuthorized": false
+  },
+  "criteria": [
+    "exact source and license identity",
+    "notice and attribution",
+    "security and executable or permission surface",
+    "portability and host or language assumptions",
+    "overlap and conflict with hard standards and approved adapted TDD",
+    "validation and bounded diagnostic compatibility",
+    "identity-bound execution admission"
+  ],
+  "candidates": [
+    {
+      "candidateId": "tdd.matt.current",
+      "sourceRevisionOrVersion": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "skillSha256": "5363bb2775679fe9311fbb67947f95359169c6e7f1fac77c0f25e190bca6cf2f",
+      "assessment": "blocked-for-exact-candidate-execution-admission",
+      "exactCandidateAdmissionPresent": false,
+      "passes": [
+        {
+          "id": "matt-exact-source-and-mit",
+          "finding": "Current main and the pinned revision matched; license and all three exact projected source files matched the dated observation.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/0"
+          ]
+        },
+        {
+          "id": "matt-no-bundled-execution-surface",
+          "finding": "The three-file TDD candidate contains no bundled script, concrete shell command, network or account call, dependency installation, configuration mutation, or permission-expansion instruction.",
+          "evidence": [
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/SKILL.md",
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/tests.md",
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/mocking.md"
+          ]
+        },
+        {
+          "id": "matt-shared-hard-standard-alignment",
+          "finding": "Public seams, behavior over implementation, independent literal expectations, vertical slices, RED before GREEN, minimal implementation, and boundary-only mocking align with the frozen TDD hard gates.",
+          "evidence": [
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/contentComparison/sharedClaims",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/hardGates"
+          ]
+        }
+      ],
+      "partials": [
+        {
+          "id": "matt-attestation-not-bound",
+          "finding": "The dated source observation binds the exact commit identity but retains no signature or distribution attestation evidence; attestation therefore remains unknown rather than passed.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/0",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/rawEvidenceBoundary"
+          ]
+        },
+        {
+          "id": "matt-seam-confirmation-precontrolled",
+          "finding": "The candidate normally asks the user to confirm the public seam; the frozen experiment pre-agrees one seam, avoiding a new interaction confound without changing the candidate bytes.",
+          "evidence": [
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/SKILL.md",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/fixtureContract"
+          ]
+        },
+        {
+          "id": "matt-optional-and-excluded-dependencies",
+          "finding": "The body optionally reads CONTEXT.md and ADRs and delegates refactor to an unprojected code-review Skill. The fixed fixture does not need that extra workflow, but the exact projection is not a complete refactor workflow.",
+          "evidence": [
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/SKILL.md",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json#/candidates/0"
+          ]
+        }
+      ],
+      "blockers": [
+        {
+          "id": "matt-current-is-not-approved-release",
+          "finding": "The approved skill.curated.tdd is a six-file adapted payload with different bytes; it is related lineage, not admission of the current three-file projection.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/governanceObservation"
+          ]
+        },
+        {
+          "id": "matt-exact-revision-review-missing",
+          "finding": "Existing security, portability, and overlap audits bind historical revision 6eeb81b5..., not current ed37663....",
+          "evidence": [
+            "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/security.md",
+            "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/portability.md",
+            "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/overlap.md"
+          ]
+        },
+        {
+          "id": "matt-notice-attribution-missing",
+          "finding": "THIRD_PARTY_NOTICES.md does not bind the current revision, exact paths, and required MIT notice for this candidate.",
+          "evidence": [
+            "THIRD_PARTY_NOTICES.md",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/0"
+          ]
+        },
+        {
+          "id": "matt-refactor-stage-conflict-unadmitted",
+          "finding": "Current Matt moves refactor out of the loop into code-review while the approved adapted Skill refactors after all GREEN. The trial protocol neutralizes scoring bias, but no exact-candidate overlap/admission review resolves the operational difference.",
+          "evidence": [
+            "https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/SKILL.md",
+            "skills/tdd/SKILL.md",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/contentComparison"
+          ]
+        },
+        {
+          "id": "matt-no-identity-bound-diagnostic-admission",
+          "finding": "No admission record authorizes this exact revision and tree for one bounded diagnostic.",
+          "evidence": [
+            "registry/admissions.json",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json#/candidates/0/governance"
+          ]
+        }
+      ],
+      "minimumRemainingGates": [
+        "Bind an exact-revision license, provenance, notice, and attribution review.",
+        "Complete exact three-file security, portability, and executable-surface review.",
+        "Complete native and approved-adapted overlap review including refactor-stage treatment.",
+        "Validate frontmatter, relative references, fixed Python command priority, mutable-file scope, and exclusion of code-review, network, Git, config, and external systems.",
+        "Create a diagnostic-only identity-bound admission record without promoting it into the approved release inventory.",
+        "After admission, revalidate source and toolchain at dispatch and require the tested single-dispatch runner and append-only identity ledger."
+      ]
+    },
+    {
+      "candidateId": "tdd.superpowers.6.2.0",
+      "sourceRevisionOrVersion": "6.2.0",
+      "skillSha256": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54",
+      "assessment": "blocked-for-exact-candidate-execution-admission",
+      "exactCandidateAdmissionPresent": false,
+      "passes": [
+        {
+          "id": "superpowers-local-package-and-mit",
+          "finding": "The local OpenAI-curated package manifest, MIT license, and two exact TDD files matched the dated observation.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1"
+          ]
+        },
+        {
+          "id": "superpowers-no-hook-or-external-service-requirement",
+          "finding": "The hashed manifest was statically observed with an empty hooks object, and the two hashed selected files were statically observed to require no MCP, App, Hook, account connection, network access, or dependency installation.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/.codex-plugin/plugin.json",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1"
+          ]
+        },
+        {
+          "id": "superpowers-shared-hard-standard-alignment",
+          "finding": "Valid RED, minimal GREEN, real behavior, independent expectations, and mutation checks align with frozen TDD hard gates.",
+          "evidence": [
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/contentComparison/sharedClaims",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/hardGates"
+          ]
+        }
+      ],
+      "partials": [
+        {
+          "id": "superpowers-distribution-provenance-only",
+          "finding": "Exact local package identity and manifest-declared upstream are bound, but no immutable upstream commit, signature, or distribution attestation is recorded.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/rawEvidenceBoundary"
+          ]
+        },
+        {
+          "id": "superpowers-notice-attribution-missing",
+          "finding": "No repository notice binds Superpowers 6.2.0 and its required MIT attribution.",
+          "evidence": [
+            "THIRD_PARTY_NOTICES.md",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1/license"
+          ]
+        },
+        {
+          "id": "superpowers-language-and-unprojected-reference",
+          "finding": "Examples and commands are TypeScript, Jest, and npm oriented, and writing-good-tests refers to an unprojected superpowers:writing-skills workflow.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/skills/test-driven-development/SKILL.md",
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/skills/test-driven-development/writing-good-tests.md",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1"
+          ]
+        },
+        {
+          "id": "superpowers-manifest-capability-surface",
+          "finding": "The hashed package manifest was statically observed to declare Interactive, Read, and Write capabilities; this is a capability-surface observation, not execution authorization.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/.codex-plugin/plugin.json",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/candidateObservations/1/pluginManifest"
+          ]
+        }
+      ],
+      "blockers": [
+        {
+          "id": "superpowers-no-repository-admission",
+          "finding": "No exact repository Skill, admission, or release entry exists for Superpowers 6.2.0 test-driven-development.",
+          "evidence": [
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/governanceObservation"
+          ]
+        },
+        {
+          "id": "superpowers-python-command-conflict",
+          "finding": "The body mandates npm test examples while the frozen fixture supplies immutable Python standard-library test commands; no exact-candidate rule proves the fixture command wins.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/skills/test-driven-development/SKILL.md",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/fixtureContract/immutableInputs"
+          ]
+        },
+        {
+          "id": "superpowers-delete-existing-code-conflict",
+          "finding": "The body says production code written before a failing test must be deleted and started over, while the frozen fixture intentionally preloads a public signature, docstring, and sentinel before the first RED. Misclassification could violate the no-production-mutation-before-valid-RED gate.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/skills/test-driven-development/SKILL.md",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/fixtureContract",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/hardGates"
+          ]
+        },
+        {
+          "id": "superpowers-other-tests-scope-conflict",
+          "finding": "The instruction to fix other failing tests may expand writes beyond the three mutable files and focused task.",
+          "evidence": [
+            "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0/skills/test-driven-development/SKILL.md",
+            "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json#/fixtureContract/allowedMutableFiles"
+          ]
+        },
+        {
+          "id": "superpowers-exact-review-missing",
+          "finding": "Exact license notice, security, portability, overlap, validation, and conflict-disposition review is absent.",
+          "evidence": [
+            "registry/skills.json",
+            "registry/admissions.json",
+            "release-manifest.json",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json#/governanceObservation"
+          ]
+        },
+        {
+          "id": "superpowers-no-identity-bound-diagnostic-admission",
+          "finding": "No admission record authorizes the exact 6.2.0 two-file projection for one bounded diagnostic.",
+          "evidence": [
+            "registry/admissions.json",
+            "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json#/candidates/1/governance"
+          ]
+        }
+      ],
+      "minimumRemainingGates": [
+        "Bind exact package provenance, license, notice, attribution, and the absence of an immutable upstream/attestation claim.",
+        "Complete exact two-file security, portability, permission-surface, overlap, and validation review.",
+        "Formally require frozen Python commands to override npm examples without modifying candidate bytes.",
+        "Treat the preloaded signature, docstring, and sentinel as authorized fixture scaffolding that must not be deleted or mutated before valid RED.",
+        "Constrain all writes and fixes to feature.py, test_feature.py, and PROCESS_EVIDENCE.json; exclude other-test repair, full Superpowers orchestration, writing-skills, network, dependency, Git, config, and external-system actions.",
+        "Create a diagnostic-only identity-bound admission record, then repeat source/toolchain preflight and require the tested single-dispatch runner and append-only identity ledger."
+      ]
+    }
+  ],
+  "decision": {
+    "staticGapAuditCompleted": true,
+    "mattExactCandidateAdmitted": false,
+    "superpowers620ExactCandidateAdmitted": false,
+    "candidateAdmissionDecisionMade": false,
+    "candidateTaskTurnStarted": false,
+    "modelRequestSent": false,
+    "candidateSkillInvoked": false,
+    "liveTransitionAllowed": false,
+    "runtimeDispatchGateAvailable": false,
+    "nextBoundedAction": "Use the candidate-specific remaining gates as inputs to a separate admission decision. Do not run either candidate, and do not treat this audit as admission, rejection, preference, or portfolio mutation."
+  },
+  "claimBoundary": {
+    "candidateBodyDelivery": false,
+    "independentLoaderInvocation": false,
+    "candidateBehavioralCausation": false,
+    "candidateValue": false,
+    "relativeNativeImprovement": false,
+    "pairwiseCandidateDifference": false,
+    "candidatePreference": false,
+    "candidateSuperiority": false,
+    "formalWeakAgentAcceptance": false,
+    "generalTddCompetence": false,
+    "productionReadiness": false,
+    "crossHostValue": false,
+    "selfAuthoredResidualGap": false,
+    "candidateAdmissionOrRejection": false,
+    "portfolioMutation": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-TDD-EXACT-CANDIDATE-ADMISSION-GAP-AUDIT-2026-07-26.md"
+}

@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-thin-slice-zero-model-capture",
+  "mode": "zero-model-scripted-calibration",
+  "protocolBinding": {
+    "path": "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json",
+    "fileSha256": "8fdafbb2da0309e34b8d9ff953e3e8f23c098088ebb9ad8c1782a46156560e56",
+    "canonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df"
+  },
+  "execution": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "dispatchAuthorized": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false
+  },
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "sourceArtifactId": "SOURCE-BUNDLE",
+  "stageEnvelopeIds": [
+    "SE-E2E-THIN-01-ZERO-001-E1",
+    "SE-E2E-THIN-01-ZERO-001-E2",
+    "SE-E2E-THIN-01-ZERO-001-E3",
+    "SE-E2E-THIN-01-ZERO-001-E4",
+    "SE-E2E-THIN-01-ZERO-001-E5",
+    "SE-E2E-THIN-01-ZERO-001-E6",
+    "SE-E2E-THIN-01-ZERO-001-E7"
+  ],
+  "authorityReceiptIds": [
+    "SE-E2E-THIN-01-ZERO-001-G0-source-scope-authority",
+    "SE-E2E-THIN-01-ZERO-001-G1-requirements-decision",
+    "SE-E2E-THIN-01-ZERO-001-G2-architecture-security-decision",
+    "SE-E2E-THIN-01-ZERO-001-G3-implementation-mutation-envelope",
+    "SE-E2E-THIN-01-ZERO-001-G4-independent-acceptance-and-risk-decision",
+    "SE-E2E-THIN-01-ZERO-001-G5-simulated-release-and-rollback-decision",
+    "SE-E2E-THIN-01-ZERO-001-G6-simulated-fault-and-recovery-decision",
+    "SE-E2E-THIN-01-ZERO-001-G7-maintenance-deprecation-decision"
+  ],
+  "acceptedInvariantLedgerIds": [
+    "SE-E2E-THIN-01-ZERO-001-ledger-00",
+    "SE-E2E-THIN-01-ZERO-001-ledger-01",
+    "SE-E2E-THIN-01-ZERO-001-ledger-02",
+    "SE-E2E-THIN-01-ZERO-001-ledger-03",
+    "SE-E2E-THIN-01-ZERO-001-ledger-04",
+    "SE-E2E-THIN-01-ZERO-001-ledger-05",
+    "SE-E2E-THIN-01-ZERO-001-ledger-06",
+    "SE-E2E-THIN-01-ZERO-001-ledger-07"
+  ],
+  "rawArtifactIndex": [
+    {
+      "artifactId": "SOURCE-BUNDLE",
+      "path": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "bytes": 658,
+      "rawSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-00",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-00.json",
+      "bytes": 4279,
+      "rawSha256": "5bbd1087a0c0d432b54fb81b498ebde18624c3c3a2fa3272d3bf34df5009974f",
+      "canonicalSha256": "0459ef9a41d9e922fbe0e7382afa9481a37f020339dc8cee4cefa007ecbbb278",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O1",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O1.json",
+      "bytes": 1209,
+      "rawSha256": "541f0a00c0ac3185d4a80716b4d4bc1439aa546a885890ac8edecc9d5a820c7a",
+      "canonicalSha256": "778917a84dd5ffcd2111b6ebfdf308f418299d7a7c1886ee0de564d231e2cb23",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O2",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O2.json",
+      "bytes": 1360,
+      "rawSha256": "e93e6dd1c6dd865c5cef77e71da001bc85e6bae172ed6ca488bee1f9dcafdb4c",
+      "canonicalSha256": "6139136cc2e5d54d80c3b17121b2a9a0998aacf36922cce595f47baeae847007",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O3",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O3.json",
+      "bytes": 1274,
+      "rawSha256": "1c7eb832e0cfece461039bd68682bb3b59c3fba1dc386f2eb99000141b6c9823",
+      "canonicalSha256": "d31710ce30b5db6c04b33b8898f08db5dafe76cb4ed4b4d19d3dddfc0d14b724",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O4",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O4.json",
+      "bytes": 1453,
+      "rawSha256": "aba71c45ac2506108ed25146f5ad3a803ac84fb8f2ff611fb154b473bc4960c2",
+      "canonicalSha256": "cba31b20624f650524bd8695349769c6701e267a4bacb6f9c139b2befb95c705",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O5",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O5.json",
+      "bytes": 1423,
+      "rawSha256": "48fc1fe83d96efff7d5889b24ef66143f9eb1dd08c84584153cda651e8a37fba",
+      "canonicalSha256": "22b61c6caaebbb471b060dd09d6ff7fbcbf13e5c20a7ba0031938b83ece760dc",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O6",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O6.json",
+      "bytes": 1555,
+      "rawSha256": "dceb1fb1e659d463b83b2cd9e1325a46f70cc585fc1cb1b4f57680aa6c4565ac",
+      "canonicalSha256": "68b55374723dabeda1d20a43de77c6f0d136a5034a37f69b22a0cb9f0c74a3c4",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O7",
+      "path": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O7.json",
+      "bytes": 1491,
+      "rawSha256": "2f387195dd21fab4ace809e1f54a4d24b2fc207f7bb40fb898b41bef072a0d59",
+      "canonicalSha256": "40c5d5ed70ac13084eebd51eb5d3ad41cf6f75f870bfcf777f6d0c52b81e60cb",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G0-source-scope-authority",
+      "path": "AUTHORITY-RECEIPTS/G0-source-scope-authority.json",
+      "bytes": 1203,
+      "rawSha256": "a0bb5484fb7725fbf276ac572dcb730fb2bf6b02d449bbeb9016f72de995406a",
+      "canonicalSha256": "f6e80eaa23b3f8ed723d002e4243d3deeaf83c88b6177357031003286cacd96a",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G1-requirements-decision",
+      "path": "AUTHORITY-RECEIPTS/G1-requirements-decision.json",
+      "bytes": 1406,
+      "rawSha256": "9577eafdd3edbb49a8b5ead524b43308817e2be5f010de32775d674ccd272169",
+      "canonicalSha256": "a29c844f4e9862c66bd460812db58a9fa1c29053a6272706c8c385edcce3b37d",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-01",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-01.json",
+      "bytes": 6021,
+      "rawSha256": "1c7f1af569b80f9cc51606a53178a3dc721aa2939011465b8a6d261627e8dee0",
+      "canonicalSha256": "0f5602eb046e9a8f43a2930c32cb0cbabd3db728f2f97a2a40fa68022df00e7b",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G2-architecture-security-decision",
+      "path": "AUTHORITY-RECEIPTS/G2-architecture-security-decision.json",
+      "bytes": 1408,
+      "rawSha256": "8d4988065155e92c38659e28410420ff0649793d92a052db8fc5f8819442514e",
+      "canonicalSha256": "24bf9af45053edd4841ee95c45e90aaac4df0b7373d7ec6b5d856651539df9b4",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-02",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-02.json",
+      "bytes": 7679,
+      "rawSha256": "542260219c447b6b0ddb6bb154c856f5d43ce1ed909df775309d26e59a4e7762",
+      "canonicalSha256": "c91eadfcfed4c4aa651420f2d9cfa1d9d1dee091d6c853b09abbd55d679ad0be",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G3-implementation-mutation-envelope",
+      "path": "AUTHORITY-RECEIPTS/G3-implementation-mutation-envelope.json",
+      "bytes": 1428,
+      "rawSha256": "9ebda15c8e908280bd9521348347613a3bd7330702ab4309acb09958803cd5ae",
+      "canonicalSha256": "eaf7d6fe04ee72c91a71223f2a14601b6e16d4a3a4a5ffcac030797342893604",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-03",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-03.json",
+      "bytes": 7678,
+      "rawSha256": "c04dde61e413aa9c8a304f546de46dc4e496fe9cf306553dfb1b231ff0aef952",
+      "canonicalSha256": "64542c754035280eb9f5758797b2e56f742f6fe2f9811579eb29a368cd62ccbe",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G4-independent-acceptance-and-risk-decision",
+      "path": "AUTHORITY-RECEIPTS/G4-independent-acceptance-and-risk-decision.json",
+      "bytes": 1445,
+      "rawSha256": "b8c6974832d465dc56770bab9435f326d5ab4b5a7950da766c919e9fc277afd9",
+      "canonicalSha256": "886f5c15a358fa81d8018f1249b75e8ba22b5c7d327af585db2e02ab1d8b2c7e",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-04",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-04.json",
+      "bytes": 9376,
+      "rawSha256": "448a58be6d847bca0c066f1787bbfc5a2dca92aa26f383205ffad5fdfb9f5439",
+      "canonicalSha256": "42c467e16f525d51afe2887b224d3503fc8cec1e951afbb7ecb2cc67a98c5b5a",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G5-simulated-release-and-rollback-decision",
+      "path": "AUTHORITY-RECEIPTS/G5-simulated-release-and-rollback-decision.json",
+      "bytes": 1450,
+      "rawSha256": "46af1f18daa27aeee2364ae62230cff6a2c125ba723c0fd7d62727fa099bdf6b",
+      "canonicalSha256": "892c44b55f16321825ca79708adb31804be7a9e0d31420607b34427ab51c8548",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-05",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-05.json",
+      "bytes": 11033,
+      "rawSha256": "b0d36d55a5f623b40c319377bdaa33ce87df73615f31b088ce330b6941cf0779",
+      "canonicalSha256": "4375c81b745b4b910be1c3cab31c30889776de958123932ee780a0aa067ab3df",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G6-simulated-fault-and-recovery-decision",
+      "path": "AUTHORITY-RECEIPTS/G6-simulated-fault-and-recovery-decision.json",
+      "bytes": 1480,
+      "rawSha256": "65de7135664f57a0d23d850d07fe1b7d8dde652bdfe6484a7e6bd7d04f5128aa",
+      "canonicalSha256": "4ebc76159d5371dbe5faee43f79285c08da3e79dbb6797b72bcc0deb66ac7a0c",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-06",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-06.json",
+      "bytes": 12717,
+      "rawSha256": "f666582a71298df15a02e34b2ab5a3a0d6e21e4a8ccd8fa855622845cdaffafd",
+      "canonicalSha256": "50445f89eb289aeddb650547f426ad5150446e014a0ce24895d626c705823d02",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-G7-maintenance-deprecation-decision",
+      "path": "AUTHORITY-RECEIPTS/G7-maintenance-deprecation-decision.json",
+      "bytes": 1412,
+      "rawSha256": "ab1eae6c4b0a1f30fdc15d0e6c257ef567317dbcc56a81068cd060d442fb65a8",
+      "canonicalSha256": "18bd2c8ea7368471c55e58698cdc99ae191caf11da72242a8d9ab28b2273b4b6",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-ledger-07",
+      "path": "ACCEPTED-INVARIANT-LEDGERS/ledger-07.json",
+      "bytes": 14371,
+      "rawSha256": "ee7231157f8eb622df66f8d5b66873ebb9558558b33bfa0e08c21634303728d9",
+      "canonicalSha256": "769b0a79ff7ebeca5732d23a2c56c6b2239d18e633deb2bfd366ce0d0513fc49",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E1",
+      "path": "STAGE-ENVELOPES/SE-TS-01-requirements-domain.json",
+      "bytes": 5499,
+      "rawSha256": "3d7d2debb62ece5c018f5345aaaac2444e408d69d5f8e41b4369c47b622c086f",
+      "canonicalSha256": "06dae15d40a8d4eeadfa3731ccadb4bb19658138a398c9d0419b4fbd2f7bcd76",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E2",
+      "path": "STAGE-ENVELOPES/SE-TS-02-architecture-design.json",
+      "bytes": 6220,
+      "rawSha256": "df167472f81749b322f29e2ba44927809561812e8d2fdac498016615335ecb20",
+      "canonicalSha256": "1abcb0f31a62d6ce4fd5c084b5b640685547ca2408a547bb4b3258450c50b0db",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E3",
+      "path": "STAGE-ENVELOPES/SE-TS-03-implementation-tdd.json",
+      "bytes": 6158,
+      "rawSha256": "18d52992fa48d3009847eca28c3ee41fce37cda1a06ac99d3c41eb96cd6af8f4",
+      "canonicalSha256": "d9d1fd050358376aa5a1b469582e6045c375a2f71ebe40730b1a19747245014c",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E4",
+      "path": "STAGE-ENVELOPES/SE-TS-04-independent-review-test-security.json",
+      "bytes": 6309,
+      "rawSha256": "67e99df6f6f4a9c14328b12b9ee589a6eea88da3f83360fcb0d2a14747b0865e",
+      "canonicalSha256": "6ca1a434871341ec45ce17ebcac9ed7279e0508ba3e122bf532a9c2e5553abe8",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E5",
+      "path": "STAGE-ENVELOPES/SE-TS-05-release-rollback-gating.json",
+      "bytes": 6265,
+      "rawSha256": "ce8bb044bc549893e369a74fdfc82b38cb41cdf8007cad54df1c7e2d5b3a9561",
+      "canonicalSha256": "cc57f2bd825ed884a9037d2efff92fb1fb2ad780243a4122ab8662a5e8a8603f",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E6",
+      "path": "STAGE-ENVELOPES/SE-TS-06-observation-incident-handling.json",
+      "bytes": 6271,
+      "rawSha256": "01955d8b0b54d86b2aaa4c94ea2ccc1c58a9d34454014d384cbebe2c11e8bee7",
+      "canonicalSha256": "8ff649989df348e89913911611b2d800fdca69fe1484a1e2d4cfb7a7c16b6685",
+      "repositoryLocalAuditPath": true
+    },
+    {
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-E7",
+      "path": "STAGE-ENVELOPES/SE-TS-07-maintenance-evolution.json",
+      "bytes": 6246,
+      "rawSha256": "58f8a23e0df92cb69bd750de7f6422b985f4054d19b73921c813bc2544ee241d",
+      "canonicalSha256": "581c183e898e30fcebd952d2a298dd69df3e18e34837915e541a121bb343bfab",
+      "repositoryLocalAuditPath": true
+    }
+  ],
+  "completion": {
+    "status": "valid-calibration-only",
+    "failureCodes": []
+  },
+  "eligibleForFormalLiveEvidence": false,
+  "claimBoundary": {
+    "provesLiveAgentBehavior": false,
+    "provesHumanDecisionQuality": false,
+    "provesProductionReadiness": false,
+    "provesRealReleaseOrDeployment": false,
+    "provesRemoteGitOrCi": false,
+    "provesDynamicMcpLifecycle": false,
+    "provesCandidateSkillDeliveryCausationPreferenceOrValue": false,
+    "provesSelfAuthoredResidualGap": false,
+    "provesCrossHostPortability": false,
+    "provesAutomaticThreadCreationCompressionOrHandoffInvocation": false,
+    "provesAllLifecycleSlices": false,
+    "provesGeneralSoftwareEngineeringCompetence": false,
+    "provesHumanAuthorityWhenReceiptsAreSimulated": false,
+    "provesLosslessEndToEndProcess": false,
+    "authorizesGitDeploymentMcpCandidateSkillPortfolioOrCleanupMutation": false
+  }
+}

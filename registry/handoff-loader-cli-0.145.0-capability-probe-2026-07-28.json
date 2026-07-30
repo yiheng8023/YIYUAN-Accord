@@ -1,0 +1,155 @@
+{
+  "schema": 1,
+  "id": "handoff-loader-cli-0.145.0-capability-probe-2026-07-28",
+  "date": "2026-07-28",
+  "status": "observed-current-host-explicit-cue-associated-output-no-exact-loader-event",
+  "scenarioId": "HND-FRESH-01",
+  "predecessor": "registry/handoff-loader-trial-preflight-contract-2026-07-24.json",
+  "authorityBoundary": {
+    "oneTemporaryMarkdownPerSuccessfulProbe": true,
+    "repositoryMutationAuthorized": false,
+    "gitMutationAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "skillMutationAuthorized": false,
+    "accountMutationAuthorized": false,
+    "networkMutationAuthorized": false
+  },
+  "runtime": {
+    "host": "codex-cli",
+    "hostVersion": "0.145.0",
+    "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    "repositoryOriginMain": "55659f30091990f7c589932e0379880de30dc403",
+    "repositoryAhead": 0,
+    "repositoryBehind": 0,
+    "successfulProbeRequestedModel": "gpt-5.4-mini",
+    "successfulProbeRequestedReasoning": "low",
+    "actualModelIndependentlyVerified": false,
+    "actualReasoningIndependentlyVerified": false
+  },
+  "sourceBackedSkill": {
+    "identity": "handoff",
+    "storageAuthority": "cc-switch-ssot",
+    "skillMdSha256": "57c9f1f392d7352cdc85b1e39ca49eddc70ce1dc278bd9653fb4f23dfc2560fc",
+    "openaiYamlSha256": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28",
+    "skillBodyRequiresSuggestedSkillsSection": true,
+    "implicitInvocationAllowedByOpenaiYaml": false
+  },
+  "probeSequence": [
+    {
+      "kind": "weak-floor-route-attempt",
+      "threadId": "019fa6c0-ba8f-71a2-9d9d-eacd6956df32",
+      "requestedModel": "gpt-5.3-codex-spark",
+      "requestedReasoning": "low",
+      "result": "model-capacity-failure",
+      "artifactCreated": false,
+      "admissibleBehaviorComparison": false
+    },
+    {
+      "kind": "fresh-cli-no-write-visibility-probe",
+      "threadId": "019fa6c1-e824-7103-8716-ede0f57d65aa",
+      "requestedModel": "gpt-5.4-mini",
+      "requestedReasoning": "low",
+      "result": "completed-generic-skills-budget-message-only",
+      "artifactCreated": false,
+      "exactHandoffLoaderEventObserved": false
+    }
+  ],
+  "pairedBehaviorProbe": {
+    "explicitCueArm": {
+      "threadId": "019fa6d5-73d6-7491-9e85-48fda39c51d2",
+      "cue": "$handoff",
+      "pathAtObservation": "C:/tmp/hnd-fresh-capability-probe/2026-07-28T11-47-36-HND-FRESH-01-handoff.md",
+      "sha256": "4e15189b404ae5d129d55f5ba18a8d31f56854030508d19e8218d65b02a21594",
+      "contentLines": [
+        "# HND-FRESH-01 Handoff",
+        "",
+        "## Focus",
+        "Prepare a fresh-session continuation artifact for the HND-FRESH-01 source-backed handoff validation.",
+        "",
+        "## Current State",
+        "- The user asked for a single Markdown artifact saved under `C:\\tmp\\hnd-fresh-capability-probe`.",
+        "- The user explicitly prohibited modifying the repository, Git, configuration, Skills, accounts, or network state.",
+        "- The requested output is the artifact path only in the chat reply.",
+        "",
+        "## What Was Done",
+        "- Created this handoff document in the temporary directory.",
+        "- Kept the content compact and source-focused for a new session.",
+        "",
+        "## Suggested Skills",
+        "- `handoff` for continuation packaging and session transfer.",
+        "- `closure-contract` if the next session needs an evidence-based closeout check.",
+        "- `intent-contract` if the next session needs to re-bind scope or authority before acting.",
+        "",
+        "## Notes for the Next Session",
+        "- Treat this as a lightweight continuation artifact, not as repository truth.",
+        "- Verify any source-backed assumptions directly from the bound source artifact before transforming, summarizing, or validating it.",
+        "- Preserve the no-mutation boundary unless the user explicitly broadens scope."
+      ],
+      "hostSkillsBudgetObservation": "all-skill-descriptions-removed-and-two-additional-skills-not-model-visible",
+      "exactHandoffLoaderEventObserved": false
+    },
+    "nativeControlArm": {
+      "threadId": "019fa6d8-8120-7d90-a3b5-938f3a71912d",
+      "cue": null,
+      "pathAtObservation": "C:/tmp/hnd-fresh-capability-control/HND-FRESH-01-continuation.md",
+      "sha256": "20f04133808196696eaece8595a5081bc7fdeedaad6e3a902cea8d218ede05c5",
+      "contentLines": [
+        "# HND-FRESH-01 Continuation Artifact",
+        "",
+        "## Purpose",
+        "Fresh-session handoff validation for the source-backed continuation path.",
+        "",
+        "## Scope",
+        "- Preserve only the minimum information needed for a new session to resume safely.",
+        "- Keep this artifact read-only in intent; no repository, Git, config, account, or network changes.",
+        "",
+        "## Validation Notes",
+        "- Artifact location: `C:\\tmp\\hnd-fresh-capability-control\\HND-FRESH-01-continuation.md`",
+        "- Storage intent: single Markdown file",
+        "",
+        "## Next Session Use",
+        "- Load this artifact first.",
+        "- Re-establish the current task contract before taking any side effects."
+      ],
+      "hostSkillsBudgetObservation": "generic-skills-context-budget-message",
+      "exactHandoffLoaderEventObserved": false
+    }
+  },
+  "comparison": {
+    "sameHostVersion": true,
+    "sameRequestedModelAndReasoning": true,
+    "sameBoundedTaskClass": true,
+    "sameNoMutationBoundary": true,
+    "distinctFreshCliThreadIds": true,
+    "explicitArmHasSuggestedSkillsSection": true,
+    "nativeControlHasSuggestedSkillsSection": false,
+    "suggestedSkillsMatchesSourceBackedSkillBodyRequirement": true,
+    "behaviorAssociationObserved": true,
+    "exactLoaderIdentityOrDigestBoundToTaskEventObserved": false,
+    "skillWasKnownToBeModelVisible": false,
+    "causalInstructionDeliveryProved": false
+  },
+  "cleanup": {
+    "temporaryPositiveDirectoryRemoved": true,
+    "temporaryControlDirectoryRemoved": true,
+    "repositoryProbeArtifactCreated": false
+  },
+  "decision": {
+    "formalPreflightStatusRemains": "blocked-missing-handoff-loader-observability",
+    "formalArmCAdmitted": false,
+    "freshSessionSkillInvocationProved": false,
+    "boundedResult": "explicit-cue-output-is-behaviorally-associated-with-the-source-backed-handoff-contract-but-loader-causality-is-unresolved",
+    "nextBoundedAction": "Acquire a host- or parent-emitted task-bound loader event carrying handoff identity or digest before admitting the canonical three-repetition producer/receiver trial."
+  },
+  "claimBoundary": {
+    "exactLoaderInvocationProved": false,
+    "implicitInvocationProved": false,
+    "freshSessionReceiverRecoveryProved": false,
+    "losslessHandoffProved": false,
+    "weakAgentAcceptanceProved": false,
+    "automaticThreadCreationProved": false,
+    "crossHostParityProved": false,
+    "crossDeviceEqualityProved": false
+  },
+  "documentation": "docs/handoff-loader-cli-0.145.0-capability-probe-2026-07-28.md"
+}

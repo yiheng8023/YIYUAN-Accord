@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "context-handoff-packet-freshness-2026-07-24",
+  "status": "verified-local-pre-dispatch-freshness-contract-no-thread-or-host-action",
+  "scenarioIds": ["CTX-04", "CTX-05"],
+  "builderReuse": "scripts/build_context_continuation_trial_packet.py SOURCE_PATHS, collect_git_truth, collect_source_hashes",
+  "fixture": "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json",
+  "tests": "tests/test_context_handoff_packet_freshness.py",
+  "invariants": [
+    "exact source manifest and local repository truth are required",
+    "the packet binds the exact repository-owned trial contract bytes",
+    "the public prompt is rebuilt from the canonical contract and must match exactly",
+    "remote freshness remains local-refs-only-no-network-refresh",
+    "packet authority remains all false",
+    "atomic snapshot proof remains false and creation-critical-section revalidation remains required",
+    "source-byte freshness and builder consistency do not prove source-semantic freshness",
+    "current packet is not receiver, model, loader, auto-create, or remote proof"
+  ],
+  "claimBoundary": {
+    "createsThread": false,
+    "readsConversation": false,
+    "invokesLoader": false,
+    "changesConfiguration": false,
+    "networkRefreshes": false,
+    "provesReceiverBehavior": false,
+    "provesAtomicSnapshot": false,
+    "provesSourceSemanticFreshness": false
+  },
+  "nextGate": "Generate and freshness-validate immediately before a separately authorized CTX-04/CTX-05 thread creation."
+}

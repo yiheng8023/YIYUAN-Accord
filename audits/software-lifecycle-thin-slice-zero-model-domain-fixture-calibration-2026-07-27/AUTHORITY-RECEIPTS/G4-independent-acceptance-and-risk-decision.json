@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27-G4-independent-acceptance-and-risk-decision",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-2026-07-27",
+  "gateId": "G4-independent-acceptance-and-risk-decision",
+  "stageId": "SE-TS-04-independent-review-test-security",
+  "sequence": 4,
+  "decision": "approve",
+  "decisionClass": "risk-acceptance",
+  "proposalArtifactCanonicalSha256": "415e90ad90b9d8cab6f70c559fe5da9fb5b0e1398e6fa14d345eaeda2ff88e6d",
+  "beforeAcceptedLedgerSha256": "7be6b517b6f469587da8f548ee4448ccbdb86b219fe84d8f2281f8be35c51abe",
+  "allowedChangeIds": [
+    "accept-stage-4"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-04-independent-review-test-security"
+    ],
+    "artifactIds": [
+      "lifecycle-zero-model-domain-fixture-calibration-2026-07-27-O4"
+    ],
+    "actions": [
+      "release-planning"
+    ]
+  },
+  "inputArtifactDigests": [
+    "415e90ad90b9d8cab6f70c559fe5da9fb5b0e1398e6fa14d345eaeda2ff88e6d"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "accountable-verification-and-security-authority",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:04+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "dcf901955690eee7e83dac5bcd593273bef5bf15a4455c863ec5c7ae32b81339"
+}

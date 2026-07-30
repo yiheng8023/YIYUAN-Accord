@@ -1,0 +1,287 @@
+{
+  "schema": 1,
+  "id": "process-fidelity-chained-transform-evaluation-fixture-injected-b1-p2",
+  "status": "calibration-only",
+  "failureCodes": [],
+  "outcome": "zero-model-injected-mechanism-pass",
+  "agentDispatchCount": 0,
+  "modelCallCount": 0,
+  "actualRouteObserved": false,
+  "formalProcessCohortCount": 0,
+  "formalLiveEvidenceEligible": false,
+  "candidateTrace": {
+    "schema": 2,
+    "kind": "process-fidelity-chained-transform-evaluated-trace",
+    "eligibility": {
+      "status": "calibration-only",
+      "failureCodes": [],
+      "formalLiveEvidenceEligible": false
+    },
+    "execution": {
+      "agentDispatchCount": 0,
+      "modelCallCount": 0,
+      "actualRouteObserved": false,
+      "requestedRouteCountsAsObservedRoute": false
+    },
+    "runIdentity": {
+      "runId": "fixture-injected-b1-p2",
+      "armId": "injected-authority-omission",
+      "blockIndex": 1,
+      "positionInBlock": 2,
+      "startedAt": "2026-07-27T04:02:00+08:00",
+      "completedAt": "2026-07-27T04:03:00+08:00"
+    },
+    "materialEdges": [
+      {
+        "edgeId": "source-to-hop-1-decomposition",
+        "stageId": "hop-1-decomposition",
+        "predecessorOutputArtifactId": "S0",
+        "predecessorOutputArtifactSha256": "1db895b4b853a399d18101fe8ef0cdd845c3068b282e07562babcd55355b55be",
+        "currentInputArtifactId": "S0",
+        "currentInputArtifactSha256": "1db895b4b853a399d18101fe8ef0cdd845c3068b282e07562babcd55355b55be",
+        "inputEqualsDeclaredPredecessor": true,
+        "transformContractSha256": "323cbee63d210afb46bebab60f4b5925d74a84412d3c6b336f4fc687fcce2df8",
+        "outputArtifactId": "fixture-injected-b1-p2-O1",
+        "outputArtifactSha256": "4fd8a48b8595d32dc81d180273212887b77e62cbd064c5682c49282a13dde4e8",
+        "opaque": false
+      },
+      {
+        "edgeId": "hop-1-output-to-controlled-mutation",
+        "stageId": "edge-controlled-mutation",
+        "predecessorOutputArtifactId": "fixture-injected-b1-p2-O1",
+        "predecessorOutputArtifactSha256": "4fd8a48b8595d32dc81d180273212887b77e62cbd064c5682c49282a13dde4e8",
+        "currentInputArtifactId": "fixture-injected-b1-p2-O1",
+        "currentInputArtifactSha256": "4fd8a48b8595d32dc81d180273212887b77e62cbd064c5682c49282a13dde4e8",
+        "inputEqualsDeclaredPredecessor": true,
+        "transformContractSha256": "0d588162675e2c37254063f1bb9f4cbcef78dced372646467d019a15b27a1746",
+        "outputArtifactId": "fixture-injected-b1-p2-M1",
+        "outputArtifactSha256": "0dc4259d7e78d53fe2f129ca2c7697dda0b3f37b9347e86a0774088114cf2d72",
+        "opaque": false
+      },
+      {
+        "edgeId": "mutation-output-to-hop-2-routing",
+        "stageId": "hop-2-routing",
+        "predecessorOutputArtifactId": "fixture-injected-b1-p2-M1",
+        "predecessorOutputArtifactSha256": "0dc4259d7e78d53fe2f129ca2c7697dda0b3f37b9347e86a0774088114cf2d72",
+        "currentInputArtifactId": "fixture-injected-b1-p2-M1",
+        "currentInputArtifactSha256": "0dc4259d7e78d53fe2f129ca2c7697dda0b3f37b9347e86a0774088114cf2d72",
+        "inputEqualsDeclaredPredecessor": true,
+        "transformContractSha256": "938f3b91de2801e1751791f7ce52deb15b3fdbc73ff30d0231bbabff8c652b28",
+        "outputArtifactId": "fixture-injected-b1-p2-O2",
+        "outputArtifactSha256": "38a160b371c7cdc12e9b2da8813dde39e303134afa920688e6d5528f51807e35",
+        "opaque": false
+      },
+      {
+        "edgeId": "hop-2-output-to-recovery-envelope",
+        "stageId": "edge-recovery-envelope",
+        "predecessorOutputArtifactId": "fixture-injected-b1-p2-O2",
+        "predecessorOutputArtifactSha256": "38a160b371c7cdc12e9b2da8813dde39e303134afa920688e6d5528f51807e35",
+        "currentInputArtifactId": "fixture-injected-b1-p2-O2",
+        "currentInputArtifactSha256": "38a160b371c7cdc12e9b2da8813dde39e303134afa920688e6d5528f51807e35",
+        "inputEqualsDeclaredPredecessor": true,
+        "transformContractSha256": "22ea174bbac68ac944af71c7f8ae3ff55d7742e4b4e3221e503f5be517c346b3",
+        "outputArtifactId": "fixture-injected-b1-p2-R2",
+        "outputArtifactSha256": "2b5d165cffe34065b07e9c9aab624d97a0d801e2d696013408b05b3163a7e531",
+        "opaque": false
+      },
+      {
+        "edgeId": "recovery-envelope-to-hop-3-acceptance",
+        "stageId": "hop-3-acceptance-and-recovery",
+        "predecessorOutputArtifactId": "fixture-injected-b1-p2-R2",
+        "predecessorOutputArtifactSha256": "2b5d165cffe34065b07e9c9aab624d97a0d801e2d696013408b05b3163a7e531",
+        "currentInputArtifactId": "fixture-injected-b1-p2-R2",
+        "currentInputArtifactSha256": "2b5d165cffe34065b07e9c9aab624d97a0d801e2d696013408b05b3163a7e531",
+        "inputEqualsDeclaredPredecessor": true,
+        "transformContractSha256": "bc9207932722128a4e9b827e1d97844e77ccf0e0514ec7a2ded7905d53899529",
+        "outputArtifactId": "fixture-injected-b1-p2-O3",
+        "outputArtifactSha256": "e32815c38fc12fd54f6be3f990d7820dc49877dc74e824a4f91d5d0be837d51b",
+        "opaque": false
+      }
+    ],
+    "hopMetrics": [
+      {
+        "stageId": "hop-1-decomposition",
+        "invariantSurvivalRate": 1.0,
+        "weightedOmissionScore": 0.0,
+        "addedAssumptionCount": 0,
+        "provenanceBreakCount": 0,
+        "authorityDriftCount": 0,
+        "weightedDelta": 0,
+        "omittedInvariantIds": [],
+        "changedInvariantIds": [],
+        "activeLossIds": [],
+        "detectedLossIds": [],
+        "detectionEvidenceValid": null
+      },
+      {
+        "stageId": "hop-2-routing",
+        "invariantSurvivalRate": 0.8,
+        "weightedOmissionScore": 0.23809523809523808,
+        "addedAssumptionCount": 0,
+        "provenanceBreakCount": 1,
+        "authorityDriftCount": 1,
+        "weightedDelta": 6,
+        "omittedInvariantIds": [
+          "authority"
+        ],
+        "changedInvariantIds": [],
+        "activeLossIds": [
+          "invariant-omitted:authority",
+          "provenance-missing:authority"
+        ],
+        "detectedLossIds": [
+          "invariant-omitted:authority",
+          "provenance-missing:authority"
+        ],
+        "detectionEvidenceValid": true
+      },
+      {
+        "stageId": "hop-3-acceptance-and-recovery",
+        "invariantSurvivalRate": 1.0,
+        "weightedOmissionScore": 0.0,
+        "addedAssumptionCount": 0,
+        "provenanceBreakCount": 0,
+        "authorityDriftCount": 0,
+        "weightedDelta": 0,
+        "omittedInvariantIds": [],
+        "changedInvariantIds": [],
+        "activeLossIds": [],
+        "detectedLossIds": [],
+        "detectionEvidenceValid": null
+      }
+    ],
+    "injectionLedger": {
+      "stageId": "edge-controlled-mutation",
+      "armId": "injected-authority-omission",
+      "operation": "remove-exact-fidelity-snapshot-field-and-matching-provenance",
+      "preArtifactId": "fixture-injected-b1-p2-O1",
+      "preArtifactCanonicalSha256": "4fd8a48b8595d32dc81d180273212887b77e62cbd064c5682c49282a13dde4e8",
+      "postArtifactId": "fixture-injected-b1-p2-M1",
+      "postArtifactCanonicalSha256": "0dc4259d7e78d53fe2f129ca2c7697dda0b3f37b9347e86a0774088114cf2d72",
+      "expectedDelta": {
+        "removedInvariantIds": [
+          "authority"
+        ],
+        "changedInvariantIds": [],
+        "addedAssumptionIds": [],
+        "removedProvenanceIds": [
+          "authority"
+        ]
+      },
+      "observedDelta": {
+        "removedInvariantIds": [
+          "authority"
+        ],
+        "changedInvariantIds": [],
+        "addedAssumptionIds": [],
+        "removedProvenanceIds": [
+          "authority"
+        ]
+      },
+      "contractMatch": true,
+      "observedWeightedDelta": 6,
+      "expectedInjectedAuthorityDriftCount": 1,
+      "unexpectedAuthorityDriftCount": 0
+    },
+    "recoveryLedger": {
+      "stageId": "edge-recovery-envelope",
+      "predecessorArtifactId": "fixture-injected-b1-p2-O2",
+      "predecessorArtifactCanonicalSha256": "38a160b371c7cdc12e9b2da8813dde39e303134afa920688e6d5528f51807e35",
+      "sourceAnchorArtifactId": "S0",
+      "sourceAnchorCanonicalSha256": "1db895b4b853a399d18101fe8ef0cdd845c3068b282e07562babcd55355b55be",
+      "triggerReceiptSha256": "03f6d51a635249b539a6f2e915a432fde49af03cb37fec24a090529d2d8a8c3c",
+      "activeLossIds": [
+        "invariant-omitted:authority",
+        "provenance-missing:authority"
+      ],
+      "detectedLossIds": [
+        "invariant-omitted:authority",
+        "provenance-missing:authority"
+      ],
+      "detectionEvidenceValid": true,
+      "sourceAnchorPayloadExposed": true,
+      "gateEligible": true,
+      "recoveryMode": "source-unsealed-after-valid-detection",
+      "outputArtifactId": "fixture-injected-b1-p2-R2",
+      "outputArtifactCanonicalSha256": "2b5d165cffe34065b07e9c9aab624d97a0d801e2d696013408b05b3163a7e531",
+      "restored": true
+    },
+    "absoluteLedger": {
+      "terminalMatchesSourceAnchor": true,
+      "terminalAcceptancePass": true
+    },
+    "processLedger": {
+      "firstDeltaStageId": "edge-controlled-mutation",
+      "firstDetectionStageId": "hop-2-routing",
+      "detectionLatencyMaterialHops": 1,
+      "downstreamAffectedHopCount": 1,
+      "amplificationFactor": 1.0,
+      "sourceBackedRecoveryValid": true,
+      "recoveryDistanceMaterialHops": 3,
+      "intermediateLossPresent": true,
+      "processAcceptancePass": true
+    },
+    "rawArtifactIndex": [
+      {
+        "artifactId": "S0",
+        "path": "RAW-ARTIFACTS/S0.json",
+        "bytes": 715,
+        "rawSha256": "d8f53a17df4ec1161bcb2f7a6562a2c62b3f3e01f6a8e34877916486654ee486",
+        "canonicalSha256": "1db895b4b853a399d18101fe8ef0cdd845c3068b282e07562babcd55355b55be",
+        "repositoryLocalAuditPath": true
+      },
+      {
+        "artifactId": "fixture-injected-b1-p2-O1",
+        "path": "RAW-ARTIFACTS/fixture-injected-b1-p2-O1.json",
+        "bytes": 865,
+        "rawSha256": "5fa693327291ae786ca3eb2c6e33be35c9838e440a92d1c5cf02b0f4efdb704a",
+        "canonicalSha256": "4fd8a48b8595d32dc81d180273212887b77e62cbd064c5682c49282a13dde4e8",
+        "repositoryLocalAuditPath": true
+      },
+      {
+        "artifactId": "fixture-injected-b1-p2-M1",
+        "path": "RAW-ARTIFACTS/fixture-injected-b1-p2-M1.json",
+        "bytes": 733,
+        "rawSha256": "acdea22a83ec6aa46fcfe02e213889f5c114ea42fea30e024cb11c15fe724157",
+        "canonicalSha256": "0dc4259d7e78d53fe2f129ca2c7697dda0b3f37b9347e86a0774088114cf2d72",
+        "repositoryLocalAuditPath": true
+      },
+      {
+        "artifactId": "fixture-injected-b1-p2-O2",
+        "path": "RAW-ARTIFACTS/fixture-injected-b1-p2-O2.json",
+        "bytes": 881,
+        "rawSha256": "3ae472ddb65569112b088973b6c4bf8f3cd53a17e59c59a79f6702b6167feae3",
+        "canonicalSha256": "38a160b371c7cdc12e9b2da8813dde39e303134afa920688e6d5528f51807e35",
+        "repositoryLocalAuditPath": true
+      },
+      {
+        "artifactId": "fixture-injected-b1-p2-R2",
+        "path": "RAW-ARTIFACTS/fixture-injected-b1-p2-R2.json",
+        "bytes": 2765,
+        "rawSha256": "283fb66ffba6091dd73b57c198012ec4d8670eb880e7ef11135e28328da9b4cd",
+        "canonicalSha256": "2b5d165cffe34065b07e9c9aab624d97a0d801e2d696013408b05b3163a7e531",
+        "repositoryLocalAuditPath": true
+      },
+      {
+        "artifactId": "fixture-injected-b1-p2-O3",
+        "path": "RAW-ARTIFACTS/fixture-injected-b1-p2-O3.json",
+        "bytes": 1079,
+        "rawSha256": "7340b5cbbb6884841850776f104456f40dfe3194d48fe38599a598b61cd600f8",
+        "canonicalSha256": "e32815c38fc12fd54f6be3f990d7820dc49877dc74e824a4f91d5d0be837d51b",
+        "repositoryLocalAuditPath": true
+      }
+    ],
+    "manualMetricSupplementationUsed": false,
+    "claimBoundary": {
+      "liveAgentBehaviorProved": false,
+      "actualWeakModelRouteObserved": false,
+      "formalCohortStarted": false,
+      "endToEndProcessFidelityAccepted": false,
+      "candidateSkillEffectMeasured": false,
+      "deliveryTopologyCompared": false,
+      "selfAuthoredResidualGapProved": false
+    }
+  },
+  "claimLimit": "This report can prove only zero-model sequencing, persisted artifact linkage, conditional source exposure, parent metric recomputation, and fault detection. It does not prove live Agent behavior, an observed Spark route, a formal cohort result, cross-host portability, or end-to-end acceptance.",
+  "reportSha256": "0a22b0cf39d0f06613f77d0cb47826e2d877e38855de97b4be09c3c17c4ea574"
+}

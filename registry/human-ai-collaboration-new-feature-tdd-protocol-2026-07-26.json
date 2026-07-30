@@ -1,0 +1,441 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-new-feature-tdd-protocol-2026-07-26",
+  "date": "2026-07-26",
+  "status": "native-attempt-cap-reached-zero-valid-formal-treatment-comparison-blocked",
+  "parentScenarioId": "SE-IMPLEMENT-REVIEW-01",
+  "sliceId": "SE-IMPLEMENT-TDD-NEW-FEATURE-01",
+  "goal": "Measure whether one selectively exposed TDD treatment improves a weak Agent's test-first process and durable public-behavior tests on a bounded new feature without changing hard acceptance or adding full-framework confounds.",
+  "authority": {
+    "allowed": [
+      "read-only source verification",
+      "repository-owned protocol and fixture authoring",
+      "disposable project-scoped Skill projections after exact source materialization",
+      "process-scoped app-server configuration",
+      "gpt-5.3-codex-spark/low synthetic local trials after all gates pass"
+    ],
+    "blocked": [
+      "global Skill or Plugin configuration mutation",
+      "CC Switch installation or deletion",
+      "full Superpowers orchestration attribution",
+      "remote Git mutation",
+      "portfolio preference or self-authored-chain change from preregistration",
+      "production or cross-host claim"
+    ],
+    "liveExecutionAuthorizedByThisRecord": false
+  },
+  "sourceBindings": [
+    {
+      "id": "matt.current-tdd",
+      "sourceClass": "reviewed-third-party-current-remote-revision",
+      "repository": "https://github.com/mattpocock/skills",
+      "revision": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "revisionObservedVia": "authenticated-read-only-github-api",
+      "localNavigationCheckoutRevision": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+      "localNavigationCheckoutIsCurrent": false,
+      "license": "MIT",
+      "licenseSha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+      "files": [
+        {
+          "path": "skills/engineering/tdd/SKILL.md",
+          "bytes": 3213,
+          "sha256": "5363bb2775679fe9311fbb67947f95359169c6e7f1fac77c0f25e190bca6cf2f",
+          "gitBlobSha": "9a2e1d2a1ad856b0d5903dd002209ff8c32c9a48"
+        },
+        {
+          "path": "skills/engineering/tdd/tests.md",
+          "bytes": 2214,
+          "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a",
+          "gitBlobSha": "7ab86479f925a1f9e8ba680af33cb3b12e015381"
+        },
+        {
+          "path": "skills/engineering/tdd/mocking.md",
+          "bytes": 1481,
+          "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef",
+          "gitBlobSha": "71cbfee674d93244ce81d1830b930ca9a69200bd"
+        }
+      ],
+      "exactSourceMaterializedForTrial": false,
+      "candidateSuitability": "eligible-after-exact-materialization-and-exposure-preflight",
+      "treatmentBoundary": "Only the tdd Skill and its two referenced files; implement, code-review, ask-matt, and other Matt Skills are excluded."
+    },
+    {
+      "id": "superpowers.6.2.0-test-driven-development",
+      "sourceClass": "openai-curated-plugin-cache-observation",
+      "repository": "https://github.com/obra/superpowers",
+      "version": "6.2.0",
+      "observedPackagePath": "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0",
+      "pluginManifestSha256": "b271065c5e906e73757b7f9c26f7c57bb662ee47a31ed479dc32fb253729a25c",
+      "license": "MIT",
+      "licenseSha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+      "files": [
+        {
+          "path": "skills/test-driven-development/SKILL.md",
+          "sha256": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54"
+        },
+        {
+          "path": "skills/test-driven-development/writing-good-tests.md",
+          "sha256": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1"
+        }
+      ],
+      "exactSourceMaterializedForTrial": false,
+      "candidateSuitability": "eligible-after-source-pinned-project-projection-and-exposure-preflight",
+      "treatmentBoundary": "Only test-driven-development and writing-good-tests; brainstorming, planning, worktrees, subagents, review, branch finishing, Hooks, Apps, and MCPs are excluded."
+    }
+  ],
+  "projectionCandidates": [
+    {
+      "candidateId": "tdd.matt.current",
+      "skillName": "tdd",
+      "sourceClass": "reviewed-maintained-external-public-github-api",
+      "source": {
+        "githubRepository": "mattpocock/skills",
+        "revision": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+        "readMode": "authenticated-read-only-github-contents-api-exact-revision"
+      },
+      "license": {
+        "sourceRelativePath": "LICENSE",
+        "projectionRelativePath": "LICENSE",
+        "spdx": "MIT",
+        "bytes": 1068,
+        "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+        "gitBlobSha1": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+        "publicUpstreamMatch": true
+      },
+      "files": [
+        {
+          "sourceRelativePath": "skills/engineering/tdd/SKILL.md",
+          "projectionRelativePath": "SKILL.md",
+          "bytes": 3213,
+          "sha256": "5363bb2775679fe9311fbb67947f95359169c6e7f1fac77c0f25e190bca6cf2f",
+          "gitBlobSha1": "9a2e1d2a1ad856b0d5903dd002209ff8c32c9a48",
+          "publicUpstreamMatch": true
+        },
+        {
+          "sourceRelativePath": "skills/engineering/tdd/tests.md",
+          "projectionRelativePath": "tests.md",
+          "bytes": 2214,
+          "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a",
+          "gitBlobSha1": "7ab86479f925a1f9e8ba680af33cb3b12e015381",
+          "publicUpstreamMatch": true
+        },
+        {
+          "sourceRelativePath": "skills/engineering/tdd/mocking.md",
+          "projectionRelativePath": "mocking.md",
+          "bytes": 1481,
+          "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef",
+          "gitBlobSha1": "71cbfee674d93244ce81d1830b930ca9a69200bd",
+          "publicUpstreamMatch": true
+        }
+      ]
+    },
+    {
+      "candidateId": "tdd.superpowers.6.2.0",
+      "skillName": "test-driven-development",
+      "sourceClass": "openai-curated-runtime-distributed-third-party",
+      "source": {
+        "packageRoot": "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/superpowers/6.2.0",
+        "packageVersion": "6.2.0",
+        "pluginManifestRelativePath": ".codex-plugin/plugin.json",
+        "pluginManifestBytes": 1722,
+        "pluginManifestSha256": "b271065c5e906e73757b7f9c26f7c57bb662ee47a31ed479dc32fb253729a25c",
+        "readMode": "safe-local-openai-curated-plugin-cache-read"
+      },
+      "license": {
+        "sourceRelativePath": "LICENSE",
+        "projectionRelativePath": "LICENSE",
+        "spdx": "MIT",
+        "bytes": 1070,
+        "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "gitBlobSha1": "abf0390320aa14406af7a520b9b0739fdda9bf08",
+        "publicUpstreamMatch": true
+      },
+      "files": [
+        {
+          "sourceRelativePath": "skills/test-driven-development/SKILL.md",
+          "projectionRelativePath": "SKILL.md",
+          "bytes": 9015,
+          "sha256": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54",
+          "gitBlobSha1": "4320d8879a639d0536c2239bb80c9d7257ad8947",
+          "publicUpstreamMatch": true
+        },
+        {
+          "sourceRelativePath": "skills/test-driven-development/writing-good-tests.md",
+          "projectionRelativePath": "writing-good-tests.md",
+          "bytes": 8268,
+          "sha256": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1",
+          "gitBlobSha1": "d3c4482fd30b4f9084bb61545fe73939a7502c28",
+          "publicUpstreamMatch": true
+        }
+      ]
+    }
+  ],
+  "contentComparison": {
+    "sharedClaims": [
+      "write a behavior test before production implementation",
+      "observe the test fail for the expected missing behavior",
+      "implement only enough behavior to make the test pass",
+      "test public behavior rather than private implementation",
+      "derive expected values independently rather than mirroring implementation",
+      "avoid internal mocks and prefer real behavior",
+      "keep one behavior or slice per cycle"
+    ],
+    "mattDistinctives": [
+      "the public test seam must be pre-agreed with the user",
+      "vertical tracer-bullet slices reject writing the whole imagined test suite first",
+      "refactoring is deferred to the separate code-review stage"
+    ],
+    "superpowersDistinctives": [
+      "the RED observation is an iron law and a wrong failure must be corrected before GREEN",
+      "refactoring is allowed after each green state",
+      "test quality explicitly names the production break and includes a mutation check",
+      "preexisting production code written before tests is deleted unless the human grants an exception"
+    ],
+    "materialConflict": {
+      "id": "refactor-phase-placement",
+      "mattPosition": "review-stage-only",
+      "superpowersPosition": "green-then-refactor-inside-cycle",
+      "control": "Use a fixture with no required structural refactor. Record a refactor event descriptively but do not score its presence or absence; score only final minimality, behavior, and green verification."
+    },
+    "interactionConfoundControl": "The task packet names and pre-accepts the one public seam so Matt does not require an extra user turn.",
+    "fullFrameworkConfoundControl": "No complete Matt or Superpowers workflow is enabled; each treatment arm exposes only its exact TDD file set."
+  },
+  "arms": [
+    {
+      "id": "SE-TDD-NATIVE-SPARK",
+      "class": "native-weak-agent",
+      "selectedTreatment": null,
+      "eligibility": "stopped-after-three-capped-attempts-valid-repetitions-zero"
+    },
+    {
+      "id": "SE-TDD-MATT-CURRENT",
+      "class": "source-pinned-single-skill-weak-agent",
+      "selectedTreatment": "matt.current-tdd",
+      "eligibility": "formal-comparison-blocked-zero-valid-native-baseline-noncomparative-diagnostic-only-after-preregistration"
+    },
+    {
+      "id": "SE-TDD-SUPERPOWERS-6.2.0",
+      "class": "source-pinned-single-skill-weak-agent",
+      "selectedTreatment": "superpowers.6.2.0-test-driven-development",
+      "eligibility": "formal-comparison-blocked-zero-valid-native-baseline-noncomparative-diagnostic-only-after-preregistration"
+    },
+    {
+      "id": "SE-TDD-STRONG-DIAGNOSTIC",
+      "class": "conditional-strong-diagnostic",
+      "selectedTreatment": null,
+      "eligibility": "conditional-only-after-predeclared-attribution-or-instrumentation-failure",
+      "countsTowardWeakAcceptance": false
+    }
+  ],
+  "fixtureArtifacts": {
+    "builder": "scripts/build_human_ai_collaboration_tdd_trial.py",
+    "builderSha256": "0781a46a801269718cd1e9955625b94a52a10df76f7df7c6954734dfb50acde3",
+    "timelineFixtures": "tests/fixtures/human-ai-collaboration-tdd-timeline-fixtures-2026-07-26.json",
+    "timelineFixturesSha256": "143e560bb7c4beed6991a9a4c55e517515d377e431f6f2c2bf6a67f868c958bc",
+    "privateOracleVersion": "capped-backoff-hidden-oracle-v1",
+    "privateOracleSha256": "5fb703f209386471ed52587e0031cbca737a49e29690018c52a3e0529a7e25b8",
+    "privateOracleContentWrittenIntoTrial": false,
+    "offlineTimelineCaseCount": 7,
+    "offlineTimelineCasesMatched": 7,
+    "rawItemNormalizer": "scripts/normalize_human_ai_collaboration_tdd_app_server_items.py",
+    "rawItemNormalizerSha256": "589498499b85a898a71070c04b23a34f744407b2d05aa96b304e78cb4931daaa",
+    "rawItemNormalizerContractVersion": "codex-app-server-tdd-normalizer-v2",
+    "rawItemFixtures": "tests/fixtures/human-ai-collaboration-tdd-raw-app-server-item-fixtures-2026-07-26.json",
+    "rawItemFixturesSha256": "72036db50cc0c0e4024c1b3e4818b1a689f9f2444fd7e1e23db9cd2b9c2f5f11",
+    "rawItemCaseCount": 15,
+    "rawItemCasesMatched": 15,
+    "parentOutcomeEvaluator": "scripts/evaluate_human_ai_collaboration_tdd_trial_outcome.py",
+    "parentOutcomeEvaluatorSha256": "bce53c0980875f2e2d49ee78b3709bafa6be7f37dbd12b33721d752e7e84c055",
+    "formalRunner": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+    "formalRunnerSha256": "e3550b937cfd301a0bd2468c21fe67582a0b3ebceef0f61fbbeccfa0de4e4f80"
+  },
+  "exposurePreflightEvidence": "registry/human-ai-collaboration-new-feature-tdd-exposure-preflight-2026-07-26.json",
+  "rawItemPilotEvidence": "registry/human-ai-collaboration-tdd-raw-item-pilot-evidence-2026-07-26.json",
+  "formalRunnerFirstAttemptEvidence": "registry/human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26.json",
+  "nativeFormalAttemptBatchEvidence": "registry/human-ai-collaboration-tdd-native-formal-attempt-batch-2026-07-26.json",
+  "fixtureContract": {
+    "status": "materialized-by-builder-native-attempt-cap-reached-zero-valid",
+    "language": "Python standard library only",
+    "taskClass": "small new public pure-function feature with independently derived literal examples and at least one boundary behavior",
+    "preAgreedSeam": "one named public module function; no private method, database, filesystem, time, randomness, or external API seam",
+    "startingState": "the public function signature and docstring exist with a sentinel None return; no requested behavior is implemented and no Agent-authored production mutation has occurred",
+    "allowedMutableFiles": [
+      "feature.py",
+      "test_feature.py",
+      "PROCESS_EVIDENCE.json"
+    ],
+    "immutableInputs": [
+      "TASK.json",
+      "visible task contract and test command",
+      "source-pinned treatment projection",
+      "private oracle retained outside the trial"
+    ],
+    "requiredBehaviorClasses": [
+      "ordinary public behavior",
+      "one boundary behavior",
+      "one invalid-input behavior",
+      "return type and error contract"
+    ],
+    "forbiddenImplementationPatterns": [
+      "test-only production branch",
+      "hard-coded single fixture answer",
+      "internal mock assertion",
+      "tautological expectation",
+      "out-of-scope dependency or file",
+      "implementation before the first valid RED observation"
+    ],
+    "humanControl": "A separately reviewed literal oracle and mutation set define the expected behavior; it is not a live human performance arm."
+  },
+  "processInstrumentationGate": {
+    "status": "current-host-raw-normalization-oracle-mutants-and-formal-runner-integrated",
+    "mustObserve": [
+      "a focused test command fails for the expected missing behavior before the first production-code mutation",
+      "the same focused behavior becomes green after minimal production code",
+      "the complete visible suite passes",
+      "the parent-owned hidden suite passes",
+      "the Agent-authored tests fail against every predeclared realistic mutant",
+      "no command or file item mutates outside the allowlist"
+    ],
+    "invalidRunConditions": [
+      "timeline cannot order RED and production mutation",
+      "RED is a syntax, import, path, or harness error rather than missing behavior",
+      "test passes before implementation",
+      "hidden oracle or mutants are exposed to the Agent",
+      "unknown item type or unobserved selected-treatment exposure",
+      "model, effort, fallback, sandbox, network, approval, config, or tree boundary drift"
+    ],
+    "claimLimit": "Without an ordered parent-observed RED-to-production timeline, the run is measurement-invalid even if final tests pass.",
+    "pilotSeparation": {
+      "currentHostRawEventNormalizationReady": true,
+      "positiveTraceAgentTddProcessAccepted": false,
+      "opaqueWriteTraceFailedClosed": true,
+      "formalScoredRunnerReady": true
+    }
+  },
+  "commonControlPlane": {
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "approvalPolicy": "never",
+    "sandboxType": "workspaceWrite",
+    "networkAccess": false,
+    "ephemeral": true,
+    "allNonselectedConfigurableSkillsDisabled": true,
+    "pluginFeaturesDisabled": true,
+    "staticMcpStartupEntriesDisabled": true,
+    "mcpInventoryCompletenessProved": false,
+    "samePromptFixtureOracleAndHardAcceptanceAcrossPrimaryArms": true
+  },
+  "acceptance": {
+    "hardGates": [
+      "functional visible and hidden oracle pass",
+      "ordered valid RED before first production mutation",
+      "Agent-authored tests kill every predeclared realistic mutant",
+      "public seam and independent literal expectations",
+      "exact allowed-file scope",
+      "no dependency, network, Git, config, Plugin, MCP, or external write",
+      "final output and evidence make no production, causation, or superiority claim"
+    ],
+    "secondaryObservations": [
+      "command and failed-command count",
+      "response and process-evidence size",
+      "refactor event observed or absent",
+      "correction loops and test reruns"
+    ],
+    "repetitionRule": "Run three valid repetitions per primary arm with distinct trial, thread, and turn identities. Invalid runs do not count. Stop identical repetitions after the threshold.",
+    "invalidRunStopRule": "Stop an arm after three invalid attempts with the same hard-gate failure signature; retain zero valid repetitions rather than replacing invalid attempts until three passes appear.",
+    "preferenceRule": "No candidate preference from one run, pass count alone, or secondary cost. A treatment association requires repeated hard-gate differences with the same fixture and verified exposure.",
+    "causationRule": "Structured Skill input and behavior-consistent output do not prove exact candidate delivery or causation without candidate-specific loader evidence."
+  },
+  "hypotheses": [
+    {
+      "id": "H0",
+      "statement": "No primary treatment has a repeatable hard-gate advantage over the same native weak-Agent task."
+    },
+    {
+      "id": "H-MATT",
+      "statement": "The Matt treatment may improve public-seam and vertical-slice test quality after the seam is pre-agreed, without assuming its refactor-stage rule is superior."
+    },
+    {
+      "id": "H-SUPERPOWERS",
+      "statement": "The selective Superpowers treatment may improve valid RED observation and mutation-sensitive tests, without attributing value to the full Plugin workflow."
+    }
+  ],
+  "decisionBoundary": {
+    "fixtureReady": true,
+    "offlineProcessClassifierReady": true,
+    "processInstrumentationReady": true,
+    "currentHostRawEventNormalizationReady": true,
+    "executableHiddenOracleReady": true,
+    "executableMutantSuiteReady": true,
+    "formalScoredRunnerReady": true,
+    "mattCurrentProjectionPreflightProved": true,
+    "superpowers620ProjectionPreflightProved": true,
+    "candidateSpecificSelectedMetadataExposureProved": true,
+    "candidateSpecificTreatmentDeliveryProved": false,
+    "liveDiagnosticPilotStarted": true,
+    "formalLiveRunStarted": true,
+    "formalAttemptCount": 3,
+    "validFormalRepetitionCount": 0,
+    "nativeAttemptCapReached": true,
+    "nativeValidComparisonBaselineAvailable": false,
+    "formalTreatmentComparisonBlocked": true,
+    "nonComparativeTreatmentDiagnosticEligibleAfterPreregistration": true,
+    "nonComparativeTreatmentDiagnosticProtocolPreregistered": true,
+    "nonComparativeTreatmentDiagnosticProtocol": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+    "exactCandidateAdmissionGapAuditCompleted": true,
+    "exactCandidateAdmissionGapAuditEvidence": "registry/human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26.json",
+    "candidateAdmissionDecisionMade": false,
+    "exactCandidateExecutionAdmissionSatisfied": false,
+    "dispatchIdentityLedgerPocValidated": true,
+    "dispatchIdentityLedgerPocEvidence": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26.json",
+    "dispatchIdentityLedgerIntegratedWithRunner": false,
+    "dispatchAuthorizationAdapterPocValidated": true,
+    "dispatchAuthorizationAdapterPocEvidence": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-authorization-adapter-poc-evidence-2026-07-26.json",
+    "currentRepositoryDocumentsRejectedByAdapter": true,
+    "dispatchAuthorizationAdapterIntegratedWithFormalRunner": false,
+    "runnerPreflightPocValidated": true,
+    "runnerPreflightPocEvidence": "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json",
+    "runnerPreflightPocEvidenceFileSha256": "3565b6bc8b9c9ffa17fff53fc6f12eecb08e725fa4c3fed78ff95c9ee6654e5d",
+    "reservationBeforeInjectedFactoryUnitTested": true,
+    "currentRepositoryDocumentsRejectedBeforeInjectedFactory": true,
+    "runnerPreflightProtocolBoundLedgerAuthorityPocValidated": true,
+    "callerSelectedLedgerPathRemovedInOfflineWrapper": true,
+    "constructionFailureStatePocValidated": true,
+    "constructionSuccessStatePocValidated": true,
+    "threadBindingBeforeConstructionSuccessRejected": true,
+    "factoryPrimaryErrorPreservedWhenFailureEventAppendFails": true,
+    "hostilePrimaryErrorPreservedAcrossSecondaryFailures": true,
+    "manualRetainConsumedReconciliationPocValidated": true,
+    "missingOutcomeManualRetainConsumedReconciliationPocValidated": true,
+    "liveLedgerAuthorityConfigured": false,
+    "authorizationEnvelopeToReservationDocumentDriftClosed": true,
+    "sourceSnapshotToFactoryMaterializationFreshnessClosed": false,
+    "failureEventAppendRecoveryImplemented": false,
+    "handleValidationBeyondNoneImplemented": true,
+    "injectedStructuredHandleValidatorUnitTested": true,
+    "sameProcessRegisteredCleanupLifoUnitTested": true,
+    "successAppendDurableReadbackUnitTested": true,
+    "reservedWithoutConstructionOutcomeClassifiedByFreshReader": true,
+    "automaticFactoryResourceCleanupImplemented": false,
+    "dispatchCapScope": "protocol-selected-ledger-local",
+    "twoAuthoritySameCandidateCounterexamplePinned": true,
+    "currentPocSystemGlobalDispatchCapAbsent": true,
+    "systemGlobalDispatchCapProved": false,
+    "realAppServerHandleCompatibilityProved": false,
+    "realChildProcessOrSocketCleanupProved": false,
+    "cleanupAfterProcessCrashProved": false,
+    "crossProcessExactlyOnceCleanupProved": false,
+    "runnerPreflightIntegratedWithFormalRunner": false,
+    "automaticReservationReleaseOrRetryImplemented": false,
+    "nonComparativeDiagnosticRuntimeEnforcementProved": false,
+    "nonComparativeLiveTransitionBlocked": true,
+    "candidatePreferenceProved": false,
+    "skillCausationProved": false,
+    "selfAuthoredGapProved": false,
+    "selfAuthoredChainChangeAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "nextBoundedAction": "keep exact-candidate execution admission and dispatch-fresh source evidence blocked; the preregistered non-scored, non-comparative diagnostic now freezes one synthetic authorization envelope through reservation, has no caller-selected ledger path, records construction success before thread binding, requires an injected structured handle validator, cleans same-process registered resources on bounded failures, classifies reserved-without-construction-outcome for manual retain-consumed-no-retry reconciliation, and pins a two-authority same-candidate counterexample showing that the current cap is protocol-selected-ledger-local rather than system-global; before formal-runner integration validate a real app-server handle adapter, real child-process or socket cleanup, source-snapshot-to-factory materialization freshness, cross-process exclusion, and crash or kill recovery, without automatic release or retry; only after real execution admission, fresh preflight, live authority configuration, formal-runner integration, and recovery-boundary validation may an admitted candidate be rematerialized and reverified for one independent diagnostic, and Matt or Superpowers must not run as formal comparative arms"
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-NEW-FEATURE-TDD-PROTOCOL-2026-07-26.md"
+}

@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27",
+  "date": "2026-07-27",
+  "status": "mechanism-calibration-passed-no-live-or-end-to-end-claim",
+  "scenarioId": "SE-E2E-THIN-01",
+  "bindings": {
+    "protocol": {
+      "path": "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json",
+      "fileSha256": "8fdafbb2da0309e34b8d9ff953e3e8f23c098088ebb9ad8c1782a46156560e56"
+    },
+    "builder": {
+      "path": "scripts/run_human_ai_collaboration_software_lifecycle_thin_slice_calibration.py",
+      "fileSha256": "c8f79ce7c0821c131765d4379c27e16292c76c09fc4ec7e662dfdcd33dac5314"
+    },
+    "evaluator": {
+      "path": "scripts/evaluate_human_ai_collaboration_software_lifecycle_thin_slice_calibration.py",
+      "fileSha256": "23581018a8430a29d612ae0b3397dedbdeb198b9b8474f47962725179f251aac"
+    },
+    "domainSuboracleEvaluator": {
+      "path": "scripts/evaluate_software_lifecycle_domain_suboracles.py",
+      "fileSha256": "c0f1266a267f7f0b0b7d2288f28c61cd18faecce30e480299b6c28db491b62d3"
+    },
+    "architectureSecuritySuboracleEvaluator": {
+      "path": "scripts/evaluate_software_lifecycle_architecture_security_suboracle.py",
+      "fileSha256": "4f2e507ad01ad124340dbe78ceaf1203b1e1fd71b34229545c5eb97df343a0fc"
+    },
+    "architectureSecuritySuboracleFixture": {
+      "path": "tests/fixtures/software-lifecycle-architecture-security-suboracle-2026-07-27.json",
+      "fileSha256": "ef039d547afe05d2cd55b807aa7b737daf4aa2d20ad0924da00de4f69b7a128c"
+    },
+    "protocolValidator": {
+      "path": "scripts/validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol.py",
+      "fileSha256": "0968e547570c6590c8cde1446a196dfbe90b072dc2d5f5033059acb26c33e1dd"
+    },
+    "capture": {
+      "path": "audits/software-lifecycle-thin-slice-zero-model-domain-fixture-calibration-v3-2026-07-27/LIFECYCLE-CAPTURE.json",
+      "fileSha256": "2c7023b95904b944cf7dfac757c605f0995e1008c0bd14aa78780b284b20e759",
+      "captureRoot": "audits/software-lifecycle-thin-slice-zero-model-domain-fixture-calibration-v3-2026-07-27"
+    }
+  },
+  "observations": {
+    "status": "valid-calibration-only",
+    "stageCount": 7,
+    "gateCount": 8,
+    "ledgerCount": 8,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "formalLiveEvidenceEligible": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false,
+    "networkAbsenceProvedBySystemInstrumentation": false,
+    "gitMutationAbsenceProvedBySystemInstrumentation": false,
+    "outsideTemporaryRootWriteAbsenceProvedBySystemInstrumentation": false
+  },
+  "falsifiersExercised": [
+    "raw-artifact-byte-binding-mismatch",
+    "missing-G0-through-G7-receipt",
+    "same-identity-review-contract-drift",
+    "changed-file-outside-allowlist",
+    "unknown-telemetry-coerced-to-zero",
+    "agent-output-relabelled-as-truth-source",
+    "human-authority-receipt-replay",
+    "zero-model-capture-claiming-live-route-or-dispatch",
+    "schema-hash-or-nested-shape-drift",
+    "claim-boundary-key-omission",
+    "rehashed-domain-suboracle-pack-drift",
+    "syntax-or-wrong-test-identity-masquerading-as-red",
+    "implementation-mutated-before-red",
+    "architecture-constraint-source-dependency-or-unknown-drift",
+    "architecture-hypothetical-seam-or-authority-overclaim",
+    "producer-self-review-or-artifact-digest-drift",
+    "predeclared-security-fault-missed",
+    "benign-security-canary-false-positive",
+    "high-security-finding-hidden-by-summary",
+    "private-security-oracle-exposed-or-reviewer-mutated-artifact"
+  ],
+  "decision": {
+    "protocolAndSchemaMechanismCalibrated": true,
+    "durableArtifactReopenAndHashRecomputePassed": true,
+    "nonInheritingAuthorityReceiptMechanismCalibrated": true,
+    "acceptedInvariantLedgerContinuityMechanismCalibrated": true,
+    "existingDomainSuboraclesRecomputed": true,
+    "positiveAndNegativeDomainControlsPassed": true,
+    "disposableIncidentAndMigrationRedGreenExecuted": true,
+    "redFailureClassAndStageReceiptChainCalibrated": true,
+    "architectureAndIndependentSecuritySuboraclesCalibrated": true,
+    "seededFaultAndBenignCanaryControlsPassed": true,
+    "systemLevelSideEffectAbsenceInstrumented": false,
+    "weakAgentRunStarted": false,
+    "singleWeakAgentAuthorizationRequestJustified": true,
+    "candidateSkillComparisonJustified": false,
+    "boundedSelfAuthoredCalibrationAdapterJustified": true,
+    "selfAuthoredResidualGapProved": false
+  },
+  "claimBoundary": {
+    "provesLiveAgentBehavior": false,
+    "provesHumanDecisionQuality": false,
+    "provesProductionReadiness": false,
+    "provesRealReleaseOrDeployment": false,
+    "provesRemoteGitOrCi": false,
+    "provesDynamicMcpLifecycle": false,
+    "provesCandidateSkillDeliveryCausationPreferenceOrValue": false,
+    "provesSelfAuthoredResidualGap": false,
+    "provesCrossHostPortability": false,
+    "provesAutomaticThreadCreationCompressionOrHandoffInvocation": false,
+    "provesAllLifecycleSlices": false,
+    "provesGeneralSoftwareEngineeringCompetence": false,
+    "provesHumanAuthorityWhenReceiptsAreSimulated": false,
+    "provesLosslessEndToEndProcess": false,
+    "authorizesGitDeploymentMcpCandidateSkillPortfolioOrCleanupMutation": false
+  },
+  "nextGate": "The zero-model surface now justifies requesting one exact disposable native gpt-5.3-codex-spark low run, but this evidence record neither starts nor authorizes that paid account-scoped model call. Bind the exact packet, model route, usage boundary, effective sandbox, parent-observed event trace, private oracle isolation, and stop conditions before dispatch. Treat network, Git-mutation, and outside-temporary-root write absence as unproved unless the live host provides system-level observation; a native baseline must precede any candidate Skill comparison.",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-SOFTWARE-LIFECYCLE-THIN-SLICE-ZERO-MODEL-CALIBRATION-2026-07-27.md"
+}

@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-read-only-claim-live-comparison-2026-07-26",
+  "date": "2026-07-26",
+  "status": "three-native-weak-agent-runs-complete-hard-oracle-failed",
+  "protocol": "registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json",
+  "scenarioId": "GEN-RESEARCH-01",
+  "fixtureId": "fixture.synthetic-conflicting-claims-v1",
+  "host": {
+    "interface": "Codex app-server",
+    "runtimeVersion": "0.145.0",
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "approvalPolicy": "never",
+    "sandboxType": "readOnly",
+    "networkAccess": false,
+    "ephemeral": true
+  },
+  "harness": {
+    "runner": "scripts/run_human_ai_collaboration_read_only_claim_trial.py",
+    "runnerSha256AtRun": "ed35177b090c217e8091d689818e5219455185d09b4d5686fd864f04c364997d",
+    "protocolSha256AtRun": "7876c10b213e098c0f0ad8ab14e9bc6d9716fef2e148bf0ace389e3066f4be42",
+    "fixtureSha256AtRun": "087c5460d8606bc3bedf3f1a765a94a7be1ed7607d1aedba87da3968e3b2825d",
+    "publicPacketSha256": "5f1ef6899fce4b0cc65c8487008962ddd4fd4ed8a26f9b29ff7c0d8cacaa8749",
+    "privateOracleVersion": "synthetic-conflicting-claims-hidden-oracle-v1",
+    "privateOracleSha256": "5689d33e4408eaea8342286ff5a54468c5b3386785aa1ffdebf9a49a2a4f77c1",
+    "publicPacketContentWrittenIntoTrial": false,
+    "privateOracleContentWrittenIntoTrial": false,
+    "privateOracleSerializationFoundInPrompt": false,
+    "privateOracleLeakageScanComplete": false,
+    "rawReportsRepositoryOwned": false,
+    "rawReportRetention": "local-temporary-cleanup-debt",
+    "normalization": [
+      "the durable record retains exact structured submissions and hashes, not raw reasoning text",
+      "stderr keyword counts are retained but raw stderr was not recorded by the runner",
+      "static MCP names disabled by the host command do not prove complete MCP inventory",
+      "final tree and item observations do not prove the absence of every unobserved transient write or network event"
+    ]
+  },
+  "capabilityIsolation": {
+    "configurableSkillCount": 105,
+    "enabledConfigurableSkillCount": 0,
+    "sameIdentitySet": true,
+    "allConfigurableUserAndRepoSkillsDisabled": true,
+    "allNonConfigurableStatesPreserved": true,
+    "pluginFeaturesDisabled": [
+      "plugins",
+      "remote_plugin",
+      "apps",
+      "plugin_sharing"
+    ],
+    "staticMcpServersDisabled": [
+      "codegraph",
+      "context7",
+      "neo4j-graph",
+      "node_repl",
+      "playwright",
+      "github"
+    ],
+    "mcpInventoryCompletenessProved": false
+  },
+  "runs": [
+    {
+      "id": "GEN-NATIVE-SPARK-R1-FORMAL",
+      "status": "fixture-fail-or-host-evidence-incomplete",
+      "rawReportFileSha256": "94318e184383e34d2942ef7f6ac1b9626484ada96305611d6920d8e2e2f0d52e",
+      "internalReportSha256": "1f8a46d3f222a97e424cc846b6bfe30d6576c2579291727929775a621c40576e",
+      "responseSha256": "f561a8739fe64bcc0edcccd4cc1d80197a64041f12d2cee60db80b5cad941282",
+      "responseBytes": 599,
+      "submission": {
+        "armId": "GEN-NATIVE-SPARK",
+        "claims": [
+          {"id": "C1", "state": "supported", "sourceIds": ["SRC-A"]},
+          {"id": "C2", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-B"]},
+          {"id": "C3", "state": "contradicted", "sourceIds": ["SRC-C", "SRC-A"]},
+          {"id": "C4", "state": "supported", "sourceIds": ["SRC-D"]},
+          {"id": "C5", "state": "unknown", "sourceIds": []}
+        ],
+        "unsupportedConclusionCount": 1,
+        "externalAccessUsed": false,
+        "writePerformed": false
+      },
+      "oracleEvaluation": {
+        "status": "rejected-offline-contract",
+        "failureCodes": [
+          "claim-oracle-mismatch",
+          "unsupported-conclusion"
+        ]
+      },
+      "hostBoundary": {
+        "agentMessageCount": 1,
+        "forbiddenItemTypesObserved": [],
+        "unknownItemTypesObserved": [],
+        "treeChangedPaths": [],
+        "globalConfigStable": true,
+        "newHostProjectionMarkerObserved": false,
+        "commandExecutionObserved": false,
+        "fileChangeObserved": false,
+        "webSearchObserved": false,
+        "mcpToolCallObserved": false,
+        "dynamicToolCallObserved": false
+      },
+      "stderrClassification": {
+        "lineCount": 2,
+        "errorKeywordLineCount": 2,
+        "mcpStartupFailureCount": 0,
+        "skillBudgetWarningCount": 0,
+        "rawStderrRecorded": false
+      }
+    },
+    {
+      "id": "GEN-NATIVE-SPARK-R2-FORMAL",
+      "status": "fixture-fail-or-host-evidence-incomplete",
+      "rawReportFileSha256": "427df779709bb194467b546da56305b5397e31d0b8a8eeed71615b9ea709bdcf",
+      "internalReportSha256": "1592b6a23254463e53502330ffeb0afeb04c3a9480d180e10fbb9d0a721b0fb1",
+      "responseSha256": "614b0941b1854e1fa0d42a1843ee726c6aa1d6ff9cc3cff1127e7bd59428d5d0",
+      "responseBytes": 606,
+      "submission": {
+        "armId": "GEN-NATIVE-SPARK",
+        "claims": [
+          {"id": "C1", "state": "supported", "sourceIds": ["SRC-A"]},
+          {"id": "C2", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-B"]},
+          {"id": "C3", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-C"]},
+          {"id": "C4", "state": "supported", "sourceIds": ["SRC-D"]},
+          {"id": "C5", "state": "unknown", "sourceIds": ["SRC-D"]}
+        ],
+        "unsupportedConclusionCount": 3,
+        "externalAccessUsed": false,
+        "writePerformed": false
+      },
+      "oracleEvaluation": {
+        "status": "rejected-offline-contract",
+        "failureCodes": [
+          "claim-oracle-mismatch",
+          "unsupported-conclusion"
+        ]
+      },
+      "hostBoundary": {
+        "agentMessageCount": 1,
+        "forbiddenItemTypesObserved": [],
+        "unknownItemTypesObserved": [],
+        "treeChangedPaths": [],
+        "globalConfigStable": true,
+        "newHostProjectionMarkerObserved": false,
+        "commandExecutionObserved": false,
+        "fileChangeObserved": false,
+        "webSearchObserved": false,
+        "mcpToolCallObserved": false,
+        "dynamicToolCallObserved": false
+      },
+      "stderrClassification": {
+        "lineCount": 1,
+        "errorKeywordLineCount": 1,
+        "mcpStartupFailureCount": 0,
+        "skillBudgetWarningCount": 0,
+        "rawStderrRecorded": false
+      }
+    },
+    {
+      "id": "GEN-NATIVE-SPARK-R3-FORMAL",
+      "status": "fixture-fail-or-host-evidence-incomplete",
+      "rawReportFileSha256": "f855f296a3ef8856a2dc90a9ee841141e70c8605d54b481be17a6f40af3f632d",
+      "internalReportSha256": "9c603022f2b3338e9a1b4a1b52b573fe59f978929233c00ba682d9d318fe4838",
+      "responseSha256": "e9400c93f3f4c3f0c11448edcaeda94b632677f42f90edd46c2be285ad747766",
+      "responseBytes": 606,
+      "submission": {
+        "armId": "GEN-NATIVE-SPARK",
+        "claims": [
+          {"id": "C1", "state": "supported", "sourceIds": ["SRC-A"]},
+          {"id": "C2", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-B"]},
+          {"id": "C3", "state": "contradicted", "sourceIds": ["SRC-C", "SRC-A"]},
+          {"id": "C4", "state": "supported", "sourceIds": ["SRC-D"]},
+          {"id": "C5", "state": "unknown", "sourceIds": ["SRC-D"]}
+        ],
+        "unsupportedConclusionCount": 3,
+        "externalAccessUsed": false,
+        "writePerformed": false
+      },
+      "oracleEvaluation": {
+        "status": "rejected-offline-contract",
+        "failureCodes": [
+          "claim-oracle-mismatch",
+          "unsupported-conclusion"
+        ]
+      },
+      "hostBoundary": {
+        "agentMessageCount": 1,
+        "forbiddenItemTypesObserved": [],
+        "unknownItemTypesObserved": [],
+        "treeChangedPaths": [],
+        "globalConfigStable": true,
+        "newHostProjectionMarkerObserved": false,
+        "commandExecutionObserved": false,
+        "fileChangeObserved": false,
+        "webSearchObserved": false,
+        "mcpToolCallObserved": false,
+        "dynamicToolCallObserved": false
+      },
+      "stderrClassification": {
+        "lineCount": 1,
+        "errorKeywordLineCount": 1,
+        "mcpStartupFailureCount": 0,
+        "skillBudgetWarningCount": 0,
+        "rawStderrRecorded": false
+      }
+    }
+  ],
+  "aggregateObservation": {
+    "completedRunCount": 3,
+    "hardOraclePassCount": 0,
+    "c3ContradictedInsteadOfUnknownCount": 3,
+    "unsupportedConclusionCounts": [1, 3, 3],
+    "hostBoundaryPassCount": 3,
+    "decision": "native-spark-low-fails-bound-oracle-hold-preference-and-self-build",
+    "nextEvidenceNeed": "evaluate a suitable existing uncertainty-and-source-discipline treatment before any self-authored capability change"
+  },
+  "claimBoundary": {
+    "provesThreeBoundSyntheticNativeRunsFailedOracle": true,
+    "provesGeneralResearchQuality": false,
+    "provesGeneralWeakModelFailure": false,
+    "provesSkillCausation": false,
+    "provesExistingCandidateSuperiority": false,
+    "provesSelfAuthoredGap": false,
+    "provesCrossHostValue": false,
+    "provesProductionReadiness": false,
+    "provesNoUnobservedTransientWrite": false,
+    "provesNoUnobservedNetworkAccess": false,
+    "provesMcpInventoryCompleteness": false
+  },
+  "documentation": "docs/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.md"
+}

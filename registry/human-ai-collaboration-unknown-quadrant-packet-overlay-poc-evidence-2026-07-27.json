@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-unknown-quadrant-packet-overlay-poc-evidence-2026-07-27",
+  "date": "2026-07-27",
+  "status": "zero-model-private-overlay-compatible-faults-fail-closed-no-live-evidence",
+  "purpose": "Prove that the four unknown-class and method-attribution oracles can be bound as private, non-mutating overlays to concrete zero-model packets while preserving hard standards, historical evidence, task inputs, and live authority boundaries.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-unknown-quadrant-attribution-oracle-poc-evidence-2026-07-27.json",
+      "bytes": 6544,
+      "sha256": "75ce1bf8f6a0af93f2fed79d1d3c6ff5a63eb6c876c556aebcdfd6fa3a98bce1",
+      "role": "four-class-and-method-attribution-oracle"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json",
+      "bytes": 5808,
+      "sha256": "700ede6d5b56203ace278003ea8f0457858f150b3bd638a39bd42edfd60d810a",
+      "role": "derived-unknown-knowns-zero-model-packet"
+    },
+    {
+      "path": "scripts/evaluate_human_ai_collaboration_unknown_knowns_creative_preference_packet.py",
+      "bytes": 4978,
+      "sha256": "def10be6eac0f52fa6b96f05501cad56b2f3c5fd5de671efc2d09fb1c7cc499d",
+      "role": "unknown-knowns-packet-evaluator"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-unknown-quadrant-packet-overlay-2026-07-27.json",
+      "bytes": 6189,
+      "sha256": "90e760b89c2d316ad8a119add18d70f3a7bbd927b5ead188c7b5d712d5822719",
+      "role": "five-packet-private-overlay-and-fault-fixtures"
+    },
+    {
+      "path": "scripts/evaluate_human_ai_collaboration_unknown_quadrant_packet_overlay.py",
+      "bytes": 4695,
+      "sha256": "92d9d8216be6c670341bd9db2b1e9888b10ea0d49f0a0d154941a7cf6af7be51",
+      "role": "private-overlay-compatibility-evaluator"
+    }
+  ],
+  "packetCoverage": [
+    {
+      "unknownClass": "known-knowns",
+      "overlayId": "OVERLAY-KK-01",
+      "sourceClass": "existing-zero-model-packet",
+      "sourcePurpose": "multi-hop explicit-fact and authority preservation"
+    },
+    {
+      "unknownClass": "known-unknowns",
+      "overlayId": "OVERLAY-KU-01",
+      "sourceClass": "existing-zero-model-packet",
+      "sourcePurpose": "requirements conflict, missing evidence, and one blocking question"
+    },
+    {
+      "unknownClass": "unknown-knowns",
+      "overlayId": "OVERLAY-UK-01",
+      "sourceClass": "derived-zero-model-packet-from-existing-planned-scenario",
+      "sourcePurpose": "creative directions without Agent-invented human preference"
+    },
+    {
+      "unknownClass": "unknown-unknowns",
+      "overlayId": "OVERLAY-UU-01",
+      "sourceClass": "existing-zero-model-suboracle-packet",
+      "sourcePurpose": "architecture, security, lifecycle, and blind-spot perspectives"
+    },
+    {
+      "unknownClass": "method-attribution",
+      "overlayId": "OVERLAY-ATTR-01",
+      "sourceClass": "current-zero-model-attribution-oracle",
+      "sourcePurpose": "hard-standard, treatment, phase-control, infrastructure, route, and residual-gap separation"
+    }
+  ],
+  "compatibilityResult": {
+    "baseOverlayCount": 5,
+    "compatibleBaseOverlayCount": 5,
+    "baseMismatchCount": 0,
+    "faultInjectionCount": 5,
+    "expectedFaultRejectionCount": 5,
+    "faultMismatchCount": 0,
+    "coveredClasses": [
+      "known-knowns",
+      "known-unknowns",
+      "unknown-knowns",
+      "unknown-unknowns",
+      "method-attribution"
+    ]
+  },
+  "unknownKnownsPacketResult": {
+    "offlineExampleCount": 6,
+    "matchedExpectedCount": 6,
+    "mismatchCount": 0,
+    "positiveExampleCount": 1,
+    "negativeControlCount": 5,
+    "historicalExecutablePacketPreviouslyPresent": false,
+    "derivedFromExistingPlannedScenario": true,
+    "fixtureCoverageGapClosed": true,
+    "productCapabilityResidualGapProved": false
+  },
+  "faultFirewall": {
+    "privateOracleExposureRejected": true,
+    "hardStandardDriftRejected": true,
+    "sourcePacketMutationRejected": true,
+    "sourceIdentityUnverifiedRejected": true,
+    "liveAuthorityExpansionRejected": true
+  },
+  "decision": {
+    "privateOverlayCompatibilityPocValidated": true,
+    "historicalPacketsMutated": false,
+    "publicTaskInputsChangedByOverlay": false,
+    "hardStandardsChangedByOverlay": false,
+    "modelDispatchAuthorized": false,
+    "readyForRendererAndPacketBuilderIntegrationReview": true,
+    "readyForLiveWeakDispatch": false,
+    "newSkillNecessary": false,
+    "selfAuthoringAuthorized": false,
+    "nextBoundedAction": "Review one existing packet renderer or builder for a parent-only oracle attachment seam. If the seam already exists, reuse it and add deterministic regression coverage; otherwise document the exact residual adapter gap before implementing. Do not expose oracle fields to the Agent or start a live run."
+  },
+  "executionBoundary": {
+    "repositoryLocalDeterministicEvaluationOnly": true,
+    "modelRequestCount": 0,
+    "candidateDispatchCount": 0,
+    "candidateSkillInvocationCount": 0,
+    "assetGenerationCount": 0,
+    "externalAccessUsed": false,
+    "installationPerformed": false,
+    "ccSwitchChanged": false,
+    "globalConfigurationChanged": false,
+    "gitMutationPerformed": false,
+    "externalWritePerformed": false
+  },
+  "claimBoundary": {
+    "packetSemanticEquivalenceProved": false,
+    "liveHostBehaviorProved": false,
+    "weakAgentBehaviorProved": false,
+    "candidateValueOrSuperiorityProved": false,
+    "humanPreferenceProved": false,
+    "creativeQualityProved": false,
+    "unknownClassCompletenessProved": false,
+    "residualCapabilityGapProved": false,
+    "selfAuthoredImplementationNeedProved": false,
+    "productionReadinessProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PACKET-OVERLAY-POC-EVIDENCE-2026-07-27.md"
+}

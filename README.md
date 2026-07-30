@@ -66,8 +66,8 @@ sync/backup, verification, and restore without proving current consumer state.
   recipes.
 - Deterministic generated projections and a schema-1 release manifest.
 
-The current approved release contains 20 Skills and 42 files: 5 reviewed
-adaptations from `addyosmani/agent-skills`, 14 from `mattpocock/skills`, and
+The current approved release contains 19 Skills and 40 files: 5 reviewed
+adaptations from `addyosmani/agent-skills`, 13 from `mattpocock/skills`, and
 1 from `kepano/obsidian-skills`.
 All have complete pinned Git provenance; the prior incomplete local baseline is
 retained only as non-runtime historical evidence.

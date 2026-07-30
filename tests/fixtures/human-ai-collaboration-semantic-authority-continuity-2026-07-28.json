@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "fixtureId": "fixture.pitch-semantic-authority-cross-lifecycle-v1",
+  "privateOracle": {
+    "expectedSources": [
+      "DRAFT_PITCH_PLAN.md",
+      "src/video_models.py",
+      "HUMAN_DECISIONS.json"
+    ],
+    "terms": {
+      "term.stand-alone-video": "A Video whose lessonId is null.",
+      "term.pitch": "The packaging intent for a prospective stand-alone Video."
+    },
+    "decisions": {
+      "decision.pitch-cardinality": "One Pitch may be referenced by multiple stand-alone Videos.",
+      "adr.pitch-delete-policy": "Deleting a referenced Pitch is restricted rather than cascaded."
+    },
+    "adrDecisionIds": [
+      "adr.pitch-delete-policy"
+    ],
+    "requiredConflict": {
+      "codeReference": "src/video_models.py:delete_pitch",
+      "decisionId": "adr.pitch-delete-policy",
+      "observedBehavior": "cascade",
+      "requiredBehavior": "restrict"
+    },
+    "requiredUnresolvedAction": "replace cascade deletion with restrict behavior before implementation acceptance"
+  },
+  "positiveBundle": {
+    "semanticReview": {
+      "schema": 1,
+      "status": "needs-human-decision",
+      "sourcesReviewed": [
+        "DRAFT_PITCH_PLAN.md",
+        "src/video_models.py"
+      ],
+      "highestPriorityQuestion": {
+        "topic": "pitch-cardinality-and-deletion-policy",
+        "question": "Should a Pitch be reusable across stand-alone Videos, and should deletion be restricted while referenced?",
+        "recommendedAnswer": "Allow reuse and restrict deletion while referenced.",
+        "tradeoff": "This preserves packaging history but requires explicit unlinking before deletion."
+      },
+      "unresolvedBeforeHumanDecision": true,
+      "authorityPromoted": false
+    },
+    "semanticAuthority": {
+      "schema": 1,
+      "humanAccepted": true,
+      "sourceDecisionFile": "HUMAN_DECISIONS.json",
+      "containsImplementationPlan": false,
+      "terms": [
+        {
+          "id": "term.stand-alone-video",
+          "definition": "A Video whose lessonId is null."
+        },
+        {
+          "id": "term.pitch",
+          "definition": "The packaging intent for a prospective stand-alone Video."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "decision.pitch-cardinality",
+          "decision": "One Pitch may be referenced by multiple stand-alone Videos.",
+          "adrEligible": false
+        },
+        {
+          "id": "adr.pitch-delete-policy",
+          "decision": "Deleting a referenced Pitch is restricted rather than cascaded.",
+          "rejectedAlternative": "Cascade-delete referencing Videos.",
+          "hardToReverse": true,
+          "surprising": true,
+          "realTradeoff": true,
+          "adrEligible": true
+        }
+      ]
+    },
+    "specification": {
+      "schema": 1,
+      "status": "bounded-draft",
+      "consumedTermIds": [
+        "term.stand-alone-video",
+        "term.pitch"
+      ],
+      "consumedDecisionIds": [
+        "decision.pitch-cardinality",
+        "adr.pitch-delete-policy"
+      ],
+      "standAloneRule": "lessonId == null",
+      "pitchCardinality": "one-to-many",
+      "pitchDeletionPolicy": "restrict-while-referenced",
+      "implementationAuthorized": false
+    },
+    "implementationReview": {
+      "schema": 1,
+      "status": "changes-required",
+      "conflicts": [
+        {
+          "codeReference": "src/video_models.py:delete_pitch",
+          "decisionId": "adr.pitch-delete-policy",
+          "observedBehavior": "cascade",
+          "requiredBehavior": "restrict"
+        }
+      ],
+      "releaseReady": false,
+      "closureReady": false
+    },
+    "handoff": {
+      "schema": 1,
+      "status": "bounded-open-work",
+      "carriedTermIds": [
+        "term.stand-alone-video",
+        "term.pitch"
+      ],
+      "carriedDecisionIds": [
+        "decision.pitch-cardinality",
+        "adr.pitch-delete-policy"
+      ],
+      "unresolvedActions": [
+        "replace cascade deletion with restrict behavior before implementation acceptance"
+      ],
+      "complete": false,
+      "releaseReady": false
+    },
+    "measurements": {
+      "schema": 1,
+      "clarificationQuestionCount": 1,
+      "repeatedClarificationCount": 0,
+      "humanDecisionCount": 2,
+      "inputTokens": null,
+      "outputTokens": null,
+      "latencyMilliseconds": null
+    }
+  },
+  "offlineExamples": [
+    {
+      "id": "valid-cross-lifecycle-bundle",
+      "expectedPass": true
+    },
+    {
+      "id": "missing-stand-alone-term",
+      "removeTermId": "term.stand-alone-video",
+      "expectedPass": false
+    },
+    {
+      "id": "delete-decision-drifted-to-cascade",
+      "setPath": "semanticAuthority.decisions.1.decision",
+      "value": "Deleting a Pitch cascades to referencing Videos.",
+      "expectedPass": false
+    },
+    {
+      "id": "cardinality-inflated-into-adr",
+      "setPath": "semanticAuthority.decisions.0.adrEligible",
+      "value": true,
+      "expectedPass": false
+    },
+    {
+      "id": "implementation-conflict-missed",
+      "setPath": "implementationReview.conflicts",
+      "value": [],
+      "expectedPass": false
+    },
+    {
+      "id": "handoff-drops-decisions",
+      "setPath": "handoff.carriedDecisionIds",
+      "value": [],
+      "expectedPass": false
+    },
+    {
+      "id": "release-promoted-despite-conflict",
+      "setPath": "implementationReview.releaseReady",
+      "value": true,
+      "expectedPass": false
+    },
+    {
+      "id": "fresh-phase-repeats-clarification",
+      "setPath": "measurements.repeatedClarificationCount",
+      "value": 2,
+      "expectedPass": false
+    }
+  ]
+}

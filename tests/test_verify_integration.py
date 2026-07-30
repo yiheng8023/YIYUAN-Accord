@@ -11,6 +11,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import verify as verify_script  # noqa: E402
 from contracts import ContractError  # noqa: E402
+from revalidate_skill_ablation_host_transaction import (  # noqa: E402
+    canonical_sha256 as canonical_skill_ablation_revalidation_sha256,
+)
+from inventory_closeout_cleanup_debt import (  # noqa: E402
+    canonical_sha256 as canonical_cleanup_preview_sha256,
+)
+from build_skill_source_lineage_collision_index import (  # noqa: E402
+    canonical_sha256 as canonical_lineage_index_sha256,
+)
 
 
 SELECTION_DOCUMENT = "sources/addyosmani-agent-skills/selection.json"
@@ -58,6 +67,28 @@ class SourceSelectionIntegrationTests(unittest.TestCase):
 
 
 class StructuralValidationIntegrationTests(unittest.TestCase):
+    def test_tdd_successor_contract_is_integrated_into_narrative_surfaces(
+        self,
+    ) -> None:
+        successor_name = (
+            "HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-"
+            "SUCCESSOR-CONTRACT-V2-2026-07-27.md"
+        )
+        for path in (
+            "docs/curation-program-plan.md",
+            "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+            "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+            "docs/operations/CONTINUATION.md",
+        ):
+            text = (verify_script.ROOT / path).read_text(encoding="utf-8")
+            self.assertIn(successor_name, text, msg=f"{path} lacks successor")
+            self.assertIn("NO-GO", text, msg=f"{path} lacks NO-GO boundary")
+            self.assertRegex(
+                text,
+                r"does not authorize|no model or candidate dispatch is authorized",
+                msg=f"{path} lacks live-effect boundary",
+            )
+
     def test_current_identity_surfaces_do_not_use_retired_topology_names(self) -> None:
         for path in (
             "README.md",
@@ -96,6 +127,2282 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
         self.assertIn(
             "schemas/v2/capabilities.schema.json", verify_script.REQUIRED_FILES
         )
+
+    def test_context_continuation_protocol_is_a_required_verifier_input(self) -> None:
+        for path in (
+            "docs/context-continuation-paired-trial-protocol-2026-07-19.md",
+            "scripts/build_context_continuation_trial_packet.py",
+            "scripts/evaluate_context_continuation_trial.py",
+            "tests/fixtures/context-continuation-paired-trial-2026-07-19.json",
+            "tests/test_context_continuation_trial_packet.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_context_continuation_protocol_rejects_fixture_expectation_drift(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/context-continuation-paired-trial-2026-07-19.json"
+        )
+        document["fixtures"][-1]["expected"] = "manual-continuation-observed-baseline"
+        with self.assertRaisesRegex(RuntimeError, "deterministic fixture failed"):
+            verify_script.validate_context_continuation_trial_protocol(document)
+
+    def test_context_continuation_protocol_rejects_sol_as_baseline(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/context-continuation-paired-trial-2026-07-19.json"
+        )
+        document["trialArms"][0]["requestedModelId"] = "gpt-5.6-sol"
+        with self.assertRaisesRegex(RuntimeError, "baseline model selection drifted"):
+            verify_script.validate_context_continuation_trial_protocol(document)
+
+    def test_context_continuation_protocol_rejects_mandatory_pair(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/context-continuation-paired-trial-2026-07-19.json"
+        )
+        document["executionPolicy"]["pairedRunAlwaysRequired"] = True
+        with self.assertRaisesRegex(RuntimeError, "conditional execution policy"):
+            verify_script.validate_context_continuation_trial_protocol(document)
+
+    def test_context_handoff_packet_freshness_is_required(self) -> None:
+        for path in (
+            "docs/context-handoff-packet-freshness-2026-07-24.md",
+            "registry/context-handoff-packet-freshness-2026-07-24.json",
+            "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json",
+            "scripts/validate_context_handoff_packet_freshness.py",
+            "tests/test_context_handoff_packet_freshness.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_context_handoff_packet_freshness_rejects_claim_promotion(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/context-handoff-packet-freshness-2026-07-24.json"
+        )
+        fixture = verify_script.load(
+            "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json"
+        )
+        document["claimBoundary"]["createsThread"] = True
+        with self.assertRaisesRegex(RuntimeError, "contract drifted"):
+            verify_script.validate_context_handoff_packet_freshness_contract(
+                document,
+                fixture,
+            )
+
+    def test_context_handoff_packet_freshness_requires_prompt_tamper_case(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/context-handoff-packet-freshness-2026-07-24.json"
+        )
+        fixture = verify_script.load(
+            "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json"
+        )
+        fixture["cases"] = [
+            case
+            for case in fixture["cases"]
+            if case["id"] != "prompt-tamper"
+        ]
+        with self.assertRaisesRegex(RuntimeError, "fixture drifted"):
+            verify_script.validate_context_handoff_packet_freshness_contract(
+                document,
+                fixture,
+            )
+
+    def test_context_handoff_packet_freshness_rejects_boundary_promotions(
+        self,
+    ) -> None:
+        fixture = verify_script.load(
+            "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json"
+        )
+        for key in (
+            "provesAtomicSnapshot",
+            "provesSourceSemanticFreshness",
+        ):
+            with self.subTest(key=key):
+                document = verify_script.load(
+                    "registry/context-handoff-packet-freshness-2026-07-24.json"
+                )
+                document["claimBoundary"][key] = True
+                with self.assertRaisesRegex(RuntimeError, "contract drifted"):
+                    verify_script.validate_context_handoff_packet_freshness_contract(
+                        document,
+                        fixture,
+                    )
+
+    def test_git_topology_protocol_is_a_required_verifier_input(self) -> None:
+        for path in (
+            "docs/git-topology-decision-poc-2026-07-19.md",
+            "scripts/evaluate_git_topology_trial.py",
+            "scripts/observe_git_snapshot.py",
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json",
+            "tests/test_git_snapshot_integration.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_git_topology_protocol_rejects_fixture_expectation_drift(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["fixtures"][-1]["expected"] = "recommend-isolated-worktree"
+        with self.assertRaisesRegex(RuntimeError, "deterministic fixture failed"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_rejects_user_repository_mutation_authority(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["authorityBoundary"]["userRepositoryMutationAuthorized"] = True
+        with self.assertRaisesRegex(RuntimeError, "authority boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_rejects_live_remote_integration_overclaim(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["integrationEvidence"]["claimBoundary"]["provesExternalRemoteFreshness"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_requires_observed_copy_path_boundary(self) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["integrationEvidence"]["claimBoundary"][
+            "provesCopyPathEnumeration"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "claim boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_requires_content_conflict_observation_boundary(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["integrationEvidence"]["claimBoundary"][
+            "provesDisposableContentConflictStatusObservation"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "claim boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_rejects_conflict_recovery_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["integrationEvidence"]["claimBoundary"][
+            "provesConflictResolutionOrAbortSafety"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_git_topology_protocol_rejects_filesystem_zero_write_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json"
+        )
+        document["integrationEvidence"]["claimBoundary"][
+            "provesFilesystemZeroWriteObserver"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary drifted"):
+            verify_script.validate_git_topology_trial_protocol(document)
+
+    def test_mcp_current_host_inventory_is_a_required_verifier_input(self) -> None:
+        for path in (
+            "docs/mcp-current-host-inventory-2026-07-19.md",
+            "registry/mcp-current-host-inventory-2026-07-19.json",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_mcp_current_host_inventory_rejects_lifecycle_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-current-host-inventory-2026-07-19.json"
+        )
+        document["authorityBoundary"]["mcpEnableDisable"] = True
+        with self.assertRaisesRegex(RuntimeError, "authority overclaim"):
+            verify_script.validate_mcp_current_host_inventory(document)
+
+    def test_mcp_current_host_inventory_rejects_resource_attribution_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-current-host-inventory-2026-07-19.json"
+        )
+        document["processObservation"]["resourceSnapshot"][
+            "specificMcpResourceAttribution"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "resource attribution overclaim"):
+            verify_script.validate_mcp_current_host_inventory(document)
+
+    def test_mcp_current_host_inventory_reconciles_resource_totals(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-current-host-inventory-2026-07-19.json"
+        )
+        document["processObservation"]["resourceSnapshot"]["byName"][0][
+            "workingSetBytes"
+        ] += 1
+        with self.assertRaisesRegex(RuntimeError, "aggregate does not reconcile"):
+            verify_script.validate_mcp_current_host_inventory(document)
+
+    def test_mcp_runtime_refresh_contract_is_required(self) -> None:
+        for path in (
+            "docs/mcp-runtime-refresh-interface-and-trial-protocol-2026-07-19.md",
+            "registry/mcp-runtime-refresh-interface-review-2026-07-19.json",
+            "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json",
+            "docs/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.md",
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json",
+            "docs/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.md",
+            "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json",
+            "docs/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.md",
+            "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json",
+            "docs/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.md",
+            "registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json",
+            "docs/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.md",
+            "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json",
+            "docs/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.md",
+            "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json",
+            "tests/fixtures/mcp-runtime-refresh-trial-2026-07-19.json",
+            "scripts/evaluate_mcp_runtime_refresh_trial.py",
+            "tests/test_mcp_runtime_refresh_trial.py",
+            "scripts/probe_codex_app_server_mcp_status.py",
+            "tests/test_codex_app_server_mcp_status_probe.py",
+            "scripts/mcp_lifecycle_sentinel.py",
+            "scripts/probe_codex_app_server_mcp_tool_call.py",
+            "scripts/probe_codex_app_server_mcp_idle_unload.py",
+            "scripts/probe_codex_app_server_mcp_startup_profiles.py",
+            "scripts/probe_codex_app_server_mcp_child_exit_recovery.py",
+            "scripts/probe_codex_app_server_mcp_reload_release_attribution.py",
+            "scripts/validate_mcp_reload_release_attribution_evidence.py",
+            "scripts/probe_codex_app_server_mcp_thread_unsubscribe_release_attribution.py",
+            "scripts/validate_mcp_thread_unsubscribe_release_attribution_evidence.py",
+            "tests/test_codex_app_server_mcp_tool_call_probe.py",
+            "tests/test_codex_app_server_mcp_idle_unload_probe.py",
+            "tests/test_codex_app_server_mcp_startup_profiles_probe.py",
+            "tests/test_codex_app_server_mcp_child_exit_recovery_probe.py",
+            "tests/test_codex_app_server_mcp_reload_release_attribution_probe.py",
+            "tests/test_mcp_reload_release_attribution_evidence.py",
+            "tests/test_codex_app_server_mcp_thread_unsubscribe_release_attribution_probe.py",
+            "tests/test_mcp_thread_unsubscribe_release_attribution_evidence.py",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/README.md",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/run-01.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-01.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-02.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-03.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-01.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-02.json",
+            "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-03.json",
+            "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/README.md",
+            "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/calibration-01.json",
+            "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-01.json",
+            "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-02.json",
+            "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-03.json",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_verify_invokes_reload_release_attribution_validator(self) -> None:
+        path = (
+            "registry/mcp-app-server-0.145.0-reload-release-attribution-"
+            "evidence-2026-07-27.json"
+        )
+        document = verify_script.load(path)
+        document["claimBoundary"]["taskEndImmediateReleaseProved"] = True
+        original_load = verify_script.load
+
+        def load_with_mutation(candidate: str) -> dict[str, object]:
+            if candidate == path:
+                return deepcopy(document)
+            return original_load(candidate)
+
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Reload-release claim boundary drifted",
+            ):
+                verify_script.verify()
+
+    def test_verify_invokes_thread_unsubscribe_attribution_validator(
+        self,
+    ) -> None:
+        path = (
+            "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-"
+            "attribution-evidence-2026-07-27.json"
+        )
+        document = verify_script.load(path)
+        document["claimBoundary"]["unsubscribeIsTaskEndProved"] = True
+        original_load = verify_script.load
+
+        def load_with_mutation(candidate: str) -> dict[str, object]:
+            if candidate == path:
+                return deepcopy(document)
+            return original_load(candidate)
+
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Thread-unsubscribe claim boundary drifted",
+            ):
+                verify_script.verify()
+
+    def test_codex_isolated_mcp_status_probe_rejects_reload_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json"
+        )
+        document["unsupportedClaims"]["runtimeRefreshObserved"] = True
+        with self.assertRaisesRegex(RuntimeError, "unsupported behavior overclaimed"):
+            verify_script.validate_codex_app_server_isolated_mcp_status_probe(document)
+
+    def test_codex_isolated_mcp_status_probe_rejects_request_firewall_drift(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json"
+        )
+        document["runner"]["requestMethods"].append("config/mcpServer/reload")
+        with self.assertRaisesRegex(RuntimeError, "request firewall"):
+            verify_script.validate_codex_app_server_isolated_mcp_status_probe(document)
+
+    def test_mcp_runtime_refresh_rejects_live_release_overclaim(self) -> None:
+        review = verify_script.load(
+            "registry/mcp-runtime-refresh-interface-review-2026-07-19.json"
+        )
+        trial = verify_script.load(
+            "tests/fixtures/mcp-runtime-refresh-trial-2026-07-19.json"
+        )
+        review["claimClassification"]["oldRuntimeOrProcessReleaseObserved"] = True
+        with self.assertRaisesRegex(RuntimeError, "live behavior overclaimed"):
+            verify_script.validate_mcp_runtime_refresh_interface_and_trial(
+                review, trial
+            )
+
+    def test_mcp_runtime_refresh_rejects_fixture_expectation_drift(self) -> None:
+        review = verify_script.load(
+            "registry/mcp-runtime-refresh-interface-review-2026-07-19.json"
+        )
+        trial = verify_script.load(
+            "tests/fixtures/mcp-runtime-refresh-trial-2026-07-19.json"
+        )
+        trial["fixtures"][-1]["expected"] = (
+            "observed-runtime-refresh-release-still-unknown"
+        )
+        with self.assertRaisesRegex(RuntimeError, "deterministic fixture failed"):
+            verify_script.validate_mcp_runtime_refresh_interface_and_trial(
+                review, trial
+            )
+
+    def test_mcp_0_145_direct_call_rejects_single_instance_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json"
+        )
+        document["primaryLiveProbe"]["runtimeInstances"][
+            "singleRuntimeInstanceProved"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "live probe evidence"):
+            verify_script.validate_mcp_app_server_0_145_direct_tool_call_evidence(
+                document
+            )
+
+    def test_mcp_0_145_direct_call_rejects_idle_release_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["thirtyMinuteIdleUnloadProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "lifecycle behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_direct_tool_call_evidence(
+                document
+            )
+
+    def test_mcp_0_145_direct_call_rejects_exact_instance_cleanup_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json"
+        )
+        document["primaryLiveProbe"]["shutdownObservation"][
+            "exactInstanceCleanupProved"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "live probe evidence"):
+            verify_script.validate_mcp_app_server_0_145_direct_tool_call_evidence(
+                document
+            )
+
+    def test_mcp_0_145_direct_call_requires_all_attempt_manifests(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json"
+        )
+        document["repeatedObservation"]["perAttemptEventManifests"].pop()
+        with self.assertRaisesRegex(RuntimeError, "repeated evidence"):
+            verify_script.validate_mcp_app_server_0_145_direct_tool_call_evidence(
+                document
+            )
+
+    def test_mcp_0_145_direct_call_rejects_hot_switch_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["sameThreadHotEnableDisableProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "lifecycle behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_direct_tool_call_evidence(
+                document
+            )
+
+    def test_mcp_0_145_new_thread_rejects_reload_causation_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"][
+            "newThreadStateChangeCausedByReloadProved"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "lifecycle behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_new_thread_reload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_new_thread_rejects_status_runtime_equivalence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["statusEqualsLoadedThreadRuntimeProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "lifecycle behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_new_thread_reload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_new_thread_requires_five_classified_instances(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.json"
+        )
+        document["processObservation"]["instances"].pop()
+        with self.assertRaisesRegex(RuntimeError, "process evidence"):
+            verify_script.validate_mcp_app_server_0_145_new_thread_reload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_idle_unload_requires_actual_thirty_minutes(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json"
+        )
+        document["idleObservation"]["actualDurationMilliseconds"] = 1799999
+        with self.assertRaisesRegex(RuntimeError, "timing evidence"):
+            verify_script.validate_mcp_app_server_0_145_idle_unload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_idle_unload_rejects_causation_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["threadClosedCausedSentinelExitProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_idle_unload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_idle_unload_rejects_resource_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json"
+        )
+        document["resourceObservation"]["singleRunProvesStableResourceSavings"] = True
+        with self.assertRaisesRegex(RuntimeError, "resource boundary"):
+            verify_script.validate_mcp_app_server_0_145_idle_unload_evidence(
+                document
+            )
+
+    def test_mcp_0_145_startup_profiles_reject_hot_switch_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["sameThreadHotSwitchingProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_startup_profile_evidence(
+                document
+            )
+
+    def test_mcp_0_145_startup_profiles_require_disabled_zero_processes(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json"
+        )
+        document["profiles"]["disabled"]["sentinelInstancesPerRun"] = [0, 1]
+        with self.assertRaisesRegex(RuntimeError, "functional evidence"):
+            verify_script.validate_mcp_app_server_0_145_startup_profile_evidence(
+                document
+            )
+
+    def test_mcp_0_145_startup_profiles_reject_filter_resource_claim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["toolFilteringReducesResourceUseProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "behavior overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_startup_profile_evidence(
+                document
+            )
+
+    def test_mcp_0_145_child_exit_rejects_same_thread_recovery_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["sameThreadRecoveryProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "recovery overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_child_exit_recovery_evidence(
+                document
+            )
+
+    def test_mcp_0_145_child_exit_rejects_generic_controller_claim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["genericRecoveryControllerJustified"] = True
+        with self.assertRaisesRegex(RuntimeError, "recovery overclaimed"):
+            verify_script.validate_mcp_app_server_0_145_child_exit_recovery_evidence(
+                document
+            )
+
+    def test_mcp_0_145_child_exit_preserves_run02_owned_kill_evidence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json"
+        )
+        document["runs"][1]["appServerHandleKillSent"] = False
+        with self.assertRaisesRegex(RuntimeError, "run02 appServerHandleKillSent"):
+            verify_script.validate_mcp_app_server_0_145_child_exit_recovery_evidence(
+                document
+            )
+
+    def test_skill_portfolio_and_closeout_gate_is_required(self) -> None:
+        for path in (
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json",
+            "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+            "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+            "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_portfolio_gate_rejects_parallel_manager(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["decision"]["parallelManagerImplementationAllowed"] = True
+        with self.assertRaisesRegex(RuntimeError, "CC Switch reuse decision"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_skill_portfolio_gate_rejects_parallel_physical_runtime_authority(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["decision"]["onePhysicalRuntimeAuthorityPerSharedSkill"] = False
+        with self.assertRaisesRegex(RuntimeError, "CC Switch reuse decision"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_skill_portfolio_gate_allows_zero_self_authored_payloads(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["decision"]["selfAuthoredPayloadCountMayBeZero"] = False
+        with self.assertRaisesRegex(RuntimeError, "CC Switch reuse decision"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_skill_portfolio_gate_rejects_universal_paired_model_requirement(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["weakAgentValidationPolicy"]["allPocsRequirePairedModelRuns"] = True
+        with self.assertRaisesRegex(RuntimeError, "weak-Agent validation policy"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_closeout_gate_rejects_implied_deletion_authority(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["closeoutGate"]["completionImpliesDeletionAuthority"] = True
+        with self.assertRaisesRegex(RuntimeError, "cleanup requirement"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_inherited_payload_migration_gate_rejects_bulk_catalog_removal(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["inheritedPayloadMigrationGate"]["bulkNameOrCatalogPresenceIsSufficient"] = True
+        with self.assertRaisesRegex(RuntimeError, "migration gate"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_inherited_payload_migration_gate_requires_behavioral_equivalence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["inheritedPayloadMigrationGate"][
+            "nameDescriptionContentDirectoryOrCatalogMatchIsSufficient"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "migration gate"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_skill_portfolio_gate_rejects_navigation_evidence_promotion(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json"
+        )
+        document["datedNavigationEvidence"][0]["currentInventoryEvidence"] = True
+        with self.assertRaisesRegex(RuntimeError, "dated navigation evidence"):
+            verify_script.validate_skill_portfolio_and_closeout_gate(document)
+
+    def test_skill_portfolio_inventory_is_a_required_verifier_input(self) -> None:
+        for path in (
+            "docs/skill-portfolio-and-closeout-inventory-2026-07-19.md",
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
+            "scripts/inventory_skill_portfolio.py",
+            "tests/test_skill_portfolio_inventory.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_portfolio_inventory_rejects_cleanup_authority_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        document["claimBoundary"]["authorizesCleanupOrDeletion"] = True
+        with self.assertRaisesRegex(RuntimeError, "authority overclaim"):
+            verify_script.validate_skill_portfolio_and_closeout_inventory(document)
+
+    def test_skill_portfolio_inventory_requires_exact_bootstrap_cleanup_targets(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        bootstrap_item = next(
+            item
+            for item in document["closeoutInventory"]
+            if item["purpose"] == "bootstrap-copies-patch-scan-input-and-stale-plan-snapshot"
+        )
+        bootstrap_item["targets"] = []
+        with self.assertRaisesRegex(RuntimeError, "closeout item is incomplete"):
+            verify_script.validate_skill_portfolio_and_closeout_inventory(document)
+
+    def test_skill_portfolio_inventory_tracks_mcp_schema_temp_artifact(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        mcp_item = next(
+            item
+            for item in document["closeoutInventory"]
+            if item["purpose"] == "mcp-stable-and-experimental-app-server-schema-generation"
+        )
+        self.assertEqual(
+            mcp_item["targets"],
+            ["C:/tmp/agent-autonomy-harness-mcp-schema-20260719"],
+        )
+        self.assertEqual(mcp_item["disposition"], "retain-authoritative")
+        self.assertFalse(mcp_item["eligibleForCurrentAction"])
+
+    def test_skill_portfolio_inventory_tracks_isolated_mcp_status_homes(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        item = next(
+            item
+            for item in document["closeoutInventory"]
+            if item["purpose"] == "isolated-codex-app-server-status-probe-failed-and-successful-homes"
+        )
+        self.assertEqual(len(item["targets"]), 2)
+        self.assertEqual(item["disposition"], "retain-authoritative")
+        self.assertFalse(item["eligibleForCurrentAction"])
+
+    def test_skill_portfolio_inventory_tracks_mcp_0_145_direct_call_roots(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        item = next(
+            item
+            for item in document["closeoutInventory"]
+            if item["purpose"]
+            == "codex-0.145.0-direct-mcp-tool-call-schema-and-five-isolated-probe-roots"
+        )
+        self.assertEqual(len(item["targets"]), 6)
+        self.assertEqual(item["disposition"], "retain-authoritative")
+        self.assertFalse(item["eligibleForCurrentAction"])
+
+    def test_skill_portfolio_inventory_tracks_comparative_treatment_cleanup_targets(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        self.assertEqual(len(document["closeoutInventory"]), 10)
+        item = next(
+            item
+            for item in document["closeoutInventory"]
+            if item["purpose"]
+            == "weak-agent-incident-treatment-fidelity-and-source-pin-temporary-artifacts"
+        )
+        self.assertEqual(len(item["targets"]), 43)
+        self.assertEqual(item["disposition"], "delete-after-authorization")
+        self.assertFalse(item["eligibleForCurrentAction"])
+
+    def test_skill_portfolio_inventory_rejects_current_cleanup_phase(self) -> None:
+        document = verify_script.load(
+            "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json"
+        )
+        document["currentCleanupPhase"] = True
+        with self.assertRaisesRegex(RuntimeError, "timing boundary"):
+            verify_script.validate_skill_portfolio_and_closeout_inventory(document)
+
+    def test_source_pinned_debugging_projection_protocol_is_required(self) -> None:
+        for path in (
+            "registry/source-pinned-debugging-skill-projection-protocol-2026-07-24.json",
+            "docs/source-pinned-debugging-skill-projection-protocol-2026-07-24.md",
+            "scripts/build_source_pinned_skill_projection.py",
+            "scripts/probe_source_pinned_skill_projection_preflight.py",
+            "scripts/validate_source_pinned_debugging_skill_projection_protocol.py",
+            "tests/test_source_pinned_skill_projection.py",
+            "tests/test_source_pinned_skill_projection_preflight.py",
+            "registry/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.json",
+            "docs/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.md",
+            "scripts/validate_source_pinned_debugging_skill_projection_preflight_evidence.py",
+            "tests/test_source_pinned_debugging_skill_projection_preflight_evidence.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_closeout_cleanup_debt_preview_is_a_required_verifier_input(
+        self,
+    ) -> None:
+        for path in (
+            "docs/closeout-cleanup-debt-preview-2026-07-24.md",
+            "registry/closeout-cleanup-debt-preview-2026-07-24.json",
+            "scripts/inventory_closeout_cleanup_debt.py",
+            "tests/test_closeout_cleanup_debt_preview.py",
+            "docs/closeout-cleanup-execution-2026-07-30.md",
+            "registry/closeout-cleanup-execution-2026-07-30.json",
+            "scripts/validate_closeout_cleanup_execution.py",
+            "tests/test_closeout_cleanup_execution.py",
+            "audits/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27/normalized-evidence.json",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_closeout_cleanup_debt_preview_rejects_deletion_authority(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/closeout-cleanup-debt-preview-2026-07-24.json"
+        )
+        document["authorityBoundary"]["deletionAuthorized"] = True
+        document["reportSha256"] = canonical_cleanup_preview_sha256(
+            {
+                key: value
+                for key, value in document.items()
+                if key != "reportSha256"
+            }
+        )
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "hard-fail-authority-promotion",
+        ):
+            verify_script.validate_closeout_cleanup_debt_preview(document)
+
+    def test_closeout_cleanup_debt_preview_is_frozen_historical_evidence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/closeout-cleanup-debt-preview-2026-07-24.json"
+        )
+        verify_script.validate_closeout_cleanup_debt_preview(document)
+
+    def test_program_acceptance_keeps_final_cleanup_as_a_partial_exact_target_gate(
+        self,
+    ) -> None:
+        acceptance = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.final-program-cleanup-gate"
+        )
+        self.assertEqual(criterion["assessment"], "partial")
+        self.assertIn(
+            "evidence.closeout-cleanup-debt-preview-2026-07-24",
+            criterion["evidenceIds"],
+        )
+        self.assertIn(
+            "evidence.closeout-cleanup-execution-2026-07-30",
+            criterion["evidenceIds"],
+        )
+        gate = next(
+            item
+            for item in program["sequenceGates"]
+            if item["id"] == "gate.final-program-cleanup-before-final-closeout"
+        )
+        self.assertEqual(gate["blockedUntil"], "any declared final program closeout")
+
+    def test_rejects_final_cleanup_gate_without_separate_authority(
+        self,
+    ) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        gate = next(
+            item
+            for item in document["sequenceGates"]
+            if item["id"] == "gate.final-program-cleanup-before-final-closeout"
+        )
+        gate["prerequisite"] = gate["prerequisite"].replace(
+            "separate cleanup authority, ",
+            "",
+        )
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "final cleanup gate missing boundary: separate cleanup authority",
+        )
+
+    def test_skill_source_authority_reconciliation_is_required(self) -> None:
+        for path in (
+            "docs/skill-source-authority-and-runtime-reconciliation-2026-07-19.md",
+            "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+            "scripts/reconcile_skill_source_authority.py",
+            "tests/test_skill_source_authority_reconciliation.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_source_authority_rejects_runtime_install_inference(self) -> None:
+        document = verify_script.load(
+            "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json"
+        )
+        document["decisions"]["installRuntimeMatchesIntoCcToEqualizeCounts"] = True
+        with self.assertRaisesRegex(RuntimeError, "reuse decision"):
+            verify_script.validate_skill_source_authority_reconciliation(document)
+
+    def test_skill_source_authority_rejects_projection_repair_authority(self) -> None:
+        document = verify_script.load(
+            "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json"
+        )
+        document["authorityBoundary"]["projectionRepairAuthorized"] = True
+        with self.assertRaisesRegex(RuntimeError, "mutation overclaim"):
+            verify_script.validate_skill_source_authority_reconciliation(document)
+
+    def test_skill_source_lineage_collision_index_is_required(self) -> None:
+        for path in (
+            "docs/skill-source-lineage-collision-index-2026-07-24.md",
+            "registry/skill-source-lineage-collision-index-2026-07-24.json",
+            "scripts/build_skill_source_lineage_collision_index.py",
+            "tests/test_skill_source_lineage_collision_index.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_source_lineage_collision_index_rejects_migration_authority(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-source-lineage-collision-index-2026-07-24.json"
+        )
+        document["authorityBoundary"]["migrationAuthorized"] = True
+        document["reportSha256"] = canonical_lineage_index_sha256(
+            {
+                key: value
+                for key, value in document.items()
+                if key != "reportSha256"
+            }
+        )
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "hard-fail-authorityBoundary-promotion",
+        ):
+            verify_script.validate_skill_source_lineage_collision_index(
+                document
+            )
+
+    def test_skill_source_lineage_collision_index_rejects_derived_drift(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-source-lineage-collision-index-2026-07-24.json"
+        )
+        rebuilt = deepcopy(document)
+        rebuilt["groups"][0]["collisionRelation"] = "equal"
+        rebuilt["reportSha256"] = canonical_lineage_index_sha256(
+            {
+                key: value
+                for key, value in rebuilt.items()
+                if key != "reportSha256"
+            }
+        )
+        with patch.object(
+            verify_script,
+            "build_skill_source_lineage_collision_index",
+            return_value=rebuilt,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "derived record drifted",
+            ):
+                verify_script.validate_skill_source_lineage_collision_index(
+                    document
+                )
+
+    def test_skill_source_lineage_collision_index_rejects_upstream_as_local_provenance(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-source-lineage-collision-index-2026-07-24.json"
+        )
+        legacy_matt = next(
+            group
+            for group in document["groups"]
+            if group["id"] == "legacy-matt-mapped-mixed-snapshot"
+        )
+        legacy_matt["immutableRevisionOrUnknown"] = legacy_matt[
+            "reviewedUpstreamRevision"
+        ]
+        document["reportSha256"] = canonical_lineage_index_sha256(
+            {
+                key: value
+                for key, value in document.items()
+                if key != "reportSha256"
+            }
+        )
+        with self.assertRaisesRegex(RuntimeError, "legacy Matt boundary"):
+            verify_script.validate_skill_source_lineage_collision_index(
+                document
+            )
+
+    def test_cc_switch_recovery_gap_and_overlap_matrix_are_required(self) -> None:
+        for path in (
+            "docs/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.md",
+            "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json",
+            "docs/cc-switch-3.18-recovery-preflight-2026-07-23.md",
+            "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json",
+            "docs/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.md",
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json",
+            "scripts/build_cc_skill_recovery_snapshot.py",
+            "tests/test_build_cc_skill_recovery_snapshot.py",
+            "docs/skill-ablation-cli-host-preflight-2026-07-23.md",
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json",
+            "docs/context-evidence-envelope-2026-07-23.md",
+            "registry/context-evidence-envelope-2026-07-23.json",
+            "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json",
+            "scripts/evaluate_skill_overlap_attribution.py",
+            "tests/test_skill_overlap_attribution.py",
+            "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json",
+            "scripts/evaluate_skill_overlap_scenarios.py",
+            "tests/test_skill_overlap_scenarios.py",
+            "docs/mcp-task-lifecycle-evidence-contract-2026-07-23.md",
+            "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
+            "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+            "scripts/evaluate_mcp_task_lifecycle_evidence.py",
+            "tests/test_mcp_task_lifecycle_evidence.py",
+            "docs/skill-live-run-evidence-contract-2026-07-23.md",
+            "registry/skill-live-run-evidence-contract-2026-07-23.json",
+            "tests/fixtures/skill-live-run-evidence-2026-07-23.json",
+            "scripts/evaluate_skill_live_run_evidence.py",
+            "tests/test_skill_live_run_evidence.py",
+            "docs/strategy/EXPERIMENT-CONTRACT-REUSE-MAP-2026-07-23.md",
+            "registry/experiment-contract-reuse-map-2026-07-23.json",
+            "docs/git-host-authorization-trial-contract-2026-07-23.md",
+            "registry/git-host-authorization-trial-contract-2026-07-23.json",
+            "docs/context-pressure-advisory-contract-2026-07-23.md",
+            "registry/context-pressure-advisory-contract-2026-07-23.json",
+            "tests/fixtures/context-pressure-advisory-2026-07-23.json",
+            "scripts/evaluate_context_pressure_advisory.py",
+            "tests/test_context_pressure_advisory.py",
+            "docs/instruction-carrier-adherence-contract-2026-07-23.md",
+            "registry/instruction-carrier-adherence-contract-2026-07-23.json",
+            "tests/fixtures/instruction-carrier-adherence-2026-07-23.json",
+            "scripts/evaluate_instruction_carrier_adherence.py",
+            "tests/test_instruction_carrier_adherence.py",
+            "docs/instruction-carrier-trial-preflight-contract-2026-07-23.md",
+            "registry/instruction-carrier-trial-preflight-contract-2026-07-23.json",
+            "scripts/build_instruction_carrier_trial_packet.py",
+            "tests/test_instruction_carrier_trial_packet.py",
+            "docs/git-host-preflight-evidence-contract-2026-07-23.md",
+            "registry/git-host-preflight-evidence-contract-2026-07-23.json",
+            "tests/fixtures/git-host-preflight-evidence-2026-07-23.json",
+            "scripts/evaluate_git_host_preflight_evidence.py",
+            "tests/test_git_host_preflight_evidence.py",
+            "docs/mcp-task-selection-decision-contract-2026-07-23.md",
+            "registry/mcp-task-selection-decision-contract-2026-07-23.json",
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json",
+            "scripts/evaluate_mcp_task_selection_decision.py",
+            "tests/test_mcp_task_selection_decision.py",
+            "docs/handoff-loader-trial-preflight-contract-2026-07-24.md",
+            "registry/handoff-loader-trial-preflight-contract-2026-07-24.json",
+            "scripts/build_handoff_loader_trial_packet.py",
+            "tests/test_handoff_loader_trial_packet.py",
+            "docs/git-readonly-preflight-envelope-contract-2026-07-24.md",
+            "registry/git-readonly-preflight-envelope-contract-2026-07-24.json",
+            "scripts/build_git_readonly_preflight_envelope.py",
+            "tests/test_git_readonly_preflight_envelope.py",
+            "docs/mcp-lifecycle-trial-skeleton-contract-2026-07-24.md",
+            "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json",
+            "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json",
+            "scripts/build_mcp_lifecycle_trial_skeleton.py",
+            "tests/test_mcp_lifecycle_trial_skeleton.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_instruction_carrier_preflight_rejects_live_claim(self) -> None:
+        document = verify_script.load(
+            "registry/instruction-carrier-trial-preflight-contract-2026-07-23.json"
+        )
+        document["claimBoundary"]["builderCountsAsLiveHostProof"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_instruction_carrier_trial_preflight_contract(
+                document
+            )
+
+    def test_git_host_preflight_rejects_bound_repository_claim(self) -> None:
+        document = verify_script.load(
+            "registry/git-host-preflight-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/git-host-preflight-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["boundUserRepositoryPreflightProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_git_host_preflight_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_git_host_preflight_rejects_fixture_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/git-host-preflight-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/git-host-preflight-evidence-2026-07-23.json"
+        )
+        fixtures["fixtures"][0]["expectedStatus"] = (
+            "live-bound-repository-safety-proved"
+        )
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_git_host_preflight_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_selection_rejects_always_on_policy(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-selection-decision-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        document["policy"]["defaultPermanentActivation"] = True
+        with self.assertRaisesRegex(RuntimeError, "policy drifted"):
+            verify_script.validate_mcp_task_selection_decision_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_selection_rejects_actuation_claim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-selection-decision-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        document["claimBoundary"]["mcpActivationProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_mcp_task_selection_decision_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_selection_rejects_fixture_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-selection-decision-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        fixtures["fixtures"][0]["expectedStatus"] = (
+            "live-activation-and-release-proved"
+        )
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_mcp_task_selection_decision_contract(
+                document,
+                fixtures,
+            )
+
+    def test_handoff_loader_preflight_rejects_claim_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/handoff-loader-trial-preflight-contract-2026-07-24.json"
+        )
+        document["claimBoundary"]["loaderInvocationProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_handoff_loader_trial_preflight_contract(document)
+
+    def test_handoff_loader_preflight_rejects_shape_only_capture_admission(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/handoff-loader-trial-preflight-contract-2026-07-24.json"
+        )
+        document["captureCapabilityEvidenceRegistry"]["claimBoundary"][
+            "shapeValidReferenceIsAdmissionEvidence"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "capture registry"):
+            verify_script.validate_handoff_loader_trial_preflight_contract(
+                document
+            )
+
+    def test_git_readonly_preflight_rejects_claim_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/git-readonly-preflight-envelope-contract-2026-07-24.json"
+        )
+        document["claimBoundary"]["creationSafetyProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_git_readonly_preflight_envelope_contract(document)
+
+    def test_mcp_lifecycle_skeleton_rejects_claim_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json"
+        )
+        selection_fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        document["claimBoundary"]["resourceBenefitProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_mcp_lifecycle_trial_skeleton_contract(
+                document,
+                fixtures,
+                selection_fixtures,
+            )
+
+    def test_mcp_lifecycle_skeleton_rejects_fixture_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json"
+        )
+        selection_fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        fixtures["fixtures"][1]["expectedFailures"] = []
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_mcp_lifecycle_trial_skeleton_contract(
+                document,
+                fixtures,
+                selection_fixtures,
+            )
+
+    def test_mcp_same_thread_refresh_rejects_release_claim_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-same-thread-refresh-evidence-contract-2026-07-24.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-same-thread-refresh-evidence-2026-07-24.json"
+        )
+        selection_fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-selection-decision-2026-07-23.json"
+        )
+        document["claimBoundary"]["taskEndReleaseProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_mcp_same_thread_refresh_evidence_contract(
+                document,
+                fixtures,
+                selection_fixtures,
+            )
+
+    def test_mcp_task_lifecycle_contract_rejects_live_claim(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["taskEndExactExitProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_mcp_task_lifecycle_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_lifecycle_contract_rejects_fixture_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json"
+        )
+        fixtures["fixtures"][-1]["expected"]["countsAsLiveHostProof"] = True
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_mcp_task_lifecycle_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_lifecycle_contract_rejects_always_on_policy(self) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json"
+        )
+        document["operatingPolicy"]["permanentlyActiveByDefault"] = True
+        with self.assertRaisesRegex(RuntimeError, "operating policy drifted"):
+            verify_script.validate_mcp_task_lifecycle_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_mcp_task_lifecycle_contract_rejects_premature_release_trace(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json"
+        )
+        valid = fixtures["fixtures"][-1]
+        valid["facts"]["leaseReferenceTrace"].insert(
+            3,
+            {"event": "server-release"},
+        )
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_mcp_task_lifecycle_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_skill_live_run_contract_rejects_weak_acceptance_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-live-run-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-live-run-evidence-2026-07-23.json"
+        )
+        document["claimBoundary"]["fiveArmComparisonExecuted"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_skill_live_run_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_skill_live_run_contract_rejects_fixture_drift(self) -> None:
+        document = verify_script.load(
+            "registry/skill-live-run-evidence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-live-run-evidence-2026-07-23.json"
+        )
+        fixtures["fixtures"][0]["expectedStatus"] = "live-run-evidence-valid"
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_skill_live_run_evidence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_experiment_reuse_map_rejects_duplicate_evidence_claim(self) -> None:
+        document = verify_script.load(
+            "registry/experiment-contract-reuse-map-2026-07-23.json"
+        )
+        document["mappings"][1]["claimBoundary"][
+            "sameScenarioEvidenceMayBeCountedTwice"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "Git overlap reuse mapping"):
+            verify_script.validate_experiment_contract_reuse_map(document)
+
+    def test_git_host_contract_rejects_inherited_merge_authority(self) -> None:
+        document = verify_script.load(
+            "registry/git-host-authorization-trial-contract-2026-07-23.json"
+        )
+        document["phases"][2]["authorizationInheritedFromCreate"] = True
+        with self.assertRaisesRegex(RuntimeError, "phase boundary overclaimed"):
+            verify_script.validate_git_host_authorization_trial_contract(document)
+
+    def test_context_pressure_contract_rejects_automatic_creation(self) -> None:
+        document = verify_script.load(
+            "registry/context-pressure-advisory-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/context-pressure-advisory-2026-07-23.json"
+        )
+        document["invariants"]["automaticThreadCreationForbidden"] = False
+        with self.assertRaisesRegex(RuntimeError, "invariant drifted"):
+            verify_script.validate_context_pressure_advisory_contract(
+                document,
+                fixtures,
+            )
+
+    def test_context_pressure_provenance_rejects_telemetry_claim(self) -> None:
+        document = verify_script.load(
+            "registry/context-pressure-provenance-evidence-envelope-2026-07-24.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/context-pressure-provenance-evidence-envelope-2026-07-24.json"
+        )
+        document["claimBoundary"]["countsAsLiveHostTelemetryProof"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_context_pressure_provenance_evidence_envelope_contract(
+                document,
+                fixtures,
+            )
+
+    def test_instruction_carrier_contract_rejects_universal_claim(self) -> None:
+        document = verify_script.load(
+            "registry/instruction-carrier-adherence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/instruction-carrier-adherence-2026-07-23.json"
+        )
+        document["claimBoundary"]["crossAgentParityProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_instruction_carrier_adherence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_instruction_carrier_contract_rejects_fixture_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/instruction-carrier-adherence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/instruction-carrier-adherence-2026-07-23.json"
+        )
+        fixtures["fixtures"][0]["expectedStatus"] = (
+            "live-host-adherence-evidence-valid"
+        )
+        with self.assertRaisesRegex(RuntimeError, "fixtures drifted"):
+            verify_script.validate_instruction_carrier_adherence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_instruction_carrier_contract_rejects_semantic_key_substitution(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/instruction-carrier-adherence-contract-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/instruction-carrier-adherence-2026-07-23.json"
+        )
+        document["requiredParentEvidence"][5] = (
+            "unrelated placeholder that preserves list length"
+        )
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "parent evidence requirements drifted",
+        ):
+            verify_script.validate_instruction_carrier_adherence_contract(
+                document,
+                fixtures,
+            )
+
+        document = verify_script.load(
+            "registry/instruction-carrier-adherence-contract-2026-07-23.json"
+        )
+        document["attributionSeparation"]["renamedUnrelatedBoundary"] = (
+            document["attributionSeparation"].pop(
+                "hostApprovalDoesNotProveCarrierAdherence"
+            )
+        )
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "attribution separation drifted",
+        ):
+            verify_script.validate_instruction_carrier_adherence_contract(
+                document,
+                fixtures,
+            )
+
+    def test_cc_switch_live_drift_rejects_count_reconciliation_drift(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json"
+        )
+        document["liveCounts"]["claudeBrokenProjections"] = 175
+        with self.assertRaisesRegex(RuntimeError, "counts do not reconcile"):
+            verify_script.validate_cc_switch_live_drift_and_transaction_gate(document)
+
+    def test_cc_switch_live_drift_rejects_premature_deletion(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json"
+        )
+        document["portfolioDecision"]["eligiblePayloadDeletionsNow"] = 1
+        with self.assertRaisesRegex(RuntimeError, "outran the recovery evidence"):
+            verify_script.validate_cc_switch_live_drift_and_transaction_gate(document)
+
+    def test_cc_switch_live_drift_rejects_copy_only_canary_as_gate(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json"
+        )
+        document["orderedTransaction"][2] = (
+            "run-copy-only-uninstall-restore-canary"
+        )
+        with self.assertRaisesRegex(RuntimeError, "ordered transaction gate"):
+            verify_script.validate_cc_switch_live_drift_and_transaction_gate(document)
+
+    def test_cc_switch_recovery_rejects_live_mutation_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json"
+        )
+        document["liveStateMutation"]["skillDeleted"] = True
+        with self.assertRaisesRegex(RuntimeError, "overclaimed live mutation"):
+            verify_script.validate_cc_switch_recovery_preflight(document)
+
+    def test_cc_switch_recovery_rejects_secret_boundary_drift(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json"
+        )
+        document["secretBoundary"]["settingsRead"] = True
+        with self.assertRaisesRegex(RuntimeError, "secret boundary"):
+            verify_script.validate_cc_switch_recovery_preflight(document)
+
+    def test_cc_switch_recovery_rejects_projection_links_as_cloud_artifacts(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json"
+        )
+        document["officialCloudSyncSourceReview"][
+            "agentProjectionLinksIncludedAsArtifacts"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "cloud-sync source boundary"):
+            verify_script.validate_cc_switch_recovery_preflight(document)
+
+    def test_cc_switch_recovery_rejects_fatal_skill_projection_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json"
+        )
+        document["officialCloudSyncSourceReview"][
+            "skillProjectionFailureIsFatal"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "cloud-sync source boundary"):
+            verify_script.validate_cc_switch_recovery_preflight(document)
+
+    def test_cc_switch_stale_row_gap_rejects_supported_bulk_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json"
+        )
+        document["decision"]["supportedBulkMutationAvailableNow"] = True
+        with self.assertRaisesRegex(RuntimeError, "bypassed the capability gap"):
+            verify_script.validate_cc_switch_stale_row_reconciliation_gap(document)
+
+    def test_cc_switch_stale_row_gap_rejects_direct_database_repair(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json"
+        )
+        document["decision"]["directSqliteRepairAccepted"] = True
+        with self.assertRaisesRegex(RuntimeError, "bypassed the capability gap"):
+            verify_script.validate_cc_switch_stale_row_reconciliation_gap(document)
+
+    def test_cc_switch_stale_row_gap_rejects_reversible_disable_claim(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json"
+        )
+        document["decision"]["perItemDisableIsReversibleWithoutSsotBody"] = True
+        with self.assertRaisesRegex(RuntimeError, "bypassed the capability gap"):
+            verify_script.validate_cc_switch_stale_row_reconciliation_gap(document)
+
+    def test_cc_switch_stale_row_gap_rejects_body_canary_as_recovery(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json"
+        )
+        document["decision"]["bodyPresentGuiCanaryProvesMissingBodyRecovery"] = True
+        with self.assertRaisesRegex(RuntimeError, "bypassed the capability gap"):
+            verify_script.validate_cc_switch_stale_row_reconciliation_gap(document)
+
+    def test_cc_switch_stale_row_gap_rejects_unobserved_gui_mutation(self) -> None:
+        document = verify_script.load(
+            "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json"
+        )
+        document["canaryPreflight"]["desktopControl"]["ccUiMutationOccurred"] = True
+        with self.assertRaisesRegex(RuntimeError, "canary preflight"):
+            verify_script.validate_cc_switch_stale_row_reconciliation_gap(document)
+
+    def test_skill_ecosystem_matrix_rejects_superiority_claim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["currentPortfolioDecision"]["superiorityClaimSupported"] = True
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_bulk_install(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["currentPortfolioDecision"]["bulkInstallWholeRepositories"] = True
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_content_overlap_as_equivalence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["claimBoundary"]["contentOverlapProvesBehavioralEquivalence"] = True
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_host_block_as_residual_gap(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["claimBoundary"]["hostBlockedArmProvesResidualGap"] = True
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "claim boundary overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_unpinned_matt_content_identity(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["baselines"]["mattPocock"]["currentContentReviewGitBlobShas"][
+            "skills/engineering/implement/SKILL.md"
+        ] = "unverified"
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "source pins drifted"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_scenario_readiness_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        document["scenarios"][0]["livePacketReady"] = True
+        with self.assertRaisesRegex(RuntimeError, "readiness overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_terra_as_weak_acceptance(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        document["attributionProtocol"]["terraLowCountsAsWeakAcceptance"] = True
+        with self.assertRaisesRegex(RuntimeError, "attribution protocol drifted"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_cc_static_behavior_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        document["ccInstalledStaticComparisonCohort"]["claimBoundary"][
+            "behavioralValueProved"
+        ] = True
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "static cohort drifted or overclaimed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_fixture_expectation_drift(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        fixtures["fixtures"][0]["expected"] = "skill-value-unobserved"
+        with self.assertRaisesRegex(RuntimeError, "deterministic fixture failed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures
+            )
+
+    def test_skill_ecosystem_matrix_rejects_scenario_example_drift(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        packets = verify_script.load(
+            "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json"
+        )
+        packets["fixtures"][0]["examples"][0]["expected"] = (
+            "fail-int-unit-coverage"
+        )
+        with self.assertRaisesRegex(RuntimeError, "deterministic example failed"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures, packets
+            )
+
+    def test_skill_ecosystem_matrix_rejects_deterministic_packet_as_live(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json"
+        )
+        fixtures = verify_script.load(
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        )
+        packets = verify_script.load(
+            "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json"
+        )
+        packets["liveEvidenceBoundary"][
+            "deterministicExamplesCountAsLiveBehavior"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "live boundary drifted"):
+            verify_script.validate_skill_ecosystem_overlap_and_ablation_matrix(
+                document, fixtures, packets
+            )
+
+    def test_skill_ablation_cli_preflight_rejects_model_verification_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["judgment"]["requestedModelIndependentlyVerified"] = True
+        with self.assertRaisesRegex(RuntimeError, "overclaimed weak acceptance"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_cli_preflight_rejects_login_side_effect(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["liveLoginStatus"]["loginAttempted"] = True
+        with self.assertRaisesRegex(RuntimeError, "login boundary"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_cli_preflight_rejects_spark_entitlement_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["officialSparkAvailabilityReview"][
+            "currentUserPlanOrSparkEntitlementVerifiedByThisReview"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "official Spark boundary"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_cli_preflight_rejects_unavailable_custom_agent_selector(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["desktopSubagentSurfaceReview"][
+            "currentCallableSpawnSupportsCustomAgentSelector"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "desktop subagent surface"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_cli_preflight_rejects_confounded_repetition_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["desktopSubagentSurfaceReview"][
+            "threeConfoundedDiagnosticRepetitionsExecuted"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "desktop subagent surface"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_cli_preflight_rejects_visible_skill_as_disabled_arm(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["claimBoundary"]["visibleSelfAuthoredSkillsCanCountAsDisabledArm"] = (
+            True
+        )
+        with self.assertRaisesRegex(RuntimeError, "claim boundary"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_codex_cli_route_diagnostic_rejects_formal_acceptance_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json"
+        )
+        document["modelJudgment"]["formalWeakAgentArmExecuted"] = True
+        with self.assertRaisesRegex(RuntimeError, "overclaimed acceptance"):
+            verify_script.validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+                document
+            )
+
+    def test_codex_cli_route_diagnostic_rejects_two_visible_server_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json"
+        )
+        document["mcpStartupObservation"]["visibleLogicalFailureCount"] = 2
+        with self.assertRaisesRegex(RuntimeError, "MCP startup classification"):
+            verify_script.validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+                document
+            )
+
+    def test_codex_cli_route_diagnostic_rejects_root_cause_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json"
+        )
+        document["mcpJudgment"]["rootCauseProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "overclaimed root cause"):
+            verify_script.validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+                document
+            )
+
+    def test_codex_cli_route_diagnostic_rejects_raw_log_admission(self) -> None:
+        document = verify_script.load(
+            "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json"
+        )
+        document["sensitiveEvidenceBoundary"]["rawDebugLogCopiedIntoRepository"] = (
+            True
+        )
+        with self.assertRaisesRegex(RuntimeError, "sensitive-evidence boundary"):
+            verify_script.validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+                document
+            )
+
+    def _rehash_codex_skill_exposure(self, document: dict) -> None:
+        document["reportSha256"] = verify_script.canonical_skill_exposure_sha256(
+            {
+                key: value
+                for key, value in document.items()
+                if key != "reportSha256"
+            }
+        )
+
+    def test_codex_skill_exposure_rejects_model_substitution(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["threadTelemetry"]["model"] = "gpt-5.6-sol"
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "fail-model-mismatch"):
+            verify_script.validate_codex_app_server_task_scoped_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_skill_exposure_rejects_enabled_user_skill_leak(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["exposureComparison"][
+            "allDisabledUserSkillsDisabled"
+        ] = False
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "fail-disabled-user-skill-leak"):
+            verify_script.validate_codex_app_server_task_scoped_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_skill_exposure_rejects_forbidden_action(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["markerTurn"]["forbiddenItemTypesObserved"] = ["mcpToolCall"]
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "hard-fail-forbidden-action-observed",
+        ):
+            verify_script.validate_codex_app_server_task_scoped_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_skill_exposure_rejects_five_arm_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["claimBoundary"]["provesFiveArmAblationOutcome"] = True
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "hard-fail-claim-boundary"):
+            verify_script.validate_codex_app_server_task_scoped_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_selected_skill_exposure_rejects_second_enabled_user(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-selected-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["exposureComparison"]["selectedEnabledUserSkillCount"] = 2
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "fail-selected-user-skill-count"):
+            verify_script.validate_codex_app_server_selected_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_selected_skill_exposure_rejects_loader_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-selected-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["claimBoundary"]["provesSkillLoaderInvocation"] = True
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "hard-fail-claim-boundary"):
+            verify_script.validate_codex_app_server_selected_skill_exposure_evidence(
+                document
+            )
+
+    def test_codex_selected_skill_exposure_rejects_hidden_turn_claim(self) -> None:
+        document = verify_script.load(
+            "registry/codex-app-server-selected-skill-exposure-evidence-2026-07-24.json"
+        )
+        document["processBoundary"]["turnStarted"] = True
+        self._rehash_codex_skill_exposure(document)
+
+        with self.assertRaisesRegex(RuntimeError, "process boundary"):
+            verify_script.validate_codex_app_server_selected_skill_exposure_evidence(
+                document
+            )
+
+    def test_context_evidence_envelope_rejects_live_thread_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/context-evidence-envelope-2026-07-23.json"
+        )
+        document["liveEvidence"]["freshThreadTrialExecuted"] = True
+        with self.assertRaisesRegex(RuntimeError, "liveEvidence overclaimed"):
+            verify_script.validate_context_evidence_envelope(document)
+
+    def test_context_evidence_envelope_rejects_boolean_only_regression(self) -> None:
+        document = verify_script.load(
+            "registry/context-evidence-envelope-2026-07-23.json"
+        )
+        document["verifiedLocal"]["negativeProbes"][0]["expected"] = (
+            "manual-continuation-observed-baseline"
+        )
+        with self.assertRaisesRegex(RuntimeError, "falsification probes drifted"):
+            verify_script.validate_context_evidence_envelope(document)
+
+    def test_skill_ablation_batch_01_is_required(self) -> None:
+        for path in (
+            "docs/skill-ablation-batch-01-selection-2026-07-19.md",
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+            "docs/skill-ablation-batch-01-protocol-2026-07-19.md",
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json",
+            "docs/skill-ablation-batch-01-host-preflight-2026-07-19.md",
+            "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json",
+            "scripts/build_skill_ablation_batch_01_packet.py",
+            "scripts/evaluate_skill_ablation_batch_01_protocol.py",
+            "tests/test_skill_ablation_batch_01_protocol.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_ablation_protocol_rejects_agent_self_report_as_loader_event(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        contract = document["liveEvidenceContract"]["contextArmC"]
+        contract["agentSelfReportAccepted"] = True
+        with self.assertRaisesRegex(RuntimeError, "live evidence contract drifted"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_agent_self_report_as_host_evidence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["liveEvidenceContract"]["shared"][
+            "agentSelfReportedModelReasoningOrExposureAccepted"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "live evidence contract drifted"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_single_run_as_formal_pass(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["claimBoundary"]["singleGitRunPassesFormalArm"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim overreach"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_single_context_run_as_formal_pass(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["claimBoundary"]["singleContextRunPassesFormalArm"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim overreach"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_requires_raw_context_digest_recomputation(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["liveEvidenceContract"]["shared"][
+            "rawResponseDigestRecomputedFromRawUtf8Bytes"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "live evidence contract drifted"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_keeps_producer_and_receiver_quality_separate(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["claimBoundary"]["producerOnlyEvidenceProvesReceiverQuality"] = True
+        with self.assertRaisesRegex(RuntimeError, "claim overreach"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_unbound_fresh_task_authority(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["authorityBoundary"]["freshTaskCreation"] = True
+        with self.assertRaisesRegex(RuntimeError, "live authority overclaim"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_cli_preflight_rejects_self_report_as_host_evidence(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-cli-host-preflight-2026-07-23.json"
+        )
+        document["repositoryOnlyEvaluatorHardening"][
+            "agentSelfReportAcceptedAsActualConditionEvidence"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "evaluator hardening drifted"):
+            verify_script.validate_skill_ablation_cli_host_preflight(document)
+
+    def test_skill_ablation_batch_01_rejects_live_task_creation_authority(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        document["authorityBoundary"]["freshTaskCreationAuthorized"] = True
+        with self.assertRaisesRegex(RuntimeError, "authority overclaim"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_batch_01_rejects_self_authored_arm_c(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        document["scenarios"][0]["armD"] = "already-enabled"
+        with self.assertRaisesRegex(RuntimeError, "self-authored deferral"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_batch_01_rejects_hard_standard_as_variable(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        document["ablationInvariant"]["hardStandardsAreAblationVariables"] = True
+        with self.assertRaisesRegex(RuntimeError, "hard-standard invariant"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_batch_01_rejects_luna_terra_equivalence_overclaim(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        document["commonAcceptance"][
+            "historicalLunaAndCurrentTerraAreAutomaticallyEquivalent"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "common acceptance boundary"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_batch_01_rejects_external_payload_ownership(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        document["productBodyBoundary"]["externalPayloadBecomesLongTermRepositoryOwnership"] = True
+        with self.assertRaisesRegex(RuntimeError, "product body boundary"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_batch_01_rejects_git_guardrails_as_topology_arm(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-selection-2026-07-19.json"
+        )
+        git_scenario = next(
+            item for item in document["scenarios"] if item["id"] == "ABL-GIT-TOPOLOGY-01"
+        )
+        git_scenario["armC"] = "approved-git-guardrails-exact-digest"
+        with self.assertRaisesRegex(RuntimeError, "reviewed external arms"):
+            verify_script.validate_skill_ablation_batch_01_selection(document)
+
+    def test_skill_ablation_protocol_rejects_prompt_only_disable_as_proof(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["selfAuthoredExposureGate"]["promptOnlyNonInvocationRequestAccepted"] = True
+        with self.assertRaisesRegex(RuntimeError, "exposure gate"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_skill_waiving_hard_standard(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["hardStandardControl"]["notCreditedAsSkillValue"] = False
+        with self.assertRaisesRegex(RuntimeError, "hard-standard control"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_protocol_rejects_global_config_authority_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["authorityBoundary"]["globalCodexConfigMutation"] = True
+        with self.assertRaisesRegex(RuntimeError, "live authority overclaim"):
+            verify_script.validate_skill_ablation_batch_01_protocol(document)
+
+    def test_skill_ablation_host_preflight_rejects_formal_arm_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json"
+        )
+        protocol = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["judgment"]["formalArmAExecuted"] = True
+        with self.assertRaisesRegex(RuntimeError, "judgment drifted"):
+            verify_script.validate_skill_ablation_batch_01_host_preflight(
+                document, protocol
+            )
+
+    def test_skill_ablation_host_preflight_rejects_hard_standard_removal(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json"
+        )
+        protocol = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["interpretationBoundary"]["hardStandardsWereRemovalTarget"] = True
+        with self.assertRaisesRegex(RuntimeError, "interpretation drifted"):
+            verify_script.validate_skill_ablation_batch_01_host_preflight(
+                document, protocol
+            )
+
+    def test_skill_ablation_host_preflight_rejects_diagnostic_disagreement_rewrite(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json"
+        )
+        protocol = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["capacityDiagnostic"]["comparison"][
+            "visibilityMatchesWeakPreflight"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "capacity diagnostic drifted"):
+            verify_script.validate_skill_ablation_batch_01_host_preflight(
+                document, protocol
+            )
+
+    def test_skill_ablation_host_preflight_rejects_startup_list_loader_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json"
+        )
+        protocol = verify_script.load(
+            "registry/skill-ablation-batch-01-protocol-2026-07-19.json"
+        )
+        document["officialHostBoundary"][
+            "initialListAbsenceProvesLoaderUnavailable"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "list-budget boundary drifted"):
+            verify_script.validate_skill_ablation_batch_01_host_preflight(
+                document, protocol
+            )
+
+    def test_skill_ablation_host_transaction_rejects_authority_overclaim(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["authorityBoundary"]["globalCodexConfigMutationAuthorized"] = True
+        with self.assertRaisesRegex(RuntimeError, "authority overclaim"):
+            verify_script.validate_skill_ablation_host_config_transaction(document)
+
+    def test_skill_ablation_host_transaction_requires_exact_rollback(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["transaction"]["orderedSteps"][6] = "leave the modified config in place"
+        with self.assertRaisesRegex(RuntimeError, "rollback sequence drifted"):
+            verify_script.validate_skill_ablation_host_config_transaction(document)
+
+    def test_skill_ablation_host_transaction_rejects_hard_standard_relaxation(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["hardStandardInvariant"]["skillDisableMayRelaxAcceptance"] = True
+        with self.assertRaisesRegex(RuntimeError, "hard-standard invariant drifted"):
+            verify_script.validate_skill_ablation_host_config_transaction(document)
+
+    def test_skill_ablation_host_transaction_revalidation_is_required(self) -> None:
+        for path in (
+            "docs/skill-ablation-host-transaction-revalidation-2026-07-24.md",
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json",
+            "scripts/revalidate_skill_ablation_host_transaction.py",
+            "tests/test_skill_ablation_host_transaction_revalidation.py",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
+    def test_skill_ablation_revalidation_rejects_status_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json"
+        )
+        transaction = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["status"] = "preconditions-match-authorization-still-required"
+        body = deepcopy(document)
+        body.pop("reportSha256")
+        document["reportSha256"] = (
+            canonical_skill_ablation_revalidation_sha256(body)
+        )
+        with self.assertRaisesRegex(RuntimeError, "fail-status-binding"):
+            verify_script.validate_skill_ablation_host_transaction_revalidation(
+                document,
+                transaction,
+            )
+
+    def test_skill_ablation_revalidation_rejects_claim_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json"
+        )
+        transaction = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["claimBoundary"]["countsAsSkillDisablement"] = True
+        body = deepcopy(document)
+        body.pop("reportSha256")
+        document["reportSha256"] = (
+            canonical_skill_ablation_revalidation_sha256(body)
+        )
+        with self.assertRaisesRegex(RuntimeError, "hard-fail-claim-promotion"):
+            verify_script.validate_skill_ablation_host_transaction_revalidation(
+                document,
+                transaction,
+            )
+
+    def test_skill_ablation_revalidation_rejects_content_promotion(self) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json"
+        )
+        transaction = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["contentBoundary"]["configContentIncluded"] = True
+        body = deepcopy(document)
+        body.pop("reportSha256")
+        document["reportSha256"] = (
+            canonical_skill_ablation_revalidation_sha256(body)
+        )
+        with self.assertRaisesRegex(RuntimeError, "hard-fail-content-boundary"):
+            verify_script.validate_skill_ablation_host_transaction_revalidation(
+                document,
+                transaction,
+            )
+
+    def test_skill_ablation_revalidation_rejects_source_digest_substitution(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json"
+        )
+        transaction = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["sourceContract"]["sha256"] = "0" * 64
+        body = deepcopy(document)
+        body.pop("reportSha256")
+        document["reportSha256"] = (
+            canonical_skill_ablation_revalidation_sha256(body)
+        )
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "fail-source-contract-binding",
+        ):
+            verify_script.validate_skill_ablation_host_transaction_revalidation(
+                document,
+                transaction,
+            )
+
+    def test_skill_ablation_revalidation_rejects_atomic_snapshot_promotion(
+        self,
+    ) -> None:
+        document = verify_script.load(
+            "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json"
+        )
+        transaction = verify_script.load(
+            "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+        )
+        document["cohortBoundary"]["atomicSnapshotProved"] = True
+        body = deepcopy(document)
+        body.pop("reportSha256")
+        document["reportSha256"] = (
+            canonical_skill_ablation_revalidation_sha256(body)
+        )
+        with self.assertRaisesRegex(RuntimeError, "hard-fail-cohort-boundary"):
+            verify_script.validate_skill_ablation_host_transaction_revalidation(
+                document,
+                transaction,
+            )
 
     def test_program_acceptance_map_is_a_required_verifier_input(self) -> None:
         self.assertIn(
@@ -1340,7 +3647,7 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(
             document["structuralBurdenProxy"]["baselineGovernedPayloadEntriesToEnumerate"],
-            29,
+            28,
         )
 
     def test_rejects_decision_ready_projection_consumer_verification_overclaim(self) -> None:
@@ -1448,6 +3755,327 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
         document = verify_script.load(path)
         document["objectives"][0]["acceptanceIds"] = ["acceptance.missing"]
         self.assert_verify_runtime_error(path, document, "unknown acceptance id")
+
+    def test_top_level_verify_rejects_skill_runtime_behavioral_overclaim(self) -> None:
+        path = "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json"
+        document = verify_script.load(path)
+        document["decision"]["superpowers620IsBehavioralBaseline"] = True
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "Skill runtime drift portfolio decision changed",
+        )
+
+    def test_program_map_rejects_missing_skill_runtime_backlink(self) -> None:
+        path = "registry/program-acceptance-map.json"
+        document = verify_script.load(path)
+        criterion = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"]
+            == "acceptance.cc-switch-source-preserving-skill-pool"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27"
+        )
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "does not reference supported evidence",
+        )
+
+    def test_program_map_rejects_process_fidelity_subgate_promotion(self) -> None:
+        path = "registry/program-acceptance-map.json"
+        document = verify_script.load(path)
+        criterion = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"] == "acceptance.end-to-end-process-fidelity"
+        )
+        criterion["graduationSubgates"][0]["status"] = "closed"
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity graduation subgates",
+        )
+
+    def test_program_map_rejects_cleanup_observation_date_drift(self) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence = next(
+            item
+            for item in document["evidence"]
+            if item["id"]
+            == "evidence.closeout-cleanup-debt-preview-2026-07-24"
+        )
+        evidence["asOf"] = "2026-07-24"
+        with self.assertRaisesRegex(RuntimeError, "lastObservedDate"):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_map_requires_current_self_authored_tdd_gap_audit_edges(
+        self,
+    ) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence_id = (
+            "evidence.human-ai-collaboration-tdd-current-self-authored-"
+            "treatment-gap-audit-2026-07-27"
+        )
+        criterion = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"] == "acceptance.repository-authored-gap-fill-gate"
+        )
+        criterion["evidenceIds"].remove(evidence_id)
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "does not reference supported evidence",
+        ):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_map_requires_release_change_protocol_on_software_lifecycle(
+        self,
+    ) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence_id = (
+            "evidence.human-ai-collaboration-release-change-zero-model-"
+            "protocol-2026-07-27"
+        )
+        software_lifecycle = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"]
+            == "acceptance.software-engineering-lifecycle-specialization"
+        )
+        self.assertIn(evidence_id, software_lifecycle["evidenceIds"])
+        evidence = next(
+            item
+            for item in document["evidence"]
+            if item["id"] == evidence_id
+        )
+        evidence["kind"] = "drifted-release-change-protocol-kind"
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Release/change zero-model protocol evidence graph",
+        ):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_map_requires_current_tdd_readiness_on_software_lifecycle(
+        self,
+    ) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence_id = (
+            "evidence.human-ai-collaboration-tdd-current-execution-readiness-"
+            "reconciliation-2026-07-27"
+        )
+        software_lifecycle = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"]
+            == "acceptance.software-engineering-lifecycle-specialization"
+        )
+        self.assertIn(evidence_id, software_lifecycle["evidenceIds"])
+        evidence = next(
+            item
+            for item in document["evidence"]
+            if item["id"] == evidence_id
+        )
+        evidence["kind"] = "drifted-tdd-readiness-kind"
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Current TDD execution-readiness evidence graph",
+        ):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_map_requires_tdd_successor_contract_on_software_lifecycle(
+        self,
+    ) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence_id = (
+            "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-"
+            "successor-contract-v2-2026-07-27"
+        )
+        software_lifecycle = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"]
+            == "acceptance.software-engineering-lifecycle-specialization"
+        )
+        self.assertIn(evidence_id, software_lifecycle["evidenceIds"])
+        evidence = next(
+            item
+            for item in document["evidence"]
+            if item["id"] == evidence_id
+        )
+        evidence["kind"] = "drifted-tdd-successor-contract-kind"
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "TDD non-comparative dispatch successor evidence graph",
+        ):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_map_requires_access_comms_process_loss_evidence(
+        self,
+    ) -> None:
+        document = verify_script.load("registry/program-acceptance-map.json")
+        program = verify_script.load("registry/curation-program-plan.json")
+        evidence_id = (
+            "evidence.human-ai-collaboration-access-comms-zero-model-"
+            "calibration-2026-07-27"
+        )
+        criterion = next(
+            item
+            for item in document["acceptanceCriteria"]
+            if item["id"] == "acceptance.end-to-end-process-fidelity"
+        )
+        self.assertIn(evidence_id, criterion["evidenceIds"])
+        evidence = next(
+            item
+            for item in document["evidence"]
+            if item["id"] == evidence_id
+        )
+        evidence["kind"] = "drifted-access-comms-kind"
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Access/comms zero-model calibration evidence graph",
+        ):
+            verify_script.validate_program_acceptance_map(document, program)
+
+    def test_program_rejects_stale_process_fidelity_evidence_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop("currentProcessFidelityDispatchLedgerContract")
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_cumulative_loss_evidence_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop(
+            "currentProcessFidelityCumulativeLossAccountingEvidence"
+        )
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_lifecycle_thin_slice_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop(
+            "currentSoftwareLifecycleThinSliceZeroModelCalibrationEvidence"
+        )
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_release_change_protocol_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop("currentReleaseChangeZeroModelProtocol")
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_current_tdd_readiness_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop("currentTddExecutionReadinessReconciliation")
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_tdd_successor_contract_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop(
+            "currentTddNoncomparativeDispatchSuccessorContractV2"
+        )
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_access_comms_protocol_index(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        initiative = next(
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            == "initiative.human-ai-collaboration-coverage-rebaseline"
+        )
+        initiative.pop("currentAccessCommsZeroModelProtocol")
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "process-fidelity current evidence index drifted",
+        )
+
+    def test_program_rejects_missing_round03_rebaseline_initiative(self) -> None:
+        path = "registry/curation-program-plan.json"
+        document = verify_script.load(path)
+        document["currentInitiatives"] = [
+            item
+            for item in document["currentInitiatives"]
+            if item["id"]
+            != "initiative.round03-capability-survey-rebaseline"
+        ]
+        self.assert_verify_runtime_error(
+            path,
+            document,
+            "required initiatives are missing",
+        )
 
     def test_rejects_verified_program_acceptance_without_evidence(self) -> None:
         path = "registry/program-acceptance-map.json"
@@ -1958,6 +4586,10 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
                 "acceptance.capability-survey-result-package",
                 "acceptance.complete-coordinate-envelope-reconciliation",
                 "acceptance.cross-agent-claim-limits",
+                "acceptance.solution-neutral-collaboration-rebaseline",
+                "acceptance.software-engineering-lifecycle-specialization",
+                "acceptance.end-to-end-process-fidelity",
+                "acceptance.ai-independent-hard-standard-boundary",
             }
             <= criterion_ids
         )
@@ -1966,6 +4598,28 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
         self.assertEqual(criteria["acceptance.full-chain-coverage-matrix"]["assessment"], "verified")
         self.assertEqual(criteria["acceptance.residual-gap-proof"]["assessment"], "partial")
         self.assertEqual(criteria["acceptance.cross-agent-claim-limits"]["assessment"], "verified")
+        self.assertEqual(
+            criteria["acceptance.solution-neutral-collaboration-rebaseline"][
+                "assessment"
+            ],
+            "partial",
+        )
+        self.assertEqual(
+            criteria["acceptance.software-engineering-lifecycle-specialization"][
+                "assessment"
+            ],
+            "partial",
+        )
+        self.assertEqual(
+            criteria["acceptance.end-to-end-process-fidelity"]["assessment"],
+            "partial",
+        )
+        self.assertEqual(
+            criteria["acceptance.ai-independent-hard-standard-boundary"][
+                "assessment"
+            ],
+            "partial",
+        )
 
     def test_residual_gap_proof_stays_partial_and_non_vacuous(self) -> None:
         gap = verify_script.load(

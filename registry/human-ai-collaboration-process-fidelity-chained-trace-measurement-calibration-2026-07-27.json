@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-process-fidelity-chained-trace-measurement-calibration-2026-07-27",
+  "date": "2026-07-27",
+  "status": "zero-agent-chained-trace-measurement-calibration-passed-live-cohort-not-authorized",
+  "scenarioId": "GEN-RESEARCH-01",
+  "crossCuttingRiskId": "XCR-01-process-fidelity-and-loss",
+  "contract": {
+    "path": "tests/fixtures/process-fidelity-chained-trace-calibration-2026-07-27.json",
+    "fileSha256": "2EF8D8301AE5CE2F419D5A15703EDAB4EF683BD5ECA8562A066385D455A796A1"
+  },
+  "calibrator": {
+    "path": "scripts/calibrate_process_fidelity_chained_trace.py",
+    "fileSha256": "3705A2CA4205063577F4814487FC33DA28AD9FBB48E75D48B9315046E3F897FC",
+    "reusedMetricEvaluatorPath": "scripts/evaluate_process_fidelity_multihop_injection_poc.py",
+    "reusedMetricEvaluatorFileSha256": "C4625BD8AAB6B902A9BD6E3B99DFC2A3FA1136EC472D7E591396FA1BE84DF60F"
+  },
+  "execution": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "externalAccessUsed": false,
+    "writeOutsideRepository": false
+  },
+  "caseOutcomes": {
+    "linked-control": "linked-control-pass",
+    "predecessor-input-linkage-mismatch": "hard-fail-predecessor-input-linkage",
+    "local-loss-propagated-and-amplified": "hard-fail-undetected-amplification",
+    "terminal-restoration-does-not-erase-intermediate-loss": "recorded-intermediate-loss-terminal-restored",
+    "opaque-material-edge": "hard-fail-opaque-material-edge"
+  },
+  "measurementEvidence": {
+    "linkageFailureEdgeIds": [
+      "decomposition-to-routing"
+    ],
+    "amplificationFactor": 2.8,
+    "downstreamAffectedHopCount": 2,
+    "terminalRestorationMatchedSourceAnchor": true,
+    "intermediateLossRetainedAfterTerminalRestoration": true,
+    "opaqueMaterialEdgeMetricsRemainUnknown": true,
+    "absoluteAndProcessLedgersCanCancelEachOther": false
+  },
+  "scopeBoundary": {
+    "v2DeliveryTopologyProtocolReclassifiedAsTerminalTaskSubprotocol": true,
+    "existingSourceBackedSmokeCountsAsProcessTrace": false,
+    "rawEventTraceAdapterImplementedByCalibration": false,
+    "subsequentTraceEligibilityAssessmentRecorded": true,
+    "subsequentTraceEligibilityAssessmentPath": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
+    "existingSmokeDeterministicallyRescoredWithoutManualSupplementation": false,
+    "formalLiveCohortAuthorized": false,
+    "endToEndProcessFidelityAcceptanceVerified": false
+  },
+  "decision": {
+    "measurementCalibrationPassed": true,
+    "evidenceStopRemainsActive": true,
+    "nextBoundedResult": "the subsequent raw-event assessment found the existing smoke process-trace-ineligible, so design the smallest future frozen chained-transform protocol without dispatch and start any later separately authorized formal process cohort from zero"
+  },
+  "claimLimit": "This proves the deterministic zero-Agent measurement layer distinguishes exact predecessor linkage, propagated and amplified loss, terminal restoration that does not erase intermediate loss, and opaque material edges while reusing the existing metric evaluator. It does not prove live Agent process fidelity, make the existing transport smoke process-trace-valid, authorize a wider cohort, compare delivery topologies, prove automatic host behavior, or verify end-to-end acceptance.",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRACE-MEASUREMENT-CALIBRATION-2026-07-27.md"
+}

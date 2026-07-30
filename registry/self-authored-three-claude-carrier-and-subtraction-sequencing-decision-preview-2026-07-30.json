@@ -1,0 +1,256 @@
+{
+  "schema": 1,
+  "id": "self-authored-three-claude-carrier-and-subtraction-sequencing-decision-preview-2026-07-30",
+  "date": "2026-07-30",
+  "status": "read-only-decision-ready-recommend-source-owned-claude-links-after-fourteen-subtraction",
+  "purpose": "Resolve the previously open Claude carrier choice for the three first-party Skills against current official Claude Code rules and reconcile its backup rotation with the separately prepared fourteen-Skill subtraction transaction without mutating either system.",
+  "inputs": [
+    "registry/self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30.json",
+    "registry/cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30.json",
+    "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json",
+    "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
+    "docs/strategy/CLAUDE-CODE-SKILL-CARRIER-OFFICIAL-RESEARCH-2026-07-30.md",
+    "C:/Projects/codex-user-config/scripts/install.py"
+  ],
+  "repositoryPosture": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "originMain": "55659f30091990f7c589932e0379880de30dc403",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeIntentionallyLargeAndDirty": true,
+    "inheritedChangesPreserved": true
+  },
+  "authorityBoundary": {
+    "readRepositoriesLocalHostAndOfficialPublicDocs": true,
+    "writeHarnessDecisionEvidence": true,
+    "modifyCodexUserConfigInstaller": false,
+    "ccSwitchMutation": false,
+    "claudeCodexAgentsOrGlobalConfigMutation": false,
+    "interactiveClaudeSessionOrModelDispatch": false,
+    "recoveryArchiveRemoteSnapshotOrBackupRotation": false,
+    "gitCommitOrPush": false
+  },
+  "officialClaudeCodeContract": {
+    "documentationUrl": "https://code.claude.com/docs/en/skills",
+    "documentationAccessed": "2026-07-30",
+    "localVersion": "2.1.220",
+    "personalSkillPath": "~/.claude/skills/<skill-name>/SKILL.md",
+    "projectSkillPath": ".claude/skills/<skill-name>/SKILL.md",
+    "pluginSkillPath": "<plugin>/skills/<skill-name>/SKILL.md",
+    "directAgentsRootDiscoveryDocumented": false,
+    "directorySymlinkSupportMinimumVersion": "2.1.203",
+    "currentVersionMeetsDocumentedSymlinkMinimum": true,
+    "sameTargetReachableFromMultipleLocationsLoadsOnce": true,
+    "personalOverridesProject": true,
+    "enterpriseOverridesPersonal": true,
+    "documentedPrecedenceIndependentlyVerifiedAgainstCurrentRuntime": false,
+    "documentedPrecedenceHasUnresolvedOfficialIssueReport": true,
+    "precedenceIssueUrl": "https://github.com/anthropics/claude-code/issues/53288",
+    "standaloneSkillCanOverrideBundledSameName": true,
+    "pluginSkillsAreNamespaced": true,
+    "liveChangeDetectionForExistingTopLevelSkillRoot": true,
+    "skillBodyLoadsOnlyWhenInvoked": true,
+    "automaticAndExplicitInvocationDocumented": true,
+    "skillsMenuAndSkillOverridesDocumented": true,
+    "officialStandaloneNoModelCliInventoryCommandFound": false
+  },
+  "localClaudeState": {
+    "cliPath": "C:/Users/15521/AppData/Roaming/npm/claude.cmd",
+    "version": "2.1.220",
+    "claudeSkillEntries": 55,
+    "agentsSkillEntries": 41,
+    "codexSkillEntries": 55,
+    "threeClaudeEntriesAreSymlinksToLegacyCcTrees": true,
+    "threeAgentsEntriesAreCurrentPhysicalSourceProjections": true,
+    "threeCodexEntriesAreCurrentPhysicalSourceProjections": true,
+    "threeCurrentSourceSkillMdLineCounts": {
+      "intent-contract": 504,
+      "capability-router": 419,
+      "closure-contract": 253
+    },
+    "allThreeCurrentSkillMdStayUnderOfficial500LineGuidance": false,
+    "intentContractLinesOverGuidance": 4,
+    "official500LineGuidanceIsKnownHardLoaderLimit": false,
+    "lineGuidanceWarningBlocksStaticAdapterEligibility": false,
+    "allThreeUsePortableNameAndDescriptionFrontmatterOnly": true,
+    "userSettingsHasSkillOverrides": false,
+    "skillsDirItemsAreRegisteredPlugins": false,
+    "barePluginListResult": "no-plugins-installed",
+    "pluginListResultDoesNotDisproveStandaloneSkillDiscovery": true,
+    "freshStandaloneClaudeLoaderExposureProved": false,
+    "skillInvocationInstructionDeliveryBehaviorOrValueProved": false
+  },
+  "sourceOwnedAdapter": {
+    "recommendedTargetShape": "~/.claude/skills/<name> symbolic-link -> ~/.agents/skills/<name>",
+    "whyAgentsProjectionIsTarget": "It preserves the portable common root as the current source-owned physical projection while Claude receives the documented host-specific adapter it still requires.",
+    "usesDocumentedClaudePersonalSkillLocation": true,
+    "usesDocumentedDirectorySymlinkSupport": true,
+    "requiresCustomLoaderOrHook": false,
+    "requiresPluginPackaging": false,
+    "changesSkillNamesThroughPluginNamespace": false,
+    "duplicatesSkillBodyBytes": false,
+    "keepsCcSwitchAsOwnerOfSharedThirdPartySkills": true,
+    "keepsCodexUserConfigAsOwnerOfFirstPartyThree": true,
+    "requiresCodexUserConfigInstallerChange": true,
+    "installerChangeAuthorized": false,
+    "liveProjectionChangeAuthorized": false
+  },
+  "optionDecision": {
+    "options": [
+      {
+        "id": "A-quarantine-claude-legacy",
+        "effect": "Retire the three old CC rows and Claude links while preserving current .agents and .codex physical trees; Claude temporarily loses all three first-party Skills.",
+        "advantages": [
+          "smallest immediate live carrier surface",
+          "requires no new Claude adapter implementation"
+        ],
+        "costs": [
+          "removes the Claude arm needed for current cross-host comparison",
+          "turns absence into a temporary policy without evidence that the three capabilities are no longer needed"
+        ],
+        "recommended": false
+      },
+      {
+        "id": "B-source-owned-claude-symlink-adapter",
+        "effect": "Retire the three old CC rows and replace their Claude links with source-owned links to the current .agents physical projections, preserving names and current bodies.",
+        "advantages": [
+          "uses the current Claude Code documented personal Skill path and directory-symlink support",
+          "preserves the falsifiable three-Skill control across Claude and Codex without vendoring another body copy",
+          "does not add a Hook, custom loader, plugin namespace, or parallel manager"
+        ],
+        "costs": [
+          "requires a separately reviewed codex-user-config installer change",
+          "intent-contract is four lines above Claude's 500-line authoring guidance and remains a later adaptation-quality review item",
+          "still requires fresh Claude no-model exposure and later invocation/behavior evidence"
+        ],
+        "recommended": true
+      }
+    ],
+    "recommendedOption": "B-source-owned-claude-symlink-adapter",
+    "recommendationReason": "The official symlink contract removes the earlier adapter uncertainty, while immediate quarantine would discard a current cross-host test arm before the three self-authored candidates have been falsified.",
+    "userDecisionStillRequired": true
+  },
+  "collisionSafeFirstPartyTransactionPreview": {
+    "ordinaryCcUninstallRemainsUnsafeAgainstCurrentPhysicalCodexTrees": true,
+    "requiredPreparation": [
+      "add and fixture-test an explicit opt-in Claude-link adapter in codex-user-config without running it live",
+      "rerun exact source .agents .codex and legacy CC tree parity checks",
+      "create and verify the secret-screened exact recovery archive",
+      "close Codex consumers before temporarily moving any physical Codex Skill tree"
+    ],
+    "perSkillSequence": [
+      "move the exact current ~/.codex/skills/<name> physical tree into the bounded transaction quarantine",
+      "invoke ordinary CC Switch uninstall so the manager backs up and retires the legacy CC body row and old Claude link while the Codex destination is absent",
+      "restore the exact current physical Codex tree immediately and verify its manifest",
+      "stop and roll back on the first manager or restore failure"
+    ],
+    "postManagerSequenceForRecommendedB": [
+      "stage a directory symlink to the current physical ~/.agents/skills/<name>",
+      "rename the staged link into the now-absent ~/.claude/skills/<name> destination",
+      "verify exact target manifest and that all three old CC rows and bodies are absent",
+      "use a fresh Claude /skills menu or autocomplete exposure check without sending a model request"
+    ],
+    "windowsSimulation": {
+      "stagedLinkRenameIntoAbsentDestinationPassed": true,
+      "atomicReplaceOverExistingDirectorySymlinkPassed": false,
+      "atomicReplaceFailure": "PermissionError WinError 5",
+      "designConsequence": "The old CC-owned Claude link must be removed by the manager transaction before the staged source-owned link is renamed into place."
+    },
+    "directDatabaseWriteRequired": false,
+    "ordinaryCcUninstallWithoutCodexQuarantineAllowed": false,
+    "mutationAuthorized": false
+  },
+  "transactionSequencing": {
+    "currentBackupCount": 20,
+    "fourteenFirstRecommended": true,
+    "reason": "The fourteen-item 3.19 whole-state preflight is current now; retiring the three first-party rows first would invalidate every database, tree, projection, and backup fingerprint and force a new fourteen-item preview.",
+    "phase1Fourteen": {
+      "databaseRowsAfter": 41,
+      "evictsOriginalBackups": [
+        "20260728_152950_lark-note",
+        "20260728_152950_lark-okr",
+        "20260728_152950_lark-openapi-explorer",
+        "20260728_152950_lark-shared",
+        "20260728_152950_lark-sheets",
+        "20260728_152950_lark-skill-maker",
+        "20260728_152950_lark-slides",
+        "20260728_152950_lark-task",
+        "20260728_152950_lark-vc",
+        "20260728_152950_lark-vc-agent",
+        "20260728_152950_lark-whiteboard",
+        "20260728_152950_lark-wiki",
+        "20260728_152950_lark-workflow-meeting-summary",
+        "20260728_152950_lark-workflow-standup-report"
+      ],
+      "coveredByExistingFivePartAuthorizationRequest": true
+    },
+    "phase2FirstPartyThree": {
+      "databaseRowsAfter": 38,
+      "additionalOriginalBackupEvictionsIfNoConcurrentBackup": [
+        "20260729_093746_21risk-automation",
+        "20260729_093826_git-guardrails",
+        "20260729_093827_git-guardrails-claude-code"
+      ],
+      "requiresNewExplicitBackupEvictionAuthorization": true,
+      "finalOriginalBackupsRetained": [
+        "20260729_093827_scaffold-exercises",
+        "20260729_093827_write-a-skill",
+        "20260729_093827_sora"
+      ]
+    },
+    "totalOriginalBackupEvictionsAcrossBothPhases": 17,
+    "sameFinalOriginalEvictionSetIfFirstPartyRunsFirst": true,
+    "firstPartyFirstInvalidatesCurrentFourteenPreflight": true,
+    "concurrentCcMutationInvalidatesProjection": true
+  },
+  "projectedFinalTopologyIfRecommendedBThenSucceeds": {
+    "databaseRows": 38,
+    "ccSwitchEntries": 38,
+    "agentsEntries": 27,
+    "claudeEntries": 41,
+    "codexTopLevelEntries": 41,
+    "firstPartyRowsInCcSwitch": 0,
+    "firstPartyCcBodies": 0,
+    "firstPartyAgentsPhysicalTrees": 3,
+    "firstPartyCodexPhysicalTrees": 3,
+    "firstPartyClaudeLinksToAgents": 3,
+    "brokenLinksAcrossManagedRoots": 0,
+    "forecastOnly": true
+  },
+  "verificationLadder": {
+    "listing": "three names appear in a fresh Claude /skills menu or autocomplete surface",
+    "installation": "not applicable to standalone adapter; source-owned installer transaction and exact link targets are recorded",
+    "enablement": "no skillOverrides entry hides the three names",
+    "hostExposure": "fresh no-model menu or autocomplete evidence",
+    "invocation": "separate explicit Skill invocation after exposure evidence",
+    "instructionDelivery": "task-bound private oracle or exact diagnostic probe",
+    "behavior": "paired scenario outcome with route and carrier identity visible",
+    "value": "incremental cross-host result over native or upstream alternatives",
+    "currentHighestProvedState": "static-official-compatibility-and-local-projection-design-only"
+  },
+  "nextAuthorizationGates": [
+    "execute the already prepared fourteen-Skill transaction under its exact five-part boundary",
+    "approve B or choose A",
+    "if B, separately authorize the codex-user-config installer change and its fixture tests",
+    "after a refreshed first-party live preflight, authorize the three-row manager transaction, three additional named backup evictions, bounded Codex quarantine, Claude link creation, no-model exposure check, and exact cleanup"
+  ],
+  "cleanup": {
+    "temporarySymlinkSimulationRootsRemoved": true,
+    "officialResearchTemporaryRootsAbsent": true,
+    "noLiveManagerHostConfigOrSkillMutation": true,
+    "noInteractiveClaudeSessionOrModelTurn": true
+  },
+  "claimBoundary": {
+    "officialClaudeDirectorySymlinkSupportProvedForCurrentVersion": true,
+    "directAgentsRootDiscoveryProved": false,
+    "currentLegacyClaudeLinkLoaderExposureProved": false,
+    "recommendedAdapterLiveExposureProved": false,
+    "recommendedAdapterInvocationBehaviorOrValueProved": false,
+    "firstPartyRetirementAuthorized": false,
+    "fourteenSubtractionAuthorizedByThisRecord": false,
+    "combinedPostStateProved": false,
+    "programCloseoutProved": false
+  },
+  "documentation": "docs/strategy/SELF-AUTHORED-THREE-CLAUDE-CARRIER-AND-SUBTRACTION-SEQUENCING-DECISION-PREVIEW-2026-07-30.md"
+}

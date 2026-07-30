@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26",
+  "status": "formal-runner-completed-first-native-attempt-invalid-not-counted",
+  "observedAt": "2026-07-26",
+  "arm": "SE-TDD-NATIVE-SPARK",
+  "selectedTreatment": null,
+  "host": {
+    "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "approvalPolicy": "never",
+    "sandboxType": "workspaceWrite",
+    "networkAccess": false,
+    "ephemeralThread": true
+  },
+  "implementationArtifacts": {
+    "formalRunnerAtExecution": {
+      "path": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+      "sha256": "ba223da1473813a11123d73e9436e46d3be1684952d0adcbd6be90709675b351",
+      "currentFileMatches": false,
+      "retainedHistoricalBytes": false,
+      "identitySource": "same-turn pre-execution SHA-256 observation"
+    },
+    "formalRunner": {
+      "path": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+      "sha256": "e3550b937cfd301a0bd2468c21fe67582a0b3ebceef0f61fbbeccfa0de4e4f80",
+      "contractVersion": "human-ai-tdd-formal-runner-v1"
+    },
+    "rawNormalizer": {
+      "path": "scripts/normalize_human_ai_collaboration_tdd_app_server_items.py",
+      "sha256": "589498499b85a898a71070c04b23a34f744407b2d05aa96b304e78cb4931daaa",
+      "contractVersion": "codex-app-server-tdd-normalizer-v2"
+    },
+    "parentOutcomeEvaluator": {
+      "path": "scripts/evaluate_human_ai_collaboration_tdd_trial_outcome.py",
+      "sha256": "bce53c0980875f2e2d49ee78b3709bafa6be7f37dbd12b33721d752e7e84c055",
+      "contractVersion": "capped-backoff-parent-outcome-evaluator-v1"
+    }
+  },
+  "retainedTemporaryEvidence": {
+    "rawArtifact": {
+      "path": ".tmp/tdd-formal-native-20260726-r1/raw-app-server-events.json",
+      "bytes": 130237,
+      "sha256": "57240bd0975d14aa7619d29a027e186681004a271ce4fb6cb2db35000e1fad45"
+    },
+    "reanalysisReport": {
+      "path": ".tmp/tdd-formal-native-20260726-r1/formal-report-reanalysis-v4.json",
+      "fileSha256": "f1bc7fa1ed20c626c4ae1689844cb97513b52d61315422eb9508ccc01d4e962f",
+      "canonicalReportSha256": "bc3de25ebf37a1b08b5bd5e332a5dc9f3fa40cc2f498598deb3de05a4187925b",
+      "rawHashVerified": true,
+      "agentRerun": false,
+      "normalizerContractVersion": "codex-app-server-tdd-normalizer-v2"
+    },
+    "vendored": false,
+    "cleanupAuthorized": false
+  },
+  "controlPlane": {
+    "controlSkillCount": 111,
+    "effectiveEnabledUserSkillCount": 0,
+    "effectiveEnabledSystemSkillCount": 6,
+    "sameSkillIdentitySet": true,
+    "allConfigurableSkillsDisabled": true,
+    "allNonConfigurableStatesPreserved": true,
+    "globalConfigStable": true,
+    "changedFiles": [
+      "feature.py",
+      "test_feature.py"
+    ],
+    "changedFileScopeValid": true
+  },
+  "measurement": {
+    "rawEnvelopeCount": 120,
+    "hookLifecycleNotificationCount": 2,
+    "normalizationStatus": "normalized-observable",
+    "normalizationFailureCodes": [],
+    "orderedTimelineStatus": "rejected-offline-tdd-timeline",
+    "orderedTimelineFailureCodes": [
+      "green-after-production-not-observed"
+    ]
+  },
+  "parentOutcome": {
+    "status": "parent-outcome-rejected",
+    "failureCodes": [
+      "predeclared-mutants-survived"
+    ],
+    "visibleSuiteGreen": true,
+    "visibleTestCount": 3,
+    "hiddenOracleGreen": true,
+    "hiddenOracleTestCount": 2,
+    "mutantCount": 7,
+    "killedMutantCount": 5,
+    "survivingMutantIds": [
+      "nonpositive-delay-accepted",
+      "string-schedule-accepted"
+    ],
+    "agentTestSourceBytes": 1614,
+    "agentTestSourceSha256": "2ecbb9bdf6d562c40270fdf33de09acb4b1b8c8425dd2be1eff7141cd69064de",
+    "hiddenOracleWrittenIntoTrial": false,
+    "mutantSourcesWrittenIntoTrial": false
+  },
+  "classification": {
+    "status": "invalid-formal-weak-agent-tdd-repetition",
+    "failureCodes": [
+      "ordered-tdd-process-rejected",
+      "parent-owned-final-outcome-rejected"
+    ],
+    "formalRunCounted": false,
+    "countsTowardWeakAcceptance": false,
+    "validFormalRepetitionCountAfterAttempt": 0
+  },
+  "decision": {
+    "formalRunnerIntegratedPathObserved": true,
+    "currentHostRawNormalizationReady": true,
+    "parentHiddenOracleExecutable": true,
+    "predeclaredMutantsExecutable": true,
+    "formalRunnerReadyForFurtherBoundedAttempts": true,
+    "nativeValidRepetitionCount": 0,
+    "candidateValidRepetitionCount": 0,
+    "candidatePreferenceProved": false,
+    "nextBoundedAction": "run at most two additional native attempts; stop the native arm if the same hard-gate failure signature recurs three times, and do not replace invalid attempts with counted repetitions"
+  },
+  "claimBoundary": {
+    "provesBoundFormalRunnerIntegration": true,
+    "provesNativeWeakAgentTddAcceptance": false,
+    "provesTreatmentDelivery": false,
+    "provesSkillCausation": false,
+    "provesCandidatePreference": false,
+    "provesGeneralCodingSuperiority": false,
+    "provesProductionReadiness": false,
+    "provesCrossHostValue": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-TDD-FORMAL-RUNNER-FIRST-ATTEMPT-EVIDENCE-2026-07-26.md"
+}

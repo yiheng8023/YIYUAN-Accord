@@ -19,7 +19,7 @@
   ],
   "currentProjection": {
     "capabilityCount": 28,
-    "approvedSkillRouteCount": 20,
+    "approvedSkillRouteCount": 19,
     "recipeCount": 9,
     "relationCount": 52,
     "activeConflictGroupCount": 0,
@@ -95,8 +95,8 @@
     "unresolvedConflictDecision": "ask-user"
   },
   "structuralBurdenProxy": {
-    "baselineGovernedPayloadEntriesToEnumerate": 29,
-    "baselineDefinition": "20 approved Skill routes plus 9 Recipes; native, runtime, no-Skill, human-authority, and gap reasoning remains additional",
+    "baselineGovernedPayloadEntriesToEnumerate": 28,
+    "baselineDefinition": "19 approved Skill routes plus 9 Recipes; native, runtime, no-Skill, human-authority, and gap reasoning remains additional",
     "projectedDecisionClassCountPerRequest": 1,
     "representativeMaximumSelectedIdCount": 2,
     "resultFieldCount": 6,

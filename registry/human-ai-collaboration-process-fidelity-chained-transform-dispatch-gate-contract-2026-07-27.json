@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27",
+  "date": "2026-07-27",
+  "status": "offline-dispatch-authorization-and-native-receipt-contract-validated-live-stopped",
+  "question": "Can one exact chained-transform run cell bind a narrow authority document, a fresh host-reported effective thread route, immutable input and output artifacts, and three parent-derived native hop receipts without converting those offline checks into live-dispatch or formal-cohort evidence?",
+  "bindings": {
+    "baseProtocol": {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+      "fileSha256": "8E1867505FD6CDB615A66892E6D4DC7553853159F459C366F8535C64E73E02C3"
+    },
+    "protocolAmendment": {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+      "fileSha256": "D80760463251971B80E1FD992F06B550551F96CC81FF6C5AB5E79153B7F180E5"
+    },
+    "rawCaptureSchema": {
+      "path": "schemas/process-fidelity-chained-transform-raw-sequence-capture-v1.schema.json",
+      "fileSha256": "CB80A7848073C634C1C240021B85574F15694D630034BC76D4412B9B7DE2DE40"
+    },
+    "formalTraceSchema": {
+      "path": "schemas/process-fidelity-chained-transform-trace-v2.schema.json",
+      "fileSha256": "8AC9BDBCC62B179799C5F31E7D1EB4545CC9F1D1A747A773FCA4777489CC50D3"
+    },
+    "dispatchGate": {
+      "path": "scripts/process_fidelity_chained_transform_dispatch_gate.py",
+      "fileSha256": "4DCD65C68CBC344C131DA30CD6A48893CED992EBAD6D7207F0D5E73C953062C3"
+    },
+    "testSuite": {
+      "path": "tests/test_process_fidelity_chained_transform_dispatch_gate.py",
+      "fileSha256": "50601051782E3C498DBEE2D4BAC4807B0E4BF0E3AF7AE03D22B019CE662633CB"
+    }
+  },
+  "contract": {
+    "oneRunCellPerAuthorityEnvelope": true,
+    "maximumAgentDispatchCount": 3,
+    "oneDispatchNoncePerHop": true,
+    "freshInvocationPerHop": true,
+    "sharedConversationStateAllowed": false,
+    "automaticRetryAllowed": false,
+    "replacementDispatchAllowed": false,
+    "strongDiagnosticAuthorized": false,
+    "toolsAllowed": [],
+    "externalAccessAuthorizedBeyondModelProvider": false,
+    "hostConfigurationMutationAuthorized": false,
+    "globalSkillMutationAuthorized": false,
+    "cleanupAuthorized": false,
+    "requestedModel": "gpt-5.3-codex-spark",
+    "requestedReasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "routeObservationMaximumAgeSeconds": 120,
+    "rawEvidenceDestinationClass": "repository-local-audits-absent-or-empty",
+    "privateOracleVisibility": "commitment-only"
+  },
+  "nativeReceiptBoundary": {
+    "routeEvidenceClass": "host-reported-effective-thread-route",
+    "providerExecutionModelTelemetry": "unknown",
+    "providerExecutionEffortTelemetry": "unknown",
+    "threadAndTurnIdentityRequired": true,
+    "rawClientAndServerWireEventsRequired": true,
+    "inputArtifactHashParentComputed": true,
+    "outputArtifactHashParentComputed": true,
+    "stageContractHashParentComputed": true,
+    "parentTransformReceiptRequiredBetweenAgentHops": true,
+    "terminalTurnCompletedRequired": true,
+    "unknownReceiptFieldsFailClosed": true,
+    "agentSelfReportedRouteOrReceiptTrusted": false
+  },
+  "deterministicValidation": {
+    "testCommand": "python -B -m unittest tests.test_process_fidelity_chained_transform_dispatch_gate",
+    "testCount": 10,
+    "failureClassesCovered": [
+      "requested-route-is-not-observed-route",
+      "authorization-window-invalid",
+      "run-cell-binding-drift-after-reseal",
+      "live-boundary-promotion",
+      "route-drift-at-hop",
+      "fresh-thread-identity-drift",
+      "parent-transform-lineage-drift",
+      "input-or-output-artifact-substitution",
+      "terminal-evidence-missing",
+      "unsupported-receipt-field",
+      "private-oracle-leak"
+    ],
+    "allTestsPassed": true
+  },
+  "decision": {
+    "offlineAuthorityEnvelopeContractPassed": true,
+    "offlineParentDerivedNativeReceiptContractPassed": true,
+    "hostReportedEffectiveThreadRouteCanBeBound": true,
+    "providerBackendActualRouteCanBeProved": false,
+    "atomicOneShotReservationLedgerBound": false,
+    "exactCurrentTaskLiveAuthorityBound": false,
+    "liveDispatchReady": false,
+    "formalProcessCohortCount": 0,
+    "endToEndProcessFidelityAssessment": "partial",
+    "nextBoundedResult": "implement and fault-test one process-specific atomic one-shot reservation ledger that consumes the immutable envelope before any thread or turn construction; keep live dispatch stopped until that ledger, a fresh zero-dispatch route preflight, and one exact current-task user authority are all bound"
+  },
+  "claimBoundary": {
+    "liveDispatchAuthorized": false,
+    "providerBackendActualRouteProved": false,
+    "nativeReceiptAuthenticityBeyondParentCapturedWireEvidenceProved": false,
+    "hiddenModelTransformObserved": false,
+    "formalCohortStarted": false,
+    "formalRepetitionAccepted": false,
+    "weakAgentAcceptancePassed": false,
+    "endToEndProcessFidelityAccepted": false,
+    "crossHostPortabilityProved": false,
+    "selfAuthoredResidualGapProved": false
+  },
+  "claimLimit": "This contract proves only deterministic offline validation of a narrow one-run authority envelope and parent-captured host-wire receipt shape. It does not start Codex, reserve or consume an authorization, call a model, prove provider-backend execution identity, accept a formal repetition, or establish end-to-end process fidelity.",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-DISPATCH-GATE-CONTRACT-2026-07-27.md"
+}

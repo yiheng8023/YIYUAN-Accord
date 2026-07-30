@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "id": "process-fidelity-chained-transform-sequential-adapter-faults-2026-07-27",
+  "validCases": [
+    {
+      "id": "control-sequence",
+      "cell": {
+        "runId": "fixture-control-b1-p1",
+        "blockIndex": 1,
+        "positionInBlock": 1,
+        "startedAt": "2026-07-27T04:00:00+08:00",
+        "completedAt": "2026-07-27T04:01:00+08:00"
+      },
+      "scriptedHopOutputs": {
+        "hop-1-decomposition": {
+          "artifactId": "fixture-control-b1-p1-O1",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "authority",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [],
+          "sections": {
+            "fidelitySnapshot": {},
+            "workItems": [],
+            "uncertainties": [],
+            "nextGate": "routing"
+          }
+        },
+        "hop-2-routing": {
+          "artifactId": "fixture-control-b1-p1-O2",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "authority",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [],
+          "sections": {
+            "fidelitySnapshot": {},
+            "route": "native-read-only",
+            "rejectedAlternatives": [],
+            "uncertainties": [],
+            "nextGate": "acceptance"
+          }
+        },
+        "hop-3-acceptance-and-recovery": {
+          "artifactId": "fixture-control-b1-p1-O3",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "authority",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [],
+          "sections": {
+            "fidelitySnapshot": {},
+            "acceptanceDecision": "bounded-pass",
+            "intermediateLossLedger": [],
+            "sourceBackedRecovery": "not-required",
+            "residualUncertainty": [],
+            "nextAuthorizationGate": "none"
+          }
+        }
+      },
+      "expectedOutcome": "zero-model-control-mechanism-pass"
+    },
+    {
+      "id": "injected-detected-and-gated-recovery",
+      "cell": {
+        "runId": "fixture-injected-b1-p2",
+        "blockIndex": 1,
+        "positionInBlock": 2,
+        "startedAt": "2026-07-27T04:02:00+08:00",
+        "completedAt": "2026-07-27T04:03:00+08:00"
+      },
+      "scriptedHopOutputs": {
+        "hop-1-decomposition": {
+          "artifactId": "fixture-injected-b1-p2-O1",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "authority",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [],
+          "sections": {
+            "fidelitySnapshot": {},
+            "workItems": [],
+            "uncertainties": [],
+            "nextGate": "routing"
+          }
+        },
+        "hop-2-routing": {
+          "artifactId": "fixture-injected-b1-p2-O2",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [
+            "invariant-omitted:authority",
+            "provenance-missing:authority"
+          ],
+          "sections": {
+            "fidelitySnapshot": {},
+            "route": "halt-and-recover-from-source",
+            "rejectedAlternatives": [],
+            "uncertainties": [],
+            "nextGate": "source-backed-recovery"
+          }
+        },
+        "hop-3-acceptance-and-recovery": {
+          "artifactId": "fixture-injected-b1-p2-O3",
+          "values": {
+            "goal": "produce a decision-ready research route without changing external or repository state",
+            "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+            "authority": "read-only; no install, configuration write, commit, push, publish, delete, or account action",
+            "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+            "continuity": "preserve source identity and keep recovery anchored to S0"
+          },
+          "provenanceIds": [
+            "goal",
+            "evidence",
+            "authority",
+            "acceptance",
+            "continuity"
+          ],
+          "assumptionIds": [],
+          "detectedLossIds": [],
+          "sections": {
+            "fidelitySnapshot": {},
+            "acceptanceDecision": "process-loss-recorded-source-restored",
+            "intermediateLossLedger": [
+              "invariant-omitted:authority",
+              "provenance-missing:authority"
+            ],
+            "sourceBackedRecovery": "S0",
+            "residualUncertainty": [],
+            "nextAuthorizationGate": "none"
+          }
+        }
+      },
+      "expectedOutcome": "zero-model-injected-mechanism-pass"
+    }
+  ],
+  "faultCases": [
+    {
+      "id": "predecessor-hash-mismatch",
+      "baseCaseId": "control-sequence",
+      "operation": "replace-first-edge-predecessor-hash",
+      "expectedFailureCode": "predecessor-input-linkage-mismatch"
+    },
+    {
+      "id": "duplicate-edge-order",
+      "baseCaseId": "control-sequence",
+      "operation": "duplicate-first-edge-id-at-second-position",
+      "expectedFailureCode": "material-edge-order-drift"
+    },
+    {
+      "id": "opaque-edge",
+      "baseCaseId": "control-sequence",
+      "operation": "mark-first-edge-opaque",
+      "expectedFailureCode": "opaque-material-edge"
+    },
+    {
+      "id": "raw-artifact-hash-mismatch",
+      "baseCaseId": "control-sequence",
+      "operation": "replace-source-index-hash",
+      "expectedFailureCode": "raw-artifact-hash-mismatch"
+    },
+    {
+      "id": "manual-metric-supplementation",
+      "baseCaseId": "control-sequence",
+      "operation": "add-caller-hop-metrics",
+      "expectedFailureCode": "manual-metric-supplementation"
+    },
+    {
+      "id": "invalid-detection-marker",
+      "baseCaseId": "injected-detected-and-gated-recovery",
+      "operation": "remove-one-hop-2-detected-loss-id-before-run",
+      "expectedFailureCode": "invalid-detection-marker"
+    }
+  ],
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "actualWeakModelRouteObserved": false,
+    "formalCohortStarted": false,
+    "endToEndProcessFidelityAccepted": false,
+    "candidateSkillEffectMeasured": false
+  }
+}

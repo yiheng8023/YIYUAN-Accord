@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import re
 import subprocess
 import sys
@@ -35,7 +36,392 @@ from simulate_routing import run_scenarios
 from evaluate_round03_evidence_fixtures import evaluate_fixture_document
 from evaluate_loopy_contract_fixtures import evaluate_fixture_document as evaluate_loopy_contract_fixture_document
 from evaluate_lifecycle_metabolism_fixtures import evaluate_fixture_document as evaluate_lifecycle_metabolism_fixture_document
+from evaluate_context_continuation_trial import evaluate_fixture_document as evaluate_context_continuation_fixture_document
+from build_context_continuation_trial_packet import (
+    build_packet as build_context_continuation_trial_packet,
+)
+from validate_context_handoff_packet_freshness import (
+    validate_packet_freshness as validate_context_handoff_packet_freshness,
+)
+from evaluate_context_pressure_advisory import evaluate_fixture_document as evaluate_context_pressure_advisory_fixture_document
+from validate_context_pressure_evidence_envelope import (
+    ACTION_BOUNDARY as CONTEXT_PRESSURE_ACTION_BOUNDARY,
+    CLAIM_BOUNDARY as CONTEXT_PRESSURE_CLAIM_BOUNDARY,
+    evaluate_fixture_document as evaluate_context_pressure_provenance_fixture_document,
+    validate_context_pressure_evidence_envelope,
+)
+from evaluate_instruction_carrier_adherence import evaluate_fixture_document as evaluate_instruction_carrier_adherence_fixture_document
+from build_instruction_carrier_trial_packet import (
+    build_trial_packet as build_instruction_carrier_trial_packet,
+    validate_loader_event_for_packet as validate_instruction_carrier_loader_event,
+    validate_packet_binding as validate_instruction_carrier_packet_binding,
+)
+from build_handoff_loader_trial_packet import (
+    build_preflight_packet as build_handoff_loader_preflight_packet,
+    validate_capture_capability_registry as validate_handoff_capture_capability_registry,
+    validate_packet_binding as validate_handoff_loader_preflight_packet,
+)
+from evaluate_git_topology_trial import evaluate_fixture_document as evaluate_git_topology_fixture_document
+from evaluate_git_host_preflight_evidence import evaluate_fixture_document as evaluate_git_host_preflight_fixture_document
+from build_git_readonly_preflight_envelope import (
+    build_readonly_preflight_envelope as build_git_readonly_preflight_envelope,
+    validate_readonly_preflight_envelope as validate_git_readonly_preflight_envelope,
+)
+from evaluate_git_guardrails_interception_decision import (
+    evaluate_fixture_document as evaluate_git_guardrails_interception_fixture_document,
+)
+from evaluate_mcp_runtime_refresh_trial import evaluate_fixture_document as evaluate_mcp_runtime_refresh_fixture_document
+from evaluate_mcp_task_lifecycle_evidence import evaluate_fixture_document as evaluate_mcp_task_lifecycle_fixture_document
+from evaluate_mcp_task_selection_decision import (
+    canonical_sha256 as canonical_mcp_selection_sha256,
+    evaluate_fixture_document as evaluate_mcp_task_selection_fixture_document,
+)
+from build_mcp_lifecycle_trial_skeleton import (
+    build_trial_skeleton as build_mcp_lifecycle_trial_skeleton,
+    evaluate_fixture_document as evaluate_mcp_lifecycle_skeleton_fixture_document,
+    validate_trial_skeleton as validate_mcp_lifecycle_trial_skeleton,
+)
+from evaluate_mcp_same_thread_refresh_evidence import (
+    evaluate_fixture_document as evaluate_mcp_same_thread_refresh_fixture_document,
+)
+from revalidate_skill_ablation_host_transaction import (
+    sha256_bytes as sha256_skill_ablation_transaction_bytes,
+    validate_revalidation_report as validate_skill_ablation_transaction_revalidation_report,
+)
+from probe_codex_app_server_skill_exposure import (
+    canonical_sha256 as canonical_skill_exposure_sha256,
+    validate_probe_report as validate_codex_skill_exposure_probe_report,
+)
+from probe_codex_app_server_selected_skill_exposure import (
+    validate_report as validate_codex_selected_skill_exposure_report,
+)
+from evaluate_skill_ablation_batch_01_protocol import evaluate_fixture_document as evaluate_skill_ablation_batch_01_fixture_document
+from evaluate_skill_overlap_attribution import evaluate_fixture_document as evaluate_skill_overlap_attribution_fixture_document
+from evaluate_skill_overlap_scenarios import evaluate_examples as evaluate_skill_overlap_scenario_examples
+from evaluate_skill_live_run_evidence import evaluate_fixture_document as evaluate_skill_live_run_fixture_document
 from build_capability_survey_result_package import build_matrix as build_capability_survey_matrix
+from inventory_closeout_cleanup_debt import (
+    ROOT_SPECS as CLOSEOUT_CLEANUP_ROOT_SPECS,
+    validate_cleanup_debt_preview,
+)
+from validate_closeout_cleanup_execution import (
+    validate_execution as validate_closeout_cleanup_execution,
+)
+from build_skill_source_lineage_collision_index import (
+    build_index as build_skill_source_lineage_collision_index,
+    validate_index as validate_skill_source_lineage_collision_index_record,
+)
+from validate_human_ai_collaboration_coverage_rebaseline import (
+    validate_rebaseline as validate_human_ai_collaboration_coverage_rebaseline,
+)
+from validate_user_supplied_human_ai_sdlc_research_intake import (
+    validate_intake as validate_user_supplied_human_ai_sdlc_research_intake,
+)
+from validate_human_ai_collaboration_high_impact_primary_source_claim_ledger import (
+    validate_claim_ledger as validate_human_ai_collaboration_high_impact_primary_source_claim_ledger,
+)
+from validate_human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol import (
+    validate_protocol as validate_human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol,
+)
+from validate_human_ai_collaboration_process_fidelity_v1_calibration_abort import (
+    validate_evidence as validate_human_ai_collaboration_process_fidelity_v1_calibration_abort,
+)
+from validate_human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence import (
+    validate_evidence as validate_human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence,
+)
+from validate_process_fidelity_chained_trace_measurement_calibration import (
+    validate_evidence as validate_process_fidelity_chained_trace_measurement_calibration,
+)
+from validate_process_fidelity_chained_transform_trial_protocol import (
+    validate_protocol as validate_process_fidelity_chained_transform_trial_protocol,
+)
+from validate_process_fidelity_chained_transform_packet_preflight import (
+    validate_evidence as validate_process_fidelity_chained_transform_packet_preflight,
+)
+from validate_process_fidelity_chained_transform_trial_protocol_v2_amendment import (
+    validate_amendment as validate_process_fidelity_chained_transform_trial_protocol_v2_amendment,
+)
+from validate_process_fidelity_chained_transform_adapter_evaluator_poc_evidence import (
+    validate_evidence as validate_process_fidelity_chained_transform_adapter_evaluator_poc_evidence,
+)
+from validate_process_fidelity_cumulative_loss_accounting_poc_evidence import (
+    validate_evidence as validate_process_fidelity_cumulative_loss_accounting_poc_evidence,
+)
+from validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol import (
+    validate_protocol as validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol,
+)
+from validate_human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence import (
+    validate_evidence as validate_human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence,
+)
+from validate_process_fidelity_chained_transform_dispatch_gate_contract import (
+    validate_evidence as validate_process_fidelity_chained_transform_dispatch_gate_contract,
+)
+from validate_process_fidelity_chained_transform_dispatch_ledger_contract import (
+    validate_evidence as validate_process_fidelity_chained_transform_dispatch_ledger_contract,
+)
+from validate_harness_three_lane_program_acceptance_reconciliation import (
+    validate_reconciliation as validate_harness_three_lane_program_acceptance_reconciliation,
+)
+from validate_context_git_snapshot_projection_contract import (
+    validate_contract as validate_context_git_snapshot_projection_contract,
+)
+from validate_context_handoff_receiver_delta_ledger_evidence import (
+    validate_fixture_and_boundaries as validate_context_handoff_receiver_delta_ledger_boundaries,
+    validate_registry_bindings as validate_context_handoff_receiver_delta_ledger_bindings,
+)
+from validate_mcp_reload_release_attribution_evidence import (
+    validate_evidence as validate_mcp_reload_release_attribution_evidence,
+)
+from validate_mcp_thread_unsubscribe_release_attribution_evidence import (
+    validate_evidence as validate_mcp_thread_unsubscribe_release_attribution_evidence,
+)
+from validate_mcp_multi_connection_subscription_preflight_evidence import (
+    validate_document as validate_mcp_multi_connection_subscription_preflight_evidence,
+)
+from validate_mcp_thread_creator_connection_close_attribution_protocol import (
+    validate_protocol as validate_mcp_thread_creator_connection_close_attribution_protocol,
+)
+from validate_mcp_thread_creator_connection_close_calibration_attempt import (
+    validate_attempt as validate_mcp_thread_creator_connection_close_calibration_attempt,
+)
+from validate_mcp_thread_creator_close_observer_acquisition_path_admission import (
+    validate_admission as validate_mcp_thread_creator_close_observer_acquisition_path_admission,
+)
+from validate_mcp_thread_creator_connection_close_auto_attach_v2 import (
+    load_and_validate as validate_mcp_thread_creator_connection_close_auto_attach_v2,
+)
+from assess_process_fidelity_raw_event_trace_eligibility import (
+    validate_evidence as validate_process_fidelity_raw_event_trace_eligibility,
+)
+from validate_human_ai_collaboration_scenario_evidence_matrix import (
+    validate_matrix as validate_human_ai_collaboration_scenario_evidence_matrix,
+)
+from evaluate_human_ai_collaboration_comparative_protocol import (
+    evaluate_fixture_document as evaluate_human_ai_collaboration_comparative_fixture_document,
+    validate_protocol as validate_human_ai_collaboration_comparative_protocol,
+)
+from validate_codex_app_server_comparative_candidate_exposure_preflight import (
+    validate_preflight as validate_codex_app_server_comparative_candidate_exposure_preflight,
+)
+from validate_human_ai_collaboration_weak_agent_live_comparison import (
+    validate_live_comparison as validate_human_ai_collaboration_weak_agent_live_comparison,
+)
+from validate_human_ai_collaboration_read_only_claim_live_comparison import (
+    validate_live_comparison as validate_human_ai_collaboration_read_only_claim_live_comparison,
+)
+from validate_human_ai_collaboration_new_feature_tdd_protocol import (
+    validate_protocol as validate_human_ai_collaboration_new_feature_tdd_protocol,
+)
+from validate_human_ai_collaboration_new_feature_tdd_exposure_preflight import (
+    validate_evidence as validate_human_ai_collaboration_new_feature_tdd_exposure_preflight,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol import (
+    validate_protocol as validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight import (
+    validate_evidence as validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight,
+)
+from validate_human_ai_collaboration_tdd_exact_candidate_admission_gap_audit import (
+    validate_audit as validate_human_ai_collaboration_tdd_exact_candidate_admission_gap_audit,
+)
+from validate_human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision import (
+    validate_decision as validate_human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision,
+)
+from validate_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision import (
+    validate_decision as validate_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision,
+)
+from validate_human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit import (
+    validate_audit as validate_human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit,
+)
+from validate_human_ai_collaboration_tdd_current_execution_readiness_reconciliation import (
+    validate_reconciliation as validate_human_ai_collaboration_tdd_current_execution_readiness_reconciliation,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2 import (
+    validate_contract as validate_human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2,
+)
+from validate_other_cc_and_external_skill_scenario_coverage_audit import (
+    validate_audit as validate_other_cc_and_external_skill_scenario_coverage_audit,
+)
+from validate_human_ai_collaboration_release_change_zero_model_protocol import (
+    validate_protocol as validate_human_ai_collaboration_release_change_zero_model_protocol,
+)
+from validate_human_ai_collaboration_release_change_current_cc_codex_no_model_preflight import (
+    validate_preflight as validate_human_ai_collaboration_release_change_current_cc_codex_no_model_preflight,
+)
+from evaluate_human_ai_collaboration_access_comms_zero_model_calibration import (
+    evaluate_repository_calibration as evaluate_human_ai_collaboration_access_comms_zero_model_calibration,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence import (
+    validate_evidence as validate_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence import (
+    validate_evidence as validate_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence,
+)
+from validate_human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence import (
+    validate_evidence as validate_human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence,
+)
+from build_human_ai_collaboration_tdd_trial import (
+    evaluate_fixture_document as evaluate_human_ai_collaboration_tdd_timeline_fixture_document,
+)
+from normalize_human_ai_collaboration_tdd_app_server_items import (
+    validate_raw_fixture_document as validate_human_ai_collaboration_tdd_raw_app_server_item_fixture,
+)
+from validate_human_ai_collaboration_tdd_raw_item_pilot_evidence import (
+    validate_evidence as validate_human_ai_collaboration_tdd_raw_item_pilot_evidence,
+)
+from validate_human_ai_collaboration_tdd_formal_runner_first_attempt_evidence import (
+    validate_evidence as validate_human_ai_collaboration_tdd_formal_runner_first_attempt_evidence,
+)
+from validate_human_ai_collaboration_tdd_native_formal_attempt_batch import (
+    validate_evidence as validate_human_ai_collaboration_tdd_native_formal_attempt_batch,
+)
+from validate_process_fidelity_multihop_injection_poc_evidence import (
+    validate_evidence as validate_process_fidelity_multihop_injection_poc_evidence,
+)
+from validate_human_ai_collaboration_weak_agent_live_comparison_batch_02 import (
+    validate_live_comparison_batch_02 as validate_human_ai_collaboration_weak_agent_live_comparison_batch_02,
+)
+from validate_human_ai_collaboration_weak_agent_live_comparison_batch_03 import (
+    validate_live_comparison_batch_03 as validate_human_ai_collaboration_weak_agent_live_comparison_batch_03,
+)
+from validate_human_ai_collaboration_maintenance_migration_protocol import (
+    validate_protocol as validate_human_ai_collaboration_maintenance_migration_protocol,
+)
+from validate_human_ai_collaboration_maintenance_migration_live_comparison import (
+    validate_live_comparison as validate_human_ai_collaboration_maintenance_migration_live_comparison,
+)
+from validate_human_ai_collaboration_requirements_domain_challenge_protocol import (
+    validate_protocol as validate_human_ai_collaboration_requirements_domain_challenge_protocol,
+)
+from validate_human_ai_collaboration_requirements_domain_live_comparison import (
+    validate_live_comparison as validate_human_ai_collaboration_requirements_domain_live_comparison,
+)
+from build_human_ai_collaboration_requirements_domain_trial import (
+    evaluate_offline_examples as evaluate_requirements_domain_offline_examples,
+)
+from validate_requirements_domain_exposure_preflight_evidence import (
+    validate_evidence as validate_requirements_domain_exposure_preflight_evidence,
+)
+from validate_deprecation_and_migration_local_adaptation_review import (
+    validate_review as validate_deprecation_and_migration_local_adaptation_review,
+)
+from validate_maintenance_migration_exposure_preflight_evidence import (
+    validate_evidence as validate_maintenance_migration_exposure_preflight_evidence,
+)
+from validate_codex_app_server_structured_skill_input_evidence import (
+    validate_evidence as validate_codex_app_server_structured_skill_input_evidence,
+)
+from validate_codex_app_server_skill_treatment_fidelity_protocol import (
+    validate_treatment_fidelity_protocol as validate_codex_app_server_skill_treatment_fidelity_protocol,
+)
+from validate_codex_app_server_skill_treatment_fidelity_evidence import (
+    validate_treatment_fidelity_evidence as validate_codex_app_server_skill_treatment_fidelity_evidence,
+)
+from validate_source_pinned_debugging_skill_projection_protocol import (
+    validate_protocol as validate_source_pinned_debugging_skill_projection_protocol,
+)
+from validate_source_pinned_debugging_skill_projection_preflight_evidence import (
+    validate_evidence as validate_source_pinned_debugging_skill_projection_preflight_evidence,
+)
+from validate_skill_runtime_and_cc_count_drift_snapshot import (
+    validate_snapshot as validate_skill_runtime_and_cc_count_drift_snapshot,
+)
+from validate_cc_switch_lark_seven_skill_update_event import (
+    validate_event as validate_cc_switch_lark_seven_skill_update_event,
+)
+from validate_cc_switch_lark_cohort_removal_event import (
+    validate_event as validate_cc_switch_lark_cohort_removal_event,
+)
+from validate_cc_switch_subtraction_cohort_and_codex_shadow_disable_event import (
+    validate_event as validate_cc_switch_subtraction_cohort_and_codex_shadow_disable_event,
+)
+from validate_codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation import (
+    validate_reconciliation as validate_codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation,
+)
+from validate_codex_common_root_doc_pdf_host_disable_transaction import (
+    validate_transaction as validate_codex_common_root_doc_pdf_host_disable_transaction,
+)
+from validate_skill_portfolio_current_55_subtractive_triage import (
+    validate_triage as validate_skill_portfolio_current_55_subtractive_triage,
+)
+from validate_skill_portfolio_six_specialist_static_triage import (
+    validate_triage as validate_skill_portfolio_six_specialist_static_triage,
+)
+from validate_user_starred_huashu_pm_current_component_delta_research import (
+    validate_research as validate_user_starred_huashu_pm_current_component_delta_research,
+)
+from validate_self_authored_three_live_authority_and_cc_collision_reconciliation import (
+    validate_reconciliation as validate_self_authored_three_live_authority_and_cc_collision_reconciliation,
+)
+from validate_self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview import (
+    validate_preview as validate_self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview,
+)
+from validate_diagnose_reference_migration_and_fifteenth_subtraction_admission_preview import (
+    validate_preview as validate_diagnose_reference_migration_and_fifteenth_subtraction_admission_preview,
+)
+from validate_cc_switch_fourteen_skill_subtraction_preview_319_refresh import (
+    validate_refresh as validate_cc_switch_fourteen_skill_subtraction_preview_319_refresh,
+)
+from preflight_cc_switch_fourteen_skill_subtraction import (
+    validate_contract_document as validate_cc_switch_fourteen_skill_live_preflight_contract,
+)
+from validate_cc_switch_fourteen_skill_subtraction_preview import (
+    validate_preview as validate_cc_switch_fourteen_skill_subtraction_preview,
+)
+from validate_cc_switch_stale_row_backend_reconciliation_event import (
+    validate_event as validate_cc_switch_stale_row_backend_reconciliation_event,
+)
+from validate_handoff_loader_cli_capability_probe import (
+    validate_probe as validate_handoff_loader_cli_capability_probe,
+)
+from validate_human_ai_collaboration_semantic_authority_layer_reconciliation import (
+    validate_reconciliation as validate_human_ai_collaboration_semantic_authority_layer_reconciliation,
+)
+from validate_human_ai_collaboration_semantic_authority_continuity_protocol import (
+    validate_protocol as validate_human_ai_collaboration_semantic_authority_continuity_protocol,
+)
+from validate_human_ai_collaboration_semantic_authority_current_matt_static_admission import (
+    validate_admission as validate_human_ai_collaboration_semantic_authority_current_matt_static_admission,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_carrier_audit import (
+    validate_audit as validate_human_ai_collaboration_self_authored_control_chain_carrier_audit,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol import (
+    validate_protocol as validate_human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence import (
+    validate_evidence as validate_human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence import (
+    validate_evidence as validate_human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission import (
+    validate_admission as validate_human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission,
+)
+from validate_human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation import (
+    validate_reconciliation as validate_human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation,
+)
+from validate_program_final_closeout_readiness_reconciliation import (
+    validate_reconciliation as validate_program_final_closeout_readiness_reconciliation,
+)
+from validate_skill_portfolio_source_and_layer_classification import (
+    validate_classification as validate_skill_portfolio_source_and_layer_classification,
+)
+from validate_skill_ecosystem_current_evidence_reconciliation import (
+    validate_reconciliation as validate_current_skill_evidence,
+)
+from validate_human_ai_collaboration_unknown_quadrant_process_fidelity_mapping import (
+    validate_mapping as validate_human_ai_collaboration_unknown_quadrant_process_fidelity_mapping,
+)
+from validate_human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence import (
+    validate_evidence as validate_human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence,
+)
+from validate_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence import (
+    validate_evidence as validate_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence,
+)
+from validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision import (
+    validate_decision as validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 UPSTREAM_SOURCE_ID = "github:addyosmani/agent-skills"
@@ -68,7 +454,515 @@ REQUIRED_FILES = (
     "sources/addyosmani-agent-skills/files.sha256", "registry/skills.json",
     "registry/capabilities.json", "registry/relations.json",
     "registry/conflicts.json", "registry/recipes.json",
+    "registry/mcp-current-host-inventory-2026-07-19.json",
+    "registry/mcp-runtime-refresh-interface-review-2026-07-19.json",
+    "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json",
+    "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json",
+    "registry/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.json",
+    "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json",
+    "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json",
+    "registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json",
+    "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json",
+    "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json",
+    "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json",
+    "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
+    "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+    "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json",
+    "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
+    "docs/closeout-cleanup-debt-preview-2026-07-24.md",
+    "registry/closeout-cleanup-debt-preview-2026-07-24.json",
+    "scripts/inventory_closeout_cleanup_debt.py",
+    "tests/test_closeout_cleanup_debt_preview.py",
+    "docs/closeout-cleanup-execution-2026-07-30.md",
+    "registry/closeout-cleanup-execution-2026-07-30.json",
+    "scripts/validate_closeout_cleanup_execution.py",
+    "tests/test_closeout_cleanup_execution.py",
+    "audits/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27/normalized-evidence.json",
+    "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+    "docs/skill-source-lineage-collision-index-2026-07-24.md",
+    "registry/skill-source-lineage-collision-index-2026-07-24.json",
+    "scripts/build_skill_source_lineage_collision_index.py",
+    "tests/test_skill_source_lineage_collision_index.py",
+    "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json",
+    "registry/cc-switch-3.18-recovery-preflight-2026-07-23.json",
+    "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json",
+    "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+    "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json",
+    "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json",
+    "registry/skill-live-run-evidence-contract-2026-07-23.json",
+    "tests/fixtures/skill-live-run-evidence-2026-07-23.json",
+    "registry/experiment-contract-reuse-map-2026-07-23.json",
+    "registry/skill-ablation-cli-host-preflight-2026-07-23.json",
+    "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json",
+    "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json",
+    "scripts/probe_codex_app_server_skill_exposure.py",
+    "tests/test_codex_app_server_skill_exposure_probe.py",
+    "registry/codex-app-server-selected-skill-exposure-evidence-2026-07-24.json",
+    "scripts/probe_codex_app_server_selected_skill_exposure.py",
+    "tests/test_codex_app_server_selected_skill_exposure_probe.py",
+    "registry/context-evidence-envelope-2026-07-23.json",
+    "registry/context-pressure-advisory-contract-2026-07-23.json",
+    "tests/fixtures/context-pressure-advisory-2026-07-23.json",
+    "docs/context-handoff-packet-freshness-2026-07-24.md",
+    "registry/context-handoff-packet-freshness-2026-07-24.json",
+    "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json",
+    "scripts/validate_context_handoff_packet_freshness.py",
+    "tests/test_context_handoff_packet_freshness.py",
+    "docs/context-git-snapshot-projection-contract-2026-07-27.md",
+    "registry/context-git-snapshot-projection-contract-2026-07-27.json",
+    "scripts/validate_context_git_snapshot_projection_contract.py",
+    "tests/test_context_git_snapshot_projection.py",
+    "tests/test_context_git_snapshot_projection_contract.py",
+    "docs/context-handoff-receiver-delta-ledger-evidence-2026-07-27.md",
+    "registry/context-handoff-receiver-delta-ledger-evidence-2026-07-27.json",
+    "scripts/evaluate_context_handoff_receiver_delta_ledger.py",
+    "scripts/validate_context_handoff_receiver_delta_ledger_evidence.py",
+    "tests/fixtures/context-handoff-receiver-delta-ledger-2026-07-27.json",
+    "tests/test_context_handoff_receiver_delta_ledger.py",
+    "docs/instruction-carrier-adherence-contract-2026-07-23.md",
+    "registry/instruction-carrier-adherence-contract-2026-07-23.json",
+    "tests/fixtures/instruction-carrier-adherence-2026-07-23.json",
+    "scripts/evaluate_instruction_carrier_adherence.py",
+    "tests/test_instruction_carrier_adherence.py",
+    "docs/instruction-carrier-trial-preflight-contract-2026-07-23.md",
+    "registry/instruction-carrier-trial-preflight-contract-2026-07-23.json",
+    "scripts/build_instruction_carrier_trial_packet.py",
+    "tests/test_instruction_carrier_trial_packet.py",
+    "docs/handoff-loader-trial-preflight-contract-2026-07-24.md",
+    "registry/handoff-loader-trial-preflight-contract-2026-07-24.json",
+    "scripts/build_handoff_loader_trial_packet.py",
+    "tests/test_handoff_loader_trial_packet.py",
+    "docs/handoff-loader-cli-0.145.0-capability-probe-2026-07-28.md",
+    "registry/handoff-loader-cli-0.145.0-capability-probe-2026-07-28.json",
+    "scripts/validate_handoff_loader_cli_capability_probe.py",
+    "tests/test_handoff_loader_cli_capability_probe.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-LAYER-RECONCILIATION-2026-07-28.md",
+    "registry/human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_semantic_authority_layer_reconciliation.py",
+    "tests/test_human_ai_collaboration_semantic_authority_layer_reconciliation.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-CONTINUITY-PROTOCOL-2026-07-28.md",
+    "registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_semantic_authority_continuity_protocol.py",
+    "tests/test_human_ai_collaboration_semantic_authority_continuity_protocol.py",
+    "tests/fixtures/human-ai-collaboration-semantic-authority-continuity-2026-07-28.json",
+    "scripts/build_human_ai_collaboration_semantic_authority_continuity_trial.py",
+    "tests/test_human_ai_collaboration_semantic_authority_continuity_trial.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-CURRENT-MATT-STATIC-ADMISSION-2026-07-28.md",
+    "docs/strategy/MATT-CURRENT-22-SKILL-REUSE-BOUNDARY-AUDIT-2026-07-31.md",
+    "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_semantic_authority_current_matt_static_admission.py",
+    "tests/test_human_ai_collaboration_semantic_authority_current_matt_static_admission.py",
+    "scripts/build_human_ai_collaboration_semantic_authority_composition_projection.py",
+    "scripts/probe_human_ai_collaboration_semantic_authority_composition_exposure.py",
+    "tests/test_human_ai_collaboration_semantic_authority_composition_projection.py",
+    "tests/test_human_ai_collaboration_semantic_authority_composition_exposure.py",
+    "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-CARRIER-AUDIT-2026-07-28.md",
+    "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_carrier_audit.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_carrier_audit.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-FACTORIAL-ABLATION-PROTOCOL-2026-07-28.md",
+    "registry/human-ai-collaboration-self-authored-control-chain-factorial-ablation-protocol-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol.py",
+    "scripts/evaluate_human_ai_collaboration_self_authored_control_chain_factorial_evidence.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_factorial_evidence.py",
+    "scripts/probe_human_ai_collaboration_self_authored_control_chain_hook_modes.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_hook_mode_probe.py",
+    "audits/human-ai-collaboration-self-authored-control-chain-hook-mode-preflight-2026-07-28/REPORT.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence.py",
+    "scripts/build_human_ai_collaboration_self_authored_control_chain_projection.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_projection.py",
+    "scripts/probe_human_ai_collaboration_self_authored_control_chain_four_cell_exposure.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_four_cell_exposure.py",
+    "audits/human-ai-collaboration-self-authored-control-chain-four-cell-exposure-2026-07-28/REPORT.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-LOADER-HOOK-OBSERVABILITY-ADMISSION-2026-07-28.md",
+    "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-SUBTRACTIVE-CLOSEOUT-RECONCILIATION-2026-07-28.md",
+    "registry/human-ai-collaboration-self-authored-control-chain-subtractive-closeout-reconciliation-2026-07-28.json",
+    "scripts/validate_human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation.py",
+    "tests/test_human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation.py",
+    "docs/strategy/PROGRAM-FINAL-CLOSEOUT-READINESS-RECONCILIATION-2026-07-28.md",
+    "registry/program-final-closeout-readiness-reconciliation-2026-07-28.json",
+    "scripts/validate_program_final_closeout_readiness_reconciliation.py",
+    "tests/test_program_final_closeout_readiness_reconciliation.py",
+    "docs/strategy/SKILL-PORTFOLIO-SOURCE-AND-LAYER-CLASSIFICATION-2026-07-28.md",
+    "registry/skill-portfolio-source-and-layer-classification-2026-07-28.json",
+    "scripts/validate_skill_portfolio_source_and_layer_classification.py",
+    "tests/test_skill_portfolio_source_and_layer_classification.py",
+    "registry/git-host-authorization-trial-contract-2026-07-23.json",
+    "docs/git-host-preflight-evidence-contract-2026-07-23.md",
+    "registry/git-host-preflight-evidence-contract-2026-07-23.json",
+    "tests/fixtures/git-host-preflight-evidence-2026-07-23.json",
+    "scripts/evaluate_git_host_preflight_evidence.py",
+    "tests/test_git_host_preflight_evidence.py",
+    "docs/git-readonly-preflight-envelope-contract-2026-07-24.md",
+    "registry/git-readonly-preflight-envelope-contract-2026-07-24.json",
+    "scripts/build_git_readonly_preflight_envelope.py",
+    "tests/test_git_readonly_preflight_envelope.py",
+    "docs/git-guardrails-interception-evidence-contract-2026-07-24.md",
+    "registry/git-guardrails-interception-evidence-contract-2026-07-24.json",
+    "tests/fixtures/git-guardrails-interception-decision-2026-07-24.json",
+    "scripts/evaluate_git_guardrails_interception_decision.py",
+    "tests/test_git_guardrails_interception_decision.py",
+    "tests/test_git_guardrails_suspension.py",
+    "docs/mcp-task-selection-decision-contract-2026-07-23.md",
+    "registry/mcp-task-selection-decision-contract-2026-07-23.json",
+    "tests/fixtures/mcp-task-selection-decision-2026-07-23.json",
+    "scripts/evaluate_mcp_task_selection_decision.py",
+    "tests/test_mcp_task_selection_decision.py",
+    "docs/mcp-lifecycle-trial-skeleton-contract-2026-07-24.md",
+    "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json",
+    "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json",
+    "scripts/build_mcp_lifecycle_trial_skeleton.py",
+    "tests/test_mcp_lifecycle_trial_skeleton.py",
+    "docs/mcp-same-thread-refresh-evidence-contract-2026-07-24.md",
+    "registry/mcp-same-thread-refresh-evidence-contract-2026-07-24.json",
+    "tests/fixtures/mcp-same-thread-refresh-evidence-2026-07-24.json",
+    "scripts/evaluate_mcp_same_thread_refresh_evidence.py",
+    "tests/test_mcp_same_thread_refresh_evidence.py",
+    "docs/context-pressure-provenance-evidence-envelope-2026-07-24.md",
+    "registry/context-pressure-provenance-evidence-envelope-2026-07-24.json",
+    "tests/fixtures/context-pressure-provenance-evidence-envelope-2026-07-24.json",
+    "scripts/validate_context_pressure_evidence_envelope.py",
+    "tests/test_context_pressure_evidence_envelope.py",
+    "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+    "registry/skill-ablation-batch-01-protocol-2026-07-19.json",
+    "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json",
+    "registry/skill-ablation-host-config-transaction-2026-07-19.json",
+    "docs/skill-ablation-host-transaction-revalidation-2026-07-24.md",
+    "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json",
+    "scripts/revalidate_skill_ablation_host_transaction.py",
+    "tests/test_skill_ablation_host_transaction_revalidation.py",
     "registry/collaboration-domain-coverage.json",
+    "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_coverage_rebaseline.py",
+    "tests/test_human_ai_collaboration_coverage_rebaseline.py",
+    "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json",
+    "docs/strategy/USER-SUPPLIED-HUMAN-AI-SDLC-RESEARCH-INTAKE-2026-07-24.md",
+    "scripts/validate_user_supplied_human_ai_sdlc_research_intake.py",
+    "tests/test_user_supplied_human_ai_sdlc_research_intake.py",
+    "registry/human-ai-collaboration-high-impact-primary-source-claim-ledger-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-HIGH-IMPACT-PRIMARY-SOURCE-CLAIM-LEDGER-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_high_impact_primary_source_claim_ledger.py",
+    "tests/test_human_ai_collaboration_high_impact_primary_source_claim_ledger.py",
+    "registry/human-ai-collaboration-process-fidelity-information-equivalent-trial-protocol-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-INFORMATION-EQUIVALENT-TRIAL-PROTOCOL-2026-07-27.md",
+    "registry/human-ai-collaboration-process-fidelity-v1-calibration-abort-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-V1-CALIBRATION-ABORT-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_process_fidelity_v1_calibration_abort.py",
+    "tests/test_human_ai_collaboration_process_fidelity_v1_calibration_abort.py",
+    "tests/fixtures/human-ai-collaboration-process-fidelity-research-oracle-v2-2026-07-27.json",
+    "registry/human-ai-collaboration-process-fidelity-information-equivalent-trial-protocol-v2-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-INFORMATION-EQUIVALENT-TRIAL-PROTOCOL-V2-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol.py",
+    "tests/test_human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol.py",
+    "scripts/build_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+    "scripts/validate_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+    "tests/test_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+    "scripts/run_human_ai_collaboration_process_fidelity_information_equivalent_trial.py",
+    "tests/test_human_ai_collaboration_process_fidelity_information_equivalent_trial_runner.py",
+    "registry/human-ai-collaboration-process-fidelity-v2-source-backed-smoke-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-V2-SOURCE-BACKED-SMOKE-EVIDENCE-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence.py",
+    "tests/test_human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence.py",
+    "audits/process-fidelity-v2-source-backed-r2-2026-07-27/RAW-REPORT.json",
+    "audits/process-fidelity-v2-source-backed-r2-2026-07-27/TRIAL-PACKET.json",
+    "audits/process-fidelity-v2-source-backed-r2-2026-07-27/BUILD-MANIFEST.json",
+    "audits/process-fidelity-v2-source-backed-r2-2026-07-27/PUBLIC-SOURCE-BUNDLE.json",
+    "tests/fixtures/process-fidelity-chained-trace-calibration-2026-07-27.json",
+    "scripts/calibrate_process_fidelity_chained_trace.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-trace-measurement-calibration-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRACE-MEASUREMENT-CALIBRATION-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_trace_measurement_calibration.py",
+    "tests/test_process_fidelity_chained_trace_measurement_calibration.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-TRIAL-PROTOCOL-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_trial_protocol.py",
+    "tests/test_process_fidelity_chained_transform_trial_protocol.py",
+    "schemas/process-fidelity-chained-transform-trace-v1.schema.json",
+    "scripts/build_process_fidelity_chained_transform_trial_packet.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-packet-preflight-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-PACKET-PREFLIGHT-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_packet_preflight.py",
+    "tests/test_process_fidelity_chained_transform_packet_preflight.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-TRIAL-PROTOCOL-V2-AMENDMENT-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_trial_protocol_v2_amendment.py",
+    "tests/test_process_fidelity_chained_transform_trial_protocol_v2_amendment.py",
+    "schemas/process-fidelity-chained-transform-raw-sequence-capture-v1.schema.json",
+    "schemas/process-fidelity-chained-transform-trace-v2.schema.json",
+    "scripts/run_process_fidelity_chained_transform_trial.py",
+    "scripts/evaluate_process_fidelity_chained_transform_trace.py",
+    "scripts/build_process_fidelity_chained_transform_adapter_evaluator_poc.py",
+    "tests/fixtures/process-fidelity-chained-transform-sequential-adapter-faults-2026-07-27.json",
+    "tests/test_process_fidelity_chained_transform_sequential_adapter.py",
+    "tests/test_process_fidelity_chained_transform_trace_evaluator.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-adapter-evaluator-poc-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-ADAPTER-EVALUATOR-POC-EVIDENCE-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_adapter_evaluator_poc_evidence.py",
+    "tests/test_process_fidelity_chained_transform_adapter_evaluator_poc_evidence.py",
+    "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/MANIFEST.json",
+    "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/POC-REPORT.json",
+    "registry/human-ai-collaboration-process-fidelity-cumulative-loss-accounting-contract-2026-07-27.json",
+    "scripts/evaluate_process_fidelity_cumulative_loss_accounting.py",
+    "scripts/build_process_fidelity_cumulative_loss_accounting_poc.py",
+    "tests/test_process_fidelity_cumulative_loss_accounting.py",
+    "registry/human-ai-collaboration-process-fidelity-cumulative-loss-accounting-poc-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CUMULATIVE-LOSS-ACCOUNTING-POC-2026-07-27.md",
+    "scripts/validate_process_fidelity_cumulative_loss_accounting_poc_evidence.py",
+    "tests/test_process_fidelity_cumulative_loss_accounting_poc_evidence.py",
+    "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json",
+    "schemas/software-lifecycle-stage-envelope-v1.schema.json",
+    "schemas/software-lifecycle-accepted-invariant-ledger-v1.schema.json",
+    "schemas/software-lifecycle-human-authority-receipt-v1.schema.json",
+    "scripts/validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol.py",
+    "scripts/run_human_ai_collaboration_software_lifecycle_thin_slice_calibration.py",
+    "scripts/evaluate_human_ai_collaboration_software_lifecycle_thin_slice_calibration.py",
+    "scripts/evaluate_software_lifecycle_domain_suboracles.py",
+    "scripts/evaluate_software_lifecycle_architecture_security_suboracle.py",
+    "tests/fixtures/software-lifecycle-architecture-security-suboracle-2026-07-27.json",
+    "tests/test_human_ai_collaboration_software_lifecycle_thin_slice_protocol.py",
+    "tests/test_human_ai_collaboration_software_lifecycle_thin_slice_calibration.py",
+    "tests/test_software_lifecycle_domain_suboracles.py",
+    "tests/test_software_lifecycle_architecture_security_suboracle.py",
+    "registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SOFTWARE-LIFECYCLE-THIN-SLICE-ZERO-MODEL-CALIBRATION-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence.py",
+    "tests/test_human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence.py",
+    "audits/software-lifecycle-thin-slice-zero-model-domain-fixture-calibration-v3-2026-07-27/LIFECYCLE-CAPTURE.json",
+    "scripts/process_fidelity_chained_transform_dispatch_gate.py",
+    "tests/test_process_fidelity_chained_transform_dispatch_gate.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-DISPATCH-GATE-CONTRACT-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_dispatch_gate_contract.py",
+    "scripts/process_fidelity_chained_transform_dispatch_ledger.py",
+    "tests/test_process_fidelity_chained_transform_dispatch_ledger.py",
+    "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-DISPATCH-LEDGER-CONTRACT-2026-07-27.md",
+    "scripts/validate_process_fidelity_chained_transform_dispatch_ledger_contract.py",
+    "registry/harness-three-lane-program-acceptance-reconciliation-2026-07-27.json",
+    "docs/strategy/HARNESS-THREE-LANE-PROGRAM-ACCEPTANCE-RECONCILIATION-2026-07-27.md",
+    "scripts/validate_harness_three_lane_program_acceptance_reconciliation.py",
+    "tests/test_harness_three_lane_program_acceptance_reconciliation.py",
+    "scripts/assess_process_fidelity_raw_event_trace_eligibility.py",
+    "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-RAW-EVENT-TRACE-ELIGIBILITY-ASSESSMENT-2026-07-27.md",
+    "tests/test_process_fidelity_raw_event_trace_eligibility_assessment.py",
+    "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-SCENARIO-EVIDENCE-MATRIX-BATCH-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_scenario_evidence_matrix.py",
+    "tests/test_human_ai_collaboration_scenario_evidence_matrix.py",
+    "registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-COMPARATIVE-PROTOCOL-BATCH-01-2026-07-24.md",
+    "tests/fixtures/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json",
+    "scripts/evaluate_human_ai_collaboration_comparative_protocol.py",
+    "tests/test_human_ai_collaboration_comparative_protocol.py",
+    "registry/codex-app-server-comparative-candidate-exposure-preflight-2026-07-24.json",
+    "docs/codex-app-server-comparative-candidate-exposure-preflight-2026-07-24.md",
+    "scripts/validate_codex_app_server_comparative_candidate_exposure_preflight.py",
+    "tests/test_codex_app_server_comparative_candidate_exposure_preflight.py",
+    "scripts/build_human_ai_collaboration_weak_agent_trial.py",
+    "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+    "scripts/run_human_ai_collaboration_read_only_claim_trial.py",
+    "registry/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.json",
+    "docs/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_read_only_claim_live_comparison.py",
+    "tests/fixtures/human-ai-collaboration-maintenance-migration-batch-01-2026-07-24.json",
+    "scripts/probe_maintenance_migration_exposure_preflight.py",
+    "tests/test_maintenance_migration_exposure_preflight.py",
+    "registry/maintenance-migration-exposure-preflight-evidence-2026-07-24.json",
+    "docs/maintenance-migration-exposure-preflight-evidence-2026-07-24.md",
+    "scripts/validate_maintenance_migration_exposure_preflight_evidence.py",
+    "tests/test_maintenance_migration_exposure_preflight_evidence.py",
+    "tests/test_human_ai_collaboration_weak_agent_trial_builder.py",
+    "tests/test_human_ai_collaboration_weak_agent_trial_runner.py",
+    "tests/test_human_ai_collaboration_read_only_claim_trial.py",
+    "tests/test_human_ai_collaboration_read_only_claim_live_comparison.py",
+    "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-NEW-FEATURE-TDD-PROTOCOL-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_new_feature_tdd_protocol.py",
+    "tests/test_human_ai_collaboration_new_feature_tdd_protocol.py",
+    "registry/human-ai-collaboration-new-feature-tdd-exposure-preflight-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-NEW-FEATURE-TDD-EXPOSURE-PREFLIGHT-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_new_feature_tdd_exposure_preflight.py",
+    "tests/test_human_ai_collaboration_new_feature_tdd_exposure_preflight.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-TREATMENT-DIAGNOSTIC-PROTOCOL-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-TREATMENT-DIAGNOSTIC-SOURCE-GOVERNANCE-PREFLIGHT-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight.py",
+    "registry/human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-EXACT-CANDIDATE-ADMISSION-GAP-AUDIT-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_exact_candidate_admission_gap_audit.py",
+    "tests/test_human_ai_collaboration_tdd_exact_candidate_admission_gap_audit.py",
+    "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-MATT-CURRENT-DIAGNOSTIC-ONLY-ADMISSION-DECISION-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision.py",
+    "tests/test_human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision.py",
+    "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-SUPERPOWERS-620-DIAGNOSTIC-ONLY-ADMISSION-DECISION-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision.py",
+    "tests/test_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision.py",
+    "registry/human-ai-collaboration-tdd-current-self-authored-treatment-gap-audit-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-CURRENT-SELF-AUTHORED-TREATMENT-GAP-AUDIT-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit.py",
+    "tests/test_human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit.py",
+    "registry/human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-CURRENT-EXECUTION-READINESS-RECONCILIATION-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_tdd_current_execution_readiness_reconciliation.py",
+    "tests/test_human_ai_collaboration_tdd_current_execution_readiness_reconciliation.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-SUCCESSOR-CONTRACT-V2-2026-07-27.md",
+    "scripts/build_human_ai_collaboration_tdd_noncomparative_dispatch_bundle_v2.py",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2.py",
+    "registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json",
+    "docs/strategy/OTHER-CC-AND-EXTERNAL-SKILL-SCENARIO-COVERAGE-AUDIT-2026-07-27.md",
+    "scripts/validate_other_cc_and_external_skill_scenario_coverage_audit.py",
+    "tests/test_other_cc_and_external_skill_scenario_coverage_audit.py",
+    "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json",
+    "registry/human-ai-collaboration-release-change-candidate-preflight-2026-07-27.json",
+    "registry/human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-RELEASE-CHANGE-CURRENT-CC-CODEX-NO-MODEL-PREFLIGHT-2026-07-30.md",
+    "scripts/validate_human_ai_collaboration_release_change_current_cc_codex_no_model_preflight.py",
+    "tests/test_human_ai_collaboration_release_change_current_cc_codex_no_model_preflight.py",
+    "tests/fixtures/human-ai-collaboration-release-change-offline-fixture-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-RELEASE-CHANGE-ZERO-MODEL-PROTOCOL-2026-07-27.md",
+    "docs/strategy/HUMAN-AI-COLLABORATION-RELEASE-CHANGE-CANDIDATE-PREFLIGHT-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_release_change_zero_model_protocol.py",
+    "tests/test_human_ai_collaboration_release_change_zero_model_protocol.py",
+    "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+    "tests/fixtures/human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-ACCESS-COMMS-ZERO-MODEL-CALIBRATION-2026-07-27.md",
+    "scripts/evaluate_human_ai_collaboration_access_comms_zero_model_calibration.py",
+    "tests/test_human_ai_collaboration_access_comms_zero_model_calibration.py",
+    "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-IDENTITY-LEDGER-POC-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence.py",
+    "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-dispatch-authorization-adapter-poc-evidence-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-AUTHORIZATION-ADAPTER-POC-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_ledger_authority_and_reconciliation.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_preconstruction_transaction.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_resource_contract.py",
+    "scripts/human_ai_collaboration_tdd_noncomparative_runner_preflight.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_runner_preflight.py",
+    "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-RUNNER-PREFLIGHT-POC-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence.py",
+    "scripts/build_human_ai_collaboration_tdd_trial.py",
+    "tests/fixtures/human-ai-collaboration-tdd-timeline-fixtures-2026-07-26.json",
+    "tests/test_human_ai_collaboration_tdd_trial_builder.py",
+    "scripts/normalize_human_ai_collaboration_tdd_app_server_items.py",
+    "tests/fixtures/human-ai-collaboration-tdd-raw-app-server-item-fixtures-2026-07-26.json",
+    "tests/test_human_ai_collaboration_tdd_app_server_item_normalizer.py",
+    "scripts/run_human_ai_collaboration_tdd_raw_item_pilot.py",
+    "tests/test_human_ai_collaboration_tdd_raw_item_pilot.py",
+    "scripts/evaluate_human_ai_collaboration_tdd_trial_outcome.py",
+    "tests/test_human_ai_collaboration_tdd_trial_outcome.py",
+    "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+    "tests/test_human_ai_collaboration_tdd_formal_trial.py",
+    "registry/human-ai-collaboration-tdd-raw-item-pilot-evidence-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-RAW-ITEM-PILOT-EVIDENCE-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_raw_item_pilot_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_raw_item_pilot_evidence.py",
+    "registry/human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-FORMAL-RUNNER-FIRST-ATTEMPT-EVIDENCE-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_formal_runner_first_attempt_evidence.py",
+    "tests/test_human_ai_collaboration_tdd_formal_runner_first_attempt_evidence.py",
+    "registry/human-ai-collaboration-tdd-native-formal-attempt-batch-2026-07-26.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NATIVE-FORMAL-ATTEMPT-BATCH-2026-07-26.md",
+    "scripts/validate_human_ai_collaboration_tdd_native_formal_attempt_batch.py",
+    "tests/test_human_ai_collaboration_tdd_native_formal_attempt_batch.py",
+    "tests/fixtures/process-fidelity-multihop-injection-poc-2026-07-26.json",
+    "scripts/evaluate_process_fidelity_multihop_injection_poc.py",
+    "registry/process-fidelity-multihop-injection-poc-evidence-2026-07-26.json",
+    "docs/strategy/PROCESS-FIDELITY-MULTIHOP-INJECTION-POC-EVIDENCE-2026-07-26.md",
+    "scripts/validate_process_fidelity_multihop_injection_poc_evidence.py",
+    "tests/test_process_fidelity_multihop_injection_poc_evidence.py",
+    "registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json",
+    "docs/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_weak_agent_live_comparison.py",
+    "tests/test_human_ai_collaboration_weak_agent_live_comparison.py",
+    "registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json",
+    "docs/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_weak_agent_live_comparison_batch_02.py",
+    "tests/test_human_ai_collaboration_weak_agent_live_comparison_batch_02.py",
+    "registry/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.json",
+    "docs/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_weak_agent_live_comparison_batch_03.py",
+    "tests/test_human_ai_collaboration_weak_agent_live_comparison_batch_03.py",
+    "registry/human-ai-collaboration-maintenance-migration-protocol-batch-01-2026-07-24.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-MAINTENANCE-MIGRATION-PROTOCOL-BATCH-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_maintenance_migration_protocol.py",
+    "tests/test_human_ai_collaboration_maintenance_migration_protocol.py",
+    "registry/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.json",
+    "docs/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_maintenance_migration_live_comparison.py",
+    "tests/test_human_ai_collaboration_maintenance_migration_live_comparison.py",
+    "registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-REQUIREMENTS-DOMAIN-CHALLENGE-PROTOCOL-BATCH-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_requirements_domain_challenge_protocol.py",
+    "tests/test_human_ai_collaboration_requirements_domain_challenge_protocol.py",
+    "registry/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.json",
+    "docs/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.md",
+    "scripts/validate_human_ai_collaboration_requirements_domain_live_comparison.py",
+    "tests/test_human_ai_collaboration_requirements_domain_live_comparison.py",
+    "tests/fixtures/human-ai-collaboration-requirements-domain-challenge-batch-01-2026-07-24.json",
+    "scripts/build_human_ai_collaboration_requirements_domain_trial.py",
+    "tests/test_human_ai_collaboration_requirements_domain_trial.py",
+    "scripts/probe_requirements_domain_exposure_preflight.py",
+    "tests/test_requirements_domain_exposure_preflight.py",
+    "registry/requirements-domain-exposure-preflight-evidence-2026-07-24.json",
+    "docs/requirements-domain-exposure-preflight-evidence-2026-07-24.md",
+    "scripts/validate_requirements_domain_exposure_preflight_evidence.py",
+    "tests/test_requirements_domain_exposure_preflight_evidence.py",
+    "registry/deprecation-and-migration-local-adaptation-review-2026-07-24.json",
+    "docs/deprecation-and-migration-local-adaptation-review-2026-07-24.md",
+    "scripts/validate_deprecation_and_migration_local_adaptation_review.py",
+    "tests/test_deprecation_and_migration_local_adaptation_review.py",
+    "registry/codex-app-server-structured-skill-input-evidence-2026-07-24.json",
+    "docs/codex-app-server-structured-skill-input-evidence-2026-07-24.md",
+    "scripts/validate_codex_app_server_structured_skill_input_evidence.py",
+    "tests/test_codex_app_server_structured_skill_input_evidence.py",
+    "registry/codex-app-server-skill-treatment-fidelity-protocol-2026-07-24.json",
+    "docs/codex-app-server-skill-treatment-fidelity-protocol-2026-07-24.md",
+    "scripts/probe_codex_app_server_skill_treatment_fidelity.py",
+    "scripts/validate_codex_app_server_skill_treatment_fidelity_protocol.py",
+    "tests/test_codex_app_server_skill_treatment_fidelity_probe.py",
+    "tests/test_codex_app_server_skill_treatment_fidelity_protocol.py",
+    "registry/codex-app-server-skill-treatment-fidelity-evidence-2026-07-24.json",
+    "docs/codex-app-server-skill-treatment-fidelity-evidence-2026-07-24.md",
+    "scripts/validate_codex_app_server_skill_treatment_fidelity_evidence.py",
+    "tests/test_codex_app_server_skill_treatment_fidelity_evidence.py",
+    "registry/source-pinned-debugging-skill-projection-protocol-2026-07-24.json",
+    "docs/source-pinned-debugging-skill-projection-protocol-2026-07-24.md",
+    "scripts/build_source_pinned_skill_projection.py",
+    "scripts/probe_source_pinned_skill_projection_preflight.py",
+    "scripts/validate_source_pinned_debugging_skill_projection_protocol.py",
+    "tests/test_source_pinned_skill_projection.py",
+    "tests/test_source_pinned_skill_projection_preflight.py",
+    "registry/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.json",
+    "docs/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.md",
+    "scripts/validate_source_pinned_debugging_skill_projection_preflight_evidence.py",
+    "tests/test_source_pinned_debugging_skill_projection_preflight_evidence.py",
     "registry/curation-expansion-rounds.json",
     "registry/curation-program-plan.json",
     "registry/program-acceptance-map.json",
@@ -161,6 +1055,9 @@ REQUIRED_FILES = (
     "tests/fixtures/round03-evidence-fixtures-batch-01.json",
     "tests/fixtures/loopy-contract-paired-fixtures-2026-07-18.json",
     "tests/fixtures/lifecycle-metabolism-fixtures-2026-07-18.json",
+    "tests/fixtures/context-continuation-paired-trial-2026-07-19.json",
+    "tests/fixtures/git-topology-decision-fixtures-2026-07-19.json",
+    "tests/fixtures/mcp-runtime-refresh-trial-2026-07-19.json",
     "registry/round03-capability-survey-rebaseline-acceptance-event-2026-07-15.json",
     "registry/mvp-candidate-batches.json",
     "registry/mvp-candidate-reviews.json",
@@ -186,6 +1083,174 @@ REQUIRED_FILES = (
     "scripts/evaluate_loopy_contract_fixtures.py",
     "scripts/evaluate_loopy_agent_trial_result.py",
     "scripts/evaluate_lifecycle_metabolism_fixtures.py",
+    "scripts/evaluate_context_continuation_trial.py",
+    "scripts/build_context_continuation_trial_packet.py",
+    "scripts/evaluate_git_topology_trial.py",
+    "scripts/observe_git_snapshot.py",
+    "tests/test_git_snapshot_integration.py",
+    "scripts/evaluate_mcp_runtime_refresh_trial.py",
+    "tests/test_mcp_runtime_refresh_trial.py",
+    "scripts/probe_codex_app_server_mcp_status.py",
+    "tests/test_codex_app_server_mcp_status_probe.py",
+    "scripts/mcp_lifecycle_sentinel.py",
+    "scripts/probe_codex_app_server_mcp_tool_call.py",
+    "scripts/probe_codex_app_server_mcp_reload_new_threads.py",
+    "scripts/probe_codex_app_server_mcp_idle_unload.py",
+    "scripts/probe_codex_app_server_mcp_startup_profiles.py",
+    "scripts/probe_codex_app_server_mcp_child_exit_recovery.py",
+    "scripts/probe_codex_app_server_mcp_reload_release_attribution.py",
+    "scripts/validate_mcp_reload_release_attribution_evidence.py",
+    "scripts/probe_codex_app_server_mcp_thread_unsubscribe_release_attribution.py",
+    "scripts/validate_mcp_thread_unsubscribe_release_attribution_evidence.py",
+    "scripts/codex_app_server_websocket_bridge.mjs",
+    "scripts/probe_codex_app_server_mcp_multi_connection_subscription.py",
+    "scripts/validate_mcp_multi_connection_subscription_preflight_evidence.py",
+    "tests/test_codex_app_server_mcp_tool_call_probe.py",
+    "tests/test_codex_app_server_mcp_reload_new_threads_probe.py",
+    "tests/test_codex_app_server_mcp_idle_unload_probe.py",
+    "tests/test_codex_app_server_mcp_startup_profiles_probe.py",
+    "tests/test_codex_app_server_mcp_child_exit_recovery_probe.py",
+    "tests/test_codex_app_server_mcp_reload_release_attribution_probe.py",
+    "tests/test_mcp_reload_release_attribution_evidence.py",
+    "tests/test_codex_app_server_mcp_thread_unsubscribe_release_attribution_probe.py",
+    "tests/test_mcp_thread_unsubscribe_release_attribution_evidence.py",
+    "tests/test_codex_app_server_mcp_multi_connection_subscription_probe.py",
+    "tests/test_mcp_multi_connection_subscription_preflight_evidence.py",
+    "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json",
+    "scripts/probe_codex_app_server_mcp_thread_creator_connection_close.py",
+    "scripts/validate_mcp_thread_creator_connection_close_attribution_protocol.py",
+    "tests/fixtures/mcp-thread-creator-connection-close-attribution-2026-07-27.json",
+    "tests/test_codex_app_server_mcp_thread_creator_connection_close_probe.py",
+    "tests/test_mcp_thread_creator_connection_close_attribution_protocol.py",
+    "registry/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27.json",
+    "docs/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27.md",
+    "scripts/validate_mcp_thread_creator_connection_close_calibration_attempt.py",
+    "tests/test_mcp_thread_creator_connection_close_calibration_attempt.py",
+    "registry/mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27.json",
+    "docs/mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27.md",
+    "scripts/validate_mcp_thread_creator_close_observer_acquisition_path_admission.py",
+    "tests/test_mcp_thread_creator_close_observer_acquisition_path_admission.py",
+    "registry/mcp-thread-creator-connection-close-auto-attach-protocol-v2-2026-07-27.json",
+    "registry/mcp-thread-creator-connection-close-auto-attach-offline-amendment-v2-2026-07-27.json",
+    "docs/mcp-thread-creator-connection-close-auto-attach-offline-amendment-v2-2026-07-27.md",
+    "scripts/probe_codex_app_server_mcp_thread_creator_connection_close_auto_attach_v2.py",
+    "scripts/validate_mcp_thread_creator_connection_close_auto_attach_v2.py",
+    "tests/test_codex_app_server_mcp_thread_creator_connection_close_auto_attach_v2_probe.py",
+    "scripts/inventory_skill_portfolio.py",
+    "tests/test_skill_portfolio_inventory.py",
+    "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json",
+    "docs/strategy/SKILL-RUNTIME-AND-CC-COUNT-DRIFT-SNAPSHOT-2026-07-27.md",
+    "scripts/validate_skill_runtime_and_cc_count_drift_snapshot.py",
+    "tests/test_skill_runtime_and_cc_count_drift_snapshot.py",
+    "registry/cc-switch-lark-seven-skill-update-event-2026-07-27.json",
+    "docs/strategy/CC-SWITCH-LARK-SEVEN-SKILL-UPDATE-EVENT-2026-07-27.md",
+    "scripts/validate_cc_switch_lark_seven_skill_update_event.py",
+    "tests/test_cc_switch_lark_seven_skill_update_event.py",
+    "registry/cc-switch-lark-cohort-removal-event-2026-07-28.json",
+    "docs/strategy/CC-SWITCH-LARK-COHORT-REMOVAL-EVENT-2026-07-28.md",
+    "scripts/validate_cc_switch_lark_cohort_removal_event.py",
+    "tests/test_cc_switch_lark_cohort_removal_event.py",
+    "registry/cc-switch-subtraction-cohort-and-codex-shadow-disable-event-2026-07-29.json",
+    "docs/strategy/CC-SWITCH-SUBTRACTION-COHORT-AND-CODEX-SHADOW-DISABLE-EVENT-2026-07-29.md",
+    "scripts/validate_cc_switch_subtraction_cohort_and_codex_shadow_disable_event.py",
+    "tests/test_cc_switch_subtraction_cohort_and_codex_shadow_disable_event.py",
+    "registry/codex-common-root-doc-pdf-shadow-disable-exposure-reconciliation-2026-07-30.json",
+    "docs/strategy/CODEX-COMMON-ROOT-DOC-PDF-SHADOW-DISABLE-EXPOSURE-RECONCILIATION-2026-07-30.md",
+    "scripts/validate_codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation.py",
+    "tests/test_codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation.py",
+    "registry/codex-common-root-doc-pdf-host-disable-transaction-2026-07-30.json",
+    "docs/strategy/CODEX-COMMON-ROOT-DOC-PDF-HOST-DISABLE-TRANSACTION-2026-07-30.md",
+    "scripts/validate_codex_common_root_doc_pdf_host_disable_transaction.py",
+    "tests/test_codex_common_root_doc_pdf_host_disable_transaction.py",
+    "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
+    "docs/strategy/SKILL-PORTFOLIO-CURRENT-55-SUBTRACTIVE-TRIAGE-2026-07-30.md",
+    "scripts/validate_skill_portfolio_current_55_subtractive_triage.py",
+    "tests/test_skill_portfolio_current_55_subtractive_triage.py",
+    "registry/skill-portfolio-six-specialist-static-triage-2026-07-30.json",
+    "docs/strategy/SKILL-PORTFOLIO-SIX-SPECIALIST-STATIC-TRIAGE-2026-07-30.md",
+    "docs/strategy/addy-five-delta-audit-2026-07-30.md",
+    "scripts/validate_skill_portfolio_six_specialist_static_triage.py",
+    "tests/test_skill_portfolio_six_specialist_static_triage.py",
+    "registry/user-starred-huashu-pm-current-component-delta-research-2026-07-30.json",
+    "docs/strategy/USER-STARRED-HUASHU-PM-CURRENT-COMPONENT-DELTA-RESEARCH-2026-07-30.md",
+    "scripts/validate_user_starred_huashu_pm_current_component_delta_research.py",
+    "tests/test_user_starred_huashu_pm_current_component_delta_research.py",
+    "registry/self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30.json",
+    "docs/strategy/SELF-AUTHORED-THREE-LIVE-AUTHORITY-AND-CC-COLLISION-RECONCILIATION-2026-07-30.md",
+    "scripts/validate_self_authored_three_live_authority_and_cc_collision_reconciliation.py",
+    "tests/test_self_authored_three_live_authority_and_cc_collision_reconciliation.py",
+    "registry/self-authored-three-claude-carrier-and-subtraction-sequencing-decision-preview-2026-07-30.json",
+    "docs/strategy/SELF-AUTHORED-THREE-CLAUDE-CARRIER-AND-SUBTRACTION-SEQUENCING-DECISION-PREVIEW-2026-07-30.md",
+    "docs/strategy/CLAUDE-CODE-SKILL-CARRIER-OFFICIAL-RESEARCH-2026-07-30.md",
+    "scripts/validate_self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview.py",
+    "tests/test_self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview.py",
+    "registry/diagnose-reference-migration-and-fifteenth-subtraction-admission-preview-2026-07-30.json",
+    "docs/strategy/DIAGNOSE-REFERENCE-MIGRATION-AND-FIFTEENTH-SUBTRACTION-ADMISSION-PREVIEW-2026-07-30.md",
+    "scripts/validate_diagnose_reference_migration_and_fifteenth_subtraction_admission_preview.py",
+    "tests/test_diagnose_reference_migration_and_fifteenth_subtraction_admission_preview.py",
+    "registry/cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30.json",
+    "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-SUBTRACTION-PREVIEW-3.19-REFRESH-2026-07-30.md",
+    "scripts/validate_cc_switch_fourteen_skill_subtraction_preview_319_refresh.py",
+    "tests/test_cc_switch_fourteen_skill_subtraction_preview_319_refresh.py",
+    "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json",
+    "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-LIVE-PREFLIGHT-CONTRACT-2026-07-30.md",
+    "scripts/preflight_cc_switch_fourteen_skill_subtraction.py",
+    "tests/test_cc_switch_fourteen_skill_live_preflight.py",
+    "registry/cc-switch-fourteen-skill-subtraction-preview-2026-07-30.json",
+    "docs/strategy/CC-SWITCH-FOURTEEN-SKILL-SUBTRACTION-PREVIEW-2026-07-30.md",
+    "scripts/validate_cc_switch_fourteen_skill_subtraction_preview.py",
+    "tests/test_cc_switch_fourteen_skill_subtraction_preview.py",
+    "registry/cc-switch-3.18-stale-row-backend-reconciliation-event-2026-07-27.json",
+    "docs/strategy/CC-SWITCH-3.18-STALE-ROW-BACKEND-RECONCILIATION-EVENT-2026-07-27.md",
+    "scripts/validate_cc_switch_stale_row_backend_reconciliation_event.py",
+    "tests/test_cc_switch_stale_row_backend_reconciliation_event.py",
+    "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json",
+    "docs/strategy/SKILL-ECOSYSTEM-CURRENT-EVIDENCE-RECONCILIATION-2026-07-27.md",
+    "scripts/validate_skill_ecosystem_current_evidence_reconciliation.py",
+    "tests/test_skill_ecosystem_current_evidence_reconciliation.py",
+    "registry/human-ai-collaboration-unknown-quadrant-process-fidelity-mapping-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PROCESS-FIDELITY-MAPPING-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_unknown_quadrant_process_fidelity_mapping.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_process_fidelity_mapping.py",
+    "tests/fixtures/human-ai-collaboration-unknown-quadrant-attribution-fixtures-2026-07-27.json",
+    "scripts/evaluate_human_ai_collaboration_unknown_quadrant_attribution.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_attribution.py",
+    "registry/human-ai-collaboration-unknown-quadrant-attribution-oracle-poc-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-ATTRIBUTION-ORACLE-POC-EVIDENCE-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence.py",
+    "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json",
+    "scripts/evaluate_human_ai_collaboration_unknown_knowns_creative_preference_packet.py",
+    "tests/test_human_ai_collaboration_unknown_knowns_creative_preference_packet.py",
+    "tests/fixtures/human-ai-collaboration-unknown-quadrant-packet-overlay-2026-07-27.json",
+    "scripts/evaluate_human_ai_collaboration_unknown_quadrant_packet_overlay.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_packet_overlay.py",
+    "registry/human-ai-collaboration-unknown-quadrant-packet-overlay-poc-evidence-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PACKET-OVERLAY-POC-EVIDENCE-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence.py",
+    "registry/human-ai-collaboration-unknown-quadrant-parent-oracle-seam-reuse-decision-2026-07-27.json",
+    "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PARENT-ORACLE-SEAM-REUSE-DECISION-2026-07-27.md",
+    "scripts/validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision.py",
+    "tests/test_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision.py",
+    "scripts/reconcile_skill_source_authority.py",
+    "tests/test_skill_source_authority_reconciliation.py",
+    "scripts/build_cc_skill_recovery_snapshot.py",
+    "tests/test_build_cc_skill_recovery_snapshot.py",
+    "scripts/build_skill_ablation_batch_01_packet.py",
+    "scripts/evaluate_skill_ablation_batch_01_protocol.py",
+    "scripts/evaluate_skill_overlap_attribution.py",
+    "scripts/evaluate_skill_overlap_scenarios.py",
+    "scripts/evaluate_skill_live_run_evidence.py",
+    "scripts/evaluate_mcp_task_lifecycle_evidence.py",
+    "scripts/evaluate_context_pressure_advisory.py",
+    "tests/test_skill_ablation_batch_01_protocol.py",
+    "tests/test_skill_overlap_attribution.py",
+    "tests/test_skill_overlap_scenarios.py",
+    "tests/test_skill_live_run_evidence.py",
+    "tests/test_mcp_task_lifecycle_evidence.py",
+    "tests/test_context_pressure_advisory.py",
+    "tests/test_context_continuation_trial_packet.py",
     "scripts/run_loopy_agent_trial.py",
     "scripts/extract_github_skill_index_sources.py",
     "scripts/preflight_github_source_list.py",
@@ -209,6 +1274,59 @@ REQUIRED_FILES = (
     "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/portability.md",
     "sources/kepano-obsidian-skills/LICENSE",
     "docs/coverage-and-curation-expansion.md",
+    "docs/context-continuation-paired-trial-protocol-2026-07-19.md",
+    "docs/git-topology-decision-poc-2026-07-19.md",
+    "docs/mcp-current-host-inventory-2026-07-19.md",
+    "docs/mcp-runtime-refresh-interface-and-trial-protocol-2026-07-19.md",
+    "docs/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.md",
+    "docs/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.md",
+    "docs/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.md",
+    "docs/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.md",
+    "docs/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.md",
+    "docs/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.md",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/README.md",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/run-01.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-01.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-02.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/formal-03.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-01.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-02.json",
+    "audits/mcp-reload-release-attribution-0.145.0-2026-07-27/evidence-03.json",
+    "docs/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.md",
+    "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/README.md",
+    "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/calibration-01.json",
+    "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-01.json",
+    "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-02.json",
+    "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-03.json",
+    "docs/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.md",
+    "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/README.md",
+    "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/resume-calibration-01.log",
+    "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/report.json",
+    "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/report.json",
+    "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/report.json",
+    "docs/mcp-task-lifecycle-evidence-contract-2026-07-23.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+    "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md",
+    "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
+    "docs/skill-portfolio-and-closeout-inventory-2026-07-19.md",
+    "docs/skill-source-authority-and-runtime-reconciliation-2026-07-19.md",
+    "docs/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.md",
+    "docs/cc-switch-3.18-recovery-preflight-2026-07-23.md",
+    "docs/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.md",
+    "docs/skill-ablation-cli-host-preflight-2026-07-23.md",
+    "docs/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.md",
+    "docs/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.md",
+    "docs/codex-app-server-selected-skill-exposure-evidence-2026-07-24.md",
+    "docs/skill-live-run-evidence-contract-2026-07-23.md",
+    "docs/strategy/EXPERIMENT-CONTRACT-REUSE-MAP-2026-07-23.md",
+    "docs/context-evidence-envelope-2026-07-23.md",
+    "docs/context-pressure-advisory-contract-2026-07-23.md",
+    "docs/git-host-authorization-trial-contract-2026-07-23.md",
+    "docs/skill-ablation-batch-01-selection-2026-07-19.md",
+    "docs/skill-ablation-batch-01-protocol-2026-07-19.md",
+    "docs/skill-ablation-batch-01-host-preflight-2026-07-19.md",
+    "docs/skill-ablation-host-config-transaction-2026-07-19.md",
     "docs/curation-harness-model.md",
     "docs/superpowers/specs/2026-07-15-production-capability-manager-design.md",
     "docs/superpowers/specs/2026-07-15-production-capability-manager-topology-impact.md",
@@ -382,6 +1500,177 @@ def verify() -> None:
     conflicts_doc = load("registry/conflicts.json")
     recipes_doc = load("registry/recipes.json")
     collaboration_domain_coverage_doc = load("registry/collaboration-domain-coverage.json")
+    human_ai_collaboration_coverage_rebaseline_doc = load(
+        "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json"
+    )
+    user_supplied_human_ai_sdlc_research_intake_doc = load(
+        "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json"
+    )
+    human_ai_collaboration_high_impact_primary_source_claim_ledger_doc = load(
+        "registry/human-ai-collaboration-high-impact-primary-source-claim-ledger-2026-07-27.json"
+    )
+    human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-information-equivalent-trial-protocol-v2-2026-07-27.json"
+    )
+    human_ai_collaboration_process_fidelity_v1_calibration_abort_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-v1-calibration-abort-2026-07-27.json"
+    )
+    human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-v2-source-backed-smoke-evidence-2026-07-27.json"
+    )
+    process_fidelity_chained_trace_measurement_calibration_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-trace-measurement-calibration-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_trial_protocol_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_packet_preflight_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-packet-preflight-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_trial_protocol_v2_amendment_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_adapter_evaluator_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-adapter-evaluator-poc-evidence-2026-07-27.json"
+    )
+    process_fidelity_cumulative_loss_accounting_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-cumulative-loss-accounting-poc-evidence-2026-07-27.json"
+    )
+    human_ai_collaboration_software_lifecycle_thin_slice_protocol_doc = load(
+        "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json"
+    )
+    human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence_doc = load(
+        "registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_dispatch_gate_contract_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json"
+    )
+    process_fidelity_chained_transform_dispatch_ledger_contract_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json"
+    )
+    harness_three_lane_program_acceptance_reconciliation_doc = load(
+        "registry/harness-three-lane-program-acceptance-reconciliation-2026-07-27.json"
+    )
+    process_fidelity_raw_event_trace_eligibility_doc = load(
+        "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json"
+    )
+    human_ai_collaboration_scenario_evidence_matrix_doc = load(
+        "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_comparative_protocol_doc = load(
+        "registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_comparative_fixture_doc = load(
+        "tests/fixtures/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json"
+    )
+    codex_comparative_candidate_exposure_preflight_doc = load(
+        "registry/codex-app-server-comparative-candidate-exposure-preflight-2026-07-24.json"
+    )
+    human_ai_collaboration_weak_agent_live_comparison_doc = load(
+        "registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_read_only_claim_live_comparison_doc = load(
+        "registry/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.json"
+    )
+    human_ai_collaboration_new_feature_tdd_protocol_doc = load(
+        "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json"
+    )
+    human_ai_collaboration_new_feature_tdd_exposure_preflight_doc = load(
+        "registry/human-ai-collaboration-new-feature-tdd-exposure-preflight-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_exact_candidate_admission_gap_audit_doc = load(
+        "registry/human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision_doc = load(
+        "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json"
+    )
+    human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision_doc = load(
+        "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json"
+    )
+    human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit_doc = load(
+        "registry/human-ai-collaboration-tdd-current-self-authored-treatment-gap-audit-2026-07-27.json"
+    )
+    human_ai_collaboration_tdd_current_execution_readiness_reconciliation_doc = load(
+        "registry/human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-dispatch-identity-ledger-poc-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-dispatch-authorization-adapter-poc-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-tdd-noncomparative-runner-preflight-poc-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_timeline_fixture_doc = load(
+        "tests/fixtures/human-ai-collaboration-tdd-timeline-fixtures-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_raw_app_server_item_fixture_doc = load(
+        "tests/fixtures/human-ai-collaboration-tdd-raw-app-server-item-fixtures-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_raw_item_pilot_evidence_doc = load(
+        "registry/human-ai-collaboration-tdd-raw-item-pilot-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_formal_runner_first_attempt_evidence_doc = load(
+        "registry/human-ai-collaboration-tdd-formal-runner-first-attempt-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_tdd_native_formal_attempt_batch_doc = load(
+        "registry/human-ai-collaboration-tdd-native-formal-attempt-batch-2026-07-26.json"
+    )
+    process_fidelity_multihop_injection_poc_evidence_doc = load(
+        "registry/process-fidelity-multihop-injection-poc-evidence-2026-07-26.json"
+    )
+    human_ai_collaboration_weak_agent_live_comparison_batch_02_doc = load(
+        "registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json"
+    )
+    human_ai_collaboration_weak_agent_live_comparison_batch_03_doc = load(
+        "registry/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.json"
+    )
+    human_ai_collaboration_maintenance_migration_protocol_doc = load(
+        "registry/human-ai-collaboration-maintenance-migration-protocol-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_maintenance_migration_live_comparison_doc = load(
+        "registry/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_requirements_domain_challenge_protocol_doc = load(
+        "registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json"
+    )
+    human_ai_collaboration_requirements_domain_live_comparison_doc = load(
+        "registry/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.json"
+    )
+    requirements_domain_exposure_preflight_evidence_doc = load(
+        "registry/requirements-domain-exposure-preflight-evidence-2026-07-24.json"
+    )
+    deprecation_and_migration_local_adaptation_review_doc = load(
+        "registry/deprecation-and-migration-local-adaptation-review-2026-07-24.json"
+    )
+    maintenance_migration_exposure_preflight_evidence_doc = load(
+        "registry/maintenance-migration-exposure-preflight-evidence-2026-07-24.json"
+    )
+    codex_structured_skill_input_evidence_doc = load(
+        "registry/codex-app-server-structured-skill-input-evidence-2026-07-24.json"
+    )
+    codex_skill_treatment_fidelity_protocol_doc = load(
+        "registry/codex-app-server-skill-treatment-fidelity-protocol-2026-07-24.json"
+    )
+    codex_skill_treatment_fidelity_evidence_doc = load(
+        "registry/codex-app-server-skill-treatment-fidelity-evidence-2026-07-24.json"
+    )
+    source_pinned_debugging_skill_projection_protocol_doc = load(
+        "registry/source-pinned-debugging-skill-projection-protocol-2026-07-24.json"
+    )
+    source_pinned_debugging_skill_projection_preflight_evidence_doc = load(
+        "registry/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.json"
+    )
     curation_expansion_rounds_doc = load("registry/curation-expansion-rounds.json")
     curation_program_plan_doc = load("registry/curation-program-plan.json")
     program_acceptance_map_doc = load("registry/program-acceptance-map.json")
@@ -471,6 +1760,212 @@ def verify() -> None:
     round03_alternative_comparison_batch_01_doc = load("registry/round03-alternative-comparison-batch-01.json")
     round03_evidence_protocol_batch_01_doc = load("registry/round03-evidence-protocol-batch-01.json")
     round03_evidence_fixtures_batch_01_doc = load("tests/fixtures/round03-evidence-fixtures-batch-01.json")
+    context_continuation_trial_doc = load("tests/fixtures/context-continuation-paired-trial-2026-07-19.json")
+    git_topology_trial_doc = load("tests/fixtures/git-topology-decision-fixtures-2026-07-19.json")
+    mcp_current_host_inventory_doc = load("registry/mcp-current-host-inventory-2026-07-19.json")
+    mcp_runtime_refresh_review_doc = load("registry/mcp-runtime-refresh-interface-review-2026-07-19.json")
+    mcp_runtime_refresh_trial_doc = load("tests/fixtures/mcp-runtime-refresh-trial-2026-07-19.json")
+    codex_isolated_mcp_status_probe_doc = load("registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json")
+    mcp_app_server_direct_tool_call_doc = load("registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json")
+    mcp_app_server_new_thread_reload_doc = load("registry/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.json")
+    mcp_app_server_idle_unload_doc = load("registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json")
+    mcp_app_server_startup_profile_doc = load("registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json")
+    mcp_app_server_child_exit_recovery_doc = load("registry/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.json")
+    mcp_reload_release_attribution_doc = load(
+        "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json"
+    )
+    mcp_thread_unsubscribe_release_attribution_doc = load(
+        "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json"
+    )
+    mcp_multi_connection_subscription_preflight_doc = load(
+        "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json"
+    )
+    mcp_thread_creator_connection_close_attribution_protocol_doc = load(
+        "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json"
+    )
+    mcp_thread_creator_connection_close_calibration_attempt_doc = load(
+        "registry/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27.json"
+    )
+    mcp_thread_creator_close_observer_acquisition_path_admission_doc = load(
+        "registry/mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27.json"
+    )
+    mcp_task_lifecycle_contract_doc = load("registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json")
+    mcp_task_lifecycle_fixture_doc = load("tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json")
+    skill_portfolio_closeout_gate_doc = load("registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json")
+    skill_portfolio_closeout_inventory_doc = load("registry/skill-portfolio-and-closeout-inventory-2026-07-19.json")
+    skill_runtime_and_cc_count_drift_snapshot_doc = load(
+        "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json"
+    )
+    cc_switch_lark_seven_skill_update_event_doc = load(
+        "registry/cc-switch-lark-seven-skill-update-event-2026-07-27.json"
+    )
+    cc_switch_lark_cohort_removal_event_doc = load(
+        "registry/cc-switch-lark-cohort-removal-event-2026-07-28.json"
+    )
+    cc_switch_subtraction_cohort_and_codex_shadow_disable_event_doc = load(
+        "registry/cc-switch-subtraction-cohort-and-codex-shadow-disable-event-2026-07-29.json"
+    )
+    codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation_doc = load(
+        "registry/codex-common-root-doc-pdf-shadow-disable-exposure-reconciliation-2026-07-30.json"
+    )
+    codex_common_root_doc_pdf_host_disable_transaction_doc = load(
+        "registry/codex-common-root-doc-pdf-host-disable-transaction-2026-07-30.json"
+    )
+    skill_portfolio_current_55_subtractive_triage_doc = load(
+        "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json"
+    )
+    skill_portfolio_six_specialist_static_triage_doc = load(
+        "registry/skill-portfolio-six-specialist-static-triage-2026-07-30.json"
+    )
+    user_starred_huashu_pm_current_component_delta_research_doc = load(
+        "registry/user-starred-huashu-pm-current-component-delta-research-2026-07-30.json"
+    )
+    self_authored_three_live_authority_and_cc_collision_reconciliation_doc = load(
+        "registry/self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30.json"
+    )
+    self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview_doc = load(
+        "registry/self-authored-three-claude-carrier-and-subtraction-sequencing-decision-preview-2026-07-30.json"
+    )
+    diagnose_reference_migration_and_fifteenth_subtraction_admission_preview_doc = load(
+        "registry/diagnose-reference-migration-and-fifteenth-subtraction-admission-preview-2026-07-30.json"
+    )
+    cc_switch_fourteen_skill_subtraction_preview_319_refresh_doc = load(
+        "registry/cc-switch-fourteen-skill-subtraction-preview-3.19-refresh-2026-07-30.json"
+    )
+    cc_switch_fourteen_skill_live_preflight_contract_doc = load(
+        "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json"
+    )
+    cc_switch_fourteen_skill_subtraction_preview_doc = load(
+        "registry/cc-switch-fourteen-skill-subtraction-preview-2026-07-30.json"
+    )
+    cc_switch_stale_row_backend_reconciliation_event_doc = load(
+        "registry/cc-switch-3.18-stale-row-backend-reconciliation-event-2026-07-27.json"
+    )
+    skill_ecosystem_current_evidence_reconciliation_doc = load(
+        "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json"
+    )
+    human_ai_collaboration_unknown_quadrant_process_fidelity_mapping_doc = load(
+        "registry/human-ai-collaboration-unknown-quadrant-process-fidelity-mapping-2026-07-27.json"
+    )
+    human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-unknown-quadrant-attribution-oracle-poc-evidence-2026-07-27.json"
+    )
+    human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence_doc = load(
+        "registry/human-ai-collaboration-unknown-quadrant-packet-overlay-poc-evidence-2026-07-27.json"
+    )
+    human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision_doc = load(
+        "registry/human-ai-collaboration-unknown-quadrant-parent-oracle-seam-reuse-decision-2026-07-27.json"
+    )
+    other_cc_and_external_skill_scenario_coverage_audit_doc = load(
+        "registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"
+    )
+    human_ai_collaboration_release_change_zero_model_protocol_doc = load(
+        "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json"
+    )
+    human_ai_collaboration_release_change_candidate_preflight_doc = load(
+        "registry/human-ai-collaboration-release-change-candidate-preflight-2026-07-27.json"
+    )
+    human_ai_collaboration_release_change_current_cc_codex_no_model_preflight_doc = load(
+        "registry/human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30.json"
+    )
+    human_ai_collaboration_release_change_offline_fixture_doc = load(
+        "tests/fixtures/human-ai-collaboration-release-change-offline-fixture-2026-07-27.json"
+    )
+    closeout_cleanup_debt_preview_doc = load("registry/closeout-cleanup-debt-preview-2026-07-24.json")
+    closeout_cleanup_execution_doc = load(
+        "registry/closeout-cleanup-execution-2026-07-30.json"
+    )
+    skill_source_authority_reconciliation_doc = load("registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json")
+    skill_source_lineage_collision_index_doc = load("registry/skill-source-lineage-collision-index-2026-07-24.json")
+    cc_switch_live_drift_doc = load("registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json")
+    cc_switch_recovery_preflight_doc = load("registry/cc-switch-3.18-recovery-preflight-2026-07-23.json")
+    cc_switch_stale_row_gap_doc = load("registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json")
+    skill_ecosystem_overlap_doc = load("registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json")
+    skill_overlap_attribution_fixture_doc = load("tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json")
+    skill_overlap_scenario_packet_doc = load("tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json")
+    skill_live_run_contract_doc = load("registry/skill-live-run-evidence-contract-2026-07-23.json")
+    skill_live_run_fixture_doc = load("tests/fixtures/skill-live-run-evidence-2026-07-23.json")
+    experiment_contract_reuse_map_doc = load("registry/experiment-contract-reuse-map-2026-07-23.json")
+    skill_ablation_cli_preflight_doc = load("registry/skill-ablation-cli-host-preflight-2026-07-23.json")
+    codex_cli_route_mcp_diagnostic_doc = load(
+        "registry/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.json"
+    )
+    codex_skill_exposure_evidence_doc = load(
+        "registry/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.json"
+    )
+    codex_selected_skill_exposure_evidence_doc = load(
+        "registry/codex-app-server-selected-skill-exposure-evidence-2026-07-24.json"
+    )
+    context_evidence_envelope_doc = load("registry/context-evidence-envelope-2026-07-23.json")
+    context_pressure_advisory_doc = load("registry/context-pressure-advisory-contract-2026-07-23.json")
+    context_pressure_advisory_fixture_doc = load("tests/fixtures/context-pressure-advisory-2026-07-23.json")
+    context_pressure_provenance_contract_doc = load("registry/context-pressure-provenance-evidence-envelope-2026-07-24.json")
+    context_pressure_provenance_fixture_doc = load("tests/fixtures/context-pressure-provenance-evidence-envelope-2026-07-24.json")
+    context_handoff_packet_freshness_doc = load("registry/context-handoff-packet-freshness-2026-07-24.json")
+    context_handoff_packet_freshness_fixture_doc = load("tests/fixtures/context-handoff-packet-freshness-2026-07-24.json")
+    context_git_snapshot_projection_contract_doc = load(
+        "registry/context-git-snapshot-projection-contract-2026-07-27.json"
+    )
+    context_handoff_receiver_delta_ledger_evidence_doc = load(
+        "registry/context-handoff-receiver-delta-ledger-evidence-2026-07-27.json"
+    )
+    instruction_carrier_adherence_doc = load("registry/instruction-carrier-adherence-contract-2026-07-23.json")
+    instruction_carrier_adherence_fixture_doc = load("tests/fixtures/instruction-carrier-adherence-2026-07-23.json")
+    instruction_carrier_trial_preflight_doc = load("registry/instruction-carrier-trial-preflight-contract-2026-07-23.json")
+    handoff_loader_trial_preflight_doc = load("registry/handoff-loader-trial-preflight-contract-2026-07-24.json")
+    handoff_loader_cli_capability_probe_doc = load(
+        "registry/handoff-loader-cli-0.145.0-capability-probe-2026-07-28.json"
+    )
+    human_ai_collaboration_semantic_authority_layer_reconciliation_doc = load(
+        "registry/human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28.json"
+    )
+    human_ai_collaboration_semantic_authority_continuity_protocol_doc = load(
+        "registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json"
+    )
+    human_ai_collaboration_semantic_authority_current_matt_static_admission_doc = load(
+        "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_carrier_audit_doc = load(
+        "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol_doc = load(
+        "registry/human-ai-collaboration-self-authored-control-chain-factorial-ablation-protocol-2026-07-28.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence_doc = load(
+        "audits/human-ai-collaboration-self-authored-control-chain-hook-mode-preflight-2026-07-28/REPORT.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence_doc = load(
+        "audits/human-ai-collaboration-self-authored-control-chain-four-cell-exposure-2026-07-28/REPORT.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission_doc = load(
+        "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json"
+    )
+    human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation_doc = load(
+        "registry/human-ai-collaboration-self-authored-control-chain-subtractive-closeout-reconciliation-2026-07-28.json"
+    )
+    program_final_closeout_readiness_reconciliation_doc = load(
+        "registry/program-final-closeout-readiness-reconciliation-2026-07-28.json"
+    )
+    skill_portfolio_source_and_layer_classification_doc = load(
+        "registry/skill-portfolio-source-and-layer-classification-2026-07-28.json"
+    )
+    git_host_authorization_contract_doc = load("registry/git-host-authorization-trial-contract-2026-07-23.json")
+    git_host_preflight_contract_doc = load("registry/git-host-preflight-evidence-contract-2026-07-23.json")
+    git_host_preflight_fixture_doc = load("tests/fixtures/git-host-preflight-evidence-2026-07-23.json")
+    git_readonly_preflight_envelope_doc = load("registry/git-readonly-preflight-envelope-contract-2026-07-24.json")
+    git_guardrails_interception_contract_doc = load("registry/git-guardrails-interception-evidence-contract-2026-07-24.json")
+    git_guardrails_interception_fixture_doc = load("tests/fixtures/git-guardrails-interception-decision-2026-07-24.json")
+    mcp_task_selection_contract_doc = load("registry/mcp-task-selection-decision-contract-2026-07-23.json")
+    mcp_task_selection_fixture_doc = load("tests/fixtures/mcp-task-selection-decision-2026-07-23.json")
+    mcp_lifecycle_trial_skeleton_doc = load("registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json")
+    mcp_lifecycle_trial_skeleton_fixture_doc = load("tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json")
+    mcp_same_thread_refresh_contract_doc = load("registry/mcp-same-thread-refresh-evidence-contract-2026-07-24.json")
+    mcp_same_thread_refresh_fixture_doc = load("tests/fixtures/mcp-same-thread-refresh-evidence-2026-07-24.json")
+    skill_ablation_batch_01_doc = load("registry/skill-ablation-batch-01-selection-2026-07-19.json")
+    skill_ablation_batch_01_protocol_doc = load("registry/skill-ablation-batch-01-protocol-2026-07-19.json")
+    skill_ablation_batch_01_host_preflight_doc = load("registry/skill-ablation-batch-01-host-preflight-2026-07-19.json")
+    skill_ablation_host_config_transaction_doc = load("registry/skill-ablation-host-config-transaction-2026-07-19.json")
+    skill_ablation_host_transaction_revalidation_doc = load("registry/skill-ablation-host-transaction-revalidation-2026-07-24.json")
     round03_capability_survey_rebaseline_acceptance_event_doc = load("registry/round03-capability-survey-rebaseline-acceptance-event-2026-07-15.json")
     admissions_doc = load("registry/admissions.json")
     routing_doc = load("registry/routing.json")
@@ -595,6 +2090,300 @@ def verify() -> None:
         curation_program_plan_doc,
     )
     validate_program_acceptance_map(program_acceptance_map_doc, curation_program_plan_doc)
+    validate_human_ai_collaboration_coverage_rebaseline(
+        human_ai_collaboration_coverage_rebaseline_doc,
+        curation_program_plan_doc,
+        program_acceptance_map_doc,
+        root=ROOT,
+    )
+    validate_user_supplied_human_ai_sdlc_research_intake(
+        user_supplied_human_ai_sdlc_research_intake_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_high_impact_primary_source_claim_ledger(
+        human_ai_collaboration_high_impact_primary_source_claim_ledger_doc,
+        root=ROOT,
+        matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
+        intake=user_supplied_human_ai_sdlc_research_intake_doc,
+    )
+    validate_human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol(
+        human_ai_collaboration_process_fidelity_information_equivalent_trial_protocol_doc,
+        root=ROOT,
+        matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
+        acceptance=program_acceptance_map_doc,
+    )
+    validate_human_ai_collaboration_process_fidelity_v1_calibration_abort(
+        human_ai_collaboration_process_fidelity_v1_calibration_abort_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence(
+        human_ai_collaboration_process_fidelity_v2_source_backed_smoke_evidence_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_trace_measurement_calibration(
+        process_fidelity_chained_trace_measurement_calibration_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_transform_trial_protocol(
+        process_fidelity_chained_transform_trial_protocol_doc,
+        root=ROOT,
+        matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
+    )
+    validate_process_fidelity_chained_transform_packet_preflight(
+        process_fidelity_chained_transform_packet_preflight_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_transform_trial_protocol_v2_amendment(
+        process_fidelity_chained_transform_trial_protocol_v2_amendment_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_transform_adapter_evaluator_poc_evidence(
+        process_fidelity_chained_transform_adapter_evaluator_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_cumulative_loss_accounting_poc_evidence(
+        process_fidelity_cumulative_loss_accounting_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol(
+        human_ai_collaboration_software_lifecycle_thin_slice_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence(
+        human_ai_collaboration_software_lifecycle_thin_slice_calibration_evidence_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_transform_dispatch_gate_contract(
+        process_fidelity_chained_transform_dispatch_gate_contract_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_chained_transform_dispatch_ledger_contract(
+        process_fidelity_chained_transform_dispatch_ledger_contract_doc,
+        root=ROOT,
+    )
+    validate_harness_three_lane_program_acceptance_reconciliation(
+        harness_three_lane_program_acceptance_reconciliation_doc,
+        root=ROOT,
+        program=program_acceptance_map_doc,
+    )
+    validate_process_fidelity_raw_event_trace_eligibility(
+        process_fidelity_raw_event_trace_eligibility_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_scenario_evidence_matrix(
+        human_ai_collaboration_scenario_evidence_matrix_doc,
+        human_ai_collaboration_coverage_rebaseline_doc,
+        curation_program_plan_doc,
+        program_acceptance_map_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_comparative_protocol(
+        human_ai_collaboration_comparative_protocol_doc,
+        human_ai_collaboration_comparative_fixture_doc,
+        root=ROOT,
+        program=curation_program_plan_doc,
+    )
+    comparative_fixture_results = evaluate_human_ai_collaboration_comparative_fixture_document(
+        human_ai_collaboration_comparative_fixture_doc,
+        human_ai_collaboration_comparative_protocol_doc,
+    )
+    comparative_fixture_mismatches = [
+        result
+        for result in comparative_fixture_results
+        if result["actualStatus"] != result["expectedStatus"]
+    ]
+    if comparative_fixture_mismatches:
+        raise RuntimeError(
+            "Human-AI collaboration comparative protocol fixture mismatches: "
+            + json.dumps(comparative_fixture_mismatches, ensure_ascii=False)
+        )
+    validate_codex_app_server_comparative_candidate_exposure_preflight(
+        codex_comparative_candidate_exposure_preflight_doc,
+        root=ROOT,
+        protocol=human_ai_collaboration_comparative_protocol_doc,
+        program=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_weak_agent_live_comparison(
+        human_ai_collaboration_weak_agent_live_comparison_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_read_only_claim_live_comparison(
+        human_ai_collaboration_read_only_claim_live_comparison_doc,
+        root=ROOT,
+        protocol=human_ai_collaboration_comparative_protocol_doc,
+        fixture=human_ai_collaboration_comparative_fixture_doc,
+    )
+    validate_human_ai_collaboration_new_feature_tdd_protocol(
+        human_ai_collaboration_new_feature_tdd_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_new_feature_tdd_exposure_preflight(
+        human_ai_collaboration_new_feature_tdd_exposure_preflight_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol(
+        human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight(
+        human_ai_collaboration_tdd_noncomparative_treatment_diagnostic_source_governance_preflight_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_exact_candidate_admission_gap_audit(
+        human_ai_collaboration_tdd_exact_candidate_admission_gap_audit_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision(
+        human_ai_collaboration_tdd_matt_current_diagnostic_only_admission_decision_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision(
+        human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit(
+        human_ai_collaboration_tdd_current_self_authored_treatment_gap_audit_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_current_execution_readiness_reconciliation(
+        human_ai_collaboration_tdd_current_execution_readiness_reconciliation_doc,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2(
+        human_ai_collaboration_tdd_noncomparative_dispatch_successor_contract_v2_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence(
+        human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence(
+        human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence(
+        human_ai_collaboration_tdd_noncomparative_runner_preflight_poc_evidence_doc,
+        root=ROOT,
+    )
+    tdd_timeline_results = (
+        evaluate_human_ai_collaboration_tdd_timeline_fixture_document(
+            human_ai_collaboration_tdd_timeline_fixture_doc
+        )
+    )
+    tdd_timeline_mismatches = [
+        result
+        for result in tdd_timeline_results
+        if result["actualStatus"] != result["expectedStatus"]
+    ]
+    if tdd_timeline_mismatches:
+        raise RuntimeError(
+            "Human-AI collaboration TDD timeline fixture mismatches: "
+            + json.dumps(tdd_timeline_mismatches, ensure_ascii=False)
+        )
+    validate_human_ai_collaboration_tdd_raw_app_server_item_fixture(
+        human_ai_collaboration_tdd_raw_app_server_item_fixture_doc
+    )
+    validate_human_ai_collaboration_tdd_raw_item_pilot_evidence(
+        human_ai_collaboration_tdd_raw_item_pilot_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_formal_runner_first_attempt_evidence(
+        human_ai_collaboration_tdd_formal_runner_first_attempt_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_tdd_native_formal_attempt_batch(
+        human_ai_collaboration_tdd_native_formal_attempt_batch_doc,
+        root=ROOT,
+    )
+    validate_process_fidelity_multihop_injection_poc_evidence(
+        process_fidelity_multihop_injection_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_weak_agent_live_comparison_batch_02(
+        human_ai_collaboration_weak_agent_live_comparison_batch_02_doc,
+        root=ROOT,
+        protocol=human_ai_collaboration_comparative_protocol_doc,
+    )
+    validate_human_ai_collaboration_weak_agent_live_comparison_batch_03(
+        human_ai_collaboration_weak_agent_live_comparison_batch_03_doc,
+        root=ROOT,
+        protocol=human_ai_collaboration_comparative_protocol_doc,
+    )
+    validate_human_ai_collaboration_maintenance_migration_protocol(
+        human_ai_collaboration_maintenance_migration_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_maintenance_migration_live_comparison(
+        human_ai_collaboration_maintenance_migration_live_comparison_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_requirements_domain_challenge_protocol(
+        human_ai_collaboration_requirements_domain_challenge_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_requirements_domain_live_comparison(
+        human_ai_collaboration_requirements_domain_live_comparison_doc,
+        root=ROOT,
+        protocol=human_ai_collaboration_requirements_domain_challenge_protocol_doc,
+    )
+    requirements_domain_example_failures = (
+        evaluate_requirements_domain_offline_examples()
+    )
+    if requirements_domain_example_failures:
+        raise RuntimeError(
+            "Requirements/domain offline example mismatches: "
+            + json.dumps(
+                requirements_domain_example_failures,
+                ensure_ascii=False,
+            )
+        )
+    validate_requirements_domain_exposure_preflight_evidence(
+        requirements_domain_exposure_preflight_evidence_doc,
+        root=ROOT,
+    )
+    validate_deprecation_and_migration_local_adaptation_review(
+        deprecation_and_migration_local_adaptation_review_doc,
+        root=ROOT,
+    )
+    validate_maintenance_migration_exposure_preflight_evidence(
+        maintenance_migration_exposure_preflight_evidence_doc,
+        root=ROOT,
+    )
+    validate_codex_app_server_structured_skill_input_evidence(
+        codex_structured_skill_input_evidence_doc,
+        root=ROOT,
+    )
+    validate_codex_app_server_skill_treatment_fidelity_protocol(
+        codex_skill_treatment_fidelity_protocol_doc,
+        root=ROOT,
+    )
+    validate_codex_app_server_skill_treatment_fidelity_evidence(
+        codex_skill_treatment_fidelity_evidence_doc,
+        root=ROOT,
+        protocol=codex_skill_treatment_fidelity_protocol_doc,
+    )
+    source_pinned_projection_failures = (
+        validate_source_pinned_debugging_skill_projection_protocol(
+            source_pinned_debugging_skill_projection_protocol_doc,
+            root=ROOT,
+        )
+    )
+    if source_pinned_projection_failures:
+        raise RuntimeError(
+            "Source-pinned debugging Skill projection protocol failed: "
+            + source_pinned_projection_failures[0]
+        )
+    source_pinned_preflight_failures = (
+        validate_source_pinned_debugging_skill_projection_preflight_evidence(
+            source_pinned_debugging_skill_projection_preflight_evidence_doc,
+            protocol=source_pinned_debugging_skill_projection_protocol_doc,
+            root=ROOT,
+        )
+    )
+    if source_pinned_preflight_failures:
+        raise RuntimeError(
+            "Source-pinned debugging Skill projection preflight evidence failed: "
+            + source_pinned_preflight_failures[0]
+        )
     validate_custom_manager_retirement_reconciliation(
         custom_manager_retirement_reconciliation_doc,
         curation_program_plan_doc,
@@ -863,6 +2652,317 @@ def verify() -> None:
         curation_expansion_rounds_doc,
         round_lifecycle_contract_doc,
         program_acceptance_map_doc,
+    )
+    validate_context_continuation_trial_protocol(context_continuation_trial_doc)
+    validate_context_handoff_packet_freshness_contract(
+        context_handoff_packet_freshness_doc,
+        context_handoff_packet_freshness_fixture_doc,
+    )
+    validate_context_git_snapshot_projection_contract(
+        context_git_snapshot_projection_contract_doc,
+        root=ROOT,
+    )
+    validate_context_handoff_receiver_delta_ledger_bindings(
+        context_handoff_receiver_delta_ledger_evidence_doc
+    )
+    validate_context_handoff_receiver_delta_ledger_boundaries(
+        context_handoff_receiver_delta_ledger_evidence_doc
+    )
+    validate_git_topology_trial_protocol(git_topology_trial_doc)
+    validate_mcp_current_host_inventory(mcp_current_host_inventory_doc)
+    validate_mcp_runtime_refresh_interface_and_trial(
+        mcp_runtime_refresh_review_doc,
+        mcp_runtime_refresh_trial_doc,
+    )
+    validate_codex_app_server_isolated_mcp_status_probe(
+        codex_isolated_mcp_status_probe_doc,
+    )
+    validate_mcp_app_server_0_145_direct_tool_call_evidence(
+        mcp_app_server_direct_tool_call_doc,
+    )
+    validate_mcp_app_server_0_145_new_thread_reload_evidence(
+        mcp_app_server_new_thread_reload_doc,
+    )
+    validate_mcp_app_server_0_145_idle_unload_evidence(
+        mcp_app_server_idle_unload_doc,
+    )
+    validate_mcp_app_server_0_145_startup_profile_evidence(
+        mcp_app_server_startup_profile_doc,
+    )
+    validate_mcp_app_server_0_145_child_exit_recovery_evidence(
+        mcp_app_server_child_exit_recovery_doc,
+    )
+    validate_mcp_reload_release_attribution_evidence(
+        mcp_reload_release_attribution_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+    )
+    validate_mcp_thread_unsubscribe_release_attribution_evidence(
+        mcp_thread_unsubscribe_release_attribution_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+    )
+    validate_mcp_multi_connection_subscription_preflight_evidence(
+        ROOT,
+        mcp_multi_connection_subscription_preflight_doc,
+    )
+    validate_mcp_thread_creator_connection_close_attribution_protocol(
+        mcp_thread_creator_connection_close_attribution_protocol_doc,
+        root=ROOT,
+    )
+    validate_mcp_thread_creator_connection_close_calibration_attempt(
+        mcp_thread_creator_connection_close_calibration_attempt_doc,
+        root=ROOT,
+    )
+    validate_mcp_thread_creator_close_observer_acquisition_path_admission(
+        mcp_thread_creator_close_observer_acquisition_path_admission_doc,
+        root=ROOT,
+    )
+    validate_mcp_thread_creator_connection_close_auto_attach_v2(root=ROOT)
+    validate_mcp_task_lifecycle_evidence_contract(
+        mcp_task_lifecycle_contract_doc,
+        mcp_task_lifecycle_fixture_doc,
+    )
+    validate_skill_portfolio_and_closeout_gate(skill_portfolio_closeout_gate_doc)
+    validate_skill_portfolio_and_closeout_inventory(skill_portfolio_closeout_inventory_doc)
+    validate_skill_runtime_and_cc_count_drift_snapshot(
+        skill_runtime_and_cc_count_drift_snapshot_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_lark_seven_skill_update_event(
+        cc_switch_lark_seven_skill_update_event_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_lark_cohort_removal_event(
+        cc_switch_lark_cohort_removal_event_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_subtraction_cohort_and_codex_shadow_disable_event(
+        cc_switch_subtraction_cohort_and_codex_shadow_disable_event_doc,
+        root=ROOT,
+    )
+    validate_codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation(
+        codex_common_root_doc_pdf_shadow_disable_exposure_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_codex_common_root_doc_pdf_host_disable_transaction(
+        codex_common_root_doc_pdf_host_disable_transaction_doc,
+        root=ROOT,
+    )
+    validate_skill_portfolio_current_55_subtractive_triage(
+        skill_portfolio_current_55_subtractive_triage_doc,
+        root=ROOT,
+    )
+    validate_skill_portfolio_six_specialist_static_triage(
+        skill_portfolio_six_specialist_static_triage_doc,
+        root=ROOT,
+    )
+    validate_user_starred_huashu_pm_current_component_delta_research(
+        user_starred_huashu_pm_current_component_delta_research_doc,
+        root=ROOT,
+    )
+    validate_self_authored_three_live_authority_and_cc_collision_reconciliation(
+        self_authored_three_live_authority_and_cc_collision_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview(
+        self_authored_three_claude_carrier_and_subtraction_sequencing_decision_preview_doc,
+        root=ROOT,
+    )
+    validate_diagnose_reference_migration_and_fifteenth_subtraction_admission_preview(
+        diagnose_reference_migration_and_fifteenth_subtraction_admission_preview_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_fourteen_skill_subtraction_preview_319_refresh(
+        cc_switch_fourteen_skill_subtraction_preview_319_refresh_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_fourteen_skill_live_preflight_contract(
+        cc_switch_fourteen_skill_live_preflight_contract_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_fourteen_skill_subtraction_preview(
+        cc_switch_fourteen_skill_subtraction_preview_doc,
+        root=ROOT,
+    )
+    validate_cc_switch_stale_row_backend_reconciliation_event(
+        cc_switch_stale_row_backend_reconciliation_event_doc,
+        root=ROOT,
+    )
+    validate_current_skill_evidence(
+        skill_ecosystem_current_evidence_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_unknown_quadrant_process_fidelity_mapping(
+        human_ai_collaboration_unknown_quadrant_process_fidelity_mapping_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence(
+        human_ai_collaboration_unknown_quadrant_attribution_oracle_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence(
+        human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision(
+        human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision_doc,
+        root=ROOT,
+    )
+    validate_other_cc_and_external_skill_scenario_coverage_audit(
+        other_cc_and_external_skill_scenario_coverage_audit_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_release_change_zero_model_protocol(
+        human_ai_collaboration_release_change_zero_model_protocol_doc,
+        human_ai_collaboration_release_change_candidate_preflight_doc,
+        human_ai_collaboration_release_change_offline_fixture_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_release_change_current_cc_codex_no_model_preflight(
+        human_ai_collaboration_release_change_current_cc_codex_no_model_preflight_doc,
+        root=ROOT,
+    )
+    evaluate_human_ai_collaboration_access_comms_zero_model_calibration(ROOT)
+    validate_closeout_cleanup_debt_preview(closeout_cleanup_debt_preview_doc)
+    validate_closeout_cleanup_execution(
+        closeout_cleanup_execution_doc,
+        root=ROOT,
+    )
+    validate_skill_source_authority_reconciliation(skill_source_authority_reconciliation_doc)
+    validate_skill_source_lineage_collision_index(
+        skill_source_lineage_collision_index_doc
+    )
+    validate_cc_switch_live_drift_and_transaction_gate(cc_switch_live_drift_doc)
+    validate_cc_switch_recovery_preflight(cc_switch_recovery_preflight_doc)
+    validate_cc_switch_stale_row_reconciliation_gap(cc_switch_stale_row_gap_doc)
+    validate_skill_ecosystem_overlap_and_ablation_matrix(
+        skill_ecosystem_overlap_doc,
+        skill_overlap_attribution_fixture_doc,
+        skill_overlap_scenario_packet_doc,
+    )
+    validate_skill_live_run_evidence_contract(
+        skill_live_run_contract_doc,
+        skill_live_run_fixture_doc,
+    )
+    validate_experiment_contract_reuse_map(experiment_contract_reuse_map_doc)
+    validate_skill_ablation_cli_host_preflight(skill_ablation_cli_preflight_doc)
+    validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+        codex_cli_route_mcp_diagnostic_doc
+    )
+    validate_codex_app_server_task_scoped_skill_exposure_evidence(
+        codex_skill_exposure_evidence_doc
+    )
+    validate_codex_app_server_selected_skill_exposure_evidence(
+        codex_selected_skill_exposure_evidence_doc
+    )
+    validate_context_evidence_envelope(context_evidence_envelope_doc)
+    validate_context_pressure_advisory_contract(
+        context_pressure_advisory_doc,
+        context_pressure_advisory_fixture_doc,
+    )
+    validate_context_pressure_provenance_evidence_envelope_contract(
+        context_pressure_provenance_contract_doc,
+        context_pressure_provenance_fixture_doc,
+    )
+    validate_instruction_carrier_adherence_contract(
+        instruction_carrier_adherence_doc,
+        instruction_carrier_adherence_fixture_doc,
+    )
+    validate_instruction_carrier_trial_preflight_contract(
+        instruction_carrier_trial_preflight_doc,
+    )
+    validate_handoff_loader_trial_preflight_contract(
+        handoff_loader_trial_preflight_doc,
+    )
+    validate_handoff_loader_cli_capability_probe(
+        handoff_loader_cli_capability_probe_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_semantic_authority_layer_reconciliation(
+        human_ai_collaboration_semantic_authority_layer_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_semantic_authority_continuity_protocol(
+        human_ai_collaboration_semantic_authority_continuity_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_semantic_authority_current_matt_static_admission(
+        human_ai_collaboration_semantic_authority_current_matt_static_admission_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_carrier_audit(
+        human_ai_collaboration_self_authored_control_chain_carrier_audit_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol(
+        human_ai_collaboration_self_authored_control_chain_factorial_ablation_protocol_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence(
+        human_ai_collaboration_self_authored_control_chain_hook_mode_preflight_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence(
+        human_ai_collaboration_self_authored_control_chain_four_cell_exposure_evidence_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission(
+        human_ai_collaboration_self_authored_control_chain_loader_hook_observability_admission_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation(
+        human_ai_collaboration_self_authored_control_chain_subtractive_closeout_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_program_final_closeout_readiness_reconciliation(
+        program_final_closeout_readiness_reconciliation_doc,
+        root=ROOT,
+    )
+    validate_skill_portfolio_source_and_layer_classification(
+        skill_portfolio_source_and_layer_classification_doc,
+        root=ROOT,
+    )
+    validate_git_host_authorization_trial_contract(
+        git_host_authorization_contract_doc
+    )
+    validate_git_host_preflight_evidence_contract(
+        git_host_preflight_contract_doc,
+        git_host_preflight_fixture_doc,
+    )
+    validate_git_readonly_preflight_envelope_contract(
+        git_readonly_preflight_envelope_doc,
+    )
+    validate_git_guardrails_interception_evidence_contract(
+        git_guardrails_interception_contract_doc,
+        git_guardrails_interception_fixture_doc,
+    )
+    validate_mcp_task_selection_decision_contract(
+        mcp_task_selection_contract_doc,
+        mcp_task_selection_fixture_doc,
+    )
+    validate_mcp_lifecycle_trial_skeleton_contract(
+        mcp_lifecycle_trial_skeleton_doc,
+        mcp_lifecycle_trial_skeleton_fixture_doc,
+        mcp_task_selection_fixture_doc,
+    )
+    validate_mcp_same_thread_refresh_evidence_contract(
+        mcp_same_thread_refresh_contract_doc,
+        mcp_same_thread_refresh_fixture_doc,
+        mcp_task_selection_fixture_doc,
+    )
+    validate_skill_ablation_batch_01_selection(skill_ablation_batch_01_doc)
+    validate_skill_ablation_batch_01_protocol(skill_ablation_batch_01_protocol_doc)
+    validate_skill_ablation_batch_01_host_preflight(
+        skill_ablation_batch_01_host_preflight_doc,
+        skill_ablation_batch_01_protocol_doc,
+    )
+    validate_skill_ablation_host_config_transaction(
+        skill_ablation_host_config_transaction_doc,
+    )
+    validate_skill_ablation_host_transaction_revalidation(
+        skill_ablation_host_transaction_revalidation_doc,
+        skill_ablation_host_config_transaction_doc,
     )
     validate_round03_capability_survey_rebaseline(
         round03_capability_survey_rebaseline_doc,
@@ -2869,7 +4969,14 @@ def validate_cross_agent_claim_limit_reconciliation(
     proxy = projection_document.get("structuralBurdenProxy", {})
     if fixture.get("scenarioCount") != 105 or fixture.get("passed") != 105 or fixture.get("failed") != 0:
         raise RuntimeError("Cross-Agent claim-limit routing scenario linkage drifted.")
-    if proxy.get("baselineGovernedPayloadEntriesToEnumerate") != 29 or "structural enumeration proxy only" not in proxy.get("claimLimit", ""):
+    current_projection = projection_document.get("currentProjection", {})
+    expected_proxy_size = (
+        current_projection.get("approvedSkillRouteCount", 0)
+        + current_projection.get("recipeCount", 0)
+        if isinstance(current_projection, dict)
+        else -1
+    )
+    if proxy.get("baselineGovernedPayloadEntriesToEnumerate") != expected_proxy_size or "structural enumeration proxy only" not in proxy.get("claimLimit", ""):
         raise RuntimeError("Cross-Agent claim-limit projection proxy drifted.")
 
     aggregate = loopy_document.get("aggregate", [])
@@ -3496,11 +5603,17 @@ def validate_round03_authority_boundary_demand_review(
     } != expected_classes:
         raise RuntimeError("Round 03 authority-boundary alternatives drifted.")
     skills = {item.get("id"): item for item in skills_document.get("skills", []) if isinstance(item, dict)}
-    if skills.get("skill.curated.git-guardrails", {}).get("status") != "approved":
-        raise RuntimeError("Round 03 authority-boundary narrow guardrail drifted.")
+    if "skill.curated.git-guardrails" in skills:
+        raise RuntimeError("Suspended git-guardrails re-entered the approved inventory.")
     admissions = {item.get("skill"): item for item in admissions_document.get("admissions", []) if isinstance(item, dict)}
-    if admissions.get("skill.curated.git-guardrails", {}).get("disposition") != "approve":
-        raise RuntimeError("Round 03 authority-boundary guardrail admission evidence drifted.")
+    git_guardrails_admission = admissions.get("skill.curated.git-guardrails", {})
+    if (
+        git_guardrails_admission.get("disposition") != "recipe-only"
+        or git_guardrails_admission.get("validated") is not False
+        or "registry/git-guardrails-interception-evidence-contract-2026-07-24.json"
+        not in git_guardrails_admission.get("reviewRefs", [])
+    ):
+        raise RuntimeError("Git-guardrails suspension admission evidence drifted.")
     recipe_ids = {item.get("id") for item in recipes_document.get("recipes", []) if isinstance(item, dict)}
     if "recipe.rollback-recovery" not in recipe_ids:
         raise RuntimeError("Round 03 authority-boundary recovery recipe drifted.")
@@ -6551,6 +8664,332 @@ def validate_program_acceptance_map(
         raise RuntimeError("Every program verification must be referenced by acceptance criteria.")
     if referenced_evidence != set(evidence):
         raise RuntimeError("Every program evidence record must be referenced by acceptance criteria.")
+    for evidence_id, evidence_record in evidence.items():
+        supports = evidence_record.get("supports")
+        if not isinstance(supports, list) or not supports:
+            raise RuntimeError(
+                f"Program evidence must declare supported acceptance ids: {evidence_id}"
+            )
+        for criterion_id in supports:
+            if criterion_id not in criteria:
+                raise RuntimeError(
+                    f"Program evidence {evidence_id} supports unknown acceptance id: "
+                    f"{criterion_id}"
+                )
+            if evidence_id not in criteria[criterion_id].get("evidenceIds", []):
+                raise RuntimeError(
+                    f"Program acceptance {criterion_id} does not reference "
+                    f"supported evidence {evidence_id}"
+                )
+
+    process_fidelity_criterion = criteria.get(
+        "acceptance.end-to-end-process-fidelity"
+    )
+    expected_process_fidelity_subgates = [
+        {
+            "id": "subgate.formal-live-chained-transform-cohort",
+            "status": "open",
+            "requiredEvidence": (
+                "Eight valid frozen-protocol weak-Agent runs, four per arm in "
+                "AB/BA/BA/AB order, each with three fresh no-tool hops, "
+                "parent-observed host route receipts, atomic one-shot "
+                "reservation, raw artifact linkage, separate absolute and "
+                "process ledgers, and no retry or silent replacement."
+            ),
+            "promotionBoundary": (
+                "A single valid run changes only the candidate repetition "
+                "count; terminal recovery cannot erase intermediate loss and "
+                "cannot make this acceptance verified."
+            ),
+        },
+        {
+            "id": "subgate.process-fidelity-boundary-and-cumulative-coverage",
+            "status": "open",
+            "requiredEvidence": (
+                "Human-to-source binding and terminal-to-human accountable "
+                "review edges; named real compression, handoff, delegation, "
+                "tool, review, and lifecycle edge classes; at least one "
+                "general and one software-lifecycle scenario; deduplicated "
+                "new, carried, recovered, unique, peak, and budget-breach "
+                "loss accounting; human review burden; opaque-host limits; "
+                "native, official, and current mature handoff-composition "
+                "ablation with a residual-gap stop-authoring decision."
+            ),
+            "promotionBoundary": (
+                "Protocol, fixtures, transport correctness, source identity, "
+                "or one scenario cannot substitute for live cross-boundary "
+                "and cumulative-loss evidence."
+            ),
+        },
+        {
+            "id": "subgate.persistent-semantic-authority-continuity",
+            "status": "open",
+            "requiredEvidence": (
+                "At least one source-backed lifecycle trial in which accepted "
+                "domain terms and consequential decisions retain identity "
+                "across requirements, architecture, implementation, "
+                "independent review, release or rollback, operations or "
+                "maintenance, handoff, and closure; conflicts, unresolved "
+                "material, supersession, human acceptance, semantic deltas, "
+                "human burden, and token or latency cost remain observable."
+            ),
+            "promotionBoundary": (
+                "A glossary file, ADR presence, one grilling session, "
+                "matching terminology, source structure, or terminal "
+                "correctness cannot prove cross-lifecycle semantic "
+                "continuity or candidate value."
+            ),
+        },
+    ]
+    if (
+        not process_fidelity_criterion
+        or process_fidelity_criterion.get("assessment") != "partial"
+        or process_fidelity_criterion.get("graduationSubgates")
+        != expected_process_fidelity_subgates
+        or "evidence.human-ai-collaboration-process-fidelity-chained-transform-v2-amendment-2026-07-27"
+        not in process_fidelity_criterion.get("evidenceIds", [])
+        or "evidence.human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28"
+        not in process_fidelity_criterion.get("evidenceIds", [])
+    ):
+        raise RuntimeError(
+            "End-to-end process-fidelity graduation subgates or V2 amendment "
+            "evidence drifted."
+        )
+
+    cleanup_criterion = criteria.get("acceptance.final-program-cleanup-gate")
+    if (
+        not cleanup_criterion
+        or cleanup_criterion.get("assessment") != "partial"
+        or cleanup_criterion.get("verificationIds")
+        != ["verification.final-program-cleanup-gate"]
+        or set(cleanup_criterion.get("evidenceIds", []))
+        != {
+            "evidence.program-plan",
+            "evidence.closeout-cleanup-debt-preview-2026-07-24",
+            "evidence.closeout-cleanup-execution-2026-07-30",
+        }
+    ):
+        raise RuntimeError(
+            "Final program cleanup acceptance gate must remain partial and "
+            "bound to the program plan, frozen preview, and exact cleanup "
+            "execution checkpoint."
+        )
+    cleanup_statement = str(cleanup_criterion.get("statement", "")).lower()
+    for phrase in [
+        "exact target",
+        "retained by default",
+        "separate authority",
+        "post-cleanup",
+        "not final program closeout",
+    ]:
+        if phrase not in cleanup_statement:
+            raise RuntimeError(
+                f"Final program cleanup acceptance gate missing boundary: {phrase}"
+            )
+
+    cleanup_evidence_id = "evidence.closeout-cleanup-debt-preview-2026-07-24"
+    cleanup_evidence = evidence.get(cleanup_evidence_id, {})
+    cleanup_source = load(
+        "registry/closeout-cleanup-debt-preview-2026-07-24.json"
+    )
+    if cleanup_evidence.get("asOf") != cleanup_source.get("lastObservedDate"):
+        raise RuntimeError(
+            "Cleanup evidence asOf must match the preview lastObservedDate."
+        )
+    cleanup_execution_evidence = evidence.get(
+        "evidence.closeout-cleanup-execution-2026-07-30",
+        {},
+    )
+    cleanup_execution_source = load(
+        "registry/closeout-cleanup-execution-2026-07-30.json"
+    )
+    if (
+        cleanup_execution_evidence.get("asOf")
+        != cleanup_execution_source.get("date")
+        or cleanup_execution_evidence.get("path")
+        != "registry/closeout-cleanup-execution-2026-07-30.json"
+    ):
+        raise RuntimeError(
+            "Cleanup execution evidence date or path drifted."
+        )
+
+    self_authored_tdd_audit_evidence_id = (
+        "evidence.human-ai-collaboration-tdd-current-self-authored-"
+        "treatment-gap-audit-2026-07-27"
+    )
+    self_authored_tdd_audit_evidence = evidence.get(
+        self_authored_tdd_audit_evidence_id,
+        {},
+    )
+    expected_self_authored_tdd_supports = {
+        "acceptance.residual-gap-proof",
+        "acceptance.repository-authored-gap-fill-gate",
+    }
+    if (
+        self_authored_tdd_audit_evidence.get("path")
+        != "registry/human-ai-collaboration-tdd-current-self-authored-"
+        "treatment-gap-audit-2026-07-27.json"
+        or self_authored_tdd_audit_evidence.get("kind")
+        != "sha-bound-current-self-authored-tdd-treatment-gap-audit-"
+        "experiment-identity-gap-not-residual-functional-gap-no-self-"
+        "authoring-authority"
+        or self_authored_tdd_audit_evidence.get("asOf") != "2026-07-27"
+        or set(self_authored_tdd_audit_evidence.get("supports", []))
+        != expected_self_authored_tdd_supports
+        or criteria.get("acceptance.residual-gap-proof", {}).get("assessment")
+        != "partial"
+        or criteria.get(
+            "acceptance.repository-authored-gap-fill-gate",
+            {},
+        ).get("assessment")
+        != "planned"
+        or any(
+            self_authored_tdd_audit_evidence_id
+            not in criteria.get(criterion_id, {}).get("evidenceIds", [])
+            for criterion_id in expected_self_authored_tdd_supports
+        )
+    ):
+        raise RuntimeError(
+            "Current self-authored TDD gap audit evidence graph or claim "
+            "boundary drifted."
+        )
+
+    release_change_protocol_evidence_id = (
+        "evidence.human-ai-collaboration-release-change-zero-model-"
+        "protocol-2026-07-27"
+    )
+    release_change_protocol_evidence = evidence.get(
+        release_change_protocol_evidence_id,
+        {},
+    )
+    software_lifecycle_criterion_id = (
+        "acceptance.software-engineering-lifecycle-specialization"
+    )
+    software_lifecycle_criterion = criteria.get(
+        software_lifecycle_criterion_id,
+        {},
+    )
+    if (
+        release_change_protocol_evidence.get("path")
+        != "registry/human-ai-collaboration-release-change-zero-model-"
+        "protocol-2026-07-27.json"
+        or release_change_protocol_evidence.get("kind")
+        != "source-bound-zero-model-release-change-negative-control-"
+        "protocol-and-candidate-preflight-live-fixture-and-arms-blocked"
+        or release_change_protocol_evidence.get("asOf") != "2026-07-27"
+        or set(release_change_protocol_evidence.get("supports", []))
+        != {software_lifecycle_criterion_id}
+        or software_lifecycle_criterion.get("assessment") != "partial"
+        or release_change_protocol_evidence_id
+        not in software_lifecycle_criterion.get("evidenceIds", [])
+        or release_change_protocol_evidence_id
+        in criteria.get(
+            "acceptance.solution-neutral-collaboration-rebaseline",
+            {},
+        ).get("evidenceIds", [])
+    ):
+        raise RuntimeError(
+            "Release/change zero-model protocol evidence graph or claim "
+            "boundary drifted."
+        )
+
+    tdd_readiness_evidence_id = (
+        "evidence.human-ai-collaboration-tdd-current-execution-readiness-"
+        "reconciliation-2026-07-27"
+    )
+    tdd_readiness_evidence = evidence.get(tdd_readiness_evidence_id, {})
+    if (
+        tdd_readiness_evidence.get("path")
+        != "registry/human-ai-collaboration-tdd-current-execution-readiness-"
+        "reconciliation-2026-07-27.json"
+        or tdd_readiness_evidence.get("kind")
+        != "sha-bound-current-tdd-static-admission-and-offline-control-plane-"
+        "reconciliation-formal-runner-and-live-execution-blocked"
+        or tdd_readiness_evidence.get("asOf") != "2026-07-27"
+        or set(tdd_readiness_evidence.get("supports", []))
+        != {software_lifecycle_criterion_id}
+        or software_lifecycle_criterion.get("assessment") != "partial"
+        or tdd_readiness_evidence_id
+        not in software_lifecycle_criterion.get("evidenceIds", [])
+    ):
+        raise RuntimeError(
+            "Current TDD execution-readiness evidence graph or claim "
+            "boundary drifted."
+        )
+
+    tdd_successor_evidence_id = (
+        "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-"
+        "successor-contract-v2-2026-07-27"
+    )
+    tdd_successor_evidence = evidence.get(tdd_successor_evidence_id, {})
+    if (
+        tdd_successor_evidence.get("path")
+        != "registry/human-ai-collaboration-tdd-noncomparative-dispatch-"
+        "successor-contract-v2-2026-07-27.json"
+        or tdd_successor_evidence.get("kind")
+        != "offline-tdd-noncomparative-successor-contract-and-pure-"
+        "structure-builder-authority-clock-live-dispatch-and-formal-"
+        "acceptance-unverified-no-go"
+        or tdd_successor_evidence.get("asOf") != "2026-07-27"
+        or set(tdd_successor_evidence.get("supports", []))
+        != {software_lifecycle_criterion_id}
+        or software_lifecycle_criterion.get("assessment") != "partial"
+        or tdd_successor_evidence_id
+        not in software_lifecycle_criterion.get("evidenceIds", [])
+        or tdd_successor_evidence_id
+        in criteria.get(
+            "acceptance.solution-neutral-collaboration-rebaseline",
+            {},
+        ).get("evidenceIds", [])
+    ):
+        raise RuntimeError(
+            "TDD non-comparative dispatch successor evidence graph or "
+            "claim boundary drifted."
+        )
+
+    access_comms_evidence_id = (
+        "evidence.human-ai-collaboration-access-comms-zero-model-"
+        "calibration-2026-07-27"
+    )
+    access_comms_evidence = evidence.get(access_comms_evidence_id, {})
+    if (
+        access_comms_evidence.get("path")
+        != "registry/human-ai-collaboration-access-comms-zero-model-"
+        "protocol-2026-07-27.json"
+        or access_comms_evidence.get("kind")
+        != "source-bound-structured-semantic-process-loss-zero-model-"
+        "calibration-no-live-agent-domain-or-accessibility-conformance"
+        or access_comms_evidence.get("asOf") != "2026-07-27"
+        or set(access_comms_evidence.get("supports", []))
+        != {"acceptance.end-to-end-process-fidelity"}
+        or access_comms_evidence_id
+        not in process_fidelity_criterion.get("evidenceIds", [])
+    ):
+        raise RuntimeError(
+            "Access/comms zero-model calibration evidence graph or claim "
+            "boundary drifted."
+        )
+
+    cleanup_verification = verifications.get(
+        "verification.final-program-cleanup-gate"
+    )
+    cleanup_verification_text = " ".join(
+        str(cleanup_verification.get(key, ""))
+        for key in ["method", "expectedResult", "evidenceRequirement"]
+    ).lower()
+    for phrase in [
+        "branches",
+        "worktrees",
+        "backups",
+        "consumer or tool state",
+        "separate authority",
+        "post-cleanup",
+        "residual-debt ledger",
+    ]:
+        if phrase not in cleanup_verification_text:
+            raise RuntimeError(
+                f"Final program cleanup verification missing boundary: {phrase}"
+            )
 
     for verification_id, verification in verifications.items():
         for key in ["method", "expectedResult", "evidenceRequirement"]:
@@ -7691,6 +10130,7 @@ def validate_curation_program_plan(
         raise RuntimeError("Curation program sequence gates are required.")
     expected_sequence_gate_ids = [
         "gate.demand-before-gap-claim",
+        "gate.solution-neutral-coverage-before-generalization",
         "gate.baseline-before-substitution",
         "gate.clustering-before-deep-review",
         "gate.source-pin-before-deep-review",
@@ -7705,6 +10145,7 @@ def validate_curation_program_plan(
         "gate.manager-topology-before-repository-creation",
         "gate.manager-post-matrix-reintake-before-adapter-work",
         "gate.closeout-before-next-intake",
+        "gate.final-program-cleanup-before-final-closeout",
     ]
     sequence_gate_ids = [
         item.get("id") for item in sequence_gates if isinstance(item, dict)
@@ -7720,6 +10161,21 @@ def validate_curation_program_plan(
     gate_by_id = {
         gate["id"]: gate for gate in sequence_gates if isinstance(gate, dict)
     }
+    final_cleanup_gate_text = " ".join(
+        str(gate_by_id["gate.final-program-cleanup-before-final-closeout"].get(key, ""))
+        for key in ["prerequisite", "blockedUntil", "verification"]
+    ).lower()
+    for phrase in [
+        "exact-target",
+        "separate cleanup authority",
+        "declared final program closeout",
+        "retain, archive, migrate, or delete",
+        "post-cleanup",
+    ]:
+        if phrase not in final_cleanup_gate_text:
+            raise RuntimeError(
+                f"Curation program final cleanup gate missing boundary: {phrase}"
+            )
     source_preflight_text = " ".join(
         str(gate_by_id["gate.source-preflight-before-download-or-install"].get(key, ""))
         for key in ["prerequisite", "blockedUntil", "verification"]
@@ -7786,7 +10242,8 @@ def validate_curation_program_plan(
         "initiative.program-control-completeness-reconciliation",
         "initiative.round02-stage-closeout-reconciliation",
         "initiative.capability-survey-gap-proof",
-        "initiative.capability-survey-gap-proof",
+        "initiative.round03-capability-survey-rebaseline",
+        "initiative.human-ai-collaboration-coverage-rebaseline",
         "initiative.production-capability-manager-topology-design",
     }
     if not required_initiative_ids <= set(initiative_ids):
@@ -7812,6 +10269,90 @@ def validate_curation_program_plan(
                 )
         if not isinstance(initiative.get("decisionGate"), str) or not initiative.get("decisionGate"):
             raise RuntimeError(f"Curation program initiative decision gate is required: {initiative_id}")
+    collaboration_rebaseline = next(
+        item
+        for item in initiatives
+        if isinstance(item, dict)
+        and item.get("id")
+        == "initiative.human-ai-collaboration-coverage-rebaseline"
+    )
+    expected_process_fidelity_evidence_pointers = {
+        "currentProcessFidelityV2Protocol": (
+            "registry/human-ai-collaboration-process-fidelity-information-"
+            "equivalent-trial-protocol-v2-2026-07-27.json"
+        ),
+        "currentProcessFidelityChainedTraceCalibration": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "trace-measurement-calibration-2026-07-27.json"
+        ),
+        "currentProcessFidelityChainedProtocol": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-trial-protocol-2026-07-27.json"
+        ),
+        "currentProcessFidelityChainedPacketPreflight": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-packet-preflight-2026-07-27.json"
+        ),
+        "currentProcessFidelityChainedProtocolV2Amendment": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-trial-protocol-v2-amendment-2026-07-27.json"
+        ),
+        "currentProcessFidelityAdapterEvaluatorEvidence": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-adapter-evaluator-poc-evidence-2026-07-27.json"
+        ),
+        "currentProcessFidelityCumulativeLossAccountingEvidence": (
+            "registry/human-ai-collaboration-process-fidelity-cumulative-"
+            "loss-accounting-poc-evidence-2026-07-27.json"
+        ),
+        "currentSoftwareLifecycleThinSliceProtocol": (
+            "registry/human-ai-collaboration-software-lifecycle-thin-slice-"
+            "protocol-2026-07-27.json"
+        ),
+        "currentSoftwareLifecycleThinSliceZeroModelCalibrationEvidence": (
+            "registry/human-ai-collaboration-software-lifecycle-thin-slice-"
+            "zero-model-calibration-evidence-2026-07-27.json"
+        ),
+        "currentReleaseChangeZeroModelProtocol": (
+            "registry/human-ai-collaboration-release-change-zero-model-"
+            "protocol-2026-07-27.json"
+        ),
+        "currentReleaseChangeCandidatePreflight": (
+            "registry/human-ai-collaboration-release-change-candidate-"
+            "preflight-2026-07-27.json"
+        ),
+        "currentTddExecutionReadinessReconciliation": (
+            "registry/human-ai-collaboration-tdd-current-execution-readiness-"
+            "reconciliation-2026-07-27.json"
+        ),
+        "currentTddNoncomparativeDispatchSuccessorContractV2": (
+            "registry/human-ai-collaboration-tdd-noncomparative-dispatch-"
+            "successor-contract-v2-2026-07-27.json"
+        ),
+        "currentAccessCommsZeroModelProtocol": (
+            "registry/human-ai-collaboration-access-comms-zero-model-"
+            "protocol-2026-07-27.json"
+        ),
+        "currentProcessFidelityDispatchGateContract": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-dispatch-gate-contract-2026-07-27.json"
+        ),
+        "currentProcessFidelityDispatchLedgerContract": (
+            "registry/human-ai-collaboration-process-fidelity-chained-"
+            "transform-dispatch-ledger-contract-2026-07-27.json"
+        ),
+        "currentProcessFidelityRawTraceEligibility": (
+            "registry/human-ai-collaboration-process-fidelity-raw-event-"
+            "trace-eligibility-assessment-2026-07-27.json"
+        ),
+    }
+    if any(
+        collaboration_rebaseline.get(key) != expected
+        for key, expected in expected_process_fidelity_evidence_pointers.items()
+    ):
+        raise RuntimeError(
+            "Curation program process-fidelity current evidence index drifted."
+        )
     current_initiative_id = document.get("currentInitiativeId")
     if current_initiative_id != "initiative.capability-survey-gap-proof":
         raise RuntimeError("Curation program current initiative must be the active capability survey.")
@@ -8007,6 +10548,7 @@ def validate_curation_program_plan(
     required_objective_ids = {
         "objective.skills-terminal-mvp",
         "objective.multi-domain-coverage",
+        "objective.solution-neutral-collaboration-coverage",
         "objective.evidence-backed-release-evolution",
         "objective.evidence-backed-demand-model",
         "objective.reuse-before-build-gap-proof",
@@ -8221,7 +10763,7 @@ def validate_curation_program_plan(
         "cross-cutting",
         "exact source pin",
         "machine-bound current initiative",
-        "fourteen required core objectives",
+        "fifteen required core objectives",
         "CC Switch Reuse And Custom Manager Retirement",
         "source-preserving",
         "non-active pool",
@@ -11810,8 +14352,6 @@ def validate_round02_approved_payload_routing_proposal(
         for item in manifest.get("files", [])
         if isinstance(item, dict)
     }
-    if manifest.get("skillCount") != 20 or manifest.get("fileCount") != 42:
-        raise RuntimeError("Round-02 approved payload manifest counts must be 20 Skills and 42 files.")
     if skill_path not in manifest_paths:
         raise RuntimeError("Round-02 approved payload skill missing from release manifest.")
 
@@ -13251,6 +15791,3350 @@ def validate_round03_alternative_comparison_batch_01(
         for phrase in phrases:
             if phrase not in text:
                 raise RuntimeError(f"Round 03 alternative comparison doc missing phrase in {path}: {phrase}")
+
+
+def validate_mcp_current_host_inventory(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-current-host-inventory-2026-07-19",
+        "date": "2026-07-19",
+        "status": "observed-single-host-partial-no-lifecycle-actuation",
+        "nextGate": "measure a disposable startup profile with explicit pre/post tool and process evidence before any lifecycle actuation claim",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"MCP current-host inventory {key} drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or authority.get("readOnlyInventory") is not True:
+        raise RuntimeError("MCP current-host read-only authority drifted.")
+    for key in (
+        "processCommandLineRead",
+        "environmentOrSecretsRead",
+        "externalAccountDataRead",
+        "configurationMutation",
+        "mcpEnableDisable",
+        "mcpAddRemove",
+        "mcpLoginLogout",
+        "processStartStop",
+    ):
+        if authority.get(key) is not False:
+            raise RuntimeError(f"MCP current-host authority overclaim drifted: {key}")
+    if authority.get("processFieldsRead") != ["ProcessId", "ParentProcessId", "Name", "WorkingSetBytes", "PrivateMemoryBytes", "CpuSeconds"]:
+        raise RuntimeError("MCP current-host process-field boundary drifted.")
+
+    cli = document.get("cliInventory", {})
+    if not isinstance(cli, dict) or cli.get("standaloneConfiguredCount") != 0 or "CLI user configuration only" not in str(cli.get("scope", "")):
+        raise RuntimeError("MCP CLI inventory scope drifted.")
+    tools = document.get("desktopToolSurface", {})
+    namespaces = tools.get("namespaces", []) if isinstance(tools, dict) else []
+    if tools.get("totalToolDefinitions") != 487 or tools.get("mcpNamedToolDefinitions") != 457 or len(namespaces) != 12:
+        raise RuntimeError("MCP Desktop tool projection counts drifted.")
+    if sum(item.get("toolDefinitions", 0) for item in namespaces if isinstance(item, dict)) != 457:
+        raise RuntimeError("MCP namespace tool counts do not sum to the recorded projection.")
+
+    call = document.get("callabilityProbe", {})
+    if not isinstance(call, dict) or call.get("namespace") != "node_repl" or call.get("output") != 42 or call.get("status") != "callable-observed-for-one-local-mcp-only":
+        raise RuntimeError("MCP bounded callability evidence drifted.")
+    process = document.get("processObservation", {})
+    if not isinstance(process, dict) or process.get("boundedElevatedReadApproved") is not True or process.get("specificMcpOwnershipAttributable") is not False or process.get("safeStopEligibility") != "not-established":
+        raise RuntimeError("MCP process-attribution claim boundary drifted.")
+    resource = process.get("resourceSnapshot", {})
+    by_name = resource.get("byName", []) if isinstance(resource, dict) else []
+    if not isinstance(resource, dict) or resource.get("codexRootCount") != 2 or resource.get("processCount") != 107 or resource.get("totalWorkingSetBytes") != 5052542976 or resource.get("totalPrivateMemoryBytes") != 3702562816 or len(by_name) != 7:
+        raise RuntimeError("MCP process resource snapshot drifted.")
+    if sum(item.get("processCount", 0) for item in by_name if isinstance(item, dict)) != 107 or sum(item.get("workingSetBytes", 0) for item in by_name if isinstance(item, dict)) != 5052542976 or sum(item.get("privateMemoryBytes", 0) for item in by_name if isinstance(item, dict)) != 3702562816:
+        raise RuntimeError("MCP process resource aggregate does not reconcile.")
+    if any(resource.get(key) is not False for key in ("volatileProcessIdsStored", "specificMcpResourceAttribution", "taskScopedResourceAttribution", "idleOrTaskEndReleaseProved", "resourceSavingsProved")):
+        raise RuntimeError("MCP process resource attribution overclaim.")
+    if len(document.get("stateClassification", [])) != 3 or len(document.get("supportedClaims", [])) != 5 or len(document.get("unsupportedClaims", [])) != 9:
+        raise RuntimeError("MCP current-host evidence coverage drifted.")
+
+    doc = " ".join((ROOT / "docs/mcp-current-host-inventory-2026-07-19.md").read_text(encoding="utf-8").split())
+    for phrase in (
+        "no lifecycle actuation",
+        "not a health or authentication census",
+        "One local `node_repl` MCP call",
+        "cannot be mapped safely to a specific MCP",
+        "107 processes with a combined 5,052,542,976-byte working set",
+        "not an MCP-only, per-server, per-task, startup, idle, or steady-state baseline",
+        "does not identify which process belongs to which MCP",
+        "no external candidate",
+        "must precede any lifecycle actuation or resource-savings claim",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"MCP current-host inventory doc missing phrase: {phrase}")
+
+
+def validate_mcp_runtime_refresh_interface_and_trial(
+    review: dict[str, object],
+    trial: dict[str, object],
+) -> None:
+    expected_review = {
+        "schema": 1,
+        "id": "mcp-runtime-refresh-interface-review-2026-07-19",
+        "date": "2026-07-19",
+        "status": "observed-single-host-isolated-status-list-live-refresh-unproven",
+        "nextGate": "separate-authorization-for-disposable-same-config-reload-status-before-and-after",
+    }
+    for key, value in expected_review.items():
+        if review.get(key) != value:
+            raise RuntimeError(f"MCP runtime refresh interface review {key} drifted.")
+
+    local = review.get("localHost", {})
+    if not isinstance(local, dict) or local.get("codexCliVersion") != "0.144.6" or local.get("experimentalFlagUsed") is not False:
+        raise RuntimeError("MCP runtime refresh local stable-schema boundary drifted.")
+    methods = local.get("methods", [])
+    if not isinstance(methods, list) or [item.get("name") for item in methods if isinstance(item, dict)] != [
+        "config/mcpServer/reload",
+        "mcpServerStatus/list",
+    ]:
+        raise RuntimeError("MCP runtime refresh local method inventory drifted.")
+    status_method = methods[1] if len(methods) > 1 and isinstance(methods[1], dict) else {}
+    if status_method.get("invoked") is not True or status_method.get("evidence") != "registry/codex-app-server-isolated-mcp-status-probe-2026-07-19.json":
+        raise RuntimeError("MCP runtime refresh live status evidence link drifted.")
+    hashes = local.get("generatedFileSha256", {})
+    if not isinstance(hashes, dict) or len(hashes) != 3 or any(
+        not isinstance(value, str) or not re.fullmatch(r"[0-9A-F]{64}", value)
+        for value in hashes.values()
+    ):
+        raise RuntimeError("MCP runtime refresh schema digest coverage drifted.")
+
+    official = review.get("officialSource", {})
+    if not isinstance(official, dict) or official.get("repository") != "openai/codex" or official.get("revision") != "0fb559f0f6e231a88ac02ea002d3ecd248e2b515":
+        raise RuntimeError("MCP runtime refresh official source pin drifted.")
+    observations = official.get("observations", {})
+    if not isinstance(observations, dict) or len(observations) != 7 or any(value is not True for value in observations.values()):
+        raise RuntimeError("MCP runtime refresh official source observations drifted.")
+
+    claims = review.get("claimClassification", {})
+    supported_static = {
+        "staticRefreshImplementationExists",
+        "currentBinaryStableProtocolExposesRefresh",
+        "currentBinaryStableProtocolExposesThreadAwareStatus",
+    }
+    supported_live = {"liveStatusListObserved"}
+    if not isinstance(claims, dict) or any(claims.get(key) is not True for key in supported_static):
+        raise RuntimeError("MCP runtime refresh static interface claims drifted.")
+    if any(claims.get(key) is not True for key in supported_live):
+        raise RuntimeError("MCP runtime refresh live status claim drifted.")
+    if claims.get("currentDesktopUiInvokesRefresh") != "unknown":
+        raise RuntimeError("MCP runtime refresh Desktop UI claim overreached.")
+    for key, value in claims.items():
+        if key not in supported_static | supported_live and key != "currentDesktopUiInvokesRefresh" and value is not False:
+            raise RuntimeError(f"MCP runtime refresh live behavior overclaimed: {key}")
+
+    authority = review.get("authorityBoundary", {})
+    allowed_true = {
+        "officialPublicSourceRead",
+        "localSchemaGenerationInTemporaryDirectory",
+        "appServerStart",
+        "statusListCall",
+    }
+    if not isinstance(authority, dict) or any(authority.get(key) is not True for key in allowed_true):
+        raise RuntimeError("MCP runtime refresh read-only authority drifted.")
+    for key, value in authority.items():
+        if key not in allowed_true and value is not False:
+            raise RuntimeError(f"MCP runtime refresh mutation authority overclaim: {key}")
+
+    expected_trial = {
+        "schema": 1,
+        "id": "mcp-runtime-refresh-trial-2026-07-19",
+        "date": "2026-07-19",
+        "status": "verified-static-interface-and-decision-fixtures-live-refresh-not-authorized",
+        "protocol": "docs/mcp-runtime-refresh-interface-and-trial-protocol-2026-07-19.md",
+        "evaluator": "scripts/evaluate_mcp_runtime_refresh_trial.py",
+    }
+    for key, value in expected_trial.items():
+        if trial.get(key) != value:
+            raise RuntimeError(f"MCP runtime refresh trial {key} drifted.")
+    trial_authority = trial.get("authorityBoundary", {})
+    if not isinstance(trial_authority, dict) or not trial_authority or any(value is not False for value in trial_authority.values()):
+        raise RuntimeError("MCP runtime refresh trial authority overclaim.")
+    fixtures = trial.get("fixtures", [])
+    if not isinstance(fixtures, list) or len(fixtures) != 17 or len({item.get("id") for item in fixtures if isinstance(item, dict)}) != 17:
+        raise RuntimeError("MCP runtime refresh fixture coverage drifted.")
+    results = evaluate_mcp_runtime_refresh_fixture_document(trial)
+    failures = [item for item in results if item["expected"] != item["actual"]]
+    if failures:
+        raise RuntimeError(f"MCP runtime refresh deterministic fixture failed: {failures[0]['id']}")
+    required_outcomes = {
+        "recorded-static-refresh-interface-only",
+        "observed-read-only-status-snapshot",
+        "observed-runtime-refresh-release-still-unknown",
+        "observed-refresh-and-owned-release-single-host",
+        "fail-static-interface-promoted-to-live-behavior",
+        "fail-per-server-release-ownership-unproved",
+        "fail-task-end-release-overclaim",
+        "fail-resource-benefit-not-repeatable",
+    }
+    if not required_outcomes.issubset({item["actual"] for item in results}):
+        raise RuntimeError("MCP runtime refresh fixture outcome coverage drifted.")
+
+    doc = " ".join(
+        (ROOT / "docs/mcp-runtime-refresh-interface-and-trial-protocol-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "static interface evidence and one isolated Codex status call observed",
+        "config/mcpServer/reload",
+        "mcpServerStatus/list",
+        "McpServerRefreshResponse` is an empty object",
+        "No static schema or source path may be promoted to live behavior",
+        "Task-end release is a separate hypothesis",
+        "Stage 1 is now observed once",
+        "did not send `config/mcpServer/reload`",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"MCP runtime refresh protocol missing phrase: {phrase}")
+
+
+def validate_codex_app_server_isolated_mcp_status_probe(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "codex-app-server-isolated-mcp-status-probe-2026-07-19",
+        "date": "2026-07-19",
+        "status": "observed-single-host-isolated-app-server-status-list-no-reload",
+        "scenarioIds": ["MCP-01", "MCP-03"],
+        "nextGate": "separate-authorization-for-disposable-same-config-reload-status-before-and-after",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Codex isolated MCP status probe {key} drifted.")
+
+    host = document.get("host", {})
+    if not isinstance(host, dict) or host.get("product") != "Codex app-server" or host.get("codexCliVersion") != "0.144.6" or host.get("transport") != "stdio-jsonl":
+        raise RuntimeError("Codex isolated MCP status probe host boundary drifted.")
+
+    repository = document.get("repositorySnapshotAfterProbe", {})
+    if not isinstance(repository, dict) or repository.get("branch") != "main" or repository.get("head") != "55659f30091990f7c589932e0379880de30dc403" or repository.get("upstream") != "origin/main" or repository.get("ahead") != 0 or repository.get("behind") != 0:
+        raise RuntimeError("Codex isolated MCP status probe repository snapshot drifted.")
+
+    runner = document.get("runner", {})
+    if not isinstance(runner, dict) or runner.get("requestMethods") != ["initialize", "initialized", "mcpServerStatus/list"] or runner.get("reloadMethodPresent") is not False or runner.get("defaultCodexHomeRejected") is not True or runner.get("accountEnvironmentValuesRecorded") is not False:
+        raise RuntimeError("Codex isolated MCP status probe request firewall drifted.")
+
+    attempts = document.get("attempts", [])
+    if not isinstance(attempts, list) or len(attempts) != 3:
+        raise RuntimeError("Codex isolated MCP status probe attempt coverage drifted.")
+    outcomes = [item.get("outcome") for item in attempts if isinstance(item, dict)]
+    if outcomes != [
+        "runner-failed-before-process-launch",
+        "transport-lifecycle-failure",
+        "observed-read-only-status-snapshot",
+    ]:
+        raise RuntimeError("Codex isolated MCP status probe attempt outcomes drifted.")
+    success = attempts[2] if isinstance(attempts[2], dict) else {}
+    process = success.get("process", {})
+    status = success.get("mcpServerStatusList", {})
+    isolation = success.get("isolationArtifacts", {})
+    discovery = success.get("hostDiscoveryBoundary", {})
+    if not isinstance(process, dict) or process.get("returnCode") != 0 or process.get("timedOut") is not False or process.get("stdinClosedAfterStatusResponse") is not True or process.get("perServerProcessIdentityEstablished") is not False:
+        raise RuntimeError("Codex isolated MCP status probe process evidence drifted.")
+    if not isinstance(status, dict) or status.get("threadIdSupplied") is not False or status.get("serverCount") != 0 or status.get("serverNames") != []:
+        raise RuntimeError("Codex isolated MCP status probe response drifted.")
+    if not isinstance(isolation, dict) or isolation.get("filesBefore") != 0 or isolation.get("authJsonPresent") is not False or isolation.get("configTomlPresent") is not False or isolation.get("runtimeOwnedSystemSkillsMaterialized") is not True:
+        raise RuntimeError("Codex isolated MCP status probe isolation evidence drifted.")
+    if not isinstance(discovery, dict) or discovery.get("parentProjectCodexDirectoryDetected") is not True or discovery.get("projectConfigHooksAndExecPoliciesLoaded") is not False or discovery.get("skillsMayRemainDiscoverableUnderHostRules") is not True or discovery.get("provesPhysicalIsolationFromEveryProjectDiscoverySurface") is not False:
+        raise RuntimeError("Codex isolated MCP status probe host discovery boundary drifted.")
+
+    supported = document.get("supportedClaims", {})
+    unsupported = document.get("unsupportedClaims", {})
+    if not isinstance(supported, dict) or not supported or any(value is not True for value in supported.values()):
+        raise RuntimeError("Codex isolated MCP status probe supported claims drifted.")
+    if not isinstance(unsupported, dict) or not unsupported or any(value is not False for value in unsupported.values()):
+        raise RuntimeError("Codex isolated MCP status probe unsupported behavior overclaimed.")
+
+    authority = document.get("authorityBoundary", {})
+    allowed_true = {"isolatedCodexHomeCreation", "appServerStart", "statusListCall"}
+    if not isinstance(authority, dict) or any(authority.get(key) is not True for key in allowed_true):
+        raise RuntimeError("Codex isolated MCP status probe authority record drifted.")
+    for key, value in authority.items():
+        if key not in allowed_true and value is not False:
+            raise RuntimeError(f"Codex isolated MCP status probe authority overclaim: {key}")
+
+    evidence = document.get("evidenceBoundary", {})
+    if not isinstance(evidence, dict) or evidence.get("liveStdoutPersistedVerbatim") is not False or evidence.get("normalizedResultRecordedHere") is not True or evidence.get("secretValuesRecorded") is not False or evidence.get("failedAndSuccessfulHomesRetainedForSeparateCloseoutReview") is not True:
+        raise RuntimeError("Codex isolated MCP status probe evidence retention boundary drifted.")
+
+
+def validate_mcp_app_server_0_145_direct_tool_call_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23",
+        "date": "2026-07-23",
+        "status": "observed-single-host-direct-local-tool-call-multi-instance-release-gap",
+        "nextGate": "isolated-config-enable-disable-reload-new-thread-trial-with-explicit-multi-instance-accounting",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Codex 0.145.0 direct MCP evidence {key} drifted.")
+
+    host = document.get("host", {})
+    if not isinstance(host, dict) or host != {
+        "product": "Codex CLI app-server",
+        "platform": "Windows",
+        "version": "0.145.0",
+        "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    }:
+        raise RuntimeError("Codex 0.145.0 direct MCP host boundary drifted.")
+
+    official = document.get("officialEvidence", {})
+    semantics = official.get("semantics", {}) if isinstance(official, dict) else {}
+    if (
+        not isinstance(official, dict)
+        or official.get("tag") != "rust-v0.145.0"
+        or official.get("commit")
+        != "25af12f7e61572b0bc18ddb1008be543b91519b0"
+        or official.get("appServerReadme")
+        != "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/README.md"
+        or not isinstance(semantics, dict)
+        or "acceptance, not completion" not in str(semantics.get("reload"))
+        or "30 minutes" not in str(semantics.get("unsubscribe"))
+        or "does not alone prove" not in str(semantics.get("threadClosed"))
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP official semantics drifted.")
+
+    schema = document.get("stableSchemaEvidence", {})
+    expected_schema_hashes = {
+        "ClientRequest.json": "f3171526a137767aa9350838f441d79e2dc294efecd32faf7932b3b08d223136",
+        "v2/McpServerToolCallParams.json": "35fa0fddcdee23ceb24a39b1e6de62d1594b804b453dda66cc522005393f6477",
+        "v2/McpServerToolCallResponse.json": "83d100ccf933b4a1ce657bc7532a79c783dcde8b4d059a2f2cc985d51538ad88",
+        "v2/McpToolCallProgressNotification.json": "53db836cfa93fecef8968d3b750b936a679d5befed987c72ad6f0bc6e327f60f",
+        "v2/McpServerRefreshResponse.json": "54a77812db02175dc69053870e582d3b314af6f161f0c76846f3563b0f9487c4",
+        "v2/ListMcpServerStatusParams.json": "701916a7d444afbbc68aef9e72ab4e5c3111a8fd97560072e9b84713adf9ddc0",
+        "v2/ThreadUnsubscribeParams.json": "a03dc3d6c5a2f77f164b6bf4250d29f0c81c10c6b5f484fac0b05392dc9c936a",
+        "v2/ThreadClosedNotification.json": "d9978b8a5450dc6ba01cac5ae6641493aa60c558340a718722a78eda990048c8",
+    }
+    parameters = schema.get("toolCallParameters", {}) if isinstance(schema, dict) else {}
+    if (
+        not isinstance(schema, dict)
+        or schema.get("experimentalFlagUsed") is not False
+        or schema.get("files") != expected_schema_hashes
+        or not isinstance(parameters, dict)
+        or parameters.get("required") != ["threadId", "server", "tool"]
+        or parameters.get("optional") != ["arguments", "_meta"]
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP stable schema evidence drifted.")
+
+    probe = document.get("primaryLiveProbe", {})
+    direct_call = probe.get("directToolCall", {}) if isinstance(probe, dict) else {}
+    instances = probe.get("runtimeInstances", {}) if isinstance(probe, dict) else {}
+    unsubscribe = probe.get("unsubscribe", {}) if isinstance(probe, dict) else {}
+    shutdown = probe.get("shutdownObservation", {}) if isinstance(probe, dict) else {}
+    post_check = shutdown.get("postProbeExactPidReadOnlyCheck", {}) if isinstance(shutdown, dict) else {}
+    expected_instances = [
+        {
+            "pid": 43368,
+            "instanceId": "4eafdc24-723a-4400-9637-5bc6736d5f74",
+            "roleFromObservedMethods": "thread-bound-tool-call-instance",
+        },
+        {
+            "pid": 40724,
+            "instanceId": "676649a5-0374-41ab-9f76-75bb03dd5232",
+            "roleFromObservedMethods": "status-resource-discovery-instance",
+        },
+    ]
+    if (
+        not isinstance(probe, dict)
+        or probe.get("probeId") != "codex-app-server-isolated-mcp-tool-call-v1"
+        or probe.get("modelTurnStarted") is not False
+        or probe.get("accountStateCopied") is not False
+        or probe.get("authStateProduced") is not False
+        or probe.get("configUnchangedDuringProbe") is not True
+        or probe.get("applicationLogExternalNetworkAttemptObserved") is not False
+        or probe.get("packetLevelNetworkMonitorUsed") is not False
+        or probe.get("statusConfiguredServerCount") != 1
+        or not isinstance(direct_call, dict)
+        or direct_call.get("succeeded") is not True
+        or direct_call.get("pid") != 43368
+        or not isinstance(instances, dict)
+        or instances.get("observedCount") != 2
+        or instances.get("toolCallPid") != 43368
+        or instances.get("instances") != expected_instances
+        or instances.get("singleRuntimeInstanceProved") is not False
+        or not isinstance(unsubscribe, dict)
+        or unsubscribe.get("responseStatus") != "unsubscribed"
+        or unsubscribe.get("thirtyMinuteIdleWindowExecuted") is not False
+        or unsubscribe.get("threadClosedObserved") is not False
+        or not isinstance(shutdown, dict)
+        or shutdown.get("launcherWrapperGracefulWaitTimedOut") is not True
+        or shutdown.get("launcherWrapperKillSent") is not True
+        or shutdown.get("launcherWrapperReturnCode") != 1
+        or shutdown.get("actualAppServerPidObserved") is not False
+        or shutdown.get("actualAppServerTerminationObserved") is not False
+        or shutdown.get("processesPresentAfterLauncherWrapperShutdown") != [40724]
+        or shutdown.get("pidOnlyCleanupSignalsSent") != [40724]
+        or shutdown.get("processIdentityRevalidatedBeforeSignal") is not False
+        or shutdown.get("exactInstanceCleanupProved") is not False
+        or shutdown.get("allSentinelProcessesExitedWithinFiveSeconds") is not False
+        or not isinstance(post_check, dict)
+        or post_check.get("pid") != 40724
+        or post_check.get("running") is not False
+        or post_check.get("exactExitLatencyKnown") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP live probe evidence drifted.")
+
+    repeated = document.get("repeatedObservation", {})
+    expected_attempt_manifests = [
+        (
+            "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723",
+            "55a1c9b3f1841f84a6177ca698a4a94e68d8ba89fb4f4bab3099aafc04b5773c",
+            50456,
+            "687efa4a-ffdf-42da-9165-6199c742abd4",
+            41388,
+            "8ec594e2-2062-499c-90ed-a0bf6dc2cac9",
+        ),
+        (
+            "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run02",
+            "09712dc9d68e2ee2df2b96bb9e0c0f0f94d193c0eaa38dcd4c534d98f0688eda",
+            45592,
+            "fefae2ea-2ad1-4d02-bffb-9682605b14cc",
+            66732,
+            "98accf5f-7f1c-420d-ab52-5eca3736633d",
+        ),
+        (
+            "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run03",
+            "6b100e689f96194fbd9ad233b05f2231e2587855f0bb8d47b1cb7cc1aea8e1ae",
+            66156,
+            "f5f508ce-623a-4c73-85d1-a1d20aeaae31",
+            59196,
+            "eab02204-296d-4ff4-a94d-50cd5d487be9",
+        ),
+        (
+            "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run04",
+            "7b49150f66ff5e288877311fdb9b74ac0a2fdd0ea87e7a4f618869e19b7c76b2",
+            60756,
+            "e3d6f263-7b43-41e0-b9b2-95c6c8b380d5",
+            60508,
+            "5f8639f0-4b4f-44d9-afc7-d48c27ffe326",
+        ),
+        (
+            "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05",
+            "75697a52bf2cf3a591d82cd41b6679ae8c0f1b0c0351539e2e8d70bc4005b213",
+            43368,
+            "4eafdc24-723a-4400-9637-5bc6736d5f74",
+            40724,
+            "676649a5-0374-41ab-9f76-75bb03dd5232",
+        ),
+    ]
+    expected_attempt_manifests = [
+        {
+            "root": root,
+            "eventLogSha256": digest,
+            "bytes": 2163,
+            "instanceCount": 2,
+            "toolCallCount": 1,
+            "instances": [
+                {
+                    "pid": tool_pid,
+                    "instanceId": tool_instance,
+                    "roleFromObservedMethods": "thread-bound-tool-call-instance",
+                },
+                {
+                    "pid": status_pid,
+                    "instanceId": status_instance,
+                    "roleFromObservedMethods": "status-resource-discovery-instance",
+                },
+            ],
+        }
+        for root, digest, tool_pid, tool_instance, status_pid, status_instance in expected_attempt_manifests
+    ]
+    if (
+        not isinstance(repeated, dict)
+        or repeated.get("attemptCount") != 5
+        or repeated.get("directToolCallSucceededCount") != 5
+        or repeated.get("twoSentinelInstancesObservedCount") != 5
+        or repeated.get("normalizedResultRetainedForPrimaryAttemptOnly") is not True
+        or repeated.get("perAttemptEventManifests") != expected_attempt_manifests
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP repeated evidence drifted.")
+
+    supported = document.get("supportedConclusions", {})
+    unsupported = document.get("claimBoundary", {})
+    if (
+        not isinstance(supported, dict)
+        or not supported
+        or any(value is not True for value in supported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP supported conclusions drifted.")
+    if (
+        not isinstance(unsupported, dict)
+        or not unsupported
+        or any(value is not False for value in unsupported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP lifecycle behavior overclaimed.")
+
+    cleanup = document.get("cleanupDebt", {})
+    if (
+        not isinstance(cleanup, dict)
+        or cleanup.get("temporarySchemaAndProbeRootsRetained") is not True
+        or cleanup.get("deletionAuthorizedByThisRecord") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 direct MCP cleanup boundary drifted.")
+
+    doc = " ".join(
+        (
+            ROOT
+            / "docs/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "direct local MCP tool call",
+        "two Sentinel instances",
+        "does not prove network traffic was absent",
+        "30-minute idle unload was not executed",
+        "PID-only cleanup signal",
+        "actual app-server termination was not independently established",
+        "not exact-instance cleanup evidence",
+        "five event logs are pinned by SHA-256",
+        "same-thread hot enable/disable remains unproven",
+        "cleanup debt, not product payloads",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex 0.145.0 direct MCP evidence doc missing phrase: {phrase}"
+            )
+
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "two Sentinel instances for the single configured server",
+        "Reload acceptance is still not completed actuation evidence",
+        "not a lease or reference-count API",
+        "30-minute path was not executed",
+        "does not prove proactive restart",
+    ):
+        if phrase not in matrix:
+            raise RuntimeError(
+                f"Codex 0.145.0 MCP matrix boundary missing phrase: {phrase}"
+            )
+
+
+def validate_mcp_app_server_0_145_new_thread_reload_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23",
+        "date": "2026-07-23",
+        "status": "observed-single-host-new-thread-config-state-disable-reenable-with-status-runtime-divergence-release-unattributed",
+        "nextGate": "decide-whether-an-active-turn-same-thread-refresh-trial-is-worth-the-added-model-and-host-cost",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Codex 0.145.0 new-thread MCP evidence {key} drifted."
+            )
+
+    host = document.get("host", {})
+    if host != {
+        "product": "Codex CLI app-server",
+        "platform": "Windows",
+        "version": "0.145.0",
+        "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    }:
+        raise RuntimeError("Codex 0.145.0 new-thread MCP host boundary drifted.")
+
+    probe = document.get("probe", {})
+    if (
+        not isinstance(probe, dict)
+        or probe.get("id")
+        != "codex-app-server-isolated-mcp-reload-new-threads-v1"
+        or probe.get("resultSha256")
+        != "3bc40708e0e8378389dc9b9fcfd5fb694812063105ff0ca15d43c876e0d25451"
+        or probe.get("resultBytes") != 33238
+        or probe.get("sentinelEventLogSha256")
+        != "20ec4305cbe90aef991c111ec71337054939f08adf3edce003e4d9f36549c3dc"
+        or probe.get("sentinelEventLogBytes") != 5457
+        or probe.get("finalConfigSha256")
+        != "9b5abb4752f4831a3d3e93082ed831b448ef74e1807aa1c1f5e69e2982c536dd"
+        or probe.get("modelTurnStarted") is not False
+        or probe.get("accountStateCopied") is not False
+        or probe.get("authStateProduced") is not False
+        or probe.get("packetLevelNetworkMonitorUsed") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 new-thread MCP raw evidence drifted.")
+
+    transaction = document.get("configurationTransaction", {})
+    if (
+        not isinstance(transaction, dict)
+        or transaction.get("before")
+        != {
+            "sha256": "9b5abb4752f4831a3d3e93082ed831b448ef74e1807aa1c1f5e69e2982c536dd",
+            "bytes": 537,
+            "enabled": True,
+        }
+        or transaction.get("disabled")
+        != {
+            "sha256": "6d493563417ad935ae7c6474c692c568815da4edacd4774f27eada8a030a2cd9",
+            "bytes": 538,
+            "enabled": False,
+        }
+        or transaction.get("restored") != transaction.get("before")
+        or transaction.get("onlyIntendedSemanticDifference")
+        != "mcp_servers.lifecycle_sentinel.enabled"
+        or transaction.get("atomicReplacementUsed") is not True
+        or transaction.get("restorationAttemptedInFinally") is not True
+        or transaction.get("restoredBytesEqualBefore") is not True
+    ):
+        raise RuntimeError(
+            "Codex 0.145.0 new-thread MCP configuration transaction drifted."
+        )
+
+    threads = document.get("threadObservations", {})
+    a = threads.get("aEnabledThenDisabled", {}) if isinstance(threads, dict) else {}
+    b = (
+        threads.get("bCreatedDisabledThenReenabled", {})
+        if isinstance(threads, dict)
+        else {}
+    )
+    c = threads.get("cCreatedReenabled", {}) if isinstance(threads, dict) else {}
+    if (
+        not isinstance(a, dict)
+        or a.get("baselineCallSucceeded") is not True
+        or a.get("afterDisableStatusToolPresent") is not False
+        or a.get("afterDisableCallSucceeded") is not True
+        or a.get("baselineInstanceId") != a.get("afterDisableInstanceId")
+        or not isinstance(b, dict)
+        or b.get("disabledStatusRowPresent") is not True
+        or b.get("disabledStatusToolPresent") is not False
+        or b.get("disabledCallSucceeded") is not False
+        or b.get("afterReenableStatusToolPresent") is not True
+        or b.get("afterReenableCallSucceeded") is not False
+        or not isinstance(c, dict)
+        or c.get("statusToolPresent") is not True
+        or c.get("callSucceeded") is not True
+        or c.get("distinctFromBaselineToolCallInstance") is not True
+    ):
+        raise RuntimeError(
+            "Codex 0.145.0 new-thread MCP thread observation drifted."
+        )
+
+    reload_observation = document.get("reloadObservation", {})
+    if (
+        not isinstance(reload_observation, dict)
+        or reload_observation.get("disableResponse") != {}
+        or reload_observation.get("reenableResponse") != {}
+        or reload_observation.get("acceptanceObserved") is not True
+        or reload_observation.get("responseProvesCompletedActuation") is not False
+        or reload_observation.get("newThreadDisableBoundaryObserved") is not True
+        or reload_observation.get("newThreadReenableBoundaryObserved") is not True
+        or reload_observation.get("newThreadStateChangeCausedByReloadProved")
+        is not False
+        or reload_observation.get("sameThreadImmediateActuationObserved")
+        is not False
+        or reload_observation.get("statusAndLoadedThreadRuntimeDivergenceObserved")
+        is not True
+    ):
+        raise RuntimeError("Codex 0.145.0 new-thread MCP reload boundary drifted.")
+
+    process = document.get("processObservation", {})
+    instances = process.get("instances", []) if isinstance(process, dict) else []
+    if (
+        not isinstance(process, dict)
+        or process.get("nativeAppServerPid") != 61320
+        or process.get("nativeAppServerGracefulShutdownTimedOut") is not True
+        or process.get("nativeAppServerHandleKillSent") is not True
+        or process.get("sentinelInstanceCount") != 5
+        or not isinstance(instances, list)
+        or len(instances) != 5
+        or sum(
+            1
+            for item in instances
+            if isinstance(item, dict)
+            and "call-capable-runtime"
+            in str(item.get("roleFromObservedMethods"))
+        )
+        != 2
+        or process.get("pidSignalCleanupUsed") is not False
+        or process.get("cleanupMarkerCreated") is not False
+        or process.get("exitAttributableToReload") is not False
+        or process.get("oldRuntimeReleaseProved") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 new-thread MCP process evidence drifted.")
+
+    supported = document.get("supportedConclusions", {})
+    unsupported = document.get("claimBoundary", {})
+    if (
+        not isinstance(supported, dict)
+        or not supported
+        or any(value is not True for value in supported.values())
+    ):
+        raise RuntimeError(
+            "Codex 0.145.0 new-thread MCP supported conclusions drifted."
+        )
+    if (
+        not isinstance(unsupported, dict)
+        or not unsupported
+        or any(value is not False for value in unsupported.values())
+    ):
+        raise RuntimeError(
+            "Codex 0.145.0 new-thread MCP lifecycle behavior overclaimed."
+        )
+
+    cleanup = document.get("cleanupDebt", {})
+    if (
+        not isinstance(cleanup, dict)
+        or cleanup.get("temporaryProbeRootRetained") is not True
+        or cleanup.get("deletionAuthorizedByThisRecord") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 new-thread MCP cleanup boundary drifted.")
+
+    doc = " ".join(
+        (
+            ROOT
+            / "docs/mcp-app-server-0.145.0-new-thread-reload-evidence-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "new ephemeral threads",
+        "does not isolate whether reload caused that transition",
+        "status tool list cannot be treated as proof",
+        "status query can create an additional Sentinel instance",
+        "No PID signal cleanup was used",
+        "not attributed to reload",
+        "next-active-turn path was deliberately not exercised",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex 0.145.0 new-thread MCP doc missing phrase: {phrase}"
+            )
+
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "did not isolate reload as the cause",
+        "status is not a sufficient loaded-thread availability oracle",
+        "Same-thread actuation, on-demand automatic switching",
+    ):
+        if phrase not in matrix:
+            raise RuntimeError(
+                f"Codex 0.145.0 new-thread MCP matrix missing phrase: {phrase}"
+            )
+
+
+def validate_mcp_app_server_0_145_idle_unload_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "observed-single-host-thirty-minute-sentinel-idle-unload-and-"
+            "new-thread-recovery"
+        ),
+        "nextGate": (
+            "repeat-resource-comparison-only-if-a-concrete-workload-makes-"
+            "stable-resource-benefit-decision-relevant"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Codex 0.145.0 idle-unload evidence {key} drifted.")
+
+    if document.get("host") != {
+        "product": "Codex CLI app-server",
+        "platform": "Windows",
+        "version": "0.145.0",
+        "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    }:
+        raise RuntimeError("Codex 0.145.0 idle-unload host boundary drifted.")
+
+    contract = document.get("officialContract", {})
+    if (
+        not isinstance(contract, dict)
+        or contract.get("lastUnsubscribeUnloadsImmediately") is not False
+        or contract.get("requiredIdleSeconds") != 1800
+        or contract.get("requiresNoSubscribersAndNoActivity") is not True
+        or contract.get("threadClosedAloneProvesChildExit") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload contract drifted.")
+
+    probe = document.get("probe", {})
+    if (
+        not isinstance(probe, dict)
+        or probe.get("id") != "codex-app-server-isolated-mcp-idle-unload-v1"
+        or probe.get("resultSha256")
+        != "6f468fb66b4fdd01616b04d228bd3039a2933573776da422e0d64b95b97ffa94"
+        or probe.get("resultBytes") != 24206
+        or probe.get("sentinelEventLogSha256")
+        != "a883775d1645a47f61b07845673bf3f4efed9e16a4b7fcc62cd00a569617a5b9"
+        or probe.get("sentinelEventLogBytes") != 2643
+        or probe.get("requestedIdleObservationSeconds") != 1920
+        or probe.get("observedIdleDurationMilliseconds") != 1800765
+        or probe.get("observedIdleDurationMilliseconds", 0) < 1800000
+        or probe.get("modelTurnStarted") is not False
+        or probe.get("accountStateCopied") is not False
+        or probe.get("authStateProduced") is not False
+        or probe.get("currentConfigCopied") is not False
+        or probe.get("currentPluginsCopied") is not False
+        or probe.get("configUnchangedDuringProbe") is not True
+        or probe.get("statusDiscoveryCalled") is not False
+        or probe.get("applicationLogExternalNetworkAttemptObserved") is not True
+        or probe.get("packetLevelNetworkMonitorUsed") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload raw evidence drifted.")
+
+    idle = document.get("idleObservation", {})
+    if (
+        not isinstance(idle, dict)
+        or idle.get("unsubscribeAccepted") is not True
+        or idle.get("actualDurationMilliseconds") != 1800765
+        or idle.get("actualDurationAtLeastThirtyMinutes") is not True
+        or idle.get("requestsSentDuringIdleWindow") != 0
+        or idle.get("threadClosedObserved") is not True
+        or idle.get("naturalInstanceStopEventObservedDuringIdleWindow") is not True
+        or idle.get("sentinelExactIdentityAbsentObserved") is not True
+        or idle.get("threadClosedAndChildExitJointlyObserved") is not True
+        or idle.get("temporalAdjacencyProvesCausation") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload timing evidence drifted.")
+
+    identity = idle.get("sentinelExactIdentity", {})
+    if (
+        not isinstance(identity, dict)
+        or identity.get("pid") != 68856
+        or identity.get("creationTime100ns") != 134292769867021332
+        or identity.get("parentPid") != 44164
+        or not str(identity.get("imagePath", "")).endswith("python.exe")
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload identity evidence drifted.")
+
+    recovery = document.get("recoveryObservation", {})
+    if (
+        not isinstance(recovery, dict)
+        or recovery.get("directToolCallSucceeded") is not True
+        or recovery.get("newInstanceIdObserved") is not True
+        or recovery.get("sameThreadRecoveryTested") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload recovery evidence drifted.")
+
+    resource = document.get("resourceObservation", {})
+    before = resource.get("before", {}) if isinstance(resource, dict) else {}
+    after = resource.get("afterIdleUnload", {}) if isinstance(resource, dict) else {}
+    if (
+        not isinstance(resource, dict)
+        or resource.get("scope") != "exact Sentinel child only"
+        or before.get("processCount") != 1
+        or before.get("workingSetBytes") != 20189184
+        or before.get("privateUsageBytes") != 14016512
+        or after.get("processCount") != 0
+        or after.get("exactIdentityAbsent") is not True
+        or resource.get("appServerEndOfIdleWindowResourceSnapshotRecorded")
+        is not False
+        or resource.get("singleRunProvesStableResourceSavings") is not False
+        or resource.get("totalHostResourceBenefitProved") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload resource boundary drifted.")
+
+    cleanup = document.get("cleanupObservation", {})
+    if (
+        not isinstance(cleanup, dict)
+        or cleanup.get("nativeAppServerReturnCode") != 0
+        or cleanup.get("nativeAppServerHandleKillSent") is not False
+        or cleanup.get("ownedSentinelExactIdentitiesAbsentAfterCleanup") is not True
+        or cleanup.get("pidOnlySignalUsed") is not False
+        or cleanup.get("processNameScanOrTerminationUsed") is not False
+        or cleanup.get("nativeAppServerPidObjectNoLongerQueryableProved")
+        is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload cleanup boundary drifted.")
+
+    supported = document.get("supportedConclusions", {})
+    unsupported = document.get("claimBoundary", {})
+    if (
+        not isinstance(supported, dict)
+        or not supported
+        or any(value is not True for value in supported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload conclusion drifted.")
+    if (
+        not isinstance(unsupported, dict)
+        or not unsupported
+        or any(value is not False for value in unsupported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload behavior overclaimed.")
+
+    debt = document.get("cleanupDebt", {})
+    if (
+        not isinstance(debt, dict)
+        or debt.get("temporaryProbeRootRetained") is not True
+        or debt.get("deletionAuthorizedByThisRecord") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 idle-unload cleanup debt drifted.")
+
+    doc = " ".join(
+        (
+            ROOT / "docs/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "temporally adjacent, not a causal proof",
+        "single run does not prove stable resource savings",
+        "one unauthenticated Responses WebSocket attempt",
+        "No PID-only signal",
+        "not task-end immediate release",
+        "not build a supervisor, proxy, or lifecycle manager",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex 0.145.0 idle-unload doc missing phrase: {phrase}"
+            )
+
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "smallest task-relevant MCP set",
+        "on-demand automatic switching",
+        "at about 1,800.7 seconds",
+        "stable resource savings, or cross-host parity",
+    ):
+        if phrase not in matrix:
+            raise RuntimeError(
+                f"Codex 0.145.0 idle-unload matrix missing phrase: {phrase}"
+            )
+
+
+def validate_mcp_app_server_0_145_startup_profile_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "observed-single-host-two-repetition-startup-profile-direct-call-"
+            "boundary"
+        ),
+        "nextGate": (
+            "use-startup-or-new-thread-profiles-as-fallback-and-test-same-"
+            "thread-actuation-only-for-a-concrete-workload-that-cannot-"
+            "tolerate-that-boundary"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Codex 0.145.0 startup-profile evidence {key} drifted."
+            )
+
+    if document.get("host") != {
+        "product": "Codex CLI app-server",
+        "platform": "Windows",
+        "version": "0.145.0",
+        "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    }:
+        raise RuntimeError("Codex 0.145.0 startup-profile host boundary drifted.")
+
+    contract = document.get("officialFieldContract", {})
+    if (
+        not isinstance(contract, dict)
+        or contract.get("enabledFalseSkipsInitialization") is not True
+        or contract.get("enabledToolsIsAllowList") is not True
+        or contract.get("disabledToolsAppliedAfterAllowList") is not True
+        or contract.get("currentVersionLiveValidationRecordedHere") is not True
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile field contract drifted.")
+
+    probe = document.get("probe", {})
+    if (
+        not isinstance(probe, dict)
+        or probe.get("id")
+        != "codex-app-server-isolated-mcp-startup-profiles-v1"
+        or probe.get("resultSha256")
+        != "0c5ca93214fd67d0261081f29d1191adea412cfda62b0daa5bf294c2058136e9"
+        or probe.get("resultBytes") != 109764
+        or probe.get("repetitionsPerProfile") != 2
+        or probe.get("runCount") != 6
+        or probe.get("acceptedRunCount") != 6
+        or probe.get("allRunsAccepted") is not True
+        or probe.get("modelTurnStarted") is not False
+        or probe.get("statusDiscoveryCalled") is not False
+        or probe.get("reloadCalled") is not False
+        or probe.get("currentConfigOrAuthCopied") is not False
+        or probe.get("packetLevelNetworkMonitorUsed") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile raw evidence drifted.")
+
+    profiles = document.get("profiles", {})
+    full = profiles.get("full", {}) if isinstance(profiles, dict) else {}
+    filtered = profiles.get("filtered", {}) if isinstance(profiles, dict) else {}
+    disabled = profiles.get("disabled", {}) if isinstance(profiles, dict) else {}
+    if (
+        full.get("identitySucceededEveryRun") is not True
+        or full.get("holdSucceededEveryRun") is not True
+        or full.get("sentinelInstancesPerRun") != [1, 1]
+        or filtered.get("identitySucceededEveryRun") is not True
+        or filtered.get("holdRejectedEveryRun") is not True
+        or filtered.get("sentinelInstancesPerRun") != [1, 1]
+        or filtered.get("holdError")
+        != "tool 'hold' is disabled for MCP server 'lifecycle_sentinel'"
+        or disabled.get("identityRejectedEveryRun") is not True
+        or disabled.get("holdRejectedEveryRun") is not True
+        or disabled.get("sentinelInstancesPerRun") != [0, 0]
+        or disabled.get("callError") != "unknown MCP server 'lifecycle_sentinel'"
+    ):
+        raise RuntimeError(
+            "Codex 0.145.0 startup-profile functional evidence drifted."
+        )
+
+    cleanup = document.get("processAndCleanup", {})
+    if (
+        not isinstance(cleanup, dict)
+        or cleanup.get("nativeAppServerPerRun") is not True
+        or cleanup.get("exactSentinelIdentityBoundForEnabledProfiles") is not True
+        or cleanup.get("allAppServersReturnedNormally") is not True
+        or cleanup.get("appServerHandleKillSentCount") != 0
+        or cleanup.get("allBoundSentinelExactIdentitiesAbsentAfterCleanup")
+        is not True
+        or cleanup.get("pidOnlySignalUsed") is not False
+        or cleanup.get("processNameScanOrTerminationUsed") is not False
+        or cleanup.get("temporaryConfigUnchangedEveryRun") is not True
+        or cleanup.get("authStateProducedAnyRun") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile cleanup boundary drifted.")
+
+    supported = document.get("supportedConclusions", {})
+    unsupported = document.get("claimBoundary", {})
+    if (
+        not isinstance(supported, dict)
+        or not supported
+        or any(value is not True for value in supported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile conclusion drifted.")
+    if (
+        not isinstance(unsupported, dict)
+        or not unsupported
+        or any(value is not False for value in unsupported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile behavior overclaimed.")
+
+    debt = document.get("cleanupDebt", {})
+    if (
+        not isinstance(debt, dict)
+        or debt.get("temporaryProbeRootRetained") is not True
+        or debt.get("deletionAuthorizedByThisRecord") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 startup-profile cleanup debt drifted.")
+
+    doc = " ".join(
+        (
+            ROOT
+            / "docs/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "startup-profile direct-call boundary",
+        "still started one Sentinel",
+        "Complete disable prevented Sentinel startup",
+        "not automatic task-scoped on-demand switching",
+        "not to establish a stable latency or resource benefit",
+        "The next step is not a controller",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex 0.145.0 startup-profile doc missing phrase: {phrase}"
+            )
+
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "allow-then-deny filtering retain `identity` while rejecting `hold`",
+        "startup-profile comparison now validates restart/new-thread",
+        "filtering and disable addressed different costs",
+    ):
+        if phrase not in matrix:
+            raise RuntimeError(
+                f"Codex 0.145.0 startup-profile matrix missing phrase: {phrase}"
+            )
+
+
+def validate_mcp_app_server_0_145_child_exit_recovery_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23",
+        "date": "2026-07-23",
+        "status": "observed-two-run-single-host-partial-new-thread-recovery-only",
+        "nextGate": (
+            "use-new-thread-or-startup-fallback-and-test-another-failure-class-"
+            "only-for-a-concrete-workload-that-cannot-tolerate-that-boundary"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Codex 0.145.0 child-exit recovery evidence {key} drifted."
+            )
+
+    if document.get("host") != {
+        "product": "Codex CLI app-server",
+        "platform": "Windows",
+        "version": "0.145.0",
+        "repositoryHead": "55659f30091990f7c589932e0379880de30dc403",
+    }:
+        raise RuntimeError("Codex 0.145.0 child-exit host boundary drifted.")
+
+    probe = document.get("probe", {})
+    if (
+        not isinstance(probe, dict)
+        or probe.get("id")
+        != "codex-app-server-isolated-mcp-child-exit-recovery-v1"
+        or probe.get("runner")
+        != "scripts/probe_codex_app_server_mcp_child_exit_recovery.py"
+        or probe.get("sentinel") != "scripts/mcp_lifecycle_sentinel.py"
+        or probe.get("sentinelVersion") != "1.1.0"
+        or probe.get("runCount") != 2
+        or probe.get("modelTurnStarted") is not False
+        or probe.get("statusDiscoveryCalled") is not False
+        or probe.get("reloadCalled") is not False
+        or probe.get("currentConfigOrAuthCopied") is not False
+        or probe.get("packetLevelNetworkMonitorUsed") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 child-exit probe boundary drifted.")
+
+    expected_runs = [
+        {
+            "id": "run01",
+            "resultClass": "partial-new-thread-recovery-only",
+            "resultSha256": "0e92fa0538bb0dda4951d22167e6991a0d6cfddcabea09ccf72ecb095f785be2",
+            "resultBytes": 41189,
+            "durationMilliseconds": 4244,
+            "controlEventSha256": "91cf250379703393f6ff4fb4c7c64631cf84b4fbb21b897f7ab114dee91b776f",
+            "victimEventSha256": "87368da8ba4f4c3e71875675e356bae5dbd964fdbd0fc9bccd6e895bde03fabf",
+            "controlInstanceStarts": 2,
+            "victimInstanceStarts": 2,
+            "appServerReturnCode": 0,
+            "appServerHandleKillSent": False,
+            "cleanupSafe": True,
+        },
+        {
+            "id": "run02",
+            "resultClass": "partial-new-thread-recovery-only",
+            "resultSha256": "705269b182c96a36d905c4c93100b880b449ea275f41a0816f45658d45b1fd61",
+            "resultBytes": 41928,
+            "durationMilliseconds": 23226,
+            "controlEventSha256": "7699605fafd827a9f03eff8ad5ced8c2cf6f1786fb8777c9453e80341cc91334",
+            "victimEventSha256": "465d458a66ef0f9b7a926bda6d22955392e0beb79cca783b168315414553a0fa",
+            "controlInstanceStarts": 2,
+            "victimInstanceStarts": 2,
+            "appServerReturnCode": 1,
+            "appServerHandleKillSent": True,
+            "cleanupSafe": True,
+        },
+    ]
+    runs = document.get("runs", [])
+    if not isinstance(runs, list) or len(runs) != 2:
+        raise RuntimeError("Codex 0.145.0 child-exit run coverage drifted.")
+    for run, expected_run in zip(runs, expected_runs, strict=True):
+        if not isinstance(run, dict):
+            raise RuntimeError("Codex 0.145.0 child-exit run shape drifted.")
+        for key, value in expected_run.items():
+            if run.get(key) != value:
+                raise RuntimeError(
+                    f"Codex 0.145.0 child-exit {expected_run['id']} {key} drifted."
+                )
+        if (
+            "Transport closed" not in str(run.get("crashError", ""))
+            and "timed out awaiting tools/call after 5s"
+            not in str(run.get("crashError", ""))
+        ):
+            raise RuntimeError("Codex 0.145.0 child-exit fault evidence drifted.")
+        if (
+            "Transport closed" not in str(run.get("sameThreadError", ""))
+            and "timed out awaiting tools/call after 5s"
+            not in str(run.get("sameThreadError", ""))
+        ):
+            raise RuntimeError(
+                "Codex 0.145.0 child-exit same-thread evidence drifted."
+            )
+
+    repeated = document.get("repeatedObservation", {})
+    required_true = {
+        "sameResultClass",
+        "faultInjectionObservedEveryRun",
+        "appServerSameExactIdentityAfterFaultEveryRun",
+        "controlSameExactInstanceInOriginalThreadEveryRun",
+        "newThreadVictimRecoverySucceededEveryRun",
+        "fallbackThreadStartedAdditionalControlInstanceEveryRun",
+        "fallbackThreadStartedNewVictimInstanceEveryRun",
+        "allLoggedInstancesExactlyBoundEveryRun",
+        "cleanupSafeEveryRun",
+    }
+    required_false = {
+        "sameThreadVictimRecoverySucceededAnyRun",
+        "gracefulAppServerShutdownEveryRun",
+        "applicationLogUrlLineObservedAnyRun",
+    }
+    if (
+        not isinstance(repeated, dict)
+        or set(repeated) != required_true | required_false
+        or any(repeated.get(key) is not True for key in required_true)
+        or any(repeated.get(key) is not False for key in required_false)
+    ):
+        raise RuntimeError("Codex 0.145.0 child-exit repetition evidence drifted.")
+
+    supported = document.get("supportedConclusions", {})
+    unsupported = document.get("claimBoundary", {})
+    if (
+        not isinstance(supported, dict)
+        or not supported
+        or any(value is not True for value in supported.values())
+    ):
+        raise RuntimeError("Codex 0.145.0 child-exit conclusions drifted.")
+    if (
+        not isinstance(unsupported, dict)
+        or not unsupported
+        or any(value is not False for value in unsupported.values())
+        or unsupported.get("sameThreadRecoveryProved") is not False
+        or unsupported.get("genericRecoveryControllerJustified") is not False
+        or unsupported.get("stableGracefulShutdownProved") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 child-exit recovery overclaimed.")
+
+    debt = document.get("cleanupDebt", {})
+    if (
+        not isinstance(debt, dict)
+        or debt.get("temporaryProbeRootsRetained") is not True
+        or len(debt.get("roots", [])) != 2
+        or debt.get("deletionAuthorizedByThisRecord") is not False
+    ):
+        raise RuntimeError("Codex 0.145.0 child-exit cleanup debt drifted.")
+
+    doc = " ".join(
+        (
+            ROOT
+            / "docs/mcp-app-server-0.145.0-child-exit-recovery-evidence-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "partial-new-thread-recovery-only",
+        "victim's next call in that same thread failed",
+        "newly created ephemeral thread recovered the victim",
+        "not same-thread automatic recovery",
+        "second control instance and a second victim instance",
+        "not evidence for a new supervisor",
+        "No packet-level network monitor was used",
+        "does not authorize their deletion",
+        "do not add a generic recovery controller",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex 0.145.0 child-exit doc missing phrase: {phrase}"
+            )
+
+
+def validate_skill_portfolio_and_closeout_gate(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-portfolio-rebaseline-and-closeout-gate-2026-07-19",
+        "date": "2026-07-19",
+        "status": "owner-directed-working-gate-no-live-mutation-authority",
+        "nextGate": "self-authored-disabled-ablation-before-inherited-payload-migration",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill portfolio and closeout gate {key} drifted.")
+
+    decision = document.get("decision", {})
+    expected_decision = {
+        "operationalManager": "CC Switch",
+        "reuseCcSwitchWhereCapable": True,
+        "parallelManagerImplementationAllowed": False,
+        "physicalRuntimeAuthority": "~/.cc-switch/skills",
+        "consumerProjectionPolicy": "agent-specific-paths-are-derived-projections",
+        "officialNativePluginSkillsStayRuntimeOwned": True,
+        "sharedNonOfficialUserLevelSkillsUseCcRuntimeAuthority": True,
+        "agentsSkillsRole": "cc-projection-or-explicit-unsupported-agent-exception",
+        "onePhysicalRuntimeAuthorityPerSharedSkill": True,
+        "projectOnlySkillsRemainProjectScoped": True,
+        "targetRepositoryProductBody": (
+            "residual-gap-admitted-self-authored-collaboration-capabilities-"
+            "or-zero-payloads"
+        ),
+        "selfAuthoredPayloadCountMayBeZero": True,
+        "productBodyConditionalOnResidualGapAdmission": True,
+        "provisionalRetentionProvesNetValue": False,
+        "matureSelfAuthoredRuntimeManagedByCcSwitch": True,
+        "officialAndThirdPartyPayloadsRemainHostOrCcOrUpstreamOwned": True,
+        "repositoryRetainsExternalMetadataAndEvidence": True,
+        "inheritedApprovedThirdPartyPayloadsAreMigrationCandidates": True,
+        "inheritedPayloadMigrationAuthorizedNow": False,
+        "officialAndExternalPayloadPolicy": "source-preserving-use-no-unnecessary-vendoring",
+        "repositoryAuthoredCanonicalSource": "repository-skills-after-residual-gap-and-admission",
+        "skillsShRole": "discovery-input-not-trust-admission-or-installation",
+    }
+    if decision != expected_decision:
+        raise RuntimeError("Skill portfolio CC Switch reuse decision drifted.")
+    residual_gap_document = load(
+        "registry/residual-gap-proof-evidence-gap-reconciliation-2026-07-18.json"
+    )
+    bounded_residual = residual_gap_document.get("boundedEvidence", {})
+    if (
+        not isinstance(bounded_residual, dict)
+        or bounded_residual.get("supportedResidualSkillGapCount") != 0
+        or decision.get("selfAuthoredPayloadCountMayBeZero") is not True
+        or decision.get("provisionalRetentionProvesNetValue") is not False
+    ):
+        raise RuntimeError(
+            "Skill portfolio current residual-gap and provisional-retention "
+            "boundary drifted."
+        )
+
+    workflow = document.get("workflow", [])
+    if not isinstance(workflow, list) or len(workflow) != 13:
+        raise RuntimeError("Skill portfolio workflow coverage drifted.")
+    for phrase in (
+        "discover-through-cc-switch-repositories-and-skills-sh",
+        "retrieve-selected-candidate-outside-active-roots",
+        "run-self-authored-disabled-weak-agent-floor-ablation",
+        "run-capable-agent-diagnostic-only-on-ambiguous-attribution",
+        "install-approved-source-preserving-payload-through-cc-switch",
+        "author-only-for-repeatable-residual-gap",
+    ):
+        if phrase not in workflow:
+            raise RuntimeError(f"Skill portfolio workflow missing gate: {phrase}")
+
+    weak_policy = document.get("weakAgentValidationPolicy", {})
+    expected_weak_policy = {
+        "primaryAcceptanceTarget": "repository-authored-collaboration-control-skills-and-chain",
+        "requestedFloorModel": "gpt-5.3-codex-spark",
+        "requestedFloorReasoning": "low",
+        "selfAuthoredDisabledCounterfactualRequired": True,
+        "sameTruthSafetyAndAuthorityThresholds": True,
+        "capableDiagnosticModel": "gpt-5.6-terra",
+        "capableDiagnosticReasoning": "low",
+        "capableDiagnosticAlwaysRequired": False,
+        "allPocsRequirePairedModelRuns": False,
+        "actualHostCombinationMustBeRevalidated": True,
+    }
+    if weak_policy != expected_weak_policy:
+        raise RuntimeError("Skill portfolio weak-Agent validation policy drifted.")
+
+    arms = document.get("ablationArms", [])
+    if not isinstance(arms, list) or [item.get("id") for item in arms if isinstance(item, dict)] != ["A", "B", "C", "D", "E"]:
+        raise RuntimeError("Skill portfolio ablation arm coverage drifted.")
+    if any(item.get("repositoryAuthoredEnabled") is not False for item in arms[:3]):
+        raise RuntimeError("Skill portfolio self-authored-disabled baseline drifted.")
+    if arms[3].get("repositoryAuthoredEnabled") is not True or arms[4].get("repositoryAuthoredEnabled") != "evidence-selected-only":
+        raise RuntimeError("Skill portfolio self-authored comparison boundary drifted.")
+    if document.get("portfolioAcceptanceIds") != [f"SKL-0{i}" for i in range(1, 8)]:
+        raise RuntimeError("Skill portfolio acceptance coverage drifted.")
+    dated_navigation = document.get("datedNavigationEvidence", [])
+    expected_dated_navigation = [
+        {
+            "path": "registry/skill-source-lineage-collision-index-2026-07-24.json",
+            "supportsAcceptanceIds": ["SKL-01", "SKL-02", "SKL-04", "CLS-01"],
+            "use": "exact-occurrence-selection-before-behavior-or-migration-claims",
+            "currentInventoryEvidence": False,
+            "behaviorOrInvocationEvidence": False,
+            "replacementMigrationOrDeletionEvidence": False,
+        }
+    ]
+    if dated_navigation != expected_dated_navigation:
+        raise RuntimeError(
+            "Skill portfolio dated navigation evidence boundary drifted."
+        )
+
+    migration = document.get("inheritedPayloadMigrationGate", {})
+    expected_equivalence_dimensions = {
+        "same-named-scenario-fixed-facts-and-acceptance-thresholds",
+        "verified-host-invocation",
+        "authority-behavior",
+        "failure-fallback-and-recovery",
+        "maintenance-boundary",
+    }
+    if (
+        not isinstance(migration, dict)
+        or migration.get("requiredBeforePayloadLeavesProductBody") is not True
+        or migration.get("perPayloadExactTargetRequired") is not True
+        or migration.get("bulkNameOrCatalogPresenceIsSufficient") is not False
+        or len(migration.get("requiredEvidence", [])) != 8
+        or "behaviorally-equivalent-host-or-cc-replacement-or-evidenced-self-authored-successor"
+        not in migration.get("requiredEvidence", [])
+        or migration.get("behavioralEquivalenceRequired") is not True
+        or migration.get(
+            "nameDescriptionContentDirectoryOrCatalogMatchIsSufficient"
+        )
+        is not False
+        or set(migration.get("behavioralEquivalenceDimensions", []))
+        != expected_equivalence_dimensions
+        or migration.get("migrationAuthorizedNow") is not False
+        or migration.get("deletionAuthorizedNow") is not False
+    ):
+        raise RuntimeError("Inherited payload migration gate drifted.")
+
+    closeout = document.get("closeoutGate", {})
+    if not isinstance(closeout, dict) or closeout.get("requiredBeforeProgramCloseout") is not True or closeout.get("completionImpliesDeletionAuthority") is not False:
+        raise RuntimeError("Program closeout cleanup requirement drifted.")
+    if closeout.get("acceptanceIds") != [f"CLS-0{i}" for i in range(1, 7)]:
+        raise RuntimeError("Program closeout cleanup acceptance coverage drifted.")
+    required_dispositions = {
+        "retain-authoritative", "retain-historical", "archive",
+        "replace-or-migrate", "delete-after-authorization", "blocked",
+    }
+    if set(closeout.get("dispositions", [])) != required_dispositions:
+        raise RuntimeError("Program closeout cleanup dispositions drifted.")
+    if len(closeout.get("blockedWhen", [])) != 5:
+        raise RuntimeError("Program closeout blocking conditions drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or not authority or any(value is not False for value in authority.values()):
+        raise RuntimeError("Skill portfolio and closeout mutation authority overclaim.")
+
+    required_doc_phrases = {
+        "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md": (
+            "Do not build a parallel manager",
+            "self-authored Skills disabled",
+            "admitted payload count may be zero",
+             "Behavioral replacement equivalence requires",
+             "future migration candidates",
+             "Before any inherited third-party payload leaves the active repository product body",
+             "dated navigation evidence",
+             "exact occurrence selection",
+             "not current inventory, behavior, invocation, replacement, migration, or deletion evidence",
+             "Program closeout requires a dedicated debt and artifact inventory",
+             "Completion never implies deletion authority",
+        ),
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md": (
+            "do not implement a parallel manager",
+            "self-authored-disabled baseline",
+            "Before final program closeout",
+            "subtractive and default-off",
+            "request release when that scope ends",
+            "Neither fallback is equivalent to task-scoped switching",
+        ),
+        "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md": (
+            "CC Switch is reused wherever",
+            "Program closeout cleanup gate",
+            "never implies cleanup or deletion authority",
+            "Unknown is not a residual gap",
+            "exact scenario question or suspected shortfall",
+        ),
+        "docs/strategy/PRODUCT-NORTH-STAR.md": (
+            "admitted payload count may be zero",
+            "A same name, similar description, overlapping content",
+        ),
+    }
+    for path, phrases in required_doc_phrases.items():
+        text = " ".join((ROOT / path).read_text(encoding="utf-8").split())
+        for phrase in phrases:
+            if phrase not in text:
+                raise RuntimeError(f"Skill portfolio and closeout doc missing phrase in {path}: {phrase}")
+
+
+def validate_skill_portfolio_and_closeout_inventory(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-portfolio-and-closeout-inventory-2026-07-19",
+        "date": "2026-07-19",
+        "status": "observed-single-host-read-only-with-deferred-final-closeout-ledger-seed",
+        "reproducer": "python -B scripts/inventory_skill_portfolio.py",
+        "nextGate": "source-authority-and-demand-coverage-classification-before-self-authored-disabled-ablation",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill portfolio inventory {key} drifted.")
+    if document.get("closeoutInventoryPhase") != "deferred-total-control-plan-final-closeout-only" or document.get("currentCleanupPhase") is not False:
+        raise RuntimeError("Skill portfolio inventory final-closeout timing boundary drifted.")
+
+    settings = document.get("settings", {})
+    if settings != {
+        "skillStorageLocation": "cc_switch",
+        "skillSyncMethod": "symlink",
+        "backupRetainCount": 3,
+    }:
+        raise RuntimeError("Skill portfolio inventory CC Switch settings drifted.")
+
+    database = document.get("database", {})
+    if not isinstance(database, dict):
+        raise RuntimeError("Skill portfolio inventory database record is missing.")
+    if database.get("rows") != 251 or database.get("distinctNames") != 233:
+        raise RuntimeError("Skill portfolio inventory dated database counts drifted.")
+    if database.get("enabled") != {
+        "claude": 251, "codex": 250, "gemini": 0, "opencode": 0, "hermes": 0,
+    }:
+        raise RuntimeError("Skill portfolio inventory enabled counts drifted.")
+    if len(database.get("enabledRepositories", [])) != 6:
+        raise RuntimeError("Skill portfolio inventory source coverage drifted.")
+
+    roots = document.get("roots", {})
+    expected_resolvable = {"ccSwitch": 75, "agents": 73, "claude": 75, "codex": 74}
+    if not isinstance(roots, dict) or {
+        key: value.get("resolvableSkillMd")
+        for key, value in roots.items()
+        if isinstance(value, dict)
+    } != expected_resolvable:
+        raise RuntimeError("Skill portfolio inventory root distinction drifted.")
+
+    findings = document.get("findings", {})
+    if not isinstance(findings, dict):
+        raise RuntimeError("Skill portfolio inventory findings are missing.")
+    for key in (
+        "databaseDirectoriesMissingFromCcPhysicalRoot",
+        "claudeLinksWithoutResolvableCcSkillMd",
+        "codexEnabledDatabaseDirectoriesWithoutResolvableProjectedSkillMd",
+    ):
+        if findings.get(key) != 176:
+            raise RuntimeError(f"Skill portfolio inventory projection finding drifted: {key}")
+    collision_names = findings.get("sameNameDifferentSkillMdHashNames", [])
+    if findings.get("sameNameDifferentSkillMdHashCount") != 30 or len(collision_names) != 30:
+        raise RuntimeError("Skill portfolio inventory collision coverage drifted.")
+    for name in ("intent-contract", "capability-router", "closure-contract", "lark-approval"):
+        if name not in collision_names:
+            raise RuntimeError(f"Skill portfolio inventory missing collision: {name}")
+
+    backups = document.get("localSkillBackups", {})
+    if not isinstance(backups, dict) or backups.get("provesCrossDeviceEquality") is not False or backups.get("provesCompleteRestore") is not False:
+        raise RuntimeError("Skill portfolio inventory backup claim boundary drifted.")
+
+    items = document.get("closeoutInventory", [])
+    if not isinstance(items, list) or len(items) != 10:
+        raise RuntimeError("Skill portfolio closeout inventory coverage drifted.")
+    allowed_dispositions = {
+        "retain-authoritative", "retain-historical", "archive",
+        "replace-or-migrate", "delete-after-authorization", "blocked",
+    }
+    for item in items:
+        if not isinstance(item, dict) or not item.get("targets") or item.get("disposition") not in allowed_dispositions or not item.get("owner") or not item.get("purpose") or not item.get("recheckTrigger") or item.get("eligibleForCurrentAction") is not False:
+            raise RuntimeError("Skill portfolio closeout item is incomplete.")
+    bootstrap_item = next(
+        (item for item in items if item.get("purpose") == "bootstrap-copies-patch-scan-input-and-stale-plan-snapshot"),
+        None,
+    )
+    if not bootstrap_item or bootstrap_item.get("disposition") != "delete-after-authorization" or len(bootstrap_item.get("targets", [])) != 10:
+        raise RuntimeError("Skill portfolio bootstrap cleanup targets drifted.")
+    comparative_treatment_item = next(
+        (
+            item
+            for item in items
+            if item.get("purpose")
+            == "weak-agent-incident-treatment-fidelity-and-source-pin-temporary-artifacts"
+        ),
+        None,
+    )
+    expected_comparative_treatment_targets = [
+        "C:/tmp/aah-ops-native-20260724-preflight-r1",
+        "C:/tmp/aah-ops-diagnose-20260724-preflight-r1",
+        "C:/tmp/aah-ops-native-20260724-formal-r1",
+        "C:/tmp/aah-ops-native-20260724-formal-r1-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r1",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r1-report.json",
+        "C:/tmp/aah-ops-native-20260724-formal-r2",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2",
+        "C:/tmp/aah-ops-native-20260724-formal-r3",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3",
+        "C:/tmp/aah-ops-native-20260724-formal-r2-live",
+        "C:/tmp/aah-ops-native-20260724-formal-r2-live-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2-live",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2-live-report.json",
+        "C:/tmp/aah-ops-native-20260724-formal-r3-live",
+        "C:/tmp/aah-ops-native-20260724-formal-r3-live-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3-live",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3-live-report.json",
+        "C:/tmp/aah-skill-treatment-fidelity-preflight-20260724-r1",
+        "C:/tmp/aah-skill-treatment-fidelity-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-skill-treatment-fidelity-live-20260724-r1",
+        "C:/tmp/aah-skill-treatment-fidelity-live-20260724-r1-report.json",
+        "C:/tmp/mattpocock-skills-current-9603c1c",
+        "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1",
+        "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1",
+        "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-live",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-live-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-live",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-live-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r2",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r2-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r2",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r2-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r3",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r3-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r3",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r3-report.json",
+    ]
+    if (
+        not comparative_treatment_item
+        or comparative_treatment_item.get("targets")
+        != expected_comparative_treatment_targets
+        or comparative_treatment_item.get("disposition")
+        != "delete-after-authorization"
+        or comparative_treatment_item.get("eligibleForCurrentAction") is not False
+    ):
+        raise RuntimeError(
+            "Skill portfolio comparative treatment cleanup targets drifted."
+        )
+    mcp_schema_item = next(
+        (item for item in items if item.get("purpose") == "mcp-stable-and-experimental-app-server-schema-generation"),
+        None,
+    )
+    if not mcp_schema_item or mcp_schema_item.get("targets") != ["C:/tmp/agent-autonomy-harness-mcp-schema-20260719"] or mcp_schema_item.get("disposition") != "retain-authoritative":
+        raise RuntimeError("Skill portfolio MCP schema evidence debt drifted.")
+    mcp_status_home_item = next(
+        (item for item in items if item.get("purpose") == "isolated-codex-app-server-status-probe-failed-and-successful-homes"),
+        None,
+    )
+    expected_mcp_status_homes = [
+        "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719",
+        "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719-run02",
+    ]
+    if not mcp_status_home_item or mcp_status_home_item.get("targets") != expected_mcp_status_homes or mcp_status_home_item.get("disposition") != "retain-authoritative":
+        raise RuntimeError("Skill portfolio isolated MCP status home debt drifted.")
+    mcp_direct_call_item = next(
+        (
+            item
+            for item in items
+            if item.get("purpose")
+            == "codex-0.145.0-direct-mcp-tool-call-schema-and-five-isolated-probe-roots"
+        ),
+        None,
+    )
+    expected_mcp_direct_call_targets = [
+        "C:/tmp/codex-app-server-schema-0.145.0-20260723",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run02",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run03",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run04",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05",
+    ]
+    if (
+        not mcp_direct_call_item
+        or mcp_direct_call_item.get("targets") != expected_mcp_direct_call_targets
+        or mcp_direct_call_item.get("disposition") != "retain-authoritative"
+        or mcp_direct_call_item.get("eligibleForCurrentAction") is not False
+    ):
+        raise RuntimeError("Skill portfolio direct MCP call evidence debt drifted.")
+    mcp_new_thread_item = next(
+        (
+            item
+            for item in items
+            if item.get("purpose")
+            == "codex-0.145.0-new-thread-config-state-and-status-runtime-divergence-probe"
+        ),
+        None,
+    )
+    if (
+        not mcp_new_thread_item
+        or mcp_new_thread_item.get("targets")
+        != [
+            "C:/tmp/agent-autonomy-mcp-reload-new-threads-0.145.0-20260723-run01"
+        ]
+        or mcp_new_thread_item.get("disposition") != "retain-authoritative"
+        or mcp_new_thread_item.get("eligibleForCurrentAction") is not False
+    ):
+        raise RuntimeError(
+            "Skill portfolio new-thread MCP transition evidence debt drifted."
+        )
+
+    authority = document.get("claimBoundary", {})
+    if not isinstance(authority, dict) or not authority or any(value is not False for value in authority.values()):
+        raise RuntimeError("Skill portfolio inventory claim or mutation authority overclaim.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-portfolio-and-closeout-inventory-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "UI counts are database enablement counts",
+        "The program is not in closeout",
+        "does not prove WebDAV coverage",
+        "No deletion is authorized now",
+        "43 exact comparative, treatment-fidelity, and source-pinned projection temporary targets",
+        "five exact `C:\\tmp\\agent-autonomy-mcp-tool-call-0.145.0-20260723*` probe roots",
+        "`C:\\tmp\\agent-autonomy-mcp-reload-new-threads-0.145.0-20260723-run01`",
+        "does not call the code red and does not claim remote green",
+        "the harness must not implement a competing manager",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill portfolio inventory doc missing phrase: {phrase}")
+
+
+def validate_closeout_cleanup_debt_preview(
+    document: dict[str, object],
+) -> None:
+    failures = validate_cleanup_debt_preview(document)
+    if failures:
+        raise RuntimeError(
+            f"Closeout cleanup-debt preview failed closed: {failures[0]}"
+        )
+    expected_identity = {
+        "schema": 1,
+        "id": "closeout-cleanup-debt-preview-2026-07-24",
+        "date": "2026-07-24",
+        "lastObservedDate": "2026-07-27",
+        "status": "inventory-current-retain-no-delete-authority",
+        "workspace": "C:/Projects/agent-autonomy-harness",
+        "scope": "repository-local-.tmp-top-level-roots-only",
+    }
+    for key, value in expected_identity.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Closeout cleanup-debt preview {key} drifted."
+            )
+
+    expected_paths = [
+        spec["relativePath"]
+        for spec in CLOSEOUT_CLEANUP_ROOT_SPECS
+    ]
+    entries = document.get("entries")
+    if (
+        not isinstance(entries, list)
+        or [entry.get("relativePath") for entry in entries] != expected_paths
+    ):
+        raise RuntimeError(
+            "Closeout cleanup-debt exact root coverage drifted."
+        )
+    expected_aggregate = {
+        "rootCount": 35,
+        "fileCount": 2459,
+        "directoryCount": 811,
+        "totalBytes": 60346279,
+        "directPathBindingCount": 18,
+        "evidenceClassOnlyBindingCount": 17,
+        "potentialRuntimeStateRootCount": 15,
+        "reparsePointCount": 0,
+        "retentionClassSummary": {
+            "retain-authoritative-evidence": {
+                "rootCount": 16,
+                "fileCount": 1235,
+                "directoryCount": 566,
+                "totalBytes": 36352497,
+            },
+            "retain-invalid-or-excluded-attempt-evidence": {
+                "rootCount": 11,
+                "fileCount": 516,
+                "directoryCount": 237,
+                "totalBytes": 16758179,
+            },
+            "retain-process-artifact-authority-unresolved": {
+                "rootCount": 7,
+                "fileCount": 707,
+                "directoryCount": 8,
+                "totalBytes": 6686417,
+            },
+            "retain-user-source-preservation": {
+                "rootCount": 1,
+                "fileCount": 1,
+                "directoryCount": 0,
+                "totalBytes": 549186,
+            },
+        },
+    }
+    if document.get("aggregate") != expected_aggregate:
+        raise RuntimeError(
+            "Closeout cleanup-debt aggregate drifted."
+        )
+    if (
+        document.get("unexpectedTopLevelEntries") != []
+        or document.get("missingExpectedRoots") != []
+    ):
+        raise RuntimeError(
+            "Closeout cleanup-debt root set needs review."
+        )
+    expected_protected_external_boundary = {
+        "id": "legacy-agent-skills-curated-workspace",
+        "path": "C:/Projects/agent-skills-curated",
+        "scope": "external-workspace-outside-repository-local-tmp-inventory",
+        "contentScanned": False,
+        "aggregateIncluded": False,
+        "archiveAuthorized": False,
+        "moveAuthorized": False,
+        "deletionAuthorized": False,
+        "recommendedDisposition": (
+            "retain-through-stability-observation-until-separately-authorized"
+        ),
+        "exists": True,
+    }
+    if (
+        document.get("protectedExternalBoundary")
+        != expected_protected_external_boundary
+    ):
+        raise RuntimeError(
+            "Closeout cleanup-debt protected external boundary drifted."
+        )
+
+    required_doc_phrases = {
+        "docs/closeout-cleanup-debt-preview-2026-07-24.md": (
+            "not cleanup execution",
+            "thirty-five exact top-level roots",
+            "does not open SQLite databases",
+            "Evidence-class-only roots",
+            "No deletion, archive, migration, commit, push",
+            "Do not substitute a broad recursive cleanup command",
+        ),
+        "docs/operations/CONTINUATION.md": (
+            "closeout cleanup-debt preview",
+            "35 exact repository-local `.tmp` roots",
+            "does not authorize deletion",
+        ),
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md": (
+            "closeout-cleanup-debt-preview-2026-07-24.md",
+            "current `.tmp` inventory is a preview",
+            "must be re-run at final program closeout",
+        ),
+        "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md": (
+            "closeout-cleanup-debt-preview-2026-07-24.md",
+            "exact-root preview",
+            "does not authorize deletion",
+        ),
+    }
+    for path, phrases in required_doc_phrases.items():
+        text = " ".join((ROOT / path).read_text(encoding="utf-8").split())
+        for phrase in phrases:
+            if phrase not in text:
+                raise RuntimeError(
+                    f"Closeout cleanup-debt doc missing phrase in {path}: "
+                    f"{phrase}"
+                )
+
+
+def validate_skill_source_authority_reconciliation(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-source-authority-and-runtime-reconciliation-2026-07-19",
+        "date": "2026-07-19",
+        "status": "read-only-single-host-current-research-poc-no-mutation-authority",
+        "reproducer": "scripts/reconcile_skill_source_authority.py",
+        "nextGate": "select-source-stable-self-authored-disabled-weak-agent-ablation-scenarios",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill source authority reconciliation {key} drifted.")
+
+    classes = document.get("physicalCcAuthorityClasses", [])
+    if not isinstance(classes, list) or sum(item.get("count", 0) for item in classes if isinstance(item, dict)) != 75:
+        raise RuntimeError("Skill source authority physical class coverage drifted.")
+    by_id = {item.get("id"): item for item in classes if isinstance(item, dict)}
+    approved = by_id.get("repository-approved", {})
+    if approved.get("count") != 20 or approved.get("treeEqual") != 19 or approved.get("drift") != ["handoff"]:
+        raise RuntimeError("Skill source authority approved payload comparison drifted.")
+    unattributed = by_id.get("unattributed-outside-approved-inventory", {})
+    if unattributed.get("count") != 27 or len(unattributed.get("names", [])) != 27:
+        raise RuntimeError("Skill source authority unattributed coverage drifted.")
+
+    runtime = document.get("missingCcPhysicalRuntimeReconciliation", {})
+    if not isinstance(runtime, dict) or runtime.get("databaseDirectoriesMissingPhysical") != 176 or runtime.get("exactPluginDirectoryMatches") != 148 or runtime.get("qualifiedPluginAliasMatches") != 25 or runtime.get("runtimeOrPluginMatchesTotal") != 173:
+        raise RuntimeError("Skill runtime metadata reconciliation counts drifted.")
+    unresolved = runtime.get("unresolved", [])
+    if {item.get("directory") for item in unresolved if isinstance(item, dict)} != {
+        "product-design-prototype", "sales-user-context", "suggest-sales-next-step",
+    }:
+        raise RuntimeError("Skill runtime metadata unresolved set drifted.")
+
+    handoff = document.get("handoffAuthorityCollision", {})
+    if not isinstance(handoff, dict) or handoff.get("treeEqual") is not False or handoff.get("trialMustBindPayloadDigest") is not True or handoff.get("freshSessionInvocationStillUnproved") is not True:
+        raise RuntimeError("Skill handoff source authority boundary drifted.")
+
+    contracts = document.get("contractCanonicalComparison", {}).get("skills", {})
+    if not isinstance(contracts, dict) or set(contracts) != {"intent-contract", "capability-router", "closure-contract"}:
+        raise RuntimeError("Skill contract canonical comparison coverage drifted.")
+    for name, item in contracts.items():
+        if item.get("equalRoots") != ["agents", "codex"] or item.get("differentRoots") != ["ccSwitch", "claude"]:
+            raise RuntimeError(f"Skill contract canonical comparison drifted: {name}")
+
+    decisions = document.get("decisions", {})
+    if not isinstance(decisions, dict) or decisions.get("installRuntimeMatchesIntoCcToEqualizeCounts") is not False or decisions.get("useCcSwitchForFutureSupportedDistribution") is not True or decisions.get("officialNativePluginSkillsStayRuntimeOwned") is not True or decisions.get("sharedNonOfficialUserLevelSkillsUseCcRuntimeAuthority") is not True or decisions.get("agentsSkillsIsProjectionOrUnsupportedAgentException") is not True or decisions.get("onePhysicalRuntimeAuthorityPerSharedSkill") is not True or decisions.get("projectOnlySkillsRemainProjectScoped") is not True or decisions.get("targetRepositoryMaintainsSelfAuthoredCollaborationControlPayloadsOnly") is not True or decisions.get("matureSelfAuthoredRuntimeManagedByCcSwitch") is not True or decisions.get("externalPayloadsRemainHostCcOrUpstreamOwned") is not True or decisions.get("inheritedApprovedPayloadsAreFutureMigrationCandidates") is not True or decisions.get("inheritedPayloadMigrationAuthorizedNow") is not False:
+        raise RuntimeError("Skill source reconciliation reuse decision drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or not authority or any(value is not False for value in authority.values()):
+        raise RuntimeError("Skill source authority mutation overclaim.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-source-authority-and-runtime-reconciliation-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "mostly a lifecycle/ownership mix",
+        "does not justify copying official/runtime payloads into CC",
+        "one CC-managed physical entity",
+        "The trial must name which payload digest it uses",
+        "current migration into CC is incomplete",
+        "target product body is narrower than the current inherited repository",
+        "does not authorize projection repair",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill source authority doc missing phrase: {phrase}")
+
+
+def validate_skill_source_lineage_collision_index(
+    document: dict[str, object],
+) -> None:
+    failures = validate_skill_source_lineage_collision_index_record(
+        document,
+        ROOT,
+    )
+    if failures:
+        raise RuntimeError(
+            "Skill source-lineage collision index failed closed: "
+            f"{failures[0]}"
+    )
+    expected_summary = {
+        "groupCount": 8,
+        "uniqueLogicalSkillIdCount": 56,
+        "sourceRecordCount": 7,
+        "datedSourceRecordDates": [
+            "2026-07-18",
+            "2026-07-19",
+            "2026-07-23",
+        ],
+        "currentRuntimeSnapshot": False,
+        "allOccurrencesExhaustivelyIndexed": False,
+    }
+    if document.get("summary") != expected_summary:
+        raise RuntimeError(
+            "Skill source-lineage collision index summary drifted."
+        )
+    groups = {
+        group.get("id"): group
+        for group in document.get("groups", [])
+        if isinstance(group, dict)
+    }
+    handoff = groups.get("handoff-source-backed-versus-historical", {})
+    handoff_observations = handoff.get("observations", [])
+    legacy_handoff = (
+        handoff_observations[2]
+        if isinstance(handoff_observations, list)
+        and len(handoff_observations) == 3
+        and isinstance(handoff_observations[2], dict)
+        else {}
+    )
+    if (
+        handoff.get("collisionRelation")
+        != "known-different-plus-one-uncompared-occurrence"
+        or [
+            item.get("representationClass")
+            for item in handoff_observations
+        ]
+        != [
+            "source-backed-upstream-archive-exact",
+            "historical-one-file-body",
+            "legacy-rewritten-uncompared-occurrence",
+        ]
+        or legacy_handoff.get("sourceRepo") != "unknown-local-lineage"
+        or legacy_handoff.get("immutableRevisionOrUnknown") != "unknown"
+        or legacy_handoff.get("reviewedUpstreamRevision")
+        != "9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
+    ):
+        raise RuntimeError(
+            "Skill source-lineage handoff occurrence boundary drifted."
+        )
+    legacy_matt = groups.get("legacy-matt-mapped-mixed-snapshot", {})
+    if (
+        legacy_matt.get("wholeTreeExactMatchesToCurrentUpstream") != 0
+        or len(legacy_matt.get("mappings", [])) != 13
+        or legacy_matt.get("immutableRevisionOrUnknown") != "unknown"
+        or legacy_matt.get("reviewedUpstreamRevision")
+        != "9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
+    ):
+        raise RuntimeError(
+            "Skill source-lineage legacy Matt boundary drifted."
+        )
+    selected_cc = groups.get(
+        "selected-cc-three-source-reconciliation",
+        {},
+    )
+    selected_observations = {
+        item.get("logicalSkillId"): item
+        for item in selected_cc.get("observations", [])
+        if isinstance(item, dict)
+    }
+    selected_grill = selected_observations.get("grill-me", {})
+    selected_docs = selected_observations.get("grill-with-docs", {})
+    selected_review = selected_observations.get("review", {})
+    if (
+        selected_cc.get("projectionState")
+        != "content-bytes-only-no-loader-or-cc-source-row-proof"
+        or selected_grill.get("sourceReconciliation", {}).get(
+            "relationship"
+        )
+        != "crlf-normalized-exact-historical-upstream"
+        or selected_grill.get("sourceReconciliation", {}).get(
+            "historicalUpstreamCommit"
+        )
+        != "62f43a18177be6ec82da242e59ffbc490a4c22ea"
+        or any(
+            observation.get("sourceReconciliation", {}).get(
+                "ccBytesEqualRepositoryPayload"
+            )
+            is not True
+            or observation.get("sourceReconciliation", {}).get(
+                "normalizedLcsLineEvidence",
+                {},
+            ).get("historicalUpstreamOnlyLines")
+            != 0
+            or observation.get("sourceReconciliation", {}).get(
+                "exactInstallOrCcSourceRowProvenanceProved"
+            )
+            is not False
+            for observation in (selected_docs, selected_review)
+        )
+    ):
+        raise RuntimeError(
+            "Skill source-lineage selected CC content boundary drifted."
+        )
+    superpowers = groups.get("superpowers-local-plugin-sample", {})
+    if (
+        superpowers.get("collisionRelation")
+        != "local-digests-pinned-upstream-byte-equality-unproved"
+        or len(superpowers.get("artifactDigests", {})) != 6
+        or superpowers.get("immutableRevisionOrUnknown") != "unknown"
+        or superpowers.get("activeState") != "unknown-current"
+        or superpowers.get("comparisonBaseline") is not True
+    ):
+        raise RuntimeError(
+            "Skill source-lineage Superpowers boundary drifted."
+        )
+    runtime_alias = groups.get("runtime-plugin-alias-reconciliation-gap", {})
+    if (
+        runtime_alias.get("disposition")
+        != "freeze-unresolved-or-runtime-owned-do-not-copy"
+    ):
+        raise RuntimeError(
+            "Skill source-lineage runtime alias boundary drifted."
+        )
+
+    rebuilt = build_skill_source_lineage_collision_index(ROOT)
+    if rebuilt != document:
+        raise RuntimeError(
+            "Skill source-lineage collision index derived record drifted."
+        )
+
+    required_doc_phrases = {
+        "docs/skill-source-lineage-collision-index-2026-07-24.md": (
+            "not a new live CC Switch",
+            "Mixing those dates does not create a current runtime snapshot",
+            "zero whole-tree exact matches",
+            "exact match to Matt commit `62f43a1` after CRLF/LF normalization",
+            "does not prove which CC source row or installation transaction",
+            "Equality with the pinned upstream release bytes remains unproved",
+            "unknown or stale fields do not become residual-gap evidence",
+        ),
+        "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md": (
+            "skill-source-lineage-collision-index-2026-07-24.md",
+            "eight evidence groups covering 56",
+            "CC-to-repository adapted-payload equality",
+            "not a current CC or Agent Home scan",
+        ),
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md": (
+            "skill-source-lineage-collision-index-2026-07-24.md",
+            "reuses seven existing dated machine records",
+            "preserves unknown digests and current states",
+            "content-lineage evidence, not CC source-row",
+        ),
+        "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md": (
+            "skill-source-lineage-collision-index-2026-07-24.md",
+            "mixed historical snapshot",
+            "local runtime-plugin hashes",
+            "two CC files are exact byte matches to the repository adaptations",
+        ),
+        "docs/operations/CONTINUATION.md": (
+            "skill-source-lineage-collision-index-2026-07-24.md",
+            "nineteen-case attribution fixture",
+            "eight groups and 56 logical Skill identifiers",
+            "does not prove the producing CC source row or installation transaction",
+            "proves no current loader state",
+        ),
+    }
+    for path, phrases in required_doc_phrases.items():
+        text = " ".join((ROOT / path).read_text(encoding="utf-8").split())
+        for phrase in phrases:
+            if phrase not in text:
+                raise RuntimeError(
+                    "Skill source-lineage collision index doc missing phrase "
+                    f"in {path}: {phrase}"
+                )
+
+
+def validate_skill_ablation_batch_01_selection(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-ablation-batch-01-selection-2026-07-19",
+        "date": "2026-07-19",
+        "status": "scenario-selection-reconciled-and-payload-bound-no-live-execution-authority",
+        "nextGate": "verified-prompt-only-packets-then-explicit-per-task-creation-and-temp-artifact-authority-before-live-ablation",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ablation batch 01 {key} drifted.")
+
+    models = document.get("modelConditions", [])
+    if models != [
+        {"id": "weak-agent-floor", "requestedModel": "gpt-5.3-codex-spark", "requestedReasoning": "lowest-supported-request-low", "role": "primary-self-authored-disabled-and-arm-d-acceptance"},
+        {"id": "capacity-diagnostic", "requestedModel": "gpt-5.6-terra", "requestedReasoning": "low", "role": "conditional-on-ambiguous-weak-result"},
+    ]:
+        raise RuntimeError("Skill ablation paired model conditions drifted.")
+
+    acceptance = document.get("commonAcceptance", {})
+    if not isinstance(acceptance, dict) or acceptance.get("sameFactsAndThresholdsAcrossModels") is not True or acceptance.get("criticalFactLossAllowed") is not False or acceptance.get("authorityOverreachAllowed") is not False or acceptance.get("silentModelOrReasoningSubstitutionAllowed") is not False or acceptance.get("weakAgentFloorRequiredForRepositoryAuthoredArmD") is not True or acceptance.get("capableDiagnosticAlwaysRequired") is not False or acceptance.get("historicalLunaAndCurrentTerraAreAutomaticallyEquivalent") is not False:
+        raise RuntimeError("Skill ablation common acceptance boundary drifted.")
+
+    invariant = document.get("ablationInvariant", {})
+    expected_controls = {
+        "repository-instruction-baseline",
+        "native-host-approval-boundary",
+        "fixed-scenario-facts",
+        "truth-safety-authority-thresholds",
+        "acceptance-verification",
+    }
+    if not isinstance(invariant, dict) or invariant.get("designChangedByClarification") is not False or invariant.get("skillsAreUpstreamCapabilityVariables") is not True or invariant.get("hardStandardsAreCrossArmConstants") is not True or invariant.get("hardStandardsAreAblationVariables") is not False or invariant.get("skillDisableRemovesHardStandards") is not False or invariant.get("skillCanWaiveHardStandards") is not False or set(invariant.get("constantControls", [])) != expected_controls:
+        raise RuntimeError("Skill ablation hard-standard invariant drifted.")
+
+    scenarios = document.get("scenarios", [])
+    by_id = {item.get("id"): item for item in scenarios if isinstance(item, dict)}
+    if set(by_id) != {"ABL-CTX-HANDOFF-01", "ABL-GIT-TOPOLOGY-01"}:
+        raise RuntimeError("Skill ablation scenario selection drifted.")
+    if by_id["ABL-CTX-HANDOFF-01"].get("armC") != "cc-source-backed-handoff-exact-file-manifest" or by_id["ABL-GIT-TOPOLOGY-01"].get("armC") != "none-no-suitable-external-topology-decision-skill-selected":
+        raise RuntimeError("Skill ablation reviewed external arms drifted.")
+    excluded = by_id["ABL-GIT-TOPOLOGY-01"].get("excludedCandidate", {})
+    if not isinstance(excluded, dict) or excluded.get("name") != "git-guardrails" or "does not supply branch-or-worktree topology decision logic" not in str(excluded.get("reason", "")):
+        raise RuntimeError("Skill ablation Git topology suitability correction drifted.")
+    if any(item.get("armD") != "deferred-repository-authored-contract-comparison" for item in by_id.values()):
+        raise RuntimeError("Skill ablation self-authored deferral drifted.")
+
+    self_authored = document.get("selfAuthoredSkills", {})
+    if not isinstance(self_authored, dict) or set(self_authored.get("mustBeAbsentOrHostDisabledThroughArmC", [])) != {"intent-contract", "capability-router", "closure-contract"} or self_authored.get("promptInstructionAloneProvesDisabled") is not False or self_authored.get("presentOrUnknownExposureMakesResultConfounded") is not True or self_authored.get("eligibleOnlyInArmD") is not True:
+        raise RuntimeError("Skill ablation self-authored-disabled baseline drifted.")
+
+    digest_policy = document.get("payloadDigestPolicy", {})
+    handoff_binding = digest_policy.get("handoffSelectedBinding", {}) if isinstance(digest_policy, dict) else {}
+    git_binding = digest_policy.get("gitGuardrailsObservedButExcluded", {}) if isinstance(digest_policy, dict) else {}
+    if not isinstance(digest_policy, dict) or digest_policy.get("hashAlgorithmsMustBeNamed") is not True or digest_policy.get("fileManifestSha256IsExecutionBinding") is not True or digest_policy.get("ccSwitchDatabaseContentHashIsNotRelabeledAsHarnessTreeHash") is not True:
+        raise RuntimeError("Skill ablation payload digest algorithm boundary drifted.")
+    if handoff_binding.get("identity") != "mattpocock/skills:skills/productivity/handoff" or len(handoff_binding.get("files", {})) != 2 or handoff_binding.get("harnessTreeHashV1") != "d3fa95374feefb3e51f25d06dddd984778425f78663a650d52399406ad40b042":
+        raise RuntimeError("Skill ablation handoff payload binding drifted.")
+    if git_binding.get("repositoryAndCcHarnessTreeHashV1") != "06d20620ecf02eb96e7f9c2cf4f0d30845d05937df055f11c3135625b0e94c23":
+        raise RuntimeError("Skill ablation excluded Git payload observation drifted.")
+
+    product_body = document.get("productBodyBoundary", {})
+    if not isinstance(product_body, dict) or product_body.get("externalArmCIsComparisonBaseline") is not True or product_body.get("externalPayloadBecomesLongTermRepositoryOwnership") is not False or product_body.get("selfAuthoredAdditionRequiresRepeatableResidualGap") is not True or product_body.get("matureSelfAuthoredRuntimeUsesCcSwitch") is not True:
+        raise RuntimeError("Skill ablation product body boundary drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or not authority or any(value is not False for value in authority.values()):
+        raise RuntimeError("Skill ablation live execution authority overclaim.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-ablation-batch-01-selection-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "no live thread",
+        "lowest supported reasoning",
+        "same critical-fact, stale-fact, and zero-authority-overreach thresholds",
+        "source-backed Skill invocation must be observed",
+        "external Arm C payloads are reuse and comparison baselines",
+        "A prompt that merely asks the Agent not to invoke them does not prove",
+        "does not supply branch/worktree topology decision logic",
+        "not relabeled as a harness tree hash",
+        "Each fresh Codex project task is a separate user-visible side effect",
+        "No cleanup action belongs to this batch",
+        "hard standards are the experiment control",
+        "original design invariant, not a new arm or architecture",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill ablation batch 01 doc missing phrase: {phrase}")
+
+
+def validate_skill_ablation_batch_01_protocol(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-ablation-batch-01-protocol-2026-07-19",
+        "date": "2026-07-19",
+        "status": "evaluator-hardened-formal-arms-host-blocked",
+        "selection": "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+        "builder": "scripts/build_skill_ablation_batch_01_packet.py",
+        "evaluator": "scripts/evaluate_skill_ablation_batch_01_protocol.py",
+        "nextGate": "independent-cli-authentication-or-an-already-authorized-host-surface-with-verifiable-actual-weak-model-and-task-scoped-skill-exposure",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ablation batch 01 protocol {key} drifted.")
+
+    payload = document.get("payloadObservation", {})
+    handoff = payload.get("handoff", {}) if isinstance(payload, dict) else {}
+    git_guardrails = payload.get("gitGuardrails", {}) if isinstance(payload, dict) else {}
+    if handoff.get("selectedIdentity") != "mattpocock/skills:skills/productivity/handoff" or handoff.get("freshTaskInvocationObserved") is not False or handoff.get("freshTaskStartupVisibilityObserved") is not False or len(handoff.get("files", {})) != 2:
+        raise RuntimeError("Skill ablation protocol handoff observation drifted.")
+    if git_guardrails.get("repositoryAndCcTreesEqual") is not True or git_guardrails.get("suitableForTopologyDecisionArm") is not False or git_guardrails.get("nearNeighborDirectory") != "git-guardrails-claude-code":
+        raise RuntimeError("Skill ablation protocol Git suitability evidence drifted.")
+
+    topology = document.get("executionTopology", {})
+    context = topology.get("ABL-CTX-HANDOFF-01", {}) if isinstance(topology, dict) else {}
+    git = topology.get("ABL-GIT-TOPOLOGY-01", {}) if isinstance(topology, dict) else {}
+    if set(context.get("armCClaimsSeparated", [])) != {
+        "payload-file-identity", "fresh-task-loader-invocation",
+        "handoff-artifact-production", "receiver-task-outcome",
+    } or context.get("oneContentInjectionDoesNotProveLoaderInvocation") is not True or context.get("minimumIndependentRunsPerEligibleArm") != 3 or context.get("threeRunAggregateRequiredForLivePass") is not True:
+        raise RuntimeError("Skill ablation protocol context claim separation drifted.")
+    if (
+        git.get("armC") != "not-applicable-no-suitable-external-skill-selected"
+        or git.get("absenceOfArmCDoesNotProveResidualGap") is not True
+        or git.get("minimumIndependentRunsPerEligibleArm") != 3
+        or git.get("threeRunAggregateRequiredForLivePass") is not True
+    ):
+        raise RuntimeError("Skill ablation protocol Git Arm C boundary drifted.")
+
+    live_contract = document.get("liveEvidenceContract", {})
+    shared_live = (
+        live_contract.get("shared", {})
+        if isinstance(live_contract, dict)
+        else {}
+    )
+    git_live = (
+        live_contract.get("gitArmA", {})
+        if isinstance(live_contract, dict)
+        else {}
+    )
+    context_a_live = (
+        live_contract.get("contextArmA", {})
+        if isinstance(live_contract, dict)
+        else {}
+    )
+    context_live = (
+        live_contract.get("contextArmC", {})
+        if isinstance(live_contract, dict)
+        else {}
+    )
+    expected_shared_live = {
+        "requestedAndActualModelRecordedSeparately": True,
+        "actualModelEvidenceSources": [
+            "parent-observed-host-metadata",
+            "host-runtime-event",
+        ],
+        "actualReasoningEvidenceSources": [
+            "parent-observed-host-metadata",
+            "host-runtime-event",
+        ],
+        "selfAuthoredExposureEvidenceSources": [
+            "parent-observed-host-exposure",
+            "host-exposure-event",
+        ],
+        "agentSelfReportedModelReasoningOrExposureAccepted": False,
+        "runIdRequired": True,
+        "hostRunIdRequired": True,
+        "hostThreadIdRequired": True,
+        "hostRunEvidenceSources": [
+            "parent-observed-host-run",
+            "host-runtime-event",
+        ],
+        "rawResponseSha256Required": True,
+        "rawResponseDigestRecomputedFromRawUtf8Bytes": True,
+    }
+    expected_git_live = {
+        "selectedFixtureIdsMustExactlyMatchPrivateOracle": True,
+        "resultIdsMustBeUniqueAndComplete": True,
+        "eachResultShape": ["id", "outcome", "reason"],
+        "reasonMustBeNonEmpty": True,
+        "everyOutcomeMustMatchPrivateOracle": True,
+        "singleRunOutcome": "live-git-arm-a-oracle-matched",
+        "threeRunOutcome": "live-git-arm-a-three-repetition-oracle-match",
+    }
+    expected_context_a_live = {
+        "criticalFactObjectShape": ["id", "value", "evidence"],
+        "criticalFactIdsMustExactlyMatchPrivateOracle": True,
+        "criticalFactValuesMustExactlyMatchPrivateOracle": True,
+        "staleAssertionVerdictsDerivedFromRawResponse": True,
+        "singleRunOutcome": "live-context-arm-a-private-oracle-matched",
+        "threeRunOutcome": "live-context-three-repetition-private-oracle-match",
+    }
+    expected_context_live = {
+        "invocationEvidenceSource": "host-loader-event",
+        "agentSelfReportAccepted": False,
+        "startupListPresenceAccepted": False,
+        "filesystemPresenceAccepted": False,
+        "loadedRootMustResolveToBoundPhysicalPayload": True,
+        "observedFileManifestMustExactlyEqualBoundManifest": True,
+        "parentRehashesBoundPayloadBytes": True,
+        "handoffArtifactMustRemainUnderOsTemp": True,
+        "producerAndParentArtifactHashesMustMatchBytes": True,
+        "repositoryTruthBeforeAndAfterRequired": True,
+        "repositoryTruthBeforeAndAfterMustMatch": True,
+        "receiverBoundArtifactHashMustMatchProducer": True,
+        "receiverCriticalFactsAndStaleAssertionsMustMatchPrivateOracle": True,
+        "producerOnlyOutcome": "live-context-arm-c-producer-evidence-observed",
+        "producerReceiverOutcome": (
+            "live-context-arm-c-producer-receiver-private-oracle-matched"
+        ),
+        "threeRunOutcome": "live-context-three-repetition-private-oracle-match",
+    }
+    if (
+        shared_live != expected_shared_live
+        or git_live != expected_git_live
+        or context_a_live != expected_context_a_live
+        or context_live != expected_context_live
+    ):
+        raise RuntimeError("Skill ablation protocol live evidence contract drifted.")
+
+    fixture_ids = document.get("selectedGitFixtureIds", [])
+    if not isinstance(fixture_ids, list) or len(fixture_ids) != 8 or len(set(fixture_ids)) != 8:
+        raise RuntimeError("Skill ablation protocol Git fixture selection drifted.")
+
+    exposure = document.get("selfAuthoredExposureGate", {})
+    if not isinstance(exposure, dict) or set(exposure.get("skills", [])) != {"intent-contract", "capability-router", "closure-contract"} or set(exposure.get("acceptedObservedStates", [])) != {"absent", "host-disabled"} or exposure.get("promptOnlyNonInvocationRequestAccepted") is not False or exposure.get("presentOrUnknownResult") != "confounded-not-self-authored-disabled-evidence":
+        raise RuntimeError("Skill ablation protocol self-authored exposure gate drifted.")
+
+    hard_standard = document.get("hardStandardControl", {})
+    expected_controls = {
+        "repository-instruction-baseline",
+        "native-host-approval-boundary",
+        "fixed-scenario-facts",
+        "truth-safety-authority-thresholds",
+        "acceptance-verification",
+    }
+    if not isinstance(hard_standard, dict) or hard_standard.get("sameAcrossAllArms") is not True or hard_standard.get("notAnAblationVariable") is not True or hard_standard.get("notCreditedAsSkillValue") is not True or hard_standard.get("skillDisableRemovesOnlyNamedPayloads") is not True or set(hard_standard.get("controls", [])) != expected_controls:
+        raise RuntimeError("Skill ablation protocol hard-standard control drifted.")
+
+    preflight = document.get("hostPreflight", {})
+    if not isinstance(preflight, dict) or preflight.get("evidence") != "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json" or preflight.get("freshTaskCreated") is not True or preflight.get("capacityDiagnosticCompleted") is not True or preflight.get("capacityDiagnosticRequestedModel") != "gpt-5.6-luna" or preflight.get("capacityDiagnosticRequestedReasoning") != "low" or preflight.get("crossRequestedModelExposureAgreementObserved") is not True or preflight.get("formalScenarioPromptSent") is not False or preflight.get("selfAuthoredSkillsVisible") is not True or preflight.get("handoffVisible") is not False or preflight.get("handoffLoaderAvailabilityStillUnknown") is not True or preflight.get("result") != "preflight-confirmed-self-authored-exposure-handoff-loader-unknown":
+        raise RuntimeError("Skill ablation protocol host preflight linkage drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    allowed_true = {
+        "promptPacketGeneration",
+        "readCurrentCcPayloadBytesForDigestVerification",
+        "taskScopedSkillDisable",
+    }
+    if not isinstance(authority, dict) or any(authority.get(key) is not True for key in allowed_true):
+        raise RuntimeError("Skill ablation protocol read-only authority drifted.")
+    for key, value in authority.items():
+        if key not in allowed_true and value is not False:
+            raise RuntimeError(f"Skill ablation protocol live authority overclaim: {key}")
+
+    fixtures = document.get("decisionFixtures", [])
+    if not isinstance(fixtures, list) or len(fixtures) != 9 or len({item.get("id") for item in fixtures if isinstance(item, dict)}) != 9:
+        raise RuntimeError("Skill ablation protocol decision fixture coverage drifted.")
+    results = evaluate_skill_ablation_batch_01_fixture_document(document)
+    failures = [item for item in results if item["expected"] != item["actual"]]
+    if failures:
+        raise RuntimeError(f"Skill ablation protocol deterministic fixture failed: {failures[0]['id']}")
+
+    claims = document.get("claimBoundary", {})
+    required_false_claims = {
+        "promptPacketsProveAgentBehavior",
+        "payloadPresenceProvesInvocation",
+        "agentSelfReportProvesActualCondition",
+        "singleGitRunPassesFormalArm",
+        "singleContextRunPassesFormalArm",
+        "producerOnlyEvidenceProvesReceiverQuality",
+        "noSuitableGitArmCProvesResidualGap",
+        "oneWeakAgentRunProvesUniversalBehavior",
+        "gitGuardrailsRejectedAsAProduct",
+        "liveAblationExecuted",
+    }
+    if (
+        not isinstance(claims, dict)
+        or set(claims) != required_false_claims
+        or any(value is not False for value in claims.values())
+    ):
+        raise RuntimeError("Skill ablation protocol claim overreach.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-ablation-batch-01-protocol-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "prompt-only packet contract and parent-evidence evaluator hardened",
+        "Asking the model not to invoke them is not a disable mechanism",
+        "does not decide branch versus worktree topology",
+        "File presence likewise does not prove invocation",
+        "There is no Arm C",
+        "do not create a Codex task",
+        "No suitable Git Arm C cannot by itself prove a residual gap",
+        "Global Codex per-Skill disablement",
+        "current CLI is not logged in",
+        "Hard standards are controls rather than ablation variables",
+        "Luna/low exposure diagnostic later matched the Spark/low report exactly",
+        "loader availability therefore remains unknown",
+        "does not resolve `handoff` loader availability",
+        "omitted from the budgeted startup list",
+        "host-emitted loader event",
+        "parent-recomputed SHA-256",
+        "complete repository truth before and after",
+        "A plausible path, a 64-character string",
+        "Agent self-report is rejected",
+        "three independent valid run IDs",
+        "exact raw UTF-8 response bytes",
+        "three independent parent-observed host run IDs",
+        "Reusing a task, thread, or run identity is not a repetition",
+        "producer-only outcome does not prove",
+        "requires separate explicit authority",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill ablation protocol doc missing phrase: {phrase}")
+
+    builder = (ROOT / "scripts/build_skill_ablation_batch_01_packet.py").read_text(encoding="utf-8")
+    for phrase in (
+        "def verify_handoff_payload(",
+        "def build_context_arm_a(",
+        "def build_context_arm_c_producer(",
+        "def build_context_arm_c_receiver(",
+        "def build_git_arm_a(",
+        '"taskCreationAuthorizedByPacket": False',
+        '"temporaryArtifactWriteAuthorizedByPacket": False',
+        '"promptOnlyNonInvocationRequestProvesDisabled": False',
+        '"hardStandardControl"',
+        '"notAnAblationVariable": True',
+        '"skillDisableRemovesOnlyNamedPayloads": True',
+        '"parentEvidenceRequired"',
+        '"receiverBoundHandoffArtifactSha256"',
+        '"actualModelAndReasoningMustBeParentOrHostObserved": True',
+        '"agentSelfReportedExposureAccepted": False',
+    ):
+        if phrase not in builder:
+            raise RuntimeError(f"Skill ablation packet builder missing boundary: {phrase}")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_skill_ablation_batch_01_protocol.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"host-loader-event"',
+        '"fail-loaded-handoff-path-mismatch"',
+        '"fail-selected-handoff-payload-byte-drift"',
+        '"fail-handoff-artifact-hash-mismatch"',
+        '"fail-repository-mutation-envelope-missing"',
+        '"hard-fail-repository-mutated-during-trial"',
+        '"fail-receiver-handoff-artifact-hash-mismatch"',
+        '"blocked-parent-exposure-evidence-unrecorded"',
+        '"fail-git-live-oracle-mismatch"',
+        "def aggregate_git_arm_a_runs(",
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Skill ablation evaluator missing evidence boundary: {phrase}"
+            )
+
+
+def validate_skill_ablation_batch_01_host_preflight(
+    document: dict[str, object],
+    protocol: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-ablation-batch-01-host-preflight-2026-07-19",
+        "date": "2026-07-19",
+        "status": "observed-fresh-task-exposure-preflight-formal-ablation-blocked",
+        "scenario": "ABLATION-EXPOSURE-PREFLIGHT",
+        "nextGate": "explicit-authorization-for-reversible-global-codex-skill-config-mutation-and-application-restart-before-repeat-preflight",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ablation host preflight {key} drifted.")
+
+    host = document.get("host", {})
+    if not isinstance(host, dict) or host.get("surface") != "Codex desktop create_thread local project task" or host.get("projectPath") != "C:/Projects/agent-autonomy-harness" or host.get("threadId") != "019f799f-702f-7151-9ce1-d13dd81378fd" or host.get("hostId") != "local":
+        raise RuntimeError("Skill ablation host preflight task binding drifted.")
+
+    request = document.get("controlPlaneRequest", {})
+    if not isinstance(request, dict) or request.get("model") != "gpt-5.3-codex-spark" or request.get("reasoningEffort") != "low" or request.get("formalScenarioPromptSent") is not False or any(request.get(key) is not False for key in ("commandsAuthorizedByPrompt", "fileReadsAuthorizedByPrompt", "fileWritesAuthorizedByPrompt")):
+        raise RuntimeError("Skill ablation host preflight control-plane boundary drifted.")
+
+    report = document.get("taskReport", {})
+    visible = report.get("visibleSkills", {}) if isinstance(report, dict) else {}
+    if not isinstance(report, dict) or report.get("actualModelSelfReport") != "gpt-5" or report.get("actualReasoningEffortSelfReport") != "unknown" or visible != {"intent-contract": True, "capability-router": True, "closure-contract": True, "handoff": False} or any(report.get(key) != 0 for key in ("commandsRun", "filesRead", "filesWritten")):
+        raise RuntimeError("Skill ablation host preflight observation drifted.")
+
+    diagnostic = document.get("capacityDiagnostic", {})
+    diagnostic_request = diagnostic.get("controlPlaneRequest", {}) if isinstance(diagnostic, dict) else {}
+    attempts = diagnostic.get("creationAttempts", []) if isinstance(diagnostic, dict) else []
+    diagnostic_report = diagnostic.get("taskReport", {}) if isinstance(diagnostic, dict) else {}
+    diagnostic_visible = diagnostic_report.get("visibleSkills", {}) if isinstance(diagnostic_report, dict) else {}
+    interpretation_report = diagnostic_report.get("hardStandardInterpretation", {}) if isinstance(diagnostic_report, dict) else {}
+    comparison = diagnostic.get("comparison", {}) if isinstance(diagnostic, dict) else {}
+    if not isinstance(diagnostic, dict) or diagnostic_request != {"model": "gpt-5.6-luna", "reasoningEffort": "low", "formalScenarioPromptSent": False} or attempts != [
+        {"threadId": "019f7a3a-a1a8-73f2-99bb-fd578b30ca27", "result": "thread-id-returned-but-not-readable-or-listed"},
+        {"threadId": "019f7a3b-1229-7eb0-9561-0b435fd47822", "result": "completed"},
+    ] or diagnostic_report.get("actualModelSelfReport") != "unknown" or diagnostic_report.get("actualReasoningEffortSelfReport") != "unknown" or diagnostic_visible != {"intent-contract": True, "capability-router": True, "closure-contract": True, "handoff": False} or interpretation_report != {"skillsAreUpstreamVariables": True, "hardStandardsRemainActive": True, "skillDisableRemovesHardStandards": False} or any(diagnostic_report.get(key) != 0 for key in ("commandsRun", "filesRead", "filesWritten")) or comparison != {"visibilityMatchesWeakPreflight": True, "exposureAmbiguityReduced": True, "handoffLoaderAmbiguityReduced": False, "exactModelIdentityStillUnverified": True, "exactReasoningEffortStillUnverified": True}:
+        raise RuntimeError("Skill ablation host capacity diagnostic drifted.")
+
+    judgment = document.get("judgment", {})
+    if not isinstance(judgment, dict) or judgment.get("resultClass") != "preflight-confirmed-self-authored-exposure-handoff-loader-unknown" or judgment.get("crossRequestedModelExposureAgreementObserved") is not True or any(judgment.get(key) is not False for key in ("selfAuthoredDisabledBaselineSatisfied", "sourceBackedHandoffFreshTaskVisibilitySatisfied", "formalArmAExecuted", "formalArmCExecuted", "modelIdentityIndependentlyVerified", "reasoningEffortIndependentlyVerified", "sourceBackedHandoffLoaderAvailabilityDetermined", "startupListAbsenceProvesLoaderUnavailable")):
+        raise RuntimeError("Skill ablation host preflight judgment drifted.")
+
+    interpretation = document.get("interpretationBoundary", {})
+    if not isinstance(interpretation, dict) or interpretation.get("designChanged") is not False or interpretation.get("failureConcernsSkillVariableIsolationOnly") is not True or interpretation.get("hardStandardBaselineExpectedToRemainActive") is not True or interpretation.get("hardStandardsWereRemovalTarget") is not False or interpretation.get("successfulSkillDisableMayRelaxAcceptance") is not False:
+        raise RuntimeError("Skill ablation host preflight interpretation drifted.")
+
+    official = document.get("officialHostBoundary", {})
+    if not isinstance(official, dict) or official.get("initialSkillListHasContextBudget") is not True or official.get("initialSkillListMayOmitSkillsWhenLarge") is not True or official.get("initialListAbsenceProvesLoaderUnavailable") is not False:
+        raise RuntimeError("Skill ablation host preflight official list-budget boundary drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    allowed_true = {"freshTaskPreflightAuthorized", "temporaryHandoffArtifactAuthorized", "taskScopedSkillDisableAuthorized"}
+    if not isinstance(authority, dict) or any(authority.get(key) is not True for key in allowed_true) or any(value is not False for key, value in authority.items() if key not in allowed_true):
+        raise RuntimeError("Skill ablation host preflight authority drifted.")
+
+    claims = document.get("claimBoundary", {})
+    if not isinstance(claims, dict) or not claims or any(value is not False for value in claims.values()):
+        raise RuntimeError("Skill ablation host preflight claim overreach.")
+
+    preflight = protocol.get("hostPreflight", {})
+    if not isinstance(preflight, dict) or preflight.get("evidence") != "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json" or preflight.get("result") != judgment.get("resultClass"):
+        raise RuntimeError("Skill ablation host preflight protocol linkage drifted.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-ablation-batch-01-host-preflight-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "formal ablation arms blocked",
+        "all three self-authored Skills visible and `handoff` absent",
+        "exact runtime model and reasoning identity remain unverified",
+        "cannot substitute for the desktop Arm C loader test",
+        "application restart",
+        "No CC Switch mutation",
+        "hard-standard baseline was expected to remain active",
+        "hide the three named Skill payloads while preserving",
+        "first creation call returned a thread ID that was neither readable",
+        "same exposure",
+        "initial Skill list has a context budget",
+        "Startup-list absence is therefore not proof of loader unavailability",
+        "does not resolve `handoff` loader availability",
+        "explicitly invoke the exact source-backed payload",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill ablation host preflight doc missing phrase: {phrase}")
+
+
+def validate_skill_ablation_host_config_transaction(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-ablation-host-config-transaction-2026-07-19",
+        "date": "2026-07-19",
+        "status": "prepared-unexecuted-awaiting-host-wide-authorization",
+        "nextGate": "explicit-authorization-for-the-complete-reversible-host-transaction-including-two-restarts-and-backup-cleanup",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ablation host transaction {key} drifted.")
+
+    official = document.get("officialMechanism", {})
+    if not isinstance(official, dict) or official.get("source") != "https://developers.openai.com/codex/skills" or official.get("configPath") != "C:/Users/15521/.codex/config.toml" or official.get("entryShape") != "[[skills.config]] path plus enabled=false" or official.get("restartRequired") is not True or official.get("implicitInvocationFalseIsDisablement") is not False or official.get("initialSkillListHasContextBudget") is not True or official.get("initialListAbsenceProvesLoaderUnavailable") is not False:
+        raise RuntimeError("Skill ablation host transaction official mechanism drifted.")
+
+    baseline = document.get("observedBaseline", {})
+    if not isinstance(baseline, dict) or baseline.get("sha256") != "147635b5938f1b6272c7009281a6772cef2781888f20bcf1ebabbe794e13efea" or baseline.get("lengthBytes") != 9723 or baseline.get("skillsConfigEntryCount") != 0 or baseline.get("configContentCapturedInRepository") is not False:
+        raise RuntimeError("Skill ablation host transaction baseline drifted.")
+
+    expected_hashes = {
+        "intent-contract": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753",
+        "capability-router": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe",
+        "closure-contract": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3",
+    }
+    targets = document.get("targets", [])
+    if not isinstance(targets, list) or len(targets) != 6:
+        raise RuntimeError("Skill ablation host transaction target count drifted.")
+    expected_paths = {
+        f"C:/Users/15521/{root}/skills/{name}/SKILL.md"
+        for root in (".agents", ".codex")
+        for name in expected_hashes
+    }
+    observed_paths: set[str] = set()
+    observed_name_counts = {name: 0 for name in expected_hashes}
+    for target in targets:
+        if not isinstance(target, dict):
+            raise RuntimeError("Skill ablation host transaction target shape drifted.")
+        name = target.get("name")
+        path = target.get("path")
+        if name not in expected_hashes or target.get("sha256") != expected_hashes[name] or not isinstance(path, str):
+            raise RuntimeError("Skill ablation host transaction target identity drifted.")
+        observed_paths.add(path)
+        observed_name_counts[name] += 1
+    if observed_paths != expected_paths or set(observed_name_counts.values()) != {2}:
+        raise RuntimeError("Skill ablation host transaction projection coverage drifted.")
+
+    hard_standard = document.get("hardStandardInvariant", {})
+    expected_controls = {
+        "repository-instruction-baseline",
+        "native-host-approval-boundary",
+        "fixed-scenario-facts",
+        "truth-safety-authority-thresholds",
+        "acceptance-verification",
+    }
+    if not isinstance(hard_standard, dict) or hard_standard.get("sameBeforeDuringAndAfterTransaction") is not True or hard_standard.get("skillDisableMayRelaxAcceptance") is not False or set(hard_standard.get("controls", [])) != expected_controls:
+        raise RuntimeError("Skill ablation host transaction hard-standard invariant drifted.")
+
+    transaction = document.get("transaction", {})
+    steps = transaction.get("orderedSteps", []) if isinstance(transaction, dict) else []
+    failures = transaction.get("failClosed", []) if isinstance(transaction, dict) else []
+    if not isinstance(transaction, dict) or transaction.get("backupPath") != "C:/Users/15521/.codex/config.toml.agent-autonomy-harness-20260719.bak" or not isinstance(steps, list) or len(steps) != 10 or "restore the exact backup bytes regardless of pass or fail" not in steps or sum("restart Codex Desktop" in step for step in steps if isinstance(step, str)) != 2 or not isinstance(failures, list) or not any("explicit invocation decides the loader claim" in item for item in failures if isinstance(item, str)):
+        raise RuntimeError("Skill ablation host transaction rollback sequence drifted.")
+
+    acceptance = document.get("acceptance", {})
+    if not isinstance(acceptance, dict) or acceptance.get("backupHashMatchesBaseline") is not True or acceptance.get("mutatedTomlParses") is not True or acceptance.get("exactDisabledTargetCount") != 6 or acceptance.get("selfAuthoredExposureRequired") != "absent-or-host-disabled" or acceptance.get("handoffLoaderEvidenceRequired") != "explicit-invocation-plus-path-and-digest" or acceptance.get("restoredHashMustEqualBaseline") is not True or acceptance.get("postRestoreRestartRequired") is not True or acceptance.get("postRestoreHostVerificationRequired") is not True:
+        raise RuntimeError("Skill ablation host transaction acceptance drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or authority.get("preparedContractWriteAuthorized") is not True or any(value is not False for key, value in authority.items() if key != "preparedContractWriteAuthorized"):
+        raise RuntimeError("Skill ablation host transaction authority overclaim.")
+
+    claims = document.get("claimBoundary", {})
+    if not isinstance(claims, dict) or not claims or any(value is not False for value in claims.values()):
+        raise RuntimeError("Skill ablation host transaction claim overreach.")
+
+    doc = " ".join(
+        (ROOT / "docs/skill-ablation-host-config-transaction-2026-07-19.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "The existing design is unchanged",
+        "contains no `[[skills.config]]` entries",
+        "initial Skill list is budgeted",
+        "one inseparable reversible unit",
+        "restore the exact backup on success, failure, or interruption",
+        "Failure to load `handoff` after explicit invocation is recorded as a falsifying host result",
+        "does not include CC Switch mutation",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(f"Skill ablation host transaction doc missing phrase: {phrase}")
+
+
+def validate_skill_ablation_host_transaction_revalidation(
+    document: dict[str, object],
+    transaction: dict[str, object],
+) -> None:
+    contract_path = (
+        ROOT / "registry/skill-ablation-host-config-transaction-2026-07-19.json"
+    )
+    expected_contract_sha256 = sha256_skill_ablation_transaction_bytes(
+        contract_path.read_bytes()
+    )
+    failures = validate_skill_ablation_transaction_revalidation_report(
+        document,
+        transaction,
+    )
+    if failures:
+        raise RuntimeError(
+            "Skill ablation host transaction revalidation failed: "
+            f"{failures[0]}"
+        )
+
+    source = document.get("sourceContract", {})
+    if (
+        not isinstance(source, dict)
+        or source.get("sha256") != expected_contract_sha256
+        or source.get("path")
+        != contract_path.resolve(strict=True).as_posix()
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation source binding drifted."
+        )
+
+    if (
+        document.get("status")
+        != "blocked-baseline-drift-reintake-required"
+        or document.get("driftReasons") != ["config-sha256-drift"]
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation status drifted."
+        )
+    config = document.get("configObservation", {})
+    if (
+        not isinstance(config, dict)
+        or config.get("exists") is not True
+        or config.get("observationComplete") is not True
+        or config.get("prePostStable") is not True
+        or config.get("readErrorClass") is not None
+        or config.get("tomlParseComplete") is not True
+        or config.get("tomlParseErrorClass") is not None
+        or config.get("lengthBytes") != 9723
+        or config.get("sha256")
+        != "baafd17f73150db5c9f48b93cc418be35ae63404f1eabdb173d4bd14b757f125"
+        or config.get("skillsConfigEntryCount") != 0
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation config observation drifted."
+        )
+    comparison = document.get("comparison", {})
+    if (
+        not isinstance(comparison, dict)
+        or comparison.get("configSha256Matches") is not False
+        or any(
+            value is not True
+            for key, value in comparison.items()
+            if key != "configSha256Matches"
+        )
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation comparison drifted."
+        )
+    targets = document.get("targetObservations", [])
+    if (
+        not isinstance(targets, list)
+        or len(targets) != 6
+        or any(
+            not isinstance(target, dict)
+            or target.get("exists") is not True
+            or target.get("observationComplete") is not True
+            or target.get("prePostStable") is not True
+            or target.get("sha256Matches") is not True
+            or target.get("readErrorClass") is not None
+            for target in targets
+        )
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation target observation drifted."
+        )
+    backup = document.get("backupObservation", {})
+    if (
+        not isinstance(backup, dict)
+        or backup.get("existsBefore") is not False
+        or backup.get("existsAfter") is not False
+        or backup.get("prePostStable") is not True
+    ):
+        raise RuntimeError(
+            "Skill ablation transaction revalidation backup boundary drifted."
+        )
+    if document.get("cohortBoundary") != {
+        "atomicSnapshotProved": False,
+        "mustRevalidateInsideAuthorizedMutationCriticalSection": True,
+        "reportDigestIsSignatureOrLiveAttestation": False,
+    }:
+        raise RuntimeError(
+            "Skill ablation transaction revalidation cohort boundary drifted."
+        )
+
+    script = (
+        ROOT / "scripts/revalidate_skill_ablation_host_transaction.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "prePostStable",
+        "readErrorClass",
+        "tomllib.loads",
+        "configContentIncluded",
+        "mustRevalidateInsideAuthorizedMutationCriticalSection",
+        "countsAsGlobalConfigMutation",
+        "blocked-baseline-drift-reintake-required",
+    ):
+        if phrase not in script:
+            raise RuntimeError(
+                "Skill ablation transaction revalidation script missing: "
+                f"{phrase}"
+            )
+    doc = " ".join(
+        (
+            ROOT
+            / "docs/skill-ablation-host-transaction-revalidation-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "must not execute",
+        "Matching length and entry count cannot cancel a full-byte digest mismatch",
+        "stat -> read/hash/count -> stat",
+        "semantic TOML",
+        "not an atomic multi-file snapshot",
+        "not a signature or live-state attestation",
+        "do not authorize replacing the old baseline",
+        "does not prove that no other historical backup exists",
+        "separate authorization",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                "Skill ablation transaction revalidation doc missing: "
+                f"{phrase}"
+            )
+    shared_docs = {
+        "transaction": (
+            ROOT / "docs/skill-ablation-host-config-transaction-2026-07-19.md"
+        ).read_text(encoding="utf-8"),
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    for name, text in shared_docs.items():
+        if (
+            "skill-ablation-host-transaction-revalidation-2026-07-24.md"
+            not in text
+        ):
+            raise RuntimeError(
+                "Skill ablation transaction revalidation link missing from "
+                f"{name}."
+            )
+
+
+def validate_git_topology_trial_protocol(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "git-topology-decision-fixtures-2026-07-19",
+        "date": "2026-07-19",
+        "status": "verified-local-decision-and-disposable-native-lifecycle-integration-user-repository-mutation-not-authorized",
+        "protocol": "docs/git-topology-decision-poc-2026-07-19.md",
+        "evaluator": "scripts/evaluate_git_topology_trial.py",
+        "observer": "scripts/observe_git_snapshot.py",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Git topology trial {key} drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    expected_authority = {
+        "readOnlyInspectionAllowed": True,
+        "disposableFixtureSetupAndAutomaticTeardownAllowed": True,
+        "disposableFixtureGitLifecycleAuthorized": True,
+        "userRepositoryMutationAuthorized": False,
+        "branchCreationAuthorized": False,
+        "worktreeCreationAuthorized": False,
+        "mergeOrCleanupAuthorized": False,
+        "commitOrPushAuthorized": False,
+    }
+    if authority != expected_authority:
+        raise RuntimeError("Git topology trial authority boundary drifted.")
+
+    integration = document.get("integrationEvidence", {})
+    if not isinstance(integration, dict):
+        raise RuntimeError("Git topology integration evidence is missing.")
+    if integration.get("runner") != "tests/test_git_snapshot_integration.py" or integration.get("temporaryDirectoryCleanup") != "python-temporary-directory-context-system-default-or-explicit-AGENT_AUTONOMY_GIT_TEST_ROOT" or integration.get("networkBoundary") != "local-filesystem-bare-remote-only-no-fetch-from-external-remote":
+        raise RuntimeError("Git topology integration runner or boundary drifted.")
+    if integration.get("latestObservedRun") != {
+        "date": "2026-07-24",
+        "platform": "Windows",
+        "gitVersion": "2.55.0.windows.3",
+        "command": "python -B -m unittest tests.test_git_topology_trial tests.test_git_snapshot_integration",
+        "testsRun": 18,
+        "result": "pass",
+    }:
+        raise RuntimeError("Git topology latest observed lifecycle run drifted.")
+    expected_scenarios = {
+        "real-clean-repository-without-upstream",
+        "real-local-upstream-with-tracked-and-untracked-dirty-paths",
+        "real-detached-head",
+        "real-rename-porcelain-with-both-paths",
+        "real-copy-porcelain-with-source-and-target-paths",
+        "real-multiple-worktree-enumeration",
+        "real-local-tracking-ref-ahead-and-diverged-counts",
+        "failed-checkout-preserves-reconstructable-state",
+        "failed-worktree-add-leaves-no-partial-registration",
+        "real-content-conflict-unmerged-status-read-only-observation",
+        "unrelated-byte-hash-preserved-across-observation",
+        "disposable-exact-base-worktree-fast-forward-and-non-force-cleanup",
+        "dirty-primary-refuses-fast-forward-and-preserves-state",
+        "dirty-worktree-refuses-non-force-cleanup-and-preserves-bytes",
+        "unmerged-branch-refuses-safe-delete-and-retains-history",
+    }
+    if set(integration.get("scenarios", [])) != expected_scenarios:
+        raise RuntimeError("Git topology integration scenario coverage drifted.")
+    claims = integration.get("claimBoundary", {})
+    expected_true_claims = {
+        "provesBoundedObserverLogicalStateContainmentOnCurrentWindowsHost",
+        "provesNoUpstreamHandling",
+        "provesLocalTrackingRefLabeling",
+        "provesDetachedHeadIdentification",
+        "provesRenamePathEnumeration",
+        "provesCopyPathEnumeration",
+        "provesMultipleWorktreeObservation",
+        "provesLocalAheadBehindCounts",
+        "provesBoundedCheckoutFailureStateReconstruction",
+        "provesBoundedWorktreeConflictLeavesNoRegistration",
+        "provesObservedUnrelatedBytesPreserved",
+        "provesCleanupOnExplicitUnwatchedWritableRoot",
+        "provesDisposableExactBaseBranchAndWorktreeCreation",
+        "provesDisposableFastForwardMerge",
+        "provesDisposableNonForceCleanup",
+        "provesDirtyPrimaryMergeRefusal",
+        "provesDirtyWorktreeCleanupRefusal",
+        "provesUnmergedBranchRetention",
+        "provesDisposableContentConflictStatusObservation",
+    }
+    expected_false_claims = {
+        "provesFilesystemZeroWriteObserver",
+        "provesExternalRemoteFreshness",
+        "provesBranchOrWorktreeCreationSafety",
+        "provesGeneralFailureRecovery",
+        "provesConflictResolutionOrAbortSafety",
+        "provesCrashRecovery",
+        "provesCrossHostParity",
+        "provesAgentAdherence",
+    }
+    if not isinstance(claims, dict) or set(claims) != expected_true_claims | expected_false_claims or any(claims.get(key) is not True for key in expected_true_claims) or any(claims.get(key) is not False for key in expected_false_claims):
+        raise RuntimeError("Git topology integration claim boundary drifted.")
+
+    fixtures = document.get("fixtures", [])
+    if not isinstance(fixtures, list) or len(fixtures) != 32 or len({item.get("id") for item in fixtures if isinstance(item, dict)}) != 32:
+        raise RuntimeError("Git topology fixture count or identity drifted.")
+    lane_counts = {
+        lane: sum(item.get("lane") == lane for item in fixtures if isinstance(item, dict))
+        for lane in ("GIT-01", "GIT-02", "GIT-03", "GIT-04", "GIT-05")
+    }
+    if lane_counts != {
+        "GIT-01": 9,
+        "GIT-02": 11,
+        "GIT-03": 4,
+        "GIT-04": 4,
+        "GIT-05": 4,
+    }:
+        raise RuntimeError("Git topology fixture lane coverage drifted.")
+
+    results = evaluate_git_topology_fixture_document(document)
+    failures = [item for item in results if item["expected"] != item["actual"]]
+    if failures:
+        raise RuntimeError(f"Git topology deterministic fixture failed: {failures[0]['id']}")
+    required_outcomes = {
+        "snapshot-complete-no-upstream",
+        "snapshot-complete-local-refs-only",
+        "snapshot-complete-live-remote-refreshed",
+        "fail-live-remote-freshness-overclaim",
+        "resolve-dirty-ownership-before-topology",
+        "continue-current-workspace-related-dirty-state",
+        "recommend-new-branch-current-workspace",
+        "recommend-isolated-worktree",
+        "hard-fail-unauthorized-topology-mutation",
+        "stop-no-creation-authority",
+        "eligible-create-worktree",
+        "stop-no-merge-authority",
+        "eligible-fast-forward-merge",
+        "retain-no-cleanup-authority",
+        "eligible-exact-cleanup",
+    }
+    if not required_outcomes.issubset({item["actual"] for item in results}):
+        raise RuntimeError("Git topology fixture outcome coverage drifted.")
+
+    protocol = " ".join((ROOT / expected["protocol"]).read_text(encoding="utf-8").split())
+    for phrase in (
+        "no user-repository Git topology mutation authorized",
+        "local tracking ref",
+        "does not invent `origin/main`",
+        "advice, not action authority",
+        "contains 32 cases",
+        "Disposable real-repository integration",
+        "automatically removed Python temporary directories",
+        "unrelated SHA-256 sentinel remains byte-identical",
+        "copy porcelain",
+        "content conflict",
+        "`UU tracked.txt`",
+        "does not resolve or abort the merge",
+        "Bounded failure injection",
+        "Disposable native lifecycle integration",
+        "never `-D`",
+        "does not add a branch/worktree manager",
+        "A nonzero exit is evidence to inspect state",
+        "separate authorization gate",
+    ):
+        if phrase not in protocol:
+            raise RuntimeError(f"Git topology protocol missing phrase: {phrase}")
+
+
+def validate_context_handoff_packet_freshness_contract(
+    document: dict[str, object],
+    fixture: dict[str, object],
+) -> None:
+    expected_claim_boundary = {
+        "createsThread": False,
+        "readsConversation": False,
+        "invokesLoader": False,
+        "changesConfiguration": False,
+        "networkRefreshes": False,
+        "provesReceiverBehavior": False,
+        "provesAtomicSnapshot": False,
+        "provesSourceSemanticFreshness": False,
+    }
+    if (
+        set(document)
+        != {
+            "schema",
+            "id",
+            "status",
+            "scenarioIds",
+            "builderReuse",
+            "fixture",
+            "tests",
+            "invariants",
+            "claimBoundary",
+            "nextGate",
+        }
+        or document.get("schema") != 1
+        or document.get("id")
+        != "context-handoff-packet-freshness-2026-07-24"
+        or document.get("status")
+        != (
+            "verified-local-pre-dispatch-freshness-contract-"
+            "no-thread-or-host-action"
+        )
+        or document.get("scenarioIds") != ["CTX-04", "CTX-05"]
+        or document.get("builderReuse")
+        != (
+            "scripts/build_context_continuation_trial_packet.py SOURCE_PATHS, "
+            "collect_git_truth, collect_source_hashes"
+        )
+        or document.get("fixture")
+        != "tests/fixtures/context-handoff-packet-freshness-2026-07-24.json"
+        or document.get("tests")
+        != "tests/test_context_handoff_packet_freshness.py"
+        or document.get("claimBoundary") != expected_claim_boundary
+        or document.get("nextGate")
+        != (
+            "Generate and freshness-validate immediately before a separately "
+            "authorized CTX-04/CTX-05 thread creation."
+        )
+    ):
+        raise RuntimeError(
+            "Context handoff packet freshness contract drifted."
+        )
+    invariants = document.get("invariants", [])
+    required_invariants = {
+        "exact source manifest and local repository truth are required",
+        (
+            "the public prompt is rebuilt from the canonical contract and "
+            "must match exactly"
+        ),
+        "the packet binds the exact repository-owned trial contract bytes",
+        "remote freshness remains local-refs-only-no-network-refresh",
+        "packet authority remains all false",
+        (
+            "atomic snapshot proof remains false and creation-critical-section "
+            "revalidation remains required"
+        ),
+        (
+            "source-byte freshness and builder consistency do not prove "
+            "source-semantic freshness"
+        ),
+        (
+            "current packet is not receiver, model, loader, auto-create, "
+            "or remote proof"
+        ),
+    }
+    if (
+        not isinstance(invariants, list)
+        or set(invariants) != required_invariants
+    ):
+        raise RuntimeError(
+            "Context handoff packet freshness invariants drifted."
+        )
+
+    expected_case_ids = {
+        "exact-local-packet",
+        "source-hash-drift",
+        "contract-digest-drift",
+        "repository-truth-drift",
+        "remote-overclaim",
+        "authority-promotion",
+        "prompt-tamper",
+    }
+    cases = fixture.get("cases", [])
+    if (
+        set(fixture)
+        != {"schema", "id", "status", "cases", "claimBoundary"}
+        or fixture.get("schema") != 1
+        or fixture.get("id")
+        != "context-handoff-packet-freshness-2026-07-24"
+        or fixture.get("status")
+        != "verified-local-packet-freshness-contract-no-thread-or-host-action"
+        or fixture.get("claimBoundary") != expected_claim_boundary
+        or not isinstance(cases, list)
+        or len(cases) != len(expected_case_ids)
+        or {
+            case.get("id")
+            for case in cases
+            if isinstance(case, dict)
+        }
+        != expected_case_ids
+    ):
+        raise RuntimeError(
+            "Context handoff packet freshness fixture drifted."
+        )
+
+    packet = build_context_continuation_trial_packet("baseline", ROOT)
+    result = validate_context_handoff_packet_freshness(packet, root=ROOT)
+    if (
+        result.get("status") != "packet-current-read-only-pre-dispatch"
+        or result.get("failureCodes") != []
+        or "currentRepositoryTruth" in result
+        or not isinstance(result.get("currentRepositoryTruthSha256"), str)
+        or not isinstance(result.get("currentSourceManifestSha256"), str)
+        or result.get("claimBoundary")
+        != {
+            "countsAsAtomicSnapshotProof": False,
+            "countsAsFreshSessionProof": False,
+            "countsAsLoaderInvocationProof": False,
+            "countsAsActualModelOrReasoningProof": False,
+            "countsAsAutomaticThreadCreationProof": False,
+            "countsAsRemoteFreshnessProof": False,
+            "countsAsReceiverRecoveryProof": False,
+            "countsAsSourceSemanticFreshnessProof": False,
+        }
+        or result.get("cohortBoundary")
+        != {
+            "atomicSnapshotProved": False,
+            "mustRevalidateInsideAuthorizedCreationCriticalSection": True,
+        }
+    ):
+        raise RuntimeError(
+            "Context handoff packet live read-only freshness check failed."
+        )
+
+    doc = " ".join(
+        (
+            ROOT / "docs/context-handoff-packet-freshness-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "public-prompt drift",
+        "local-refs-only-no-network-refresh",
+        "does not create a thread",
+        "only canonical digests and failure codes",
+        "source-byte freshness plus canonical-builder consistency",
+        "countsAsSourceSemanticFreshnessProof=false",
+        "not an atomic cross-file snapshot",
+        "future authorized creation critical section",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                "Context handoff packet freshness doc missing: "
+                f"{phrase}"
+            )
+
+
+def validate_context_continuation_trial_protocol(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "context-continuation-paired-trial-2026-07-19",
+        "date": "2026-07-19",
+        "status": "verified-local-contract-fixtures-live-thread-trial-pending",
+        "protocol": "docs/context-continuation-paired-trial-protocol-2026-07-19.md",
+        "evaluator": "scripts/evaluate_context_continuation_trial.py",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Context continuation trial {key} drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if not isinstance(authority, dict) or any(authority.get(key) is not False for key in (
+        "liveThreadCreationAuthorizedByThisFixture",
+        "automaticThreadCreationClaimed",
+        "modelSubstitutionAuthorized",
+        "archiveOrDeletionAuthorized",
+    )):
+        raise RuntimeError("Context continuation trial authority boundary drifted.")
+
+    execution_policy = document.get("executionPolicy", {})
+    expected_execution_policy = {
+        "primaryLiveArm": "weak-agent-stress",
+        "baselineRunPolicy": "conditional-on-weak-failure-ambiguous-attribution-or-explicit-capacity-comparison",
+        "pairedRunAlwaysRequired": False,
+        "selfAuthoredAdmissionEvidenceProvidedByFixtureAlone": False,
+    }
+    if execution_policy != expected_execution_policy:
+        raise RuntimeError("Context continuation conditional execution policy drifted.")
+
+    arms = document.get("trialArms", [])
+    if not isinstance(arms, list) or {item.get("id") for item in arms if isinstance(item, dict)} != {
+        "baseline", "weak-agent-stress",
+    }:
+        raise RuntimeError("Context continuation trial arm coverage drifted.")
+    baseline_arm = next(item for item in arms if item.get("id") == "baseline")
+    weak_arm = next(item for item in arms if item.get("id") == "weak-agent-stress")
+    expected_availability = "listed-by-current-calling-host-tool-contract-revalidate-on-create"
+    if baseline_arm.get("requestedModelId") != "gpt-5.6-terra" or baseline_arm.get("requestedReasoningEffort") != "low" or baseline_arm.get("availability") != expected_availability:
+        raise RuntimeError("Context continuation baseline model selection drifted.")
+    if weak_arm.get("requestedModelLabel") != "5.3 Spark" or weak_arm.get("requestedModelId") != "gpt-5.3-codex-spark" or weak_arm.get("requestedReasoningEffort") != "low" or weak_arm.get("availability") != expected_availability:
+        raise RuntimeError("Context continuation weak-Agent selection boundary drifted.")
+
+    oracle = document.get("oracle", {})
+    if not isinstance(oracle, dict) or len(oracle.get("criticalFactIds", [])) != 10 or len(oracle.get("staleFactIds", [])) != 5 or len(oracle.get("optionalFactIds", [])) != 4:
+        raise RuntimeError("Context continuation fact oracle coverage drifted.")
+    for key in ("criticalFactIds", "staleFactIds", "optionalFactIds"):
+        values = oracle.get(key, [])
+        if len(values) != len(set(values)):
+            raise RuntimeError(f"Context continuation oracle contains duplicate {key}.")
+
+    fixtures = document.get("fixtures", [])
+    if not isinstance(fixtures, list) or len(fixtures) != 12 or len({item.get("id") for item in fixtures if isinstance(item, dict)}) != 12:
+        raise RuntimeError("Context continuation fixture count or identity drifted.")
+    results = evaluate_context_continuation_fixture_document(document)
+    failures = [item for item in results if item["expected"] != item["actual"]]
+    if failures:
+        raise RuntimeError(f"Context continuation deterministic fixture failed: {failures[0]['id']}")
+
+    outcomes = {item["actual"] for item in results}
+    required_outcomes = {
+        "require-explicit-thread-authority",
+        "require-live-model-capability-verification",
+        "blocked-requested-model-unavailable",
+        "hard-fail-authority-overreach",
+        "fail-critical-fact-loss-or-invention",
+        "fail-stale-fact-acceptance-or-invention",
+        "manual-continuation-observed-baseline",
+        "manual-continuation-observed-weak-agent-stress",
+    }
+    if not required_outcomes.issubset(outcomes):
+        raise RuntimeError("Context continuation fixture outcome coverage drifted.")
+
+    protocol = " ".join((ROOT / expected["protocol"]).read_text(encoding="utf-8").split())
+    for phrase in (
+        "live thread trial not yet executed",
+        "5.3 Spark",
+        "No nearest model is silently substituted",
+        "critical-fact recovery is exactly 100%",
+        "deterministic fixture pass validates only the classifier and guardrails",
+        "No live thread is required merely because this protocol is prepared",
+        "conditional attribution trigger and separate authority",
+        "domain-separated deterministic stale OID",
+        "no shared twelve-character fragment",
+    ):
+        if phrase not in protocol:
+            raise RuntimeError(f"Context continuation protocol missing phrase: {phrase}")
+
+    builder = (ROOT / "scripts/build_context_continuation_trial_packet.py").read_text(encoding="utf-8")
+    for phrase in (
+        "def collect_git_truth(",
+        "def build_packet(",
+        '"oraclePrivate"',
+        '"sendToThread"',
+        '"threadCreationAuthorizedByPacket": False',
+        '"repositoryMutationAuthorized": False',
+        '"networkRefreshAuthorizedByPacket": False',
+        '"cleanupAuthorizedByPacket": False',
+        'output.add_argument("--prompt-only"',
+        '"--emit-parent-packet"',
+        "if args.emit_parent_packet:",
+        'print(packet["sendToThread"]["prompt"], end="")',
+    ):
+        if phrase not in builder:
+            raise RuntimeError(f"Context continuation packet builder missing boundary: {phrase}")
+
+
+def validate_context_evidence_envelope(document: dict[str, object]) -> None:
+    expected = {
+        "schema": 1,
+        "id": "context-evidence-envelope-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-local-negative-probes-live-thread-and-loader-pending",
+        "nextGate": (
+            "separately-authorized-fresh-thread-trial-with-verified-model-and-"
+            "parent-observed-evidence"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Context evidence envelope {key} drifted.")
+
+    scope = document.get("scope", {})
+    if scope != {
+        "protocol": "tests/fixtures/context-continuation-paired-trial-2026-07-19.json",
+        "packetBuilder": "scripts/build_context_continuation_trial_packet.py",
+        "evaluator": "scripts/evaluate_context_continuation_trial.py",
+    }:
+        raise RuntimeError("Context evidence envelope scope drifted.")
+
+    local = document.get("verifiedLocal", {})
+    if (
+        not isinstance(local, dict)
+        or local.get("focusedTestCount") != 12
+        or any(
+            local.get(key) is not True
+            for key in (
+                "completeRepositoryTruthRequired",
+                "exactRepositoryTruthEqualityRequired",
+                "exactSourceDigestEqualityRequired",
+                "beforeAfterGitTruthEqualityRequired",
+            )
+        )
+    ):
+        raise RuntimeError("Context evidence envelope local proof drifted.")
+    probes = local.get("negativeProbes", [])
+    required_probes = {
+        "boolean-only-repository-truth": "fail-repository-truth-evidence-missing",
+        "repository-truth-value-drift": "fail-repository-truth-value-drift",
+        "source-digest-drift": "fail-source-evidence-drift",
+        "missing-git-mutation-envelope": "fail-repository-mutation-envelope-missing",
+        "git-truth-mutated": "hard-fail-repository-mutated-during-trial",
+    }
+    if (
+        not isinstance(probes, list)
+        or len(probes) != len(required_probes)
+        or {
+            item.get("id"): item.get("expected")
+            for item in probes
+            if isinstance(item, dict)
+        }
+        != required_probes
+    ):
+        raise RuntimeError("Context evidence envelope falsification probes drifted.")
+
+    host = document.get("hostObservation", {})
+    if (
+        not isinstance(host, dict)
+        or host.get("codexCliVersion") != "0.145.0"
+        or host.get("hostVersionRequiresLiveRevalidation") is not True
+        or host.get("olderHostEvidenceAutomaticallyUpgraded") is not False
+    ):
+        raise RuntimeError("Context evidence envelope host boundary drifted.")
+
+    for section in ("liveEvidence", "mutationBoundary"):
+        values = document.get(section, {})
+        if (
+            not isinstance(values, dict)
+            or not values
+            or any(value is not False for value in values.values())
+        ):
+            raise RuntimeError(f"Context evidence envelope {section} overclaimed.")
+
+    text = (ROOT / "docs/context-evidence-envelope-2026-07-23.md").read_text(
+        encoding="utf-8"
+    )
+    for phrase in (
+        "does not prove",
+        "not a live",
+        "source-backed handoff Skill",
+        "parent-observed evidence",
+        "No live thread was created",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Context evidence envelope documentation missing phrase: {phrase}"
+            )
 
 
 def validate_round03_evidence_protocol_batch_01(
@@ -15755,6 +21639,4265 @@ def validate_mvp06_lifecycle_feedback(
         raise RuntimeError("README.md must link MVP-06 lifecycle feedback.")
     if doc_path not in readme_zh:
         raise RuntimeError("README.zh-CN.md must link MVP-06 lifecycle feedback.")
+
+
+def validate_cc_switch_live_drift_and_transaction_gate(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23",
+        "date": "2026-07-23",
+        "status": "live-drift-observed-management-authorized-but-recovery-gated",
+        "preservesPreviousRecordAsDatedEvidence": True,
+        "nextGate": "owner-decision-on-stale-row-debt-disposition",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"CC Switch live drift {key} drifted.")
+
+    cc_switch = document.get("ccSwitch", {})
+    if (
+        not isinstance(cc_switch, dict)
+        or cc_switch.get("version") != "3.18.0"
+        or cc_switch.get("tag") != "v3.18.0"
+        or cc_switch.get("commit")
+        != "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+        or cc_switch.get("sourceAuditMode") != "read-only-official-tag"
+    ):
+        raise RuntimeError("CC Switch 3.18 source pin drifted.")
+
+    counts = document.get("liveCounts", {})
+    if not isinstance(counts, dict):
+        raise RuntimeError("CC Switch live counts are missing.")
+    if counts.get("databaseRows") != 251 or counts.get("ccSsotBodies") != 75:
+        raise RuntimeError("CC Switch live database or SSOT count drifted.")
+    if (
+        counts.get("databaseRows") - counts.get("ccSsotBodies")
+        != counts.get("databaseDirectoriesMissingSsotBody")
+        or counts.get("claudeEntries") - counts.get("claudeResolvable")
+        != counts.get("claudeBrokenProjections")
+        or counts.get("databaseDirectoriesMissingSsotBody") != 176
+        or counts.get("claudeBrokenProjections") != 176
+    ):
+        raise RuntimeError("CC Switch missing-body and projection counts do not reconcile.")
+
+    source_classes = document.get("sourceClasses", {})
+    if (
+        not isinstance(source_classes, dict)
+        or source_classes.get("physicalBodiesWithRepositoryAttribution") != 29
+        or source_classes.get("physicalBodiesWithoutRepositoryAttribution") != 46
+        or source_classes.get("repositoryRegistrationProvesPayloadSource") is not False
+        or source_classes.get("physicalBodiesWithRepositoryAttribution")
+        + source_classes.get("physicalBodiesWithoutRepositoryAttribution")
+        != counts.get("ccSsotBodies")
+    ):
+        raise RuntimeError("CC Switch source-class reconciliation drifted.")
+
+    cohorts = document.get("criticalCohorts", {})
+    contracts = (
+        cohorts.get("repositoryAuthoredContracts", {})
+        if isinstance(cohorts, dict)
+        else {}
+    )
+    lark = cohorts.get("lark", {}) if isinstance(cohorts, dict) else {}
+    if (
+        contracts.get("skills")
+        != ["intent-contract", "capability-router", "closure-contract"]
+        or contracts.get("ccIsCanonicalAcrossSupportedHosts") is not False
+        or contracts.get("skillLevelCcBackupsPresent") != 0
+    ):
+        raise RuntimeError("CC Switch contract-cohort recovery gate drifted.")
+    if (
+        lark.get("count") != 27
+        or lark.get("treatAsAtomicCohort") is not True
+        or lark.get("genericPortabilityProved") is not False
+    ):
+        raise RuntimeError("CC Switch Lark atomic-cohort gate drifted.")
+
+    recovery = document.get("backupAndRecovery", {})
+    if (
+        not isinstance(recovery, dict)
+        or recovery.get("restoreRehearsalPassed") is not False
+        or recovery.get("crossDeviceContentEqualityProved") is not False
+        or recovery.get("settingsContainsCredentialExcludedFromEvidence") is not True
+    ):
+        raise RuntimeError("CC Switch recovery or secret-exclusion boundary drifted.")
+
+    decision = document.get("portfolioDecision", {})
+    if (
+        not isinstance(decision, dict)
+        or decision.get("ccSpecificManagementAuthorizedByUser") is not True
+        or decision.get("eligiblePayloadDeletionsNow") != 0
+        or decision.get("directDatabaseMutationAccepted") is not False
+        or decision.get("bulkDeletionBeforeOwnerDecisionAccepted") is not False
+        or decision.get("copyRuntimePluginCachesIntoCcAccepted") is not False
+    ):
+        raise RuntimeError("CC Switch portfolio decision outran the recovery evidence.")
+
+    if document.get("orderedTransaction") != [
+        "capture-secret-free-live-manifest",
+        "backup-both-contract-trees-and-complete-lark-cohort",
+        "retain-official-isolated-uninstall-restore-fixtures-without-copy-only-canary",
+        "owner-decision-on-stale-row-debt-disposition",
+        "if-separately-authorized-run-one-exact-visible-gui-transaction-and-reinventory",
+        "import-and-distribute-one-canonical-contract-release",
+        "reconcile-lark-as-an-atomic-version-cohort",
+        "resolve-live-duplicate-display-groups",
+        "apply-per-capability-admit-retain-disable-or-uninstall-decisions",
+    ]:
+        raise RuntimeError("CC Switch ordered transaction gate drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if (
+        not isinstance(authority, dict)
+        or authority.get("ccSkillPortfolioManagement") is not True
+        or authority.get("webDavUploadOrDownload") is not False
+        or authority.get("accountOrOAuthChange") is not False
+        or authority.get("commitOrPush") is not False
+    ):
+        raise RuntimeError("CC Switch live transaction authority boundary drifted.")
+
+    text = (
+        ROOT
+        / "docs/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "176 database rows",
+        "authorized-but-recovery-gated",
+        "Direct SQLite editing",
+        "WebDAV manifest equality is not a restore rehearsal",
+        "Do not add a copy-only canary",
+        "owner decision",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"CC Switch live transaction documentation missing phrase: {phrase}"
+            )
+
+
+def validate_cc_switch_recovery_preflight(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "cc-switch-3.18-recovery-preflight-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "local-recovery-artifact-verified-official-isolated-fixtures-pass-"
+            "live-mutation-not-started"
+        ),
+        "predecessor": (
+            "registry/cc-switch-3.18-live-drift-and-transaction-gate-"
+            "2026-07-23.json"
+        ),
+        "nextGate": "owner-decision-on-stale-row-debt-disposition",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"CC Switch recovery preflight {key} drifted.")
+
+    source = document.get("ccSwitchSource", {})
+    if (
+        not isinstance(source, dict)
+        or source.get("tag") != "v3.18.0"
+        or source.get("commit")
+        != "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+    ):
+        raise RuntimeError("CC Switch recovery source pin drifted.")
+
+    fixtures = document.get("officialIsolatedFixtures", [])
+    expected_fixtures = {
+        "uninstall_skill_creates_backup_before_removing_ssot",
+        "restore_skill_backup_restores_files_to_ssot_and_current_app",
+    }
+    if (
+        not isinstance(fixtures, list)
+        or {item.get("name") for item in fixtures if isinstance(item, dict)}
+        != expected_fixtures
+        or any(
+            not isinstance(item, dict)
+            or item.get("result") != "pass"
+            or item.get("liveUserStateUsed") is not False
+            for item in fixtures
+        )
+    ):
+        raise RuntimeError("CC Switch official isolated fixture evidence drifted.")
+
+    artifact = document.get("localRecoveryArtifact", {})
+    verification = (
+        artifact.get("verification", {}) if isinstance(artifact, dict) else {}
+    )
+    if (
+        not isinstance(artifact, dict)
+        or artifact.get("archiveSha256")
+        != "a3e760d0d9700e72be2fed34fe1eaee108d9f31b478068826e5b635f9a07b26d"
+        or artifact.get("archiveBytes") != 5560348
+        or artifact.get("payloadFiles") != 1493
+        or artifact.get("ccSsotBodies") != 75
+        or artifact.get("agentsSelectedBodies") != 30
+        or artifact.get("canonicalContracts") != 3
+        or artifact.get("existingCcSkillBackups") != 20
+        or artifact.get("safeDatabaseSkillRows") != 251
+        or artifact.get("safeDatabaseRepositoryRows") != 6
+        or not isinstance(verification, dict)
+        or any(value is not True for value in verification.values())
+        or not isinstance(artifact.get("sourceConsistency"), dict)
+        or any(
+            value is not True
+            for value in artifact.get("sourceConsistency", {}).values()
+        )
+    ):
+        raise RuntimeError("CC Switch local recovery artifact evidence drifted.")
+
+    secret = document.get("secretBoundary", {})
+    if (
+        not isinstance(secret, dict)
+        or secret.get("settingsRead") is not False
+        or secret.get("rawDatabaseCopied") is not False
+        or secret.get("providerOrAccountConfigurationCopied") is not False
+        or secret.get("highConfidenceSecretPatternMatches") != 0
+        or secret.get("artifactMayBeCommittedOrUploaded") is not False
+    ):
+        raise RuntimeError("CC Switch recovery secret boundary drifted.")
+
+    mutation = document.get("liveStateMutation", {})
+    if (
+        not isinstance(mutation, dict)
+        or any(value is not False for value in mutation.values())
+    ):
+        raise RuntimeError("CC Switch recovery preflight overclaimed live mutation.")
+
+    source_review = document.get("officialCloudSyncSourceReview", {})
+    expected_source_paths = [
+        "src-tauri/src/services/webdav_sync.rs",
+        "src-tauri/src/services/sync_protocol.rs",
+        "src-tauri/src/services/webdav_sync/archive.rs",
+        "src-tauri/src/commands/webdav_sync.rs",
+        "src-tauri/src/commands/sync_support.rs",
+        "src-tauri/src/services/provider/live.rs",
+    ]
+    if (
+        not isinstance(source_review, dict)
+        or source_review.get("sourceCommit")
+        != "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+        or source_review.get("sourcePaths") != expected_source_paths
+        or source_review.get("artifactSet")
+        != ["db.sql", "skills.zip", "manifest.json"]
+        or source_review.get("skillsArchiveSource") != "~/.cc-switch/skills"
+        or source_review.get("agentProjectionLinksIncludedAsArtifacts") is not False
+        or source_review.get("skillUninstallBackupsIncluded") is not False
+        or source_review.get("downloadReplacesEntireSsot") is not True
+        or source_review.get("databaseImportFailureRollsBackSkills") is not True
+        or source_review.get("postDownloadProjectionRebuildAttemptedForAllApps")
+        is not True
+        or source_review.get("skillProjectionFailureIsFatal") is not False
+        or source_review.get("staleDatabaseRowsAutomaticallyHealed") is not False
+        or source_review.get("webDavOrS3TransferExecuted") is not False
+        or source_review.get("credentialOrSettingsRead") is not False
+    ):
+        raise RuntimeError("CC Switch cloud-sync source boundary drifted.")
+
+    boundary = document.get("claimBoundary", {})
+    if (
+        not isinstance(boundary, dict)
+        or boundary.get("officialFixturesProveServicePathInIsolation") is not True
+        or boundary.get("officialFixturesProveLiveUserStateRecovery") is not False
+        or boundary.get("localArchiveProvesArchiveAndExtractionIntegrity") is not True
+        or boundary.get("localArchiveIsSupportedCcRestoreOperation") is not False
+        or boundary.get("sourceReviewProvesCloudSnapshotContractIncludesCcSsot")
+        is not True
+        or boundary.get("sourceReviewProvesCrossDeviceContentEquality") is not False
+        or boundary.get("sourceReviewProvesProjectionRebuildSuccess") is not False
+        or boundary.get("crossDeviceRecoveryProved") is not False
+        or boundary.get("directSqliteRepairAuthorized") is not False
+        or boundary.get("reconcile176MissingBodiesProved") is not False
+    ):
+        raise RuntimeError("CC Switch recovery claim boundary drifted.")
+
+    text = (
+        ROOT / "docs/cc-switch-3.18-recovery-preflight-2026-07-23.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "all 20 existing CC Skill backups",
+        "live CC mutation has not started",
+        "real-user-state CC",
+        "must not be committed or uploaded",
+        "Agent projection links are not cloud artifacts",
+        "An individual Skill projection failure is logged",
+        "does not prove a successful WebDAV or S3 transfer",
+        "Supported per-item disable and uninstall mechanisms exist",
+        "owner decision on stale-row debt disposition",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"CC Switch recovery preflight documentation missing phrase: {phrase}"
+            )
+
+
+def validate_cc_switch_stale_row_reconciliation_gap(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23",
+        "date": "2026-07-23",
+        "status": "source-pinned-capability-gap-no-live-row-removed",
+        "nextGate": "owner-decision-on-stale-row-debt-disposition",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"CC Switch stale-row gap {key} drifted.")
+
+    source = document.get("ccSwitchSource", {})
+    if (
+        not isinstance(source, dict)
+        or source.get("tag") != "v3.18.0"
+        or source.get("commit")
+        != "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+    ):
+        raise RuntimeError("CC Switch stale-row source pin drifted.")
+
+    classification = document.get("liveClassification", {})
+    if (
+        not isinstance(classification, dict)
+        or classification.get("missingBodyDatabaseRows") != 176
+        or classification.get("uniqueMissingDirectories") != 176
+        or classification.get("duplicateMissingDirectoryGroups") != 0
+        or classification.get("repositoryAttributedRows") != 0
+        or classification.get("unattributedRows") != 176
+        or classification.get("exactRuntimePluginDirectoryMatches") != 148
+        or classification.get("qualifiedRuntimePluginAliasMatches") != 25
+        or classification.get("runtimePluginMatchAuthorizesVendoringIntoCc")
+        is not False
+    ):
+        raise RuntimeError("CC Switch stale-row live classification drifted.")
+
+    findings = document.get("sourceFindings", {})
+    if (
+        not isinstance(findings, dict)
+        or findings.get("singleItemGuiDisableExists") is not True
+        or findings.get("singleItemGuiUninstallExists") is not True
+        or findings.get("batchUninstallCommandExists") is not False
+        or findings.get("staleRowBatchReconcilerExists") is not False
+        or findings.get("singleUninstallIsTransactional") is not False
+        or findings.get("missingBodyUninstallCreatesContentBackup") is not False
+        or findings.get("importExistingCanSeeSameDirectoryStaleRows") is not False
+        or findings.get("ordinarySyncRemovesStaleDatabaseRows") is not False
+        or findings.get("webDavIsTargetedStaleRowRepair") is not False
+        or findings.get("missingBodyReenableSucceeds") is not False
+    ):
+        raise RuntimeError("CC Switch stale-row source findings overclaimed support.")
+
+    decision = document.get("decision", {})
+    if (
+        not isinstance(decision, dict)
+        or decision.get("supportedBulkMutationAvailableNow") is not False
+        or decision.get("supportedPerItemDisableAvailable") is not True
+        or decision.get("supportedPerItemUninstallAvailable") is not True
+        or decision.get("perItemDisableIsReversibleWithoutSsotBody") is not False
+        or decision.get("missingBodyUninstallProducesRestorableContentBackup")
+        is not False
+        or decision.get("directSqliteRepairAccepted") is not False
+        or decision.get("hiddenMigrationFlagAccepted") is not False
+        or decision.get("webDavRoundTripAccepted") is not False
+        or decision.get("internalRpcLoopAcceptedAsSupportedWorkflow") is not False
+        or decision.get("parallelManagerOrCleanerAccepted") is not False
+        or decision.get("bodyPresentGuiCanaryProvesMissingBodyRecovery") is not False
+        or decision.get("smallRecoverableGuiCanaryMayProceedAfterSeparateAuthorization")
+        is not True
+        or decision.get("reinventoryAfterEveryCanaryOrSmallBatch") is not True
+    ):
+        raise RuntimeError("CC Switch stale-row decision bypassed the capability gap.")
+
+    canary = document.get("canaryPreflight", {})
+    candidate = canary.get("candidate", {}) if isinstance(canary, dict) else {}
+    recovery = canary.get("sourceRecovery", {}) if isinstance(canary, dict) else {}
+    desktop = canary.get("desktopControl", {}) if isinstance(canary, dict) else {}
+    post = canary.get("postAttemptState", {}) if isinstance(canary, dict) else {}
+    if (
+        not isinstance(canary, dict)
+        or canary.get("result")
+        != "selected-and-recoverable-but-ui-runtime-blocked"
+        or candidate.get("directory") != "-21risk-automation"
+        or candidate.get("localTreeHashV1")
+        != "d30d3753baad308fd33e66089bf3f12917aedd72a7888ff28918ab5cd7ad117f"
+        or candidate.get("claudeProjectionTreeEqual") is not True
+        or candidate.get("codexProjectionTreeEqual") is not True
+        or recovery.get("currentHead")
+        != "92568c1edaff1bde5371154f036d959346c145a8"
+        or recovery.get("currentHeadBodyTreeEqual") is not False
+        or recovery.get("exactHistoricalCommit")
+        != "27904475d1270d8395acf07691966267d5abda2d"
+        or recovery.get("exactHistoricalBodyMatch") is not True
+        or desktop.get("initializationTimeoutSeconds") != [60, 120]
+        or desktop.get("guiInteractionOccurred") is not False
+        or desktop.get("ccUiMutationOccurred") is not False
+        or desktop.get("internalRpcFallbackUsed") is not False
+        or desktop.get("directDatabaseFallbackUsed") is not False
+        or post.get("databaseRows") != 251
+        or any(
+            post.get(key) is not True
+            for key in (
+                "candidateDatabaseRowPresent",
+                "candidateSsotBodyPresent",
+                "candidateClaudeProjectionPresent",
+                "candidateCodexProjectionPresent",
+            )
+        )
+    ):
+        raise RuntimeError("CC Switch visible GUI canary preflight drifted.")
+
+    authority = document.get("authorityBoundary", {})
+    if (
+        not isinstance(authority, dict)
+        or authority.get("liveRowRemoved") is not False
+        or authority.get("upstreamIssueOrPullRequest") is not False
+        or authority.get("directDatabaseMutation") is not False
+        or authority.get("webDavAccountOperation") is not False
+        or authority.get("commitOrPush") is not False
+    ):
+        raise RuntimeError("CC Switch stale-row authority boundary drifted.")
+
+    text = (
+        ROOT / "docs/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "does not expose a supported stale-row detector",
+        "supported per-item disable and uninstall mutations",
+        "No direct SQLite repair",
+        "There is no evidence-supported bulk mutation to run now",
+        "parallel Skill manager",
+        "selected-and-recoverable-but-ui-runtime-blocked",
+        "not a stale-row recovery result",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"CC Switch stale-row documentation missing phrase: {phrase}"
+            )
+
+
+def validate_skill_ecosystem_overlap_and_ablation_matrix(
+    document: dict[str, object],
+    attribution_fixtures: dict[str, object],
+    scenario_packets: dict[str, object] | None = None,
+) -> None:
+    if scenario_packets is None:
+        scenario_packets = load(
+            "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json"
+        )
+    expected = {
+        "schema": 1,
+        "id": "skill-ecosystem-overlap-and-ablation-matrix-2026-07-23",
+        "date": "2026-07-23",
+        "status": "source-pinned-comparison-design-no-superiority-or-replacement-claim",
+        "nextGate": (
+            "obtain-verifiable-spark-low-and-task-scoped-skill-exposure-then-"
+            "run-repeated-host-isolated-arms"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ecosystem overlap matrix {key} drifted.")
+
+    baselines = document.get("baselines", {})
+    matt = baselines.get("mattPocock", {}) if isinstance(baselines, dict) else {}
+    superpowers = (
+        baselines.get("superpowers", {}) if isinstance(baselines, dict) else {}
+    )
+    cc_switch = baselines.get("ccSwitch", {}) if isinstance(baselines, dict) else {}
+    if (
+        matt.get("mainCommit")
+        != "ed37663cc5fbef691ddfecd080dff42f7e7e350d"
+        or matt.get("releaseCommit")
+        != "d574778f94cf620fcc8ce741584093bc650a61d3"
+        or matt.get("currentContentReviewCommit")
+        != "ed37663cc5fbef691ddfecd080dff42f7e7e350d"
+        or matt.get("mainCommitObservedVia")
+        != "GitHub MCP list_commits on main"
+        or matt.get("mainCommitObservedAt") != "2026-07-23"
+        or matt.get("mainCommitRevalidatedAt") != "2026-07-24"
+        or matt.get("mainCommitRevalidatedVia")
+        != "public Git clone plus GitHub web"
+        or matt.get("currentContentReviewParentCommit")
+        != "9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
+        or matt.get("currentContentReviewChangedFiles")
+        != ["skills/engineering/to-tickets/SKILL.md"]
+        or matt.get("currentContentReviewFiles")
+        != [
+            "skills/engineering/ask-matt/SKILL.md",
+            "skills/engineering/implement/SKILL.md",
+            "skills/engineering/code-review/SKILL.md",
+        ]
+        or matt.get("currentContentReviewGitBlobShas")
+        != {
+            "skills/engineering/ask-matt/SKILL.md": (
+                "70b807b35f85859b0c6cced1919f56e024e6a753"
+            ),
+            "skills/engineering/implement/SKILL.md": (
+                "7a0b11f5f4fe9505ea5c7983c3083ba1bf754f69"
+            ),
+            "skills/engineering/code-review/SKILL.md": (
+                "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7"
+            ),
+        }
+        or matt.get("currentContentReviewSources")
+        != [
+            "https://raw.githubusercontent.com/mattpocock/skills/"
+            "ed37663cc5fbef691ddfecd080dff42f7e7e350d/"
+            "skills/engineering/ask-matt/SKILL.md",
+            "https://raw.githubusercontent.com/mattpocock/skills/"
+            "ed37663cc5fbef691ddfecd080dff42f7e7e350d/"
+            "skills/engineering/implement/SKILL.md",
+            "https://raw.githubusercontent.com/mattpocock/skills/"
+            "ed37663cc5fbef691ddfecd080dff42f7e7e350d/"
+            "skills/engineering/code-review/SKILL.md",
+        ]
+        or matt.get("olderLocalCheckoutCommit")
+        != "9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
+        or matt.get("olderLocalCheckoutAcceptedAsCurrentRepositoryEvidence")
+        is not False
+        or matt.get("olderLocalTargetFilesConfirmedUnchangedByOfficialCommitDiff")
+        is not True
+        or superpowers.get("releaseCommit")
+        != "d884ae04edebef577e82ff7c4e143debd0bbec99"
+        or superpowers.get("localCuratedPluginVersion") != "6.1.1"
+        or superpowers.get("localPayloadSnapshotObservedAt") != "2026-07-23"
+        or superpowers.get("localPayloadSha256")
+        != {
+            "brainstorming": (
+                "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d"
+            ),
+            "writing-plans": (
+                "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845"
+            ),
+            "using-superpowers": (
+                "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05"
+            ),
+            "verification-before-completion": (
+                "ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c"
+            ),
+            "subagent-driven-development": (
+                "41ab239a6ad1c487cd839fdac972a8c9cf0f5e90efa59a63f963767864f0df4c"
+            ),
+            "systematic-debugging": (
+                "3b20719eca4f0461cb51a195221320d775dcf03b6859271066a03a5132a6ce7a"
+            ),
+        }
+        or superpowers.get("localPayloadEqualsReleaseCommitBytesProved")
+        is not False
+        or superpowers.get("startupVisibilityOrInvocationProved") is not False
+        or cc_switch.get("commit")
+        != "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+    ):
+        raise RuntimeError("Skill ecosystem source pins drifted.")
+
+    if document.get("arms") != [
+        "hard-only",
+        "repository-contract-chain",
+        "matt-selective-single-skill",
+        "superpowers-selective-single-skill",
+        "superpowers-full-bootstrap",
+    ]:
+        raise RuntimeError("Skill ecosystem ablation arms drifted.")
+    if document.get("compositionProbeArms") != [
+        {
+            "id": (
+                "repository-contract-chain-plus-superpowers-sdd-"
+                "composition-probe"
+            ),
+            "purpose": "offline-resume-correction-ordering-probe-only",
+            "eligibleForLiveWeakAgentCredit": False,
+            "netValueProved": False,
+        }
+    ]:
+        raise RuntimeError("Skill ecosystem composition probe arm drifted.")
+
+    expected_cc_static_cohort = {
+        "observedAt": "2026-07-24",
+        "observationClass": "single-host-local-file-static-only",
+        "skills": [
+            {
+                "name": "grill-me",
+                "path": "C:/Users/15521/.cc-switch/skills/grill-me/SKILL.md",
+                "bytes": 645,
+                "sha256": (
+                    "c9df326c4ab635765ea884471d21f4e21d5b0ec85aec43a06c238307841eb4bc"
+                ),
+                "triggerMode": "user-explicit",
+                "triggerBoundary": "post-front-gate-deep-questioning",
+                "relationshipToRepositoryContract": (
+                    "post-intake-deep-questioning-complement"
+                ),
+                "lineageState": (
+                    "crlf-normalized-exact-historical-matt-upstream-current-"
+                    "upstream-refactored"
+                ),
+                "sourceReconciliation": {
+                    "relationship": (
+                        "crlf-normalized-exact-historical-upstream"
+                    ),
+                    "publicUpstreamRepository": "mattpocock/skills",
+                    "historicalUpstreamCommit": (
+                        "62f43a18177be6ec82da242e59ffbc490a4c22ea"
+                    ),
+                    "historicalUpstreamPath": (
+                        "skills/productivity/grill-me/SKILL.md"
+                    ),
+                    "historicalUpstreamGitBlobSha1": (
+                        "bd04394c675ee54173a093c50eb74da01a2940fa"
+                    ),
+                    "normalizedSha256": (
+                        "74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556"
+                    ),
+                    "historicalUpstreamUrl": (
+                        "https://github.com/mattpocock/skills/blob/"
+                        "62f43a18177be6ec82da242e59ffbc490a4c22ea/"
+                        "skills/productivity/grill-me/SKILL.md"
+                    ),
+                    "currentUpstreamCommit": (
+                        "ed37663cc5fbef691ddfecd080dff42f7e7e350d"
+                    ),
+                    "currentUpstreamPath": (
+                        "skills/productivity/grill-me/SKILL.md"
+                    ),
+                    "currentUpstreamGitBlobSha1": (
+                        "9470cfcfe231a35e46494cddbacdd395991afb1e"
+                    ),
+                    "currentUpstreamRelationship": (
+                        "refactored-wrapper-delegating-to-grilling-not-"
+                        "current-byte-equal"
+                    ),
+                    "exactInstallOrCcSourceRowProvenanceProved": False,
+                },
+                "authorityBoundary": (
+                    "read-only-questioning-unless-separately-authorized"
+                ),
+            },
+            {
+                "name": "grill-with-docs",
+                "path": (
+                    "C:/Users/15521/.cc-switch/skills/grill-with-docs/SKILL.md"
+                ),
+                "bytes": 5340,
+                "sha256": (
+                    "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035"
+                ),
+                "triggerMode": "user-explicit",
+                "triggerBoundary": (
+                    "post-front-gate-document-grounded-questioning"
+                ),
+                "relationshipToRepositoryContract": (
+                    "post-intake-domain-precision-complement-with-separate-"
+                    "write-phase"
+                ),
+                "lineageState": (
+                    "cc-bytes-equal-repository-adaptation-strict-supersequence-"
+                    "of-historical-matt-upstream"
+                ),
+                "sourceReconciliation": {
+                    "relationship": (
+                        "cc-exact-repository-adaptation-containing-complete-"
+                        "historical-upstream-plus-local-additions"
+                    ),
+                    "ccBytesEqualRepositoryPayload": True,
+                    "repositoryPayloadPath": (
+                        "skills/grill-with-docs/SKILL.md"
+                    ),
+                    "repositoryPayloadSha256": (
+                        "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035"
+                    ),
+                    "repositoryImportCommit": (
+                        "3e041f02f217b1a1fee5c85f52dfb1463ea34941"
+                    ),
+                    "repositoryAdaptationCommits": [
+                        "e80d49733192bfa41c894a72da63def4801691f4",
+                        "e9832c89c21593d4671db5a731deb49a300cd730",
+                    ],
+                    "publicUpstreamRepository": "mattpocock/skills",
+                    "historicalUpstreamCommit": (
+                        "e74f0061bb67222181640effa98c675bdb2fdaa7"
+                    ),
+                    "historicalUpstreamPath": (
+                        "skills/engineering/grill-with-docs/SKILL.md"
+                    ),
+                    "historicalUpstreamGitBlobSha1": (
+                        "5ea0aa913629bec683690f371839bd10e588413d"
+                    ),
+                    "historicalUpstreamUrl": (
+                        "https://github.com/mattpocock/skills/blob/"
+                        "e74f0061bb67222181640effa98c675bdb2fdaa7/"
+                        "skills/engineering/grill-with-docs/SKILL.md"
+                    ),
+                    "normalizedLcsLineEvidence": {
+                        "terminalEmptyIncluded": True,
+                        "repositoryAdaptationLines": 116,
+                        "historicalUpstreamLines": 89,
+                        "commonLines": 89,
+                        "repositoryOnlyLines": 27,
+                        "historicalUpstreamOnlyLines": 0,
+                    },
+                    "currentUpstreamCommit": (
+                        "ed37663cc5fbef691ddfecd080dff42f7e7e350d"
+                    ),
+                    "currentUpstreamPath": (
+                        "skills/engineering/grill-with-docs/SKILL.md"
+                    ),
+                    "currentUpstreamGitBlobSha1": (
+                        "bed05d2bd3245306267cea57cd696b5dd94d50fe"
+                    ),
+                    "currentUpstreamRelationship": (
+                        "refactored-wrapper-delegating-to-grilling-and-domain-"
+                        "modeling-not-current-byte-equal"
+                    ),
+                    "exactInstallOrCcSourceRowProvenanceProved": False,
+                },
+                "authorityBoundary": (
+                    "context-or-adr-write-requires-separate-authorization"
+                ),
+            },
+            {
+                "name": "review",
+                "path": "C:/Users/15521/.cc-switch/skills/review/SKILL.md",
+                "bytes": 6406,
+                "sha256": (
+                    "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6"
+                ),
+                "triggerMode": "user-explicit",
+                "triggerBoundary": "fixed-point-domain-review",
+                "relationshipToRepositoryContract": (
+                    "domain-review-evidence-producer-not-closure-owner"
+                ),
+                "lineageState": (
+                    "cc-bytes-equal-repository-adaptation-strict-supersequence-"
+                    "of-historical-matt-upstream"
+                ),
+                "sourceReconciliation": {
+                    "relationship": (
+                        "cc-exact-repository-adaptation-containing-complete-"
+                        "historical-upstream-plus-local-additions"
+                    ),
+                    "ccBytesEqualRepositoryPayload": True,
+                    "repositoryPayloadPath": "skills/review/SKILL.md",
+                    "repositoryPayloadSha256": (
+                        "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6"
+                    ),
+                    "repositoryImportCommit": (
+                        "3e041f02f217b1a1fee5c85f52dfb1463ea34941"
+                    ),
+                    "repositoryAdaptationCommits": [
+                        "e80d49733192bfa41c894a72da63def4801691f4",
+                        "e9832c89c21593d4671db5a731deb49a300cd730",
+                    ],
+                    "publicUpstreamRepository": "mattpocock/skills",
+                    "historicalUpstreamCommit": (
+                        "9fecab929abb904c68ce3366a1781df31ab22832"
+                    ),
+                    "historicalUpstreamPath": (
+                        "skills/in-progress/review/SKILL.md"
+                    ),
+                    "historicalUpstreamGitBlobSha1": (
+                        "7507a362147167c277b17ec5abf8bedb99fc42d5"
+                    ),
+                    "historicalUpstreamUrl": (
+                        "https://github.com/mattpocock/skills/blob/"
+                        "9fecab929abb904c68ce3366a1781df31ab22832/"
+                        "skills/in-progress/review/SKILL.md"
+                    ),
+                    "normalizedLcsLineEvidence": {
+                        "terminalEmptyIncluded": True,
+                        "repositoryAdaptationLines": 105,
+                        "historicalUpstreamLines": 79,
+                        "commonLines": 79,
+                        "repositoryOnlyLines": 26,
+                        "historicalUpstreamOnlyLines": 0,
+                    },
+                    "currentUpstreamCommit": (
+                        "ed37663cc5fbef691ddfecd080dff42f7e7e350d"
+                    ),
+                    "currentUpstreamPath": (
+                        "skills/engineering/code-review/SKILL.md"
+                    ),
+                    "currentUpstreamName": "code-review",
+                    "currentUpstreamGitBlobSha1": (
+                        "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7"
+                    ),
+                    "currentUpstreamRelationship": (
+                        "renamed-and-substantively-changed-not-current-byte-"
+                        "equal"
+                    ),
+                    "exactInstallOrCcSourceRowProvenanceProved": False,
+                },
+                "authorityBoundary": (
+                    "no-post-comment-code-merge-publish-or-release-without-"
+                    "separate-authorization"
+                ),
+            },
+        ],
+        "capabilityRouterReplacementCandidateSelected": False,
+        "claimBoundary": {
+            "sourceProvenanceProved": False,
+            "officialByteEqualityProved": False,
+            "historicalContentLineageProvedForAllThreeSamples": True,
+            "ccBytesEqualRepositoryAdaptationProvedForTwoSamples": True,
+            "installOrCcSourceRowProvenanceProved": False,
+            "currentEnablementProved": False,
+            "loaderInvocationProved": False,
+            "behavioralValueProved": False,
+            "crossHostParityProved": False,
+        },
+    }
+    if document.get("ccInstalledStaticComparisonCohort") != expected_cc_static_cohort:
+        raise RuntimeError("Skill ecosystem CC static cohort drifted or overclaimed.")
+
+    scenarios = document.get("scenarios", [])
+    if not isinstance(scenarios, list) or [
+        item.get("id") for item in scenarios
+    ] != [
+        "INT-AMB-01",
+        "ROUTE-MIN-01",
+        "CLOSE-PRESS-01",
+        "ENG-SLICE-01",
+        "ORCH-RESUME-CORRECTION-01",
+    ]:
+        raise RuntimeError("Skill ecosystem scenario matrix drifted.")
+    if any(
+        not isinstance(item, dict)
+        or item.get("currentEvidenceState")
+        != "deterministic-packet-and-scorer-ready-no-live-run"
+        or item.get("deterministicPacketReady") is not True
+        or item.get("livePacketReady") is not False
+        for item in scenarios
+    ):
+        raise RuntimeError("Skill ecosystem scenario readiness overclaimed.")
+
+    weak = document.get("weakAgentCondition", {})
+    if (
+        not isinstance(weak, dict)
+        or weak.get("requestedModel") != "gpt-5.3-codex-spark"
+        or weak.get("requestedReasoning") != "low"
+        or weak.get("silentSubstitutionAllowed") is not False
+        or weak.get("minimumRepetitionsPerEligibleArm") != 3
+        or weak.get("conditionalDiagnosticModel") != "gpt-5.6-terra"
+    ):
+        raise RuntimeError("Skill ecosystem weak-Agent contract drifted.")
+
+    attribution = document.get("attributionProtocol", {})
+    expected_attribution = {
+        "fixtures": (
+            "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json"
+        ),
+        "evaluator": "scripts/evaluate_skill_overlap_attribution.py",
+        "fixtureCount": 19,
+        "hardStandardOutcomeNeverCreditedToSkill": True,
+        "triggerModeAndBoundaryRequired": True,
+        "selectiveArmCannotUseFullBootstrapTrigger": True,
+        "askMattCannotBeCrossEcosystemTopLevelTrigger": True,
+        "payloadPresenceOrAgentSelfReportProvesInvocation": False,
+        "producerEvidenceProvesReceiverQuality": False,
+        "engineeringVerificationProvesCrossDomainClosure": False,
+        "worktreeOrHookExecutionProvesTopologyJudgment": False,
+        "explicitNotApplicableArmProvesResidualGap": False,
+        "terraLowCountsAsWeakAcceptance": False,
+    }
+    if attribution != expected_attribution:
+        raise RuntimeError("Skill ecosystem attribution protocol drifted.")
+
+    scenario_protocol = document.get("scenarioPacketProtocol", {})
+    expected_scenario_protocol = {
+        "fixtures": (
+            "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json"
+        ),
+        "evaluator": "scripts/evaluate_skill_overlap_scenarios.py",
+        "packetFixtureCount": 9,
+        "deterministicExampleCount": 19,
+        "scenarioIds": [
+            "INT-AMB-01",
+            "INT-AMB-02",
+            "ROUTE-MIN-01",
+            "ROUTE-STAGE-02",
+            "CLOSE-PRESS-01",
+            "CLOSE-STAGE-02",
+            "ENG-SLICE-01",
+            "ENG-ORACLE-02",
+            "ORCH-RESUME-CORRECTION-01",
+        ],
+        "privateOracleExcludedFromPublicPacket": True,
+        "rawResponseDigestRecomputedFromBytes": True,
+        "deterministicPacketCountsAsLiveWeakAcceptance": False,
+    }
+    if scenario_protocol != expected_scenario_protocol:
+        raise RuntimeError("Skill ecosystem scenario packet protocol drifted.")
+
+    live_protocol = document.get("liveRunEvidenceProtocol", {})
+    if live_protocol != {
+        "registry": "registry/skill-live-run-evidence-contract-2026-07-23.json",
+        "evaluator": "scripts/evaluate_skill_live_run_evidence.py",
+        "fixtures": "tests/fixtures/skill-live-run-evidence-2026-07-23.json",
+        "fixtureCount": 15,
+        "minimumIndependentRunsPerEligibleCell": 3,
+        "taskScopedExposureRequired": True,
+        "selectedPayloadLoaderEventRequired": True,
+        "triggerModeAndBoundaryRequired": True,
+        "unselectedInterventionIsolationRequired": True,
+        "syntheticFixtureCountsAsLiveHostProof": False,
+        "syntheticFixtureCountsAsWeakAgentAcceptance": False,
+    }:
+        raise RuntimeError("Skill ecosystem live-run evidence protocol drifted.")
+
+    if (
+        scenario_packets.get("schema") != 1
+        or scenario_packets.get("id")
+        != "skill-overlap-scenario-packets-2026-07-23"
+        or scenario_packets.get("date") != "2026-07-23"
+        or scenario_packets.get("status")
+        != "deterministic-prompt-packets-and-private-oracle-no-live-execution"
+    ):
+        raise RuntimeError("Skill overlap scenario packet identity drifted.")
+    packet_fixtures = scenario_packets.get("fixtures", [])
+    if (
+        not isinstance(packet_fixtures, list)
+        or len(packet_fixtures) != 9
+        or len(
+            {
+                item.get("id")
+                for item in packet_fixtures
+                if isinstance(item, dict)
+            }
+        )
+        != 9
+    ):
+        raise RuntimeError("Skill overlap scenario packet coverage drifted.")
+    scenario_results = evaluate_skill_overlap_scenario_examples(scenario_packets)
+    if (
+        len(scenario_results) != 19
+        or any(
+            item["expected"] != item["actual"] for item in scenario_results
+        )
+    ):
+        raise RuntimeError("Skill overlap scenario deterministic example failed.")
+    live_boundary = scenario_packets.get("liveEvidenceBoundary", {})
+    if (
+        not isinstance(live_boundary, dict)
+        or live_boundary.get("requestedModel") != "gpt-5.3-codex-spark"
+        or live_boundary.get("requestedReasoning") != "low"
+        or live_boundary.get("actualModelReasoningParentObserved") is not True
+        or live_boundary.get("minimumIndependentHostRunsAndThreads") != 3
+        or live_boundary.get("terraLowDiagnosticOnly") is not True
+        or live_boundary.get("deterministicExamplesCountAsLiveBehavior")
+        is not False
+    ):
+        raise RuntimeError("Skill overlap scenario live boundary drifted.")
+    packet_claims = scenario_packets.get("claimBoundary", {})
+    if (
+        not isinstance(packet_claims, dict)
+        or not packet_claims
+        or any(value is not False for value in packet_claims.values())
+    ):
+        raise RuntimeError("Skill overlap scenario packet overclaimed.")
+
+    if (
+        attribution_fixtures.get("schema") != 1
+        or attribution_fixtures.get("id")
+        != "skill-overlap-attribution-fixtures-2026-07-23"
+        or attribution_fixtures.get("date") != "2026-07-23"
+    ):
+        raise RuntimeError("Skill overlap attribution fixture identity drifted.")
+    fixture_list = attribution_fixtures.get("fixtures", [])
+    if (
+        not isinstance(fixture_list, list)
+        or len(fixture_list) != 19
+        or len(
+            {
+                item.get("id")
+                for item in fixture_list
+                if isinstance(item, dict)
+            }
+        )
+        != 19
+    ):
+        raise RuntimeError("Skill overlap attribution fixture coverage drifted.")
+    fixture_results = evaluate_skill_overlap_attribution_fixture_document(
+        attribution_fixtures
+    )
+    fixture_failures = [
+        item for item in fixture_results if item["expected"] != item["actual"]
+    ]
+    if fixture_failures:
+        raise RuntimeError(
+            "Skill overlap attribution deterministic fixture failed: "
+            f"{fixture_failures[0]['id']}"
+        )
+    fixture_claims = attribution_fixtures.get("claimBoundary", {})
+    if (
+        not isinstance(fixture_claims, dict)
+        or not fixture_claims
+        or any(value is not False for value in fixture_claims.values())
+    ):
+        raise RuntimeError("Skill overlap attribution fixture overclaimed.")
+
+    standards = document.get("hardStandardControl", {})
+    if (
+        not isinstance(standards, dict)
+        or standards.get("constantAcrossEveryArm") is not True
+        or standards.get("creditedAsSkillValue") is not False
+        or standards.get("waivableBySkill") is not False
+    ):
+        raise RuntimeError("Skill ecosystem hard-standard control drifted.")
+
+    decision = document.get("currentPortfolioDecision", {})
+    if (
+        not isinstance(decision, dict)
+        or decision.get("retainRepositoryContracts") is not True
+        or decision.get("repositoryContractRetentionMode")
+        != "provisional-comparison-baseline"
+        or decision.get("provisionalRetentionProvesNetValue") is not False
+        or decision.get("admittedSelfAuthoredPayloadCountMayBeZero") is not True
+        or decision.get("claimLocalMattLikePoolIsCurrentMattSuite") is not False
+        or decision.get("bulkInstallWholeRepositories") is not False
+        or decision.get("deleteCcPayloadBeforeRecoveryGate") is not False
+        or decision.get("superiorityClaimSupported") is not False
+    ):
+        raise RuntimeError("Skill ecosystem portfolio decision overclaimed.")
+
+    subtractive = document.get("subtractiveDesignDecision", {})
+    expected_subtractive = {
+        "retainThreeRepositoryContractsUntilHostIsolatedComparison": True,
+        "retentionMeansPermanentProductAdmission": False,
+        "reuseMattHandoffInsteadOfAuthoringGenericHandoffPayload": True,
+        "reuseExternalEngineeringDisciplinesBeforeSelfAuthoring": True,
+        "superpowersLocalVerificationMayBeAClosureSubstep": True,
+        "superpowersLocalVerificationReplacesCrossDomainClosure": False,
+        "mattAskMattMayBeBoundedInternalSubflow": True,
+        "mattAskMattReplacesCrossEcosystemRouter": False,
+        "superpowersMandatoryFullBootstrapBecomesGlobalDefault": False,
+        "newSelfAuthoredSkillAuthorizedByThisReview": False,
+    }
+    if subtractive != expected_subtractive:
+        raise RuntimeError("Skill ecosystem subtractive decision drifted.")
+
+    claim = document.get("claimBoundary", {})
+    required_false_claims = {
+        "installationProvesInvocation",
+        "contentOverlapProvesBehavioralEquivalence",
+        "hostBlockedArmProvesResidualGap",
+        "noEligibleExternalCandidateProvesResidualGap",
+        "provisionalRetentionProvesNetValue",
+        "oneStrongAgentRunProvesGeneralSuperiority",
+        "secondaryBenchmarkProvesSuperiority",
+        "ccRepositoryRegistrationPinsPayloadRevision",
+        "strongDiagnosticCanReplaceWeakAcceptance",
+        "compositionProbeProvesRuntimeCoordinationOrNetValue",
+    }
+    if (
+        not isinstance(claim, dict)
+        or set(claim) != required_false_claims
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Skill ecosystem claim boundary overclaimed.")
+
+    text = " ".join(
+        (
+            ROOT
+            / "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "not a current Matt installation",
+        "checked against the three exact files at pinned main commit",
+        "not current-repository evidence",
+        "confirmed unchanged across that one-commit boundary",
+        "Host blocking is not net-value proof",
+        "admitted long-term payload count may be zero",
+        "Full Superpowers",
+        "Hard standards remain constant controls",
+        "No first-party Matt-versus-Superpowers head-to-head benchmark was found",
+        "six scenario-relevant Skills",
+        "nine packets keep private oracles out of public output",
+        "not a sixth live arm",
+        "does not show that a host can interrupt an already-running subagent",
+        "parent-observed hidden-regression failure",
+        "fails closed on nineteen premature-attribution patterns",
+        "every eligible Arm binds trigger mode and trigger boundary",
+        "single-host static evidence only",
+        "No CC payload was selected as a replacement for `capability-router`",
+        "hard-standard stop is not Skill value",
+        "not a second top-level router",
+        "not a replacement for cross-domain closure",
+        "deterministic packet/scorer gate is now covered",
+        "parent-observed live-run evidence contract",
+        "task-scoped exposure for selected and unselected intervention arms",
+        "fifteen synthetic fixtures",
+        "never count as live host proof or weak-Agent acceptance",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Skill ecosystem overlap documentation missing phrase: {phrase}"
+            )
+
+    research_text = (
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+    ).read_text(encoding="utf-8")
+    if "those residual gaps" in research_text:
+        raise RuntimeError(
+            "Open MCP evidence questions must not be labeled residual gaps."
+        )
+
+
+def validate_context_pressure_advisory_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "context-pressure-advisory-contract-2026-07-23",
+        "status": "verified-local-advisory-contract-live-host-evidence-pending",
+        "mode": "offline-default-no-action",
+        "nextLiveGate": (
+            "separately-authorized-host-specific-signal-observation-and-"
+            "CTX-04-CTX-05-thread-trial"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Context pressure advisory {key} drifted.")
+    if document.get("provenance") != [
+        "direct-counter",
+        "host-event",
+        "heuristic",
+        "user-observed",
+        "unknown",
+    ]:
+        raise RuntimeError("Context pressure provenance drifted.")
+    if document.get("states") != [
+        "OBSERVE",
+        "EVALUATE",
+        "HEURISTIC_EVALUATE",
+        "UNKNOWN",
+        "CONTINUE",
+        "RECOMMEND_HANDOFF",
+        "REQUIRE_USER_DECISION",
+        "WAIT",
+        "HANDOFF_PACKET_READY",
+    ]:
+        raise RuntimeError("Context pressure state machine drifted.")
+
+    invariants = document.get("invariants", {})
+    if (
+        not isinstance(invariants, dict)
+        or any(
+            invariants.get(key) is not True
+            for key in (
+                "fixedUniversalPercentageForbidden",
+                "automaticThreadCreationForbidden",
+                "losslessHandoffClaimForbidden",
+                "crossHostParityClaimForbidden",
+                "terraDiagnosticOnly",
+                "threadCreationRequiresExplicitAuthority",
+            )
+        )
+        or invariants.get("handoffFollowOn")
+        != "reuse-existing-CTX-04-CTX-05-contract"
+    ):
+        raise RuntimeError("Context pressure invariant drifted.")
+    if document.get("futureLiveObservationSchema") != [
+        "hostIdentity",
+        "hostVersion",
+        "profileId",
+        "signalEvidenceSource",
+        "observedValue",
+        "unit",
+        "observedAt",
+        "parentRunId",
+        "signalDeliveryObserved",
+        "actionAuthority",
+        "postHandoffOracleResult",
+    ]:
+        raise RuntimeError("Context pressure future live schema drifted.")
+    live_boundary = document.get("liveEvidenceBoundary", {})
+    if (
+        not isinstance(live_boundary, dict)
+        or not live_boundary
+        or any(value is not False for value in live_boundary.values())
+    ):
+        raise RuntimeError("Context pressure live evidence boundary overclaimed.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Context pressure claim boundary overclaimed.")
+
+    results = evaluate_context_pressure_advisory_fixture_document(fixtures)
+    if len(results) != 12:
+        raise RuntimeError("Context pressure fixture count drifted.")
+    for item in results:
+        expected_result = item["expected"]
+        actual = item["actual"]
+        if any(actual.get(key) != value for key, value in expected_result.items()):
+            raise RuntimeError(
+                f"Context pressure fixture failed: {item['id']}"
+            )
+        if (
+            actual.get("countsAsLiveHostProof") is not False
+            or actual.get("countsAsWeakAgentAcceptance") is not False
+        ):
+            raise RuntimeError("Context pressure fixture overclaimed live evidence.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_context_pressure_advisory.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"hard-fail-automatic-thread-creation-claim"',
+        '"hard-fail-fixed-context-percentage-claim"',
+        '"hard-fail-terra-counted-as-weak-agent-acceptance"',
+        '"missing-explicit-thread-authority"',
+        '"ctx0405-packet-not-prepared"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Context pressure evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/context-pressure-advisory-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "default-no-action",
+        "No fixed context percentage",
+        "explicit thread-creation authority",
+        "does not create the thread",
+        "a compact event does not prove token usage",
+        "a heuristic is not telemetry",
+        "They prove only deterministic contract behavior",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Context pressure documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "Context-pressure default-no-action advisory contract" not in research:
+        raise RuntimeError("Context pressure research-plan link drifted.")
+    if "twelve-fixture context-pressure advisory" not in continuation:
+        raise RuntimeError("Context pressure continuation link drifted.")
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "twelve-fixture default-no-action advisory contract",
+        "No live signal delivery",
+        "false-positive/negative measurement",
+        "automatic thread action is proved",
+    ):
+        if phrase not in matrix:
+            raise RuntimeError(
+                f"Context pressure matrix evidence drifted: {phrase}"
+            )
+
+
+def validate_context_pressure_provenance_evidence_envelope_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "context-pressure-provenance-evidence-envelope-2026-07-24",
+        "status": "verified-local-input-contract-no-host-observation",
+        "scope": "offline validation of evidence that may be supplied to CTX-03",
+        "evaluator": "scripts/validate_context_pressure_evidence_envelope.py",
+        "fixture": (
+            "tests/fixtures/context-pressure-provenance-evidence-envelope-"
+            "2026-07-24.json"
+        ),
+        "fixtureCount": 11,
+        "nextGate": (
+            "separately-authorized host-specific observation followed by "
+            "existing CTX-03 advisory and CTX-04/05 authority gates"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Context pressure provenance envelope {key} drifted."
+            )
+    required = document.get("requiredInputs", [])
+    if (
+        not isinstance(required, list)
+        or len(required) != 11
+        or required[-1]
+        != "separate expected binding for host/version/profile/run/time"
+    ):
+        raise RuntimeError(
+            "Context pressure provenance required inputs drifted."
+        )
+    if (
+        document.get("hostEvidenceRule")
+        != (
+            "direct-counter and host-event require a SHA-256-bound artifact "
+            "and exact host identity fields; opaque references are allowed "
+            "only for non-host heuristic or user-observed evidence"
+        )
+    ):
+        raise RuntimeError("Context pressure provenance host rule drifted.")
+    if document.get("claimBoundary") != CONTEXT_PRESSURE_CLAIM_BOUNDARY:
+        raise RuntimeError(
+            "Context pressure provenance claim boundary overclaimed."
+        )
+    results = evaluate_context_pressure_provenance_fixture_document(fixtures)
+    if (
+        len(results) != 11
+        or any(
+            item["expectedStatus"] != item["actualStatus"]
+            or item["expectedFailureCodes"] != item["actualFailureCodes"]
+            or item["claimBoundary"] != CONTEXT_PRESSURE_CLAIM_BOUNDARY
+            for item in results
+        )
+    ):
+        raise RuntimeError("Context pressure provenance fixtures drifted.")
+    base = fixtures.get("baseEnvelope", {})
+    if (
+        not isinstance(base, dict)
+        or base.get("actionAuthority") != CONTEXT_PRESSURE_ACTION_BOUNDARY
+        or base.get("claimBoundary") != CONTEXT_PRESSURE_CLAIM_BOUNDARY
+    ):
+        raise RuntimeError(
+            "Context pressure provenance base boundary drifted."
+        )
+    evaluator = (
+        ROOT / "scripts/validate_context_pressure_evidence_envelope.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"blocked-target-run-time-binding-mismatch"',
+        '"blocked-missing-sha256-bound-host-evidence"',
+        '"hard-fail-non-host-provenance-masquerades-as-host-telemetry"',
+        '"hard-fail-envelope-authority-promotion"',
+        '"hard-fail-envelope-claim-promotion"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Context pressure provenance evaluator missing: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT
+            / "docs/context-pressure-provenance-evidence-envelope-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "self-consistent envelope cannot bind those targets by itself",
+        "SHA-256-bound evidence artifact",
+        "must not masquerade as host telemetry",
+        "cannot make a thread",
+        "target-host and parent-run/time binding mismatches",
+        "live telemetry, best efficiency threshold",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Context pressure provenance documentation missing: {phrase}"
+            )
+    shared_docs = {
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    for name, content in shared_docs.items():
+        if (
+            "context-pressure-provenance-evidence-envelope-2026-07-24.md"
+            not in content
+        ):
+            raise RuntimeError(
+                f"Context pressure provenance {name} link drifted."
+            )
+
+
+def validate_git_host_authorization_trial_contract(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "git-host-authorization-trial-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "verified-local-authorization-contract-live-user-repository-trial-"
+            "pending"
+        ),
+        "nextGate": (
+            "separately-authorized-bound-repository-create-or-denial-trial-"
+            "with-before-after-snapshot-and-no-inherited-merge-or-cleanup-"
+            "authority"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Git host authorization contract {key} drifted.")
+
+    reuse = document.get("reuse", {})
+    if (
+        not isinstance(reuse, dict)
+        or reuse.get("snapshot") != "scripts/observe_git_snapshot.py"
+        or reuse.get("decisionEvaluator")
+        != "scripts/evaluate_git_topology_trial.py"
+        or reuse.get("weakAgentScenario") != "ABL-GIT-TOPOLOGY-01"
+        or reuse.get("newGitManagerAuthorized") is not False
+        or reuse.get("gitGuardrailsHookSubstitutesForTopologyJudgment") is not False
+    ):
+        raise RuntimeError("Git host authorization reuse boundary drifted.")
+
+    phases = document.get("phases", [])
+    if (
+        not isinstance(phases, list)
+        or [item.get("id") for item in phases if isinstance(item, dict)]
+        != ["preflight", "create", "merge", "cleanup", "recovery"]
+    ):
+        raise RuntimeError("Git host authorization phases drifted.")
+    preflight, create, merge, cleanup, recovery = phases
+    if (
+        preflight.get("mutationAuthorized") is not False
+        or create.get("requiresSeparateAuthorization") is not True
+        or merge.get("requiresSeparateAuthorization") is not True
+        or merge.get("authorizationInheritedFromCreate") is not False
+        or merge.get("allowedStrategy") != "ff-only"
+        or cleanup.get("requiresSeparateAuthorization") is not True
+        or cleanup.get("authorizationInheritedFromCreateOrMerge") is not False
+        or cleanup.get("allowedOperations")
+        != ["non-force worktree remove", "safe merged branch delete"]
+        or recovery.get("mutationAuthorizedByFailureAlone") is not False
+    ):
+        raise RuntimeError("Git host authorization phase boundary overclaimed.")
+
+    forbidden = document.get("forbiddenAutomation", [])
+    if (
+        not isinstance(forbidden, list)
+        or len(forbidden) != 9
+        or "automatic stash" not in forbidden
+        or "force worktree removal" not in forbidden
+        or "remote mutation" not in forbidden
+    ):
+        raise RuntimeError("Git host forbidden automation drifted.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Git host authorization claim boundary overclaimed.")
+
+    text = " ".join(
+        (
+            ROOT / "docs/git-host-authorization-trial-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "Do not build a Git manager",
+        "Create authorization does not authorize merge",
+        "Create or merge authorization does not authorize cleanup",
+        "Failure alone grants no recovery-write authority",
+        "A state that can be reconstructed is not the same as a completed recovery",
+        "does not prove safe creation",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Git host authorization documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "create authorization never carries merge or cleanup authority" not in research:
+        raise RuntimeError("Git host authorization research-plan link drifted.")
+    if "Git host trial is now split into independent" not in continuation:
+        raise RuntimeError("Git host authorization continuation link drifted.")
+
+
+def validate_experiment_contract_reuse_map(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "experiment-contract-reuse-map-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-local-mapping-live-runs-pending",
+        "nextGate": (
+            "separately-authorized-fresh-session-run-using-the-canonical-"
+            "context-arm-c-contract-and-parent-observed-loader-evidence"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Experiment contract reuse map {key} drifted.")
+
+    mappings = document.get("mappings", [])
+    if (
+        not isinstance(mappings, list)
+        or [item.get("viewId") for item in mappings if isinstance(item, dict)]
+        != [
+            "HND-FRESH-01",
+            "GIT-OVERLAP-01",
+            "INSTRUCTION-CARRIER-CTX-07",
+        ]
+    ):
+        raise RuntimeError("Experiment contract reuse mappings drifted.")
+    handoff, git, carrier = mappings
+    source = handoff.get("sourceBackedIntervention", {})
+    if (
+        handoff.get("canonicalScenarioId") != "ABL-CTX-HANDOFF-01"
+        or handoff.get("packetBuilder")
+        != "scripts/build_context_continuation_trial_packet.py"
+        or handoff.get("loaderPreflight")
+        != "registry/handoff-loader-trial-preflight-contract-2026-07-24.json"
+        or handoff.get("canonicalEvaluator")
+        != "scripts/evaluate_skill_ablation_batch_01_protocol.py"
+        or handoff.get("supportingEvaluator")
+        != "scripts/evaluate_context_continuation_trial.py"
+        or handoff.get("evidenceAxes")
+        != [
+            "producerArtifactIntegrity",
+            "hostExposure",
+            "loaderInvocation",
+            "receiverRepositoryTruth",
+            "creationMode",
+        ]
+        or handoff.get("duplicateScorerAuthorized") is not False
+        or not isinstance(source, dict)
+        or source.get("identity")
+        != "mattpocock/skills:skills/productivity/handoff"
+        or source.get("fileSha256")
+        != {
+            "SKILL.md": (
+                "57c9f1f392d7352cdc85b1e39ca49eddc70ce1dc278bd9653fb4f23dfc2560fc"
+            ),
+            "agents/openai.yaml": (
+                "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+            ),
+        }
+    ):
+        raise RuntimeError("Fresh-session handoff reuse mapping drifted.")
+    handoff_claim = handoff.get("claimBoundary", {})
+    if (
+        not isinstance(handoff_claim, dict)
+        or not handoff_claim
+        or any(value is not False for value in handoff_claim.values())
+        or len(handoff.get("requiredLiveEvidence", [])) != 9
+    ):
+        raise RuntimeError("Fresh-session handoff claim boundary overclaimed.")
+
+    git_claim = git.get("claimBoundary", {})
+    if (
+        git.get("canonicalScenarioId") != "ABL-GIT-TOPOLOGY-01"
+        or git.get("supportingEvaluator")
+        != "scripts/evaluate_git_topology_trial.py"
+        or git.get("relatedViews") != ["ENG-SLICE-01", "ENG-ORACLE-02"]
+        or git.get("duplicateScorerAuthorized") is not False
+        or not isinstance(git_claim, dict)
+        or any(value is not False for value in git_claim.values())
+    ):
+        raise RuntimeError("Git overlap reuse mapping drifted.")
+
+    carrier_claim = carrier.get("claimBoundary", {})
+    if (
+        carrier.get("canonicalScenarioId") != "CTX-07"
+        or carrier.get("canonicalEvaluator")
+        != "scripts/evaluate_instruction_carrier_adherence.py"
+        or len(carrier.get("outerEnvelopeFieldsReused", [])) != 5
+        or carrier.get("semanticScorersNotReused")
+        != [
+            "INT-AMB-01",
+            "ROUTE-MIN-01",
+            "CLOSE-PRESS-01",
+            "ENG-SLICE-01",
+        ]
+        or carrier.get("duplicateScorerAuthorized") is not False
+        or not isinstance(carrier_claim, dict)
+        or not carrier_claim
+        or any(value is not False for value in carrier_claim.values())
+    ):
+        raise RuntimeError("Instruction-carrier reuse mapping drifted.")
+
+    outer = document.get("outerLiveEnvelope", {})
+    if (
+        not isinstance(outer, dict)
+        or outer.get("contract")
+        != "registry/skill-live-run-evidence-contract-2026-07-23.json"
+        or outer.get("replacesCanonicalScenarioScoring") is not False
+        or outer.get("requiresCanonicalScenarioScorerVerdictAndDigest") is not True
+        or outer.get("syntheticEnvelopeCountsAsLiveEvidence") is not False
+    ):
+        raise RuntimeError("Outer live evidence reuse boundary drifted.")
+
+    text = " ".join(
+        (
+            ROOT
+            / "docs/strategy/EXPERIMENT-CONTRACT-REUSE-MAP-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "not a new independent scenario",
+        "five independent axes",
+        "do not prove fresh-session loading",
+        "do not replace topology judgment",
+        "independent carrier-specific private oracle",
+        "does not replace the carrier private oracle",
+        "does not prove cross-Agent parity",
+        "does not replace canonical scenario scoring",
+        "Synthetic envelopes never count as live evidence",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Experiment contract reuse documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "`HND-FRESH-01` now reuses" not in research:
+        raise RuntimeError("Experiment contract reuse research-plan link drifted.")
+    if "`HND-FRESH-01` is now explicitly mapped" not in continuation:
+        raise RuntimeError("Experiment contract reuse continuation link drifted.")
+
+
+def validate_mcp_task_lifecycle_evidence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-task-lifecycle-evidence-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": "offline-synthetic-decision-contract-only",
+        "evaluator": "scripts/evaluate_mcp_task_lifecycle_evidence.py",
+        "fixtures": "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+        "verification": "tests/test_mcp_task_lifecycle_evidence.py",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"MCP task lifecycle contract {key} drifted.")
+
+    if document.get("evidenceDimensions") != [
+        "lease",
+        "referenceCount",
+        "taskEndExit",
+        "duplicateIdentity",
+        "crashRecovery",
+        "resourceControl",
+        "sameSessionSwitching",
+    ]:
+        raise RuntimeError("MCP task lifecycle evidence dimensions drifted.")
+    minimum = document.get("minimumStructuralEvidence", {})
+    if (
+        not isinstance(minimum, dict)
+        or set(minimum)
+        != {
+            "lease",
+            "referenceCount",
+            "taskEndExit",
+            "duplicateIdentity",
+            "crashRecovery",
+            "resourceControl",
+            "sameSessionSwitching",
+        }
+        or minimum.get("lease", [])[-1:] != ["leaseEventOrderValidated"]
+        or "leaseReferenceTraceValidated" not in minimum.get("lease", [])
+        or "referenceCountTraceEndsAtZero"
+        not in minimum.get("referenceCount", [])
+        or "leaseReferenceTraceValidated"
+        not in minimum.get("referenceCount", [])
+        or minimum.get("taskEndExit", [])[-1:]
+        != ["taskEndReleaseExitOrderValidated"]
+        or "concurrentInstanceWindowRecorded"
+        not in minimum.get("duplicateIdentity", [])
+        or "sameThreadRecoveryOutcomeRecorded"
+        not in minimum.get("crashRecovery", [])
+        or "controlWorkloadRecorded" not in minimum.get("resourceControl", [])
+        or "resourceSampleWindowBounded"
+        not in minimum.get("resourceControl", [])
+        or "activeTurnBetweenCallsRecorded"
+        not in minimum.get("sameSessionSwitching", [])
+        or "sameSessionRefreshEvidencePacketRecorded"
+        not in minimum.get("sameSessionSwitching", [])
+    ):
+        raise RuntimeError("MCP task lifecycle minimum evidence drifted.")
+    authority = document.get("authorityBoundary", {})
+    if (
+        not isinstance(authority, dict)
+        or set(authority)
+        != {
+            "hostOrMcpStartAuthorized",
+            "hostStateOrProcessStateReadAuthorized",
+            "configurationMutationAuthorized",
+            "accountOrSecretAccessAuthorized",
+        }
+        or any(value is not False for value in authority.values())
+    ):
+        raise RuntimeError("MCP task lifecycle authority boundary overclaimed.")
+    policy = document.get("operatingPolicy", {})
+    if (
+        not isinstance(policy, dict)
+        or policy.get("defaultState")
+        != "off-unless-current-bounded-task-requires-capability"
+        or policy.get("activationScope") != "smallest-task-relevant-mcp-set"
+        or policy.get("nonSelectedMcpState")
+        != "off-or-not-activated-where-the-host-supports-that-boundary"
+        or policy.get("rerouteCheckpoints")
+        != [
+            "task-entry",
+            "phase-change",
+            "task-end",
+            "failure-or-recovery",
+        ]
+        or policy.get("releaseRequestedAtTaskOrPhaseEnd") is not True
+        or policy.get("permanentlyActiveByDefault") is not False
+        or policy.get("fallbackWhenDynamicLifecycleUnproved")
+        != "startup-or-new-thread-profile-or-documented-native-idle-timeout"
+        or policy.get("policyDoesNotProveHostActuation") is not True
+    ):
+        raise RuntimeError("MCP task lifecycle operating policy drifted.")
+    claim = document.get("claimBoundary", {})
+    false_keys = {
+        "countsAsLiveHostProof",
+        "countsAsWeakAgentAcceptance",
+        "syntheticTraceProvesLiveRelease",
+        "leaseOrReferenceCountCorrectnessProved",
+        "taskEndExactExitProved",
+        "duplicateFreedomProved",
+        "crashRecoveryProved",
+        "resourceBenefitProved",
+        "sameSessionSwitchingProved",
+    }
+    if (
+        not isinstance(claim, dict)
+        or any(claim.get(key) is not False for key in false_keys)
+        or claim.get("syntheticEvidenceMayProveOnly")
+        != "decision-contract completeness and premature-claim rejection"
+    ):
+        raise RuntimeError("MCP task lifecycle claim boundary overclaimed.")
+
+    results = evaluate_mcp_task_lifecycle_fixture_document(fixtures)
+    if (
+        len(results) != 22
+        or any(item["expected"] != item["actual"] for item in results)
+        or any(
+            item["actual"].get("countsAsLiveHostProof") is not False
+            or item["actual"].get("countsAsWeakAgentAcceptance") is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("MCP task lifecycle fixtures drifted.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_mcp_task_lifecycle_evidence.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"fail-lease-event-order-unvalidated"',
+        '"fail-reference-count-without-zero-terminal-state"',
+        '"fail-lease-reference-trace-premature-server-release"',
+        '"fail-lease-reference-trace-cross-task-release"',
+        '"fail-lease-reference-trace-leaked-lease"',
+        '"fail-task-end-release-exit-order-unvalidated"',
+        '"fail-duplicate-control-without-concurrent-window"',
+        '"fail-crash-recovery-without-same-thread-outcome"',
+        '"fail-resource-control-without-control-workload"',
+        '"fail-resource-control-without-bounded-sample-window"',
+        '"fail-same-session-switching-without-active-turn"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"MCP task lifecycle evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/mcp-task-lifecycle-evidence-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "task-end, final release, zero reference count, and exact exit in that order",
+        "concurrent instance window",
+        "control workload",
+        "countsAsLiveHostProof=false",
+        "cannot prove live lease or reference-count correctness",
+        "keep MCPs off unless the current bounded task or phase needs them",
+        "This policy does not prove that a host can perform same-session actuation",
+        "Twenty-two fixtures",
+        "not a runtime lease manager",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"MCP task lifecycle documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "offline task-lifecycle classifier" not in research:
+        raise RuntimeError("MCP task lifecycle research-plan link drifted.")
+    if "22-fixture offline MCP task-lifecycle contract" not in continuation:
+        raise RuntimeError("MCP task lifecycle continuation link drifted.")
+
+
+def validate_instruction_carrier_adherence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "instruction-carrier-adherence-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-offline-evidence-contract-no-live-cross-agent-run",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Instruction-carrier adherence contract {key} drifted."
+            )
+
+    scope = document.get("scope", {})
+    if (
+        not isinstance(scope, dict)
+        or scope.get("scenarioId") != "CTX-07"
+        or scope.get("evaluator")
+        != "scripts/evaluate_instruction_carrier_adherence.py"
+        or scope.get("fixtures")
+        != "tests/fixtures/instruction-carrier-adherence-2026-07-23.json"
+        or scope.get("tests") != "tests/test_instruction_carrier_adherence.py"
+        or scope.get("semanticScorerIndependentFrom")
+        != [
+            "INT-AMB-01",
+            "ROUTE-MIN-01",
+            "CLOSE-PRESS-01",
+            "ENG-SLICE-01",
+        ]
+    ):
+        raise RuntimeError("Instruction-carrier adherence scope drifted.")
+    if document.get("evidenceLevels") != [
+        "carrier-file-visible-only",
+        "instruction-discovery-unproved",
+        "discovery-observed-loading-unproved",
+        "loading-observed-adherence-unproved",
+        "adherence-observed-single-host",
+    ]:
+        raise RuntimeError("Instruction-carrier evidence ladder drifted.")
+    if (
+        document.get("requiredParentEvidence")
+        != [
+            "exact host identity and version",
+            "actual model and reasoning effort from parent or host metadata",
+            "distinct run, host-run, thread, and task identities",
+            "carrier identity, path, and sha256",
+            "host instruction-discovery event",
+            "host instruction-loader event bound to task and carrier digest",
+            "effective instruction surface and precedence",
+            "raw response bytes and sha256",
+            "private oracle identity and exact result",
+            "host approval outcome kept separate from carrier credit",
+            "hard-standard outcome kept separate from carrier credit",
+            "repository truth before and after",
+        ]
+        or document.get("observableRules")
+        != [
+            "observed-unknown-separation",
+            "unknown-field-preservation",
+            "host-approval-separation",
+            "counterexample-limit",
+        ]
+    ):
+        raise RuntimeError(
+            "Instruction-carrier parent evidence requirements drifted."
+        )
+
+    separation = document.get("attributionSeparation", {})
+    if separation != {
+        "filesystemPresenceDoesNotProveDiscovery": True,
+        "agentSelfReportDoesNotProveDiscoveryOrLoading": True,
+        "startupVisibleListDoesNotProveInstructionLoading": True,
+        "hardStandardPassDoesNotProveCarrierAdherence": True,
+        "hostApprovalDoesNotProveCarrierAdherence": True,
+        "singleHostPassDoesNotProveCrossAgentParity": True,
+    }:
+        raise RuntimeError(
+            "Instruction-carrier attribution separation drifted."
+        )
+    weak = document.get("weakAgentGate", {})
+    if (
+        not isinstance(weak, dict)
+        or weak.get("formalModel") != "gpt-5.3-codex-spark"
+        or weak.get("formalReasoningEffort") != "low"
+        or weak.get("actualModelAndReasoningMustBeParentOrHostObserved")
+        is not True
+        or weak.get("terraLowMayBeDiagnostic") is not True
+        or weak.get("terraLowCountsAsWeakAgentAcceptance") is not False
+    ):
+        raise RuntimeError("Instruction-carrier weak-Agent gate drifted.")
+    repetition = document.get("repetitionGate", {})
+    if (
+        not isinstance(repetition, dict)
+        or repetition.get("minimumIndependentRunsPerExactHostCondition") != 3
+        or repetition.get("distinct")
+        != ["runId", "hostRunId", "hostThreadId", "taskId"]
+        or repetition.get("heldConstant")
+        != [
+            "hostIdentity",
+            "hostVersion",
+            "actualModel",
+            "actualReasoningEffort",
+            "carrierId",
+            "carrierSha256",
+            "oracleSha256",
+        ]
+        or repetition.get("provesAtMost")
+        != (
+            "repeatability for the exact host, version, model, carrier digest, "
+            "and scenario"
+        )
+    ):
+        raise RuntimeError("Instruction-carrier repetition gate drifted.")
+    offline = document.get("offlineFixtureResult", {})
+    if (
+        not isinstance(offline, dict)
+        or offline.get("fixtureCount") != 14
+        or any(
+            offline.get(key) is not False
+            for key in (
+                "countsAsLiveHostProof",
+                "countsAsWeakAgentAcceptance",
+                "countsAsUniversalCrossAgentAdherence",
+            )
+        )
+    ):
+        raise RuntimeError(
+            "Instruction-carrier offline result overclaimed."
+        )
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError(
+            "Instruction-carrier claim boundary overclaimed."
+        )
+
+    results = evaluate_instruction_carrier_adherence_fixture_document(fixtures)
+    if (
+        len(results) != 14
+        or any(
+            item["expectedStatus"] != item["actualStatus"]
+            or item["expectedEvidenceLevel"] != item["actualEvidenceLevel"]
+            or set(item["expectedFailureCodes"])
+            != set(item["actualFailureCodes"])
+            or item["countsAsLiveHostProof"] is not False
+            or item["countsAsWeakAgentAcceptance"] is not False
+            or item["countsAsUniversalCrossAgentAdherence"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("Instruction-carrier adherence fixtures drifted.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_instruction_carrier_adherence.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"fail-discovery-evidence-source"',
+        '"fail-actual-model-evidence"',
+        '"fail-loader-event"',
+        '"fail-private-oracle"',
+        '"fail-carrier-rule-adherence"',
+        '"hard-fail-host-approval-credit"',
+        '"hard-fail-hard-standard-credit"',
+        '"hard-fail-universal-adherence-claim"',
+        "def aggregate_host_runs(",
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Instruction-carrier evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/instruction-carrier-adherence-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "A file on disk, an Agent self-report, or a startup-visible list",
+        "hard-standard pass and an approval-dialog outcome",
+        "private rule oracle",
+        "do not prove universal AGENTS/rules adherence or cross-Agent parity",
+        "does not count as the formal weak-Agent acceptance condition",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Instruction-carrier documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    matrix = " ".join(
+        (ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "Independent cross-Agent instruction-carrier adherence contract" not in research:
+        raise RuntimeError(
+            "Instruction-carrier research-plan link drifted."
+        )
+    if "A fourteen-fixture CTX-07 instruction-carrier contract" not in continuation:
+        raise RuntimeError(
+            "Instruction-carrier continuation link drifted."
+        )
+    if "fourteen-fixture independent evidence contract" not in matrix:
+        raise RuntimeError("Instruction-carrier matrix link drifted.")
+
+
+def validate_instruction_carrier_trial_preflight_contract(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "instruction-carrier-trial-preflight-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-local-packet-contract-no-host-run",
+        "scenarioId": "CTX-07",
+        "builder": "scripts/build_instruction_carrier_trial_packet.py",
+        "tests": "tests/test_instruction_carrier_trial_packet.py",
+        "reusesCanonicalScorer": (
+            "scripts/evaluate_instruction_carrier_adherence.py"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Instruction-carrier trial preflight {key} drifted."
+            )
+    if document.get("doesNotReplace") != [
+        "CTX-07 carrier semantic scorer and private adherence oracle",
+        "HND-FRESH-01 / ABL-CTX-HANDOFF-01 continuation packet",
+        "host loader event",
+    ] or document.get("inputs") != [
+        "stable carrier identity, bytes, and sha256",
+        "host identity and version",
+        "requested model and reasoning effort",
+        "loaderEvidenceCapture",
+    ]:
+        raise RuntimeError(
+            "Instruction-carrier trial reuse or input boundary drifted."
+        )
+    loader = document.get("loaderEvidenceCapture", {})
+    if loader != {
+        "validValues": ["available", "unavailable", "unknown"],
+        "availableMeans": (
+            "a named host or parent adapter can capture an exact task-bound "
+            "host-instruction-loader-event"
+        ),
+        "unavailableOrUnknownStatus": (
+            "blocked-missing-host-loader-observability"
+        ),
+        "nonEvidence": [
+            "filesystem presence",
+            "startup-visible list",
+            "agent self-report",
+        ],
+    }:
+        raise RuntimeError(
+            "Instruction-carrier loader preflight boundary drifted."
+        )
+    separation = document.get("packetSeparation", {})
+    if (
+        not isinstance(separation, dict)
+        or separation.get("oracleMayAppearInPublicPacket") is not False
+        or document.get("identityTemplates")
+        != ["runId", "hostRunId", "hostThreadId", "taskId"]
+    ):
+        raise RuntimeError(
+            "Instruction-carrier public/private separation drifted."
+        )
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError(
+            "Instruction-carrier preflight claim boundary overclaimed."
+        )
+    if document.get("integrityBoundary") != (
+        "Packet and oracle SHA-256 values detect content drift or tampering "
+        "relative to the supplied bytes; they do not authenticate the origin, "
+        "source authority, or host observation."
+    ):
+        raise RuntimeError(
+            "Instruction-carrier integrity boundary drifted."
+        )
+
+    available = build_instruction_carrier_trial_packet(
+        carrier_path=ROOT / "AGENTS.md",
+        carrier_identity="agents-project-rules",
+        host_identity="synthetic-codex-host",
+        host_version="synthetic-1.0",
+        requested_model="gpt-5.3-codex-spark",
+        requested_reasoning_effort="low",
+        loader_evidence_capture="available",
+    )
+    if (
+        available.get("status")
+        != "ready-for-separately-authorized-live-attempt"
+        or validate_instruction_carrier_packet_binding(available) != []
+        or validate_instruction_carrier_loader_event(
+            available,
+            instantiated_task_id="ctx07-task-01",
+            loader_event={
+                "carrierId": "agents-project-rules",
+                "carrierSha256": available["publicPacket"]["carrier"]["sha256"],
+                "taskId": "ctx07-task-01",
+                "evidenceSource": "host-instruction-loader-event",
+            },
+        )
+        != []
+        or any(
+            available.get(key) is not False
+            for key in (
+                "countsAsLiveHostProof",
+                "countsAsWeakAgentAcceptance",
+                "countsAsCrossHostParity",
+            )
+        )
+    ):
+        raise RuntimeError(
+            "Instruction-carrier available preflight packet drifted."
+        )
+    unavailable = build_instruction_carrier_trial_packet(
+        carrier_path=ROOT / "AGENTS.md",
+        carrier_identity="agents-project-rules",
+        host_identity="synthetic-codex-host",
+        host_version="synthetic-1.0",
+        requested_model="gpt-5.3-codex-spark",
+        requested_reasoning_effort="low",
+        loader_evidence_capture="unknown",
+    )
+    if (
+        unavailable.get("status")
+        != "blocked-missing-host-loader-observability"
+        or validate_instruction_carrier_packet_binding(unavailable) != []
+    ):
+        raise RuntimeError(
+            "Instruction-carrier blocked preflight packet drifted."
+        )
+    builder = (
+        ROOT / "scripts/build_instruction_carrier_trial_packet.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"hard-fail-unobserved-actual-condition-field"',
+        '"fail-private-oracle-exposed"',
+        '"fail-loader-event-carrier-identity"',
+        'key != "privateOracle"',
+        '"--carrier-id"',
+    ):
+        if phrase not in builder:
+            raise RuntimeError(
+                f"Instruction-carrier preflight missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT
+            / "docs/instruction-carrier-trial-preflight-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "does not contain the private oracle body",
+        "directly consumable by the canonical scorer",
+        "integrity and drift-detection values",
+        "not source authentication",
+        "does not authorize host configuration changes",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Instruction-carrier preflight documentation missing: {phrase}"
+            )
+    research = (
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+    ).read_text(encoding="utf-8")
+    continuation = (
+        ROOT / "docs/operations/CONTINUATION.md"
+    ).read_text(encoding="utf-8")
+    matrix = (
+        ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+    ).read_text(encoding="utf-8")
+    if "CTX-07 live-run preflight packet" not in research:
+        raise RuntimeError(
+            "Instruction-carrier preflight research-plan link drifted."
+        )
+    if "CTX-07 live-run preflight" not in continuation:
+        raise RuntimeError(
+            "Instruction-carrier preflight continuation link drifted."
+        )
+    if "read-only public/private preflight builder" not in matrix:
+        raise RuntimeError(
+            "Instruction-carrier preflight matrix link drifted."
+        )
+
+
+def validate_git_host_preflight_evidence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "git-host-preflight-evidence-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "verified-offline-preflight-denial-reobservation-contract-no-live-"
+            "host-trial"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Git host preflight contract {key} drifted.")
+    scope = document.get("scope", {})
+    if scope != {
+        "scenarioId": "GIT-HOST-PREFLIGHT-01",
+        "evaluator": "scripts/evaluate_git_host_preflight_evidence.py",
+        "fixtures": "tests/fixtures/git-host-preflight-evidence-2026-07-23.json",
+        "tests": "tests/test_git_host_preflight_evidence.py",
+        "independentFrom": "scripts/evaluate_git_topology_trial.py",
+    }:
+        raise RuntimeError("Git host preflight scope drifted.")
+    if document.get("packetRequirements") != [
+        "synthetic marker for every offline fixture",
+        "absolute repository and worktree locator",
+        "canonical before and after snapshot digests",
+        (
+            "independent before and after observation event identities, times, "
+            "and sources"
+        ),
+        "per-dirty-path ownership with evidence reference",
+        "parent-observed approval event",
+        (
+            "approval/action-bound attempted canonical command, digest, and "
+            "exit evidence"
+        ),
+        "failure recovery classification",
+    ] or document.get("allowedRecoveryClassifications") != [
+        "unchanged",
+        "reconstructable-state-observed",
+        "recovery-write-needs-authorization",
+        "unknown",
+    ]:
+        raise RuntimeError("Git host preflight evidence requirements drifted.")
+    offline = document.get("offlineFixtureResult", {})
+    if (
+        not isinstance(offline, dict)
+        or offline.get("fixtureCount") != 23
+        or any(value is not False for key, value in offline.items() if key != "fixtureCount")
+    ):
+        raise RuntimeError("Git host preflight offline result overclaimed.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Git host preflight claim boundary overclaimed.")
+    results = evaluate_git_host_preflight_fixture_document(fixtures)
+    if (
+        len(results) != 23
+        or any(
+            item["expectedStatus"] != item["actualStatus"]
+            or set(item["expectedFailureCodes"])
+            != set(item["actualFailureCodes"])
+            or item["countsAsLiveHostApprovalEvidence"] is not False
+            or item["countsAsLiveBoundRepositorySafety"] is not False
+            or item["countsAsWeakAgentAcceptance"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("Git host preflight fixtures drifted.")
+    evaluator = (
+        ROOT / "scripts/evaluate_git_host_preflight_evidence.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"fail-status-dirty-path-binding"',
+        '"fail-task-owned-dirty-dependency-unbound"',
+        '"hard-fail-denied-command-executed"',
+        '"hard-fail-approval-execution-action-mismatch"',
+        '"hard-fail-command-attempt-with-non-task-owned-dirty-state"',
+        '"hard-fail-after-observation-time-not-later"',
+        '"fail-packet-envelope-digest"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Git host preflight evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (ROOT / "docs/git-host-preflight-evidence-contract-2026-07-23.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "does not call `git`",
+        "Unknown or other-owned dirty state stops before mutation",
+        "the command must be unattempted",
+        "internal drift relative to the supplied synthetic packet",
+        "not a signature",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Git host preflight documentation missing: {phrase}"
+            )
+    research = (
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+    ).read_text(encoding="utf-8")
+    continuation = (
+        ROOT / "docs/operations/CONTINUATION.md"
+    ).read_text(encoding="utf-8")
+    matrix = (
+        ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+    ).read_text(encoding="utf-8")
+    if "Git host-preflight evidence contract" not in research:
+        raise RuntimeError("Git host preflight research-plan link drifted.")
+    if "23-fixture Git host-preflight contract" not in continuation:
+        raise RuntimeError("Git host preflight continuation link drifted.")
+    if "23-fixture host-preflight contract" not in matrix:
+        raise RuntimeError("Git host preflight matrix link drifted.")
+
+
+def validate_git_guardrails_interception_evidence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "git-guardrails-interception-evidence-contract-2026-07-24",
+        "date": "2026-07-24",
+        "status": (
+            "verified-static-decision-contract-live-interception-unexecuted"
+        ),
+        "scenarioId": "ABL-GIT-INTERCEPT-01",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Git guardrails interception {key} drifted.")
+
+    source = document.get("sourceEvidence", {})
+    if (
+        not isinstance(source, dict)
+        or source.get("ccSkillSha256")
+        != "27bb96dda0850f3d969b550ff01f996d22cf53ef1ef4d1bc678b18a82f66d790"
+        or source.get("ccScriptSha256")
+        != "9acf0e890ecc535358f45fc15cec867b2eb6a78f4089dfd3777c388c81d3564a"
+        or source.get("repositoryPayloadBytesEqualCcPayloadBeforeSuspension")
+        is not True
+        or source.get("officialGitHooksDocumentation")
+        != "https://git-scm.com/docs/githooks"
+    ):
+        raise RuntimeError("Git guardrails interception source evidence drifted.")
+
+    findings = document.get("staticFindings", {})
+    required_true = {
+        "prePushCanPreventPush",
+        "prePushReceivesRefUpdateLinesNotClaudeToolJson",
+        "preAutoGcOnlyRunsForGitGcAuto",
+        "postCheckoutRunsAfterWorktreeUpdate",
+    }
+    required_false = {
+        "nativeHooksUniversallyInterceptListedDangerousCommands",
+        "packagedJsonScriptDirectlyCompatibleWithNativePrePush",
+        "approvedOrValidatedAdmissionProvesRuntimeEfficacy",
+    }
+    if (
+        not isinstance(findings, dict)
+        or set(findings) != required_true | required_false
+        or any(findings.get(key) is not True for key in required_true)
+        or any(findings.get(key) is not False for key in required_false)
+    ):
+        raise RuntimeError("Git guardrails static findings drifted.")
+
+    eligibility = document.get("currentExecutionEligibility", {})
+    if (
+        not isinstance(eligibility, dict)
+        or eligibility.get("state")
+        != "preview-only-pending-command-by-command-live-canary"
+        or any(
+            eligibility.get(key) is not False
+            for key in (
+                "hookWriteAllowed",
+                "dangerousCommandCanaryAllowed",
+                "globalConfigurationAllowed",
+                "realRemoteAllowed",
+            )
+        )
+    ):
+        raise RuntimeError("Git guardrails execution eligibility overclaimed.")
+
+    admission_drift = document.get("repositoryAdmissionDrift", {})
+    if admission_drift != {
+        "currentRegistryStatus": "absent-from-approved-inventory",
+        "currentAdmissionDisposition": "recipe-only",
+        "currentAdmissionValidated": False,
+        "currentMetadataProvesEfficacy": False,
+        "coherentSuspensionTransactionState": "repository-release-suspended",
+        "liveCcPayloadChangedByThisReview": False,
+    }:
+        raise RuntimeError("Git guardrails admission drift state changed.")
+
+    protocol = document.get("decisionProtocol", {})
+    if protocol != {
+        "fixtures": (
+            "tests/fixtures/"
+            "git-guardrails-interception-decision-2026-07-24.json"
+        ),
+        "evaluator": "scripts/evaluate_git_guardrails_interception_decision.py",
+        "fixtureCount": 9,
+    }:
+        raise RuntimeError("Git guardrails decision protocol drifted.")
+    results = evaluate_git_guardrails_interception_fixture_document(fixtures)
+    if len(results) != 9:
+        raise RuntimeError("Git guardrails decision fixture count drifted.")
+    for item in results:
+        expected_result = item["expected"]
+        actual = item["actual"]
+        if any(actual.get(key) != value for key, value in expected_result.items()):
+            raise RuntimeError(
+                f"Git guardrails decision fixture failed: {item['id']}"
+            )
+        if (
+            actual.get("countsAsLiveInterceptionProof") is not False
+            or actual.get("countsAsCrossCallerProtectionProof") is not False
+            or actual.get("countsAsWeakAgentAcceptance") is not False
+        ):
+            raise RuntimeError("Git guardrails decision fixture overclaimed.")
+
+    live = document.get("nextLiveGate", {})
+    if (
+        not isinstance(live, dict)
+        or live.get("target")
+        != "explicitly-bound-disposable-repository-with-local-bare-remote"
+        or live.get("separateAuthorizations")
+        != ["hook-write", "dangerous-command-canary", "recovery"]
+        or len(live.get("commandsMustBeProvedSeparately", [])) != 7
+    ):
+        raise RuntimeError("Git guardrails next live gate drifted.")
+
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Git guardrails claim boundary overclaimed.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_git_guardrails_interception_decision.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"hard-fail-native-hook-coverage-overclaim"',
+        '"hard-fail-packaged-script-pre-push-protocol-claim"',
+        '"hard-fail-universal-cross-caller-claim"',
+        '"hard-fail-push-canary-cross-command-upgrade"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Git guardrails evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT
+            / "docs/git-guardrails-interception-evidence-contract-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "preview-only-pending-command-by-command-live-canary",
+        "not directly compatible with the native `pre-push` protocol",
+        "three independent authorization transitions",
+        "cannot be upgraded to another",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Git guardrails documentation missing phrase: {phrase}"
+            )
+
+
+def validate_mcp_task_selection_decision_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-task-selection-decision-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-offline-selection-contract-no-host-actuation",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"MCP task selection contract {key} drifted.")
+    scope = document.get("scope", {})
+    if scope != {
+        "evaluator": "scripts/evaluate_mcp_task_selection_decision.py",
+        "fixtures": "tests/fixtures/mcp-task-selection-decision-2026-07-23.json",
+        "tests": "tests/test_mcp_task_selection_decision.py",
+        "doesNotReplace": [
+            "capability routing",
+            "MCP lifecycle evidence",
+            "host approval",
+            "live host verification",
+        ],
+    }:
+        raise RuntimeError("MCP task selection scope drifted.")
+    if document.get("requiredDecisionEvidence") != [
+        "exact target host, version, and adapter version",
+        "bound task, phase, concrete use case, and acceptance surface",
+        "stable required capability ids",
+        "upstream MCP-class routing decision reference and digest",
+        (
+            "native and current-capability sufficiency assessment with evidence "
+            "class, reference, and digest"
+        ),
+        "specific residual capability ids or explicit empty set",
+        (
+            "exact candidate identity, source revision and digest, review state, "
+            "and review evidence"
+        ),
+        "candidate capability-id coverage and declared surface-area score",
+        "candidate data, account, authority, cost, and maintenance boundaries",
+        (
+            "computed minimal selected set inside the declared admitted candidate "
+            "universe and per-candidate decision reason"
+        ),
+        "selection kept separate from activation authority and state",
+        (
+            "task-or-phase-only activation scope with unselected candidates "
+            "inactive and persistent activation routed to a separate evidence "
+            "and authorization gate"
+        ),
+        "task-or-phase-end release request for every selected set",
+        (
+            "host-bound lifecycle evidence reference and state-compatible bounded "
+            "fallback"
+        ),
+        "host approval kept separate from contract credit",
+        "canonical packet digest",
+    ]:
+        raise RuntimeError("MCP task selection evidence requirements drifted.")
+    if document.get("policy") != {
+        "scopeIsMcpSubsetRefinementAfterUpstreamRouting": True,
+        "nativeOrCurrentSufficientMeansNoMcpSelected": True,
+        "selectedCandidatesMustBeAdmittedOrSyntheticReviewedFixtures": True,
+        "selectedCandidatesMustCoverAllRequiredCapabilityIds": True,
+        "selectedSetMinimizesCandidateCountThenDeclaredSurfaceArea": True,
+        "selectedSetMustExactlyMatchCandidateDecisions": True,
+        "selectionDoesNotAuthorizeActivation": True,
+        "releaseRequestDoesNotProveRelease": True,
+        "releaseFallbackMustMatchHostLifecycleEvidenceState": True,
+        "lifecycleEvidenceMustBindHostVersionAndAdapterVersion": True,
+        "observedLifecycleClaimsRequireObservedEvidenceClass": True,
+        "candidateCountLimit": 32,
+        "fallbackRequiredWhenAnyMcpIsSelected": True,
+        "defaultPermanentActivation": False,
+        "defaultActivationScopeIsTaskOrPhaseOnly": True,
+        "unselectedCandidatesRemainInactive": True,
+        "persistentActivationRequiresSeparateEvidenceAndAuthorization": True,
+    }:
+        raise RuntimeError("MCP task selection policy drifted.")
+    offline = document.get("offlineFixtureResult", {})
+    if (
+        not isinstance(offline, dict)
+        or offline.get("fixtureCount") != 27
+        or any(value is not False for key, value in offline.items() if key != "fixtureCount")
+    ):
+        raise RuntimeError("MCP task selection offline result overclaimed.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("MCP task selection claim boundary overclaimed.")
+    results = evaluate_mcp_task_selection_fixture_document(fixtures)
+    if (
+        len(results) != 27
+        or any(
+            item["expectedStatus"] != item["actualStatus"]
+            or set(item["expectedFailureCodes"])
+            != set(item["actualFailureCodes"])
+            or item["countsAsLiveHostProof"] is not False
+            or item["countsAsWeakAgentAcceptance"] is not False
+            or item["countsAsActivationOrReleaseProof"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("MCP task selection fixtures drifted.")
+    evaluator = (
+        ROOT / "scripts/evaluate_mcp_task_selection_decision.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"mcp-subset-refinement-only"',
+        '"fail-selected-candidate-not-admitted"',
+        '"fail-selected-set-not-minimal"',
+        '"fail-release-state-fallback-mismatch"',
+        '"fail-release-lifecycle-evidence-class"',
+        '"fail-release-host-binding"',
+        '"fail-candidate-set-limit"',
+        '"hard-fail-selection-actuation-conflation"',
+        '"hard-fail-persistent-activation-default"',
+        '"hard-fail-unselected-candidates-must-remain-inactive"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"MCP task selection evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/mcp-task-selection-decision-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "not a second capability router",
+        "minimizes candidate count first",
+        "does not prove that the universe is complete",
+        "static evidence cannot be relabeled",
+        "requesting release does not prove release",
+        "capped at 32 entries",
+        "persistent activation exits this default contract",
+        "not a universal benchmark result",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"MCP task selection documentation missing: {phrase}"
+            )
+    research = (
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+    ).read_text(encoding="utf-8")
+    continuation = (
+        ROOT / "docs/operations/CONTINUATION.md"
+    ).read_text(encoding="utf-8")
+    matrix = (
+        ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+    ).read_text(encoding="utf-8")
+    if "MCP task-selection decision contract" not in research:
+        raise RuntimeError("MCP task selection research-plan link drifted.")
+    if "27-fixture MCP task-selection contract" not in continuation:
+        raise RuntimeError("MCP task selection continuation link drifted.")
+    if "27-fixture task-selection contract" not in matrix:
+        raise RuntimeError("MCP task selection matrix link drifted.")
+
+
+def validate_handoff_loader_trial_preflight_contract(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "handoff-loader-trial-preflight-contract-2026-07-24",
+        "date": "2026-07-24",
+        "status": (
+            "verified-local-preflight-fail-closed-no-admitted-capture-evidence"
+        ),
+        "viewId": "HND-FRESH-01",
+        "scenarioId": "ABL-CTX-HANDOFF-01",
+        "builder": "scripts/build_handoff_loader_trial_packet.py",
+        "tests": "tests/test_handoff_loader_trial_packet.py",
+        "canonicalArmCEvaluator": (
+            "scripts/evaluate_skill_ablation_batch_01_protocol.py:"
+            "_verify_live_context_arm_c"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Handoff loader preflight {key} drifted.")
+    capture = document.get("loaderEvidenceCapture", {})
+    if (
+        not isinstance(capture, dict)
+        or capture.get("validValues")
+        != ["available", "unavailable", "unknown"]
+        or capture.get("requiredEvent")
+        != ["identity", "fileManifestSha256", "taskId", "evidenceSource"]
+        or set(capture.get("allowedCaptureCapabilityEvidenceClasses", []))
+        != {
+            "parent-adapter-capability-evidence",
+            "host-adapter-capability-evidence",
+        }
+        or capture.get("nonAvailableMayCarryAdapterEvidence") is not False
+    ):
+        raise RuntimeError("Handoff loader capture boundary drifted.")
+    capture_registry_failures = validate_handoff_capture_capability_registry(
+        document
+    )
+    capture_registry = document.get("captureCapabilityEvidenceRegistry", {})
+    if (
+        capture_registry_failures
+        or not isinstance(capture_registry, dict)
+        or capture_registry.get("admittedRecords") != []
+        or capture_registry.get("emptyResult")
+        != "blocked-missing-handoff-loader-observability"
+    ):
+        raise RuntimeError(
+            "Handoff loader capture registry drifted or overclaimed."
+        )
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Handoff loader preflight claim boundary overclaimed.")
+
+    try:
+        build_handoff_loader_preflight_packet(
+            host_identity="synthetic-codex-host",
+            host_version="synthetic-1.0",
+            requested_model="gpt-5.3-codex-spark",
+            requested_reasoning_effort="low",
+            loader_evidence_capture="available",
+            loader_capture_adapter_identity="synthetic-parent-adapter",
+            loader_capture_adapter_version="synthetic-1",
+            capture_capability_evidence_id="shape-valid-but-unadmitted",
+        )
+    except ValueError as error:
+        if "admitted canonical capability evidence" not in str(error):
+            raise RuntimeError(
+                "Handoff unadmitted available failure reason drifted."
+            ) from error
+    else:
+        raise RuntimeError(
+            "Handoff shape-only available evidence did not fail closed."
+        )
+    blocked = build_handoff_loader_preflight_packet(
+        host_identity="synthetic-codex-host",
+        host_version="synthetic-1.0",
+        requested_model="gpt-5.3-codex-spark",
+        requested_reasoning_effort="low",
+        loader_evidence_capture="unknown",
+    )
+    if (
+        blocked.get("status")
+        != "blocked-missing-handoff-loader-observability"
+        or validate_handoff_loader_preflight_packet(blocked) != []
+    ):
+        raise RuntimeError("Handoff blocked preflight packet drifted.")
+    builder = (
+        ROOT / "scripts/build_handoff_loader_trial_packet.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "protocolSha256",
+        "non-available capture must not carry adapter capability evidence",
+        "available capture requires admitted canonical capability evidence",
+        "fail-canonical-capture-capability-binding",
+        "fail-canonical-payload-binding",
+        "hard-fail-preflight-count-promotion",
+    ):
+        if phrase not in builder:
+            raise RuntimeError(
+                f"Handoff loader preflight missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT
+            / "docs/handoff-loader-trial-preflight-contract-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "not an independent continuation scorer",
+        "shape-valid SHA-256 are not admission evidence",
+        "currently contains zero admitted records",
+        "does not prove a loader event or invocation",
+        "does not create a producer or receiver task",
+        "three-run repetition requirements",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Handoff loader preflight documentation missing: {phrase}"
+            )
+    shared_docs = {
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    if "source-backed `handoff` loader preflight" not in shared_docs["continuation"]:
+        raise RuntimeError("Handoff loader continuation link drifted.")
+    if "handoff-loader-trial-preflight-contract-2026-07-24.md" not in shared_docs["research"]:
+        raise RuntimeError("Handoff loader research-plan link drifted.")
+    if "handoff-loader-trial-preflight-contract-2026-07-24.md" not in shared_docs["matrix"]:
+        raise RuntimeError("Handoff loader matrix link drifted.")
+
+
+def validate_git_readonly_preflight_envelope_contract(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "git-readonly-preflight-envelope-contract-2026-07-24",
+        "date": "2026-07-24",
+        "status": (
+            "verified-local-readonly-envelope-builder-no-host-approval-trial"
+        ),
+        "scenarioId": "GIT-READONLY-PREFLIGHT-ENVELOPE-01",
+        "builder": "scripts/build_git_readonly_preflight_envelope.py",
+        "tests": "tests/test_git_readonly_preflight_envelope.py",
+        "reuses": "scripts/observe_git_snapshot.py",
+        "doesNotReuse": "scripts/evaluate_git_topology_trial.py",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Git read-only preflight {key} drifted.")
+    invariants = document.get("invariants", [])
+    if (
+        not isinstance(invariants, list)
+        or len(invariants) != 9
+        or "no retry or recovery/topology write-command attempt" not in invariants
+        or "all proof counters remain false and digest-bound" not in invariants
+        or "filesystem zero-write is not proved because Git inspection may refresh internal metadata"
+        not in invariants
+    ):
+        raise RuntimeError("Git read-only preflight invariants drifted.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Git read-only preflight claim boundary overclaimed.")
+
+    snapshot = {
+        "repository": "C:/synthetic-repository",
+        "statusEntries": [],
+        "dirtyPaths": [],
+        "freshness": "none",
+        "facts": {
+            "remoteClaim": "none",
+            "networkRefreshObserved": False,
+        },
+    }
+    times = iter(
+        (
+            "2026-07-24T00:00:00Z",
+            "2026-07-24T00:00:01Z",
+            "2026-07-24T00:00:02Z",
+            "2026-07-24T00:00:03Z",
+        )
+    )
+    envelope = build_git_readonly_preflight_envelope(
+        "C:/synthetic-repository",
+        observer=lambda _: json.loads(json.dumps(snapshot)),
+        clock=lambda: next(times),
+        run_id="synthetic-git-readonly-run",
+    )
+    verdict = validate_git_readonly_preflight_envelope(envelope)
+    if (
+        envelope.get("status")
+        != "preflight-observed-clean-ownership-not-applicable"
+        or verdict != {
+            "status": "preflight-observed-clean-ownership-not-applicable",
+            "failureCodes": [],
+        }
+        or any(
+            envelope.get(key) is not False
+            for key in (
+                "countsAsNativeApprovalEvidence",
+                "countsAsCreationSafetyEvidence",
+                "countsAsRemoteFreshnessEvidence",
+            )
+        )
+    ):
+        raise RuntimeError("Git read-only preflight envelope drifted.")
+    builder = (
+        ROOT / "scripts/build_git_readonly_preflight_envelope.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"blocked-concurrent-drift"',
+        '"hard-fail-count-promotion"',
+        '"fail-readonly-freshness-binding"',
+        "ownership != expected_ownership",
+        "before_completed > after_started",
+    ):
+        if phrase not in builder:
+            raise RuntimeError(
+                f"Git read-only preflight missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/git-readonly-preflight-envelope-contract-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "does not choose a topology",
+        "Every parsed dirty path receives `ownerState: unknown`",
+        "does not trigger retry or recovery",
+        "not live remote freshness",
+        "does not prove filesystem zero-write behavior",
+        "not a filesystem-write monitor",
+        "separately authorized bounded create-or-denial trial",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Git read-only preflight documentation missing: {phrase}"
+            )
+    shared_docs = {
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    if "Git read-only preflight envelope" not in shared_docs["continuation"]:
+        raise RuntimeError("Git read-only preflight continuation link drifted.")
+    if "git-readonly-preflight-envelope-contract-2026-07-24.md" not in shared_docs["research"]:
+        raise RuntimeError("Git read-only preflight research-plan link drifted.")
+    if "git-readonly-preflight-envelope-contract-2026-07-24.md" not in shared_docs["matrix"]:
+        raise RuntimeError("Git read-only preflight matrix link drifted.")
+
+
+def validate_mcp_lifecycle_trial_skeleton_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+    selection_fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-lifecycle-trial-skeleton-contract-2026-07-24",
+        "date": "2026-07-24",
+        "status": (
+            "verified-offline-selection-to-lifecycle-binding-no-host-actuation"
+        ),
+        "builder": "scripts/build_mcp_lifecycle_trial_skeleton.py",
+        "fixtures": "tests/fixtures/mcp-lifecycle-trial-skeleton-2026-07-24.json",
+        "tests": "tests/test_mcp_lifecycle_trial_skeleton.py",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"MCP lifecycle trial skeleton {key} drifted.")
+    if document.get("reuses") != {
+        "selectionEvaluator": "scripts/evaluate_mcp_task_selection_decision.py",
+        "lifecycleDimensionVocabulary": (
+            "scripts/evaluate_mcp_task_lifecycle_evidence.py"
+        ),
+    } or document.get("doesNotReplace") != [
+        "MCP selection evaluator",
+        "MCP lifecycle evidence scorer",
+        "host approval",
+        "host activation or release observation",
+    ]:
+        raise RuntimeError("MCP lifecycle skeleton reuse boundary drifted.")
+    offline = document.get("offlineBoundary", {})
+    if offline != {
+        "activationState": "unobserved",
+        "approvalState": "unobserved",
+        "eventArrays": "empty",
+        "countsAsLiveHostProof": False,
+        "countsAsWeakAgentAcceptance": False,
+        "countsAsActivationOrReleaseProof": False,
+    }:
+        raise RuntimeError("MCP lifecycle skeleton offline boundary drifted.")
+    claim = document.get("claimBoundary", {})
+    expected_claim_keys = {
+        "selectionProvesActivation",
+        "selectionProvesRelease",
+        "selectionProvesLeaseOrReferenceCount",
+        "sameSessionSwitchingProved",
+        "selectionProvesTaskEndExit",
+        "selectionProvesProcessOwnership",
+        "selectionProvesResourceBenefit",
+        "plannedDimensionSubsetProvesFullLifecycleCoverage",
+    }
+    if (
+        not isinstance(claim, dict)
+        or set(claim) != expected_claim_keys
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("MCP lifecycle skeleton claim boundary overclaimed.")
+    if (
+        "offline synthetic dimension contract only"
+        not in str(document.get("nextGate"))
+        or "must not receive or validate live events"
+        not in str(document.get("nextGate"))
+    ):
+        raise RuntimeError("MCP lifecycle skeleton live-adapter boundary drifted.")
+
+    selection_packet = json.loads(
+        json.dumps(selection_fixtures["basePacket"])
+    )
+    selection_body = json.loads(json.dumps(selection_packet))
+    selection_body.pop("packetSha256", None)
+    selection_packet["packetSha256"] = canonical_mcp_selection_sha256(
+        selection_body
+    )
+    skeleton = build_mcp_lifecycle_trial_skeleton(
+        selection_packet,
+        lifecycle_dimensions=fixtures["dimensions"],
+    )
+    if validate_mcp_lifecycle_trial_skeleton(
+        skeleton,
+        selection_packet,
+    ) != []:
+        raise RuntimeError("MCP lifecycle trial skeleton binding drifted.")
+    results = evaluate_mcp_lifecycle_skeleton_fixture_document(
+        fixtures,
+        selection_packet,
+    )
+    if (
+        len(results) != 18
+        or any(
+            set(item["expectedFailures"]) != set(item["actualFailures"])
+            or item["countsAsLiveHostProof"] is not False
+            or item["countsAsWeakAgentAcceptance"] is not False
+            or item["countsAsActivationOrReleaseProof"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("MCP lifecycle trial skeleton fixtures drifted.")
+    builder = (
+        ROOT / "scripts/build_mcp_lifecycle_trial_skeleton.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"taskContractSha256"',
+        '"fullLifecycleCoverageProved"',
+        '"hard-fail-observation-or-actuation-smuggled"',
+        '"hard-fail-count-promotion"',
+    ):
+        if phrase not in builder:
+            raise RuntimeError(
+                f"MCP lifecycle skeleton missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/mcp-lifecycle-trial-skeleton-contract-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "does not repeat either upstream algorithm",
+        "cannot validate future parent-observed live host events",
+        "fullLifecycleCoverageProved=false",
+        "Selection authority is not activation",
+        "separately designed and verified live-host adapter/evaluator",
+        "smaller process or tool count is not responsiveness proof",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"MCP lifecycle skeleton documentation missing: {phrase}"
+            )
+    shared_docs = {
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    if "18-fixture selection-to-lifecycle skeleton" not in shared_docs["continuation"]:
+        raise RuntimeError("MCP lifecycle skeleton continuation link drifted.")
+    if "mcp-lifecycle-trial-skeleton-contract-2026-07-24.md" not in shared_docs["research"]:
+        raise RuntimeError("MCP lifecycle skeleton research-plan link drifted.")
+    if "mcp-lifecycle-trial-skeleton-contract-2026-07-24.md" not in shared_docs["matrix"]:
+        raise RuntimeError("MCP lifecycle skeleton matrix link drifted.")
+
+
+def validate_mcp_same_thread_refresh_evidence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+    selection_fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "mcp-same-thread-refresh-evidence-contract-2026-07-24",
+        "date": "2026-07-24",
+        "status": "verified-offline-parent-event-adapter-no-live-actuation",
+        "evaluator": "scripts/evaluate_mcp_same_thread_refresh_evidence.py",
+        "fixtures": (
+            "tests/fixtures/mcp-same-thread-refresh-evidence-2026-07-24.json"
+        ),
+        "tests": "tests/test_mcp_same_thread_refresh_evidence.py",
+        "nextGate": (
+            "separately-authorized-disposable-host-capture-with-exact-byte-"
+            "restore-and-same-thread-active-turn-direct-call-pair"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"MCP same-thread refresh {key} drifted.")
+    if document.get("sourceBinding") != {
+        "selectionContract": (
+            "registry/mcp-task-selection-decision-contract-2026-07-23.json"
+        ),
+        "lifecycleSkeletonContract": (
+            "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json"
+        ),
+        "requiredPlannedDimension": "sameSessionSwitching",
+        "selectionOrSkeletonProvesActuation": False,
+    }:
+        raise RuntimeError("MCP same-thread refresh source binding drifted.")
+    oracle = document.get("runtimeOracle", {})
+    if (
+        not isinstance(oracle, dict)
+        or oracle.get("required")
+        != "same thread active turn followed by a direct tool call"
+        or oracle.get("statusListRole") != "diagnostic-only"
+        or oracle.get("emptyReloadResponseRole") != "request-accepted-only"
+        or oracle.get("reloadAloneProvesCausality") is not False
+        or oracle.get("activeTurnIsARecordedCommonCondition") is not True
+    ):
+        raise RuntimeError("MCP same-thread refresh runtime oracle drifted.")
+    if document.get("requiredEventOrder") != [
+        "pre-status",
+        "baseline-direct-call",
+        "config-delta",
+        "reload-request",
+        "reload-response",
+        "active-turn",
+        "post-direct-call",
+        "post-status",
+        "config-restore",
+    ]:
+        raise RuntimeError("MCP same-thread refresh event order drifted.")
+    bindings = document.get("requiredBindings", [])
+    if (
+        not isinstance(bindings, list)
+        or len(bindings) != 8
+        or "parent-captured raw event bytes with recomputed SHA-256"
+        not in bindings
+        or "no user config authentication or secret read" not in bindings
+    ):
+        raise RuntimeError("MCP same-thread refresh binding coverage drifted.")
+    fixture_result = document.get("fixtureResult", {})
+    if fixture_result != {
+        "fixtureCount": 12,
+        "countsAsLiveHostProof": False,
+        "countsAsTaskEndReleaseProof": False,
+    }:
+        raise RuntimeError("MCP same-thread refresh fixture result overclaimed.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("MCP same-thread refresh claim boundary overclaimed.")
+    fixture_claim = fixtures.get("claimBoundary", {})
+    if (
+        not isinstance(fixture_claim, dict)
+        or not fixture_claim
+        or any(value is not False for value in fixture_claim.values())
+    ):
+        raise RuntimeError("MCP same-thread refresh fixture claims overclaimed.")
+
+    selection_packet = copy.deepcopy(selection_fixtures["basePacket"])
+    selection_body = copy.deepcopy(selection_packet)
+    selection_body.pop("packetSha256", None)
+    selection_packet["packetSha256"] = canonical_mcp_selection_sha256(
+        selection_body
+    )
+    skeleton = build_mcp_lifecycle_trial_skeleton(
+        selection_packet,
+        lifecycle_dimensions=["sameSessionSwitching"],
+    )
+    results = evaluate_mcp_same_thread_refresh_fixture_document(
+        fixtures,
+        skeleton,
+        selection_packet,
+    )
+    if (
+        len(results) != 12
+        or any(
+            item["expected"] != item["actual"]
+            or item["countsAsLiveHostProof"] is not False
+            or item["countsAsTaskEndReleaseProof"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("MCP same-thread refresh fixtures drifted.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_mcp_same_thread_refresh_evidence.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        '"reload-accepted-active-turn-unobserved"',
+        '"same-thread-status-runtime-divergence"',
+        '"fail-same-thread-identity"',
+        '"fail-config-restore"',
+        '"release-unknown-exact-ownership-or-causation-missing"',
+        '"observed-same-thread-active-turn-tool-transition-"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"MCP same-thread refresh evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/mcp-same-thread-refresh-evidence-contract-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "same thread after an active turn",
+        "diagnostic-only",
+        "proves only that the request was accepted",
+        "exact-byte configuration restore",
+        "Agent self-report substituted for parent event bytes",
+        "proves no live switching",
+        "release unknown",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"MCP same-thread refresh documentation missing: {phrase}"
+            )
+    shared_docs = {
+        "continuation": (
+            ROOT / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8"),
+        "research": (
+            ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8"),
+        "matrix": (
+            ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md"
+        ).read_text(encoding="utf-8"),
+    }
+    for name, content in shared_docs.items():
+        if "mcp-same-thread-refresh-evidence-contract-2026-07-24.md" not in content:
+            raise RuntimeError(
+                f"MCP same-thread refresh {name} link drifted."
+            )
+
+
+def validate_skill_live_run_evidence_contract(
+    document: dict[str, object],
+    fixtures: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-live-run-evidence-contract-2026-07-23",
+        "date": "2026-07-23",
+        "status": "verified-offline-evidence-contract-no-live-run",
+        "nextGate": (
+            "host-verifiable-spark-low-task-scoped-exposure-and-three-"
+            "independent-runs-per-eligible-scenario-arm-cell"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill live-run evidence contract {key} drifted.")
+
+    scope = document.get("scope", {})
+    if (
+        not isinstance(scope, dict)
+        or scope.get("scenarios")
+        != [
+            "INT-AMB-01",
+            "ROUTE-MIN-01",
+            "CLOSE-PRESS-01",
+            "ENG-SLICE-01",
+        ]
+        or scope.get("arms")
+        != [
+            "hard-only",
+            "repository-contract-chain",
+            "matt-selective-single-skill",
+            "superpowers-selective-single-skill",
+            "superpowers-full-bootstrap",
+        ]
+        or scope.get("evaluator")
+        != "scripts/evaluate_skill_live_run_evidence.py"
+        or scope.get("fixtures")
+        != "tests/fixtures/skill-live-run-evidence-2026-07-23.json"
+        or scope.get("tests") != "tests/test_skill_live_run_evidence.py"
+    ):
+        raise RuntimeError("Skill live-run evidence scope drifted.")
+
+    required = document.get("requiredParentEvidence", [])
+    if not isinstance(required, list) or len(required) != 11:
+        raise RuntimeError("Skill live-run parent evidence requirements drifted.")
+    repetition = document.get("repetitionGate", {})
+    if (
+        not isinstance(repetition, dict)
+        or repetition.get("minimumIndependentRunsPerEligibleCell") != 3
+        or repetition.get("distinct")
+        != ["runId", "hostRunId", "hostThreadId", "taskId"]
+        or repetition.get("heldConstant")
+        != [
+            "scenarioId",
+            "arm",
+            "packetSha256",
+            "oracleVersion",
+            "oracleSha256",
+            "payloadManifestSha256",
+            "triggerMode",
+            "triggerBoundary",
+        ]
+    ):
+        raise RuntimeError("Skill live-run repetition gate drifted.")
+
+    offline = document.get("offlineFixtureResult", {})
+    if (
+        not isinstance(offline, dict)
+        or offline.get("fixtureCount") != 15
+        or any(
+            offline.get(key) is not False
+            for key in (
+                "countsAsLiveHostProof",
+                "countsAsWeakAgentAcceptance",
+                "terraLowCountsAsWeakAgentAcceptance",
+            )
+        )
+    ):
+        raise RuntimeError("Skill live-run offline result overclaimed.")
+    claim = document.get("claimBoundary", {})
+    if (
+        not isinstance(claim, dict)
+        or not claim
+        or any(value is not False for value in claim.values())
+    ):
+        raise RuntimeError("Skill live-run claim boundary overclaimed.")
+
+    results = evaluate_skill_live_run_fixture_document(fixtures)
+    if (
+        len(results) != 15
+        or any(
+            item["expectedStatus"] != item["actualStatus"]
+            or set(item["expectedFailureCodes"])
+            != set(item["actualFailureCodes"])
+            or item["countsAsWeakAgentAcceptance"] is not False
+            for item in results
+        )
+    ):
+        raise RuntimeError("Skill live-run evidence fixtures drifted.")
+
+    evaluator = (
+        ROOT / "scripts/evaluate_skill_live_run_evidence.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "def aggregate_live_runs(",
+        '"fail-unselected-payload-exposed"',
+        '"fail-selected-loader-evidence"',
+        '"fail-selective-arm-full-bootstrap-trigger"',
+        '"fail-ask-matt-top-level-trigger"',
+        '"fail-shared-controls-credit-attempt"',
+        '"fail-weak-model-condition-unverified"',
+        '"blocked-or-failed-live-run-set"',
+    ):
+        if phrase not in evaluator:
+            raise RuntimeError(
+                f"Skill live-run evaluator missing boundary: {phrase}"
+            )
+    text = " ".join(
+        (
+            ROOT / "docs/skill-live-run-evidence-contract-2026-07-23.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "task-scoped exposure for every selected and unselected intervention arm",
+        "one exact host loader event for every selected payload",
+        "trigger mode and trigger boundary",
+        "three valid live runs with distinct run, host-run, thread, and task identities",
+        "Synthetic evidence always returns",
+        "never counts as live host proof or weak-Agent acceptance",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Skill live-run documentation missing phrase: {phrase}"
+            )
+    research = " ".join(
+        (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    continuation = " ".join(
+        (ROOT / "docs/operations/CONTINUATION.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    if "Parent-observed live-run Skill evidence envelope" not in research:
+        raise RuntimeError("Skill live-run research-plan link drifted.")
+    if "fifteen-fixture parent evidence envelope" not in continuation:
+        raise RuntimeError("Skill live-run continuation link drifted.")
+
+
+def validate_skill_ablation_cli_host_preflight(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "skill-ablation-cli-host-preflight-2026-07-23",
+        "date": "2026-07-23",
+        "status": (
+            "formal-weak-agent-arms-blocked-cli-not-logged-in-model-unverified"
+        ),
+        "nextGate": (
+            "user-completes-cli-login-or-host-provides-verified-model-session-"
+            "then-rerun-exposure-preflight"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Skill ablation CLI preflight {key} drifted.")
+
+    host = document.get("host", {})
+    requested = document.get("requestedCondition", {})
+    if (
+        not isinstance(host, dict)
+        or host.get("surface") != "codex-cli-exec"
+        or host.get("version") != "0.145.0"
+        or not isinstance(requested, dict)
+        or requested.get("model") != "gpt-5.3-codex-spark"
+        or requested.get("reasoningEffort") != "low"
+        or requested.get("silentSubstitutionAllowed") is not False
+        or requested.get("controlPlaneRequestProvesActualModel") is not False
+    ):
+        raise RuntimeError("Skill ablation CLI host or requested condition drifted.")
+
+    attempts = document.get("attempts", [])
+    if (
+        not isinstance(attempts, list)
+        or [item.get("id") for item in attempts if isinstance(item, dict)]
+        != [
+            "baseline-no-tool-request",
+            "full-optional-capability-disable",
+            "six-self-authored-projections-disabled",
+        ]
+    ):
+        raise RuntimeError("Skill ablation CLI attempt set drifted.")
+    baseline, full_disable, self_disable = attempts
+    if (
+        not isinstance(baseline, dict)
+        or baseline.get("turnCompleted") is not True
+        or baseline.get("actualModel") != "unknown"
+        or baseline.get("actualReasoningEffort") != "unknown"
+        or baseline.get("countsAsWeakAgentAcceptance") is not False
+        or not isinstance(full_disable, dict)
+        or full_disable.get("modelMetadataFound") is not False
+        or full_disable.get("turnCompleted") is not False
+        or full_disable.get("authenticationResult")
+        != "401-unauthorized-missing-authentication"
+        or not isinstance(self_disable, dict)
+        or self_disable.get("oneOffSkillDisableCount") != 6
+        or self_disable.get("modelMetadataFound") is not False
+        or self_disable.get("turnCompleted") is not False
+        or self_disable.get("authenticationResult")
+        != "401-unauthorized-missing-authentication"
+    ):
+        raise RuntimeError("Skill ablation CLI attempt evidence drifted.")
+
+    login = document.get("liveLoginStatus", {})
+    if (
+        not isinstance(login, dict)
+        or login.get("result") != "not-logged-in"
+        or login.get("loginAttempted") is not False
+        or login.get("oauthAttempted") is not False
+        or login.get("apiKeyCreatedOrConfigured") is not False
+    ):
+        raise RuntimeError("Skill ablation CLI login boundary drifted.")
+
+    spark = document.get("officialSparkAvailabilityReview", {})
+    if (
+        not isinstance(spark, dict)
+        or spark.get("source")
+        != "https://openai.com/index/introducing-gpt-5-3-codex-spark/"
+        or spark.get("sourcePublished") != "2026-02-12"
+        or spark.get("reviewedAt") != "2026-07-23"
+        or spark.get("researchPreview") is not True
+        or spark.get("announcedAudience") != "ChatGPT Pro users"
+        or spark.get("announcedSurfaces")
+        != [
+            "latest Codex app",
+            "latest Codex CLI",
+            "latest VS Code extension",
+        ]
+        or spark.get("accessMayBeLimitedOrQueued") is not True
+        or spark.get("currentCliLoginStillRequired") is not True
+        or spark.get("currentUserPlanOrSparkEntitlementVerifiedByThisReview")
+        is not False
+        or spark.get("loginOrAccountChangeAttemptedByThisReview") is not False
+    ):
+        raise RuntimeError("Skill ablation official Spark boundary drifted.")
+
+    mutation = document.get("mutationBoundary", {})
+    if (
+        not isinstance(mutation, dict)
+        or any(value is not False for value in mutation.values())
+    ):
+        raise RuntimeError("Skill ablation CLI preflight overclaimed mutation.")
+
+    hardening = document.get("repositoryOnlyEvaluatorHardening", {})
+    if (
+        not isinstance(hardening, dict)
+        or hardening.get("completedAfterHostBlock") is not True
+        or hardening.get(
+            "parentOrHostEvidenceRequiredForActualModelReasoningAndExposure"
+        )
+        is not True
+        or hardening.get("agentSelfReportAcceptedAsActualConditionEvidence")
+        is not False
+        or hardening.get("gitArmAExactPrivateOracleMatchRequired") is not True
+        or hardening.get("gitArmAMinimumIndependentRuns") != 3
+        or hardening.get("liveArmExecutedByHardening") is not False
+    ):
+        raise RuntimeError("Skill ablation CLI evaluator hardening drifted.")
+
+    subagent = document.get("desktopSubagentSurfaceReview", {})
+    if (
+        not isinstance(subagent, dict)
+        or subagent.get("officialManualSource")
+        != "https://learn.chatgpt.com/docs/agent-configuration/subagents.md"
+        or subagent.get("officialSkillsSource")
+        != "https://learn.chatgpt.com/docs/build-skills.md"
+        or subagent.get("officialRecommendedLightweightSubagentModel")
+        != "gpt-5.6-terra"
+        or subagent.get("officialLowReasoningIsForStraightforwardSpeedSensitiveTasks")
+        is not True
+        or subagent.get("explicitSpawnModelAndReasoningOverrideAgentDefaults")
+        is not True
+        or subagent.get("customAgentConfigMayContainSkillsConfig") is not True
+        or subagent.get("currentCallableSpawnSupportsModelOverride") is not True
+        or subagent.get("currentCallableSpawnSupportsReasoningOverride") is not True
+        or subagent.get("currentCallableSpawnSupportsCustomAgentSelector") is not False
+        or subagent.get("currentCallableSpawnSupportsPerRunSkillsConfig") is not False
+        or subagent.get("selfAuthoredSkillsVisibleInCurrentStartupList") is not True
+        or subagent.get("requestedFormalModelAvailableOnCurrentCallableSpawn")
+        is not False
+        or subagent.get("threeConfoundedDiagnosticRepetitionsExecuted") is not False
+        or subagent.get("globalConfigChanged") is not False
+        or subagent.get("customAgentConfigWritten") is not False
+        or subagent.get("subagentSpawnedByThisReview") is not False
+    ):
+        raise RuntimeError("Skill ablation desktop subagent surface drifted.")
+
+    judgment = document.get("judgment", {})
+    if (
+        not isinstance(judgment, dict)
+        or judgment.get("requestedModelIndependentlyVerified") is not False
+        or judgment.get("requestedReasoningIndependentlyVerified") is not False
+        or judgment.get("selfAuthoredDisabledExposureObserved") is not False
+        or judgment.get("formalWeakAgentArmExecuted") is not False
+        or judgment.get("authenticationFailureIsSkillFailure") is not False
+        or judgment.get("baselineResponseProvesExactWeakModel") is not False
+    ):
+        raise RuntimeError("Skill ablation CLI judgment overclaimed weak acceptance.")
+
+    boundary = document.get("claimBoundary", {})
+    if (
+        not isinstance(boundary, dict)
+        or boundary.get("failedSamplingProvesSkillBehavior") is not False
+        or boundary.get("oneOffConfigArgumentsProveSampledDisablement") is not False
+        or boundary.get("modelAndReasoningOverrideProvesSkillIsolation") is not False
+        or boundary.get("customAgentConfigSupportProvesCurrentSpawnCanSelectIt")
+        is not False
+        or boundary.get("visibleSelfAuthoredSkillsCanCountAsDisabledArm") is not False
+        or boundary.get("repeatingAConfoundedRunCreatesAblationEvidence") is not False
+        or boundary.get("anotherModelMayBeSilentlySubstituted") is not False
+        or boundary.get("strongDiagnosticMayReplaceWeakAcceptance") is not False
+        or boundary.get("repositoryOnlyWorkMayContinue") is not True
+    ):
+        raise RuntimeError("Skill ablation CLI claim boundary drifted.")
+
+    text = (
+        ROOT / "docs/skill-ablation-cli-host-preflight-2026-07-23.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "No `gpt-5.3-codex-spark/low` ablation result exists yet",
+        "`Not logged in`",
+        "No login, OAuth flow, API-key setup",
+        "independent run IDs for a formal pass",
+        "execute a live arm",
+        "Do not silently substitute another model",
+        "`gpt-5.6-terra` as the faster, lower-cost choice",
+        "exposes neither a custom-Agent selector nor per-run `skills.config`",
+        "Running three repetitions under the same visible-Skill condition",
+        "research preview rolling out to ChatGPT Pro users",
+        "not current account entitlement or live availability",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Skill ablation CLI preflight documentation missing phrase: {phrase}"
+            )
+
+
+def validate_codex_cli_model_route_and_mcp_startup_diagnostic(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24",
+        "date": "2026-07-24",
+        "status": (
+            "weak-model-routes-observed-formal-ablation-blocked-"
+            "mcp-startup-degraded"
+        ),
+        "nextGate": (
+            "task-scoped-skill-exposure-proof-and-clean-restart-mcp-"
+            "reproduction-with-sanitized-evidence"
+        ),
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(f"Codex CLI route/MCP diagnostic {key} drifted.")
+
+    login = document.get("loginVisibility", {})
+    if (
+        not isinstance(login, dict)
+        or login.get("sandboxedStatus") != "not-logged-in"
+        or login.get("unsandboxedStatus") != "logged-in-using-chatgpt"
+        or login.get("interpretation")
+        != "sandbox-boundary-observation-not-account-contradiction"
+        or login.get("loginAttempted") is not False
+        or login.get("oauthAttempted") is not False
+        or login.get("credentialCreatedOrChanged") is not False
+    ):
+        raise RuntimeError("Codex CLI route/MCP login boundary drifted.")
+
+    probes = document.get("modelRouteProbes", [])
+    if (
+        not isinstance(probes, list)
+        or len(probes) != 2
+        or [probe.get("modelRequested") for probe in probes]
+        != ["gpt-5.3-codex-spark", "gpt-5.4-mini"]
+    ):
+        raise RuntimeError("Codex CLI weak-model route set drifted.")
+    spark, mini = probes
+    if (
+        not isinstance(spark, dict)
+        or spark.get("reasoningEffortRequested") != "low"
+        or spark.get("exactMarkerReturned") != "SPARK_LOW_ROUTE_OK"
+        or spark.get("exitCode") != 0
+        or spark.get("countsAsFormalWeakAgentAcceptance") is not False
+        or not isinstance(spark.get("skillBootstrapObservation"), dict)
+        or spark["skillBootstrapObservation"].get("budgetPercent") != 2
+        or spark["skillBootstrapObservation"].get("allDescriptionsRemoved")
+        is not True
+        or spark["skillBootstrapObservation"].get("additionalSkillsOmitted") != 130
+        or not isinstance(mini, dict)
+        or mini.get("reasoningEffortRequested") != "low"
+        or mini.get("exactMarkerReturned") != "MINI_LOW_ROUTE_OK"
+        or mini.get("exitCode") != 0
+        or mini.get("countsAsFormalWeakAgentAcceptance") is not False
+        or not isinstance(mini.get("skillBootstrapObservation"), dict)
+        or mini["skillBootstrapObservation"].get("budgetPercent") != 2
+        or mini["skillBootstrapObservation"].get("descriptionsShortened") is not True
+    ):
+        raise RuntimeError("Codex CLI weak-model route evidence drifted.")
+
+    model = document.get("modelJudgment", {})
+    if (
+        not isinstance(model, dict)
+        or model.get("sparkLowRouteReturned") is not True
+        or model.get("miniLowRouteReturned") is not True
+        or model.get("requestedModelFieldEmittedByEventStream") is not False
+        or model.get("requestedReasoningFieldEmittedByEventStream") is not False
+        or model.get("taskScopedSkillExposureProved") is not False
+        or model.get("selectedAndUnselectedSkillIsolationProved") is not False
+        or model.get("formalWeakAgentArmExecuted") is not False
+        or model.get("primaryWeakAcceptanceCandidate")
+        != "gpt-5.3-codex-spark-low"
+        or model.get("strongModelMayReplaceWeakAcceptance") is not False
+    ):
+        raise RuntimeError("Codex CLI weak-model judgment overclaimed acceptance.")
+
+    mcp = document.get("mcpStartupObservation", {})
+    if (
+        not isinstance(mcp, dict)
+        or mcp.get("visibleWarningLines") != 2
+        or mcp.get("visibleLogicalFailureCount") != 1
+        or mcp.get("visibleFailedServer") != "sites-design-picker"
+        or mcp.get("staticCodexMcpListContainsSitesDesignPicker") is not False
+        or mcp.get("classification")
+        != "plugin-or-runtime-injected-not-static-user-mcp-row"
+        or mcp.get("separateBackgroundTransportFailureObserved") is not True
+        or mcp.get("separateBackgroundTransportSurface")
+        != "remote-plugin-service-mcp"
+        or mcp.get("twoDistinctFailureSurfacesObserved") is not True
+    ):
+        raise RuntimeError("Codex CLI MCP startup classification drifted.")
+
+    sites = document.get("sitesPluginCacheObservation", {})
+    if (
+        not isinstance(sites, dict)
+        or sites.get("currentManifestVersion") != "0.1.31"
+        or sites.get("currentManifestDeclaresMcp") is not False
+        or sites.get("currentLocalMcpServerFilePresent") is not False
+        or sites.get("emptyPriorVersionDirectoryPresent") != "0.1.30"
+        or sites.get("historicalSuccessfulServiceInitializationObserved")
+        is not True
+        or sites.get("sameProcessAsCurrentCliFailure") is not False
+    ):
+        raise RuntimeError("Codex CLI Sites Plugin cache boundary drifted.")
+
+    judgment = document.get("mcpJudgment", {})
+    if (
+        not isinstance(judgment, dict)
+        or judgment.get("rootCauseProved") is not False
+        or judgment.get("versionTransitionIsHypothesisOnly") is not True
+        or judgment.get("remoteTransportTimingIsHypothesisOnly") is not True
+        or judgment.get("staticMcpDisableWouldBeEvidenceBasedFix") is not False
+        or judgment.get("persistentFailureAcrossCleanRestartsProved") is not False
+        or judgment.get("dynamicMcpLifecycleControlProved") is not False
+    ):
+        raise RuntimeError("Codex CLI MCP judgment overclaimed root cause.")
+
+    sensitive = document.get("sensitiveEvidenceBoundary", {})
+    if (
+        not isinstance(sensitive, dict)
+        or sensitive.get("rawDebugLogsMayContainAuthorizationMaterial") is not True
+        or sensitive.get("rawDebugLogCopiedIntoRepository") is not False
+        or sensitive.get("authorizationValueRecorded") is not False
+        or sensitive.get("futureQueriesMustBeSanitized") is not True
+        or sensitive.get("credentialRotationPerformed") is not False
+        or sensitive.get("logDeletionPerformed") is not False
+    ):
+        raise RuntimeError("Codex CLI diagnostic sensitive-evidence boundary drifted.")
+
+    mutation = document.get("mutationBoundary", {})
+    if (
+        not isinstance(mutation, dict)
+        or any(value is not False for value in mutation.values())
+    ):
+        raise RuntimeError("Codex CLI route/MCP diagnostic overclaimed mutation.")
+
+    boundary = document.get("claimBoundary", {})
+    if (
+        not isinstance(boundary, dict)
+        or any(value is not False for value in boundary.values())
+    ):
+        raise RuntimeError("Codex CLI route/MCP claim boundary drifted.")
+
+    text = " ".join(
+        (
+            ROOT
+            / "docs/codex-cli-model-route-and-mcp-startup-diagnostic-2026-07-24.md"
+        )
+        .read_text(encoding="utf-8")
+        .split()
+    )
+    for phrase in (
+        "`gpt-5.3-codex-spark/low` and `gpt-5.4-mini/low` both returned",
+        "create a formal weak-Agent result",
+        "Spark exceeded the two-percent Skills context budget",
+        "two yellow lines for one visible failed server",
+        "second, distinct failure surface",
+        "absent from `codex mcp list`",
+        "plausible hypotheses, not causes",
+        "Raw log bodies are not repository evidence",
+        "task-scoped Skill exposure",
+        "do not present a static MCP config edit as a verified fix",
+    ):
+        if phrase not in text:
+            raise RuntimeError(
+                f"Codex CLI route/MCP documentation missing phrase: {phrase}"
+            )
+
+
+def validate_codex_app_server_task_scoped_skill_exposure_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "codex-app-server-task-scoped-skill-exposure-v1",
+        "status": "pass-current-host-task-scoped-exposure",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Codex app-server Skill exposure evidence {key} drifted."
+            )
+    digest = document.get("reportSha256")
+    body = {
+        key: value
+        for key, value in document.items()
+        if key != "reportSha256"
+    }
+    if (
+        not isinstance(digest, str)
+        or len(digest) != 64
+        or digest != canonical_skill_exposure_sha256(body)
+    ):
+        raise RuntimeError(
+            "Codex app-server Skill exposure evidence digest drifted."
+        )
+    failures = validate_codex_skill_exposure_probe_report(document)
+    if failures:
+        raise RuntimeError(
+            "Codex app-server Skill exposure evidence failed: "
+            + ", ".join(failures)
+        )
+
+    control = document.get("controlInventory", {})
+    disabled = document.get("disabledInventory", {})
+    if (
+        not isinstance(control, dict)
+        or not isinstance(disabled, dict)
+        or control.get("skillCount") != 111
+        or control.get("countsByScope") != {"system": 6, "user": 105}
+        or control.get("enabledCountsByScope")
+        != {"system": 6, "user": 105}
+        or disabled.get("skillCount") != 111
+        or disabled.get("countsByScope") != {"system": 6, "user": 105}
+        or disabled.get("enabledCountsByScope")
+        != {"system": 6, "user": 0}
+        or control.get("identityManifestSha256")
+        != disabled.get("identityManifestSha256")
+    ):
+        raise RuntimeError(
+            "Codex app-server Skill exposure inventory drifted."
+        )
+
+    comparison = document.get("exposureComparison", {})
+    if comparison != {
+        "allControlUserSkillsEnabled": True,
+        "allDisabledUserSkillsDisabled": True,
+        "allNonUserStatesPreserved": True,
+        "nonUserSkillCount": 6,
+        "sameIdentitySet": True,
+        "userSkillCount": 105,
+        "userStateTransitionCount": 105,
+    }:
+        raise RuntimeError(
+            "Codex app-server Skill exposure comparison drifted."
+        )
+
+    control_rows = document.get("selfAuthoredControlRows")
+    disabled_rows = document.get("selfAuthoredDisabledRows")
+    if (
+        not isinstance(control_rows, list)
+        or not isinstance(disabled_rows, list)
+        or len(control_rows) != 6
+        or len(disabled_rows) != 6
+        or {
+            (row.get("name"), row.get("path"), row.get("scope"))
+            for row in control_rows
+            if isinstance(row, dict)
+        }
+        != {
+            (row.get("name"), row.get("path"), row.get("scope"))
+            for row in disabled_rows
+            if isinstance(row, dict)
+        }
+        or {
+            row.get("name")
+            for row in control_rows
+            if isinstance(row, dict)
+        }
+        != {"intent-contract", "capability-router", "closure-contract"}
+        or any(
+            not isinstance(row, dict) or row.get("enabled") is not True
+            for row in control_rows
+        )
+        or any(
+            not isinstance(row, dict) or row.get("enabled") is not False
+            for row in disabled_rows
+        )
+    ):
+        raise RuntimeError(
+            "Codex app-server self-authored Skill rows drifted."
+        )
+
+    marker = document.get("markerTurn", {})
+    if (
+        not isinstance(marker, dict)
+        or marker.get("status") != "completed"
+        or marker.get("exactMarkerMatch") is not True
+        or marker.get("agentMessageCount") != 1
+        or marker.get("itemTypes")
+        != ["userMessage", "reasoning", "agentMessage"]
+        or marker.get("itemCompletedNotificationTypes")
+        != ["userMessage", "reasoning", "agentMessage"]
+        or marker.get("itemsView") != "eventStreamCompletedItems"
+        or marker.get("forbiddenItemTypesObserved") != []
+        or not isinstance(marker.get("durationMilliseconds"), int)
+        or marker.get("durationMilliseconds") <= 0
+    ):
+        raise RuntimeError(
+            "Codex app-server marker-turn evidence drifted."
+        )
+
+    source = document.get("turnEvidenceSource", {})
+    if source != {
+        "itemCompletedNotificationsUsed": True,
+        "reason": (
+            "ephemeral threads reject thread/read(includeTurns=true) "
+            "with JSON-RPC -32600"
+        ),
+        "threadIsEphemeral": True,
+        "threadReadIncludeTurnsAttempted": False,
+        "turnCompletedMayHaveEmptyItems": True,
+    }:
+        raise RuntimeError(
+            "Codex app-server turn evidence-source boundary drifted."
+        )
+
+    process = document.get("processBoundary", {})
+    if (
+        not isinstance(process, dict)
+        or process.get("controlProcessReturnCode") != 0
+        or process.get("disabledProcessReturnCode") != 0
+        or process.get("disableOverrideEntryCount") != 105
+        or not isinstance(
+            process.get("disabledCommandLineCharacterCount"), int
+        )
+        or process.get("disabledCommandLineCharacterCount") <= 0
+        or process.get("globalConfigWritten") is not False
+        or process.get("applicationRestarted") is not False
+        or process.get("capabilityInstalled") is not False
+        or process.get("mcpToolInvoked") is not False
+        or process.get("pluginFeaturesDisabled")
+        != ["plugins", "remote_plugin", "apps", "plugin_sharing"]
+        or process.get("staticMcpServersDisabled")
+        != [
+            "codegraph",
+            "context7",
+            "neo4j-graph",
+            "node_repl",
+            "playwright",
+            "github",
+        ]
+    ):
+        raise RuntimeError(
+            "Codex app-server Skill exposure process boundary drifted."
+        )
+
+    stderr = document.get("stderrClassification", {})
+    if (
+        not isinstance(stderr, dict)
+        or set(stderr) != {"control", "disabled"}
+        or any(
+            not isinstance(row, dict)
+            or row.get("rawStderrRecorded") is not False
+            or row.get("skillBudgetWarningCount") != 0
+            or row.get("mcpStartupFailureCount") != 0
+            for row in stderr.values()
+        )
+    ):
+        raise RuntimeError(
+            "Codex app-server Skill exposure stderr boundary drifted."
+        )
+
+    mutation = document.get("mutationBoundary", {})
+    if (
+        not isinstance(mutation, dict)
+        or mutation.get("configPrePostStable") is not True
+        or mutation.get("repositoryStatusPrePostStable") is not True
+        or mutation.get("configBefore") != mutation.get("configAfter")
+        or mutation.get("repositoryStatusBefore")
+        != mutation.get("repositoryStatusAfter")
+        or mutation.get("rawConfigRecorded") is not False
+        or mutation.get("rawRepositoryStatusRecorded") is not False
+    ):
+        raise RuntimeError(
+            "Codex app-server Skill exposure mutation boundary drifted."
+        )
+
+    if document.get("validationFailures") != []:
+        raise RuntimeError(
+            "Codex app-server Skill exposure recorded failures drifted."
+        )
+    expected_claims = {
+        "provesAutomaticThreadCreation": False,
+        "provesCrossHostPortability": False,
+        "provesCurrentHostExactWeakModelAndEffort": True,
+        "provesCurrentHostOneOffUserSkillDisablement": True,
+        "provesDynamicMcpLifecycle": False,
+        "provesFiveArmAblationOutcome": False,
+        "provesGlobalConfigTransaction": False,
+        "provesMarkerOnlyTurnWithoutForbiddenActions": True,
+        "provesMattOrSuperpowersBehavior": False,
+        "provesProductionReadiness": False,
+    }
+    if document.get("claimBoundary") != expected_claims:
+        raise RuntimeError(
+            "Codex app-server Skill exposure claim boundary drifted."
+        )
+
+    probe = (
+        ROOT / "scripts/probe_codex_app_server_skill_exposure.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "skills.config=[",
+        "item/completed",
+        "ephemeral threads reject",
+        "FORBIDDEN_ITEM_TYPES",
+        "configPrePostStable",
+        "repositoryStatusPrePostStable",
+    ):
+        if phrase not in probe:
+            raise RuntimeError(
+                f"Codex app-server Skill exposure probe missing: {phrase}"
+            )
+
+    evidence_doc = (
+        ROOT
+        / "docs/codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "105 user Skills became",
+        "all 6 system Skills stayed enabled",
+        "`gpt-5.3-codex-spark`",
+        "`item/completed` notifications",
+        "does not prove",
+        "selected-Skill exposure preflight",
+    ):
+        if phrase not in evidence_doc:
+            raise RuntimeError(
+                f"Codex app-server Skill exposure doc missing: {phrase}"
+            )
+
+    evidence_link = (
+        "codex-app-server-task-scoped-skill-exposure-evidence-2026-07-24.md"
+    )
+    for path in (
+        ROOT / "docs/operations/CONTINUATION.md",
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+        ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+    ):
+        if evidence_link not in path.read_text(encoding="utf-8"):
+            raise RuntimeError(
+                f"Codex app-server Skill exposure link missing from {path.name}."
+            )
+
+
+def validate_codex_app_server_selected_skill_exposure_evidence(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "id": "codex-app-server-selected-skill-exposure-v1",
+        "status": "pass-current-host-selected-skill-exposure-only",
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"Codex selected Skill exposure evidence {key} drifted."
+            )
+    digest = document.get("reportSha256")
+    if (
+        not isinstance(digest, str)
+        or digest
+        != canonical_skill_exposure_sha256(
+            {
+                key: value
+                for key, value in document.items()
+                if key != "reportSha256"
+            }
+        )
+    ):
+        raise RuntimeError("Codex selected Skill exposure digest drifted.")
+    failures = validate_codex_selected_skill_exposure_report(document)
+    if failures:
+        raise RuntimeError(
+            "Codex selected Skill exposure evidence failed: "
+            + ", ".join(failures)
+        )
+
+    control = document.get("controlInventory", {})
+    selected_inventory = document.get("selectedInventory", {})
+    if (
+        not isinstance(control, dict)
+        or not isinstance(selected_inventory, dict)
+        or control.get("skillCount") != 111
+        or selected_inventory.get("skillCount") != 111
+        or control.get("enabledCountsByScope")
+        != {"system": 6, "user": 105}
+        or selected_inventory.get("enabledCountsByScope")
+        != {"system": 6, "user": 1}
+        or control.get("identityManifestSha256")
+        != selected_inventory.get("identityManifestSha256")
+    ):
+        raise RuntimeError("Codex selected Skill inventory drifted.")
+
+    comparison = document.get("exposureComparison")
+    if comparison != {
+        "allNonUserStatesPreserved": True,
+        "allOtherUserSkillsDisabled": True,
+        "controlUserSkillCount": 105,
+        "onlySelectedUserSkillEnabled": True,
+        "sameIdentitySet": True,
+        "selectedEnabledUserSkillCount": 1,
+    }:
+        raise RuntimeError("Codex selected Skill comparison drifted.")
+
+    selected = document.get("selectedSkill", {})
+    selected_digest = (
+        "c9df326c4ab635765ea884471d21f4e21d5b0ec85aec43a06c238307841eb4bc"
+    )
+    if (
+        not isinstance(selected, dict)
+        or selected.get("name") != "grill-me"
+        or selected.get("path")
+        != "C:/Users/15521/.cc-switch/skills/grill-me/SKILL.md"
+        or selected.get("scope") != "user"
+        or selected.get("enabled") is not True
+        or selected.get("bytes") != 645
+        or selected.get("sha256") != selected_digest
+        or selected.get("expectedSha256") != selected_digest
+        or selected.get("prePostStable") is not True
+        or selected.get("triggerModeFromPriorStaticReview")
+        != "user-explicit"
+        or selected.get("triggerBoundaryFromPriorStaticReview")
+        != "post-front-gate-deep-questioning"
+    ):
+        raise RuntimeError("Codex selected Skill identity drifted.")
+
+    process = document.get("processBoundary", {})
+    if (
+        not isinstance(process, dict)
+        or process.get("overrideEntryCount") != 105
+        or process.get("selectedEnabledEntryCount") != 1
+        or process.get("turnStarted") is not False
+        or process.get("modelRequestSent") is not False
+        or process.get("globalConfigWritten") is not False
+        or process.get("applicationRestarted") is not False
+        or process.get("capabilityInstalled") is not False
+        or process.get("mcpToolInvoked") is not False
+        or process.get("controlProcessReturnCode") != 0
+        or process.get("selectedProcessReturnCode") != 0
+    ):
+        raise RuntimeError("Codex selected Skill process boundary drifted.")
+
+    mutation = document.get("mutationBoundary", {})
+    if (
+        not isinstance(mutation, dict)
+        or mutation.get("configPrePostStable") is not True
+        or mutation.get("repositoryStatusPrePostStable") is not True
+        or mutation.get("configBefore") != mutation.get("configAfter")
+        or mutation.get("repositoryStatusBefore")
+        != mutation.get("repositoryStatusAfter")
+        or mutation.get("rawConfigRecorded") is not False
+        or mutation.get("rawRepositoryStatusRecorded") is not False
+        or mutation.get("rawSkillContentRecorded") is not False
+    ):
+        raise RuntimeError("Codex selected Skill mutation boundary drifted.")
+
+    expected_claims = {
+        "provesCrossHostPortability": False,
+        "provesCurrentHostSingleSelectedSkillExposure": True,
+        "provesExactWeakModelThreadConfiguration": True,
+        "provesFiveArmAblationOutcome": False,
+        "provesProductionReadiness": False,
+        "provesSkillBehavior": False,
+        "provesSkillInstructionsReachedModel": False,
+        "provesSkillLoaderInvocation": False,
+        "provesSkillNetValueOrSuperiority": False,
+    }
+    if (
+        document.get("claimBoundary") != expected_claims
+        or document.get("validationFailures") != []
+    ):
+        raise RuntimeError("Codex selected Skill claim boundary drifted.")
+
+    probe = (
+        ROOT / "scripts/probe_codex_app_server_selected_skill_exposure.py"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "build_skill_config_override",
+        "turnStarted",
+        "modelRequestSent",
+        "provesSkillLoaderInvocation",
+        "EXPECTED_SELECTED_SHA256",
+    ):
+        if phrase not in probe:
+            raise RuntimeError(
+                f"Codex selected Skill probe missing boundary: {phrase}"
+            )
+
+    doc = (
+        ROOT
+        / "docs/codex-app-server-selected-skill-exposure-evidence-2026-07-24.md"
+    ).read_text(encoding="utf-8")
+    for phrase in (
+        "exactly 1 enabled user Skill",
+        "all other 104",
+        "No `turn/start`",
+        "does not prove",
+        "loader invocation",
+        "explicit invocation trial",
+    ):
+        if phrase not in doc:
+            raise RuntimeError(
+                f"Codex selected Skill documentation missing: {phrase}"
+            )
+
+    link = "codex-app-server-selected-skill-exposure-evidence-2026-07-24.md"
+    for path in (
+        ROOT / "docs/operations/CONTINUATION.md",
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+        ROOT / "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+    ):
+        if link not in path.read_text(encoding="utf-8"):
+            raise RuntimeError(
+                f"Codex selected Skill link missing from {path.name}."
+            )
 
 
 def main() -> int:

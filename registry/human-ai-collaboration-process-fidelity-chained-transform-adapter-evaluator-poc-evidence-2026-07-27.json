@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-process-fidelity-chained-transform-adapter-evaluator-poc-evidence-2026-07-27",
+  "date": "2026-07-27",
+  "status": "zero-agent-zero-dispatch-sequential-artifact-adapter-and-trace-evaluator-poc-passed-live-not-tested",
+  "bindings": {
+    "protocolAmendment": {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+      "fileSha256": "D80760463251971B80E1FD992F06B550551F96CC81FF6C5AB5E79153B7F180E5"
+    },
+    "rawCaptureSchema": {
+      "path": "schemas/process-fidelity-chained-transform-raw-sequence-capture-v1.schema.json",
+      "fileSha256": "CB80A7848073C634C1C240021B85574F15694D630034BC76D4412B9B7DE2DE40"
+    },
+    "formalTraceSchema": {
+      "path": "schemas/process-fidelity-chained-transform-trace-v2.schema.json",
+      "fileSha256": "8AC9BDBCC62B179799C5F31E7D1EB4545CC9F1D1A747A773FCA4777489CC50D3"
+    },
+    "sequentialArtifactAdapter": {
+      "path": "scripts/run_process_fidelity_chained_transform_trial.py",
+      "fileSha256": "59543F28A73CD7A831997209D9D2D5A223A5413A3698CBF0B44263C6EE44DDD0"
+    },
+    "traceEvaluator": {
+      "path": "scripts/evaluate_process_fidelity_chained_transform_trace.py",
+      "fileSha256": "793BA34148486D57042A09AE357B5F2282D5BE7F4F4C9844B4AC4C3D5C92B999"
+    },
+    "pocBuilder": {
+      "path": "scripts/build_process_fidelity_chained_transform_adapter_evaluator_poc.py",
+      "fileSha256": "25AC851922183F31B14DB3FB244A6AE685AB0370AF87B2AC1862052D947A325A"
+    },
+    "faultFixtureCorpus": {
+      "path": "tests/fixtures/process-fidelity-chained-transform-sequential-adapter-faults-2026-07-27.json",
+      "fileSha256": "0BA460240FFB71DB34DF8C78DCD202A4C443C78562B046AE591F9E6CF73CC39A"
+    }
+  },
+  "auditEvidence": {
+    "root": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27",
+    "manifestPath": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/MANIFEST.json",
+    "manifestFileSha256": "675FB0F543874587D56526A62BCE4ABB7C969B68843E6E4F198B0434510B46EE",
+    "reportPath": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/POC-REPORT.json",
+    "reportFileSha256": "FBDEC6D7329EE8C6801D62D413B7D4F564ABFA624F8C61C5FD9E66D4E3F080B9",
+    "repositoryLocalNonTemporaryDestinationBound": true,
+    "gitOrRemoteDurabilityProved": false,
+    "cleanupDisposition": "retain-authoritative-mechanism-evidence"
+  },
+  "results": {
+    "validCaseCount": 2,
+    "validCaseOutcomeMatchCount": 2,
+    "registeredFaultCaseCount": 6,
+    "registeredFaultClassificationMatchCount": 6,
+    "conditionalRecoverySourceExposureProved": true,
+    "controlSourcePayloadStayedSealed": true,
+    "invalidDetectionStoppedBeforeHop3": true,
+    "callerSuppliedMetricsIgnored": true,
+    "absoluteAndProcessLedgersSeparated": true
+  },
+  "execution": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "liveDispatchAuthorized": false,
+    "externalAccessUsed": false,
+    "hostConfigurationChanged": false,
+    "globalSkillStateChanged": false
+  },
+  "decision": {
+    "sequentialArtifactAdapterMechanismPassed": true,
+    "parentRecomputedTraceEvaluatorMechanismPassed": true,
+    "faultClassifierPassed": true,
+    "nonTemporaryRawEvidenceDestinationBound": true,
+    "liveDispatchReady": false,
+    "formalProcessCohortCount": 0,
+    "endToEndProcessFidelityAssessment": "partial",
+    "nextBoundedResult": "add a separately authorized live-dispatch authority envelope and per-hop native route receipts, then start any formal weak-Agent cohort from zero without treating this calibration as a repetition"
+  },
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "actualWeakModelRouteObserved": false,
+    "formalCohortStarted": false,
+    "weakAgentAcceptancePassed": false,
+    "endToEndProcessFidelityAccepted": false,
+    "candidateSkillEffectMeasured": false,
+    "deliveryTopologyCompared": false,
+    "crossHostPortabilityProved": false,
+    "selfAuthoredResidualGapProved": false
+  },
+  "claimLimit": "This evidence proves a repository-local zero-model sequential artifact adapter, conditional source-unsealing recovery gate, parent-recomputed trace evaluator, two valid scripted mechanism cases, and six registered fail-closed fault classes. It does not prove live Agent behavior, an observed Spark route, a formal cohort result, cross-host portability, candidate Skill value, end-to-end process fidelity, or a residual gap requiring self-authored runtime control.",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-ADAPTER-EVALUATOR-POC-EVIDENCE-2026-07-27.md"
+}

@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-stage-output",
+  "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O1",
+  "stageId": "SE-TS-01-requirements-domain",
+  "sections": {
+    "goalAndNonGoals": {
+      "status": "synthetic-calibration-present"
+    },
+    "domainTerms": {
+      "status": "synthetic-calibration-present"
+    },
+    "requirements": {
+      "status": "synthetic-calibration-present"
+    },
+    "acceptanceExamples": {
+      "status": "synthetic-calibration-present"
+    },
+    "constraints": {
+      "status": "synthetic-calibration-present"
+    },
+    "unknowns": {
+      "status": "synthetic-calibration-present"
+    },
+    "blockingDecision": {
+      "status": "synthetic-calibration-present"
+    },
+    "provenance": {
+      "status": "synthetic-calibration-present"
+    },
+    "nextGate": {
+      "status": "synthetic-calibration-present"
+    }
+  },
+  "acceptedInvariantIdsObserved": [
+    "inv.source-goal",
+    "inv.no-live-side-effects"
+  ],
+  "semanticAssertions": {
+    "sourceBound": true,
+    "authorityPromotedByAgent": false,
+    "materialUnknownsResolvedOrBlocked": true
+  },
+  "domainSuboracleBindings": [],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": []
+}

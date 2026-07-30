@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-six-specialist-static-triage-2026-07-30",
+  "date": "2026-07-30",
+  "observedAt": "2026-07-30T19:22:28+08:00",
+  "status": "read-only-static-triage-five-removal-preview-candidates-one-retain",
+  "predecessor": "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
+  "purpose": "Resolve the six task-bound specialist rows by current provenance, source freshness, carrier fit, dependencies, live exposure, overlap, and recoverability without treating installation as value evidence.",
+  "repositoryPosture": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "originMain": "55659f30091990f7c589932e0379880de30dc403",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeIntentionallyLargeAndDirty": true,
+    "inheritedChangesPreserved": true
+  },
+  "authorityBoundary": {
+    "readLiveCcDatabase": true,
+    "readInstalledSkillBodiesAndTrees": true,
+    "readPublicPrimarySourcesAndPackageMetadata": true,
+    "readCurrentCapabilityInventory": true,
+    "sourceBodyExecution": false,
+    "dependencyInstall": false,
+    "skillInstallUpdateDisableOrDelete": false,
+    "ccSwitchMutation": false,
+    "globalConfigHookRulesOrForeignRootMutation": false,
+    "modelDispatch": false,
+    "gitCommitOrPush": false
+  },
+  "liveState": {
+    "manager": "CC Switch 3.18.0",
+    "databaseRows": 55,
+    "targetRows": 6,
+    "targetRowsWithSourceMetadata": 0,
+    "allTargetsClaudeEnabled": true,
+    "allTargetsCodexEnabled": true,
+    "allTargetsOtherRecordedHostsDisabled": true,
+    "currentCodexExposureEvidence": "registry/skill-portfolio-current-55-subtractive-triage-2026-07-30.json",
+    "currentCodexPluginEnabledSkillCount": 76,
+    "allSixCurrentlyCodexExposed": true,
+    "noNewModelRequestSent": true
+  },
+  "primarySourceRefresh": {
+    "openaiSkills": {
+      "repository": "https://github.com/openai/skills",
+      "mainRevision": "49f948faa9258a0c61caceaf225e179651397431",
+      "playwrightWholeTreeFileCount": 9,
+      "playwrightWholeTreeMatchesCurrentUpstreamAfterLfNormalization": true,
+      "securityOwnershipMapWholeTreeFileCount": 8,
+      "securityOwnershipMapWholeTreeMatchesCurrentUpstreamAfterLfNormalization": true
+    },
+    "mattpocockSkills": {
+      "repository": "https://github.com/mattpocock/skills",
+      "mainRevision": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+      "migrateToShoehornLifecycle": "misc-non-promoted",
+      "migrateToShoehornLiveTreeMatchesCurrentUpstream": false,
+      "obsidianVaultLifecycle": "personal-non-promoted",
+      "obsidianVaultLiveTreeMatchesCurrentUpstream": false,
+      "disciplinedCodingExistsInCurrentTree": false
+    },
+    "kepanoObsidianSkills": {
+      "repository": "https://github.com/kepano/obsidian-skills",
+      "mainRevision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "installedAdaptationDeclaredSourceRevision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "declaredSourceRevisionIsCurrentMain": true
+    },
+    "packageMetadata": {
+      "shoehorn": {
+        "package": "@total-typescript/shoehorn",
+        "version": "0.1.2",
+        "license": "MIT",
+        "modified": "2024-02-26T15:26:41.136Z",
+        "repository": "https://github.com/total-typescript/shoehorn"
+      },
+      "playwrightCli": {
+        "package": "@playwright/cli",
+        "version": "0.1.17",
+        "license": "Apache-2.0",
+        "modified": "2026-07-09T19:11:13.933Z",
+        "repository": "https://github.com/microsoft/playwright-cli"
+      }
+    }
+  },
+  "items": [
+    {
+      "name": "disciplined-coding",
+      "fileCount": 2,
+      "bytes": 6075,
+      "skillSha256": "d36f49ed0d252b9c9c656bc9c0f72d43710c68591ce234e8dc2886dc4785fc7b",
+      "treeManifestSha256": "676963eb47fbf430385b160c684c622babe4c46cfa0ede817fb306c975fec3d1",
+      "ccContentHash": "1012342b737b591ea7b924d03a4fe466164ed31bcbec154f31eece197c2ff758",
+      "sourceClass": "local-unattributed-karpathy-style-derivative",
+      "sourceAuthorityBound": false,
+      "currentUpstreamExact": false,
+      "runtimeDependencies": [],
+      "overlap": [
+        "native task reasoning and verification",
+        "active intake, scope, preservation, and closeout guidance",
+        "Matt implementation and review Skills"
+      ],
+      "behaviorEvidence": "Historical Spark/low pairs passed the functional oracle in both arms; native passed the recorded strict process 3/3 versus candidate 2/3, with one candidate transient out-of-scope write. Loader delivery and causation were not proved.",
+      "disposition": "remove-active-copy-after-manager-preview",
+      "reason": "No current source authority is bound, the prior Matt-family label is not supported by the current Matt tree, and bounded evidence does not prove incremental value over the active native/rules baseline."
+    },
+    {
+      "name": "migrate-to-shoehorn",
+      "fileCount": 1,
+      "bytes": 3377,
+      "skillSha256": "1d5d79ae3f21220553da1f9fd438799f27f6fcb5b16c61c87ceee4aa2d3f4d61",
+      "treeManifestSha256": "3a7b38f0d4d530ceea6625d478a5931b7398af6a56a2caee62be1b8e63a0f1af",
+      "ccContentHash": "a990a79a6a5d1123f66b4e44ebbd7c2e34fc517454bc06a4aaa7fd6feaa38be0",
+      "sourceClass": "repository-approved-matt-derived-specialist",
+      "sourceAuthorityBound": true,
+      "repositoryApprovedPayloadByteEqual": true,
+      "currentUpstreamExact": false,
+      "runtimeDependencies": [
+        "@total-typescript/shoehorn"
+      ],
+      "overlap": [
+        "native TypeScript refactoring and test editing",
+        "general dependency-aware implementation workflows"
+      ],
+      "behaviorEvidence": "No current task-bound behavioral value trial exists.",
+      "disposition": "remove-active-copy-retain-approved-on-demand-payload-after-manager-preview",
+      "reason": "The approved payload remains recoverable in the repository, but the active Skill is a very narrow test-only migration that introduces a package dependency and has no current bound demand."
+    },
+    {
+      "name": "obsidian-open-format-knowledge-files",
+      "fileCount": 1,
+      "bytes": 4394,
+      "skillSha256": "de8884f63cb9809531999d0f3cdc2fabbbe5a8963717e0fe0ea8a3ce3db4d75b",
+      "treeManifestSha256": "59f8b9a754f2e9a0a17027303d93d288233b4886e955b30f26e186b6a0dd6e9a",
+      "ccContentHash": "82fccd9fc450c89b316f81deaf9469d84e70c5ad984c0fd29dbb6ecfbd4c4cf9",
+      "sourceClass": "repository-approved-cross-agent-adaptation",
+      "sourceAuthorityBound": true,
+      "repositoryApprovedPayloadByteEqual": true,
+      "declaredSourceRevisionCurrent": true,
+      "runtimeDependencies": [],
+      "overlap": [
+        "generic Markdown, JSON, and YAML editing"
+      ],
+      "distinctIncrement": "Portable Obsidian Markdown, JSON Canvas, and Bases format constraints without app, CLI, plugin, or vault control assumptions.",
+      "behaviorEvidence": "Static format and boundary review exists; rendered Obsidian behavior is not claimed.",
+      "disposition": "retain-active",
+      "reason": "It is source-bound, byte-equal to the approved agent-neutral payload, dependency-free, portable, and explicitly separates file-format work from host or vault control."
+    },
+    {
+      "name": "obsidian-vault",
+      "fileCount": 1,
+      "bytes": 1932,
+      "skillSha256": "6514fee386f8eb976330bba81b682cf7e9a26c801deab48b68c4fe6cb6123a8e",
+      "treeManifestSha256": "679a6523005bbfc3f692fa7ecaac56851767debe73944abce594285ed0240777",
+      "ccContentHash": "50115ea7abb1bdaadcfa37bf58c979421d50979bace9d456506298499fdb68aa",
+      "sourceClass": "local-adaptation-of-matt-personal-skill",
+      "sourceAuthorityBound": false,
+      "currentUpstreamExact": false,
+      "repoVaultPathFilePresent": false,
+      "vaultPathEnvironmentPresent": false,
+      "runtimeDependencies": [
+        "an explicitly bound local Obsidian vault"
+      ],
+      "overlap": [
+        "obsidian-open-format-knowledge-files",
+        "native filesystem search and editing"
+      ],
+      "behaviorEvidence": "No configured vault or task-bound value trial exists.",
+      "disposition": "remove-active-copy-after-manager-preview",
+      "reason": "The source is a personal non-promoted Skill, the live body is an unattributed local derivative, it assumes one flat-vault convention, and no vault is configured in the current repository or environment."
+    },
+    {
+      "name": "playwright",
+      "fileCount": 9,
+      "bytes": 23256,
+      "skillSha256": "c52cc95125b720cdc3c9829b0294c2752d4ae9b85a5282aa153da8bba929af87",
+      "treeManifestSha256": "fccec4848fefddaaf59d302e11f01e0a732803077651f38a0320029f543b5aa6",
+      "ccContentHash": "aa5e6b5b87195ce2ae412812938f09c85fc8b9528dee445bca5cb783cf5c59fb",
+      "sourceClass": "openai-official-current-exact-copy",
+      "sourceAuthorityBound": true,
+      "currentUpstreamExactAfterLfNormalization": true,
+      "npxPresent": true,
+      "playwrightCliGloballyInstalled": false,
+      "runtimeDependencies": [
+        "npx",
+        "dynamic @playwright/cli package acquisition when the wrapper runs"
+      ],
+      "currentHostAlternatives": [
+        "installed browser control Plugin",
+        "installed Chrome control Plugin",
+        "live Playwright MCP tools"
+      ],
+      "behaviorEvidence": "Current capability inventory proves alternative exposure, not comparative behavioral value.",
+      "disposition": "remove-shared-vendored-copy-retain-official-runtime-metadata-after-manager-preview",
+      "reason": "The body is official and current, but the shared CC copy is a Codex-home-coupled vendored carrier and duplicates live runtime-owned browser control surfaces."
+    },
+    {
+      "name": "security-ownership-map",
+      "fileCount": 8,
+      "bytes": 101180,
+      "skillSha256": "f855af8ef91e173adf931c82b0fe21931d5e32b661eeb3d95fed18df46c0ef6e",
+      "treeManifestSha256": "3b12e417b1ff0521c6e6146eb5c51c901fff344d59b4e01dde9d2e3651796847",
+      "ccContentHash": "397cf98983705e4473efd06a2c5440b210a4597b2d7a2e449dce80d9316cdb5d",
+      "sourceClass": "openai-official-current-exact-copy",
+      "sourceAuthorityBound": true,
+      "currentUpstreamExactAfterLfNormalization": true,
+      "networkxInstalledInCurrentPython": false,
+      "runtimeDependencies": [
+        "Python 3",
+        "networkx"
+      ],
+      "dataBoundary": "Reads repository Git history and emits people-to-file ownership and sensitive-code topology artifacts.",
+      "behaviorEvidence": "No dependency-complete current-host run or bound security-ownership task exists.",
+      "disposition": "remove-shared-vendored-copy-retain-official-metadata-for-task-bound-reacquisition-after-manager-preview",
+      "reason": "The exact official package is dormant without networkx, has a materially broader repository-history data boundary, and should be reacquired only for a bound ownership-risk task rather than permanently vendored."
+    }
+  ],
+  "decision": {
+    "retainActive": [
+      "obsidian-open-format-knowledge-files"
+    ],
+    "readyForManagerRemovalPreview": [
+      "disciplined-coding",
+      "migrate-to-shoehorn",
+      "obsidian-vault",
+      "playwright",
+      "security-ownership-map"
+    ],
+    "readyCount": 5,
+    "readyFileCount": 21,
+    "readyPayloadBytes": 135820,
+    "allFiveHaveNoObservedHardNamedDependencyFromRetainedSkillBodies": true,
+    "genericWordsAndToolMentionsWereNotTreatedAsSkillIdentityDependencies": true,
+    "removalMeansActiveCcCopyOnly": true,
+    "sourceAndApprovedPayloadMetadataRemain": true,
+    "directUninstallAuthorized": false
+  },
+  "nextGates": [
+    "build one exact CC Switch manager preview for the five-item cohort, including backup rotation after any preceding transaction, recovery hashes, projections, common-root links, and foreign-root sentinels",
+    "keep obsidian-open-format-knowledge-files byte-bound to the approved repository payload",
+    "do not update or reinstall migrate-to-shoehorn merely because current Matt differs",
+    "do not install networkx or execute repository-history analysis without a bound task and data boundary",
+    "request separate mutation authorization before any uninstall, host toggle, source relink, or global config change"
+  ],
+  "cleanup": {
+    "temporarySourceRootCreated": false,
+    "temporarySourceRootAbsent": true,
+    "noSourceBodyExecuted": true,
+    "noDependencyInstalled": true,
+    "repositoryCleanupInventoryStable": true
+  },
+  "claimBoundary": {
+    "currentStaticSourceAndDependencyTriageProved": true,
+    "currentManagerAndCodexExposureReusedFromDatedLiveEvidence": true,
+    "openFormatRetainDecisionSupported": true,
+    "fiveItemRemovalPreviewEligibilitySupported": true,
+    "fiveItemManagerRemovalAuthorized": false,
+    "behavioralValueProvedForAllSix": false,
+    "crossHostValueProvedForAllSix": false,
+    "programCloseoutProved": false
+  },
+  "documentation": "docs/strategy/SKILL-PORTFOLIO-SIX-SPECIALIST-STATIC-TRIAGE-2026-07-30.md"
+}

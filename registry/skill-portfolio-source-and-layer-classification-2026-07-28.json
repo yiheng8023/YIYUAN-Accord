@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-source-and-layer-classification-2026-07-28",
+  "date": "2026-07-28",
+  "status": "verified-read-only-single-host-classification-no-portfolio-mutation",
+  "purpose": "Classify Skill carriers without nesting active Skill directories, conflating CC Switch with runtime Plugin/App Skills, or treating source metadata as behavioral value.",
+  "standards": {
+    "agentSkillsSpecification": "https://agentskills.io/specification",
+    "clientImplementationGuide": "https://agentskills.io/client-implementation/adding-skills-support",
+    "skillUnit": "one-directory-with-SKILL.md",
+    "nameMustMatchParentDirectory": true,
+    "portablePhysicalSourceGroupingInsideActiveSkillRoot": false,
+    "reason": "Clients discover Skill directories at host-defined scopes and may scan direct child directories or bounded recursive depths; inserting a source-group parent is not a portable identity or discovery contract.",
+    "metadataMapAllowed": true,
+    "thirdPartyBodiesShouldBeRewrittenForClassification": false
+  },
+  "classificationDimensions": [
+    {
+      "id": "source-authority",
+      "values": [
+        "runtime-owned",
+        "official-vendor",
+        "reviewed-third-party",
+        "self-authored",
+        "local-unattributed",
+        "unknown"
+      ]
+    },
+    {
+      "id": "carrier",
+      "values": [
+        "system-skill",
+        "bundled-plugin",
+        "primary-runtime-plugin",
+        "curated-plugin-or-app",
+        "cc-switch-ssot",
+        "shared-agent-projection",
+        "client-projection",
+        "project-local"
+      ]
+    },
+    {
+      "id": "capability-layer",
+      "values": [
+        "semantic-control-plane",
+        "domain-workflow",
+        "host-adapter",
+        "evidence-and-verification",
+        "continuity-and-lifecycle"
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "values": [
+        "runtime-provided",
+        "installed-managed",
+        "cached-not-proved-active",
+        "candidate",
+        "test-only",
+        "inactive",
+        "archived"
+      ]
+    },
+    {
+      "id": "exposure-evidence",
+      "values": [
+        "disk-only",
+        "catalog-visible",
+        "startup-exposed",
+        "explicitly-loaded",
+        "behavior-associated",
+        "value-proved"
+      ]
+    }
+  ],
+  "currentHostObservation": {
+    "host": "windows-codex-desktop",
+    "codexVersion": "0.145.0",
+    "ccSwitchVersion": "3.18.0",
+    "ccSwitch": {
+      "skillsTableRows": 75,
+      "distinctSkillNames": 73,
+      "installedUiCounts": {
+        "claude": 75,
+        "codex": 75,
+        "gemini": 0,
+        "grokbuild": 0,
+        "opencode": 0,
+        "hermes": 0
+      },
+      "installedRowsByRecordedSource": {
+        "local-or-unattributed": 46,
+        "larksuite/cli": 27,
+        "ComposioHQ/awesome-claude-skills": 1,
+        "mattpocock/skills": 1
+      },
+      "registeredRepositories": [
+        "ComposioHQ/awesome-claude-skills@master",
+        "JimLiu/baoyu-skills@main",
+        "anthropics/skills@main",
+        "cexll/myclaude@master",
+        "larksuite/cli@HEAD",
+        "mattpocock/skills@main"
+      ],
+      "mattInstalledSkills": [
+        "handoff"
+      ],
+      "databaseSourceFields": [
+        "repo_owner",
+        "repo_name",
+        "repo_branch",
+        "readme_url"
+      ],
+      "databaseCategoryOrTagFields": [],
+      "installedUiShowsInlineSource": true,
+      "installedUiExposesCategoryOrTagFilter": false,
+      "directDatabaseMutationAllowed": false
+    },
+    "runtimeAndPluginCarriers": {
+      "systemSkillMdFiles": 6,
+      "pluginCacheSkillMdFiles": 328,
+      "pluginCacheBreakdown": {
+        "openai-bundled": 6,
+        "openai-primary-runtime": 6,
+        "openai-curated-remote": 259,
+        "other-cache-namespaces": 57
+      },
+      "cachePresenceProvesCurrentExposure": false,
+      "cachePresenceMakesCcSwitchTheAuthority": false,
+      "pluginOrAppSkillsAutomaticallyBelongToCcSwitch": false
+    },
+    "countReconciliation": {
+      "historical251IsCurrentInstalledCount": false,
+      "currentInstalledCount": 75,
+      "historical251MayRepresent": [
+        "older-database-snapshot",
+        "discoverable-candidate-view",
+        "runtime-or-plugin-metadata"
+      ],
+      "currentUiMeaningOf251Reobserved": false
+    }
+  },
+  "selfAuthoredControlPlane": [
+    {
+      "name": "intent-contract",
+      "sourceAuthority": "self-authored",
+      "capabilityLayer": "semantic-control-plane",
+      "role": "negative-boundary request intake",
+      "knownOverlap": [
+        "global source-binding and authority gates",
+        "native intent reasoning",
+        "bounded external elicitation workflows"
+      ],
+      "provenFullReplacement": null,
+      "currentDisposition": "provisional-retain-pending-isolated-value-comparison"
+    },
+    {
+      "name": "capability-router",
+      "sourceAuthority": "self-authored",
+      "capabilityLayer": "semantic-control-plane",
+      "role": "cross-Skill Plugin App MCP native-capability and authorization routing",
+      "knownOverlap": [
+        "global reuse order and authorization gates",
+        "native capability selection",
+        "narrow engineering or process bootstrap workflows"
+      ],
+      "provenFullReplacement": null,
+      "currentDisposition": "provisional-retain-no-known-full-suite-replacement-proved"
+    },
+    {
+      "name": "closure-contract",
+      "sourceAuthority": "self-authored",
+      "capabilityLayer": "semantic-control-plane",
+      "role": "cross-task claim-sufficient closeout",
+      "knownOverlap": [
+        "global status-mutation and closure gates",
+        "verification-before-completion workflows",
+        "narrow review and handoff workflows"
+      ],
+      "provenFullReplacement": null,
+      "currentDisposition": "provisional-retain-pending-isolated-value-comparison"
+    }
+  ],
+  "managementModel": {
+    "physicalSkillRootsStayFlat": true,
+    "ccSwitchRemainsManagerForSharedNonOfficialInstalledSkills": true,
+    "runtimeOwnedAndPluginAppSkillsRemainRuntimeOwned": true,
+    "classificationIsDerivedRegistryNotSecondPayloadStore": true,
+    "preferredGroupingKeys": [
+      "recorded upstream owner and repository",
+      "source authority",
+      "capability layer",
+      "lifecycle state",
+      "consumer exposure",
+      "exact payload digest"
+    ],
+    "futureCcSwitchEnhancementCandidates": [
+      "filter by owner/repository",
+      "filter by local versus source-backed",
+      "external read-only tags keyed by skill id and digest",
+      "separate installed, cached runtime, and discoverable candidate views"
+    ]
+  },
+  "currentDecisions": {
+    "retireSelfAuthoredControlPlaneNow": false,
+    "claimCapabilityRouterHasAProvenCompleteReplacement": false,
+    "restoreOrEnableHookByThisClassification": false,
+    "installOrUninstallSkillsByThisClassification": false,
+    "moveSkillsIntoNestedSourceDirectories": false,
+    "rewriteThirdPartySkillFrontmatterForLocalTags": false,
+    "changeCcSwitchDatabaseSchemaOrRows": false,
+    "treatAllCachedPluginSkillsAsActive": false,
+    "useDerivedClassificationBeforePortfolioMutation": true
+  },
+  "claimBoundary": [
+    "The classification distinguishes carrier, authority, capability layer, lifecycle, and exposure; it does not score Skill quality.",
+    "No finite survey proves that every public Skill has been found.",
+    "No currently reviewed Skill or suite is proved to replace capability-router one-for-one.",
+    "The current CC Switch installed view is not the complete Codex runtime Skill inventory.",
+    "This record does not authorize installation, uninstallation, Hook enablement, database mutation, commit, or push."
+  ],
+  "documentation": "docs/strategy/SKILL-PORTFOLIO-SOURCE-AND-LAYER-CLASSIFICATION-2026-07-28.md"
+}

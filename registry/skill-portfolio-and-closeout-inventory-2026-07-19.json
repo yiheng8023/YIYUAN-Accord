@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-and-closeout-inventory-2026-07-19",
+  "date": "2026-07-19",
+  "observedAt": "2026-07-19T03:24:22+08:00",
+  "status": "observed-single-host-read-only-with-deferred-final-closeout-ledger-seed",
+  "closeoutInventoryPhase": "deferred-total-control-plan-final-closeout-only",
+  "currentCleanupPhase": false,
+  "host": {
+    "platform": "windows",
+    "home": "C:/Users/15521",
+    "ccSwitchVersion": "3.17.0"
+  },
+  "reproducer": "python -B scripts/inventory_skill_portfolio.py",
+  "settings": {
+    "skillStorageLocation": "cc_switch",
+    "skillSyncMethod": "symlink",
+    "backupRetainCount": 3
+  },
+  "database": {
+    "rows": 251,
+    "distinctNames": 233,
+    "enabled": {"claude": 251, "codex": 250, "gemini": 0, "opencode": 0, "hermes": 0},
+    "duplicateNameGroups": {
+      "company-tearsheet": 2,
+      "comps-valuation": 2,
+      "dcf-model-builder": 2,
+      "financials-normalizer": 2,
+      "git-guardrails": 2,
+      "index": 3,
+      "meeting-prep": 2,
+      "memo-builder": 2,
+      "model-audit-tieout": 2,
+      "pdf": 2,
+      "prototype": 2,
+      "scenario-sensitivity-generator": 2,
+      "setup-project-skills": 2,
+      "three-statement-model-builder": 2,
+      "user-context": 4
+    },
+    "enabledRepositories": [
+      "ComposioHQ/awesome-claude-skills@master",
+      "JimLiu/baoyu-skills@main",
+      "anthropics/skills@main",
+      "cexll/myclaude@master",
+      "larksuite/cli@HEAD",
+      "mattpocock/skills@main"
+    ]
+  },
+  "roots": {
+    "ccSwitch": {"directories": 75, "physical": 75, "symlink": 0, "junction": 0, "resolvableSkillMd": 75},
+    "agents": {"directories": 73, "physical": 30, "symlink": 42, "junction": 1, "resolvableSkillMd": 73},
+    "claude": {"directories": 251, "physical": 1, "symlink": 243, "junction": 7, "resolvableSkillMd": 75},
+    "codex": {"directories": 76, "physical": 6, "symlink": 69, "junction": 1, "resolvableSkillMd": 74}
+  },
+  "findings": {
+    "databaseDirectoriesMissingFromCcPhysicalRoot": 176,
+    "claudeLinksWithoutResolvableCcSkillMd": 176,
+    "codexEnabledDatabaseDirectoriesWithoutResolvableProjectedSkillMd": 176,
+    "sameNameDifferentSkillMdHashCount": 30,
+    "sameNameDifferentSkillMdHashNames": [
+      "capability-router",
+      "closure-contract",
+      "intent-contract",
+      "lark-approval",
+      "lark-apps",
+      "lark-attendance",
+      "lark-base",
+      "lark-calendar",
+      "lark-contact",
+      "lark-doc",
+      "lark-drive",
+      "lark-event",
+      "lark-im",
+      "lark-mail",
+      "lark-markdown",
+      "lark-minutes",
+      "lark-note",
+      "lark-okr",
+      "lark-openapi-explorer",
+      "lark-shared",
+      "lark-sheets",
+      "lark-skill-maker",
+      "lark-slides",
+      "lark-task",
+      "lark-vc",
+      "lark-vc-agent",
+      "lark-whiteboard",
+      "lark-wiki",
+      "lark-workflow-meeting-summary",
+      "lark-workflow-standup-report"
+    ],
+    "ccNotAgents": ["-21risk-automation", "kimi-webbridge"],
+    "ccNotCodex": ["-21risk-automation"],
+    "codexContainerRootsWithoutTopLevelSkillMd": [".system", "codex-primary-runtime"]
+  },
+  "physicalCcSourceAttribution": {
+    "unattributedLocalRows": 46,
+    "larksuite/cli": 27,
+    "ComposioHQ/awesome-claude-skills": 1,
+    "mattpocock/skills": 1
+  },
+  "localSkillBackups": {
+    "topLevelEntries": 20,
+    "directories": 71,
+    "files": 406,
+    "bytes": 7389241,
+    "provesCrossDeviceEquality": false,
+    "provesCompleteRestore": false
+  },
+  "closeoutInventory": [
+    {
+      "targets": [
+        "C:/tmp/agent-autonomy-codex-app-server-schema-0.144.6-stable",
+        "C:/tmp/agent-autonomy-codex-app-server-schema-0.144.6-experimental"
+      ],
+      "owner": "agent-autonomy-harness-context-evidence",
+      "purpose": "static-codex-app-server-schema-comparison",
+      "disposition": "retain-authoritative",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "context-evidence-phase-exit-then-separate-deletion-authorization"
+    },
+    {
+      "targets": ["C:/tmp/agent-autonomy-harness-mcp-schema-20260719"],
+      "owner": "agent-autonomy-harness-mcp-evidence",
+      "purpose": "mcp-stable-and-experimental-app-server-schema-generation",
+      "disposition": "retain-authoritative",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "mcp-interface-evidence-phase-exit-then-separate-deletion-authorization"
+    },
+    {
+      "targets": [
+        "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719",
+        "C:/Users/15521/.codex/visualizations/2026/07/18/019f75fd-2b84-75f3-98b3-461fb9895206/mcp-status-probe-20260719-run02"
+      ],
+      "owner": "agent-autonomy-harness-mcp-evidence",
+      "purpose": "isolated-codex-app-server-status-probe-failed-and-successful-homes",
+      "disposition": "retain-authoritative",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "mcp-live-evidence-phase-exit-then-separate-deletion-authorization"
+    },
+    {
+      "targets": [
+        "C:/tmp/codex-app-server-schema-0.145.0-20260723",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run02",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run03",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run04",
+        "C:/tmp/agent-autonomy-mcp-tool-call-0.145.0-20260723-run05"
+      ],
+      "owner": "agent-autonomy-harness-mcp-evidence",
+      "purpose": "codex-0.145.0-direct-mcp-tool-call-schema-and-five-isolated-probe-roots",
+      "disposition": "retain-authoritative",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "mcp-direct-call-and-lifecycle-evidence-phase-exit-then-separate-deletion-authorization"
+    },
+    {
+      "targets": [
+        "C:/tmp/agent-autonomy-mcp-reload-new-threads-0.145.0-20260723-run01"
+      ],
+      "owner": "agent-autonomy-harness-mcp-evidence",
+      "purpose": "codex-0.145.0-new-thread-config-state-and-status-runtime-divergence-probe",
+      "disposition": "retain-authoritative",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "mcp-new-thread-transition-evidence-phase-exit-then-separate-deletion-authorization"
+    },
+    {
+      "targets": [
+        "C:/tmp/agent-autonomy-AGENTS.md",
+        "C:/tmp/agent-autonomy-bootstrap.json",
+        "C:/tmp/agent-autonomy-CONTINUATION.md",
+        "C:/tmp/agent-autonomy-harness-bootstrap.patch",
+        "C:/tmp/agent-autonomy-PRODUCT-NORTH-STAR.md",
+        "C:/tmp/agent-autonomy-README.md",
+        "C:/tmp/agent-autonomy-README.zh-CN.md",
+        "C:/tmp/agent-autonomy-RESEARCH-AND-POC-PLAN.md",
+        "C:/tmp/agent-autonomy-secret-patterns.txt",
+        "C:/tmp/agent-autonomy-verify_bootstrap.py"
+      ],
+      "owner": "agent-autonomy-harness-bootstrap-process",
+      "purpose": "bootstrap-copies-patch-scan-input-and-stale-plan-snapshot",
+      "disposition": "delete-after-authorization",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "total-control-plan-final-closeout-and-repository-copies-and-git-history-reverified"
+    },
+    {
+      "targets": [
+        "C:/tmp/aah-ops-native-20260724-preflight-r1",
+        "C:/tmp/aah-ops-diagnose-20260724-preflight-r1",
+        "C:/tmp/aah-ops-native-20260724-formal-r1",
+        "C:/tmp/aah-ops-native-20260724-formal-r1-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r1",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r1-report.json",
+        "C:/tmp/aah-ops-native-20260724-formal-r2",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2",
+        "C:/tmp/aah-ops-native-20260724-formal-r3",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3",
+        "C:/tmp/aah-ops-native-20260724-formal-r2-live",
+        "C:/tmp/aah-ops-native-20260724-formal-r2-live-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2-live",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r2-live-report.json",
+        "C:/tmp/aah-ops-native-20260724-formal-r3-live",
+        "C:/tmp/aah-ops-native-20260724-formal-r3-live-report.json",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3-live",
+        "C:/tmp/aah-ops-diagnose-20260724-formal-r3-live-report.json",
+        "C:/tmp/aah-skill-treatment-fidelity-preflight-20260724-r1",
+        "C:/tmp/aah-skill-treatment-fidelity-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-skill-treatment-fidelity-live-20260724-r1",
+        "C:/tmp/aah-skill-treatment-fidelity-live-20260724-r1-report.json",
+        "C:/tmp/mattpocock-skills-current-9603c1c",
+        "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1",
+        "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1",
+        "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-live",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r1-live-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-live",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r1-live-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r2",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r2-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r2",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r2-report.json",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r3",
+        "C:/tmp/aah-ops-matt-current-20260724-projection-r3-report.json",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r3",
+        "C:/tmp/aah-ops-superpowers-6.1.1-20260724-projection-r3-report.json"
+      ],
+      "owner": "agent-autonomy-harness-comparative-evidence",
+      "purpose": "weak-agent-incident-treatment-fidelity-and-source-pin-temporary-artifacts",
+      "disposition": "delete-after-authorization",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "total-control-plan-final-closeout-and-durable-evidence-validators-green-then-separate-deletion-authorization"
+    },
+    {
+      "targets": ["C:/Projects/agent-skills-curated"],
+      "owner": "historical-curation-repository",
+      "purpose": "stability-period-fallback-and-lineage-evidence",
+      "disposition": "retain-historical",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "new-harness-stability-period-complete-and-separate-archive-or-delete-decision"
+    },
+    {
+      "targets": ["C:/Users/15521/.cc-switch/cc-switch.db", "C:/Users/15521/.cc-switch/skills", "C:/Users/15521/.claude/skills", "C:/Users/15521/.codex/skills", "C:/Users/15521/.agents/skills"],
+      "owner": "cc-switch-operational-skill-pool",
+      "purpose": "active-skill-database-physical-root-and-consumer-projections",
+      "disposition": "blocked",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "source-authority-classification-and-cc-switch-supported-reconciliation-path-verified"
+    },
+    {
+      "targets": ["https://github.com/yiheng8023/agent-autonomy-harness/actions/runs/29650655197"],
+      "owner": "github-actions-account-boundary",
+      "purpose": "exact-head-remote-matrix-acceptance",
+      "disposition": "blocked",
+      "eligibleForCurrentAction": false,
+      "recheckTrigger": "account-billing-or-spending-limit-resolved"
+    }
+  ],
+  "absenceChecks": {
+    "C:/Projects/agent-capability-manager": true,
+    "extraAgentAutonomyHarnessWorktrees": false,
+    "extraLocalBranches": false,
+    "repositoryTempOrCacheDirectories": false
+  },
+  "claimBoundary": {
+    "uiCountMeansUsableSkills": false,
+    "provesLiveInvocation": false,
+    "provesLarkPortability": false,
+    "provesCrossDeviceEquality": false,
+    "provesRemoteGreen": false,
+    "authorizesSkillRepairOrInstallation": false,
+    "authorizesCleanupOrDeletion": false,
+    "authorizesCommitOrPush": false
+  },
+  "nextGate": "source-authority-and-demand-coverage-classification-before-self-authored-disabled-ablation"
+}

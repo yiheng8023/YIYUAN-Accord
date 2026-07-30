@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27",
+  "date": "2026-07-27",
+  "status": "observed-three-valid-no-model-turn-preflights-second-connection-subscription-not-observed",
+  "question": "Can Codex app-server 0.145.0 expose two independently releasable connection-scoped subscriptions to one already-loaded local MCP runtime without a model turn, fabricated state, a second app-server, or a third-party transport dependency?",
+  "hostBinding": {
+    "platform": "Windows",
+    "codexVersion": "codex-cli 0.145.0",
+    "probeId": "codex-app-server-mcp-multi-connection-subscription-v1",
+    "transport": "one-loopback-websocket-listener-two-independent-node-builtin-websocket-bridges",
+    "formalRunCount": 3,
+    "formalAppServerCount": 3,
+    "formalConnectionCount": 6,
+    "officialSourceTag": "rust-v0.145.0",
+    "officialSourceCommit": "25af12f7e61572b0bc18ddb1008be543b91519b0",
+    "probeScript": {
+      "path": "scripts/probe_codex_app_server_mcp_multi_connection_subscription.py",
+      "sha256": "2DCF396B66F304E73D311E1DEF938561BA61940E2D74BFBA757CC4302F39D23A"
+    },
+    "bridgeScript": {
+      "path": "scripts/codex_app_server_websocket_bridge.mjs",
+      "sha256": "42AB099127D1693350E783A7C564F3B241AF0E3DAADB1CEB60F6FDD40934E633"
+    },
+    "sentinel": {
+      "path": "scripts/mcp_lifecycle_sentinel.py",
+      "sha256": "48656683EAFF80D0162FC230B111880EE59CC619475187531B09C341136EE590"
+    },
+    "stableSchemaEvidence": [
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/ClientRequest.json",
+        "sha256": "F3171526A137767AA9350838F441D79E2DC294EFECD32FAF7932B3B08D223136"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadResumeParams.json",
+        "sha256": "27F1114333A9F535352D8763589CCF60A5A5D41711416D0D98CD6C988C06DBDD"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadResumeResponse.json",
+        "sha256": "BF090F736D47A65C1E671E2786918B05CA9F2486DEF47F2069360D0C72EC7EBB"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadUnsubscribeParams.json",
+        "sha256": "A03DC3D6C5A2F77F164B6BF4250D29F0C81C10C6B5F484FAC0B05392DC9C936A"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadUnsubscribeResponse.json",
+        "sha256": "14CD8BAAC4521C8101698DE3DF2D7A8E509ECE6BF9B8B5D11162D9391064B4AE"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ConfigReadParams.json",
+        "sha256": "9A51989DC089AC297037C6F1FDC65A73F9C8105837E93A998F173A80C7880172"
+      }
+    ],
+    "pinnedOfficialSourceEvidence": [
+      {
+        "path": "codex-rs/app-server/src/thread_state.rs",
+        "url": "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/src/thread_state.rs",
+        "blobSha": "384317210029fe230dbe3d3e4739a4f53332bca1",
+        "sha256": "81E020028F6A47EB1B5E5F3ACC79D02F726B3FCE18A7D45E8BE05795C0D61862",
+        "boundedFinding": "Thread subscriptions are stored in a HashSet of ConnectionId values, and unsubscribe removes only the requesting connection."
+      },
+      {
+        "path": "codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+        "url": "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+        "blobSha": "d83cf7edd468845e95288fc199a58a49326b4927",
+        "sha256": "D60B9AC54DBEE113A530AE7245C2D827A8D6715C5D88D15585CFB479F4F6580D",
+        "boundedFinding": "Listener attachment attempts to subscribe a concrete connection and retains a separate 30-minute unloading delay."
+      },
+      {
+        "path": "codex-rs/app-server/src/request_processors/thread_processor.rs",
+        "url": "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/src/request_processors/thread_processor.rs",
+        "blobSha": "7f1a30a39e52a2216bd97121146e48fdf94c556a",
+        "sha256": "3BAE6A6CB8F983F20538CDCC01C4F0BA6CECDAC73E15F980D4ABAA8284DCC731",
+        "boundedFinding": "Running-thread resume still reads stored thread metadata, while thread/unsubscribe reports unsubscribed or notSubscribed for the requesting ConnectionId."
+      },
+      {
+        "path": "codex-rs/app-server/src/lib.rs",
+        "url": "https://github.com/openai/codex/blob/rust-v0.145.0/codex-rs/app-server/src/lib.rs",
+        "blobSha": "7c79989eff8a18fbff7ae7403f9e1eb3b1026541",
+        "sha256": "A1D8569DCC4F0B2C9D6C7F617CE47A0980F4620AD1A24E5DA0377DBE47CA853A",
+        "boundedFinding": "WebSocket is a multi-connection transport and the thread-created path best-effort attaches listeners to initialized connections."
+      }
+    ]
+  },
+  "preflightDesign": {
+    "singleAppServerPerRun": true,
+    "freshExplicitCodexHomePerRun": true,
+    "twoIndependentBridgeProcessesPerRun": true,
+    "nodeBuiltinWebSocketOnly": true,
+    "ownerBInitializedBarrier": "config/read-response-before-owner-a-thread-start",
+    "formalAcquisitionPath": "thread-created-auto-attach",
+    "formalDecisionRule": "Three of three protocol-valid sequential repetitions must have the same classification. Mixed results are not decided by majority vote.",
+    "noModelTurnRequested": true,
+    "noModelTurnNotificationAllowed": true,
+    "noGlobalConfigurationMutation": true,
+    "noSecondAppServerAsSecondOwner": true,
+    "noFabricatedRolloutOrSubscriberState": true,
+    "cleanupAfterEvidenceBoundaryOnly": true
+  },
+  "excludedCalibration": [
+    {
+      "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/resume-calibration-01.log",
+      "sha256": "508FA826413A1512B3C62BCFD5C9CF38B7072EDB7D9680B60D470B1B89B11FDD",
+      "acquisitionPath": "thread-resume",
+      "waitSeconds": 2,
+      "result": "advertised-rollout-path-did-not-materialize",
+      "reasonExcluded": "Calibration failure surface only; it is not one of the three formal auto-attach repetitions."
+    }
+  ],
+  "formalEvidence": [
+    {
+      "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/report.json",
+      "sha256": "F4C0230E4C87C8499365F892671FA41BD5B4A615EB7539A73557D65C278CCB5D",
+      "reportSha256": "F8036D42AD148A0C4B11F61EB2D25E2C4F4B4CC13F9BEED67E60CAA3E6004D04",
+      "classification": "second-connection-subscription-not-observed-bounded",
+      "threadId": "019fa055-062f-7883-9907-313e05f9d064",
+      "sentinelPid": 15368,
+      "sentinelInstanceId": "d344edfd-ad29-45c2-9e99-8ccedf813200"
+    },
+    {
+      "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/report.json",
+      "sha256": "769BA186566817C5120BEDA3769D4C4B870C303A1A4540EA36FC47B2F077DC2D",
+      "reportSha256": "A37A5308B878210870A341F928D7B580D8E4710C5CD369FDDE55C9A8B1BA8F2C",
+      "classification": "second-connection-subscription-not-observed-bounded",
+      "threadId": "019fa055-2352-7743-bde7-8f2f3a63a989",
+      "sentinelPid": 34640,
+      "sentinelInstanceId": "9487138f-2a38-4650-b1c8-703dc0de07a8"
+    },
+    {
+      "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/report.json",
+      "sha256": "C9D569B30F80DA680A46C79A8650F7ECB9B61E6298D4748326447F0F883E8E36",
+      "reportSha256": "6B28F7D0AA804608D1C2A721D4BA9E364EAF3C59F8A945F3382A704CEBD71359",
+      "classification": "second-connection-subscription-not-observed-bounded",
+      "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+      "sentinelPid": 30044,
+      "sentinelInstanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83"
+    }
+  ],
+  "aggregateObservation": {
+    "formalRunCount": 3,
+    "protocolValidRunCount": 3,
+    "distinctWebSocketConnectionPairCount": 3,
+    "sameThreadSameExactSentinelCallPairCount": 3,
+    "ownerAUnsubscribedThenNotSubscribedCount": 3,
+    "ownerBNotSubscribedThenNotSubscribedCount": 3,
+    "overlappingSubscriptionObservedCount": 0,
+    "modelTurnRequestCount": 0,
+    "turnStartedNotificationCount": 0,
+    "verifiedCleanupCount": 3,
+    "appServerAliveBeforeHarnessShutdownCount": 3,
+    "applicationLogExternalNetworkAttemptCount": 3
+  },
+  "decision": {
+    "multiConnectionWebSocketTransportObserved": true,
+    "sameLoadedThreadSameExactSentinelCallsAcrossConnectionsObserved": true,
+    "secondIndependentlyReleasableSubscriptionObserved": false,
+    "overlappingOwnerPreconditionSatisfied": false,
+    "finalObservedOwnerReleaseTrialShouldProceed": false,
+    "stopReason": "The formal best-effort auto-attach path did not expose a second subscription in three protocol-valid runs, while the zero-turn resume calibration had no materialized rollout to resume.",
+    "nativeThirtyMinuteIdleFallbackRemainsSeparate": true,
+    "dynamicRuntimeControlAssessment": "partial",
+    "residualSelfAuthoredControllerGapProved": false,
+    "nextBoundedGap": "Re-open overlapping-owner and final-release testing only if this host/version exposes a reproducible second subscription acquisition path without fabricated state, or if a separately authorized model-turn trial is justified."
+  },
+  "claimBoundary": {
+    "threadCreatedAutoAttachNeverWorksProved": false,
+    "threadResumeWithEveryPossiblePersistedThreadProved": false,
+    "publicSubscriberCountObserved": false,
+    "leaseOrReferenceCountCorrectnessProved": false,
+    "taskEndSemanticsProved": false,
+    "finalReleaseSemanticsProved": false,
+    "stableResourceSavingsProved": false,
+    "arbitraryMcpBehaviorProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "noNetworkTrafficProved": false,
+    "residualNeedForSelfAuthoredControllerProved": false,
+    "productionReadinessProved": false
+  },
+  "programAcceptance": {
+    "acceptanceId": "acceptance.dynamic-runtime-control-gap-research",
+    "assessment": "partial",
+    "supportsResidualGapProof": false
+  },
+  "cleanupDisposition": {
+    "repositoryAudit": "retain-authoritative-host-preflight-evidence",
+    "earlierTemporaryCalibrationRoots": "candidate-process-debt-pending-program-cleanup-gate",
+    "deletionAuthorized": false
+  },
+  "documentation": "docs/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.md"
+}

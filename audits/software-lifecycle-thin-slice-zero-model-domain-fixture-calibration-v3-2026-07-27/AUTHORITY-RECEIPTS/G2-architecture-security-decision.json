@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G2-architecture-security-decision",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27",
+  "gateId": "G2-architecture-security-decision",
+  "stageId": "SE-TS-02-architecture-design",
+  "sequence": 2,
+  "decision": "approve",
+  "decisionClass": "accepted-truth-change",
+  "proposalArtifactCanonicalSha256": "7210e50f43e8214ba083ca1d52f8619911a663c0d7a3612e40e40ad21f30bba1",
+  "beforeAcceptedLedgerSha256": "0beec7b27929a3ae3efe1d179f35e2020c3cceddd8af547a9d9616f9e87472b0",
+  "allowedChangeIds": [
+    "accept-stage-2"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-02-architecture-design"
+    ],
+    "artifactIds": [
+      "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O2"
+    ],
+    "actions": [
+      "exact-design-acceptance"
+    ]
+  },
+  "inputArtifactDigests": [
+    "7210e50f43e8214ba083ca1d52f8619911a663c0d7a3612e40e40ad21f30bba1"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "accountable-architecture-and-security-owner",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:02+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "8376fecd611b37b4548fd5b8da12adfb6690dc71eb04355fc3003802efe3842d"
+}

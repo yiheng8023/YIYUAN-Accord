@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "skill-source-authority-and-runtime-reconciliation-2026-07-19",
+  "date": "2026-07-19",
+  "status": "read-only-single-host-current-research-poc-no-mutation-authority",
+  "reproducer": "scripts/reconcile_skill_source_authority.py",
+  "physicalCcAuthorityClasses": [
+    {"id": "repository-approved", "count": 20, "treeEqual": 19, "drift": ["handoff"]},
+    {"id": "larksuite-cli-attributed", "count": 27},
+    {"id": "composio-attributed", "count": 1, "names": ["-21risk-automation"]},
+    {
+      "id": "unattributed-outside-approved-inventory",
+      "count": 27,
+      "names": [
+        "capability-router", "caveman", "closure-contract",
+        "design-an-interface", "disciplined-coding", "doc", "edit-article",
+        "git-guardrails-claude-code", "grill-me", "intent-contract",
+        "kimi-webbridge", "obsidian-vault", "pdf", "playwright", "qa",
+        "request-refactor-plan", "scaffold-exercises", "security-ownership-map",
+        "setup-matt-pocock-skills", "setup-pre-commit", "sora", "teach",
+        "write-a-skill", "writing-beats", "writing-fragments",
+        "writing-shape", "zoom-out"
+      ]
+    }
+  ],
+  "missingCcPhysicalRuntimeReconciliation": {
+    "databaseDirectoriesMissingPhysical": 176,
+    "exactPluginDirectoryMatches": 148,
+    "qualifiedPluginAliasMatches": 25,
+    "runtimeOrPluginMatchesTotal": 173,
+    "unresolved": [
+      {"name": "prototype", "directory": "product-design-prototype"},
+      {"name": "suggest-sales-next-step", "directory": "suggest-sales-next-step"},
+      {"name": "user-context", "directory": "sales-user-context"}
+    ]
+  },
+  "handoffAuthorityCollision": {
+    "repositoryApprovedPayloadPresent": true,
+    "ccPhysicalPayloadPresent": true,
+    "treeEqual": false,
+    "ccDatabaseSource": "mattpocock/skills",
+    "trialMustBindPayloadDigest": true,
+    "freshSessionInvocationStillUnproved": true
+  },
+  "contractCanonicalComparison": {
+    "canonicalRepository": "C:/Projects/codex-user-config",
+    "canonicalRepositoryObservedHead": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+    "canonicalRepositoryDirtyUnrelatedPathsPresent": true,
+    "skills": {
+      "intent-contract": {"equalRoots": ["agents", "codex"], "differentRoots": ["ccSwitch", "claude"]},
+      "capability-router": {"equalRoots": ["agents", "codex"], "differentRoots": ["ccSwitch", "claude"]},
+      "closure-contract": {"equalRoots": ["agents", "codex"], "differentRoots": ["ccSwitch", "claude"]}
+    }
+  },
+  "decisions": {
+    "installRuntimeMatchesIntoCcToEqualizeCounts": false,
+    "treatUiCountsAsShoppingList": false,
+    "genericLarkAblationWithoutBoundTaskAndAccount": false,
+    "useCcSwitchForFutureSupportedDistribution": true,
+    "retainInheritedResearchAsSupplementalGovernanceEvidence": true,
+    "officialNativePluginSkillsStayRuntimeOwned": true,
+    "sharedNonOfficialUserLevelSkillsUseCcRuntimeAuthority": true,
+    "agentsSkillsIsProjectionOrUnsupportedAgentException": true,
+    "onePhysicalRuntimeAuthorityPerSharedSkill": true,
+    "projectOnlySkillsRemainProjectScoped": true,
+    "targetRepositoryMaintainsSelfAuthoredCollaborationControlPayloadsOnly": true,
+    "matureSelfAuthoredRuntimeManagedByCcSwitch": true,
+    "externalPayloadsRemainHostCcOrUpstreamOwned": true,
+    "inheritedApprovedPayloadsAreFutureMigrationCandidates": true,
+    "inheritedPayloadMigrationAuthorizedNow": false
+  },
+  "authorityBoundary": {
+    "runtimeCacheMatchProvesInvocation": false,
+    "sourceEqualityApprovesInstallation": false,
+    "projectionRepairAuthorized": false,
+    "ccSwitchOrAgentHomeMutationAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "cleanupAuthorized": false,
+    "commitOrPushAuthorized": false
+  },
+  "nextGate": "select-source-stable-self-authored-disabled-weak-agent-ablation-scenarios"
+}

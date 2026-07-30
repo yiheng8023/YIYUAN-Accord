@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23",
+  "date": "2026-07-23",
+  "status": "observed-single-host-thirty-minute-sentinel-idle-unload-and-new-thread-recovery",
+  "host": {
+    "product": "Codex CLI app-server",
+    "platform": "Windows",
+    "version": "0.145.0",
+    "repositoryHead": "55659f30091990f7c589932e0379880de30dc403"
+  },
+  "officialContract": {
+    "sourceRecord": "registry/mcp-app-server-0.145.0-direct-tool-call-evidence-2026-07-23.json",
+    "lastUnsubscribeUnloadsImmediately": false,
+    "requiredIdleSeconds": 1800,
+    "requiresNoSubscribersAndNoActivity": true,
+    "threadClosedAloneProvesChildExit": false
+  },
+  "probe": {
+    "id": "codex-app-server-isolated-mcp-idle-unload-v1",
+    "runner": "scripts/probe_codex_app_server_mcp_idle_unload.py",
+    "sentinel": "scripts/mcp_lifecycle_sentinel.py",
+    "tempRoot": "C:/Projects/agent-autonomy-harness/.tmp/mcp-idle-observation-20260723",
+    "resultSha256": "6f468fb66b4fdd01616b04d228bd3039a2933573776da422e0d64b95b97ffa94",
+    "resultBytes": 24206,
+    "sentinelEventLogSha256": "a883775d1645a47f61b07845673bf3f4efed9e16a4b7fcc62cd00a569617a5b9",
+    "sentinelEventLogBytes": 2643,
+    "startedAt": "2026-07-23T18:43:06.365389+08:00",
+    "finishedAt": "2026-07-23T19:13:08.799188+08:00",
+    "durationMilliseconds": 1802434,
+    "requestedIdleObservationSeconds": 1920,
+    "observedIdleDurationMilliseconds": 1800765,
+    "modelTurnStarted": false,
+    "accountStateCopied": false,
+    "authStateProduced": false,
+    "currentConfigCopied": false,
+    "currentPluginsCopied": false,
+    "configUnchangedDuringProbe": true,
+    "statusDiscoveryCalled": false,
+    "applicationLogExternalNetworkAttemptObserved": true,
+    "externalAttemptObservation": "The isolated unauthenticated app-server logged one Responses WebSocket 401 attempt; no model turn was started.",
+    "packetLevelNetworkMonitorUsed": false
+  },
+  "idleObservation": {
+    "threadId": "019f8e92-6526-7621-8969-05f0eae8e634",
+    "unsubscribeAccepted": true,
+    "startedAfterUnsubscribeResponseAt": "2026-07-23T18:43:06.923195+08:00",
+    "finishedAt": "2026-07-23T19:13:07.68814+08:00",
+    "actualDurationMilliseconds": 1800765,
+    "actualDurationAtLeastThirtyMinutes": true,
+    "pollSeconds": 1,
+    "requestsSentDuringIdleWindow": 0,
+    "threadClosedObserved": true,
+    "threadClosedAt": "2026-07-23T19:13:07.6881+08:00",
+    "sentinelInstanceId": "d402dd0b-9487-4ee7-b226-2f440eda53b7",
+    "sentinelExactIdentity": {
+      "pid": 68856,
+      "creationTime100ns": 134292769867021332,
+      "imagePath": "C:/Users/15521/AppData/Local/Programs/Python/Python314/python.exe",
+      "parentPid": 44164
+    },
+    "naturalInstanceStopEventObservedDuringIdleWindow": true,
+    "naturalInstanceStopAt": "2026-07-23T19:13:07.652605+08:00",
+    "sentinelExactIdentityAbsentObserved": true,
+    "sentinelExactIdentityAbsentAt": "2026-07-23T19:13:07.688134+08:00",
+    "threadClosedAndChildExitJointlyObserved": true,
+    "temporalAdjacencyProvesCausation": false
+  },
+  "recoveryObservation": {
+    "newThreadId": "019f8ead-e072-75b3-bc7b-dcc60c96dad2",
+    "directToolCallSucceeded": true,
+    "newInstanceIdObserved": true,
+    "instanceId": "4e6b20a5-c4a3-4884-9a87-260bb5e2a42c",
+    "pid": 69492,
+    "sameThreadRecoveryTested": false
+  },
+  "resourceObservation": {
+    "scope": "exact Sentinel child only",
+    "before": {
+      "processCount": 1,
+      "workingSetBytes": 20189184,
+      "privateUsageBytes": 14016512,
+      "cpuTime100ns": 1718750
+    },
+    "afterIdleUnload": {
+      "processCount": 0,
+      "exactIdentityAbsent": true
+    },
+    "appServerEndOfIdleWindowResourceSnapshotRecorded": false,
+    "recoverySentinelWorkingSetBytes": 20156416,
+    "recoverySentinelPrivateUsageBytes": 13754368,
+    "singleRunProvesStableResourceSavings": false,
+    "totalHostResourceBenefitProved": false
+  },
+  "cleanupObservation": {
+    "nativeAppServerPid": 44164,
+    "nativeAppServerReturnCode": 0,
+    "nativeAppServerExactIdentityAbsentAfterCleanup": true,
+    "nativeAppServerPidObjectNoLongerQueryableProved": false,
+    "nativeAppServerHandleKillSent": false,
+    "ownedSentinelExactIdentitiesAbsentAfterCleanup": true,
+    "pidOnlySignalUsed": false,
+    "processNameScanOrTerminationUsed": false,
+    "cleanupMarkerWrittenAfterProbe": true
+  },
+  "supportedConclusions": {
+    "documentedThirtyMinuteIdlePathExecuted": true,
+    "threadClosedObservedForThisEphemeralThread": true,
+    "boundSentinelNaturalStopAndExactIdentityExitObserved": true,
+    "newThreadDirectCallRecoveredWithNewSentinelInstance": true,
+    "exactSentinelChildProcessCountChangedFromOneToZero": true,
+    "isolatedConfigStayedByteEqual": true
+  },
+  "claimBoundary": {
+    "sameThreadHotEnableDisableProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "publicLeaseOrReferenceCountApiProved": false,
+    "leaseOrReferenceCountCorrectnessUnderConcurrencyProved": false,
+    "threadClosedCausedSentinelExitProved": false,
+    "sentinelExitCausedThreadClosedProved": false,
+    "allMcpChildrenExitedProved": false,
+    "allMcpServersUnloadAfterThirtyMinutesProved": false,
+    "stableResourceSavingsProved": false,
+    "totalHostResourceBenefitProved": false,
+    "crashRecoveryProved": false,
+    "concurrentSubscriberSafetyProved": false,
+    "noNetworkTrafficProved": false,
+    "noExternalConnectionAttemptProved": false,
+    "noCredentialWasUsedProved": false,
+    "priorEnabledStateRestorationProved": false,
+    "desktopPluginOrCrossHostParityProved": false,
+    "universalTaskScopedMcpLifecycleProved": false
+  },
+  "cleanupDebt": {
+    "temporaryProbeRootRetained": true,
+    "deletionAuthorizedByThisRecord": false,
+    "disposition": "Retain as bounded long-duration evidence until the program-wide cleanup gate or a separately authorized evidence migration."
+  },
+  "nextGate": "repeat-resource-comparison-only-if-a-concrete-workload-makes-stable-resource-benefit-decision-relevant"
+}

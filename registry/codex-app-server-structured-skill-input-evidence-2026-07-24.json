@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "codex-app-server-structured-skill-input-evidence-2026-07-24",
+  "date": "2026-07-24",
+  "status": "host-accepted-structured-skill-input-loader-delivery-unproved",
+  "parentComparison": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json",
+  "host": {
+    "interface": "Codex app-server",
+    "runtimeVersion": "0.145.0",
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "approvalPolicy": "never",
+    "sandboxType": "workspaceWrite",
+    "networkAccess": false
+  },
+  "runtimeSchemaEvidence": {
+    "generatedSchemaRepositoryOwned": false,
+    "generatedSchemaRetention": "local-temporary-cleanup-debt",
+    "schemaFileSha256": "e46597ec8d870ff80d8930499f37819393e28090b78186d0a27d9b7127f1d708",
+    "definition": "SkillUserInput",
+    "requiredFields": [
+      "name",
+      "path",
+      "type"
+    ],
+    "typeEnum": "skill",
+    "observedAbsence": "No skill-load, skill-injection, or skill-invocation notification was found in the generated v2 protocol schema; skills/changed is metadata invalidation only."
+  },
+  "treatment": {
+    "armId": "SE-MATT-DISCIPLINED-CODING",
+    "selectedSkill": {
+      "name": "disciplined-coding",
+      "sourceClass": "cc-switch-managed",
+      "contentSha256": "d36f49ed0d252b9c9c656bc9c0f72d43710c68591ce234e8dc2886dc4785fc7b"
+    },
+    "selectedSkillInputMode": "structured",
+    "structuredSkillInputSent": true,
+    "textPromptNamedSelectedSkill": false,
+    "hostAcceptedStructuredSkillInput": true,
+    "onlySelectedUserSkillEnabled": true,
+    "allOtherUserSkillsDisabled": true,
+    "sameSkillIdentitySet": true
+  },
+  "run": {
+    "runner": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+    "runnerSha256": "96972b95d5bf6b486afedbbcb9b847711d16cbc53e84fbc2cfa629c9e8b94018",
+    "rawReportFileSha256": "20a5620687be54e1f90de38f76c2f26792f27b0272e9da87e6b3deb432fe8783",
+    "internalReportSha256": "c7e297b8f040f83c526a2369986a0e17a3321a0a37cce03da4a2f6886f873dba",
+    "responseSha256": "20de22c212f52ef14ffc28e0f20f0919949454dc2f2bc38a7afa3c66e28615d9",
+    "responseBytes": 1484,
+    "status": "fixture-pass-loader-causation-unproved",
+    "visibleTestsPassed": true,
+    "hiddenTestsPassed": true,
+    "changedFiles": [
+      "retry_policy.py",
+      "test_retry_policy.py"
+    ],
+    "commandCount": 4,
+    "failedCommandCount": 1,
+    "testCommandObserved": true,
+    "transientOutOfScopeWritePaths": [],
+    "globalConfigStable": true,
+    "forbiddenItemTypesObserved": []
+  },
+  "claimBoundary": {
+    "provesRuntimeSchemaSupportsStructuredSkillInput": true,
+    "provesHostAcceptedExactStructuredSkillInput": true,
+    "provesTaskScopedSelectedSkillMetadataExposure": true,
+    "provesSkillLoaderInvocation": false,
+    "provesSkillBodyRead": false,
+    "provesSkillInstructionsReachedModel": false,
+    "provesSkillCausation": false,
+    "provesMattSuperiority": false,
+    "provesProductionReadiness": false,
+    "provesCrossHostValue": false
+  },
+  "decision": {
+    "structuredSkillInputPreferredForFutureCodexTreatmentArms": true,
+    "historicalTextNamedRunsReclassifiedAsInvalid": false,
+    "historicalTextNamedRunsRemainMetadataExposureAndBehaviorObservations": true,
+    "architectureOrRetentionDecisionAllowed": false,
+    "nextGate": "The second software-lifecycle scenario and synthetic body-only delivery assay are now recorded separately. Continue using structured Skill input, but retain candidate-specific delivery, causation, preference, and portfolio boundaries."
+  },
+  "documentation": "docs/codex-app-server-structured-skill-input-evidence-2026-07-24.md"
+}

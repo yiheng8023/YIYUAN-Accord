@@ -1,0 +1,176 @@
+{
+  "schema": 1,
+  "id": "codex-common-root-doc-pdf-shadow-disable-exposure-reconciliation-2026-07-30",
+  "date": "2026-07-30",
+  "status": "fresh-task-exposure-contradiction-and-isolated-correction-preflight",
+  "predecessor": "registry/cc-switch-subtraction-cohort-and-codex-shadow-disable-event-2026-07-29.json",
+  "purpose": "Reconcile the difference between removing doc/pdf from the CC-managed Codex projection and actually removing them from Codex host exposure while retaining the common ~/.agents/skills root.",
+  "authorityBoundary": {
+    "readOnlyLiveObservationAuthorized": true,
+    "isolatedTemporaryProjectionAuthorized": true,
+    "isolatedCodexHomeAuthorized": true,
+    "globalCodexConfigMutation": false,
+    "codexDesktopRestart": false,
+    "commonRootPayloadMutation": false,
+    "ccSwitchMutation": false,
+    "modelDispatch": false,
+    "gitCommitOrPush": false
+  },
+  "freshTaskObservation": {
+    "surface": "current-task-startup-available-skills-list",
+    "removedCohortAbsent": [
+      "-21risk-automation",
+      "git-guardrails",
+      "git-guardrails-claude-code",
+      "scaffold-exercises",
+      "sora",
+      "write-a-skill"
+    ],
+    "docVisible": true,
+    "pdfVisible": true,
+    "docVisiblePath": "C:/Users/15521/.cc-switch/skills/doc/SKILL.md",
+    "pdfVisiblePath": "C:/Users/15521/.cc-switch/skills/pdf/SKILL.md",
+    "runtimeOwnedDocumentsAlsoVisible": true,
+    "runtimeOwnedPdfAlsoVisible": true,
+    "independentLoaderEventObserved": false
+  },
+  "liveFilesystemTopology": {
+    "ccSwitch": {
+      "doc": "physical",
+      "pdf": "physical"
+    },
+    "agents": {
+      "doc": {
+        "kind": "symlink",
+        "target": "C:/Users/15521/.cc-switch/skills/doc"
+      },
+      "pdf": {
+        "kind": "symlink",
+        "target": "C:/Users/15521/.cc-switch/skills/pdf"
+      }
+    },
+    "claude": {
+      "doc": {
+        "kind": "symlink",
+        "target": "C:/Users/15521/.cc-switch/skills/doc"
+      },
+      "pdf": {
+        "kind": "symlink",
+        "target": "C:/Users/15521/.cc-switch/skills/pdf"
+      }
+    },
+    "codexPrivateProjection": {
+      "docPresent": false,
+      "pdfPresent": false
+    }
+  },
+  "officialMechanism": {
+    "source": "https://developers.openai.com/codex/skills",
+    "userSkillRootDocumentedAs": "$HOME/.agents/skills",
+    "hostDisableEntryShape": "[[skills.config]] exact SKILL.md path plus enabled=false",
+    "restartRequired": true
+  },
+  "causalAssessment": {
+    "ccSwitchCodexProjectionDisableSucceeded": true,
+    "codexHostExposureDisableSucceeded": false,
+    "alternateCommonRootCarrierStillPresent": true,
+    "commonRootCarrierIsBestCurrentExplanation": true,
+    "commonRootCarrierIndependentlyProvedAsCodexDiscoverable": true,
+    "currentTaskExactLoaderCarrierIdentityProved": false,
+    "finding": "Disabling a CC-managed Codex projection is not sufficient when the same Skill remains reachable through the Codex-discovered common root."
+  },
+  "isolatedPreflight": {
+    "id": "codex-common-root-doc-pdf-shadow-disable-isolated-preflight-2026-07-30",
+    "hostUserAgent": "Codex Desktop/0.146.0 (Windows 10.0.26200; x86_64)",
+    "temporaryProjectAgentsRoot": true,
+    "isolatedCodexHome": true,
+    "sourceSkillMdSha256": {
+      "doc": "2dd628afc3f9217d88bba8f61454b964aa25921f55f69e8d4d923b2ab092c54f",
+      "pdf": "724b72c932053fd87133144405b00fbeec30285ee770168328c8f591ec89c134"
+    },
+    "projectedSkillMdMatchedSource": true,
+    "control": {
+      "targetCount": 2,
+      "docEnabled": true,
+      "pdfEnabled": true
+    },
+    "treatment": {
+      "sameIdentityPaths": true,
+      "docEnabled": false,
+      "pdfEnabled": false
+    },
+    "stderrLineCount": 0,
+    "threadStarted": false,
+    "turnStarted": false,
+    "modelRequestSent": false,
+    "globalConfigWritten": false,
+    "reportSha256": "63e325990bf784f9b5f45f3132abb92412417866e1be30bd37171c1b21d0352e"
+  },
+  "optionAssessment": [
+    {
+      "option": "remove doc/pdf links from ~/.agents/skills",
+      "result": "not-preferred",
+      "reason": "It would suppress the common compatibility projection for every present or future Agent instead of expressing a Codex-specific policy."
+    },
+    {
+      "option": "retain current state",
+      "result": "reject",
+      "reason": "It preserves duplicate Codex exposure and makes the completed CC Codex toggle semantically ineffective at the host-exposure layer."
+    },
+    {
+      "option": "add two exact Codex skills.config disabled entries",
+      "result": "preferred-pending-authorization",
+      "reason": "It retains the common root and Claude projection while expressing the host-specific Codex exclusion through the official mechanism."
+    }
+  ],
+  "proposedLiveTransaction": {
+    "targets": [
+      "C:/Users/15521/.agents/skills/doc/SKILL.md",
+      "C:/Users/15521/.agents/skills/pdf/SKILL.md"
+    ],
+    "enabled": false,
+    "steps": [
+      "re-hash and parse the live Codex config and confirm zero conflicting skills.config entries",
+      "create and verify one exact-byte rollback backup",
+      "atomically add exactly two disabled skills.config entries",
+      "parse and re-read the resulting TOML",
+      "restart Codex Desktop once",
+      "run a no-model fresh-process skills/list verification against the live Codex home",
+      "restore the exact backup and restart if either target remains enabled or any unrelated exposure changes",
+      "on success retain the two host-adapter entries, delete only the verified transaction backup, and record cleanup"
+    ],
+    "requiresNewAuthorization": [
+      "global Codex config mutation",
+      "Codex Desktop restart",
+      "exact rollback-backup cleanup"
+    ],
+    "doesNotRequire": [
+      "CC Switch mutation",
+      "common-root link deletion",
+      "Claude mutation",
+      "Trae mutation",
+      "model dispatch",
+      "commit or push"
+    ]
+  },
+  "cleanup": {
+    "temporaryProjectionRootAbsent": true,
+    "isolatedCodexHomeAbsent": true,
+    "repositoryCleanupInventoryStable": true
+  },
+  "verification": {
+    "eventValidatorTestsPassed": true,
+    "topLevelVerifierPassed": true
+  },
+  "claimBoundary": {
+    "removedCohortFreshTaskAbsenceProved": true,
+    "docPdfFreshTaskPresenceProved": true,
+    "isolatedOfficialDisableMechanismProved": true,
+    "liveGlobalDisableApplied": false,
+    "livePostRestartExposureVerified": false,
+    "loaderInvocationProved": false,
+    "behavioralValueProved": false,
+    "programCloseoutProved": false
+  },
+  "documentation": "docs/strategy/CODEX-COMMON-ROOT-DOC-PDF-SHADOW-DISABLE-EXPOSURE-RECONCILIATION-2026-07-30.md"
+}

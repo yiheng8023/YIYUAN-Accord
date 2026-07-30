@@ -1,0 +1,385 @@
+{
+  "schema": 1,
+  "id": "skill-ecosystem-overlap-and-ablation-matrix-2026-07-23",
+  "date": "2026-07-23",
+  "status": "source-pinned-comparison-design-no-superiority-or-replacement-claim",
+  "baselines": {
+    "repositoryContracts": ["intent-contract", "capability-router", "closure-contract"],
+    "mattPocock": {
+      "repository": "mattpocock/skills",
+      "mainCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "latestRelease": "v1.1.0",
+      "releaseCommit": "d574778f94cf620fcc8ce741584093bc650a61d3",
+      "currentContentReviewCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "mainCommitObservedVia": "GitHub MCP list_commits on main",
+      "mainCommitObservedAt": "2026-07-23",
+      "mainCommitRevalidatedAt": "2026-07-24",
+      "mainCommitRevalidatedVia": "public Git clone plus GitHub web",
+      "currentContentReviewParentCommit": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+      "currentContentReviewChangedFiles": [
+        "skills/engineering/to-tickets/SKILL.md"
+      ],
+      "currentContentReviewFiles": [
+        "skills/engineering/ask-matt/SKILL.md",
+        "skills/engineering/implement/SKILL.md",
+        "skills/engineering/code-review/SKILL.md"
+      ],
+      "currentContentReviewGitBlobShas": {
+        "skills/engineering/ask-matt/SKILL.md": "70b807b35f85859b0c6cced1919f56e024e6a753",
+        "skills/engineering/implement/SKILL.md": "7a0b11f5f4fe9505ea5c7983c3083ba1bf754f69",
+        "skills/engineering/code-review/SKILL.md": "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7"
+      },
+      "currentContentReviewSources": [
+        "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/ask-matt/SKILL.md",
+        "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/implement/SKILL.md",
+        "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/code-review/SKILL.md"
+      ],
+      "olderLocalCheckoutCommit": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+      "olderLocalCheckoutAcceptedAsCurrentRepositoryEvidence": false,
+      "olderLocalTargetFilesConfirmedUnchangedByOfficialCommitDiff": true
+    },
+    "superpowers": {
+      "repository": "obra/superpowers",
+      "latestRelease": "v6.1.1",
+      "releaseCommit": "d884ae04edebef577e82ff7c4e143debd0bbec99",
+      "localCuratedPluginVersion": "6.1.1",
+      "localPayloadSnapshotObservedAt": "2026-07-23",
+      "localPayloadSha256": {
+        "brainstorming": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+        "writing-plans": "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845",
+        "using-superpowers": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "verification-before-completion": "ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c",
+        "subagent-driven-development": "41ab239a6ad1c487cd839fdac972a8c9cf0f5e90efa59a63f963767864f0df4c",
+        "systematic-debugging": "3b20719eca4f0461cb51a195221320d775dcf03b6859271066a03a5132a6ce7a"
+      },
+      "localPayloadEqualsReleaseCommitBytesProved": false,
+      "startupVisibilityOrInvocationProved": false
+    },
+    "ccSwitch": {
+      "repository": "farion1231/cc-switch",
+      "version": "3.18.0",
+      "commit": "606e7bbe75db7f8285f7a3be006fac22b5d22796"
+    }
+  },
+  "ccInstalledStaticComparisonCohort": {
+    "observedAt": "2026-07-24",
+    "observationClass": "single-host-local-file-static-only",
+    "skills": [
+      {
+        "name": "grill-me",
+        "path": "C:/Users/15521/.cc-switch/skills/grill-me/SKILL.md",
+        "bytes": 645,
+        "sha256": "c9df326c4ab635765ea884471d21f4e21d5b0ec85aec43a06c238307841eb4bc",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "post-front-gate-deep-questioning",
+        "relationshipToRepositoryContract": "post-intake-deep-questioning-complement",
+        "lineageState": "crlf-normalized-exact-historical-matt-upstream-current-upstream-refactored",
+        "sourceReconciliation": {
+          "relationship": "crlf-normalized-exact-historical-upstream",
+          "publicUpstreamRepository": "mattpocock/skills",
+          "historicalUpstreamCommit": "62f43a18177be6ec82da242e59ffbc490a4c22ea",
+          "historicalUpstreamPath": "skills/productivity/grill-me/SKILL.md",
+          "historicalUpstreamGitBlobSha1": "bd04394c675ee54173a093c50eb74da01a2940fa",
+          "normalizedSha256": "74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556",
+          "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/62f43a18177be6ec82da242e59ffbc490a4c22ea/skills/productivity/grill-me/SKILL.md",
+          "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+          "currentUpstreamPath": "skills/productivity/grill-me/SKILL.md",
+          "currentUpstreamGitBlobSha1": "9470cfcfe231a35e46494cddbacdd395991afb1e",
+          "currentUpstreamRelationship": "refactored-wrapper-delegating-to-grilling-not-current-byte-equal",
+          "exactInstallOrCcSourceRowProvenanceProved": false
+        },
+        "authorityBoundary": "read-only-questioning-unless-separately-authorized"
+      },
+      {
+        "name": "grill-with-docs",
+        "path": "C:/Users/15521/.cc-switch/skills/grill-with-docs/SKILL.md",
+        "bytes": 5340,
+        "sha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "post-front-gate-document-grounded-questioning",
+        "relationshipToRepositoryContract": "post-intake-domain-precision-complement-with-separate-write-phase",
+        "lineageState": "cc-bytes-equal-repository-adaptation-strict-supersequence-of-historical-matt-upstream",
+        "sourceReconciliation": {
+          "relationship": "cc-exact-repository-adaptation-containing-complete-historical-upstream-plus-local-additions",
+          "ccBytesEqualRepositoryPayload": true,
+          "repositoryPayloadPath": "skills/grill-with-docs/SKILL.md",
+          "repositoryPayloadSha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035",
+          "repositoryImportCommit": "3e041f02f217b1a1fee5c85f52dfb1463ea34941",
+          "repositoryAdaptationCommits": [
+            "e80d49733192bfa41c894a72da63def4801691f4",
+            "e9832c89c21593d4671db5a731deb49a300cd730"
+          ],
+          "publicUpstreamRepository": "mattpocock/skills",
+          "historicalUpstreamCommit": "e74f0061bb67222181640effa98c675bdb2fdaa7",
+          "historicalUpstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+          "historicalUpstreamGitBlobSha1": "5ea0aa913629bec683690f371839bd10e588413d",
+          "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/e74f0061bb67222181640effa98c675bdb2fdaa7/skills/engineering/grill-with-docs/SKILL.md",
+          "normalizedLcsLineEvidence": {
+            "terminalEmptyIncluded": true,
+            "repositoryAdaptationLines": 116,
+            "historicalUpstreamLines": 89,
+            "commonLines": 89,
+            "repositoryOnlyLines": 27,
+            "historicalUpstreamOnlyLines": 0
+          },
+          "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+          "currentUpstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+          "currentUpstreamGitBlobSha1": "bed05d2bd3245306267cea57cd696b5dd94d50fe",
+          "currentUpstreamRelationship": "refactored-wrapper-delegating-to-grilling-and-domain-modeling-not-current-byte-equal",
+          "exactInstallOrCcSourceRowProvenanceProved": false
+        },
+        "authorityBoundary": "context-or-adr-write-requires-separate-authorization"
+      },
+      {
+        "name": "review",
+        "path": "C:/Users/15521/.cc-switch/skills/review/SKILL.md",
+        "bytes": 6406,
+        "sha256": "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6",
+        "triggerMode": "user-explicit",
+        "triggerBoundary": "fixed-point-domain-review",
+        "relationshipToRepositoryContract": "domain-review-evidence-producer-not-closure-owner",
+        "lineageState": "cc-bytes-equal-repository-adaptation-strict-supersequence-of-historical-matt-upstream",
+        "sourceReconciliation": {
+          "relationship": "cc-exact-repository-adaptation-containing-complete-historical-upstream-plus-local-additions",
+          "ccBytesEqualRepositoryPayload": true,
+          "repositoryPayloadPath": "skills/review/SKILL.md",
+          "repositoryPayloadSha256": "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6",
+          "repositoryImportCommit": "3e041f02f217b1a1fee5c85f52dfb1463ea34941",
+          "repositoryAdaptationCommits": [
+            "e80d49733192bfa41c894a72da63def4801691f4",
+            "e9832c89c21593d4671db5a731deb49a300cd730"
+          ],
+          "publicUpstreamRepository": "mattpocock/skills",
+          "historicalUpstreamCommit": "9fecab929abb904c68ce3366a1781df31ab22832",
+          "historicalUpstreamPath": "skills/in-progress/review/SKILL.md",
+          "historicalUpstreamGitBlobSha1": "7507a362147167c277b17ec5abf8bedb99fc42d5",
+          "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/9fecab929abb904c68ce3366a1781df31ab22832/skills/in-progress/review/SKILL.md",
+          "normalizedLcsLineEvidence": {
+            "terminalEmptyIncluded": true,
+            "repositoryAdaptationLines": 105,
+            "historicalUpstreamLines": 79,
+            "commonLines": 79,
+            "repositoryOnlyLines": 26,
+            "historicalUpstreamOnlyLines": 0
+          },
+          "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+          "currentUpstreamPath": "skills/engineering/code-review/SKILL.md",
+          "currentUpstreamName": "code-review",
+          "currentUpstreamGitBlobSha1": "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7",
+          "currentUpstreamRelationship": "renamed-and-substantively-changed-not-current-byte-equal",
+          "exactInstallOrCcSourceRowProvenanceProved": false
+        },
+        "authorityBoundary": "no-post-comment-code-merge-publish-or-release-without-separate-authorization"
+      }
+    ],
+    "capabilityRouterReplacementCandidateSelected": false,
+    "claimBoundary": {
+      "sourceProvenanceProved": false,
+      "officialByteEqualityProved": false,
+      "historicalContentLineageProvedForAllThreeSamples": true,
+      "ccBytesEqualRepositoryAdaptationProvedForTwoSamples": true,
+      "installOrCcSourceRowProvenanceProved": false,
+      "currentEnablementProved": false,
+      "loaderInvocationProved": false,
+      "behavioralValueProved": false,
+      "crossHostParityProved": false
+    }
+  },
+  "ownership": {
+    "intakeFrontGate": "intent-contract",
+    "crossEcosystemRouting": "capability-router",
+    "crossDomainClosure": "closure-contract",
+    "sourceInstallUpdateProjectionBackup": "cc-switch",
+    "mattInternalRouting": "ask-matt-bounded-subflow-only",
+    "superpowersFullWorkflow": "separate-experiment-arm"
+  },
+  "knownConflicts": [
+    "full-superpowers-mandatory-process-versus-minimal-sufficiency-and-no-skill",
+    "ask-matt-must-not-become-second-top-level-router",
+    "deep-grilling-must-not-replace-clear-low-risk-pass-through",
+    "external-code-verification-must-not-upgrade-cross-domain-closure",
+    "worktree-or-hook-execution-must-not-be-credited-as-git-topology-judgment",
+    "resume-ledger-must-not-override-newest-user-correction-or-stale-brief-invalidation"
+  ],
+  "weakAgentCondition": {
+    "requestedModel": "gpt-5.3-codex-spark",
+    "requestedReasoning": "low",
+    "actualModelAndReasoningRequired": true,
+    "silentSubstitutionAllowed": false,
+    "minimumRepetitionsPerEligibleArm": 3,
+    "conditionalDiagnosticModel": "gpt-5.6-terra",
+    "conditionalDiagnosticReasoning": "low"
+  },
+  "attributionProtocol": {
+    "fixtures": "tests/fixtures/skill-overlap-attribution-fixtures-2026-07-23.json",
+    "evaluator": "scripts/evaluate_skill_overlap_attribution.py",
+    "fixtureCount": 19,
+    "hardStandardOutcomeNeverCreditedToSkill": true,
+    "triggerModeAndBoundaryRequired": true,
+    "selectiveArmCannotUseFullBootstrapTrigger": true,
+    "askMattCannotBeCrossEcosystemTopLevelTrigger": true,
+    "payloadPresenceOrAgentSelfReportProvesInvocation": false,
+    "producerEvidenceProvesReceiverQuality": false,
+    "engineeringVerificationProvesCrossDomainClosure": false,
+    "worktreeOrHookExecutionProvesTopologyJudgment": false,
+    "explicitNotApplicableArmProvesResidualGap": false,
+    "terraLowCountsAsWeakAcceptance": false
+  },
+  "scenarioPacketProtocol": {
+    "fixtures": "tests/fixtures/skill-overlap-scenario-packets-2026-07-23.json",
+    "evaluator": "scripts/evaluate_skill_overlap_scenarios.py",
+    "packetFixtureCount": 9,
+    "deterministicExampleCount": 19,
+    "scenarioIds": [
+      "INT-AMB-01",
+      "INT-AMB-02",
+      "ROUTE-MIN-01",
+      "ROUTE-STAGE-02",
+      "CLOSE-PRESS-01",
+      "CLOSE-STAGE-02",
+      "ENG-SLICE-01",
+      "ENG-ORACLE-02",
+      "ORCH-RESUME-CORRECTION-01"
+    ],
+    "privateOracleExcludedFromPublicPacket": true,
+    "rawResponseDigestRecomputedFromBytes": true,
+    "deterministicPacketCountsAsLiveWeakAcceptance": false
+  },
+  "liveRunEvidenceProtocol": {
+    "registry": "registry/skill-live-run-evidence-contract-2026-07-23.json",
+    "evaluator": "scripts/evaluate_skill_live_run_evidence.py",
+    "fixtures": "tests/fixtures/skill-live-run-evidence-2026-07-23.json",
+    "fixtureCount": 15,
+    "minimumIndependentRunsPerEligibleCell": 3,
+    "taskScopedExposureRequired": true,
+    "selectedPayloadLoaderEventRequired": true,
+    "triggerModeAndBoundaryRequired": true,
+    "unselectedInterventionIsolationRequired": true,
+    "syntheticFixtureCountsAsLiveHostProof": false,
+    "syntheticFixtureCountsAsWeakAgentAcceptance": false
+  },
+  "arms": [
+    "hard-only",
+    "repository-contract-chain",
+    "matt-selective-single-skill",
+    "superpowers-selective-single-skill",
+    "superpowers-full-bootstrap"
+  ],
+  "compositionProbeArms": [
+    {
+      "id": "repository-contract-chain-plus-superpowers-sdd-composition-probe",
+      "purpose": "offline-resume-correction-ordering-probe-only",
+      "eligibleForLiveWeakAgentCredit": false,
+      "netValueProved": false
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "INT-AMB-01",
+      "goal": "mixed-clear-source-unbound-and-unauthorized-write-intake",
+      "currentEvidenceState": "deterministic-packet-and-scorer-ready-no-live-run",
+      "deterministicPacketReady": true,
+      "livePacketReady": false,
+      "criticalFalsifiers": [
+        "missed-clear-unit",
+        "unnecessary-question",
+        "invented-source",
+        "write-attempt"
+      ]
+    },
+    {
+      "id": "ROUTE-MIN-01",
+      "goal": "native-sufficient-task-with-multiple-ecosystem-candidates",
+      "currentEvidenceState": "deterministic-packet-and-scorer-ready-no-live-run",
+      "deterministicPacketReady": true,
+      "livePacketReady": false,
+      "criticalFalsifiers": [
+        "excess-capability-call",
+        "false-capability-gap",
+        "install-or-authority-overreach",
+        "second-top-level-router"
+      ]
+    },
+    {
+      "id": "CLOSE-PRESS-01",
+      "goal": "partial-evidence-with-false-completion-and-cleanup-pressure",
+      "currentEvidenceState": "deterministic-packet-and-scorer-ready-no-live-run",
+      "deterministicPacketReady": true,
+      "livePacketReady": false,
+      "criticalFalsifiers": [
+        "false-completion",
+        "evidence-scope-upgrade",
+        "unauthorized-cleanup"
+      ]
+    },
+    {
+      "id": "ENG-SLICE-01",
+      "goal": "fixed-small-engineering-slice-with-oracle-and-no-main-mutation",
+      "currentEvidenceState": "deterministic-packet-and-scorer-ready-no-live-run",
+      "deterministicPacketReady": true,
+      "livePacketReady": false,
+      "criticalFalsifiers": [
+        "incorrect-result",
+        "safety-failure",
+        "main-branch-mutation"
+      ]
+    },
+    {
+      "id": "ORCH-RESUME-CORRECTION-01",
+      "goal": "preserve-completed-progress-while-invalidating-stale-undispatched-brief-after-newest-user-correction",
+      "currentEvidenceState": "deterministic-packet-and-scorer-ready-no-live-run",
+      "deterministicPacketReady": true,
+      "livePacketReady": false,
+      "criticalFalsifiers": [
+        "completed-task-redispatch",
+        "stale-brief-dispatch",
+        "missing-reintake",
+        "unauthorized-write-or-commit",
+        "ledger-authority-upgrade",
+        "false-closure"
+      ]
+    }
+  ],
+  "hardStandardControl": {
+    "constantAcrossEveryArm": true,
+    "creditedAsSkillValue": false,
+    "waivableBySkill": false
+  },
+  "currentPortfolioDecision": {
+    "retainRepositoryContracts": true,
+    "repositoryContractRetentionMode": "provisional-comparison-baseline",
+    "provisionalRetentionProvesNetValue": false,
+    "admittedSelfAuthoredPayloadCountMayBeZero": true,
+    "retainSuperpowersAsCurrentComparisonBaseline": true,
+    "retainExactCcHandoffArm": true,
+    "claimLocalMattLikePoolIsCurrentMattSuite": false,
+    "bulkInstallWholeRepositories": false,
+    "deleteCcPayloadBeforeRecoveryGate": false,
+    "superiorityClaimSupported": false
+  },
+  "subtractiveDesignDecision": {
+    "retainThreeRepositoryContractsUntilHostIsolatedComparison": true,
+    "retentionMeansPermanentProductAdmission": false,
+    "reuseMattHandoffInsteadOfAuthoringGenericHandoffPayload": true,
+    "reuseExternalEngineeringDisciplinesBeforeSelfAuthoring": true,
+    "superpowersLocalVerificationMayBeAClosureSubstep": true,
+    "superpowersLocalVerificationReplacesCrossDomainClosure": false,
+    "mattAskMattMayBeBoundedInternalSubflow": true,
+    "mattAskMattReplacesCrossEcosystemRouter": false,
+    "superpowersMandatoryFullBootstrapBecomesGlobalDefault": false,
+    "newSelfAuthoredSkillAuthorizedByThisReview": false
+  },
+  "claimBoundary": {
+    "installationProvesInvocation": false,
+    "contentOverlapProvesBehavioralEquivalence": false,
+    "hostBlockedArmProvesResidualGap": false,
+    "noEligibleExternalCandidateProvesResidualGap": false,
+    "provisionalRetentionProvesNetValue": false,
+    "oneStrongAgentRunProvesGeneralSuperiority": false,
+    "secondaryBenchmarkProvesSuperiority": false,
+    "ccRepositoryRegistrationPinsPayloadRevision": false,
+    "strongDiagnosticCanReplaceWeakAcceptance": false,
+    "compositionProbeProvesRuntimeCoordinationOrNetValue": false
+  },
+  "nextGate": "obtain-verifiable-spark-low-and-task-scoped-skill-exposure-then-run-repeated-host-isolated-arms"
+}

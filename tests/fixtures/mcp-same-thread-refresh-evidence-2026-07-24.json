@@ -1,0 +1,261 @@
+{
+  "schema": 1,
+  "id": "mcp-same-thread-refresh-evidence-fixtures-2026-07-24",
+  "baseEvidence": {
+    "schema": 1,
+    "synthetic": true,
+    "liveExecutionObserved": false,
+    "sourceSkeletonSha256": "injected-by-fixture-runner",
+    "hostBinding": {
+      "identity": "synthetic-codex-host",
+      "version": "synthetic-1.0",
+      "platform": "synthetic-windows",
+      "protocolSchemaSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "adapterId": "synthetic-parent-capture-adapter",
+      "adapterVersion": "synthetic-adapter-1",
+      "appServerInstanceId": "synthetic-app-server-instance-1",
+      "appServerPid": 4242,
+      "appServerCreateTime": "2026-07-24T00:00:00Z",
+      "evidenceSource": "synthetic-fixture"
+    },
+    "authority": {
+      "disposableHomeAuthorized": true,
+      "configDeltaAuthorized": true,
+      "reloadAuthorized": true,
+      "activeTurnAuthorized": true,
+      "restoreAuthorized": true,
+      "userConfigRead": false,
+      "authOrSecretRead": false
+    },
+    "target": {
+      "identity": "example:local-schema-mcp",
+      "source": "reviewed-local-fixture",
+      "revision": "synthetic-revision-1",
+      "sourceSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "semanticKey": "mcp_servers.example-local-schema.enabled",
+      "expectedTransition": "available-to-unavailable"
+    },
+    "threadId": "synthetic-thread-1",
+    "configuration": {
+      "initialSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "changedSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "restoredSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "changedKeys": ["mcp_servers.example-local-schema.enabled"]
+    },
+    "events": [
+      {
+        "seq": 1,
+        "role": "pre-status",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 100,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"diagnosticOnly": true, "reportedToolState": "enabled"}
+      },
+      {
+        "seq": 2,
+        "role": "baseline-direct-call",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 200,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"outcome": "available", "runtimeInstanceId": "runtime-old"}
+      },
+      {
+        "seq": 3,
+        "role": "config-delta",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 300,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {
+          "configSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "changedKeys": ["mcp_servers.example-local-schema.enabled"]
+        }
+      },
+      {
+        "seq": 4,
+        "role": "reload-request",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 400,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"method": "config/mcpServer/reload"}
+      },
+      {
+        "seq": 5,
+        "role": "reload-response",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 500,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"accepted": true}
+      },
+      {
+        "seq": 6,
+        "role": "active-turn",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 600,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"turnId": "synthetic-turn-1", "completed": true}
+      },
+      {
+        "seq": 7,
+        "role": "post-direct-call",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 700,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"outcome": "unavailable", "runtimeInstanceId": "none"}
+      },
+      {
+        "seq": 8,
+        "role": "post-status",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 800,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {"diagnosticOnly": true, "reportedToolState": "disabled"}
+      },
+      {
+        "seq": 9,
+        "role": "config-restore",
+        "threadId": "synthetic-thread-1",
+        "monotonicNs": 900,
+        "artifactRef": "generated-by-fixture-runner",
+        "artifactSha256": "recomputed-by-fixture-runner",
+        "evidenceSource": "synthetic-fixture",
+        "details": {
+          "configSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "artifactsBase64": {},
+    "releaseObservation": {
+      "state": "not-observed",
+      "cause": "not-claimed",
+      "evidenceSource": "synthetic-fixture"
+    },
+    "claimBoundary": {
+      "oldRuntimeReleaseProved": false,
+      "taskEndReleaseProved": false,
+      "leaseProved": false,
+      "referenceCountProved": false,
+      "resourceBenefitProved": false,
+      "desktopParityProved": false,
+      "globalConfigMutationAuthorized": false,
+      "reloadAloneProvesCausality": false
+    }
+  },
+  "fixtures": [
+    {
+      "id": "complete-synthetic-envelope",
+      "expected": "evidence-contract-ready-not-live-host-proved"
+    },
+    {
+      "id": "source-skeleton-digest-drift",
+      "patch": {
+        "sourceSkeletonSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected": "blocked-source-skeleton-binding"
+    },
+    {
+      "id": "active-turn-not-authorized",
+      "patch": {"authority": {"activeTurnAuthorized": false}},
+      "expected": "blocked-authority-or-host-binding"
+    },
+    {
+      "id": "reload-accepted-without-active-turn",
+      "dropEventRoles": ["active-turn"],
+      "expected": "reload-accepted-active-turn-unobserved"
+    },
+    {
+      "id": "status-changes-but-runtime-call-does-not",
+      "eventPatches": {
+        "post-direct-call": {
+          "details": {"outcome": "available", "runtimeInstanceId": "runtime-old"}
+        }
+      },
+      "expected": "same-thread-status-runtime-divergence"
+    },
+    {
+      "id": "post-call-is-on-new-thread",
+      "eventPatches": {
+        "post-direct-call": {"threadId": "synthetic-thread-2"}
+      },
+      "expected": "fail-same-thread-identity"
+    },
+    {
+      "id": "config-delta-expands-beyond-target-key",
+      "patch": {
+        "configuration": {
+          "changedKeys": [
+            "mcp_servers.example-local-schema.enabled",
+            "mcp_servers.unrelated.enabled"
+          ]
+        }
+      },
+      "expected": "fail-config-delta-scope"
+    },
+    {
+      "id": "restore-bytes-do-not-match-initial",
+      "patch": {
+        "configuration": {
+          "restoredSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      },
+      "expected": "fail-config-restore"
+    },
+    {
+      "id": "active-turn-does-not-change-direct-call",
+      "eventPatches": {
+        "post-direct-call": {
+          "details": {"outcome": "available", "runtimeInstanceId": "runtime-old"}
+        },
+        "post-status": {
+          "details": {"diagnosticOnly": true, "reportedToolState": "enabled"}
+        }
+      },
+      "expected": "same-thread-actuation-unproved-or-falsified"
+    },
+    {
+      "id": "pid-disappearance-without-owned-causation",
+      "patch": {
+        "releaseObservation": {
+          "state": "pid-disappeared",
+          "cause": "ownership-or-causation-unproved"
+        }
+      },
+      "expected": "release-unknown-exact-ownership-or-causation-missing"
+    },
+    {
+      "id": "task-end-release-claim-promotion",
+      "patch": {"claimBoundary": {"taskEndReleaseProved": true}},
+      "expected": "hard-fail-lifecycle-claim-promotion"
+    },
+    {
+      "id": "agent-self-report-is-not-parent-event",
+      "eventPatches": {
+        "post-direct-call": {"evidenceSource": "agent-self-report"}
+      },
+      "expected": "fail-parent-event-envelope"
+    }
+  ],
+  "claimBoundary": {
+    "fixturesProveLiveSameThreadActuation": false,
+    "fixturesProveOldRuntimeRelease": false,
+    "fixturesProveTaskEndRelease": false,
+    "fixturesProveLeaseOrReferenceCount": false,
+    "fixturesProveResourceBenefit": false,
+    "fixturesProveDesktopParity": false
+  }
+}

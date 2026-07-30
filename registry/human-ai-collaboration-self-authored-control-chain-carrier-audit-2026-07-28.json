@@ -1,0 +1,339 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28",
+  "date": "2026-07-28",
+  "status": "current-carrier-audit-partial-no-portfolio-mutation",
+  "purpose": "Audit the current intent-contract, capability-router, and closure-contract candidates together with AGENTS rules, the advisory routing Hook, host exposure, compression, and handoff boundaries without treating presence or implicit selection as maturity evidence.",
+  "sourceBindings": {
+    "portfolioOverlapMatrix": "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
+    "currentSkillEvidenceReconciliation": "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json",
+    "instructionCarrierContract": "registry/instruction-carrier-adherence-contract-2026-07-23.json",
+    "contextPressureContract": "registry/context-pressure-provenance-evidence-envelope-2026-07-24.json",
+    "handoffLoaderProbe": "registry/handoff-loader-cli-0.145.0-capability-probe-2026-07-28.json",
+    "semanticAuthorityNoModelExposure": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json"
+  },
+  "currentCarrierObservation": {
+    "globalAgents": {
+      "path": "C:/Users/15521/.codex/AGENTS.md",
+      "bytes": 62363,
+      "lines": 1077,
+      "sha256": "29b7e7970a686e48a9d70d4d21a4151acec1d57d73cf83ba62e22836a2301b23"
+    },
+    "repositoryAgents": {
+      "path": "C:/Projects/agent-autonomy-harness/AGENTS.md",
+      "bytes": 2640,
+      "lines": 51,
+      "sha256": "db4f5ccb824600eb38cd318eba56a37566f23012a8673410cdb98037aba0fcac"
+    },
+    "skills": [
+      {
+        "name": "intent-contract",
+        "agentsPath": "C:/Users/15521/.agents/skills/intent-contract/SKILL.md",
+        "codexPath": "C:/Users/15521/.codex/skills/intent-contract/SKILL.md",
+        "currentBytes": 29139,
+        "currentSha256": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753",
+        "agentsAndCodexByteEqual": true,
+        "ccSwitchPath": "C:/Users/15521/.cc-switch/skills/intent-contract/SKILL.md",
+        "ccSwitchBytes": 23075,
+        "ccSwitchSha256": "7eb8e46648d3b4889fe16e6c650a5f51a4ed1cf0baaeb46e70d9e24e6073befc",
+        "ccSwitchByteEqualToCurrent": false,
+        "currentExactLineOverlapWithGlobalAgents": 73,
+        "currentExactThreeLineWindowOverlapWithGlobalAgents": 36
+      },
+      {
+        "name": "capability-router",
+        "agentsPath": "C:/Users/15521/.agents/skills/capability-router/SKILL.md",
+        "codexPath": "C:/Users/15521/.codex/skills/capability-router/SKILL.md",
+        "currentBytes": 22018,
+        "currentSha256": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe",
+        "agentsAndCodexByteEqual": true,
+        "ccSwitchPath": "C:/Users/15521/.cc-switch/skills/capability-router/SKILL.md",
+        "ccSwitchBytes": 16581,
+        "ccSwitchSha256": "3f1fd8597314ad501fa813864b0c73d7182ab64349f97a1bff640a508af5a127",
+        "ccSwitchByteEqualToCurrent": false,
+        "currentExactLineOverlapWithGlobalAgents": 28,
+        "currentExactThreeLineWindowOverlapWithGlobalAgents": 12
+      },
+      {
+        "name": "closure-contract",
+        "agentsPath": "C:/Users/15521/.agents/skills/closure-contract/SKILL.md",
+        "codexPath": "C:/Users/15521/.codex/skills/closure-contract/SKILL.md",
+        "currentBytes": 12187,
+        "currentSha256": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3",
+        "agentsAndCodexByteEqual": true,
+        "ccSwitchPath": "C:/Users/15521/.cc-switch/skills/closure-contract/SKILL.md",
+        "ccSwitchBytes": 7872,
+        "ccSwitchSha256": "b3515179f8304c2fa0b1a2a88450c2ccc98ab9cfdbb144b0b829526757052524",
+        "ccSwitchByteEqualToCurrent": false,
+        "currentExactLineOverlapWithGlobalAgents": 10,
+        "currentExactThreeLineWindowOverlapWithGlobalAgents": 2
+      }
+    ],
+    "startupVisibleCatalog": {
+      "logicalSkillNames": [
+        "intent-contract",
+        "capability-router",
+        "closure-contract"
+      ],
+      "visibleEntriesPerLogicalName": 2,
+      "observedRoots": [
+        "C:/Users/15521/.agents/skills",
+        "C:/Users/15521/.codex/skills"
+      ],
+      "evidenceClass": "current-thread-parent-visible-catalog-not-independent-loader-event",
+      "loaderInvocationProved": false
+    },
+    "ownerRecalibration20260729": {
+      "commonAgentsSkillsRootMustBeRetained": true,
+      "rootRetentionImpliesPayloadRetention": false,
+      "hostSpecificSkillPackagesMayDiffer": true,
+      "claudeCodexByteParityRequired": false,
+      "currentTurnImplicitSelectionLikeBehaviorObserved": true,
+      "nativeRuntimeCauseProved": false,
+      "selfAuthoredSkillCauseProved": false,
+      "hookCauseProved": false,
+      "composedCauseProved": false,
+      "stableFreshTaskImplicitSelectionProved": false,
+      "nativeFirstCausalAblationRequired": true,
+      "liveMutationAuthorized": false
+    },
+    "nativeImplicitInvocationEvidence20260729": {
+      "officialDocumentation": {
+        "manual": "https://developers.openai.com/codex/codex-manual.md",
+        "buildSkills": "https://learn.chatgpt.com/docs/build-skills",
+        "implicitInvocationByDescriptionDocumented": true,
+        "allowImplicitInvocationDefaultTrueDocumented": true,
+        "fullSkillBodyReadAfterSelectionDocumented": true,
+        "userSkillRootDocumentedAs": "$HOME/.agents/skills"
+      },
+      "hostVersion": "0.145.0",
+      "route": {
+        "model": "gpt-5.6-sol",
+        "provider": "openai",
+        "reasoningEffort": "none",
+        "approval": "never",
+        "sandbox": "read-only"
+      },
+      "isolation": {
+        "freshEphemeralTaskPerArm": true,
+        "temporaryCodexHome": true,
+        "globalAgentsExcluded": true,
+        "codexPrivateSkillRootExcluded": true,
+        "hookExcluded": true,
+        "projectAgentsExcluded": true,
+        "threeSelfAuthoredAgentsSkillsTemporarilyMoved": true,
+        "commonAgentsSkillsRootRetained": true,
+        "samePromptBothArms": true,
+        "sentinelTokenAbsentFromDescription": true
+      },
+      "control": {
+        "sentinelPresent": false,
+        "exitCode": 0,
+        "matchedPrivateBodyToken": false
+      },
+      "treatment": {
+        "sentinelPresent": true,
+        "exitCode": 0,
+        "fullSkillBodyReadVisible": true,
+        "response": "PURPLE_COMPASS_RECEIPT_7D29",
+        "matchedPrivateBodyToken": true
+      },
+      "causalPass": true,
+      "cleanup": {
+        "threeSelfAuthoredSkillsRestoredByTreeDigest": true,
+        "sentinelRemoved": true,
+        "temporaryAuthenticationCopyRemoved": true
+      },
+      "claimLimits": {
+        "nativeImplicitInvocationCapabilityProvedCurrentHost": true,
+        "earlierMixedCarrierTurnAttributed": false,
+        "universalTriggerReliabilityProved": false,
+        "selfAuthoredIncrementalValueProved": false,
+        "desktopAppServerExactChainFactorialSatisfied": false
+      }
+    },
+    "currentPackageDependencies": [
+      {
+        "skillName": "intent-contract",
+        "relativePath": "references/intake-contract.md",
+        "agentsPath": "C:/Users/15521/.agents/skills/intent-contract/references/intake-contract.md",
+        "codexPath": "C:/Users/15521/.codex/skills/intent-contract/references/intake-contract.md",
+        "currentBytes": 20948,
+        "currentSha256": "66e3990e36f3771c5bd22136834100b7aba799c6416968f486e5929204392b93",
+        "agentsAndCodexByteEqual": true,
+        "ccSwitchPath": "C:/Users/15521/.cc-switch/skills/intent-contract/references/intake-contract.md",
+        "ccSwitchBytes": 18294,
+        "ccSwitchSha256": "8cae799380bed8b98eebecd43bbade44ad9cdb9b2551b4486c5c948b7c44f1b9",
+        "ccSwitchByteEqualToCurrent": false
+      },
+      {
+        "skillName": "capability-router",
+        "relativePath": "references/routing-contract.md",
+        "agentsPath": "C:/Users/15521/.agents/skills/capability-router/references/routing-contract.md",
+        "codexPath": "C:/Users/15521/.codex/skills/capability-router/references/routing-contract.md",
+        "currentBytes": 10108,
+        "currentSha256": "17d7ef3892f2794f78321615f276d89e5040059b6bf49793c2edebbfe5e90c3b",
+        "agentsAndCodexByteEqual": true,
+        "ccSwitchPath": "C:/Users/15521/.cc-switch/skills/capability-router/references/routing-contract.md",
+        "ccSwitchBytes": 4794,
+        "ccSwitchSha256": "1ab6f8d5d344dc48386513305bcc5610f6654f27db850b7894d7fe9c53dba85e",
+        "ccSwitchByteEqualToCurrent": false
+      }
+    ]
+  },
+  "hookObservation": {
+    "observationDate": "2026-07-28",
+    "historicalObservationNotCurrentState": true,
+    "registrationPath": "C:/Users/15521/.codex/hooks.json",
+    "registrationSha256": "2d7e4f93aedddfe5816efdd8f07b92f48b3c2fed29bbbe2bd78b42f4a29d90fa",
+    "handlerPath": "C:/Users/15521/.codex/hooks/capability-router/capability_router.py",
+    "handlerSha256": "6a9bf721132023fd2d5a68ee830c3958ef6616bc2c3e1cc7a6676288d84bb2ad",
+    "policyPath": "C:/Users/15521/.codex/hooks/capability-router/policies/capability-ecosystem-recall.json",
+    "policySha256": "125b8ece99315978ac0abaa41e5a7ad158d2b14aecfda7cc2024dda5063c4ad0",
+    "policyStatus": "candidate",
+    "mode": "auto",
+    "event": "UserPromptSubmit",
+    "action": "advisory-context-injection",
+    "mayDeny": false,
+    "mayMutateExternalState": false,
+    "externalTransmission": "deny",
+    "handlerFailure": "fail-open-with-evidence",
+    "boundedSyntheticProbe": {
+      "positiveOutputBytes": 428,
+      "positiveElapsedMilliseconds": 1198.3,
+      "negativeOutputBytes": 0,
+      "negativeElapsedMilliseconds": 1592.9,
+      "sampleCountPerClass": 1,
+      "latencyGeneralizationAllowed": false
+    },
+    "liveRecheck20260729": {
+      "hooksJsonExists": true,
+      "hooksJsonValue": {},
+      "activeHookRegistrationObserved": false,
+      "hooksDirectoryExists": true,
+      "hooksDirectoryFileCount": 0,
+      "historicalConfigStateEntryExists": true,
+      "historicalStateOrDirectoryCountsAsInvocationEvidence": false
+    }
+  },
+  "coverageAssessment": [
+    {
+      "surface": "negative-boundary intake",
+      "currentCandidate": "intent-contract",
+      "nativeOrHardBaseline": "global and repository AGENTS front gates",
+      "reviewedExternalOverlap": [
+        "Matt grilling and grill-with-docs",
+        "Superpowers brainstorming"
+      ],
+      "assessment": "material-overlap-ablation-required"
+    },
+    {
+      "surface": "cross-ecosystem capability routing",
+      "currentCandidate": "capability-router",
+      "nativeOrHardBaseline": "global AGENTS capability orchestration plus native reasoning",
+      "reviewedExternalOverlap": [
+        "Matt ask-matt as ecosystem-local subflow",
+        "Superpowers using-superpowers as process-first subflow"
+      ],
+      "assessment": "broad-owner-claim-unproved-hook-is-separate-treatment"
+    },
+    {
+      "surface": "claim-sufficient closure",
+      "currentCandidate": "closure-contract",
+      "nativeOrHardBaseline": "global AGENTS closure and status-mutation gates",
+      "reviewedExternalOverlap": [
+        "Superpowers verification-before-completion",
+        "Matt code-review and handoff"
+      ],
+      "assessment": "cross-task-residual-role-plausible-but-live-net-value-unproved"
+    },
+    {
+      "surface": "instruction-carrier adherence",
+      "currentCandidate": "AGENTS plus Skills",
+      "nativeOrHardBaseline": "host discovery and repository instructions",
+      "reviewedExternalOverlap": [],
+      "assessment": "offline-contract-pass-live-loader-and-cross-host-open"
+    },
+    {
+      "surface": "compression and continuation",
+      "currentCandidate": "repository-anchored continuation protocol",
+      "nativeOrHardBaseline": "host compression and thread lifecycle",
+      "reviewedExternalOverlap": [
+        "source-backed Matt handoff"
+      ],
+      "assessment": "automatic-compression-telemetry-and-handoff-loader-observability-open"
+    }
+  ],
+  "focusedVerification": {
+    "semanticAuthorityProjectionExposureProtocolAndAuditTests": 23,
+    "carrierOverlapHandoffAndContextTests": 60,
+    "allPassedAtObservation": true,
+    "repositoryVerifierPassedBeforeCurrentEvidenceWrites": true,
+    "repositoryVerifierPassedAfterEvidenceAndTemporaryRootReconciliation": true,
+    "exactTemporaryProjectionAndReportRemovedAfterEvidencePersistence": true
+  },
+  "findings": [
+    {
+      "id": "CHAIN-01",
+      "severity": "high",
+      "finding": "Three logical Skills have byte-equal current Agents and Codex copies but byte-distinct CC Switch copies, so current canonical ownership and consumer convergence are not proved."
+    },
+    {
+      "id": "CHAIN-02",
+      "severity": "high",
+      "finding": "The startup-visible catalog exposes two entries per logical self-authored Skill while no independent loader event exists; duplicate visibility cannot be treated as reliable invocation or beneficial redundancy."
+    },
+    {
+      "id": "CHAIN-03",
+      "severity": "medium",
+      "finding": "The global AGENTS baseline and all three Skill bodies contain exact repeated rule windows, so Skill value must be measured against hard-only native behavior rather than credited from shared constraints."
+    },
+    {
+      "id": "CHAIN-04",
+      "severity": "medium",
+      "finding": "The candidate capability-router Hook is currently registered in auto mode and adds prompt-path latency plus repeated routing context; its recall benefit, false-positive rate, context cost, and failure behavior have not been compared as a separate treatment."
+    },
+    {
+      "id": "CHAIN-05",
+      "severity": "high",
+      "finding": "Current host evidence proves exposure and explicit Skill reading only, not implicit loader invocation, instruction delivery, adherence, causation, or weak-Agent value."
+    },
+    {
+      "id": "CHAIN-06",
+      "severity": "high",
+      "finding": "Automatic compression telemetry, automatic thread creation, source-backed handoff loader observability, and receiver recovery remain open; repository continuation is a verified navigation practice, not automatic host continuity."
+    },
+    {
+      "id": "CHAIN-07",
+      "severity": "high",
+      "finding": "Body-only Skill pins are not dependency-complete: intent-contract and capability-router each require one current reference file, and both current references are byte-equal across Agents and Codex but byte-distinct from their CC Switch counterparts."
+    }
+  ],
+  "decision": {
+    "selfAuthoredChainPresumedCorrect": false,
+    "selfAuthoredResidualGapProved": false,
+    "implicitLoadingCountsAsMaturity": false,
+    "hookDefaultValueProved": false,
+    "skillInstallUpdateDeleteReplaceOrRetireAllowed": false,
+    "ccSwitchMutationAllowed": false,
+    "weakModelDispatchAllowedByThisAudit": false,
+    "agentsSkillsRootRemovalAllowed": false,
+    "hostSpecificByteParityRequired": false,
+    "nativeFirstCausalAblationRequired": false,
+    "nativeImplicitInvocationCapabilityProvedCurrentHost": true,
+    "selfAuthoredIncrementalValueAblationRequired": true,
+    "nextBoundedAction": "Materialize a dependency-complete isolated projection of the exact current chain, then prove no-model task-scoped four-cell exposure without changing the live user Hook configuration."
+  },
+  "claimBoundary": {
+    "nativeSufficiencyProved": false,
+    "officialCapabilitySuperiorityProved": false,
+    "reviewedExternalCapabilitySuperiorityProved": false,
+    "selfAuthoredChainValueProved": false,
+    "hookNetValueProved": false,
+    "crossHostAdherenceProved": false,
+    "compressionContinuityProved": false,
+    "handoffRecoveryProved": false,
+    "portfolioMutationJustified": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-CARRIER-AUDIT-2026-07-28.md"
+}

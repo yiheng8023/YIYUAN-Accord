@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "SE-E2E-THIN-01-ZERO-001-G0-source-scope-authority",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "gateId": "G0-source-scope-authority",
+  "stageId": null,
+  "sequence": 0,
+  "decision": "approve",
+  "decisionClass": "source-scope",
+  "proposalArtifactCanonicalSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+  "beforeAcceptedLedgerSha256": null,
+  "allowedChangeIds": [],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [],
+    "artifactIds": [
+      "SOURCE-BUNDLE"
+    ],
+    "actions": [
+      "requirements-analysis-only"
+    ]
+  },
+  "inputArtifactDigests": [
+    "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "requester-and-product-owner",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:00+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "f57a9eace86a17f1b3f92d3095986d32c7899d35101fe9cc323e37d27425b119"
+}

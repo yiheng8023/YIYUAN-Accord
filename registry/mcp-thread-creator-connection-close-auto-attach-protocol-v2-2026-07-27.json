@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "id": "MCP-THREAD-CREATOR-CONNECTION-CLOSE-AUTO-ATTACH-V2-01",
+  "date": "2026-07-27",
+  "status": "offline-amendment-not-live-executed",
+  "supersessionBoundary": {
+    "amendsProtocolPath": "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json",
+    "amendsProtocolSha256": "8A110058AAC75DDC54E2B3795F6F6BE12004E4CDE0262045BEA79D112D157326",
+    "oldProtocolMutationAuthorized": false,
+    "oldProbePath": "scripts/probe_codex_app_server_mcp_thread_creator_connection_close.py",
+    "oldProbeSha256": "66CF7066B68D92139653C5E41AD74CAA64D00273C662A2899E396501974C2CF6",
+    "oldProbeMutationAuthorized": false
+  },
+  "question": "On Codex CLI app-server 0.145.0 for Windows, after connection B is initialized before connection A creates a read-only non-ephemeral thread and both connections directly call the same exact Sentinel without thread/resume or a model turn, is closing only creator connection A associated with release of that Sentinel within five seconds while B and the app-server remain alive?",
+  "formalRunCount": 0,
+  "design": {
+    "repetitions": 3,
+    "pairedArms": [
+      "connected-control",
+      "creator-connection-close"
+    ],
+    "perArm": {
+      "isolatedCodexHome": true,
+      "isolatedWorkspace": true,
+      "appServerProcesses": 1,
+      "webSocketBridgeProcesses": 2,
+      "loadedThreads": 1,
+      "sentinelInstancesAtBaseline": 1,
+      "pluginsAndAppsDisabled": true,
+      "currentAccountStateCopied": false,
+      "currentUserConfigCopied": false,
+      "modelTurns": 0
+    },
+    "setupSequence": [
+      "Connection B initializes.",
+      "Connection B completes config/read as an initialized barrier before connection A sends thread/start.",
+      "Connection A initializes.",
+      "Connection A starts one non-ephemeral read-only thread.",
+      "Connection A calls Sentinel identity on that thread.",
+      "Connection B directly calls Sentinel identity on the same thread without thread/resume.",
+      "The parent requires A and B to report the same Sentinel PID and instance ID and binds that exact process identity."
+    ],
+    "rolloutMaterializationRole": "diagnostic-only-never-a-prerequisite",
+    "window": {
+      "seconds": 5,
+      "sampleIntervalSeconds": 0.5,
+      "expectedSamplesPerArm": 11,
+      "maximumActionSkewMilliseconds": 100,
+      "maximumSampleSkewMilliseconds": 250,
+      "connectedControlAction": "No transport action and no host RPC.",
+      "creatorConnectionCloseAction": "Close only connection A bridge stdin/WebSocket. Do not send thread/unsubscribe, config reload, signal, cleanup marker, or any host RPC.",
+      "allowedParentActions": [
+        "sample exact process identities for app-server, Sentinel, connection A bridge, and connection B bridge",
+        "read the local Sentinel event log",
+        "record bridge lifecycle events"
+      ],
+      "forbiddenActions": [
+        "turn/start",
+        "thread/start",
+        "thread/resume",
+        "thread/unsubscribe",
+        "mcpServer/tool/call",
+        "config/read",
+        "config reload",
+        "configuration write",
+        "new thread",
+        "process signal",
+        "cleanup marker",
+        "app-server teardown",
+        "observer connection close"
+      ]
+    },
+    "evidenceSeal": "Setup RPC ledgers, process samples, Sentinel events, transport actions, bridge lifecycle evidence, and configuration bytes/hash are sealed before the observer post-window tool call.",
+    "postWindow": "After the evidence seal only, connection B directly calls Sentinel identity on the same thread without thread/resume.",
+    "failureCleanup": "On any setup, binding, window, seal, or post-window failure, close both injected connection transports and invoke bounded Sentinel cleanup only after retaining the failure trace."
+  },
+  "validityRequirements": [
+    "Both arms use the same bound Codex executable/version and v2 protocol/probe/dependency hashes.",
+    "Each arm has one exact app-server identity and two distinct exact bridge identities.",
+    "Connection B config/read completes before connection A sends thread/start.",
+    "Connection A thread/start is non-ephemeral and read-only.",
+    "Connection B sends no thread/resume and directly calls mcpServer/tool/call with connection A's thread ID.",
+    "A and B bind to the same thread and exact Sentinel PID/instance at baseline.",
+    "The exact Sentinel process is a child of the app-server and has one matching instance-start event.",
+    "No host RPC is sent inside either attribution window.",
+    "The treatment contains exactly one clean creator-connection-close transport action and the control action ledger is empty.",
+    "The observer bridge and app-server remain alive through both windows.",
+    "No model turn request or notification is present.",
+    "Rollout materialization is recorded only as a diagnostic and cannot invalidate a zero-turn setup by absence.",
+    "Configuration bytes remain equal to the pre-window bytes and no auth state is produced.",
+    "Window evidence is sealed before the observer post-window direct tool call.",
+    "Failure cleanup occurs only after the retained trace boundary."
+  ],
+  "preRegisteredOutcomes": {
+    "creator-connection-close-release-associated-bounded": "Control retains the exact Sentinel and treatment has a matching stop event plus exact final process absence.",
+    "creator-connection-close-immediate-release-falsified-bounded": "Both control and treatment retain the exact Sentinel through five seconds and the observer post-window direct call returns the same PID/instance.",
+    "inconclusive-valid-bounded": "Both arm measurements are valid but the control does not establish the required retained baseline or the paired pattern is otherwise non-attributable.",
+    "invalid": "Any acquisition order, identity, timing, action, RPC, liveness, configuration, model-turn, evidence-order, or cleanup validity requirement fails."
+  },
+  "claimBoundary": {
+    "autoAttachIsSecondSubscriptionProved": false,
+    "autoAttachCreatesIndependentOwnerProved": false,
+    "leaseOrReferenceCountProved": false,
+    "taskEndSemanticsProved": false,
+    "finalReleaseSemanticsProved": false,
+    "resourceBenefitProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "selfAuthoredControllerNeedProved": false,
+    "liveReadinessProved": false
+  },
+  "executionBoundary": {
+    "offlineProtocolAndDeterministicTestsAuthorized": true,
+    "formalLivePairedRunsExecuted": false,
+    "appServerStartAuthorized": false,
+    "loopbackTransportExecutionAuthorized": false,
+    "modelOrAccountUseAuthorized": false,
+    "externalNetworkUseAuthorized": false,
+    "globalConfigurationMutationAuthorized": false,
+    "installationAuthorized": false,
+    "liveProtocolExecutionAuthorized": false
+  }
+}

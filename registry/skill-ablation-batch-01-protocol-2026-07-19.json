@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "id": "skill-ablation-batch-01-protocol-2026-07-19",
+  "date": "2026-07-19",
+  "status": "evaluator-hardened-formal-arms-host-blocked",
+  "selection": "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+  "builder": "scripts/build_skill_ablation_batch_01_packet.py",
+  "evaluator": "scripts/evaluate_skill_ablation_batch_01_protocol.py",
+  "payloadObservation": {
+    "observedAt": "2026-07-19",
+    "handoff": {
+      "selectedIdentity": "mattpocock/skills:skills/productivity/handoff",
+      "physicalRoot": "C:/Users/15521/.cc-switch/skills/handoff",
+      "projectionRootsObserved": [
+        "C:/Users/15521/.agents/skills/handoff",
+        "C:/Users/15521/.codex/skills/handoff"
+      ],
+      "ccSwitchDatabaseContentHash": "c97a305f5ca0b6fa21ca82a009ac5a553acd02aab63cf59de939f75ac7797393",
+      "harnessTreeHashV1": "d3fa95374feefb3e51f25d06dddd984778425f78663a650d52399406ad40b042",
+      "files": {
+        "SKILL.md": "57c9f1f392d7352cdc85b1e39ca49eddc70ce1dc278bd9653fb4f23dfc2560fc",
+        "agents/openai.yaml": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+      },
+      "sourceBackedCanaryEvidence": "registry/cc-switch-handoff-real-canary-execution-2026-07-18.json",
+      "freshTaskInvocationObserved": false,
+      "freshTaskStartupVisibilityObserved": false
+    },
+    "gitGuardrails": {
+      "repositoryAndCcTreesEqual": true,
+      "harnessTreeHashV1": "06d20620ecf02eb96e7f9c2cf4f0d30845d05937df055f11c3135625b0e94c23",
+      "ccSwitchDatabaseContentHash": "47419af7fbd00bfa5ac87281a4aaf9b1e89c3f79a212a53dcf8eb9b2f27d78d1",
+      "separateSameNameNearNeighborPresent": true,
+      "nearNeighborDirectory": "git-guardrails-claude-code",
+      "suitableForTopologyDecisionArm": false,
+      "reason": "the payload installs command-interception hooks and does not provide branch-or-worktree topology decision logic"
+    }
+  },
+  "executionTopology": {
+    "ABL-CTX-HANDOFF-01": {
+      "armA": "one weak-agent receiver task using repository sources and the existing private oracle",
+      "armC": "one explicit source-backed handoff producer task followed by one weak-agent receiver task",
+      "armCClaimsSeparated": [
+        "payload-file-identity",
+        "fresh-task-loader-invocation",
+        "handoff-artifact-production",
+        "receiver-task-outcome"
+      ],
+      "producerAndReceiverModelMustBeRecordedSeparately": true,
+      "oneContentInjectionDoesNotProveLoaderInvocation": true,
+      "minimumIndependentRunsPerEligibleArm": 3,
+      "threeRunAggregateRequiredForLivePass": true
+    },
+    "ABL-GIT-TOPOLOGY-01": {
+      "armA": "one weak-agent task over selected deterministic Git facts",
+      "armC": "not-applicable-no-suitable-external-skill-selected",
+      "gitGuardrailsDeferredTo": "ABL-GIT-INTERCEPT-01",
+      "absenceOfArmCDoesNotProveResidualGap": true,
+      "minimumIndependentRunsPerEligibleArm": 3,
+      "threeRunAggregateRequiredForLivePass": true
+    }
+  },
+  "liveEvidenceContract": {
+    "shared": {
+      "requestedAndActualModelRecordedSeparately": true,
+      "actualModelEvidenceSources": [
+        "parent-observed-host-metadata",
+        "host-runtime-event"
+      ],
+      "actualReasoningEvidenceSources": [
+        "parent-observed-host-metadata",
+        "host-runtime-event"
+      ],
+      "selfAuthoredExposureEvidenceSources": [
+        "parent-observed-host-exposure",
+        "host-exposure-event"
+      ],
+      "agentSelfReportedModelReasoningOrExposureAccepted": false,
+      "runIdRequired": true,
+      "hostRunIdRequired": true,
+      "hostThreadIdRequired": true,
+      "hostRunEvidenceSources": [
+        "parent-observed-host-run",
+        "host-runtime-event"
+      ],
+      "rawResponseSha256Required": true,
+      "rawResponseDigestRecomputedFromRawUtf8Bytes": true
+    },
+    "contextArmA": {
+      "criticalFactObjectShape": [
+        "id",
+        "value",
+        "evidence"
+      ],
+      "criticalFactIdsMustExactlyMatchPrivateOracle": true,
+      "criticalFactValuesMustExactlyMatchPrivateOracle": true,
+      "staleAssertionVerdictsDerivedFromRawResponse": true,
+      "singleRunOutcome": "live-context-arm-a-private-oracle-matched",
+      "threeRunOutcome": "live-context-three-repetition-private-oracle-match"
+    },
+    "gitArmA": {
+      "selectedFixtureIdsMustExactlyMatchPrivateOracle": true,
+      "resultIdsMustBeUniqueAndComplete": true,
+      "eachResultShape": [
+        "id",
+        "outcome",
+        "reason"
+      ],
+      "reasonMustBeNonEmpty": true,
+      "everyOutcomeMustMatchPrivateOracle": true,
+      "singleRunOutcome": "live-git-arm-a-oracle-matched",
+      "threeRunOutcome": "live-git-arm-a-three-repetition-oracle-match"
+    },
+    "contextArmC": {
+      "invocationEvidenceSource": "host-loader-event",
+      "agentSelfReportAccepted": false,
+      "startupListPresenceAccepted": false,
+      "filesystemPresenceAccepted": false,
+      "loadedRootMustResolveToBoundPhysicalPayload": true,
+      "observedFileManifestMustExactlyEqualBoundManifest": true,
+      "parentRehashesBoundPayloadBytes": true,
+      "handoffArtifactMustRemainUnderOsTemp": true,
+      "producerAndParentArtifactHashesMustMatchBytes": true,
+      "repositoryTruthBeforeAndAfterRequired": true,
+      "repositoryTruthBeforeAndAfterMustMatch": true,
+      "receiverBoundArtifactHashMustMatchProducer": true,
+      "receiverCriticalFactsAndStaleAssertionsMustMatchPrivateOracle": true,
+      "producerOnlyOutcome": "live-context-arm-c-producer-evidence-observed",
+      "producerReceiverOutcome": "live-context-arm-c-producer-receiver-private-oracle-matched",
+      "threeRunOutcome": "live-context-three-repetition-private-oracle-match"
+    }
+  },
+  "selectedGitFixtureIds": [
+    "git01-incomplete-snapshot",
+    "git01-invented-upstream-comparison",
+    "git01-live-remote-overclaim",
+    "git01-complete-no-upstream",
+    "git02-unauthorized-mutation",
+    "git02-dirty-ownership-unknown",
+    "git02-unrelated-dirty-work",
+    "git02-new-branch-sufficient"
+  ],
+  "selfAuthoredExposureGate": {
+    "skills": ["intent-contract", "capability-router", "closure-contract"],
+    "acceptedObservedStates": ["absent", "host-disabled"],
+    "promptOnlyNonInvocationRequestAccepted": false,
+    "presentOrUnknownResult": "confounded-not-self-authored-disabled-evidence"
+  },
+  "hardStandardControl": {
+    "sameAcrossAllArms": true,
+    "notAnAblationVariable": true,
+    "notCreditedAsSkillValue": true,
+    "skillDisableRemovesOnlyNamedPayloads": true,
+    "controls": [
+      "repository-instruction-baseline",
+      "native-host-approval-boundary",
+      "fixed-scenario-facts",
+      "truth-safety-authority-thresholds",
+      "acceptance-verification"
+    ]
+  },
+  "hostPreflight": {
+    "evidence": "registry/skill-ablation-batch-01-host-preflight-2026-07-19.json",
+    "freshTaskCreated": true,
+    "capacityDiagnosticCompleted": true,
+    "capacityDiagnosticRequestedModel": "gpt-5.6-luna",
+    "capacityDiagnosticRequestedReasoning": "low",
+    "crossRequestedModelExposureAgreementObserved": true,
+    "formalScenarioPromptSent": false,
+    "selfAuthoredSkillsVisible": true,
+    "handoffVisible": false,
+    "handoffLoaderAvailabilityStillUnknown": true,
+    "result": "preflight-confirmed-self-authored-exposure-handoff-loader-unknown"
+  },
+  "authorityBoundary": {
+    "promptPacketGeneration": true,
+    "readCurrentCcPayloadBytesForDigestVerification": true,
+    "freshTaskCreation": false,
+    "temporaryHandoffArtifactWrite": false,
+    "taskScopedSkillDisable": true,
+    "disposableAgentHomeWrite": false,
+    "globalCodexConfigMutation": false,
+    "applicationRestart": false,
+    "skillInstallOrProjection": false,
+    "gitHookOrConfigurationWrite": false,
+    "gitMutation": false,
+    "cleanup": false,
+    "commitOrPush": false
+  },
+  "decisionFixtures": [
+    {
+      "id": "require-live-task-authority",
+      "facts": {"scenario": "ABL-CTX-HANDOFF-01", "arm": "A", "liveTaskRequested": true, "freshTaskCreationAuthorized": false},
+      "expected": "require-explicit-fresh-task-authority"
+    },
+    {
+      "id": "require-temp-artifact-authority",
+      "facts": {"scenario": "ABL-CTX-HANDOFF-01", "arm": "C", "liveTaskRequested": true, "freshTaskCreationAuthorized": true, "tempArtifactWriteRequired": true, "tempArtifactWriteAuthorized": false},
+      "expected": "require-explicit-temp-artifact-authority"
+    },
+    {
+      "id": "reject-digest-algorithm-conflation",
+      "facts": {"scenario": "ABL-CTX-HANDOFF-01", "arm": "C", "liveTaskRequested": false, "digestAlgorithmsConflated": true},
+      "expected": "fail-digest-algorithm-conflation"
+    },
+    {
+      "id": "reject-legacy-handoff-payload",
+      "facts": {"scenario": "ABL-CTX-HANDOFF-01", "arm": "C", "liveTaskRequested": false, "digestAlgorithmsConflated": false, "selectedPayload": "repository-legacy-handoff"},
+      "expected": "fail-wrong-handoff-payload-binding"
+    },
+    {
+      "id": "context-c-packet-ready",
+      "facts": {"scenario": "ABL-CTX-HANDOFF-01", "arm": "C", "liveTaskRequested": false, "digestAlgorithmsConflated": false, "selectedPayload": "cc-source-backed-handoff", "payloadManifestMatches": true},
+      "expected": "ready-prompt-only-context-arm-c"
+    },
+    {
+      "id": "reject-git-guardrails-as-topology-arm",
+      "facts": {"scenario": "ABL-GIT-TOPOLOGY-01", "arm": "C", "liveTaskRequested": false, "selectedPayload": "git-guardrails"},
+      "expected": "reject-unsuitable-git-topology-candidate"
+    },
+    {
+      "id": "git-a-packet-ready",
+      "facts": {"scenario": "ABL-GIT-TOPOLOGY-01", "arm": "A", "liveTaskRequested": false, "selectedGitFixtureCount": 8},
+      "expected": "ready-prompt-only-git-arm-a"
+    },
+    {
+      "id": "reject-prompt-only-self-authored-disable",
+      "facts": {"scenario": "ABL-GIT-TOPOLOGY-01", "arm": "A", "liveTaskRequested": false, "selectedGitFixtureCount": 8, "selfAuthoredExposureState": "prompt-only-not-invoked"},
+      "expected": "confounded-self-authored-exposure-not-disabled"
+    },
+    {
+      "id": "reject-premature-arm-d",
+      "facts": {"scenario": "ABL-GIT-TOPOLOGY-01", "arm": "D", "liveTaskRequested": false, "repeatableResidualGapProved": false},
+      "expected": "hard-fail-premature-self-authored-arm"
+    }
+  ],
+  "claimBoundary": {
+    "promptPacketsProveAgentBehavior": false,
+    "payloadPresenceProvesInvocation": false,
+    "agentSelfReportProvesActualCondition": false,
+    "singleGitRunPassesFormalArm": false,
+    "singleContextRunPassesFormalArm": false,
+    "producerOnlyEvidenceProvesReceiverQuality": false,
+    "noSuitableGitArmCProvesResidualGap": false,
+    "oneWeakAgentRunProvesUniversalBehavior": false,
+    "gitGuardrailsRejectedAsAProduct": false,
+    "liveAblationExecuted": false
+  },
+  "nextGate": "independent-cli-authentication-or-an-already-authorized-host-surface-with-verifiable-actual-weak-model-and-task-scoped-skill-exposure"
+}

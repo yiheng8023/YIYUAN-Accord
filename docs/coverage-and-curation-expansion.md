@@ -35,7 +35,38 @@ mandatory stable program stage and does not prove current live parity.
 The machine-readable coverage model lives in
 `registry/collaboration-domain-coverage.json`. It separates general Skills from
 specialist Skills so the repository can grow without forcing every capability
-into one shape.
+into one shape. That registry is a planning surface, not a completeness proof.
+The solution-neutral, open-world coverage rebaseline and the
+software-engineering lifecycle specialization live in
+`registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json`.
+Historical STM/P/SG coordinates remain a bounded evidence index; mapping every
+historical coordinate does not establish whole-domain or full-lifecycle
+coverage.
+
+The first bounded comparative protocol is
+`registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json`.
+It selects one general research scenario and one software implementation
+scenario, excludes unsuitable or confounded candidates before execution, and
+keeps candidate-specific exposure preflight separate from live comparative
+evidence.
+The first formal native/Matt weak-Agent pair is recorded in
+`registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json`.
+It now contains three runs per arm with a mixed process result; loader
+invocation, Skill causation, general coding quality, and cross-host value
+remain unproved.
+The second software-lifecycle comparison is recorded in
+`registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json`.
+Across three synthetic incident pairs both arms passed the functional oracle
+3/3; native passed the strict process boundary 0/3 and the installed historical
+`diagnose` arm passed 2/3. This is an association, not a preference or causation
+result. A separate three-pair canary assay proves body-only project-Skill
+content reached the model through the bound host mechanism, but it is not an
+independent loader event and does not prove exact installed-`diagnose`
+delivery.
+Codex `0.145.0` structured Skill input is separately evidenced in
+`registry/codex-app-server-structured-skill-input-evidence-2026-07-24.json`.
+It improves treatment binding beyond textual `$skill` naming, but still does
+not prove Skill-body delivery or behavioral causation.
 
 The iterative control plan lives in `registry/curation-expansion-rounds.json`.
 The overall execution plan lives in `registry/curation-program-plan.json` and

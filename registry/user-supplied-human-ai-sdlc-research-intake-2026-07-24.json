@@ -1,0 +1,327 @@
+{
+  "schema": 1,
+  "id": "user-supplied-human-ai-sdlc-research-intake-2026-07-24",
+  "date": "2026-07-24",
+  "status": "retained-research-input-not-accepted-evidence",
+  "purpose": "Bind and assess a user-supplied Kimi research package as a software-engineering lifecycle input without importing its confidence labels, links, conclusions, or proposed standards as project truth.",
+  "authorityBoundary": {
+    "owningRepository": "agent-autonomy-harness",
+    "calibrationState": "paused-read-only",
+    "calibrationWriteAuthorized": false,
+    "assetsAdmissionAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "skillOrHookMutationAuthorizedByThisRecord": false,
+    "runtimeMutationAuthorizedByThisRecord": false,
+    "externalCapabilityInstallationAuthorizedByThisRecord": false,
+    "gitCommitOrPushAuthorizedByThisRecord": false
+  },
+  "sourceArtifact": {
+    "sourceClass": "user-supplied-local-archive",
+    "producerReportedByUser": "Kimi",
+    "producerIndependentlyVerified": false,
+    "archiveName": "hmc_report.agent.final.zip",
+    "archiveBytes": 549186,
+    "archiveSha256": "53DDB51DF05A739EBBF68418D5B9F312AC28142C43C19DE1AE8D5CECECE5D39F",
+    "observedLastWriteLocal": "2026-07-25T12:11:18+08:00",
+    "localAbsolutePathRetainedInPortableRecord": false,
+    "archiveExecuted": false,
+    "archiveReadAndExtractedForInspectionOnly": true,
+    "restoredArchiveObservation": {
+      "observedDate": "2026-07-26",
+      "containerBytes": 549186,
+      "containerSha256": "C59510DB88911D920228803ACE53A2A97D77B9DF7E0EBF79D067BEFC4D02A3BD",
+      "originalContainerSha256Equal": false,
+      "memberNamesSizesAndSha256Equal": true,
+      "classification": "zip-container-metadata-or-member-order-drift-no-member-content-drift",
+      "localPreservationCopyCreated": true,
+      "portableLocalPathRetained": false,
+      "repositorySourceCustodyCreated": true,
+      "repositoryRelativePath": "sources/user-supplied-human-ai-sdlc-research/hmc_report.agent.final.restored-2026-07-26.zip",
+      "repositoryCustodyBytes": 549186,
+      "repositoryCustodySha256": "C59510DB88911D920228803ACE53A2A97D77B9DF7E0EBF79D067BEFC4D02A3BD",
+      "repositoryCustodyHashVerified": true,
+      "gitOrRemoteDurabilityProved": false,
+      "temporaryPreservationCopyStillPresent": true,
+      "cleanupBoundary": "Retain the repository source-custody copy. The byte-equal temporary duplicate remains cleanup debt and may be removed only under separate exact-target cleanup authorization."
+    },
+    "members": [
+      {
+        "name": "hmc_report.agent.final.md",
+        "bytes": 308391,
+        "sha256": "EF7AD703A31175565966716F28824AC3C1CC4AFE8091B4BBB07E62D08A730949",
+        "role": "research report"
+      },
+      {
+        "name": "hmc_report_sec02_chart1.png",
+        "bytes": 159117,
+        "sha256": "2DE38A2DAD0BC36983F4C1DAC0509B8FF6865BF9A6FC8B679480462FE9EFDC5F",
+        "role": "report visualization"
+      },
+      {
+        "name": "hmc_report_sec03_chart1.png",
+        "bytes": 211841,
+        "sha256": "F3755B7C4EE0A9FB17991CEA418E467AC67AA441F7C68A6CA9A7D69B37D52DF1",
+        "role": "report visualization"
+      },
+      {
+        "name": "hmc_report_sec05_chart1.png",
+        "bytes": 86648,
+        "sha256": "6D620A40088145BEBAD2373185E294AC27869F99932469D6077361DEE110CC6F",
+        "role": "report visualization"
+      }
+    ],
+    "portableCustody": "repository-local source custody plus cryptographic identity and bounded audit; source content remains unaccepted evidence and Git or remote durability remains unproved",
+    "temporaryExtractionDisposition": "delete exact inspection directory after durable intake validation"
+  },
+  "reportStructure": {
+    "title": "人机协作短板深度调研报告：面向生产级交付的软件工程全生命周期分析",
+    "lineCount": 1187,
+    "decodedCharacterCount": 183824,
+    "urlOccurrenceCount": 908,
+    "uniqueUrlCount": 503,
+    "referenceEntryCount": 292,
+    "referenceUrlCount": 278,
+    "declaredMethod": {
+      "researchAgentCount": 12,
+      "searchCountClaim": "more-than-300",
+      "templatedEvidenceCountClaim": "approximately-280",
+      "claimTemplateFields": [
+        "Claim",
+        "Source",
+        "URL",
+        "Date",
+        "Excerpt",
+        "Context",
+        "Confidence"
+      ],
+      "confidenceCountsClaimed": {
+        "high": 13,
+        "medium": 10,
+        "low": 5,
+        "conflictZones": 8
+      },
+      "independentlyReproduced": false
+    }
+  },
+  "historicalComparison": {
+    "priorBroadResearch": {
+      "path": "C:/Projects/YIYUAN-CALIBRATION/common/human-ai-collaboration-shortfalls/sources/2026-07-11-human-ai-shortfall-research-refresh.md",
+      "sha256": "FDC5E4EB1AB7CF01752885BC2C9C335F1C301BE407DDBAD697DFCC21E85C6727",
+      "producerRecordedInRepository": false,
+      "scope": "broad human-AI shortfalls and a solution-framed Harness synthesis"
+    },
+    "priorNamedModelReports": [
+      {
+        "path": "C:/Projects/YIYUAN-CALIBRATION/assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/chatgpt-ai-programming-risk-report.md",
+        "producer": "ChatGPT"
+      },
+      {
+        "path": "C:/Projects/YIYUAN-CALIBRATION/assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/claude-ai-programming-risk-report.md",
+        "producer": "Claude"
+      },
+      {
+        "path": "C:/Projects/YIYUAN-CALIBRATION/assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/gemini-ai-programming-risk-report.txt",
+        "producer": "Gemini"
+      }
+    ],
+    "priorKimiReportProvableFromRepository": false,
+    "overlap": [
+      "human reliability, trust calibration, automation bias, and review burden",
+      "model reliability, long-horizon failure, security, provenance, and evidence limits",
+      "authority, accountability, operations, learning, and organizational controls",
+      "selected AI-assisted programming risk and governance evidence"
+    ],
+    "materialIncrement": [
+      "one explicit staged software-engineering narrative spanning requirements, architecture, coding, review, testing, deployment, operations, and evolution",
+      "a consolidated organization, economics, governance, metrics, and autonomy discussion around AI-assisted software delivery",
+      "a large candidate bibliography that can be repaired into a primary-source ledger"
+    ],
+    "classification": "substantive-software-engineering-specialization-expansion-not-a-new-mother-framework"
+  },
+  "lifecycleProjection": {
+    "directlyDiscussedSlices": [
+      "stakeholder-needs-and-requirements",
+      "system-and-software-architecture",
+      "detailed-design-and-modeling",
+      "implementation-build-and-dependency-management",
+      "review-static-quality-and-configuration-control",
+      "verification-validation-testing-and-acceptance",
+      "security-privacy-safety-and-software-supply-chain",
+      "release-delivery-deployment-and-change-management",
+      "operations-observability-reliability-and-support",
+      "maintenance-evolution-refactoring-and-technical-debt",
+      "engineering-management-economics-teamwork-and-professional-practice"
+    ],
+    "partialOrWeakSlices": [
+      "strategy-product-discovery-acquisition-and-supply",
+      "incident-response-recovery-and-learning",
+      "migration-deprecation-retirement-and-disposal"
+    ],
+    "motherFrameworkCoverage": "software-engineering-heavy; human, machine, collaboration, and organization dimensions are useful cross-cuts but do not cover the full human-AI collaboration domain",
+    "fullSoftwareLifecycleCoverageAccepted": false,
+    "wholeHumanAiCollaborationCoverageAccepted": false
+  },
+  "processLossCrossCutAudit": {
+    "classification": "substantive-explicit-mechanism-coverage-structural-modeling-incomplete",
+    "sourceMember": "hmc_report.agent.final.md",
+    "sourceMemberSha256": "EF7AD703A31175565966716F28824AC3C1CC4AFE8091B4BBB07E62D08A730949",
+    "sourcePackageCurrentlyRequiredForValidation": false,
+    "observedMechanisms": [
+      {
+        "lineRange": "218-226",
+        "mechanism": "multi-turn context degradation, missing validation that propagates errors, multiplicative end-to-end success decay, and self-conditioning on earlier mistakes"
+      },
+      {
+        "lineRange": "324-344",
+        "mechanism": "loss across human-intent-to-machine-specification, machine-output-to-human-validation, cross-session institutional knowledge, and accumulated comprehension debt"
+      },
+      {
+        "lineRange": "422-442",
+        "mechanism": "ambiguous upstream input becoming authoritative downstream, faithful execution of the wrong premise, lifecycle propagation, and amplified late-stage correction cost"
+      },
+      {
+        "lineRange": "691-694",
+        "mechanism": "delivery-chain attenuation from task and coding gains to project and release outcomes, with an explicit need for end-to-end instrumentation"
+      }
+    ],
+    "consistencyImpact": "Each transformation output can become the next transformation input, so an unobserved local distortion may cascade through decomposition, routing, delegation, implementation, review, and acceptance into global end-to-end inconsistency; a final-looking artifact cannot alone prove chain fidelity.",
+    "notYetUnifiedAs": [
+      "a first-class cross-domain process-loss taxonomy",
+      "a hop-by-hop intent, constraint, evidence, confidence, authority, and version fidelity model",
+      "a cumulative loss budget with downstream blast radius and rollback anchors",
+      "a falsifiable acceptance protocol spanning compression, handoff, delegation, routing, and lifecycle transforms"
+    ],
+    "claimLimit": "The report supplies bounded mechanism and measurement-design input. It does not prove the cited quantitative claims, a universal loss function, lossless continuation, end-to-end observability, or an effective Harness intervention."
+  },
+  "citationIntegrityAudit": {
+    "method": "non-statistical high-impact sample of opening claims, central mechanisms, lifecycle claims, and final conclusions; compare inline target, bibliography entry, and reachable primary source",
+    "sampleRepresentsWholeReport": false,
+    "automatedCountsValidateClaimEntailment": false,
+    "observations": [
+      {
+        "id": "audit.dora-2025-adoption-amplifier",
+        "reportClaim": "90 percent adoption and AI as an organizational amplifier",
+        "inlineTargetClass": "secondary Chinese article",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://dora.dev/research/2025/dora-report/",
+        "primarySourceResult": "direction-and-key-figures-corroborated",
+        "disposition": "usable only through the primary source with its organizational and correlational limits"
+      },
+      {
+        "id": "audit.stack-overflow-2025-trust",
+        "reportClaim": "84 percent use-or-plan-to-use; 46 percent distrust versus 33 percent trust",
+        "inlineTargetClass": "unrelated Codellaborator UIST paper",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://survey.stackoverflow.co/2025/ai",
+        "primarySourceResult": "trust-figures-corroborated; adoption-figure-retained-for-separate-table-check",
+        "disposition": "repair inline link before reuse"
+      },
+      {
+        "id": "audit.jetbrains-2025-adoption-integration",
+        "reportClaim": "85 percent regular use and 44 percent core-workflow integration",
+        "inlineTargetClass": "secondary CSDN article",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://blog.jetbrains.com/research/2025/10/state-of-developer-ecosystem-2025/",
+        "primarySourceResult": "85-percent-use-and-sample-corroborated; 44-percent-integration-not-found-in-sampled-primary-page",
+        "disposition": "split the corroborated adoption claim from the unresolved integration claim"
+      },
+      {
+        "id": "audit.metr-early-2025-productivity",
+        "reportClaim": "experienced maintainers took 19 percent longer while believing they were 20 percent faster",
+        "inlineTargetClass": "unrelated IISIT document",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",
+        "primarySourceResult": "corroborated for the study's narrow early-2025 setting",
+        "disposition": "repair inline link and preserve METR's explicit non-generalization boundary"
+      },
+      {
+        "id": "audit.mozannar-cups-verification-cost",
+        "reportClaim": "21 programmers, CUPS taxonomy, and several exact activity percentages",
+        "inlineTargetClass": "unrelated Springer paper",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://arxiv.org/abs/2210.14306",
+        "primarySourceResult": "paper-identity-sample-and-taxonomy-corroborated; exact percentages-not-checked-in-this-sample",
+        "disposition": "repair inline link and verify exact table values before quantitative reuse"
+      },
+      {
+        "id": "audit.shen-tamkin-skill-formation",
+        "reportClaim": "AI assistance can impair conceptual understanding, code reading, and debugging; conclusion cites a 17 percent score gap",
+        "inlineTargetClass": "mixed secondary targets in body; primary bibliography entry exists",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://arxiv.org/abs/2601.20245",
+        "primarySourceResult": "direction-corroborated; exact-17-percent-value-not-checked-in-this-sample",
+        "disposition": "retain directional hypothesis and verify exact effect before reuse"
+      },
+      {
+        "id": "audit.stanford-early-career-employment",
+        "reportClaim": "employment for age 22 to 25 developers fell by nearly 20 percent",
+        "inlineTargetClass": "secondary report mirror",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/",
+        "primarySourceResult": "primary abstract reports a 16-percent relative decline across the most AI-exposed occupations, not a universal developer-employment estimate",
+        "disposition": "narrow population and value before reuse"
+      },
+      {
+        "id": "audit.faros-review-and-incident-metrics",
+        "reportClaim": "review time plus 441 percent and incident-per-PR plus 242.7 percent",
+        "inlineTargetClass": "secondary Chinese reporting and report aggregators",
+        "bibliographyHasPrimaryTarget": true,
+        "primaryUrl": "https://www.faros.ai/blog/ai-engineering",
+        "primarySourceResult": "vendor source and broader telemetry description found; sampled page did not independently establish both exact figures",
+        "disposition": "retain as vendor-telemetry candidate, not a high-confidence population estimate"
+      }
+    ],
+    "sampleSummary": {
+      "primaryDirectionCorroboratedCount": 5,
+      "requiresExactValueOrPopulationRepairCount": 5,
+      "clearInlineTargetMismatchCount": 4,
+      "reportHighConfidenceLabelsAccepted": false,
+      "allReportClaimsAccepted": false,
+      "bodyLinksSafeAsEvidenceLedger": false,
+      "bibliographyUsefulForRepair": true
+    }
+  },
+  "primarySourceRepair": {
+    "ledgerPath": "registry/human-ai-collaboration-high-impact-primary-source-claim-ledger-2026-07-27.json",
+    "status": "bounded-subset-repaired-design-input-only",
+    "claimCount": 5,
+    "repairedClaimIds": [
+      "claim.dora-2025-organizational-amplifier-and-delivery-tension",
+      "claim.stack-overflow-2025-trust-and-rework",
+      "claim.metr-2025-experienced-oss-productivity-perception-gap",
+      "claim.laban-2025-multi-turn-unreliability",
+      "claim.shen-tamkin-2026-skill-formation"
+    ],
+    "wholeReportAccepted": false,
+    "studyResultsIndependentlyReproduced": false,
+    "matrixEvidenceStatePromotionAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "selfAuthoredCapabilityMutationAuthorized": false,
+    "claimLimit": "The repaired subset may shape scenario and measurement design only. It does not repair the remaining report bibliography, reproduce any study, prove a live Harness result, establish a universal threshold, or justify a candidate or architecture change."
+  },
+  "acceptedUse": [
+    "software-engineering lifecycle scenario discovery",
+    "candidate claim and source ledger generation",
+    "counterexample and measurement-design prompts",
+    "identifying areas where existing matrix rows are too coarse"
+  ],
+  "rejectedUse": [
+    "whole human-AI collaboration ontology",
+    "full software-lifecycle completeness proof",
+    "hard-standard source without independent normative and domain review",
+    "Skill, Hook, MCP, or self-authored architecture justification",
+    "production-readiness or autonomy-level authority",
+    "wholesale import of the report's High, Medium, Low, or Conflict labels"
+  ],
+  "decision": {
+    "retainResearchInput": true,
+    "duplicateAndDiscard": false,
+    "replacePriorBroadResearch": false,
+    "replaceCoverageRebaseline": false,
+    "promoteClaimsWithoutRepair": false,
+    "changeSelfAuthoredSkillChainNow": false,
+    "changeHardStandardsNow": false,
+    "nextBoundedResult": "preserve the validated information-equivalent delivery-topology protocol, the passed zero-Agent chained-trace calibration, and the finding that the existing smoke is a process-trace-ineligible transport pilot; next design the smallest future frozen chained-transform protocol without dispatch while preserving the mother framework, hard standards, evidence-state boundaries, and paused CALIBRATION"
+  },
+  "documentation": "docs/strategy/USER-SUPPLIED-HUMAN-AI-SDLC-RESEARCH-INTAKE-2026-07-24.md"
+}

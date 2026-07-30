@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "kind": "source-backed-software-lifecycle-stage-envelope",
+  "envelopeId": "SE-E2E-THIN-01-ZERO-001-E6",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "protocolBinding": {
+    "protocolId": "human-ai-collaboration-source-backed-software-lifecycle-thin-slice-v1",
+    "protocolCanonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df",
+    "stageDefinitionCanonicalSha256": "200017e8b2637dcebb35bf7355033a77478f2805eb7a8689ea66ee80214182c0"
+  },
+  "stage": {
+    "stageId": "SE-TS-06-observation-incident-handling",
+    "sequence": 6,
+    "stageClass": "observation-incident-handling"
+  },
+  "role": "operator-and-incident-responder",
+  "independenceClass": "operator-separated-from-implementation-no-production-authority",
+  "lineage": {
+    "primaryPredecessorEnvelopeSha256": "fd24d35894861b7fd874797ee137cffb4a0cf63460e069930d6c3f6b4df4c2e6",
+    "additionalPredecessorEnvelopeSha256s": [],
+    "previousAcceptedLedgerSha256": "73524c357b432c6e8e7f06e6db3e20e00bdb7a0d7899874a913518be2324bc1c"
+  },
+  "sourceBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    }
+  ],
+  "inputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    },
+    {
+      "ordinal": 2,
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O5",
+      "role": "simulated-release-rollback-decision",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O5.json",
+      "byteLength": 1720,
+      "byteSha256": "68d182c9074e039d8674a25ab17c9e6f2826116e2c6639991ae20712c65cf715",
+      "canonicalJsonSha256": "89abb34bed147adc50e0afca49dc178fdcff371374908d0ac62cf11bf5eb6562",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "inputSetCanonicalSha256": "4eaa317ffa6e09507e82412f10d9ec8ca2454743111e72a85c13398947d0316d",
+  "outputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SE-E2E-THIN-01-ZERO-001-O6",
+      "role": "observation-incident-record",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SE-E2E-THIN-01-ZERO-001-O6.json",
+      "byteLength": 1845,
+      "byteSha256": "90f8d66c2cacfe3b3ebe1a8495e40e7dab51a76b18c1c6a12a0f04aac8245868",
+      "canonicalJsonSha256": "e532e681ba389dd5240d3b3d71ddda5c65291420d58a0174fbcc7b4b95ce01a0",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "outputSetCanonicalSha256": "5926449ce4208dc6858ec7543a7116b6fd5d9207b3d1078118b5abb4dbbe6603",
+  "sections": [
+    "releaseIdentity",
+    "observationWindow",
+    "sloAndSignals",
+    "faultClass",
+    "detectionEvidence",
+    "hypotheses",
+    "operatorActions",
+    "recoveryEvidence",
+    "postRecoveryState",
+    "communicationAndLearning",
+    "maintenanceTriggers",
+    "nextGate"
+  ],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": [],
+  "acceptanceObligationIds": [
+    "acceptance.observation-incident-handling"
+  ],
+  "humanAuthorityReceiptBindings": [
+    "6b0b3a0b475ef1486b8df718fe3bed95709216af955ad0eaab827e878d3b43bd",
+    "ffb499065b29faad66bea8213c3622eebe0cabffa5bf5a661f80a12936f45d59"
+  ],
+  "repositoryTruthBefore": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "repositoryTruthAfter": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "allowedMutableFiles": [],
+  "changedFiles": [],
+  "rawEventArtifactIds": [],
+  "absoluteGateResults": [
+    {
+      "gateId": "mechanism.observation-incident-handling",
+      "passed": true,
+      "evidenceArtifactIds": [
+        "SE-E2E-THIN-01-ZERO-001-O6"
+      ]
+    }
+  ],
+  "truthTransition": {
+    "proposalArtifactCanonicalSha256": "e532e681ba389dd5240d3b3d71ddda5c65291420d58a0174fbcc7b4b95ce01a0",
+    "proposedChangeIds": [
+      "accept-stage-6"
+    ],
+    "acceptedChangeIds": [
+      "accept-stage-6"
+    ],
+    "rejectedChangeIds": [],
+    "basisKindsUsed": [
+      "human-authority-receipt"
+    ],
+    "beforeAcceptedLedgerSha256": "73524c357b432c6e8e7f06e6db3e20e00bdb7a0d7899874a913518be2324bc1c",
+    "afterAcceptedLedgerSha256": "db134345fbafd0ca263479acaf7276f852a820ed95cf917a14e00bf32ec83dc4"
+  },
+  "parentEvaluation": {
+    "evaluatorId": "software-lifecycle-zero-model-calibrator-v1",
+    "evaluatorCanonicalSha256": "e9880346f79e8aeab22bbee4fc19173abc9ab4f2bfad270b492d828fa0ae2e6b",
+    "stageValidators": [
+      "release-runtime-identity",
+      "bounded-fault-injection",
+      "detection-and-recovery-evidence",
+      "unknown-observation-remains-unknown"
+    ],
+    "status": "accepted",
+    "failureCodes": []
+  },
+  "execution": {
+    "mode": "zero-model-scripted-calibration",
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false
+  },
+  "status": "accepted",
+  "stopReason": null,
+  "nextGate": null,
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "productionLifecycleProved": false,
+    "humanDecisionQualityProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "envelopeSha256": "9d75230bef5aebe0663051f461d6edd68b3e260c1191df92919b2d4ac51165a8"
+}

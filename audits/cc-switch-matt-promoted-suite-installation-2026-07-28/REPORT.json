@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "eventId": "cc-switch-matt-promoted-suite-installation-2026-07-28",
+  "observedAt": "2026-07-28T19:22:28+08:00",
+  "status": "live-promoted-suite-installation-and-dual-projection-verified",
+  "authorityBoundary": {
+    "userAuthorizedReplacingNineStaleCopies": true,
+    "userAuthorizedInstallingCurrentMattSuiteThroughCcSwitch": true,
+    "userAuthorizedClaudeAndCodexEnablement": true,
+    "userAuthorizedExactProcessArtifactCleanupAfterVerification": true,
+    "ccSwitchGuiWasMutationSurface": true,
+    "directDatabaseMutation": false,
+    "globalHookMutation": false,
+    "gitCommitOrPush": false
+  },
+  "ccSwitch": {
+    "version": "3.18.0",
+    "databaseRowsBefore": 75,
+    "databaseRowsAfter": 88,
+    "claudeEnabledRowsAfter": 88,
+    "codexEnabledRowsAfter": 88,
+    "mattPromotedRowsAfter": 22,
+    "mattPromotedRowsEnabledForClaudeAndCodex": 22,
+    "nonMattRowsLeftDisabledForClaudeOrCodex": 0,
+    "replacedStaleDirectoryCount": 9,
+    "managementSurface": "CC Switch GUI"
+  },
+  "upstream": {
+    "repository": "https://github.com/mattpocock/skills",
+    "revision": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+    "branchMetadataRecordedByCcSwitch": "main",
+    "license": "MIT",
+    "promotedManifestPath": ".claude-plugin/plugin.json",
+    "promotedSkillCount": 22,
+    "promotedFileCount": 66,
+    "repositorySkillMdCount": 41,
+    "categoryCounts": {
+      "promoted": 22,
+      "deprecated": 4,
+      "inProgress": 9,
+      "misc": 4,
+      "personal": 2
+    }
+  },
+  "promotedSkillNames": [
+    "ask-matt",
+    "diagnosing-bugs",
+    "grill-with-docs",
+    "triage",
+    "improve-codebase-architecture",
+    "setup-matt-pocock-skills",
+    "tdd",
+    "to-spec",
+    "to-tickets",
+    "wayfinder",
+    "implement",
+    "prototype",
+    "research",
+    "domain-modeling",
+    "codebase-design",
+    "code-review",
+    "resolving-merge-conflicts",
+    "grill-me",
+    "grilling",
+    "handoff",
+    "teach",
+    "writing-great-skills"
+  ],
+  "wholeTreeVerification": {
+    "identitySurface": "raw Git blobs at the pinned revision",
+    "ccSwitchCentralSkillTreesMatched": 22,
+    "claudeProjectedSkillTreesMatched": 22,
+    "codexProjectedSkillTreesMatched": 22,
+    "fileSetAndSha256MismatchCount": 0,
+    "checkoutLineEndingNormalizationWasExcluded": true
+  },
+  "discoveryCountReconciliation": {
+    "userObservedCcSwitchCount": 38,
+    "currentRepositorySkillMdCount": 41,
+    "promotedReleaseManifestCount": 22,
+    "ccSwitchScannerRecursivelyAdmitsEveryDirectoryContainingSkillMd": true,
+    "ccSwitchScannerFiltersLifecycleCategories": false,
+    "secondLiveAllRepositoryRefreshCompleted": false,
+    "secondLiveAllRepositoryRefreshBlocker": "GitHub transport remained in the loading state",
+    "decision": "Use 22 as the promoted installation scope. Do not use the UI discovery count as the promoted release count."
+  },
+  "temporaryArtifactCleanup": {
+    "status": "completed-after-verification",
+    "exactCcSwitchBackupDirectoryCount": 9,
+    "exactCcSwitchBackupDirectoriesRemoved": 9,
+    "repositoryBackupSha256": "DF45D1811D78AE94177DDB236CC76920A072F9055A0ABE40F722C5F8EFC91C86",
+    "repositoryBackupRemoved": true,
+    "recoverySnapshotRemoved": true,
+    "temporarySourceRootsRemoved": true,
+    "temporarySourceRoots": [
+      "C:/tmp/cc-switch-v3.18.0-source",
+      "C:/tmp/mattpocock-skills-20260728"
+    ]
+  },
+  "historicalTrialStabilityRepair": {
+    "required": true,
+    "cause": "The separately authorized CC Switch replacement changed the mutable live path previously used as a frozen historical comparison arm.",
+    "frozenRepositoryPayload": "skills/grill-with-docs/SKILL.md",
+    "frozenRepositoryPayloadBytes": 5340,
+    "frozenRepositoryPayloadSha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035",
+    "currentLiveMattEntryBytes": 245,
+    "currentLiveMattEntrySha256": "610d091047bcfb9db0f75c057d15538481a721111579fc5ec7f83ad9131a2165",
+    "currentLiveMattEntryWasNotSubstitutedForHistoricalArm": true
+  },
+  "postChangeVerification": {
+    "semanticAuthorityCoreTests": 18,
+    "semanticAuthorityExtendedTests": 24,
+    "affectedHistoricalProtocolAndBuilderTests": 27,
+    "topLevelVerifyPassed": true
+  },
+  "claimBoundary": {
+    "promotedWholeTreeIdentityProved": true,
+    "claudeAndCodexFilesystemProjectionProved": true,
+    "loaderInvocationProved": false,
+    "skillInstructionsReachedModelProved": false,
+    "behavioralValueProved": false,
+    "crossHostValueProved": false,
+    "selfAuthoredControlChainReplacementJustified": false,
+    "allFortyOneRepositorySkillsEligibleForInstallation": false
+  }
+}

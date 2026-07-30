@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "id": "cc-switch-3.18-stale-row-backend-reconciliation-event-2026-07-27",
+  "date": "2026-07-27",
+  "status": "live-backend-reconciliation-executed-and-verified-current-host",
+  "predecessor": "registry/cc-switch-3.18-stale-row-reconciliation-gap-2026-07-23.json",
+  "supersedesLiveCountClaimsIn": [
+    "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json",
+    "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json",
+    "registry/cc-switch-lark-seven-skill-update-event-2026-07-27.json"
+  ],
+  "authorityBoundary": {
+    "userAuthorizedCcSwitchPortfolioManagement": true,
+    "scopeLimitedToMissingBodyLocalRows": true,
+    "ccSwitchBackendMutation": true,
+    "rawSqliteMutation": false,
+    "computerUseMutation": false,
+    "separateAgentBackupCreated": false,
+    "physicalSsotDeletion": false,
+    "gitMutation": false,
+    "remoteRepositoryMutation": false
+  },
+  "runtime": {
+    "appVersion": "3.18.0",
+    "databaseSchema": 16,
+    "storageLocation": "cc_switch",
+    "syncMethod": "symlink"
+  },
+  "preflight": {
+    "databaseRows": 251,
+    "physicalSsotBodies": 75,
+    "missingBodyLocalRows": 176,
+    "exactRuntimePluginDirectoryMatches": 148,
+    "qualifiedRuntimePluginAliasMatches": 25,
+    "historicalAliasRows": [
+      "product-design-prototype",
+      "sales-user-context",
+      "suggest-sales-next-step"
+    ],
+    "nonLocalOrRepositoryAttributedTargets": 0,
+    "targetWithPhysicalSsotDirectory": 0
+  },
+  "execution": {
+    "surface": "temporary-localhost-webview2-cdp-to-tauri-ipc",
+    "tauriCommand": "uninstall_skill_unified",
+    "canary": {
+      "id": "local:coderabbit-review",
+      "databaseRowsAfter": 250,
+      "physicalSsotBodiesAfter": 75,
+      "claudeProjectionPresentAfter": false,
+      "codexProjectionPresentAfter": false
+    },
+    "remainingBatchRequested": 175,
+    "remainingBatchSucceeded": 175,
+    "remainingBatchErrors": 0,
+    "unexpectedContentBackupResults": 0,
+    "temporaryDebugPortClosedAfter": true,
+    "ordinaryCcSwitchRestartedAfter": true
+  },
+  "postVerification": {
+    "databaseRows": 75,
+    "physicalSsotBodies": 75,
+    "missingBodyDatabaseRows": 0,
+    "claudeProjectionEntries": 75,
+    "claudeBrokenSymlinks": 0,
+    "codexTopLevelEntries": 77,
+    "codexBrokenSymlinks": 0,
+    "handoffTreeSha256V1": "d3fa95374feefb3e51f25d06dddd984778425f78663a650d52399406ad40b042",
+    "normalModeProcessRunning": true,
+    "temporaryDebugPortOpen": false
+  },
+  "cloudSyncObservation": {
+    "observedAt": "2026-07-27T14:05:48Z",
+    "lastRemoteEtag": "\"18c62a9af41000c0211\"",
+    "lastLocalManifestHash": "2048112abe2270b7311cf4748c028840581a13dbf8f8f943172aaeab15d0253a",
+    "lastRemoteManifestHash": "2048112abe2270b7311cf4748c028840581a13dbf8f8f943172aaeab15d0253a",
+    "localAndRemoteManifestHashEqual": true,
+    "crossDeviceRestoreEqualityProved": false
+  },
+  "decision": {
+    "staleRowGapResolvedOnCurrentHost": true,
+    "physicalPortfolioBodyCountChanged": false,
+    "currentCcManagedBodyCount": 75,
+    "portfolioQualityReviewComplete": false,
+    "deduplicationOrRetirementComplete": false,
+    "upstreamBatchReconcilerExists": false,
+    "nextBoundedAction": "Rebaseline the 75-body CC-managed portfolio and continue source, overlap, behavioral-value, and residual-gap review without treating stale-row removal as Skill quality evidence."
+  },
+  "claimBoundary": {
+    "loaderInvocationProved": false,
+    "behavioralValueProved": false,
+    "crossDeviceRestoreEqualityProved": false,
+    "allSeventyFiveBodiesApproved": false,
+    "deduplicationComplete": false,
+    "finalPortfolioComplete": false
+  },
+  "documentation": "docs/strategy/CC-SWITCH-3.18-STALE-ROW-BACKEND-RECONCILIATION-EVENT-2026-07-27.md"
+}

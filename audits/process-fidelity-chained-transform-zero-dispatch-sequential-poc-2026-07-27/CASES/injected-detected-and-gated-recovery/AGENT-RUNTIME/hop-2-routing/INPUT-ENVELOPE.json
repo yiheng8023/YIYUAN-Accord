@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "stageId": "hop-2-routing",
+  "dynamicInputCount": 1,
+  "artifact": {
+    "artifactId": "fixture-injected-b1-p2-M1",
+    "values": {
+      "goal": "produce a decision-ready research route without changing external or repository state",
+      "evidence": "separate observed facts, inferences, unknowns, and unsupported claims",
+      "acceptance": "return a bounded route, verification surface, residual uncertainty, and next authorization gate",
+      "continuity": "preserve source identity and keep recovery anchored to S0"
+    },
+    "provenanceIds": [
+      "goal",
+      "evidence",
+      "acceptance",
+      "continuity"
+    ],
+    "assumptionIds": [],
+    "detectedLossIds": [],
+    "sections": {
+      "fidelitySnapshot": {},
+      "workItems": [],
+      "uncertainties": [],
+      "nextGate": "routing"
+    }
+  }
+}

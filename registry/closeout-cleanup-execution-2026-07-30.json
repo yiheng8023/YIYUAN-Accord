@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "id": "closeout-cleanup-execution-2026-07-30",
+  "date": "2026-07-30",
+  "status": "repository-local-temporary-debt-cleaned-stage-checkpoint",
+  "scope": "exact-repository-local-.tmp-and-audit-runtime-debris-cleanup",
+  "sourcePreview": {
+    "path": "registry/closeout-cleanup-debt-preview-2026-07-24.json",
+    "reportSha256": "61f32c72cee343b6b14f9a4f4f362a295ad23839c673740591dea53b71395715",
+    "rootCount": 35,
+    "fileCount": 2459,
+    "directoryCount": 811,
+    "totalBytes": 60346279
+  },
+  "authorityBoundary": {
+    "exactRepositoryTemporaryProcessCleanupAuthorized": true,
+    "commitPushDiscretionAuthorized": true,
+    "externalWorkspaceMutationAuthorized": false,
+    "globalConfigurationMutationAuthorized": false,
+    "ccSwitchMutationAuthorized": false
+  },
+  "cleanupExecution": {
+    "targetPaths": [
+      ".tmp/mcp-child-exit-recovery-20260723-run01",
+      ".tmp/mcp-child-exit-recovery-20260723-run02",
+      ".tmp/mcp-idle-observation-20260723",
+      ".tmp/mcp-idle-preflight-20260723",
+      ".tmp/mcp-idle-preflight-20260723-b",
+      ".tmp/mcp-startup-profiles-20260723-run01",
+      ".tmp/source-archives",
+      ".tmp/codex-app-server-schema-0145-tdd-20260726",
+      ".tmp/tdd-raw-item-pilot-20260726-r1",
+      ".tmp/tdd-raw-item-pilot-20260726-r2",
+      ".tmp/tdd-formal-native-20260726-r1",
+      ".tmp/tdd-formal-native-20260726-r2",
+      ".tmp/tdd-formal-native-20260726-r3",
+      ".tmp/app-server-schema-0.145.0",
+      ".tmp/process-fidelity-live-20260727",
+      ".tmp/process-fidelity-v2-zero-dispatch-20260727",
+      ".tmp/process-fidelity-v2-zero-dispatch-20260727-report.json",
+      ".tmp/process-fidelity-v2-live-20260727-r1-source-backed",
+      ".tmp/process-fidelity-v2-live-20260727-r1-source-backed-report.json",
+      ".tmp/process-fidelity-v2-zero-dispatch-corrected-20260727",
+      ".tmp/process-fidelity-v2-zero-dispatch-corrected-20260727-report.json",
+      ".tmp/process-fidelity-v2-live-20260727-r2-source-backed",
+      ".tmp/process-fidelity-v2-live-20260727-r2-source-backed-report.json",
+      ".tmp/mcp-unsubscribe-attribution-calibration-20260727-01",
+      ".tmp/mcp-unsubscribe-attribution-formal-20260727-01",
+      ".tmp/mcp-unsubscribe-attribution-formal-20260727-02",
+      ".tmp/mcp-unsubscribe-attribution-formal-20260727-03",
+      ".tmp/mcp-multi-connection-subscription-preflight-2026-07-27-attempt-01",
+      ".tmp/mcp-multi-connection-subscription-preflight-2026-07-27-attempt-02",
+      ".tmp/mcp-multi-connection-subscription-preflight-2026-07-27-attempt-03",
+      ".tmp/mcp-multi-connection-subscription-preflight-2026-07-27-attempt-04",
+      ".tmp/mcp-multi-connection-subscription-preflight-2026-07-27-attempt-05",
+      ".tmp/mcp-creator-close-calibration-20260727-01",
+      ".tmp/mcp-creator-close-calibration-workspace-20260727-01",
+      ".tmp/inflight-full-suite-20260727"
+    ],
+    "targetCount": 35,
+    "unexpectedPathsDeleted": [],
+    "sourceFilesDeleted": 2459,
+    "sourceDirectoriesDeleted": 811,
+    "sourceBytesDeleted": 60346279,
+    "temporaryRootRemoved": true,
+    "allExactTargetsAbsentAfterCleanup": true,
+    "cleanupExecuted": true
+  },
+  "commitScreeningCleanup": {
+    "targetPaths": [
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/resume-calibration-01/codex-home",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/resume-calibration-01/workspace",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/codex-home",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/workspace",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/codex-home",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/workspace",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/codex-home",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/workspace"
+    ],
+    "targetCount": 8,
+    "sourceFilesDeleted": 292,
+    "sourceDirectoriesDeleted": 124,
+    "sourceBytesDeleted": 9058784,
+    "rawRuntimeStateDetected": true,
+    "unexpectedPathsDeleted": [],
+    "retainedCompactAuditPaths": [
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/README.md",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/resume-calibration-01.log",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/report.json",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/report.json",
+      "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/report.json"
+    ],
+    "allExactTargetsAbsentAfterCleanup": true,
+    "cleanupExecuted": true
+  },
+  "durableEvidence": {
+    "userSourceArchive": {
+      "path": "sources/user-supplied-human-ai-sdlc-research/hmc_report.agent.final.restored-2026-07-26.zip",
+      "bytes": 549186,
+      "sha256": "C59510DB88911D920228803ACE53A2A97D77B9DF7E0EBF79D067BEFC4D02A3BD"
+    },
+    "creatorCloseNormalizedEvidence": {
+      "path": "audits/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27/normalized-evidence.json",
+      "bytes": 2545,
+      "sha256": "6EC43BDD24F6C88E75EA5B5D0C7DECB84903F9453979446D6B9E872655BED4CC"
+    },
+    "allPreviewEvidenceReferencesExist": true,
+    "rawRuntimeStateCommitted": false
+  },
+  "protectedExternalBoundary": {
+    "path": "C:/Projects/agent-skills-curated",
+    "insideCleanupScope": false,
+    "inspectedByCleanup": false,
+    "modifiedByCleanup": false
+  },
+  "claimBoundary": {
+    "programCloseoutProved": false,
+    "allHistoricalExperimentsReproducibleFromRawRuntimeState": false,
+    "sensitiveDataAbsentFromDeletedRuntimeStateProved": false,
+    "externalWorkspaceCleanupProved": false,
+    "productReadinessProved": false
+  },
+  "reportSha256": "5d2c2f14bc4bacd9da642e695e6330336c8ae7b5fc6b2c04f4339dbd7eb4a33a"
+}

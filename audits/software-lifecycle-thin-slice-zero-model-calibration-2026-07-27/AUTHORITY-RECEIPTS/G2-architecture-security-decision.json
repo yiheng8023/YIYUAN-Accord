@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "SE-E2E-THIN-01-ZERO-001-G2-architecture-security-decision",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "gateId": "G2-architecture-security-decision",
+  "stageId": "SE-TS-02-architecture-design",
+  "sequence": 2,
+  "decision": "approve",
+  "decisionClass": "accepted-truth-change",
+  "proposalArtifactCanonicalSha256": "6139136cc2e5d54d80c3b17121b2a9a0998aacf36922cce595f47baeae847007",
+  "beforeAcceptedLedgerSha256": "28ba182811cc725b2b0a79cc2234d262559913d81f9e07e4015bd95ed28936c4",
+  "allowedChangeIds": [
+    "accept-stage-2"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-02-architecture-design"
+    ],
+    "artifactIds": [
+      "SE-E2E-THIN-01-ZERO-001-O2"
+    ],
+    "actions": [
+      "exact-design-acceptance"
+    ]
+  },
+  "inputArtifactDigests": [
+    "6139136cc2e5d54d80c3b17121b2a9a0998aacf36922cce595f47baeae847007"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "accountable-architecture-and-security-owner",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:02+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "64f7aef81e2a52cf308427cfb18573a901b559e4ddcffecf3aef4e40a1ea3999"
+}

@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "SE-E2E-THIN-01-ZERO-001-G5-simulated-release-and-rollback-decision",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "gateId": "G5-simulated-release-and-rollback-decision",
+  "stageId": "SE-TS-05-release-rollback-gating",
+  "sequence": 5,
+  "decision": "approve",
+  "decisionClass": "simulated-release",
+  "proposalArtifactCanonicalSha256": "22b61c6caaebbb471b060dd09d6ff7fbcbf13e5c20a7ba0031938b83ece760dc",
+  "beforeAcceptedLedgerSha256": "c6714630bbf38085bcb5852ec0242024595b38fb00c94a10d125420a13f9221f",
+  "allowedChangeIds": [
+    "accept-stage-5"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-05-release-rollback-gating"
+    ],
+    "artifactIds": [
+      "SE-E2E-THIN-01-ZERO-001-O5"
+    ],
+    "actions": [
+      "local-simulated-release",
+      "local-rollback-exercise"
+    ]
+  },
+  "inputArtifactDigests": [
+    "22b61c6caaebbb471b060dd09d6ff7fbcbf13e5c20a7ba0031938b83ece760dc"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "release-and-operator-authority",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:05+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "6d67668dde6903d77b0761577bb680cf0a9c52e24ecc20bffc74c2b524a8558e"
+}

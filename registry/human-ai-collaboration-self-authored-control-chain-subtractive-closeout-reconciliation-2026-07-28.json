@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-self-authored-control-chain-subtractive-closeout-reconciliation-2026-07-28",
+  "date": "2026-07-28",
+  "status": "static-subtractive-reconciliation-complete-live-value-and-program-closeout-open",
+  "purpose": "Reconcile the three self-authored control Skills, global and repository rules, the candidate Hook, host loading and compaction surfaces, and reviewed external workflows without treating metadata, exposure, or implicit visibility as value evidence.",
+  "sourceBindings": {
+    "carrierAudit": "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json",
+    "factorialProtocol": "registry/human-ai-collaboration-self-authored-control-chain-factorial-ablation-protocol-2026-07-28.json",
+    "loaderHookObservabilityAdmission": "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
+    "currentEcosystemEvidence": "registry/skill-ecosystem-current-evidence-reconciliation-2026-07-27.json",
+    "overlapMatrix": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+    "sourceAuthorityReconciliation": "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+    "runtimeAndCcDrift": "registry/skill-runtime-and-cc-count-drift-snapshot-2026-07-27.json",
+    "externalScenarioCoverage": "registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json",
+    "programAcceptanceReconciliation": "registry/harness-three-lane-program-acceptance-reconciliation-2026-07-27.json",
+    "officialAppServerReadme": "https://github.com/openai/codex/blob/main/codex-rs/app-server/README.md"
+  },
+  "comparisonOrderApplied": [
+    "native-or-runtime",
+    "official",
+    "reviewed-maintained-external",
+    "composition",
+    "self-authored-only-for-evidenced-residual-gap"
+  ],
+  "rootAndCausalityRecalibration20260729": {
+    "commonAgentsSkillsRootMustBeRetained": true,
+    "rootRetentionImpliesPayloadRetention": false,
+    "hostSpecificSkillPackagesMayDiffer": true,
+    "claudeCodexByteParityRequired": false,
+    "currentCodexTurnImplicitSelectionLikeBehaviorObserved": true,
+    "nativeRuntimeCauseProved": false,
+    "selfAuthoredSkillCauseProved": false,
+    "hookCauseProved": false,
+    "composedCauseProved": false,
+    "nativeFirstCausalAblationRequired": false,
+    "nativeImplicitInvocationCapabilityProvedCurrentHost": true,
+    "selfAuthoredIncrementalValueAblationRequired": true,
+    "liveMutationAuthorized": false
+  },
+  "layerReconciliation": [
+    {
+      "layer": "negative-boundary-intake",
+      "selfAuthoredCandidate": "intent-contract",
+      "nativeOrHardCoverage": "Global AGENTS already enforces source binding, task-contract sufficiency, authority stops, and re-intake checkpoints.",
+      "officialCoverage": "Codex instruction and Skill loading surfaces carry guidance but do not independently prove the candidate's semantic intake value.",
+      "reviewedExternalCoverage": [
+        "Matt grilling and grill-with-docs provide bounded elicitation workflows.",
+        "Superpowers brainstorming provides a broader design-discovery workflow."
+      ],
+      "residualAssessment": "The reusable negative-boundary role is coherent, but incremental value over the hard baseline is unproved.",
+      "currentDisposition": "provisional-retain-for-frozen-ablation-only"
+    },
+    {
+      "layer": "cross-ecosystem-capability-routing",
+      "selfAuthoredCandidate": "capability-router",
+      "nativeOrHardCoverage": "Global AGENTS plus native reasoning already encode the reuse order, authorization gates, reroute checkpoints, and no-skill outcome.",
+      "officialCoverage": "App-server exposes Skill, Hook, App, Plugin, thread, model, and runtime inventory or control surfaces; those are mechanisms, not a semantic cross-ecosystem decision policy.",
+      "reviewedExternalCoverage": [
+        "Matt ask-matt is an engineering-ecosystem subflow.",
+        "Superpowers using-superpowers is a process-first bootstrap subflow."
+      ],
+      "residualAssessment": "A cross-ecosystem policy role remains plausible, but broad ownership, Hook benefit, and net value are unproved.",
+      "currentDisposition": "provisional-retain-for-frozen-ablation-only"
+    },
+    {
+      "layer": "claim-sufficient-closeout",
+      "selfAuthoredCandidate": "closure-contract",
+      "nativeOrHardCoverage": "Global AGENTS already contains closure, status-mutation, evidence-scope, and dirty-state disclosure gates.",
+      "officialCoverage": "Native tests, repository inspection, review, thread lifecycle, and approval surfaces provide evidence mechanisms but not cross-task coverage judgment.",
+      "reviewedExternalCoverage": [
+        "Superpowers verification-before-completion covers local verification discipline.",
+        "Matt code-review and handoff cover narrower review and transition workflows."
+      ],
+      "residualAssessment": "A cross-task closure role is plausible, but incremental value over hard gates and narrower reviewed workflows is unproved.",
+      "currentDisposition": "provisional-retain-for-frozen-ablation-only"
+    },
+    {
+      "layer": "hook-recall",
+      "selfAuthoredCandidate": "capability-router UserPromptSubmit advisory Hook",
+      "nativeOrHardCoverage": "The hard baseline remains active without Hook output.",
+      "officialCoverage": "The official Hook runtime supplies discovery, trust, execution, and task-associated run notifications.",
+      "reviewedExternalCoverage": [],
+      "residualAssessment": "Direct handler output and fail-open behavior are proved; host-consumed recall benefit, false-positive rate, context cost, and net value are not.",
+      "currentDisposition": "candidate-treatment-only-no-default-value-claim"
+    },
+    {
+      "layer": "host-loading-and-continuity",
+      "selfAuthoredCandidate": "duplicate Agents/Codex Skill projections plus repository-anchored continuation",
+      "nativeOrHardCoverage": "Host Skill discovery, explicit typed Skill input, thread lifecycle, and manual compaction exist.",
+      "officialCoverage": "App-server exposes skills/list, skills/changed, thread/compact/start, and thread events, but current 0.145.0 evidence has no independent task-bound Skill-loader identity or digest event.",
+      "reviewedExternalCoverage": [
+        "Matt handoff is the preferred source-backed reusable transition workflow where admitted."
+      ],
+      "residualAssessment": "Repository continuation is useful navigation; loader delivery, automatic compression quality, receiver recovery, and cross-host continuity remain open.",
+      "currentDisposition": "retain-repository-continuation-do-not-claim-automatic-host-continuity"
+    }
+  ],
+  "lifecycleCoverage": {
+    "coveredControlCheckpoints": [
+      "request intake",
+      "capability route selection",
+      "closeout sufficiency"
+    ],
+    "notACompleteSoftwareLifecycle": true,
+    "notCoveredAsDomainExecutionByThisChain": [
+      "requirements domain analysis",
+      "architecture and design",
+      "implementation discipline",
+      "security verification",
+      "release and rollback",
+      "operations and incident response",
+      "maintenance and migration"
+    ],
+    "externalDomainSkillsRemainSeparateCandidates": true,
+    "domainCoverageMetadataProvesValue": false
+  },
+  "overlapAndConflictFindings": [
+    {
+      "id": "SUB-01",
+      "severity": "high",
+      "finding": "All three Skill bodies materially repeat global AGENTS rules, so shared hard-standard passes cannot be credited to Skill value."
+    },
+    {
+      "id": "SUB-02",
+      "severity": "high",
+      "finding": "Agents and Codex copies are byte-equal while CC Switch copies are older and byte-distinct; canonical runtime ownership and consumer convergence remain unresolved."
+    },
+    {
+      "id": "SUB-03",
+      "severity": "high",
+      "finding": "Two startup-visible entries per logical Skill increase ambiguity without proving beneficial redundancy or independent loading."
+    },
+    {
+      "id": "SUB-04",
+      "severity": "medium",
+      "finding": "Official host mechanisms expose inventory, explicit input, Hook, thread, and compaction controls but do not substitute for semantic intake, routing, or closure judgment."
+    },
+    {
+      "id": "SUB-05",
+      "severity": "medium",
+      "finding": "Reviewed Matt and Superpowers workflows overlap only bounded subflows; neither currently proves a complete replacement for the three control checkpoints."
+    },
+    {
+      "id": "SUB-06",
+      "severity": "high",
+      "finding": "The current host cannot independently attribute scenario-relevant Skill loading, so live net value and retirement decisions remain inadmissible under the frozen protocol."
+    },
+    {
+      "id": "SUB-07",
+      "severity": "high",
+      "finding": "Automatic compression quality, handoff loader delivery, receiver recovery, and cross-host adherence remain outside current evidence."
+    }
+  ],
+  "subtractiveDecisions": {
+    "authorAnotherControlSkillNow": false,
+    "promoteHookToProvedDefaultNow": false,
+    "installOrBulkEnableExternalSuitesNow": false,
+    "replaceNativeOrOfficialMechanismsNow": false,
+    "retireAnyOfThreeSelfAuthoredSkillsNow": false,
+    "deleteDuplicateOrOlderCopiesNow": false,
+    "mutateCcSwitchNow": false,
+    "treatImplicitVisibilityAsMaturity": false,
+    "treatStaticOverlapAsReplacementProof": false,
+    "retainThreeSkillsAsPermanentlyAdmittedProductPayloads": false,
+    "retainThreeSkillsProvisionallyForFrozenAblation": true,
+    "reuseMattHandoffBeforeAuthoringAnotherGenericHandoff": true,
+    "reuseReviewedDomainWorkflowsBeforeAuthoringDomainSkills": true,
+    "allowFinalAdmittedSelfAuthoredPayloadCountToBeZero": true
+  },
+  "closeoutCoverage": [
+    {
+      "requirement": "exact current Matt dependency-complete no-model exposure",
+      "status": "covered",
+      "evidence": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json"
+    },
+    {
+      "requirement": "three-Skill chain and Hook static overlap, authority, lifecycle, and fallback audit",
+      "status": "covered-with-limits",
+      "evidence": "This record plus the carrier audit; live value, loader attribution, and cross-host behavior are excluded."
+    },
+    {
+      "requirement": "weak-model factorial value attribution",
+      "status": "blocked",
+      "evidence": "Current host lacks the frozen independent Skill-loader event."
+    },
+    {
+      "requirement": "portfolio retirement, replacement, installation, or deduplication decision",
+      "status": "needs-verification",
+      "evidence": "No admissible live self-authored value cell or canonical consumer-convergence proof exists."
+    },
+    {
+      "requirement": "three-lane program acceptance and final cleanup",
+      "status": "cannot-close",
+      "evidence": "All runtime lane assessments remain partial and cleanup authority is absent."
+    }
+  ],
+  "authorityBoundary": {
+    "skillInstallUpdateDeleteReplaceOrRetireAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "hookConfigurationMutationAuthorized": false,
+    "protocolAcceptanceAmendmentAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "cleanupAuthorized": false,
+    "commitAuthorized": false,
+    "pushAuthorized": false
+  },
+  "nextGate": {
+    "recommended": "Preserve the exact-loader acceptance boundary and recheck a future host before live factorial execution.",
+    "alternativeRequiresOwnerDecision": "Owner decision to amend the frozen attribution contract to accept weaker behavior association.",
+    "workPossibleWithoutThatDecision": "Continue program-level evidence reconciliation and cleanup classification without portfolio or runtime mutation.",
+    "programCloseoutSupportedNow": false
+  },
+  "claimBoundary": [
+    "Static overlap is evidence for ablation design, not value, superiority, replacement, or retirement.",
+    "Official host capability availability is not semantic task quality or automatic continuity.",
+    "Reviewed external workflow metadata is not execution admission or live behavior.",
+    "Provisional retention is experiment preservation, not permanent product admission.",
+    "No repository, Skill, Hook, CC Switch, cleanup, commit, push, or goal-status mutation is authorized by this record."
+  ],
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-SUBTRACTIVE-CLOSEOUT-RECONCILIATION-2026-07-28.md"
+}

@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-coverage-rebaseline-2026-07-24",
+  "date": "2026-07-24",
+  "status": "active-rebaseline-candidate-no-standard-promotion",
+  "purpose": "Rebaseline human-AI collaboration coverage without allowing the current self-authored Skill chain, the historical STM/P/SG inventory, or software engineering alone to define the whole problem space.",
+  "authorityBoundary": {
+    "owningRepository": "agent-autonomy-harness",
+    "calibrationState": "paused-read-only-source",
+    "calibrationWriteAuthorized": false,
+    "assetsAdmissionAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "skillOrHookMutationAuthorizedByThisRecord": false,
+    "runtimeMutationAuthorizedByThisRecord": false,
+    "gitCommitOrPushAuthorizedByThisRecord": false
+  },
+  "calibrationSourceSnapshot": {
+    "repository": "C:/Projects/YIYUAN-CALIBRATION",
+    "head": "e060a08f05361cb4cc9a67be050236cdbbde1de5",
+    "observedDirtyFiles": [
+      "GOVERNANCE.md"
+    ],
+    "dirtyFileUseBoundary": "The dirty governance file is preserved and is not used as source evidence for this rebaseline.",
+    "artifacts": [
+      {
+        "path": "common/human-ai-collaboration-shortfalls/sources/2026-07-11-human-ai-shortfall-research-refresh.md",
+        "bytes": 62925,
+        "sha256": "FDC5E4EB1AB7CF01752885BC2C9C335F1C301BE407DDBAD697DFCC21E85C6727",
+        "role": "historical broad shortfall synthesis with self-authored-chain framing"
+      },
+      {
+        "path": "common/human-ai-collaboration-shortfalls/evidence/corrected-evidence-ledger-20260712.md",
+        "bytes": 51097,
+        "sha256": "7CD7FDDA5B386753B9B53807BAD1EDB974E60A94D35FDB2538A4BBD141AA223A",
+        "role": "claim and evidence correction ledger"
+      },
+      {
+        "path": "common/human-ai-collaboration-shortfalls/taxonomy/two-layer-taxonomy-20260712.md",
+        "bytes": 21707,
+        "sha256": "1BAA51C89A4B51D49DF65948166A708312C343EF9950D896884C31E2C059EC90",
+        "role": "historical candidate STM/P normalization"
+      },
+      {
+        "path": "common/human-ai-collaboration-shortfalls/mapping/problem-owner-standard-gap-matrix-20260712.md",
+        "bytes": 39489,
+        "sha256": "AA61EB0C022AE47F6091C9FA8D1CC8FDC8141638B9064F5850A225055248F93A",
+        "role": "historical candidate owner and SG mapping"
+      },
+      {
+        "path": "common/human-ai-collaboration-shortfalls/decisions/codex-m1-intake-audit-20260712.md",
+        "bytes": 22819,
+        "sha256": "89C9A53F71BD49BB532E6F50D6AC08A08372D357787DC478787642F4795D802A",
+        "role": "non-authoritative M1 intake decision"
+      },
+      {
+        "path": "assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/chatgpt-ai-programming-risk-report.md",
+        "bytes": 50879,
+        "sha256": "BD096EC08655A07148042BF522FD05F0288A7FDBC57740F91801146E4FFEB210",
+        "role": "AI programming risk and governance intake, not lifecycle completeness evidence"
+      },
+      {
+        "path": "assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/claude-ai-programming-risk-report.md",
+        "bytes": 7363,
+        "sha256": "D102782BC47418768FAFA8CB4DB076790CF9B91D68FB7F5D530B033C760BE398",
+        "role": "AI programming risk intake, not lifecycle completeness evidence"
+      },
+      {
+        "path": "assets/engineering-research/intake/ai-assisted-engineering-2026-06-18/gemini-ai-programming-risk-report.txt",
+        "bytes": 23408,
+        "sha256": "772F1DA7EAC1282F6EEB30C0802268846D4B889EDA8E0A0E32C163A448A98295",
+        "role": "AI programming risk and SDLC proposal intake, not lifecycle completeness evidence"
+      }
+    ]
+  },
+  "externalReferenceBaseline": [
+    {
+      "id": "nist-ai-rmf-1.0",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+      "scope": "continuous Govern, Map, Measure, and Manage outcomes plus human-AI roles",
+      "boundary": "voluntary risk-management framework; not a complete collaboration ontology and currently under revision"
+    },
+    {
+      "id": "iso-9241-210-2019",
+      "url": "https://www.iso.org/standard/77520.html",
+      "scope": "human-centred design principles and activities across interactive-system lifecycle",
+      "boundary": "human-system design standard; not an Agent capability or whole-domain shortfall taxonomy"
+    },
+    {
+      "id": "microsoft-human-ai-guidelines-2019",
+      "url": "https://www.microsoft.com/en-us/research/publication/guidelines-for-human-ai-interaction/",
+      "scope": "validated human-AI interaction guidance across initial use, regular interaction, failure, and change over time",
+      "boundary": "interaction-design evidence; not organizational, domain, or runtime completeness proof"
+    },
+    {
+      "id": "iso-iec-ieee-12207-2026",
+      "url": "https://www.iso.org/standard/90219.html",
+      "scope": "software lifecycle from conception, acquisition, supply, development, operation, support, maintenance, and retirement",
+      "boundary": "software-engineering specialization reference, not the human-AI collaboration mother framework"
+    },
+    {
+      "id": "swebok-v4.0a",
+      "url": "https://www.computer.org/education/bodies-of-knowledge/software-engineering",
+      "scope": "18 generally accepted software-engineering knowledge areas",
+      "boundary": "discipline body of knowledge; not proof that a local control or Skill works"
+    },
+    {
+      "id": "nist-ssdf-1.1",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "scope": "secure software development practices integrated into SDLC",
+      "boundary": "security specialization; it complements rather than replaces the full software lifecycle"
+    }
+  ],
+  "supplementalResearchInputs": [
+    {
+      "path": "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json",
+      "status": "retained-research-input-not-accepted-evidence",
+      "role": "software-engineering lifecycle scenario and claim-ledger expansion",
+      "boundary": "Does not replace the mother framework, prove full lifecycle coverage, promote hard standards, or justify a Skill, Hook, MCP, or self-authored design."
+    }
+  ],
+  "structuralFindings": [
+    {
+      "id": "finding.solution-framing-bias",
+      "state": "confirmed-bounded",
+      "finding": "The historical corpus is broader than the three self-authored Skills, but its opening architecture and later placement model organize the problem space around intent-contract, capability-router, and closure-contract.",
+      "nonClaim": "This does not prove those contracts are useless or that every historical category is invalid."
+    },
+    {
+      "id": "finding.closed-coordinate-coverage",
+      "state": "confirmed-bounded",
+      "finding": "Mapping all STM-01..26, P1..24, and SG-01..12 proves coverage of the historical coordinate inventory only.",
+      "nonClaim": "It does not prove an exhaustive or solution-independent human-AI collaboration demand model."
+    },
+    {
+      "id": "finding.software-risk-not-lifecycle",
+      "state": "confirmed-bounded",
+      "finding": "The three retained AI-programming reports are risk and governance inputs with useful SDLC fragments, but they do not form an independently verified full software-engineering lifecycle model.",
+      "nonClaim": "This does not discard their bounded security, quality, supply-chain, review, or operations evidence."
+    }
+  ],
+  "coverageModel": {
+    "completenessModel": "open-world-versioned-no-absolute-completeness",
+    "motherFrameworkRole": "Human-AI collaboration is the total domain. Software engineering is one priority specialization, not the total domain.",
+    "motherFrameworkAxes": [
+      {
+        "id": "axis.subjects-and-affected-parties",
+        "question": "Who requests, acts, reviews, decides, owns, maintains, is represented, or is affected?",
+        "examples": ["individual", "team", "organization", "professional", "community", "operator", "maintainer", "AI or hybrid role"]
+      },
+      {
+        "id": "axis.goals-values-and-intent",
+        "question": "What goal, value, non-goal, trade-off, preference, or consequential decision is in force, and who may change it?",
+        "examples": ["exploration", "creation", "learning", "decision", "delivery", "care", "governance"]
+      },
+      {
+        "id": "axis.work-and-collaboration-modes",
+        "question": "What kind of human-AI work is occurring and how is labor divided?",
+        "examples": ["create", "research", "analyze", "learn", "teach", "communicate", "coordinate", "decide", "execute", "review", "operate"]
+      },
+      {
+        "id": "axis.cognition-competence-and-agency",
+        "question": "What expertise, uncertainty, reliance, learning, accessibility, dignity, autonomy, or skill-retention condition matters?",
+        "examples": ["automation bias", "algorithm aversion", "review fatigue", "inspectability", "human learning", "meaningful control"]
+      },
+      {
+        "id": "axis.context-knowledge-state-and-provenance",
+        "question": "Which facts, sources, memories, decisions, versions, assumptions, and handoffs are authoritative, current, and recoverable?",
+        "examples": ["active state", "source freshness", "decision history", "repository truth", "cross-session continuity"]
+      },
+      {
+        "id": "axis.capability-data-authority-and-action",
+        "question": "Which human, Agent, model, tool, data, account, permission, resource, or action is available, suitable, bounded, and reversible?",
+        "examples": ["native capability", "Skill", "MCP", "App", "human expert", "least privilege", "rollback"]
+      },
+      {
+        "id": "axis.evidence-assurance-and-accountability",
+        "question": "What proof, test, independent review, domain assurance, acceptance, and accountable sign-off matches the consequence?",
+        "examples": ["source evidence", "deterministic checks", "domain review", "affected-subject input", "cannot-close outcome"]
+      },
+      {
+        "id": "axis.organization-incentives-and-impacts",
+        "question": "Which organizational incentives, power relations, costs, rights, externalities, and impact dimensions shape the collaboration?",
+        "examples": ["safety", "security", "privacy", "fairness", "law", "labor", "environment", "maintenance rent"]
+      },
+      {
+        "id": "axis.lifecycle-operations-and-evolution",
+        "question": "How is the collaboration introduced, monitored, changed, recovered, learned from, migrated, deprecated, and retired?",
+        "examples": ["evaluation", "rollout", "monitoring", "incident", "feedback", "drift", "decommission"]
+      }
+    ],
+    "crossCuttingRisks": [
+      {
+        "id": "risk.end-to-end-process-fidelity-loss",
+        "role": "cross-domain transformation-edge risk rather than a standalone Skill or lifecycle stage",
+        "question": "Which goals, constraints, meanings, evidence, uncertainty, authority, responsibility, versions, and acceptance obligations are lost, distorted, invented, or amplified as work moves across human, Agent, tool, context, compression, delegation, handoff, review, and lifecycle boundaries?",
+        "requiredModel": [
+          "source artifact and authority",
+          "from-stage and to-stage transform",
+          "required invariants and input/output fingerprints",
+          "omitted constraints and added assumptions",
+          "evidence-lineage, confidence, authority, and responsibility deltas",
+          "hop verification and cumulative loss budget",
+          "downstream blast radius, detection latency, and rollback anchor"
+        ],
+        "claimLimit": "Local fidelity checks, handoff freshness, or unchanged files do not prove lossless end-to-end collaboration."
+      }
+    ],
+    "softwareEngineeringSpecialization": {
+      "status": "priority-specialization-baseline-not-complete",
+      "lifecycleSlices": [
+        "strategy-product-discovery-acquisition-and-supply",
+        "stakeholder-needs-and-requirements",
+        "system-and-software-architecture",
+        "detailed-design-and-modeling",
+        "implementation-build-and-dependency-management",
+        "review-static-quality-and-configuration-control",
+        "verification-validation-testing-and-acceptance",
+        "security-privacy-safety-and-software-supply-chain",
+        "release-delivery-deployment-and-change-management",
+        "operations-observability-reliability-and-support",
+        "incident-response-recovery-and-learning",
+        "maintenance-evolution-refactoring-and-technical-debt",
+        "migration-deprecation-retirement-and-disposal",
+        "engineering-management-economics-teamwork-and-professional-practice"
+      ],
+      "requiredCrossCuts": [
+        "human-AI division of labor",
+        "requirements and acceptance independence",
+        "repository and environment truth",
+        "tool and dependency authority",
+        "weak-Agent and host variation",
+        "reviewer competence and accountability",
+        "production evidence and rollback",
+        "longitudinal maintainability and human learning",
+        "end-to-end process fidelity and cumulative transformation loss"
+      ]
+    }
+  },
+  "historicalCoordinateBoundary": {
+    "sets": [
+      "STM-01..26",
+      "P1..24",
+      "SG-01..12"
+    ],
+    "preservedAs": "historical-candidate-coordinates-and-narrow-evidence-index",
+    "notAcceptedAs": [
+      "exhaustive-human-ai-collaboration-ontology",
+      "software-engineering-lifecycle-completeness-proof",
+      "hard-standard",
+      "Skill-or-Hook-architecture-proof"
+    ],
+    "mappingRequirement": "Map existing coordinates to the new axes and software lifecycle slices, record uncovered cells and counterexamples, and allow new, split, merged, or rejected candidates without protecting historical counts."
+  },
+  "acceptanceRevalidation": [
+    {
+      "acceptanceId": "acceptance.multi-domain-coverage",
+      "preservedClaim": "The planning registry names broad digital collaboration domains beyond software engineering.",
+      "revalidationRequiredFor": "evidence-backed or open-world coverage across those domains"
+    },
+    {
+      "acceptanceId": "acceptance.full-chain-coverage-matrix",
+      "preservedClaim": "The bounded survey maps all 62 historical coordinates through capability alternatives.",
+      "revalidationRequiredFor": "whole human-AI collaboration demand coverage or software lifecycle completeness"
+    },
+    {
+      "acceptanceId": "acceptance.alternative-comparison",
+      "preservedClaim": "Selected surveyed demand areas have bounded alternative comparisons.",
+      "revalidationRequiredFor": "unassessed mother-framework axes, domain modes, or software lifecycle slices"
+    },
+    {
+      "acceptanceId": "acceptance.residual-gap-proof",
+      "preservedClaim": "The negative and rejection path remains partially evidenced.",
+      "revalidationRequiredFor": "any positive residual-gap or repository-authoring claim under the rebaselined demand model"
+    }
+  ],
+  "gates": [
+    {
+      "id": "gate.solution-neutrality",
+      "passCondition": "Problem axes and scenarios remain meaningful if the current self-authored Skills are removed, replaced, or renamed.",
+      "falsifier": "A category exists only because intent-contract, capability-router, closure-contract, AGENTS, or a Hook needs an owner."
+    },
+    {
+      "id": "gate.open-world-coverage",
+      "passCondition": "Coverage reports observed cells, unassessed cells, counterexamples, source diversity, and recheck triggers instead of a fixed-count completion claim.",
+      "falsifier": "All historical IDs are mapped and that fact alone is treated as whole-domain closure."
+    },
+    {
+      "id": "gate.software-lifecycle-specialization",
+      "passCondition": "Every software lifecycle slice has bounded human-AI scenarios, evidence limits, native and external alternatives, hard requirements, and accountable owners.",
+      "falsifier": "Coding, code review, security scanning, or CI examples are treated as the full software lifecycle."
+    },
+    {
+      "id": "gate.end-to-end-process-fidelity",
+      "passCondition": "Material transformations identify source authority, preserved invariants, observed deltas, cumulative loss, downstream impact, verification, and recovery without claiming that local checks prove a lossless chain.",
+      "falsifier": "A successful local step, summary, compression, delegation, handoff, review, or stage result is treated as proof that intent, constraints, evidence, authority, and acceptance survived the whole chain."
+    },
+    {
+      "id": "gate.ai-independent-hard-standard",
+      "passCondition": "A proposed hard standard remains valid and testable when AI and Skills are absent.",
+      "falsifier": "A Skill instruction, Agent behavior, or model capability is the only execution or proof surface for a mandatory standard."
+    },
+    {
+      "id": "gate.narrow-evidence-retention",
+      "passCondition": "Existing context, Git, MCP, Skill-exposure, and ablation results retain their tested narrow claim while generalized coverage claims remain blocked.",
+      "falsifier": "Rebaseline work discards valid bounded evidence or upgrades it into domain completeness."
+    }
+  ],
+  "decision": {
+    "existingNarrowEvidenceRetained": true,
+    "historicalCoordinateLineageRetained": true,
+    "selfAuthoredSkillsDefineProblemSpace": false,
+    "softwareEngineeringDefinesWholeDomain": false,
+    "wholeHumanAiCoverageClaimed": false,
+    "softwareLifecycleCoverageClaimed": false,
+    "endToEndProcessFidelityCoverageClaimed": false,
+    "hardStandardPromotionAuthorized": false,
+    "calibrationMutationAuthorized": false,
+    "skillsOrHooksMutationAuthorized": false,
+    "nextBoundedResult": "produce a falsifiable mother-framework and software-specialization scenario-to-evidence matrix before generalized gap, self-authoring, or hard-standard claims"
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md"
+}

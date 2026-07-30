@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "handoff-loader-trial-preflight-contract-2026-07-24",
+  "date": "2026-07-24",
+  "status": "verified-local-preflight-fail-closed-no-admitted-capture-evidence",
+  "viewId": "HND-FRESH-01",
+  "scenarioId": "ABL-CTX-HANDOFF-01",
+  "builder": "scripts/build_handoff_loader_trial_packet.py",
+  "tests": "tests/test_handoff_loader_trial_packet.py",
+  "canonicalArmCEvaluator": "scripts/evaluate_skill_ablation_batch_01_protocol.py:_verify_live_context_arm_c",
+  "sourceBinding": "fixed canonical registry/skill-ablation-batch-01-protocol-2026-07-19.json payloadObservation.handoff plus full protocol SHA-256",
+  "loaderEvidenceCapture": {
+    "validValues": ["available", "unavailable", "unknown"],
+    "requiredEvent": ["identity", "fileManifestSha256", "taskId", "evidenceSource"],
+    "availableRequires": ["loaderCaptureAdapter identity", "loaderCaptureAdapter version", "canonical admitted captureCapabilityEvidence evidenceId with exact host and adapter match"],
+    "allowedCaptureCapabilityEvidenceClasses": ["parent-adapter-capability-evidence", "host-adapter-capability-evidence"],
+    "availableMeans": "a named/versioned host or parent adapter exactly matches a repository-admitted SHA-256-bound capture-capability record; it does not prove a loader event or invocation",
+    "nonAvailableStatus": "blocked-missing-handoff-loader-observability",
+    "nonAvailableMayCarryAdapterEvidence": false
+  },
+  "captureCapabilityEvidenceRegistry": {
+    "schema": 1,
+    "status": "no-admitted-capture-capability-evidence",
+    "requiredRecordFields": [
+      "adapterIdentity",
+      "adapterVersion",
+      "artifactRef",
+      "artifactSha256",
+      "captureSurface",
+      "claimBoundary",
+      "evidenceClass",
+      "evidenceId",
+      "evidenceScope",
+      "hostIdentity",
+      "hostVersion",
+      "observedAt"
+    ],
+    "admittedRecords": [],
+    "emptyResult": "blocked-missing-handoff-loader-observability",
+    "claimBoundary": {
+      "callerAssertionIsAdmissionEvidence": false,
+      "shapeValidReferenceIsAdmissionEvidence": false,
+      "registryPresenceProvesLoaderInvocation": false,
+      "registryPresenceProvesFreshSession": false
+    }
+  },
+  "publicPrivateBoundary": {
+    "publicContains": ["payload identity and hashes", "requested host condition", "identity templates", "no-write authority boundary"],
+    "privateContains": ["canonical Arm-C evaluator reference", "fixed canonical protocol reference and SHA-256", "canonical selected payload binding"],
+    "cliPrintsPrivateOracle": false
+  },
+  "claimBoundary": {
+    "createsTask": false,
+    "writesHandoffArtifact": false,
+    "readsLiveCcPayload": false,
+    "provesLoaderInvocation": false,
+    "provesFreshSession": false,
+    "provesWeakAgentAcceptance": false,
+    "provesCrossHostParity": false
+  },
+  "nextGate": "Observe and separately admit a real host or parent capture-capability record before available can prepare a separately authorized producer/receiver trial; use the existing Arm-C evaluator for invocation, payload, artifact, receiver, and repetition evidence."
+}

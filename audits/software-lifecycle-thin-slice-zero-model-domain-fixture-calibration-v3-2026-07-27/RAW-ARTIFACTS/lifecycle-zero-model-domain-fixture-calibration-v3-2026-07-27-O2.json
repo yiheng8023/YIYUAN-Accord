@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-stage-output",
+  "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O2",
+  "stageId": "SE-TS-02-architecture-design",
+  "sections": {
+    "selectedOption": {
+      "status": "synthetic-calibration-present"
+    },
+    "rejectedAlternatives": {
+      "status": "synthetic-calibration-present"
+    },
+    "publicSeamAndStateBoundary": {
+      "status": "synthetic-calibration-present"
+    },
+    "failureModes": {
+      "status": "synthetic-calibration-present"
+    },
+    "securityAndTrustBoundary": {
+      "status": "synthetic-calibration-present"
+    },
+    "observabilityDesign": {
+      "status": "synthetic-calibration-present"
+    },
+    "rollbackDesign": {
+      "status": "synthetic-calibration-present"
+    },
+    "tradeoffs": {
+      "status": "synthetic-calibration-present"
+    },
+    "residualUncertainty": {
+      "status": "synthetic-calibration-present"
+    },
+    "nextGate": {
+      "status": "synthetic-calibration-present"
+    }
+  },
+  "acceptedInvariantIdsObserved": [
+    "inv.source-goal",
+    "inv.no-live-side-effects"
+  ],
+  "semanticAssertions": {
+    "requirementsDigestMatched": true,
+    "securityObservabilityRollbackSurfacesPresent": true,
+    "irreversibleCommitmentClaimed": false
+  },
+  "domainSuboracleBindings": [
+    {
+      "artifactId": "DOMAIN-SUBORACLE-PACK",
+      "resultKey": "architecture",
+      "resultCanonicalSha256": "64d4d10433071fa5fd6874b05b34f1132cfdfabaf6cb680540337dc6b9d24b01",
+      "evidenceClass": "zero-model-synthetic-seeded-fault-suboracle"
+    }
+  ],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": []
+}

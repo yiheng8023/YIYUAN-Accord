@@ -1,0 +1,389 @@
+{
+  "agentDeclaration": {
+    "externalAccessUsed": false,
+    "writePerformed": false
+  },
+  "capabilityIsolation": {
+    "allConfigurableUserAndRepoSkillsDisabled": true,
+    "generalFilesystemReadToolAuthorized": false,
+    "mcpInventoryCompletenessProved": false,
+    "parentScopedDynamicToolNames": [
+      "read_public_information_bundle"
+    ],
+    "pluginFeaturesDisabled": [
+      "plugins",
+      "remote_plugin",
+      "apps",
+      "plugin_sharing"
+    ],
+    "staticMcpServersDisabled": [
+      "codegraph",
+      "context7",
+      "neo4j-graph",
+      "node_repl",
+      "playwright",
+      "github"
+    ]
+  },
+  "claimBoundary": {
+    "provesCrossHostValue": false,
+    "provesDomainExpertise": false,
+    "provesGeneralResearchQuality": false,
+    "provesMcpInventoryCompleteness": false,
+    "provesNoUnobservedNetworkAccess": false,
+    "provesNoUnobservedTransientWrite": false,
+    "provesOnlyOneBoundSyntheticPacketOnObservedHost": true,
+    "provesSkillCausation": false
+  },
+  "classification": {
+    "countsAsBoundSyntheticFixtureOutcome": true,
+    "countsAsCrossHostCapability": false,
+    "countsAsGeneralResearchQuality": false,
+    "countsAsProductionReadiness": false,
+    "countsAsSkillCausationProof": false,
+    "failureCodes": [],
+    "status": "fixture-pass-native-read-only-boundary"
+  },
+  "controlInventory": {
+    "countsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "enabledCountsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "identityManifestSha256": "09bff0fcecfaf92cf962fbf9d4838d1831b83e4632c488500c4acbb4a392158e",
+    "skillCount": 111
+  },
+  "conversationEvidence": {
+    "informationArmId": "source-backed-fresh-session-recovery",
+    "intermediateFailureCodes": [],
+    "intermediateTurnCount": 0,
+    "turnCount": 1,
+    "turnIds": [
+      "019f9fb9-4a34-7e12-bb6f-d2d3d9569626"
+    ]
+  },
+  "effectiveInventory": {
+    "countsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "enabledCountsByScope": {
+      "system": 6,
+      "user": 0
+    },
+    "identityManifestSha256": "09bff0fcecfaf92cf962fbf9d4838d1831b83e4632c488500c4acbb4a392158e",
+    "skillCount": 111
+  },
+  "exposure": {
+    "allConfigurableSkillsDisabled": true,
+    "allNonConfigurableStatesPreserved": true,
+    "configurableSkillCount": 105,
+    "enabledConfigurableSkillCount": 0,
+    "sameIdentitySet": true
+  },
+  "host": {
+    "platformFamily": "windows",
+    "platformOs": "windows",
+    "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)"
+  },
+  "id": "information-equivalent-read-only-claim-live-trial:source-backed-fresh-session-recovery",
+  "informationEquivalentTrialBinding": {
+    "agentVisibleProjection": {
+      "fileNames": [
+        "PUBLIC-SOURCE-BUNDLE.json"
+      ],
+      "parentEvidenceRootIsRuntimeWorkspaceRoot": false,
+      "publicInformationBundleCanonicalSha256": "b477ef4f58c68fcfeb7024604257f50f2a15fae7c184adf2314debfbad3b8226",
+      "shellOrCommandExecutionAllowed": false
+    },
+    "automaticCompressionClaimed": false,
+    "automaticThreadCreationClaimed": false,
+    "candidateComparisonClaimed": false,
+    "countsAsProcessFidelityOutcome": false,
+    "countsAsThreeArmComparison": false,
+    "fixtureId": "fixture.synthetic-conflicting-claims-v2",
+    "handoffSkillInvocationClaimed": false,
+    "informationArmId": "source-backed-fresh-session-recovery",
+    "liveTaskCreationAuthorized": true,
+    "packetPreflightStatus": "passed-zero-dispatch-live-authority-still-required",
+    "privateOracleCanonicalSha256": "e2dacb10be81d87f63bb5bbdaf94a45ce9f49335bd10b72620b6e41461b99a76",
+    "publicInformationBundleCanonicalSha256": "b477ef4f58c68fcfeb7024604257f50f2a15fae7c184adf2314debfbad3b8226",
+    "submissionArmId": "GEN-NATIVE-SPARK",
+    "turnPlanSha256": "6709a77e8cde93290d1a5dbc40f443d3e248b9027d7d2c61b2f8fa4f85670e11",
+    "v1CalibrationRunIncluded": false
+  },
+  "inputBinding": {
+    "agentVisibleFileNames": [
+      "PUBLIC-SOURCE-BUNDLE.json"
+    ],
+    "inputMode": "source-backed-fresh-session-recovery",
+    "packetPreflightStatus": "passed-zero-dispatch-live-authority-still-required",
+    "parentEvidenceRootIsRuntimeWorkspaceRoot": false,
+    "preDispatchPublicCarrierOracleIsolationProved": true,
+    "privateOracleExposureObserved": false,
+    "privateOracleLeakageScanComplete": false,
+    "privateOraclePayloadWrittenIntoPreparedPackage": false,
+    "privateOracleSha256": "e2dacb10be81d87f63bb5bbdaf94a45ce9f49335bd10b72620b6e41461b99a76",
+    "privateOracleVersion": "synthetic-conflicting-claims-hidden-oracle-v2",
+    "provedByPacketPreflight": true,
+    "publicCarrierOracleIsolationEvidence": {
+      "privateOracleClaimRowsFound": false,
+      "privateOracleExactSerializationFound": false,
+      "privateStateFieldsFoundInClaimsToAssess": false,
+      "proved": true,
+      "scannedAgentVisibleFileNames": [
+        "PUBLIC-SOURCE-BUNDLE.json"
+      ],
+      "scannedTurnCount": 1
+    },
+    "publicInformationBundleCanonicalSha256": "b477ef4f58c68fcfeb7024604257f50f2a15fae7c184adf2314debfbad3b8226",
+    "publicInformationBundleContentWrittenIntoTrial": true,
+    "publicInformationBundleRequiredAsInput": true,
+    "runtimeReadBoundaryProved": true,
+    "sourceBackedLocator": "PUBLIC-SOURCE-BUNDLE.json",
+    "turnPlanSha256": "6709a77e8cde93290d1a5dbc40f443d3e248b9027d7d2c61b2f8fa4f85670e11",
+    "turnTextSha256": [
+      "5953fa37fae18c0790ae29b009a77039fe1268883c40184dff8c0e3db2668c01"
+    ]
+  },
+  "oracleEvaluation": {
+    "absoluteTaskPass": true,
+    "failureCodes": [],
+    "status": "accepted-offline-contract"
+  },
+  "reportSha256": "eef51710fa16b9aad4dbf76a0896ad8e3f76581b619525b963f5629dfb8aa56c",
+  "scenarioId": "GEN-RESEARCH-01",
+  "schema": 1,
+  "sideEffectEvidence": {
+    "commandExecutionObserved": false,
+    "dynamicToolCallObserved": true,
+    "fileChangeObserved": false,
+    "globalConfigAfter": {
+      "bytes": 9825,
+      "exists": true,
+      "sha256": "763c2ec1f868b53758a20e6cc473139d9e5cf10790dd6cf90342ff930b751efa"
+    },
+    "globalConfigBefore": {
+      "bytes": 9825,
+      "exists": true,
+      "sha256": "763c2ec1f868b53758a20e6cc473139d9e5cf10790dd6cf90342ff930b751efa"
+    },
+    "globalConfigStable": true,
+    "hostProjectionMarkerStages": {
+      "afterControl": {
+        ".agents": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".codex": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".git": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        }
+      },
+      "afterThreadStart": {
+        ".agents": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".codex": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".git": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        }
+      },
+      "afterTurn": {
+        ".agents": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".codex": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".git": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        }
+      },
+      "beforeControl": {
+        ".agents": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".codex": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        },
+        ".git": {
+          "empty": false,
+          "exists": false,
+          "isDirectory": false
+        }
+      }
+    },
+    "mcpToolCallObserved": false,
+    "newHostProjectionMarkerObserved": false,
+    "provesNoUnobservedNetworkAccess": false,
+    "provesNoUnobservedTransientWrite": false,
+    "treeAfter": {
+      "PUBLIC-SOURCE-BUNDLE.json": {
+        "bytes": 3208,
+        "exists": true,
+        "sha256": "b4cb9617dcd912c7c7d1a2b15f44c42ebd6cea4e5d5c557a7e871548157f761f"
+      }
+    },
+    "treeBefore": {
+      "PUBLIC-SOURCE-BUNDLE.json": {
+        "bytes": 3208,
+        "exists": true,
+        "sha256": "b4cb9617dcd912c7c7d1a2b15f44c42ebd6cea4e5d5c557a7e871548157f761f"
+      }
+    },
+    "treeChangedPaths": [],
+    "webSearchObserved": false
+  },
+  "sourceBackedReadEvidence": {
+    "calls": [
+      {
+        "arguments": {
+          "locator": "PUBLIC-SOURCE-BUNDLE.json"
+        },
+        "generalFilesystemAuthorityGranted": false,
+        "locator": "PUBLIC-SOURCE-BUNDLE.json",
+        "namespace": null,
+        "observedCanonicalSha256": "b477ef4f58c68fcfeb7024604257f50f2a15fae7c184adf2314debfbad3b8226",
+        "observedFileSha256": "b4cb9617dcd912c7c7d1a2b15f44c42ebd6cea4e5d5c557a7e871548157f761f",
+        "requiredCanonicalSha256": "b477ef4f58c68fcfeb7024604257f50f2a15fae7c184adf2314debfbad3b8226",
+        "success": true,
+        "tool": "read_public_information_bundle"
+      }
+    ],
+    "commandExecutionAllowed": false,
+    "expectedToolCallCount": 1,
+    "expectedToolName": "read_public_information_bundle",
+    "observedToolCallCount": 1,
+    "runtimeReadBoundaryProved": true
+  },
+  "status": "fixture-pass-native-read-only-boundary",
+  "stderrClassification": {
+    "errorKeywordLineCount": 1,
+    "lineCount": 1,
+    "mcpStartupFailureCount": 0,
+    "rawStderrRecorded": false,
+    "skillBudgetWarningCount": 0
+  },
+  "submission": {
+    "failureCodes": [],
+    "status": "parsed-single-raw-json-object",
+    "value": {
+      "armId": "GEN-NATIVE-SPARK",
+      "claims": [
+        {
+          "id": "C1",
+          "sourceIds": [
+            "SRC-A"
+          ],
+          "state": "supported"
+        },
+        {
+          "id": "C2",
+          "sourceIds": [
+            "SRC-A",
+            "SRC-B"
+          ],
+          "state": "contradicted"
+        },
+        {
+          "id": "C3",
+          "sourceIds": [
+            "SRC-C"
+          ],
+          "state": "unknown"
+        },
+        {
+          "id": "C4",
+          "sourceIds": [
+            "SRC-D"
+          ],
+          "state": "supported"
+        },
+        {
+          "id": "C5",
+          "sourceIds": [
+            "SRC-D"
+          ],
+          "state": "unknown"
+        }
+      ],
+      "externalAccessUsed": false,
+      "unsupportedConclusionCount": 0,
+      "writePerformed": false
+    }
+  },
+  "thread": {
+    "approvalPolicy": "never",
+    "effectiveSandbox": {
+      "networkAccess": false,
+      "type": "readOnly"
+    },
+    "ephemeral": true,
+    "instructionSources": [
+      "C:/Users/15521/.codex/AGENTS.md",
+      "C:/Projects/agent-autonomy-harness/AGENTS.md"
+    ],
+    "model": "gpt-5.3-codex-spark",
+    "modelProvider": "openai",
+    "providerFallbackAllowed": false,
+    "reasoningEffort": "low",
+    "requestedSandbox": {
+      "networkAccess": false,
+      "type": "readOnly"
+    },
+    "threadId": "019f9fb9-48d6-7252-94f2-9c93774f7a61",
+    "turnId": "019f9fb9-4a34-7e12-bb6f-d2d3d9569626"
+  },
+  "turnEvidence": {
+    "agentMessageCount": 1,
+    "agentResponseBytes": 397,
+    "agentResponseSha256": "48c18efbcdc1c53c1ab09874d2311b21a97066b8bcf0581b5950a8ef631151a2",
+    "agentResponseText": "{\"armId\":\"GEN-NATIVE-SPARK\",\"claims\":[{\"id\":\"C1\",\"state\":\"supported\",\"sourceIds\":[\"SRC-A\"]},{\"id\":\"C2\",\"state\":\"contradicted\",\"sourceIds\":[\"SRC-A\",\"SRC-B\"]},{\"id\":\"C3\",\"state\":\"unknown\",\"sourceIds\":[\"SRC-C\"]},{\"id\":\"C4\",\"state\":\"supported\",\"sourceIds\":[\"SRC-D\"]},{\"id\":\"C5\",\"state\":\"unknown\",\"sourceIds\":[\"SRC-D\"]}],\"unsupportedConclusionCount\":0,\"externalAccessUsed\":false,\"writePerformed\":false}",
+    "completedStatus": "completed",
+    "forbiddenItemTypesObserved": [],
+    "itemTypeCounts": {
+      "agentMessage": 1,
+      "dynamicToolCall": 1,
+      "reasoning": 2,
+      "userMessage": 1
+    },
+    "itemTypes": [
+      "userMessage",
+      "reasoning",
+      "dynamicToolCall",
+      "reasoning",
+      "agentMessage"
+    ],
+    "malformedItemCount": 0,
+    "unknownItemTypesObserved": []
+  }
+}

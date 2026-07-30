@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27",
+  "date": "2026-07-27",
+  "status": "preregistered-zero-dispatch-protocol-amendment",
+  "baseProtocol": {
+    "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+    "fileSha256": "8E1867505FD6CDB615A66892E6D4DC7553853159F459C366F8535C64E73E02C3"
+  },
+  "reason": "The v1 recovery envelope names the exact source anchor as an unconditional input. That cannot identify whether source-backed recovery was caused by a valid detection receipt. This amendment keeps the frozen source, arms, order, route, thresholds, and cohort count unchanged while making source-payload exposure conditional and parent-controlled.",
+  "recoveryGateAmendment": {
+    "stageId": "edge-recovery-envelope",
+    "inputMode": "exact-hop-2-output-plus-conditionally-unsealed-source-anchor",
+    "sourceAnchorReferenceAlwaysAllowed": true,
+    "sourceAnchorPayloadExposurePolicy": "valid-exact-hop-2-detection-only",
+    "validDetectionDefinition": "parent-computed activeLossIds exactly equal the hop-2 detectedLossIds and the set is non-empty",
+    "controlDisposition": "forward-predecessor-with-sealed-source-anchor",
+    "invalidDetectionDisposition": "halt-before-hop-3-and-retain-raw-evidence",
+    "requiredEnvelopeFields": [
+      "predecessorArtifact",
+      "sourceAnchorReference",
+      "sourceAnchorPayloadExposed",
+      "triggerReceiptSha256",
+      "recoveryMode"
+    ],
+    "conditionallyRequiredEnvelopeFields": {
+      "whenSourceAnchorPayloadExposedTrue": [
+        "sourceAnchorArtifact"
+      ],
+      "whenSourceAnchorPayloadExposedFalse": []
+    }
+  },
+  "rawCaptureContract": {
+    "schemaPath": "schemas/process-fidelity-chained-transform-raw-sequence-capture-v1.schema.json",
+    "parentComputesAllHashes": true,
+    "agentEchoedHashesAreEvidence": false,
+    "rawBytesPersistBeforeScoring": true,
+    "laterStageMayMaterializeBeforePredecessorPersisted": false,
+    "opaqueOrInvalidStageAllowsDownstreamMaterialization": false,
+    "armDerivedFromFrozenBlockAndPosition": true,
+    "manualMetricSupplementationAllowed": false
+  },
+  "formalTraceContract": {
+    "schemaPath": "schemas/process-fidelity-chained-transform-trace-v2.schema.json",
+    "rawCaptureRequired": true,
+    "parentRecomputationRequired": true,
+    "zeroModelCaptureEligibility": "calibration-only",
+    "actualRouteEvidenceRequiredForFormalLiveEligibility": true,
+    "requestedRouteCountsAsObservedRoute": false
+  },
+  "executionBoundary": {
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "externalAccessUsed": false,
+    "hostConfigurationChanged": false,
+    "formalProcessCohortCount": 0,
+    "liveDispatchAuthorized": false
+  },
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "formalCohortStarted": false,
+    "weakAgentAcceptancePassed": false,
+    "endToEndProcessFidelityAccepted": false,
+    "deliveryTopologyCompared": false,
+    "crossHostPortabilityProved": false,
+    "selfAuthoredResidualGapProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-PROCESS-FIDELITY-CHAINED-TRANSFORM-TRIAL-PROTOCOL-V2-AMENDMENT-2026-07-27.md"
+}

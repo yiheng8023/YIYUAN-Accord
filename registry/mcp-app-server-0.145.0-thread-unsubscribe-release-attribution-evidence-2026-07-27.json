@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27",
+  "date": "2026-07-27",
+  "status": "observed-three-valid-paired-repetitions-unsubscribe-runtime-retained-five-seconds-with-subscribed-controls",
+  "question": "After the only client subscription is removed with thread/unsubscribe, does one already-loaded local stdio MCP runtime release within a concurrent controlled five-second window while app-server remains alive?",
+  "hostBinding": {
+    "platform": "Windows",
+    "codexVersion": "codex-cli 0.145.0",
+    "probeId": "codex-app-server-mcp-thread-unsubscribe-release-attribution-v1",
+    "formalPairCount": 3,
+    "formalAppServerCount": 6,
+    "observationSecondsPerArm": 5.0,
+    "sampleIntervalSeconds": 0.5,
+    "probeScript": {
+      "path": "scripts/probe_codex_app_server_mcp_thread_unsubscribe_release_attribution.py",
+      "sha256": "870C03EC94D79463713213289ED55AF45FD0513AF71695623AC3C9C8A9E0D1E3"
+    },
+    "sentinel": {
+      "path": "scripts/mcp_lifecycle_sentinel.py",
+      "sha256": "48656683EAFF80D0162FC230B111880EE59CC619475187531B09C341136EE590"
+    },
+    "stableSchemaEvidence": [
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/ClientRequest.json",
+        "sha256": "F3171526A137767AA9350838F441D79E2DC294EFECD32FAF7932B3B08D223136"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadUnsubscribeParams.json",
+        "sha256": "A03DC3D6C5A2F77F164B6BF4250D29F0C81C10C6B5F484FAC0B05392DC9C936A"
+      },
+      {
+        "path": "C:/tmp/codex-app-server-schema-0.145.0-20260723/v2/ThreadUnsubscribeResponse.json",
+        "sha256": "14CD8BAAC4521C8101698DE3DF2D7A8E509ECE6BF9B8B5D11162D9391064B4AE"
+      }
+    ]
+  },
+  "pairDesign": {
+    "independentAppServers": true,
+    "independentCodexHomes": true,
+    "independentThreads": true,
+    "independentSentinelInstances": true,
+    "concurrentMonotonicBarrier": true,
+    "unsubscribeArmIntervention": "one thread/unsubscribe request",
+    "subscribedControlIntervention": "no host request",
+    "unsubscribeResponseStatusRequired": "unsubscribed",
+    "maximumCrossArmActionSkewMilliseconds": 100.0,
+    "maximumPerSampleSkewMilliseconds": 250.0,
+    "formalDecisionRule": "Three of three valid pairs must have the same decisive pair classification; mixed results are non-reproducible and are not decided by majority vote.",
+    "unsubscribeIsTaskEnd": false
+  },
+  "attributionBoundary": {
+    "unsubscribeArmAllowedHostMethods": [
+      "thread/unsubscribe"
+    ],
+    "controlArmAllowedHostMethods": [],
+    "bothArmsAllowedParentActions": [
+      "exact-process-sampling",
+      "sentinel-event-log-read",
+      "app-server-liveness-sampling"
+    ],
+    "reloadDuringWindow": false,
+    "configWriteDuringWindow": false,
+    "newThreadDuringWindow": false,
+    "toolCallDuringWindow": false,
+    "turnStartDuringWindow": false,
+    "teardownDuringWindow": false,
+    "cleanupDuringWindow": false,
+    "pidSignalDuringWindow": false
+  },
+  "excludedCalibrationRuns": [
+    {
+      "path": "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/calibration-01.json",
+      "sha256": "906CD7FFDE646C1C76C7403962E5FF7B71C447E5F8B961E7452C75B999467EEF",
+      "reason": "One-second plumbing calibration; not the pre-registered five-second formal window."
+    }
+  ],
+  "formalEvidence": [
+    {
+      "path": "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-01.json",
+      "sha256": "9D46BE014A7C5835159FF963CDB98BE4ED66760F03F3C83CFA9F43A1730097C6",
+      "pairClassification": "unsubscribe-immediate-release-falsified-bounded",
+      "control": {
+        "threadId": "019fa030-ec8f-7b80-a9c2-59a7d815883a",
+        "pid": 1720,
+        "instanceId": "c465f8c4-43d5-400c-a3ac-ed4aa30df03e"
+      },
+      "unsubscribe": {
+        "threadId": "019fa030-ee7d-72c2-8515-239e2e79a424",
+        "pid": 41900,
+        "instanceId": "452832a0-b5aa-463e-9eeb-4f19bf3cea9e"
+      }
+    },
+    {
+      "path": "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-02.json",
+      "sha256": "38B6ADA08E61199A4DC762D95D9A9C5BDDC43EDE69D0D01BDDAB2A54AA845D33",
+      "pairClassification": "unsubscribe-immediate-release-falsified-bounded",
+      "control": {
+        "threadId": "019fa031-06e3-7fb3-aa66-1537d5798505",
+        "pid": 41708,
+        "instanceId": "c15d1f71-e020-45fc-b9f5-8f396018aaa4"
+      },
+      "unsubscribe": {
+        "threadId": "019fa031-08c9-7153-808d-334670e0414c",
+        "pid": 41356,
+        "instanceId": "f66512a6-48fd-4d8c-8706-246cfb7dd4ba"
+      }
+    },
+    {
+      "path": "audits/mcp-thread-unsubscribe-release-attribution-0.145.0-2026-07-27/evidence-03.json",
+      "sha256": "ACBBB0D1283B619EFE42C6B7BFEF68C19BDC1CFF34B6BC80D91DA22CF4AA0D63",
+      "pairClassification": "unsubscribe-immediate-release-falsified-bounded",
+      "control": {
+        "threadId": "019fa031-20b6-7632-8db9-e77bdd9b27fc",
+        "pid": 41408,
+        "instanceId": "793354ae-a747-49d3-b4a8-232bddc64aaa"
+      },
+      "unsubscribe": {
+        "threadId": "019fa031-22ad-7f62-bfe9-b4c36c0c4eb7",
+        "pid": 11216,
+        "instanceId": "c6b7a835-7981-44b9-935c-5c038d632394"
+      }
+    }
+  ],
+  "aggregateObservation": {
+    "validPairCount": 3,
+    "unsubscribeImmediateReleaseFalsifiedPairCount": 3,
+    "unsubscribeReleaseAssociatedPairCount": 0,
+    "formalAppServerCount": 6,
+    "independentThreadCount": 6,
+    "independentSentinelInstanceCount": 6,
+    "subscribedControlRetainedCount": 3,
+    "unsubscribeRuntimeRetainedCount": 3,
+    "unsubscribeAcknowledgedCount": 3,
+    "exactProcessIdentitySampleCount": 66,
+    "sameIdentitySampleCount": 66,
+    "attributionWindowStopEventCount": 0,
+    "postWindowSameInstanceCallCount": 6,
+    "verifiedCleanupCount": 6,
+    "gracefulAppServerShutdownCount": 6,
+    "appServerKillCount": 0,
+    "applicationLogExternalNetworkAttemptCount": 6,
+    "modelTurnCount": 0,
+    "modelRequestCount": 0
+  },
+  "decision": {
+    "unsubscribeRequestAcceptanceObserved": true,
+    "unsubscribeImmediateReleaseInTestedWindowObserved": false,
+    "unsubscribeAsObservedImmediateReleaseMechanismFalsifiedForTestedBoundary": true,
+    "subscribedControlRetainedForTestedWindow": true,
+    "nativeThirtyMinuteIdleFallbackRemainsSeparate": true,
+    "dynamicRuntimeControlAssessment": "partial",
+    "residualSelfAuthoredControllerGapProved": false,
+    "nextBoundedGap": "Evaluate overlapping task or subscription ownership and final-release semantics separately before any lease or reference-count claim."
+  },
+  "claimBoundary": {
+    "unsubscribeIsTaskEndProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "sameThreadHotEnableDisableForArbitraryMcpProved": false,
+    "leaseOrReferenceCountProved": false,
+    "stableResourceSavingsProved": false,
+    "genericCrashRecoveryProved": false,
+    "arbitraryMcpBehaviorProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "noNetworkTrafficProved": false,
+    "residualNeedForSelfAuthoredControllerProved": false,
+    "productionReadinessProved": false
+  },
+  "programAcceptance": {
+    "acceptanceId": "acceptance.dynamic-runtime-control-gap-research",
+    "assessment": "partial",
+    "supportsResidualGapProof": false
+  },
+  "cleanupDisposition": {
+    "repositoryAudit": "retain-authoritative-host-evidence",
+    "isolatedHostRoots": "retain-temporary-process-evidence-pending-program-cleanup-gate",
+    "deletionAuthorized": false
+  },
+  "documentation": "docs/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.md"
+}

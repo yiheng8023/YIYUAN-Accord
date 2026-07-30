@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "id": "source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24",
+  "date": "2026-07-24",
+  "status": "two-candidate-materialization-and-no-turn-inventory-isolation-pass",
+  "protocol": "registry/source-pinned-debugging-skill-projection-protocol-2026-07-24.json",
+  "atRunProtocolSha256": "bce7a4a34a73571aa4af6160263933dbfc3da6a62048f2dbfa5b0fb6090add30",
+  "atRunBuilderSha256": "ca9e31a54229a8d8d4e52ee8356a8889acc2d0d2df91240e56c31423e4edd1b3",
+  "atRunProbeSha256": "2c6d22b19f301a6ef27bc575c4177704cb462c05c98863603f8a60de5268516b",
+  "host": {
+    "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "platformFamily": "windows",
+    "platformOs": "windows"
+  },
+  "results": [
+    {
+      "candidateId": "matt.current-diagnosing-bugs",
+      "projectionRoot": "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1",
+      "rawReportPath": "C:/tmp/aah-source-pinned-matt-projection-preflight-20260724-r1-report.json",
+      "rawReportFileBytes": 3490,
+      "rawReportFileSha256": "9f6c11d125bce95331d216ecfa8e035f5f719bb4aecbf7bd894f70fdd141b010",
+      "rawReportInternalSha256": "bbe2b2e169544834e257ca5ed7119fa6f32eeb786f75a1196e3a88ebe1514118",
+      "projectionManifestSha256": "723454de86e3a663620f3deaf6c50d6ae65e2631b61d10c11bd4fecf181d9e6b",
+      "projectedTreeSha256": "4160945a04d86a2602f59657ae647d6997ee796c53926f9cdbf498548d42edc6",
+      "skillName": "diagnosing-bugs",
+      "controlInventory": {
+        "skillCount": 112,
+        "countsByScope": {"repo": 1, "system": 6, "user": 105},
+        "identityManifestSha256": "9fe3a89b0557c4bf6a39b824f3dd070378f8735527652ada650007798b3e65f7"
+      },
+      "unselectedEnabledCountsByScope": {"repo": 0, "system": 6, "user": 0},
+      "selectedEnabledCountsByScope": {"repo": 1, "system": 6, "user": 0},
+      "threadStarted": false,
+      "turnStarted": false,
+      "projectionTreeStable": true,
+      "globalConfigStable": true,
+      "repositoryStatusStable": true
+    },
+    {
+      "candidateId": "superpowers.runtime-6.1.1-systematic-debugging",
+      "projectionRoot": "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1",
+      "rawReportPath": "C:/tmp/aah-source-pinned-superpowers-projection-preflight-20260724-r1-report.json",
+      "rawReportFileBytes": 3525,
+      "rawReportFileSha256": "d9cf18f4db6d5d20c371c90bdf74e78cddc4e34267bf57e59d04e6ed07b29990",
+      "rawReportInternalSha256": "25b0b00aeee133da1507ef8b4d092a6b8ee9c99f15d7d47cd51c686bf6891df9",
+      "projectionManifestSha256": "cc3fb8b1362254e5811f8e49c362ed0a9b35ed9068ba7b648ec9fd49b14f819d",
+      "projectedTreeSha256": "4a06537def2b81a56b1d63173fd96dd947c2f80f3f4062db7bea77249bad97d8",
+      "skillName": "systematic-debugging",
+      "controlInventory": {
+        "skillCount": 112,
+        "countsByScope": {"repo": 1, "system": 6, "user": 105},
+        "identityManifestSha256": "ffa3971cbdce0fd85d58c9876d6e6f76f76dd819df13cb5b146997657009ea2b"
+      },
+      "unselectedEnabledCountsByScope": {"repo": 0, "system": 6, "user": 0},
+      "selectedEnabledCountsByScope": {"repo": 1, "system": 6, "user": 0},
+      "threadStarted": false,
+      "turnStarted": false,
+      "projectionTreeStable": true,
+      "globalConfigStable": true,
+      "repositoryStatusStable": true
+    }
+  ],
+  "supportedConclusions": [
+    "Both pinned candidate directories were materialized byte-exactly with their MIT notices in separate disposable roots.",
+    "Codex Desktop 0.145.0 discovered each candidate as one repository-scoped Skill.",
+    "A process-scoped configuration selected only the exact projected candidate path while disabling every user Skill and every other repository Skill.",
+    "No thread or model turn was needed for the inventory-isolation observation."
+  ],
+  "claimBoundary": {
+    "candidateBodyDeliveryProved": false,
+    "independentLoaderEventProved": false,
+    "behavioralCausationProved": false,
+    "installedCandidateDeliveryProved": false,
+    "fullSuperpowersOrchestrationProved": false,
+    "candidateSuperiorityProved": false,
+    "productionIncidentCompetenceProved": false,
+    "crossHostPortabilityProved": false,
+    "installUpdateOrCleanupAuthorized": false
+  },
+  "nonActions": [
+    "no model thread or turn",
+    "no CC Switch or installed Skill mutation",
+    "no global configuration write",
+    "no source checkout working-tree mutation",
+    "no commit push publication or cleanup"
+  ],
+  "validator": "scripts/validate_source_pinned_debugging_skill_projection_preflight_evidence.py",
+  "tests": "tests/test_source_pinned_debugging_skill_projection_preflight_evidence.py",
+  "documentation": "docs/source-pinned-debugging-skill-projection-preflight-evidence-2026-07-24.md",
+  "nextGate": "Add current-Matt and Superpowers project-projection arms to the bounded synthetic incident runner; preserve structured Skill input and candidate-specific process scoring."
+}

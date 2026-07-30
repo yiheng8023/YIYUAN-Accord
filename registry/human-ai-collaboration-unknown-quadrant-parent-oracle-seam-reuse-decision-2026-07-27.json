@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-unknown-quadrant-parent-oracle-seam-reuse-decision-2026-07-27",
+  "date": "2026-07-27",
+  "status": "existing-parent-only-oracle-seams-sufficient-no-new-adapter-justified",
+  "purpose": "Decide whether the unknown-quadrant private overlays require a new renderer or adapter, using current byte-bound builder and regression evidence rather than implementation preference.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-unknown-quadrant-packet-overlay-poc-evidence-2026-07-27.json",
+      "bytes": 5864,
+      "sha256": "1082f76537098962704674ae6b2f7ae2d44d788a521e3a408283cba0ba79f6e0",
+      "role": "current-private-overlay-compatibility-and-fault-evidence"
+    },
+    {
+      "path": "scripts/build_human_ai_collaboration_weak_agent_trial.py",
+      "bytes": 26113,
+      "sha256": "45d7c0868abb1ef7173d84fdb8c9a962b390e57454498be61431f6cfb489886f",
+      "role": "general-weak-agent-trial-builder"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_weak_agent_trial_builder.py",
+      "bytes": 8729,
+      "sha256": "b431e91e27e217cacf6017957be9d136efd4cdd3e4c289b0aafc7f83ee326f00",
+      "role": "weak-agent-private-oracle-nonwrite-regression"
+    },
+    {
+      "path": "scripts/build_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+      "bytes": 13001,
+      "sha256": "4dd084c599dc93f3342743c3107095ad0ed4ade2acf885c616b1bb9b3622a66c",
+      "role": "agent-visible-projection-and-parent-private-oracle-builder"
+    },
+    {
+      "path": "tests/test_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+      "bytes": 7891,
+      "sha256": "765b68e24d9fdd90744579c5eb4a81861c089cb8c30b4691c54f4539dbb1bb65",
+      "role": "private-oracle-content-injection-rejection-regression"
+    },
+    {
+      "path": "scripts/build_context_continuation_trial_packet.py",
+      "bytes": 13292,
+      "sha256": "94550e0a3eec1fe78d25c869f5aa2e59d4015508633d5e9abac86856c70ff3cc",
+      "role": "default-public-packet-with-optional-parent-only-oracle-output"
+    },
+    {
+      "path": "tests/test_context_continuation_trial_packet.py",
+      "bytes": 5047,
+      "sha256": "b2673ef3eb965aa21e73369de98c9dcce8e4a5d5068a09e7f83d6dc8ec7c22be",
+      "role": "default-public-output-excludes-private-oracle-regression"
+    }
+  ],
+  "observedSeams": [
+    {
+      "id": "SEAM-WEAK-TRIAL-SPEC-PRIVATE-PAYLOAD",
+      "builder": "scripts/build_human_ai_collaboration_weak_agent_trial.py",
+      "mechanism": "trial specs may define privateOraclePayload; the manifest stores only fixture, version, canonical hash, and contentWrittenIntoTrial=false while TASK.json contains the public task",
+      "currentRegression": "test_builds_read_only_research_packet_without_oracle_answers",
+      "arbitraryRuntimeOverrideExposed": false
+    },
+    {
+      "id": "SEAM-PROCESS-FIDELITY-AGENT-VISIBLE-PROJECTION",
+      "builder": "scripts/build_human_ai_collaboration_process_fidelity_information_equivalent_trial_packet.py",
+      "mechanism": "agentVisibleProjection and parent privateOracle are distinct fields with a canonical private hash and content-written=false boundary",
+      "currentRegression": "test_private_oracle_content_injection_is_rejected",
+      "arbitraryRuntimeOverrideExposed": false
+    },
+    {
+      "id": "SEAM-CONTEXT-DEFAULT-PUBLIC-PROJECTION",
+      "builder": "scripts/build_context_continuation_trial_packet.py",
+      "mechanism": "default output omits oraclePrivate; a separate explicit parent-only output mode retains the scoring carrier",
+      "currentRegression": "test_default_output_omits_private_oracle",
+      "arbitraryRuntimeOverrideExposed": false
+    }
+  ],
+  "reuseDecision": {
+    "existingParentOnlyOraclePatternExists": true,
+    "existingPatternSufficientForCurrentZeroModelPhase": true,
+    "genericNewOracleAdapterNecessary": false,
+    "genericArbitraryRuntimeOverrideDesirable": false,
+    "reasonGenericOverrideRejected": "A generic live override would expand the leakage and authority surface without a bound live protocol. Current evaluator-time overlays and trial-spec-owned private payloads already satisfy the zero-model need.",
+    "unknownQuadrantOverlayPlacement": "parent-evaluator-and-protocol-owned-private-payload",
+    "publicTaskPacketPlacement": "unchanged-agent-visible-projection",
+    "liveProtocolSpecificIntegrationImplemented": false,
+    "residualAdapterGapProved": false,
+    "selfAuthoredSkillOrAdapterAuthorized": false
+  },
+  "futureIntegrationGate": {
+    "exactScenarioAndArmRequired": true,
+    "exactPrivateOracleSchemaRequired": true,
+    "agentVisibleProjectionHashRequired": true,
+    "privateOracleCanonicalHashRequired": true,
+    "oracleLeakageNegativeTestRequired": true,
+    "hardStandardIdentityRequired": true,
+    "freshWeakRouteAndDispatchAuthorityRequired": true,
+    "ledgerReservationRequired": true,
+    "implementationRule": "Extend only the selected protocol-owned trial spec and reuse the existing private-payload pattern. Do not add a global arbitrary oracle override."
+  },
+  "decision": {
+    "newAdapterImplementationStarted": false,
+    "weakAgentBuilderChanged": false,
+    "processFidelityBuilderChanged": false,
+    "contextBuilderChanged": false,
+    "historicalTestsChanged": false,
+    "nextBoundedAction": "Keep the overlay at evaluator time until one exact live scenario and arm is separately authorized. At that point add one protocol-owned privateOraclePayload mapping and leakage regression to the existing builder rather than creating a new global adapter."
+  },
+  "executionBoundary": {
+    "repositoryReadOnlySeamReview": true,
+    "modelRequestCount": 0,
+    "candidateDispatchCount": 0,
+    "candidateSkillInvocationCount": 0,
+    "installationPerformed": false,
+    "ccSwitchChanged": false,
+    "globalConfigurationChanged": false,
+    "gitMutationPerformed": false,
+    "externalWritePerformed": false
+  },
+  "claimBoundary": {
+    "liveIntegrationProved": false,
+    "oracleLeakageImpossibleProved": false,
+    "weakAgentBehaviorProved": false,
+    "candidateValueProved": false,
+    "residualAdapterGapProved": false,
+    "newAdapterNeedProved": false,
+    "productionReadinessProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PARENT-ORACLE-SEAM-REUSE-DECISION-2026-07-27.md"
+}

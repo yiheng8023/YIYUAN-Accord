@@ -987,15 +987,6 @@
       "status": "approved"
     },
     {
-      "description": "Set up hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Works in any agent environment or manual terminal workflow. Use when the user wants to prevent destructive git operations or add git safety guardrails.",
-      "directory": "git-guardrails",
-      "id": "skill.curated.git-guardrails",
-      "name": "git-guardrails",
-      "phase": "general",
-      "source": "github:mattpocock/skills",
-      "status": "approved"
-    },
-    {
       "description": "Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.",
       "directory": "grill-with-docs",
       "id": "skill.curated.grill-with-docs",

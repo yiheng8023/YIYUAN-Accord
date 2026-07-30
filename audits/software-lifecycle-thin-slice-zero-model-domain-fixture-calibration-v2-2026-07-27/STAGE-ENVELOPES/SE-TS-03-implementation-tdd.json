@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "kind": "source-backed-software-lifecycle-stage-envelope",
+  "envelopeId": "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-E3",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27",
+  "protocolBinding": {
+    "protocolId": "human-ai-collaboration-source-backed-software-lifecycle-thin-slice-v1",
+    "protocolCanonicalSha256": "1ad22aa460102e4d8e47bedcc5328e5507f11973399a20117c197561e65a23df",
+    "stageDefinitionCanonicalSha256": "5713174302bafe6b879e1faaf63392184df6b40e1a9a83c67f356daf87cc7bd6"
+  },
+  "stage": {
+    "stageId": "SE-TS-03-implementation-tdd",
+    "sequence": 3,
+    "stageClass": "implementation-tdd"
+  },
+  "role": "implementation-tdd-agent",
+  "independenceClass": "isolated-no-verification-release-or-risk-acceptance-authority",
+  "lineage": {
+    "primaryPredecessorEnvelopeSha256": "407ab48f243c021b4dcc246332d0fc6f12175fddfe86d2df86cef6fe9c74245a",
+    "additionalPredecessorEnvelopeSha256s": [],
+    "previousAcceptedLedgerSha256": "f95630568df3e0c44d2bda95aae2240a15699aa35ca0de06f26d09a24c8de85d"
+  },
+  "sourceBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    }
+  ],
+  "inputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "SOURCE-BUNDLE",
+      "role": "frozen-source-bundle",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/SOURCE-BUNDLE.json",
+      "byteLength": 658,
+      "byteSha256": "1d86945728dd4c7df3f13ade36bc70679e4070c3d43879ac0b0488dd978cc07e",
+      "canonicalJsonSha256": "3097e52b038d7c7cd1f7b887c61ec59cff8954d19771ec1edb8310e5d2459535",
+      "producerClass": "frozen-source",
+      "authorityClass": "accepted-truth-source"
+    },
+    {
+      "ordinal": 2,
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O2",
+      "role": "architecture-decision-proposal",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O2.json",
+      "byteLength": 1694,
+      "byteSha256": "5595cb06f5ce091e9d39b159e89d62cd2ae07c12eb5031fe5d5716b1454e30fe",
+      "canonicalJsonSha256": "aa9ade26410d3c299419ee673aa28331579006a3b34a864f3ef1447e86c3d718",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "inputSetCanonicalSha256": "ec8a7a0c94e68e874c77f5d44daf13663fa1d645a61ba9a7388c86beee8ca7b7",
+  "outputBindings": [
+    {
+      "ordinal": 1,
+      "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O3",
+      "role": "implementation-tree",
+      "mediaType": "application/json",
+      "relativePath": "RAW-ARTIFACTS/lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O3.json",
+      "byteLength": 1597,
+      "byteSha256": "298311ed2aaf08427fdc1754df0e735d587b66d662b4841e40fb0b01a33eb830",
+      "canonicalJsonSha256": "c20386e9405999fb2a5757f359835adf42f7b34361ce161e64d0407e4f61b135",
+      "producerClass": "synthetic-calibration",
+      "authorityClass": "proposal-only"
+    }
+  ],
+  "outputSetCanonicalSha256": "69418e6b6cac1e7e874a17a011499b90d84cd5c5d55405f11b148e2dc92844ae",
+  "sections": [
+    "orderedRedGreenRefactorTimeline",
+    "publicBehaviorEvidence",
+    "hiddenOracleResult",
+    "mutantKillResult",
+    "changedFileScope",
+    "implementationAssumptions",
+    "unresolvedItems",
+    "nextGate"
+  ],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": [],
+  "acceptanceObligationIds": [
+    "acceptance.implementation-tdd"
+  ],
+  "humanAuthorityReceiptBindings": [
+    "44793567d3c1f3b90ce33d9fab47f8c9761b249789483526e7cc8eaf0de088b5",
+    "7bbe94e30cf793f1a07864aa97fbda9458c9dfc64a101a4f4ace0ad54372ff6a"
+  ],
+  "repositoryTruthBefore": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "repositoryTruthAfter": {
+    "required": false,
+    "observed": false,
+    "snapshotArtifactId": null,
+    "snapshotSha256": null,
+    "provesFilesystemZeroWrite": false
+  },
+  "allowedMutableFiles": [
+    "feature.py",
+    "test_feature.py"
+  ],
+  "changedFiles": [],
+  "rawEventArtifactIds": [],
+  "absoluteGateResults": [
+    {
+      "gateId": "mechanism.implementation-tdd",
+      "passed": true,
+      "evidenceArtifactIds": [
+        "lifecycle-zero-model-domain-fixture-calibration-v2-2026-07-27-O3"
+      ]
+    }
+  ],
+  "truthTransition": {
+    "proposalArtifactCanonicalSha256": "c20386e9405999fb2a5757f359835adf42f7b34361ce161e64d0407e4f61b135",
+    "proposedChangeIds": [],
+    "acceptedChangeIds": [],
+    "rejectedChangeIds": [],
+    "basisKindsUsed": [],
+    "beforeAcceptedLedgerSha256": "f95630568df3e0c44d2bda95aae2240a15699aa35ca0de06f26d09a24c8de85d",
+    "afterAcceptedLedgerSha256": "344d846d1331c4e66e83b350a738e1df5955d36ecb6f463a01ed5ae9718a749a"
+  },
+  "parentEvaluation": {
+    "evaluatorId": "software-lifecycle-zero-model-calibrator-v1",
+    "evaluatorCanonicalSha256": "e9880346f79e8aeab22bbee4fc19173abc9ab4f2bfad270b492d828fa0ae2e6b",
+    "stageValidators": [
+      "parent-observed-valid-red-before-production-mutation",
+      "visible-hidden-oracle",
+      "predeclared-mutants",
+      "changed-file-allowlist",
+      "effective-sandbox",
+      "private-oracle-nonexposure"
+    ],
+    "status": "accepted",
+    "failureCodes": []
+  },
+  "execution": {
+    "mode": "zero-model-scripted-calibration",
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "actualRouteObserved": false,
+    "networkAccessUsed": false,
+    "gitMutationUsed": false,
+    "externalWriteUsed": false
+  },
+  "status": "accepted",
+  "stopReason": null,
+  "nextGate": null,
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "productionLifecycleProved": false,
+    "humanDecisionQualityProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "envelopeSha256": "90a72f70875bfd109c23e91a232986106f52da247f07d785815f3fcfaa067f03"
+}

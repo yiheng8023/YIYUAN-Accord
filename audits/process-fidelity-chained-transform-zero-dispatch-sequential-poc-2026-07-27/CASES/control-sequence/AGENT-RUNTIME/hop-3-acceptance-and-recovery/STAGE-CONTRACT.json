@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "stageId": "hop-3-acceptance-and-recovery",
+  "protocolFileSha256": "8e1867505fd6cdb615a66892e6d4dc7553853159f459c366f8535c64e73e02c3",
+  "inputMode": "single-declared-recovery-envelope-only",
+  "inputArtifactId": "fixture-control-b1-p1-R2",
+  "inputArtifactSha256": "ea89e88e3e4c85dedc16a4fdf191cc377d71c23ec575441ac62a44287f28c93b",
+  "dynamicInputCount": 1,
+  "outputArtifactId": "fixture-control-b1-p1-O3",
+  "requiredOutputSections": [
+    "fidelitySnapshot",
+    "acceptanceDecision",
+    "intermediateLossLedger",
+    "sourceBackedRecovery",
+    "residualUncertainty",
+    "nextAuthorizationGate"
+  ],
+  "requiredInvariantIdsVisible": true,
+  "oracleValuesVisible": false,
+  "toolsAllowed": [],
+  "outputMustBeStructuredJson": true
+}

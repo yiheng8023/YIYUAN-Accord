@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "id": "codex-app-server-skill-treatment-fidelity-protocol-2026-07-24",
+  "date": "2026-07-24",
+  "status": "live-assay-passed-synthetic-body-only-delivery-proved",
+  "purpose": "Test whether body-only Skill content reaches the model through current Codex app-server structured Skill input without modifying an installed third-party Skill or global configuration.",
+  "hostBinding": {
+    "interface": "Codex app-server",
+    "runtimeVersion": "0.145.0",
+    "model": "gpt-5.3-codex-spark",
+    "reasoningEffort": "low",
+    "providerFallbackAllowed": false,
+    "approvalPolicy": "never",
+    "sandbox": "read-only",
+    "networkAllowed": false
+  },
+  "authorityBoundary": {
+    "disposableRootWritesAuthorized": true,
+    "repositoryProtocolWritesAuthorized": true,
+    "installedSkillMutationAuthorized": false,
+    "globalConfigMutationAuthorized": false,
+    "dependencyInstallAuthorized": false,
+    "mcpOrAppUseAuthorized": false,
+    "externalWriteAuthorized": false,
+    "gitMutationAuthorized": false,
+    "calibrationWriteAuthorized": false
+  },
+  "assay": {
+    "skillName": "treatment-fidelity-canary",
+    "projectSkillPathPattern": "<disposable-root>/.agents/skills/treatment-fidelity-canary/SKILL.md",
+    "tokenGeneration": "fresh cryptographic random token per paired repetition",
+    "tokenLocationBeforeTurn": "Skill body only",
+    "tokenForbiddenLocations": [
+      "Skill name",
+      "frontmatter description",
+      "Skill path",
+      "public prompt",
+      "structured Skill input",
+      "process-scoped config override"
+    ],
+    "publicPrompt": "A treatment may or may not be selected. If it supplies an opaque verification token, return exactly that token. Otherwise return exactly NO_TREATMENT. Do not use tools or add any other text.",
+    "repetitions": 3,
+    "armOrder": [
+      ["control-unselected", "selected-structured-skill"],
+      ["selected-structured-skill", "control-unselected"],
+      ["control-unselected", "selected-structured-skill"]
+    ],
+    "controlArm": {
+      "structuredSkillInputSent": false,
+      "allUserSkillsDisabled": true,
+      "expectedExactResponse": "NO_TREATMENT"
+    },
+    "selectedArm": {
+      "structuredSkillInputSent": true,
+      "onlyCanaryUserSkillEnabled": true,
+      "expectedExactResponse": "fresh body-only token"
+    }
+  },
+  "acceptance": {
+    "sameInventoryIdentitySetAcrossArms": true,
+    "canaryPresentInInventory": true,
+    "bodyHashStableAcrossPair": true,
+    "tokenAbsentFromEveryPublicOrMetadataSurface": true,
+    "threeDistinctControlThreadsReturnFallbackExactly": true,
+    "threeDistinctSelectedThreadsReturnBodyTokenExactly": true,
+    "actualModelAndReasoningMatch": true,
+    "noForbiddenItemTypeObserved": true,
+    "globalConfigStable": true,
+    "repositoryStatusStable": true
+  },
+  "falsifiers": [
+    "control returns the body-only token",
+    "selected arm does not return the body-only token exactly",
+    "token appears in any public, metadata, path, config, or structured-input surface",
+    "inventory identity or canary body changes between paired arms",
+    "model, reasoning, sandbox, approval, or provider fallback drifts",
+    "a command, file change, MCP, App, dynamic tool, collaboration Agent, network, dependency, Git, or external write item appears",
+    "global configuration or repository status changes",
+    "fewer than three distinct paired thread identities complete"
+  ],
+  "evidenceLadder": [
+    {
+      "level": "L0-source-identity",
+      "meaning": "Exact Skill body path and digest are bound.",
+      "currentInstalledCandidateEvidence": true
+    },
+    {
+      "level": "L1-selected-metadata-exposure",
+      "meaning": "Only the intended user Skill is enabled in the task-scoped inventory.",
+      "currentInstalledCandidateEvidence": true
+    },
+    {
+      "level": "L2-structured-input-accepted",
+      "meaning": "The host accepts an exact type=skill input with name and path.",
+      "currentInstalledCandidateEvidence": true
+    },
+    {
+      "level": "L3-body-only-content-response",
+      "meaning": "A hidden body-only nonce appears exactly in selected responses and never in controls under the same host mechanism.",
+      "currentInstalledCandidateEvidence": false
+    },
+    {
+      "level": "L4-independent-loader-or-model-input-event",
+      "meaning": "Host telemetry independently binds the Skill body digest to the exact turn or captured model input.",
+      "currentInstalledCandidateEvidence": false
+    },
+    {
+      "level": "L5-candidate-specific-causal-task-value",
+      "meaning": "Repeated candidate-specific treatment changes task outcomes under adequate controls.",
+      "currentInstalledCandidateEvidence": false
+    }
+  ],
+  "claimBoundary": {
+    "assayPassMayProveBodyOnlyContentReachedModelForSyntheticCanaryOnBoundHost": true,
+    "assayPassMayProveIndependentLoaderEvent": false,
+    "assayPassMayProveInstalledDiagnoseBodyDelivery": false,
+    "assayPassMayProveInstalledDiagnoseCausation": false,
+    "assayPassMayProveCurrentMattValue": false,
+    "assayPassMayProveSkillSuperiority": false,
+    "assayPassMayProvePortfolioDecisionReadiness": false,
+    "assayPassMayProveCrossHostBehavior": false
+  },
+  "reuse": {
+    "inventoryAndOverride": "scripts/probe_codex_app_server_skill_exposure.py",
+    "structuredInputShape": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+    "parentEvidenceContract": "registry/skill-live-run-evidence-contract-2026-07-23.json",
+    "doesNotCreateParallelSkillManager": true
+  },
+  "implementation": "scripts/probe_codex_app_server_skill_treatment_fidelity.py",
+  "liveEvidence": "registry/codex-app-server-skill-treatment-fidelity-evidence-2026-07-24.json",
+  "documentation": "docs/codex-app-server-skill-treatment-fidelity-protocol-2026-07-24.md",
+  "decision": {
+    "liveAssayAuthorizedByCurrentGoal": true,
+    "liveAssayRunStarted": true,
+    "liveAssayPassed": true,
+    "syntheticCanaryBodyOnlyDeliveryProved": true,
+    "independentLoaderEventProved": false,
+    "installedCandidateAttributionAllowed": false,
+    "nextBoundedAction": "Use disposable source-pinned candidate projections to compare current Matt and Superpowers without installation or global configuration changes; retain the exact installed-candidate delivery and causation boundary."
+  }
+}

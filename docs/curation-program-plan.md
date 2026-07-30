@@ -66,42 +66,54 @@ round.
 
 ## Strategic Objectives
 
-The program currently has fourteen required core objectives and permits reviewed
+The program currently has fifteen required core objectives and permits reviewed
 extensions without weakening reference closure:
 
 1. Operate Skills as the first terminal MVP without turning the broader funnel
    into a Skills-only system.
 2. Preserve broad general and specialist coverage beyond software engineering
    and any one human-AI shortfall chain.
-3. Evolve the approved release through governed retention, reuse, replacement,
+3. Maintain an open-world, solution-neutral human-AI collaboration mother
+   framework, with software engineering as a priority lifecycle specialization
+   rather than the whole domain. Historical STM/P/SG coordinates and current
+   self-authored Skills remain bounded evidence, not the problem universe.
+   Treat process fidelity and cumulative transformation loss as a cross-domain
+   risk spanning intake, decomposition, routing, delegation, compression,
+   handoff, review, acceptance, and lifecycle transitions.
+   Treat accepted domain language and consequential decision records as a
+   cross-lifecycle semantic authority plane. Grilling is a selective
+   elicitation method, domain modeling maintains that state, and composed
+   entries remain replaceable rather than becoming a mandatory universal
+   workflow.
+4. Evolve the approved release through governed retention, reuse, replacement,
    supersession, composition, admission, deprecation, or retirement; unchanged
    is valid when no alternative proves positive net value.
-4. Bind capability work to dated demand evidence, uncertainty, held claims,
+5. Bind capability work to dated demand evidence, uncertainty, held claims,
    refresh rules, and promotion firewalls.
-5. Reuse reliable native, official, runtime, curated, external, composed, or
+6. Reuse reliable native, official, runtime, curated, external, composed, or
    non-Skill paths before authoring new capability.
-6. Model full-chain native, single, composed, non-Skill, human-authority,
+7. Model full-chain native, single, composed, non-Skill, human-authority,
    fallback, conflict, and lifecycle coverage.
-7. Produce decision-ready topology that reduces unknown-Skill enumeration,
+8. Produce decision-ready topology that reduces unknown-Skill enumeration,
    routing burden, collision, and maintenance rent without owning invocation.
-8. Govern third-party Skill bodies through provenance, license, security,
+9. Govern third-party Skill bodies through provenance, license, security,
    portability, overlap, adaptation, validation, release, and lifecycle gates.
-9. Keep releases agent-neutral while requiring evidence-backed consumer
+10. Keep releases agent-neutral while requiring evidence-backed consumer
    mappings for each Agent's instruction, Skill, precedence, projection,
    verification, backup, and restore behavior.
-10. Improve collaboration reliability through the smallest sufficient layered
+11. Improve collaboration reliability through the smallest sufficient layered
    combination of instructions, Skills, deterministic mechanisms, project
    standards, evidence, and accountable human decisions.
-11. Consume CALIBRATION research read-only and defer standard-candidate work
+12. Consume CALIBRATION research read-only and defer standard-candidate work
    until the chain-maturity gate is met; only then consider extraction while
    preserving applicable project admission and final-carrier authority,
    including a graph-scoped revalidation cascade after a standard is accepted.
-12. Support update, conflict handling, supersession, deprecation, migration,
+13. Support update, conflict handling, supersession, deprecation, migration,
    rollback, and retirement instead of accumulating Skills indefinitely.
-13. Govern source-preserving cross-Agent capability consumption while reusing
+14. Govern source-preserving cross-Agent capability consumption while reusing
    CC Switch where supported and leaving host configuration and runtime
    authority with consumers.
-14. Preserve superseded custom Manager decisions and bounded experiments as
+15. Preserve superseded custom Manager decisions and bounded experiments as
    historical evidence without retaining them as current product identity or
    reactivation authority.
 
@@ -124,6 +136,103 @@ evidenced demand or shortfall
 -> adopt, adapt, merge, compose, reference, reject, hold, adapter-only, or repository-author
 -> admission, verification, and release
 ```
+
+Before that path can support a generalized coverage, residual-gap,
+repository-authoring, or hard-standard claim, the demand model must pass the
+solution-neutral coverage gate. The versioned baseline in
+`registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json` defines
+nine open-world mother-framework axes, a fourteen-slice software-engineering
+specialization, an end-to-end process-fidelity cross-cut, explicit
+uncovered-cell and counterexample expectations, and an AI-independent
+hard-standard boundary. It preserves valid narrow evidence
+without converting a closed coordinate inventory into whole-domain closure.
+The first executable comparison boundary is recorded in
+`registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json`;
+candidate-specific Matt exposure and one native/Matt weak-Agent pair are now
+recorded, but loader causation and any preference decision remain unproved.
+The paired observation is in
+`registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json`
+and now contains three runs per arm with a mixed process result. Treatment
+fidelity remains required before any retention or self-authored-chain
+decision. The second software-lifecycle scenario has started under
+`registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json`.
+All three native/CC `diagnose` pairs passed the functional oracle in both arms.
+The native arm passed the strict process boundary zero times and `diagnose`
+passed twice. A separate three-pair synthetic canary assay now proves that the
+bound Codex host mechanism can deliver body-only project-Skill content.
+Independent loader notification and exact installed-`diagnose` delivery remain
+unproved. The bounded association therefore still does not support preference,
+causation, current-upstream-value, portfolio, or self-authored-chain decisions.
+Identical incident and canary repetitions stopped. The next comparison used
+disposable source-pinned current-Matt and Superpowers projections under
+`registry/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.json`.
+Across three valid pairs, both candidates passed visible tests 3/3; full hidden
+contract passed Matt 1/3 and Superpowers 2/3, while complete strict process
+passed 1/3 each. One earlier pair is retained as classifier-invalid and is not
+counted. The mixed result favors neither candidate and proves no loader
+causation, full-Superpowers orchestration, portfolio decision, residual gap, or
+self-authored-chain change. Identical repetitions stop; the next comparison
+must change the falsifiable lifecycle scenario or treatment-fidelity question.
+The first general research baseline is now recorded in
+`registry/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.json`.
+Three native Spark/low read-only repetitions satisfied the observed host
+boundary but failed the fixed private claim oracle in the same way: production
+readiness was treated as contradicted rather than unknown. This is a bounded
+synthetic failure only. It does not prove general weak-model failure, any
+candidate's value, or a residual self-authored gap; one suitable existing
+source/uncertainty treatment must be tested before authoring changes.
+The next programming-heavy slice is preregistered in
+`registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json`.
+It separates native Spark/low, current remote-revision Matt `tdd`, and
+OpenAI-curated Superpowers 6.2.0 `test-driven-development`. Only the exact TDD
+sub-capabilities are eligible; full Matt/Superpowers workflows remain excluded.
+The protocol pre-binds Matt's required public seam and makes ordered valid RED
+plus mutation-sensitive Agent tests hard gates. The dependency-free fixture
+builder and a seven-case normalized offline RED timeline classifier now pass.
+Raw app-server event normalization, exact projections, exposure, and live runs
+remain open.
+The bounded successor is now preregistered in
+`registry/human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27.json`
+and documented by
+`docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-SUCCESSOR-CONTRACT-V2-2026-07-27.md`.
+Its pure offline builder and exact contract/document bindings remain `NO-GO`
+for live effects. A future authorized slice must establish one shared ledger
+authority before snapshot and preflight capture, then receive a separate
+independent grant. This does not authorize candidate materialization,
+app-server start, model dispatch, formal acceptance credit, or portfolio
+change.
+The next scenario was pre-registered in
+`registry/human-ai-collaboration-maintenance-migration-protocol-batch-01-2026-07-24.json`.
+It uses a synthetic affected-consumer model and a configurable CC
+`deprecation-and-migration` candidate. Three valid Spark/low pairs are now
+recorded in
+`registry/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.json`:
+visible tests passed 3/3 in both arms, while the hidden contract passed native
+3/3 and the candidate 1/3. This supports only a bounded native association on
+the fixture, not loader causation, a general preference, or portfolio action.
+Identical repetitions stop. The security slice is deferred because the
+suitable OpenAI proprietary system Skill currently lacks a clean disabled
+control and must not be vendored.
+
+The next materially different slice is pre-registered in
+`registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json`.
+It tests source-bound requirements and domain-language challenge with
+Spark/low native-disabled versus the exact CC `grill-with-docs` payload. The
+fixture, wording-neutral oracle, and five offline classifier cases now pass;
+the exact no-turn native-disabled and selected-candidate host exposure also
+passes with Plugin and static MCP startup entries disabled. Live runs remain
+gated. This selection does not add the self-authored chain as a
+requirements-method arm and does not change any hard standard.
+
+The later
+[semantic-authority layer reconciliation](strategy/HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-LAYER-RECONCILIATION-2026-07-28.md)
+confirms that current Matt upstream now separates `grilling`,
+`domain-modeling`, and the thin `grill-with-docs` composition entry. The exact
+CC treatment remains the historical adapted monolith and lacks the separate
+current-wrapper primitives. The program therefore adds persistent semantic
+authority continuity as an open acceptance subgate while preserving the exact
+current requirements protocol. No silent update, dependency installation,
+replacement, portfolio preference, or self-authored residual-gap claim follows.
 
 This display is a dependency graph projection, not a one-way conveyor. The
 eight lines above are the core path. Consumer projection is an optional branch
@@ -280,6 +389,18 @@ deprecation, migration, rollback, and retirement are verified at repository
 policy and deterministic-fixture scope; a live approved-Skill consumer event
 is still required before claiming observed runtime maturity or cross-consumer
 effectiveness.
+
+Final program closeout now has a distinct cleanup acceptance gate rather than
+being inferred from a green stage or the latest PoC. Before any declared final
+closeout, the program must rebuild an exact-target inventory across bound
+repositories, workspaces, branches, worktrees, temporary downloads, backups,
+generated trial artifacts, consumer or tool state, and retained historical
+evidence; bind ownership, recoverability, sensitivity, and disposition; retain
+authoritative or ambiguously owned evidence by default; obtain separate
+authority for cleanup mutations; and reverify the post-cleanup repository and
+evidence state. The current
+`registry/closeout-cleanup-debt-preview-2026-07-24.json` is only a partial,
+repository-local read-only preview and authorizes no deletion.
 
 Cross-Agent claim limits are reconciled in
 `registry/cross-agent-claim-limit-reconciliation-2026-07-18.json`. Nine current
@@ -586,3 +707,40 @@ third manually maintained full authority copy; if public reuse later proves
 valuable, it may receive only a sanitized generated non-authoritative
 projection with explicit provenance. No cross-repository write is authorized
 by this checkpoint.
+
+## Unknown-quadrant research mapping
+
+The
+[unknown-quadrant process-fidelity mapping](strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PROCESS-FIDELITY-MAPPING-2026-07-27.md)
+adds Known Knowns, Known Unknowns, Unknown Knowns, and Unknown Unknowns as a
+research and task-framing lens across intake, implementation, review, handoff,
+and process-loss measurement. It does not become a hard standard, globally
+mandatory workflow, or new Skill. Hard standards remain mandatory common
+controls; Matt, Superpowers, and self-authored phase controls remain separately
+attributable method candidates or controls. Zero-model fixtures remain first,
+and any weak-Agent dispatch still requires its own exact current-task grant.
+
+The
+[unknown-quadrant attribution-oracle PoC](strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-ATTRIBUTION-ORACLE-POC-EVIDENCE-2026-07-27.md)
+adds 22 deterministic zero-model classifications without rewriting the
+historical overlap fixtures. It rejects hard-standard credit, multi-method
+confounding, phase-control promotion, infrastructure credit, terminal
+correctness as a process-loss rescue, and residual-gap self-authorization.
+Passing the oracle makes a packet eligible for further compatibility testing;
+it does not prove live behavior or candidate value.
+
+The
+[unknown-quadrant packet-overlay PoC](strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PACKET-OVERLAY-POC-EVIDENCE-2026-07-27.md)
+then binds the oracle privately to five concrete zero-model packets. Four reuse
+existing executable packets; the Unknown Knowns creative row required one
+derived packet because the prior matrix contained only a planned scenario.
+Five overlay faults fail closed. This closes a fixture-coverage gap only and
+changes neither public prompts, hard standards, live authority, nor the
+residual-gap decision.
+
+The
+[parent-oracle seam reuse decision](strategy/HUMAN-AI-COLLABORATION-UNKNOWN-QUADRANT-PARENT-ORACLE-SEAM-REUSE-DECISION-2026-07-27.md)
+finds that existing weak-Agent, process-fidelity, and context packet builders
+already separate Agent-visible inputs from parent-only oracle material. A new
+generic adapter or runtime override is therefore not justified. Future live
+integration must remain protocol-owned and scenario-specific.

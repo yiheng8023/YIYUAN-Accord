@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "id": "mcp-task-lifecycle-evidence-contract-2026-07-23",
+  "date": "2026-07-23",
+  "status": "offline-synthetic-decision-contract-only",
+  "evaluator": "scripts/evaluate_mcp_task_lifecycle_evidence.py",
+  "fixtures": "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+  "verification": "tests/test_mcp_task_lifecycle_evidence.py",
+  "authorityBoundary": {
+    "hostOrMcpStartAuthorized": false,
+    "hostStateOrProcessStateReadAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "accountOrSecretAccessAuthorized": false
+  },
+  "operatingPolicy": {
+    "defaultState": "off-unless-current-bounded-task-requires-capability",
+    "activationScope": "smallest-task-relevant-mcp-set",
+    "nonSelectedMcpState": "off-or-not-activated-where-the-host-supports-that-boundary",
+    "rerouteCheckpoints": [
+      "task-entry",
+      "phase-change",
+      "task-end",
+      "failure-or-recovery"
+    ],
+    "releaseRequestedAtTaskOrPhaseEnd": true,
+    "permanentlyActiveByDefault": false,
+    "fallbackWhenDynamicLifecycleUnproved": "startup-or-new-thread-profile-or-documented-native-idle-timeout",
+    "policyDoesNotProveHostActuation": true
+  },
+  "evidenceDimensions": ["lease", "referenceCount", "taskEndExit", "duplicateIdentity", "crashRecovery", "resourceControl", "sameSessionSwitching"],
+  "minimumStructuralEvidence": {
+    "lease": [
+      "exactTaskIdentityRecorded",
+      "leaseAcquireEventRecorded",
+      "leaseReleaseEventRecorded",
+      "leaseReferenceTraceValidated",
+      "leaseEventOrderValidated"
+    ],
+    "referenceCount": [
+      "concurrentAcquireReleaseTraceRecorded",
+      "underflowAndDoubleReleaseCasesCovered",
+      "leaseReferenceTraceValidated",
+      "referenceCountTraceEndsAtZero"
+    ],
+    "taskEndExit": [
+      "taskEndEventRecorded",
+      "finalLeaseReleaseEventRecorded",
+      "referenceCountZeroBeforeExitRecorded",
+      "exactExitEventRecorded",
+      "taskEndReleaseExitOrderValidated"
+    ],
+    "duplicateIdentity": [
+      "exactMcpInstanceIdentityRecorded",
+      "concurrentInstanceWindowRecorded",
+      "duplicateAttemptTraceRecorded",
+      "identityCollisionOutcomeRecorded"
+    ],
+    "crashRecovery": [
+      "faultClassDeclared",
+      "preFaultExactIdentityRecorded",
+      "postFaultExactIdentityRecorded",
+      "sameThreadRecoveryOutcomeRecorded",
+      "recoveryFallbackDeclared"
+    ],
+    "resourceControl": [
+      "resourceRepeatCount>=2",
+      "resourceBaselineAndPostStateRecorded",
+      "resourceMetricScopeBounded",
+      "controlWorkloadRecorded",
+      "resourceSampleWindowBounded"
+    ],
+    "sameSessionSwitching": [
+      "exactSameThreadIdentityRecorded",
+      "baselineAndPostDirectCallRecorded",
+      "activeTurnBetweenCallsRecorded",
+      "sameSessionRefreshEvidencePacketRecorded"
+    ]
+  },
+  "claimBoundary": {
+    "countsAsLiveHostProof": false,
+    "countsAsWeakAgentAcceptance": false,
+    "syntheticEvidenceMayProveOnly": "decision-contract completeness and premature-claim rejection",
+    "syntheticTraceProvesLiveRelease": false,
+    "leaseOrReferenceCountCorrectnessProved": false,
+    "taskEndExactExitProved": false,
+    "duplicateFreedomProved": false,
+    "crashRecoveryProved": false,
+    "resourceBenefitProved": false,
+    "sameSessionSwitchingProved": false
+  },
+  "nextGate": "For a concrete workload, obtain separately authorized repeated live-host observations with exact identities, bounded resource metrics, and a declared fallback; do not promote this offline contract itself."
+}

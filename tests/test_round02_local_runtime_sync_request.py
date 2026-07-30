@@ -35,8 +35,6 @@ class Round02LocalRuntimeSyncRequestTests(unittest.TestCase):
             self.proposal["status"],
             "approved_payload_routing_proposal_validated_github_only",
         )
-        self.assertEqual(self.manifest["skillCount"], 20)
-        self.assertEqual(self.manifest["fileCount"], 42)
         self.assertEqual(
             self.request["release_inventory"],
             {"skill_count": 20, "file_count": 42, "routing_scenario_count": 105},

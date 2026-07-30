@@ -1,0 +1,429 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27",
+  "date": "2026-07-27",
+  "status": "offline-successor-contract-preregistered-live-no-go",
+  "purpose": "Preregister a fail-closed successor boundary for one possible future non-comparative TDD diagnostic without rewriting historical evidence, materializing a candidate, creating a live ledger, starting Codex app-server, or sending a model request.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-protocol-2026-07-26.json",
+      "bytes": 16323,
+      "sha256": "80086509febcf37665b301ed43d856ce087a30349ca85f7be81a1dfb47bf12f1",
+      "role": "historical-parent-noncomparative-protocol",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-noncomparative-treatment-diagnostic-source-governance-preflight-2026-07-26.json",
+      "bytes": 9332,
+      "sha256": "cc6f265eeca164b3f26cfa020976776242a4f95a06deff9a9e88b4167f4866cd",
+      "role": "historical-dated-source-toolchain-observation",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-exact-candidate-admission-gap-audit-2026-07-26.json",
+      "bytes": 18674,
+      "sha256": "7b9371ef23de7dce3e3c96ffc4595796e519c30736705012b05b467b3d7efef1",
+      "role": "historical-static-gap-audit",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json",
+      "bytes": 13359,
+      "sha256": "8b12683f86dcecffac5cfd398061f194ccc08578b04247e7631c03a922b131e4",
+      "role": "matt-static-identity-governance-admission",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json",
+      "bytes": 14016,
+      "sha256": "aa763b96a461b1f6a85d4d8329612eee536923c04bf7ba48ac057b75e83c2376",
+      "role": "superpowers-static-identity-governance-admission",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "registry/human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27.json",
+      "bytes": 17774,
+      "sha256": "af8ab74c690e86ce79d9a882603ed75e5765def60509afb1b072c332568a5a53",
+      "role": "current-blocked-readiness-reconciliation",
+      "immutableHistoricalEvidence": false,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_authorization_adapter.py",
+      "bytes": 14624,
+      "sha256": "a146a95c3e37827e9969cc0bcde2652c01547e19ad44ae2deadad398d5cc454c",
+      "role": "historical-authorization-adapter-poc",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_dispatch_identity_ledger.py",
+      "bytes": 49057,
+      "sha256": "c8625d78bd3ae93aea6c7a41eed5981670797f9d49be9a3e1d5124be7103e1e6",
+      "role": "historical-identity-ledger-poc",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "scripts/human_ai_collaboration_tdd_noncomparative_runner_preflight.py",
+      "bytes": 8640,
+      "sha256": "d3aeb2508b7214ce1786f88f79987b0d677e9d8f4c47166cfef453f5f90e6f15",
+      "role": "historical-runner-preflight-poc",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    },
+    {
+      "path": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+      "bytes": 24396,
+      "sha256": "e3550b937cfd301a0bd2468c21fe67582a0b3ebceef0f61fbbeccfa0de4e4f80",
+      "role": "excluded-formal-policy-shell",
+      "immutableHistoricalEvidence": true,
+      "dispatchAuthority": false
+    }
+  ],
+  "historicalEvidenceBoundary": {
+    "historyRewriteAllowed": false,
+    "historicalProtocolAdapterLedgerRunnerRemainUnchanged": true,
+    "historicalStaticGovernanceIsDispatchFreshness": false,
+    "historicalStaticGovernanceIsCurrentAuthority": false,
+    "historicalFormalRunnerIsDiagnosticPolicyShell": false,
+    "successorConsumesHistoricalEvidenceAsBaselineOnly": true
+  },
+  "knownHistoricalIncompatibilities": [
+    {
+      "id": "incompat.replacement-field",
+      "historicalProtocolField": "diagnosticDesign.replacementDispatchesAllowed",
+      "historicalAdapterField": "diagnosticDesign.replacementDispatchAllowed",
+      "successorRule": "replacementAllowed is the only normalized successor field; the singular historical alias is rejected."
+    },
+    {
+      "id": "incompat.static-audit-versus-fresh-preflight",
+      "historicalFact": "The static gap audit permanently binds the dated preflight, while the historical adapter requires that audit binding to equal the dispatch-time fresh preflight.",
+      "successorRule": "Static governance, dispatch-time freshness, and independent authority are separate evidence layers; the historical audit and adapter are not reused as current dispatch documents."
+    },
+    {
+      "id": "incompat.post-response-ledger-binding",
+      "historicalFact": "The historical ledger binds host thread and turn identities only after host responses.",
+      "successorRule": "Durable thread-start-intent and turn-start-intent events precede host calls; ambiguous outcomes remain consumed with no automatic retry."
+    },
+    {
+      "id": "incompat.formal-policy-and-resource-owner",
+      "historicalFact": "The formal runner counts valid output toward weak-Agent acceptance, and the runner preflight transfers a raw successful handle without exposing its cleanup owner.",
+      "successorRule": "The formal policy shell is excluded; a later diagnostic runner or shared transport must return an explicit closeable owner and persist resources-closed."
+    }
+  ],
+  "normalizedDispatchPolicy": {
+    "maximumDispatchesPerCandidate": 1,
+    "maximumDispatchesTotal": 2,
+    "replacementAllowed": false,
+    "comparisonAllowed": false,
+    "scoreProduced": false,
+    "formalAcceptanceContribution": false,
+    "candidateOrderHasMeaning": false,
+    "automaticReleaseAllowed": false,
+    "automaticRetryAllowed": false,
+    "manualReconciliationRequired": true
+  },
+  "candidateBindings": [
+    {
+      "candidateId": "tdd.matt.current",
+      "candidateIdentitySha256": "5d7376eefd8d581452778c637814065d309e07966faf998b575d54d7e6812f67",
+      "staticAdmissionPath": "registry/human-ai-collaboration-tdd-matt-current-diagnostic-only-admission-decision-2026-07-27.json",
+      "staticAdmissionSha256": "8b12683f86dcecffac5cfd398061f194ccc08578b04247e7631c03a922b131e4",
+      "staticDisposition": "admit-diagnostic-only",
+      "currentMaterializationAuthorized": false,
+      "currentExecutionAuthorized": false,
+      "currentModelDispatchAuthorized": false
+    },
+    {
+      "candidateId": "tdd.superpowers.6.2.0",
+      "candidateIdentitySha256": "005b8090affe1c685ce37325d2c7fb8509e97a537ee4b488f393473d6c079c51",
+      "staticAdmissionPath": "registry/human-ai-collaboration-tdd-superpowers-620-diagnostic-only-admission-decision-2026-07-27.json",
+      "staticAdmissionSha256": "aa763b96a461b1f6a85d4d8329612eee536923c04bf7ba48ac057b75e83c2376",
+      "staticDisposition": "admit-diagnostic-only",
+      "currentMaterializationAuthorized": false,
+      "currentExecutionAuthorized": false,
+      "currentModelDispatchAuthorized": false
+    }
+  ],
+  "controlBundleContract": {
+    "builderPath": "scripts/build_human_ai_collaboration_tdd_noncomparative_dispatch_bundle_v2.py",
+    "builderIsPureReadOnly": true,
+    "builderMayIssueAuthorityGrant": false,
+    "inputDocuments": [
+      "sourceSnapshotManifest",
+      "freshPreflight",
+      "separateAuthorityGrant",
+      "ledgerAuthority"
+    ],
+    "missingAuthorityGrantDecision": "NO-GO",
+    "validOfflineBundleDecision": "offline-structure-consistent-authority-unverified-live-no-go",
+    "liveDispatchEligibleFromOfflineBundle": false,
+    "forbiddenEffects": [
+      "account-or-private-data-access",
+      "app-server-start",
+      "candidate-instruction-execution",
+      "candidate-materialization",
+      "cc-switch-read-or-mutation",
+      "external-write",
+      "git-operation",
+      "global-configuration-read-or-change",
+      "ledger-creation-or-append",
+      "model-request",
+      "network-or-source-fetch",
+      "release-or-publication"
+    ]
+  },
+  "sourceSnapshotContract": {
+    "schema": 1,
+    "requiredFields": [
+      "schema",
+      "id",
+      "candidateId",
+      "candidateIdentitySha256",
+      "capturedAt",
+      "controlRoot",
+      "trialRoot",
+      "sourceFiles"
+    ],
+    "sourceFileFields": [
+      "path",
+      "bytes",
+      "sha256"
+    ],
+    "controlRootMustExist": true,
+    "trialRootMustExist": true,
+    "controlAndTrialRootsMustBeDisjoint": true,
+    "linkOrPathEscapeAllowed": false,
+    "sourceFilesMustExistAndMatchCandidateBytes": true,
+    "sourceFileSetMustEqualParentCandidateFileSet": true,
+    "materializerMayReadOnlySnapshotBytes": true,
+    "remoteOrInstalledSourceRereadAfterFreezeAllowed": false
+  },
+  "freshPreflightContract": {
+    "schema": 1,
+    "maximumAgeSeconds": 1200,
+    "maximumSnapshotToPreflightSeconds": 1200,
+    "requiredFields": [
+      "schema",
+      "id",
+      "candidateId",
+      "candidateIdentitySha256",
+      "observedAt",
+      "sourceSnapshotManifestSha256",
+      "sourceFiles",
+      "toolchain",
+      "freshForDispatch",
+      "freshRevalidationStillRequiredAtDispatch",
+      "candidateMaterialized",
+      "candidateInstructionExecuted",
+      "appServerStarted",
+      "threadStarted",
+      "turnStarted",
+      "modelRequestSent"
+    ],
+    "toolchainFields": [
+      "codexExecutableSha256",
+      "codexCliVersion",
+      "expectedAppServerInterface",
+      "projectionBuilderSha256",
+      "normalizerSha256",
+      "diagnosticRunnerCoreSha256"
+    ],
+    "freshForDispatchMustBeParentRecomputed": true,
+    "toolchainAuthenticityVerifiedByBuilder": false,
+    "freshRevalidationStillRequiredAtDispatch": false,
+    "allExecutionFlagsBeforeGrant": false
+  },
+  "separateAuthorityGrantContract": {
+    "schema": 1,
+    "kind": "separate-user-runtime-authority-grant",
+    "maximumTtlSeconds": 1200,
+    "authorityEvidenceLocatorPrefixes": [
+      "runtime-authority:",
+      "user-confirmation:"
+    ],
+    "requiredFields": [
+      "schema",
+      "id",
+      "kind",
+      "authorityEvidenceLocator",
+      "issuedAt",
+      "validFrom",
+      "validUntil",
+      "sourceRevalidatedAt",
+      "candidateId",
+      "candidateIdentitySha256",
+      "successorContractSha256",
+      "parentProtocolSha256",
+      "freshPreflightSha256",
+      "sourceSnapshotManifestSha256",
+      "staticAdmissionDecisionSha256",
+      "ledgerAuthoritySha256",
+      "authorizedEffects",
+      "hostBinding",
+      "maximumDispatches",
+      "replacementAllowed",
+      "comparisonAllowed",
+      "formalAcceptanceContribution",
+      "portfolioMutationAllowed"
+    ],
+    "authorizedEffects": [
+      "app-server-construction",
+      "candidate-materialization",
+      "ledger-reservation",
+      "one-ephemeral-thread",
+      "one-model-turn"
+    ],
+    "hostBinding": {
+      "interface": "Codex app-server",
+      "model": "gpt-5.3-codex-spark",
+      "effort": "low",
+      "providerFallbackAllowed": false,
+      "networkAllowed": false,
+      "ephemeral": true
+    },
+    "maximumDispatches": 1,
+    "replacementAllowed": false,
+    "comparisonAllowed": false,
+    "formalAcceptanceContribution": false,
+    "portfolioMutationAllowed": false,
+    "grantMayBeSynthesizedByBuilder": false,
+    "authorityAuthenticityVerifiedByBuilder": false,
+    "clockAuthorityVerifiedByBuilder": false
+  },
+  "authorizationEnvelopeContract": {
+    "canonicalJsonSha256Required": true,
+    "mustBindExactCandidate": true,
+    "mustBindCurrentSuccessorContractBytes": true,
+    "mustBindHistoricalParentProtocolBytes": true,
+    "mustBindFreshPreflight": true,
+    "mustBindSourceSnapshotManifest": true,
+    "mustBindStaticAdmissionDecision": true,
+    "mustBindSingleLedgerAuthority": true,
+    "offlineBundleItselfAuthorizesLiveEffects": false
+  },
+  "ledgerAuthorityContract": {
+    "schema": 1,
+    "experimentId": "human-ai-collaboration-tdd-noncomparative-diagnostic-v2",
+    "candidateIds": [
+      "tdd.matt.current",
+      "tdd.superpowers.6.2.0"
+    ],
+    "authorityScope": "single-experiment-shared-two-candidate-authority",
+    "maximumAuthorityAgeSeconds": 1200,
+    "liveLedgerCreated": false,
+    "reservationCreated": false,
+    "authorityMustBeIndependentInput": true,
+    "builderMayCreateOrAppendLedger": false,
+    "authorityAuthenticityVerifiedByBuilder": false
+  },
+  "atomicTransitionOrder": [
+    "validate-static-contract-history-and-candidate-identity",
+    "capture-one-control-bundle-and-ledger-authority",
+    "capture-exact-source-snapshot-and-toolchain",
+    "persist-and-revalidate-fresh-preflight",
+    "wait-for-independent-authority-grant",
+    "freeze-canonical-authorization-envelope",
+    "atomically-write-candidate-reservation",
+    "materialize-candidate-from-snapshot-only",
+    "validate-projection-and-persist-materialization-succeeded",
+    "construct-and-validate-closeable-app-server-owner",
+    "persist-construction-succeeded",
+    "persist-thread-start-intent-before-thread-start",
+    "bind-host-thread-id-after-thread-start",
+    "persist-turn-start-intent-before-turn-start",
+    "bind-host-turn-id-after-turn-start",
+    "persist-terminal-outcome",
+    "close-or-abort-owner-and-persist-resources-closed"
+  ],
+  "stateMachine": {
+    "statesInOrder": [
+      "offline-no-go",
+      "offline-structure-consistent-authority-unverified-live-no-go",
+      "authority-envelope-frozen",
+      "reservation-consumed",
+      "materialization-succeeded",
+      "construction-succeeded",
+      "thread-start-intent",
+      "thread-bound",
+      "turn-start-intent",
+      "turn-bound",
+      "terminal-outcome",
+      "resources-closed"
+    ],
+    "currentState": "offline-no-go",
+    "offlineBuilderMaximumState": "offline-structure-consistent-authority-unverified-live-no-go",
+    "unknownHostOutcomeRetainsReservationConsumed": true
+  },
+  "failureAndRecoveryPolicy": {
+    "failClosed": true,
+    "automaticRetryAllowed": false,
+    "automaticReservationReleaseAllowed": false,
+    "unknownHostOutcome": "retain-consumed-no-retry-manual-reconciliation",
+    "projectionMismatch": "retain-consumed-no-retry-manual-reconciliation",
+    "cleanupErrorMayReplacePrimaryError": false,
+    "resourcesClosedEventRequiredAfterSuccessOrFailure": true
+  },
+  "runnerPolicyBoundary": {
+    "formalRunnerPath": "scripts/run_human_ai_collaboration_tdd_formal_trial.py",
+    "formalRunnerPolicyShellExcluded": true,
+    "formalRunnerCountsTowardWeakAcceptance": true,
+    "noncomparativeDiagnosticCountsTowardWeakAcceptance": false,
+    "futureAllowedShape": "independent-diagnostic-runner-or-shared-transport-with-separate-policy-shell",
+    "diagnosticScoreRankOrPreferenceAllowed": false
+  },
+  "authorityBoundary": {
+    "currentSeparateAuthorityGrantBound": false,
+    "currentLiveLedgerAuthorityBound": false,
+    "sourceSnapshotCapturedForDispatch": false,
+    "freshDispatchPreflightCaptured": false,
+    "candidateMaterializationAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "appServerStartAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "networkSourceReadAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "liveReleaseAdmissionAuthorized": false,
+    "separateLiveAuthorityStillRequired": true
+  },
+  "decision": {
+    "successorContractPreregistered": true,
+    "pureOfflineBundleBuilderSpecified": true,
+    "historicalEvidenceRewritten": false,
+    "currentOfflineDecision": "NO-GO",
+    "currentLiveDispatchEligible": false,
+    "candidateMaterialized": false,
+    "candidateInstructionExecuted": false,
+    "appServerStarted": false,
+    "modelRequestSent": false,
+    "formalAcceptanceContribution": false,
+    "nextBoundedAction": "Validate this static successor contract and pure offline builder. Do not create a grant or live ledger. A later separately authorized slice may first establish one shared ledger authority, then capture a fresh source snapshot and preflight, accept one independent grant, and only then implement the diagnostic runner or shared transport controls."
+  },
+  "claimBoundary": {
+    "realSourceFreshnessProved": false,
+    "realToolchainFreshnessProved": false,
+    "realAuthorityGrantObserved": false,
+    "liveLedgerAuthorityObserved": false,
+    "candidateMaterializationOccurred": false,
+    "candidateSkillInvoked": false,
+    "candidateBodyDeliveryProved": false,
+    "modelRequestOccurred": false,
+    "realAppServerOwnershipProved": false,
+    "crashRecoveryProved": false,
+    "crossProcessExclusionProved": false,
+    "candidateValueProved": false,
+    "candidatePreferenceProved": false,
+    "candidateSuperiorityProved": false,
+    "weakAgentAcceptanceAdvanced": false,
+    "residualSelfAuthoredGapProved": false,
+    "portfolioMutationAuthorized": false,
+    "releaseAdmissionProved": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-TDD-NONCOMPARATIVE-DISPATCH-SUCCESSOR-CONTRACT-V2-2026-07-27.md"
+}

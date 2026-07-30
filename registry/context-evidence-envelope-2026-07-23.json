@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "context-evidence-envelope-2026-07-23",
+  "date": "2026-07-23",
+  "status": "verified-local-negative-probes-live-thread-and-loader-pending",
+  "scope": {
+    "protocol": "tests/fixtures/context-continuation-paired-trial-2026-07-19.json",
+    "packetBuilder": "scripts/build_context_continuation_trial_packet.py",
+    "evaluator": "scripts/evaluate_context_continuation_trial.py"
+  },
+  "verifiedLocal": {
+    "focusedTestCount": 12,
+    "completeRepositoryTruthRequired": true,
+    "exactRepositoryTruthEqualityRequired": true,
+    "exactSourceDigestEqualityRequired": true,
+    "beforeAfterGitTruthEqualityRequired": true,
+    "negativeProbes": [
+      {
+        "id": "boolean-only-repository-truth",
+        "expected": "fail-repository-truth-evidence-missing"
+      },
+      {
+        "id": "repository-truth-value-drift",
+        "expected": "fail-repository-truth-value-drift"
+      },
+      {
+        "id": "source-digest-drift",
+        "expected": "fail-source-evidence-drift"
+      },
+      {
+        "id": "missing-git-mutation-envelope",
+        "expected": "fail-repository-mutation-envelope-missing"
+      },
+      {
+        "id": "git-truth-mutated",
+        "expected": "hard-fail-repository-mutated-during-trial"
+      }
+    ]
+  },
+  "hostObservation": {
+    "codexCliVersion": "0.145.0",
+    "hostVersionRequiresLiveRevalidation": true,
+    "olderHostEvidenceAutomaticallyUpgraded": false
+  },
+  "liveEvidence": {
+    "freshThreadTrialExecuted": false,
+    "weakModelTrialExecuted": false,
+    "automaticThreadCreationProved": false,
+    "contextTelemetryProved": false,
+    "sourceBackedHandoffInvocationProved": false,
+    "crossAgentRulesAdherenceProved": false
+  },
+  "mutationBoundary": {
+    "liveThreadCreated": false,
+    "loaderInvoked": false,
+    "modelSampled": false,
+    "repositoryChangedByLiveTrial": false,
+    "hostConfigurationChanged": false
+  },
+  "nextGate": "separately-authorized-fresh-thread-trial-with-verified-model-and-parent-observed-evidence"
+}

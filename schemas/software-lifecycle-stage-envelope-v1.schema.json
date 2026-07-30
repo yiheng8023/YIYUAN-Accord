@@ -1,0 +1,530 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/agent-autonomy-harness/software-lifecycle-stage-envelope-v1.schema.json",
+  "title": "Source-backed Software Lifecycle Stage Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "kind",
+    "envelopeId",
+    "runId",
+    "protocolBinding",
+    "stage",
+    "role",
+    "independenceClass",
+    "lineage",
+    "sourceBindings",
+    "inputBindings",
+    "inputSetCanonicalSha256",
+    "outputBindings",
+    "outputSetCanonicalSha256",
+    "sections",
+    "provenanceIds",
+    "assumptionIds",
+    "detectedLossIds",
+    "acceptanceObligationIds",
+    "humanAuthorityReceiptBindings",
+    "repositoryTruthBefore",
+    "repositoryTruthAfter",
+    "allowedMutableFiles",
+    "changedFiles",
+    "rawEventArtifactIds",
+    "absoluteGateResults",
+    "truthTransition",
+    "parentEvaluation",
+    "execution",
+    "status",
+    "stopReason",
+    "nextGate",
+    "claimBoundary",
+    "envelopeSha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "kind": {
+      "const": "source-backed-software-lifecycle-stage-envelope"
+    },
+    "envelopeId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "runId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "protocolBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocolId",
+        "protocolCanonicalSha256",
+        "stageDefinitionCanonicalSha256"
+      ],
+      "properties": {
+        "protocolId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "protocolCanonicalSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stageDefinitionCanonicalSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stageId",
+        "sequence",
+        "stageClass"
+      ],
+      "properties": {
+        "stageId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stageClass": {
+          "enum": [
+            "requirements-domain",
+            "architecture-design",
+            "implementation-tdd",
+            "independent-review-test-security",
+            "release-rollback-gating",
+            "observation-incident-handling",
+            "maintenance-evolution"
+          ]
+        }
+      }
+    },
+    "role": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "independenceClass": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primaryPredecessorEnvelopeSha256",
+        "additionalPredecessorEnvelopeSha256s",
+        "previousAcceptedLedgerSha256"
+      ],
+      "properties": {
+        "primaryPredecessorEnvelopeSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "additionalPredecessorEnvelopeSha256s": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sha256"
+          }
+        },
+        "previousAcceptedLedgerSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sourceBindings": {
+      "$ref": "#/$defs/artifactBindings"
+    },
+    "inputBindings": {
+      "$ref": "#/$defs/artifactBindings"
+    },
+    "inputSetCanonicalSha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "outputBindings": {
+      "$ref": "#/$defs/artifactBindings"
+    },
+    "outputSetCanonicalSha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "sections": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "provenanceIds": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "assumptionIds": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "detectedLossIds": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "acceptanceObligationIds": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "humanAuthorityReceiptBindings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "repositoryTruthBefore": {
+      "$ref": "#/$defs/repositoryTruth"
+    },
+    "repositoryTruthAfter": {
+      "$ref": "#/$defs/repositoryTruth"
+    },
+    "allowedMutableFiles": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "changedFiles": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "rawEventArtifactIds": {
+      "$ref": "#/$defs/uniqueStrings"
+    },
+    "absoluteGateResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gateId",
+          "passed",
+          "evidenceArtifactIds"
+        ],
+        "properties": {
+          "gateId": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "evidenceArtifactIds": {
+            "$ref": "#/$defs/uniqueStrings"
+          }
+        }
+      }
+    },
+    "truthTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposalArtifactCanonicalSha256",
+        "proposedChangeIds",
+        "acceptedChangeIds",
+        "rejectedChangeIds",
+        "basisKindsUsed",
+        "beforeAcceptedLedgerSha256",
+        "afterAcceptedLedgerSha256"
+      ],
+      "properties": {
+        "proposalArtifactCanonicalSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "proposedChangeIds": {
+          "$ref": "#/$defs/uniqueStrings"
+        },
+        "acceptedChangeIds": {
+          "$ref": "#/$defs/uniqueStrings"
+        },
+        "rejectedChangeIds": {
+          "$ref": "#/$defs/uniqueStrings"
+        },
+        "basisKindsUsed": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "source",
+              "human-authority-receipt"
+            ]
+          }
+        },
+        "beforeAcceptedLedgerSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "afterAcceptedLedgerSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "parentEvaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluatorId",
+        "evaluatorCanonicalSha256",
+        "stageValidators",
+        "status",
+        "failureCodes"
+      ],
+      "properties": {
+        "evaluatorId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evaluatorCanonicalSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stageValidators": {
+          "$ref": "#/$defs/uniqueStrings"
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "partial-valid-stop",
+            "invalid"
+          ]
+        },
+        "failureCodes": {
+          "$ref": "#/$defs/uniqueStrings"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "agentDispatchCount",
+        "modelCallCount",
+        "actualRouteObserved",
+        "networkAccessUsed",
+        "gitMutationUsed",
+        "externalWriteUsed"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "zero-model-scripted-calibration",
+            "future-native-weak-agent"
+          ]
+        },
+        "agentDispatchCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modelCallCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actualRouteObserved": {
+          "type": "boolean"
+        },
+        "networkAccessUsed": {
+          "type": "boolean"
+        },
+        "gitMutationUsed": {
+          "type": "boolean"
+        },
+        "externalWriteUsed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "accepted",
+        "partial-valid-stop",
+        "invalid"
+      ]
+    },
+    "stopReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nextGate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "liveAgentBehaviorProved",
+        "productionLifecycleProved",
+        "humanDecisionQualityProved",
+        "crossHostPortabilityProved"
+      ],
+      "properties": {
+        "liveAgentBehaviorProved": {
+          "const": false
+        },
+        "productionLifecycleProved": {
+          "const": false
+        },
+        "humanDecisionQualityProved": {
+          "const": false
+        },
+        "crossHostPortabilityProved": {
+          "const": false
+        }
+      }
+    },
+    "envelopeSha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "artifactBindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifactBinding"
+      }
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ordinal",
+        "artifactId",
+        "role",
+        "mediaType",
+        "relativePath",
+        "byteLength",
+        "byteSha256",
+        "canonicalJsonSha256",
+        "producerClass",
+        "authorityClass"
+      ],
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifactId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mediaType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "relativePath": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "byteSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "canonicalJsonSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "producerClass": {
+          "enum": [
+            "frozen-source",
+            "parent-evaluator",
+            "agent-stage",
+            "human-authority",
+            "synthetic-calibration"
+          ]
+        },
+        "authorityClass": {
+          "enum": [
+            "accepted-truth-source",
+            "proposal-only",
+            "evidence-only",
+            "authority-receipt"
+          ]
+        }
+      }
+    },
+    "repositoryTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "observed",
+        "snapshotArtifactId",
+        "snapshotSha256",
+        "provesFilesystemZeroWrite"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "observed": {
+          "type": "boolean"
+        },
+        "snapshotArtifactId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshotSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provesFilesystemZeroWrite": {
+          "const": false
+        }
+      }
+    }
+  }
+}

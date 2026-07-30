@@ -5,7 +5,6 @@ Do not edit manually.
 - `ci-cd-and-automation` (phase: `ship`, source: `github:addyosmani/agent-skills`)
 - `deprecation-and-migration` (phase: `evolve`, source: `github:addyosmani/agent-skills`)
 - `diagnose` (phase: `general`, source: `github:mattpocock/skills`)
-- `git-guardrails` (phase: `general`, source: `github:mattpocock/skills`)
 - `grill-with-docs` (phase: `general`, source: `github:mattpocock/skills`)
 - `handoff` (phase: `general`, source: `github:mattpocock/skills`)
 - `improve-codebase-architecture` (phase: `general`, source: `github:mattpocock/skills`)

@@ -54,8 +54,8 @@ agent 环境迁移、云端同步/备份、验证和恢复模式，不证明当�
 - Skills、能力、关系、冲突和 Recipes 的权威 registry；
 - 确定性的派生投影和 schema 1 发布清单。
 
-当前批准发布包含 20 个 Skills、42 个文件：5 个来自
-`addyosmani/agent-skills`，14 个来自 `mattpocock/skills`，1 个来自
+当前批准发布包含 19 个 Skills、40 个文件：5 个来自
+`addyosmani/agent-skills`，13 个来自 `mattpocock/skills`，1 个来自
 `kepano/obsidian-skills`。它们都具备完整、固定的 Git 来源；原先来源不完整的
 本地基线仅保留为非运行时历史证据。
 

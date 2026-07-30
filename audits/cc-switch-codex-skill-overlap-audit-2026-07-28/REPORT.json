@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "eventId": "cc-switch-codex-skill-overlap-audit-2026-07-28",
+  "observedAt": "2026-07-28T19:32:45+08:00",
+  "status": "read-only-overlap-audit-needs-authority-decision",
+  "mode": "read-only",
+  "roots": {
+    "ccSwitchCentral": {
+      "path": "C:/Users/15521/.cc-switch/skills",
+      "directoryCount": 88,
+      "physicalDirectoryCount": 88
+    },
+    "codexUser": {
+      "path": "C:/Users/15521/.codex/skills",
+      "directoryCount": 90,
+      "reparsePointCount": 84,
+      "physicalDirectoryCount": 6
+    },
+    "agentNeutralUser": {
+      "path": "C:/Users/15521/.agents/skills",
+      "directoryCount": 73,
+      "reparsePointCount": 43,
+      "physicalDirectoryCount": 30
+    }
+  },
+  "ccSwitchToCodex": {
+    "sameNameCount": 88,
+    "expectedManagedLinkCount": 84,
+    "ccSwitchOnlyCount": 0,
+    "codexOnlyNames": [
+      ".system",
+      "codex-primary-runtime"
+    ],
+    "physicalSameNameDirectories": [
+      "intent-contract",
+      "capability-router",
+      "closure-contract",
+      "kimi-webbridge"
+    ],
+    "physicalSameNameSemanticallyIdentical": [
+      "kimi-webbridge"
+    ],
+    "physicalSameNameSemanticallyDivergent": [
+      "intent-contract",
+      "capability-router",
+      "closure-contract"
+    ]
+  },
+  "agentNeutralToCodex": {
+    "sameNameCount": 73,
+    "agentNeutralLinksPointingToCcSwitchCount": 43,
+    "agentNeutralPhysicalDirectoryCount": 30,
+    "normalizedSemanticallyIdenticalPhysicalCount": 18,
+    "normalizedSemanticallyDivergentPhysicalCount": 12,
+    "normalizedSemanticallyDivergentNames": [
+      "intent-contract",
+      "capability-router",
+      "closure-contract",
+      "lark-apps",
+      "lark-base",
+      "lark-calendar",
+      "lark-doc",
+      "lark-drive",
+      "lark-im",
+      "lark-slides",
+      "lark-task",
+      "lark-wiki"
+    ],
+    "lineEndingNormalizationAppliedForSemanticComparison": true
+  },
+  "interpretation": {
+    "ccSwitchCentralAndCodexManagedLinksAreExpectedProjection": true,
+    "duplicatePathCountMustNotBeTreatedAsDuplicateCapabilityCount": true,
+    "physicalSameNameDivergenceIsAuthorityConflict": true,
+    "loaderPrecedenceVerified": false,
+    "singleEffectiveInstructionBodyVerified": false,
+    "safeToDeleteEitherAuthorityWithoutDecision": false
+  },
+  "decisionBoundary": {
+    "mutationPerformed": false,
+    "databaseMutationPerformed": false,
+    "skillDeletionPerformed": false,
+    "requiredNextDecision": "Choose one canonical authority and projection lifecycle for each divergent same-name Skill before any removal or replacement."
+  }
+}

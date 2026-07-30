@@ -1,0 +1,638 @@
+{
+  "schema": 1,
+  "id": "skill-source-lineage-collision-index-2026-07-24",
+  "date": "2026-07-24",
+  "status": "derived-dated-evidence-index-no-current-runtime-or-behavior-claim",
+  "scope": "repository-evidence-only-no-live-cc-or-agent-home-scan",
+  "sourceRecords": [
+    {
+      "path": "registry/legacy-curated-skill-source-migration-review-2026-07-18.json",
+      "id": "legacy-curated-skill-source-migration-review-2026-07-18",
+      "date": "2026-07-18",
+      "status": "verified-read-only-provisional-dispositions-migration-not-authorized",
+      "sha256": "a82b3736c20f7a9571e9f23959b76cf499b7384de3f19b312a46b483e736778d"
+    },
+    {
+      "path": "registry/cc-switch-handoff-real-canary-execution-2026-07-18.json",
+      "id": "cc-switch-handoff-real-canary-execution-2026-07-18",
+      "date": "2026-07-18",
+      "status": "verified-local-live-source-backed-canary-and-owner-authorized-webdav-sync-fresh-session-invocation-open",
+      "sha256": "1840e01cd69bcbaf71e1fee9d34f6e0ed440466dfafa358613ff8fdeca4b27d1"
+    },
+    {
+      "path": "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
+      "id": "skill-portfolio-and-closeout-inventory-2026-07-19",
+      "date": "2026-07-19",
+      "status": "observed-single-host-read-only-with-deferred-final-closeout-ledger-seed",
+      "sha256": "0c6efc4904d3ba7bfa5b664a627356be73e9c6a901ae171b4d3d09c44cbfc673"
+    },
+    {
+      "path": "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+      "id": "skill-source-authority-and-runtime-reconciliation-2026-07-19",
+      "date": "2026-07-19",
+      "status": "read-only-single-host-current-research-poc-no-mutation-authority",
+      "sha256": "5eb074bb5ce12245de8e3513e4ff4ea10f32b8b294397b07f9d8000d4053c1c0"
+    },
+    {
+      "path": "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+      "id": "skill-ablation-batch-01-selection-2026-07-19",
+      "date": "2026-07-19",
+      "status": "scenario-selection-reconciled-and-payload-bound-no-live-execution-authority",
+      "sha256": "005a844a0b6ba0583f09fc729c307fb783fdb044ef38588f09702cbe2e6eb58c"
+    },
+    {
+      "path": "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json",
+      "id": "cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23",
+      "date": "2026-07-23",
+      "status": "live-drift-observed-management-authorized-but-recovery-gated",
+      "sha256": "95a333a45e94bdd70acb658a6b74b66628598a48db54a22b669925460fceb880"
+    },
+    {
+      "path": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+      "id": "skill-ecosystem-overlap-and-ablation-matrix-2026-07-23",
+      "date": "2026-07-23",
+      "status": "source-pinned-comparison-design-no-superiority-or-replacement-claim",
+      "sha256": "7b6fcfd9dab80d42a4180c49ed3b3a97162d4d8ac47a24890d86da71ea57ba8c"
+    }
+  ],
+  "groups": [
+    {
+      "id": "handoff-source-backed-versus-historical",
+      "logicalSkillIds": [
+        "handoff"
+      ],
+      "observations": [
+        {
+          "surface": "cc-switch-ssot",
+          "observedAt": "2026-07-18",
+          "sourceEvidenceRef": "registry/cc-switch-handoff-real-canary-execution-2026-07-18.json",
+          "relativePathOrOpaqueId": "mattpocock/skills:skills/productivity/handoff",
+          "sourceRepo": "mattpocock/skills",
+          "immutableRevisionOrUnknown": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+          "artifactDigest": {
+            "treeSha256": "c97a305f5ca0b6fa21ca82a009ac5a553acd02aab63cf59de939f75ac7797393",
+            "files": {
+              "SKILL.md": "57c9f1f392d7352cdc85b1e39ca49eddc70ce1dc278bd9653fb4f23dfc2560fc",
+              "agents/openai.yaml": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+            }
+          },
+          "representationClass": "source-backed-upstream-archive-exact",
+          "projectionState": "enabled-for-claude-and-codex-as-of-source-record",
+          "activeState": "observed-dated-not-currently-revalidated"
+        },
+        {
+          "surface": "repository-historical-payload",
+          "observedAt": "2026-07-19",
+          "sourceEvidenceRef": "registry/skill-ablation-batch-01-selection-2026-07-19.json",
+          "relativePathOrOpaqueId": "repository:legacy-handoff",
+          "sourceRepo": "historical-repository-payload",
+          "immutableRevisionOrUnknown": "unknown",
+          "artifactDigest": {
+            "harnessTreeHashV1": "b978e237c84e6457f8d6a337f433ef8abb25e99b10b5a6fe60fb522498179f3b"
+          },
+          "representationClass": "historical-one-file-body",
+          "projectionState": "not-selected-for-arm-c",
+          "activeState": "comparison-only"
+        },
+        {
+          "surface": "legacy-cc-local-row",
+          "observedAt": "2026-07-18",
+          "sourceEvidenceRef": "registry/legacy-curated-skill-source-migration-review-2026-07-18.json",
+          "relativePathOrOpaqueId": "local:handoff",
+          "sourceRepo": "unknown-local-lineage",
+          "immutableRevisionOrUnknown": "unknown",
+          "reviewedUpstreamSource": "github:mattpocock/skills",
+          "reviewedUpstreamRevision": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+          "artifactDigest": "unknown",
+          "representationClass": "legacy-rewritten-uncompared-occurrence",
+          "projectionState": "historically-projected-before-source-backed-canary",
+          "activeState": "superseded-by-dated-canary",
+          "currentUpstreamPath": "skills/productivity/handoff"
+        }
+      ],
+      "collisionRelation": "known-different-plus-one-uncompared-occurrence",
+      "disposition": "compare-baseline",
+      "recheckTrigger": "fresh-session-loader-trial-or-source-update"
+    },
+    {
+      "id": "repository-contract-chain-root-collision",
+      "logicalSkillIds": [
+        "capability-router",
+        "closure-contract",
+        "intent-contract"
+      ],
+      "observedAt": "2026-07-19",
+      "sourceEvidenceRef": "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+      "memberRelations": [
+        {
+          "logicalSkillId": "capability-router",
+          "canonicalRepository": "C:/Projects/codex-user-config",
+          "canonicalRepositoryObservedHead": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+          "equalRoots": [
+            "agents",
+            "codex"
+          ],
+          "differentRoots": [
+            "ccSwitch",
+            "claude"
+          ],
+          "artifactDigests": "unknown"
+        },
+        {
+          "logicalSkillId": "closure-contract",
+          "canonicalRepository": "C:/Projects/codex-user-config",
+          "canonicalRepositoryObservedHead": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+          "equalRoots": [
+            "agents",
+            "codex"
+          ],
+          "differentRoots": [
+            "ccSwitch",
+            "claude"
+          ],
+          "artifactDigests": "unknown"
+        },
+        {
+          "logicalSkillId": "intent-contract",
+          "canonicalRepository": "C:/Projects/codex-user-config",
+          "canonicalRepositoryObservedHead": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+          "equalRoots": [
+            "agents",
+            "codex"
+          ],
+          "differentRoots": [
+            "ccSwitch",
+            "claude"
+          ],
+          "artifactDigests": "unknown"
+        }
+      ],
+      "collisionRelation": "agents-and-codex-equal-cc-and-claude-different",
+      "representationClass": "repository-authored-versus-older-cc-tree",
+      "activeState": "dated-root-comparison-not-current-loader-proof",
+      "disposition": "freeze-pending-host-isolated-ablation",
+      "recheckTrigger": "verified-spark-low-task-scoped-exposure"
+    },
+    {
+      "id": "lark-attributed-cross-root-collision-cohort",
+      "logicalSkillIds": [
+        "lark-approval",
+        "lark-apps",
+        "lark-attendance",
+        "lark-base",
+        "lark-calendar",
+        "lark-contact",
+        "lark-doc",
+        "lark-drive",
+        "lark-event",
+        "lark-im",
+        "lark-mail",
+        "lark-markdown",
+        "lark-minutes",
+        "lark-note",
+        "lark-okr",
+        "lark-openapi-explorer",
+        "lark-shared",
+        "lark-sheets",
+        "lark-skill-maker",
+        "lark-slides",
+        "lark-task",
+        "lark-vc",
+        "lark-vc-agent",
+        "lark-whiteboard",
+        "lark-wiki",
+        "lark-workflow-meeting-summary",
+        "lark-workflow-standup-report"
+      ],
+      "observedAt": "2026-07-19",
+      "sourceEvidenceRefs": [
+        "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+        "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
+        "registry/cc-switch-3.18-live-drift-and-transaction-gate-2026-07-23.json"
+      ],
+      "sourceRepo": "larksuite/cli",
+      "immutableRevisionOrUnknown": "unknown",
+      "artifactDigests": "unknown-per-occurrence",
+      "collisionRelation": "same-name-different-skill-md-hash-in-dated-roots",
+      "representationClass": "source-attributed-cc-body-versus-different-agent-root-occurrence",
+      "projectionState": "dated-root-evidence-not-current-loader-proof",
+      "activeState": "unknown-current",
+      "atomicCohort": true,
+      "substantiveDriftAfterEolNormalization": [
+        "lark-base",
+        "lark-doc",
+        "lark-drive",
+        "lark-im",
+        "lark-wiki"
+      ],
+      "disposition": "freeze-as-atomic-cohort",
+      "recheckTrigger": "secret-free-backup-plus-cohort-version-and-portability-review"
+    },
+    {
+      "id": "legacy-matt-mapped-mixed-snapshot",
+      "logicalSkillIds": [
+        "diagnose",
+        "git-guardrails",
+        "grill-with-docs",
+        "improve-codebase-architecture",
+        "migrate-to-shoehorn",
+        "prototype",
+        "review",
+        "setup-project-skills",
+        "tdd",
+        "to-issues",
+        "to-prd",
+        "triage",
+        "ubiquitous-language"
+      ],
+      "observedAt": "2026-07-18",
+      "sourceEvidenceRef": "registry/legacy-curated-skill-source-migration-review-2026-07-18.json",
+      "sourceRepo": "unknown-per-local-occurrence",
+      "immutableRevisionOrUnknown": "unknown",
+      "reviewedUpstreamSource": "github:mattpocock/skills",
+      "reviewedUpstreamRevision": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+      "wholeTreeExactMatchesToCurrentUpstream": 0,
+      "mappings": [
+        {
+          "logicalSkillId": "diagnose",
+          "currentUpstreamPath": "skills/engineering/diagnosing-bugs",
+          "currentUpstreamName": "diagnosing-bugs",
+          "lifecycle": "active",
+          "priorToCurrent": "body-unchanged-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "git-guardrails",
+          "currentUpstreamPath": "skills/misc/git-guardrails-claude-code",
+          "currentUpstreamName": "git-guardrails-claude-code",
+          "lifecycle": "active-agent-specific",
+          "priorToCurrent": "body-unchanged-openai-metadata-added",
+          "provisionalDisposition": "retire-or-supersede",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "grill-with-docs",
+          "currentUpstreamPath": "skills/engineering/grill-with-docs",
+          "currentUpstreamName": "grill-with-docs",
+          "lifecycle": "active",
+          "priorToCurrent": "body-unchanged-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "improve-codebase-architecture",
+          "currentUpstreamPath": "skills/engineering/improve-codebase-architecture",
+          "currentUpstreamName": "improve-codebase-architecture",
+          "lifecycle": "active",
+          "priorToCurrent": "skill-body-changed-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "migrate-to-shoehorn",
+          "currentUpstreamPath": "skills/misc/migrate-to-shoehorn",
+          "currentUpstreamName": "migrate-to-shoehorn",
+          "lifecycle": "active",
+          "priorToCurrent": "body-unchanged-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "prototype",
+          "currentUpstreamPath": "skills/engineering/prototype",
+          "currentUpstreamName": "prototype",
+          "lifecycle": "active",
+          "priorToCurrent": "all-three-body-files-changed-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "review",
+          "currentUpstreamPath": "skills/engineering/code-review",
+          "currentUpstreamName": "code-review",
+          "lifecycle": "active-renamed",
+          "priorToCurrent": "promoted-renamed-and-body-changed",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "setup-project-skills",
+          "currentUpstreamPath": "skills/engineering/setup-matt-pocock-skills",
+          "currentUpstreamName": "setup-matt-pocock-skills",
+          "lifecycle": "active",
+          "priorToCurrent": "four-body-files-changed-openai-metadata-added",
+          "provisionalDisposition": "retire-or-supersede",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "tdd",
+          "currentUpstreamPath": "skills/engineering/tdd",
+          "currentUpstreamName": "tdd",
+          "lifecycle": "active",
+          "priorToCurrent": "two-body-files-changed-one-removed-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "to-issues",
+          "currentUpstreamPath": "skills/engineering/to-tickets",
+          "currentUpstreamName": "to-tickets",
+          "lifecycle": "active-renamed-and-replaced",
+          "priorToCurrent": "renamed-and-body-changed",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "to-prd",
+          "currentUpstreamPath": "skills/engineering/to-spec",
+          "currentUpstreamName": "to-spec",
+          "lifecycle": "active-renamed",
+          "priorToCurrent": "renamed-and-body-changed",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "triage",
+          "currentUpstreamPath": "skills/engineering/triage",
+          "currentUpstreamName": "triage",
+          "lifecycle": "active",
+          "priorToCurrent": "three-body-files-unchanged-openai-metadata-added",
+          "provisionalDisposition": "replace-with-reviewed-source-backed-upstream-exact",
+          "artifactDigest": "unknown"
+        },
+        {
+          "logicalSkillId": "ubiquitous-language",
+          "currentUpstreamPath": "skills/deprecated/ubiquitous-language",
+          "currentUpstreamName": "ubiquitous-language",
+          "lifecycle": "deprecated",
+          "priorToCurrent": "body-unchanged-openai-metadata-added",
+          "provisionalDisposition": "retire-or-supersede",
+          "artifactDigest": "unknown"
+        }
+      ],
+      "collisionRelation": "legacy-local-names-map-to-current-renamed-deprecated-or-changed-upstream",
+      "representationClass": "mixed-historical-adapted-snapshot",
+      "projectionState": "historically-projected-through-cc-local-rows",
+      "activeState": "unknown-current-except-handoff-separately-observed",
+      "disposition": "candidate-source-review",
+      "recheckTrigger": "per-skill-current-revision-delta-and-source-backed-preview"
+    },
+    {
+      "id": "selected-cc-three-source-reconciliation",
+      "logicalSkillIds": [
+        "grill-me",
+        "grill-with-docs",
+        "review"
+      ],
+      "observedAt": "2026-07-24",
+      "sourceEvidenceRef": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+      "observations": [
+        {
+          "logicalSkillId": "grill-me",
+          "ccPayloadPath": "C:/Users/15521/.cc-switch/skills/grill-me/SKILL.md",
+          "artifactDigest": {
+            "bytes": 645,
+            "sha256": "c9df326c4ab635765ea884471d21f4e21d5b0ec85aec43a06c238307841eb4bc"
+          },
+          "triggerMode": "user-explicit",
+          "triggerBoundary": "post-front-gate-deep-questioning",
+          "representationClass": "crlf-normalized-exact-historical-matt-upstream-current-upstream-refactored",
+          "sourceReconciliation": {
+            "relationship": "crlf-normalized-exact-historical-upstream",
+            "publicUpstreamRepository": "mattpocock/skills",
+            "historicalUpstreamCommit": "62f43a18177be6ec82da242e59ffbc490a4c22ea",
+            "historicalUpstreamPath": "skills/productivity/grill-me/SKILL.md",
+            "historicalUpstreamGitBlobSha1": "bd04394c675ee54173a093c50eb74da01a2940fa",
+            "normalizedSha256": "74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556",
+            "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/62f43a18177be6ec82da242e59ffbc490a4c22ea/skills/productivity/grill-me/SKILL.md",
+            "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+            "currentUpstreamPath": "skills/productivity/grill-me/SKILL.md",
+            "currentUpstreamGitBlobSha1": "9470cfcfe231a35e46494cddbacdd395991afb1e",
+            "currentUpstreamRelationship": "refactored-wrapper-delegating-to-grilling-not-current-byte-equal",
+            "exactInstallOrCcSourceRowProvenanceProved": false
+          },
+          "activeState": "current-file-bytes-observed-no-enable-or-invocation-proof"
+        },
+        {
+          "logicalSkillId": "grill-with-docs",
+          "ccPayloadPath": "C:/Users/15521/.cc-switch/skills/grill-with-docs/SKILL.md",
+          "artifactDigest": {
+            "bytes": 5340,
+            "sha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035"
+          },
+          "triggerMode": "user-explicit",
+          "triggerBoundary": "post-front-gate-document-grounded-questioning",
+          "representationClass": "cc-bytes-equal-repository-adaptation-strict-supersequence-of-historical-matt-upstream",
+          "sourceReconciliation": {
+            "relationship": "cc-exact-repository-adaptation-containing-complete-historical-upstream-plus-local-additions",
+            "ccBytesEqualRepositoryPayload": true,
+            "repositoryPayloadPath": "skills/grill-with-docs/SKILL.md",
+            "repositoryPayloadSha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035",
+            "repositoryImportCommit": "3e041f02f217b1a1fee5c85f52dfb1463ea34941",
+            "repositoryAdaptationCommits": [
+              "e80d49733192bfa41c894a72da63def4801691f4",
+              "e9832c89c21593d4671db5a731deb49a300cd730"
+            ],
+            "publicUpstreamRepository": "mattpocock/skills",
+            "historicalUpstreamCommit": "e74f0061bb67222181640effa98c675bdb2fdaa7",
+            "historicalUpstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+            "historicalUpstreamGitBlobSha1": "5ea0aa913629bec683690f371839bd10e588413d",
+            "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/e74f0061bb67222181640effa98c675bdb2fdaa7/skills/engineering/grill-with-docs/SKILL.md",
+            "normalizedLcsLineEvidence": {
+              "terminalEmptyIncluded": true,
+              "repositoryAdaptationLines": 116,
+              "historicalUpstreamLines": 89,
+              "commonLines": 89,
+              "repositoryOnlyLines": 27,
+              "historicalUpstreamOnlyLines": 0
+            },
+            "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+            "currentUpstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+            "currentUpstreamGitBlobSha1": "bed05d2bd3245306267cea57cd696b5dd94d50fe",
+            "currentUpstreamRelationship": "refactored-wrapper-delegating-to-grilling-and-domain-modeling-not-current-byte-equal",
+            "exactInstallOrCcSourceRowProvenanceProved": false
+          },
+          "activeState": "current-file-bytes-observed-no-enable-or-invocation-proof"
+        },
+        {
+          "logicalSkillId": "review",
+          "ccPayloadPath": "C:/Users/15521/.cc-switch/skills/review/SKILL.md",
+          "artifactDigest": {
+            "bytes": 6406,
+            "sha256": "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6"
+          },
+          "triggerMode": "user-explicit",
+          "triggerBoundary": "fixed-point-domain-review",
+          "representationClass": "cc-bytes-equal-repository-adaptation-strict-supersequence-of-historical-matt-upstream",
+          "sourceReconciliation": {
+            "relationship": "cc-exact-repository-adaptation-containing-complete-historical-upstream-plus-local-additions",
+            "ccBytesEqualRepositoryPayload": true,
+            "repositoryPayloadPath": "skills/review/SKILL.md",
+            "repositoryPayloadSha256": "7d20260e46399ca040ee53bee5fbe057fffd7fec0866bc7a627c4f422c69a0e6",
+            "repositoryImportCommit": "3e041f02f217b1a1fee5c85f52dfb1463ea34941",
+            "repositoryAdaptationCommits": [
+              "e80d49733192bfa41c894a72da63def4801691f4",
+              "e9832c89c21593d4671db5a731deb49a300cd730"
+            ],
+            "publicUpstreamRepository": "mattpocock/skills",
+            "historicalUpstreamCommit": "9fecab929abb904c68ce3366a1781df31ab22832",
+            "historicalUpstreamPath": "skills/in-progress/review/SKILL.md",
+            "historicalUpstreamGitBlobSha1": "7507a362147167c277b17ec5abf8bedb99fc42d5",
+            "historicalUpstreamUrl": "https://github.com/mattpocock/skills/blob/9fecab929abb904c68ce3366a1781df31ab22832/skills/in-progress/review/SKILL.md",
+            "normalizedLcsLineEvidence": {
+              "terminalEmptyIncluded": true,
+              "repositoryAdaptationLines": 105,
+              "historicalUpstreamLines": 79,
+              "commonLines": 79,
+              "repositoryOnlyLines": 26,
+              "historicalUpstreamOnlyLines": 0
+            },
+            "currentUpstreamCommit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+            "currentUpstreamPath": "skills/engineering/code-review/SKILL.md",
+            "currentUpstreamName": "code-review",
+            "currentUpstreamGitBlobSha1": "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7",
+            "currentUpstreamRelationship": "renamed-and-substantively-changed-not-current-byte-equal",
+            "exactInstallOrCcSourceRowProvenanceProved": false
+          },
+          "activeState": "current-file-bytes-observed-no-enable-or-invocation-proof"
+        }
+      ],
+      "collisionRelation": "one-normalized-exact-historical-upstream-plus-two-exact-repository-adaptations-based-on-historical-upstream",
+      "representationClass": "selected-cc-static-content-lineage-reconciled",
+      "projectionState": "content-bytes-only-no-loader-or-cc-source-row-proof",
+      "activeState": "current-file-bytes-observed-no-enable-or-invocation-proof",
+      "disposition": "compare-baseline",
+      "recheckTrigger": "cc-source-row-update-or-task-scoped-host-ablation"
+    },
+    {
+      "id": "matt-current-content-sample",
+      "logicalSkillIds": [
+        "ask-matt",
+        "implement",
+        "code-review"
+      ],
+      "observedAt": "2026-07-23",
+      "sourceEvidenceRef": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+      "sourceRepo": "mattpocock/skills",
+      "immutableRevisionOrUnknown": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "artifactDigests": {
+        "skills/engineering/ask-matt/SKILL.md": "70b807b35f85859b0c6cced1919f56e024e6a753",
+        "skills/engineering/implement/SKILL.md": "7a0b11f5f4fe9505ea5c7983c3083ba1bf754f69",
+        "skills/engineering/code-review/SKILL.md": "2a0b5240731b927caa9ac0bf43c3e2af9dc3f0a7"
+      },
+      "collisionRelation": "official-sample-only-not-cc-occurrence-equality",
+      "representationClass": "official-current-content-sample",
+      "projectionState": "not-proved-installed-or-exposed",
+      "activeState": "comparison-metadata-only",
+      "disposition": "compare-baseline",
+      "recheckTrigger": "source-delta-or-task-scoped-host-ablation"
+    },
+    {
+      "id": "superpowers-local-plugin-sample",
+      "logicalSkillIds": [
+        "brainstorming",
+        "subagent-driven-development",
+        "systematic-debugging",
+        "using-superpowers",
+        "verification-before-completion",
+        "writing-plans"
+      ],
+      "observedAt": "2026-07-23",
+      "sourceEvidenceRef": "registry/skill-ecosystem-overlap-and-ablation-matrix-2026-07-23.json",
+      "sourceRepo": "unknown-for-local-payload-bytes",
+      "immutableRevisionOrUnknown": "unknown",
+      "candidateUpstreamRepo": "obra/superpowers",
+      "upstreamReleaseReference": "d884ae04edebef577e82ff7c4e143debd0bbec99",
+      "artifactDigests": {
+        "brainstorming": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+        "writing-plans": "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845",
+        "using-superpowers": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "verification-before-completion": "ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c",
+        "subagent-driven-development": "41ab239a6ad1c487cd839fdac972a8c9cf0f5e90efa59a63f963767864f0df4c",
+        "systematic-debugging": "3b20719eca4f0461cb51a195221320d775dcf03b6859271066a03a5132a6ce7a"
+      },
+      "collisionRelation": "local-digests-pinned-upstream-byte-equality-unproved",
+      "representationClass": "runtime-owned-local-plugin-sample",
+      "projectionState": "startup-visibility-and-invocation-unproved",
+      "activeState": "unknown-current",
+      "comparisonBaseline": true,
+      "disposition": "runtime-owned-do-not-copy",
+      "recheckTrigger": "plugin-update-or-task-scoped-host-ablation"
+    },
+    {
+      "id": "runtime-plugin-alias-reconciliation-gap",
+      "logicalSkillIds": [
+        "prototype",
+        "suggest-sales-next-step",
+        "user-context"
+      ],
+      "observedAt": "2026-07-19",
+      "sourceEvidenceRef": "registry/skill-source-authority-and-runtime-reconciliation-2026-07-19.json",
+      "databaseDirectoriesMissingPhysical": 176,
+      "runtimeOrPluginMatchesTotal": 173,
+      "unresolved": [
+        {
+          "name": "prototype",
+          "directory": "product-design-prototype"
+        },
+        {
+          "name": "suggest-sales-next-step",
+          "directory": "suggest-sales-next-step"
+        },
+        {
+          "name": "user-context",
+          "directory": "sales-user-context"
+        }
+      ],
+      "collisionRelation": "runtime-or-plugin-alias-match-is-not-cc-source-lineage",
+      "representationClass": "runtime-owned-or-unresolved-missing-cc-body",
+      "projectionState": "dated-reconciliation-only",
+      "activeState": "unknown-current",
+      "disposition": "freeze-unresolved-or-runtime-owned-do-not-copy",
+      "recheckTrigger": "runtime-or-plugin-version-change-or-cc-reinventory"
+    }
+  ],
+  "summary": {
+    "groupCount": 8,
+    "uniqueLogicalSkillIdCount": 56,
+    "sourceRecordCount": 7,
+    "datedSourceRecordDates": [
+      "2026-07-18",
+      "2026-07-19",
+      "2026-07-23"
+    ],
+    "currentRuntimeSnapshot": false,
+    "allOccurrencesExhaustivelyIndexed": false
+  },
+  "authorityBoundary": {
+    "liveCcSwitchReadAuthorized": false,
+    "agentHomeReadAuthorized": false,
+    "installOrEnableAuthorized": false,
+    "relinkOrProjectionRepairAuthorized": false,
+    "migrationAuthorized": false,
+    "deletionOrCleanupAuthorized": false,
+    "commitOrPushAuthorized": false
+  },
+  "claimBoundary": {
+    "currentCcDatabaseTruthProved": false,
+    "currentProjectionOrLoaderStateProved": false,
+    "sourceAttributionProvesInvocation": false,
+    "contentDigestProvesBehavioralEquivalence": false,
+    "localSuperpowersBytesEqualReleaseProved": false,
+    "legacyMattLikePoolIsCurrentMattSuiteProved": false,
+    "selectedCcInstallOrSourceRowProvenanceProved": false,
+    "crossDeviceEqualityProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "safeMigrationOrDeletionProved": false
+  },
+  "nonActions": [
+    "no live CC Switch database or settings read",
+    "no Agent Home or CC Skill body scan",
+    "no network fetch or candidate download",
+    "no Skill install enable disable relink migration or deletion",
+    "no commit push release or publication"
+  ],
+  "nextGate": "Use this dated index to select exact per-Skill source and collision questions; re-observe only the bound occurrence needed for that decision, then require host invocation evidence before any behavior or replacement claim.",
+  "reportSha256": "5e8a446c684948e69f6a079c4c3fc7933a1efa024fd7590f9176a4846dd3d70b"
+}

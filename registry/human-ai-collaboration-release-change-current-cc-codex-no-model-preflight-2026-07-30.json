@@ -1,0 +1,247 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30",
+  "date": "2026-07-30",
+  "status": "current-cc-exact-two-candidates-task-inventory-listed-fresh-desktop-reprobe-blocked",
+  "scenarioId": "SE-RELEASE-CHANGE-01",
+  "repositoryPosture": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "originMain": "55659f30091990f7c589932e0379880de30dc403",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeIntentionallyLargeAndDirty": true,
+    "inheritedChangesPreserved": true
+  },
+  "sourceBindings": [
+    "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json",
+    "registry/human-ai-collaboration-release-change-candidate-preflight-2026-07-27.json",
+    "registry/cc-switch-fourteen-skill-live-preflight-contract-2026-07-30.json",
+    "registry/codex-common-root-doc-pdf-host-disable-transaction-2026-07-30.json",
+    "scripts/preflight_cc_switch_fourteen_skill_subtraction.py",
+    "scripts/probe_codex_app_server_skill_exposure.py"
+  ],
+  "authorityBoundary": {
+    "readLocalCcDatabaseSettingsSkillTreesAndLinks": true,
+    "readCurrentCodexConfigPolicyRows": true,
+    "startShortLivedNoModelAppServer": true,
+    "sourceBodyExecution": false,
+    "modelRequest": false,
+    "candidateInvocation": false,
+    "ccSwitchMutation": false,
+    "hostProjectionMutation": false,
+    "globalConfigurationMutation": false,
+    "dependencyInstall": false,
+    "cleanupOrDeletion": false,
+    "gitCommitOrPushDuringProbe": false
+  },
+  "wholeStateObservation": {
+    "frozenWholeStatePreflightPassed": false,
+    "failure": "whole live Skill state drifted from the governed preflight fingerprint",
+    "currentCounts": {
+      "databaseRows": 55,
+      "ccSkillTrees": 55,
+      "backupCount": 20,
+      "projectionEntryCounts": {
+        "ccSwitch": 55,
+        "agents": 41,
+        "claude": 55,
+        "codex": 57
+      }
+    },
+    "fingerprintMatchesFrozen": {
+      "managerBinary": true,
+      "settings": true,
+      "database": false,
+      "ccTrees": true,
+      "projections": false,
+      "backups": true,
+      "codexSkillConfig": true,
+      "wholeState": false
+    },
+    "currentFingerprints": {
+      "database": "2246345107954ec57ee6c48252b2bc416479bf2268769a14c952d00965ccd124",
+      "projections": "ee0d8eda54c711d682d27f06881fe2ba91662945ef92d3cf5dc52c4b9089e53e",
+      "wholeState": "3245721c8dae1f2008d4c795e6fcbe66da5a64994d25d6ae13d5f4eef2d86c01"
+    },
+    "frozenFingerprints": {
+      "database": "3775e90fd2af828ace49edcf8dbec60d79924968f603660f984775dddb915794",
+      "projections": "0f67a3a6159cd5c396185db22bea77c6cc1cf5df479f992f0d94b0639dca45c4",
+      "wholeState": "4275f647d365be09862eb7cf0f86f3f85f78be3910c58f4514071746c69e5c60"
+    }
+  },
+  "driftAttribution": {
+    "rankedHypotheses": [
+      {
+        "rank": 1,
+        "hypothesis": "A later CC Switch refresh or synchronization rehydrated the Codex doc/pdf database flags and private projections.",
+        "outcome": "supported-exactly"
+      },
+      {
+        "rank": 2,
+        "hypothesis": "The two release/change candidate bodies, rows, or projections drifted.",
+        "outcome": "falsified"
+      },
+      {
+        "rank": 3,
+        "hypothesis": "The manager binary, settings, backups, CC trees, or Codex disable-policy rows drifted.",
+        "outcome": "falsified"
+      },
+      {
+        "rank": 4,
+        "hypothesis": "A fresh independent Desktop app-server can currently reproduce task inventory exposure.",
+        "outcome": "not-proved-windowsapps-createprocess-denied"
+      }
+    ],
+    "exactObservedDelta": {
+      "databaseRows": [
+        {
+          "name": "doc",
+          "frozenEnabledCodex": 0,
+          "currentEnabledCodex": 1
+        },
+        {
+          "name": "pdf",
+          "frozenEnabledCodex": 0,
+          "currentEnabledCodex": 1
+        }
+      ],
+      "codexPrivateProjectionRows": [
+        {
+          "name": "doc",
+          "frozenState": "absent",
+          "currentState": "resolvable-symlink-to-cc-source"
+        },
+        {
+          "name": "pdf",
+          "frozenState": "absent",
+          "currentState": "resolvable-symlink-to-cc-source"
+        }
+      ]
+    },
+    "readOnlyCounterfactual": {
+      "method": "deep-copy current safe projection, set only doc/pdf enabled_codex to zero, remove only doc/pdf Codex private projection entries, and recompute canonical fingerprints in memory",
+      "databaseFingerprintMatchesFrozen": true,
+      "projectionFingerprintMatchesFrozen": true,
+      "wholeStateFingerprintMatchesFrozen": true,
+      "liveStateMutated": false
+    },
+    "candidateCohortCausedWholeStateFailure": false,
+    "oldFrozenBaselineShouldBeRefreshedFromThisObservation": false
+  },
+  "candidateObservations": [
+    {
+      "candidateId": "skill.curated.ci-cd-and-automation",
+      "ccDirectory": "ci-cd-and-automation",
+      "ccSkillMdBytes": 11470,
+      "ccSkillMdSha256": "7aa008e4be26068c9e61ea8a9303711020e376c6cbfdf10d581a9fd400acf8ea",
+      "ccTreeManifestSha256": "b99b47b56d6e64723953296bf89bf4988a7efe067bd99c5335454188b285d944",
+      "databaseContentHash": "e0286552f03d16cf307df32e4530bc3fe440029131bd2b274858ab7a37dc689f",
+      "databaseEnabledCodex": 1,
+      "databaseEnabledClaude": 1,
+      "ccSourcePhysical": true,
+      "agentsProjectionExactSymlink": true,
+      "claudeProjectionExactSymlink": true,
+      "codexProjectionExactSymlink": true,
+      "repositoryReleasePayloadExact": true,
+      "currentTaskRuntimeInventoryPath": "C:/Users/15521/.cc-switch/skills/ci-cd-and-automation/SKILL.md",
+      "currentTaskRuntimeInventoryListed": true
+    },
+    {
+      "candidateId": "skill.curated.shipping-and-launch",
+      "ccDirectory": "shipping-and-launch",
+      "ccSkillMdBytes": 11464,
+      "ccSkillMdSha256": "195a1fad5612627464df4581954727b8ebd649b0ce4bfe91e06655bcc32302b0",
+      "ccTreeManifestSha256": "71cabfbce6288267c1b1821fcae556af0f639354e4feb48b45da06be5765c04a",
+      "databaseContentHash": "1d84f22a9cff34b8ed8ed9b5690fdc9c4d18c78cdc90892684746cbc5d296522",
+      "databaseEnabledCodex": 1,
+      "databaseEnabledClaude": 1,
+      "ccSourcePhysical": true,
+      "agentsProjectionExactSymlink": true,
+      "claudeProjectionExactSymlink": true,
+      "codexProjectionExactSymlink": true,
+      "repositoryReleasePayloadExact": true,
+      "currentTaskRuntimeInventoryPath": "C:/Users/15521/.cc-switch/skills/shipping-and-launch/SKILL.md",
+      "currentTaskRuntimeInventoryListed": true
+    }
+  ],
+  "hostCarrierObservations": {
+    "npmCli": {
+      "path": "C:/Users/15521/AppData/Roaming/npm/codex.cmd",
+      "version": "codex-cli 0.146.0",
+      "pluginsDisabledArm": {
+        "skillCount": 6,
+        "userSkillCount": 0,
+        "candidateRowCount": 0,
+        "stderrLineCount": 0
+      },
+      "pluginsEnabledArm": {
+        "skillCount": 6,
+        "userSkillCount": 0,
+        "candidateRowCount": 0,
+        "stderrLineCount": 0
+      },
+      "configPrePostStable": true,
+      "interpretation": "different-carrier-observation-not-candidate-failure"
+    },
+    "desktop": {
+      "path": "C:/Program Files/WindowsApps/OpenAI.Codex_26.721.4979.0_x64__2p2nqsd0c76g0/app/resources/codex.exe",
+      "version": "Codex Desktop/0.146.0",
+      "runningProcessObserved": true,
+      "freshAppServerSpawnAttemptedInSandbox": true,
+      "freshAppServerSpawnAttemptedWithEscalation": true,
+      "freshAppServerSpawnResult": "blocked-windowsapps-acl-winerror-5",
+      "freshSkillsListReproduced": false
+    },
+    "carrierEquivalenceProved": false
+  },
+  "preflightDecision": {
+    "currentCcEntityIdentityProvedForBothCandidates": true,
+    "currentManagerEnablementProvedForBothCandidates": true,
+    "currentFilesystemProjectionProvedForBothCandidates": true,
+    "currentTaskRuntimeInventoryListingObservedForBothCandidates": true,
+    "independentFreshDesktopExposureReproduced": false,
+    "candidateLoaderInvocationProved": false,
+    "candidateInstructionsReachedModelProved": false,
+    "candidateBehaviorOrValueProved": false,
+    "formalNativeOrCandidateArmEligible": false,
+    "docPdfDriftRequiresSeparateLifecycleReconciliation": true,
+    "candidateInstallUpdateEnableOrMutationAuthorized": false,
+    "selfAuthoredWorkEligible": false
+  },
+  "executionCounters": {
+    "modelRequestCount": 0,
+    "candidateInvocationCount": 0,
+    "skillInstallUpdateEnableDisableOrDeleteCount": 0,
+    "ccSwitchMutationCount": 0,
+    "globalConfigurationMutationCount": 0,
+    "gitOperationCountDuringProbe": 0
+  },
+  "cleanup": {
+    "temporaryRootCreated": false,
+    "temporaryRootAbsent": true,
+    "rawConfigRecorded": false,
+    "rawDatabaseRecorded": false,
+    "shortLivedNpmAppServersExited": true,
+    "desktopFreshProcessCreated": false,
+    "repositoryCleanupInventoryStableBeforeEvidenceWrite": true
+  },
+  "claimBoundary": {
+    "provesCurrentCcBodyAndProjectionIdentity": true,
+    "provesCurrentTaskStartupInventoryListing": true,
+    "provesIndependentFreshDesktopExposure": false,
+    "provesCandidateInvocationOrInstructionDelivery": false,
+    "provesCandidateBehaviorValuePreferenceOrSuperiority": false,
+    "provesNpmCliAndDesktopCarrierEquivalence": false,
+    "provesDocPdfEffectiveRuntimeSuppressionAfterRehydration": false,
+    "provesReleaseReadinessOrRealRollback": false,
+    "provesResidualSelfAuthoredGap": false,
+    "authorizesPortfolioOrHostMutation": false
+  },
+  "nextGate": {
+    "releaseScenario": "Keep the live arm blocked until a real release fixture, accountable authority, short-lived dispatch authority, and independently reproducible Desktop task-scoped exposure are all bound.",
+    "docPdfLifecycle": "Reconcile why CC Switch rehydrated host-specific Codex rows and links while exact Codex config disable rows remained; do not delete, refresh the frozen baseline, or mutate the manager under this evidence.",
+    "commitBoundary": "Repository evidence may be committed and pushed only after full verification, process-artifact review, and secret-sensitive boundary checks."
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-RELEASE-CHANGE-CURRENT-CC-CODEX-NO-MODEL-PREFLIGHT-2026-07-30.md"
+}

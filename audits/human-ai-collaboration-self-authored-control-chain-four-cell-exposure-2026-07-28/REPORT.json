@@ -1,0 +1,265 @@
+{
+  "schema": 1,
+  "probeId": "self-authored-control-chain-four-cell-exposure-v1",
+  "status": "preflight-pass-no-turn",
+  "protocol": "registry/human-ai-collaboration-self-authored-control-chain-factorial-ablation-protocol-2026-07-28.json",
+  "projectionManifestSha256": "cb1a616e75a4142831a84d453974f06bdd63c848fa7e9f082c74c8b259ad22af",
+  "projection": {
+    "requiredFileCount": 5,
+    "requiredSkillCount": 3,
+    "requiredSkillNames": [
+      "capability-router",
+      "closure-contract",
+      "intent-contract"
+    ],
+    "projectedTreeSha256": "b4d25f4d28985916338821610ae7634e458f17e196b504a31358650bd1746e71",
+    "projectedFiles": [
+      {
+        "skillName": "capability-router",
+        "relativePath": "SKILL.md",
+        "role": "skill-entry",
+        "path": ".agents/skills/capability-router/SKILL.md",
+        "sourcePath": "C:/Users/15521/.agents/skills/capability-router/SKILL.md",
+        "bytes": 22018,
+        "sha256": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe"
+      },
+      {
+        "skillName": "capability-router",
+        "relativePath": "references/routing-contract.md",
+        "role": "referenced-instruction",
+        "path": ".agents/skills/capability-router/references/routing-contract.md",
+        "sourcePath": "C:/Users/15521/.agents/skills/capability-router/references/routing-contract.md",
+        "bytes": 10108,
+        "sha256": "17d7ef3892f2794f78321615f276d89e5040059b6bf49793c2edebbfe5e90c3b"
+      },
+      {
+        "skillName": "closure-contract",
+        "relativePath": "SKILL.md",
+        "role": "skill-entry",
+        "path": ".agents/skills/closure-contract/SKILL.md",
+        "sourcePath": "C:/Users/15521/.agents/skills/closure-contract/SKILL.md",
+        "bytes": 12187,
+        "sha256": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3"
+      },
+      {
+        "skillName": "intent-contract",
+        "relativePath": "SKILL.md",
+        "role": "skill-entry",
+        "path": ".agents/skills/intent-contract/SKILL.md",
+        "sourcePath": "C:/Users/15521/.agents/skills/intent-contract/SKILL.md",
+        "bytes": 29139,
+        "sha256": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753"
+      },
+      {
+        "skillName": "intent-contract",
+        "relativePath": "references/intake-contract.md",
+        "role": "referenced-instruction",
+        "path": ".agents/skills/intent-contract/references/intake-contract.md",
+        "sourcePath": "C:/Users/15521/.agents/skills/intent-contract/references/intake-contract.md",
+        "bytes": 20948,
+        "sha256": "66e3990e36f3771c5bd22136834100b7aba799c6416968f486e5929204392b93"
+      }
+    ],
+    "exactSkillPathSha256": {
+      "capability-router": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe",
+      "closure-contract": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3",
+      "intent-contract": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753"
+    }
+  },
+  "host": {
+    "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "platformFamily": "windows",
+    "platformOs": "windows",
+    "isolatedCodexHome": "C:/Users/15521/AppData/Local/Temp/aah-control-chain-four-cell-d7wlnbx3/codex-home"
+  },
+  "controlInventory": {
+    "skillCount": 9,
+    "countsByScope": {
+      "repo": 3,
+      "system": 6
+    },
+    "enabledCountsByScope": {
+      "repo": 3,
+      "system": 6
+    },
+    "identityManifestSha256": "7e52c4c44bdedd0aaa1d127cbe608771bff71f52f6924c666ece8c4f3b1badf1"
+  },
+  "cells": [
+    {
+      "cellId": "CHAIN-HARD-HOOK-OFF",
+      "chainFactor": "hard-only",
+      "hookFactor": "off",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 0,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 9,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "enabledCountsByScope": {
+          "repo": 0,
+          "system": 6
+        },
+        "identityManifestSha256": "7e52c4c44bdedd0aaa1d127cbe608771bff71f52f6924c666ece8c4f3b1badf1"
+      },
+      "hookDirectEvidence": {
+        "returnCode": 0,
+        "elapsedMilliseconds": 161.27,
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutUtf8": "",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrUtf8": ""
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    },
+    {
+      "cellId": "CHAIN-HARD-HOOK-AUTO",
+      "chainFactor": "hard-only",
+      "hookFactor": "auto",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 0,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 9,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "enabledCountsByScope": {
+          "repo": 0,
+          "system": 6
+        },
+        "identityManifestSha256": "7e52c4c44bdedd0aaa1d127cbe608771bff71f52f6924c666ece8c4f3b1badf1"
+      },
+      "hookDirectEvidence": {
+        "returnCode": 0,
+        "elapsedMilliseconds": 228.943,
+        "stdoutBytes": 428,
+        "stdoutSha256": "7763ce68af001cdd8583e6fcd214cd676a2d058fcf45767e7699aa143ef65608",
+        "stdoutUtf8": "{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"Capability-routing check: choose the smallest sufficient available capability set, prefer already-installed and authorized options, use built-in or OpenAI-official options as tie-breakers, identify gaps honestly, and request approval only when the next action exceeds the user's explicit scope or changes access, trust, cost, or side effects.\"}}",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrUtf8": ""
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    },
+    {
+      "cellId": "CHAIN-EXACT-HOOK-OFF",
+      "chainFactor": "exact-current-three-skill-chain",
+      "hookFactor": "off",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 3,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 9,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "enabledCountsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "identityManifestSha256": "7e52c4c44bdedd0aaa1d127cbe608771bff71f52f6924c666ece8c4f3b1badf1"
+      },
+      "hookDirectEvidence": {
+        "returnCode": 0,
+        "elapsedMilliseconds": 164.081,
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutUtf8": "",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrUtf8": ""
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    },
+    {
+      "cellId": "CHAIN-EXACT-HOOK-AUTO",
+      "chainFactor": "exact-current-three-skill-chain",
+      "hookFactor": "auto",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 3,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 9,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "enabledCountsByScope": {
+          "repo": 3,
+          "system": 6
+        },
+        "identityManifestSha256": "7e52c4c44bdedd0aaa1d127cbe608771bff71f52f6924c666ece8c4f3b1badf1"
+      },
+      "hookDirectEvidence": {
+        "returnCode": 0,
+        "elapsedMilliseconds": 187.047,
+        "stdoutBytes": 428,
+        "stdoutSha256": "7763ce68af001cdd8583e6fcd214cd676a2d058fcf45767e7699aa143ef65608",
+        "stdoutUtf8": "{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"Capability-routing check: choose the smallest sufficient available capability set, prefer already-installed and authorized options, use built-in or OpenAI-official options as tie-breakers, identify gaps honestly, and request approval only when the next action exceeds the user's explicit scope or changes access, trust, cost, or side effects.\"}}",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrUtf8": ""
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    }
+  ],
+  "threadStarted": false,
+  "turnStarted": false,
+  "modelRequestSent": false,
+  "stability": {
+    "projectionTreeStable": true,
+    "globalConfigStable": true,
+    "liveHookRegistrationStable": true,
+    "repositoryStatusStableDuringProbe": true,
+    "projectionRemovedAfterEvidenceCapture": true,
+    "isolatedCodexHomeRemovedAfterEvidenceCapture": true
+  },
+  "decision": {
+    "dependencyCompleteFourCellExposureProved": true,
+    "loaderInvocationProved": false,
+    "skillInstructionsReachedModelProved": false,
+    "hookHostConsumptionProved": false,
+    "behavioralCausationProved": false,
+    "hookNetValueProved": false,
+    "selfAuthoredChainValueProved": false,
+    "weakModelRunAuthorized": false,
+    "programCloseoutSupported": false
+  },
+  "claimBoundary": "This no-turn preflight proves only dependency-complete isolated Skill inventory exposure for four process-scoped cells plus direct Hook-mode evidence. It does not prove loader invocation, host Hook consumption, instruction delivery, behavioral causation, value, stable latency, cross-host behavior, or weak-Agent acceptance.",
+  "reportSha256": "5097500a0271c83a5f3afe0ede85bcef52bbe879d3a0978356f7aa9dc0a42963"
+}

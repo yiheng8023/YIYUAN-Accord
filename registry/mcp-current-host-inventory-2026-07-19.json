@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "id": "mcp-current-host-inventory-2026-07-19",
+  "date": "2026-07-19",
+  "status": "observed-single-host-partial-no-lifecycle-actuation",
+  "host": {
+    "surface": "Codex Desktop local",
+    "companionCliVersion": "codex-cli 0.144.6",
+    "desktopBuild": "not-exposed-by-probe"
+  },
+  "authorityBoundary": {
+    "readOnlyInventory": true,
+    "processFieldsRead": ["ProcessId", "ParentProcessId", "Name", "WorkingSetBytes", "PrivateMemoryBytes", "CpuSeconds"],
+    "processCommandLineRead": false,
+    "environmentOrSecretsRead": false,
+    "externalAccountDataRead": false,
+    "configurationMutation": false,
+    "mcpEnableDisable": false,
+    "mcpAddRemove": false,
+    "mcpLoginLogout": false,
+    "processStartStop": false
+  },
+  "cliInventory": {
+    "command": "codex mcp list",
+    "standaloneConfiguredCount": 0,
+    "observation": "No MCP servers configured yet",
+    "scope": "Codex CLI user configuration only; not the Desktop Plugin/App/runtime tool surface"
+  },
+  "desktopToolSurface": {
+    "source": "current runtime ALL_TOOLS metadata",
+    "totalToolDefinitions": 487,
+    "mcpNamedToolDefinitions": 457,
+    "namespaces": [
+      {"name": "codegraph", "toolDefinitions": 1},
+      {"name": "codex_apps", "toolDefinitions": 361},
+      {"name": "codex_security", "toolDefinitions": 11},
+      {"name": "context7", "toolDefinitions": 2},
+      {"name": "creative_production_mcp", "toolDefinitions": 1},
+      {"name": "dataAnalyticsWidgets", "toolDefinitions": 5},
+      {"name": "github", "toolDefinitions": 44},
+      {"name": "neo4j_graph", "toolDefinitions": 3},
+      {"name": "node_repl", "toolDefinitions": 3},
+      {"name": "openai_api_key_local_confirmation", "toolDefinitions": 1},
+      {"name": "playwright", "toolDefinitions": 24},
+      {"name": "sites_design_picker", "toolDefinitions": 1}
+    ],
+    "claimLimit": "definition visibility does not prove initialization, authentication, health, account access, or callability"
+  },
+  "callabilityProbe": {
+    "namespace": "node_repl",
+    "dataBoundary": "local arithmetic only; no account or external data",
+    "input": "6 * 7",
+    "output": 42,
+    "status": "callable-observed-for-one-local-mcp-only"
+  },
+  "processObservation": {
+    "initialSandboxResult": "access-denied",
+    "boundedElevatedReadApproved": true,
+    "codexProcessRowsObserved": 2,
+    "descendantNamesIncluded": ["cmd.exe", "codex-code-mode-host.exe", "conhost.exe", "node.exe", "node_repl.exe", "pwsh.exe"],
+    "specificMcpOwnershipAttributable": false,
+    "reason": "PID, parent PID, and generic process names cannot map shared Node processes to a specific MCP without stronger identity evidence",
+    "safeStopEligibility": "not-established",
+    "resourceSnapshot": {
+      "capturedAtUtc": "2026-07-19T12:22:48.9092302Z",
+      "scope": "all codex.exe roots and recursively discovered descendants",
+      "codexRootCount": 2,
+      "processCount": 107,
+      "totalWorkingSetBytes": 5052542976,
+      "totalPrivateMemoryBytes": 3702562816,
+      "byName": [
+        {"name": "cmd.exe", "processCount": 30, "workingSetBytes": 288301056, "privateMemoryBytes": 141000704},
+        {"name": "codex-code-mode-host.exe", "processCount": 1, "workingSetBytes": 24866816, "privateMemoryBytes": 17899520},
+        {"name": "codex.exe", "processCount": 2, "workingSetBytes": 425758720, "privateMemoryBytes": 364662784},
+        {"name": "conhost.exe", "processCount": 2, "workingSetBytes": 16183296, "privateMemoryBytes": 2576384},
+        {"name": "node_repl.exe", "processCount": 5, "workingSetBytes": 52822016, "privateMemoryBytes": 13463552},
+        {"name": "node.exe", "processCount": 65, "workingSetBytes": 4035944448, "privateMemoryBytes": 3079692288},
+        {"name": "pwsh.exe", "processCount": 2, "workingSetBytes": 208666624, "privateMemoryBytes": 83267584}
+      ],
+      "volatileProcessIdsStored": false,
+      "specificMcpResourceAttribution": false,
+      "taskScopedResourceAttribution": false,
+      "idleOrTaskEndReleaseProved": false,
+      "resourceSavingsProved": false,
+      "claimLimit": "one point-in-time Codex descendant-forest aggregate; not an MCP-only, per-server, per-task, idle, or steady-state baseline"
+    }
+  },
+  "stateClassification": [
+    {"surface": "CLI standalone MCP configuration", "configured": "observed-none", "enabled": "not-applicable", "initialized": "not-applicable", "callable": "not-applicable", "authenticated": "not-inspected"},
+    {"surface": "Desktop MCP-named tool projection", "configured": "unknown", "enabled": "tool-definitions-visible", "initialized": "unknown-except-node-repl", "callable": "observed-node-repl-only", "authenticated": "not-inspected"},
+    {"surface": "Codex descendant processes", "configured": "not-derivable", "enabled": "not-derivable", "initialized": "generic-runtime-processes-observed", "callable": "not-derivable", "authenticated": "not-inspected"}
+  ],
+  "supportedClaims": [
+    "The Codex CLI standalone MCP configuration reported zero configured servers in this observation.",
+    "The current Desktop runtime projected 457 MCP-named tool definitions across 12 namespaces, so the CLI list is not a complete Desktop capability inventory.",
+    "One local node_repl MCP call completed successfully with the expected result.",
+    "The bounded process fields were insufficient to attribute generic Node descendants to specific MCP servers or prove safe stop ownership.",
+    "One point-in-time Codex descendant-forest snapshot contained 107 processes with 5052542976 working-set bytes and 3702562816 private-memory bytes."
+  ],
+  "unsupportedClaims": [
+    "All projected MCP tools are initialized, healthy, connected, authenticated, or callable.",
+    "The 12 namespaces are the complete MCP ecosystem or permanent host configuration.",
+    "A visible tool definition corresponds one-to-one with a dedicated process.",
+    "Any observed Node process can be safely stopped or released.",
+    "Mid-session enable, disable, unload, restart, lease, reference counting, or idle release is supported.",
+    "Task-end release or resource savings occurred.",
+    "The aggregate Codex descendant-forest memory belongs only to MCP servers or to any one task.",
+    "One point-in-time resource snapshot is a steady-state, idle, startup, or comparable savings baseline.",
+    "The observation applies to another host, account, model, version, or startup profile."
+  ],
+  "nextGate": "measure a disposable startup profile with explicit pre/post tool and process evidence before any lifecycle actuation claim"
+}

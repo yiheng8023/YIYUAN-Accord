@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "id": "mcp-thread-creator-connection-close-calibration-attempt-2026-07-27",
+  "date": "2026-07-27",
+  "status": "invalid-pre-window-calibration-rollout-prerequisite-and-authority-conflict-recorded",
+  "protocol": {
+    "path": "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json",
+    "sha256AtAttempt": "8A110058AAC75DDC54E2B3795F6F6BE12004E4CDE0262045BEA79D112D157326",
+    "loopbackTransportExecutionAuthorizedAtAttempt": false
+  },
+  "probe": {
+    "path": "scripts/probe_codex_app_server_mcp_thread_creator_connection_close.py",
+    "sha256AtAttempt": "98B248688F98DECB35AE0B1F34DB4AA2DA819ED7DDF91BA3E4AC1C707AFCAC6",
+    "sha256AtAttemptRole": "attempt-time-source-identity-only",
+    "currentProbeMayDifferAfterRemediation": true,
+    "currentSha256": "66CF7066B68D92139653C5E41AD74CAA64D00273C662A2899E396501974C2CF6",
+    "currentProbeContainsWaitForRollout": false
+  },
+  "attempt": {
+    "type": "calibration",
+    "startedAt": "2026-07-27T01:32:19.527503+00:00",
+    "failedBeforePairedWindow": true,
+    "pairedWindowEntered": false,
+    "formalLivePairedRunCount": 0,
+    "pairReportGenerated": false,
+    "root": ".tmp/mcp-creator-close-calibration-20260727-01",
+    "workspace": ".tmp/mcp-creator-close-calibration-workspace-20260727-01",
+    "requestedOutput": ".tmp/mcp-creator-close-calibration-output-20260727-01",
+    "requestedOutputExists": false,
+    "failureClass": "runner-prerequisite-invalid-for-zero-turn-thread",
+    "failureMessage": "thread rollout did not materialize before the 30-second timeout",
+    "failurePath": ".tmp/mcp-creator-close-calibration-20260727-01/connected-control/codex-home/sessions/2026/07/27/rollout-2026-07-27T09-32-19-019fa133-90af-74b0-83e8-31c069cfacce.jsonl",
+    "failureIsHostReleaseOutcome": false
+  },
+  "observedLocalEvidence": {
+    "startedArmCount": 1,
+    "startedArm": "connected-control",
+    "sentinelEventLog": ".tmp/mcp-creator-close-calibration-20260727-01/connected-control/codex-home/sentinel-events.jsonl",
+    "sentinelEventLogBytes": 789,
+    "sentinelEventLogSha256": "9630EEA400B3F4D5B60D1472802014197E560FCFA30963183B4658876E2B7AC1",
+    "sentinelInstanceStartAt": "2026-07-27T01:32:19.527503+00:00",
+    "sentinelInstanceStopAt": "2026-07-27T01:32:50.444071+00:00",
+    "sentinelPid": 34556,
+    "sentinelInstanceId": "b2456f9a-9163-49ab-9674-b325f3795e23",
+    "sentinelPidAbsentAtPostFailureInspection": true,
+    "broaderProcessFamilyAbsenceProved": false,
+    "cimProcessFamilyInspectionSucceeded": false,
+    "cimInspectionFailure": "access-denied"
+  },
+  "configurationBoundary": {
+    "isolatedCodexHomeOnly": true,
+    "isolatedConfig": ".tmp/mcp-creator-close-calibration-20260727-01/connected-control/codex-home/config.toml",
+    "isolatedConfigBytes": 607,
+    "isolatedConfigSha256": "5526767B48F5D20EAC1C96ED16D5820D4E2A63322AF35A45A7F615D419D2C8E2",
+    "globalConfigurationMutationObserved": false,
+    "accountStateCopied": false,
+    "modelTurnRequestedByProbe": false,
+    "externalNetworkTrafficInspected": false,
+    "zeroNetworkTrafficClaimed": false
+  },
+  "normalizedEvidence": {
+    "path": "audits/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27/normalized-evidence.json",
+    "bytes": 2545,
+    "sha256": "6EC43BDD24F6C88E75EA5B5D0C7DECB84903F9453979446D6B9E872655BED4CC",
+    "allFiveSentinelEventsPreserved": true,
+    "isolatedConfigSemanticsPreserved": true,
+    "rawRuntimeStateRetained": false,
+    "machineAbsolutePathsRetained": false,
+    "secretMaterialRetained": false
+  },
+  "authorityIncident": {
+    "protocolLoopbackBoundaryWasFalse": true,
+    "preWindowLoopbackCalibrationStarted": true,
+    "formalPairedWindowStarted": false,
+    "incidentDoesNotAuthorizeContinuation": true,
+    "rerunRequiresExplicitLoopbackExecutionAuthorization": true
+  },
+  "remediation": {
+    "zeroTurnRolloutAbsenceIsNowObservationNotGate": true,
+    "probeWaitForRolloutRemoved": true,
+    "deterministicRegressionTestAdded": true,
+    "liveRerunPerformed": false
+  },
+  "cleanupBoundary": {
+    "rootsOriginallyRetained": [
+      ".tmp/mcp-creator-close-calibration-20260727-01",
+      ".tmp/mcp-creator-close-calibration-workspace-20260727-01"
+    ],
+    "deletionAuthorizedOn": "2026-07-30",
+    "cleanupExecuted": true,
+    "cleanupExecutionEvidence": "registry/closeout-cleanup-execution-2026-07-30.json",
+    "rootsAbsentAfterCleanup": true,
+    "inventoryRegistrationRequired": false
+  },
+  "claimBoundary": {
+    "creatorConnectionCloseReleaseObserved": false,
+    "creatorConnectionCloseRetentionObserved": false,
+    "taskEndReleaseProved": false,
+    "leaseOrReferenceCountProved": false,
+    "resourceBenefitProved": false,
+    "formalProtocolValidityProved": false,
+    "selfAuthoredControllerNeedProved": false
+  },
+  "nextGate": "Do not rerun the loopback calibration or formal paired protocol until the user explicitly authorizes that live transport execution boundary; then use fresh exact roots and preserve this invalid attempt unchanged.",
+  "documentation": "docs/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27.md"
+}

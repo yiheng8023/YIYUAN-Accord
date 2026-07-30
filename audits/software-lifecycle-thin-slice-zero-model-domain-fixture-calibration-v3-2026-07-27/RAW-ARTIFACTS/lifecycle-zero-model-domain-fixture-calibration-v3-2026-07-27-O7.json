@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-stage-output",
+  "artifactId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O7",
+  "stageId": "SE-TS-07-maintenance-evolution",
+  "sections": {
+    "consumerStates": {
+      "status": "synthetic-calibration-present"
+    },
+    "knownAndUnknownTelemetry": {
+      "status": "synthetic-calibration-present"
+    },
+    "compatibilityObligations": {
+      "status": "synthetic-calibration-present"
+    },
+    "incidentDrivenChange": {
+      "status": "synthetic-calibration-present"
+    },
+    "retention": {
+      "status": "synthetic-calibration-present"
+    },
+    "rollbackOwner": {
+      "status": "synthetic-calibration-present"
+    },
+    "deprecationState": {
+      "status": "synthetic-calibration-present"
+    },
+    "removalBoundary": {
+      "status": "synthetic-calibration-present"
+    },
+    "recheckTriggers": {
+      "status": "synthetic-calibration-present"
+    },
+    "claimBoundary": {
+      "status": "synthetic-calibration-present"
+    },
+    "nextGate": {
+      "status": "synthetic-calibration-present"
+    }
+  },
+  "acceptedInvariantIdsObserved": [
+    "inv.source-goal",
+    "inv.no-live-side-effects"
+  ],
+  "semanticAssertions": {
+    "distinctConsumerStatesPreserved": true,
+    "unknownTelemetryCoercedToZero": false,
+    "removalOrProductionMigrationClaimed": false,
+    "retentionRollbackOwnerAndRecheckTriggerPresent": true
+  },
+  "domainSuboracleBindings": [
+    {
+      "artifactId": "DOMAIN-SUBORACLE-PACK",
+      "resultKey": "maintenance",
+      "resultCanonicalSha256": "4af83e1f8da6f9ca1a9916e28a872a9e12248b3e36edb968f399d0e7319f2089",
+      "evidenceClass": "recomputed-zero-model-existing-classifier-plus-disposable-stage-receipts"
+    },
+    {
+      "artifactId": "DOMAIN-SUBORACLE-PACK",
+      "resultKey": "cumulativeLoss",
+      "resultCanonicalSha256": "95c08f71e4759dd01c5509dbf8c7335a3faabfc6fbe5319fd96ce3989892208e",
+      "evidenceClass": "recomputed-zero-model-existing-classifier"
+    }
+  ],
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": []
+}

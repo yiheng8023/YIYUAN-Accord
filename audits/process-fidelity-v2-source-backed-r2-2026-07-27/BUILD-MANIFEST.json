@@ -1,0 +1,19 @@
+{
+  "agentRunStartedAtBuildTime": false,
+  "dispatchCount": 0,
+  "files": [
+    {
+      "name": "PUBLIC-SOURCE-BUNDLE.json",
+      "sha256": "b4cb9617dcd912c7c7d1a2b15f44c42ebd6cea4e5d5c557a7e871548157f761f"
+    },
+    {
+      "name": "TRIAL-PACKET.json",
+      "sha256": "dd8555203af47817b622d3ced7d3bafd14222e2656ac9ed49ecc983784f18246"
+    }
+  ],
+  "id": "information-equivalent-trial-packet-build-manifest",
+  "privateOracleCanonicalSha256": "e2dacb10be81d87f63bb5bbdaf94a45ce9f49335bd10b72620b6e41461b99a76",
+  "privateOracleContentWritten": false,
+  "schema": 1,
+  "status": "prepared-zero-dispatch"
+}

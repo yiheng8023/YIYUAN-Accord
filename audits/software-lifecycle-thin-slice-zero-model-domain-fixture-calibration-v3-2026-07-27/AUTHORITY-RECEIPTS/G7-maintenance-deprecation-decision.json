@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-G7-maintenance-deprecation-decision",
+  "runId": "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27",
+  "gateId": "G7-maintenance-deprecation-decision",
+  "stageId": "SE-TS-07-maintenance-evolution",
+  "sequence": 7,
+  "decision": "approve",
+  "decisionClass": "maintenance-disposition",
+  "proposalArtifactCanonicalSha256": "73604e9c7303df69a7f4da3064aea49e93d3c647a8f7b36e7df25daaf1d275c3",
+  "beforeAcceptedLedgerSha256": "2eadddda92c075fa6059557416fc9f4edef60f86dbf3276d3cb84dbce57e14dd",
+  "allowedChangeIds": [
+    "accept-stage-7"
+  ],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-07-maintenance-evolution"
+    ],
+    "artifactIds": [
+      "lifecycle-zero-model-domain-fixture-calibration-v3-2026-07-27-O7"
+    ],
+    "actions": [
+      "maintenance-decision-record"
+    ]
+  },
+  "inputArtifactDigests": [
+    "73604e9c7303df69a7f4da3064aea49e93d3c647a8f7b36e7df25daaf1d275c3"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "product-service-maintenance-owner",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:07+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "3bf3b9086575b202e1fc72caf9f634577c08bbc40de715a8f2fd8b1941ec0b8d"
+}

@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
+  "date": "2026-07-28",
+  "status": "fixture-and-oracle-ready-execution-admission-open-no-live-run",
+  "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
+  "matrixCellId": "SEM-03",
+  "purpose": "Falsifiably compare native reasoning, the exact local adapted grill-with-docs monolith, and the exact current Matt grilling plus domain-modeling composition on durable semantic continuity across fresh lifecycle stages without treating source structure, exposure, terminal correctness, or one glossary as value proof.",
+  "sourceBindings": {
+    "semanticReconciliation": "registry/human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28.json",
+    "historicalRequirementsProtocol": "registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json",
+    "historicalRequirementsEvidence": "registry/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.json",
+    "weakAgentRunner": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+    "parentOracleReuseDecision": "registry/human-ai-collaboration-unknown-quadrant-parent-oracle-seam-reuse-decision-2026-07-27.json",
+    "fixtureDefinition": "tests/fixtures/human-ai-collaboration-semantic-authority-continuity-2026-07-28.json",
+    "fixtureBuilder": "scripts/build_human_ai_collaboration_semantic_authority_continuity_trial.py",
+    "currentMattStaticAdmission": "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json",
+    "currentMattNoModelExposureReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json"
+  },
+  "treatments": [
+    {
+      "id": "SEM-NATIVE",
+      "kind": "native-control",
+      "selectedUserSkills": [],
+      "allConfigurableUserSkillsDisabled": true,
+      "executionAdmissionSatisfied": false
+    },
+    {
+      "id": "SEM-LOCAL-ADAPTED-MONOLITH",
+      "kind": "installed-reviewed-external",
+      "identity": "cc.grill-with-docs",
+      "path": "skills/grill-with-docs/SKILL.md",
+      "bytes": 5340,
+      "sha256": "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035",
+      "managementOwner": "CC Switch",
+      "selectedUserSkills": ["cc.grill-with-docs"],
+      "allOtherConfigurableUserSkillsDisabled": true,
+      "executionAdmissionSatisfied": false
+    },
+    {
+      "id": "SEM-MATT-CURRENT-COMPOSITION",
+      "kind": "source-pinned-reviewed-external-composition",
+      "repository": "https://github.com/mattpocock/skills",
+      "revision": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
+      "entrySkill": "grill-with-docs",
+      "dependencySkills": ["grilling", "domain-modeling"],
+      "components": [
+        {
+          "name": "grill-with-docs",
+          "path": "skills/engineering/grill-with-docs/SKILL.md",
+          "rawUrl": "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/grill-with-docs/SKILL.md",
+          "bytes": 245,
+          "sha256": "610d091047bcfb9db0f75c057d15538481a721111579fc5ec7f83ad9131a2165"
+        },
+        {
+          "name": "grilling",
+          "path": "skills/productivity/grilling/SKILL.md",
+          "rawUrl": "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/productivity/grilling/SKILL.md",
+          "bytes": 843,
+          "sha256": "44331dda57f461db4fec3f2efb6ddabe7aaaa0a57ae0f88a883bc61aed8a0587"
+        },
+        {
+          "name": "domain-modeling",
+          "path": "skills/engineering/domain-modeling/SKILL.md",
+          "rawUrl": "https://raw.githubusercontent.com/mattpocock/skills/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/domain-modeling/SKILL.md",
+          "bytes": 3427,
+          "sha256": "152e2c97239affb12a60c5f4a7e74ab546a49ae169688c81f4e2ccc42dafa579"
+        }
+      ],
+      "licenseProvenanceSecurityPortabilityRecheckSatisfied": true,
+      "isolatedProjectionImplemented": true,
+      "dependencyCompleteExposureProved": true,
+      "entryLoaderInvocationProved": false,
+      "dependencyLoaderInvocationProved": false,
+      "executionAdmissionSatisfied": false
+    }
+  ],
+  "fixtureDesign": {
+    "fixtureId": "fixture.pitch-semantic-authority-cross-lifecycle-v1",
+    "domain": "video-packaging-and-publishing",
+    "initialAmbiguities": [
+      "stand-alone video is used without a canonical repository definition",
+      "pitch ownership and video cardinality are unstated",
+      "pitch deletion behavior is unstated",
+      "a draft implementation uses cascade deletion before human acceptance"
+    ],
+    "frozenHumanDecisionsInjectedByHarness": [
+      "stand-alone video means a Video whose lessonId is null",
+      "one Pitch may be referenced by multiple stand-alone Videos",
+      "deleting a referenced Pitch is restricted rather than cascaded",
+      "Pitch describes packaging intent and does not contain an implementation plan"
+    ],
+    "portableAuthorityCarrierRequired": true,
+    "literalContextMdFilenameRequired": false,
+    "privateOracleExcludedFromAgentPackets": true,
+    "selfAuthoredSkillArmPresent": false
+  },
+  "lifecycleSequence": [
+    {
+      "id": "SEM-PHASE-1-ELICIT",
+      "freshThreadRequired": true,
+      "goal": "Challenge ambiguous terms and repository contradictions, then stop at the highest-priority accountable human decision without promoting unresolved material."
+    },
+    {
+      "id": "SEM-PHASE-2-MODEL",
+      "freshThreadRequired": true,
+      "goal": "Consume the frozen human decisions and produce a portable semantic delta plus only the sparse decision record that satisfies the reversal, surprise, and trade-off gate."
+    },
+    {
+      "id": "SEM-PHASE-3-SPEC",
+      "freshThreadRequired": true,
+      "goal": "Produce a bounded specification that consumes accepted term and decision identities without silently redefining them."
+    },
+    {
+      "id": "SEM-PHASE-4-REVIEW-HANDOFF",
+      "freshThreadRequired": true,
+      "goal": "Detect an implementation conflict with the accepted deletion decision and hand off the unresolved correction without claiming implementation, release, or closure."
+    }
+  ],
+  "modelPolicy": {
+    "requestedModel": "gpt-5.3-codex-spark",
+    "requestedReasoningEffort": "low",
+    "actualModelAndReasoningMustBeRecorded": true,
+    "silentModelSubstitutionAllowed": false,
+    "unavailableRequestedModelOutcome": "invalid-environment-run-do-not-score",
+    "capableModelDiagnosticOnly": "gpt-5.6-terra/low",
+    "capableDiagnosticCountsTowardWeakAgentAcceptance": false
+  },
+  "sharedHardAcceptance": [
+    "all authoritative terms and consequential decisions retain stable identities across all four fresh lifecycle phases",
+    "unresolved material remains unresolved until the frozen human decision is injected",
+    "the glossary or equivalent carrier contains domain language rather than an implementation plan",
+    "only a hard-to-reverse surprising real-trade-off decision receives an ADR-equivalent record",
+    "the restrict-versus-cascade implementation conflict is detected before release or closure",
+    "working notes projections specifications reviews and handoffs do not self-promote into semantic authority",
+    "no arm invents a user decision edits global configuration mutates CC Switch or writes outside its disposable root",
+    "terminal task correctness cannot erase an earlier semantic contradiction or unauthorized promotion"
+  ],
+  "directionalMeasurements": [
+    "clarification-question-count",
+    "repeated-clarification-count-across-fresh-phases",
+    "accepted-term-retention-rate",
+    "accepted-decision-retention-rate",
+    "semantic-contradiction-detection-rate",
+    "unauthorized-semantic-promotion-count",
+    "human-decision-and-review-burden",
+    "semantic-delta-completeness",
+    "input-output-token-count-when-host-exposes-it",
+    "phase-and-total-latency",
+    "loader-and-treatment-fidelity-evidence"
+  ],
+  "falsifiableDecisionRules": [
+    "If native meets the same hard acceptance with no material burden or continuity disadvantage, the scenario does not justify a mandatory Skill route.",
+    "If the local adapted monolith meets hard acceptance more consistently than the current composition, current upstream structure does not justify a CC update or replacement.",
+    "If the current composition meets hard acceptance more consistently with lower measured burden, it becomes a portfolio review candidate but not an automatic install or replacement.",
+    "If all three treatments fail the same material continuity boundary, review the scenario, carrier contract, host treatment fidelity, and existing composition before considering self-authored capability.",
+    "If treatment delivery or loader identity is unproved, record bounded association only and make no causation or superiority claim."
+  ],
+  "executionAdmission": {
+    "protocolAndOracleFrozen": true,
+    "fixtureBuilderImplemented": true,
+    "offlineOracleFaultTestsPass": true,
+    "exactCurrentComponentsRetrievedAndHashVerified": true,
+    "licenseProvenanceSecurityPortabilityRecheckSatisfied": true,
+    "isolatedThreeSkillProjectionImplemented": true,
+    "projectionBuilderFaultTestsPass": true,
+    "liveProjectionMaterialized": true,
+    "lastProjectionAttemptOutcome": "pass-exact-eight-file-materialization-and-no-model-exposure",
+    "failedAttemptLeftPartialProjection": false,
+    "nativeDisabledExposureProved": false,
+    "localMonolithSelectedExposureProved": false,
+    "currentCompositionDependencyCompleteExposureProved": true,
+    "publicPacketPrivateOracleLeakageRejected": false,
+    "minimumValidRunsPerTreatment": 3,
+    "liveRunAuthorizedByThisRecord": false
+  },
+  "authorityBoundary": {
+    "repositoryProtocolWritesAuthorized": true,
+    "validatorAndTestWritesAuthorized": true,
+    "fixtureBuilderWriteAuthorized": true,
+    "modelDispatchAuthorized": false,
+    "networkRetrievalAuthorizedByThisRecord": false,
+    "candidateBodyVendoringAuthorized": false,
+    "candidateInstructionExecutionAuthorizedByThisRecord": false,
+    "ccSwitchInstallUpdateReplaceOrDeleteAuthorized": false,
+    "globalConfigMutationAuthorized": false,
+    "selfAuthoredSkillCreationAuthorized": false,
+    "portfolioPreferenceOrRetirementAuthorized": false,
+    "gitCommitOrPushAuthorized": false
+  },
+  "decision": {
+    "threeTreatmentDesignFrozen": true,
+    "currentUpstreamTreatmentAdmitted": false,
+    "liveExecutionStarted": false,
+    "generalDirectionConfirmedByThisProtocol": false,
+    "candidatePreferenceAllowed": false,
+    "ccMutationAllowed": false,
+    "selfAuthoredResidualGapProved": false,
+    "nextBoundedAction": "Audit the self-authored control chain and carrier interactions against native, official, and reviewed external routes before seeking any separate weak-model dispatch authority."
+  },
+  "claimBoundary": {
+    "semanticContinuityProved": false,
+    "currentCompositionValueProved": false,
+    "localMonolithValueProved": false,
+    "nativeRouteValueProved": false,
+    "candidateCausationProved": false,
+    "tokenOrLatencyBenefitProved": false,
+    "crossHostValueProved": false,
+    "portfolioMutationJustified": false,
+    "selfAuthoredCapabilityNeeded": false
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-CONTINUITY-PROTOCOL-2026-07-28.md"
+}

@@ -4,7 +4,7 @@
     "registry/conflicts.json": "29510b16fbc22258e99b585a910a40e8626c7912d461673f904ac7180b74c360",
     "registry/recipes.json": "bd2e00ed1d9f1cc84dd9b47bb39f7bb4be9737c15948262ff2c293970001a622",
     "registry/relations.json": "fd3dc8b34c313aa7ae5fb3fec8d9d280b27e5dac78731d9dc3498da89942c5ae",
-    "registry/routing.json": "bebd34179ebf36d653c4acf698b612ea43a75d70071ceac5fda228ed4d799ea9"
+    "registry/routing.json": "604e0240e031979c5c6b4f4a09db3c058e9b45c9990de6c32b653be60ec7a4ba"
   },
   "capabilities": [
     {
@@ -1120,57 +1120,6 @@
       "skill": "skill.curated.diagnose",
       "validation": [
         "Original symptom reproduces before the fix and the regression test passes after it."
-      ]
-    },
-    {
-      "agentCompatibility": [
-        "cross-agent instruction following",
-        "optional tools are capability-checked at runtime"
-      ],
-      "aliases": [
-        "git guardrails",
-        "dangerous git protection",
-        "Git\u5b89\u5168\u62a4\u680f"
-      ],
-      "contextRequirements": [
-        "Target scope, protected commands, shell environment, and hook ownership are known."
-      ],
-      "fallback": [
-        "Provide a read-only guardrail design and manual commands without installing."
-      ],
-      "humanConfirmWhen": [
-        "Before installing, replacing, or broadening a persistent hook."
-      ],
-      "inputs": [
-        "Desired Git safety policy and target repository or user scope."
-      ],
-      "languages": [
-        "en",
-        "zh-CN",
-        "mixed"
-      ],
-      "lifecycleCapabilities": [
-        "capability.ci-cd"
-      ],
-      "negativeTriggers": [
-        "A one-time ordinary Git command does not justify installing persistent guardrails."
-      ],
-      "outputs": [
-        "Reviewed guardrail hook/configuration and verification evidence."
-      ],
-      "permissionsRequired": [
-        "Explicit permission to modify hooks or user/repository configuration."
-      ],
-      "positiveTriggers": [
-        "Prevent destructive Git commands or install repository/user-level Git safety hooks."
-      ],
-      "riskLevel": "high",
-      "sideEffects": [
-        "Installs or changes Git hooks or command policy."
-      ],
-      "skill": "skill.curated.git-guardrails",
-      "validation": [
-        "Blocked commands fail safely while allowed commands continue to work."
       ]
     },
     {

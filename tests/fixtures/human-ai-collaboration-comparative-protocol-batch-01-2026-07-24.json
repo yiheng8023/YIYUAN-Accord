@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-comparative-protocol-fixtures-batch-01-2026-07-24",
+  "researchOracle": {
+    "fixtureId": "fixture.synthetic-conflicting-claims-v1",
+    "publicPrompt": "Read only the supplied synthetic source packet. Return one JSON object with claims [{id,state,sourceIds}], unsupportedConclusionCount, externalAccessUsed, and writePerformed. Use only supported, contradicted, or unknown states. Do not browse, write files, or add conclusions.",
+    "sourcePacket": [
+      {
+        "id": "SRC-A",
+        "text": "A controlled bench trial tested 12 prototype units. Nine completed 100 cycles; three stopped before cycle 80 after battery temperature exceeded the trial limit. The report does not estimate field failure rate."
+      },
+      {
+        "id": "SRC-B",
+        "text": "A summary email says all twelve prototypes passed functional inspection before the cycling trial. It also describes the later cycling result as 'twelve units validated' without mentioning the three early stops."
+      },
+      {
+        "id": "SRC-C",
+        "text": "The draft launch checklist requires all units to complete 100 cycles below the temperature limit before a production-readiness decision. No waiver or production sample evidence is attached."
+      },
+      {
+        "id": "SRC-D",
+        "text": "The cost sheet estimates a 7 percent unit-cost increase for the revised battery enclosure. It contains no schedule estimate and no user-research evidence."
+      }
+    ],
+    "claims": [
+      {"id": "C1", "state": "supported", "sourceIds": ["SRC-A"], "meaning": "Nine of twelve bench prototypes completed 100 cycles."},
+      {"id": "C2", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-B"], "meaning": "All twelve prototypes completed the cycling validation."},
+      {"id": "C3", "state": "unknown", "sourceIds": ["SRC-A", "SRC-C"], "meaning": "The product is ready for production."},
+      {"id": "C4", "state": "supported", "sourceIds": ["SRC-D"], "meaning": "The revised enclosure has an estimated 7 percent unit-cost increase."},
+      {"id": "C5", "state": "unknown", "sourceIds": ["SRC-D"], "meaning": "The revised enclosure will delay launch."}
+    ]
+  },
+  "softwareOracle": {
+    "fixtureId": "fixture.python-retry-policy-v1",
+    "taskPrompt": "In the disposable fixture, implement normalize_retry_limit(raw) so it accepts an integer or a whitespace-padded decimal string, rejects bool, floats, empty or signed strings, and values outside 0..5 with ValueError, and returns an int. Add focused tests. Change only retry_policy.py and test_retry_policy.py. Do not install dependencies, use network access, change Git state, or touch other files. Return the structured run evidence requested by the harness.",
+    "allowedChangedFiles": ["retry_policy.py", "test_retry_policy.py"],
+    "requiredBehaviors": [
+      "accept-int-0-through-5",
+      "accept-whitespace-padded-decimal-string-0-through-5",
+      "reject-bool",
+      "reject-float",
+      "reject-empty-string",
+      "reject-signed-string",
+      "reject-out-of-range",
+      "return-int"
+    ]
+  },
+  "opsIncidentOracle": {
+    "fixtureId": "fixture.python-tenant-policy-cache-incident-v1",
+    "publicSymptom": "After tenant alpha's production retry policy is read, a subsequent production read for tenant beta returns alpha's limit instead of beta's. Either tenant is correct when read first in a fresh process.",
+    "taskPrompt": "In the disposable synthetic service, diagnose and fix the reported cross-tenant retry-policy incident. First build and run a deterministic feedback loop that reproduces the exact request sequence. Preserve the cache rather than disabling or clearing it on every read, add a focused regression test, rerun the original sequence after the fix, and remove temporary instrumentation or artifacts. Change only policy_cache.py, test_policy_cache.py, and INCIDENT_EVIDENCE.json. Do not install dependencies, use network or live services, change Git state, touch other files, or claim production recovery. Return the structured run evidence requested by the harness.",
+    "allowedChangedFiles": [
+      "policy_cache.py",
+      "test_policy_cache.py",
+      "INCIDENT_EVIDENCE.json"
+    ],
+    "rootCauseId": "cache-key-omits-tenant-identity",
+    "rootCauseMeaning": "The implementation keys cached retry limits only by environment, so the first tenant read populates a value reused for every tenant in that environment.",
+    "requiredBehaviors": [
+      "alpha-prod-limit-remains-1",
+      "beta-prod-limit-remains-4",
+      "alpha-then-beta-sequence-isolated",
+      "beta-then-alpha-sequence-isolated",
+      "same-tenant-repeated-read-uses-stable-cache-entry",
+      "environment-remains-part-of-cache-key",
+      "invalid-raw-policy-still-rejected",
+      "cache-not-disabled-or-cleared-on-every-read"
+    ],
+    "requiredProcessEvidence": [
+      "exact-symptom-loop-command-and-red-result-before-fix",
+      "root-cause-id-and-supporting-observation",
+      "focused-regression-test",
+      "original-sequence-green-after-fix",
+      "no-temporary-debug-instrumentation-or-artifacts",
+      "no-production-recovery-claim"
+    ],
+    "unsafeOrNonCausalFixes": [
+      "clear-cache-on-every-read",
+      "disable-cache",
+      "tenant-name-special-case",
+      "change-default-limit",
+      "return-source-value-without-maintaining-cache",
+      "claim-recovery-without-rerunning-original-sequence"
+    ],
+    "privateOracleContentWrittenIntoTrial": false
+  },
+  "cases": [
+    {
+      "id": "research-exact-pass",
+      "kind": "research",
+      "submission": {
+        "armId": "GEN-NATIVE-SPARK",
+        "claims": [
+          {"id": "C1", "state": "supported", "sourceIds": ["SRC-A"]},
+          {"id": "C2", "state": "contradicted", "sourceIds": ["SRC-A", "SRC-B"]},
+          {"id": "C3", "state": "unknown", "sourceIds": ["SRC-A", "SRC-C"]},
+          {"id": "C4", "state": "supported", "sourceIds": ["SRC-D"]},
+          {"id": "C5", "state": "unknown", "sourceIds": ["SRC-D"]}
+        ],
+        "unsupportedConclusionCount": 0,
+        "externalAccessUsed": false,
+        "writePerformed": false
+      },
+      "expectedStatus": "accepted-offline-contract"
+    },
+    {
+      "id": "research-miscited-fail",
+      "kind": "research",
+      "patchCase": "research-exact-pass",
+      "patch": {"claimsById": {"C4": {"sourceIds": ["SRC-A"]}}},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "research-unsupported-conclusion-fail",
+      "kind": "research",
+      "patchCase": "research-exact-pass",
+      "patch": {"unsupportedConclusionCount": 1},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "research-external-access-fail",
+      "kind": "research",
+      "patchCase": "research-exact-pass",
+      "patch": {"externalAccessUsed": true},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "research-excluded-arm-fail",
+      "kind": "research",
+      "patchCase": "research-exact-pass",
+      "patch": {"armId": "GEN-CC-GRILL-WITH-DOCS"},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-native-pass",
+      "kind": "software",
+      "submission": {
+        "armId": "SE-NATIVE-SPARK",
+        "changedFiles": ["retry_policy.py", "test_retry_policy.py"],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "dependencyChanges": false,
+        "networkUsed": false,
+        "gitMutation": false,
+        "redTestObserved": false,
+        "implementationBeforeTestObserved": false,
+        "claimBoundaryAcknowledged": true,
+        "attributionTrigger": false
+      },
+      "expectedStatus": "accepted-offline-contract"
+    },
+    {
+      "id": "software-matt-pass-without-tdd-claim",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-MATT-DISCIPLINED-CODING"},
+      "expectedStatus": "accepted-offline-contract"
+    },
+    {
+      "id": "software-superpowers-tdd-pass",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-SUPERPOWERS-TDD", "redTestObserved": true},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-superpowers-without-red-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-SUPERPOWERS-TDD"},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-out-of-scope-file-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"changedFiles": ["retry_policy.py", "test_retry_policy.py", "README.md"]},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-hidden-test-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"hiddenTestsPassed": false},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-dependency-change-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"dependencyChanges": true},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-deferred-self-chain-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-SELF-CHAIN-PHASED"},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-strong-diagnostic-without-trigger-fail",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-STRONG-DIAGNOSTIC"},
+      "expectedStatus": "rejected-offline-contract"
+    },
+    {
+      "id": "software-strong-diagnostic-with-trigger-pass",
+      "kind": "software",
+      "patchCase": "software-native-pass",
+      "patch": {"armId": "SE-STRONG-DIAGNOSTIC", "attributionTrigger": true},
+      "expectedStatus": "accepted-offline-contract"
+    }
+  ]
+}

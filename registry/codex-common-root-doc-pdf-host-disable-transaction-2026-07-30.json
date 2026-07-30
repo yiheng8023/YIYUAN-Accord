@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "id": "codex-common-root-doc-pdf-host-disable-transaction-2026-07-30",
+  "date": "2026-07-30",
+  "status": "applied-live-no-model-verified-clean",
+  "predecessor": "registry/codex-common-root-doc-pdf-shadow-disable-exposure-reconciliation-2026-07-30.json",
+  "purpose": "Apply the authorized Codex-only doc/pdf common-root exclusion, verify actual post-restart host exposure without a model turn, and preserve the shared CC Switch and Claude carriers.",
+  "authorityBoundary": {
+    "explicitUserAuthorizationObserved": true,
+    "globalCodexConfigMutation": true,
+    "codexDesktopRestart": true,
+    "exactRollbackBackupCleanup": true,
+    "ccSwitchMutation": false,
+    "commonRootMutation": false,
+    "claudeMutation": false,
+    "traeMutation": false,
+    "threadOrTurnStartedByProbe": false,
+    "modelDispatch": false,
+    "gitCommitOrPush": false
+  },
+  "preflight": {
+    "configPath": "C:/Users/15521/.codex/config.toml",
+    "configSha256": "5ef4129a7ae5c4018f5884879ab22abdd72e833f6d486e52bee2a061ba6e630d",
+    "configBytes": 9824,
+    "tomlParsePassed": true,
+    "existingSkillsConfigEntryCount": 0,
+    "targetSkillMdSha256": {
+      "doc": "2dd628afc3f9217d88bba8f61454b964aa25921f55f69e8d4d923b2ab092c54f",
+      "pdf": "724b72c932053fd87133144405b00fbeec30285ee770168328c8f591ec89c134"
+    }
+  },
+  "transaction": {
+    "writeMethod": "same-directory temporary file plus System.IO.File.Replace",
+    "oldHashPreconditionEnforced": true,
+    "rollbackBackupPath": "C:/Users/15521/.codex/config.toml.aah-doc-pdf-20260730-183527.bak",
+    "rollbackBackupSha256": "5ef4129a7ae5c4018f5884879ab22abdd72e833f6d486e52bee2a061ba6e630d",
+    "rollbackBackupMatchesPreflight": true,
+    "postWritePreRestartSha256": "91e9195ceafa743edfd4e07062f7f91c94383510bfb9f327112f8edd414c6c54",
+    "postWriteTomlParsePassed": true,
+    "targetRows": [
+      {
+        "path": "C:/Users/15521/.agents/skills/doc/SKILL.md",
+        "enabled": false
+      },
+      {
+        "path": "C:/Users/15521/.agents/skills/pdf/SKILL.md",
+        "enabled": false
+      }
+    ],
+    "targetRowCount": 2,
+    "concurrentConfigDriftDetected": false
+  },
+  "restart": {
+    "method": "detached delayed PowerShell helper",
+    "desktopProcessesStoppedAndRelaunched": true,
+    "newDesktopProcessStartLocal": "2026-07-30T18:38:01+08:00",
+    "postRestartHostUserAgent": "Codex Desktop/0.146.0 (Windows 10.0.26200; x86_64)",
+    "postRestartConfigSha256": "8e40c69fabab0991e94fcf6742c5765361ac60d881cd428fca75b311fe7ce1dd",
+    "hostOwnedVolatileConfigDrift": [
+      "SKY_CUA_NATIVE_PIPE_DIRECTORY",
+      "marketplaces.openai-bundled.last_updated"
+    ],
+    "intendedRowsRetainedAfterRestart": true
+  },
+  "liveNoModelExposureProbe": {
+    "protocol": "Codex app-server skills/list with forceReload=true",
+    "cwd": "C:/Projects/agent-autonomy-harness",
+    "freshProcess": true,
+    "threadStarted": false,
+    "turnStarted": false,
+    "modelRequestSent": false,
+    "configPrePostStable": true,
+    "pluginFeaturesDisabledArm": {
+      "skillCount": 64,
+      "stderrLineCount": 0,
+      "doc": {
+        "name": "doc",
+        "resolvedPath": "C:/Users/15521/.cc-switch/skills/doc/SKILL.md",
+        "scope": "user",
+        "enabled": false
+      },
+      "pdf": {
+        "name": "pdf",
+        "resolvedPath": "C:/Users/15521/.cc-switch/skills/pdf/SKILL.md",
+        "scope": "user",
+        "enabled": false
+      }
+    },
+    "pluginFeaturesEnabledArm": {
+      "skillCount": 76,
+      "stderrClassification": {
+        "lineCount": 6,
+        "errorKeywordLineCount": 0,
+        "mcpStartupFailureCount": 0,
+        "skillBudgetWarningCount": 0,
+        "rawStderrRecorded": false
+      },
+      "doc": {
+        "name": "doc",
+        "resolvedPath": "C:/Users/15521/.cc-switch/skills/doc/SKILL.md",
+        "scope": "user",
+        "enabled": false
+      },
+      "runtimeDocuments": {
+        "name": "documents:documents",
+        "resolvedPath": "C:/Users/15521/.codex/plugins/cache/openai-primary-runtime/documents/26.727.11326/skills/documents/SKILL.md",
+        "scope": "user",
+        "enabled": true
+      },
+      "pdf": {
+        "name": "pdf",
+        "resolvedPath": "C:/Users/15521/.cc-switch/skills/pdf/SKILL.md",
+        "scope": "user",
+        "enabled": false
+      },
+      "runtimePdf": {
+        "name": "pdf:pdf",
+        "resolvedPath": "C:/Users/15521/.codex/plugins/cache/openai-primary-runtime/pdf/26.727.11326/skills/pdf/SKILL.md",
+        "scope": "user",
+        "enabled": true
+      }
+    }
+  },
+  "carrierPreservation": {
+    "ccSwitchDocAndPdfBodiesPresent": true,
+    "agentsDocAndPdfLinksPresent": true,
+    "claudeDocAndPdfLinksPresent": true,
+    "codexPrivateDocAndPdfLinksAbsent": true,
+    "commonRootRetained": true,
+    "sharedEntityDeleted": false
+  },
+  "rollbackDecision": {
+    "triggered": false,
+    "reason": "Both shared targets are disabled in fresh live-home app-server processes while the runtime-owned document and PDF Skills remain enabled."
+  },
+  "cleanup": {
+    "sameDirectoryWriteTempAbsent": true,
+    "restartHelperRetained": false,
+    "rollbackBackupState": "removed-after-repository-evidence-verification",
+    "exactRollbackBackupAbsent": true,
+    "repositoryCleanupInventoryStable": true
+  },
+  "verification": {
+    "eventValidatorTestsPassed": true,
+    "topLevelVerifierPassed": true
+  },
+  "claimBoundary": {
+    "liveGlobalDisableApplied": true,
+    "postRestartTargetExposureStateProved": true,
+    "runtimeOwnedAlternativesRemainEnabled": true,
+    "sharedCarrierPreservationProved": true,
+    "loaderInvocationProved": false,
+    "behavioralValueProved": false,
+    "crossHostBehavioralEquivalenceProved": false,
+    "remainingPortfolioQualityProved": false,
+    "programCloseoutProved": false
+  },
+  "documentation": "docs/strategy/CODEX-COMMON-ROOT-DOC-PDF-HOST-DISABLE-TRANSACTION-2026-07-30.md"
+}

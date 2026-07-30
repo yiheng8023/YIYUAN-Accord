@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-human-authority-receipt",
+  "receiptId": "SE-E2E-THIN-01-ZERO-001-G3-implementation-mutation-envelope",
+  "runId": "SE-E2E-THIN-01-ZERO-001",
+  "gateId": "G3-implementation-mutation-envelope",
+  "stageId": "SE-TS-03-implementation-tdd",
+  "sequence": 3,
+  "decision": "approve",
+  "decisionClass": "bounded-local-mutation",
+  "proposalArtifactCanonicalSha256": "d31710ce30b5db6c04b33b8898f08db5dafe76cb4ed4b4d19d3dddfc0d14b724",
+  "beforeAcceptedLedgerSha256": "0ee089542efe57115c0e1789c8222d83df6b2c0f18d0d74a4f222e302c13ac61",
+  "allowedChangeIds": [],
+  "rejectedChangeIds": [],
+  "scope": {
+    "stageIds": [
+      "SE-TS-03-implementation-tdd"
+    ],
+    "artifactIds": [
+      "SE-E2E-THIN-01-ZERO-001-O3"
+    ],
+    "actions": [
+      "exact-disposable-local-file-allowlist",
+      "read-only-independent-verification"
+    ]
+  },
+  "inputArtifactDigests": [
+    "d31710ce30b5db6c04b33b8898f08db5dafe76cb4ed4b4d19d3dddfc0d14b724"
+  ],
+  "conditions": [
+    "synthetic-zero-model-calibration-only"
+  ],
+  "issuer": {
+    "subjectId": "synthetic-calibration-authority",
+    "accountableRole": "disposable-workspace-owner",
+    "evidenceClass": "synthetic-calibration-authority"
+  },
+  "issuedAt": "2026-07-27T00:00:03+00:00",
+  "expiresAt": null,
+  "singleUse": true,
+  "simulated": true,
+  "receiptSha256": "4ea562583f50af1eed5601589238abf4d3659df7523e2ea5be68a191f3dacb2b"
+}

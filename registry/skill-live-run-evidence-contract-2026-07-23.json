@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "skill-live-run-evidence-contract-2026-07-23",
+  "date": "2026-07-23",
+  "status": "verified-offline-evidence-contract-no-live-run",
+  "scope": {
+    "scenarios": [
+      "INT-AMB-01",
+      "ROUTE-MIN-01",
+      "CLOSE-PRESS-01",
+      "ENG-SLICE-01"
+    ],
+    "arms": [
+      "hard-only",
+      "repository-contract-chain",
+      "matt-selective-single-skill",
+      "superpowers-selective-single-skill",
+      "superpowers-full-bootstrap"
+    ],
+    "evaluator": "scripts/evaluate_skill_live_run_evidence.py",
+    "fixtures": "tests/fixtures/skill-live-run-evidence-2026-07-23.json",
+    "tests": "tests/test_skill_live_run_evidence.py"
+  },
+  "requiredParentEvidence": [
+    "actual model and reasoning from parent or host metadata",
+    "host run, thread, and task identities",
+    "public packet digest and private oracle identity",
+    "selected payload source, revision, path, and SHA-256 manifest",
+    "task-scoped exposure for selected and unselected intervention arms",
+    "exact host loader events for every selected payload",
+    "trigger mode, trigger boundary, and parent or host trigger evidence source",
+    "raw UTF-8 response digest recomputed by the parent",
+    "scenario private-oracle scorer verdict and evidence digest",
+    "repository truth before and after",
+    "authority and mutation envelope"
+  ],
+  "repetitionGate": {
+    "minimumIndependentRunsPerEligibleCell": 3,
+    "distinct": ["runId", "hostRunId", "hostThreadId", "taskId"],
+    "heldConstant": [
+      "scenarioId",
+      "arm",
+      "packetSha256",
+      "oracleVersion",
+      "oracleSha256",
+      "payloadManifestSha256",
+      "triggerMode",
+      "triggerBoundary"
+    ]
+  },
+  "offlineFixtureResult": {
+    "fixtureCount": 15,
+    "countsAsLiveHostProof": false,
+    "countsAsWeakAgentAcceptance": false,
+    "terraLowCountsAsWeakAgentAcceptance": false
+  },
+  "claimBoundary": {
+    "liveSkillInvocationProved": false,
+    "taskScopedSkillExposureProved": false,
+    "taskScopedTriggerProved": false,
+    "sparkLowAvailabilityProved": false,
+    "fiveArmComparisonExecuted": false,
+    "skillNetValueOrSuperiorityProved": false,
+    "selfAuthoredResidualGapProved": false
+  },
+  "nextGate": "host-verifiable-spark-low-task-scoped-exposure-and-three-independent-runs-per-eligible-scenario-arm-cell"
+}

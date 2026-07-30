@@ -1,0 +1,85 @@
+{
+  "researchOracle": {
+    "fixtureId": "fixture.synthetic-conflicting-claims-v2",
+    "semanticContractVersion": "research-claim-entailment-v2",
+    "privateOracleVersion": "synthetic-conflicting-claims-hidden-oracle-v2",
+    "publicPrompt": "Read only the supplied synthetic source packet and assess exactly the five requested claims. For each claim, copy requiredSourceIds unchanged into sourceIds. Use supported only when those sources entail the claim, contradicted only when they entail the claim's logical negation, and unknown when neither the claim nor its logical negation is entailed. Missing evidence, an undecided state, or an unapproved draft condition is unknown rather than contradicted. unsupportedConclusionCount counts only assertions added outside the five requested claim classifications that are not entailed by their cited sources; it does not count requested claims classified contradicted or unknown. Add no extra assertions, so set unsupportedConclusionCount to 0. Return one raw JSON object with armId, claims [{id,state,sourceIds}], unsupportedConclusionCount, externalAccessUsed, and writePerformed. Set externalAccessUsed and writePerformed to false. Do not browse, write files, or add conclusions.",
+    "sourcePacket": [
+      {
+        "id": "SRC-A",
+        "text": "A controlled bench trial tested 12 prototype units. Nine completed 100 cycles; three stopped before cycle 80 after battery temperature exceeded the trial limit. The report does not estimate field failure rate."
+      },
+      {
+        "id": "SRC-B",
+        "text": "A summary email says all twelve prototypes passed functional inspection before the cycling trial. It later calls the batch 'validated' but does not say that all twelve completed 100 cycles or remained below the cycling temperature limit."
+      },
+      {
+        "id": "SRC-C",
+        "text": "No production-readiness decision or calendar commitment is recorded in this packet. A checklist that would require all units to complete 100 cycles below the temperature limit is still a draft and is not an approved gate. The packet establishes neither 'ready for production by 1 September' nor its logical negation."
+      },
+      {
+        "id": "SRC-D",
+        "text": "The cost sheet estimates a 7 percent unit-cost increase for the revised battery enclosure. It explicitly contains no schedule estimate and no user-research evidence."
+      }
+    ],
+    "claims": [
+      {
+        "id": "C1",
+        "meaning": "Nine of twelve bench prototypes completed 100 cycles.",
+        "requiredSourceIds": [
+          "SRC-A"
+        ],
+        "state": "supported",
+        "sourceIds": [
+          "SRC-A"
+        ]
+      },
+      {
+        "id": "C2",
+        "meaning": "All twelve prototypes completed 100 cycles below the cycling temperature limit.",
+        "requiredSourceIds": [
+          "SRC-A",
+          "SRC-B"
+        ],
+        "state": "contradicted",
+        "sourceIds": [
+          "SRC-A",
+          "SRC-B"
+        ]
+      },
+      {
+        "id": "C3",
+        "meaning": "The product will be ready for production by 1 September.",
+        "requiredSourceIds": [
+          "SRC-C"
+        ],
+        "state": "unknown",
+        "sourceIds": [
+          "SRC-C"
+        ]
+      },
+      {
+        "id": "C4",
+        "meaning": "The revised enclosure has an estimated 7 percent unit-cost increase.",
+        "requiredSourceIds": [
+          "SRC-D"
+        ],
+        "state": "supported",
+        "sourceIds": [
+          "SRC-D"
+        ]
+      },
+      {
+        "id": "C5",
+        "meaning": "The revised enclosure will delay launch.",
+        "requiredSourceIds": [
+          "SRC-D"
+        ],
+        "state": "unknown",
+        "sourceIds": [
+          "SRC-D"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-stage-output",
+  "artifactId": "SE-E2E-THIN-01-ZERO-001-O1",
+  "stageId": "SE-TS-01-requirements-domain",
+  "sections": {
+    "goalAndNonGoals": {
+      "status": "synthetic-calibration-present"
+    },
+    "domainTerms": {
+      "status": "synthetic-calibration-present"
+    },
+    "requirements": {
+      "status": "synthetic-calibration-present"
+    },
+    "acceptanceExamples": {
+      "status": "synthetic-calibration-present"
+    },
+    "constraints": {
+      "status": "synthetic-calibration-present"
+    },
+    "unknowns": {
+      "status": "synthetic-calibration-present"
+    },
+    "blockingDecision": {
+      "status": "synthetic-calibration-present"
+    },
+    "provenance": {
+      "status": "synthetic-calibration-present"
+    },
+    "nextGate": {
+      "status": "synthetic-calibration-present"
+    }
+  },
+  "acceptedInvariantIdsObserved": [
+    "inv.source-goal",
+    "inv.no-live-side-effects"
+  ],
+  "semanticAssertions": {
+    "sourceBound": true,
+    "authorityPromotedByAgent": false,
+    "materialUnknownsResolvedOrBlocked": true
+  },
+  "provenanceIds": [
+    "source.lifecycle-fixture"
+  ],
+  "assumptionIds": [],
+  "detectedLossIds": []
+}

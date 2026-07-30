@@ -1,0 +1,1747 @@
+{
+  "schemaVersion": 1,
+  "probeId": "codex-app-server-mcp-multi-connection-subscription-v1",
+  "startedAt": "2026-07-26T21:29:30.799309+00:00",
+  "finishedAt": "2026-07-26T21:29:33.843819+00:00",
+  "host": {
+    "platform": "win32",
+    "codexVersion": "codex-cli 0.145.0",
+    "codexExecutable": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+    "appServerProcess": {
+      "pid": 22788,
+      "observedAt": "2026-07-26T21:29:30.784932+00:00",
+      "exists": true,
+      "imagePath": "C:\\Users\\15521\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "creationTime100ns": 134295749707564203,
+      "parentPid": 25504,
+      "workingSetBytes": 2543616,
+      "privateUsageBytes": 1699840,
+      "kernelTime100ns": 0,
+      "userTime100ns": 0
+    },
+    "listenUrl": "ws://127.0.0.1:59661",
+    "transport": "loopback-websocket",
+    "singleAppServerProcess": true,
+    "appServerAliveBeforeHarnessShutdown": true,
+    "appServerTerminationByHarness": true,
+    "appServerKillSent": false,
+    "applicationLogExternalNetworkAttemptObserved": true,
+    "applicationLogExternalNetworkAttemptLines": [
+      "  readyz: http://127.0.0.1:59661/readyz",
+      "  healthz: http://127.0.0.1:59661/healthz",
+      "{\"timestamp\":\"2026-07-26T21:29:32.832173Z\",\"level\":\"ERROR\",\"fields\":{\"message\":\"failed to connect to websocket: HTTP error: 401 Unauthorized, url: wss://api.openai.com/v1/responses\"},\"target\":\"codex_api::endpoint::responses_websocket\"}"
+    ]
+  },
+  "isolation": {
+    "root": "C:/Projects/agent-autonomy-harness/audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03",
+    "codexHome": "C:/Projects/agent-autonomy-harness/audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/codex-home",
+    "workspace": "C:/Projects/agent-autonomy-harness/audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/workspace",
+    "configSha256": "b88124de33e9767a8d721baf8dc0f030c905b7d6a369f51978c9f9ec3bd735ee",
+    "filesBefore": [
+      {
+        "path": "config.toml",
+        "type": "file",
+        "bytes": 631
+      }
+    ],
+    "filesAfter": [
+      {
+        "path": ".sandbox_migration",
+        "type": "file",
+        "bytes": 3
+      },
+      {
+        "path": "config.toml",
+        "type": "file",
+        "bytes": 631
+      },
+      {
+        "path": "goals_1.sqlite",
+        "type": "file",
+        "bytes": 4096
+      },
+      {
+        "path": "goals_1.sqlite-shm",
+        "type": "file",
+        "bytes": 32768
+      },
+      {
+        "path": "goals_1.sqlite-wal",
+        "type": "file",
+        "bytes": 74192
+      },
+      {
+        "path": "installation_id",
+        "type": "file",
+        "bytes": 36
+      },
+      {
+        "path": "logs_2.sqlite",
+        "type": "file",
+        "bytes": 49152
+      },
+      {
+        "path": "logs_2.sqlite-shm",
+        "type": "file",
+        "bytes": 32768
+      },
+      {
+        "path": "logs_2.sqlite-wal",
+        "type": "file",
+        "bytes": 119512
+      },
+      {
+        "path": "memories_1.sqlite",
+        "type": "file",
+        "bytes": 4096
+      },
+      {
+        "path": "memories_1.sqlite-shm",
+        "type": "file",
+        "bytes": 32768
+      },
+      {
+        "path": "memories_1.sqlite-wal",
+        "type": "file",
+        "bytes": 61832
+      },
+      {
+        "path": "sentinel-events.jsonl",
+        "type": "file",
+        "bytes": 2471
+      },
+      {
+        "path": "skills",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/.codex-system-skills.marker",
+        "type": "file",
+        "bytes": 17
+      },
+      {
+        "path": "skills/.system/imagegen",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/imagegen/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/imagegen/agents/openai.yaml",
+        "type": "file",
+        "bytes": 281
+      },
+      {
+        "path": "skills/.system/imagegen/assets",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/imagegen/assets/imagegen-small.svg",
+        "type": "file",
+        "bytes": 2894
+      },
+      {
+        "path": "skills/.system/imagegen/assets/imagegen.png",
+        "type": "file",
+        "bytes": 1711
+      },
+      {
+        "path": "skills/.system/imagegen/LICENSE.txt",
+        "type": "file",
+        "bytes": 10977
+      },
+      {
+        "path": "skills/.system/imagegen/references",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/imagegen/references/cli.md",
+        "type": "file",
+        "bytes": 10430
+      },
+      {
+        "path": "skills/.system/imagegen/references/codex-network.md",
+        "type": "file",
+        "bytes": 1812
+      },
+      {
+        "path": "skills/.system/imagegen/references/image-api.md",
+        "type": "file",
+        "bytes": 6169
+      },
+      {
+        "path": "skills/.system/imagegen/references/prompting.md",
+        "type": "file",
+        "bytes": 10014
+      },
+      {
+        "path": "skills/.system/imagegen/references/sample-prompts.md",
+        "type": "file",
+        "bytes": 19672
+      },
+      {
+        "path": "skills/.system/imagegen/scripts",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/imagegen/scripts/image_gen.py",
+        "type": "file",
+        "bytes": 35266
+      },
+      {
+        "path": "skills/.system/imagegen/scripts/remove_chroma_key.py",
+        "type": "file",
+        "bytes": 14276
+      },
+      {
+        "path": "skills/.system/imagegen/SKILL.md",
+        "type": "file",
+        "bytes": 24359
+      },
+      {
+        "path": "skills/.system/openai-docs",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/openai-docs/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/openai-docs/agents/openai.yaml",
+        "type": "file",
+        "bytes": 612
+      },
+      {
+        "path": "skills/.system/openai-docs/assets",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/openai-docs/assets/openai-small.svg",
+        "type": "file",
+        "bytes": 1094
+      },
+      {
+        "path": "skills/.system/openai-docs/assets/openai.png",
+        "type": "file",
+        "bytes": 1429
+      },
+      {
+        "path": "skills/.system/openai-docs/LICENSE.txt",
+        "type": "file",
+        "bytes": 10977
+      },
+      {
+        "path": "skills/.system/openai-docs/references",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/openai-docs/references/latest-model.md",
+        "type": "file",
+        "bytes": 2405
+      },
+      {
+        "path": "skills/.system/openai-docs/references/prompting-guide.md",
+        "type": "file",
+        "bytes": 17780
+      },
+      {
+        "path": "skills/.system/openai-docs/references/upgrade-guide.md",
+        "type": "file",
+        "bytes": 1072
+      },
+      {
+        "path": "skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+        "type": "file",
+        "bytes": 23847
+      },
+      {
+        "path": "skills/.system/openai-docs/scripts",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+        "type": "file",
+        "bytes": 16683
+      },
+      {
+        "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info",
+        "type": "file",
+        "bytes": 1077
+      },
+      {
+        "path": "skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+        "type": "file",
+        "bytes": 4102
+      },
+      {
+        "path": "skills/.system/openai-docs/SKILL.md",
+        "type": "file",
+        "bytes": 22989
+      },
+      {
+        "path": "skills/.system/plugin-creator",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/plugin-creator/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/plugin-creator/agents/openai.yaml",
+        "type": "file",
+        "bytes": 345
+      },
+      {
+        "path": "skills/.system/plugin-creator/assets",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+        "type": "file",
+        "bytes": 1322
+      },
+      {
+        "path": "skills/.system/plugin-creator/assets/plugin-creator.png",
+        "type": "file",
+        "bytes": 1563
+      },
+      {
+        "path": "skills/.system/plugin-creator/references",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/plugin-creator/references/installing-and-updating.md",
+        "type": "file",
+        "bytes": 6017
+      },
+      {
+        "path": "skills/.system/plugin-creator/references/plugin-json-spec.md",
+        "type": "file",
+        "bytes": 9397
+      },
+      {
+        "path": "skills/.system/plugin-creator/scripts",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+        "type": "file",
+        "bytes": 11509
+      },
+      {
+        "path": "skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+        "type": "file",
+        "bytes": 1545
+      },
+      {
+        "path": "skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+        "type": "file",
+        "bytes": 2764
+      },
+      {
+        "path": "skills/.system/plugin-creator/scripts/validate_plugin.py",
+        "type": "file",
+        "bytes": 21809
+      },
+      {
+        "path": "skills/.system/plugin-creator/SKILL.md",
+        "type": "file",
+        "bytes": 11283
+      },
+      {
+        "path": "skills/.system/review-agent",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/review-agent/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/review-agent/agents/openai.yaml",
+        "type": "file",
+        "bytes": 258
+      },
+      {
+        "path": "skills/.system/review-agent/SKILL.md",
+        "type": "file",
+        "bytes": 2718
+      },
+      {
+        "path": "skills/.system/skill-creator",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-creator/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-creator/agents/openai.yaml",
+        "type": "file",
+        "bytes": 188
+      },
+      {
+        "path": "skills/.system/skill-creator/assets",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-creator/assets/skill-creator-small.svg",
+        "type": "file",
+        "bytes": 1322
+      },
+      {
+        "path": "skills/.system/skill-creator/assets/skill-creator.png",
+        "type": "file",
+        "bytes": 1563
+      },
+      {
+        "path": "skills/.system/skill-creator/license.txt",
+        "type": "file",
+        "bytes": 11560
+      },
+      {
+        "path": "skills/.system/skill-creator/references",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-creator/references/openai_yaml.md",
+        "type": "file",
+        "bytes": 2405
+      },
+      {
+        "path": "skills/.system/skill-creator/scripts",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+        "type": "file",
+        "bytes": 6845
+      },
+      {
+        "path": "skills/.system/skill-creator/scripts/init_skill.py",
+        "type": "file",
+        "bytes": 15002
+      },
+      {
+        "path": "skills/.system/skill-creator/scripts/quick_validate.py",
+        "type": "file",
+        "bytes": 3394
+      },
+      {
+        "path": "skills/.system/skill-creator/SKILL.md",
+        "type": "file",
+        "bytes": 22463
+      },
+      {
+        "path": "skills/.system/skill-installer",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-installer/agents",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-installer/agents/openai.yaml",
+        "type": "file",
+        "bytes": 226
+      },
+      {
+        "path": "skills/.system/skill-installer/assets",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-installer/assets/skill-installer-small.svg",
+        "type": "file",
+        "bytes": 926
+      },
+      {
+        "path": "skills/.system/skill-installer/assets/skill-installer.png",
+        "type": "file",
+        "bytes": 1086
+      },
+      {
+        "path": "skills/.system/skill-installer/LICENSE.txt",
+        "type": "file",
+        "bytes": 11560
+      },
+      {
+        "path": "skills/.system/skill-installer/scripts",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "skills/.system/skill-installer/scripts/github_utils.py",
+        "type": "file",
+        "bytes": 680
+      },
+      {
+        "path": "skills/.system/skill-installer/scripts/install-skill-from-github.py",
+        "type": "file",
+        "bytes": 10404
+      },
+      {
+        "path": "skills/.system/skill-installer/scripts/list-skills.py",
+        "type": "file",
+        "bytes": 3074
+      },
+      {
+        "path": "skills/.system/skill-installer/SKILL.md",
+        "type": "file",
+        "bytes": 3425
+      },
+      {
+        "path": "state_5.sqlite",
+        "type": "file",
+        "bytes": 4096
+      },
+      {
+        "path": "state_5.sqlite-shm",
+        "type": "file",
+        "bytes": 32768
+      },
+      {
+        "path": "state_5.sqlite-wal",
+        "type": "file",
+        "bytes": 1404952
+      },
+      {
+        "path": "tmp",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "tmp/arg0",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "tmp/arg0/codex-arg0EjxyAX",
+        "type": "directory",
+        "bytes": null
+      },
+      {
+        "path": "tmp/arg0/codex-arg0EjxyAX/.lock",
+        "type": "file",
+        "bytes": 0
+      },
+      {
+        "path": "tmp/arg0/codex-arg0EjxyAX/apply_patch.bat",
+        "type": "file",
+        "bytes": 185
+      },
+      {
+        "path": "tmp/arg0/codex-arg0EjxyAX/applypatch.bat",
+        "type": "file",
+        "bytes": 185
+      }
+    ],
+    "environmentAllowlistApplied": true,
+    "environmentKeyNames": [
+      "APPDATA",
+      "CODEX_HOME",
+      "COMSPEC",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "LOG_FORMAT",
+      "NUMBER_OF_PROCESSORS",
+      "OS",
+      "PATH",
+      "PATHEXT",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMDATA",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "RUST_LOG",
+      "SYSTEMDRIVE",
+      "SYSTEMROOT",
+      "TEMP",
+      "TMP",
+      "USERDOMAIN",
+      "USERNAME",
+      "USERPROFILE",
+      "WINDIR"
+    ],
+    "environmentValuesRecorded": false,
+    "authStateProduced": false,
+    "pluginsAndAppsDisabled": true
+  },
+  "bindings": {
+    "probeScript": {
+      "path": "C:/Projects/agent-autonomy-harness/scripts/probe_codex_app_server_mcp_multi_connection_subscription.py",
+      "sha256": "2dcf396b66f304e73d311e1def938561ba61940e2d74bfba757cc4302f39d23a"
+    },
+    "bridgeScript": {
+      "path": "C:/Projects/agent-autonomy-harness/scripts/codex_app_server_websocket_bridge.mjs",
+      "sha256": "42ab099127d1693350e783a7c564f3b241af0e3daadb1ceb60f6fdd40934e633"
+    },
+    "sentinelScript": {
+      "path": "C:/Projects/agent-autonomy-harness/scripts/mcp_lifecycle_sentinel.py",
+      "sha256": "48656683eaff80d0162fc230b111880ee59cc619475187531b09c341136ee590"
+    }
+  },
+  "thread": {
+    "id": "019fa055-470e-7dd3-9e27-063cb64841ce",
+    "ephemeral": false,
+    "subscriptionAcquisitionPath": "thread-created-auto-attach",
+    "rolloutMaterialization": {},
+    "ownerBInitializedBarrier": "config/read",
+    "modelTurnRequests": 0,
+    "turnStartedNotifications": 0
+  },
+  "connections": {
+    "owner-a": {
+      "bridgeProcess": {
+        "pid": 22240,
+        "observedAt": "2026-07-26T21:29:30.827954+00:00",
+        "exists": true,
+        "imagePath": "C:\\Program Files\\nodejs\\node.exe",
+        "creationTime100ns": 134295749708013596,
+        "parentPid": 25504,
+        "workingSetBytes": 32833536,
+        "privateUsageBytes": 1204224,
+        "kernelTime100ns": 0,
+        "userTime100ns": 0
+      },
+      "readyLine": "BRIDGE_READY pid=22240 attempt=2 url=ws://127.0.0.1:59661",
+      "requestLedger": [
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 0,
+          "method": "initialize",
+          "phase": "initialize",
+          "threadId": null,
+          "requestSha256": "705D177138C6F4BD2F5331622E38AAD1F8FBDC9E61FA090999CE385F7A2E55CD",
+          "sentAt": "2026-07-26T21:29:30.986341+00:00",
+          "sentMonotonic": 64784.2150083,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.004400+00:00",
+          "responseMonotonic": 64784.2330673,
+          "responseSha256": "30268138F00D792C5F2BC5F334992A3B70FD00F58DC8FDCCC3427258F73E695F",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": null,
+          "method": "initialized",
+          "phase": "initialized",
+          "threadId": null,
+          "requestSha256": "ABA8C91241D7FAB24E31EC3A6740BA9D9B3DD12695EDBC8F14B78EAF23C9BA55",
+          "sentAt": "2026-07-26T21:29:31.005477+00:00",
+          "sentMonotonic": 64784.234138,
+          "responseExpected": false
+        },
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 1,
+          "method": "thread/start",
+          "phase": "thread-start",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "3AFE24A33EAB086F089D58C09C94842947A1DD1E3A2E95B259FFE957CBC1EB6B",
+          "sentAt": "2026-07-26T21:29:31.142732+00:00",
+          "sentMonotonic": 64784.371392,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.549184+00:00",
+          "responseMonotonic": 64784.7778534,
+          "responseSha256": "F0762B726BE537999F1523BC9295EA0B7EF33C3A5B71D6F812EF952592D428A8",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 2,
+          "method": "mcpServer/tool/call",
+          "phase": "owner-a-baseline-call",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "F7235BAAB31A557FE7ED4DF8268E68A98BBCFB1100251F4789F3EB8421DC9989",
+          "sentAt": "2026-07-26T21:29:31.549286+00:00",
+          "sentMonotonic": 64784.7779439,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.678250+00:00",
+          "responseMonotonic": 64784.906914,
+          "responseSha256": "15254F43A3C12B9FFFE9067F66D2A90D1F0BC78002A03F3013AACC3BFF893FBA",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 3,
+          "method": "thread/unsubscribe",
+          "phase": "owner-a-unsubscribe",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "1DA70DE8E33E09568AC5DB609D4EFA9BD1CB77DD27B61A75BE9B4C9BE73967B0",
+          "sentAt": "2026-07-26T21:29:31.696896+00:00",
+          "sentMonotonic": 64784.9255533,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.697750+00:00",
+          "responseMonotonic": 64784.9264123,
+          "responseSha256": "0647CF33801B98017B1A22A0F7BBF355E000AAC0D8CA5E384362A88B3A86E556",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-a",
+          "bridgePid": 22240,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 4,
+          "method": "thread/unsubscribe",
+          "phase": "owner-a-second-unsubscribe",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "C196E3BE54F86F1F1B32793E29C659C5E9EA87E2D23086D384E25897B74F854A",
+          "sentAt": "2026-07-26T21:29:31.697814+00:00",
+          "sentMonotonic": 64784.9264728,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.698435+00:00",
+          "responseMonotonic": 64784.9270961,
+          "responseSha256": "A0BAC0C3F8550ED64427236137064ED8CCCE7D3990851159CA620E1AD56969F3",
+          "succeeded": true,
+          "error": null
+        }
+      ],
+      "messages": [
+        {
+          "id": 0,
+          "result": {
+            "userAgent": "codex-app-server-mcp-multi-connection-subscription-v1/0.145.0 (Windows 10.0.26200; x86_64) unknown (codex-app-server-mcp-multi-connection-subscription-v1; 1.0.0)",
+            "codexHome": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home",
+            "platformFamily": "windows",
+            "platformOs": "windows"
+          }
+        },
+        {
+          "method": "remoteControl/status/changed",
+          "params": {
+            "status": "disabled",
+            "serverName": "yiheng8023",
+            "installationId": "6c4d9ae8-f9e4-4779-bb78-790509681eb6",
+            "environmentId": null
+          },
+          "emittedAtMs": 1785101371003
+        },
+        {
+          "id": 1,
+          "result": {
+            "thread": {
+              "id": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "extra": null,
+              "sessionId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "forkedFromId": null,
+              "parentThreadId": null,
+              "preview": "",
+              "ephemeral": false,
+              "historyMode": "legacy",
+              "modelProvider": "openai",
+              "createdAt": 1785101371,
+              "updatedAt": 1785101371,
+              "recencyAt": 1785101371,
+              "status": {
+                "type": "idle"
+              },
+              "path": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\sessions\\2026\\07\\27\\rollout-2026-07-27T05-29-31-019fa055-470e-7dd3-9e27-063cb64841ce.jsonl",
+              "cwd": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\workspace",
+              "cliVersion": "0.145.0",
+              "source": "vscode",
+              "canAcceptDirectInput": true,
+              "threadSource": null,
+              "agentNickname": null,
+              "agentRole": null,
+              "gitInfo": null,
+              "name": null,
+              "turns": []
+            },
+            "model": "gpt-5.6-sol",
+            "modelProvider": "openai",
+            "serviceTier": null,
+            "cwd": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\workspace",
+            "runtimeWorkspaceRoots": [
+              "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\workspace"
+            ],
+            "instructionSources": [
+              "C:\\Projects\\agent-autonomy-harness\\AGENTS.md"
+            ],
+            "approvalPolicy": "never",
+            "approvalsReviewer": "user",
+            "sandbox": {
+              "type": "readOnly",
+              "networkAccess": false
+            },
+            "activePermissionProfile": null,
+            "reasoningEffort": null,
+            "multiAgentMode": "explicitRequestOnly"
+          }
+        },
+        {
+          "method": "thread/started",
+          "params": {
+            "thread": {
+              "id": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "extra": null,
+              "sessionId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "forkedFromId": null,
+              "parentThreadId": null,
+              "preview": "",
+              "ephemeral": false,
+              "historyMode": "legacy",
+              "modelProvider": "openai",
+              "createdAt": 1785101371,
+              "updatedAt": 1785101371,
+              "recencyAt": 1785101371,
+              "status": {
+                "type": "idle"
+              },
+              "path": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\sessions\\2026\\07\\27\\rollout-2026-07-27T05-29-31-019fa055-470e-7dd3-9e27-063cb64841ce.jsonl",
+              "cwd": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\workspace",
+              "cliVersion": "0.145.0",
+              "source": "vscode",
+              "canAcceptDirectInput": true,
+              "threadSource": null,
+              "agentNickname": null,
+              "agentRole": null,
+              "gitInfo": null,
+              "name": null,
+              "turns": []
+            }
+          },
+          "emittedAtMs": 1785101371548
+        },
+        {
+          "method": "mcpServer/startupStatus/updated",
+          "params": {
+            "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+            "name": "lifecycle_sentinel",
+            "status": "starting",
+            "error": null,
+            "failureReason": null
+          },
+          "emittedAtMs": 1785101371548
+        },
+        {
+          "method": "mcpServer/startupStatus/updated",
+          "params": {
+            "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+            "name": "lifecycle_sentinel",
+            "status": "ready",
+            "error": null,
+            "failureReason": null
+          },
+          "emittedAtMs": 1785101371675
+        },
+        {
+          "id": 2,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":30044,\"instanceId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83\",\"callId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83:1\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-multi-connection-subscription-v1\",\"owner\":\"owner-a\",\"phase\":\"baseline\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 30044,
+              "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+              "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:1",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+                "owner": "owner-a",
+                "phase": "baseline"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "id": 3,
+          "result": {
+            "status": "unsubscribed"
+          }
+        },
+        {
+          "id": 4,
+          "result": {
+            "status": "notSubscribed"
+          }
+        }
+      ],
+      "shutdown": {
+        "returnCode": 0,
+        "killSent": false,
+        "stderrLines": [
+          "BRIDGE_READY pid=22240 attempt=2 url=ws://127.0.0.1:59661"
+        ]
+      }
+    },
+    "owner-b": {
+      "bridgeProcess": {
+        "pid": 30868,
+        "observedAt": "2026-07-26T21:29:31.033012+00:00",
+        "exists": true,
+        "imagePath": "C:\\Program Files\\nodejs\\node.exe",
+        "creationTime100ns": 134295749710076850,
+        "parentPid": 25504,
+        "workingSetBytes": 32854016,
+        "privateUsageBytes": 1196032,
+        "kernelTime100ns": 0,
+        "userTime100ns": 0
+      },
+      "readyLine": "BRIDGE_READY pid=30868 attempt=1 url=ws://127.0.0.1:59661",
+      "requestLedger": [
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 0,
+          "method": "initialize",
+          "phase": "initialize",
+          "threadId": null,
+          "requestSha256": "705D177138C6F4BD2F5331622E38AAD1F8FBDC9E61FA090999CE385F7A2E55CD",
+          "sentAt": "2026-07-26T21:29:31.128459+00:00",
+          "sentMonotonic": 64784.3571262,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.131577+00:00",
+          "responseMonotonic": 64784.3602419,
+          "responseSha256": "30268138F00D792C5F2BC5F334992A3B70FD00F58DC8FDCCC3427258F73E695F",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": null,
+          "method": "initialized",
+          "phase": "initialized",
+          "threadId": null,
+          "requestSha256": "ABA8C91241D7FAB24E31EC3A6740BA9D9B3DD12695EDBC8F14B78EAF23C9BA55",
+          "sentAt": "2026-07-26T21:29:31.132606+00:00",
+          "sentMonotonic": 64784.3612674,
+          "responseExpected": false
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 1,
+          "method": "config/read",
+          "phase": "owner-b-initialized-barrier",
+          "threadId": null,
+          "requestSha256": "3D0124601CBA757EDC53ED73227619E31474E584B6D46FE79D3A662B8E8CB153",
+          "sentAt": "2026-07-26T21:29:31.132661+00:00",
+          "sentMonotonic": 64784.3613186,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.142113+00:00",
+          "responseMonotonic": 64784.3707794,
+          "responseSha256": "6AA358A72B4B1957524971B6EE700BFA83795A3E683DA845A332585EA4E6372D",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 2,
+          "method": "mcpServer/tool/call",
+          "phase": "owner-b-joined-call",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "E95F874F1116169719A928326FB3C97D8D58D75571A6AC49FDFA725512940E55",
+          "sentAt": "2026-07-26T21:29:31.692508+00:00",
+          "sentMonotonic": 64784.9211732,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.696818+00:00",
+          "responseMonotonic": 64784.9254819,
+          "responseSha256": "85788EEF83105261E1064D63BA7B81C8949E664CFF7D95E571AC7446BEBF8B34",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 3,
+          "method": "mcpServer/tool/call",
+          "phase": "owner-b-after-owner-a-release",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "0E4FC94ADB652747B630A71DBBE3D3685F02097FD56DF351462FF0C534D8804C",
+          "sentAt": "2026-07-26T21:29:31.698493+00:00",
+          "sentMonotonic": 64784.9271508,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.702042+00:00",
+          "responseMonotonic": 64784.9307076,
+          "responseSha256": "7725A06D37F20450C43D1E01684871BF07F767EBDDD2A6DB64DA4CC0146D91DA",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 4,
+          "method": "thread/unsubscribe",
+          "phase": "owner-b-unsubscribe",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "C196E3BE54F86F1F1B32793E29C659C5E9EA87E2D23086D384E25897B74F854A",
+          "sentAt": "2026-07-26T21:29:31.702143+00:00",
+          "sentMonotonic": 64784.9308029,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.702959+00:00",
+          "responseMonotonic": 64784.9316218,
+          "responseSha256": "A0BAC0C3F8550ED64427236137064ED8CCCE7D3990851159CA620E1AD56969F3",
+          "succeeded": true,
+          "error": null
+        },
+        {
+          "ownerId": "owner-b",
+          "bridgePid": 30868,
+          "transportUrl": "ws://127.0.0.1:59661",
+          "id": 5,
+          "method": "thread/unsubscribe",
+          "phase": "owner-b-second-unsubscribe",
+          "threadId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+          "requestSha256": "B755D592AC83B4A93AB6725A9EA272AA5AF22BE027B5D3A6CA51AF3D357E51E8",
+          "sentAt": "2026-07-26T21:29:31.703016+00:00",
+          "sentMonotonic": 64784.9316745,
+          "responseExpected": true,
+          "responseAt": "2026-07-26T21:29:31.703691+00:00",
+          "responseMonotonic": 64784.9323514,
+          "responseSha256": "A112D7C01E50513DFC41778D006E2B2686411F6B4CF2F098E946D099CA1F4DD9",
+          "succeeded": true,
+          "error": null
+        }
+      ],
+      "messages": [
+        {
+          "id": 0,
+          "result": {
+            "userAgent": "codex-app-server-mcp-multi-connection-subscription-v1/0.145.0 (Windows 10.0.26200; x86_64) unknown (codex-app-server-mcp-multi-connection-subscription-v1; 1.0.0)",
+            "codexHome": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home",
+            "platformFamily": "windows",
+            "platformOs": "windows"
+          }
+        },
+        {
+          "method": "remoteControl/status/changed",
+          "params": {
+            "status": "disabled",
+            "serverName": "yiheng8023",
+            "installationId": "6c4d9ae8-f9e4-4779-bb78-790509681eb6",
+            "environmentId": null
+          },
+          "emittedAtMs": 1785101371130
+        },
+        {
+          "id": 1,
+          "result": {
+            "config": {
+              "model": null,
+              "review_model": null,
+              "model_context_window": null,
+              "model_auto_compact_token_limit": null,
+              "model_auto_compact_token_limit_scope": null,
+              "model_provider": null,
+              "approval_policy": null,
+              "approvals_reviewer": null,
+              "sandbox_mode": null,
+              "sandbox_workspace_write": null,
+              "forced_chatgpt_workspace_id": null,
+              "forced_login_method": null,
+              "web_search": null,
+              "tools": null,
+              "instructions": null,
+              "developer_instructions": null,
+              "compact_prompt": null,
+              "model_reasoning_effort": null,
+              "model_reasoning_summary": null,
+              "model_verbosity": null,
+              "service_tier": null,
+              "analytics": {
+                "enabled": false
+              },
+              "apps": null,
+              "desktop": null,
+              "windows": null,
+              "profile": null,
+              "mcp_oauth_credentials_store": null,
+              "experimental_realtime_ws_model": null,
+              "mcp_servers": {
+                "lifecycle_sentinel": {
+                  "command": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+                  "args": [
+                    "-B",
+                    "C:\\Projects\\agent-autonomy-harness\\scripts\\mcp_lifecycle_sentinel.py",
+                    "--event-log",
+                    "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\sentinel-events.jsonl",
+                    "--cleanup-marker",
+                    "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\harness-cleanup.marker"
+                  ],
+                  "environment_id": "local",
+                  "enabled": true,
+                  "startup_timeout_sec": 10.0,
+                  "tool_timeout_sec": 15.0
+                }
+              },
+              "include_environment_context": null,
+              "cli_auth_credentials_store": null,
+              "agents": null,
+              "include_permissions_instructions": null,
+              "auto_review": null,
+              "skills": null,
+              "notice": null,
+              "sqlite_home": null,
+              "experimental_use_unified_exec_tool": null,
+              "background_terminal_max_timeout": null,
+              "personality": null,
+              "audio": null,
+              "suppress_unstable_features_warning": null,
+              "plugins": {},
+              "check_for_update_on_startup": null,
+              "memories": null,
+              "show_raw_agent_reasoning": null,
+              "experimental_realtime_ws_base_url": null,
+              "experimental_realtime_ws_backend_prompt": null,
+              "experimental_realtime_ws_startup_context": null,
+              "otel": null,
+              "project_root_markers": null,
+              "marketplaces": {},
+              "hide_agent_reasoning": false,
+              "apps_mcp_product_sku": null,
+              "mcp_oauth_callback_port": null,
+              "shell_environment_policy": {
+                "inherit": null,
+                "ignore_default_excludes": null,
+                "exclude": null,
+                "set": null,
+                "include_only": null,
+                "experimental_use_profile": null
+              },
+              "history": {
+                "persistence": "save-all",
+                "max_bytes": null
+              },
+              "debug": null,
+              "js_repl_node_module_dirs": null,
+              "openai_base_url": null,
+              "orchestrator": null,
+              "allow_login_shell": true,
+              "experimental_thread_store_endpoint": null,
+              "file_opener": null,
+              "projects": null,
+              "plan_mode_reasoning_effort": null,
+              "disable_paste_burst": null,
+              "feedback": null,
+              "notify": null,
+              "experimental_compact_prompt_file": null,
+              "realtime": null,
+              "mcp_oauth_callback_url": null,
+              "oss_provider": null,
+              "features": {
+                "network_proxy": null,
+                "apps": false,
+                "plugin_sharing": false,
+                "plugins": false,
+                "remote_plugin": false,
+                "auth_elicitation": true,
+                "memories": false,
+                "mentions_v2": true,
+                "remote_control": false,
+                "tool_suggest": true
+              },
+              "chatgpt_base_url": null,
+              "model_providers": {},
+              "tool_suggest": null,
+              "experimental_thread_config_endpoint": null,
+              "hooks": null,
+              "log_dir": null,
+              "experimental_realtime_webrtc_call_base_url": null,
+              "include_collaboration_mode_instructions": null,
+              "tool_output_token_limit": null,
+              "model_instructions_file": null,
+              "project_doc_fallback_filenames": [],
+              "js_repl_node_path": null,
+              "tui": null,
+              "experimental_realtime_start_instructions": null,
+              "default_permissions": null,
+              "ghost_snapshot": null,
+              "include_apps_instructions": null,
+              "permissions": null,
+              "experimental_thread_store": null,
+              "model_catalog_json": null,
+              "project_doc_max_bytes": 32768,
+              "profiles": {}
+            },
+            "origins": {
+              "mcp_servers.lifecycle_sentinel.args.3": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.command": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "features.plugins": {
+                "name": {
+                  "type": "sessionFlags"
+                },
+                "version": "sha256:881d7a44c1657a3148756779c00997f37d8df7c6decf6efaa3a2cee17948c1e4"
+              },
+              "mcp_servers.lifecycle_sentinel.args.4": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "features.remote_plugin": {
+                "name": {
+                  "type": "sessionFlags"
+                },
+                "version": "sha256:881d7a44c1657a3148756779c00997f37d8df7c6decf6efaa3a2cee17948c1e4"
+              },
+              "mcp_servers.lifecycle_sentinel.args.0": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "features.plugin_sharing": {
+                "name": {
+                  "type": "sessionFlags"
+                },
+                "version": "sha256:881d7a44c1657a3148756779c00997f37d8df7c6decf6efaa3a2cee17948c1e4"
+              },
+              "mcp_servers.lifecycle_sentinel.enabled": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.startup_timeout_sec": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.args.5": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.args.1": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.args.2": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "mcp_servers.lifecycle_sentinel.tool_timeout_sec": {
+                "name": {
+                  "type": "user",
+                  "file": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\config.toml",
+                  "profile": null
+                },
+                "version": "sha256:d9aab96a04d2854890bfde0aa8a8e999e787c3c2a6a68b6b54bc43681143233a"
+              },
+              "analytics.enabled": {
+                "name": {
+                  "type": "sessionFlags"
+                },
+                "version": "sha256:881d7a44c1657a3148756779c00997f37d8df7c6decf6efaa3a2cee17948c1e4"
+              },
+              "features.apps": {
+                "name": {
+                  "type": "sessionFlags"
+                },
+                "version": "sha256:881d7a44c1657a3148756779c00997f37d8df7c6decf6efaa3a2cee17948c1e4"
+              }
+            }
+          }
+        },
+        {
+          "method": "thread/started",
+          "params": {
+            "thread": {
+              "id": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "extra": null,
+              "sessionId": "019fa055-470e-7dd3-9e27-063cb64841ce",
+              "forkedFromId": null,
+              "parentThreadId": null,
+              "preview": "",
+              "ephemeral": false,
+              "historyMode": "legacy",
+              "modelProvider": "openai",
+              "createdAt": 1785101371,
+              "updatedAt": 1785101371,
+              "recencyAt": 1785101371,
+              "status": {
+                "type": "idle"
+              },
+              "path": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\codex-home\\sessions\\2026\\07\\27\\rollout-2026-07-27T05-29-31-019fa055-470e-7dd3-9e27-063cb64841ce.jsonl",
+              "cwd": "C:\\Projects\\agent-autonomy-harness\\audits\\mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27\\run-03\\workspace",
+              "cliVersion": "0.145.0",
+              "source": "vscode",
+              "canAcceptDirectInput": true,
+              "threadSource": null,
+              "agentNickname": null,
+              "agentRole": null,
+              "gitInfo": null,
+              "name": null,
+              "turns": []
+            }
+          },
+          "emittedAtMs": 1785101371548
+        },
+        {
+          "id": 2,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":30044,\"instanceId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83\",\"callId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83:2\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-multi-connection-subscription-v1\",\"owner\":\"owner-b\",\"phase\":\"joined\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 30044,
+              "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+              "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:2",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+                "owner": "owner-b",
+                "phase": "joined"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "id": 3,
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"server\":\"agent-autonomy-harness-mcp-lifecycle-sentinel\",\"version\":\"1.1.0\",\"pid\":30044,\"instanceId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83\",\"callId\":\"5e8083ee-c76a-4b91-8ee2-6e1cea179c83:3\",\"tool\":\"identity\",\"arguments\":{\"probe\":\"codex-app-server-mcp-multi-connection-subscription-v1\",\"owner\":\"owner-b\",\"phase\":\"after-owner-a-release\"}}"
+              }
+            ],
+            "structuredContent": {
+              "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+              "version": "1.1.0",
+              "pid": 30044,
+              "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+              "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:3",
+              "tool": "identity",
+              "arguments": {
+                "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+                "owner": "owner-b",
+                "phase": "after-owner-a-release"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "id": 4,
+          "result": {
+            "status": "notSubscribed"
+          }
+        },
+        {
+          "id": 5,
+          "result": {
+            "status": "notSubscribed"
+          }
+        }
+      ],
+      "shutdown": {
+        "returnCode": 0,
+        "killSent": false,
+        "stderrLines": [
+          "BRIDGE_READY pid=30868 attempt=1 url=ws://127.0.0.1:59661"
+        ]
+      }
+    }
+  },
+  "sentinel": {
+    "baselineCall": {
+      "succeeded": true,
+      "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+      "tool": "identity",
+      "pid": 30044,
+      "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+      "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:1",
+      "arguments": {
+        "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+        "owner": "owner-a",
+        "phase": "baseline"
+      }
+    },
+    "ownerBJoinedCall": {
+      "succeeded": true,
+      "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+      "tool": "identity",
+      "pid": 30044,
+      "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+      "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:2",
+      "arguments": {
+        "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+        "owner": "owner-b",
+        "phase": "joined"
+      }
+    },
+    "ownerBAfterOwnerAReleaseCall": {
+      "succeeded": true,
+      "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+      "tool": "identity",
+      "pid": 30044,
+      "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+      "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:3",
+      "arguments": {
+        "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+        "owner": "owner-b",
+        "phase": "after-owner-a-release"
+      }
+    },
+    "process": {
+      "pid": 30044,
+      "observedAt": "2026-07-26T21:29:31.678333+00:00",
+      "exists": true,
+      "imagePath": "C:\\Users\\15521\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "creationTime100ns": 134295749715462158,
+      "parentPid": 22788,
+      "workingSetBytes": 23461888,
+      "privateUsageBytes": 14606336,
+      "kernelTime100ns": 937500,
+      "userTime100ns": 156250
+    },
+    "eventsBeforeHarnessShutdown": [
+      {
+        "timestamp": "2026-07-26T21:29:31.671072+00:00",
+        "event": "instance-start",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83"
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.673656+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "initialize",
+        "hasId": true
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.674490+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "notifications/initialized",
+        "hasId": false
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.674982+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "tools/list",
+        "hasId": true
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.675971+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "tools/call",
+        "hasId": true
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.676508+00:00",
+        "event": "tool-call",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "version": "1.1.0",
+        "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:1",
+        "tool": "identity",
+        "arguments": {
+          "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+          "owner": "owner-a",
+          "phase": "baseline"
+        }
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.694655+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "tools/call",
+        "hasId": true
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.695377+00:00",
+        "event": "tool-call",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "version": "1.1.0",
+        "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:2",
+        "tool": "identity",
+        "arguments": {
+          "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+          "owner": "owner-b",
+          "phase": "joined"
+        }
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.700323+00:00",
+        "event": "message",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "method": "tools/call",
+        "hasId": true
+      },
+      {
+        "timestamp": "2026-07-26T21:29:31.700910+00:00",
+        "event": "tool-call",
+        "pid": 30044,
+        "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+        "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+        "version": "1.1.0",
+        "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:3",
+        "tool": "identity",
+        "arguments": {
+          "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+          "owner": "owner-b",
+          "phase": "after-owner-a-release"
+        }
+      }
+    ],
+    "cleanup": {
+      "markerCreated": false,
+      "targetInstanceIds": [],
+      "acknowledgedInstanceIds": [],
+      "allTargetsAcknowledged": true,
+      "pidAbsentAfterCleanup": {
+        "30044": true
+      },
+      "cleanupVerified": true,
+      "pidSignalCleanupUsed": false,
+      "cleanupMarkerExitIsNaturalReleaseEvidence": false,
+      "eventsAfterCleanup": [
+        {
+          "timestamp": "2026-07-26T21:29:31.671072+00:00",
+          "event": "instance-start",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83"
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.673656+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "initialize",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.674490+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "notifications/initialized",
+          "hasId": false
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.674982+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "tools/list",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.675971+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "tools/call",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.676508+00:00",
+          "event": "tool-call",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+          "version": "1.1.0",
+          "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:1",
+          "tool": "identity",
+          "arguments": {
+            "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+            "owner": "owner-a",
+            "phase": "baseline"
+          }
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.694655+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "tools/call",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.695377+00:00",
+          "event": "tool-call",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+          "version": "1.1.0",
+          "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:2",
+          "tool": "identity",
+          "arguments": {
+            "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+            "owner": "owner-b",
+            "phase": "joined"
+          }
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.700323+00:00",
+          "event": "message",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "method": "tools/call",
+          "hasId": true
+        },
+        {
+          "timestamp": "2026-07-26T21:29:31.700910+00:00",
+          "event": "tool-call",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83",
+          "server": "agent-autonomy-harness-mcp-lifecycle-sentinel",
+          "version": "1.1.0",
+          "callId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83:3",
+          "tool": "identity",
+          "arguments": {
+            "probe": "codex-app-server-mcp-multi-connection-subscription-v1",
+            "owner": "owner-b",
+            "phase": "after-owner-a-release"
+          }
+        },
+        {
+          "timestamp": "2026-07-26T21:29:33.756490+00:00",
+          "event": "instance-stop",
+          "pid": 30044,
+          "instanceId": "5e8083ee-c76a-4b91-8ee2-6e1cea179c83"
+        }
+      ]
+    }
+  },
+  "unsubscribe": {
+    "ownerAStatuses": [
+      "unsubscribed",
+      "notSubscribed"
+    ],
+    "ownerBStatuses": [
+      "notSubscribed",
+      "notSubscribed"
+    ]
+  },
+  "classification": {
+    "classification": "second-connection-subscription-not-observed-bounded",
+    "valid": true,
+    "invalidReasons": [],
+    "distinctClientConnectionsObserved": true,
+    "sameLoadedThreadObserved": true,
+    "sameExactSentinelObservedAcrossConnections": true,
+    "firstConnectionReleasePreservedSecondConnectionCall": true,
+    "secondConnectionSubscriptionObserved": false,
+    "overlappingSubscriptionObserved": false,
+    "connectionScopedUnsubscribeResponsesObserved": false,
+    "publicSubscriberCountObserved": false,
+    "publicLeaseOrReferenceCountApiObserved": false,
+    "finalReleaseObserved": false,
+    "taskEndSemanticsObserved": false,
+    "resourceBenefitMeasured": false,
+    "modelTurnRequested": false
+  },
+  "claimBoundary": {
+    "provesDistinctPublicConnectionIds": false,
+    "provesPublicLeaseOrReferenceCountApi": false,
+    "provesInternalReferenceCountCorrectness": false,
+    "provesTaskEndRelease": false,
+    "provesFinalSubscriberRelease": false,
+    "provesResourceBenefit": false,
+    "provesArbitraryMcpBehavior": false,
+    "provesCrossHostOrVersionParity": false,
+    "noModelTurnRequestProvesNoNetwork": false
+  },
+  "reportSha256": "6B28F7D0AA804608D1C2A721D4BA9E364EAF3C59F8A945F3382A704CEBD71359"
+}

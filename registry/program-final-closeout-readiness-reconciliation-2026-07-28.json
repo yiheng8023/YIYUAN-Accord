@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "id": "program-final-closeout-readiness-reconciliation-2026-07-28",
+  "date": "2026-07-28",
+  "status": "current-program-closeout-audited-cannot-close",
+  "purpose": "Reconcile every non-verified program acceptance criterion against current evidence so a local green verifier, one host-observability decision, or one completed PoC cannot be mistaken for final program closeout.",
+  "sourceBindings": {
+    "programAcceptanceMap": "registry/program-acceptance-map.json",
+    "threeLaneReconciliation": "registry/harness-three-lane-program-acceptance-reconciliation-2026-07-27.json",
+    "controlChainSubtractiveReconciliation": "registry/human-ai-collaboration-self-authored-control-chain-subtractive-closeout-reconciliation-2026-07-28.json",
+    "loaderHookObservabilityAdmission": "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
+    "cleanupDebtPreview": "registry/closeout-cleanup-debt-preview-2026-07-24.json"
+  },
+  "acceptanceSnapshot": {
+    "totalCriteria": 61,
+    "verified": 44,
+    "partial": 15,
+    "planned": 2,
+    "other": 0,
+    "allCriteriaVerified": false
+  },
+  "openCriteria": [
+    {
+      "id": "acceptance.solution-neutral-collaboration-rebaseline",
+      "assessment": "partial",
+      "cluster": "semantic-and-lifecycle-evidence"
+    },
+    {
+      "id": "acceptance.software-engineering-lifecycle-specialization",
+      "assessment": "partial",
+      "cluster": "semantic-and-lifecycle-evidence"
+    },
+    {
+      "id": "acceptance.end-to-end-process-fidelity",
+      "assessment": "partial",
+      "cluster": "semantic-and-lifecycle-evidence"
+    },
+    {
+      "id": "acceptance.ai-independent-hard-standard-boundary",
+      "assessment": "partial",
+      "cluster": "semantic-and-lifecycle-evidence"
+    },
+    {
+      "id": "acceptance.native-runtime-baseline",
+      "assessment": "partial",
+      "cluster": "residual-gap-and-authoring"
+    },
+    {
+      "id": "acceptance.residual-gap-proof",
+      "assessment": "partial",
+      "cluster": "residual-gap-and-authoring"
+    },
+    {
+      "id": "acceptance.repository-authored-gap-fill-gate",
+      "assessment": "planned",
+      "cluster": "residual-gap-and-authoring"
+    },
+    {
+      "id": "acceptance.decision-ready-consumer-projection",
+      "assessment": "partial",
+      "cluster": "consumer-and-source-governance"
+    },
+    {
+      "id": "acceptance.consumer-mapping-evidence",
+      "assessment": "partial",
+      "cluster": "consumer-and-source-governance"
+    },
+    {
+      "id": "acceptance.standard-candidate-contract",
+      "assessment": "planned",
+      "cluster": "standard-lifecycle"
+    },
+    {
+      "id": "acceptance.standard-revalidation-cascade",
+      "assessment": "partial",
+      "cluster": "standard-lifecycle"
+    },
+    {
+      "id": "acceptance.final-program-cleanup-gate",
+      "assessment": "partial",
+      "cluster": "final-cleanup"
+    },
+    {
+      "id": "acceptance.dynamic-runtime-control-gap-research",
+      "assessment": "partial",
+      "cluster": "runtime-hook-and-orchestration"
+    },
+    {
+      "id": "acceptance.cc-switch-source-preserving-skill-pool",
+      "assessment": "partial",
+      "cluster": "consumer-and-source-governance"
+    },
+    {
+      "id": "acceptance.foreign-managed-capability-coexistence",
+      "assessment": "partial",
+      "cluster": "consumer-and-source-governance"
+    },
+    {
+      "id": "acceptance.optional-hook-mode-chain",
+      "assessment": "partial",
+      "cluster": "runtime-hook-and-orchestration"
+    },
+    {
+      "id": "acceptance.native-task-orchestration-boundary",
+      "assessment": "partial",
+      "cluster": "runtime-hook-and-orchestration"
+    }
+  ],
+  "openObjectiveIds": [
+    "objective.solution-neutral-collaboration-coverage",
+    "objective.reuse-before-build-gap-proof",
+    "objective.decision-ready-external-brain",
+    "objective.multi-agent-consumer-mapping",
+    "objective.layered-collaboration-reliability",
+    "objective.standard-candidate-extraction",
+    "objective.lifecycle-metabolism",
+    "objective.source-preserving-cross-agent-capability-governance"
+  ],
+  "gateClusters": [
+    {
+      "id": "semantic-and-lifecycle-evidence",
+      "openCriteriaCount": 4,
+      "currentBoundary": "The mother-framework, full software lifecycle, end-to-end process fidelity, and AI-independent hard-standard boundary have bounded evidence but not full live, domain, longitudinal, or cross-host validation.",
+      "nextEvidenceClass": "named remaining domain or process-fidelity live evidence with frozen hard standards and affected-subject or domain review where applicable"
+    },
+    {
+      "id": "residual-gap-and-authoring",
+      "openCriteriaCount": 3,
+      "currentBoundary": "Native/runtime and reviewed alternatives have not been exhausted with admissible self-authored live attribution, so no residual gap or repository-authored payload need is proved.",
+      "nextEvidenceClass": "exact candidate admission and attributable comparison before any authoring or portfolio preference"
+    },
+    {
+      "id": "consumer-and-source-governance",
+      "openCriteriaCount": 4,
+      "currentBoundary": "Decision-ready projection, consumer mapping, CC Switch source preservation, and foreign-managed coexistence remain partial because physical, database, projection, loader, backup/restore, and cross-device layers are not converged.",
+      "nextEvidenceClass": "read-only per-consumer authority reconciliation plus separately authorized supported recovery or convergence canaries"
+    },
+    {
+      "id": "standard-lifecycle",
+      "openCriteriaCount": 2,
+      "currentBoundary": "The reusable standard-candidate package is planned and the graph-scoped revalidation cascade remains partial.",
+      "nextEvidenceClass": "one source-bound standard candidate package and a bounded affected-node revalidation proof without big-bang migration"
+    },
+    {
+      "id": "runtime-hook-and-orchestration",
+      "openCriteriaCount": 3,
+      "currentBoundary": "Dynamic MCP control, optional Hook value, and native task orchestration remain partial; current single-host and offline evidence does not prove task-scoped lifecycle, loader causation, or cross-host behavior.",
+      "nextEvidenceClass": "named current-host capability gap with task-bound observability and authority, or a dated negative admission when the host lacks the surface"
+    },
+    {
+      "id": "final-cleanup",
+      "openCriteriaCount": 1,
+      "currentBoundary": "The cleanup inventory is governed and locally verifiable, but exact retain/archive/migrate/delete dispositions and separate cleanup authority are not complete.",
+      "nextEvidenceClass": "exact-target disposition and separately authorized cleanup followed by repository and evidence re-verification"
+    }
+  ],
+  "currentEvidenceProgress": {
+    "mattDependencyCompleteNoModelExposure": "covered",
+    "selfAuthoredStaticSubtractiveAudit": "covered-with-limits",
+    "currentHostLoaderHookObservability": "negative-admission-recorded",
+    "weakModelFactorial": "not-admitted",
+    "portfolioMutation": "not-authorized",
+    "finalCleanup": "not-authorized"
+  },
+  "butterflyPremiseChecks": [
+    {
+      "premise": "Choosing the loader attribution boundary is the only remaining closeout decision.",
+      "result": "falsified",
+      "evidence": "Seventeen criteria across six clusters remain non-verified."
+    },
+    {
+      "premise": "A passing top-level verifier proves final program completion.",
+      "result": "falsified",
+      "evidence": "The verifier validates the current contract while the canonical acceptance map still contains fifteen partial and two planned criteria."
+    },
+    {
+      "premise": "Static overlap can justify Skill retirement or external replacement.",
+      "result": "falsified",
+      "evidence": "The subtractive reconciliation retains candidates only for ablation and permits a final admitted self-authored payload count of zero."
+    },
+    {
+      "premise": "A clean governed temporary-root inventory authorizes cleanup.",
+      "result": "falsified",
+      "evidence": "Inventory conformance and cleanup authority are separate gates."
+    }
+  ],
+  "closeoutDecision": {
+    "status": "cannot-close",
+    "goalComplete": false,
+    "exactLoaderDecisionAloneCanCloseProgram": false,
+    "topLevelVerifierPassCanCloseProgram": false,
+    "cleanupInventoryPassCanCloseProgram": false,
+    "programStatusMutationAuthorized": false,
+    "nextBoundedAction": "Advance open criteria by evidence cluster while preserving the exact-loader trust decision as one independent gate; do not concentrate all remaining work into the weak-model factorial."
+  },
+  "authorityBoundary": {
+    "acceptanceAssessmentUpgradeAuthorizedByThisRecord": false,
+    "protocolAcceptanceAmendmentAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "skillOrPortfolioMutationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "cleanupAuthorized": false,
+    "commitAuthorized": false,
+    "pushAuthorized": false,
+    "goalStatusMutationAuthorized": false
+  },
+  "documentation": "docs/strategy/PROGRAM-FINAL-CLOSEOUT-READINESS-RECONCILIATION-2026-07-28.md"
+}

@@ -118,14 +118,15 @@
       "source": "github:mattpocock/skills",
       "thirdParty": true,
       "nativeBaselineCompared": true,
-      "nativeIncrement": "Provides an executable preventive-control workflow, safe hook boundaries, and verification for destructive Git operations.",
+      "nativeIncrement": "Retained only as review material for command-specific guardrail recipes; the current payload's universal native-hook and packaged pre-push claims are not execution-valid.",
       "overlapReviewed": true,
-      "disposition": "approve",
+      "disposition": "recipe-only",
       "reviewRefs": [
         "audits/native-overlap/2026-06-22.md",
-        "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/overlap.md"
+        "audits/mattpocock-skills/6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461/overlap.md",
+        "registry/git-guardrails-interception-evidence-contract-2026-07-24.json"
       ],
-      "validated": true
+      "validated": false
     },
     {
       "skill": "skill.curated.grill-me",

@@ -1,0 +1,345 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-high-impact-primary-source-claim-ledger-2026-07-27",
+  "date": "2026-07-27",
+  "status": "verified-primary-source-reading-bounded-design-input-only",
+  "purpose": "Repair a small high-impact subset of claims from the user-supplied human-AI software-lifecycle report against direct primary sources, retain the methods and non-generalization boundaries, and expose only bounded scenario and measurement-design inputs.",
+  "authorityBoundary": {
+    "owningRepository": "agent-autonomy-harness",
+    "publicSourcesOnly": true,
+    "externalWriteAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "capabilityInstallationAuthorized": false,
+    "runtimeOrGlobalConfigurationMutationAuthorized": false,
+    "calibrationState": "paused-read-only",
+    "calibrationWriteAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "selfAuthoredCapabilityMutationAuthorized": false,
+    "gitCommitOrPushAuthorized": false
+  },
+  "verificationBoundary": {
+    "sourceIntake": "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json",
+    "method": "Direct reading of author, research-program, official survey, and author-manuscript surfaces. Claims were paraphrased, quantitative values were bound to their observed population or response count, and explicit limitations were retained.",
+    "retrievalDate": "2026-07-27",
+    "studyResultsIndependentlyReproduced": false,
+    "sourcePageBytesSnapshotted": false,
+    "futureSourceDriftRecheckRequired": true,
+    "bodyLinksFromUserReportAcceptedAsEvidence": false,
+    "reportConfidenceLabelsAccepted": false,
+    "wholeReportAccepted": false
+  },
+  "claims": [
+    {
+      "id": "claim.dora-2025-organizational-amplifier-and-delivery-tension",
+      "reportAuditId": "audit.dora-2025-adoption-amplifier",
+      "source": {
+        "title": "State of AI-assisted Software Development 2025",
+        "publisherOrAuthors": "DORA / Google Cloud",
+        "sourceClass": "official-research-program-report-and-release-summary",
+        "canonicalUrl": "https://dora.dev/research/2025/dora-report/",
+        "supportingPrimaryUrls": [
+          "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report",
+          "https://dora.dev/research/2025/errata/"
+        ],
+        "versionOrDate": "2025 report; official errata identifies latest report version v2025.2"
+      },
+      "entailmentStatus": "direct-primary-source-reading-bounded",
+      "paraphrasedClaim": "DORA describes AI as an organizational amplifier rather than a standalone fix. Its official release summary reports near-universal self-reported AI use and reports positive relationships between AI adoption and delivery throughput or product performance alongside a negative relationship with delivery stability.",
+      "quantitativeScope": "Official release summary: nearly 5,000 technology-professional survey responses, 90% reporting AI use at work, more than 80% reporting perceived productivity improvement, and 30% reporting little or no trust in AI-generated code. No causal effect size is imported by this ledger.",
+      "populationOrSetting": "Technology professionals represented in the 2025 DORA research program and the organizational systems in which they work.",
+      "methodLimits": [
+        "The exact sampling frame, model specification, and uncertainty intervals are not reproduced in this ledger.",
+        "Adoption, perceived productivity, and trust are self-reported constructs rather than direct measurements of objective productivity or code correctness.",
+        "The official release summary uses relationship language; it does not establish that AI adoption causes throughput, product-performance, or stability changes.",
+        "The report and its errata are dated sources and do not establish current host, model, or organization behavior."
+      ],
+      "allowedScenarioIds": [
+        "GEN-ORG-DECISION-01",
+        "SE-RELEASE-CHANGE-01",
+        "SE-OPS-INCIDENT-01",
+        "SE-MGMT-PRACTICE-01"
+      ],
+      "allowedRiskIds": [
+        "XCR-01-process-fidelity-and-loss"
+      ],
+      "allowedUses": [
+        "Separate local or self-reported productivity from delivery throughput, stability, product, and organizational outcomes.",
+        "Include organizational preconditions, downstream bottlenecks, rollback, and feedback loops in scenario design.",
+        "Treat simultaneous throughput and stability movement as a reason to use paired outcome measures rather than a one-dimensional speed score."
+      ],
+      "forbiddenInferences": [
+        "AI adoption universally causes either better or worse organizational outcomes.",
+        "The reported adoption or perceived-productivity percentages measure objective productivity.",
+        "The DORA findings validate the current Harness architecture or any Skill, Hook, MCP, model, or candidate.",
+        "The report supplies a universal pass threshold for delivery or stability."
+      ]
+    },
+    {
+      "id": "claim.stack-overflow-2025-trust-and-rework",
+      "reportAuditId": "audit.stack-overflow-2025-trust",
+      "source": {
+        "title": "2025 Stack Overflow Developer Survey: AI",
+        "publisherOrAuthors": "Stack Overflow",
+        "sourceClass": "official-cross-sectional-developer-survey",
+        "canonicalUrl": "https://survey.stackoverflow.co/2025/ai",
+        "supportingPrimaryUrls": [
+          "https://survey.stackoverflow.co/2025/methodology/"
+        ],
+        "versionOrDate": "Survey fielded 2025-05-29 through 2025-06-23"
+      },
+      "entailmentStatus": "direct-primary-source-reading-bounded",
+      "paraphrasedClaim": "Among respondents to the relevant questions, distrust of AI-tool accuracy exceeded trust, and many respondents reported nearly-correct AI solutions and extra debugging effort. These are attitudes and reported experiences, not measured error rates.",
+      "quantitativeScope": "Accuracy question: 46% distrust versus 33% trust and 3% highly trust, 33,244 responses. Multi-select frustration question: 66% selected nearly-correct solutions and 45% selected more time debugging AI-generated code, 31,476 responses. The survey retained 49,009 responses from 177 countries, but each percentage is bound to its question response count.",
+      "populationOrSetting": "A self-selected 2025 Stack Overflow survey sample recruited primarily through Stack Overflow-owned channels; highly engaged Stack Overflow users were more likely to see recruitment.",
+      "methodLimits": [
+        "This is a cross-sectional self-report survey and does not measure AI output accuracy, defect rates, or causal productivity effects.",
+        "Question-level response counts differ from the retained survey total and are the applicable denominators for these figures.",
+        "The frustration question is multi-select; its percentages must not be added or treated as mutually exclusive outcomes.",
+        "The recruitment method does not make the sample a probability sample of all developers worldwide."
+      ],
+      "allowedScenarioIds": [
+        "SE-IMPLEMENT-REVIEW-01",
+        "SE-VERIFY-SECURE-01",
+        "SE-MGMT-PRACTICE-01"
+      ],
+      "allowedRiskIds": [
+        "XCR-01-process-fidelity-and-loss"
+      ],
+      "allowedUses": [
+        "Motivate independent verification, trust calibration, negative tests, and measured review or debugging burden.",
+        "Track nearly-correct defect escape, detection latency, rework time, and recovery distance in Harness trials.",
+        "Keep self-reported confidence or satisfaction separate from objective correctness and lifecycle outcomes."
+      ],
+      "forbiddenInferences": [
+        "Forty-six percent of AI outputs are wrong or thirty-three percent are correct.",
+        "The two frustration percentages form a causal chain or can be added together.",
+        "The survey proves AI is unsuitable for complex, deployment, monitoring, or planning work.",
+        "The survey sample is representative of every developer, organization, country, or current model."
+      ]
+    },
+    {
+      "id": "claim.metr-2025-experienced-oss-productivity-perception-gap",
+      "reportAuditId": "audit.metr-early-2025-productivity",
+      "source": {
+        "title": "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity",
+        "publisherOrAuthors": "Joel Becker, Nate Rush, Elizabeth Barnes, and David Rein / METR",
+        "sourceClass": "author-reported-randomized-controlled-field-study-and-manuscript",
+        "canonicalUrl": "https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",
+        "supportingPrimaryUrls": [
+          "https://arxiv.org/abs/2507.09089"
+        ],
+        "versionOrDate": "arXiv:2507.09089v2, 2025-07-25"
+      },
+      "entailmentStatus": "direct-primary-source-reading-bounded",
+      "paraphrasedClaim": "In a narrow early-2025 randomized trial, experienced open-source developers working on familiar mature repositories took longer on AI-allowed tasks even though they expected and later perceived a speedup.",
+      "quantitativeScope": "Sixteen developers completed 246 real issues in repositories where they averaged about five years of prior experience. The adjusted estimate was 19% longer with AI allowed; developers forecast 24% faster before tasks and estimated 20% faster after the study.",
+      "populationOrSetting": "Experienced maintainers completing roughly 20-minute to four-hour bug, feature, and refactoring tasks in large, mature open-source repositories, primarily with Cursor Pro and Claude 3.5/3.7 Sonnet during February-June 2025.",
+      "methodLimits": [
+        "The sample is small, selected, and highly experienced in the studied repositories; it is not representative of most software work.",
+        "The result is a snapshot of early-2025 tools and ordinary participant-selected usage, not current models or maximal agent scaffolding.",
+        "Implementation time was self-reported, with screen recordings used for compliance and activity analysis.",
+        "The adjusted 19% estimate must not be confused with the larger unadjusted raw-mean ratio.",
+        "The study did not measure a full software lifecycle, long-term maintenance, incident outcomes, or human skill retention."
+      ],
+      "allowedScenarioIds": [
+        "SE-IMPLEMENT-REVIEW-01",
+        "SE-MGMT-PRACTICE-01"
+      ],
+      "allowedRiskIds": [
+        "XCR-01-process-fidelity-and-loss"
+      ],
+      "allowedUses": [
+        "Require preregistered forecast-versus-observed calibration rather than relying on perceived acceleration.",
+        "Measure end-to-end task time, prompting, waiting, review, and post-review rework alongside output correctness.",
+        "Use realistic task and repository context as a separate evidence dimension from self-contained benchmark success."
+      ],
+      "forbiddenInferences": [
+        "AI makes software developers generally or permanently nineteen percent slower.",
+        "AI coding has no value, or the result applies to novices, prototypes, unfamiliar repositories, closed-source work, or current models.",
+        "The study ranks Matt, Superpowers, other CC Skills, native behavior, or the self-authored chain.",
+        "Activity traces or AI-use time are valid individual-performance surveillance measures."
+      ]
+    },
+    {
+      "id": "claim.laban-2025-multi-turn-unreliability",
+      "reportAuditId": null,
+      "source": {
+        "title": "LLMs Get Lost In Multi-Turn Conversation",
+        "publisherOrAuthors": "Philippe Laban, Hiroaki Hayashi, Yingbo Zhou, and Jennifer Neville",
+        "sourceClass": "author-manuscript-and-large-scale-simulated-experiment",
+        "canonicalUrl": "https://arxiv.org/abs/2505.06120",
+        "supportingPrimaryUrls": [
+          "https://arxiv.org/html/2505.06120",
+          "https://www.microsoft.com/en-us/research/publication/llms-get-lost-in-multi-turn-conversation/"
+        ],
+        "versionOrDate": "arXiv submitted 2025-05-09; later published at ICLR 2026"
+      },
+      "entailmentStatus": "direct-primary-source-reading-bounded",
+      "paraphrasedClaim": "Across the studied simulated generation tasks, revealing the same task information across underspecified turns produced much lower average performance and much higher run-to-run unreliability than presenting the full instruction at once. Early assumptions and reliance on prior wrong answers were observed failure modes.",
+      "quantitativeScope": "Fifteen models, six generation tasks, about 600 source instructions, and more than 200,000 simulated conversations. The paper reports aggregate performance near 90 in the full setting versus 65 in the sharded setting, while average unreliability increased by about 112%. Relative-drop figures use a different aggregation and are not substituted for the 25-point difference.",
+      "populationOrSetting": "English-language, text-only, analytical generation tasks with requirements split into controlled shards and a GPT-4o-mini simulated user; each trajectory was guaranteed eventually to expose sufficient information.",
+      "methodLimits": [
+        "The conversations are automated, idealized sharded simulations and are not representative of the full range of human-AI conversations.",
+        "The study does not manipulate host context compression, token pressure, repository handoff, automatic thread creation, or source-backed continuation.",
+        "Tasks and metrics differ across coding, SQL, actions, math, data-to-text, and summarization; aggregate values mix measurement mechanisms.",
+        "The study is dated model-behavior evidence, not a universal turn threshold or a production software-project outcome study.",
+        "Recap, repetition, and concatenation experiments provide bounded intervention clues, not proof of lossless recovery."
+      ],
+      "allowedScenarioIds": [
+        "GEN-RESEARCH-01",
+        "SE-DISCOVERY-REQ-01",
+        "SE-IMPLEMENT-REVIEW-01"
+      ],
+      "allowedRiskIds": [
+        "XCR-01-process-fidelity-and-loss"
+      ],
+      "allowedUses": [
+        "Design information-equivalent single-turn, sharded multi-turn, and source-backed fresh-session recovery arms.",
+        "Measure added assumptions, omitted constraints, detection latency, amplification, and recovery distance hop by hop.",
+        "Treat reliability across repeated trajectories as distinct from best-case aptitude or one successful run."
+      ],
+      "forbiddenInferences": [
+        "Every long conversation degrades by a fixed percentage or fails after a fixed number of turns.",
+        "Sharded multi-turn simulation is equivalent to host compression, token exhaustion, or context-window overflow.",
+        "Repository-anchored handoff, automatic new-thread creation, or source-backed recovery is already proved.",
+        "Summarization, recap, lower temperature, stronger reasoning, or fresh sessions are universally effective or ineffective."
+      ]
+    },
+    {
+      "id": "claim.shen-tamkin-2026-skill-formation",
+      "reportAuditId": "audit.shen-tamkin-skill-formation",
+      "source": {
+        "title": "How AI Impacts Skill Formation",
+        "publisherOrAuthors": "Judy Hanwen Shen and Alex Tamkin",
+        "sourceClass": "preregistered-randomized-experiment-author-preprint",
+        "canonicalUrl": "https://arxiv.org/abs/2601.20245",
+        "supportingPrimaryUrls": [
+          "https://arxiv.org/html/2601.20245",
+          "https://osf.io/w49e7"
+        ],
+        "versionOrDate": "arXiv:2601.20245v2, 2026-02-01"
+      },
+      "entailmentStatus": "direct-primary-source-reading-bounded",
+      "paraphrasedClaim": "In a short randomized experiment on learning an unfamiliar Python library, the AI-assisted group scored lower on an immediate independent knowledge assessment while the average task-time difference was not statistically significant.",
+      "quantitativeScope": "Fifty-two participants, 26 per condition, completed two Trio tasks with a 35-minute task limit. The AI-assisted group's mean immediate quiz score was 4.15 points lower on a 27-point quiz, described by the authors as a 17% score difference, with Cohen's d 0.738 and p=0.01.",
+      "populationOrSetting": "Participants with more than one year of Python experience, at least weekly Python use, some prior AI-coding-assistance use, and no Trio experience; a one-session chat-based GPT-4o assistance study using an immediate concept, code-reading, and debugging quiz.",
+      "methodLimits": [
+        "The preprint studies one unfamiliar library, two short tasks, one chat interface, and roughly one hour of immediate learning rather than longitudinal skill retention.",
+        "Most participants were experienced programmers; they were novices to Trio, not predominantly junior developers.",
+        "The study does not compare agentic coding tools, human tutoring, pair programming, or code-review assistance.",
+        "Interaction-pattern clusters are small qualitative associations and do not causally prove a best learning workflow.",
+        "The assessment does not measure full independent software delivery, delayed retention, transfer, or real-company incentives."
+      ],
+      "allowedScenarioIds": [
+        "GEN-LEARNING-01",
+        "SE-IMPLEMENT-REVIEW-01",
+        "SE-VERIFY-SECURE-01",
+        "SE-MGMT-PRACTICE-01"
+      ],
+      "allowedRiskIds": [],
+      "allowedUses": [
+        "Separate artifact correctness and completion time from the human's independent conceptual, code-reading, debugging, and supervisory competence.",
+        "Add immediate independent understanding, delayed retention, adjacent-task transfer, and error-supervision as distinct future acceptance layers.",
+        "Treat cognitively engaged AI interaction patterns as hypotheses for Harness comparison rather than mandatory workflow."
+      ],
+      "forbiddenInferences": [
+        "AI programming assistance generally or permanently damages developer skill.",
+        "The seventeen-percent result is a universal Harness threshold or proves long-term skill decay.",
+        "Agentic tools are worse than chat assistance or that any identified interaction pattern causally preserves learning.",
+        "Weak-Agent system testing is a substitute for measuring the human supervisor's retained competence."
+      ]
+    }
+  ],
+  "matrixBackflow": [
+    {
+      "scenarioId": "GEN-RESEARCH-01",
+      "claimIds": [
+        "claim.laban-2025-multi-turn-unreliability"
+      ],
+      "designUse": "Add repeated-trajectory reliability and hop-level assumption or omission checks without treating simulated multi-turn performance as live research quality."
+    },
+    {
+      "scenarioId": "GEN-LEARNING-01",
+      "claimIds": [
+        "claim.shen-tamkin-2026-skill-formation"
+      ],
+      "designUse": "Keep task completion separate from immediate, delayed, transfer, and supervision competence."
+    },
+    {
+      "scenarioId": "GEN-ORG-DECISION-01",
+      "claimIds": [
+        "claim.dora-2025-organizational-amplifier-and-delivery-tension"
+      ],
+      "designUse": "Measure organizational conditions and downstream effects rather than interpreting tool adoption as value."
+    },
+    {
+      "scenarioId": "SE-DISCOVERY-REQ-01",
+      "claimIds": [
+        "claim.laban-2025-multi-turn-unreliability"
+      ],
+      "designUse": "Detect premature implementation and unapproved assumptions while requirements are incrementally clarified."
+    },
+    {
+      "scenarioId": "SE-IMPLEMENT-REVIEW-01",
+      "claimIds": [
+        "claim.stack-overflow-2025-trust-and-rework",
+        "claim.metr-2025-experienced-oss-productivity-perception-gap",
+        "claim.laban-2025-multi-turn-unreliability",
+        "claim.shen-tamkin-2026-skill-formation"
+      ],
+      "designUse": "Jointly measure correctness, realistic cycle time, review and rework cost, process fidelity, and human supervisory competence."
+    },
+    {
+      "scenarioId": "SE-VERIFY-SECURE-01",
+      "claimIds": [
+        "claim.stack-overflow-2025-trust-and-rework",
+        "claim.shen-tamkin-2026-skill-formation"
+      ],
+      "designUse": "Require independent verification evidence and distinguish performing a check from retaining the competence to supervise it."
+    },
+    {
+      "scenarioId": "SE-RELEASE-CHANGE-01",
+      "claimIds": [
+        "claim.dora-2025-organizational-amplifier-and-delivery-tension"
+      ],
+      "designUse": "Pair throughput with stability, rollback, and downstream change outcomes."
+    },
+    {
+      "scenarioId": "SE-OPS-INCIDENT-01",
+      "claimIds": [
+        "claim.dora-2025-organizational-amplifier-and-delivery-tension"
+      ],
+      "designUse": "Do not let faster change volume stand in for stable operation or verified recovery."
+    },
+    {
+      "scenarioId": "SE-MGMT-PRACTICE-01",
+      "claimIds": [
+        "claim.dora-2025-organizational-amplifier-and-delivery-tension",
+        "claim.stack-overflow-2025-trust-and-rework",
+        "claim.metr-2025-experienced-oss-productivity-perception-gap",
+        "claim.shen-tamkin-2026-skill-formation"
+      ],
+      "designUse": "Reconcile self-report, forecast, objective outcome, team or lifecycle effects, and long-term competence without individual surveillance."
+    }
+  ],
+  "claimBoundary": {
+    "wholeUserReportAccepted": false,
+    "studyResultsIndependentlyReproduced": false,
+    "generalPopulationEffectsProved": false,
+    "organizationLevelCausalityProved": false,
+    "liveHarnessOutcomeProved": false,
+    "crossHostBehaviorProved": false,
+    "hardStandardPromotionJustified": false,
+    "selfAuthoredCapabilityGapProved": false,
+    "candidateComparisonOrAdmissionJustified": false,
+    "calibrationMutationAuthorized": false
+  },
+  "decision": {
+    "claimSubsetRepaired": true,
+    "matrixDesignInputReady": true,
+    "matrixEvidenceStatePromotionAuthorized": false,
+    "newUniversalThresholdAuthorized": false,
+    "nextBoundedResult": "The falsifiable information-equivalent weak-Agent protocol is now selected and preregistered; validate its offline contract and design the smallest reusable packet builder and preflight without treating literature as candidate superiority or live Harness evidence."
+  },
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-HIGH-IMPACT-PRIMARY-SOURCE-CLAIM-LEDGER-2026-07-27.md"
+}

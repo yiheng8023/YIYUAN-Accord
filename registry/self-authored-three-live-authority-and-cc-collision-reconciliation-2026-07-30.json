@@ -1,0 +1,399 @@
+{
+  "schema": 1,
+  "id": "self-authored-three-live-authority-and-cc-collision-reconciliation-2026-07-30",
+  "date": "2026-07-30",
+  "observedAt": "2026-07-30T19:54:13+08:00",
+  "status": "read-only-authority-proved-cc-ownership-collision-blocks-ordinary-manager-actions",
+  "purpose": "Reconcile the live source authority, physical projections, host exposure, divergent CC Switch copies, and current manager deletion semantics for intent-contract, capability-router, and closure-contract without mutating any Skill, host, manager, rule, Hook, or configuration.",
+  "predecessors": [
+    "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json",
+    "registry/cc-switch-fourteen-skill-subtraction-preview-2026-07-30.json"
+  ],
+  "repositoryPosture": {
+    "branch": "main",
+    "head": "55659f30091990f7c589932e0379880de30dc403",
+    "originMain": "55659f30091990f7c589932e0379880de30dc403",
+    "upstream": "origin/main",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeIntentionallyLargeAndDirty": true,
+    "inheritedChangesPreserved": true
+  },
+  "authorityBoundary": {
+    "readHarnessAndSourceRepositories": true,
+    "readLiveCcDatabaseSettingsAndInstalledTrees": true,
+    "readCurrentHostExposureWithoutModelDispatch": true,
+    "readCurrentOfficialCcSwitchTagSource": true,
+    "skillBodyExecution": false,
+    "modelDispatch": false,
+    "ccSwitchMutation": false,
+    "skillInstallUpdateDisableDeleteOrRelink": false,
+    "globalConfigRulesHookOrForeignRootMutation": false,
+    "gitCommitOrPush": false
+  },
+  "sourceAuthority": {
+    "repositoryPath": "C:/Projects/codex-user-config",
+    "branch": "main",
+    "head": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+    "originMain": "0c93458d48cb1ebaa6d0d289e3a21f46d2f61f65",
+    "ahead": 0,
+    "behind": 0,
+    "worktreeDirtyOutsideThreeSkillTrees": true,
+    "threeSkillTreesCleanAtHead": true,
+    "declaredRole": "current source authority for the three first-party Skill bodies and their Codex baseline projection",
+    "authorityEvidence": [
+      "C:/Projects/codex-user-config/README.md",
+      "C:/Projects/codex-user-config/docs/audits/m1-live-skill-projection-topology-audit-20260712.md",
+      "C:/Projects/codex-user-config/scripts/install.py"
+    ],
+    "installer": {
+      "firstPartySkills": [
+        "capability-router",
+        "intent-contract",
+        "closure-contract"
+      ],
+      "targetRoots": [
+        ".agents/skills",
+        ".codex/skills"
+      ],
+      "claudeTargetDefined": false,
+      "ccSwitchTargetDefined": false,
+      "currentMechanism": "delete each existing target directory and copy the source tree"
+    }
+  },
+  "liveManager": {
+    "processName": "cc-switch",
+    "binaryPath": "C:/Users/15521/AppData/Local/Programs/CC Switch/cc-switch.exe",
+    "binaryFileVersion": "3.19.0",
+    "binaryProductVersion": "3.19.0",
+    "databasePath": "C:/Users/15521/.cc-switch/cc-switch.db",
+    "databaseRows": 55,
+    "settings": {
+      "skillStorageLocation": "cc_switch",
+      "skillSyncMethod": "symlink",
+      "skillPathOverridesObserved": false,
+      "defaultClaudeTarget": "C:/Users/15521/.claude/skills",
+      "defaultCodexTarget": "C:/Users/15521/.codex/skills"
+    },
+    "officialSource": {
+      "repository": "https://github.com/farion1231/cc-switch",
+      "tag": "v3.19.0",
+      "tagObject": "09ccf3280c779c6cf7023cd2c3fc3faa21af8b73",
+      "commit": "c0ff89b9b208c092d6ef40b155403dcf290e5767",
+      "tagSignatureVerifiedByGitHub": false,
+      "binaryToTagCryptographicAttributionProved": false,
+      "servicePath": "src-tauri/src/services/skill.rs",
+      "serviceBlob": "84f02e9ebdcfdd7f53c683669e1c942c5fe75944",
+      "commandPath": "src-tauri/src/commands/skill.rs",
+      "commandBlob": "6ac90ac54702117fef8cb78ddc93cfddde763e0c",
+      "appTypePath": "src-tauri/src/app_config.rs",
+      "appTypeBlob": "74eac3f846dbcd78304231df044b7c585dbaccc3"
+    },
+    "threeRows": [
+      {
+        "id": "local:capability-router",
+        "name": "capability-router",
+        "directory": "capability-router",
+        "repoOwner": null,
+        "repoName": null,
+        "repoBranch": null,
+        "enabledClaude": true,
+        "enabledCodex": true,
+        "enabledGemini": false,
+        "enabledOpenCode": false,
+        "enabledHermes": false,
+        "enabledGrokBuild": false,
+        "contentHash": "5d7eb07b08b739ba80e90ed22a31dd2587be33722967c5baa4e0701e7919beff"
+      },
+      {
+        "id": "local:closure-contract",
+        "name": "closure-contract",
+        "directory": "closure-contract",
+        "repoOwner": null,
+        "repoName": null,
+        "repoBranch": null,
+        "enabledClaude": true,
+        "enabledCodex": true,
+        "enabledGemini": false,
+        "enabledOpenCode": false,
+        "enabledHermes": false,
+        "enabledGrokBuild": false,
+        "contentHash": "6430e798829416ab69a02916690dfe0c939c76fcc21c98012be3f237995cf288"
+      },
+      {
+        "id": "local:intent-contract",
+        "name": "intent-contract",
+        "directory": "intent-contract",
+        "repoOwner": null,
+        "repoName": null,
+        "repoBranch": null,
+        "enabledClaude": true,
+        "enabledCodex": true,
+        "enabledGemini": false,
+        "enabledOpenCode": false,
+        "enabledHermes": false,
+        "enabledGrokBuild": false,
+        "contentHash": "3541a23d107b789b640afb06c03bba0cd120e80e59b981862fd8c6bce6ae8557"
+      }
+    ]
+  },
+  "packages": [
+    {
+      "name": "intent-contract",
+      "currentSourceProjection": {
+        "roots": [
+          "C:/Projects/codex-user-config/skills/intent-contract",
+          "C:/Users/15521/.agents/skills/intent-contract",
+          "C:/Users/15521/.codex/skills/intent-contract"
+        ],
+        "allRootsArePhysicalDirectories": true,
+        "allRootsByteEqual": true,
+        "fileCount": 2,
+        "bytes": 50087,
+        "treeManifestSha256": "67d30201ed6ab42f65ae896e55ad3594a5bf97402db9cc1ba980b0b7494a7e1d",
+        "files": [
+          {
+            "path": "references/intake-contract.md",
+            "bytes": 20948,
+            "sha256": "66e3990e36f3771c5bd22136834100b7aba799c6416968f486e5929204392b93"
+          },
+          {
+            "path": "SKILL.md",
+            "bytes": 29139,
+            "sha256": "1d67e4b84856bcd0828d89b82803a7275d95d8e586fd8efcd127f89e82845753"
+          }
+        ]
+      },
+      "legacyCcProjection": {
+        "ccRoot": "C:/Users/15521/.cc-switch/skills/intent-contract",
+        "ccRootIsPhysicalDirectory": true,
+        "claudePath": "C:/Users/15521/.claude/skills/intent-contract",
+        "claudePathType": "symbolic-link",
+        "claudeTarget": "C:/Users/15521/.cc-switch/skills/intent-contract",
+        "claudeAndCcByteEqual": true,
+        "fileCount": 2,
+        "bytes": 41369,
+        "treeManifestSha256": "9d716e595dcfc1b0e6e471dbe72f34d6491ec84387b45de5c422769d28e5224e",
+        "files": [
+          {
+            "path": "references/intake-contract.md",
+            "bytes": 18294,
+            "sha256": "8cae799380bed8b98eebecd43bbade44ad9cdb9b2551b4486c5c948b7c44f1b9"
+          },
+          {
+            "path": "SKILL.md",
+            "bytes": 23075,
+            "sha256": "7eb8e46648d3b4889fe16e6c650a5f51a4ed1cf0baaeb46e70d9e24e6073befc"
+          }
+        ],
+        "matchesCurrentSourceProjection": false
+      }
+    },
+    {
+      "name": "capability-router",
+      "currentSourceProjection": {
+        "roots": [
+          "C:/Projects/codex-user-config/skills/capability-router",
+          "C:/Users/15521/.agents/skills/capability-router",
+          "C:/Users/15521/.codex/skills/capability-router"
+        ],
+        "allRootsArePhysicalDirectories": true,
+        "allRootsByteEqual": true,
+        "fileCount": 2,
+        "bytes": 32126,
+        "treeManifestSha256": "193a2e413084aa2d2a7714bbaddfaf076393c7c4c9ce049709129f1afb8bce1a",
+        "files": [
+          {
+            "path": "references/routing-contract.md",
+            "bytes": 10108,
+            "sha256": "17d7ef3892f2794f78321615f276d89e5040059b6bf49793c2edebbfe5e90c3b"
+          },
+          {
+            "path": "SKILL.md",
+            "bytes": 22018,
+            "sha256": "eb9f7d253d12682a3e8b9f87faf5bad4284a2d268b25c30cc5ad9f6dd36eb8fe"
+          }
+        ]
+      },
+      "legacyCcProjection": {
+        "ccRoot": "C:/Users/15521/.cc-switch/skills/capability-router",
+        "ccRootIsPhysicalDirectory": true,
+        "claudePath": "C:/Users/15521/.claude/skills/capability-router",
+        "claudePathType": "symbolic-link",
+        "claudeTarget": "C:/Users/15521/.cc-switch/skills/capability-router",
+        "claudeAndCcByteEqual": true,
+        "fileCount": 2,
+        "bytes": 21375,
+        "treeManifestSha256": "a313d8cb76fe34c63066a404e68495cd6ef16e5031a6335eee3ab4ff1f05a79b",
+        "files": [
+          {
+            "path": "references/routing-contract.md",
+            "bytes": 4794,
+            "sha256": "1ab6f8d5d344dc48386513305bcc5610f6654f27db850b7894d7fe9c53dba85e"
+          },
+          {
+            "path": "SKILL.md",
+            "bytes": 16581,
+            "sha256": "3f1fd8597314ad501fa813864b0c73d7182ab64349f97a1bff640a508af5a127"
+          }
+        ],
+        "matchesCurrentSourceProjection": false
+      }
+    },
+    {
+      "name": "closure-contract",
+      "currentSourceProjection": {
+        "roots": [
+          "C:/Projects/codex-user-config/skills/closure-contract",
+          "C:/Users/15521/.agents/skills/closure-contract",
+          "C:/Users/15521/.codex/skills/closure-contract"
+        ],
+        "allRootsArePhysicalDirectories": true,
+        "allRootsByteEqual": true,
+        "fileCount": 1,
+        "bytes": 12187,
+        "treeManifestSha256": "5a6924e0efe9153307003322b9ee0d5cd3efae40cc0067fe0a1b84cc67d8fd99",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "bytes": 12187,
+            "sha256": "59edfc131c45b7aa1ef85a1737317a0cc97adcfb0ddceb7ee81e9c744b13bbb3"
+          }
+        ]
+      },
+      "legacyCcProjection": {
+        "ccRoot": "C:/Users/15521/.cc-switch/skills/closure-contract",
+        "ccRootIsPhysicalDirectory": true,
+        "claudePath": "C:/Users/15521/.claude/skills/closure-contract",
+        "claudePathType": "symbolic-link",
+        "claudeTarget": "C:/Users/15521/.cc-switch/skills/closure-contract",
+        "claudeAndCcByteEqual": true,
+        "fileCount": 1,
+        "bytes": 7872,
+        "treeManifestSha256": "2933dc8485c495b3afcfc643184c56959c4104d87c3641ab24a5e62aa9fedeea",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "bytes": 7872,
+            "sha256": "b3515179f8304c2fa0b1a2a88450c2ccc98ab9cfdbb144b0b829526757052524"
+          }
+        ],
+        "matchesCurrentSourceProjection": false
+      }
+    }
+  ],
+  "codexExposure": {
+    "surface": "fresh no-model Codex app-server skills/list with forceReload=true and Plugin features disabled",
+    "inventoryCount": 64,
+    "matchingEntries": 6,
+    "entriesPerLogicalName": 2,
+    "paths": [
+      "C:/Users/15521/.agents/skills/capability-router/SKILL.md",
+      "C:/Users/15521/.codex/skills/capability-router/SKILL.md",
+      "C:/Users/15521/.agents/skills/closure-contract/SKILL.md",
+      "C:/Users/15521/.codex/skills/closure-contract/SKILL.md",
+      "C:/Users/15521/.agents/skills/intent-contract/SKILL.md",
+      "C:/Users/15521/.codex/skills/intent-contract/SKILL.md"
+    ],
+    "allMatchingEntriesUserScoped": true,
+    "allMatchingEntriesEnabled": true,
+    "modelTurnSent": false,
+    "provesDuplicateDiscovery": true,
+    "provesInvocation": false,
+    "provesInstructionDelivery": false,
+    "provesBehavior": false,
+    "provesValue": false
+  },
+  "claudeExposure": {
+    "staticSymlinkProjectionObserved": true,
+    "allThreeLinksResolveToLegacyCcTrees": true,
+    "freshClaudeLoaderExposureProved": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false
+  },
+  "managerCollision": {
+    "currentRowDirectoriesPassSingleSegmentShape": true,
+    "uninstallCommandCallsSkillServiceUninstall": true,
+    "uninstallIteratesAllAppTypes": true,
+    "allAppTypesIncludesClaudeAndCodex": true,
+    "codexDestinationResolvesToPhysicalFirstPartyDirectory": true,
+    "uninstallRemoveFromAppIgnoresEnabledFlags": true,
+    "removePathUnlinksSymlinksOnly": true,
+    "removePathRecursivelyDeletesPhysicalDirectories": true,
+    "ordinaryUninstallWouldDeleteCurrentPhysicalCodexProjection": true,
+    "ordinaryUninstallWouldRemoveClaudeLegacySymlink": true,
+    "ordinaryCodexDisableWouldDeleteCurrentPhysicalCodexProjection": true,
+    "ordinaryCodexEnableOrSyncWithSymlinkModeWouldDeleteCurrentPhysicalCodexProjectionBeforeCreatingCcLink": true,
+    "uninstallBackupProtectsCcBodyAndMetadataOnly": true,
+    "uninstallBackupDoesNotProtectExternallyOwnedNewerCodexProjection": true,
+    "ordinaryCcUninstallToggleOrSyncSafeForTheseThree": false,
+    "sourceReferences": [
+      "v3.19.0 src-tauri/src/commands/skill.rs:67-74",
+      "v3.19.0 src-tauri/src/services/skill.rs:812-846",
+      "v3.19.0 src-tauri/src/services/skill.rs:1426-1445",
+      "v3.19.0 src-tauri/src/services/skill.rs:1664-1725",
+      "v3.19.0 src-tauri/src/services/skill.rs:1737-1750",
+      "v3.19.0 src-tauri/src/services/skill.rs:1839-1855",
+      "v3.19.0 src-tauri/src/app_config.rs:370-424"
+    ]
+  },
+  "diagnoseReferenceBoundary": {
+    "currentSourceCapabilityRouterStillNamesDiagnose": true,
+    "legacyCcCapabilityRouterStillNamesDiagnose": true,
+    "observabilitySkillStillNamesCanonicalDiagnose": true,
+    "observabilitySkillStillContainsPiiLoggingExample": true,
+    "promotedDiagnosingBugsExists": true,
+    "referenceMigrationAuthority": "The capability-router change belongs in codex-user-config source authority; the observability adaptation belongs in its separately governed payload and CC projection path.",
+    "mutationAuthorized": false
+  },
+  "decision": {
+    "canonicalSourceAuthority": "C:/Projects/codex-user-config",
+    "commonAndCodexPhysicalCopiesAreCurrentSourceProjections": true,
+    "ccCopiesAreLegacyDivergentSnapshots": true,
+    "claudeLinksAreLegacyDivergentProjections": true,
+    "ccRowsAreNotSourceAuthority": true,
+    "ordinaryManagerMutationBlocked": true,
+    "preferredNextPolicy": "Keep codex-user-config as first-party authority; design a collision-safe, backed-up transaction that preserves current .agents and .codex trees while either quarantining the unproved Claude legacy links or replacing them only through a separately tested first-party Claude adapter.",
+    "policyChoicesRequiringUserDecision": [
+      {
+        "id": "quarantine-claude-legacy",
+        "effect": "Safely detach the three Claude legacy links and retire the three CC rows and SSOT copies without touching current source-owned .agents or .codex projections; Claude temporarily has no three-Skill projection until an adapter is proved."
+      },
+      {
+        "id": "source-owned-claude-adapter",
+        "effect": "First define and test a source-owned Claude projection, then retire the three legacy CC rows and links through a collision-safe transaction."
+      }
+    ],
+    "codexDualRootSimplificationIsSeparateGate": true,
+    "codexDualRootMutationAuthorized": false,
+    "firstPartyCcRetirementMutationAuthorized": false,
+    "diagnoseReferenceMutationAuthorized": false,
+    "priorFourteenPreviewRequiresManager319RefreshBeforeExecution": true
+  },
+  "cleanup": {
+    "temporarySourceRootCreated": false,
+    "temporarySourceRootAbsent": true,
+    "noRecoveryArchiveCreated": true,
+    "noDatabaseCopyCreated": true,
+    "noSourceBodyExecuted": true,
+    "noModelTurnSent": true,
+    "noManagerOrHostMutation": true
+  },
+  "claimBoundary": {
+    "sourceAuthorityProvedForCurrentThreeTrees": true,
+    "currentSourceAgentsCodexByteParityProved": true,
+    "legacyCcClaudeDivergenceProved": true,
+    "codexDualRootNoModelExposureProved": true,
+    "currentCc319CollisionRiskProvedFromOfficialTagSource": true,
+    "binarySupplyChainIdentityToOfficialTagProved": false,
+    "claudeLoaderExposureProved": false,
+    "skillInvocationOrInstructionDeliveryProved": false,
+    "behavioralValueOrSuperiorityProved": false,
+    "crossHostParityRequired": false,
+    "retirementOrMigrationAuthorized": false,
+    "programCloseoutProved": false
+  },
+  "documentation": "docs/strategy/SELF-AUTHORED-THREE-LIVE-AUTHORITY-AND-CC-COLLISION-RECONCILIATION-2026-07-30.md"
+}

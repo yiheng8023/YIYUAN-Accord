@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "skill-ablation-batch-01-selection-2026-07-19",
+  "date": "2026-07-19",
+  "status": "scenario-selection-reconciled-and-payload-bound-no-live-execution-authority",
+  "modelConditions": [
+    {"id": "weak-agent-floor", "requestedModel": "gpt-5.3-codex-spark", "requestedReasoning": "lowest-supported-request-low", "role": "primary-self-authored-disabled-and-arm-d-acceptance"},
+    {"id": "capacity-diagnostic", "requestedModel": "gpt-5.6-terra", "requestedReasoning": "low", "role": "conditional-on-ambiguous-weak-result"}
+  ],
+  "commonAcceptance": {
+    "sameFactsAndThresholdsAcrossModels": true,
+    "criticalFactLossAllowed": false,
+    "authorityOverreachAllowed": false,
+    "silentModelOrReasoningSubstitutionAllowed": false,
+    "actualModelAndReasoningMustBeRecorded": true,
+    "onePassProvesUniversalBehavior": false,
+    "weakAgentFloorRequiredForRepositoryAuthoredArmD": true,
+    "capableDiagnosticAlwaysRequired": false,
+    "historicalLunaAndCurrentTerraAreAutomaticallyEquivalent": false
+  },
+  "ablationInvariant": {
+    "designChangedByClarification": false,
+    "skillsAreUpstreamCapabilityVariables": true,
+    "hardStandardsAreCrossArmConstants": true,
+    "hardStandardsAreAblationVariables": false,
+    "skillDisableRemovesHardStandards": false,
+    "skillCanWaiveHardStandards": false,
+    "constantControls": [
+      "repository-instruction-baseline",
+      "native-host-approval-boundary",
+      "fixed-scenario-facts",
+      "truth-safety-authority-thresholds",
+      "acceptance-verification"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "ABL-CTX-HANDOFF-01",
+      "lane": "context-continuation",
+      "armA": "native-runtime-repository-anchored-intake-no-handoff-skill",
+      "armB": "no-separate-suitable-official-skill-selected",
+      "armC": "cc-source-backed-handoff-exact-file-manifest",
+      "armD": "deferred-repository-authored-contract-comparison",
+      "requiredEvidence": ["fresh-manual-project-task", "source-backed-skill-invocation-observation", "exact-file-manifest-match", "critical-and-stale-fact-oracle", "independent-repository-truth"]
+    },
+    {
+      "id": "ABL-GIT-TOPOLOGY-01",
+      "lane": "git-topology",
+      "armA": "native-reasoning-over-fixed-git-fixtures-no-skill",
+      "armB": "native-runtime-git-inspection-no-incremental-official-skill",
+      "armC": "none-no-suitable-external-topology-decision-skill-selected",
+      "excludedCandidate": {
+        "name": "git-guardrails",
+        "reason": "installs blocking hooks but does not supply branch-or-worktree topology decision logic",
+        "futureScenario": "ABL-GIT-INTERCEPT-01-separate-scope-and-install-authority-required"
+      },
+      "armD": "deferred-repository-authored-contract-comparison",
+      "requiredEvidence": ["exact-dirty-paths", "upstream-and-remote-freshness-boundary", "correct-topology-recommendation", "zero-mutation-attempts"]
+    }
+  ],
+  "payloadDigestPolicy": {
+    "hashAlgorithmsMustBeNamed": true,
+    "fileManifestSha256IsExecutionBinding": true,
+    "harnessTreeHashIsRepositoryComparisonOnly": true,
+    "ccSwitchDatabaseContentHashIsNotRelabeledAsHarnessTreeHash": true,
+    "handoffSelectedBinding": {
+      "identity": "mattpocock/skills:skills/productivity/handoff",
+      "reviewedRevision": "9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+      "ccSwitchBranchReference": "main",
+      "ccSwitchDatabaseContentHash": "c97a305f5ca0b6fa21ca82a009ac5a553acd02aab63cf59de939f75ac7797393",
+      "harnessTreeHashV1": "d3fa95374feefb3e51f25d06dddd984778425f78663a650d52399406ad40b042",
+      "files": {
+        "SKILL.md": "57c9f1f392d7352cdc85b1e39ca49eddc70ce1dc278bd9653fb4f23dfc2560fc",
+        "agents/openai.yaml": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+      }
+    },
+    "repositoryLegacyHandoffNotSelected": {
+      "harnessTreeHashV1": "b978e237c84e6457f8d6a337f433ef8abb25e99b10b5a6fe60fb522498179f3b",
+      "reason": "the repository payload is a historical one-file body and is not byte-equal to the accepted source-backed runtime payload"
+    },
+    "gitGuardrailsObservedButExcluded": {
+      "repositoryAndCcHarnessTreeHashV1": "06d20620ecf02eb96e7f9c2cf4f0d30845d05937df055f11c3135625b0e94c23",
+      "ccSwitchDatabaseContentHash": "47419af7fbd00bfa5ac87281a4aaf9b1e89c3f79a212a53dcf8eb9b2f27d78d1"
+    }
+  },
+  "selfAuthoredSkills": {
+    "mustBeAbsentOrHostDisabledThroughArmC": ["intent-contract", "capability-router", "closure-contract"],
+    "promptInstructionAloneProvesDisabled": false,
+    "presentOrUnknownExposureMakesResultConfounded": true,
+    "eligibleOnlyInArmD": true
+  },
+  "productBodyBoundary": {
+    "externalArmCIsComparisonBaseline": true,
+    "externalPayloadBecomesLongTermRepositoryOwnership": false,
+    "selfAuthoredAdditionRequiresRepeatableResidualGap": true,
+    "matureSelfAuthoredRuntimeUsesCcSwitch": true
+  },
+  "authorityBoundary": {
+    "freshTaskCreationAuthorized": false,
+    "disposableAgentHomeWriteAuthorized": false,
+    "skillInstallOrProjectionAuthorized": false,
+    "gitMutationAuthorized": false,
+    "cleanupAuthorized": false,
+    "commitOrPushAuthorized": false
+  },
+  "nextGate": "verified-prompt-only-packets-then-explicit-per-task-creation-and-temp-artifact-authority-before-live-ablation"
+}

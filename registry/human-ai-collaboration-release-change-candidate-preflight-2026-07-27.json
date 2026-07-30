@@ -1,0 +1,260 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-release-change-candidate-preflight-2026-07-27",
+  "date": "2026-07-27",
+  "status": "validated-repository-source-license-admission-overlap-live-arms-blocked",
+  "scenarioId": "SE-RELEASE-CHANGE-01",
+  "parentProtocol": "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json",
+  "scope": "Repository-only comparison of native baseline metadata and exact approved release payload source, license, admission, and overlap evidence. No host, CC Switch, global configuration, model, materialization, or execution surface is inspected.",
+  "sourceBindings": [
+    {
+      "path": "registry/skills.json",
+      "bytes": 9752,
+      "sha256": "6bb7eb9c21529869398acf80714d666d601b459069dd8d0df73dbd5d1b3e5525",
+      "role": "approved-skill-identities"
+    },
+    {
+      "path": "registry/admissions.json",
+      "bytes": 21494,
+      "sha256": "428f7e30d8fc9bcb4b89ba7ea5fc6cca0e31cca2c1a35d03012b05785d537eb8",
+      "role": "admission-native-increment-and-overlap-decisions"
+    },
+    {
+      "path": "release-manifest.json",
+      "bytes": 6835,
+      "sha256": "ca3c87d51ab8215d020f241a280e2dcfa97806dba63c73282b2db21f5daaa587",
+      "role": "release-payload-file-identities"
+    },
+    {
+      "path": "registry/capabilities.json",
+      "bytes": 12529,
+      "sha256": "3b1c7496c33b44c33688f941f57d20628205f8b5d645fc998f89d6ec83c4a264",
+      "role": "candidate-capability-ownership"
+    },
+    {
+      "path": "registry/routing.json",
+      "bytes": 36739,
+      "sha256": "604e0240e031979c5c6b4f4a09db3c058e9b45c9990de6c32b653be60ec7a4ba",
+      "role": "candidate-trigger-input-output-risk-permission-and-fallback-boundaries"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 2131,
+      "sha256": "b17e6b8f2ed08ec9e6c2e64891660330c41ed1d190752a8516e0d164b6d211b8",
+      "role": "license-attribution-and-adaptation-boundary"
+    },
+    {
+      "path": "sources/addyosmani-agent-skills/LICENSE",
+      "bytes": 1089,
+      "sha256": "31a37fa17cfa0d529038a3a49a36962f9d5b5a302bf33b4b4787da84ecdb4f0a",
+      "role": "upstream-mit-license"
+    },
+    {
+      "path": "audits/addyosmani-agent-skills/17214a29c429a19f7a9607f2c06f9d650ea87eb0/provenance.json",
+      "bytes": 493,
+      "sha256": "cdbd4bb6e0d960486571ecce2ab9ff7115865ec40307fab5371d0309e95dd93d",
+      "role": "upstream-revision-license-executable-and-runtime-approval-boundary"
+    },
+    {
+      "path": "audits/addyosmani-agent-skills/17214a29c429a19f7a9607f2c06f9d650ea87eb0/overlap.md",
+      "bytes": 1158,
+      "sha256": "dae0bafc7914142be01e5c491e158f5a5019a6274ec7a113d059f390a95e85b8",
+      "role": "approved-minimal-set-and-owner-separation"
+    },
+    {
+      "path": "audits/native-overlap/2026-06-22.md",
+      "bytes": 7015,
+      "sha256": "af9030028061b6bb0ab661c70f796296bba01485a52c075f231e1d77ea0faf31",
+      "role": "portable-native-baseline-and-candidate-increments"
+    }
+  ],
+  "candidates": [
+    {
+      "candidateId": "native",
+      "candidateClass": "native-control",
+      "identity": {
+        "repositoryPayloadPath": null,
+        "repositoryPayloadSha256": null,
+        "repositoryPayloadBytes": null,
+        "currentHostVersion": "unknown",
+        "currentModelRoute": "unknown"
+      },
+      "source": {
+        "sourceClass": "native-agent-capability",
+        "sourceRevision": "unknown-current-host",
+        "license": "not-applicable"
+      },
+      "admission": {
+        "releaseInventoryDisposition": "not-applicable-control-arm",
+        "validated": "not-applicable",
+        "nativeBaselineCompared": "self-baseline",
+        "overlapReviewed": true
+      },
+      "overlap": {
+        "portableBaseline": "general reasoning, synthesis, instruction following, ordinary planning, and normal use of currently exposed tools",
+        "candidateIncrementCredited": false,
+        "pairwiseBoundary": "Native is the first future control. The hard standards and oracle are shared controls and receive no candidate credit."
+      },
+      "currentHostEvidence": {
+        "exactIdentityProved": false,
+        "taskScopedExposureState": "unknown",
+        "loaderInvocationState": "not-applicable-native-control",
+        "instructionsReachedModelState": "unknown",
+        "behaviorOrValueProved": false
+      },
+      "formalLiveArmEligible": false
+    },
+    {
+      "candidateId": "skill.curated.ci-cd-and-automation",
+      "candidateClass": "approved-curated-third-party",
+      "identity": {
+        "registryStatus": "approved",
+        "repositoryPayloadPath": "skills/ci-cd-and-automation/SKILL.md",
+        "repositoryPayloadSha256": "7aa008e4be26068c9e61ea8a9303711020e376c6cbfdf10d581a9fd400acf8ea",
+        "repositoryPayloadBytes": 11470,
+        "originalPath": "skills/ci-cd-and-automation",
+        "adaptedFor": "cross-agent"
+      },
+      "source": {
+        "sourceId": "github:addyosmani/agent-skills",
+        "repository": "https://github.com/addyosmani/agent-skills",
+        "revision": "17214a29c429a19f7a9607f2c06f9d650ea87eb0",
+        "license": "MIT",
+        "runtimeApproval": "approved-text-only-minimal-set",
+        "adoptedExecutableCount": 0
+      },
+      "admission": {
+        "thirdParty": true,
+        "nativeBaselineCompared": true,
+        "nativeIncrement": "Provides a repeatable delivery-pipeline design, staged gate, rollback, and validation contract beyond ordinary code editing.",
+        "overlapReviewed": true,
+        "disposition": "approve",
+        "validated": true
+      },
+      "overlap": {
+        "primaryCapability": "capability.ci-cd",
+        "primaryScope": "pipeline policy, automated quality gates, packaging, staged delivery, and deployment safeguards",
+        "overlapWithNative": "Adds a repeatable pipeline and gate contract beyond ordinary native planning; live added value remains unproved.",
+        "overlapWithOtherCandidate": "Overlaps shipping-and-launch on staged delivery and rollback language, but owns pipeline design and automation rather than the final GO/NO-GO release-readiness decision.",
+        "firstComparisonTreatment": "separate-arm-only-no-composition"
+      },
+      "currentHostEvidence": {
+        "currentCcBodyIdentityProved": false,
+        "candidateSpecificExposureState": "unknown",
+        "loaderInvocationState": "unknown",
+        "instructionsReachedModelState": "unknown",
+        "behaviorOrValueProved": false
+      },
+      "materializationAuthorized": false,
+      "executionAuthorized": false,
+      "formalLiveArmEligible": false
+    },
+    {
+      "candidateId": "skill.curated.shipping-and-launch",
+      "candidateClass": "approved-curated-third-party",
+      "identity": {
+        "registryStatus": "approved",
+        "repositoryPayloadPath": "skills/shipping-and-launch/SKILL.md",
+        "repositoryPayloadSha256": "195a1fad5612627464df4581954727b8ebd649b0ce4bfe91e06655bcc32302b0",
+        "repositoryPayloadBytes": 11464,
+        "originalPath": "skills/shipping-and-launch",
+        "adaptedFor": "cross-agent"
+      },
+      "source": {
+        "sourceId": "github:addyosmani/agent-skills",
+        "repository": "https://github.com/addyosmani/agent-skills",
+        "revision": "17214a29c429a19f7a9607f2c06f9d650ea87eb0",
+        "license": "MIT",
+        "runtimeApproval": "approved-text-only-minimal-set",
+        "adoptedExecutableCount": 0
+      },
+      "admission": {
+        "thirdParty": true,
+        "nativeBaselineCompared": true,
+        "nativeIncrement": "Provides an evidence-based GO/NO-GO, staged rollout, monitoring, rollback, and post-launch verification contract.",
+        "overlapReviewed": true,
+        "disposition": "approve",
+        "validated": true
+      },
+      "overlap": {
+        "primaryCapability": "capability.release-readiness",
+        "secondaryCapability": "capability.rollback-recovery",
+        "primaryScope": "release readiness, GO/NO-GO, rollout, monitoring, rollback, communication, and post-launch verification",
+        "overlapWithNative": "Adds a repeatable readiness decision package beyond ordinary native planning; live added value remains unproved.",
+        "overlapWithOtherCandidate": "Overlaps ci-cd-and-automation on staged delivery and rollback language, but owns the final readiness decision and post-change evidence rather than pipeline configuration.",
+        "firstComparisonTreatment": "separate-arm-only-no-composition"
+      },
+      "currentHostEvidence": {
+        "currentCcBodyIdentityProved": false,
+        "candidateSpecificExposureState": "unknown",
+        "loaderInvocationState": "unknown",
+        "instructionsReachedModelState": "unknown",
+        "behaviorOrValueProved": false
+      },
+      "materializationAuthorized": false,
+      "executionAuthorized": false,
+      "formalLiveArmEligible": false
+    }
+  ],
+  "preflightDecision": {
+    "candidateSetExact": true,
+    "repositoryPayloadIdentityValidated": true,
+    "sourceAndRevisionValidated": true,
+    "licenseAndAttributionValidated": true,
+    "releaseAdmissionValidated": true,
+    "nativeOverlapDecisionValidated": true,
+    "pairwiseScopeOverlapRecorded": true,
+    "approvedReleasePayloadProvesCurrentCcPresence": false,
+    "candidateSpecificExposureProved": false,
+    "candidateLoaderInvocationProved": false,
+    "candidateInstructionsReachedModelProved": false,
+    "candidateBehaviorOrValueProved": false,
+    "liveComparativeArmReady": false,
+    "materializationOrExecutionAuthorized": false
+  },
+  "failureFallback": [
+    "If any repository payload digest, source revision, license, admission, or overlap record drifts, invalidate this preflight.",
+    "If current-host candidate identity or exposure cannot be proved, retain unknown and stop before a candidate arm.",
+    "If the host exposes no independent loader event, preserve loader invocation as unknown and forbid causal candidate credit.",
+    "If the future native control is valid and sufficient, stop before candidate comparison unless comparison has separate authority.",
+    "If the two curated candidates cannot be isolated, do not compose them into an attributable first comparison."
+  ],
+  "authorityBoundary": {
+    "repositoryEvidenceReadOnly": true,
+    "externalDiscoveryAuthorized": false,
+    "networkAuthorized": false,
+    "modelRequestAuthorized": false,
+    "candidateMaterializationAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "ccSwitchReadOrMutationAuthorized": false,
+    "globalConfigurationReadOrMutationAuthorized": false,
+    "gitOperationAuthorized": false,
+    "portfolioMutationAuthorized": false
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "externalDiscoveryPerformed": false,
+    "networkAccessUsed": false,
+    "modelRequestCount": 0,
+    "candidateMaterializationCount": 0,
+    "candidateExecutionCount": 0,
+    "ccSwitchReadOrMutationPerformed": false,
+    "globalConfigurationReadOrChanged": false,
+    "gitOperationPerformed": false
+  },
+  "claimBoundary": {
+    "provesCurrentCcPresence": false,
+    "provesCurrentHostAvailability": false,
+    "provesCandidateSpecificExposure": false,
+    "provesCandidateLoaderInvocation": false,
+    "provesCandidateInstructionsReachedModel": false,
+    "provesCandidateBehaviorOrValue": false,
+    "provesPreferenceOrSuperiority": false,
+    "provesReleaseCompetence": false,
+    "provesCrossHostBehavior": false,
+    "provesResidualSelfAuthoredGap": false,
+    "authorizesMaterializationExecutionOrPortfolioMutation": false
+  },
+  "nextGate": "Keep all three candidates blocked from live execution. A future current-host preflight must bind exact host/model/sandbox identity, the exact candidate bytes at the execution source, task-scoped selected and unselected exposure, and an independent loader event or explicit loader-unknown attribution. A separate real fixture and dispatch authority remain mandatory.",
+  "documentation": "docs/strategy/HUMAN-AI-COLLABORATION-RELEASE-CHANGE-CANDIDATE-PREFLIGHT-2026-07-27.md"
+}

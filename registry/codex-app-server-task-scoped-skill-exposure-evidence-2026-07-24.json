@@ -1,0 +1,244 @@
+{
+  "schema": 1,
+  "id": "codex-app-server-task-scoped-skill-exposure-v1",
+  "status": "pass-current-host-task-scoped-exposure",
+  "host": {
+    "codexCliVersion": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "controlUserAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "platformFamily": "windows",
+    "platformOs": "windows"
+  },
+  "repository": {
+    "path": "C:/Projects/agent-autonomy-harness"
+  },
+  "controlInventory": {
+    "countsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "enabledCountsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "identityManifestSha256": "09bff0fcecfaf92cf962fbf9d4838d1831b83e4632c488500c4acbb4a392158e",
+    "skillCount": 111
+  },
+  "disabledInventory": {
+    "countsByScope": {
+      "system": 6,
+      "user": 105
+    },
+    "enabledCountsByScope": {
+      "system": 6,
+      "user": 0
+    },
+    "identityManifestSha256": "09bff0fcecfaf92cf962fbf9d4838d1831b83e4632c488500c4acbb4a392158e",
+    "skillCount": 111
+  },
+  "exposureComparison": {
+    "allControlUserSkillsEnabled": true,
+    "allDisabledUserSkillsDisabled": true,
+    "allNonUserStatesPreserved": true,
+    "nonUserSkillCount": 6,
+    "sameIdentitySet": true,
+    "userSkillCount": 105,
+    "userStateTransitionCount": 105
+  },
+  "selfAuthoredControlRows": [
+    {
+      "enabled": true,
+      "name": "capability-router",
+      "path": "C:/Users/15521/.agents/skills/capability-router/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": true,
+      "name": "capability-router",
+      "path": "C:/Users/15521/.codex/skills/capability-router/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": true,
+      "name": "closure-contract",
+      "path": "C:/Users/15521/.agents/skills/closure-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": true,
+      "name": "closure-contract",
+      "path": "C:/Users/15521/.codex/skills/closure-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": true,
+      "name": "intent-contract",
+      "path": "C:/Users/15521/.agents/skills/intent-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": true,
+      "name": "intent-contract",
+      "path": "C:/Users/15521/.codex/skills/intent-contract/SKILL.md",
+      "scope": "user"
+    }
+  ],
+  "selfAuthoredDisabledRows": [
+    {
+      "enabled": false,
+      "name": "capability-router",
+      "path": "C:/Users/15521/.agents/skills/capability-router/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": false,
+      "name": "capability-router",
+      "path": "C:/Users/15521/.codex/skills/capability-router/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": false,
+      "name": "closure-contract",
+      "path": "C:/Users/15521/.agents/skills/closure-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": false,
+      "name": "closure-contract",
+      "path": "C:/Users/15521/.codex/skills/closure-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": false,
+      "name": "intent-contract",
+      "path": "C:/Users/15521/.agents/skills/intent-contract/SKILL.md",
+      "scope": "user"
+    },
+    {
+      "enabled": false,
+      "name": "intent-contract",
+      "path": "C:/Users/15521/.codex/skills/intent-contract/SKILL.md",
+      "scope": "user"
+    }
+  ],
+  "threadTelemetry": {
+    "approvalPolicy": "never",
+    "cwd": "C:/Projects/agent-autonomy-harness",
+    "ephemeral": true,
+    "instructionSources": [
+      "C:/Users/15521/.codex/AGENTS.md",
+      "C:/Projects/agent-autonomy-harness/AGENTS.md"
+    ],
+    "model": "gpt-5.3-codex-spark",
+    "modelProvider": "openai",
+    "providerFallbackAllowed": false,
+    "reasoningEffort": "low",
+    "sandbox": {
+      "networkAccess": false,
+      "type": "readOnly"
+    }
+  },
+  "markerTurn": {
+    "agentMessageCount": 1,
+    "durationMilliseconds": 8820,
+    "exactMarkerMatch": true,
+    "forbiddenItemTypesObserved": [],
+    "itemCompletedNotificationTypes": [
+      "userMessage",
+      "reasoning",
+      "agentMessage"
+    ],
+    "itemTypes": [
+      "userMessage",
+      "reasoning",
+      "agentMessage"
+    ],
+    "itemsView": "eventStreamCompletedItems",
+    "status": "completed"
+  },
+  "turnEvidenceSource": {
+    "itemCompletedNotificationsUsed": true,
+    "reason": "ephemeral threads reject thread/read(includeTurns=true) with JSON-RPC -32600",
+    "threadIsEphemeral": true,
+    "threadReadIncludeTurnsAttempted": false,
+    "turnCompletedMayHaveEmptyItems": true
+  },
+  "processBoundary": {
+    "applicationRestarted": false,
+    "capabilityInstalled": false,
+    "controlProcessReturnCode": 0,
+    "disableOverrideEntryCount": 105,
+    "disabledCommandLineCharacterCount": 8978,
+    "disabledProcessReturnCode": 0,
+    "globalConfigWritten": false,
+    "mcpToolInvoked": false,
+    "pluginFeaturesDisabled": [
+      "plugins",
+      "remote_plugin",
+      "apps",
+      "plugin_sharing"
+    ],
+    "staticMcpServersDisabled": [
+      "codegraph",
+      "context7",
+      "neo4j-graph",
+      "node_repl",
+      "playwright",
+      "github"
+    ]
+  },
+  "stderrClassification": {
+    "control": {
+      "errorKeywordLineCount": 0,
+      "lineCount": 0,
+      "mcpStartupFailureCount": 0,
+      "rawStderrRecorded": false,
+      "skillBudgetWarningCount": 0
+    },
+    "disabled": {
+      "errorKeywordLineCount": 1,
+      "lineCount": 1,
+      "mcpStartupFailureCount": 0,
+      "rawStderrRecorded": false,
+      "skillBudgetWarningCount": 0
+    }
+  },
+  "mutationBoundary": {
+    "configPath": "C:/Users/15521/.codex/config.toml",
+    "configBefore": {
+      "bytes": 9723,
+      "exists": true,
+      "sha256": "39cd0a6824b56a5217dded69e8f05cd846a67c73dffde5980f799c6b621a8162"
+    },
+    "configAfter": {
+      "bytes": 9723,
+      "exists": true,
+      "sha256": "39cd0a6824b56a5217dded69e8f05cd846a67c73dffde5980f799c6b621a8162"
+    },
+    "configPrePostStable": true,
+    "rawConfigRecorded": false,
+    "rawRepositoryStatusRecorded": false,
+    "repositoryStatusBefore": {
+      "lineCount": 196,
+      "sha256": "250189a183fc63a5440bc2f0789cd4006a05d811c72a2fc170a3ffeb0fc996e7"
+    },
+    "repositoryStatusAfter": {
+      "lineCount": 196,
+      "sha256": "250189a183fc63a5440bc2f0789cd4006a05d811c72a2fc170a3ffeb0fc996e7"
+    },
+    "repositoryStatusPrePostStable": true
+  },
+  "claimBoundary": {
+    "provesAutomaticThreadCreation": false,
+    "provesCrossHostPortability": false,
+    "provesCurrentHostExactWeakModelAndEffort": true,
+    "provesCurrentHostOneOffUserSkillDisablement": true,
+    "provesDynamicMcpLifecycle": false,
+    "provesFiveArmAblationOutcome": false,
+    "provesGlobalConfigTransaction": false,
+    "provesMarkerOnlyTurnWithoutForbiddenActions": true,
+    "provesMattOrSuperpowersBehavior": false,
+    "provesProductionReadiness": false
+  },
+  "validationFailures": [],
+  "reportSha256": "55369f0582286a1dbcbae3fcd6b1521bdaf19363cf47521e189a2ba8bea7d43b"
+}

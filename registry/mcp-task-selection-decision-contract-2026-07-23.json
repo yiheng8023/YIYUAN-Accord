@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "id": "mcp-task-selection-decision-contract-2026-07-23",
+  "date": "2026-07-23",
+  "status": "verified-offline-selection-contract-no-host-actuation",
+  "scope": {
+    "evaluator": "scripts/evaluate_mcp_task_selection_decision.py",
+    "fixtures": "tests/fixtures/mcp-task-selection-decision-2026-07-23.json",
+    "tests": "tests/test_mcp_task_selection_decision.py",
+    "doesNotReplace": [
+      "capability routing",
+      "MCP lifecycle evidence",
+      "host approval",
+      "live host verification"
+    ]
+  },
+  "requiredDecisionEvidence": [
+    "exact target host, version, and adapter version",
+    "bound task, phase, concrete use case, and acceptance surface",
+    "stable required capability ids",
+    "upstream MCP-class routing decision reference and digest",
+    "native and current-capability sufficiency assessment with evidence class, reference, and digest",
+    "specific residual capability ids or explicit empty set",
+    "exact candidate identity, source revision and digest, review state, and review evidence",
+    "candidate capability-id coverage and declared surface-area score",
+    "candidate data, account, authority, cost, and maintenance boundaries",
+    "computed minimal selected set inside the declared admitted candidate universe and per-candidate decision reason",
+    "selection kept separate from activation authority and state",
+    "task-or-phase-only activation scope with unselected candidates inactive and persistent activation routed to a separate evidence and authorization gate",
+    "task-or-phase-end release request for every selected set",
+    "host-bound lifecycle evidence reference and state-compatible bounded fallback",
+    "host approval kept separate from contract credit",
+    "canonical packet digest"
+  ],
+  "policy": {
+    "scopeIsMcpSubsetRefinementAfterUpstreamRouting": true,
+    "nativeOrCurrentSufficientMeansNoMcpSelected": true,
+    "selectedCandidatesMustBeAdmittedOrSyntheticReviewedFixtures": true,
+    "selectedCandidatesMustCoverAllRequiredCapabilityIds": true,
+    "selectedSetMinimizesCandidateCountThenDeclaredSurfaceArea": true,
+    "selectedSetMustExactlyMatchCandidateDecisions": true,
+    "selectionDoesNotAuthorizeActivation": true,
+    "releaseRequestDoesNotProveRelease": true,
+    "releaseFallbackMustMatchHostLifecycleEvidenceState": true,
+    "lifecycleEvidenceMustBindHostVersionAndAdapterVersion": true,
+    "observedLifecycleClaimsRequireObservedEvidenceClass": true,
+    "candidateCountLimit": 32,
+    "fallbackRequiredWhenAnyMcpIsSelected": true,
+    "defaultPermanentActivation": false,
+    "defaultActivationScopeIsTaskOrPhaseOnly": true,
+    "unselectedCandidatesRemainInactive": true,
+    "persistentActivationRequiresSeparateEvidenceAndAuthorization": true
+  },
+  "offlineFixtureResult": {
+    "fixtureCount": 27,
+    "countsAsLiveHostProof": false,
+    "countsAsWeakAgentAcceptance": false,
+    "countsAsActivationOrReleaseProof": false
+  },
+  "claimBoundary": {
+    "mcpActivationProved": false,
+    "sameSessionSwitchingProved": false,
+    "taskEndReleaseProved": false,
+    "leaseOrReferenceCountProved": false,
+    "resourceBenefitProved": false,
+    "weakAgentAcceptanceProved": false,
+    "crossHostSupportProved": false,
+    "candidateUniverseCompleteProved": false,
+    "candidateReviewTruthProved": false,
+    "minimalityBeyondDeclaredCandidatesProved": false,
+    "persistentActivationSafeOrBeneficialProved": false
+  },
+  "nextGate": "For one separately authorized concrete workload, bind the exact selected MCP identities to parent-observed host activation and release evidence; keep selection, host approval, actuation, process identity, and resource results separate."
+}

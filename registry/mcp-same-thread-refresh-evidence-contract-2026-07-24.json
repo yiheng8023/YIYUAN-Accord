@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "mcp-same-thread-refresh-evidence-contract-2026-07-24",
+  "date": "2026-07-24",
+  "status": "verified-offline-parent-event-adapter-no-live-actuation",
+  "evaluator": "scripts/evaluate_mcp_same_thread_refresh_evidence.py",
+  "fixtures": "tests/fixtures/mcp-same-thread-refresh-evidence-2026-07-24.json",
+  "tests": "tests/test_mcp_same_thread_refresh_evidence.py",
+  "sourceBinding": {
+    "selectionContract": "registry/mcp-task-selection-decision-contract-2026-07-23.json",
+    "lifecycleSkeletonContract": "registry/mcp-lifecycle-trial-skeleton-contract-2026-07-24.json",
+    "requiredPlannedDimension": "sameSessionSwitching",
+    "selectionOrSkeletonProvesActuation": false
+  },
+  "runtimeOracle": {
+    "required": "same thread active turn followed by a direct tool call",
+    "statusListRole": "diagnostic-only",
+    "emptyReloadResponseRole": "request-accepted-only",
+    "reloadAloneProvesCausality": false,
+    "activeTurnIsARecordedCommonCondition": true
+  },
+  "requiredEventOrder": [
+    "pre-status",
+    "baseline-direct-call",
+    "config-delta",
+    "reload-request",
+    "reload-response",
+    "active-turn",
+    "post-direct-call",
+    "post-status",
+    "config-restore"
+  ],
+  "requiredBindings": [
+    "exact host version platform protocol schema and adapter",
+    "exact app-server instance PID and creation time",
+    "exact selected MCP identity source revision and digest",
+    "one semantic config key with initial changed and restored byte digests",
+    "one unchanged thread identity across all ordered events",
+    "parent-captured raw event bytes with recomputed SHA-256",
+    "explicit disposable-home delta reload active-turn and restore authority",
+    "no user config authentication or secret read"
+  ],
+  "fixtureResult": {
+    "fixtureCount": 12,
+    "countsAsLiveHostProof": false,
+    "countsAsTaskEndReleaseProof": false
+  },
+  "claimBoundary": {
+    "liveSameThreadActuationProved": false,
+    "reloadAloneCausalityProved": false,
+    "oldRuntimeReleaseProved": false,
+    "taskEndReleaseProved": false,
+    "leaseOrReferenceCountProved": false,
+    "resourceBenefitProved": false,
+    "desktopParityProved": false,
+    "globalConfigMutationAuthorized": false
+  },
+  "nextGate": "separately-authorized-disposable-host-capture-with-exact-byte-restore-and-same-thread-active-turn-direct-call-pair"
+}

@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27",
+  "date": "2026-07-27",
+  "status": "offline-amendment-required-before-live",
+  "purpose": "Decide whether the existing creator-connection-close protocol and probe have an evidence-backed zero-model-turn acquisition path for connection B before any live paired execution is considered.",
+  "sourceBindings": {
+    "protocol": {
+      "path": "registry/mcp-thread-creator-connection-close-attribution-protocol-2026-07-27.json",
+      "sha256": "8A110058AAC75DDC54E2B3795F6F6BE12004E4CDE0262045BEA79D112D157326"
+    },
+    "currentProbe": {
+      "path": "scripts/probe_codex_app_server_mcp_thread_creator_connection_close.py",
+      "sha256": "66CF7066B68D92139653C5E41AD74CAA64D00273C662A2899E396501974C2CF6"
+    },
+    "invalidCalibration": {
+      "path": "registry/mcp-thread-creator-connection-close-calibration-attempt-2026-07-27.json",
+      "sha256": "D0872E69083A79A87CDF9D3A269E6AC53E676AE7D2EAA4AFF97110618BE3A0FA"
+    },
+    "multiConnectionEvidence": {
+      "path": "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json",
+      "sha256": "ED3047D4EDC8B1FC437A1EF90E5DDB9C660078CE6D66B98112CEEF83E76F3E22"
+    },
+    "formalReports": [
+      {
+        "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-01/report.json",
+        "sha256": "F4C0230E4C87C8499365F892671FA41BD5B4A615EB7539A73557D65C278CCB5D",
+        "reportSha256": "F8036D42AD148A0C4B11F61EB2D25E2C4F4B4CC13F9BEED67E60CAA3E6004D04"
+      },
+      {
+        "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-02/report.json",
+        "sha256": "769BA186566817C5120BEDA3769D4C4B870C303A1A4540EA36FC47B2F077DC2D",
+        "reportSha256": "A37A5308B878210870A341F928D7B580D8E4710C5CD369FDDE55C9A8B1BA8F2C"
+      },
+      {
+        "path": "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/report.json",
+        "sha256": "C9D569B30F80DA680A46C79A8650F7ECB9B61E6298D4748326447F0F883E8E36",
+        "reportSha256": "6B28F7D0AA804608D1C2A721D4BA9E364EAF3C59F8A945F3382A704CEBD71359"
+      }
+    ]
+  },
+  "machineVerifiedObservation": {
+    "formalRunCount": 3,
+    "acquisitionPath": "thread-created-auto-attach",
+    "singleAppServerPerRun": true,
+    "twoDistinctBridgeProcessesPerRun": true,
+    "sameThreadPerRun": true,
+    "sameExactSentinelPerRun": true,
+    "connectionBDirectToolCallPerRun": true,
+    "modelTurnRequestCount": 0,
+    "turnStartedNotificationCount": 0,
+    "secondIndependentlyReleasableSubscriptionObserved": false
+  },
+  "currentConflict": {
+    "protocolSetupRequiresThreadResume": true,
+    "currentProbeCallsThreadResume": true,
+    "zeroTurnResumePathValidatedByFormalReports": false,
+    "invalidCalibrationPairedWindowEntered": false,
+    "invalidCalibrationFormalLivePairedRunCount": 0,
+    "reason": "The only three valid zero-model-turn reports use thread-created auto-attach and direct connection-B calls. The current protocol and probe still require thread/resume, while the retained calibration did not reach a paired window."
+  },
+  "requiredOfflineAmendment": {
+    "disposition": "amend-new-revision-do-not-rewrite-bound-history",
+    "candidateSequence": [
+      "Initialize connection B and complete its config/read barrier before connection A starts the thread.",
+      "Initialize connection A, start one non-ephemeral read-only thread, and call the Sentinel.",
+      "Call the same thread and Sentinel directly from connection B without thread/resume.",
+      "Use rollout materialization only as diagnostic evidence and never as a prerequisite."
+    ],
+    "protocolRevisionRequired": true,
+    "probeRevisionRequired": true,
+    "oldProtocolMutationAuthorized": false,
+    "oldProbeMutationAuthorized": false,
+    "candidateSequenceIsLiveAuthorization": false
+  },
+  "admissionDecision": {
+    "conclusion": "offline-amendment-required-before-live",
+    "currentProtocolProbePairAdmittedForLiveExecution": false,
+    "autoAttachAcquisitionPathAdmittedAsSecondSubscription": false,
+    "liveRerunAuthorized": false,
+    "reason": "Auto-attach callability is reproducible, but it neither validates the current resume-dependent setup nor proves a second subscription. A new offline protocol/probe revision and deterministic validation are required before any separate live-authorization decision."
+  },
+  "executionBoundary": {
+    "readOnlySourceAndReportValidationAuthorized": true,
+    "offlineArtifactCreationAuthorized": true,
+    "appServerStartAuthorized": false,
+    "loopbackTransportExecutionAuthorized": false,
+    "modelTurnAuthorized": false,
+    "externalNetworkUseAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "installationAuthorized": false,
+    "liveProtocolExecutionAuthorized": false
+  },
+  "claimBoundary": {
+    "autoAttachIsSecondSubscriptionProved": false,
+    "autoAttachCreatesIndependentOwnerProved": false,
+    "leaseOrReferenceCountProved": false,
+    "taskEndSemanticsProved": false,
+    "finalReleaseSemanticsProved": false,
+    "resourceBenefitProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "selfAuthoredControllerNeedProved": false,
+    "liveReadinessProved": false
+  },
+  "documentation": "docs/mcp-thread-creator-close-observer-acquisition-path-admission-2026-07-27.md"
+}

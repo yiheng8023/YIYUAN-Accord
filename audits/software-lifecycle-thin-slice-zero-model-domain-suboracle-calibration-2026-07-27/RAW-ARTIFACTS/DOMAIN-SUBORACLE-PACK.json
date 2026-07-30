@@ -1,0 +1,407 @@
+{
+  "schema": 1,
+  "kind": "software-lifecycle-domain-suboracle-pack",
+  "mode": "zero-model-recomputed-existing-classifiers",
+  "sourceBindings": [
+    {
+      "path": "tests/fixtures/human-ai-collaboration-tdd-timeline-fixtures-2026-07-26.json",
+      "fileSha256": "143e560bb7c4beed6991a9a4c55e517515d377e431f6f2c2bf6a67f868c958bc"
+    },
+    {
+      "path": "tests/fixtures/lifecycle-metabolism-fixtures-2026-07-18.json",
+      "fileSha256": "ac5cc8be038a26f4486574e073359cb18a70f79d6e66ba75b161b4f2f657cb32"
+    },
+    {
+      "path": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+      "fileSha256": "8e1867505fd6cdb615a66892e6d4dc7553853159f459c366f8535c64e73e02c3"
+    }
+  ],
+  "classifierBindings": [
+    {
+      "module": "scripts.build_human_ai_collaboration_tdd_trial",
+      "callable": "evaluate_tdd_timeline"
+    },
+    {
+      "module": "scripts.evaluate_lifecycle_metabolism_fixtures",
+      "callable": "evaluate_case"
+    },
+    {
+      "module": "scripts.run_human_ai_collaboration_weak_agent_trial",
+      "callable": "evaluate_trial"
+    },
+    {
+      "module": "scripts.evaluate_process_fidelity_cumulative_loss_accounting",
+      "callable": "build_cumulative_loss_ledger"
+    }
+  ],
+  "results": {
+    "tdd": {
+      "positive": {
+        "status": "accepted-offline-tdd-timeline",
+        "failureCodes": [],
+        "eventCount": 4,
+        "validRedCount": 1,
+        "finalGreenCount": 1,
+        "firstProductionMutationIndex": 2,
+        "unknownNormalizedEventTypes": []
+      },
+      "negativeControl": {
+        "status": "rejected-offline-tdd-timeline",
+        "failureCodes": [
+          "valid-red-before-production-not-observed",
+          "only-wrong-error-red-observed"
+        ],
+        "eventCount": 4,
+        "validRedCount": 0,
+        "finalGreenCount": 1,
+        "firstProductionMutationIndex": 2,
+        "unknownNormalizedEventTypes": []
+      }
+    },
+    "releaseRollback": {
+      "positive": {
+        "id": "rollback-after-validation-failure",
+        "decision": "accept",
+        "reasonCode": "policy-satisfied"
+      },
+      "negativeControl": {
+        "id": "reject-retirement-without-migration-or-rollback",
+        "decision": "reject",
+        "reasonCode": "release-safeguards-incomplete",
+        "missing": [
+          "migrationPlan",
+          "rollbackPlan"
+        ]
+      }
+    },
+    "incident": {
+      "positive": {
+        "status": "fixture-pass-loader-causation-unproved",
+        "failureCodes": [],
+        "changedFiles": [
+          "INCIDENT_EVIDENCE.json",
+          "policy_cache.py",
+          "test_policy_cache.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-OPS-NATIVE-SPARK",
+        "scenarioId": "SE-OPS-INCIDENT-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "negativeControl": {
+        "status": "fixture-fail-or-host-evidence-incomplete",
+        "failureCodes": [
+          "incident-feedback-loop-not-observed-before-fix"
+        ],
+        "changedFiles": [
+          "INCIDENT_EVIDENCE.json",
+          "policy_cache.py",
+          "test_policy_cache.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-OPS-NATIVE-SPARK",
+        "scenarioId": "SE-OPS-INCIDENT-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      }
+    },
+    "maintenance": {
+      "policyPositive": {
+        "id": "retire-after-verified-migration",
+        "decision": "accept",
+        "reasonCode": "policy-satisfied"
+      },
+      "runnerPositive": {
+        "status": "fixture-pass-loader-causation-unproved",
+        "failureCodes": [],
+        "changedFiles": [
+          "MIGRATION_EVIDENCE.json",
+          "record_adapter.py",
+          "test_record_adapter.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-MAINT-NATIVE-SPARK",
+        "scenarioId": "SE-MAINT-MIGRATE-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      },
+      "negativeControl": {
+        "status": "fixture-fail-or-host-evidence-incomplete",
+        "failureCodes": [
+          "maintenance-verification-command-not-observed"
+        ],
+        "changedFiles": [
+          "MIGRATION_EVIDENCE.json",
+          "record_adapter.py",
+          "test_record_adapter.py"
+        ],
+        "changedFileScopeValid": true,
+        "immutableInputsStable": true,
+        "forbiddenItemTypesObserved": [],
+        "visibleTestsPassed": true,
+        "hiddenTestsPassed": true,
+        "countsAsGeneralCodingSuperiority": false,
+        "countsAsGeneralResearchQuality": false,
+        "countsAsSkillCausationProof": false,
+        "countsAsProductionReadiness": false,
+        "arm": "SE-MAINT-NATIVE-SPARK",
+        "scenarioId": "SE-MAINT-MIGRATE-01",
+        "hostProjectionMarkersObserved": false,
+        "transientOutOfScopeWriteObserved": false,
+        "outOfScopeReadObserved": false
+      }
+    },
+    "cumulativeLoss": {
+      "control": {
+        "accountingMode": "parent-recomputed-deduplicated-active-loss-set",
+        "budgetEvaluated": true,
+        "budgetMaximum": 0,
+        "budgetExceededAtHop": null,
+        "peakActiveLossWeight": 0,
+        "cumulativeUniqueLossIds": [],
+        "cumulativeUniqueLossWeight": 0,
+        "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true,
+        "changesProcessAcceptancePass": false,
+        "hops": [
+          {
+            "stageId": "requirements-domain",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "architecture-design",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "implementation-tdd",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "independent-review-test-security",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "release-rollback-gating",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "observation-incident-handling",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          },
+          {
+            "stageId": "maintenance-evolution",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [],
+            "cumulativeUniqueLossWeight": 0
+          }
+        ]
+      },
+      "reintroductionControl": {
+        "accountingMode": "parent-recomputed-deduplicated-active-loss-set",
+        "budgetEvaluated": false,
+        "budgetMaximum": null,
+        "budgetExceededAtHop": null,
+        "peakActiveLossWeight": 5,
+        "cumulativeUniqueLossIds": [
+          "invariant-omitted:authority"
+        ],
+        "cumulativeUniqueLossWeight": 5,
+        "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true,
+        "changesProcessAcceptancePass": false,
+        "hops": [
+          {
+            "stageId": "loss-introduced",
+            "activeLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "newLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 5,
+            "newLossWeight": 5,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          },
+          {
+            "stageId": "loss-recovered",
+            "activeLossIds": [],
+            "newLossIds": [],
+            "carriedLossIds": [],
+            "recoveredLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [],
+            "activeLossWeight": 0,
+            "newLossWeight": 0,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 5,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          },
+          {
+            "stageId": "loss-reintroduced",
+            "activeLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "newLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "carriedLossIds": [],
+            "recoveredLossIds": [],
+            "firstSeenLossIds": [],
+            "reintroducedLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "activeLossWeight": 5,
+            "newLossWeight": 5,
+            "carriedLossWeight": 0,
+            "recoveredLossWeight": 0,
+            "cumulativeUniqueLossIds": [
+              "invariant-omitted:authority"
+            ],
+            "cumulativeUniqueLossWeight": 5
+          }
+        ]
+      }
+    }
+  },
+  "positiveAcceptance": {
+    "tdd": true,
+    "releaseRollback": true,
+    "incidentContract": true,
+    "maintenancePolicy": true,
+    "maintenanceRunnerContract": true,
+    "cumulativeLossControl": true
+  },
+  "negativeControlRejection": {
+    "tddWrongRed": true,
+    "retirementWithoutSafeguards": true,
+    "incidentWithoutFeedbackLoop": true,
+    "maintenanceWithoutVerification": true,
+    "reintroducedLossNotDoubleCounted": true
+  },
+  "allPositiveAccepted": true,
+  "allNegativeControlsRejected": true,
+  "claimBoundary": {
+    "liveAgentBehaviorProved": false,
+    "liveModelRouteProved": false,
+    "domainTaskExecutionProved": false,
+    "loaderCausationProved": false,
+    "productionLifecycleProved": false
+  }
+}

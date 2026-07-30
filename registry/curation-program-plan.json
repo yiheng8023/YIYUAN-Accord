@@ -279,12 +279,12 @@
         "id": "lane.lifecycle-metabolism",
         "executionMode": "cross-cutting",
         "dependsOn": [],
-        "purpose": "Re-evaluate upstream updates, conflicts, safety, usage, license, replacement, deprecation, migration, rollback, and retirement.",
+        "purpose": "Re-evaluate upstream updates, conflicts, safety, usage, license, replacement, deprecation, migration, rollback, and retirement, and reconcile exact-target cleanup debt before any declared final program closeout.",
         "requiredInputs": ["at least one governed candidate, release, upstream, consumer, community, or validation signal"],
         "triggerInputsAnyOf": ["governed candidate evidence", "release evidence", "upstream refresh", "consumer feedback", "community or validation feedback"],
-        "allowedOutputs": ["refresh decision", "supersession", "deprecation", "migration", "rollback", "retirement"],
+        "allowedOutputs": ["refresh decision", "supersession", "deprecation", "migration", "rollback", "retirement", "final-closeout cleanup disposition and retained-evidence ledger"],
         "blockedTransitions": ["automatic upstream replacement", "inventory growth as success", "silent breaking change"],
-        "verificationSurface": ["diff evidence", "impact analysis", "migration and rollback", "recheck trigger"],
+        "verificationSurface": ["diff evidence", "impact analysis", "migration and rollback", "recheck trigger", "exact-target cleanup inventory and post-cleanup recheck"],
         "rerouteTriggers": ["upstream update", "security finding", "usage failure", "better replacement"]
       },
       {
@@ -331,6 +331,7 @@
   },
   "sequenceGates": [
     {"id": "gate.demand-before-gap-claim", "prerequisite": "evidence-backed demand", "blockedUntil": "capability-gap claim", "verification": "demand coordinates and claim limits"},
+    {"id": "gate.solution-neutral-coverage-before-generalization", "prerequisite": "open-world mother-framework coverage plus applicable domain or lifecycle specialization", "blockedUntil": "whole-domain coverage, generalized residual-gap, repository-authoring, or hard-standard claim", "verification": "solution-neutrality, uncovered cells, counterexamples, source diversity, software-lifecycle specialization where applicable, and AI-independent hard-standard boundary"},
     {"id": "gate.baseline-before-substitution", "prerequisite": "native, official, and runtime baseline", "blockedUntil": "external substitution decision", "verification": "dated host and capability evidence"},
     {"id": "gate.clustering-before-deep-review", "prerequisite": "candidate clustering and deduplication", "blockedUntil": "representative deep review", "verification": "cluster and shortlist rationale"},
     {"id": "gate.source-pin-before-deep-review", "prerequisite": "exact source pin and license or provenance boundary", "blockedUntil": "third-party instructions or executable-surface deep review", "verification": "immutable revision, source identity, license, provenance, and non-execution boundary"},
@@ -344,7 +345,8 @@
     {"id": "gate.source-preflight-before-download-or-install", "prerequisite": "bound task or shortfall plus metadata license provenance and executable-surface preflight", "blockedUntil": "candidate download into a non-active pool", "verification": "source identity, immutable revision, license, provenance, executable surfaces, non-active destination, and explicit non-execution boundary"},
     {"id": "gate.manager-topology-before-repository-creation", "status": "historical-satisfied", "prerequisite": "owner-reviewed written Manager design and accepted historical MERIDIAN topology-impact package", "blockedUntil": "the completed local Manager repository-creation decision", "verification": "historical authority, upstream and downstream, bookmark and radar, public and private, Actions, release, acceptance, rollback, retirement, and cross-repository write edges"},
     {"id": "gate.manager-post-matrix-reintake-before-adapter-work", "status": "historical-satisfied", "prerequisite": "dated repository truth and current authority contract", "blockedUntil": "the completed disposable adapter preview", "verification": "dated repository authority snapshot, CALIBRATION read-only input, historical curated and Manager authority, explicit adapter slice scope, and real Agent and Hook write prohibition"},
-    {"id": "gate.closeout-before-next-intake", "prerequisite": "current round stage closeout", "blockedUntil": "next candidate-intake round activation", "verification": "closeout outcome, residual risks, deferred work, and next decision"}
+    {"id": "gate.closeout-before-next-intake", "prerequisite": "current round stage closeout", "blockedUntil": "next candidate-intake round activation", "verification": "closeout outcome, residual risks, deferred work, and next decision"},
+    {"id": "gate.final-program-cleanup-before-final-closeout", "prerequisite": "exact-target historical-debt and temporary-artifact inventory, ownership and recoverability review, separate cleanup authority, and preserved authoritative evidence", "blockedUntil": "any declared final program closeout", "verification": "explicit retain, archive, migrate, or delete disposition for each bound target plus post-cleanup repository, workspace, branch, worktree, backup, generated-artifact, consumer-state, and evidence recheck"}
   ],
   "currentInitiatives": [
     {
@@ -423,6 +425,48 @@
       }
     },
     {
+      "id": "initiative.human-ai-collaboration-coverage-rebaseline",
+      "status": "active",
+      "prerequisites": ["user accepted the structural-bias audit", "current Harness repository truth verified", "YIYUAN-CALIBRATION remains paused and read-only"],
+      "allowedActions": ["exact read-only source binding", "solution-neutral mother-framework modeling", "software-engineering lifecycle specialization", "historical STM/P/SG cross-mapping", "acceptance-scope revalidation", "deterministic in-repository verification"],
+      "blockedActions": ["YIYUAN-CALIBRATION mutation", "YIYUAN-ASSETS admission", "hard-standard promotion", "Skill or Hook mutation from coverage metadata", "runtime mutation", "whole-domain closure claim", "remote push"],
+      "resultPackage": ["source-bound structural finding", "open-world mother-framework axes", "software-engineering lifecycle slices", "cross-domain process-fidelity and cumulative-loss model", "historical-coordinate preservation boundary", "acceptance revalidation map", "falsifiable gates and next scenario-to-evidence matrix"],
+      "acceptanceIds": ["acceptance.solution-neutral-collaboration-rebaseline", "acceptance.software-engineering-lifecycle-specialization", "acceptance.end-to-end-process-fidelity", "acceptance.ai-independent-hard-standard-boundary"],
+      "decisionGate": "scenario-to-evidence coverage must expose unassessed cells and pass solution-neutrality before generalized gap, repository-authoring, or future hard-standard extraction",
+      "currentEvidence": "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json",
+      "currentMatrixEvidence": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "currentComparativeProtocol": "registry/human-ai-collaboration-comparative-protocol-batch-01-2026-07-24.json",
+      "currentCandidateExposureEvidence": "registry/codex-app-server-comparative-candidate-exposure-preflight-2026-07-24.json",
+      "currentWeakAgentLiveComparisonEvidence": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-01-2026-07-24.json",
+      "currentWeakAgentLiveComparisonEvidenceBatch02": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-02-2026-07-24.json",
+      "currentWeakAgentLiveComparisonEvidenceBatch03": "registry/human-ai-collaboration-weak-agent-live-comparison-batch-03-2026-07-24.json",
+      "currentReadOnlyClaimLiveComparisonEvidence": "registry/human-ai-collaboration-read-only-claim-live-comparison-2026-07-26.json",
+      "currentNewFeatureTddProtocol": "registry/human-ai-collaboration-new-feature-tdd-protocol-2026-07-26.json",
+      "currentMaintenanceMigrationProtocol": "registry/human-ai-collaboration-maintenance-migration-protocol-batch-01-2026-07-24.json",
+      "currentMaintenanceMigrationLiveComparisonEvidence": "registry/human-ai-collaboration-maintenance-migration-live-comparison-batch-01-2026-07-24.json",
+      "currentRequirementsDomainChallengeProtocol": "registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json",
+      "currentRequirementsDomainExposurePreflightEvidence": "registry/requirements-domain-exposure-preflight-evidence-2026-07-24.json",
+      "currentStructuredSkillInputEvidence": "registry/codex-app-server-structured-skill-input-evidence-2026-07-24.json",
+      "currentTreatmentFidelityEvidence": "registry/codex-app-server-skill-treatment-fidelity-evidence-2026-07-24.json",
+      "currentProcessFidelityV2Protocol": "registry/human-ai-collaboration-process-fidelity-information-equivalent-trial-protocol-v2-2026-07-27.json",
+      "currentProcessFidelityChainedTraceCalibration": "registry/human-ai-collaboration-process-fidelity-chained-trace-measurement-calibration-2026-07-27.json",
+      "currentProcessFidelityChainedProtocol": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+      "currentProcessFidelityChainedPacketPreflight": "registry/human-ai-collaboration-process-fidelity-chained-transform-packet-preflight-2026-07-27.json",
+      "currentProcessFidelityChainedProtocolV2Amendment": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+      "currentProcessFidelityAdapterEvaluatorEvidence": "registry/human-ai-collaboration-process-fidelity-chained-transform-adapter-evaluator-poc-evidence-2026-07-27.json",
+      "currentProcessFidelityCumulativeLossAccountingEvidence": "registry/human-ai-collaboration-process-fidelity-cumulative-loss-accounting-poc-evidence-2026-07-27.json",
+      "currentSoftwareLifecycleThinSliceProtocol": "registry/human-ai-collaboration-software-lifecycle-thin-slice-protocol-2026-07-27.json",
+      "currentSoftwareLifecycleThinSliceZeroModelCalibrationEvidence": "registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json",
+      "currentReleaseChangeZeroModelProtocol": "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json",
+      "currentReleaseChangeCandidatePreflight": "registry/human-ai-collaboration-release-change-candidate-preflight-2026-07-27.json",
+      "currentTddExecutionReadinessReconciliation": "registry/human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27.json",
+      "currentTddNoncomparativeDispatchSuccessorContractV2": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27.json",
+      "currentAccessCommsZeroModelProtocol": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+      "currentProcessFidelityDispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
+      "currentProcessFidelityDispatchLedgerContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
+      "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json"
+    },
+    {
       "id": "initiative.production-capability-manager-topology-design",
       "status": "superseded",
       "designDecisionEvidence": "registry/production-capability-manager-design-acceptance-event-2026-07-15.json",
@@ -470,6 +514,13 @@
       "authorityOwner": "agent-skills-curated-for-coverage-planning",
       "nonGoals": ["claiming universal domain completeness", "replacing accountable domain experts"],
       "acceptanceIds": ["acceptance.multi-domain-coverage"]
+    },
+    {
+      "id": "objective.solution-neutral-collaboration-coverage",
+      "statement": "Maintain an open-world, solution-neutral human-AI collaboration mother framework with software engineering as a priority lifecycle specialization and end-to-end process fidelity as a cross-domain transformation risk, while preserving narrow historical evidence without treating the current Skills or coordinate inventory as the problem universe.",
+      "authorityOwner": "agent-autonomy-harness-for-rebaseline-evidence-only",
+      "nonGoals": ["mutating paused YIYUAN-CALIBRATION", "claiming exhaustive human-AI coverage", "treating software engineering as the whole domain", "promoting a Skill or Agent behavior into a hard standard"],
+      "acceptanceIds": ["acceptance.solution-neutral-collaboration-rebaseline", "acceptance.software-engineering-lifecycle-specialization", "acceptance.end-to-end-process-fidelity", "acceptance.ai-independent-hard-standard-boundary"]
     },
     {
       "id": "objective.evidence-backed-release-evolution",
@@ -567,15 +618,17 @@
     },
     {
       "id": "objective.lifecycle-metabolism",
-      "statement": "Continuously re-evaluate upstream updates, conflicts, safety, usage feedback, deprecation, migration, rollback, and retirement instead of accumulating Skills indefinitely.",
+      "statement": "Continuously re-evaluate upstream updates, conflicts, safety, usage feedback, deprecation, migration, rollback, retirement, and exact-target final-closeout cleanup debt instead of accumulating Skills or temporary process artifacts indefinitely.",
       "authorityOwner": "agent-skills-curated-for-release-lifecycle",
       "nonGoals": [
         "optimizing for Skill count",
-        "claiming an absolute completion state"
+        "claiming an absolute completion state",
+        "treating a green stage or latest PoC slice as final program closeout"
       ],
       "acceptanceIds": [
         "acceptance.feedback-loop",
         "acceptance.deprecation-retirement-loop",
+        "acceptance.final-program-cleanup-gate",
         "acceptance.sequence-integrity",
         "acceptance.round02-stage-closeout",
         "acceptance.round03-rebaseline"

@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "probeId": "semantic-authority-composition-exposure-preflight-v1",
+  "status": "preflight-pass-no-turn",
+  "candidateId": "matt.current.grill-with-docs-composition",
+  "projectionManifestSha256": "81570ce9ed247e5f346aa96f97fe30a89f3c15a333289f59192e2146751a3332",
+  "projectedTreeSha256": "295c4f5819f38e49cd4955d81294a5da1ce3197d78fc52c24bfecaf92027daa5",
+  "host": {
+    "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+    "platformFamily": "windows",
+    "platformOs": "windows"
+  },
+  "controlInventory": {
+    "skillCount": 114,
+    "countsByScope": {
+      "repo": 3,
+      "system": 6,
+      "user": 105
+    },
+    "enabledCountsByScope": {
+      "repo": 3,
+      "system": 6,
+      "user": 105
+    },
+    "identityManifestSha256": "3f3ca1b0d8ec7c664c01705401f0919e8cc23e0e561a316a152b3e4ffa92ef34"
+  },
+  "exposure": {
+    "requiredSkillCount": 3,
+    "requiredSkillNames": [
+      "domain-modeling",
+      "grill-with-docs",
+      "grilling"
+    ],
+    "allRequiredExactPathsPresent": true,
+    "exactPathSha256": {
+      "domain-modeling": "152e2c97239affb12a60c5f4a7e74ab546a49ae169688c81f4e2ccc42dafa579",
+      "grill-with-docs": "610d091047bcfb9db0f75c057d15538481a721111579fc5ec7f83ad9131a2165",
+      "grilling": "44331dda57f461db4fec3f2efb6ddabe7aaaa0a57ae0f88a883bc61aed8a0587"
+    }
+  },
+  "arms": [
+    {
+      "arm": "control-unselected",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 0,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 114,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6,
+          "user": 105
+        },
+        "enabledCountsByScope": {
+          "repo": 0,
+          "system": 6,
+          "user": 0
+        },
+        "identityManifestSha256": "3f3ca1b0d8ec7c664c01705401f0919e8cc23e0e561a316a152b3e4ffa92ef34"
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    },
+    {
+      "arm": "composition-selected",
+      "inventory": {
+        "sameIdentitySet": true,
+        "enabledConfigurableSkillCount": 3,
+        "onlyExpectedConfigurableSkillsEnabled": true,
+        "allNonConfigurableStatesPreserved": true
+      },
+      "effectiveInventory": {
+        "skillCount": 114,
+        "countsByScope": {
+          "repo": 3,
+          "system": 6,
+          "user": 105
+        },
+        "enabledCountsByScope": {
+          "repo": 3,
+          "system": 6,
+          "user": 0
+        },
+        "identityManifestSha256": "3f3ca1b0d8ec7c664c01705401f0919e8cc23e0e561a316a152b3e4ffa92ef34"
+      },
+      "host": {
+        "userAgent": "Codex Desktop/0.145.0 (Windows 10.0.26200; x86_64) unknown (agent_autonomy_harness_skill_exposure_probe; 1.0.0)",
+        "platformFamily": "windows",
+        "platformOs": "windows"
+      }
+    }
+  ],
+  "threadStarted": false,
+  "turnStarted": false,
+  "modelRequestSent": false,
+  "stability": {
+    "projectionTreeStable": true,
+    "globalConfigStable": true,
+    "repositoryStatusStable": true
+  },
+  "claimBoundary": {
+    "entryLoaderInvocationProved": false,
+    "dependencyLoaderInvocationProved": false,
+    "skillInstructionsReachedModelProved": false,
+    "namedSlashCompositionWorksProved": false,
+    "relativeFormatFileDeliveryProved": false,
+    "behavioralCausationProved": false,
+    "semanticContinuityProved": false,
+    "candidateSuperiorityProved": false,
+    "crossHostValueProved": false
+  },
+  "reportSha256": "024e1b27a51c897f7dac66ab19028a4a4ac6e59ef73cc89b37beefab264238ab"
+}

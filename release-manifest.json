@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "skillCount": 20,
-  "fileCount": 42,
+  "skillCount": 19,
+  "fileCount": 40,
   "files": [
     {
       "path": "skills/ci-cd-and-automation/SKILL.md",
@@ -22,16 +22,6 @@
       "path": "skills/diagnose/scripts/hitl-loop.template.sh",
       "sha256": "26b45e7b0893de95d8a74da6d36a512682313d1f018cf82549a67f4aa59468c3",
       "size": 1165
-    },
-    {
-      "path": "skills/git-guardrails/SKILL.md",
-      "sha256": "27bb96dda0850f3d969b550ff01f996d22cf53ef1ef4d1bc678b18a82f66d790",
-      "size": 4002
-    },
-    {
-      "path": "skills/git-guardrails/scripts/block-dangerous-git.sh",
-      "sha256": "9acf0e890ecc535358f45fc15cec867b2eb6a78f4089dfd3777c388c81d3564a",
-      "size": 508
     },
     {
       "path": "skills/grill-with-docs/ADR-FORMAT.md",
