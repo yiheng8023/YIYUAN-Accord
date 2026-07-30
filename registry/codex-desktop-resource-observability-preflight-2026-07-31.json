@@ -1,0 +1,299 @@
+{
+  "schema": 1,
+  "id": "codex-desktop-resource-observability-preflight-2026-07-31",
+  "date": "2026-07-31",
+  "status": "observed-live-read-only-single-host-desktop-resource-observability-owner-attribution-blocked-no-actuation",
+  "hostBinding": {
+    "surface": "Codex Desktop",
+    "platform": "Microsoft Windows 11 Professional",
+    "windowsVersion": "10.0.26200",
+    "windowsBuild": "26200",
+    "logicalProcessors": 16,
+    "totalPhysicalMemoryBytes": 33737932800,
+    "freePhysicalMemoryBytesAtHostProfileObservation": 20861067264,
+    "codexCliVersion": "codex-cli 0.146.0",
+    "desktopProductVersion": "unknown",
+    "repositoryHead": "db8078e9b5686c4d7d958184241ceddd64dab592"
+  },
+  "authorityBoundary": {
+    "readOnlyLocalHostObservation": true,
+    "modelTurnStarted": false,
+    "threadCreatedArchivedOrDeleted": false,
+    "mcpEnabledDisabledReloadedOrReconfigured": false,
+    "processStoppedOrRestarted": false,
+    "hookPluginAppOrGlobalConfigChanged": false,
+    "rawCommandLinesRetained": false,
+    "credentialValuesRetained": false,
+    "threadTitlesBodiesOrSummariesRetained": false
+  },
+  "threadInventoryObservation": {
+    "surface": "Codex Desktop list_threads schema 4",
+    "observedAt": "2026-07-31 current task turn",
+    "requestedNonPinnedLimit": 50,
+    "returnedPinnedCount": 10,
+    "returnedNonPinnedCount": 50,
+    "returnedTotalCount": 60,
+    "resultTruncatedAtRequestedLimit": true,
+    "codex": {
+      "active": 2,
+      "notLoaded": 18
+    },
+    "chatgpt": {
+      "idle": 40
+    },
+    "currentProject": {
+      "active": 1,
+      "notLoaded": 1
+    },
+    "unavailableHostCount": 0,
+    "unavailableSourceCount": 0,
+    "currentThreadTerminalAttached": false,
+    "provesLoadedRuntimeCount": false,
+    "provesThreadToProcessOwnership": false,
+    "provesResourceRelease": false
+  },
+  "mcpConfigurationObservation": {
+    "surface": "codex mcp list",
+    "configuredEntryCount": 9,
+    "enabledEntryCount": 9,
+    "localConfiguredEntries": [
+      "codegraph",
+      "codex-security",
+      "context7",
+      "neo4j-graph",
+      "node_repl",
+      "openai-api-key-local-confirmation",
+      "playwright"
+    ],
+    "remoteConfiguredEntries": [
+      "figma",
+      "github"
+    ],
+    "configurationStatusEqualsLoadedRuntime": false,
+    "configurationInventoryIsCompletePluginRuntimeInventory": false,
+    "perEntryProcessOrConnectionOwnershipExposed": false
+  },
+  "officialSourceCorrelation": {
+    "repository": "openai/codex",
+    "codexCliTag": "rust-v0.146.0",
+    "codexCliTagCommit": "e363b08c9175ac1cbe5893615dd2cb9ddf95043b",
+    "appServerProtocolSource": "https://github.com/openai/codex/blob/e363b08c9175ac1cbe5893615dd2cb9ddf95043b/codex-rs/app-server/README.md",
+    "protocolSurfacesAtPinnedCommit": {
+      "loadedThreadIds": "thread/loaded/list",
+      "threadRuntimeStatus": "thread/status/changed",
+      "threadScopedMcpStartupOwner": "mcpServer/startupStatus/updated.threadId",
+      "threadTokenUsage": "thread/tokenUsage/updated",
+      "automaticOrExplicitContextCompaction": [
+        "contextCompaction",
+        "thread/compact/start"
+      ],
+      "threadBackgroundTerminalActuators": [
+        "thread/backgroundTerminals/clean",
+        "thread/backgroundTerminals/list",
+        "thread/backgroundTerminals/terminate"
+      ]
+    },
+    "implementationObservationsAtPinnedCommit": {
+      "connectionManagerSourceBlob": "2e6be9864f842d56d93535e34597875fc185ce14",
+      "connectionManagerHasExplicitShutdown": true,
+      "stdioLauncherSourceBlob": "4a2c52a40fb03da30e0c2e2eb7293a918a0e0a6d",
+      "stdioChildKillOnDropEnabled": true
+    },
+    "issueSnapshot": [
+      {
+        "number": 18881,
+        "title": "MCP child processes leak when McpConnectionManager is replaced",
+        "state": "closed",
+        "stateReason": "completed",
+        "closedAtUtc": "2026-04-28T16:30:00Z"
+      },
+      {
+        "number": 11324,
+        "title": "MCP servers eat up memory when multi-tasking in Codex App",
+        "state": "open",
+        "updatedAtUtc": "2026-07-28T04:21:32Z"
+      },
+      {
+        "number": 17832,
+        "title": "Regression: Playwright MCP stdio processes still leak after #16895 fix",
+        "state": "open",
+        "updatedAtUtc": "2026-07-28T22:23:46Z"
+      },
+      {
+        "number": 35676,
+        "title": "App Server: expose read-only subscriber presence separately from loaded-thread state",
+        "state": "open",
+        "updatedAtUtc": "2026-07-27T21:48:03Z"
+      }
+    ],
+    "currentTaskSurfaceExposesLoadedThreadList": false,
+    "currentTaskSurfaceExposesMcpStartupOwnerReceipt": false,
+    "currentTaskSurfaceExposesSubscriberPresence": false,
+    "historicalManagerReplacementIssueAttributionEligible": false,
+    "openIssuesCorroborateRiskButDoNotProveLocalCause": true,
+    "officialProtocolReuseMustPrecedeControllerDesign": true
+  },
+  "processTreeObservation": {
+    "measurementSurface": [
+      "Win32_Process parent-child identity",
+      "Get-Process working set, private bytes, handles, threads, cumulative CPU",
+      "Get-NetTCPConnection owning-process count"
+    ],
+    "observerProcessAndDescendantsExcluded": true,
+    "codexRuntimeRootCount": 1,
+    "codexRuntimeRootPidAtObservation": 199328,
+    "sampleCount": 3,
+    "samples": [
+      {
+        "observedAtUtc": "2026-07-30T17:10:26.4001014Z",
+        "nonObserverProcessCount": 118,
+        "workingSetBytes": 6389592064,
+        "privateBytes": 4332285952,
+        "handles": 24114,
+        "threads": 1074,
+        "cumulativeCpuSeconds": 585.748,
+        "tcpConnectionCount": 34
+      },
+      {
+        "observedAtUtc": "2026-07-30T17:10:30.2494013Z",
+        "nonObserverProcessCount": 118,
+        "workingSetBytes": 6387245056,
+        "privateBytes": 4328890368,
+        "handles": 24112,
+        "threads": 1074,
+        "cumulativeCpuSeconds": 585.779,
+        "tcpConnectionCount": 34
+      },
+      {
+        "observedAtUtc": "2026-07-30T17:10:35.3259471Z",
+        "nonObserverProcessCount": 118,
+        "workingSetBytes": 6389481472,
+        "privateBytes": 4333043712,
+        "handles": 24179,
+        "threads": 1141,
+        "cumulativeCpuSeconds": 588.31,
+        "tcpConnectionCount": 34
+      }
+    ],
+    "classifiedSnapshot": {
+      "observedAtUtc": "2026-07-30T17:12:37.6074145Z",
+      "directChildCount": 57,
+      "repeatedStartupCohortCount": 6,
+      "cohortAnchorsUtc": [
+        "2026-07-30T16:04:00.2968536Z",
+        "2026-07-30T16:04:48.3832542Z",
+        "2026-07-30T16:05:07.6369961Z",
+        "2026-07-30T16:06:14.3060577Z",
+        "2026-07-30T16:31:46.3764720Z",
+        "2026-07-30T16:32:00.9226689Z"
+      ],
+      "repeatedRoots": [
+        {
+          "label": "unclassified-node",
+          "rootCount": 24,
+          "processCount": 24,
+          "workingSetBytes": 1545682944,
+          "privateBytes": 962981888,
+          "handles": 5070,
+          "threads": 240
+        },
+        {
+          "label": "playwright",
+          "rootCount": 6,
+          "processCount": 24,
+          "workingSetBytes": 1279348736,
+          "privateBytes": 1016119296,
+          "handles": 4608,
+          "threads": 144
+        },
+        {
+          "label": "context7",
+          "rootCount": 6,
+          "processCount": 24,
+          "workingSetBytes": 1168633856,
+          "privateBytes": 900968448,
+          "handles": 4608,
+          "threads": 144
+        },
+        {
+          "label": "codegraph",
+          "rootCount": 6,
+          "processCount": 24,
+          "workingSetBytes": 982384640,
+          "privateBytes": 472805376,
+          "handles": 4680,
+          "threads": 180
+        },
+        {
+          "label": "neo4j-graph",
+          "rootCount": 6,
+          "processCount": 12,
+          "workingSetBytes": 450027520,
+          "privateBytes": 208887808,
+          "handles": 2238,
+          "threads": 60
+        },
+        {
+          "label": "node-repl",
+          "rootCount": 6,
+          "processCount": 6,
+          "workingSetBytes": 64823296,
+          "privateBytes": 16855040,
+          "handles": 870,
+          "threads": 120
+        }
+      ],
+      "repeatedCohortAggregate": {
+        "directRootCount": 54,
+        "processCount": 114,
+        "workingSetBytes": 5490900992,
+        "privateBytes": 3578617856,
+        "handles": 22074,
+        "threads": 888
+      },
+      "knownLabelCardinalityPerCohort": {
+        "node-repl": 1,
+        "neo4j-graph": 1,
+        "playwright": 1,
+        "context7": 1,
+        "codegraph": 1,
+        "unclassified-node": 4
+      },
+      "rawProcessRowsRetained": false,
+      "rawCommandLinesRetained": false
+    },
+    "workingSetSumMayDoubleCountSharedPages": true,
+    "privateBytesAreStillProcessAggregates": true,
+    "sampleWindowIsNotAnIdleControl": true,
+    "sampleWindowIsNotAControlledSameWorkloadRepetition": true
+  },
+  "observabilityDecision": {
+    "threadStatusSurfaceAvailable": true,
+    "configuredMcpInventorySurfaceAvailable": true,
+    "processIdentityAndMetricSurfaceAvailable": true,
+    "repeatedRuntimeStartupCohortsObserved": true,
+    "contextSizeOrCompactionTelemetryAvailable": false,
+    "threadToProcessOwnerOrLeaseMappingObserved": false,
+    "mcpToThreadOwnerOrLeaseMappingObserved": false,
+    "taskCompletionOrCancellationReleaseReceiptObserved": false,
+    "safeTaskScopedRuntimeActuatorObserved": false,
+    "officialProtocolOffersPotentialOwnerInputs": true,
+    "officialProtocolInputsExposedOnCurrentTaskSurface": false,
+    "pressureAttributionEligible": false,
+    "releaseAttributionEligible": false,
+    "autonomousActionEligible": false,
+    "selfAuthoredControllerGapProved": false
+  },
+  "claimBoundary": {
+    "sixCohortsEqualSixUserThreads": false,
+    "notLoadedThreadsOwnObservedProcesses": false,
+    "zombieThreadsProved": false,
+    "resourceLeakProved": false,
+    "mcpProcessesAreTheMainPressureCause": false,
+    "stableCpuOrLatencyImpactProved": false,
+    "resourceReleaseProved": false,
+    "crossHostParityProved": false,
+    "runtimeControllerNeeded": false
+  },
+  "nextGate": "Inspect a current official or host-exposed thread-to-runtime ownership and release surface. If none exists, bind a separately authorized disposable Desktop lifecycle trial with pre/post process identities, one state transition, rollback, release latency, and no weak-model turn before any actuation or controller design."
+}

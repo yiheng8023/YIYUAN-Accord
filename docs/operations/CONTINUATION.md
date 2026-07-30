@@ -1996,3 +1996,44 @@ acceptance, cross-host parity, or proof that a self-authored controller is
 needed. Resume with the validator and targeted tests, then full
 `scripts/verify.py`. Any live observation or actuation needs its own exact
 host, workload, authority, metric, rollback, and claim boundary.
+
+## 2026-07-31 Codex Desktop resource-observability preflight checkpoint
+
+A live read-only Desktop preflight has now been recorded in:
+
+- `registry/codex-desktop-resource-observability-preflight-2026-07-31.json`;
+- `docs/strategy/CODEX-DESKTOP-RESOURCE-OBSERVABILITY-PREFLIGHT-2026-07-31.md`;
+- `scripts/validate_codex_desktop_resource_observability_preflight.py`.
+
+The bounded task listing returned 20 Codex tasks: two active and eighteen
+not-loaded. The non-pinned page was truncated at 50 and is not a complete
+persisted-task inventory. `codex mcp list` returned nine enabled configuration
+entries, which remain configuration rather than loaded-runtime evidence.
+
+Three observer-excluded process samples each found 118 Codex-runtime processes
+and 34 TCP connections. The process tree contained six near-identical startup
+cohorts, each with node_repl, Neo4j, Playwright, Context7, CodeGraph, and four
+unclassified Node roots. Together the repeated cohorts contained 114
+processes, about 5.49 GB summed working set, and about 3.58 GB summed private
+bytes. Working-set sums may double-count shared pages, and the sample was
+neither idle nor a controlled workload.
+
+No surface joined task status, MCP configuration, and process identity through
+an owner or lease. No context telemetry, lifecycle release receipt, or safe
+task-scoped actuator was observed. Therefore pressure attribution, release
+attribution, autonomous action, zombie-thread claims, leak claims, and
+self-authored controller justification all remain false.
+
+Pinned `rust-v0.146.0` source inspection found official app-server methods and
+events for loaded threads, thread status, thread-scoped MCP startup ownership,
+token usage, compaction, and background-terminal cleanup. The current Desktop
+task surface did not expose the owner-bearing inputs. The older
+manager-replacement leak issue is closed as completed, while broader
+multi-task MCP, Playwright retention, and subscriber-presence issues remain
+open. Treat those reports as corroborating risk, not as local causation.
+
+No model turn, task mutation, MCP mutation, process stop/restart, Hook,
+Plugin/App, or global-configuration change occurred. Continue with current
+host exposure or safe read-only access to the official ownership/release
+primitives. A disposable Desktop lifecycle transition requires a separate
+exact authority and cleanup gate.

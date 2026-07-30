@@ -1461,3 +1461,26 @@ Hook, MCP gateway, or self-authored controller. The next gate is a separately
 authorized same-workload read-only observation with exact identities, three
 repetitions, idle and concurrent controls, cancellation, bounded metrics, and
 release-latency evidence.
+
+The first live
+[Codex Desktop resource-observability preflight](CODEX-DESKTOP-RESOURCE-OBSERVABILITY-PREFLIGHT-2026-07-31.md)
+has now completed only the observability portion of that gate. A bounded task
+page exposed two active and eighteen not-loaded Codex tasks, while the
+observer-excluded runtime tree contained 118 processes and six repeated MCP
+startup cohorts. Those cohorts accounted for 114 processes, about 5.49 GB
+summed working set, and about 3.58 GB summed private bytes. The task, MCP
+configuration, and process surfaces did not expose a common owner or lease, a
+release receipt, context telemetry, or a safe task-scoped actuator.
+
+This is a real single-host inventory, not a causal trial. It does not attribute
+the cohorts to user tasks, prove a zombie thread or leak, establish resource
+pressure, or justify an intervention. Exact `rust-v0.146.0` source correlation
+found official app-server primitives for loaded-thread state, thread-scoped
+MCP startup ownership, token and compaction telemetry, and thread background
+terminal control. Those inputs were not exposed on the current Desktop task
+surface. Open upstream MCP and Playwright lifecycle reports corroborate risk
+but do not prove this host's cause; the older manager-replacement issue is
+closed and is not eligible as an attribution shortcut. Reusing or exposing
+official protocol inputs is the next gate. Only after that path is exhausted
+should a disposable one-transition Desktop lifecycle trial be proposed for
+separate authorization.
