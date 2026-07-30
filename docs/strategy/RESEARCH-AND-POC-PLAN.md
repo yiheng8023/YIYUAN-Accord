@@ -1484,3 +1484,20 @@ closed and is not eligible as an attribution shortcut. Reusing or exposing
 official protocol inputs is the next gate. Only after that path is exhausted
 should a disposable one-transition Desktop lifecycle trial be proposed for
 separate authorization.
+
+The follow-up
+[official control-surface access preflight](CODEX-DESKTOP-OFFICIAL-CONTROL-SURFACE-ACCESS-PREFLIGHT-2026-07-31.md)
+generated the exact local `codex-cli 0.146.0` experimental protocol schema
+without changing the Node process set. It confirmed that the installed runtime
+already defines loaded-thread inventory, thread-scoped MCP status and startup
+receipts, context-window and compaction telemetry, and thread background
+terminal RSS/CPU/PID telemetry and actuators.
+
+The current Desktop App-tool surface did not expose those owner-bearing
+methods. No default control socket or Codex TCP listener was observed, and
+managed app-server daemon lifecycle is unsupported on Windows. Upstream issue
+`#25914` records the same persisted-thread-versus-current-Desktop-attachment
+boundary. Therefore the current residual is a host access/adapter gap, not an
+official protocol-definition gap and not yet a self-authored controller gap.
+The isolated schema root was removed. A new app-server lifecycle trial remains
+a separate runtime mutation requiring explicit authorization.

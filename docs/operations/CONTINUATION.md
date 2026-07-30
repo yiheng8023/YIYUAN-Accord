@@ -2037,3 +2037,42 @@ Plugin/App, or global-configuration change occurred. Continue with current
 host exposure or safe read-only access to the official ownership/release
 primitives. A disposable Desktop lifecycle transition requires a separate
 exact authority and cleanup gate.
+
+## 2026-07-31 Codex Desktop official control-surface access checkpoint
+
+The installed `codex-cli 0.146.0` generated its experimental app-server schema
+into an isolated `.tmp` root. The probe produced 349 files and 3,343,741 bytes;
+seven relevant artifacts were hashed. Node process count and identity stayed
+unchanged at 72 before and after generation. The generated root and empty
+parent were removed.
+
+The exact local schema confirms:
+
+- `thread/loaded/list`;
+- thread-scoped `mcpServerStatus/list`;
+- MCP startup status with nullable `threadId`;
+- thread token usage with model context window and compaction surfaces;
+- thread background-terminal list, RSS/CPU/PID telemetry, clean, and
+  terminate.
+
+Background-terminal telemetry is not MCP-process telemetry. MCP status exposes
+neither per-process resource metrics nor lease/subscriber count.
+
+The current Desktop App tools exposed task list/read status but not the
+owner-bearing protocol methods. No attached task terminal, default app-server
+control directory, or Codex TCP listener was observed. Managed app-server
+daemon lifecycle is unsupported on Windows. Upstream issue `#25914` remains
+open for supported discovery/attachment to the current Desktop thread.
+
+The resulting classification is:
+
+- official protocol-definition gap: false;
+- current Desktop owner-telemetry access gap: observed;
+- current Desktop actuator access gap: observed;
+- autonomous runtime action: ineligible;
+- self-authored controller gap: unproved.
+
+Do not start a separate app-server, mutate tasks, or infer ownership from
+persisted sessions, timestamps, process cohorts, or UI labels. Prefer a
+supported Desktop bridge. An isolated same-version no-model lifecycle trial
+requires separate authorization.

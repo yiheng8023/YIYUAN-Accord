@@ -744,7 +744,8 @@
         "evidence.mcp-thread-creator-connection-close-auto-attach-v2-offline-amendment-2026-07-27",
         "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
         "evidence.agent-resource-pressure-attribution-protocol-2026-07-31",
-        "evidence.codex-desktop-resource-observability-preflight-2026-07-31"
+        "evidence.codex-desktop-resource-observability-preflight-2026-07-31",
+        "evidence.codex-desktop-official-control-surface-access-preflight-2026-07-31"
       ]
     },
     {
@@ -1531,6 +1532,15 @@
       "id": "evidence.codex-desktop-resource-observability-preflight-2026-07-31",
       "path": "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
       "kind": "live-read-only-single-host-desktop-process-thread-and-mcp-observability-preflight-owner-attribution-blocked-no-actuation",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.dynamic-runtime-control-gap-research"
+      ]
+    },
+    {
+      "id": "evidence.codex-desktop-official-control-surface-access-preflight-2026-07-31",
+      "path": "registry/codex-desktop-official-control-surface-access-preflight-2026-07-31.json",
+      "kind": "local-official-protocol-schema-and-current-desktop-attachment-access-preflight-no-runtime-actuation",
       "asOf": "2026-07-31",
       "supports": [
         "acceptance.dynamic-runtime-control-gap-research"

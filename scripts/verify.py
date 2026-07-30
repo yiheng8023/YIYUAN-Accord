@@ -196,6 +196,9 @@ from validate_agent_resource_pressure_attribution_protocol import (
 from validate_codex_desktop_resource_observability_preflight import (
     validate_preflight as validate_codex_desktop_resource_observability_preflight,
 )
+from validate_codex_desktop_official_control_surface_access_preflight import (
+    validate_preflight as validate_codex_desktop_official_control_surface_access_preflight,
+)
 from assess_process_fidelity_raw_event_trace_eligibility import (
     validate_evidence as validate_process_fidelity_raw_event_trace_eligibility,
 )
@@ -482,6 +485,9 @@ REQUIRED_FILES = (
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
     "scripts/validate_codex_desktop_resource_observability_preflight.py",
     "tests/test_codex_desktop_resource_observability_preflight.py",
+    "registry/codex-desktop-official-control-surface-access-preflight-2026-07-31.json",
+    "scripts/validate_codex_desktop_official_control_surface_access_preflight.py",
+    "tests/test_codex_desktop_official_control_surface_access_preflight.py",
     "registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json",
     "registry/skill-portfolio-and-closeout-inventory-2026-07-19.json",
     "docs/closeout-cleanup-debt-preview-2026-07-24.md",
@@ -1339,6 +1345,7 @@ REQUIRED_FILES = (
     "docs/context-pressure-advisory-contract-2026-07-23.md",
     "docs/strategy/AGENT-RESOURCE-PRESSURE-ATTRIBUTION-PROTOCOL-2026-07-31.md",
     "docs/strategy/CODEX-DESKTOP-RESOURCE-OBSERVABILITY-PREFLIGHT-2026-07-31.md",
+    "docs/strategy/CODEX-DESKTOP-OFFICIAL-CONTROL-SURFACE-ACCESS-PREFLIGHT-2026-07-31.md",
     "docs/git-host-authorization-trial-contract-2026-07-23.md",
     "docs/skill-ablation-batch-01-selection-2026-07-19.md",
     "docs/skill-ablation-batch-01-protocol-2026-07-19.md",
@@ -1813,6 +1820,9 @@ def verify() -> None:
     )
     codex_desktop_resource_observability_preflight_doc = load(
         "registry/codex-desktop-resource-observability-preflight-2026-07-31.json"
+    )
+    codex_desktop_official_control_surface_access_preflight_doc = load(
+        "registry/codex-desktop-official-control-surface-access-preflight-2026-07-31.json"
     )
     skill_portfolio_closeout_gate_doc = load("registry/skill-portfolio-rebaseline-and-closeout-gate-2026-07-19.json")
     skill_portfolio_closeout_inventory_doc = load("registry/skill-portfolio-and-closeout-inventory-2026-07-19.json")
@@ -2753,6 +2763,11 @@ def verify() -> None:
     )
     validate_codex_desktop_resource_observability_preflight(
         codex_desktop_resource_observability_preflight_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+    )
+    validate_codex_desktop_official_control_surface_access_preflight(
+        codex_desktop_official_control_surface_access_preflight_doc,
         root=ROOT,
         program_map=program_acceptance_map_doc,
     )
