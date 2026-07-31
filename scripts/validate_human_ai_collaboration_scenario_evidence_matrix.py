@@ -70,6 +70,9 @@ LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
 CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31"
 )
+ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+)
 EXPECTED_HOSTS = {
     "host.native-transparent",
     "host.configurable-agent",
@@ -903,6 +906,7 @@ def validate_matrix(
             expected_evidence_ids += [
                 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID,
                 CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID,
+                ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID,
             ]
         if (
             acceptance_id

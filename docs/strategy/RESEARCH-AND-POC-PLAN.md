@@ -1699,3 +1699,33 @@ for a specific uncovered task, source or host drift, failed health or exposure,
 or a mechanism gap exposed by the existing packet. Any live board, MCP,
 generation, model, account, or asset-write phase requires a separate preflight
 and authority decision.
+
+## 2026-07-31 GEN-ACCESS-COMMS-01 candidate-route checkpoint
+
+`GEN-ACCESS-COMMS-01` now has a source-bound static capability baseline at
+`registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json`.
+It does not create a new standard or duplicate the existing nine-case
+zero-model fixture.
+
+The minimal route is ordered: source and terminology lock, native draft
+adaptation, the existing deterministic structured semantic-loss gate,
+conditional OpenAI Documents only for a relevant document carrier, then
+bilingual, domain, accessibility, and recipient review with authorized human
+release control. OpenAI Documents is not a semantic translation engine or full
+WCAG engine. Installed `edit-article` remains an excluded native-overlap near
+match and this checkpoint authorizes no removal.
+
+Targeted public discovery found Microsoft Azure Translation SDK Skills plus
+Weblate glossary and Translate Toolkit QA references. Azure is a
+service-backed development Skill with package, endpoint, credential, network,
+account, and data-boundary costs; the other two are localization-workflow
+references rather than current universal Agent treatments. Reconsider them
+only for a bound recurring translation application or localization program.
+
+The residual is free-form behavior, accessibility, bilingual or domain, and
+recipient-evidence work, not a capability-name shortage. Project neutrality is
+unchanged, and language or domain judgments remain human-owned evidence inputs
+rather than universal facts. `GEN-ACCESS-COMMS-01` stays
+`planned-no-live-domain-evidence`; no installation, service execution, account
+connection, model dispatch, Skill or Hook authoring, standards promotion, or
+remote mutation follows from this checkpoint.

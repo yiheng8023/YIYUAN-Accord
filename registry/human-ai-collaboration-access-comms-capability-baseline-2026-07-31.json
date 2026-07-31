@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
+  "asOf": "2026-07-31",
+  "observedAt": "2026-07-31T20:21:29+08:00",
+  "status": "source-bound-static-capability-baseline-no-live-translation-accessibility-recipient-admission-or-standard-evidence",
+  "purpose": "Bind the minimal native, official-carrier, targeted external-reference, deterministic-gate, and human-review route for GEN-ACCESS-COMMS-01 without duplicating its existing fixture or prematurely installing, executing, authoring, or standardizing a capability.",
+  "scenarioBinding": {
+    "scenarioId": "GEN-ACCESS-COMMS-01",
+    "domain": "accessible-and-multilingual-communication",
+    "task": "Adapt a consequential message across language, literacy, and accessibility needs without changing its obligations, uncertainty, or speaker intent.",
+    "authorityBoundary": "Draft adaptation only; official release and legally consequential wording require authorized review.",
+    "dataBoundary": "The bound source message and necessary terminology or accessibility profile only.",
+    "acceptanceSignals": [
+      "semantic fidelity",
+      "obligation preservation",
+      "comprehension",
+      "accessibility conformance",
+      "recipient harm or confusion"
+    ],
+    "requiredEvidence": [
+      "source and terminology lock",
+      "bilingual or domain review",
+      "accessibility checks",
+      "recipient comprehension sample",
+      "human-only control"
+    ],
+    "evidenceStateMustRemain": "planned-no-live-domain-evidence"
+  },
+  "repositorySourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "bytes": 76246,
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+      "bytes": 10733,
+      "sha256": "d3f717d6153c9b176a5cc8b8761b8dcb92e463b0459ffde60ee92d9964eb84c9"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27.json",
+      "bytes": 7297,
+      "sha256": "6c53a0d48d0b0678b07e8931dcd8f929d075991379f7f443f4960284dbae5384"
+    },
+    {
+      "path": "docs/strategy/HUMAN-AI-COLLABORATION-ACCESS-COMMS-ZERO-MODEL-CALIBRATION-2026-07-27.md",
+      "bytes": 4838,
+      "sha256": "2dccb88f6ab37e97e6be450fc4177db52db7ad41e31db838267b460da48301a8"
+    }
+  ],
+  "existingZeroModelGate": {
+    "protocolPath": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+    "fixturePath": "tests/fixtures/human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27.json",
+    "caseCount": 9,
+    "faultCaseCount": 8,
+    "coveredFaultClasses": [
+      "accessibility-structure-break",
+      "actor-swap",
+      "deadline-unit-drift",
+      "invented-commitment",
+      "negation-flip",
+      "obligation-weakening",
+      "terminology-drift",
+      "uncertainty-deletion"
+    ],
+    "reuseDecision": "reuse-as-deterministic-structured-semantic-gate-do-not-duplicate",
+    "freeFormLanguageCorrectnessProved": false,
+    "accessibilityConformanceProved": false,
+    "recipientComprehensionProved": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "officialDocumentsObservation": {
+    "id": "official.openai-primary-runtime-documents-26.730.11710",
+    "owner": "OpenAI",
+    "sourceClass": "official-openai-primary-runtime-current-host-cache",
+    "version": "26.730.11710",
+    "license": "MIT",
+    "hostSnapshotRoot": "C:/Users/15521/.codex/plugins/cache/openai-primary-runtime/documents/26.730.11710",
+    "fileRecords": [
+      {
+        "path": ".codex-plugin/plugin.json",
+        "bytes": 1570,
+        "sha256": "1f12c88438dd7ce1ded2d8b063929002f8009c87496a644ec69d71a5bd5dc6d2"
+      },
+      {
+        "path": "skills/documents/SKILL.md",
+        "bytes": 39780,
+        "sha256": "84dd796a7834889191515ea6508abc9d6559314dd554e0345eeaa07c5e780bd5"
+      },
+      {
+        "path": "skills/documents/tasks/accessibility_a11y.md",
+        "bytes": 2019,
+        "sha256": "951dca7ba7e520792776a636c22e512a9a3c53699c6da80c5c3e47b0690c1374"
+      },
+      {
+        "path": "skills/documents/scripts/a11y_audit.py",
+        "bytes": 13207,
+        "sha256": "a832e288503704a24ae4e7d9bde4444dee01c835c651f746f19167c4ef4632bf"
+      }
+    ],
+    "conditionalRole": "Downstream document carrier and narrow structural accessibility supplement only when the requested deliverable is DOCX or equivalent document work.",
+    "staticAccessibilityChecks": [
+      "heading structure",
+      "image alternative text",
+      "table header flag",
+      "descriptive hyperlink text"
+    ],
+    "fullWcagEngineClaimedBySource": false,
+    "semanticTranslationOrTerminologyLockSupplied": false,
+    "recipientComprehensionSupplied": false,
+    "googleDriveAccountBoundaryNeededForGoogleDocsImport": true,
+    "currentTaskGoogleDriveBoundaryAuthorized": false,
+    "instructionDeliveryOrBehaviorProved": false
+  },
+  "excludedInstalledNearMatch": {
+    "id": "external.edit-article-current-cc-switch-projection",
+    "sourceClass": "installed-third-party-current-cc-switch-projection",
+    "localAuthorityRoot": "C:/Users/15521/.cc-switch/skills/edit-article",
+    "fileRecords": [
+      {
+        "path": "SKILL.md",
+        "bytes": 735,
+        "sha256": "3d6f8a603aeef1c6527e203e1a092725605ffe58d9084af8f3043b31ee4144d3"
+      }
+    ],
+    "disposition": "exclude-as-treatment-retain-prior-native-overlap-rejection-and-manager-removal-preview",
+    "reason": "Article clarity and flow do not supply translation, obligation and uncertainty fidelity, terminology control, accessibility verification, bilingual review, or recipient testing.",
+    "removalAuthorizedByThisBaseline": false
+  },
+  "targetedExternalDiscovery": [
+    {
+      "id": "external.microsoft-azure-ai-translation-text-py",
+      "owner": "Microsoft",
+      "sourceClass": "official-vendor-agent-skill-for-service-sdk-development-not-installed",
+      "repository": "https://github.com/microsoft/skills",
+      "observedHead": "4a2873faffc1b101a33a0b59c24713d4ed78142f",
+      "sourcePath": ".github/plugins/azure-sdk-python/skills/azure-ai-translation-text-py/SKILL.md",
+      "sourceBlobSha": "e8ed670c9d5e23a5a08bee0684c7ea18f64fa809",
+      "sourceBytes": 10880,
+      "license": "MIT",
+      "staticRole": "Teach an Agent to build real-time translation, transliteration, language detection, and dictionary lookup against Azure AI Translator.",
+      "lifecycleAndAuthorityCosts": [
+        "Python package installation",
+        "Azure Translator endpoint",
+        "Entra credential or API key and region",
+        "network and service account boundary",
+        "translation data leaves the local repository boundary when executed"
+      ],
+      "currentDisposition": "reconsider-only-for-a-bound-recurring-translation-application-not-a-default-treatment",
+      "installedOrExecuted": false,
+      "semanticFidelityAccessibilityOrRecipientValueProved": false
+    },
+    {
+      "id": "reference.weblate-glossary",
+      "sourceClass": "official-localization-workflow-reference",
+      "url": "https://docs.weblate.org/en/weblate-2026.7/user/glossary.html",
+      "staticRole": "Preferred, forbidden, and untranslatable terminology plus glossary checks.",
+      "currentDisposition": "reference-for-recurring-localization-workflow-not-current-agent-treatment"
+    },
+    {
+      "id": "reference.translate-toolkit-pofilter",
+      "sourceClass": "official-localization-qa-tool-reference",
+      "url": "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/guides/using_pofilter.html",
+      "staticRole": "File-based PO and XLIFF translation QA using multiple checks.",
+      "currentDisposition": "reference-for-file-based-localization-workflow-not-current-agent-treatment"
+    },
+    {
+      "id": "reference.w3c-wai-readable-and-accessibility-principles",
+      "sourceClass": "authoritative-accessibility-reference",
+      "urls": [
+        "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+        "https://www.w3.org/WAI/WCAG22/Understanding/readable"
+      ],
+      "staticRole": "Accessibility principles and readable-language guidance.",
+      "currentDisposition": "reference-not-execution-capability-or-conformance-proof"
+    }
+  ],
+  "orderedRepresentativeRoute": [
+    {
+      "id": "route.source-and-terminology-lock",
+      "routeClass": "C",
+      "role": "Freeze the source semantics and recipient profile before adaptation."
+    },
+    {
+      "id": "route.native-semantic-adaptation",
+      "routeClass": "N",
+      "role": "Create a draft adaptation without a dedicated external capability."
+    },
+    {
+      "id": "route.existing-zero-model-semantic-gate",
+      "routeClass": "C",
+      "role": "Reject structured semantic loss before downstream carrier or release work."
+    },
+    {
+      "id": "route.conditional-official-documents-carrier",
+      "routeClass": "O",
+      "role": "Apply only when a document carrier and its narrow structural checks are needed."
+    },
+    {
+      "id": "route.human-review-and-release-control",
+      "routeClass": "H",
+      "role": "Bilingual, domain, accessibility, and recipient review plus authorized release decision."
+    }
+  ],
+  "comparisonDecision": {
+    "representativeRouteSufficientForNextEvidenceGate": true,
+    "widerCandidateNameDiscoveryNeededNow": false,
+    "externalCapabilityInstallationNeededNow": false,
+    "candidateOrServiceExecutionNeededNow": false,
+    "newZeroModelFixtureNeededNow": false,
+    "selfAuthoredSkillNeededNow": false,
+    "skillOrHardStandardExtractionNeededNow": false,
+    "residualGapState": "behavior-accessibility-and-recipient-evidence-gap-not-capability-name-gap",
+    "reason": "The existing deterministic gate already covers the structured loss mechanisms, while the uncovered claims require free-form behavior, bilingual or domain review, accessibility checks, recipient evidence, and release authority rather than another equivalent Skill name.",
+    "nextBoundedAction": "Use the fixed source and terminology lock for a separately authorized comparative draft, run the existing deterministic gate, then require carrier-appropriate accessibility checks, bilingual or domain review, recipient comprehension sampling, and a human-only control."
+  },
+  "neutralityAndHumanAuthority": {
+    "projectNeutralityChanged": false,
+    "neutralityRule": "Do not privilege a route because it is native, official, external, installed, popular, self-authored, or familiar; compare it against the bound scenario and evidence surface.",
+    "judgmentTreatment": "Language, domain, accessibility, and recipient judgments are legitimate human-owned inputs and review outcomes; record their owner and evidence surface without generalizing them into universal facts.",
+    "sourceIntentOwner": "message-owner",
+    "legallyConsequentialReleaseOwner": "authorized-human-or-accountable-organization"
+  },
+  "recheckTriggers": [
+    "the official Documents package or accessibility task changes",
+    "the requested carrier is not a document",
+    "the task becomes a recurring localization program or translation application",
+    "the existing zero-model gate reveals a specific uncovered loss mechanism",
+    "a candidate fails health, exposure, semantic fidelity, accessibility, recipient, permission, or lifecycle preflight",
+    "data, account, service, legal, release, or recipient-contact authority changes"
+  ],
+  "claimLimits": {
+    "structuredGateIsFreeFormTranslationProof": false,
+    "documentAccessibilityChecksAreWcagConformance": false,
+    "readabilityIsAccessibilityConformance": false,
+    "machineTranslationIsCertifiedTranslation": false,
+    "staticSkillMetadataIsLiveAvailabilityOrBehavior": false,
+    "recipientUnderstandingWithoutTesting": false,
+    "staticCoverageIsCandidateAdmission": false,
+    "staticCoverageIsStandardPromotion": false
+  },
+  "authorityBoundary": {
+    "candidateOrServiceExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "installationOrAccountConnectionAuthorized": false,
+    "translationUploadOrRecipientContactAuthorized": false,
+    "ccSwitchPluginMcpOrRuntimeMutationAuthorized": false,
+    "skillOrHookAuthoringMutationAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "remotePushAuthorizedByThisBaseline": false
+  }
+}

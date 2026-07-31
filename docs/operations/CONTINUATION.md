@@ -2592,3 +2592,33 @@ this checkpoint. The next live gate, if separately authorized, is exact
 exposure and instruction-delivery preflight followed by deterministic packet
 validation, provenance logging, and blind human review against native and
 human-only controls.
+
+## 2026-07-31 GEN-ACCESS-COMMS-01 capability-baseline checkpoint
+
+The durable package is:
+
+- `registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json`;
+- `docs/strategy/HUMAN-AI-COLLABORATION-ACCESS-COMMS-CAPABILITY-BASELINE-2026-07-31.md`;
+- `scripts/validate_human_ai_collaboration_access_comms_capability_baseline.py`;
+- `tests/test_human_ai_collaboration_access_comms_capability_baseline.py`.
+
+It reuses the frozen nine-case access/comms protocol and fixture as the
+deterministic structured semantic gate. The ordered candidate route is source
+and terminology lock, native draft adaptation, that existing gate, conditional
+OpenAI Documents for a relevant document carrier, and human bilingual, domain,
+accessibility, recipient, and release review. No duplicate fixture was added.
+
+Official Documents `26.730.11710` is a carrier and narrow structural
+accessibility supplement, not a translation engine or full WCAG engine.
+Installed `edit-article` remains excluded as a treatment and is not removed.
+Targeted external discovery records Microsoft Azure Translation SDK Skills,
+Weblate glossary checks, Translate Toolkit `pofilter`, and W3C WAI references;
+none closes the combined semantic, accessibility, recipient, and authority
+surface for this bounded scenario without extra lifecycle or account costs.
+
+Project neutrality is unchanged. `GEN-ACCESS-COMMS-01` remains
+`planned-no-live-domain-evidence`. The residual is behavioral and recipient
+evidence, not another candidate name or a proved self-authored gap. No model,
+service, account, installation, CC Switch, Plugin, MCP, runtime, Skill, Hook,
+standard, cross-repository, or remote-push authority follows from this
+checkpoint.

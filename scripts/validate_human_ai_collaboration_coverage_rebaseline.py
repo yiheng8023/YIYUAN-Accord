@@ -156,6 +156,9 @@ LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
 CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31"
 )
+ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+)
 DOCUMENTATION_PATH = (
     "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md"
 )
@@ -430,6 +433,7 @@ def validate_rebaseline(
             expected_evidence_ids += [
                 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID,
                 CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID,
+                ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID,
             ]
         if (
             acceptance_id
