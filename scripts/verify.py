@@ -199,6 +199,9 @@ from validate_ai_era_classical_software_engineering_principles_revalidation impo
 from validate_human_ai_collaboration_learning_capability_baseline import (
     validate_baseline as validate_human_ai_collaboration_learning_capability_baseline,
 )
+from validate_human_ai_collaboration_creative_capability_baseline import (
+    validate_baseline as validate_human_ai_collaboration_creative_capability_baseline,
+)
 from validate_human_ai_collaboration_learning_fixed_fixture_protocol import (
     validate_protocol as validate_human_ai_collaboration_learning_fixed_fixture_protocol,
 )
@@ -514,6 +517,10 @@ REQUIRED_FILES = (
     "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
     "scripts/validate_human_ai_collaboration_learning_capability_baseline.py",
     "tests/test_human_ai_collaboration_learning_capability_baseline.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-CREATIVE-CAPABILITY-BASELINE-2026-07-31.md",
+    "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json",
+    "scripts/validate_human_ai_collaboration_creative_capability_baseline.py",
+    "tests/test_human_ai_collaboration_creative_capability_baseline.py",
     "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md",
     "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json",
     "scripts/evaluate_human_ai_collaboration_learning_protocol.py",
@@ -1895,6 +1902,12 @@ def verify() -> None:
     human_ai_collaboration_learning_capability_baseline_doc = load(
         "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json"
     )
+    human_ai_collaboration_creative_capability_baseline_doc = load(
+        "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json"
+    )
+    human_ai_collaboration_unknown_knowns_creative_preference_packet_doc = load(
+        "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json"
+    )
     human_ai_collaboration_learning_fixed_fixture_protocol_doc = load(
         "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json"
     )
@@ -2873,6 +2886,14 @@ def verify() -> None:
         root=ROOT,
         scenario_matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
         claim_ledger=human_ai_collaboration_high_impact_primary_source_claim_ledger_doc,
+        program_map=program_acceptance_map_doc,
+        program_plan=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_creative_capability_baseline(
+        human_ai_collaboration_creative_capability_baseline_doc,
+        root=ROOT,
+        scenario_matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
+        packet=human_ai_collaboration_unknown_knowns_creative_preference_packet_doc,
         program_map=program_acceptance_map_doc,
         program_plan=curation_program_plan_doc,
     )

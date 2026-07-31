@@ -2564,3 +2564,31 @@ The same producing identity cannot supply independent human review. No model,
 candidate, official account, participant, live trial, CC Switch, runtime,
 Skill, Hook, hard-standard, matrix promotion, external write, commit, or push
 is authorized by this calibration record.
+
+## 2026-07-31 GEN-CREATIVE-01 capability-baseline checkpoint
+
+The source-bound creative baseline now lives at:
+
+- `registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json`;
+- `docs/strategy/HUMAN-AI-COLLABORATION-CREATIVE-CAPABILITY-BASELINE-2026-07-31.md`;
+- `scripts/validate_human_ai_collaboration_creative_capability_baseline.py`;
+- `tests/test_human_ai_collaboration_creative_capability_baseline.py`.
+
+It binds native open divergence, current OpenAI Creative Production `0.1.25`,
+conditional explicit `grilling`, and a human-led control. Superpowers
+`brainstorming` is excluded as a treatment because its complete workflow is
+software-development specific. Current Huashu still supplies no atomic
+candidate for this scenario.
+
+The existing six-example Unknown Knowns creative preference packet is reused;
+do not create a second equivalent fixture. The package records that project
+neutrality did not change: aesthetic judgment stays a legitimate human-owned
+input and outcome, while no route receives automatic evidentiary authority.
+
+`GEN-CREATIVE-01` remains `planned-no-live-domain-evidence`. No model, plugin,
+MCP, board, generation, account, install, CC Switch, Hook, Skill-authoring,
+standard-promotion, cross-repository, or remote-push authority follows from
+this checkpoint. The next live gate, if separately authorized, is exact
+exposure and instruction-delivery preflight followed by deterministic packet
+validation, provenance logging, and blind human review against native and
+human-only controls.

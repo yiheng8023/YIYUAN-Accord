@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-creative-capability-baseline-2026-07-31",
+  "asOf": "2026-07-31",
+  "observedAt": "2026-07-31T20:02:56+08:00",
+  "status": "source-bound-static-capability-baseline-no-live-creative-rights-admission-or-standard-evidence",
+  "purpose": "Bind a representative, solution-neutral capability set for GEN-CREATIVE-01 while reusing the existing zero-model creative preference packet and avoiding premature discovery, execution, Skill authoring, or standards extraction.",
+  "scenarioBinding": {
+    "scenarioId": "GEN-CREATIVE-01",
+    "domain": "creative-production",
+    "task": "Co-create several materially different directions from an incomplete brief, preserve the creator's intent and rights, and let the human make the final aesthetic and value decision.",
+    "authorityBoundary": "Draft and critique only; publication, purchase, rights transfer, or destructive asset edits require separate authority.",
+    "dataBoundary": "User-provided brief and licensed or explicitly permitted references only.",
+    "acceptanceSignals": [
+      "directional diversity",
+      "intent fidelity",
+      "rights and source traceability",
+      "human edit and selection burden",
+      "no unauthorized publication"
+    ],
+    "requiredEvidence": [
+      "fixed brief and oracle",
+      "blind comparative review",
+      "revision history",
+      "rights/provenance log",
+      "human-only control"
+    ],
+    "evidenceStateMustRemain": "planned-no-live-domain-evidence"
+  },
+  "repositorySourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "bytes": 76246,
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json",
+      "bytes": 5808,
+      "sha256": "700ede6d5b56203ace278003ea8f0457858f150b3bd638a39bd42edfd60d810a"
+    },
+    {
+      "path": "docs/strategy/USER-STARRED-HUASHU-PM-CURRENT-COMPONENT-DELTA-RESEARCH-2026-07-30.md",
+      "bytes": 22629,
+      "sha256": "13bc554ba2722d6f81d11d873a84c068e3efe76fe531b869e512fc7305171e03"
+    },
+    {
+      "path": "docs/strategy/MATT-CURRENT-22-SKILL-REUSE-BOUNDARY-AUDIT-2026-07-31.md",
+      "bytes": 25608,
+      "sha256": "0420f028b31401f0240ad18eaa622467287c15fdfa74d9dfc0df45463626d83b"
+    }
+  ],
+  "existingZeroModelPacket": {
+    "path": "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json",
+    "scenarioId": "GEN-CREATIVE-01-UK-PACKET",
+    "offlineExampleCount": 6,
+    "coveredMechanisms": [
+      "brief-fact fidelity",
+      "minimum direction and primary-axis diversity",
+      "explicit unresolved preference topics",
+      "no agent-selected aesthetic winner",
+      "no generation-only rights-clearance claim",
+      "no unauthorized publication attempt"
+    ],
+    "reuseDecision": "reuse-as-deterministic-output-gate-do-not-duplicate",
+    "candidateBehaviorProved": false,
+    "liveCreativeValueProved": false
+  },
+  "officialCreativeProductionObservation": {
+    "id": "official.openai-creative-production-0.1.25",
+    "owner": "OpenAI",
+    "sourceClass": "official-openai-maintained-plugin-current-host-cache",
+    "version": "0.1.25",
+    "repositoryLocator": "https://github.com/openai/oai-maintained-plugins/tree/main/plugins/creative-production",
+    "license": "Proprietary",
+    "hostSnapshotRoot": "C:/Users/15521/.codex/plugins/cache/openai-curated-remote/creative-production/0.1.25",
+    "packageFileRecords": [
+      {
+        "path": ".codex-plugin/plugin.json",
+        "bytes": 2168,
+        "sha256": "3dc7136df983952de274587cb357620aaf566a102dd88bc96e9526542ea61eec"
+      },
+      {
+        "path": ".app.json",
+        "bytes": 17,
+        "sha256": "1284c18c07b6548843fdcaa9ff0cb0d2dd61d029248cfa3f93a2dddeba55d0fb"
+      },
+      {
+        "path": ".mcp.json",
+        "bytes": 166,
+        "sha256": "ea6d3c52f5c6782d7e3737f8937ae7df48ecacbdc4d92eba178ea757b1d6eb4b"
+      },
+      {
+        "path": "skills/intake/SKILL.md",
+        "bytes": 1367,
+        "sha256": "8b5c1b507e48ef90ed1104eee45d4a3f3c780f37683d487ff16dc635e1fe666e"
+      },
+      {
+        "path": "skills/produce/SKILL.md",
+        "bytes": 5026,
+        "sha256": "056d2f32c7d27639c3cf861981d7331cab8e7723ded1ae1966de6efd8ce01b7c"
+      },
+      {
+        "path": "skills/produce/references/contracts/source-preservation.md",
+        "bytes": 417,
+        "sha256": "d1084b343e9ba956fd6d6ebee0306074852a378df3dbfadf370dbe32b74160f0"
+      },
+      {
+        "path": "skills/produce/references/contracts/exact-content.md",
+        "bytes": 458,
+        "sha256": "ebad12eb80f6fc1d0254d59fda901400443320fc691ee6d25afe7f87d03b9b20"
+      }
+    ],
+    "staticCapabilities": [
+      "opens a Creative Production review board before production",
+      "defaults to four to six distinct visual directions when appropriate",
+      "supports source-preservation and exact-content contracts",
+      "may use image-generation and external design integrations when available"
+    ],
+    "lifecycleAndAuthorityCosts": [
+      "declares interactive and write capability",
+      "declares a bundled Node MCP server",
+      "board writes, image generation, integrations, and external account boundaries require task-specific preflight",
+      "license and host portability differ from a portable open Skill"
+    ],
+    "implicitInvocationAllowedByMetadata": true,
+    "appDeclarationContainsCallableApps": false,
+    "bundledMcpDeclared": true,
+    "currentTaskMcpHealthProved": false,
+    "boardOrGenerationExecutionAuthorized": false,
+    "instructionDeliveryOrBehaviorProved": false,
+    "rightsOrCreativeValueProved": false
+  },
+  "conditionalGrillingObservation": {
+    "id": "external.matt-grilling-2ab9580",
+    "source": "mattpocock/skills",
+    "sourceClass": "reviewed-maintained-external-current-cc-switch-projection",
+    "observedHead": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+    "sourcePath": "skills/productivity/grilling",
+    "localAuthorityRoot": "C:/Users/15521/.cc-switch/skills/grilling",
+    "fileRecords": [
+      {
+        "path": "SKILL.md",
+        "bytes": 843,
+        "sha256": "44331dda57f461db4fec3f2efb6ddabe7aaaa0a57ae0f88a883bc61aed8a0587"
+      },
+      {
+        "path": "agents/openai.yaml",
+        "bytes": 105,
+        "sha256": "cf29b9a8dbf35a58a908a6ca4f64dcd86c2b2130291eee0a78b9f706b138825b"
+      }
+    ],
+    "staticValue": "One decision question at a time, recommended answers, environment lookup for facts, and explicit human ownership of decisions.",
+    "defaultDisposition": "not-a-default-creative-treatment",
+    "conditionalUse": "Only when consequential brief decisions are genuinely missing and the user explicitly wants deep stress-testing; do not convert intentionally open aesthetic preferences into mandatory intake closure.",
+    "metadataExplicitlyAllowsImplicitInvocation": false,
+    "instructionDeliveryOrMarginalValueProved": false
+  },
+  "excludedNearMatchObservations": [
+    {
+      "id": "external.superpowers-brainstorming-6.2.0",
+      "source": "obra/superpowers",
+      "version": "6.2.0",
+      "pluginManifestSha256": "b271065c5e906e73757b7f9c26f7c57bb662ee47a31ed479dc32fb253729a25c",
+      "skillSha256": "4a54a4858b99807f3155ed1614b2f116e35ea5c1b788e793f565dd837fd3891f",
+      "disposition": "exclude-as-gen-creative-treatment-retain-as-software-method-reference",
+      "reason": "Its mandatory project-context, design-approval, specification, review, and implementation-planning lifecycle is software-development specific and would add unrelated ceremony and writes to this creative-direction scenario."
+    },
+    {
+      "id": "external.huashu-current-root-suite",
+      "source": "alchaincyf/huashu-design",
+      "observedRevision": "cb25af09b4ffb4f47fb9248e4704e587d8f745c8",
+      "disposition": "no-current-atomic-candidate-no-install-or-execution",
+      "reason": "The current source remains a broad root Skill, media and design dependency tree, direction gates, and optional blocking Hook; no independently attributable lower-cost component is exposed for GEN-CREATIVE-01."
+    }
+  ],
+  "representativeAlternatives": [
+    {
+      "id": "alternative.native-open-divergence",
+      "routeClass": "N",
+      "role": "Low-structure baseline for several labelled directions, factual brief preservation, and explicit return of aesthetic choice to the human.",
+      "openEvidence": [
+        "candidate behavior under the fixed packet",
+        "directional diversity under blind review",
+        "human correction and selection burden"
+      ]
+    },
+    {
+      "id": "alternative.official-openai-creative-production",
+      "routeClass": "O",
+      "role": "Current official visual-production candidate inside its board, MCP, account, data, write, and license boundaries.",
+      "openEvidence": [
+        "live MCP and board availability",
+        "instruction delivery and source-preservation behavior",
+        "blind diversity, intent fidelity, rights traceability, and edit burden"
+      ]
+    },
+    {
+      "id": "alternative.conditional-grilling-then-official-production",
+      "routeClass": "C",
+      "role": "Explicit, proportional composition only when unresolved consequential brief decisions block safe production.",
+      "openEvidence": [
+        "whether deep intake reduces material correction without suppressing useful ambiguity",
+        "composition fidelity across the intake-to-production boundary",
+        "added interaction and context cost"
+      ]
+    },
+    {
+      "id": "alternative.human-led-ideation-control",
+      "routeClass": "H",
+      "role": "Human-only control and fallback for final aesthetic and value judgment, creator intent, reference permission, and publication authority.",
+      "openEvidence": [
+        "time and coordination cost",
+        "review consistency",
+        "independence sufficient for a useful control arm"
+      ]
+    }
+  ],
+  "comparisonDecision": {
+    "representativeSetSufficientForNextEvidenceGate": true,
+    "widerThirdPartyDiscoveryNeededNow": false,
+    "externalCapabilityInstallationNeededNow": false,
+    "candidateExecutionNeededNow": false,
+    "newZeroModelPacketNeededNow": false,
+    "selfAuthoredSkillNeededNow": false,
+    "skillOrHardStandardExtractionNeededNow": false,
+    "residualGapState": "behavior-rights-and-edit-burden-evidence-gap-not-capability-name-gap",
+    "reason": "The bound set spans native, official, proportional composition, and human-control routes, while the existing packet already supplies the deterministic boundary oracle. Additional names or another equivalent fixture would not prove behavior, rights traceability, or reduced human burden.",
+    "nextBoundedAction": "Use the existing packet as the deterministic gate for any later source-pinned candidate output, then require a separately authorized live exposure preflight and blind human review before any value, admission, default-route, or standard claim."
+  },
+  "neutralityAndJudgmentBoundary": {
+    "projectNeutralityChanged": false,
+    "neutralityRule": "Do not privilege a route because it is native, official, popular, installed, self-authored, or familiar; compare it against the bound scenario and evidence surface.",
+    "subjectiveJudgmentTreatment": "Aesthetic and value judgments are legitimate human inputs and outcomes, not noise to erase. Record their owner, context, uncertainty, and review method; do not silently promote them to universal facts.",
+    "finalAestheticDecisionOwner": "human",
+    "rightsAndPublicationDecisionOwner": "authorized-human-or-accountable-organization"
+  },
+  "recheckTriggers": [
+    "the current official plugin version, source body, MCP declaration, or host exposure changes",
+    "a bound creative task falls outside the visual-direction scope",
+    "the existing packet reveals a specific mechanism gap",
+    "a representative route fails health, exposure, fidelity, rights, or lifecycle preflight",
+    "data, account, license, rights, publication, or destructive-edit authority changes"
+  ],
+  "claimLimits": {
+    "staticMetadataIsLiveAvailability": false,
+    "implicitInvocationMetadataIsInstructionDelivery": false,
+    "installedOrCachedStateIsBehaviorProof": false,
+    "generationIsRightsClearance": false,
+    "directionCountIsCreativeDiversity": false,
+    "oneHumanPreferenceIsUniversalAestheticQuality": false,
+    "staticCoverageIsCandidateAdmission": false,
+    "staticCoverageIsStandardPromotion": false
+  },
+  "authorityBoundary": {
+    "externalCapabilityDiscoveryBeyondBoundSourcesAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "boardOrAssetWriteAuthorized": false,
+    "installationOrAccountConnectionAuthorized": false,
+    "ccSwitchPluginMcpOrRuntimeMutationAuthorized": false,
+    "skillOrHookAuthoringMutationAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "remotePushAuthorizedByThisBaseline": false
+  }
+}

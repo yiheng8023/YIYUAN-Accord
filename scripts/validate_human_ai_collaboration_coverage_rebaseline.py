@@ -153,6 +153,9 @@ MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID = (
 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
 )
+CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31"
+)
 DOCUMENTATION_PATH = (
     "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md"
 )
@@ -424,7 +427,10 @@ def validate_rebaseline(
         _require(len(verification_ids) == 1 and verification_ids[0] in verifications, f"Acceptance verification missing: {acceptance_id}")
         expected_evidence_ids = [EVIDENCE_ID, MATRIX_EVIDENCE_ID]
         if acceptance_id == "acceptance.solution-neutral-collaboration-rebaseline":
-            expected_evidence_ids.append(LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID)
+            expected_evidence_ids += [
+                LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID,
+                CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID,
+            ]
         if (
             acceptance_id
             == "acceptance.software-engineering-lifecycle-specialization"

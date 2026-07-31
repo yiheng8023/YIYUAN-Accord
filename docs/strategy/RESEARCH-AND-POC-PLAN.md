@@ -1672,3 +1672,30 @@ This completes structural and oracle-logic calibration only. An independent
 human review of content, form balance, readability, accessibility, and cleanup
 remains open. Participant safeguards, power, treatment exposure, learning
 effect, candidate value, and live readiness remain unproved and blocked.
+
+## 2026-07-31 GEN-CREATIVE-01 candidate-coverage checkpoint
+
+The next general-domain slice binds `GEN-CREATIVE-01` without changing the
+project's neutral posture. The exact static package is recorded in
+`registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json`.
+
+The representative routes are native open divergence, OpenAI Creative
+Production `0.1.25` inside its board and MCP boundary, a strictly conditional
+Matt `grilling` to resolve consequential missing decisions, and a human-led
+control. Superpowers `brainstorming` remains software-method reference rather
+than a creative-production treatment, and current Huashu still exposes no
+atomic lower-cost candidate for this scenario.
+
+The six-example Unknown Knowns creative preference packet is reused as the
+deterministic output gate. No duplicate fixture is authorized or needed.
+`GEN-CREATIVE-01` remains `planned-no-live-domain-evidence`; static metadata,
+implicit-invocation policy, cached installation, direction count, or
+generation cannot prove instruction delivery, creative diversity, rights
+clearance, reduced edit burden, admission, or a standard.
+
+Discovery for this slice pauses because the residual uncertainty is behavioral,
+rights, and edit-burden evidence, not a candidate-name shortage. Reopen it only
+for a specific uncovered task, source or host drift, failed health or exposure,
+or a mechanism gap exposed by the existing packet. Any live board, MCP,
+generation, model, account, or asset-write phase requires a separate preflight
+and authority decision.
