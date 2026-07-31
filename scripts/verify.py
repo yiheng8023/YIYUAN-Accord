@@ -202,6 +202,9 @@ from validate_human_ai_collaboration_learning_capability_baseline import (
 from validate_human_ai_collaboration_learning_fixed_fixture_protocol import (
     validate_protocol as validate_human_ai_collaboration_learning_fixed_fixture_protocol,
 )
+from validate_human_ai_collaboration_learning_noru_material_calibration import (
+    validate_calibration as validate_human_ai_collaboration_learning_noru_material_calibration,
+)
 from validate_multidimensional_software_engineering_evaluation_contract import (
     validate_contract as validate_multidimensional_software_engineering_evaluation_contract,
 )
@@ -517,6 +520,12 @@ REQUIRED_FILES = (
     "scripts/validate_human_ai_collaboration_learning_fixed_fixture_protocol.py",
     "tests/fixtures/human-ai-collaboration-learning-protocol-fixtures-2026-07-31.json",
     "tests/test_human_ai_collaboration_learning_fixed_fixture_protocol.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-NORU-MATERIAL-CALIBRATION-2026-07-31.md",
+    "registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json",
+    "tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json",
+    "tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json",
+    "scripts/validate_human_ai_collaboration_learning_noru_material_calibration.py",
+    "tests/test_human_ai_collaboration_learning_noru_material_calibration.py",
     "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
     "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
@@ -1892,6 +1901,15 @@ def verify() -> None:
     human_ai_collaboration_learning_protocol_fixture_doc = load(
         "tests/fixtures/human-ai-collaboration-learning-protocol-fixtures-2026-07-31.json"
     )
+    human_ai_collaboration_learning_noru_material_calibration_doc = load(
+        "registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json"
+    )
+    human_ai_collaboration_learning_noru_public_packet_doc = load(
+        "tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json"
+    )
+    human_ai_collaboration_learning_noru_private_oracle_doc = load(
+        "tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json"
+    )
     multidimensional_software_engineering_evaluation_contract_doc = load(
         "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json"
     )
@@ -2862,6 +2880,13 @@ def verify() -> None:
         human_ai_collaboration_learning_fixed_fixture_protocol_doc,
         root=ROOT,
         fixtures=human_ai_collaboration_learning_protocol_fixture_doc,
+        program_plan=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_learning_noru_material_calibration(
+        human_ai_collaboration_learning_noru_material_calibration_doc,
+        root=ROOT,
+        public_packet=human_ai_collaboration_learning_noru_public_packet_doc,
+        private_oracle=human_ai_collaboration_learning_noru_private_oracle_doc,
         program_plan=curation_program_plan_doc,
     )
     validate_multidimensional_software_engineering_evaluation_contract(

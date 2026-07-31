@@ -1651,3 +1651,24 @@ packet, private oracle, misconception map, parallel immediate and delayed
 assessments, novel transfer task, accessibility review, and cleanup manifest.
 No live permission is inferred. A pilot and formal human-learning trial remain
 later, separately authorized phases.
+
+The offline material gate now has one concrete
+[Noru calibration package](HUMAN-AI-COLLABORATION-LEARNING-NORU-MATERIAL-CALIBRATION-2026-07-31.md).
+The public packet is a text-only synthetic five-rule domain with four worked
+examples and eight practice items. The physically separate private oracle has
+a non-Noru baseline pretest, parallel six-item immediate and delayed forms,
+three transfer tasks, eight misconception classes, and non-cancelling scoring
+boundaries.
+
+The deterministic validator executes the domain rules, recomputes twelve
+transform or compatibility answers and one inverse answer, rejects public
+answer leakage, rejects practice/assessment overlap, resolves misconception
+references, enforces the minimum-data and text-accessibility boundaries, and
+binds cleanup to one exact disposable trial root. The immediate and delayed
+forms have equal item and point counts, but empirical difficulty equivalence is
+explicitly unproved because one visible blueprint difference remains.
+
+This completes structural and oracle-logic calibration only. An independent
+human review of content, form balance, readability, accessibility, and cleanup
+remains open. Participant safeguards, power, treatment exposure, learning
+effect, candidate value, and live readiness remain unproved and blocked.

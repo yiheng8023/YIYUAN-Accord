@@ -2532,3 +2532,35 @@ parallel assessments, misconception map, accessibility review, and cleanup
 manifest. Model dispatch, candidate execution, account access, participant
 contact, live trial, CC Switch, runtime, Skill, Hook, hard-standard, evidence
 promotion, commit, and push remain unauthorized by the protocol itself.
+
+## 2026-07-31 GEN-LEARNING-01 Noru material-calibration checkpoint
+
+The no-model material gate now has a concrete synthetic micro-domain package:
+
+- `docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-NORU-MATERIAL-CALIBRATION-2026-07-31.md`;
+- `registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json`;
+- `tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json`;
+- `tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json`;
+- `scripts/validate_human_ai_collaboration_learning_noru_material_calibration.py`;
+- `tests/test_human_ai_collaboration_learning_noru_material_calibration.py`.
+
+The public `Noru cards` packet carries all meaning through text and requires no
+personal, education, employment, color, image, or audio input. It contains five
+rules, four worked examples, eight practice items, interaction limits,
+accessibility options, and a minimum-data boundary. It contains no assessment
+answer or misconception key.
+
+The evaluator-only oracle contains a three-item non-Noru rule-application
+pretest, six immediate items, six delayed items, three novel-transfer items,
+eight misconception classes, and scoring boundaries. The validator executes
+the Noru rules, recomputes twelve transform or compatibility cases plus one
+inverse case, rejects answer leakage and item overlap, and binds future cleanup
+to `.tmp/aah-learning-noru/<trial-id>`.
+
+Structural and oracle-logic calibration passed. Empirical form difficulty,
+human readability, accessibility in use, misconception coverage, participant
+safeguards, power, treatment exposure, and learning effects remain unproved.
+The same producing identity cannot supply independent human review. No model,
+candidate, official account, participant, live trial, CC Switch, runtime,
+Skill, Hook, hard-standard, matrix promotion, external write, commit, or push
+is authorized by this calibration record.
