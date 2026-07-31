@@ -370,6 +370,20 @@ class HumanAiCollaborationScenarioEvidenceMatrixTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
             self.validate(acceptance=acceptance)
 
+    def test_rejects_semantic_execution_plan_preflight_evidence_removal(self) -> None:
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.end-to-end-process-fidelity"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.human-ai-collaboration-semantic-authority-execution-plan-"
+            "preflight-2026-08-01"
+        )
+        with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
+            self.validate(acceptance=acceptance)
+
 
 if __name__ == "__main__":
     unittest.main()

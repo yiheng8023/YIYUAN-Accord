@@ -224,3 +224,32 @@ it is not an automatic model run.
 
 The machine-readable authority is
 [`registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json`](../../registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json).
+
+## 2026-08-01 execution-plan preflight checkpoint
+
+The existing shared weak-Agent runner was audited before dispatch. It does not
+accept the SEM-03 treatment identities, emits no independent loader event, and
+hard-codes both loader invocation and instruction delivery as unproved. It is
+therefore a reusable app-server primitive source, not a SEM-03 execution
+adapter; using it directly would collapse a host-adapter gap into a candidate
+failure.
+
+A deterministic zero-model compiler now materializes one parent execution plan
+and one oracle-isolated public packet for each of the native, exact local, and
+exact current-Matt treatments. Every plan binds visible
+`gpt-5.3-codex-spark`/`low` routing with no fallback, a zero dispatch budget,
+workspace-write limited to the disposable public root, no network or external
+writes, four fresh phase threads, the frozen human-decision injection boundary,
+and close-after-phase cleanup. Structured Skill input establishes only a
+bounded association with the selected treatment; it is not an independent
+loader or instruction-delivery event.
+
+All three bundles passed materialization and self-validation, and the temporary
+preflight root was removed. The durable report is
+[`audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json).
+No model request, thread, or turn ran. The protocol status is now
+`no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized`.
+A dedicated runtime adapter, its dry validation, dispatch readiness, and a
+separate live-dispatch authority decision remain open. Loader invocation,
+instruction delivery, behavior, semantic continuity, treatment value, and
+cross-host value remain unproved.

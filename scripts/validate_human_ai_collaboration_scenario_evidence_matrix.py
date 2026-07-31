@@ -93,6 +93,10 @@ NATIVE_LOCAL_EXPOSURE_ORACLE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-semantic-authority-native-local-"
     "no-model-exposure-and-oracle-2026-08-01"
 )
+SEMANTIC_EXECUTION_PLAN_PREFLIGHT_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-semantic-authority-execution-plan-"
+    "preflight-2026-08-01"
+)
 EXPECTED_HOSTS = {
     "host.native-transparent",
     "host.configurable-agent",
@@ -1017,6 +1021,7 @@ def validate_matrix(
                 SEMANTIC_AUTHORITY_CONTINUITY_EVIDENCE_ID,
                 CURRENT_MATT_EXPOSURE_REFRESH_EVIDENCE_ID,
                 NATIVE_LOCAL_EXPOSURE_ORACLE_EVIDENCE_ID,
+                SEMANTIC_EXECUTION_PLAN_PREFLIGHT_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]

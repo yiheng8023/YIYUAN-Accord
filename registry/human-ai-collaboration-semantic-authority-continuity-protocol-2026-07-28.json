@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
   "date": "2026-07-28",
-  "status": "no-model-admission-complete-live-dispatch-not-authorized",
+  "status": "no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized",
   "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
   "matrixCellId": "SEM-03",
   "purpose": "Falsifiably compare native reasoning, the exact local adapted grill-with-docs monolith, and the exact current Matt grilling plus domain-modeling composition on durable semantic continuity across fresh lifecycle stages without treating source structure, exposure, terminal correctness, or one glossary as value proof.",
@@ -10,14 +10,16 @@
     "semanticReconciliation": "registry/human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28.json",
     "historicalRequirementsProtocol": "registry/human-ai-collaboration-requirements-domain-challenge-protocol-batch-01-2026-07-24.json",
     "historicalRequirementsEvidence": "registry/human-ai-collaboration-requirements-domain-live-comparison-batch-01-2026-07-24.json",
-    "weakAgentRunner": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+    "candidateWeakAgentRunner": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
     "parentOracleReuseDecision": "registry/human-ai-collaboration-unknown-quadrant-parent-oracle-seam-reuse-decision-2026-07-27.json",
     "fixtureDefinition": "tests/fixtures/human-ai-collaboration-semantic-authority-continuity-2026-07-28.json",
     "fixtureBuilder": "scripts/build_human_ai_collaboration_semantic_authority_continuity_trial.py",
     "currentMattStaticAdmission": "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json",
     "currentMattNoModelExposureReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json",
     "currentMattNoModelExposureRefreshReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json",
-    "nativeLocalNoModelExposureAndOracleReport": "audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json"
+    "nativeLocalNoModelExposureAndOracleReport": "audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json",
+    "semanticExecutionPlanBuilder": "scripts/build_human_ai_collaboration_semantic_authority_execution_plan.py",
+    "semanticExecutionPlanPreflightReport": "audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json"
   },
   "treatments": [
     {
@@ -175,6 +177,13 @@
     "currentCompositionDependencyCompleteExposureProved": true,
     "currentHostRefreshExposureProved": true,
     "publicPacketPrivateOracleLeakageRejected": true,
+    "existingRunnerSupportsSemanticTreatments": false,
+    "existingRunnerLoaderInvocationProved": false,
+    "existingRunnerInstructionDeliveryProved": false,
+    "semanticExecutionPlanAdapterImplemented": true,
+    "semanticExecutionPlanPreflightPass": true,
+    "semanticRuntimeAdapterImplemented": false,
+    "dispatchReadinessProved": false,
     "minimumValidRunsPerTreatment": 3,
     "liveRunAuthorizedByThisRecord": false
   },
@@ -200,7 +209,7 @@
     "candidatePreferenceAllowed": false,
     "ccMutationAllowed": false,
     "selfAuthoredResidualGapProved": false,
-    "nextBoundedAction": "Keep model runs at zero while performing an execution-admission review. Bind one exact disposable weak-Agent packet, visible gpt-5.3-codex-spark/low routing, parent-observed loader and instruction-delivery evidence, cost and sandbox boundaries, stop conditions, and separate dispatch authority before any model turn."
+    "nextBoundedAction": "Keep model runs at zero. Reuse the compiled three-treatment, four-fresh-thread execution plans to implement and dry-validate a dedicated SEM-03 runtime adapter over existing app-server session, inventory, route, sandbox, process-boundary, and cleanup primitives. Preserve bounded association when no independent loader event exists. Dispatch readiness remains false until visible gpt-5.3-codex-spark/low routing, exact treatment materialization, cost and sandbox boundaries, stop conditions, cleanup, and separate dispatch authority are all bound."
   },
   "claimBoundary": {
     "semanticContinuityProved": false,

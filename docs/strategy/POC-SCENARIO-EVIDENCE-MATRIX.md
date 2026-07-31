@@ -465,6 +465,17 @@ and Codex homes were removed. Loader/instruction delivery, behavior, value, and
 all model runs remain open. The records authorize no model dispatch, CC
 mutation, candidate preference, or self-authored arm.
 
+A subsequent zero-model execution-plan preflight found that the existing
+shared weak-Agent runner cannot represent the SEM-03 treatment IDs and provides
+no independent loader or instruction-delivery event. A dedicated compiler now
+materializes one parent plan and one oracle-isolated public packet for each
+treatment with visible `gpt-5.3-codex-spark`/`low` routing, zero dispatch
+budget, no fallback, bounded sandboxing, four fresh phase threads, human
+decision injection, hard stops, and exact cleanup. All three bundles passed and
+the temporary root was removed. This is adapter-plan evidence only: the runtime
+adapter, dispatch readiness, every model run, loader/instruction delivery,
+behavior, continuity, value, and cross-host claims remain open.
+
 ## Program closeout cleanup gate
 
 Program closeout is blocked until the portfolio/closeout gate inventories and

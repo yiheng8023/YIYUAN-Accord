@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-semantic-authority-execution-plan-preflight-v1",
+  "status": "preflight-pass-no-dispatch",
+  "candidateRunnerAssessment": {
+    "acceptsSemanticTreatmentIds": false,
+    "loaderInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "dedicatedAdapterRequired": true
+  },
+  "treatments": [
+    {
+      "schema": 1,
+      "status": "compiled-no-dispatch",
+      "runId": "SEM03-ADMISSION-LOCAL-001",
+      "treatmentId": "SEM-LOCAL-ADAPTED-MONOLITH",
+      "planSha256": "c1a824c917dac7a391a62a0947c90c992777c77a9b0c6bcf0ff5652b5cd4e0ee",
+      "publicPacketManifestSha256": "e2d46a706c461b7c0ad4f3592fe727fa4edfc0c7d7843ade751c4fa6feba67ab",
+      "failureCodes": [],
+      "modelRequestSent": false,
+      "threadStarted": false,
+      "turnStarted": false
+    },
+    {
+      "schema": 1,
+      "status": "compiled-no-dispatch",
+      "runId": "SEM03-ADMISSION-CURRENT-001",
+      "treatmentId": "SEM-MATT-CURRENT-COMPOSITION",
+      "planSha256": "5a013ed6f9532815bce61b5a2afe237f014341307865e11fe299b9292f81ca74",
+      "publicPacketManifestSha256": "71985f01848f58497232075a916c703e0df13438fcc76573464653eae5279b97",
+      "failureCodes": [],
+      "modelRequestSent": false,
+      "threadStarted": false,
+      "turnStarted": false
+    },
+    {
+      "schema": 1,
+      "status": "compiled-no-dispatch",
+      "runId": "SEM03-ADMISSION-NATIVE-001",
+      "treatmentId": "SEM-NATIVE",
+      "planSha256": "47cc5e2fcfd1c5abcb9c3a37dcba661a4d8512eda68d54632623476a2985262b",
+      "publicPacketManifestSha256": "45ae2e21334d807b7b37c07964c2a2eeafe4f00ed437f55f341c5c46f0932d27",
+      "failureCodes": [],
+      "modelRequestSent": false,
+      "threadStarted": false,
+      "turnStarted": false
+    }
+  ],
+  "temporaryProcessRootRetained": false,
+  "modelRequestSent": false,
+  "threadStarted": false,
+  "turnStarted": false,
+  "claimBoundary": {
+    "dispatchReadinessProved": false,
+    "loaderInvocationProved": false,
+    "skillInstructionsReachedModelProved": false,
+    "behavioralCausationProved": false,
+    "semanticContinuityProved": false,
+    "treatmentValueProved": false
+  },
+  "reportSha256": "28a387abbcef4b61bb33ef1dfc2aac8d9d5e991e27857342b1d36f2ac43eb7f4"
+}

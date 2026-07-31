@@ -278,6 +278,7 @@
         "evidence.human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
         "evidence.human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-refresh-2026-07-31",
         "evidence.human-ai-collaboration-semantic-authority-native-local-no-model-exposure-and-oracle-2026-08-01",
+        "evidence.human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
@@ -2524,6 +2525,15 @@
       "id": "evidence.human-ai-collaboration-semantic-authority-native-local-no-model-exposure-and-oracle-2026-08-01",
       "path": "audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json",
       "kind": "codex-0-146-temporary-home-empty-mcp-table-native-zero-configurable-local-exact-one-selected-and-public-packet-oracle-leakage-rejection-no-turn-loader-behavior-or-value-proof",
+      "asOf": "2026-08-01",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01",
+      "path": "audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json",
+      "kind": "deterministic-three-treatment-public-packet-and-parent-plan-preflight-zero-model-zero-thread-candidate-runner-incompatible-runtime-adapter-and-dispatch-still-open",
       "asOf": "2026-08-01",
       "supports": [
         "acceptance.end-to-end-process-fidelity"

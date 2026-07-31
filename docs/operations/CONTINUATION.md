@@ -2779,3 +2779,30 @@ semantic continuity, treatment value, and cross-host value remain unproved.
 Do not dispatch a weak Agent directly. First bind one exact disposable packet,
 visible `gpt-5.3-codex-spark`/`low` routing, parent-observed evidence,
 cost/sandbox/stop boundaries, and separate dispatch authority.
+
+## 2026-08-01 SEM-03 execution-plan preflight checkpoint
+
+The direct-dispatch premise was audited before any model use. The shared
+`scripts/run_human_ai_collaboration_weak_agent_trial.py` runner does not accept
+the SEM-03 treatment IDs and does not prove loader invocation or instruction
+delivery. Reuse its app-server/session/route/process-boundary primitives only;
+do not record an incompatible runner outcome as candidate evidence.
+
+The new
+`scripts/build_human_ai_collaboration_semantic_authority_execution_plan.py`
+compiled and materialized native, exact local, and exact current-Matt bundles.
+Each parent plan binds `gpt-5.3-codex-spark`/`low`, no fallback, model budget
+zero, no network or external writes, disposable public-root workspace-write,
+four fresh phase threads, the frozen human-decision injection boundary, hard
+stops, and close-after-phase cleanup. The public packets passed private-oracle
+isolation checks. The three-treatment temporary root was removed.
+
+The durable report is
+`audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json`.
+It records zero model requests, threads, and turns. Current status is
+`no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized`.
+Next: implement and dry-validate a dedicated SEM-03 runtime adapter using the
+existing app-server primitives. Do not dispatch until adapter fidelity, visible
+route, materialization, cost, sandbox, stop, cleanup, and separate live
+authority are all evidenced. Structured Skill input alone is not loader or
+instruction-delivery proof.

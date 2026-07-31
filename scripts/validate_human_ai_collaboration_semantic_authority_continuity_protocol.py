@@ -27,6 +27,10 @@ NATIVE_LOCAL_EXPOSURE_REPORT_PATH = Path(
     "audits/human-ai-collaboration-semantic-authority-native-local-"
     "no-model-exposure-2026-08-01/REPORT.json"
 )
+EXECUTION_PLAN_PREFLIGHT_REPORT_PATH = Path(
+    "audits/human-ai-collaboration-semantic-authority-execution-plan-"
+    "preflight-2026-08-01/REPORT.json"
+)
 
 
 def _require(condition: bool, message: str) -> None:
@@ -44,7 +48,10 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
     _require(
         document.get("schema") == 1
         and document.get("status")
-        == "no-model-admission-complete-live-dispatch-not-authorized"
+        == (
+            "no-model-admission-and-plan-preflight-complete-"
+            "live-dispatch-not-authorized"
+        )
         and document.get("scenarioId") == "HAC-SEMANTIC-AUTHORITY-01"
         and document.get("matrixCellId") == "SEM-03",
         "Semantic continuity protocol identity drifted",
@@ -61,7 +68,9 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
             "registry/human-ai-collaboration-requirements-domain-live-"
             "comparison-batch-01-2026-07-24.json"
         ),
-        "weakAgentRunner": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+        "candidateWeakAgentRunner": (
+            "scripts/run_human_ai_collaboration_weak_agent_trial.py"
+        ),
         "parentOracleReuseDecision": (
             "registry/human-ai-collaboration-unknown-quadrant-parent-oracle-"
             "seam-reuse-decision-2026-07-27.json"
@@ -86,6 +95,13 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         ).replace("\\", "/"),
         "nativeLocalNoModelExposureAndOracleReport": str(
             NATIVE_LOCAL_EXPOSURE_REPORT_PATH
+        ).replace("\\", "/"),
+        "semanticExecutionPlanBuilder": (
+            "scripts/build_human_ai_collaboration_semantic_authority_"
+            "execution_plan.py"
+        ),
+        "semanticExecutionPlanPreflightReport": str(
+            EXECUTION_PLAN_PREFLIGHT_REPORT_PATH
         ).replace("\\", "/"),
     }
     _require(sources == expected_sources, "Semantic continuity source bindings drifted")
@@ -267,6 +283,28 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
     _require(
         gate.get("publicPacketPrivateOracleLeakageRejected") is True,
         "Semantic continuity private-oracle isolation was not recorded",
+    )
+    _require(
+        gate.get("existingRunnerSupportsSemanticTreatments") is False,
+        "Semantic continuity runner compatibility overclaimed",
+    )
+    _require(
+        gate.get("existingRunnerLoaderInvocationProved") is False
+        and gate.get("existingRunnerInstructionDeliveryProved") is False,
+        "Semantic continuity runner evidence overclaimed",
+    )
+    _require(
+        gate.get("semanticExecutionPlanAdapterImplemented") is True
+        and gate.get("semanticExecutionPlanPreflightPass") is True,
+        "Semantic continuity execution-plan preflight was not recorded",
+    )
+    _require(
+        gate.get("semanticRuntimeAdapterImplemented") is False,
+        "Semantic continuity runtime adapter prematurely promoted",
+    )
+    _require(
+        gate.get("dispatchReadinessProved") is False,
+        "Semantic continuity dispatch readiness overclaimed",
     )
     _require(
         gate.get("currentCompositionDependencyCompleteExposureProved") is True,
@@ -555,6 +593,93 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
             for value in native_local_report.get("claimBoundary", {}).values()
         ),
         "Semantic continuity native/local isolation or claim boundary drifted",
+    )
+
+    execution_plan_report = json.loads(
+        (root / EXECUTION_PLAN_PREFLIGHT_REPORT_PATH).read_text(encoding="utf-8")
+    )
+    execution_plan_body = dict(execution_plan_report)
+    execution_plan_digest = execution_plan_body.pop("reportSha256", None)
+    computed_execution_plan_digest = hashlib.sha256(
+        json.dumps(
+            execution_plan_body,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    _require(
+        execution_plan_digest == computed_execution_plan_digest
+        == "28a387abbcef4b61bb33ef1dfc2aac8d9d5e991e27857342b1d36f2ac43eb7f4",
+        "Semantic continuity execution-plan report digest drifted",
+    )
+    _require(
+        execution_plan_report.get("status") == "preflight-pass-no-dispatch"
+        and execution_plan_report.get("id")
+        == (
+            "human-ai-collaboration-semantic-authority-"
+            "execution-plan-preflight-v1"
+        )
+        and execution_plan_report.get("candidateRunnerAssessment")
+        == {
+            "acceptsSemanticTreatmentIds": False,
+            "loaderInvocationProved": False,
+            "instructionDeliveryProved": False,
+            "dedicatedAdapterRequired": True,
+        },
+        "Semantic continuity execution-plan identity drifted",
+    )
+    execution_plan_treatments = _index(
+        execution_plan_report.get("treatments", []),
+        "treatmentId",
+        "Execution-plan treatment",
+    )
+    _require(
+        {
+            treatment_id: (
+                row.get("runId"),
+                row.get("planSha256"),
+                row.get("publicPacketManifestSha256"),
+            )
+            for treatment_id, row in execution_plan_treatments.items()
+        }
+        == {
+            "SEM-NATIVE": (
+                "SEM03-ADMISSION-NATIVE-001",
+                "47cc5e2fcfd1c5abcb9c3a37dcba661a4d8512eda68d54632623476a2985262b",
+                "45ae2e21334d807b7b37c07964c2a2eeafe4f00ed437f55f341c5c46f0932d27",
+            ),
+            "SEM-LOCAL-ADAPTED-MONOLITH": (
+                "SEM03-ADMISSION-LOCAL-001",
+                "c1a824c917dac7a391a62a0947c90c992777c77a9b0c6bcf0ff5652b5cd4e0ee",
+                "e2d46a706c461b7c0ad4f3592fe727fa4edfc0c7d7843ade751c4fa6feba67ab",
+            ),
+            "SEM-MATT-CURRENT-COMPOSITION": (
+                "SEM03-ADMISSION-CURRENT-001",
+                "5a013ed6f9532815bce61b5a2afe237f014341307865e11fe299b9292f81ca74",
+                "71985f01848f58497232075a916c703e0df13438fcc76573464653eae5279b97",
+            ),
+        }
+        and all(
+            row.get("status") == "compiled-no-dispatch"
+            and row.get("failureCodes") == []
+            and row.get("modelRequestSent") is False
+            and row.get("threadStarted") is False
+            and row.get("turnStarted") is False
+            for row in execution_plan_treatments.values()
+        ),
+        "Semantic continuity execution-plan matrix drifted",
+    )
+    _require(
+        execution_plan_report.get("temporaryProcessRootRetained") is False
+        and execution_plan_report.get("modelRequestSent") is False
+        and execution_plan_report.get("threadStarted") is False
+        and execution_plan_report.get("turnStarted") is False
+        and all(
+            value is False
+            for value in execution_plan_report.get("claimBoundary", {}).values()
+        ),
+        "Semantic continuity execution-plan boundary drifted",
     )
 
     authority = document.get("authorityBoundary", {})

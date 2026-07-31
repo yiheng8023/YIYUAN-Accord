@@ -30,6 +30,66 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
         ):
             self.assertTrue(gate[key], key)
 
+    def test_current_runner_gap_is_explicit(self) -> None:
+        self.assertEqual(
+            "scripts/run_human_ai_collaboration_weak_agent_trial.py",
+            self.document["sourceBindings"]["candidateWeakAgentRunner"],
+        )
+        self.assertNotIn("weakAgentRunner", self.document["sourceBindings"])
+        gate = self.document["executionAdmission"]
+        self.assertIs(gate["existingRunnerSupportsSemanticTreatments"], False)
+        self.assertIs(gate["existingRunnerLoaderInvocationProved"], False)
+        self.assertIs(gate["existingRunnerInstructionDeliveryProved"], False)
+
+    def test_current_execution_plan_preflight_is_recorded(self) -> None:
+        sources = self.document["sourceBindings"]
+        self.assertEqual(
+            "scripts/build_human_ai_collaboration_semantic_authority_execution_plan.py",
+            sources["semanticExecutionPlanBuilder"],
+        )
+        self.assertEqual(
+            (
+                "audits/human-ai-collaboration-semantic-authority-execution-"
+                "plan-preflight-2026-08-01/REPORT.json"
+            ),
+            sources["semanticExecutionPlanPreflightReport"],
+        )
+        gate = self.document["executionAdmission"]
+        self.assertIs(gate["semanticExecutionPlanAdapterImplemented"], True)
+        self.assertIs(gate["semanticExecutionPlanPreflightPass"], True)
+        self.assertIs(gate["semanticRuntimeAdapterImplemented"], False)
+        self.assertIs(gate["dispatchReadinessProved"], False)
+
+    def test_rejects_existing_runner_semantic_support_promotion(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "existingRunnerSupportsSemanticTreatments"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "runner compatibility overclaimed"):
+            self.validate(document)
+
+    def test_rejects_existing_runner_loader_promotion(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "existingRunnerLoaderInvocationProved"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "runner evidence overclaimed"):
+            self.validate(document)
+
+    def test_rejects_execution_plan_preflight_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "semanticExecutionPlanPreflightPass"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "execution-plan preflight"):
+            self.validate(document)
+
+    def test_rejects_dispatch_readiness_promotion(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"]["dispatchReadinessProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "dispatch readiness overclaimed"):
+            self.validate(document)
+
     def test_rejects_mutable_live_local_treatment_path(self) -> None:
         document = copy.deepcopy(self.document)
         local = next(
