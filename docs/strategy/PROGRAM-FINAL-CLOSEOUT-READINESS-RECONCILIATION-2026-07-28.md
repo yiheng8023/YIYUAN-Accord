@@ -1,6 +1,7 @@
 # Program final-closeout readiness reconciliation
 
 Date: 2026-07-28
+Last reconciled: 2026-07-31
 Status: audited; cannot close
 
 Machine-readable authority:
@@ -11,8 +12,8 @@ Machine-readable authority:
 The canonical program map contains 61 acceptance criteria:
 
 - 44 verified;
-- 15 partial;
-- 2 planned.
+- 16 partial;
+- 1 planned.
 
 Seventeen criteria remain open across eight objectives. A passing verifier
 proves that the map and its current contracts are internally valid; it does not
@@ -31,8 +32,10 @@ upgrade those assessments or prove final program completion.
    source preservation, and foreign-managed coexistence remain split across
    database, physical, projection, loader, backup/restore, and cross-device
    layers.
-4. Standard lifecycle: the standard-candidate package is still planned, and
-   bounded graph-scoped revalidation remains partial.
+4. Standard lifecycle: the standard-candidate package now has one bounded
+   AI-era research contract and deterministic negative tests, but remains
+   partial because repeated cross-host value, CALIBRATION review, ASSETS
+   admission, and bounded graph-scoped revalidation remain open.
 5. Runtime, Hook, and orchestration: dynamic MCP lifecycle, Hook value, and
    native task orchestration lack task-bound or cross-host proof.
 6. Final cleanup: the inventory is governed, but exact disposition, separate

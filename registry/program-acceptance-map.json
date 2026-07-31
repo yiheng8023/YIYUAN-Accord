@@ -205,7 +205,7 @@
     },
     {
       "id": "acceptance.software-engineering-lifecycle-specialization",
-      "statement": "Software engineering is modeled as a priority specialization across a full lifecycle and discipline surface rather than reduced to coding, review, security scanning, or CI examples.",
+      "statement": "Software engineering is modeled as a priority specialization across a full lifecycle and discipline surface rather than reduced to coding, review, security scanning, or CI examples; classical principles are revalidated against AI-era failure modes and lifecycle cost rather than revived or dismissed wholesale.",
       "assessment": "partial",
       "verificationIds": [
         "verification.software-engineering-lifecycle-specialization"
@@ -216,7 +216,8 @@
         "evidence.human-ai-collaboration-release-change-zero-model-protocol-2026-07-27",
         "evidence.human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30",
         "evidence.human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27",
-        "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27"
+        "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27",
+        "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31"
       ]
     },
     {
@@ -277,7 +278,8 @@
       ],
       "evidenceIds": [
         "evidence.human-ai-collaboration-coverage-rebaseline",
-        "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01"
+        "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01",
+        "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31"
       ]
     },
     {
@@ -590,12 +592,14 @@
     },
     {
       "id": "acceptance.standard-candidate-contract",
-      "statement": "A reusable standard candidate package contract preserves source lineage, repeated evidence, scope, counterexamples, verification, versioning, migration, and authority boundaries.",
-      "assessment": "planned",
+      "statement": "A reusable standard candidate package contract preserves source lineage, repeated evidence, original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, scope, counterexamples, fallback, revalidation or retirement, versioning, migration, and authority boundaries.",
+      "assessment": "partial",
       "verificationIds": [
         "verification.standard-candidate-contract"
       ],
-      "evidenceIds": []
+      "evidenceIds": [
+        "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31"
+      ]
     },
     {
       "id": "acceptance.calibration-reference-boundary",
@@ -710,7 +714,8 @@
       "evidenceIds": [
         "evidence.program-plan",
         "evidence.adaptive-harness-source-suite-and-user-sovereignty",
-        "evidence.public-skill-source-static-review-batch-2026-07-18"
+        "evidence.public-skill-source-static-review-batch-2026-07-18",
+        "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31"
       ]
     },
     {
@@ -1066,9 +1071,9 @@
     },
     {
       "id": "verification.software-engineering-lifecycle-specialization",
-      "method": "Validate the 14 software-engineering lifecycle slices against current lifecycle, body-of-knowledge, and secure-development references, then require scenario and evidence coverage per slice before a completeness claim.",
-      "expectedResult": "Software engineering remains a priority specialization with unassessed slices visible; coding examples cannot substitute for lifecycle coverage.",
-      "evidenceRequirement": "Current official reference locators, lifecycle-slice registry, cross-cut requirements, uncovered-cell reporting, and a later scenario-to-evidence matrix."
+      "method": "Validate the 14 software-engineering lifecycle slices against current lifecycle, body-of-knowledge, and secure-development references; for classical-principle candidates, bind the original failure mode, AI-era effect, current capability coverage, deterministic and human verification boundaries, total lifecycle cost, counterexamples, and retirement condition before any completeness or promotion claim.",
+      "expectedResult": "Software engineering remains a priority specialization with unassessed slices visible; coding examples cannot substitute for lifecycle coverage, and renewed interest cannot substitute for revalidation.",
+      "evidenceRequirement": "Current official reference locators, lifecycle-slice registry, cross-cut requirements, uncovered-cell reporting, bounded primary-source synthesis, four-way classification contract, and later scenario-to-evidence comparison."
     },
     {
       "id": "verification.end-to-end-process-fidelity",
@@ -1177,9 +1182,9 @@
     },
     {
       "id": "verification.standard-candidate-contract",
-      "method": "Validate a future standard candidate schema and at least one evidence-backed fixture without performing an unauthorized cross-repository write.",
-      "expectedResult": "Candidate packages preserve lineage, identify any YIYUAN-CALIBRATION handoff as an independent and principally temporary reference or calibration path, identify YIYUAN-ASSETS as final admission and carrier authority, and remain non-authoritative until admission.",
-      "evidenceRequirement": "A checked-in contract, fixtures, deterministic tests, an explicit intended calibration handoff target, final-carrier metadata, and an external authority boundary."
+      "method": "Validate a future standard candidate schema and at least one evidence-backed fixture, including original failure mode, AI-era effect, current native/official/reviewed-external/composed coverage, deterministic verification, residual human judgment, creativity and maintenance cost, counterexamples, fallback, and revalidation or retirement, without performing an unauthorized cross-repository write.",
+      "expectedResult": "Candidate packages distinguish candidate invariants, adaptive practices, obsolete ceremonies, and insufficient evidence; preserve lineage; identify any YIYUAN-CALIBRATION handoff as an independent and principally temporary reference or calibration path; identify YIYUAN-ASSETS as final admission and carrier authority; and remain non-authoritative until admission.",
+      "evidenceRequirement": "A checked-in contract, bounded primary-source fixture, deterministic positive and negative tests, explicit claim limits, an intended calibration handoff target, final-carrier metadata, and an external authority boundary."
     },
     {
       "id": "verification.calibration-reference-boundary",
@@ -2501,6 +2506,18 @@
       "asOf": "2026-07-27",
       "supports": [
         "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
+      "path": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
+      "kind": "bounded-primary-source-ai-era-classical-engineering-principles-revalidation-contract-no-hard-standard-promotion",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.software-engineering-lifecycle-specialization",
+        "acceptance.ai-independent-hard-standard-boundary",
+        "acceptance.standard-candidate-contract",
+        "acceptance.adaptive-harness-proportionality"
       ]
     }
   ]

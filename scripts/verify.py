@@ -193,6 +193,9 @@ from validate_mcp_thread_creator_connection_close_auto_attach_v2 import (
 from validate_agent_resource_pressure_attribution_protocol import (
     validate_protocol as validate_agent_resource_pressure_attribution_protocol,
 )
+from validate_ai_era_classical_software_engineering_principles_revalidation import (
+    validate_contract as validate_ai_era_classical_software_engineering_principles_revalidation,
+)
 from validate_codex_desktop_resource_observability_preflight import (
     validate_preflight as validate_codex_desktop_resource_observability_preflight,
 )
@@ -482,6 +485,10 @@ REQUIRED_FILES = (
     "scripts/validate_agent_resource_pressure_attribution_protocol.py",
     "tests/test_agent_resource_pressure_attribution.py",
     "tests/test_agent_resource_pressure_attribution_protocol.py",
+    "docs/strategy/AI-ERA-CLASSICAL-SOFTWARE-ENGINEERING-PRINCIPLES-REVALIDATION-2026-07-31.md",
+    "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
+    "scripts/validate_ai_era_classical_software_engineering_principles_revalidation.py",
+    "tests/test_ai_era_classical_software_engineering_principles_revalidation.py",
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
     "scripts/validate_codex_desktop_resource_observability_preflight.py",
     "tests/test_codex_desktop_resource_observability_preflight.py",
@@ -1822,6 +1829,9 @@ def verify() -> None:
     agent_resource_pressure_attribution_protocol_doc = load(
         "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json"
     )
+    ai_era_classical_software_engineering_principles_revalidation_doc = load(
+        "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json"
+    )
     codex_desktop_resource_observability_preflight_doc = load(
         "registry/codex-desktop-resource-observability-preflight-2026-07-31.json"
     )
@@ -2770,6 +2780,12 @@ def verify() -> None:
         agent_resource_pressure_attribution_protocol_doc,
         root=ROOT,
         program_map=program_acceptance_map_doc,
+    )
+    validate_ai_era_classical_software_engineering_principles_revalidation(
+        ai_era_classical_software_engineering_principles_revalidation_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+        program_plan=curation_program_plan_doc,
     )
     validate_codex_desktop_resource_observability_preflight(
         codex_desktop_resource_observability_preflight_doc,
@@ -9366,8 +9382,22 @@ def validate_layered_reliability_projection_reconciliation(
         criterion = criteria.get(criterion_id, {})
         if criterion.get("assessment") != "verified" or evidence_id not in criterion.get("evidenceIds", []):
             raise RuntimeError(f"Layered reliability acceptance mapping drifted: {criterion_id}")
+    ai_era_revalidation_evidence_id = (
+        "evidence.ai-era-classical-software-engineering-principles-"
+        "revalidation-2026-07-31"
+    )
     for criterion_id, assessment in kept_open.items():
-        if criteria.get(criterion_id, {}).get("assessment") != assessment:
+        criterion = criteria.get(criterion_id, {})
+        current_assessment = criterion.get("assessment")
+        if (
+            criterion_id == "acceptance.standard-candidate-contract"
+            and assessment == "planned"
+            and current_assessment == "partial"
+            and ai_era_revalidation_evidence_id
+            in criterion.get("evidenceIds", [])
+        ):
+            continue
+        if current_assessment != assessment:
             raise RuntimeError(f"Layered reliability open acceptance was overclaimed: {criterion_id}")
     evidence = {
         item.get("id"): item

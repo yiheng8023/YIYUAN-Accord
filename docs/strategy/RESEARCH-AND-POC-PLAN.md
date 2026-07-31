@@ -19,6 +19,20 @@ must preserve artifact identity, authority, acceptance, per-hop deltas, and a
 recovery anchor; naming all slices or passing one implementation fixture cannot
 establish lifecycle completeness.
 
+AI-era classical software-engineering principles revalidation:
+[`AI-ERA-CLASSICAL-SOFTWARE-ENGINEERING-PRINCIPLES-REVALIDATION-2026-07-31.md`](AI-ERA-CLASSICAL-SOFTWARE-ENGINEERING-PRINCIPLES-REVALIDATION-2026-07-31.md).
+This horizontal research lens asks whether a historical principle remains a
+candidate invariant, needs adaptive implementation, represents obsolete
+ceremony, or still lacks sufficient evidence. Every candidate binds its
+original failure mode, AI-era effect, current ecosystem coverage,
+deterministic verification, residual human judgment, creativity and
+maintenance cost, counterexamples, and retirement condition. The current
+primary-source package supports bounded revalidation rather than universal AI
+productivity, quality, or legacy-process claims. It extends existing
+software-lifecycle, AI-independent hard-standard, standard-candidate, and
+adaptive-proportionality acceptance carriers; it creates no new acceptance
+item and authorizes no hard-standard, Skill, Hook, model, or runtime action.
+
 After the additive cumulative-loss accounting mechanism passed, the
 source-backed lifecycle protocol and zero-model calibration also passed their
 mechanism gate. The capture persists seven stage envelopes, eight G0–G7

@@ -744,3 +744,29 @@ finds that existing weak-Agent, process-fidelity, and context packet builders
 already separate Agent-visible inputs from parent-only oracle material. A new
 generic adapter or runtime override is therefore not justified. Future live
 integration must remain protocol-owned and scenario-specific.
+
+## AI-era classical engineering-principles revalidation — 2026-07-31
+
+The program now carries
+[AI-era classical software-engineering principles revalidation](strategy/AI-ERA-CLASSICAL-SOFTWARE-ENGINEERING-PRINCIPLES-REVALIDATION-2026-07-31.md)
+as a horizontal research and evaluation lens. It does not change the current
+candidate-first execution order or make software engineering the whole
+human-AI collaboration domain.
+
+The associated machine contract classifies a candidate only as a
+`candidate-invariant`, `adaptive-practice`, `obsolete-ceremony`, or
+`insufficient-evidence` item. It requires original failure mode, AI-era effect,
+current native/official/reviewed-external/composed coverage, deterministic
+verification, residual human judgment, creativity and maintenance cost,
+counterexamples, and retirement conditions. Mixed primary-source evidence is
+kept bounded by task, cohort, tool generation, repository maturity, and
+lifecycle scope.
+
+This calibration reuses
+`acceptance.software-engineering-lifecycle-specialization`,
+`acceptance.ai-independent-hard-standard-boundary`,
+`acceptance.standard-candidate-contract`, and
+`acceptance.adaptive-harness-proportionality`; the acceptance inventory remains
+61. It does not restore rigid legacy process, promote a hard standard, create a
+Skill or Hook, justify self-authored work, mutate CC Switch, dispatch a model,
+or authorize a cross-repository write.

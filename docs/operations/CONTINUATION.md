@@ -2162,3 +2162,44 @@ No uninstall, backup eviction, common-link cleanup, remote snapshot, recovery
 archive, debug helper, host toggle, configuration write, restart, or model turn
 was authorized or executed. Rerun the live preflight immediately before any
 separately authorized canary.
+
+## 2026-07-31 AI-era engineering-principles revalidation checkpoint
+
+The product, program, research, and existing acceptance carriers now include a
+bounded AI-era revalidation lens for classical software-engineering
+principles. The durable package is:
+
+- `docs/strategy/AI-ERA-CLASSICAL-SOFTWARE-ENGINEERING-PRINCIPLES-REVALIDATION-2026-07-31.md`;
+- `registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json`;
+- `scripts/validate_ai_era_classical_software_engineering_principles_revalidation.py`.
+
+The four outcomes are candidate invariant, adaptive practice, obsolete
+ceremony, and insufficient evidence. The package keeps productivity and
+quality findings bounded, separates a principle from its historical workflow,
+and requires original failure mode, AI-era effect, current capability
+coverage, deterministic verification, residual human judgment, creativity and
+maintenance cost, counterexamples, fallback, and retirement conditions.
+
+It reuses four existing acceptance carriers and keeps the acceptance inventory
+at 61. `acceptance.standard-candidate-contract` advances only from `planned` to
+`partial`: the checked-in contract and negative tests do not prove repeated
+cross-host value, CALIBRATION review, ASSETS admission, or hard-standard
+authority.
+
+When the paused goal is resumed, append this exact decision constraint:
+
+> Treat AI-era revalidation of classical software-engineering principles as a
+> horizontal research and evaluation lens. Separate candidate invariants,
+> adaptive practices, obsolete ceremonies, and insufficient-evidence items;
+> assess original failure mode, AI-era effect, current ecosystem coverage,
+> deterministic verification, residual human judgment, creativity and
+> maintenance cost, counterexamples, and retirement conditions. Do not restore
+> rigid legacy process because a principle regained importance, and do not
+> weaken intent, evidence, responsibility, verification, rollback, or long-term
+> system-health requirements because AI improved generation speed. This lens
+> does not reorder current candidate work, prove a self-authored gap, or promote
+> a hard standard without separate repeated evidence and authority.
+
+This checkpoint authorizes no capability installation, CC Switch, Skill, Hook,
+model, runtime, cross-repository, CALIBRATION, ASSETS, commit, push, or release
+mutation.

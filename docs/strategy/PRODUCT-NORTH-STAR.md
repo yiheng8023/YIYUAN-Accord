@@ -10,6 +10,11 @@ Skill, MCP server, Plugin, Hook, repository, or context-management mechanism.
 The user should primarily provide ideas, goals, corrections, creative judgment,
 important decisions, and authorization where the host requires it.
 
+The Harness must not reduce value to code volume, task throughput, saved time,
+or money. It should also preserve intent fidelity, epistemic integrity, human
+judgment and authorization, accountable evidence, reversibility, continuity,
+resilience, and long-term system health as AI increases execution speed.
+
 ## Desired outcomes
 
 - less user effort spent learning or manually orchestrating Agent mechanics;
@@ -24,7 +29,25 @@ important decisions, and authorization where the host requires it.
 - reusable cross-Agent contracts with honest host-specific adapters;
 - task-bound discovery when the current native and loaded ecosystem is
   insufficient or stale, without turning discovery into automatic admission;
-- native and external reuse before residual-gap implementation.
+- native and external reuse before residual-gap implementation;
+- AI-era revalidation of classical engineering principles without blanket
+  revival of legacy process or blanket dismissal of pre-AI experience.
+
+## AI-era engineering value
+
+AI can lower the cost of producing code without lowering the cost of forming
+intent, judging correctness, carrying responsibility, integrating change,
+verifying outcomes, or maintaining a system over time. The Harness therefore
+treats classical engineering principles as candidates for revalidation, not
+automatic standards.
+
+The research vocabulary distinguishes candidate invariants, adaptive practices,
+obsolete ceremonies, and insufficient-evidence items. A principle can regain
+importance while its historical workflow remains too rigid. Conversely, faster
+generation does not justify weaker evidence, review, provenance, rollback,
+authority, or maintenance boundaries. This is a horizontal evaluation lens;
+it does not promote a hard standard, prescribe one universal process, or
+reorder current candidate and residual-gap work.
 
 ## Product layers
 

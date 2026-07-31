@@ -2,6 +2,7 @@
   "schema": 1,
   "id": "program-final-closeout-readiness-reconciliation-2026-07-28",
   "date": "2026-07-28",
+  "lastReconciledDate": "2026-07-31",
   "status": "current-program-closeout-audited-cannot-close",
   "purpose": "Reconcile every non-verified program acceptance criterion against current evidence so a local green verifier, one host-observability decision, or one completed PoC cannot be mistaken for final program closeout.",
   "sourceBindings": {
@@ -14,8 +15,8 @@
   "acceptanceSnapshot": {
     "totalCriteria": 61,
     "verified": 44,
-    "partial": 15,
-    "planned": 2,
+    "partial": 16,
+    "planned": 1,
     "other": 0,
     "allCriteriaVerified": false
   },
@@ -67,7 +68,7 @@
     },
     {
       "id": "acceptance.standard-candidate-contract",
-      "assessment": "planned",
+      "assessment": "partial",
       "cluster": "standard-lifecycle"
     },
     {
@@ -138,8 +139,8 @@
     {
       "id": "standard-lifecycle",
       "openCriteriaCount": 2,
-      "currentBoundary": "The reusable standard-candidate package is planned and the graph-scoped revalidation cascade remains partial.",
-      "nextEvidenceClass": "one source-bound standard candidate package and a bounded affected-node revalidation proof without big-bang migration"
+      "currentBoundary": "The reusable standard-candidate package now has one bounded AI-era research contract and deterministic negative tests, but repeated cross-host value, CALIBRATION review, ASSETS admission, and the graph-scoped revalidation cascade remain open.",
+      "nextEvidenceClass": "repeated source-bound candidate evidence across task or host boundaries plus a bounded affected-node revalidation proof without big-bang migration"
     },
     {
       "id": "runtime-hook-and-orchestration",
@@ -171,7 +172,7 @@
     {
       "premise": "A passing top-level verifier proves final program completion.",
       "result": "falsified",
-      "evidence": "The verifier validates the current contract while the canonical acceptance map still contains fifteen partial and two planned criteria."
+      "evidence": "The verifier validates the current contract while the canonical acceptance map still contains sixteen partial and one planned criterion."
     },
     {
       "premise": "Static overlap can justify Skill retirement or external replacement.",

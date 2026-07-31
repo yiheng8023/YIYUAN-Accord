@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "id": "ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
+  "asOf": "2026-07-31",
+  "status": "bounded-primary-source-research-contract-no-hard-standard-promotion",
+  "researchQuestion": "Which classical software-engineering principles remain candidate invariants, require adaptive implementation, represent obsolete ceremony, or still lack sufficient evidence under AI-assisted development?",
+  "boundedFinding": {
+    "statement": "AI can reduce code-production cost while leaving intent formation, correctness judgment, responsibility, integration, verification, and long-term maintenance costly, so classical principles require AI-era revalidation rather than blanket revival or dismissal.",
+    "universalProductivityClaim": false,
+    "universalQualityClaim": false,
+    "legacyProcessRestorationClaim": false,
+    "hardStandardPromotionClaim": false
+  },
+  "valueDimensions": [
+    "intent-fidelity",
+    "epistemic-integrity",
+    "human-judgment-and-authorization",
+    "accountable-evidence",
+    "reversibility",
+    "continuity",
+    "resilience",
+    "long-term-system-health"
+  ],
+  "classifications": [
+    {
+      "id": "candidate-invariant",
+      "meaning": "The underlying obligation remains meaningful across AI and non-AI execution, subject to repeated evidence and separate admission."
+    },
+    {
+      "id": "adaptive-practice",
+      "meaning": "The goal remains useful but implementation should vary with task, host, risk, reversibility, and lifecycle phase."
+    },
+    {
+      "id": "obsolete-ceremony",
+      "meaning": "The historical process form lacks supported net value or is better replaced by a smaller deterministic or adaptive path."
+    },
+    {
+      "id": "insufficient-evidence",
+      "meaning": "Current evidence cannot support promotion, rejection, or mandatory use."
+    }
+  ],
+  "requiredEvaluationDimensions": [
+    "originalFailureMode",
+    "aiEraEffect",
+    "currentNativeOfficialReviewedExternalAndComposedCoverage",
+    "deterministicVerification",
+    "residualHumanOrDomainJudgment",
+    "creativityContextLatencyOperationalAndMaintenanceCost",
+    "scopeCounterexamplesFalsifiersAndFallback",
+    "revalidationOrRetirementCondition"
+  ],
+  "primarySources": [
+    {
+      "id": "dora-2025-report",
+      "owner": "DORA",
+      "locator": "https://dora.dev/research/2025/dora-report/",
+      "evidenceType": "industry-research-report",
+      "boundedFinding": "AI acts as an amplifier of the underlying organizational and delivery system.",
+      "limitation": "The report does not prove one universal causal effect for every team, task, or host."
+    },
+    {
+      "id": "dora-2026-balancing-ai-tensions",
+      "owner": "DORA",
+      "locator": "https://dora.dev/insights/balancing-ai-tensions/",
+      "evidenceType": "industry-research-synthesis",
+      "boundedFinding": "Faster generation shifts effort toward auditing and verification and can accompany both higher throughput and higher instability.",
+      "limitation": "Association and synthesis do not establish a universal per-task causal effect."
+    },
+    {
+      "id": "microsoft-three-field-experiments",
+      "owner": "Microsoft Research",
+      "locator": "https://www.microsoft.com/en-us/research/publication/the-effects-of-generative-ai-on-high-skilled-work-evidence-from-three-field-experiments-with-software-developers/",
+      "evidenceType": "field-experiments",
+      "boundedFinding": "AI assistance increased completed-task throughput across a large developer cohort with heterogeneous effects.",
+      "limitation": "Throughput is not complete lifecycle quality, maintainability, safety, or long-term value."
+    },
+    {
+      "id": "metr-early-2025-experienced-open-source-developers",
+      "owner": "METR",
+      "locator": "https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf",
+      "evidenceType": "randomized-controlled-trial",
+      "boundedFinding": "Experienced maintainers were slower on familiar mature repositories with the tested early-2025 tools despite expecting a speedup.",
+      "limitation": "The cohort and tool generation are bounded and cannot establish a permanent universal slowdown."
+    },
+    {
+      "id": "github-copilot-code-quality-rct",
+      "owner": "GitHub",
+      "locator": "https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/",
+      "evidenceType": "vendor-run-randomized-study",
+      "boundedFinding": "AI assistance improved selected quality measures on one bounded Python task.",
+      "limitation": "The vendor-run narrow task is not evidence of lifecycle-wide or cross-domain superiority."
+    },
+    {
+      "id": "microsoft-bounded-delegation",
+      "owner": "Microsoft Research",
+      "locator": "https://www.microsoft.com/en-us/research/publication/to-copilot-and-beyond-22-ai-systems-developers-want-built/",
+      "evidenceType": "developer-survey-and-systems-research",
+      "boundedFinding": "Developers want earlier quality signals, explicit authority, provenance, and uncertainty as generation accelerates.",
+      "limitation": "Reported needs and proposed systems are not independent proof that one implementation works."
+    },
+    {
+      "id": "usenix-security-2025-package-hallucinations",
+      "owner": "USENIX Security",
+      "locator": "https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen",
+      "evidenceType": "peer-reviewed-security-study",
+      "boundedFinding": "Package hallucination is a persistent software-supply-chain risk in the studied models and samples.",
+      "limitation": "Rates vary by model and setup and do not alone determine a complete dependency policy."
+    },
+    {
+      "id": "github-spec-kit-and-aws-kiro-direction",
+      "owner": "GitHub and AWS",
+      "locator": "https://github.github.com/spec-kit/index.html",
+      "secondaryLocator": "https://aws.amazon.com/documentation-overview/kiro/",
+      "evidenceType": "official-product-and-method-direction",
+      "boundedFinding": "Industry tooling is making specifications and quality gates iterative and Agent-consumable.",
+      "limitation": "Product direction is not independent effectiveness, superiority, or portability proof."
+    }
+  ],
+  "acceptanceProjection": {
+    "existingAcceptanceIds": [
+      "acceptance.software-engineering-lifecycle-specialization",
+      "acceptance.ai-independent-hard-standard-boundary",
+      "acceptance.standard-candidate-contract",
+      "acceptance.adaptive-harness-proportionality"
+    ],
+    "newAcceptanceIdCreated": false,
+    "acceptanceCountMustRemain": 61,
+    "reason": "Existing acceptance carriers already cover lifecycle specialization, AI-independent obligations, candidate packaging, and proportional retirement."
+  },
+  "goalModePromptDelta": "Treat AI-era revalidation of classical software-engineering principles as a horizontal research and evaluation lens. Separate candidate invariants, adaptive practices, obsolete ceremonies, and insufficient-evidence items; assess original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, counterexamples, and retirement conditions. Do not restore rigid legacy process because a principle regained importance, and do not weaken intent, evidence, responsibility, verification, rollback, or long-term system-health requirements because AI improved generation speed. This lens does not reorder current candidate work, prove a self-authored gap, or promote a hard standard without separate repeated evidence and authority.",
+  "authorityBoundary": {
+    "externalCapabilityDiscoveryOrInstallationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "skillOrHookMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "calibrationOrAssetsAdmissionAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "commitOrPushAuthorizedByThisContract": false
+  }
+}

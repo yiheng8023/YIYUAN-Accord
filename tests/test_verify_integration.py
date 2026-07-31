@@ -3613,7 +3613,7 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(
             criteria["acceptance.standard-candidate-contract"]["assessment"],
-            "planned",
+            "partial",
         )
         self.assertEqual(
             criteria["acceptance.standard-revalidation-cascade"]["assessment"],

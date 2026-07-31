@@ -428,9 +428,9 @@
       "id": "initiative.human-ai-collaboration-coverage-rebaseline",
       "status": "active",
       "prerequisites": ["user accepted the structural-bias audit", "current Harness repository truth verified", "YIYUAN-CALIBRATION remains paused and read-only"],
-      "allowedActions": ["exact read-only source binding", "solution-neutral mother-framework modeling", "software-engineering lifecycle specialization", "historical STM/P/SG cross-mapping", "acceptance-scope revalidation", "deterministic in-repository verification"],
+      "allowedActions": ["exact read-only source binding", "solution-neutral mother-framework modeling", "software-engineering lifecycle specialization", "AI-era classical software-engineering principle revalidation", "historical STM/P/SG cross-mapping", "acceptance-scope revalidation", "deterministic in-repository verification"],
       "blockedActions": ["YIYUAN-CALIBRATION mutation", "YIYUAN-ASSETS admission", "hard-standard promotion", "Skill or Hook mutation from coverage metadata", "runtime mutation", "whole-domain closure claim", "remote push"],
-      "resultPackage": ["source-bound structural finding", "open-world mother-framework axes", "software-engineering lifecycle slices", "cross-domain process-fidelity and cumulative-loss model", "historical-coordinate preservation boundary", "acceptance revalidation map", "falsifiable gates and next scenario-to-evidence matrix"],
+      "resultPackage": ["source-bound structural finding", "open-world mother-framework axes", "software-engineering lifecycle slices", "AI-era invariant/adaptive-practice/obsolete-ceremony/insufficient-evidence classification contract", "cross-domain process-fidelity and cumulative-loss model", "historical-coordinate preservation boundary", "acceptance revalidation map", "falsifiable gates and next scenario-to-evidence matrix"],
       "acceptanceIds": ["acceptance.solution-neutral-collaboration-rebaseline", "acceptance.software-engineering-lifecycle-specialization", "acceptance.end-to-end-process-fidelity", "acceptance.ai-independent-hard-standard-boundary"],
       "decisionGate": "scenario-to-evidence coverage must expose unassessed cells and pass solution-neutrality before generalized gap, repository-authoring, or future hard-standard extraction",
       "currentEvidence": "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json",
@@ -464,7 +464,8 @@
       "currentAccessCommsZeroModelProtocol": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
       "currentProcessFidelityDispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
       "currentProcessFidelityDispatchLedgerContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
-      "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json"
+      "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
+      "currentAiEraEngineeringPrinciplesRevalidation": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json"
     },
     {
       "id": "initiative.production-capability-manager-topology-design",
@@ -603,11 +604,12 @@
     },
     {
       "id": "objective.standard-candidate-extraction",
-      "statement": "Extract bounded, traceable standard candidate packages from repeated Skill-governance evidence without claiming project-standard authority.",
+      "statement": "Extract bounded, traceable standard candidate packages from repeated evidence without claiming project-standard authority; AI-era engineering candidates must distinguish durable obligations, adaptive practices, obsolete ceremony, and insufficient evidence.",
       "authorityOwner": "agent-skills-curated-for-candidate-evidence-only",
       "nonGoals": [
         "writing directly to YIYUAN-CALIBRATION or YIYUAN-ASSETS in this program",
-        "publishing private ASSETS hard standards"
+        "publishing private ASSETS hard standards",
+        "treating renewed interest in classical engineering principles as automatic hard-standard evidence"
       ],
       "acceptanceIds": [
         "acceptance.standard-candidate-contract",

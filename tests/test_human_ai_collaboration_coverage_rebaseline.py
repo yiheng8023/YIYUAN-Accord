@@ -113,6 +113,20 @@ class HumanAiCollaborationCoverageRebaselineTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "assessment overclaimed"):
             self.validate(acceptance=acceptance)
 
+    def test_rejects_ai_era_revalidation_evidence_projection_removal(self) -> None:
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.ai-independent-hard-standard-boundary"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.ai-era-classical-software-engineering-principles-"
+            "revalidation-2026-07-31"
+        )
+        with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
+            self.validate(acceptance=acceptance)
+
 
 if __name__ == "__main__":
     unittest.main()
