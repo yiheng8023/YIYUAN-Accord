@@ -2702,8 +2702,16 @@ therefore ignored rather than failing closed.
 requires the exact seven-key `cleanupBoundary` schema. The focused 26-test
 module and the 1,845-test non-slow-integration set pass. This correction grants
 no cleanup or deletion authority and changes no historical cleanup evidence.
-The complete discovery run that includes `test_verify_integration` still has
-no green result: it reached the 304-second outer timeout without diagnostic
-output. Independent `scripts/verify.py` runs pass, so the timeout remains an
-unresolved test-runner duration surface rather than a code-stack failure or a
-green receipt.
+The initial complete discovery run that includes `test_verify_integration`
+reached a 304-second outer timeout without diagnostic output. A subsequent
+root-cause timing pass established that this was an insufficient caller budget,
+not a code-stack failure: the integration module alone passed all 379 tests in
+347.590 seconds (350.011 seconds wall clock), and the complete discovery run
+then passed all 2,224 tests in 504.803 seconds (508.521 seconds wall clock).
+The module contains 114 negative-test call sites that route through helpers
+which re-run top-level `verify()`; one successful verifier profile included 31
+subprocess calls and took about seven seconds. The repository CI already runs
+the complete discovery command without a repository-imposed short timeout, so
+no duplicate runner, weakened integration assertion, or validation-semantic
+change was introduced. Future short caller timeouts must be recorded as
+inconclusive unless they also return a test failure.
