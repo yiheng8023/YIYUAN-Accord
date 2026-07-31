@@ -456,8 +456,12 @@ The refresh used a temporary empty Codex home and empty MCP-table override,
 observed exactly the three required repo Skills, retained no runtime home, and
 left projection bytes, global config, and repository status stable. The current
 50-Skill inventory versus the earlier 114-Skill snapshot is dated host drift,
-not deletion or value evidence. Native-disabled and local-monolith exposure,
-private-oracle leakage rejection, loader/instruction delivery, behavior, and
+not deletion or value evidence. A 2026-08-01 no-turn checkpoint then used one
+stable 48-Skill identity set to prove zero configurable Skills enabled in the
+native arm and only the exact repository-pinned local monolith enabled in its
+treatment arm. The same report records positive-packet acceptance and
+fail-closed full-oracle and partial-canary leakage mutants. Temporary treatment
+and Codex homes were removed. Loader/instruction delivery, behavior, value, and
 all model runs remain open. The records authorize no model dispatch, CC
 mutation, candidate preference, or self-authored arm.
 

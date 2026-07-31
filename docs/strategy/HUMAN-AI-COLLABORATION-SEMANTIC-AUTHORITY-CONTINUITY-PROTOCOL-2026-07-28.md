@@ -121,8 +121,8 @@ for a disposable no-network trial. The review also records that Windows
 `core.autocrlf=true` changes checkout hashes, so raw blob identity is required.
 
 Before a live run, an isolated raw-byte projection, dependency-complete
-task-scoped exposure, and private-oracle leakage checks must still pass. These
-execution admission gates are currently open.
+task-scoped exposure, and private-oracle leakage checks had to pass. These
+execution admission gates were still open at that static-admission checkpoint.
 
 ## Projection implementation checkpoint
 
@@ -187,6 +187,40 @@ It refreshes dependency-complete exposure only. Native-disabled exposure,
 local adapted-monolith selected exposure, public-packet private-oracle leakage
 rejection, loader and instruction delivery, named composition, relative-file
 delivery, behavior, value, and every weak-model run remain open.
+
+## 2026-08-01 remaining no-model admission checkpoint
+
+The remaining no-model gates now have a current-host report. Under the same
+temporary empty Codex home and empty MCP-table boundary, one stable 48-Skill
+identity set contained `1` repository Skill, `6` system Skills, and `41` user
+Skills. The native arm disabled every configurable repository/user Skill while
+preserving the six non-configurable system Skills. The local treatment arm
+enabled only the exact repository-pinned 5,340-byte `grill-with-docs` monolith
+at SHA-256
+`e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035`.
+This is configurable-Skill isolation, not a claim that native runtime or system
+capabilities disappeared.
+
+The packet builder now performs an allowlisted file/digest check and scans for
+a private non-public canary before accepting a public packet. The positive
+packet passed. An injected full private-oracle file failed with both
+`hard-fail-unmanifested-public-file` and `hard-fail-private-oracle-leak`; an
+injected partial canary failed with both `hard-fail-private-oracle-leak` and
+`hard-fail-public-file-digest-drift`. These deterministic mutants prove the
+checker rejects the declared leakage classes; they do not prove that every
+possible semantic side channel is impossible.
+
+The durable report is
+[`audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json).
+No thread or turn started, no model request was sent, no temporary treatment or
+Codex home remains, and global configuration and repository status stayed
+stable. All declared no-model admission gates are now closed. Loader and
+instruction delivery, named composition, relative-file delivery, behavior,
+semantic continuity, treatment value, and cross-host value remain unproved.
+The next step is an execution-admission review that binds one exact disposable
+packet, visible `gpt-5.3-codex-spark`/`low` routing, parent-observed evidence,
+cost and sandbox boundaries, stop conditions, and separate dispatch authority;
+it is not an automatic model run.
 
 The machine-readable authority is
 [`registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json`](../../registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json).

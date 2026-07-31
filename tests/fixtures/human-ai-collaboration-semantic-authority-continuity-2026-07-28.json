@@ -2,6 +2,7 @@
   "schema": 1,
   "fixtureId": "fixture.pitch-semantic-authority-cross-lifecycle-v1",
   "privateOracle": {
+    "nonPublicLeakageCanary": "SEM03-PRIVATE-ORACLE-CANARY-7D91C0E5",
     "expectedSources": [
       "DRAFT_PITCH_PLAN.md",
       "src/video_models.py",

@@ -23,6 +23,10 @@ EXPOSURE_REFRESH_REPORT_PATH = Path(
     "audits/human-ai-collaboration-semantic-authority-current-matt-"
     "no-model-exposure-2026-07-31/REPORT.json"
 )
+NATIVE_LOCAL_EXPOSURE_REPORT_PATH = Path(
+    "audits/human-ai-collaboration-semantic-authority-native-local-"
+    "no-model-exposure-2026-08-01/REPORT.json"
+)
 
 
 def _require(condition: bool, message: str) -> None:
@@ -40,7 +44,7 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
     _require(
         document.get("schema") == 1
         and document.get("status")
-        == "fixture-and-oracle-ready-execution-admission-open-no-live-run"
+        == "no-model-admission-complete-live-dispatch-not-authorized"
         and document.get("scenarioId") == "HAC-SEMANTIC-AUTHORITY-01"
         and document.get("matrixCellId") == "SEM-03",
         "Semantic continuity protocol identity drifted",
@@ -79,6 +83,9 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         ),
         "currentMattNoModelExposureRefreshReport": str(
             EXPOSURE_REFRESH_REPORT_PATH
+        ).replace("\\", "/"),
+        "nativeLocalNoModelExposureAndOracleReport": str(
+            NATIVE_LOCAL_EXPOSURE_REPORT_PATH
         ).replace("\\", "/"),
     }
     _require(sources == expected_sources, "Semantic continuity source bindings drifted")
@@ -241,18 +248,26 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         and gate.get("liveProjectionMaterialized") is True
         and gate.get("lastProjectionAttemptOutcome")
         == "pass-exact-eight-file-materialization-and-no-model-exposure"
+        and gate.get("lastNoModelAdmissionOutcome")
+        == (
+            "pass-native-disabled-local-selected-current-composition-and-"
+            "public-packet-oracle-isolation"
+        )
         and gate.get("failedAttemptLeftPartialProjection") is False,
         "Semantic continuity projection implementation checkpoint drifted",
     )
-    for key in (
-        "nativeDisabledExposureProved",
-        "localMonolithSelectedExposureProved",
-        "publicPacketPrivateOracleLeakageRejected",
-    ):
-        _require(
-            gate.get(key) is False,
-            f"Semantic continuity execution admission promoted: {key}",
-        )
+    _require(
+        gate.get("nativeDisabledExposureProved") is True,
+        "Semantic continuity native-disabled exposure was not recorded",
+    )
+    _require(
+        gate.get("localMonolithSelectedExposureProved") is True,
+        "Semantic continuity local monolith exposure was not recorded",
+    )
+    _require(
+        gate.get("publicPacketPrivateOracleLeakageRejected") is True,
+        "Semantic continuity private-oracle isolation was not recorded",
+    )
     _require(
         gate.get("currentCompositionDependencyCompleteExposureProved") is True,
         "Semantic continuity current composition exposure was not recorded",
@@ -431,6 +446,117 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "Semantic continuity current-host isolation or claim boundary drifted",
     )
 
+    native_local_report = json.loads(
+        (root / NATIVE_LOCAL_EXPOSURE_REPORT_PATH).read_text(encoding="utf-8")
+    )
+    native_local_body = dict(native_local_report)
+    native_local_digest = native_local_body.pop("reportSha256", None)
+    computed_native_local_digest = hashlib.sha256(
+        json.dumps(
+            native_local_body,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    _require(
+        native_local_digest == computed_native_local_digest
+        == "7949dd6d1fdd3236141762b1ae4954ae58ffcdc945db5ed4874ede62aa0097b5",
+        "Semantic continuity native/local exposure report digest drifted",
+    )
+    _require(
+        native_local_report.get("status") == "preflight-pass-no-turn"
+        and native_local_report.get("probeId")
+        == "semantic-authority-native-local-no-model-exposure-v1"
+        and native_local_report.get("host", {}).get("userAgent")
+        == (
+            "Codex Desktop/0.146.0 (Windows 10.0.26200; x86_64) unknown "
+            "(agent_autonomy_harness_skill_exposure_probe; 1.0.0)"
+        )
+        and native_local_report.get("controlInventory", {}).get("skillCount")
+        == 48
+        and native_local_report.get("controlInventory", {}).get(
+            "countsByScope"
+        )
+        == {"repo": 1, "system": 6, "user": 41},
+        "Semantic continuity native/local host snapshot drifted",
+    )
+    local_treatment = native_local_report.get("localTreatment", {})
+    _require(
+        local_treatment
+        == {
+            "identity": "cc.grill-with-docs",
+            "skillName": "grill-with-docs",
+            "bytes": 5340,
+            "sha256": (
+                "e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035"
+            ),
+            "allRequiredExactPathsPresent": True,
+        },
+        "Semantic continuity local monolith identity drifted",
+    )
+    native_local_arms = _index(
+        native_local_report.get("arms", []),
+        "arm",
+        "Native/local exposure arm",
+    )
+    _require(
+        native_local_arms["native-configurable-skills-disabled"]["inventory"][
+            "enabledConfigurableSkillCount"
+        ]
+        == 0
+        and native_local_arms["local-adapted-monolith-selected"]["inventory"][
+            "enabledConfigurableSkillCount"
+        ]
+        == 1
+        and all(
+            arm["inventory"].get(key) is True
+            for arm in native_local_arms.values()
+            for key in (
+                "sameIdentitySet",
+                "onlyExpectedConfigurableSkillsEnabled",
+                "allNonConfigurableStatesPreserved",
+            )
+        ),
+        "Semantic continuity native/local task-scoped exposure drifted",
+    )
+    _require(
+        native_local_report.get("publicPacketOracleIsolation")
+        == {
+            "positivePacketFailureCodes": [],
+            "fullOracleLeakFailureCodes": [
+                "hard-fail-unmanifested-public-file",
+                "hard-fail-private-oracle-leak",
+            ],
+            "partialCanaryLeakFailureCodes": [
+                "hard-fail-private-oracle-leak",
+                "hard-fail-public-file-digest-drift",
+            ],
+            "publicPacketPrivateOracleLeakageRejected": True,
+        },
+        "Semantic continuity public-packet private-oracle isolation drifted",
+    )
+    _require(
+        native_local_report.get("runtimeIsolation")
+        == {
+            "codexHomeMode": "temporary-empty-under-treatment-root",
+            "temporaryCodexHomeRetained": False,
+            "treatmentRootMode": "temporary-under-repository-tmp",
+            "temporaryTreatmentRootRetained": False,
+            "mcpConfigurationMode": "empty-table-override",
+            "inheritedGlobalConfigExecuted": False,
+        }
+        and native_local_report.get("threadStarted") is False
+        and native_local_report.get("turnStarted") is False
+        and native_local_report.get("modelRequestSent") is False
+        and all(native_local_report.get("stability", {}).values())
+        and all(
+            value is False
+            for value in native_local_report.get("claimBoundary", {}).values()
+        ),
+        "Semantic continuity native/local isolation or claim boundary drifted",
+    )
+
     authority = document.get("authorityBoundary", {})
     _require(
         authority.get("repositoryProtocolWritesAuthorized") is True
@@ -472,7 +598,9 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "does not justify mandatory grilling",
         "report association only",
         "Silent substitution is invalid",
-        "These execution admission gates are currently open",
+        "execution admission gates were still open at that static-admission checkpoint",
+        "All declared no-model admission gates are now closed",
+        "it is not an automatic model run",
     ):
         _require(phrase in text, f"Semantic continuity documentation missing: {phrase}")
 

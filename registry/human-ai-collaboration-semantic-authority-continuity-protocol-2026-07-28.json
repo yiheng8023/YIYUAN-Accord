@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
   "date": "2026-07-28",
-  "status": "fixture-and-oracle-ready-execution-admission-open-no-live-run",
+  "status": "no-model-admission-complete-live-dispatch-not-authorized",
   "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
   "matrixCellId": "SEM-03",
   "purpose": "Falsifiably compare native reasoning, the exact local adapted grill-with-docs monolith, and the exact current Matt grilling plus domain-modeling composition on durable semantic continuity across fresh lifecycle stages without treating source structure, exposure, terminal correctness, or one glossary as value proof.",
@@ -16,7 +16,8 @@
     "fixtureBuilder": "scripts/build_human_ai_collaboration_semantic_authority_continuity_trial.py",
     "currentMattStaticAdmission": "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json",
     "currentMattNoModelExposureReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json",
-    "currentMattNoModelExposureRefreshReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json"
+    "currentMattNoModelExposureRefreshReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json",
+    "nativeLocalNoModelExposureAndOracleReport": "audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json"
   },
   "treatments": [
     {
@@ -167,12 +168,13 @@
     "projectionBuilderFaultTestsPass": true,
     "liveProjectionMaterialized": true,
     "lastProjectionAttemptOutcome": "pass-exact-eight-file-materialization-and-no-model-exposure",
+    "lastNoModelAdmissionOutcome": "pass-native-disabled-local-selected-current-composition-and-public-packet-oracle-isolation",
     "failedAttemptLeftPartialProjection": false,
-    "nativeDisabledExposureProved": false,
-    "localMonolithSelectedExposureProved": false,
+    "nativeDisabledExposureProved": true,
+    "localMonolithSelectedExposureProved": true,
     "currentCompositionDependencyCompleteExposureProved": true,
     "currentHostRefreshExposureProved": true,
-    "publicPacketPrivateOracleLeakageRejected": false,
+    "publicPacketPrivateOracleLeakageRejected": true,
     "minimumValidRunsPerTreatment": 3,
     "liveRunAuthorizedByThisRecord": false
   },
@@ -198,7 +200,7 @@
     "candidatePreferenceAllowed": false,
     "ccMutationAllowed": false,
     "selfAuthoredResidualGapProved": false,
-    "nextBoundedAction": "Keep all model runs at zero and close the remaining no-model admission gaps: current-host native-disabled exposure, local adapted-monolith selected exposure, and public-packet private-oracle leakage rejection."
+    "nextBoundedAction": "Keep model runs at zero while performing an execution-admission review. Bind one exact disposable weak-Agent packet, visible gpt-5.3-codex-spark/low routing, parent-observed loader and instruction-delivery evidence, cost and sandbox boundaries, stop conditions, and separate dispatch authority before any model turn."
   },
   "claimBoundary": {
     "semanticContinuityProved": false,

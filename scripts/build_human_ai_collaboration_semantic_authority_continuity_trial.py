@@ -349,6 +349,53 @@ def evaluate_offline_examples(
     return failures
 
 
+def validate_public_packet_oracle_isolation(
+    output: Path,
+    manifest: dict[str, Any],
+    *,
+    fixture: dict[str, Any] | None = None,
+) -> list[str]:
+    """Reject unmanifested bytes, packet drift, and a private-oracle canary."""
+
+    output = output.resolve()
+    fixture = fixture or load_fixture()
+    canary = fixture["privateOracle"].get("nonPublicLeakageCanary")
+    if not isinstance(canary, str) or not canary:
+        return ["hard-fail-private-oracle-canary-missing"]
+
+    expected = manifest.get("files")
+    if not isinstance(expected, dict):
+        return ["hard-fail-public-packet-manifest-invalid"]
+
+    actual_paths = {
+        path.relative_to(output).as_posix(): path
+        for path in output.rglob("*")
+        if path.is_file()
+    }
+    failures: list[str] = []
+    if set(actual_paths) - set(expected):
+        failures.append("hard-fail-unmanifested-public-file")
+    if set(expected) - set(actual_paths):
+        failures.append("hard-fail-public-file-missing")
+
+    canary_bytes = canary.encode("utf-8")
+    for relative, path in actual_paths.items():
+        content = path.read_bytes()
+        if canary_bytes in content or "PRIVATE_ORACLE" in relative.upper():
+            if "hard-fail-private-oracle-leak" not in failures:
+                failures.append("hard-fail-private-oracle-leak")
+        expected_entry = expected.get(relative)
+        if expected_entry is None:
+            continue
+        if (
+            expected_entry.get("bytes") != len(content)
+            or expected_entry.get("sha256") != sha256_bytes(content)
+        ):
+            if "hard-fail-public-file-digest-drift" not in failures:
+                failures.append("hard-fail-public-file-digest-drift")
+    return failures
+
+
 def build_packet(
     output: Path,
     treatment: str = "SEM-NATIVE",
@@ -418,6 +465,18 @@ def build_packet(
         "privateOracleIncludedInPacket": False,
         "literalContextMdFilenameRequired": False,
         "networkRequired": False,
+    }
+    isolation_failures = validate_public_packet_oracle_isolation(output, manifest)
+    if isolation_failures:
+        raise RuntimeError(
+            "public packet oracle isolation failed: "
+            + ", ".join(isolation_failures)
+        )
+    manifest["privateOracleIsolation"] = {
+        "status": "pass",
+        "checkedFileCount": len(manifest["files"]),
+        "unmanifestedFilesPresent": False,
+        "privateOracleCanaryPresent": False,
     }
     manifest["manifestSha256"] = canonical_sha256(manifest)
     return manifest

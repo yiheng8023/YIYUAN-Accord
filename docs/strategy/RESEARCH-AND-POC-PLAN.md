@@ -163,9 +163,15 @@ Skills, with zero selected in control and only three selected in treatment,
 then removed the temporary home and preserved global config, projected bytes,
 and repository status. Its 50-Skill snapshot differs from the earlier 114-Skill
 snapshot, but inventory count drift is not deletion, loader, behavior, or value
-evidence. The next bounded work remains no-model: native-disabled exposure,
-local adapted-monolith exposure, and public-packet private-oracle leakage
-rejection. No weak-model dispatch is authorized by the refresh.
+evidence. A 2026-08-01 no-turn checkpoint then closed the remaining declared
+no-model gates: the native arm enabled zero configurable Skills, the local arm
+enabled only the exact repository-pinned adapted monolith, and deterministic
+full-oracle plus partial-canary mutations failed closed while the positive
+public packet passed. Both temporary roots were removed and no model request
+was sent. The next bounded step is an execution-admission review for one exact
+disposable `gpt-5.3-codex-spark`/`low` packet with visible routing,
+parent-observed evidence, cost/sandbox/stop boundaries, and separate dispatch
+authority; it is not an automatic weak-model run.
 
 The follow-on
 [`self-authored control-chain carrier audit`](HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-CARRIER-AUDIT-2026-07-28.md)

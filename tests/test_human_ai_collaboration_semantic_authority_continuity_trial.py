@@ -12,6 +12,7 @@ from scripts.build_human_ai_collaboration_semantic_authority_continuity_trial im
     evaluate_offline_examples,
     inject_human_decisions,
     load_fixture,
+    validate_public_packet_oracle_isolation,
 )
 
 
@@ -53,6 +54,40 @@ class SemanticAuthorityContinuityTrialTests(unittest.TestCase):
             self.assertNotIn("requiredUnresolvedAction", rendered)
             self.assertFalse((root / "HUMAN_DECISIONS.json").exists())
             self.assertFalse((root / "CONTEXT.md").exists())
+            self.assertEqual(
+                {
+                    "status": "pass",
+                    "checkedFileCount": len(manifest["files"]),
+                    "unmanifestedFilesPresent": False,
+                    "privateOracleCanaryPresent": False,
+                },
+                manifest["privateOracleIsolation"],
+            )
+
+    def test_public_packet_rejects_full_private_oracle_file_leak(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "trial"
+            manifest = build_packet(root, "SEM-NATIVE")
+            (root / "PRIVATE_ORACLE.json").write_text(
+                json.dumps(self.fixture["privateOracle"], ensure_ascii=False),
+                encoding="utf-8",
+            )
+            failures = validate_public_packet_oracle_isolation(root, manifest)
+            self.assertIn("hard-fail-unmanifested-public-file", failures)
+            self.assertIn("hard-fail-private-oracle-leak", failures)
+
+    def test_public_packet_rejects_partial_private_oracle_canary_leak(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "trial"
+            manifest = build_packet(root, "SEM-NATIVE")
+            canary = self.fixture["privateOracle"]["nonPublicLeakageCanary"]
+            with (root / "DRAFT_PITCH_PLAN.md").open(
+                "a", encoding="utf-8", newline="\n"
+            ) as handle:
+                handle.write(f"\n{canary}\n")
+            failures = validate_public_packet_oracle_isolation(root, manifest)
+            self.assertIn("hard-fail-private-oracle-leak", failures)
+            self.assertIn("hard-fail-public-file-digest-drift", failures)
 
     def test_human_decisions_are_injected_once_after_packet_build(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

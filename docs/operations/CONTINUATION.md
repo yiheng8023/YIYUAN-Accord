@@ -2749,3 +2749,33 @@ behavior, semantic continuity, value, portfolio preference, or cross-host
 equivalence. All model runs remain zero. Before any separate weak-model gate,
 complete native-disabled exposure, local adapted-monolith exposure, and
 public-packet private-oracle leakage rejection.
+
+## 2026-08-01 SEM-03 remaining no-model admission checkpoint
+
+The remaining three declared no-model gates are now evidenced by
+`audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json`.
+The current Codex `0.146.0` app-server used a temporary empty Codex home, an
+empty MCP-table override, and one temporary treatment root under `.tmp`.
+Across one stable 48-Skill identity set (`1` repo, `6` system, `41` user), the
+native arm enabled zero configurable repository/user Skills and preserved the
+six system Skills. The local arm enabled only the exact repository-pinned
+5,340-byte `grill-with-docs` monolith at SHA-256
+`e1078020c41b954638ba94acda95a3340739908bd68b1db9bc2af129d3936035`.
+
+The public packet builder now rejects file-set and digest drift plus a
+non-public private-oracle canary. The positive packet passed. A full oracle-file
+mutant failed with `hard-fail-unmanifested-public-file` and
+`hard-fail-private-oracle-leak`; a partial-canary mutant failed with
+`hard-fail-private-oracle-leak` and
+`hard-fail-public-file-digest-drift`. This proves those declared negative
+classes, not universal semantic side-channel absence.
+
+No thread, turn, or model request ran. The temporary Codex home, packet
+mutants, and treatment root were removed; `.tmp` is absent. Global config,
+local Skill bytes, and repository status were stable. The protocol status is
+`no-model-admission-complete-live-dispatch-not-authorized`. Loader and
+instruction delivery, named composition, relative-file delivery, behavior,
+semantic continuity, treatment value, and cross-host value remain unproved.
+Do not dispatch a weak Agent directly. First bind one exact disposable packet,
+visible `gpt-5.3-codex-spark`/`low` routing, parent-observed evidence,
+cost/sandbox/stop boundaries, and separate dispatch authority.

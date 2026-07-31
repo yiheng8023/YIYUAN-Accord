@@ -21,6 +21,15 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
     def test_current_protocol_is_valid(self) -> None:
         self.validate()
 
+    def test_current_remaining_no_model_gates_are_recorded(self) -> None:
+        gate = self.document["executionAdmission"]
+        for key in (
+            "nativeDisabledExposureProved",
+            "localMonolithSelectedExposureProved",
+            "publicPacketPrivateOracleLeakageRejected",
+        ):
+            self.assertTrue(gate[key], key)
+
     def test_rejects_mutable_live_local_treatment_path(self) -> None:
         document = copy.deepcopy(self.document)
         local = next(
@@ -101,6 +110,28 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
         document = copy.deepcopy(self.document)
         document["executionAdmission"]["currentHostRefreshExposureProved"] = False
         with self.assertRaisesRegex(RuntimeError, "current-host exposure"):
+            self.validate(document)
+
+    def test_rejects_native_disabled_exposure_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"]["nativeDisabledExposureProved"] = False
+        with self.assertRaisesRegex(RuntimeError, "native-disabled exposure"):
+            self.validate(document)
+
+    def test_rejects_local_monolith_exposure_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "localMonolithSelectedExposureProved"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "local monolith exposure"):
+            self.validate(document)
+
+    def test_rejects_private_oracle_isolation_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "publicPacketPrivateOracleLeakageRejected"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "private-oracle isolation"):
             self.validate(document)
 
 
