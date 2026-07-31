@@ -2282,16 +2282,14 @@ evidence collection, validation, and explanation only after repeated
 residual-gap proof; it cannot be the sole carrier, own truth, waive a floor, or
 mark acceptance.
 
-The user explicitly rejected deference and universalization of one person's
-preferences. Preserve a plural-subject boundary: user goals, preferences,
-resources, corrections, and authorization govern the user's legitimate scope,
-but are not empirical truth, independent validation, authority over other
-subjects, or proof of broad population value. Do not optimize for agreement and
-do not manufacture disagreement. Separate fact, preference, interpretation,
-inference, value trade-off, authorization, and acceptance. Broad claims require
-diverse contexts, counterexamples, dissent, accessibility, exclusion,
-distributional-impact, domain and jurisdiction review, independent review, and
-accountable acceptance.
+Preserve the existing neutral evidence-and-authority boundary. Separate task
+inputs, observation, evidence, interpretation, preference, inference,
+authorization, and acceptance. Claim scope must match affected parties,
+context, domain, jurisdiction, and accountable authority. Broad claims require
+representative evidence, material counterevidence, applicable accessibility,
+exclusion and distributional-impact review, independent review, and
+accountable acceptance. A collaboration correction does not create a new
+project value direction.
 
 The second schema-conformant report is:
 
@@ -2373,10 +2371,12 @@ Windows-CRLF runtime-byte digest differs from the Git-LF durable bytes. This is
 the already-recorded repository portability debt, not a new source-snapshot
 failure. The exact archive root and tar were deleted; no process path remains.
 
-The next admitted evaluation step is independent review of the contract, both
-bounded reports, and the source snapshot, including the rights, evidence
-strength, conflict, plural-subject, and claim-boundary classifications. Broader
-profile calibration follows that review. No automatic refresh, content
+The source snapshot is retained as a provisional screening input. Candidate
+capability coverage, overlap, conflict, host exposure, behavior, and value
+evidence now precede further contract expansion or standard admission. The
+prepared independent-review mechanism remains available for a later revised
+target; its frozen pre-correction packet is not the current critical path. No
+automatic refresh, content
 vendoring, license override, Skill, Hook, MCP, Plugin, App, model, CC Switch,
 global configuration, hard-standard, CALIBRATION, ASSETS, release, or
 deployment mutation is authorized by this checkpoint.
@@ -2421,7 +2421,7 @@ packet producer and both report evaluators, prior-involvement disclosure,
 identity evidence, no private-reasoning transfer, and no reviewer mutation of
 the target. Ten non-cancelling axes cover standards/specification, rights,
 evidence strength and freshness, conflicts, dimension/floor judgments,
-plural-subject boundaries, claim and authority separation, CRLF/LF
+evidence scope, affected-party and authority boundaries, CRLF/LF
 portability, deterministic negative controls, and capability reuse. The
 repository can validate the declaration shape but cannot cryptographically
 prove an identity that the host does not attest.
@@ -2433,8 +2433,35 @@ acceptance inventory remains 61 and
 `acceptance.standard-candidate-contract` remains `partial`. Readiness does not
 promote a hard floor, prove a new Skill necessary, or authorize release.
 
-The next gate is a separately accountable reviewer using the immutable packet.
-Broader profile calibration follows the returned and validated review receipt.
-No external capability, CC Switch, Skill, Hook, MCP, Plugin, App, global
-configuration, weak-model, CALIBRATION, ASSETS, acceptance, release, or
-deployment mutation is authorized by this checkpoint.
+The packet is a reusable review-mechanism calibration for its frozen target,
+not current standard-admission evidence. Candidate capability intake,
+verification, coverage mapping, and subtraction are the main critical path.
+When a revised evaluation target becomes decision-relevant, build a new packet
+for a separately accountable reviewer. No external capability, CC Switch,
+Skill, Hook, MCP, Plugin, App, global configuration, weak-model, CALIBRATION,
+ASSETS, acceptance, release, or deployment mutation is authorized by this
+checkpoint.
+
+## 2026-07-31 neutrality and sequencing correction
+
+The collaboration note about avoiding subjective drift was incorrectly
+projected into personalized `current user`, agreement, and anti-deference
+product language. The project neutrality direction had not changed. Current
+authority surfaces now express only the general evidence-scope,
+affected-party, permission, and acceptance separation needed for bounded
+claims. Historical test artifacts remain historical; no new value doctrine is
+created from the exchange.
+
+The standardization sequence is also corrected. The current multidimensional
+ontology remains a provisional screening coordinate system, not a final
+standard. The next mainline work is to broaden and verify native, official,
+reviewed external, and composed candidate coverage; map overlap, conflict,
+fallback, lifecycle, host, permission, and evidence states; and subtract or
+revise the ontology from comparison results. A new Skill, hard floor, or final
+standard remains downstream of repeated residual-gap and admission evidence.
+The existing independent-review packet is retained as mechanism calibration
+but deferred because it binds the pre-correction target.
+
+The immutable `bb65a26` same-system assessment is likewise retained as
+historical pre-correction evidence. It does not assess the revised contract and
+must not be projected as current review or standard-admission evidence.

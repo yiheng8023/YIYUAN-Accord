@@ -598,7 +598,7 @@
     },
     {
       "id": "acceptance.standard-candidate-contract",
-      "statement": "A reusable standard candidate package contract separates adaptive soft evaluation from any admitted AI-independent hard floor; it preserves dynamic source-refresh triggers, a frozen versioned evidence snapshot, source lineage and freshness, plural affected-subject and context boundaries, dissent and counterevidence, distributional and exclusion impact, repeated non-self-referential evidence, original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, scope, fallback, revalidation or retirement, versioning, migration, and authority boundaries without treating user agreement as factual or acceptance evidence.",
+      "statement": "A reusable standard candidate package contract separates adaptive soft evaluation from any admitted AI-independent hard floor; it preserves dynamic source-refresh triggers, a frozen versioned evidence snapshot, source lineage and freshness, affected-party and context boundaries, material disagreement and counterevidence, distributional and exclusion impact, repeated non-self-referential evidence, original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, scope, fallback, revalidation or retirement, versioning, migration, and authority boundaries without treating task preference or authorization as factual or acceptance evidence.",
       "assessment": "partial",
       "verificationIds": [
         "verification.standard-candidate-contract"
@@ -2547,7 +2547,7 @@
     {
       "id": "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
       "path": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
-      "kind": "deterministic-offline-rebuildable-source-identity-usability-rights-freshness-and-conflict-snapshot-no-content-archive-independent-review-pending",
+      "kind": "deterministic-offline-rebuildable-source-identity-usability-rights-freshness-and-conflict-snapshot-no-content-archive-review-deferred-candidate-coverage-first",
       "asOf": "2026-07-31",
       "supports": [
         "acceptance.software-engineering-lifecycle-specialization",

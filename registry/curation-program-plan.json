@@ -468,12 +468,13 @@
       "currentAiEraEngineeringPrinciplesRevalidation": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationContract": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+      "currentMultidimensionalSoftwareEngineeringEvaluationAssessmentState": "historical-pre-correction-self-assessment-not-current-contract-review",
       "currentMultidimensionalSoftwareEngineeringNonSelfAssessment": "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringSourceSnapshot": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
-      "currentMultidimensionalSoftwareEngineeringSourceRefreshState": "deterministic-offline-snapshot-calibrated-independent-review-pending",
+      "currentMultidimensionalSoftwareEngineeringSourceRefreshState": "deterministic-offline-snapshot-calibrated-review-deferred-candidate-coverage-first",
       "currentMultidimensionalSoftwareEngineeringIndependentReviewContract": "registry/multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringIndependentReviewPacket": "registry/multidimensional-software-engineering-independent-review-packet-2026-07-31.json",
-      "currentMultidimensionalSoftwareEngineeringIndependentReviewState": "prepared-not-reviewed-distinct-identity-required"
+      "currentMultidimensionalSoftwareEngineeringIndependentReviewState": "prepared-not-reviewed-deferred-candidate-coverage-first"
     },
     {
       "id": "initiative.production-capability-manager-topology-design",

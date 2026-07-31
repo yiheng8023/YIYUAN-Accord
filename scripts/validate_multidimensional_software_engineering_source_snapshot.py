@@ -128,7 +128,7 @@ def validate_snapshot(
         and initiative.get(
             "currentMultidimensionalSoftwareEngineeringSourceRefreshState"
         )
-        == "deterministic-offline-snapshot-calibrated-independent-review-pending",
+        == "deterministic-offline-snapshot-calibrated-review-deferred-candidate-coverage-first",
         "Program-plan source snapshot projection drifted",
     )
 
@@ -166,7 +166,7 @@ def validate_snapshot(
         "ISO metadata-only boundary",
         "Offline reconstruction",
         "does not prove",
-        "Independent review remains pending",
+        "Independent review remains deferred behind candidate capability coverage",
     ):
         _require(phrase in normalized, f"Source snapshot document missing: {phrase}")
 

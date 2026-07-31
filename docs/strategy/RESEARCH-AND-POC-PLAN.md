@@ -48,7 +48,8 @@ separate. The deterministic report schema and positive fixture pass zero-model
 cross-field checks. A first schema-conformant application now binds the
 immutable `bb65a26` eight-file evaluation package, preserves unassessed and
 insufficient-evidence results, and remains an unaccepted same-system
-self-assessment. A second application binds the non-self-referential
+self-assessment. It is retained as historical pre-correction evidence and does
+not assess the revised contract. A second application binds the non-self-referential
 `202cf047` Codex Desktop resource-observability change. Its target checks pass,
 while exact-archive full verification exposes an inherited CRLF/LF durable-hash
 portability defect and therefore blocks the evidence/provenance floor.
@@ -63,18 +64,22 @@ rejection, not full source meaning or independent correctness.
 
 The next research order is:
 
-1. obtain independent review of the contract, both bounded reports, and source
-   snapshot; record disagreement and test whether the rights, source-strength,
-   conflict, and claim-boundary classifications are defensible;
-2. test whether one-user assumptions survive plural affected-subject,
-   accessibility, exclusion, distributional-impact, domain, and jurisdiction
-   review;
-3. apply the contract across additional risk, lifecycle, and domain profiles;
-4. measure orchestration burden and compare native, official, reviewed
-   external, and composed evaluation paths;
-5. consider a lightweight evaluation Skill only if repeated orchestration
-   residuals remain;
-6. consider hard-floor admission only after floor-relevant collaboration,
+1. freeze the current ontology as a provisional screening coordinate system;
+   do not expand it into a final standard or new Skill;
+2. broaden and verify the candidate capability pool through native, official,
+   reviewed external, and composed paths, preserving source, revision,
+   dependency, permission, host, and lifecycle evidence;
+3. map candidate coverage, overlap, conflict, fallback, and unassessed cells
+   across the evaluation dimensions and complete collaboration lifecycle;
+4. run bounded simulations and only the necessary human checks, separating
+   listing, acquisition, installation, exposure, invocation, behavior, and
+   value evidence;
+5. revise or subtract the provisional evaluation contract from comparison
+   evidence, then use the already-prepared independent-review packet mechanism
+   on the revised target when review becomes decision-relevant;
+6. consider a lightweight evaluation Skill only if repeated orchestration
+   residuals remain after viable reuse and composition;
+7. consider hard-floor admission only after floor-relevant collaboration,
    lifecycle, domain, and operational dependencies mature, with repeated
    non-self-referential evidence, counterexamples, migration, cost, fallback,
    retirement, and final authority review. A mature high-confidence safety or
@@ -1571,8 +1576,8 @@ a separate runtime mutation requiring explicit authorization.
 
 ## Multidimensional engineering independent-review readiness — 2026-07-31
 
-The next evaluation gate is now prepared without pretending that the producing
-task reviewed itself independently. The
+An evaluation-design review mechanism is prepared without pretending that the
+producing task reviewed itself independently. The
 [independent-review readiness package](MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-INDEPENDENT-REVIEW-READINESS-2026-07-31.md)
 binds nineteen exact Git blobs at `c634d83`, including the evaluation contract,
 both bounded assessments, the source observation and snapshot, validators,
@@ -1592,5 +1597,9 @@ while the repository lifecycle thin slice contributes producer/reviewer
 separation, artifact binding, independent re-execution, private-oracle
 isolation, and risk disposition. The packet composes those proven mechanism
 ideas; it does not establish the identity or judgment of a future reviewer.
-Broader profile calibration remains after a separately accountable review, and
-no evaluation Skill or hard floor is justified by readiness alone.
+The packet is retained as a reusable mechanism calibration, but review of its
+frozen pre-correction target is deferred while verified candidate capability
+coverage becomes the main critical path. A future decision-relevant review
+must bind the revised target rather than treating this packet as current
+standard admission. No evaluation Skill or hard floor is justified by
+readiness alone.

@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "multidimensional-software-engineering-independent-review-packet-2026-07-31",
   "asOf": "2026-07-31",
-  "status": "prepared-not-reviewed",
+  "status": "prepared-not-reviewed-deferred",
   "contractBinding": {
     "path": "registry/multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31.json",
-    "sha256": "7e111c031c33fb68af56cb7d1615c5c646df658386bac35c26ef3226537d50ee"
+    "sha256": "ab97463f411f47bf285f97d75067ececa1a7ae41cd8d488796d121137b7cbb7f"
   },
   "targetBinding": {
     "revision": "c634d83d84b269ab66a94eba1540d04133e308dd",
@@ -230,8 +230,8 @@
       "question": "Are dimensions, profile axes, evidence grades, assessment labels, candidate-floor results, and next evidence proportionate to each frozen target?"
     },
     {
-      "id": "plural-subject-and-anti-deference-boundary",
-      "question": "Does the package separate user preference and authorization from fact, general-population validity, affected-subject impact, dissent, and accountable acceptance?"
+      "id": "evidence-scope-affected-party-and-authority-boundary",
+      "question": "Does the package keep task inputs, evidence scope, affected-party impact, authorization, independent review, and accountable acceptance distinct?"
     },
     {
       "id": "claim-authority-and-acceptance-boundary",
@@ -305,6 +305,7 @@
   "packetState": {
     "reviewPerformed": false,
     "reviewReceiptPath": null,
+    "reviewDeferredUntilCandidateCoverage": true,
     "acceptanceDecisionRequested": false,
     "modelDispatchPerformed": false,
     "externalWritePerformed": false
@@ -341,5 +342,5 @@
     "acceptanceAuthorized": false,
     "releaseOrDeploymentAuthorized": false
   },
-  "packetSha256": "5fc74cc240842a48d33d06e4f99102aa3ac2e6aa19162a45113ed4d1c9119a0d"
+  "packetSha256": "e1c2b2d36436b086293cbe0ad0300084737bb589026bbe511c8e4b1707d62a44"
 }

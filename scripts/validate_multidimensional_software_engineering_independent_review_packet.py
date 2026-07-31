@@ -100,7 +100,7 @@ def validate_packet_integrity(
             "2026-07-31"
         )
         and packet.get("asOf") == contract["asOf"]
-        and packet.get("status") == "prepared-not-reviewed",
+        and packet.get("status") == "prepared-not-reviewed-deferred",
         "Independent-review packet identity drifted",
     )
     _require(
@@ -195,6 +195,8 @@ def validate_packet_integrity(
     _require(
         packet.get("packetState", {}).get("reviewPerformed") is False
         and packet["packetState"].get("reviewReceiptPath") is None
+        and packet["packetState"].get("reviewDeferredUntilCandidateCoverage")
+        is True
         and packet["packetState"].get("acceptanceDecisionRequested") is False
         and packet["packetState"].get("modelDispatchPerformed") is False
         and packet["packetState"].get("externalWritePerformed") is False,
@@ -239,7 +241,7 @@ def validate_packet_integrity(
         and initiative.get(
             "currentMultidimensionalSoftwareEngineeringIndependentReviewState"
         )
-        == "prepared-not-reviewed-distinct-identity-required",
+        == "prepared-not-reviewed-deferred-candidate-coverage-first",
         "Program-plan independent-review projection drifted",
     )
 
@@ -279,7 +281,7 @@ def validate_packet_integrity(
     for phrase in (
         "Preparation is not review",
         "Different execution identity",
-        "Rights, evidence, conflict, and plural-subject review",
+        "Rights, evidence, conflict, and affected-party review",
         "No review receipt is generated",
         "does not authorize acceptance",
         "No new evaluation Skill is justified",

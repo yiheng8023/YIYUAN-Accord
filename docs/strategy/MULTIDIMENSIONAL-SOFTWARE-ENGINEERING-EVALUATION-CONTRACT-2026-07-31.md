@@ -175,26 +175,22 @@ authorized human review. One mutable OWASP source remains unpinned, and the
 ISO/IEC 5055 review state remains explicitly disputed instead of being
 normalized into a stronger claim.
 
-## Plural subjects and anti-deference
+## Evidence scope and authority
 
-The current user's goals, preferences, corrections, resources, and bounded
-authorization are essential task inputs. They are not empirical truth,
-independent validation, authority over other affected subjects, or proof of
-general population value. User agreement cannot close a factual, safety,
-rights, or acceptance gap.
+Task inputs bind the target, context, constraints, preferences, resources, and
+authorized actions. They do not automatically expand the factual, safety,
+rights, broader-impact, readiness, or acceptance scope of a conclusion.
 
-The Agent must not optimize for agreement, flattery, or conflict avoidance. It
-must also not perform disagreement merely to appear independent. Every material
-judgment separates fact, user preference, interpretation, inference, value
-trade-off, authorization, and acceptance. Broad claims require diverse
-affected-subject and context evidence, counterexamples and dissent,
-distributional, accessibility, exclusion, and disparate-impact review, domain
-and jurisdiction boundaries, independent review, and accountable acceptance.
+Every material judgment separates observation, evidence, interpretation,
+preference, inference, authorization, and acceptance. A broad claim requires
+representative context and affected-party evidence, counterexamples and
+material disagreements, applicable accessibility and distributional review,
+domain and jurisdiction boundaries, independent review, and accountable
+acceptance.
 
-User authority governs goals, resources, preferences, and actions inside the
-user's legitimate scope. It does not make a claim true, waive applicable safety
-or rights, bind other subjects, or turn one collaboration history into a
-universal design.
+Authorization permits a bounded action; it is not factual evidence or
+acceptance. This is a general evidence and authority boundary, not a new
+project value direction or a rule derived from one collaboration exchange.
 
 ## Source synthesis
 
@@ -263,7 +259,10 @@ authority, and accepted-status guards without a model. The first bounded
 application evaluates the immutable `bb65a26` eight-file contract package and
 remains a same-system self-assessment with status `needs-verification`; it does
 not establish independent validity, real-domain usefulness, cross-host value,
-efficiency, or standard eligibility.
+efficiency, or standard eligibility. After the neutrality and sequencing
+correction, that report is retained only as a historical pre-correction
+self-assessment. It does not evaluate the revised contract and is not current
+review evidence.
 
 The second application evaluates the non-self-referential `202cf047`
 Codex Desktop resource-observability change. Its target validator and unit test
@@ -271,8 +270,11 @@ pass in an exact archive, while full exact-commit verification exposes an
 inherited CRLF runtime-byte versus Git-LF durable-hash portability defect. The
 report therefore preserves a blocked evidence/provenance floor instead of
 letting local green checks cancel the counterevidence. Independent review and
-the now-calibrated frozen source snapshot precede broader profile calibration,
-any evaluation Skill, or any hard-standard decision.
+the now-calibrated frozen source snapshot remain required before admission, but
+the current main path is broader verified candidate capability coverage and
+subtraction. The provisional contract is revised from that comparison evidence
+before broader profile calibration, any evaluation Skill, or any hard-standard
+decision.
 
 ## Acceptance and authority boundary
 

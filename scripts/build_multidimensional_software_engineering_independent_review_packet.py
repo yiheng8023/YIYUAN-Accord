@@ -82,7 +82,8 @@ def _parse_timestamp(value: Any, *, label: str) -> None:
 def validate_contract(contract: dict[str, Any]) -> None:
     _require(contract.get("schema") == 1, "Review contract schema drifted")
     _require(
-        contract.get("status") == "prepared-not-reviewed-no-acceptance-authority",
+        contract.get("status")
+        == "prepared-not-reviewed-deferred-candidate-coverage-first",
         "Review contract status drifted",
     )
     target_revision = contract.get("targetRevision")
@@ -160,7 +161,7 @@ def validate_contract(contract: dict[str, Any]) -> None:
         "source-identity-evidence-strength-and-freshness",
         "conflict-ambiguity-and-counterevidence",
         "dimension-floor-and-profile-judgments",
-        "plural-subject-and-anti-deference-boundary",
+        "evidence-scope-affected-party-and-authority-boundary",
         "claim-authority-and-acceptance-boundary",
         "provenance-portability-and-line-ending-semantics",
         "deterministic-reproduction-and-negative-controls",
@@ -205,6 +206,7 @@ def validate_contract(contract: dict[str, Any]) -> None:
         == {
             "reviewPerformed": False,
             "reviewReceiptPath": None,
+            "reviewDeferredUntilCandidateCoverage": True,
             "acceptanceDecisionRequested": False,
             "modelDispatchPerformed": False,
             "externalWritePerformed": False,
@@ -318,7 +320,7 @@ def build_packet(
         "schema": 1,
         "id": "multidimensional-software-engineering-independent-review-packet-2026-07-31",
         "asOf": contract["asOf"],
-        "status": "prepared-not-reviewed",
+        "status": "prepared-not-reviewed-deferred",
         "contractBinding": {
             "path": CONTRACT_PATH.as_posix(),
             "sha256": file_sha256(contract_path),

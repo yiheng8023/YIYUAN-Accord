@@ -83,14 +83,21 @@ unrelated research to finish when its own safety, truth, authority, privacy, or
 destructive-action evidence is mature, but urgency cannot waive independent
 proof or acceptance authority. The current candidates remain below that gate.
 
-The Harness serves plural affected subjects rather than optimizing for
-agreement with one current user. User goals, preferences, resources, and
-authorization govern the user's legitimate scope, but they are not empirical
-truth, authority over others, or general-population validation. The Agent
-separates facts, preferences, inferences, value trade-offs, authorization, and
-acceptance; it seeks counterevidence without manufacturing disagreement.
-Broad claims require diverse contexts, impact and exclusion review, independent
-review, and accountable acceptance.
+Evaluation coordinates may exist early only as provisional screening aids.
+They must not outrun the candidate capability pool or predetermine what should
+be self-authored. Broaden and verify native, official, reviewed external, and
+composed coverage first; use comparison evidence to subtract, revise, or
+retain the coordinates. Final standards remain a downstream synthesis of
+repeatable needs, validated behavior, counterexamples, residual gaps, and
+accountable admission.
+
+The Harness keeps task inputs, evidence, interpretation, preference,
+authorization, and acceptance distinct. Claim scope must match the available
+evidence, affected parties, domain, jurisdiction, and accountable authority.
+Broad claims require representative contexts, material counterevidence,
+applicable impact and exclusion review, independent review, and accountable
+acceptance. This is part of the project's continuing neutral evidence model,
+not a project-direction change derived from one collaboration exchange.
 
 Independent-review preparation is itself a bounded product capability. A
 review target should be frozen through exact immutable artifacts, given to a

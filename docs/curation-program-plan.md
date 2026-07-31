@@ -792,7 +792,9 @@ dimension/floor sets, evidence references, unknowns, independent review,
 acceptance authority, and accepted-status guards. The first bounded application
 is a same-system `needs-verification` assessment of the immutable `bb65a26`
 eight-file evaluation package. It is not independent review or project-wide
-quality evidence. The second application evaluates the non-self-referential
+quality evidence. Following the neutrality and sequencing correction, it is a
+historical pre-correction self-assessment rather than an assessment of the
+revised contract. The second application evaluates the non-self-referential
 `202cf047` Codex Desktop resource-observability change and retains its exact
 archive portability failure as counterevidence instead of cancelling it with
 passing target checks.
@@ -821,10 +823,19 @@ state. This advances the source-layer mechanism from specified to calibrated,
 not to independent correctness, normative coverage, Skill necessity, or
 hard-standard readiness.
 
-The current user is an essential goal, preference, resource, correction, and
-authorization subject, not a universal evidence source. The program does not
-optimize for agreement or manufacture opposition. It separates facts,
-preferences, inference, value trade-offs, authorization, and acceptance, and
-requires plural affected-subject, context, dissent, accessibility, exclusion,
-distributional-impact, domain, jurisdiction, and independent-review evidence
-before broad population claims.
+The program separates task inputs, observation, evidence, interpretation,
+preference, inference, authorization, and acceptance. Claim scope must match
+the affected parties, context, domain, jurisdiction, and available evidence.
+Broad claims require representative evidence, material counterevidence,
+applicable accessibility, exclusion and distributional-impact review,
+independent review, and accountable acceptance. This restates the project's
+existing neutral evidence model rather than adding a direction from one
+collaboration exchange.
+
+The current evaluation ontology is frozen as a provisional candidate-screening
+coordinate system. The next mainline work broadens and verifies native,
+official, reviewed external, and composed capability coverage, then maps
+overlap, conflict, fallback, lifecycle, host, permission, and evidence states.
+Comparison evidence may subtract or revise the ontology. Independent review of
+a revised target, any evaluation Skill, and hard-standard admission remain
+downstream rather than preceding candidate coverage.

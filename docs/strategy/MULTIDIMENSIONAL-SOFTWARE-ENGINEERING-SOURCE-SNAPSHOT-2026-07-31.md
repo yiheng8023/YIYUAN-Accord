@@ -88,7 +88,8 @@ source-snapshot success.
 This does not prove external interpretation correctness, normative
 completeness, current cross-jurisdiction applicability, independent validity,
 evaluation Skill necessity, hard-standard eligibility, or acceptance.
-Independent review remains pending. Any later refresh must create a new dated
+Independent review remains deferred behind candidate capability coverage. Any
+later refresh must create a new dated
 observation and snapshot rather than silently editing this historical record.
 
 ## Authority boundary

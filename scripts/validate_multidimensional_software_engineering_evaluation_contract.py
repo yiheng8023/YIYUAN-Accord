@@ -138,33 +138,33 @@ def validate_contract(
         and len(standard_boundary.get("admissionPrerequisites", [])) >= 5,
         "Soft-policy and hard-floor separation drifted",
     )
-    subject_boundary = contract.get("subjectAndBiasBoundary", {})
+    evidence_authority = contract.get("evidenceScopeAndAuthorityBoundary", {})
     _require(
-        subject_boundary.get("userGoalPreferenceAndAuthorizationAreTaskInputs")
+        evidence_authority.get("taskInputsDoNotExpandClaimScope") is True
+        and evidence_authority.get("preferenceEvidenceClass")
+        == "preference-only-unless-separately-supported"
+        and evidence_authority.get(
+            "authorizationIsCapabilityPermissionNotFactualEvidence"
+        )
         is True
-        and subject_boundary.get("userPreferenceIsEmpiricalTruth") is False
-        and subject_boundary.get("userAgreementIsValidationEvidence") is False
-        and subject_boundary.get("automaticAgreementAllowed") is False
-        and subject_boundary.get("mechanicalOppositionCountsAsIndependence")
-        is False
-        and subject_boundary.get("affectedSubjectsMayExtendBeyondCurrentUser")
-        is True,
-        "Plural-subject or anti-deference boundary drifted",
+        and evidence_authority.get("acceptanceRequiresNamedAuthority") is True
+        and evidence_authority.get("affectedPartiesMustMatchClaimScope") is True,
+        "Evidence-scope or authority boundary drifted",
     )
     _require(
-        len(subject_boundary.get("broadPopulationClaimRequires", [])) >= 5
-        and set(subject_boundary.get("requiredSeparation", []))
+        len(evidence_authority.get("broadClaimsRequire", [])) >= 5
+        and set(evidence_authority.get("requiredSeparation", []))
         == {
-            "fact",
-            "user preference",
+            "observation",
+            "evidence",
             "interpretation",
+            "preference",
             "inference",
-            "value trade-off",
             "authorization",
             "acceptance",
         }
-        and subject_boundary.get("authorityRule"),
-        "Plural-subject evidence or judgment separation is incomplete",
+        and evidence_authority.get("authorityRule"),
+        "Evidence, judgment, or authority separation is incomplete",
     )
 
     dimensions = {item.get("id") for item in contract.get("dimensions", [])}
@@ -274,7 +274,7 @@ def validate_contract(
     )
     _require(
         capability.get("nextImplementationPriority")
-        == "obtain independent review of the contract, two bounded assessments, and deterministic source snapshot before broader profile calibration or any evaluation Skill or hard-standard decision",
+        == "freeze the provisional evaluation coordinate system, broaden and verify candidate capability coverage, and revise the contract from comparison evidence before any evaluation Skill or hard-standard decision",
         "Next implementation priority drifted",
     )
     _require(
@@ -290,6 +290,11 @@ def validate_contract(
         "Current bounded assessment projection is missing",
     )
     _require(
+        capability.get("currentBoundedAssessmentState")
+        == "historical-pre-correction-self-assessment-not-current-contract-review",
+        "Bounded assessment history boundary is missing",
+    )
+    _require(
         capability.get("currentNonSelfReferentialAssessment")
         == "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
         "Current non-self-referential assessment projection is missing",
@@ -298,7 +303,7 @@ def validate_contract(
         capability.get("currentDeterministicSourceSnapshot")
         == "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json"
         and capability.get("currentSourceSnapshotState")
-        == "calibration-only-metadata-and-bounded-summary-no-content-archive-independent-review-pending",
+        == "calibration-only-metadata-and-bounded-summary-no-content-archive-review-deferred-candidate-coverage-first",
         "Current source snapshot projection or boundary is missing",
     )
 
@@ -364,6 +369,11 @@ def validate_contract(
         "Program-plan bounded-assessment projection is missing",
     )
     _require(
+        initiative.get("currentMultidimensionalSoftwareEngineeringEvaluationAssessmentState")
+        == "historical-pre-correction-self-assessment-not-current-contract-review",
+        "Program-plan bounded-assessment history boundary is missing",
+    )
+    _require(
         initiative.get("currentMultidimensionalSoftwareEngineeringNonSelfAssessment")
         == "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json"
         and initiative.get(
@@ -373,7 +383,7 @@ def validate_contract(
         and initiative.get(
             "currentMultidimensionalSoftwareEngineeringSourceRefreshState"
         )
-        == "deterministic-offline-snapshot-calibrated-independent-review-pending",
+        == "deterministic-offline-snapshot-calibrated-review-deferred-candidate-coverage-first",
         "Program-plan non-self assessment or source-refresh projection is missing",
     )
 
@@ -390,7 +400,7 @@ def validate_contract(
         "future Skill is justified only after repeated tasks",
         "Dynamic source intelligence and frozen snapshots",
         "Soft evaluation policy and hard red lines coexist",
-        "Plural subjects and anti-deference",
+        "Evidence scope and authority",
         "authorizes no hard-standard promotion",
     ):
         _require(phrase in normalized, f"Strategy document missing: {phrase}")

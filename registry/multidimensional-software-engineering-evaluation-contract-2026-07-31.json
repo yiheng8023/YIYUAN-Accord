@@ -73,30 +73,29 @@
     ],
     "earlyReviewBoundary": "A high-confidence safety, truth, authority, privacy, or destructive-action floor may be reviewed before unrelated program work finishes, but urgency cannot waive independent proof, scope, false-positive, fallback, migration, retirement, or acceptance authority."
   },
-  "subjectAndBiasBoundary": {
-    "userGoalPreferenceAndAuthorizationAreTaskInputs": true,
-    "userPreferenceIsEmpiricalTruth": false,
-    "userAgreementIsValidationEvidence": false,
-    "automaticAgreementAllowed": false,
-    "mechanicalOppositionCountsAsIndependence": false,
-    "affectedSubjectsMayExtendBeyondCurrentUser": true,
-    "broadPopulationClaimRequires": [
-      "diverse affected-subject and context evidence",
-      "counterexamples and dissent",
-      "distributional, accessibility, exclusion, and disparate-impact review",
+  "evidenceScopeAndAuthorityBoundary": {
+    "taskInputsDoNotExpandClaimScope": true,
+    "preferenceEvidenceClass": "preference-only-unless-separately-supported",
+    "authorizationIsCapabilityPermissionNotFactualEvidence": true,
+    "acceptanceRequiresNamedAuthority": true,
+    "affectedPartiesMustMatchClaimScope": true,
+    "broadClaimsRequire": [
+      "representative context and affected-party evidence",
+      "counterexamples and material disagreements",
+      "accessibility, exclusion, distributional, and disparate-impact review where applicable",
       "domain and jurisdiction boundaries",
       "independent review and accountable acceptance"
     ],
     "requiredSeparation": [
-      "fact",
-      "user preference",
+      "observation",
+      "evidence",
       "interpretation",
+      "preference",
       "inference",
-      "value trade-off",
       "authorization",
       "acceptance"
     ],
-    "authorityRule": "A user controls goals, resources, preferences, and authorization inside their legitimate scope; that authority does not make a factual claim true, waive applicable safety or rights, bind other affected subjects, or prove general population value."
+    "authorityRule": "Goals, preferences, resources, and authorization govern only their bound scope; factual, safety, rights, broader-impact, readiness, and acceptance claims require evidence and authority appropriate to those claims."
   },
   "dimensions": [
     {
@@ -385,10 +384,11 @@
     "currentReportSchema": "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
     "currentPositiveFixture": "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
     "currentBoundedAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+    "currentBoundedAssessmentState": "historical-pre-correction-self-assessment-not-current-contract-review",
     "currentNonSelfReferentialAssessment": "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
     "currentDeterministicSourceSnapshot": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
-    "currentSourceSnapshotState": "calibration-only-metadata-and-bounded-summary-no-content-archive-independent-review-pending",
-    "nextImplementationPriority": "obtain independent review of the contract, two bounded assessments, and deterministic source snapshot before broader profile calibration or any evaluation Skill or hard-standard decision",
+    "currentSourceSnapshotState": "calibration-only-metadata-and-bounded-summary-no-content-archive-review-deferred-candidate-coverage-first",
+    "nextImplementationPriority": "freeze the provisional evaluation coordinate system, broaden and verify candidate capability coverage, and revise the contract from comparison evidence before any evaluation Skill or hard-standard decision",
     "skillMayLater": [
       "select an applicable profile",
       "trigger task-bound source refresh and freeze a reviewed snapshot",

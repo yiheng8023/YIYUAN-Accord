@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31",
   "asOf": "2026-07-31",
-  "status": "prepared-not-reviewed-no-acceptance-authority",
+  "status": "prepared-not-reviewed-deferred-candidate-coverage-first",
   "purpose": "Freeze the exact evaluation contract, both bounded assessments, deterministic source snapshot, supporting validators, tests, and program projections into one reproducible review surface that a different accountable execution identity can inspect without treating same-task rereading as independent review.",
   "targetRevision": "c634d83d84b269ab66a94eba1540d04133e308dd",
   "targetPaths": [
@@ -109,8 +109,8 @@
       "question": "Are dimensions, profile axes, evidence grades, assessment labels, candidate-floor results, and next evidence proportionate to each frozen target?"
     },
     {
-      "id": "plural-subject-and-anti-deference-boundary",
-      "question": "Does the package separate user preference and authorization from fact, general-population validity, affected-subject impact, dissent, and accountable acceptance?"
+      "id": "evidence-scope-affected-party-and-authority-boundary",
+      "question": "Does the package keep task inputs, evidence scope, affected-party impact, authorization, independent review, and accountable acceptance distinct?"
     },
     {
       "id": "claim-authority-and-acceptance-boundary",
@@ -184,6 +184,7 @@
   "packetState": {
     "reviewPerformed": false,
     "reviewReceiptPath": null,
+    "reviewDeferredUntilCandidateCoverage": true,
     "acceptanceDecisionRequested": false,
     "modelDispatchPerformed": false,
     "externalWritePerformed": false

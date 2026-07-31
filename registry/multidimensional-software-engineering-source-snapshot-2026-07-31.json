@@ -5,7 +5,7 @@
   "status": "calibration-snapshot-source-identity-and-usability-only",
   "bindings": {
     "evaluationContractPath": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
-    "evaluationContractSha256": "138491a5275fabd6dbc2c5b24ddc4c82112da37fee14d22e318cdea56cf47268",
+    "evaluationContractSha256": "2543109cc4b4a78dd65aab0e2d93e4cd83533dbc16bc203efd6bc4c27c21c078",
     "snapshotContractPath": "registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json",
     "snapshotContractSha256": "ddbee25d4709ecced0c7d8fbb79bf94d6b60fa4faca8117047340fe17aaca9dd",
     "observationPath": "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
@@ -373,5 +373,5 @@
     "provesEvaluationSkillNecessary": false,
     "authorizesHardStandardOrAcceptance": false
   },
-  "manifestSha256": "9949b7d74c052cec32676a874a17e687db3bb1f261ddf8ba70df59b4c4afdb20"
+  "manifestSha256": "5a4eef9bbe24ff69d17181ada5184778a9cc1902f505d14757c68eb1b9f6d8f9"
 }

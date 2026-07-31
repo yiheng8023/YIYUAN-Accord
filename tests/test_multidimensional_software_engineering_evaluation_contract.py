@@ -60,18 +60,20 @@ class MultidimensionalSoftwareEngineeringEvaluationContractTests(
         with self.assertRaisesRegex(RuntimeError, "hard-floor separation"):
             validate_contract(mutated)
 
-    def test_automatic_user_agreement_fails_closed(self) -> None:
+    def test_task_inputs_cannot_expand_claim_scope(self) -> None:
         mutated = copy.deepcopy(self.contract)
-        mutated["subjectAndBiasBoundary"]["automaticAgreementAllowed"] = True
-        with self.assertRaisesRegex(RuntimeError, "anti-deference"):
+        mutated["evidenceScopeAndAuthorityBoundary"][
+            "taskInputsDoNotExpandClaimScope"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "Evidence-scope"):
             validate_contract(mutated)
 
-    def test_mechanical_opposition_is_not_independence(self) -> None:
+    def test_authorization_cannot_become_factual_evidence(self) -> None:
         mutated = copy.deepcopy(self.contract)
-        mutated["subjectAndBiasBoundary"][
-            "mechanicalOppositionCountsAsIndependence"
-        ] = True
-        with self.assertRaisesRegex(RuntimeError, "anti-deference"):
+        mutated["evidenceScopeAndAuthorityBoundary"][
+            "authorizationIsCapabilityPermissionNotFactualEvidence"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "authority boundary"):
             validate_contract(mutated)
 
     def test_source_snapshot_state_cannot_claim_independent_review(self) -> None:

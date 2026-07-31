@@ -1,7 +1,7 @@
 # Multidimensional Software-Engineering Independent-Review Readiness
 
 Date: 2026-07-31
-Status: prepared, not reviewed
+Status: prepared, not reviewed, deferred behind candidate coverage
 Authority: repository-local review preparation only
 
 ## Decision
@@ -32,7 +32,7 @@ host does not attest.
 
 ## Review surface
 
-Rights, evidence, conflict, and plural-subject review are mandatory alongside
+Rights, evidence, conflict, and affected-party review are mandatory alongside
 repository standards and specification fidelity. The ten non-cancelling axes
 cover:
 
@@ -41,7 +41,7 @@ cover:
 - source identity, evidence strength, and freshness;
 - conflicts, ambiguity, counterevidence, and disagreement;
 - dimension, candidate-floor, profile, and next-evidence judgments;
-- plural affected subjects and the anti-deference boundary;
+- evidence scope, affected parties, and authority boundaries;
 - claim, authority, independent-review, and acceptance separation;
 - Git provenance, portability, and CRLF/LF byte semantics;
 - deterministic reconstruction and negative controls;
@@ -95,9 +95,16 @@ failure. The exact archive root and tar were removed after inspection.
 
 ## Next gate
 
-Provide this immutable packet to a separately identifiable human, Agent task,
-or mixed panel that did not produce the packet or either assessment. Retain the
-review receipt separately, validate it against the packet, and preserve every
-correction, disagreement, limitation, and unresolved finding. Accountable
-acceptance, broader profile calibration, Skill-necessity evaluation, and any
-hard-floor admission remain later and separately governed.
+Candidate capability coverage is the main critical path. Keep the current
+ontology provisional, broaden and verify reusable native, official, reviewed
+external, and composed coverage, and revise or subtract the evaluation
+contract from that evidence. The current packet remains a mechanism
+calibration for its frozen pre-correction target; it is not the future review
+target.
+
+When review becomes decision-relevant, build a new immutable packet for the
+revised target and give it to a separately identifiable human, Agent task, or
+mixed panel that did not produce the target. Retain the review receipt
+separately and preserve every correction, disagreement, limitation, and
+unresolved finding. Accountable acceptance, Skill-necessity evaluation, and
+any hard-floor admission remain later and separately governed.
