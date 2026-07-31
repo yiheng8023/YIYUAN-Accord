@@ -409,6 +409,8 @@
       "currentFollowupEvidence": "registry/loopy-disposable-agent-trial-result-2026-07-18.json",
       "currentLearningCapabilityBaseline": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
       "currentLearningCapabilityBaselineState": "representative-set-sufficient-for-protocol-design-behavioral-evidence-gap-not-capability-name-gap",
+      "currentLearningFixedFixtureProtocol": "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json",
+      "currentLearningFixedFixtureProtocolState": "zero-model-mechanism-simulation-complete-material-and-oracle-calibration-next-no-live-authority",
       "currentAssessment": {
         "tenComponentPackageAssembled": true,
         "selectedDemandBatchDecisionReady": true,
@@ -468,6 +470,7 @@
       "currentProcessFidelityDispatchLedgerContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
       "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
       "currentLearningCapabilityBaseline": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+      "currentLearningFixedFixtureProtocol": "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json",
       "currentAiEraEngineeringPrinciplesRevalidation": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationContract": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",

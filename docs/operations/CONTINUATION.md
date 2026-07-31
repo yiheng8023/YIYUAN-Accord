@@ -2498,3 +2498,37 @@ cannot be established deterministically should advance to manual or
 real-learner testing. No candidate execution, model dispatch, CC Switch,
 runtime, Skill, Hook, hard-standard, cross-repository, or remote mutation is
 authorized by this checkpoint.
+
+## 2026-07-31 GEN-LEARNING-01 fixed-fixture protocol checkpoint
+
+The capability baseline now has a zero-model protocol successor:
+
+- `docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md`;
+- `registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json`;
+- `scripts/evaluate_human_ai_collaboration_learning_protocol.py`;
+- `scripts/validate_human_ai_collaboration_learning_fixed_fixture_protocol.py`;
+- `tests/fixtures/human-ai-collaboration-learning-protocol-fixtures-2026-07-31.json`;
+- `tests/test_human_ai_collaboration_learning_fixed_fixture_protocol.py`.
+
+The ordered phases are zero-model mechanism simulation, no-model material and
+oracle calibration, separately authorized mechanism pilot, and only then a
+preregistered human-learning trial. The current phase is the first. Ten
+fixtures cover a valid mechanism-only record and fail-closed boundaries for
+immediate-completion claims, provider pooling, private-oracle exposure, missing
+authority, weak-model substitution, installed-only Matt exposure, incomplete
+cleanup, missing delayed assessment, and premature effect claims.
+
+Any future weak-Agent native/Matt pair must visibly use
+`gpt-5.3-codex-spark` with `low` reasoning. The official arm selects exactly
+one real host product and remains a product-bundle comparison. The formal
+design is between-subject to prevent treatment carryover. Delayed unaided
+competence is primary; immediate competence, transfer, misconception,
+autonomy, accessibility, teacher review, and lifecycle cost cannot cancel one
+another.
+
+No model, candidate, account, or participant surface was used. The next action
+is an offline synthetic micro-domain public packet and private oracle with
+parallel assessments, misconception map, accessibility review, and cleanup
+manifest. Model dispatch, candidate execution, account access, participant
+contact, live trial, CC Switch, runtime, Skill, Hook, hard-standard, evidence
+promotion, commit, and push remain unauthorized by the protocol itself.

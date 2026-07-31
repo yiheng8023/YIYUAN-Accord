@@ -1629,3 +1629,25 @@ misconception, autonomy, accessibility, teacher-review, and lifecycle-cost
 outcomes. Simulation precedes any necessary manual or real-learner testing.
 No Skill, Hook, hard standard, candidate execution, runtime mutation, or
 acceptance promotion follows from this checkpoint.
+
+The follow-up
+[fixed-fixture learning protocol](HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md)
+now turns that comparison boundary into an ordered four-phase path. Ten
+zero-model fixtures calibrate route identity, separate live authorities,
+official-product selection, private-oracle isolation, human-only control,
+Matt instruction delivery, delayed measurement, claim ceilings, and exact
+cleanup. They dispatch no model, execute no candidate, access no official
+account, and involve no participant.
+
+A formal comparison would use randomized between-subject allocation over one
+novel synthetic micro-domain. The two Codex arms must expose exact
+`gpt-5.3-codex-spark` / `low` routing; the official route must name exactly one
+real product and remains a product-bundle comparison; the human instructor
+cannot see the private assessment oracle. A complete record is only eligible
+for independent analysis and cannot prove an effect by shape alone.
+
+The next mainline step is offline material and oracle calibration: public
+packet, private oracle, misconception map, parallel immediate and delayed
+assessments, novel transfer task, accessibility review, and cleanup manifest.
+No live permission is inferred. A pilot and formal human-learning trial remain
+later, separately authorized phases.
