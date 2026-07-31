@@ -1603,3 +1603,29 @@ coverage becomes the main critical path. A future decision-relevant review
 must bind the revised target rather than treating this packet as current
 standard admission. No evaluation Skill or hard floor is justified by
 readiness alone.
+
+## Learning capability baseline checkpoint — 2026-07-31
+
+The first general-domain candidate-coverage slice now binds `GEN-LEARNING-01`
+without promoting its planned evidence state. The durable
+[learning capability baseline](HUMAN-AI-COLLABORATION-LEARNING-CAPABILITY-BASELINE-2026-07-31.md)
+compares four distinct route classes: native behavior without a dedicated
+learning capability, one official host-specific learning mode, Matt Pocock's
+exact current `teach` Skill as an explicit treatment, and a human instructor
+control.
+
+Official OpenAI, Anthropic, and Google learning surfaces are dated product
+evidence only. They do not prove current-account availability, cross-host
+portability, delayed retention, or transfer. Matt `teach` contributes a
+materially different durable multi-session workspace, but its current
+projection and static content prove neither instruction delivery nor learning
+value and carry additional mutation, context, lifecycle, and cleanup cost.
+
+The representative set is sufficient for protocol design. Broader discovery
+stops because the open issue is a behavioral-evidence gap, not a
+capability-name gap. The next gate is a fixed-fixture, no-install,
+no-account-expansion protocol that measures immediate, delayed, transfer,
+misconception, autonomy, accessibility, teacher-review, and lifecycle-cost
+outcomes. Simulation precedes any necessary manual or real-learner testing.
+No Skill, Hook, hard standard, candidate execution, runtime mutation, or
+acceptance promotion follows from this checkpoint.

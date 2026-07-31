@@ -407,6 +407,8 @@
       "currentResultEvidence": "registry/round03-capability-survey-result-package-2026-07-18.json",
       "currentReconciliationEvidence": "registry/round03-complete-coordinate-envelope-reconciliation-2026-07-18.json",
       "currentFollowupEvidence": "registry/loopy-disposable-agent-trial-result-2026-07-18.json",
+      "currentLearningCapabilityBaseline": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+      "currentLearningCapabilityBaselineState": "representative-set-sufficient-for-protocol-design-behavioral-evidence-gap-not-capability-name-gap",
       "currentAssessment": {
         "tenComponentPackageAssembled": true,
         "selectedDemandBatchDecisionReady": true,
@@ -465,6 +467,7 @@
       "currentProcessFidelityDispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
       "currentProcessFidelityDispatchLedgerContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
       "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
+      "currentLearningCapabilityBaseline": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
       "currentAiEraEngineeringPrinciplesRevalidation": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationContract": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",

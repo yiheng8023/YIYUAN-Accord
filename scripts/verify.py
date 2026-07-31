@@ -196,6 +196,9 @@ from validate_agent_resource_pressure_attribution_protocol import (
 from validate_ai_era_classical_software_engineering_principles_revalidation import (
     validate_contract as validate_ai_era_classical_software_engineering_principles_revalidation,
 )
+from validate_human_ai_collaboration_learning_capability_baseline import (
+    validate_baseline as validate_human_ai_collaboration_learning_capability_baseline,
+)
 from validate_multidimensional_software_engineering_evaluation_contract import (
     validate_contract as validate_multidimensional_software_engineering_evaluation_contract,
 )
@@ -501,6 +504,10 @@ REQUIRED_FILES = (
     "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
     "scripts/validate_ai_era_classical_software_engineering_principles_revalidation.py",
     "tests/test_ai_era_classical_software_engineering_principles_revalidation.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-CAPABILITY-BASELINE-2026-07-31.md",
+    "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+    "scripts/validate_human_ai_collaboration_learning_capability_baseline.py",
+    "tests/test_human_ai_collaboration_learning_capability_baseline.py",
     "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
     "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
@@ -1867,6 +1874,9 @@ def verify() -> None:
     ai_era_classical_software_engineering_principles_revalidation_doc = load(
         "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json"
     )
+    human_ai_collaboration_learning_capability_baseline_doc = load(
+        "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json"
+    )
     multidimensional_software_engineering_evaluation_contract_doc = load(
         "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json"
     )
@@ -2822,6 +2832,14 @@ def verify() -> None:
     validate_ai_era_classical_software_engineering_principles_revalidation(
         ai_era_classical_software_engineering_principles_revalidation_doc,
         root=ROOT,
+        program_map=program_acceptance_map_doc,
+        program_plan=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_learning_capability_baseline(
+        human_ai_collaboration_learning_capability_baseline_doc,
+        root=ROOT,
+        scenario_matrix=human_ai_collaboration_scenario_evidence_matrix_doc,
+        claim_ledger=human_ai_collaboration_high_impact_primary_source_claim_ledger_doc,
         program_map=program_acceptance_map_doc,
         program_plan=curation_program_plan_doc,
     )

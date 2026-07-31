@@ -2442,15 +2442,13 @@ Skill, Hook, MCP, Plugin, App, global configuration, weak-model, CALIBRATION,
 ASSETS, acceptance, release, or deployment mutation is authorized by this
 checkpoint.
 
-## 2026-07-31 neutrality and sequencing correction
+## 2026-07-31 sequencing correction
 
-The collaboration note about avoiding subjective drift was incorrectly
-projected into personalized `current user`, agreement, and anti-deference
-product language. The project neutrality direction had not changed. Current
-authority surfaces now express only the general evidence-scope,
-affected-party, permission, and acceptance separation needed for bounded
-claims. Historical test artifacts remain historical; no new value doctrine is
-created from the exchange.
+The project's neutral scope and authority model remain unchanged. Current
+authority surfaces express the general evidence-scope, affected-party,
+permission, and acceptance separation needed for bounded claims. Historical
+test artifacts remain historical; no new value doctrine is created by this
+checkpoint.
 
 The standardization sequence is also corrected. The current multidimensional
 ontology remains a provisional screening coordinate system, not a final
@@ -2465,3 +2463,38 @@ but deferred because it binds the pre-correction target.
 The immutable `bb65a26` same-system assessment is likewise retained as
 historical pre-correction evidence. It does not assess the revised contract and
 must not be projected as current review or standard-admission evidence.
+
+## 2026-07-31 GEN-LEARNING-01 capability-baseline checkpoint
+
+Candidate coverage has moved from the corrected sequencing statement into one
+bounded general-domain slice. The durable package is:
+
+- `docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-CAPABILITY-BASELINE-2026-07-31.md`;
+- `registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json`;
+- `scripts/validate_human_ai_collaboration_learning_capability_baseline.py`;
+- `tests/test_human_ai_collaboration_learning_capability_baseline.py`.
+
+`GEN-LEARNING-01` remains `planned-no-live-domain-evidence`. Its bound task,
+educator authority, minimum-data boundary, delayed and transfer measurements,
+misconception oracle, teacher review, and human-only control are unchanged.
+The Shen and Tamkin claim remains a bounded design input rather than a general
+learning-effect claim.
+
+The static representative set is native/no dedicated capability, one
+host-specific official learning mode, exact current Matt `teach` as an
+explicit task-bound treatment, and a human instructor control. OpenAI Study
+mode, Anthropic learning mode, and Gemini Guided Learning are official product
+surfaces, not a single portable treatment and not current-account, outcome, or
+cross-host proof. Matt `teach` is pinned at
+`2ab958093e83e0ec752e6c1c5932da465bf23e0c`; its exact six-file projection and
+CC Switch authority-root topology are recorded, while instruction delivery,
+behavior, retention, and transfer remain unproved.
+
+Broader third-party discovery stops for this scenario until a concrete recheck
+trigger appears. The residual is a behavioral-evidence gap, not a
+capability-name gap. The next bounded action is protocol design with no
+installation or account expansion, followed by simulation; only effects that
+cannot be established deterministically should advance to manual or
+real-learner testing. No candidate execution, model dispatch, CC Switch,
+runtime, Skill, Hook, hard-standard, cross-repository, or remote mutation is
+authorized by this checkpoint.

@@ -1,0 +1,259 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-learning-capability-baseline-2026-07-31",
+  "asOf": "2026-07-31",
+  "observedAt": "2026-07-31T19:22:48+08:00",
+  "status": "source-bound-static-capability-baseline-no-live-learning-or-admission-evidence",
+  "purpose": "Bind a representative, solution-neutral capability set for GEN-LEARNING-01 before any model trial, broader discovery, Skill authoring, or standards extraction.",
+  "scenarioBinding": {
+    "scenarioId": "GEN-LEARNING-01",
+    "domain": "education-and-skill-development",
+    "task": "Tutor a learner through explanation, retrieval, practice, and feedback while measuring durable competence rather than answer completion.",
+    "authorityBoundary": "Practice support only; grading, certification, accommodations, and high-stakes progression stay with accountable educators.",
+    "dataBoundary": "Minimum learner profile and task history; no unnecessary educational or identity data.",
+    "requiredEvidence": [
+      "pretest and delayed post-test",
+      "novel transfer task",
+      "misconception oracle",
+      "teacher review",
+      "human-only control"
+    ],
+    "evidenceStateMustRemain": "planned-no-live-domain-evidence",
+    "primarySourceDesignInputId": "claim.shen-tamkin-2026-skill-formation"
+  },
+  "repositorySourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "bytes": 76246,
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9"
+    },
+    {
+      "path": "registry/human-ai-collaboration-high-impact-primary-source-claim-ledger-2026-07-27.json",
+      "bytes": 22420,
+      "sha256": "8ca9a488662519a451bb0d335adf9fbb5772bd498ec759fdb2150dff2e70a937"
+    },
+    {
+      "path": "docs/strategy/MATT-CURRENT-22-SKILL-REUSE-BOUNDARY-AUDIT-2026-07-31.md",
+      "bytes": 25608,
+      "sha256": "0420f028b31401f0240ad18eaa622467287c15fdfa74d9dfc0df45463626d83b"
+    }
+  ],
+  "officialCapabilityObservations": [
+    {
+      "id": "official.openai-chatgpt-study-mode",
+      "owner": "OpenAI",
+      "locator": "https://help.openai.com/en/articles/11780217-study-mode",
+      "surface": "ChatGPT Study mode",
+      "documentedCapability": "Socratic questions, stepwise explanation, open-ended checks, quizzes, file use, and optional memory within supported ChatGPT conversations.",
+      "accountOrDataBoundary": "ChatGPT account and conversation data; files or memory only when the user chooses those surfaces.",
+      "portabilityBoundary": "Host-specific product mode, not a portable cross-Agent Skill and not documented as a Codex task capability.",
+      "currentUserAccountAvailabilityProved": false,
+      "delayedRetentionOrTransferOutcomeProved": false,
+      "crossHostBehaviorProved": false
+    },
+    {
+      "id": "official.anthropic-claude-learning-mode",
+      "owner": "Anthropic",
+      "locator": "https://claude.com/solutions/education",
+      "surface": "Claude learning mode for education",
+      "documentedCapability": "Tutor-like questioning intended to strengthen transferable thinking within Claude's education offering.",
+      "accountOrDataBoundary": "Claude and, where applicable, institutional education account and data boundaries.",
+      "portabilityBoundary": "Host- and offering-specific product surface, not evidence of Claude Code, Codex, or generic Agent exposure.",
+      "currentUserAccountAvailabilityProved": false,
+      "delayedRetentionOrTransferOutcomeProved": false,
+      "crossHostBehaviorProved": false
+    },
+    {
+      "id": "official.google-gemini-guided-learning",
+      "owner": "Google",
+      "locator": "https://support.google.com/gemini/answer/16448384",
+      "secondaryLocator": "https://blog.google/products-and-platforms/products/education/guided-learning/",
+      "surface": "Gemini Guided Learning",
+      "documentedCapability": "Guided questions, stepwise learning, visual aids, practice, feedback, hints, and supported file inputs in Gemini Apps.",
+      "accountOrDataBoundary": "Google account and Gemini Apps data boundary; some documented features have language, region, age, or account-type constraints.",
+      "portabilityBoundary": "Host-specific application feature, not a portable Skill or current cross-Agent behavior proof.",
+      "currentUserAccountAvailabilityProved": false,
+      "delayedRetentionOrTransferOutcomeProved": false,
+      "crossHostBehaviorProved": false
+    }
+  ],
+  "mattTeachObservation": {
+    "source": "mattpocock/skills",
+    "branch": "main",
+    "observedHead": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+    "sourceLocator": "https://github.com/mattpocock/skills",
+    "localAuthorityRoot": "C:/Users/15521/.cc-switch/skills/teach",
+    "carrierProjectionSnapshot": [
+      {
+        "root": "C:/Users/15521/.agents/skills/teach",
+        "kind": "symbolic-link",
+        "target": "C:/Users/15521/.cc-switch/skills/teach"
+      },
+      {
+        "root": "C:/Users/15521/.claude/skills/teach",
+        "kind": "symbolic-link",
+        "target": "C:/Users/15521/.cc-switch/skills/teach"
+      },
+      {
+        "root": "C:/Users/15521/.codex/skills/teach",
+        "kind": "symbolic-link",
+        "target": "C:/Users/15521/.cc-switch/skills/teach"
+      }
+    ],
+    "fileRecords": [
+      {
+        "path": "GLOSSARY-FORMAT.md",
+        "bytes": 2131,
+        "sha256": "d177def491519d97873291f2e860d8f1d60ead78feecb82eee022177958069c6"
+      },
+      {
+        "path": "LEARNING-RECORD-FORMAT.md",
+        "bytes": 2777,
+        "sha256": "855f81017625256584bbf62bd5edb9b0c86605c4cc1139c56acc36b802595d17"
+      },
+      {
+        "path": "MISSION-FORMAT.md",
+        "bytes": 1553,
+        "sha256": "8da6d3ac84eb2eb19f17c260b6acf01c560d3ac7a4501c415eea0e985602f4d7"
+      },
+      {
+        "path": "RESOURCES-FORMAT.md",
+        "bytes": 1926,
+        "sha256": "2bc634a64b0d0daa10904f9222e7aa0d361420dfacabbf092fbe3a72222edc08"
+      },
+      {
+        "path": "SKILL.md",
+        "bytes": 9507,
+        "sha256": "6d2dbe5e03084cf26fef66b535127b36cd1bcbe9478e26b0626029cd51dc2259"
+      },
+      {
+        "path": "agents/openai.yaml",
+        "bytes": 139,
+        "sha256": "5856f3ae8aec742f1499c640aecdd5f1d6af5fa210a7c6ec794de8263a6f733f"
+      }
+    ],
+    "fileRecordManifestSha256": "5bea8bb9489ddc4ba9023d9dd31f2c5b2653d8a46c4c5de397c4bcd441e5726a",
+    "documentedStrengths": [
+      "stateful multi-session learning workspace",
+      "mission and source grounding",
+      "retrieval, spacing, interleaving, and feedback loops",
+      "learning records and reusable lesson artifacts"
+    ],
+    "documentedCostsOrRisks": [
+      "many workspace writes and generated HTML or asset artifacts",
+      "higher context, file-lifecycle, and cleanup burden than a host learning mode",
+      "possible external research or command surfaces that require separate authority",
+      "structure may exceed a small or short-lived learning need"
+    ],
+    "implicitInvocationAllowedByOpenAiMetadata": false,
+    "installedOrProjectedStateProvesInstructionDelivery": false,
+    "behaviorOrLearningValueProved": false,
+    "delayedRetentionOrNovelTransferProved": false
+  },
+  "representativeAlternatives": [
+    {
+      "id": "alternative.native-no-dedicated-learning-capability",
+      "routeClass": "N",
+      "role": "Minimum-structure baseline using ordinary Agent reasoning and user-directed interaction.",
+      "covered": [
+        "explanation",
+        "question answering",
+        "ad hoc practice and feedback"
+      ],
+      "openGaps": [
+        "no guaranteed durable learning workflow",
+        "no retained competence evidence",
+        "no standardized delayed or transfer measurement"
+      ]
+    },
+    {
+      "id": "alternative.official-host-learning-mode",
+      "routeClass": "O",
+      "role": "One host-specific official learning mode, evaluated only inside its documented account and product boundary.",
+      "covered": [
+        "Socratic or guided questioning",
+        "stepwise explanation",
+        "practice and feedback"
+      ],
+      "openGaps": [
+        "not one portable cross-host treatment",
+        "current account availability not established",
+        "delayed retention and novel transfer not established"
+      ]
+    },
+    {
+      "id": "alternative.matt-teach-explicit",
+      "routeClass": "E",
+      "role": "Explicit task-bound treatment for learning that benefits from a durable workspace and multi-session artifacts.",
+      "covered": [
+        "durable learning workspace",
+        "source and mission records",
+        "retrieval, spacing, interleaving, feedback, and reusable lessons"
+      ],
+      "openGaps": [
+        "instruction delivery and causal behavior not established",
+        "delayed retention and novel transfer not established",
+        "workspace mutation and cleanup cost requires protocol control"
+      ]
+    },
+    {
+      "id": "alternative.human-instructor-control",
+      "routeClass": "H",
+      "role": "Accountable educator or mentor control arm and fallback for judgment, accessibility, accommodations, grading, and high-stakes progression.",
+      "covered": [
+        "accountable domain judgment",
+        "learner-specific observation",
+        "authority-retaining review and fallback"
+      ],
+      "openGaps": [
+        "availability and consistency vary",
+        "time and coordination cost",
+        "must remain independent enough to serve as a useful control"
+      ]
+    }
+  ],
+  "comparisonDecision": {
+    "representativeSetSufficientForProtocolDesign": true,
+    "widerThirdPartyDiscoveryNeededNow": false,
+    "externalCapabilityInstallationNeededNow": false,
+    "candidateExecutionNeededNow": false,
+    "selfAuthoredSkillNeededNow": false,
+    "skillOrHardStandardExtractionNeededNow": false,
+    "residualGapState": "behavioral-evidence-gap-not-capability-name-gap",
+    "reason": "The representative set already spans native, official host-specific, reviewed external, and human-control routes. The blocking uncertainty is durable learning behavior and cost under one fixed scenario, not a shortage of candidate names.",
+    "nextBoundedAction": "Design a fixed-fixture, no-install, no-account-expansion protocol that preserves the scenario authority and data boundaries and measures immediate, delayed, transfer, misconception, autonomy, accessibility, teacher-review, and lifecycle-cost outcomes. Simulate first; request manual testing only for effects that cannot be established deterministically."
+  },
+  "discoveryStopAndRecheck": {
+    "stopNowBecause": [
+      "each materially different route class needed for protocol design is represented",
+      "no evidence currently supports a narrower capability gap that another catalog search would resolve",
+      "additional names would increase review and lifecycle cost without resolving behavioral uncertainty"
+    ],
+    "recheckTriggers": [
+      "a bound learning task falls outside the representative coverage",
+      "an official surface or Matt teach materially changes",
+      "a representative route fails its health or exposure preflight",
+      "the fixed protocol reveals a specific unmet capability rather than an evidence gap",
+      "account, data, accessibility, language, host, or authority boundaries change"
+    ]
+  },
+  "claimLimits": {
+    "officialDocumentationIsBehaviorProof": false,
+    "installationOrProjectionIsInstructionDeliveryProof": false,
+    "immediateTaskCompletionIsLearningProof": false,
+    "oneHostResultIsCrossAgentProof": false,
+    "staticCoverageIsCandidateAdmission": false,
+    "staticCoverageIsStandardPromotion": false
+  },
+  "authorityBoundary": {
+    "externalCapabilityDiscoveryBeyondBoundSourcesAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "installationOrAccountConnectionAuthorized": false,
+    "ccSwitchOrRuntimeMutationAuthorized": false,
+    "skillOrHookAuthoringMutationAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "remotePushAuthorizedByThisBaseline": false
+  }
+}

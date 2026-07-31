@@ -200,7 +200,8 @@
       ],
       "evidenceIds": [
         "evidence.human-ai-collaboration-coverage-rebaseline",
-        "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01"
+        "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01",
+        "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
       ]
     },
     {
@@ -368,7 +369,8 @@
         "evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27",
         "evidence.skill-ecosystem-current-evidence-reconciliation-2026-07-27",
         "evidence.human-ai-collaboration-tdd-current-self-authored-treatment-gap-audit-2026-07-27",
-        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30"
+        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
+        "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
       ]
     },
     {
@@ -422,7 +424,8 @@
         "evidence.round03-rebaseline",
         "evidence.round03-alternative-comparison-batch-01",
         "evidence.round03-evidence-protocol-batch-01",
-        "evidence.round03-capability-survey-result-package"
+        "evidence.round03-capability-survey-result-package",
+        "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
       ]
     },
     {
@@ -448,7 +451,8 @@
         "evidence.program-plan",
         "evidence.harness-model",
         "evidence.cross-agent-claim-limit-reconciliation-2026-07-18",
-        "evidence.completeness-audit"
+        "evidence.completeness-audit",
+        "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
       ]
     },
     {
@@ -2564,6 +2568,18 @@
       "asOf": "2026-07-31",
       "supports": [
         "acceptance.standard-candidate-contract"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
+      "path": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+      "kind": "source-bound-static-native-official-reviewed-external-human-learning-capability-baseline-no-live-learning-admission-or-standard-evidence",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.solution-neutral-collaboration-rebaseline",
+        "acceptance.capability-survey-result-package",
+        "acceptance.cross-agent-claim-limits",
+        "acceptance.residual-gap-proof"
       ]
     }
   ]

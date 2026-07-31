@@ -64,6 +64,9 @@ MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID = (
     "evidence.multidimensional-software-engineering-source-snapshot-"
     "2026-07-31"
 )
+LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
+)
 EXPECTED_HOSTS = {
     "host.native-transparent",
     "host.configurable-agent",
@@ -893,6 +896,8 @@ def validate_matrix(
         item = criteria.get(acceptance_id)
         _require(item is not None and item.get("assessment") == "partial", f"Scenario matrix acceptance state drifted: {acceptance_id}")
         expected_evidence_ids = [REBASELINE_EVIDENCE_ID, MATRIX_EVIDENCE_ID]
+        if acceptance_id == "acceptance.solution-neutral-collaboration-rebaseline":
+            expected_evidence_ids.append(LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID)
         if (
             acceptance_id
             == "acceptance.software-engineering-lifecycle-specialization"
