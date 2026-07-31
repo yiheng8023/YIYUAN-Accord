@@ -56,6 +56,10 @@ ORG_DECISION_CALIBRATION_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-org-decision-zero-model-calibration-"
     "2026-07-31"
 )
+ENGINEERING_MANAGEMENT_CALIBRATION_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-engineering-management-zero-model-"
+    "calibration-2026-07-31"
+)
 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID = (
     "evidence.ai-era-classical-software-engineering-principles-"
     "revalidation-2026-07-31"
@@ -924,6 +928,7 @@ def validate_matrix(
                 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
+                ENGINEERING_MANAGEMENT_CALIBRATION_EVIDENCE_ID,
             ]
         if acceptance_id == "acceptance.ai-independent-hard-standard-boundary":
             expected_evidence_ids += [
@@ -992,6 +997,7 @@ def validate_matrix(
                 ),
                 ACCESS_COMMS_CALIBRATION_EVIDENCE_ID,
                 ORG_DECISION_CALIBRATION_EVIDENCE_ID,
+                ENGINEERING_MANAGEMENT_CALIBRATION_EVIDENCE_ID,
                 (
                     "evidence.human-ai-collaboration-semantic-authority-"
                     "layer-reconciliation-2026-07-28"

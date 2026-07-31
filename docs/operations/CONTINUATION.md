@@ -2655,3 +2655,55 @@ affected-party participation. No model, candidate, organization, account,
 installation, CC Switch, Plugin, MCP, Hook, communication, decision,
 implementation, self-authored Skill, hard-standard, cross-repository, or
 remote-push authority follows from this checkpoint.
+
+## 2026-07-31 SE-MGMT-PRACTICE-01 zero-model checkpoint
+
+The durable package is:
+
+- `docs/strategy/HUMAN-AI-COLLABORATION-ENGINEERING-MANAGEMENT-ZERO-MODEL-CALIBRATION-2026-07-31.md`;
+- `registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json`;
+- `tests/fixtures/human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31.json`;
+- `scripts/evaluate_human_ai_collaboration_engineering_management_zero_model_calibration.py`;
+- `scripts/validate_human_ai_collaboration_engineering_management_zero_model_protocol.py`;
+- `tests/test_human_ai_collaboration_engineering_management_zero_model_calibration.py`.
+
+The route stops broad discovery and retains five future arms: native, current
+OpenAI Data Analytics, exact PM two-component composition, ordered
+official-plus-PM composition, and a team-led human control. The PM pin still
+equals upstream `main`. Current `wayfinder` is retained as a useful
+tracker-backed long-horizon planning near match but excluded as an estimation,
+calibration, anti-surveillance, or management-authority treatment.
+
+The protocol reuses the organizational-decision cross-cut, then adds
+management-specific forecast/outcome, non-coercive commitment, quality and
+economic trade-off, aggregate measurement, anti-surveillance, professional
+accountability, and perception-versus-observed-outcome gates. Four synthetic
+forecast/outcome records are parent-recomputed. One control and seventeen
+faults pass deterministic calibration; terminal repair cannot erase historical
+loss.
+
+`SE-MGMT-PRACTICE-01` remains `planned-no-live-domain-evidence`. Simulated
+team-owned recovery is not team participation, worker review, management
+acceptance, forecast improvement, delivery value, fairness, competence, or
+organizational causality. No model, candidate, real team, account, installation,
+CC Switch, Plugin, MCP, Hook, staffing, budget, deadline, contract,
+professional-accountability, self-authored Skill, hard-standard,
+cross-repository, or remote-push authority follows from this checkpoint.
+
+## 2026-07-31 cleanup-boundary unknown-key fail-closed correction
+
+The broad non-`test_verify_integration` suite exposed two pre-existing negative
+tests in `test_harness_three_lane_program_acceptance_reconciliation`: they
+injected legacy or misspelled cleanup-authority keys, while the validator
+checked required values but did not reject unknown keys. The mutations were
+therefore ignored rather than failing closed.
+
+`scripts/validate_harness_three_lane_program_acceptance_reconciliation.py` now
+requires the exact seven-key `cleanupBoundary` schema. The focused 26-test
+module and the 1,845-test non-slow-integration set pass. This correction grants
+no cleanup or deletion authority and changes no historical cleanup evidence.
+The complete discovery run that includes `test_verify_integration` still has
+no green result: it reached the 304-second outer timeout without diagnostic
+output. Independent `scripts/verify.py` runs pass, so the timeout remains an
+unresolved test-runner duration surface rather than a code-stack failure or a
+green receipt.

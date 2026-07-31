@@ -658,6 +658,20 @@ def validate_reconciliation(
         "Three-lane decision boundary drifted",
     )
     cleanup = document.get("cleanupBoundary")
+    _require(
+        isinstance(cleanup, dict)
+        and set(cleanup)
+        == {
+            "temporaryPreviewScopeUnchanged",
+            "durableHostAndProcessFidelityAuditClassification",
+            "cleanupAuthorityGrantedByThisReconciliation",
+            "invalidCreatorCloseCalibrationRootsClassifiedAsCleanupDebt",
+            "invalidCreatorCloseCalibrationDeletionAuthorizedByThisReconciliation",
+            "cleanupInventoryMutationPerformedByThisReconciliation",
+            "currentCleanupExecution",
+        },
+        "Three-lane cleanup boundary keys drifted",
+    )
     cleanup_preview = json.loads(
         (root / CLEANUP_PATH).read_text(encoding="utf-8")
     )

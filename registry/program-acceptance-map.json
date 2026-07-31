@@ -222,7 +222,8 @@
         "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27",
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
-        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
+        "evidence.human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31"
       ]
     },
     {
@@ -272,6 +273,7 @@
         "evidence.context-handoff-receiver-delta-ledger-2026-07-27",
         "evidence.human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27",
         "evidence.human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31",
+        "evidence.human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31",
         "evidence.human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
@@ -2475,6 +2477,16 @@
       "kind": "source-bound-structured-organizational-decision-process-loss-zero-model-calibration-no-live-candidate-organization-participation-authority-or-standard-evidence",
       "asOf": "2026-07-31",
       "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31",
+      "path": "registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json",
+      "kind": "source-bound-parent-recomputed-engineering-management-forecast-outcome-team-autonomy-authority-and-process-loss-zero-model-calibration-no-live-candidate-team-outcome-or-standard-evidence",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.software-engineering-lifecycle-specialization",
         "acceptance.end-to-end-process-fidelity"
       ]
     },

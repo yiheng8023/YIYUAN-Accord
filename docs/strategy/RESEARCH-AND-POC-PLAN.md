@@ -1760,3 +1760,36 @@ human recovery is not affected-party participation, consultation, consent,
 consensus, acceptance, or decision-quality evidence. Independent fixture and
 oracle review precedes any separately authorized weak-Agent phase; no current
 evidence makes self-authored work or a hard standard eligible.
+
+## 2026-07-31 SE-MGMT-PRACTICE-01 zero-model checkpoint
+
+The engineering-management specialization now has a source-bound deterministic
+successor at
+[`HUMAN-AI-COLLABORATION-ENGINEERING-MANAGEMENT-ZERO-MODEL-CALIBRATION-2026-07-31.md`](HUMAN-AI-COLLABORATION-ENGINEERING-MANAGEMENT-ZERO-MODEL-CALIBRATION-2026-07-31.md).
+It reuses the organizational-decision evidence, affected-subject, option,
+reversibility, authority, monitoring, and cumulative-loss mechanisms, then
+adds the management-specific surfaces that reuse cannot prove: historical
+forecast/outcome calibration, non-coercive forecast ranges, quality and
+economic trade-offs, aggregate team measurement, anti-surveillance,
+professional-accountability non-transfer, and perception/outcome separation.
+
+The exact current route is native, the current OpenAI Data Analytics sequence,
+the pinned PM `stakeholder-map -> strategy-red-team` composition, the ordered
+official-plus-PM composition, and a team-led human control. `wayfinder` remains
+a useful tracker-backed long-horizon planning capability but is excluded from
+this treatment because it does not address forecast calibration, outcome
+measurement, surveillance, or management authority. No candidate was
+installed, projected, executed, or dispatched.
+
+One synthetic control plus seventeen single faults pass parent-recomputed
+calibration. Four frozen forecast/outcome records recompute to three interval
+hits and a doubled absolute midpoint-error sum of thirteen. All faults breach
+at the planning draft, remain visible at review, and recover only in a
+simulated terminal record without erasing cumulative loss.
+
+`SE-MGMT-PRACTICE-01` remains `planned-no-live-domain-evidence`. This is not
+team participation, forecast improvement, management quality, delivery value,
+fairness, competence, or organizational-causality evidence. Independent oracle
+review precedes any separately authorized weak-Agent phase, and longitudinal
+claims additionally require accountable real-team evidence. No self-authored
+Skill or hard-standard promotion is justified.

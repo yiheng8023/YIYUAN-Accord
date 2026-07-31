@@ -208,6 +208,9 @@ from validate_human_ai_collaboration_access_comms_capability_baseline import (
 from validate_human_ai_collaboration_org_decision_zero_model_protocol import (
     validate_protocol as validate_human_ai_collaboration_org_decision_zero_model_protocol,
 )
+from validate_human_ai_collaboration_engineering_management_zero_model_protocol import (
+    validate_protocol as validate_human_ai_collaboration_engineering_management_zero_model_protocol,
+)
 from validate_human_ai_collaboration_learning_fixed_fixture_protocol import (
     validate_protocol as validate_human_ai_collaboration_learning_fixed_fixture_protocol,
 )
@@ -537,6 +540,12 @@ REQUIRED_FILES = (
     "scripts/validate_human_ai_collaboration_org_decision_zero_model_protocol.py",
     "tests/fixtures/human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31.json",
     "tests/test_human_ai_collaboration_org_decision_zero_model_calibration.py",
+    "docs/strategy/HUMAN-AI-COLLABORATION-ENGINEERING-MANAGEMENT-ZERO-MODEL-CALIBRATION-2026-07-31.md",
+    "registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json",
+    "scripts/evaluate_human_ai_collaboration_engineering_management_zero_model_calibration.py",
+    "scripts/validate_human_ai_collaboration_engineering_management_zero_model_protocol.py",
+    "tests/fixtures/human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31.json",
+    "tests/test_human_ai_collaboration_engineering_management_zero_model_calibration.py",
     "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md",
     "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json",
     "scripts/evaluate_human_ai_collaboration_learning_protocol.py",
@@ -1936,6 +1945,12 @@ def verify() -> None:
     human_ai_collaboration_org_decision_zero_model_fixture_doc = load(
         "tests/fixtures/human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31.json"
     )
+    human_ai_collaboration_engineering_management_zero_model_protocol_doc = load(
+        "registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json"
+    )
+    human_ai_collaboration_engineering_management_zero_model_fixture_doc = load(
+        "tests/fixtures/human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31.json"
+    )
     human_ai_collaboration_unknown_knowns_creative_preference_packet_doc = load(
         "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json"
     )
@@ -2941,6 +2956,13 @@ def verify() -> None:
         human_ai_collaboration_org_decision_zero_model_protocol_doc,
         root=ROOT,
         fixture=human_ai_collaboration_org_decision_zero_model_fixture_doc,
+        program_map=program_acceptance_map_doc,
+        program_plan=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_engineering_management_zero_model_protocol(
+        human_ai_collaboration_engineering_management_zero_model_protocol_doc,
+        root=ROOT,
+        fixture=human_ai_collaboration_engineering_management_zero_model_fixture_doc,
         program_map=program_acceptance_map_doc,
         program_plan=curation_program_plan_doc,
     )
