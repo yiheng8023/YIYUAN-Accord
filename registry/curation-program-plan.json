@@ -472,6 +472,8 @@
       "currentTddExecutionReadinessReconciliation": "registry/human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27.json",
       "currentTddNoncomparativeDispatchSuccessorContractV2": "registry/human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27.json",
       "currentAccessCommsZeroModelProtocol": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+      "currentOrgDecisionZeroModelProtocol": "registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json",
+      "currentOrgDecisionZeroModelProtocolState": "structured-parent-recomputed-calibration-passed-no-live-candidate-organization-participation-or-authority-evidence",
       "currentProcessFidelityDispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
       "currentProcessFidelityDispatchLedgerContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27.json",
       "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",

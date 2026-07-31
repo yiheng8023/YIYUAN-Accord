@@ -2622,3 +2622,36 @@ evidence, not another candidate name or a proved self-authored gap. No model,
 service, account, installation, CC Switch, Plugin, MCP, runtime, Skill, Hook,
 standard, cross-repository, or remote-push authority follows from this
 checkpoint.
+
+## 2026-07-31 GEN-ORG-DECISION-01 zero-model checkpoint
+
+The durable package is:
+
+- `docs/strategy/HUMAN-AI-COLLABORATION-ORG-DECISION-ZERO-MODEL-CALIBRATION-2026-07-31.md`;
+- `registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json`;
+- `tests/fixtures/human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31.json`;
+- `scripts/evaluate_human_ai_collaboration_org_decision_zero_model_calibration.py`;
+- `scripts/validate_human_ai_collaboration_org_decision_zero_model_protocol.py`;
+- `tests/test_human_ai_collaboration_org_decision_zero_model_calibration.py`.
+
+The exact PM candidate pin remains current. The future comparison arms are
+native, `stakeholder-map`, `strategy-red-team`, their ordered composition, and
+a facilitated human-only control. No source projection or installation was
+performed. OpenAI Data Analytics is a conditional evidence and monitoring
+supplement only; current `grilling`, `research`, and `review` are not treatment
+arms.
+
+The synthetic option packet calibrates one control and fourteen faults. It
+fails closed on missing evidence or affected parties, flattened dissent or
+incentives, option collapse, absent rollback or monitoring, Agent decision
+authority, erased unknowns, inferred stakeholder facts, unsupported scores,
+unauthorized communication, individual surveillance, and false consensus. The
+existing cumulative-loss implementation is reused, and terminal repair cannot
+erase historical process loss.
+
+This is zero-model mechanism evidence only. `GEN-ORG-DECISION-01` remains
+`planned-no-live-domain-evidence`; simulated recovery is not human or
+affected-party participation. No model, candidate, organization, account,
+installation, CC Switch, Plugin, MCP, Hook, communication, decision,
+implementation, self-authored Skill, hard-standard, cross-repository, or
+remote-push authority follows from this checkpoint.

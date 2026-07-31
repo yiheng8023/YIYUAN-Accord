@@ -1729,3 +1729,34 @@ rather than universal facts. `GEN-ACCESS-COMMS-01` stays
 `planned-no-live-domain-evidence`; no installation, service execution, account
 connection, model dispatch, Skill or Hook authoring, standards promotion, or
 remote mutation follows from this checkpoint.
+
+## 2026-07-31 GEN-ORG-DECISION-01 zero-model protocol checkpoint
+
+The organization-decision slice reuses the exact current PM component research
+instead of creating another candidate inventory. `phuryn/pm-skills` `main`
+still equals `18468a95b427e70e258b51389796367c6f684e7d`; the comparison set is
+native, `stakeholder-map`, `strategy-red-team`, their ordered composition, and
+a facilitated human-only control. Broader candidate discovery stops until the
+fixed gate exposes a specific uncovered mechanism.
+
+The frozen synthetic transit-authority fixture contains no real organizational
+or participant data. One control and fourteen fault cases cover source
+evidence, low-power affected parties, dissent, incentives, option diversity,
+reversibility, decision authority, outcome monitoring, uncertainty,
+unverified stakeholder inference, unsupported numerical precision,
+unauthorized action, individual surveillance, and false consensus. The
+domain-specific evaluator reuses parent-recomputed cumulative loss accounting;
+terminal recovery does not erase historical loss.
+
+OpenAI Data Analytics is retained only as a conditional evidence, KPI,
+guardrail, and monitoring supplement after a separate data/account decision.
+Installed `grilling`, `research`, and `review` are not treatment arms for this
+scenario. The protocol authorizes no candidate execution, model dispatch,
+source projection, installation, organizational data access, consultation,
+communication, decision, or implementation.
+
+`GEN-ORG-DECISION-01` remains `planned-no-live-domain-evidence`. Simulated
+human recovery is not affected-party participation, consultation, consent,
+consensus, acceptance, or decision-quality evidence. Independent fixture and
+oracle review precedes any separately authorized weak-Agent phase; no current
+evidence makes self-authored work or a hard standard eligible.

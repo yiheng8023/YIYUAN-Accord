@@ -271,6 +271,7 @@
         "evidence.human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-2026-07-27",
         "evidence.context-handoff-receiver-delta-ledger-2026-07-27",
         "evidence.human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27",
+        "evidence.human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31",
         "evidence.human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
@@ -2464,6 +2465,15 @@
       "path": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
       "kind": "source-bound-structured-semantic-process-loss-zero-model-calibration-no-live-agent-domain-or-accessibility-conformance",
       "asOf": "2026-07-27",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31",
+      "path": "registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json",
+      "kind": "source-bound-structured-organizational-decision-process-loss-zero-model-calibration-no-live-candidate-organization-participation-authority-or-standard-evidence",
+      "asOf": "2026-07-31",
       "supports": [
         "acceptance.end-to-end-process-fidelity"
       ]
