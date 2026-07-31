@@ -92,6 +92,14 @@ acceptance; it seeks counterevidence without manufacturing disagreement.
 Broad claims require diverse contexts, impact and exclusion review, independent
 review, and accountable acceptance.
 
+Independent-review preparation is itself a bounded product capability. A
+review target should be frozen through exact immutable artifacts, given to a
+different execution identity and process, and returned with visible findings,
+disagreement, limitations, and identity evidence. Same-task rereading or
+invoking a review Skill is useful checking but is not independent review.
+Review remains separate from accountable acceptance, release authority,
+hard-standard promotion, broad-population validity, and Skill necessity.
+
 ## Product layers
 
 1. **Portable decision core** — intent, capability routing, event-driven

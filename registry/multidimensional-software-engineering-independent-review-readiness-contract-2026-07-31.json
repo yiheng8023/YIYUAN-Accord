@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "id": "multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31",
+  "asOf": "2026-07-31",
+  "status": "prepared-not-reviewed-no-acceptance-authority",
+  "purpose": "Freeze the exact evaluation contract, both bounded assessments, deterministic source snapshot, supporting validators, tests, and program projections into one reproducible review surface that a different accountable execution identity can inspect without treating same-task rereading as independent review.",
+  "targetRevision": "c634d83d84b269ab66a94eba1540d04133e308dd",
+  "targetPaths": [
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-SOURCE-SNAPSHOT-2026-07-31.md",
+    "registry/curation-program-plan.json",
+    "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
+    "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+    "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+    "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
+    "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
+    "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+    "registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json",
+    "registry/program-acceptance-map.json",
+    "scripts/build_multidimensional_software_engineering_source_snapshot.py",
+    "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
+    "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
+    "scripts/validate_multidimensional_software_engineering_source_snapshot.py",
+    "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
+    "tests/test_multidimensional_software_engineering_evaluation_contract.py",
+    "tests/test_multidimensional_software_engineering_evaluation_report.py",
+    "tests/test_multidimensional_software_engineering_source_snapshot.py"
+  ],
+  "subjectPackages": [
+    {
+      "id": "evaluation-contract-and-schema",
+      "paths": [
+        "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
+        "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+        "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "same-system-contract-package-assessment",
+      "paths": [
+        "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "non-self-referential-resource-observability-assessment",
+      "paths": [
+        "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "source-observation-and-deterministic-snapshot",
+      "paths": [
+        "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-SOURCE-SNAPSHOT-2026-07-31.md",
+        "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
+        "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+        "registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "deterministic-mechanism-and-program-projection",
+      "paths": [
+        "registry/curation-program-plan.json",
+        "registry/program-acceptance-map.json",
+        "scripts/build_multidimensional_software_engineering_source_snapshot.py",
+        "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
+        "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
+        "scripts/validate_multidimensional_software_engineering_source_snapshot.py",
+        "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
+        "tests/test_multidimensional_software_engineering_evaluation_contract.py",
+        "tests/test_multidimensional_software_engineering_evaluation_report.py",
+        "tests/test_multidimensional_software_engineering_source_snapshot.py"
+      ]
+    }
+  ],
+  "producerBoundary": {
+    "packetProducerIdentity": "current-task-packet-producer",
+    "packetProducerProcessId": "codex-current-task-2026-07-31",
+    "reportEvaluatorIdentities": [
+      "same-task Codex self-assessment with deterministic repository checks",
+      "same-system Codex assessment using immutable Git objects, retained repository evidence, and exact-archive checks"
+    ],
+    "identityEvidenceIsCryptographic": false,
+    "sameTaskRereadQualifiesAsIndependentReview": false,
+    "reviewSkillInvocationAloneQualifiesAsIndependentReview": false,
+    "distinctExecutionIdentityRequired": true,
+    "distinctProcessIdRequired": true,
+    "privateReasoningTransferAllowed": false,
+    "reviewerArtifactMutationAllowed": false
+  },
+  "reviewAxes": [
+    {
+      "id": "spec-and-repository-standards",
+      "question": "Do the frozen artifacts implement the stated product, research, and report contracts without scope creep or repository-rule violations?"
+    },
+    {
+      "id": "source-rights-and-bounded-use",
+      "question": "Are ISO and other source rights, retention, quotation, metadata-only, and permitted-use boundaries correctly classified and preserved?"
+    },
+    {
+      "id": "source-identity-evidence-strength-and-freshness",
+      "question": "Do identity, revision, archive, digest, freshness, reachability, and model-mediated observation claims stay within the evidence actually retained?"
+    },
+    {
+      "id": "conflict-ambiguity-and-counterevidence",
+      "question": "Are mutable, partially observed, disputed, conflicting, and portability findings visible without being silently resolved or cancelled?"
+    },
+    {
+      "id": "dimension-floor-and-profile-judgments",
+      "question": "Are dimensions, profile axes, evidence grades, assessment labels, candidate-floor results, and next evidence proportionate to each frozen target?"
+    },
+    {
+      "id": "plural-subject-and-anti-deference-boundary",
+      "question": "Does the package separate user preference and authorization from fact, general-population validity, affected-subject impact, dissent, and accountable acceptance?"
+    },
+    {
+      "id": "claim-authority-and-acceptance-boundary",
+      "question": "Do self-assessment, independent review, acceptance, hard-standard promotion, Skill necessity, release readiness, and broad validity remain separate?"
+    },
+    {
+      "id": "provenance-portability-and-line-ending-semantics",
+      "question": "Are Git-object bindings reproducible, and is the Windows-CRLF runtime-byte versus Git-LF durable-byte finding classified without hiding or overgeneralizing it?"
+    },
+    {
+      "id": "deterministic-reproduction-and-negative-controls",
+      "question": "Can the bound builders and validators be independently rerun, and do their negative controls reject material identity, rights, evidence, authority, and manifest drift?"
+    },
+    {
+      "id": "capability-reuse-and-residual-gap-boundary",
+      "question": "Does the package reuse native, official, reviewed external, and composed review capabilities without treating this packet, a review Skill, or current gaps as proof that a new Skill is necessary?"
+    }
+  ],
+  "receiptContract": {
+    "requiredTopLevelFields": [
+      "schema",
+      "id",
+      "packetId",
+      "packetManifestSha256",
+      "reviewStatus",
+      "reviewedAt",
+      "reviewer",
+      "independence",
+      "axisResults",
+      "findings",
+      "disagreements",
+      "correctionsRequired",
+      "overallOutcome",
+      "limitations",
+      "claimBoundary"
+    ],
+    "allowedReviewStatus": [
+      "performed"
+    ],
+    "allowedAxisOutcomes": [
+      "accept-bounded",
+      "accept-with-corrections",
+      "reject",
+      "insufficient-evidence"
+    ],
+    "allowedOverallOutcomes": [
+      "accept-bounded",
+      "accept-with-corrections",
+      "reject",
+      "insufficient-evidence"
+    ],
+    "allowedFindingSeverities": [
+      "informational",
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "allReviewAxesRequiredExactlyOnce": true,
+    "reviewerIdentityMustDifferFromAllProducerIdentities": true,
+    "reviewProcessMustDifferFromProducerProcess": true,
+    "priorInvolvementDisclosureRequired": true,
+    "identityEvidenceRequired": true,
+    "findingEvidenceReferencesRequired": true,
+    "highAndCriticalFindingDispositionRequired": true,
+    "disagreementsMustRemainVisible": true,
+    "acceptanceAuthorityMayBeExercisedByReceipt": false,
+    "hardStandardMayBePromotedByReceipt": false,
+    "skillNecessityMayBeProvedByReceipt": false
+  },
+  "packetState": {
+    "reviewPerformed": false,
+    "reviewReceiptPath": null,
+    "acceptanceDecisionRequested": false,
+    "modelDispatchPerformed": false,
+    "externalWritePerformed": false
+  },
+  "claimBoundary": {
+    "provesTargetArtifactsFrozen": true,
+    "provesManifestRebuildableFromGit": true,
+    "provesIndependentReviewPerformed": false,
+    "provesReviewerIdentityBeyondFutureReceiptEvidence": false,
+    "provesSourceInterpretationCorrect": false,
+    "provesAssessmentJudgmentsCorrect": false,
+    "provesBroadPopulationValidity": false,
+    "provesHardStandardEligibility": false,
+    "provesEvaluationSkillNecessary": false,
+    "authorizesAcceptanceOrRelease": false
+  },
+  "authorityBoundary": {
+    "modelDispatchAuthorized": false,
+    "newThreadOrSubagentAuthorized": false,
+    "externalCapabilityMutationAuthorized": false,
+    "ccSwitchOrGlobalConfigMutationAuthorized": false,
+    "reviewerMutationOfTargetArtifactsAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "acceptanceAuthorized": false,
+    "releaseOrDeploymentAuthorized": false
+  }
+}

@@ -205,6 +205,9 @@ from validate_multidimensional_software_engineering_evaluation_report import (
 from validate_multidimensional_software_engineering_source_snapshot import (
     validate_snapshot as validate_multidimensional_software_engineering_source_snapshot,
 )
+from validate_multidimensional_software_engineering_independent_review_packet import (
+    validate_packet_integrity as validate_multidimensional_software_engineering_independent_review_packet,
+)
 from validate_codex_desktop_resource_observability_preflight import (
     validate_preflight as validate_codex_desktop_resource_observability_preflight,
 )
@@ -515,6 +518,12 @@ REQUIRED_FILES = (
     "scripts/build_multidimensional_software_engineering_source_snapshot.py",
     "scripts/validate_multidimensional_software_engineering_source_snapshot.py",
     "tests/test_multidimensional_software_engineering_source_snapshot.py",
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-INDEPENDENT-REVIEW-READINESS-2026-07-31.md",
+    "registry/multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31.json",
+    "registry/multidimensional-software-engineering-independent-review-packet-2026-07-31.json",
+    "scripts/build_multidimensional_software_engineering_independent_review_packet.py",
+    "scripts/validate_multidimensional_software_engineering_independent_review_packet.py",
+    "tests/test_multidimensional_software_engineering_independent_review_packet.py",
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
     "scripts/validate_codex_desktop_resource_observability_preflight.py",
     "tests/test_codex_desktop_resource_observability_preflight.py",
@@ -2824,6 +2833,7 @@ def verify() -> None:
     )
     validate_multidimensional_software_engineering_evaluation_report()
     validate_multidimensional_software_engineering_source_snapshot()
+    validate_multidimensional_software_engineering_independent_review_packet()
     validate_codex_desktop_resource_observability_preflight(
         codex_desktop_resource_observability_preflight_doc,
         root=ROOT,

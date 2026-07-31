@@ -2380,3 +2380,61 @@ profile calibration follows that review. No automatic refresh, content
 vendoring, license override, Skill, Hook, MCP, Plugin, App, model, CC Switch,
 global configuration, hard-standard, CALIBRATION, ASSETS, release, or
 deployment mutation is authorized by this checkpoint.
+
+## 2026-07-31 multidimensional engineering independent-review readiness checkpoint
+
+The next review gate is prepared but has not been performed. The durable
+package is:
+
+- `docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-INDEPENDENT-REVIEW-READINESS-2026-07-31.md`;
+- `registry/multidimensional-software-engineering-independent-review-readiness-contract-2026-07-31.json`;
+- `registry/multidimensional-software-engineering-independent-review-packet-2026-07-31.json`;
+- `scripts/build_multidimensional_software_engineering_independent_review_packet.py`;
+- `scripts/validate_multidimensional_software_engineering_independent_review_packet.py`;
+- `tests/test_multidimensional_software_engineering_independent_review_packet.py`.
+
+The packet binds nineteen exact Git blobs at
+`c634d83d84b269ab66a94eba1540d04133e308dd`, including the contract, both
+bounded reports, source observation and snapshot, deterministic mechanisms,
+tests, and then-current program projections. It records each Git object id and
+SHA-256 content digest plus a canonical manifest digest. Reconstruction needs
+the repository Git objects but no network or model.
+
+The standalone packet validator rederives all nineteen bindings from Git.
+Repository-wide verification uses a separate retained-integrity entry point so
+an exact Git archive without historical objects can still validate the
+contract, packet digest, embedded manifest, and program projections. That
+archive-only path does not claim historical Git-object rederivation.
+
+A pre-push exact Git archive passed the source-snapshot builder and validator
+and the new packet retained-integrity check. Full `scripts/verify.py` stopped
+only at the inherited process-fidelity `RAW-REPORT.json` hash boundary: the
+Windows-CRLF working-tree digest remains
+`6c40c51606cc6ed2330b3d725d9a81d0beea351a8420bbbefb4a93f8c7273c88`
+and the Git-LF archive digest remains
+`821861719e20fa601caf861781bdb32d005d5266fa3ab76e03024c37144453fd`.
+This is the already-recorded portability counterevidence, not a new packet
+failure. The exact archive root and tar were deleted after inspection.
+
+The future receipt requires a reviewer identity and process distinct from the
+packet producer and both report evaluators, prior-involvement disclosure,
+identity evidence, no private-reasoning transfer, and no reviewer mutation of
+the target. Ten non-cancelling axes cover standards/specification, rights,
+evidence strength and freshness, conflicts, dimension/floor judgments,
+plural-subject boundaries, claim and authority separation, CRLF/LF
+portability, deterministic negative controls, and capability reuse. The
+repository can validate the declaration shape but cannot cryptographically
+prove an identity that the host does not attest.
+
+The current task did not create a review receipt, dispatch a model, create a
+task or subagent, or exercise acceptance authority. Same-task rereading and
+review-Skill invocation are explicitly insufficient for independence. The
+acceptance inventory remains 61 and
+`acceptance.standard-candidate-contract` remains `partial`. Readiness does not
+promote a hard floor, prove a new Skill necessary, or authorize release.
+
+The next gate is a separately accountable reviewer using the immutable packet.
+Broader profile calibration follows the returned and validated review receipt.
+No external capability, CC Switch, Skill, Hook, MCP, Plugin, App, global
+configuration, weak-model, CALIBRATION, ASSETS, acceptance, release, or
+deployment mutation is authorized by this checkpoint.

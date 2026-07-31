@@ -606,7 +606,8 @@
       "evidenceIds": [
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
-        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
+        "evidence.multidimensional-software-engineering-independent-review-readiness-2026-07-31"
       ]
     },
     {
@@ -2554,6 +2555,15 @@
         "acceptance.ai-independent-hard-standard-boundary",
         "acceptance.standard-candidate-contract",
         "acceptance.adaptive-harness-proportionality"
+      ]
+    },
+    {
+      "id": "evidence.multidimensional-software-engineering-independent-review-readiness-2026-07-31",
+      "path": "registry/multidimensional-software-engineering-independent-review-packet-2026-07-31.json",
+      "kind": "immutable-git-object-bound-independent-review-preparation-distinct-identity-required-no-review-or-acceptance-claim",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.standard-candidate-contract"
       ]
     }
   ]
