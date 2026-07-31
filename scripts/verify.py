@@ -196,6 +196,12 @@ from validate_agent_resource_pressure_attribution_protocol import (
 from validate_ai_era_classical_software_engineering_principles_revalidation import (
     validate_contract as validate_ai_era_classical_software_engineering_principles_revalidation,
 )
+from validate_multidimensional_software_engineering_evaluation_contract import (
+    validate_contract as validate_multidimensional_software_engineering_evaluation_contract,
+)
+from validate_multidimensional_software_engineering_evaluation_report import (
+    validate_report as validate_multidimensional_software_engineering_evaluation_report,
+)
 from validate_codex_desktop_resource_observability_preflight import (
     validate_preflight as validate_codex_desktop_resource_observability_preflight,
 )
@@ -489,6 +495,14 @@ REQUIRED_FILES = (
     "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
     "scripts/validate_ai_era_classical_software_engineering_principles_revalidation.py",
     "tests/test_ai_era_classical_software_engineering_principles_revalidation.py",
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
+    "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+    "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
+    "tests/test_multidimensional_software_engineering_evaluation_contract.py",
+    "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
+    "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
+    "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
+    "tests/test_multidimensional_software_engineering_evaluation_report.py",
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
     "scripts/validate_codex_desktop_resource_observability_preflight.py",
     "tests/test_codex_desktop_resource_observability_preflight.py",
@@ -1832,6 +1846,9 @@ def verify() -> None:
     ai_era_classical_software_engineering_principles_revalidation_doc = load(
         "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json"
     )
+    multidimensional_software_engineering_evaluation_contract_doc = load(
+        "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json"
+    )
     codex_desktop_resource_observability_preflight_doc = load(
         "registry/codex-desktop-resource-observability-preflight-2026-07-31.json"
     )
@@ -2787,6 +2804,13 @@ def verify() -> None:
         program_map=program_acceptance_map_doc,
         program_plan=curation_program_plan_doc,
     )
+    validate_multidimensional_software_engineering_evaluation_contract(
+        multidimensional_software_engineering_evaluation_contract_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+        program_plan=curation_program_plan_doc,
+    )
+    validate_multidimensional_software_engineering_evaluation_report()
     validate_codex_desktop_resource_observability_preflight(
         codex_desktop_resource_observability_preflight_doc,
         root=ROOT,

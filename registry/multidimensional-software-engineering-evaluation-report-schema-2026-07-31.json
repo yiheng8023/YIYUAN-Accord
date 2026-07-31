@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yiyuan.example/schemas/multidimensional-software-engineering-evaluation-report-2026-07-31.json",
+  "title": "Multidimensional software-engineering evaluation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "targetIdentity",
+    "evaluationContext",
+    "profileAxes",
+    "applicableDimensions",
+    "applicableCandidateFloors",
+    "evidence",
+    "dimensionResults",
+    "floorResults",
+    "unknownsAndLimitations",
+    "counterevidenceAndDisagreements",
+    "humanOrDomainDecisions",
+    "nextEvidenceAndFallback",
+    "revalidationAndRetirementTriggers",
+    "independentReview",
+    "acceptanceAuthority",
+    "statusClaim",
+    "claimBoundary"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "targetIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "locator", "revision", "asOf"],
+      "properties": {
+        "type": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "asOf": {"type": "string", "format": "date"}
+      }
+    },
+    "evaluationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "domain", "evaluator", "method", "claimScope"],
+      "properties": {
+        "purpose": {"type": "string", "minLength": 1},
+        "domain": {"type": "string", "minLength": 1},
+        "evaluator": {"type": "string", "minLength": 1},
+        "method": {"type": "string", "minLength": 1},
+        "claimScope": {"type": "string", "minLength": 1}
+      }
+    },
+    "profileAxes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycleStage",
+        "criticality",
+        "exposure",
+        "reversibility",
+        "dataSensitivity",
+        "aiInvolvement"
+      ],
+      "properties": {
+        "lifecycleStage": {
+          "enum": [
+            "exploration",
+            "design",
+            "implementation",
+            "pre-merge",
+            "pre-release",
+            "operation",
+            "incident",
+            "migration",
+            "deprecation",
+            "retirement"
+          ]
+        },
+        "criticality": {"enum": ["low", "medium", "high", "critical"]},
+        "exposure": {"enum": ["local", "internal", "partner", "public", "regulated"]},
+        "reversibility": {"enum": ["easy", "bounded", "costly", "irreversible"]},
+        "dataSensitivity": {
+          "enum": ["public", "internal", "confidential", "restricted", "unknown"]
+        },
+        "aiInvolvement": {"enum": ["none", "advisory", "generative", "agentic", "opaque"]}
+      }
+    },
+    "applicableDimensions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/dimensionId"}
+    },
+    "applicableCandidateFloors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/floorId"}
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source",
+          "asOf",
+          "scope",
+          "grade",
+          "independence",
+          "limitations"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
+          "asOf": {"type": "string", "format": "date"},
+          "scope": {"type": "string", "minLength": 1},
+          "grade": {"$ref": "#/$defs/evidenceGrade"},
+          "independence": {"enum": ["self", "tool", "independent-human", "mixed"]},
+          "limitations": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "dimensionResults": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "dimensionId",
+          "assessment",
+          "confidence",
+          "evidenceIds",
+          "unknowns",
+          "limitations"
+        ],
+        "properties": {
+          "dimensionId": {"$ref": "#/$defs/dimensionId"},
+          "assessment": {"$ref": "#/$defs/dimensionAssessment"},
+          "confidence": {"enum": ["low", "medium", "high"]},
+          "evidenceIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "unknowns": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "limitations": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "floorResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["floorId", "result", "evidenceIds", "owner", "disposition"],
+        "properties": {
+          "floorId": {"$ref": "#/$defs/floorId"},
+          "result": {"enum": ["not-applicable", "unassessed", "pass", "blocked"]},
+          "evidenceIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "owner": {"type": "string", "minLength": 1},
+          "disposition": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "unknownsAndLimitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "counterevidenceAndDisagreements": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "humanOrDomainDecisions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "nextEvidenceAndFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nextEvidence", "fallback"],
+      "properties": {
+        "nextEvidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "fallback": {"type": "string", "minLength": 1}
+      }
+    },
+    "revalidationAndRetirementTriggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "independentReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewer", "scope"],
+      "properties": {
+        "status": {"enum": ["not-performed", "performed"]},
+        "reviewer": {"type": "string"},
+        "scope": {"type": "string", "minLength": 1}
+      }
+    },
+    "acceptanceAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "owner", "scope"],
+      "properties": {
+        "status": {"enum": ["not-sought", "withheld", "accepted"]},
+        "owner": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1}
+      }
+    },
+    "statusClaim": {
+      "enum": ["research-only", "partial", "needs-verification", "blocked", "accepted"]
+    },
+    "claimBoundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "dimensionId": {
+      "enum": [
+        "goal-value-and-requirement-fitness",
+        "intent-and-acceptance-fidelity",
+        "architecture-and-design-integrity",
+        "implementation-and-code-quality",
+        "verification-security-privacy-and-safety",
+        "supply-chain-and-provenance",
+        "delivery-change-and-rollback",
+        "reliability-operability-and-observability",
+        "maintainability-evolution-and-retirement",
+        "collaboration-knowledge-and-accountability",
+        "ai-process-loss-and-human-control",
+        "efficiency-resource-stewardship-and-sustainability"
+      ]
+    },
+    "floorId": {
+      "enum": [
+        "evidence-truth-and-provenance",
+        "authority-and-data-boundary",
+        "critical-risk-release-block",
+        "rollback-recovery-and-accountability",
+        "third-party-release-provenance",
+        "completion-acceptance-and-readiness-integrity"
+      ]
+    },
+    "evidenceGrade": {
+      "enum": [
+        "claim-only",
+        "source-bound",
+        "deterministic",
+        "observed-live",
+        "repeated-comparative",
+        "longitudinal-or-cross-context"
+      ]
+    },
+    "dimensionAssessment": {
+      "enum": [
+        "not-applicable",
+        "unassessed",
+        "insufficient-evidence",
+        "blocked",
+        "concerning",
+        "adequate",
+        "strong"
+      ]
+    }
+  }
+}

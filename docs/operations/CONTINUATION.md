@@ -2203,3 +2203,39 @@ When the paused goal is resumed, append this exact decision constraint:
 This checkpoint authorizes no capability installation, CC Switch, Skill, Hook,
 model, runtime, cross-repository, CALIBRATION, ASSETS, commit, push, or release
 mutation.
+
+## 2026-07-31 multidimensional software-engineering evaluation checkpoint
+
+The repository now has a carrier-neutral evaluation contract that is broader
+than the AI-era classical-principle revalidation lens:
+
+- `docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md`;
+- `registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json`;
+- `scripts/validate_multidimensional_software_engineering_evaluation_contract.py`.
+
+The contract composes current official lifecycle, product-quality,
+quality-in-use, evaluation-process, security, supply-chain, delivery,
+developer-productivity, and AI-risk sources. It defines twelve dimensions,
+six adaptive profile axes, evidence grades, uncertainty, six candidate
+hard-floor hypotheses, and a report contract. One scalar total score,
+cross-dimension cancellation, treating unknown as zero, and hiding a blocked
+floor are prohibited.
+
+The architecture keeps the evaluation ontology, candidate hard floors,
+deterministic validators, adaptive profiles, optional orchestration, and
+accountable acceptance separate. Existing native, official, repository, and
+reviewed Skill capabilities cover subproblems only. A new evaluation Skill is
+not currently justified. The deterministic report schema, positive fixture,
+and cross-field validator now pass without a model:
+
+- `registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json`;
+- `tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json`;
+- `scripts/validate_multidimensional_software_engineering_evaluation_report.py`.
+
+The next bounded implementation is one schema-conformant evaluation of a named
+repository target without claiming project-wide quality.
+
+The package reuses five existing acceptance carriers, keeps the inventory at
+61, changes no assessment, and promotes no hard standard. No CC Switch, Skill,
+Hook, model, external capability, cross-repository, CALIBRATION, ASSETS,
+commit, push, release, or deployment mutation follows from this checkpoint.

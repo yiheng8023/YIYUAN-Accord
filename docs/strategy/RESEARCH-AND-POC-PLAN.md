@@ -33,6 +33,24 @@ software-lifecycle, AI-independent hard-standard, standard-candidate, and
 adaptive-proportionality acceptance carriers; it creates no new acceptance
 item and authorizes no hard-standard, Skill, Hook, model, or runtime action.
 
+Multidimensional software-engineering evaluation:
+[`MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md`](MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md).
+This carrier-neutral contract composes current lifecycle, product-quality,
+quality-in-use, evaluation-process, secure-development, supply-chain,
+delivery-performance, developer-productivity, and AI-risk sources. It defines
+twelve dimensions, six context axes, evidence grades, uncertainty, candidate
+hard-floor hypotheses, and an anti-gaming rule that forbids one scalar score
+from cancelling a blocked floor or hiding an unassessed dimension.
+
+The ontology, candidate floors, deterministic validators, adaptive profiles,
+optional Agent or Skill orchestration, and accountable acceptance remain
+separate. The current implementation is the contract and validator only; the
+deterministic report schema and positive fixture now pass zero-model
+cross-field checks. The next bounded implementation is one schema-conformant
+evaluation of a named repository target without a project-wide rating. No
+complete evaluation capability, new Skill necessity, hard-standard promotion,
+cross-domain threshold, or lifecycle completion is claimed.
+
 After the additive cumulative-loss accounting mechanism passed, the
 source-backed lifecycle protocol and zero-model calibration also passed their
 mechanism gate. The capture persists seven stage envelopes, eight G0–G7

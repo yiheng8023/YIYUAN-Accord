@@ -770,3 +770,25 @@ This calibration reuses
 61. It does not restore rigid legacy process, promote a hard standard, create a
 Skill or Hook, justify self-authored work, mutate CC Switch, dispatch a model,
 or authorize a cross-repository write.
+
+## Multidimensional software-engineering evaluation — 2026-07-31
+
+The program now carries a
+[carrier-neutral multidimensional evaluation contract](strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md).
+It composes bounded lifecycle, product-quality, quality-in-use,
+evaluation-process, security, supply-chain, delivery, developer-productivity,
+and AI-risk sources without treating any one framework as complete.
+
+The contract defines twelve evaluation dimensions, six adaptive profile axes,
+six evidence grades, explicit uncertainty, candidate hard-floor hypotheses,
+and a report shape that prohibits one scalar score from hiding blocked or
+unassessed results. Evaluation ontology, deterministic validators, adaptive
+profiles, optional orchestration, and accountable acceptance remain separate.
+
+This record reuses five existing acceptance carriers and leaves all assessment
+states unchanged. It neither creates a Skill nor admits a hard standard. The
+deterministic report schema and bounded positive fixture now preserve exact
+dimension/floor sets, evidence references, unknowns, independent review,
+acceptance authority, and accepted-status guards. The next bounded
+implementation is one named repository-target evaluation, not a project-wide
+score.

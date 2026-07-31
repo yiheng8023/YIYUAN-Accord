@@ -49,6 +49,24 @@ authority, or maintenance boundaries. This is a horizontal evaluation lens;
 it does not promote a hard standard, prescribe one universal process, or
 reorder current candidate and residual-gap work.
 
+## Multidimensional engineering evaluation
+
+Software-engineering evaluation is a carrier-neutral contract rather than one
+Skill, checklist, maturity score, or model judgment. It separates the
+evaluation ontology, candidate hard floors, deterministic validators,
+context-derived profiles, optional orchestration, and accountable acceptance.
+The current reference contract covers goal value, intent fidelity,
+architecture, implementation, verification and safety, supply chain,
+delivery and rollback, operations, maintenance, collaboration, AI process
+loss and human control, and resource sustainability.
+
+No single total score may hide an applicable blocked floor, unassessed
+dimension, weak evidence, or material uncertainty. Profiles vary by lifecycle
+stage, criticality, exposure, reversibility, data sensitivity, and AI
+involvement. A later evaluation Skill may collect and explain evidence only
+after a repeated orchestration gap is proved; it cannot own truth, waive
+standards, or mark acceptance.
+
 ## Product layers
 
 1. **Portable decision core** — intent, capability routing, event-driven

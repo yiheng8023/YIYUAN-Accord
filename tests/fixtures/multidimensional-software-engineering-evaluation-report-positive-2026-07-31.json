@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "targetIdentity": {
+    "type": "repository-contract",
+    "locator": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+    "revision": "working-tree-bounded-fixture",
+    "asOf": "2026-07-31"
+  },
+  "evaluationContext": {
+    "purpose": "Calibrate the report schema without rating the whole repository.",
+    "domain": "software-engineering-evaluation-contract",
+    "evaluator": "deterministic parent validator",
+    "method": "zero-model schema and cross-field validation",
+    "claimScope": "Only the report shape and anti-gaming invariants."
+  },
+  "profileAxes": {
+    "lifecycleStage": "exploration",
+    "criticality": "low",
+    "exposure": "local",
+    "reversibility": "easy",
+    "dataSensitivity": "public",
+    "aiInvolvement": "none"
+  },
+  "applicableDimensions": [
+    "intent-and-acceptance-fidelity",
+    "ai-process-loss-and-human-control"
+  ],
+  "applicableCandidateFloors": [
+    "evidence-truth-and-provenance",
+    "completion-acceptance-and-readiness-integrity"
+  ],
+  "evidence": [
+    {
+      "id": "evidence.contract-validator",
+      "source": "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
+      "asOf": "2026-07-31",
+      "scope": "Checked-in contract structure and acceptance mapping only.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "No live Agent, host, cross-domain, or longitudinal behavior is evaluated."
+      ]
+    }
+  ],
+  "dimensionResults": [
+    {
+      "dimensionId": "intent-and-acceptance-fidelity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.contract-validator"],
+      "unknowns": ["Cross-host report production remains untested."],
+      "limitations": ["The fixture proves schema mechanics, not lifecycle value."]
+    },
+    {
+      "dimensionId": "ai-process-loss-and-human-control",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": ["evidence.contract-validator"],
+      "unknowns": ["No Agent process is present in this calibration."],
+      "limitations": ["A zero-model fixture cannot establish AI process behavior."]
+    }
+  ],
+  "floorResults": [
+    {
+      "floorId": "evidence-truth-and-provenance",
+      "result": "pass",
+      "evidenceIds": ["evidence.contract-validator"],
+      "owner": "agent-autonomy-harness",
+      "disposition": "The bounded schema claim is source-linked."
+    },
+    {
+      "floorId": "completion-acceptance-and-readiness-integrity",
+      "result": "pass",
+      "evidenceIds": ["evidence.contract-validator"],
+      "owner": "agent-autonomy-harness",
+      "disposition": "The fixture claims only schema calibration."
+    }
+  ],
+  "unknownsAndLimitations": [
+    "The fixture does not evaluate the repository, a product, or a live Agent."
+  ],
+  "counterevidenceAndDisagreements": [],
+  "humanOrDomainDecisions": [],
+  "nextEvidenceAndFallback": {
+    "nextEvidence": [
+      "Apply the schema to one bounded repository target without claiming project-wide quality."
+    ],
+    "fallback": "Retain the contract and report schema as research-only if a valid bounded target is not available."
+  },
+  "revalidationAndRetirementTriggers": [
+    "Revalidate when dimensions, evidence grades, floor candidates, or acceptance authority change."
+  ],
+  "independentReview": {
+    "status": "not-performed",
+    "reviewer": "",
+    "scope": "No independent review is claimed."
+  },
+  "acceptanceAuthority": {
+    "status": "not-sought",
+    "owner": "repository owner",
+    "scope": "No acceptance or hard-standard authority is requested."
+  },
+  "statusClaim": "needs-verification",
+  "claimBoundary": "The report schema and deterministic cross-field rules are calibrated; software-engineering quality and lifecycle value remain unassessed."
+}

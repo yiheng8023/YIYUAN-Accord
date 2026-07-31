@@ -1,0 +1,358 @@
+{
+  "schema": 1,
+  "id": "multidimensional-software-engineering-evaluation-contract-2026-07-31",
+  "asOf": "2026-07-31",
+  "status": "carrier-neutral-bounded-evaluation-contract-no-hard-standard-or-skill-promotion",
+  "purpose": "Define a multidimensional, evidence-graded, context-adaptive software-engineering evaluation contract without collapsing quality into code, delivery speed, one maturity model, one Agent, or one scalar score.",
+  "architectureLayers": [
+    {
+      "id": "evaluation-ontology-and-contract",
+      "role": "Own dimensions, context, evidence, uncertainty, output shape, and anti-gaming rules.",
+      "mayOwnAcceptanceAuthority": false
+    },
+    {
+      "id": "candidate-hard-floors",
+      "role": "Express independently testable floor hypotheses without promoting them into admitted standards.",
+      "mayOwnAcceptanceAuthority": false
+    },
+    {
+      "id": "deterministic-validators",
+      "role": "Produce test, static, provenance, policy, and observed receipts.",
+      "mayOwnAcceptanceAuthority": false
+    },
+    {
+      "id": "adaptive-profiles",
+      "role": "Derive proportional evidence expectations from risk, stage, domain, and reversibility.",
+      "mayOwnAcceptanceAuthority": false
+    },
+    {
+      "id": "optional-orchestration",
+      "role": "Select a profile, collect evidence, call existing validators, and explain results without owning truth or waiving floors.",
+      "mayOwnAcceptanceAuthority": false
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "goal-value-and-requirement-fitness",
+      "question": "Does the system solve the intended problem for the affected subjects under explicit requirements and context?",
+      "sourceAnchors": ["iso-12207-2026", "iso-25019-2023"]
+    },
+    {
+      "id": "intent-and-acceptance-fidelity",
+      "question": "Do intent, constraints, uncertainty, acceptance, and authority survive lifecycle transformations?",
+      "sourceAnchors": ["iso-12207-2026", "nist-ai-rmf-1.0"]
+    },
+    {
+      "id": "architecture-and-design-integrity",
+      "question": "Are boundaries, dependencies, quality attributes, trade-offs, and change paths coherent and evidenced?",
+      "sourceAnchors": ["iso-12207-2026", "iso-25010-2023"]
+    },
+    {
+      "id": "implementation-and-code-quality",
+      "question": "Does implementation preserve design intent and avoid defect, complexity, and change-risk concentrations?",
+      "sourceAnchors": ["iso-25010-2023", "iso-5055-2021"]
+    },
+    {
+      "id": "verification-security-privacy-and-safety",
+      "question": "Are applicable correctness, security, privacy, safety, and compliance claims independently verifiable?",
+      "sourceAnchors": ["iso-25040-2024", "nist-ssdf-1.1", "owasp-samm-v2"]
+    },
+    {
+      "id": "supply-chain-and-provenance",
+      "question": "Can source, dependencies, builds, artifacts, licenses, and attestations be traced and verified?",
+      "sourceAnchors": ["nist-ssdf-1.1", "slsa-1.2"]
+    },
+    {
+      "id": "delivery-change-and-rollback",
+      "question": "Can changes be delivered, observed, recovered, and rolled back with bounded impact?",
+      "sourceAnchors": ["iso-12207-2026", "dora-current-five-metrics"]
+    },
+    {
+      "id": "reliability-operability-and-observability",
+      "question": "Can operators detect, attribute, respond to, and learn from operational behavior and failure?",
+      "sourceAnchors": ["iso-25010-2023", "owasp-samm-v2", "dora-current-five-metrics"]
+    },
+    {
+      "id": "maintainability-evolution-and-retirement",
+      "question": "Can the system be understood, changed, migrated, deprecated, and retired without uncontrolled debt?",
+      "sourceAnchors": ["iso-12207-2026", "iso-25010-2023"]
+    },
+    {
+      "id": "collaboration-knowledge-and-accountability",
+      "question": "Are ownership, decisions, provenance, review independence, and durable knowledge explicit?",
+      "sourceAnchors": ["iso-12207-2026", "space-developer-productivity", "nist-ai-rmf-1.0"]
+    },
+    {
+      "id": "ai-process-loss-and-human-control",
+      "question": "Are AI involvement, authority, uncertainty, process loss, oversight, and consequential human decisions visible?",
+      "sourceAnchors": ["nist-ai-rmf-1.0", "nist-ai-600-1"]
+    },
+    {
+      "id": "efficiency-resource-stewardship-and-sustainability",
+      "question": "Does the system use time, attention, compute, dependencies, and operational resources without hiding quality or human cost?",
+      "sourceAnchors": ["dora-current-five-metrics", "space-developer-productivity"]
+    }
+  ],
+  "evidenceModel": {
+    "grades": [
+      "claim-only",
+      "source-bound",
+      "deterministic",
+      "observed-live",
+      "repeated-comparative",
+      "longitudinal-or-cross-context"
+    ],
+    "confidenceLevels": ["low", "medium", "high"],
+    "rules": [
+      "evidence grade does not broaden target, host, domain, time, or causal scope",
+      "deterministic evidence is not live operational evidence",
+      "one live observation is not repeated causal comparison",
+      "absence of a detected defect is not positive evidence",
+      "freshness, independence, limitations, and unknowns are mandatory"
+    ]
+  },
+  "assessmentModel": {
+    "allowedDimensionAssessments": [
+      "not-applicable",
+      "unassessed",
+      "insufficient-evidence",
+      "blocked",
+      "concerning",
+      "adequate",
+      "strong"
+    ],
+    "scalarTotalScoreAllowed": false,
+    "crossDimensionCancellationAllowed": false,
+    "unknownCountsAsZero": false,
+    "blockedFloorMayBeHiddenByPresentation": false
+  },
+  "profileAxes": {
+    "lifecycleStage": [
+      "exploration",
+      "design",
+      "implementation",
+      "pre-merge",
+      "pre-release",
+      "operation",
+      "incident",
+      "migration",
+      "deprecation",
+      "retirement"
+    ],
+    "criticality": ["low", "medium", "high", "critical"],
+    "exposure": ["local", "internal", "partner", "public", "regulated"],
+    "reversibility": ["easy", "bounded", "costly", "irreversible"],
+    "dataSensitivity": ["public", "internal", "confidential", "restricted", "unknown"],
+    "aiInvolvement": ["none", "advisory", "generative", "agentic", "opaque"]
+  },
+  "candidateHardFloorBoundary": {
+    "admittedHardStandardsCreated": false,
+    "candidateFloors": [
+      {
+        "id": "evidence-truth-and-provenance",
+        "applicability": "all consequential claims",
+        "obligation": "Do not fabricate, silently broaden, or detach evidence from its source, identity, freshness, and scope."
+      },
+      {
+        "id": "authority-and-data-boundary",
+        "applicability": "all actions or claims crossing permission, ownership, account, data, trust, cost, or destructive boundaries",
+        "obligation": "Bind accountable authority and do not treat capability as permission."
+      },
+      {
+        "id": "critical-risk-release-block",
+        "applicability": "release or operation with an unresolved applicable critical security, privacy, safety, legal, or compliance risk",
+        "obligation": "Block the affected readiness claim until resolution, explicit accountable disposition, or safe fallback is evidenced."
+      },
+      {
+        "id": "rollback-recovery-and-accountability",
+        "applicability": "consequential, costly, destructive, or hard-to-reverse change",
+        "obligation": "Bind an owner, bounded impact, recovery or rollback path, and verification surface."
+      },
+      {
+        "id": "third-party-release-provenance",
+        "applicability": "third-party source, dependency, build, or artifact entering a release or trusted execution path",
+        "obligation": "Bind source, revision, license, dependency closure, integrity, and applicable supply-chain evidence."
+      },
+      {
+        "id": "completion-acceptance-and-readiness-integrity",
+        "applicability": "completion, acceptance, release-readiness, production-readiness, or equivalent status claim",
+        "obligation": "Keep scope, verification, acceptance authority, residual risk, and unknowns explicit."
+      }
+    ],
+    "promotionRequirements": [
+      "AI-independent obligation and proof",
+      "accountable authority owner",
+      "repeated evidence with counterexamples",
+      "deterministic or domain verification",
+      "versioning, migration, fallback, revalidation, and retirement",
+      "governed CALIBRATION handoff and final ASSETS admission"
+    ]
+  },
+  "reportContract": {
+    "requiredFields": [
+      "targetIdentity",
+      "evaluationContext",
+      "profileAxes",
+      "applicableDimensions",
+      "applicableCandidateFloors",
+      "evidence",
+      "dimensionResults",
+      "floorResults",
+      "unknownsAndLimitations",
+      "counterevidenceAndDisagreements",
+      "humanOrDomainDecisions",
+      "nextEvidenceAndFallback",
+      "revalidationAndRetirementTriggers",
+      "claimBoundary"
+    ],
+    "independentReviewRecordedSeparately": true,
+    "acceptanceAuthorityRecordedSeparately": true
+  },
+  "primarySources": [
+    {
+      "id": "iso-12207-2026",
+      "owner": "ISO IEC IEEE",
+      "locator": "https://www.iso.org/standard/90219.html",
+      "status": "published",
+      "boundedUse": "Full software lifecycle process coverage without prescribing one lifecycle model.",
+      "limitation": "Does not supply one universal quality threshold or engineering judgment."
+    },
+    {
+      "id": "iso-25010-2023",
+      "owner": "ISO IEC",
+      "locator": "https://www.iso.org/standard/78176.html",
+      "status": "published",
+      "boundedUse": "Nine-characteristic product-quality reference model.",
+      "limitation": "Product quality is not lifecycle, organizational, delivery, or AI-process completeness."
+    },
+    {
+      "id": "iso-25019-2023",
+      "owner": "ISO IEC",
+      "locator": "https://www.iso.org/standard/78177.html",
+      "status": "published",
+      "boundedUse": "Quality-in-use evaluation in a specified context of use.",
+      "limitation": "Context must be rebound when intended use changes."
+    },
+    {
+      "id": "iso-25040-2024",
+      "owner": "ISO IEC",
+      "locator": "https://www.iso.org/standard/83467.html",
+      "status": "published",
+      "boundedUse": "Quality-evaluation process concepts and requirements.",
+      "limitation": "Does not provide universal test methods or result-use rules."
+    },
+    {
+      "id": "iso-5055-2021",
+      "owner": "ISO IEC",
+      "locator": "https://www.iso.org/standard/80623.html",
+      "status": "published-under-review",
+      "boundedUse": "Automated source-code quality measures tied to operational risk and cost.",
+      "limitation": "Source-code measures are narrower than product, lifecycle, and outcome quality."
+    },
+    {
+      "id": "nist-ssdf-1.1",
+      "owner": "NIST",
+      "locator": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "status": "final",
+      "boundedUse": "Outcome-oriented secure software development practices.",
+      "limitation": "SSDF is a security overlay, not a complete engineering evaluation; version 1.2 remains draft."
+    },
+    {
+      "id": "owasp-samm-v2",
+      "owner": "OWASP",
+      "locator": "https://owaspsamm.org/about/",
+      "status": "maintained-v2-model",
+      "boundedUse": "Risk-driven adaptable software-assurance maturity practices.",
+      "limitation": "Maximum maturity is not a universal target and security maturity is not total software quality."
+    },
+    {
+      "id": "slsa-1.2",
+      "owner": "OpenSSF SLSA",
+      "locator": "https://slsa.dev/spec/v1.2/",
+      "status": "approved",
+      "boundedUse": "Source and build provenance tracks with increasing supply-chain guarantees.",
+      "limitation": "SLSA does not cover all software quality, operational, or human-collaboration risks."
+    },
+    {
+      "id": "dora-current-five-metrics",
+      "owner": "DORA Google Cloud",
+      "locator": "https://dora.dev/guides/dora-metrics/",
+      "status": "current-guidance-updated-2026-01-05",
+      "boundedUse": "Application-level delivery throughput and instability outcomes plus anti-gaming cautions.",
+      "limitation": "Delivery performance is not total product quality and disparate applications should not be compared blindly."
+    },
+    {
+      "id": "space-developer-productivity",
+      "owner": "Microsoft Research and ACM Queue authors",
+      "locator": "https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/",
+      "status": "published",
+      "boundedUse": "Multidimensional developer productivity beyond individual activity or one metric.",
+      "limitation": "Productivity dimensions do not by themselves prove product correctness, safety, or value."
+    },
+    {
+      "id": "nist-ai-rmf-1.0",
+      "owner": "NIST",
+      "locator": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
+      "status": "published-under-revision",
+      "boundedUse": "Lifecycle AI risk, human roles, oversight, context, and third-party-component governance.",
+      "limitation": "Voluntary cross-sector guidance needs use-case and domain adaptation and is under revision."
+    },
+    {
+      "id": "nist-ai-600-1",
+      "owner": "NIST",
+      "locator": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+      "status": "final",
+      "boundedUse": "Generative-AI risk profile across AI lifecycle stages.",
+      "limitation": "A risk profile is not a complete software-engineering quality model."
+    }
+  ],
+  "capabilityBoundary": {
+    "currentSubproblemCoverageObserved": [
+      "native reasoning",
+      "repository deterministic validators",
+      "official security tooling",
+      "reviewed workflow Skills"
+    ],
+    "completeEvaluationCapabilityProved": false,
+    "newEvaluationSkillNecessary": false,
+    "currentReportSchema": "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
+    "currentPositiveFixture": "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
+    "nextImplementationPriority": "apply deterministic report schema to one bounded repository target",
+    "skillMayLater": [
+      "select an applicable profile",
+      "collect and normalize evidence",
+      "invoke existing validators",
+      "explain uncertainty and gaps"
+    ],
+    "skillMustNever": [
+      "own truth or acceptance authority",
+      "waive an applicable floor",
+      "invent or broaden evidence",
+      "hide unknowns or blocked dimensions",
+      "promote a hard standard"
+    ]
+  },
+  "acceptanceProjection": {
+    "existingAcceptanceIds": [
+      "acceptance.software-engineering-lifecycle-specialization",
+      "acceptance.end-to-end-process-fidelity",
+      "acceptance.ai-independent-hard-standard-boundary",
+      "acceptance.standard-candidate-contract",
+      "acceptance.adaptive-harness-proportionality"
+    ],
+    "newAcceptanceIdCreated": false,
+    "acceptanceCountMustRemain": 61,
+    "assessmentChangesAuthorized": false
+  },
+  "authorityBoundary": {
+    "externalCapabilityInstallationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "skillOrHookCreationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "calibrationOrAssetsAdmissionAuthorized": false,
+    "commitOrPushAuthorizedByThisContract": false,
+    "releaseOrDeploymentAuthorized": false
+  }
+}
