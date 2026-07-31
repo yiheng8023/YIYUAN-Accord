@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "targetIdentity": {
+    "type": "repository-change-set",
+    "locator": "git:agent-autonomy-harness@bb65a26c3e0c73c925e761c09da06e44b76cbad3",
+    "revision": "bb65a26c3e0c73c925e761c09da06e44b76cbad3",
+    "asOf": "2026-07-31"
+  },
+  "evaluationContext": {
+    "purpose": "Apply the multidimensional report contract to the immutable commit that introduced the contract, schema, validators, fixture, tests, and program integration.",
+    "domain": "agent-neutral software-engineering evaluation governance",
+    "evaluator": "same-task Codex self-assessment with deterministic repository checks",
+    "method": "Git object binding, schema validation, negative controls, acceptance-map reconciliation, and repository-wide verification",
+    "claimScope": "The eight-file evaluation core and its bb65a26 integration only; not the whole Harness, another repository, a live Agent, or an admitted standard."
+  },
+  "profileAxes": {
+    "lifecycleStage": "pre-release",
+    "criticality": "medium",
+    "exposure": "internal",
+    "reversibility": "bounded",
+    "dataSensitivity": "internal",
+    "aiInvolvement": "agentic"
+  },
+  "applicableDimensions": [
+    "goal-value-and-requirement-fitness",
+    "intent-and-acceptance-fidelity",
+    "architecture-and-design-integrity",
+    "implementation-and-code-quality",
+    "verification-security-privacy-and-safety",
+    "supply-chain-and-provenance",
+    "delivery-change-and-rollback",
+    "reliability-operability-and-observability",
+    "maintainability-evolution-and-retirement",
+    "collaboration-knowledge-and-accountability",
+    "ai-process-loss-and-human-control",
+    "efficiency-resource-stewardship-and-sustainability"
+  ],
+  "applicableCandidateFloors": [
+    "evidence-truth-and-provenance",
+    "authority-and-data-boundary",
+    "rollback-recovery-and-accountability",
+    "completion-acceptance-and-readiness-integrity"
+  ],
+  "evidence": [
+    {
+      "id": "evidence.bb65a26-eight-file-git-object-manifest",
+      "source": "git ls-tree -r bb65a26c3e0c73c925e761c09da06e44b76cbad3 over the eight evaluation-core paths",
+      "asOf": "2026-07-31",
+      "scope": "Eight Git blobs; full git ls-tree records sorted lexicographically, joined with UTF-8 LF, and no terminal newline; manifest SHA-256 9a9772709ee72753af6bdec9fc0eb6224444192a13cb2abd52c48e60c7db0289.",
+      "grade": "source-bound",
+      "independence": "tool",
+      "limitations": [
+        "Git identity proves exact bytes and history, not semantic quality or value."
+      ]
+    },
+    {
+      "id": "evidence.contract-and-report-validators",
+      "source": "scripts/validate_multidimensional_software_engineering_evaluation_contract.py and scripts/validate_multidimensional_software_engineering_evaluation_report.py at bb65a26",
+      "asOf": "2026-07-31",
+      "scope": "Contract vocabulary, source anchors, acceptance links, schema fields, evidence references, uncertainty, floor coverage, and accepted-status guards.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "The validators encode the same contract they assess and require independent review for external validity."
+      ]
+    },
+    {
+      "id": "evidence.positive-and-negative-unit-tests",
+      "source": "tests/test_multidimensional_software_engineering_evaluation_contract.py and tests/test_multidimensional_software_engineering_evaluation_report.py at bb65a26",
+      "asOf": "2026-07-31",
+      "scope": "Positive fixtures and negative mutations for score injection, missing dimensions, evidence drift, Skill-necessity overclaim, hard-standard promotion, and false accepted status.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "Unit tests do not establish usability, cross-host interpretation, domain fitness, or longitudinal maintenance."
+      ]
+    },
+    {
+      "id": "evidence.repository-wide-verify",
+      "source": "python -B scripts/verify.py at bb65a26 and immediate post-change reruns",
+      "asOf": "2026-07-31",
+      "scope": "Repository-required files, program topology, acceptance inventory, prior validators, and new evaluation validators.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "A local verifier pass is not remote CI, independent acceptance, release readiness, or product value."
+      ]
+    },
+    {
+      "id": "evidence.program-acceptance-state",
+      "source": "registry/program-acceptance-map.json at bb65a26",
+      "asOf": "2026-07-31",
+      "scope": "61 acceptance criteria remain 44 verified, 16 partial, and 1 planned; this package changes no assessment authority.",
+      "grade": "source-bound",
+      "independence": "mixed",
+      "limitations": [
+        "The map is repository governance evidence, not external acceptance."
+      ]
+    },
+    {
+      "id": "evidence.official-primary-source-map",
+      "source": "primarySources in registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json at bb65a26",
+      "asOf": "2026-07-31",
+      "scope": "Current official lifecycle, product quality, quality in use, evaluation process, secure development, supply-chain, delivery, productivity, and AI-risk locators with bounded uses and limitations.",
+      "grade": "source-bound",
+      "independence": "mixed",
+      "limitations": [
+        "Some standards are paywalled, one is under review, AI RMF 1.0 is under revision, and locators are not content-hash pins."
+      ]
+    },
+    {
+      "id": "evidence.main-remote-synchronization",
+      "source": "Git HEAD and origin/main read-only snapshot after push",
+      "asOf": "2026-07-31",
+      "scope": "main and origin/main both resolved to bb65a26c3e0c73c925e761c09da06e44b76cbad3 with ahead/behind 0/0.",
+      "grade": "observed-live",
+      "independence": "tool",
+      "limitations": [
+        "Remote synchronization does not prove CI, release, review, or runtime behavior."
+      ]
+    }
+  ],
+  "dimensionResults": [
+    {
+      "dimensionId": "goal-value-and-requirement-fitness",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.bb65a26-eight-file-git-object-manifest",
+        "evidence.program-acceptance-state"
+      ],
+      "unknowns": [
+        "No real project team has yet used the report contract to make an engineering decision."
+      ],
+      "limitations": [
+        "Repository alignment is stronger than demonstrated user or organizational value."
+      ]
+    },
+    {
+      "dimensionId": "intent-and-acceptance-fidelity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.contract-and-report-validators",
+        "evidence.program-acceptance-state"
+      ],
+      "unknowns": [
+        "Cross-thread and cross-host interpretation of the evaluation vocabulary remains untested."
+      ],
+      "limitations": [
+        "The same implementation authored the contract and its fidelity checks."
+      ]
+    },
+    {
+      "dimensionId": "architecture-and-design-integrity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.contract-and-report-validators",
+        "evidence.official-primary-source-map"
+      ],
+      "unknowns": [
+        "No independent architecture review has challenged the five-layer separation."
+      ],
+      "limitations": [
+        "Coherent static layering is not proof that later adapters and profiles will remain decoupled."
+      ]
+    },
+    {
+      "dimensionId": "implementation-and-code-quality",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.positive-and-negative-unit-tests",
+        "evidence.repository-wide-verify"
+      ],
+      "unknowns": [
+        "Mutation depth, property-based coverage, and long-term schema migration behavior remain unmeasured."
+      ],
+      "limitations": [
+        "The implementation is small and deterministic but has not received independent code review."
+      ]
+    },
+    {
+      "dimensionId": "verification-security-privacy-and-safety",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.positive-and-negative-unit-tests",
+        "evidence.repository-wide-verify"
+      ],
+      "unknowns": [
+        "No dedicated independent security, privacy, threat, or misuse review was performed."
+      ],
+      "limitations": [
+        "No executable third-party payload or secret-bearing data was added, but absence of detected risk is not positive assurance."
+      ]
+    },
+    {
+      "dimensionId": "supply-chain-and-provenance",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.bb65a26-eight-file-git-object-manifest",
+        "evidence.official-primary-source-map"
+      ],
+      "unknowns": [
+        "External standard contents are not hash-pinned and future source revisions may change interpretations."
+      ],
+      "limitations": [
+        "Git provenance is exact for repository files, while external normative-source provenance remains locator-bound."
+      ]
+    },
+    {
+      "dimensionId": "delivery-change-and-rollback",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.main-remote-synchronization",
+        "evidence.bb65a26-eight-file-git-object-manifest"
+      ],
+      "unknowns": [
+        "No rollback drill or remote CI execution was performed."
+      ],
+      "limitations": [
+        "Git revert is available and bounded, but availability is not an observed recovery result."
+      ]
+    },
+    {
+      "dimensionId": "reliability-operability-and-observability",
+      "assessment": "not-applicable",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.bb65a26-eight-file-git-object-manifest"
+      ],
+      "unknowns": [
+        "Future runtime orchestration based on this contract would require a separate operational profile."
+      ],
+      "limitations": [
+        "The evaluated target is a static contract package, not a deployed service."
+      ]
+    },
+    {
+      "dimensionId": "maintainability-evolution-and-retirement",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.contract-and-report-validators",
+        "evidence.positive-and-negative-unit-tests"
+      ],
+      "unknowns": [
+        "No schema version migration or retirement has yet occurred."
+      ],
+      "limitations": [
+        "Separation and fail-closed tests support change, but longitudinal maintenance is absent."
+      ]
+    },
+    {
+      "dimensionId": "collaboration-knowledge-and-accountability",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.program-acceptance-state",
+        "evidence.contract-and-report-validators"
+      ],
+      "unknowns": [
+        "No independent reviewer or downstream accountable adopter has signed the report."
+      ],
+      "limitations": [
+        "Ownership and authority are explicit in the contract but not externally exercised."
+      ]
+    },
+    {
+      "dimensionId": "ai-process-loss-and-human-control",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.contract-and-report-validators",
+        "evidence.program-acceptance-state"
+      ],
+      "unknowns": [
+        "The Agent-authored path has no independent per-hop intent-loss ledger for this change."
+      ],
+      "limitations": [
+        "Explicit authority boundaries prevent overclaim but do not prove preserved intent or human-control effectiveness."
+      ]
+    },
+    {
+      "dimensionId": "efficiency-resource-stewardship-and-sustainability",
+      "assessment": "unassessed",
+      "confidence": "high",
+      "evidenceIds": [],
+      "unknowns": [
+        "Authoring time, review burden, verifier cost, context cost, and future maintenance cost were not measured."
+      ],
+      "limitations": [
+        "No efficiency or resource claim is eligible."
+      ]
+    }
+  ],
+  "floorResults": [
+    {
+      "floorId": "evidence-truth-and-provenance",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.bb65a26-eight-file-git-object-manifest",
+        "evidence.repository-wide-verify"
+      ],
+      "owner": "agent-autonomy-harness repository authority",
+      "disposition": "Claims are bound to one immutable commit, exact Git objects, explicit command surfaces, and stated limitations."
+    },
+    {
+      "floorId": "authority-and-data-boundary",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.contract-and-report-validators",
+        "evidence.program-acceptance-state"
+      ],
+      "owner": "repository owner",
+      "disposition": "The package changes repository research and validation only; it installs no capability and grants no hard-standard, account, runtime, or acceptance authority."
+    },
+    {
+      "floorId": "rollback-recovery-and-accountability",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.bb65a26-eight-file-git-object-manifest",
+        "evidence.main-remote-synchronization"
+      ],
+      "owner": "repository owner",
+      "disposition": "The change is one Git commit with exact identity and a bounded revert path; no rollback success is claimed."
+    },
+    {
+      "floorId": "completion-acceptance-and-readiness-integrity",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.program-acceptance-state",
+        "evidence.contract-and-report-validators"
+      ],
+      "owner": "repository owner and future acceptance authority",
+      "disposition": "The report remains needs-verification, records no independent review, seeks no acceptance, and preserves all partial or planned program states."
+    }
+  ],
+  "unknownsAndLimitations": [
+    "This is a same-system self-assessment of the framework that produced it.",
+    "No independent human or Agent review, live-domain use, cross-host use, longitudinal maintenance, remote CI, or rollback drill is included.",
+    "The report evaluates one immutable change-set and cannot support a whole-repository, product-quality, release-readiness, or hard-standard claim."
+  ],
+  "counterevidenceAndDisagreements": [
+    "Deterministic tests show internal consistency but cannot establish external validity or usability.",
+    "The source map is broad but some normative texts are paywalled, mutable, under review, or under revision.",
+    "An Agent-authored report can preserve explicit uncertainty while still missing tacit human judgment."
+  ],
+  "humanOrDomainDecisions": [],
+  "nextEvidenceAndFallback": {
+    "nextEvidence": [
+      "Obtain an independent review of the dimension, floor, evidence, and status judgments.",
+      "Apply the same schema to one non-self-referential bounded software change with a different risk profile.",
+      "Record review burden and any disagreement rather than converting consensus into a scalar score."
+    ],
+    "fallback": "Retain this report as a self-assessment and keep the framework research-only if independent review or a suitable second target is unavailable."
+  },
+  "revalidationAndRetirementTriggers": [
+    "The report schema, dimension vocabulary, floor candidates, evidence grades, or authority model changes.",
+    "A non-self-referential target exposes a missing dimension, misleading assessment state, or unusable evidence burden.",
+    "A mature native, official, or reviewed external framework provides a demonstrably superior carrier.",
+    "Independent review identifies a material overclaim, omission, conflict, or anti-gaming weakness."
+  ],
+  "independentReview": {
+    "status": "not-performed",
+    "reviewer": "",
+    "scope": "The deterministic checks are not independent judgment."
+  },
+  "acceptanceAuthority": {
+    "status": "not-sought",
+    "owner": "repository owner and separately governed standards authority",
+    "scope": "No project-wide acceptance, release readiness, CALIBRATION handoff, ASSETS admission, or hard-standard promotion is requested."
+  },
+  "statusClaim": "needs-verification",
+  "claimBoundary": "The bb65a26 evaluation package is internally consistent, source-bound, machine-validated, reversible, and honestly non-authoritative; independent validity, real-domain usefulness, cross-host behavior, efficiency, and standard eligibility remain unproved."
+}

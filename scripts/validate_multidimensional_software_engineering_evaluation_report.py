@@ -3,8 +3,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
+import re
+import subprocess
 from typing import Any
 
 try:
@@ -25,6 +28,21 @@ SCHEMA_PATH = (
 FIXTURE_PATH = (
     ROOT
     / "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json"
+)
+BOUNDED_ASSESSMENT_PATH = (
+    ROOT
+    / "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json"
+)
+BOUNDED_ASSESSMENT_REVISION = "bb65a26c3e0c73c925e761c09da06e44b76cbad3"
+BOUNDED_ASSESSMENT_PATHS = (
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
+    "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+    "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
+    "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
+    "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
+    "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
+    "tests/test_multidimensional_software_engineering_evaluation_contract.py",
+    "tests/test_multidimensional_software_engineering_evaluation_report.py",
 )
 
 
@@ -208,8 +226,55 @@ def validate_report(
         )
 
 
+def validate_bounded_assessment_provenance(
+    report: dict[str, Any] | None = None,
+    *,
+    root: Path = ROOT,
+) -> None:
+    report = report or _load(BOUNDED_ASSESSMENT_PATH)
+    validate_report(report)
+    revision = report["targetIdentity"]["revision"]
+    _require(
+        revision == BOUNDED_ASSESSMENT_REVISION,
+        "Bounded-assessment Git revision drifted",
+    )
+
+    process = subprocess.run(
+        ["git", "ls-tree", "-r", revision, "--", *BOUNDED_ASSESSMENT_PATHS],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    records = process.stdout.splitlines()
+    _require(
+        len(records) == len(BOUNDED_ASSESSMENT_PATHS),
+        "Bounded-assessment Git object inventory is incomplete",
+    )
+    manifest = "\n".join(sorted(records)).encode("utf-8")
+    observed_digest = hashlib.sha256(manifest).hexdigest()
+
+    evidence = {
+        item["id"]: item
+        for item in report["evidence"]
+    }
+    manifest_evidence = evidence.get("evidence.bb65a26-eight-file-git-object-manifest")
+    _require(manifest_evidence is not None, "Bounded-assessment manifest evidence is missing")
+    match = re.search(
+        r"manifest SHA-256 ([0-9a-f]{64})\.",
+        manifest_evidence["scope"],
+    )
+    _require(match is not None, "Bounded-assessment manifest digest is missing")
+    _require(
+        match.group(1) == observed_digest,
+        "Bounded-assessment Git object manifest digest drifted",
+    )
+
+
 def main() -> int:
     validate_report()
+    validate_bounded_assessment_provenance()
     print("Multidimensional software-engineering evaluation report validation passed.")
     return 0
 

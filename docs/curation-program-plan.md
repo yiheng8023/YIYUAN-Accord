@@ -789,6 +789,8 @@ This record reuses five existing acceptance carriers and leaves all assessment
 states unchanged. It neither creates a Skill nor admits a hard standard. The
 deterministic report schema and bounded positive fixture now preserve exact
 dimension/floor sets, evidence references, unknowns, independent review,
-acceptance authority, and accepted-status guards. The next bounded
-implementation is one named repository-target evaluation, not a project-wide
-score.
+acceptance authority, and accepted-status guards. The first bounded application
+is a same-system `needs-verification` assessment of the immutable `bb65a26`
+eight-file evaluation package. It is not independent review or project-wide
+quality evidence. The next bounded implementation is a non-self-referential
+software change with independent review, not a project-wide score.

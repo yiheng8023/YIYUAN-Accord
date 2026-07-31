@@ -180,9 +180,13 @@ prove a complete evaluation system, and this contract does not credit their
 behavior without task-bound evidence. A deterministic report schema and
 positive fixture now prove the output shape, exact dimension/floor coverage,
 evidence references, unknown preservation, independent review, acceptance
-authority, and accepted-status guards without a model. The next implementation
-priority is applying that schema to one bounded repository target without
-claiming project-wide quality, not creating a new evaluation Skill.
+authority, and accepted-status guards without a model. The first bounded
+application evaluates the immutable `bb65a26` eight-file contract package and
+remains a same-system self-assessment with status `needs-verification`; it does
+not establish independent validity, real-domain usefulness, cross-host value,
+efficiency, or standard eligibility. The next implementation priority is a
+non-self-referential bounded software change with independent review, not a
+project-wide rating or a new evaluation Skill.
 
 ## Acceptance and authority boundary
 

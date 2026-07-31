@@ -217,7 +217,7 @@ def validate_contract(
     )
     _require(
         capability.get("nextImplementationPriority")
-        == "apply deterministic report schema to one bounded repository target",
+        == "apply the report schema to one non-self-referential bounded software change and seek independent review",
         "Next implementation priority drifted",
     )
     _require(
@@ -226,6 +226,11 @@ def validate_contract(
         and capability.get("currentPositiveFixture")
         == "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
         "Current report-schema calibration projection is missing",
+    )
+    _require(
+        capability.get("currentBoundedAssessment")
+        == "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+        "Current bounded assessment projection is missing",
     )
 
     projection = contract.get("acceptanceProjection", {})
@@ -283,6 +288,11 @@ def validate_contract(
         initiative.get("currentMultidimensionalSoftwareEngineeringEvaluationContract")
         == "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
         "Program-plan evaluation projection is missing",
+    )
+    _require(
+        initiative.get("currentMultidimensionalSoftwareEngineeringEvaluationAssessment")
+        == "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+        "Program-plan bounded-assessment projection is missing",
     )
 
     document = (

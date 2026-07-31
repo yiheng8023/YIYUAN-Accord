@@ -44,12 +44,14 @@ from cancelling a blocked floor or hiding an unassessed dimension.
 
 The ontology, candidate floors, deterministic validators, adaptive profiles,
 optional Agent or Skill orchestration, and accountable acceptance remain
-separate. The current implementation is the contract and validator only; the
-deterministic report schema and positive fixture now pass zero-model
-cross-field checks. The next bounded implementation is one schema-conformant
-evaluation of a named repository target without a project-wide rating. No
-complete evaluation capability, new Skill necessity, hard-standard promotion,
-cross-domain threshold, or lifecycle completion is claimed.
+separate. The deterministic report schema and positive fixture pass zero-model
+cross-field checks. A first schema-conformant application now binds the
+immutable `bb65a26` eight-file evaluation package, preserves unassessed and
+insufficient-evidence results, and remains an unaccepted same-system
+self-assessment. The next bounded implementation is a non-self-referential
+software change with independent review. No complete evaluation capability,
+new Skill necessity, hard-standard promotion, cross-domain threshold, or
+lifecycle completion is claimed.
 
 After the additive cumulative-loss accounting mechanism passed, the
 source-backed lifecycle protocol and zero-model calibration also passed their

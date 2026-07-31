@@ -317,7 +317,8 @@
     "newEvaluationSkillNecessary": false,
     "currentReportSchema": "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
     "currentPositiveFixture": "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
-    "nextImplementationPriority": "apply deterministic report schema to one bounded repository target",
+    "currentBoundedAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+    "nextImplementationPriority": "apply the report schema to one non-self-referential bounded software change and seek independent review",
     "skillMayLater": [
       "select an applicable profile",
       "collect and normalize evidence",

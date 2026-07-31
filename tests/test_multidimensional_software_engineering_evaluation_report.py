@@ -3,7 +3,9 @@ import json
 import unittest
 
 from scripts.validate_multidimensional_software_engineering_evaluation_report import (
+    BOUNDED_ASSESSMENT_PATH,
     FIXTURE_PATH,
+    validate_bounded_assessment_provenance,
     validate_report,
 )
 
@@ -12,9 +14,40 @@ class MultidimensionalSoftwareEngineeringEvaluationReportTests(unittest.TestCase
     @classmethod
     def setUpClass(cls) -> None:
         cls.report = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+        cls.bounded_assessment = json.loads(
+            BOUNDED_ASSESSMENT_PATH.read_text(encoding="utf-8")
+        )
 
     def test_positive_fixture_is_valid(self) -> None:
         validate_report()
+
+    def test_bounded_commit_assessment_is_valid(self) -> None:
+        validate_bounded_assessment_provenance(self.bounded_assessment)
+
+    def test_bounded_commit_manifest_digest_drift_is_rejected(self) -> None:
+        mutated = copy.deepcopy(self.bounded_assessment)
+        manifest = next(
+            item
+            for item in mutated["evidence"]
+            if item["id"] == "evidence.bb65a26-eight-file-git-object-manifest"
+        )
+        manifest["scope"] = manifest["scope"].replace(
+            "9a9772709ee72753af6bdec9fc0eb6224444192a13cb2abd52c48e60c7db0289",
+            "0" * 64,
+        )
+        with self.assertRaisesRegex(RuntimeError, "manifest digest drifted"):
+            validate_bounded_assessment_provenance(mutated)
+
+    def test_bounded_self_assessment_stays_unaccepted(self) -> None:
+        self.assertEqual(
+            self.bounded_assessment["independentReview"]["status"],
+            "not-performed",
+        )
+        self.assertEqual(
+            self.bounded_assessment["acceptanceAuthority"]["status"],
+            "not-sought",
+        )
+        self.assertEqual(self.bounded_assessment["statusClaim"], "needs-verification")
 
     def test_total_score_is_rejected(self) -> None:
         mutated = copy.deepcopy(self.report)

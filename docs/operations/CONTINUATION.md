@@ -2232,8 +2232,18 @@ and cross-field validator now pass without a model:
 - `tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json`;
 - `scripts/validate_multidimensional_software_engineering_evaluation_report.py`.
 
-The next bounded implementation is one schema-conformant evaluation of a named
-repository target without claiming project-wide quality.
+The first bounded application is
+`registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json`.
+It binds the immutable `bb65a26` eight-file evaluation core through exact Git
+objects and a deterministic manifest. It is deliberately a same-system
+self-assessment with `independentReview=not-performed`,
+`acceptanceAuthority=not-sought`, and `statusClaim=needs-verification`.
+It preserves insufficient-evidence and unassessed dimensions instead of
+turning local verification into independent validity, real-domain usefulness,
+cross-host value, efficiency, project-wide quality, or standard eligibility.
+
+The next bounded implementation is the same schema applied to one
+non-self-referential software change with independent review.
 
 The package reuses five existing acceptance carriers, keeps the inventory at
 61, changes no assessment, and promotes no hard standard. No CC Switch, Skill,
