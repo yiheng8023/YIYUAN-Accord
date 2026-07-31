@@ -202,6 +202,9 @@ from validate_multidimensional_software_engineering_evaluation_contract import (
 from validate_multidimensional_software_engineering_evaluation_report import (
     validate_report as validate_multidimensional_software_engineering_evaluation_report,
 )
+from validate_multidimensional_software_engineering_source_snapshot import (
+    validate_snapshot as validate_multidimensional_software_engineering_source_snapshot,
+)
 from validate_codex_desktop_resource_observability_preflight import (
     validate_preflight as validate_codex_desktop_resource_observability_preflight,
 )
@@ -505,6 +508,13 @@ REQUIRED_FILES = (
     "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
     "tests/test_multidimensional_software_engineering_evaluation_report.py",
+    "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-SOURCE-SNAPSHOT-2026-07-31.md",
+    "registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json",
+    "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
+    "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+    "scripts/build_multidimensional_software_engineering_source_snapshot.py",
+    "scripts/validate_multidimensional_software_engineering_source_snapshot.py",
+    "tests/test_multidimensional_software_engineering_source_snapshot.py",
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
     "scripts/validate_codex_desktop_resource_observability_preflight.py",
     "tests/test_codex_desktop_resource_observability_preflight.py",
@@ -2813,6 +2823,7 @@ def verify() -> None:
         program_plan=curation_program_plan_doc,
     )
     validate_multidimensional_software_engineering_evaluation_report()
+    validate_multidimensional_software_engineering_source_snapshot()
     validate_codex_desktop_resource_observability_preflight(
         codex_desktop_resource_observability_preflight_doc,
         root=ROOT,

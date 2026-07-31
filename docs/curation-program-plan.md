@@ -808,6 +808,19 @@ floor-relevant collaboration, lifecycle, domain, counterevidence, and
 operational maturity plus separate final authority; a mature high-confidence
 safety or authority floor need not wait for unrelated research to finish.
 
+The first source-layer calibration now separates one read-only official-locator
+observation from a deterministic offline builder and verifier. The exact
+twelve-source parent set, observation bytes, snapshot contract, usability,
+rights, freshness, conflict, bounded use, limitation, and applicability are
+bound in
+`registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json`.
+No raw external body is retained. Five ISO references remain
+bibliographic-metadata-only under their official AI-use restriction; one
+mutable OWASP page remains unpinned; ISO/IEC 5055 preserves an ambiguous review
+state. This advances the source-layer mechanism from specified to calibrated,
+not to independent correctness, normative coverage, Skill necessity, or
+hard-standard readiness.
+
 The current user is an essential goal, preference, resource, correction, and
 authorization subject, not a universal evidence source. The program does not
 optimize for agreement or manufacture opposition. It separates facts,

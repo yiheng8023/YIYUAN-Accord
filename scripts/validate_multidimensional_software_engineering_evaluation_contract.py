@@ -274,7 +274,7 @@ def validate_contract(
     )
     _require(
         capability.get("nextImplementationPriority")
-        == "obtain independent review and implement a deterministic frozen source-refresh snapshot before any evaluation Skill or hard-standard decision",
+        == "obtain independent review of the contract, two bounded assessments, and deterministic source snapshot before broader profile calibration or any evaluation Skill or hard-standard decision",
         "Next implementation priority drifted",
     )
     _require(
@@ -293,6 +293,13 @@ def validate_contract(
         capability.get("currentNonSelfReferentialAssessment")
         == "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
         "Current non-self-referential assessment projection is missing",
+    )
+    _require(
+        capability.get("currentDeterministicSourceSnapshot")
+        == "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json"
+        and capability.get("currentSourceSnapshotState")
+        == "calibration-only-metadata-and-bounded-summary-no-content-archive-independent-review-pending",
+        "Current source snapshot projection or boundary is missing",
     )
 
     projection = contract.get("acceptanceProjection", {})
@@ -360,9 +367,13 @@ def validate_contract(
         initiative.get("currentMultidimensionalSoftwareEngineeringNonSelfAssessment")
         == "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json"
         and initiative.get(
+            "currentMultidimensionalSoftwareEngineeringSourceSnapshot"
+        )
+        == "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json"
+        and initiative.get(
             "currentMultidimensionalSoftwareEngineeringSourceRefreshState"
         )
-        == "contract-specified-frozen-snapshot-implementation-and-independent-review-pending",
+        == "deterministic-offline-snapshot-calibrated-independent-review-pending",
         "Program-plan non-self assessment or source-refresh projection is missing",
     )
 

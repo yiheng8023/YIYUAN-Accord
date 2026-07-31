@@ -70,6 +70,11 @@ freshness, conflict, limitation, and applicability. A search or catalog hit is
 not evidence. A later evaluation Skill may orchestrate refresh, collection,
 validation, and explanation only after a repeated orchestration gap is proved;
 it cannot be the sole carrier, own truth, waive standards, or mark acceptance.
+The first implementation separates network observation from a pure offline
+builder and verifier. Its twelve-source snapshot retains no raw external body,
+keeps five ISO references metadata-only under their published AI-use
+restriction, and preserves mutable, partial, and disputed bindings rather than
+upgrading them to normative evidence.
 
 Adaptive soft policy and hard red lines coexist. Profiles and recommendations
 change with project context; any future admitted hard floor remains

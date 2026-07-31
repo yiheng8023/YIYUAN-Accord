@@ -2321,3 +2321,62 @@ The exact temporary archive root and tar were deleted after evidence capture;
 CC Switch, Skill, Hook, model, runtime, process, thread, global configuration,
 cross-repository, CALIBRATION, ASSETS, release, deployment, or hard-standard
 mutation.
+
+## 2026-07-31 deterministic evaluation source-snapshot checkpoint
+
+The source-intelligence layer now has one real calibration instead of only a
+policy statement. It separates a non-deterministic read-only observation from
+a pure offline builder and verifier:
+
+- `registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json`;
+- `registry/multidimensional-software-engineering-source-observation-2026-07-31.json`;
+- `registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json`;
+- `scripts/build_multidimensional_software_engineering_source_snapshot.py`;
+- `scripts/validate_multidimensional_software_engineering_source_snapshot.py`;
+- `tests/test_multidimensional_software_engineering_source_snapshot.py`;
+- `docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-SOURCE-SNAPSHOT-2026-07-31.md`.
+
+The observation binds all twelve official locators already declared by the
+parent evaluation contract. The builder performs no network operation. It
+requires exact parent source-set, owner, and locator equality; merges bounded
+use and limitation from the parent into separately labeled parent fields;
+retains the narrower snapshot use from the observation; binds parent,
+snapshot-contract, and observation bytes; sorts source rows; and adds a
+canonical manifest digest.
+The verifier reconstructs the checked-in snapshot offline. Negative tests
+reject source omission, locator drift, an unadmitted refresh trigger, ISO
+rights-boundary escalation, normative promotion of a mutable unpinned source,
+an archive without a digest, and manifest drift.
+
+No raw external body or page digest is retained. Five ISO sources are
+bibliographic-metadata-only because their official pages state AI-use
+restrictions. OWASP SAMM v2 remains a mutable unpinned model-family page.
+ISO/IEC 5055 remains explicitly ambiguous because its official page presents a
+published standard and stage 90.60 close-of-review or under-review language.
+Two parent-status claims are only partially observed on their bound locators.
+These are evidence-strength and rights findings, not formatting defects.
+
+The snapshot records a model-mediated dated locator observation and proves
+exact parent-source-set freezing plus deterministic offline repository
+reconstruction. Because no network receipt is retained, it does not
+independently prove locator reachability, external content bytes, full
+normative meaning, correct interpretation, current cross-jurisdiction
+applicability, independent review, evaluation Skill necessity, hard-standard
+eligibility, or acceptance. The acceptance inventory remains 61 and no
+assessment is promoted.
+
+A pre-push exact Git archive confirms that the new snapshot builder `--check`
+and dedicated validator both pass after tracked JSON is normalized to LF. The
+same archive's full `scripts/verify.py` still fails at the inherited historical
+process-fidelity `RAW-REPORT.json` hash mismatch: the retained
+Windows-CRLF runtime-byte digest differs from the Git-LF durable bytes. This is
+the already-recorded repository portability debt, not a new source-snapshot
+failure. The exact archive root and tar were deleted; no process path remains.
+
+The next admitted evaluation step is independent review of the contract, both
+bounded reports, and the source snapshot, including the rights, evidence
+strength, conflict, plural-subject, and claim-boundary classifications. Broader
+profile calibration follows that review. No automatic refresh, content
+vendoring, license override, Skill, Hook, MCP, Plugin, App, model, CC Switch,
+global configuration, hard-standard, CALIBRATION, ASSETS, release, or
+deployment mutation is authorized by this checkpoint.

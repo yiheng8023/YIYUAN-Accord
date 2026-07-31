@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "id": "multidimensional-software-engineering-source-snapshot-contract-2026-07-31",
+  "asOf": "2026-07-31",
+  "status": "calibration-contract-no-automatic-refresh-no-normative-authority",
+  "purpose": "Separate dynamic source observation from deterministic offline snapshot construction so one dated evaluation source set can be inspected, rebuilt, and rejected on drift without treating reachability, a catalog result, or an Agent interpretation as source truth.",
+  "parentEvaluationContract": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+  "pipeline": [
+    {
+      "stage": "observe",
+      "networkAllowed": true,
+      "deterministic": false,
+      "output": "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
+      "boundary": "Read official locators and retain only bounded metadata, identity, usability, rights, freshness, conflict, and applicability observations."
+    },
+    {
+      "stage": "freeze",
+      "networkAllowed": false,
+      "deterministic": true,
+      "output": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+      "boundary": "Merge the exact parent source set with one already-captured observation, sort by source id, bind input bytes, and add a canonical manifest digest."
+    },
+    {
+      "stage": "verify",
+      "networkAllowed": false,
+      "deterministic": true,
+      "output": "pass-or-fail",
+      "boundary": "Rebuild the snapshot from repository inputs and reject source-set, identity, rights, freshness, claim, or digest drift."
+    }
+  ],
+  "observationContract": {
+    "requiredTopLevelFields": [
+      "schema",
+      "id",
+      "observedAt",
+      "acquisitionMode",
+      "refreshTrigger",
+      "networkAccessUsed",
+      "networkReceiptRetained",
+      "rawBodiesRetained",
+      "modelOrAgentMediated",
+      "scope",
+      "sourceObservations"
+    ],
+    "requiredSourceFields": [
+      "id",
+      "owner",
+      "locator",
+      "retrievalOutcome",
+      "identityKind",
+      "identityValue",
+      "publicationState",
+      "evidenceUsability",
+      "claimSupportStatus",
+      "contentArchiveAvailable",
+      "contentDigest",
+      "contentDigestBasis",
+      "rightsBoundary",
+      "freshnessClass",
+      "revalidationTriggers",
+      "contractStatusCheck",
+      "conflicts",
+      "applicability"
+    ],
+    "allowedRetrievalOutcomes": [
+      "observed",
+      "blocked",
+      "unavailable"
+    ],
+    "allowedEvidenceUsability": [
+      "bibliographic-metadata-only",
+      "bounded-public-summary",
+      "versioned-public-specification-summary"
+    ],
+    "allowedClaimSupportStatuses": [
+      "bibliographic-only",
+      "bounded-summary-only",
+      "versioned-public-guidance"
+    ],
+    "allowedFreshnessClasses": [
+      "stable-versioned-publication",
+      "stable-publication-under-revision",
+      "versioned-public-specification",
+      "mutable-dated-guidance",
+      "mutable-unpinned-guidance"
+    ],
+    "sourceSetMustExactlyMatchParent": true,
+    "ownerAndLocatorMustMatchParent": true,
+    "rightsBoundaryRequired": true,
+    "mutableUnpinnedMaySupportNormativeClaim": false,
+    "restrictedIsoUse": "bibliographic-metadata-only"
+  },
+  "snapshotContract": {
+    "canonicalization": "UTF-8 JSON with sorted keys, no insignificant whitespace, and no manifestSha256 field",
+    "bindParentEvaluationContractBytes": true,
+    "bindSnapshotContractBytes": true,
+    "bindObservationBytes": true,
+    "sortSourcesById": true,
+    "offlineRebuildRequired": true,
+    "rawSourceBodiesRequired": false,
+    "missingRawBodyMustNarrowClaim": true,
+    "independentReviewRequiredForAcceptance": true
+  },
+  "claimBoundary": {
+    "locatorReachabilityIsSourceTruth": false,
+    "modelMediatedObservationIsIndependentReceipt": false,
+    "publicationIdentityIsFullContentIdentity": false,
+    "contentDigestWithoutRetainedBytesProvesMeaning": false,
+    "snapshotManifestProvesExternalClaimCorrectness": false,
+    "snapshotMayPreserveWeakOrDisputedBindings": true,
+    "snapshotMayPromoteHardStandard": false,
+    "snapshotMayProveSkillNecessity": false
+  },
+  "authorityBoundary": {
+    "automaticNetworkRefreshAuthorized": false,
+    "externalContentVendoringAuthorized": false,
+    "licenseOrTermsOverrideAuthorized": false,
+    "skillOrHookMutationAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "acceptanceAuthorized": false
+  }
+}

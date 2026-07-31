@@ -218,7 +218,8 @@
         "evidence.human-ai-collaboration-tdd-current-execution-readiness-reconciliation-2026-07-27",
         "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27",
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
-        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31"
+        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
     },
     {
@@ -268,7 +269,8 @@
         "evidence.context-handoff-receiver-delta-ledger-2026-07-27",
         "evidence.human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27",
         "evidence.human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28",
-        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31"
+        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
     },
     {
@@ -282,7 +284,8 @@
         "evidence.human-ai-collaboration-coverage-rebaseline",
         "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01",
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
-        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31"
+        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
     },
     {
@@ -602,7 +605,8 @@
       ],
       "evidenceIds": [
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
-        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31"
+        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
     },
     {
@@ -720,7 +724,8 @@
         "evidence.adaptive-harness-source-suite-and-user-sovereignty",
         "evidence.public-skill-source-static-review-batch-2026-07-18",
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
-        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31"
+        "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
     },
     {
@@ -2529,6 +2534,19 @@
       "id": "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
       "path": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
       "kind": "carrier-neutral-multidimensional-evidence-graded-context-adaptive-software-engineering-evaluation-contract-no-hard-standard-or-skill-promotion",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.software-engineering-lifecycle-specialization",
+        "acceptance.end-to-end-process-fidelity",
+        "acceptance.ai-independent-hard-standard-boundary",
+        "acceptance.standard-candidate-contract",
+        "acceptance.adaptive-harness-proportionality"
+      ]
+    },
+    {
+      "id": "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
+      "path": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+      "kind": "deterministic-offline-rebuildable-source-identity-usability-rights-freshness-and-conflict-snapshot-no-content-archive-independent-review-pending",
       "asOf": "2026-07-31",
       "supports": [
         "acceptance.software-engineering-lifecycle-specialization",

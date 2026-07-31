@@ -127,6 +127,20 @@ class HumanAiCollaborationCoverageRebaselineTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
             self.validate(acceptance=acceptance)
 
+    def test_rejects_source_snapshot_evidence_projection_removal(self) -> None:
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.software-engineering-lifecycle-specialization"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.multidimensional-software-engineering-source-snapshot-"
+            "2026-07-31"
+        )
+        with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
+            self.validate(acceptance=acceptance)
+
 
 if __name__ == "__main__":
     unittest.main()

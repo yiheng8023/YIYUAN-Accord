@@ -157,6 +157,24 @@ orchestrate refresh and snapshot construction, but the snapshot, deterministic
 checks, candidate hard floors, and acceptance decision remain usable and
 auditable without that Skill or without network access.
 
+The first calibrated implementation now keeps observation, freezing, and
+verification separate:
+
+- `registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json`;
+- `registry/multidimensional-software-engineering-source-observation-2026-07-31.json`;
+- `registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json`.
+
+The observation uses the twelve already-declared official locators. The pure
+offline builder merges the exact parent source set, binds all input bytes,
+sorts source records, and adds a canonical digest. The verifier rebuilds the
+snapshot without network access. No raw external body is retained, so the
+snapshot proves neither exact external content bytes nor complete meaning.
+Five ISO sources remain bibliographic-metadata-only because the official pages
+state AI-use restrictions; normative ISO use requires separately licensed and
+authorized human review. One mutable OWASP source remains unpinned, and the
+ISO/IEC 5055 review state remains explicitly disputed instead of being
+normalized into a stronger claim.
+
 ## Plural subjects and anti-deference
 
 The current user's goals, preferences, corrections, resources, and bounded
@@ -253,8 +271,8 @@ pass in an exact archive, while full exact-commit verification exposes an
 inherited CRLF runtime-byte versus Git-LF durable-hash portability defect. The
 report therefore preserves a blocked evidence/provenance floor instead of
 letting local green checks cancel the counterevidence. Independent review and
-frozen source-refresh snapshot semantics precede any evaluation Skill or
-hard-standard decision.
+the now-calibrated frozen source snapshot precede broader profile calibration,
+any evaluation Skill, or any hard-standard decision.
 
 ## Acceptance and authority boundary
 

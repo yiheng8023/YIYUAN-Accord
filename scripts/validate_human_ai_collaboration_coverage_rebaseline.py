@@ -146,6 +146,10 @@ MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID = (
     "evidence.multidimensional-software-engineering-evaluation-contract-"
     "2026-07-31"
 )
+MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID = (
+    "evidence.multidimensional-software-engineering-source-snapshot-"
+    "2026-07-31"
+)
 DOCUMENTATION_PATH = (
     "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md"
 )
@@ -427,11 +431,13 @@ def validate_rebaseline(
                 TDD_SUCCESSOR_CONTRACT_EVIDENCE_ID,
                 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
+                MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]
         if acceptance_id == "acceptance.ai-independent-hard-standard-boundary":
             expected_evidence_ids += [
                 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
+                MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]
         if acceptance_id == "acceptance.end-to-end-process-fidelity":
             expected_evidence_ids += [
@@ -498,6 +504,7 @@ def validate_rebaseline(
                     "layer-reconciliation-2026-07-28"
                 ),
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
+                MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]
         _require(
             item.get("evidenceIds") == expected_evidence_ids,

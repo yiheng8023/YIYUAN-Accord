@@ -74,6 +74,14 @@ class MultidimensionalSoftwareEngineeringEvaluationContractTests(
         with self.assertRaisesRegex(RuntimeError, "anti-deference"):
             validate_contract(mutated)
 
+    def test_source_snapshot_state_cannot_claim_independent_review(self) -> None:
+        mutated = copy.deepcopy(self.contract)
+        mutated["capabilityBoundary"][
+            "currentSourceSnapshotState"
+        ] = "independently-validated"
+        with self.assertRaisesRegex(RuntimeError, "source snapshot"):
+            validate_contract(mutated)
+
     def test_acceptance_count_drift_fails_closed(self) -> None:
         mutated_map = copy.deepcopy(self.program_map)
         mutated_map["acceptanceCriteria"].pop()

@@ -386,7 +386,9 @@
     "currentPositiveFixture": "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
     "currentBoundedAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
     "currentNonSelfReferentialAssessment": "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
-    "nextImplementationPriority": "obtain independent review and implement a deterministic frozen source-refresh snapshot before any evaluation Skill or hard-standard decision",
+    "currentDeterministicSourceSnapshot": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+    "currentSourceSnapshotState": "calibration-only-metadata-and-bounded-summary-no-content-archive-independent-review-pending",
+    "nextImplementationPriority": "obtain independent review of the contract, two bounded assessments, and deterministic source snapshot before broader profile calibration or any evaluation Skill or hard-standard decision",
     "skillMayLater": [
       "select an applicable profile",
       "trigger task-bound source refresh and freeze a reviewed snapshot",

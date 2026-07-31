@@ -53,12 +53,20 @@ self-assessment. A second application binds the non-self-referential
 while exact-archive full verification exposes an inherited CRLF/LF durable-hash
 portability defect and therefore blocks the evidence/provenance floor.
 
+The first task-bound source observation and deterministic frozen snapshot are
+now implemented. All twelve declared source identities are preserved, but no
+raw external body is retained. Five ISO references are metadata-only because
+their official pages state AI-use restrictions; one mutable OWASP source
+remains unpinned; ISO/IEC 5055 retains an ambiguous official review state. The
+offline builder and validator prove repository reconstruction and drift
+rejection, not full source meaning or independent correctness.
+
 The next research order is:
 
-1. implement and calibrate the specified task-bound source-refresh triggers and
-   frozen, versioned evidence snapshot so it remains usable offline;
-2. obtain independent review of both bounded reports, record disagreement, and
-   test whether one-user assumptions survive plural affected-subject,
+1. obtain independent review of the contract, both bounded reports, and source
+   snapshot; record disagreement and test whether the rights, source-strength,
+   conflict, and claim-boundary classifications are defensible;
+2. test whether one-user assumptions survive plural affected-subject,
    accessibility, exclusion, distributional-impact, domain, and jurisdiction
    review;
 3. apply the contract across additional risk, lifecycle, and domain profiles;
