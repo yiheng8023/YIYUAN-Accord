@@ -159,5 +159,34 @@ loader invocation, slash-name resolution, relative-file delivery, instruction
 delivery, behavioral causation, semantic continuity, candidate value, and
 cross-host behavior remain unproved. All model-treatment runs remain at zero.
 
+## 2026-07-31 current-host exposure refresh
+
+Codex CLI and app-server drifted from the earlier `0.145.0` observation to
+`0.146.0`, which triggered a no-model refresh rather than a behavioral rerun.
+The first refresh attempt stopped before Skills enumeration because the old
+probe extended each inherited MCP table with `enabled=false`; `0.146.0`
+rejected the current `codegraph` table as having an invalid transport. No
+candidate instruction ran and no report was written, so this is a probe-host
+compatibility failure rather than a candidate failure.
+
+The probe now uses a temporary empty `CODEX_HOME` beneath the disposable
+projection and replaces the MCP table with an empty one for the no-turn
+processes. Two TDD regressions require that isolation and cleanup behavior.
+The repaired probe observed `Codex Desktop/0.146.0`, exactly the same three
+required repository Skill paths and raw hashes, zero configurable Skills in
+the unselected arm, and only the three composition Skills in the selected arm.
+It started no thread or turn, sent no model request, retained no temporary
+Codex home, and left global configuration, projection bytes, and repository
+status stable. The current snapshot contains 50 Skills (`3` repo, `6` system,
+`41` user), versus 114 in the older host snapshot; that dated inventory drift
+is not deletion, quality, invocation, or value evidence.
+
+The durable refresh report is
+[`audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json).
+It refreshes dependency-complete exposure only. Native-disabled exposure,
+local adapted-monolith selected exposure, public-packet private-oracle leakage
+rejection, loader and instruction delivery, named composition, relative-file
+delivery, behavior, value, and every weak-model run remain open.
+
 The machine-readable authority is
 [`registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json`](../../registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json).

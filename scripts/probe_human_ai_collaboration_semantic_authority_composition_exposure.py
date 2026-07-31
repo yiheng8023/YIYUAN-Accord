@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
+import tempfile
 from typing import Any
 
 try:
@@ -62,6 +64,39 @@ def load_manifest(projection_root: Path) -> dict[str, Any]:
     if expected != canonical_sha256(body):
         raise RuntimeError("composition projection manifest digest drifted")
     return document
+
+
+def build_no_turn_command(
+    executable: str,
+    disable_override: str,
+) -> list[str]:
+    command = build_command(executable, disable_override=None)
+    command.extend(
+        (
+            "-c",
+            disable_override,
+            "-c",
+            "model_reasoning_effort=low",
+            "-c",
+            "mcp_servers={}",
+        )
+    )
+    return command
+
+
+@contextmanager
+def isolated_codex_environment(
+    projection_root: Path,
+    base_environment: dict[str, str],
+):
+    with tempfile.TemporaryDirectory(
+        prefix=".aah-codex-home-",
+        dir=projection_root.resolve(),
+    ) as temporary_home:
+        environment = base_environment.copy()
+        environment["CODEX_HOME"] = str(Path(temporary_home).resolve())
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        yield environment
 
 
 def select_projected_skills(
@@ -138,6 +173,13 @@ def validate_report(report: dict[str, Any]) -> list[str]:
         failures.append("hard-fail-thread-started")
     if report.get("turnStarted") is not False:
         failures.append("hard-fail-turn-started")
+    if report.get("runtimeIsolation") != {
+        "codexHomeMode": "temporary-empty-under-projection",
+        "temporaryCodexHomeRetained": False,
+        "mcpConfigurationMode": "empty-table-override",
+        "inheritedGlobalConfigExecuted": False,
+    }:
+        failures.append("hard-fail-runtime-isolation")
     exposure = report.get("exposure", {})
     if exposure.get("requiredSkillCount") != 3:
         failures.append("fail-required-skill-count")
@@ -205,71 +247,74 @@ def run_preflight(
     config_before = file_observation(config_path)
     repository_before = _git_status_digest(ROOT)
     executable = resolve_codex_executable(codex_executable)
-    environment = os.environ.copy()
-    environment["PYTHONDONTWRITEBYTECODE"] = "1"
-
-    control = AppServerSession(
-        build_command(executable, disable_override="skills.config=[]"),
+    with isolated_codex_environment(
         projection_root,
-        timeout_seconds,
-        environment=environment,
-    )
-    try:
-        control_initialize = initialize(control, experimental_api=True)
-        control_inventory = request_skills(control, projection_root, request_id=1)
-        projected = select_projected_skills(control_inventory, skill_paths)
-        control.close()
-    except BaseException:
-        control.abort()
-        raise
-
-    configurable = [
-        row for row in control_inventory if row.get("scope") in CONFIGURABLE_SCOPES
-    ]
-    projected_paths = {str(row["path"]) for row in projected.values()}
-    arms: list[dict[str, Any]] = []
-    for arm_name, enabled_paths in (
-        ("control-unselected", set()),
-        ("composition-selected", projected_paths),
-    ):
-        override = build_skill_config_override(
-            configurable,
-            enabled_paths=enabled_paths,
-        )
-        session = AppServerSession(
-            build_command(executable, disable_override=override),
+        os.environ,
+    ) as environment:
+        control = AppServerSession(
+            build_no_turn_command(executable, "skills.config=[]"),
             projection_root,
             timeout_seconds,
             environment=environment,
         )
         try:
-            effective_initialize = initialize(session, experimental_api=True)
-            effective_inventory = request_skills(
-                session,
-                projection_root,
-                request_id=1,
-            )
-            comparison = compare_inventory(
-                control_inventory,
-                effective_inventory,
-                expected_enabled_paths=enabled_paths,
-            )
-            session.close()
+            control_initialize = initialize(control, experimental_api=True)
+            control_inventory = request_skills(control, projection_root, request_id=1)
+            projected = select_projected_skills(control_inventory, skill_paths)
+            control.close()
         except BaseException:
-            session.abort()
+            control.abort()
             raise
-        arms.append(
-            {
-                "arm": arm_name,
-                "inventory": comparison,
-                "effectiveInventory": inventory_summary(effective_inventory),
-                "host": {
-                    "userAgent": effective_initialize.get("userAgent"),
-                    "platformFamily": effective_initialize.get("platformFamily"),
-                    "platformOs": effective_initialize.get("platformOs"),
-                },
-            }
-        )
+
+        configurable = [
+            row
+            for row in control_inventory
+            if row.get("scope") in CONFIGURABLE_SCOPES
+        ]
+        projected_paths = {str(row["path"]) for row in projected.values()}
+        arms: list[dict[str, Any]] = []
+        for arm_name, enabled_paths in (
+            ("control-unselected", set()),
+            ("composition-selected", projected_paths),
+        ):
+            override = build_skill_config_override(
+                configurable,
+                enabled_paths=enabled_paths,
+            )
+            session = AppServerSession(
+                build_no_turn_command(executable, override),
+                projection_root,
+                timeout_seconds,
+                environment=environment,
+            )
+            try:
+                effective_initialize = initialize(session, experimental_api=True)
+                effective_inventory = request_skills(
+                    session,
+                    projection_root,
+                    request_id=1,
+                )
+                comparison = compare_inventory(
+                    control_inventory,
+                    effective_inventory,
+                    expected_enabled_paths=enabled_paths,
+                )
+                session.close()
+            except BaseException:
+                session.abort()
+                raise
+            arms.append(
+                {
+                    "arm": arm_name,
+                    "inventory": comparison,
+                    "effectiveInventory": inventory_summary(effective_inventory),
+                    "host": {
+                        "userAgent": effective_initialize.get("userAgent"),
+                        "platformFamily": effective_initialize.get("platformFamily"),
+                        "platformOs": effective_initialize.get("platformOs"),
+                    },
+                }
+            )
 
     projection_after = {
         row["path"]: file_observation(projection_root / row["path"])
@@ -304,6 +349,12 @@ def run_preflight(
         "threadStarted": False,
         "turnStarted": False,
         "modelRequestSent": False,
+        "runtimeIsolation": {
+            "codexHomeMode": "temporary-empty-under-projection",
+            "temporaryCodexHomeRetained": False,
+            "mcpConfigurationMode": "empty-table-override",
+            "inheritedGlobalConfigExecuted": False,
+        },
         "stability": {
             "projectionTreeStable": projection_before == projection_after,
             "globalConfigStable": config_before == config_after,

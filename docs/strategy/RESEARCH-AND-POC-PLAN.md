@@ -153,6 +153,20 @@ Skill identities while keeping all other configurable Skills disabled. Loader
 invocation, named dependency resolution, relative-file delivery, behavioral
 value, and live dispatch remain open.
 
+A current-host refresh on 2026-07-31 re-ran only that no-model exposure gate
+after Codex moved to `0.146.0`. The first attempt exposed a probe compatibility
+defect: per-server `enabled=false` overlays caused the newer parser to reject
+the inherited `codegraph` table before Skills enumeration. A TDD repair now
+uses a temporary empty Codex home and replaces the MCP table for the no-turn
+processes. The repaired run again exposed exactly the three pinned repository
+Skills, with zero selected in control and only three selected in treatment,
+then removed the temporary home and preserved global config, projected bytes,
+and repository status. Its 50-Skill snapshot differs from the earlier 114-Skill
+snapshot, but inventory count drift is not deletion, loader, behavior, or value
+evidence. The next bounded work remains no-model: native-disabled exposure,
+local adapted-monolith exposure, and public-packet private-oracle leakage
+rejection. No weak-model dispatch is authorized by the refresh.
+
 The follow-on
 [`self-authored control-chain carrier audit`](HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-CARRIER-AUDIT-2026-07-28.md)
 records current `.agents`/`.codex` equality, divergent CC Switch bodies,

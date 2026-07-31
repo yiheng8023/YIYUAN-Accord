@@ -19,6 +19,10 @@ EXPOSURE_REPORT_PATH = Path(
     "audits/human-ai-collaboration-semantic-authority-current-matt-"
     "no-model-exposure-2026-07-28/REPORT.json"
 )
+EXPOSURE_REFRESH_REPORT_PATH = Path(
+    "audits/human-ai-collaboration-semantic-authority-current-matt-"
+    "no-model-exposure-2026-07-31/REPORT.json"
+)
 
 
 def _require(condition: bool, message: str) -> None:
@@ -73,6 +77,9 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "currentMattNoModelExposureReport": str(EXPOSURE_REPORT_PATH).replace(
             "\\", "/"
         ),
+        "currentMattNoModelExposureRefreshReport": str(
+            EXPOSURE_REFRESH_REPORT_PATH
+        ).replace("\\", "/"),
     }
     _require(sources == expected_sources, "Semantic continuity source bindings drifted")
     for relative in sources.values():
@@ -251,6 +258,10 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "Semantic continuity current composition exposure was not recorded",
     )
     _require(
+        gate.get("currentHostRefreshExposureProved") is True,
+        "Semantic continuity current-host exposure was not recorded",
+    )
+    _require(
         gate.get("exactCurrentComponentsRetrievedAndHashVerified") is True
         and gate.get("licenseProvenanceSecurityPortabilityRecheckSatisfied")
         is True,
@@ -324,6 +335,100 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
             for value in exposure_report.get("claimBoundary", {}).values()
         ),
         "Semantic continuity no-model or claim boundary drifted",
+    )
+
+    exposure_refresh_report = json.loads(
+        (root / EXPOSURE_REFRESH_REPORT_PATH).read_text(encoding="utf-8")
+    )
+    refresh_body = dict(exposure_refresh_report)
+    refresh_digest = refresh_body.pop("reportSha256", None)
+    computed_refresh_digest = hashlib.sha256(
+        json.dumps(
+            refresh_body,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    _require(
+        refresh_digest == computed_refresh_digest
+        == "8b1493583296bf2fd289b56b5d9d34156c3ffb1d39a59fd957f30851231e1c5d",
+        "Semantic continuity current-host exposure report digest drifted",
+    )
+    _require(
+        exposure_refresh_report.get("status") == "preflight-pass-no-turn"
+        and exposure_refresh_report.get("candidateId")
+        == "matt.current.grill-with-docs-composition"
+        and exposure_refresh_report.get("projectionManifestSha256")
+        == "6f8a2ca7b1552028b6c5e785b82b2b56979a62190e66763f2c6ffc3bc87d7001"
+        and exposure_refresh_report.get("projectedTreeSha256")
+        == "295c4f5819f38e49cd4955d81294a5da1ce3197d78fc52c24bfecaf92027daa5",
+        "Semantic continuity current-host exposure identity drifted",
+    )
+    _require(
+        exposure_refresh_report.get("host", {}).get("userAgent")
+        == (
+            "Codex Desktop/0.146.0 (Windows 10.0.26200; x86_64) unknown "
+            "(agent_autonomy_harness_skill_exposure_probe; 1.0.0)"
+        )
+        and exposure_refresh_report.get("controlInventory", {}).get("skillCount")
+        == 50
+        and exposure_refresh_report.get("controlInventory", {}).get(
+            "countsByScope"
+        )
+        == {"repo": 3, "system": 6, "user": 41},
+        "Semantic continuity current-host inventory snapshot drifted",
+    )
+    refresh_exposure = exposure_refresh_report.get("exposure", {})
+    _require(
+        refresh_exposure.get("requiredSkillCount") == 3
+        and refresh_exposure.get("requiredSkillNames")
+        == ["domain-modeling", "grill-with-docs", "grilling"]
+        and refresh_exposure.get("allRequiredExactPathsPresent") is True,
+        "Semantic continuity current-host dependency exposure drifted",
+    )
+    refresh_arms = _index(
+        exposure_refresh_report.get("arms", []),
+        "arm",
+        "Current-host exposure arm",
+    )
+    _require(
+        refresh_arms["control-unselected"]["inventory"][
+            "enabledConfigurableSkillCount"
+        ]
+        == 0
+        and refresh_arms["composition-selected"]["inventory"][
+            "enabledConfigurableSkillCount"
+        ]
+        == 3
+        and all(
+            arm["inventory"].get(key) is True
+            for arm in refresh_arms.values()
+            for key in (
+                "sameIdentitySet",
+                "onlyExpectedConfigurableSkillsEnabled",
+                "allNonConfigurableStatesPreserved",
+            )
+        ),
+        "Semantic continuity current-host task-scoped exposure drifted",
+    )
+    _require(
+        exposure_refresh_report.get("runtimeIsolation")
+        == {
+            "codexHomeMode": "temporary-empty-under-projection",
+            "temporaryCodexHomeRetained": False,
+            "mcpConfigurationMode": "empty-table-override",
+            "inheritedGlobalConfigExecuted": False,
+        }
+        and exposure_refresh_report.get("threadStarted") is False
+        and exposure_refresh_report.get("turnStarted") is False
+        and exposure_refresh_report.get("modelRequestSent") is False
+        and all(exposure_refresh_report.get("stability", {}).values())
+        and all(
+            value is False
+            for value in exposure_refresh_report.get("claimBoundary", {}).values()
+        ),
+        "Semantic continuity current-host isolation or claim boundary drifted",
     )
 
     authority = document.get("authorityBoundary", {})

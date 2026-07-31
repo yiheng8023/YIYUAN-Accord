@@ -15,7 +15,8 @@
     "fixtureDefinition": "tests/fixtures/human-ai-collaboration-semantic-authority-continuity-2026-07-28.json",
     "fixtureBuilder": "scripts/build_human_ai_collaboration_semantic_authority_continuity_trial.py",
     "currentMattStaticAdmission": "registry/human-ai-collaboration-semantic-authority-current-matt-static-admission-2026-07-28.json",
-    "currentMattNoModelExposureReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json"
+    "currentMattNoModelExposureReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json",
+    "currentMattNoModelExposureRefreshReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json"
   },
   "treatments": [
     {
@@ -170,6 +171,7 @@
     "nativeDisabledExposureProved": false,
     "localMonolithSelectedExposureProved": false,
     "currentCompositionDependencyCompleteExposureProved": true,
+    "currentHostRefreshExposureProved": true,
     "publicPacketPrivateOracleLeakageRejected": false,
     "minimumValidRunsPerTreatment": 3,
     "liveRunAuthorizedByThisRecord": false
@@ -196,7 +198,7 @@
     "candidatePreferenceAllowed": false,
     "ccMutationAllowed": false,
     "selfAuthoredResidualGapProved": false,
-    "nextBoundedAction": "Audit the self-authored control chain and carrier interactions against native, official, and reviewed external routes before seeking any separate weak-model dispatch authority."
+    "nextBoundedAction": "Keep all model runs at zero and close the remaining no-model admission gaps: current-host native-disabled exposure, local adapted-monolith selected exposure, and public-packet private-oracle leakage rejection."
   },
   "claimBoundary": {
     "semanticContinuityProved": false,

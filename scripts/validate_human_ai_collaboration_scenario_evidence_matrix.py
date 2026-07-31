@@ -81,6 +81,14 @@ CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID = (
 ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
 )
+SEMANTIC_AUTHORITY_CONTINUITY_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-semantic-authority-"
+    "continuity-protocol-2026-07-28"
+)
+CURRENT_MATT_EXPOSURE_REFRESH_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-semantic-authority-"
+    "current-matt-no-model-exposure-refresh-2026-07-31"
+)
 EXPECTED_HOSTS = {
     "host.native-transparent",
     "host.configurable-agent",
@@ -1002,6 +1010,8 @@ def validate_matrix(
                     "evidence.human-ai-collaboration-semantic-authority-"
                     "layer-reconciliation-2026-07-28"
                 ),
+                SEMANTIC_AUTHORITY_CONTINUITY_EVIDENCE_ID,
+                CURRENT_MATT_EXPOSURE_REFRESH_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]

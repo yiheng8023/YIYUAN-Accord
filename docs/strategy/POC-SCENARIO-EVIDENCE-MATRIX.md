@@ -445,15 +445,21 @@ The
 [SEM-03 continuity protocol](HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-CONTINUITY-PROTOCOL-2026-07-28.md)
 now freezes the three treatment identities, the four fresh-thread lifecycle
 phases, the common hard gates, and direction-falsification rules. It reuses the
-existing weak-Agent and parent-private oracle seams, but has not implemented
-the current upstream composition for execution. The disposable fixture and
-private oracle now reject seven injected continuity faults without exposing
-the oracle or pre-injecting human decisions. Exact current-source static
-admission now covers eight raw Git-blob files, the MIT license, relative format
-dependencies, host-specific composition, document-write authority, and the
-Windows EOL conversion hazard. Isolated dependency-complete exposure remains
-open. The records authorize no model dispatch, CC mutation, candidate
-preference, or self-authored arm.
+existing weak-Agent and parent-private oracle seams. The disposable fixture and
+private oracle reject seven injected continuity faults without exposing the
+oracle or pre-injecting human decisions. Exact current-source static admission
+covers eight raw Git-blob files, the MIT license, relative format dependencies,
+host-specific composition, document-write authority, and the Windows EOL
+conversion hazard. The isolated projection and no-turn exposure gates passed
+first on Codex Desktop `0.145.0` and again after current-host drift to `0.146.0`.
+The refresh used a temporary empty Codex home and empty MCP-table override,
+observed exactly the three required repo Skills, retained no runtime home, and
+left projection bytes, global config, and repository status stable. The current
+50-Skill inventory versus the earlier 114-Skill snapshot is dated host drift,
+not deletion or value evidence. Native-disabled and local-monolith exposure,
+private-oracle leakage rejection, loader/instruction delivery, behavior, and
+all model runs remain open. The records authorize no model dispatch, CC
+mutation, candidate preference, or self-authored arm.
 
 ## Program closeout cleanup gate
 

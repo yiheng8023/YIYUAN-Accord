@@ -2715,3 +2715,37 @@ the complete discovery command without a repository-imposed short timeout, so
 no duplicate runner, weakened integration assertion, or validation-semantic
 change was introduced. Future short caller timeouts must be recorded as
 inconclusive unless they also return a test failure.
+
+## 2026-07-31 SEM-03 Codex 0.146 no-model exposure refresh
+
+The fixed Matt revision
+`ed37663cc5fbef691ddfecd080dff42f7e7e350d` was re-materialized through the
+existing fetch-all-then-write builder into
+`.tmp/aah-sem03-composition-projection-20260731-v3`. All eight raw files and the
+MIT license matched their pinned Blob and SHA-256 identities; the projected
+tree digest remained
+`295c4f5819f38e49cd4955d81294a5da1ce3197d78fc52c24bfecaf92027daa5`.
+
+The first Codex `0.146.0` no-turn exposure attempt stopped before Skills
+enumeration. Its stderr identified an inherited-probe compatibility boundary:
+adding `enabled=false` to each configured MCP caused the newer parser to reject
+the `codegraph` table as an invalid transport. No candidate instruction,
+thread, turn, or model request ran, and no report was written. Two test-first
+regressions now require a temporary Codex home and a whole empty MCP-table
+override; a third requires the isolation receipt in every passing report.
+
+The repaired probe passed on `Codex Desktop/0.146.0`. It observed exactly the
+three required repo Skill paths and raw hashes, zero configurable Skills in the
+unselected arm, and only those three in the selected arm. The isolated snapshot
+contained 50 Skills (`3` repo, `6` system, `41` user); the older `0.145.0`
+snapshot contained 114. This is dated host/inventory drift only. The temporary
+Codex home was removed, and global config, projected bytes, and repository
+status were stable. The durable report is
+`audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json`.
+
+This refresh proves current-host dependency-complete exposure only. It proves
+no loader or instruction delivery, named composition, relative-file delivery,
+behavior, semantic continuity, value, portfolio preference, or cross-host
+equivalence. All model runs remain zero. Before any separate weak-model gate,
+complete native-disabled exposure, local adapted-monolith exposure, and
+public-packet private-oracle leakage rejection.

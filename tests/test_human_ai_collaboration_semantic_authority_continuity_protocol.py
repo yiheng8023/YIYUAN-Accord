@@ -97,6 +97,12 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "exposure was not recorded"):
             self.validate(document)
 
+    def test_rejects_current_host_refresh_exposure_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"]["currentHostRefreshExposureProved"] = False
+        with self.assertRaisesRegex(RuntimeError, "current-host exposure"):
+            self.validate(document)
+
 
 if __name__ == "__main__":
     unittest.main()

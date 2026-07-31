@@ -275,6 +275,8 @@
         "evidence.human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31",
         "evidence.human-ai-collaboration-engineering-management-zero-model-calibration-2026-07-31",
         "evidence.human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28",
+        "evidence.human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
+        "evidence.human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-refresh-2026-07-31",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
@@ -2495,6 +2497,24 @@
       "path": "registry/human-ai-collaboration-semantic-authority-layer-reconciliation-2026-07-28.json",
       "kind": "read-only-current-upstream-and-local-cc-source-reconciliation-cross-lifecycle-semantic-authority-subgate-open-no-value-or-mutation-claim",
       "asOf": "2026-07-28",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
+      "path": "registry/human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28.json",
+      "kind": "source-bound-three-arm-semantic-continuity-protocol-current-composition-dependency-complete-exposure-only-no-model-loader-behavior-or-value-proof",
+      "asOf": "2026-07-31",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-refresh-2026-07-31",
+      "path": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json",
+      "kind": "codex-0-146-current-host-temporary-home-empty-mcp-table-no-turn-three-skill-exposure-refresh-no-loader-instruction-behavior-or-value-proof",
+      "asOf": "2026-07-31",
       "supports": [
         "acceptance.end-to-end-process-fidelity"
       ]

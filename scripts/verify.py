@@ -677,6 +677,7 @@ REQUIRED_FILES = (
     "tests/test_human_ai_collaboration_semantic_authority_composition_projection.py",
     "tests/test_human_ai_collaboration_semantic_authority_composition_exposure.py",
     "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-28/REPORT.json",
+    "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json",
     "docs/strategy/HUMAN-AI-COLLABORATION-SELF-AUTHORED-CONTROL-CHAIN-CARRIER-AUDIT-2026-07-28.md",
     "registry/human-ai-collaboration-self-authored-control-chain-carrier-audit-2026-07-28.json",
     "scripts/validate_human_ai_collaboration_self_authored_control_chain_carrier_audit.py",

@@ -141,6 +141,34 @@ class HumanAiCollaborationCoverageRebaselineTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
             self.validate(acceptance=acceptance)
 
+    def test_rejects_semantic_authority_continuity_evidence_removal(self) -> None:
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.end-to-end-process-fidelity"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.human-ai-collaboration-semantic-authority-"
+            "continuity-protocol-2026-07-28"
+        )
+        with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
+            self.validate(acceptance=acceptance)
+
+    def test_rejects_current_matt_exposure_refresh_evidence_removal(self) -> None:
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.end-to-end-process-fidelity"
+        )
+        criterion["evidenceIds"].remove(
+            "evidence.human-ai-collaboration-semantic-authority-"
+            "current-matt-no-model-exposure-refresh-2026-07-31"
+        )
+        with self.assertRaisesRegex(RuntimeError, "evidence mapping drifted"):
+            self.validate(acceptance=acceptance)
+
 
 if __name__ == "__main__":
     unittest.main()
