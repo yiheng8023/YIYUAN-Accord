@@ -33,6 +33,10 @@ BOUNDED_ASSESSMENT_PATH = (
     ROOT
     / "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json"
 )
+RESOURCE_OBSERVABILITY_ASSESSMENT_PATH = (
+    ROOT
+    / "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json"
+)
 BOUNDED_ASSESSMENT_REVISION = "bb65a26c3e0c73c925e761c09da06e44b76cbad3"
 BOUNDED_ASSESSMENT_PATHS = (
     "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
@@ -43,6 +47,19 @@ BOUNDED_ASSESSMENT_PATHS = (
     "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
     "tests/test_multidimensional_software_engineering_evaluation_contract.py",
     "tests/test_multidimensional_software_engineering_evaluation_report.py",
+)
+RESOURCE_OBSERVABILITY_ASSESSMENT_REVISION = (
+    "202cf04732272c646be2c8c15bf2bbccb749d113"
+)
+RESOURCE_OBSERVABILITY_ASSESSMENT_PATHS = (
+    "docs/operations/CONTINUATION.md",
+    "docs/strategy/CODEX-DESKTOP-RESOURCE-OBSERVABILITY-PREFLIGHT-2026-07-31.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",
+    "registry/program-acceptance-map.json",
+    "scripts/validate_codex_desktop_resource_observability_preflight.py",
+    "scripts/verify.py",
+    "tests/test_codex_desktop_resource_observability_preflight.py",
 )
 
 
@@ -230,17 +247,20 @@ def validate_bounded_assessment_provenance(
     report: dict[str, Any] | None = None,
     *,
     root: Path = ROOT,
+    expected_revision: str = BOUNDED_ASSESSMENT_REVISION,
+    expected_paths: tuple[str, ...] = BOUNDED_ASSESSMENT_PATHS,
+    manifest_evidence_id: str = "evidence.bb65a26-eight-file-git-object-manifest",
 ) -> None:
     report = report or _load(BOUNDED_ASSESSMENT_PATH)
     validate_report(report)
     revision = report["targetIdentity"]["revision"]
     _require(
-        revision == BOUNDED_ASSESSMENT_REVISION,
+        revision == expected_revision,
         "Bounded-assessment Git revision drifted",
     )
 
     process = subprocess.run(
-        ["git", "ls-tree", "-r", revision, "--", *BOUNDED_ASSESSMENT_PATHS],
+        ["git", "ls-tree", "-r", revision, "--", *expected_paths],
         cwd=root,
         check=True,
         capture_output=True,
@@ -249,7 +269,7 @@ def validate_bounded_assessment_provenance(
     )
     records = process.stdout.splitlines()
     _require(
-        len(records) == len(BOUNDED_ASSESSMENT_PATHS),
+        len(records) == len(expected_paths),
         "Bounded-assessment Git object inventory is incomplete",
     )
     manifest = "\n".join(sorted(records)).encode("utf-8")
@@ -259,7 +279,7 @@ def validate_bounded_assessment_provenance(
         item["id"]: item
         for item in report["evidence"]
     }
-    manifest_evidence = evidence.get("evidence.bb65a26-eight-file-git-object-manifest")
+    manifest_evidence = evidence.get(manifest_evidence_id)
     _require(manifest_evidence is not None, "Bounded-assessment manifest evidence is missing")
     match = re.search(
         r"manifest SHA-256 ([0-9a-f]{64})\.",
@@ -275,6 +295,12 @@ def validate_bounded_assessment_provenance(
 def main() -> int:
     validate_report()
     validate_bounded_assessment_provenance()
+    validate_bounded_assessment_provenance(
+        _load(RESOURCE_OBSERVABILITY_ASSESSMENT_PATH),
+        expected_revision=RESOURCE_OBSERVABILITY_ASSESSMENT_REVISION,
+        expected_paths=RESOURCE_OBSERVABILITY_ASSESSMENT_PATHS,
+        manifest_evidence_id="evidence.202cf04-eight-file-git-object-manifest",
+    )
     print("Multidimensional software-engineering evaluation report validation passed.")
     return 0
 

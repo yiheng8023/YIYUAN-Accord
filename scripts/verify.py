@@ -502,6 +502,7 @@ REQUIRED_FILES = (
     "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
     "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
     "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+    "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
     "tests/test_multidimensional_software_engineering_evaluation_report.py",
     "registry/codex-desktop-resource-observability-preflight-2026-07-31.json",

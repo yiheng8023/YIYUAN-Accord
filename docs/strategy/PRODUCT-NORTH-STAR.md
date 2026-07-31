@@ -53,8 +53,9 @@ reorder current candidate and residual-gap work.
 
 Software-engineering evaluation is a carrier-neutral contract rather than one
 Skill, checklist, maturity score, or model judgment. It separates the
-evaluation ontology, candidate hard floors, deterministic validators,
-context-derived profiles, optional orchestration, and accountable acceptance.
+evaluation ontology, dynamic source intelligence and frozen snapshots,
+candidate hard floors, deterministic validators, context-derived soft
+profiles, optional orchestration, and accountable acceptance.
 The current reference contract covers goal value, intent fidelity,
 architecture, implementation, verification and safety, supply chain,
 delivery and rollback, operations, maintenance, collaboration, AI process
@@ -63,9 +64,28 @@ loss and human control, and resource sustainability.
 No single total score may hide an applicable blocked floor, unassessed
 dimension, weak evidence, or material uncertainty. Profiles vary by lifecycle
 stage, criticality, exposure, reversibility, data sensitivity, and AI
-involvement. A later evaluation Skill may collect and explain evidence only
-after a repeated orchestration gap is proved; it cannot own truth, waive
-standards, or mark acceptance.
+involvement. Task-bound network refresh may update time-sensitive sources, but
+each evaluation freezes source identity, retrieval time, revision or digest,
+freshness, conflict, limitation, and applicability. A search or catalog hit is
+not evidence. A later evaluation Skill may orchestrate refresh, collection,
+validation, and explanation only after a repeated orchestration gap is proved;
+it cannot be the sole carrier, own truth, waive standards, or mark acceptance.
+
+Adaptive soft policy and hard red lines coexist. Profiles and recommendations
+change with project context; any future admitted hard floor remains
+AI-independent and mandatory where applicable. A floor need not wait for
+unrelated research to finish when its own safety, truth, authority, privacy, or
+destructive-action evidence is mature, but urgency cannot waive independent
+proof or acceptance authority. The current candidates remain below that gate.
+
+The Harness serves plural affected subjects rather than optimizing for
+agreement with one current user. User goals, preferences, resources, and
+authorization govern the user's legitimate scope, but they are not empirical
+truth, authority over others, or general-population validation. The Agent
+separates facts, preferences, inferences, value trade-offs, authorization, and
+acceptance; it seeks counterevidence without manufacturing disagreement.
+Broad claims require diverse contexts, impact and exclusion review, independent
+review, and accountable acceptance.
 
 ## Product layers
 

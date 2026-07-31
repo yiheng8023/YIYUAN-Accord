@@ -2249,3 +2249,75 @@ The package reuses five existing acceptance carriers, keeps the inventory at
 61, changes no assessment, and promotes no hard standard. No CC Switch, Skill,
 Hook, model, external capability, cross-repository, CALIBRATION, ASSETS,
 commit, push, release, or deployment mutation follows from this checkpoint.
+
+## 2026-07-31 dynamic evaluation and non-self-referential checkpoint
+
+The multidimensional evaluation direction remains inside the Harness north
+star: software engineering is one priority lifecycle specialization of
+human-AI collaboration, not the whole problem domain. The evaluation system is
+not a Skill-only design. It now separates six carrier-neutral layers:
+evaluation ontology, source intelligence and freshness, candidate hard floors,
+deterministic validators, adaptive soft profiles, and optional orchestration.
+Accountable acceptance remains outside all six.
+
+Task-bound network research may refresh time-sensitive standards, law,
+vulnerabilities, dependencies, hosts, capabilities, and reviewed practices.
+Dynamic discovery is not dynamic truth. Every evaluation must freeze source
+identity, owner, retrieval time, revision or digest, freshness, conflict,
+bounded use, limitation, and applicability. A search or catalog hit is not
+evidence. If refresh is unavailable, use the last reviewed pinned snapshot,
+mark it stale or unavailable, narrow the claim, and schedule revalidation.
+
+Soft evaluation policy and hard red lines may coexist. Profiles and
+recommendations adapt to domain, lifecycle stage, risk, host, and evidence.
+Any future admitted hard floor must remain AI-independent and mandatory where
+applicable. Admission waits for the floor-relevant collaboration, lifecycle,
+domain, counterevidence, and operational dependencies, not every unrelated
+research question. A high-confidence safety, truth, authority, privacy, or
+destructive-action floor may receive independent early review, but urgency
+cannot waive proof, scope, false-positive, fallback, migration, retirement, or
+acceptance authority. The current candidates remain below that gate. A future
+Skill may orchestrate refresh, snapshot construction, profile selection,
+evidence collection, validation, and explanation only after repeated
+residual-gap proof; it cannot be the sole carrier, own truth, waive a floor, or
+mark acceptance.
+
+The user explicitly rejected deference and universalization of one person's
+preferences. Preserve a plural-subject boundary: user goals, preferences,
+resources, corrections, and authorization govern the user's legitimate scope,
+but are not empirical truth, independent validation, authority over other
+subjects, or proof of broad population value. Do not optimize for agreement and
+do not manufacture disagreement. Separate fact, preference, interpretation,
+inference, value trade-off, authorization, and acceptance. Broad claims require
+diverse contexts, counterexamples, dissent, accessibility, exclusion,
+distributional-impact, domain and jurisdiction review, independent review, and
+accountable acceptance.
+
+The second schema-conformant report is:
+
+- `registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json`.
+
+It binds the non-self-referential commit
+`202cf04732272c646be2c8c15bf2bbccb749d113` and all eight changed Git objects.
+The target validator and its unit test pass in an exact isolated archive.
+The same archive's full `scripts/verify.py` fails on an inherited historical
+process-fidelity `RAW-REPORT.json` hash: the retained Windows-CRLF runtime-byte
+digest is `6c40c5...`, while the Git-normalized LF archive digest is
+`821861...`. All four files in that historical package have the same semantic
+class of divergence, and downstream records preserve those captured hashes.
+This is an exact-checkout portability and hash-semantics defect, not evidence
+that the resource-observability target logic failed. No partial hash migration
+was attempted without a governed compatibility contract.
+
+The report therefore keeps `statusClaim=needs-verification`, records no
+independent review or acceptance, and blocks the evidence/provenance floor.
+Passing target checks do not cancel that counterevidence. The next order is:
+independent review, frozen source-snapshot implementation, broader profile
+applications, orchestration-burden comparison, then a Skill necessity decision.
+Hard-floor admission remains later and separately governed.
+
+The exact temporary archive root and tar were deleted after evidence capture;
+`.tmp` is absent. This checkpoint authorizes no capability installation,
+CC Switch, Skill, Hook, model, runtime, process, thread, global configuration,
+cross-repository, CALIBRATION, ASSETS, release, deployment, or hard-standard
+mutation.

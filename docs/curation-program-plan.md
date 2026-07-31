@@ -792,5 +792,26 @@ dimension/floor sets, evidence references, unknowns, independent review,
 acceptance authority, and accepted-status guards. The first bounded application
 is a same-system `needs-verification` assessment of the immutable `bb65a26`
 eight-file evaluation package. It is not independent review or project-wide
-quality evidence. The next bounded implementation is a non-self-referential
-software change with independent review, not a project-wide score.
+quality evidence. The second application evaluates the non-self-referential
+`202cf047` Codex Desktop resource-observability change and retains its exact
+archive portability failure as counterevidence instead of cancelling it with
+passing target checks.
+
+The evaluation system now treats task-bound source refresh as a separate layer:
+current network information may update the source pool, but every evaluation
+must freeze a reviewed evidence snapshot that remains auditable offline. Soft
+profiles and future hard red lines coexist; a Skill may later orchestrate
+refresh, profile selection, evidence collection, validation, and explanation,
+but only after repeated residual-gap proof and never as the sole truth,
+standard, or acceptance carrier. Hard-standard admission stays downstream of
+floor-relevant collaboration, lifecycle, domain, counterevidence, and
+operational maturity plus separate final authority; a mature high-confidence
+safety or authority floor need not wait for unrelated research to finish.
+
+The current user is an essential goal, preference, resource, correction, and
+authorization subject, not a universal evidence source. The program does not
+optimize for agreement or manufacture opposition. It separates facts,
+preferences, inference, value trade-offs, authorization, and acceptance, and
+requires plural affected-subject, context, dissent, accessibility, exclusion,
+distributional-impact, domain, jurisdiction, and independent-review evidence
+before broad population claims.

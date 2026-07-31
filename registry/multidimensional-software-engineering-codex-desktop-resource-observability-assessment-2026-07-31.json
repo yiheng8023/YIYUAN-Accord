@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "targetIdentity": {
+    "type": "repository-change-set",
+    "locator": "git:agent-autonomy-harness@202cf04732272c646be2c8c15bf2bbccb749d113",
+    "revision": "202cf04732272c646be2c8c15bf2bbccb749d113",
+    "asOf": "2026-07-31"
+  },
+  "evaluationContext": {
+    "purpose": "Apply the multidimensional contract to a non-self-referential change that records and validates a live read-only Codex Desktop resource-observability preflight.",
+    "domain": "single-host Agent runtime resource observability and attribution gating",
+    "evaluator": "same-task Codex assessment using immutable Git objects, exact-commit isolated verification, and current repository reconciliation",
+    "method": "Git object binding, target-validator execution, unit testing, exact-commit archive verification, line-ending diagnosis, evidence-boundary review, and acceptance-map reconciliation",
+    "claimScope": "The eight files added or changed by commit 202cf047 only; not current Codex Desktop health, resource causation, release behavior, another host, or the whole Harness."
+  },
+  "profileAxes": {
+    "lifecycleStage": "operation",
+    "criticality": "high",
+    "exposure": "local",
+    "reversibility": "bounded",
+    "dataSensitivity": "internal",
+    "aiInvolvement": "agentic"
+  },
+  "applicableDimensions": [
+    "goal-value-and-requirement-fitness",
+    "intent-and-acceptance-fidelity",
+    "architecture-and-design-integrity",
+    "implementation-and-code-quality",
+    "verification-security-privacy-and-safety",
+    "supply-chain-and-provenance",
+    "delivery-change-and-rollback",
+    "reliability-operability-and-observability",
+    "maintainability-evolution-and-retirement",
+    "collaboration-knowledge-and-accountability",
+    "ai-process-loss-and-human-control",
+    "efficiency-resource-stewardship-and-sustainability"
+  ],
+  "applicableCandidateFloors": [
+    "evidence-truth-and-provenance",
+    "authority-and-data-boundary",
+    "completion-acceptance-and-readiness-integrity"
+  ],
+  "evidence": [
+    {
+      "id": "evidence.202cf04-eight-file-git-object-manifest",
+      "source": "git ls-tree over all eight paths changed by 202cf04732272c646be2c8c15bf2bbccb749d113",
+      "asOf": "2026-07-31",
+      "scope": "Eight Git blobs; full git ls-tree records sorted lexicographically, joined with UTF-8 LF, and no terminal newline; manifest SHA-256 dc5005db4b6773e0a6e856812d9991110dd93bf1f614c06f46eb73ffbb8df036.",
+      "grade": "source-bound",
+      "independence": "tool",
+      "limitations": [
+        "Git identity proves the exact change-set bytes, not the truth of the earlier live observations."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-target-validator-and-unit-test",
+      "source": "Exact 202cf047 Git archive running validate_codex_desktop_resource_observability_preflight.py and tests.test_codex_desktop_resource_observability_preflight",
+      "asOf": "2026-07-31",
+      "scope": "The target validator passed and its single consistency unit test passed in an isolated archive with PYTHONDONTWRITEBYTECODE=1.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "The unit suite has one positive consistency test and no target-specific negative mutation tests.",
+        "The static validator checks the retained report; it does not replay the original live collection."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-exact-archive-full-verify-failure",
+      "source": "python -B scripts/verify.py in the exact 202cf047 Git archive",
+      "asOf": "2026-07-31",
+      "scope": "Full verification failed before target integration closeout because a pre-existing durable RAW-REPORT.json expected Windows-CRLF SHA-256 6c40c51606cc6ed2330b3d725d9a81d0beea351a8420bbbefb4a93f8c7273c88 while the Git-normalized LF archive was 821861719e20fa601caf861781bdb32d005d5266fa3ab76e03024c37144453fd.",
+      "grade": "deterministic",
+      "independence": "tool",
+      "limitations": [
+        "The failure is in an inherited process-fidelity evidence package, not in the resource-observability validator.",
+        "The same archive pattern affects four historical JSON byte hashes and may extend to other raw self-bindings; no repository-wide migration was attempted."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-live-observation-bundle",
+      "source": "registry/codex-desktop-resource-observability-preflight-2026-07-31.json at 202cf047",
+      "asOf": "2026-07-31",
+      "scope": "One Windows 11 Codex Desktop 0.146.0 observation with a bounded task listing, nine configured MCP entries, three observer-excluded process samples, one classified snapshot, and explicit non-attribution decisions.",
+      "grade": "observed-live",
+      "independence": "mixed",
+      "limitations": [
+        "Raw process rows, command lines, collection commands, thread titles, and credentials were intentionally not retained.",
+        "The sample was neither idle nor a controlled same-workload repetition and does not prove cause, leak, release, or current state."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-pinned-official-source-correlation",
+      "source": "OpenAI Codex rust-v0.146.0 commit e363b08c9175ac1cbe5893615dd2cb9ddf95043b and dated upstream issue states retained in the target evidence",
+      "asOf": "2026-07-31",
+      "scope": "Pinned protocol method names, two implementation blob identities, and four issue-state observations used only to bound available primitives and corroborating risk.",
+      "grade": "source-bound",
+      "independence": "mixed",
+      "limitations": [
+        "The assessment did not refetch upstream sources, and issue states are dated rather than current.",
+        "Upstream risk reports cannot establish local host causation."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-authority-redaction-and-negative-claim-boundary",
+      "source": "AuthorityBoundary, observabilityDecision, claimBoundary, and documentation at 202cf047",
+      "asOf": "2026-07-31",
+      "scope": "The retained package declares read-only observation, no model turn or runtime mutation, no retained raw command lines or credentials, and nine explicit false causation/control claims.",
+      "grade": "deterministic",
+      "independence": "mixed",
+      "limitations": [
+        "Repository absence and assertions support the retained-artifact boundary but cannot independently replay every collection-time side effect or redaction decision."
+      ]
+    },
+    {
+      "id": "evidence.202cf04-program-integration",
+      "source": "registry/program-acceptance-map.json and scripts/verify.py at 202cf047",
+      "asOf": "2026-07-31",
+      "scope": "The preflight was linked to acceptance.dynamic-runtime-control-gap-research as bounded evidence without upgrading autonomous control or self-authored-controller claims.",
+      "grade": "source-bound",
+      "independence": "mixed",
+      "limitations": [
+        "Program linkage is repository governance evidence, not external acceptance or product readiness."
+      ]
+    }
+  ],
+  "dimensionResults": [
+    {
+      "dimensionId": "goal-value-and-requirement-fitness",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.202cf04-live-observation-bundle",
+        "evidence.202cf04-program-integration"
+      ],
+      "unknowns": [
+        "No controlled experiment shows that the observed footprint caused user-visible slowdown or that a later intervention would produce value."
+      ],
+      "limitations": [
+        "The change narrows the problem and blocks unsafe action; it does not solve resource allocation or release."
+      ]
+    },
+    {
+      "dimensionId": "intent-and-acceptance-fidelity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.202cf04-authority-redaction-and-negative-claim-boundary",
+        "evidence.202cf04-program-integration"
+      ],
+      "unknowns": [
+        "No independent reviewer confirmed that all user concerns and non-goals were preserved through collection, classification, and program integration."
+      ],
+      "limitations": [
+        "The negative claim boundary is strong, while the intake-to-observation process trace is incomplete."
+      ]
+    },
+    {
+      "dimensionId": "architecture-and-design-integrity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.202cf04-live-observation-bundle",
+        "evidence.202cf04-pinned-official-source-correlation"
+      ],
+      "unknowns": [
+        "No independent design review challenged the separation among inventory, ownership, attribution, actuation, and verification."
+      ],
+      "limitations": [
+        "The architecture is a bounded evidence package and static validator, not an operational observer or controller."
+      ]
+    },
+    {
+      "dimensionId": "implementation-and-code-quality",
+      "assessment": "concerning",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-target-validator-and-unit-test",
+        "evidence.202cf04-exact-archive-full-verify-failure"
+      ],
+      "unknowns": [
+        "Mutation coverage and collection-to-report reconstruction behavior were not measured."
+      ],
+      "limitations": [
+        "The validator is deterministic and passes, but its only dedicated unit test is a positive consistency check.",
+        "Exact-commit repository verification is not archive-portable because of inherited raw text hash semantics."
+      ]
+    },
+    {
+      "dimensionId": "verification-security-privacy-and-safety",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-authority-redaction-and-negative-claim-boundary",
+        "evidence.202cf04-target-validator-and-unit-test"
+      ],
+      "unknowns": [
+        "No independent security or privacy review inspected the live collection surface, residual identifiers, or redaction completeness."
+      ],
+      "limitations": [
+        "Sensitive raw command lines, credentials, and task text were not retained, which protects privacy but also limits replay and independent verification."
+      ]
+    },
+    {
+      "dimensionId": "supply-chain-and-provenance",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.202cf04-eight-file-git-object-manifest",
+        "evidence.202cf04-pinned-official-source-correlation"
+      ],
+      "unknowns": [
+        "No fresh upstream refetch was performed and no external issue-page content digest was retained."
+      ],
+      "limitations": [
+        "Code and protocol references are revision-pinned, while issue state and interpretation remain dated metadata."
+      ]
+    },
+    {
+      "dimensionId": "delivery-change-and-rollback",
+      "assessment": "concerning",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-eight-file-git-object-manifest",
+        "evidence.202cf04-exact-archive-full-verify-failure"
+      ],
+      "unknowns": [
+        "No rollback drill or exact-commit remote CI result was retained."
+      ],
+      "limitations": [
+        "The Git change is bounded and revertible, but an exact clean archive cannot pass the repository-wide verifier without resolving inherited line-ending hash semantics."
+      ]
+    },
+    {
+      "dimensionId": "reliability-operability-and-observability",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-live-observation-bundle",
+        "evidence.202cf04-pinned-official-source-correlation"
+      ],
+      "unknowns": [
+        "Task-to-process ownership, context telemetry, release receipts, idle controls, repeated same-workload samples, and safe task-scoped actuation remain absent."
+      ],
+      "limitations": [
+        "The package is a single-host snapshot and preflight decision, not a repeatable operational observability capability."
+      ]
+    },
+    {
+      "dimensionId": "maintainability-evolution-and-retirement",
+      "assessment": "concerning",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-target-validator-and-unit-test",
+        "evidence.202cf04-exact-archive-full-verify-failure",
+        "evidence.202cf04-pinned-official-source-correlation"
+      ],
+      "unknowns": [
+        "No migration policy exists for historical runtime byte hashes versus Git-normalized durable bytes."
+      ],
+      "limitations": [
+        "The validator hard-codes dated host counts, source versions, blob identities, and issue states.",
+        "The inherited CRLF/LF self-binding prevents checkout-independent verification."
+      ]
+    },
+    {
+      "dimensionId": "collaboration-knowledge-and-accountability",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "evidence.202cf04-authority-redaction-and-negative-claim-boundary",
+        "evidence.202cf04-program-integration"
+      ],
+      "unknowns": [
+        "No accountable external owner accepted the interpretation or next gate."
+      ],
+      "limitations": [
+        "The documentation makes decisions and prohibited claims visible, but responsibility has not been exercised through independent review."
+      ]
+    },
+    {
+      "dimensionId": "ai-process-loss-and-human-control",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-authority-redaction-and-negative-claim-boundary",
+        "evidence.202cf04-live-observation-bundle"
+      ],
+      "unknowns": [
+        "The live collection and classification path has no complete per-hop intent, omission, assumption, and redaction ledger."
+      ],
+      "limitations": [
+        "Strong negative action boundaries preserve control, but they do not prove that the Agent retained every relevant signal or avoided classification loss."
+      ]
+    },
+    {
+      "dimensionId": "efficiency-resource-stewardship-and-sustainability",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": [
+        "evidence.202cf04-live-observation-bundle"
+      ],
+      "unknowns": [
+        "Collection overhead, verification cost, context cost, intervention benefit, idle baseline, and long-term maintenance burden were not measured."
+      ],
+      "limitations": [
+        "The target records a resource footprint but cannot support an efficiency, savings, sustainability, or optimal-allocation claim."
+      ]
+    }
+  ],
+  "floorResults": [
+    {
+      "floorId": "evidence-truth-and-provenance",
+      "result": "blocked",
+      "evidenceIds": [
+        "evidence.202cf04-eight-file-git-object-manifest",
+        "evidence.202cf04-exact-archive-full-verify-failure"
+      ],
+      "owner": "agent-autonomy-harness repository authority",
+      "disposition": "The target identity is exact and local claims stay bounded, but checkout-independent repository verification is blocked by inherited CRLF runtime-byte versus Git-LF durable-hash semantics."
+    },
+    {
+      "floorId": "authority-and-data-boundary",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.202cf04-authority-redaction-and-negative-claim-boundary"
+      ],
+      "owner": "repository owner and local host owner",
+      "disposition": "The retained artifact stays read-only, records no runtime mutation, and excludes raw command lines, credentials, and task content; collection-time replay remains a stated limit."
+    },
+    {
+      "floorId": "completion-acceptance-and-readiness-integrity",
+      "result": "pass",
+      "evidenceIds": [
+        "evidence.202cf04-program-integration",
+        "evidence.202cf04-live-observation-bundle"
+      ],
+      "owner": "repository owner and future runtime acceptance authority",
+      "disposition": "The package denies attribution, actuation, controller necessity, cross-host parity, and release claims and is not treated as a completed runtime capability."
+    }
+  ],
+  "unknownsAndLimitations": [
+    "This is a same-system assessment of a historical single-host observation package.",
+    "The original live collection cannot be independently replayed from retained raw rows because privacy-preserving redaction intentionally removed them.",
+    "Target-specific checks pass, while exact-commit full verification is blocked by inherited cross-checkout line-ending hash semantics.",
+    "The report cannot support current-host health, causal resource pressure, safe release, controller necessity, project-wide quality, or hard-standard admission."
+  ],
+  "counterevidenceAndDisagreements": [
+    "Six repeated startup cohorts and multi-gigabyte aggregates are material observations but do not identify an owning task, lifecycle state, cause, or leak.",
+    "Official protocol primitives exist, contradicting a broad claim that Codex has no ownership or release surfaces, but the current task surface did not expose them.",
+    "A passing target validator does not cancel the exact-archive repository verification failure.",
+    "Privacy-preserving omission reduces data exposure while weakening independent replay; neither value cancels the other."
+  ],
+  "humanOrDomainDecisions": [
+    "The repository owner must separately decide whether historical Windows-CRLF capture hashes remain runtime evidence alongside new Git-normalized durable digests or enter a governed hash-semantics migration."
+  ],
+  "nextEvidenceAndFallback": {
+    "nextEvidence": [
+      "Obtain independent review of the dimension, floor, privacy, and portability judgments.",
+      "Define and test a non-destructive migration contract that separates historical captured-file hashes from Git-normalized durable-artifact hashes before changing existing evidence.",
+      "Run exact-commit or clean-clone verification on at least Windows and one LF-native environment after that contract exists.",
+      "For resource control, inspect current official ownership/release exposure before any separately authorized disposable lifecycle trial or self-authored controller."
+    ],
+    "fallback": "Retain 202cf047 as a single-host read-only inventory and negative attribution gate; do not use it for causal action, resource savings, current-host conclusions, or controller justification."
+  },
+  "revalidationAndRetirementTriggers": [
+    "Codex Desktop, app-server ownership, resource telemetry, or lifecycle release surfaces materially change.",
+    "The historical evidence hash semantics are migrated or a clean checkout becomes reproducibly verifiable.",
+    "Independent review finds a privacy, provenance, attribution, or classification defect.",
+    "A newer controlled same-workload observation supersedes the single-host snapshot.",
+    "A native or official resource governor makes the bounded preflight obsolete."
+  ],
+  "independentReview": {
+    "status": "not-performed",
+    "reviewer": "",
+    "scope": "Tool-independent judgment of the live-observation interpretation, privacy boundary, archive-portability finding, and dimensional assessments remains absent."
+  },
+  "acceptanceAuthority": {
+    "status": "not-sought",
+    "owner": "repository owner and separately governed runtime acceptance authority",
+    "scope": "No current-host health, causal attribution, actuation, controller, cross-host, release, project-wide quality, CALIBRATION, ASSETS, or hard-standard acceptance is requested."
+  },
+  "statusClaim": "needs-verification",
+  "claimBoundary": "Commit 202cf047 is an exact, bounded, non-self-referential resource-observability change whose target-specific checks pass and whose negative authority claims are useful; independent validity, privacy completeness, clean-checkout repository verification, causal attribution, operational control, efficiency, and acceptance remain unproved."
+}

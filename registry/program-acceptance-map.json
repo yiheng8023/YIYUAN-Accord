@@ -595,7 +595,7 @@
     },
     {
       "id": "acceptance.standard-candidate-contract",
-      "statement": "A reusable standard candidate package contract preserves source lineage, repeated evidence, original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, scope, counterexamples, fallback, revalidation or retirement, versioning, migration, and authority boundaries.",
+      "statement": "A reusable standard candidate package contract separates adaptive soft evaluation from any admitted AI-independent hard floor; it preserves dynamic source-refresh triggers, a frozen versioned evidence snapshot, source lineage and freshness, plural affected-subject and context boundaries, dissent and counterevidence, distributional and exclusion impact, repeated non-self-referential evidence, original failure mode, AI-era effect, current ecosystem coverage, deterministic verification, residual human judgment, creativity and maintenance cost, scope, fallback, revalidation or retirement, versioning, migration, and authority boundaries without treating user agreement as factual or acceptance evidence.",
       "assessment": "partial",
       "verificationIds": [
         "verification.standard-candidate-contract"

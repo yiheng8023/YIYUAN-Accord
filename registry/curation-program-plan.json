@@ -467,7 +467,9 @@
       "currentProcessFidelityRawTraceEligibility": "registry/human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-assessment-2026-07-27.json",
       "currentAiEraEngineeringPrinciplesRevalidation": "registry/ai-era-classical-software-engineering-principles-revalidation-2026-07-31.json",
       "currentMultidimensionalSoftwareEngineeringEvaluationContract": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
-      "currentMultidimensionalSoftwareEngineeringEvaluationAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json"
+      "currentMultidimensionalSoftwareEngineeringEvaluationAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
+      "currentMultidimensionalSoftwareEngineeringNonSelfAssessment": "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
+      "currentMultidimensionalSoftwareEngineeringSourceRefreshState": "contract-specified-frozen-snapshot-implementation-and-independent-review-pending"
     },
     {
       "id": "initiative.production-capability-manager-topology-design",

@@ -48,10 +48,35 @@ separate. The deterministic report schema and positive fixture pass zero-model
 cross-field checks. A first schema-conformant application now binds the
 immutable `bb65a26` eight-file evaluation package, preserves unassessed and
 insufficient-evidence results, and remains an unaccepted same-system
-self-assessment. The next bounded implementation is a non-self-referential
-software change with independent review. No complete evaluation capability,
-new Skill necessity, hard-standard promotion, cross-domain threshold, or
-lifecycle completion is claimed.
+self-assessment. A second application binds the non-self-referential
+`202cf047` Codex Desktop resource-observability change. Its target checks pass,
+while exact-archive full verification exposes an inherited CRLF/LF durable-hash
+portability defect and therefore blocks the evidence/provenance floor.
+
+The next research order is:
+
+1. implement and calibrate the specified task-bound source-refresh triggers and
+   frozen, versioned evidence snapshot so it remains usable offline;
+2. obtain independent review of both bounded reports, record disagreement, and
+   test whether one-user assumptions survive plural affected-subject,
+   accessibility, exclusion, distributional-impact, domain, and jurisdiction
+   review;
+3. apply the contract across additional risk, lifecycle, and domain profiles;
+4. measure orchestration burden and compare native, official, reviewed
+   external, and composed evaluation paths;
+5. consider a lightweight evaluation Skill only if repeated orchestration
+   residuals remain;
+6. consider hard-floor admission only after floor-relevant collaboration,
+   lifecycle, domain, and operational dependencies mature, with repeated
+   non-self-referential evidence, counterexamples, migration, cost, fallback,
+   retirement, and final authority review. A mature high-confidence safety or
+   authority floor need not wait for unrelated research to finish.
+
+The dynamic layer may use current network sources, but every report must freeze
+source identity, retrieval time, revision or digest, freshness, conflict,
+bounded use, and limitation. No complete evaluation capability, new Skill
+necessity, hard-standard promotion, cross-domain threshold, or lifecycle
+completion is claimed.
 
 After the additive cumulative-loss accounting mechanism passed, the
 source-backed lifecycle protocol and zero-model calibration also passed their

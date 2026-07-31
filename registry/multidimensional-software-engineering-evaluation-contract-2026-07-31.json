@@ -11,6 +11,11 @@
       "mayOwnAcceptanceAuthority": false
     },
     {
+      "id": "source-intelligence-and-freshness",
+      "role": "Discover and refresh task-relevant native, official, and reviewed sources while freezing identity, retrieval time, freshness, conflict, and applicability for each evaluation.",
+      "mayOwnAcceptanceAuthority": false
+    },
+    {
       "id": "candidate-hard-floors",
       "role": "Express independently testable floor hypotheses without promoting them into admitted standards.",
       "mayOwnAcceptanceAuthority": false
@@ -31,6 +36,68 @@
       "mayOwnAcceptanceAuthority": false
     }
   ],
+  "sourceRefreshAndSnapshotPolicy": {
+    "ecosystemAndGuidanceAreDynamic": true,
+    "networkRefreshMayBeUsed": true,
+    "networkRefreshTriggers": [
+      "a bound evaluation needs time-sensitive law, standard, vulnerability, dependency, platform, or ecosystem facts",
+      "a retained source exceeds its declared freshness window",
+      "material source conflict, supersession, deprecation, or contrary evidence appears",
+      "a phase, risk, domain, host, or release boundary changes the applicable profile"
+    ],
+    "everyEvaluationFreezesOneEvidenceSnapshot": true,
+    "snapshotMustRecord": [
+      "source identity and owner",
+      "locator and retrieval time",
+      "revision, version, publication state, or content digest when available",
+      "freshness window and revalidation trigger",
+      "bounded use, conflict, limitation, and applicability"
+    ],
+    "catalogOrSearchHitIsEvidence": false,
+    "latestClaimWithoutPinnedSnapshotAllowed": false,
+    "offlineOrUnavailableFallback": "Use the last reviewed pinned snapshot, mark it stale or unavailable when applicable, narrow the claim, and schedule revalidation rather than inventing freshness.",
+    "skillMayOrchestrateRefreshButOwnsNoSourceTruth": true
+  },
+  "softAndHardStandardBoundary": {
+    "softEvaluationPolicy": "Dimensions, profiles, evidence expectations, recommendations, and source selection adapt to domain, lifecycle stage, risk, host, and current evidence.",
+    "hardFloorPolicy": "Only separately admitted, AI-independent, deterministically testable red lines may become mandatory project or product controls.",
+    "coexistenceRule": "Soft evaluation may add context and stricter evidence but may not cancel an applicable admitted hard floor; a hard floor may block a claim but may not replace multidimensional judgment.",
+    "currentHardStandardAdmissionReady": false,
+    "independentEarlyFloorReviewAllowed": true,
+    "admissionPrerequisites": [
+      "the floor-relevant human-AI shortfall, lifecycle, domain, counterevidence, and operational dependencies are mature enough for this specific decision",
+      "a candidate remains necessary across repeated non-self-referential cases and counterexamples",
+      "meaning and proof remain usable without an Agent, Skill, Hook, or network",
+      "cost, false-positive risk, fallback, migration, versioning, and retirement are evidenced",
+      "the separately governed final standard authority accepts it"
+    ],
+    "earlyReviewBoundary": "A high-confidence safety, truth, authority, privacy, or destructive-action floor may be reviewed before unrelated program work finishes, but urgency cannot waive independent proof, scope, false-positive, fallback, migration, retirement, or acceptance authority."
+  },
+  "subjectAndBiasBoundary": {
+    "userGoalPreferenceAndAuthorizationAreTaskInputs": true,
+    "userPreferenceIsEmpiricalTruth": false,
+    "userAgreementIsValidationEvidence": false,
+    "automaticAgreementAllowed": false,
+    "mechanicalOppositionCountsAsIndependence": false,
+    "affectedSubjectsMayExtendBeyondCurrentUser": true,
+    "broadPopulationClaimRequires": [
+      "diverse affected-subject and context evidence",
+      "counterexamples and dissent",
+      "distributional, accessibility, exclusion, and disparate-impact review",
+      "domain and jurisdiction boundaries",
+      "independent review and accountable acceptance"
+    ],
+    "requiredSeparation": [
+      "fact",
+      "user preference",
+      "interpretation",
+      "inference",
+      "value trade-off",
+      "authorization",
+      "acceptance"
+    ],
+    "authorityRule": "A user controls goals, resources, preferences, and authorization inside their legitimate scope; that authority does not make a factual claim true, waive applicable safety or rights, bind other affected subjects, or prove general population value."
+  },
   "dimensions": [
     {
       "id": "goal-value-and-requirement-fitness",
@@ -318,9 +385,11 @@
     "currentReportSchema": "registry/multidimensional-software-engineering-evaluation-report-schema-2026-07-31.json",
     "currentPositiveFixture": "tests/fixtures/multidimensional-software-engineering-evaluation-report-positive-2026-07-31.json",
     "currentBoundedAssessment": "registry/multidimensional-software-engineering-evaluation-contract-package-assessment-2026-07-31.json",
-    "nextImplementationPriority": "apply the report schema to one non-self-referential bounded software change and seek independent review",
+    "currentNonSelfReferentialAssessment": "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
+    "nextImplementationPriority": "obtain independent review and implement a deterministic frozen source-refresh snapshot before any evaluation Skill or hard-standard decision",
     "skillMayLater": [
       "select an applicable profile",
+      "trigger task-bound source refresh and freeze a reviewed snapshot",
       "collect and normalize evidence",
       "invoke existing validators",
       "explain uncertainty and gaps"

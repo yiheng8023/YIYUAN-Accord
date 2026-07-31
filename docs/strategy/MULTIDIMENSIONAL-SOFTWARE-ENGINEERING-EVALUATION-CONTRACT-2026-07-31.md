@@ -15,21 +15,25 @@ evaluation structure around it.
 
 ## Separation of carriers
 
-The evaluation system has five distinct layers:
+The evaluation system has six distinct layers:
 
 1. **evaluation ontology and contract** — dimensions, context, evidence,
    uncertainty, output shape, and anti-gaming rules;
-2. **candidate hard floors** — independently testable obligations that may
+2. **source intelligence and freshness** — task-bound discovery and refresh of
+   native, official, and reviewed sources, followed by a frozen evidence
+   snapshot with identity, retrieval time, freshness, conflict, and scope;
+3. **candidate hard floors** — independently testable obligations that may
    block a bounded evaluation when applicable, but remain non-authoritative
    until separate admission;
-3. **deterministic validators** — tests, static checks, provenance checks,
+4. **deterministic validators** — tests, static checks, provenance checks,
    policy checks, and observed receipts;
-4. **risk, stage, and domain profiles** — proportional evidence expectations
+5. **risk, stage, and domain profiles** — proportional evidence expectations
    derived from lifecycle stage, criticality, exposure, reversibility, data
    sensitivity, and AI involvement;
-5. **optional orchestration** — an Agent or later Skill may select a profile,
-   collect evidence, invoke existing validators, and explain results, but it
-   cannot own truth, waive a floor, invent evidence, or mark acceptance.
+6. **optional orchestration** — an Agent or later Skill may trigger a bounded
+   refresh, freeze a snapshot, select a profile, collect evidence, invoke
+   existing validators, and explain results, but it cannot own truth, waive a
+   floor, invent evidence, or mark acceptance.
 
 The evaluation contract must remain usable when no Agent, Skill, Hook, Plugin,
 App, or MCP is present. A future Skill is justified only after repeated tasks
@@ -99,6 +103,20 @@ but cannot promote them into project hard standards. Admission still requires
 AI-independent meaning and proof, repeated evidence, a governed calibration
 handoff, and the final standard authority's decision.
 
+Soft evaluation policy and hard red lines coexist. Dimensions, profiles,
+evidence expectations, recommendations, and source selection remain adaptive.
+An admitted hard floor, if one later exists, is a mandatory AI-independent
+project or product control. Soft policy may add context and require stronger
+evidence but cannot cancel an applicable hard floor; a hard floor may block a
+claim but cannot replace multidimensional judgment. Admission does not require
+every unrelated human-AI research question to finish. A high-confidence
+safety, truth, authority, privacy, or destructive-action floor may receive
+independent early review once its own shortfall, lifecycle, domain,
+counterevidence, and operational dependencies are mature. Urgency still cannot
+waive independent proof, scope, false-positive, fallback, migration,
+retirement, or acceptance authority. The current floor candidates have not
+met those conditions.
+
 ## Adaptive profiles
 
 Profiles are derived rather than treated as one permanent checklist. The
@@ -116,6 +134,49 @@ A profile may raise evidence requirements or make a candidate floor
 applicable. It may not lower an already applicable authority, truth, safety,
 or acceptance boundary. Domain overlays remain separate and can be added only
 when their source, owner, scope, and verification surface are bound.
+
+## Dynamic source intelligence and frozen snapshots
+
+Standards, laws, vulnerabilities, dependencies, Agent hosts, official
+capabilities, and reviewed ecosystem practices change. The evaluation system
+may therefore use task-bound network research when a claim is time-sensitive,
+a retained source is stale, contrary evidence appears, or a phase, risk,
+domain, host, or release boundary changes.
+
+Dynamic discovery is not dynamic truth. Every evaluation freezes one evidence
+snapshot that records source identity and owner, locator and retrieval time,
+revision, version, publication state or digest when available, freshness
+window, revalidation trigger, bounded use, conflict, limitation, and
+applicability. A catalog hit, search result, or unpinned “latest” claim is not
+evaluation evidence. If refresh is unavailable, use the last reviewed pinned
+snapshot, mark it stale or unavailable, narrow the claim, and schedule
+revalidation.
+
+This source layer remains independent of the Skill carrier. A future Skill may
+orchestrate refresh and snapshot construction, but the snapshot, deterministic
+checks, candidate hard floors, and acceptance decision remain usable and
+auditable without that Skill or without network access.
+
+## Plural subjects and anti-deference
+
+The current user's goals, preferences, corrections, resources, and bounded
+authorization are essential task inputs. They are not empirical truth,
+independent validation, authority over other affected subjects, or proof of
+general population value. User agreement cannot close a factual, safety,
+rights, or acceptance gap.
+
+The Agent must not optimize for agreement, flattery, or conflict avoidance. It
+must also not perform disagreement merely to appear independent. Every material
+judgment separates fact, user preference, interpretation, inference, value
+trade-off, authorization, and acceptance. Broad claims require diverse
+affected-subject and context evidence, counterexamples and dissent,
+distributional, accessibility, exclusion, and disparate-impact review, domain
+and jurisdiction boundaries, independent review, and accountable acceptance.
+
+User authority governs goals, resources, preferences, and actions inside the
+user's legitimate scope. It does not make a claim true, waive applicable safety
+or rights, bind other subjects, or turn one collaboration history into a
+universal design.
 
 ## Source synthesis
 
@@ -184,9 +245,16 @@ authority, and accepted-status guards without a model. The first bounded
 application evaluates the immutable `bb65a26` eight-file contract package and
 remains a same-system self-assessment with status `needs-verification`; it does
 not establish independent validity, real-domain usefulness, cross-host value,
-efficiency, or standard eligibility. The next implementation priority is a
-non-self-referential bounded software change with independent review, not a
-project-wide rating or a new evaluation Skill.
+efficiency, or standard eligibility.
+
+The second application evaluates the non-self-referential `202cf047`
+Codex Desktop resource-observability change. Its target validator and unit test
+pass in an exact archive, while full exact-commit verification exposes an
+inherited CRLF runtime-byte versus Git-LF durable-hash portability defect. The
+report therefore preserves a blocked evidence/provenance floor instead of
+letting local green checks cancel the counterevidence. Independent review and
+frozen source-refresh snapshot semantics precede any evaluation Skill or
+hard-standard decision.
 
 ## Acceptance and authority boundary
 

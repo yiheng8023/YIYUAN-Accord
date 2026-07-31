@@ -44,6 +44,36 @@ class MultidimensionalSoftwareEngineeringEvaluationContractTests(
         with self.assertRaisesRegex(RuntimeError, "new Skill was declared necessary"):
             validate_contract(mutated)
 
+    def test_unpinned_latest_source_claim_fails_closed(self) -> None:
+        mutated = copy.deepcopy(self.contract)
+        mutated["sourceRefreshAndSnapshotPolicy"][
+            "latestClaimWithoutPinnedSnapshotAllowed"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "source-refresh"):
+            validate_contract(mutated)
+
+    def test_hard_standard_readiness_fails_closed(self) -> None:
+        mutated = copy.deepcopy(self.contract)
+        mutated["softAndHardStandardBoundary"][
+            "currentHardStandardAdmissionReady"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "hard-floor separation"):
+            validate_contract(mutated)
+
+    def test_automatic_user_agreement_fails_closed(self) -> None:
+        mutated = copy.deepcopy(self.contract)
+        mutated["subjectAndBiasBoundary"]["automaticAgreementAllowed"] = True
+        with self.assertRaisesRegex(RuntimeError, "anti-deference"):
+            validate_contract(mutated)
+
+    def test_mechanical_opposition_is_not_independence(self) -> None:
+        mutated = copy.deepcopy(self.contract)
+        mutated["subjectAndBiasBoundary"][
+            "mechanicalOppositionCountsAsIndependence"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "anti-deference"):
+            validate_contract(mutated)
+
     def test_acceptance_count_drift_fails_closed(self) -> None:
         mutated_map = copy.deepcopy(self.program_map)
         mutated_map["acceptanceCriteria"].pop()
