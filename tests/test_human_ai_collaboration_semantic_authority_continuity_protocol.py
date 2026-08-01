@@ -41,7 +41,7 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
         self.assertIs(gate["existingRunnerLoaderInvocationProved"], False)
         self.assertIs(gate["existingRunnerInstructionDeliveryProved"], False)
 
-    def test_current_execution_plan_preflight_is_recorded(self) -> None:
+    def test_current_execution_plan_and_dry_runtime_preflights_are_recorded(self) -> None:
         sources = self.document["sourceBindings"]
         self.assertEqual(
             "scripts/build_human_ai_collaboration_semantic_authority_execution_plan.py",
@@ -54,10 +54,23 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
             ),
             sources["semanticExecutionPlanPreflightReport"],
         )
+        self.assertEqual(
+            "scripts/run_human_ai_collaboration_semantic_authority_runtime_adapter.py",
+            sources["semanticDryRuntimeAdapter"],
+        )
+        self.assertEqual(
+            (
+                "audits/human-ai-collaboration-semantic-authority-runtime-"
+                "adapter-preflight-2026-08-01/REPORT.json"
+            ),
+            sources["semanticDryRuntimeAdapterPreflightReport"],
+        )
         gate = self.document["executionAdmission"]
         self.assertIs(gate["semanticExecutionPlanAdapterImplemented"], True)
         self.assertIs(gate["semanticExecutionPlanPreflightPass"], True)
-        self.assertIs(gate["semanticRuntimeAdapterImplemented"], False)
+        self.assertIs(gate["semanticDryRuntimeAdapterImplemented"], True)
+        self.assertIs(gate["semanticDryRuntimeAdapterPreflightPass"], True)
+        self.assertIs(gate["semanticLiveRuntimeAdapterImplemented"], False)
         self.assertIs(gate["dispatchReadinessProved"], False)
 
     def test_rejects_existing_runner_semantic_support_promotion(self) -> None:
@@ -82,6 +95,22 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
             "semanticExecutionPlanPreflightPass"
         ] = False
         with self.assertRaisesRegex(RuntimeError, "execution-plan preflight"):
+            self.validate(document)
+
+    def test_rejects_dry_runtime_adapter_preflight_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "semanticDryRuntimeAdapterPreflightPass"
+        ] = False
+        with self.assertRaisesRegex(RuntimeError, "dry runtime-adapter preflight"):
+            self.validate(document)
+
+    def test_rejects_live_runtime_adapter_promotion(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"][
+            "semanticLiveRuntimeAdapterImplemented"
+        ] = True
+        with self.assertRaisesRegex(RuntimeError, "live runtime adapter overclaimed"):
             self.validate(document)
 
     def test_rejects_dispatch_readiness_promotion(self) -> None:

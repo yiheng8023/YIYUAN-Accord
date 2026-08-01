@@ -31,6 +31,10 @@ EXECUTION_PLAN_PREFLIGHT_REPORT_PATH = Path(
     "audits/human-ai-collaboration-semantic-authority-execution-plan-"
     "preflight-2026-08-01/REPORT.json"
 )
+RUNTIME_ADAPTER_PREFLIGHT_REPORT_PATH = Path(
+    "audits/human-ai-collaboration-semantic-authority-runtime-adapter-"
+    "preflight-2026-08-01/REPORT.json"
+)
 
 
 def _require(condition: bool, message: str) -> None:
@@ -49,7 +53,7 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         document.get("schema") == 1
         and document.get("status")
         == (
-            "no-model-admission-and-plan-preflight-complete-"
+            "no-model-admission-plan-and-runtime-adapter-preflight-complete-"
             "live-dispatch-not-authorized"
         )
         and document.get("scenarioId") == "HAC-SEMANTIC-AUTHORITY-01"
@@ -102,6 +106,13 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         ),
         "semanticExecutionPlanPreflightReport": str(
             EXECUTION_PLAN_PREFLIGHT_REPORT_PATH
+        ).replace("\\", "/"),
+        "semanticDryRuntimeAdapter": (
+            "scripts/run_human_ai_collaboration_semantic_authority_"
+            "runtime_adapter.py"
+        ),
+        "semanticDryRuntimeAdapterPreflightReport": str(
+            RUNTIME_ADAPTER_PREFLIGHT_REPORT_PATH
         ).replace("\\", "/"),
     }
     _require(sources == expected_sources, "Semantic continuity source bindings drifted")
@@ -299,8 +310,13 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "Semantic continuity execution-plan preflight was not recorded",
     )
     _require(
-        gate.get("semanticRuntimeAdapterImplemented") is False,
-        "Semantic continuity runtime adapter prematurely promoted",
+        gate.get("semanticDryRuntimeAdapterImplemented") is True
+        and gate.get("semanticDryRuntimeAdapterPreflightPass") is True,
+        "Semantic continuity dry runtime-adapter preflight was not recorded",
+    )
+    _require(
+        gate.get("semanticLiveRuntimeAdapterImplemented") is False,
+        "Semantic continuity live runtime adapter overclaimed",
     )
     _require(
         gate.get("dispatchReadinessProved") is False,
@@ -610,7 +626,7 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
     ).hexdigest()
     _require(
         execution_plan_digest == computed_execution_plan_digest
-        == "28a387abbcef4b61bb33ef1dfc2aac8d9d5e991e27857342b1d36f2ac43eb7f4",
+        == "74a7113c4dc2502460644d701d83608c4cbda9c84ccfec21d34167a6bbc39617",
         "Semantic continuity execution-plan report digest drifted",
     )
     _require(
@@ -646,17 +662,17 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         == {
             "SEM-NATIVE": (
                 "SEM03-ADMISSION-NATIVE-001",
-                "47cc5e2fcfd1c5abcb9c3a37dcba661a4d8512eda68d54632623476a2985262b",
+                "748fc795823d2b71f8937c287540d97df122f79528582ca0e213a3e366fd36a2",
                 "45ae2e21334d807b7b37c07964c2a2eeafe4f00ed437f55f341c5c46f0932d27",
             ),
             "SEM-LOCAL-ADAPTED-MONOLITH": (
                 "SEM03-ADMISSION-LOCAL-001",
-                "c1a824c917dac7a391a62a0947c90c992777c77a9b0c6bcf0ff5652b5cd4e0ee",
+                "b1419556f71f0f890bcad792a314e79a2dc205c8b7da6afcad4f544329af95cb",
                 "e2d46a706c461b7c0ad4f3592fe727fa4edfc0c7d7843ade751c4fa6feba67ab",
             ),
             "SEM-MATT-CURRENT-COMPOSITION": (
                 "SEM03-ADMISSION-CURRENT-001",
-                "5a013ed6f9532815bce61b5a2afe237f014341307865e11fe299b9292f81ca74",
+                "f1c26c4dcf37caa67996184090cfdc8e8b2e5abd43d0886769762c973ace97d1",
                 "71985f01848f58497232075a916c703e0df13438fcc76573464653eae5279b97",
             ),
         }
@@ -680,6 +696,102 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
             for value in execution_plan_report.get("claimBoundary", {}).values()
         ),
         "Semantic continuity execution-plan boundary drifted",
+    )
+
+    runtime_report = json.loads(
+        (root / RUNTIME_ADAPTER_PREFLIGHT_REPORT_PATH).read_text(encoding="utf-8")
+    )
+    runtime_body = dict(runtime_report)
+    runtime_digest = runtime_body.pop("reportSha256", None)
+    computed_runtime_digest = hashlib.sha256(
+        json.dumps(
+            runtime_body,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    _require(
+        runtime_digest == computed_runtime_digest
+        == "284122bab9c24d31308bd75868d7369f7cd47fc4eb49ad17af18f058add3386f",
+        "Semantic continuity runtime-adapter report digest drifted",
+    )
+    _require(
+        runtime_report.get("status") == "preflight-pass-no-dispatch"
+        and runtime_report.get("id")
+        == (
+            "human-ai-collaboration-semantic-authority-runtime-adapter-"
+            "preflight-v1"
+        )
+        and runtime_report.get("appServerSessionCount") == 6
+        and runtime_report.get("appServerRequestCount") == 12
+        and runtime_report.get("hostInventoryBaselineCounts")
+        == {"system": 6, "user": 55},
+        "Semantic continuity runtime-adapter identity drifted",
+    )
+    runtime_treatments = _index(
+        runtime_report.get("treatments", []),
+        "treatmentId",
+        "Runtime-adapter treatment",
+    )
+    _require(
+        {
+            treatment_id: (
+                row.get("runId"),
+                row.get("planSha256"),
+                row.get("phaseEnvelopeCount"),
+                row.get("projection", {}).get("requiredSkillNames"),
+            )
+            for treatment_id, row in runtime_treatments.items()
+        }
+        == {
+            "SEM-NATIVE": (
+                "SEM03-DRY-NATIVE-001",
+                "de42e75c4c711c1465473667383cb6303870060082d8d71a12eef2ffa3033055",
+                4,
+                [],
+            ),
+            "SEM-LOCAL-ADAPTED-MONOLITH": (
+                "SEM03-DRY-LOCAL-001",
+                "f4878066f805e7e9b7854f874a20b2ef7bed39f7711816d096f0fa5b67100ee5",
+                4,
+                ["grill-with-docs"],
+            ),
+            "SEM-MATT-CURRENT-COMPOSITION": (
+                "SEM03-DRY-CURRENT-001",
+                "05af2255ede76fbf6a103b7106974df5ede97c95d862e42d0a2052416ee006b8",
+                4,
+                ["domain-modeling", "grill-with-docs", "grilling"],
+            ),
+        }
+        and all(
+            row.get("status") == "preflight-pass-no-dispatch"
+            and row.get("failureCodes") == []
+            and row.get("phaseRequestsTransmitted") is False
+            and row.get("inventory", {}).get("appServerSessionCount") == 2
+            and row.get("inventory", {}).get("appServerRequestCount") == 4
+            and row.get("inventory", {}).get(
+                "appServerInventoryRequestsTransmitted"
+            )
+            is True
+            and row.get("inventory", {}).get("threadStarted") is False
+            and row.get("inventory", {}).get("turnStarted") is False
+            and row.get("inventory", {}).get("modelRequestSent") is False
+            for row in runtime_treatments.values()
+        ),
+        "Semantic continuity runtime-adapter matrix drifted",
+    )
+    _require(
+        runtime_report.get("temporaryProcessRootRetained") is False
+        and runtime_report.get("phaseRequestsTransmitted") is False
+        and runtime_report.get("modelRequestSent") is False
+        and runtime_report.get("threadStarted") is False
+        and runtime_report.get("turnStarted") is False
+        and all(
+            value is False
+            for value in runtime_report.get("claimBoundary", {}).values()
+        ),
+        "Semantic continuity runtime-adapter boundary drifted",
     )
 
     authority = document.get("authorityBoundary", {})

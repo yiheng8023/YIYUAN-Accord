@@ -240,16 +240,51 @@ exact current-Matt treatments. Every plan binds visible
 `gpt-5.3-codex-spark`/`low` routing with no fallback, a zero dispatch budget,
 workspace-write limited to the disposable public root, no network or external
 writes, four fresh phase threads, the frozen human-decision injection boundary,
-and close-after-phase cleanup. Structured Skill input establishes only a
+and close-after-phase cleanup. Parent control files sit outside the model's
+`runtime/` cwd; the task packet is `runtime/public/` and task-scoped Skills are
+projected only beneath `runtime/.agents/skills/`. Structured Skill input establishes only a
 bounded association with the selected treatment; it is not an independent
 loader or instruction-delivery event.
 
 All three bundles passed materialization and self-validation, and the temporary
 preflight root was removed. The durable report is
 [`audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json).
-No model request, thread, or turn ran. The protocol status is now
-`no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized`.
-A dedicated runtime adapter, its dry validation, dispatch readiness, and a
-separate live-dispatch authority decision remain open. Loader invocation,
-instruction delivery, behavior, semantic continuity, treatment value, and
-cross-host value remain unproved.
+No model request, thread, or turn ran. That checkpoint did not authorize
+dispatch. Loader invocation, instruction delivery, behavior, semantic
+continuity, treatment value, and cross-host value remained unproved.
+
+## 2026-08-01 dedicated dry runtime-adapter checkpoint
+
+The dedicated adapter now compiles twelve concrete app-server request
+templates across the three treatments and four lifecycle phases, but transmits
+none of them. It materializes the public packet at `runtime/public/`, keeps
+parent controls outside `runtime/`, projects task-scoped Skills only at
+`runtime/.agents/skills/`, and copies the public instruction into the runtime
+root so instruction discovery does not depend on parent traversal. The native
+arm has no configurable Skill; the local arm exposes only the pinned monolith;
+the current-Matt arm exposes the exact three-Skill, eight-file composition.
+
+Two online materialization attempts stopped on GitHub REST/API rate limits
+before a report, thread, turn, model request, or partial projection existed.
+Those are `blocked-external` transport observations, not candidate failures.
+The repaired path fetches the exact pinned Git revision once, verifies
+`FETCH_HEAD`, then preserves the existing Blob, SHA-256, license, and
+fetch-all-before-write checks. It does not execute candidate instructions.
+
+The final preflight used six isolated app-server sessions solely for
+initialization and `skills/list`, transmitting exactly twelve inventory
+requests. Across all three effective arms it disabled the 55 user-scope
+Skills in the fresh-thread snapshot, preserved the six system Skills, and enabled only the
+exact treatment-local repo Skills. It started zero threads and turns, sent zero
+model requests, transmitted zero phase templates, retained no process root,
+and reproduced byte-for-byte with report SHA-256
+`849a014057a8d8696da1a9afcfe77c0eea80e1b3541ab8791a82272e58578798`.
+The governed report is
+[`audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json).
+
+The protocol status is now
+`no-model-admission-plan-and-runtime-adapter-preflight-complete-live-dispatch-not-authorized`.
+Dry runtime materialization and inventory isolation are proved; live request
+transmission, loader invocation, instruction delivery, behavior, continuity,
+value, cross-host value, dispatch readiness, and live-dispatch authority remain
+open.

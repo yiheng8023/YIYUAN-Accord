@@ -2794,15 +2794,63 @@ compiled and materialized native, exact local, and exact current-Matt bundles.
 Each parent plan binds `gpt-5.3-codex-spark`/`low`, no fallback, model budget
 zero, no network or external writes, disposable public-root workspace-write,
 four fresh phase threads, the frozen human-decision injection boundary, hard
-stops, and close-after-phase cleanup. The public packets passed private-oracle
-isolation checks. The three-treatment temporary root was removed.
+stops, and close-after-phase cleanup. Parent controls are outside the
+model-visible `runtime/` cwd; task files and task-scoped Skills are isolated at
+`runtime/public/` and `runtime/.agents/skills/`. The public packets passed
+private-oracle isolation checks. The three-treatment temporary root was removed.
 
 The durable report is
 `audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json`.
-It records zero model requests, threads, and turns. Current status is
-`no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized`.
-Next: implement and dry-validate a dedicated SEM-03 runtime adapter using the
-existing app-server primitives. Do not dispatch until adapter fidelity, visible
-route, materialization, cost, sandbox, stop, cleanup, and separate live
-authority are all evidenced. Structured Skill input alone is not loader or
+It records zero model requests, threads, and turns. That checkpoint did not
+authorize dispatch. Structured Skill input alone is not loader or
 instruction-delivery proof.
+
+## 2026-08-01 SEM-03 dedicated dry runtime-adapter checkpoint
+
+`scripts/run_human_ai_collaboration_semantic_authority_runtime_adapter.py`
+now consumes the frozen plans and materializes each arm under an isolated
+parent/`runtime` split. It compiles twelve thread/settings/turn request
+templates but sends none. Six isolated app-server sessions transmit exactly
+twelve inventory requests (`initialize` plus `skills/list` per session); no
+thread, turn, or model request is started.
+
+Two GitHub REST/API attempts stopped on rate limits before any report or partial
+projection. Record them as `blocked-external`, not candidate failures. The
+composition builder now supports one exact-revision Git object fetch, verifies
+`FETCH_HEAD`, and reads the eight pinned files plus license while retaining all
+prior Blob, SHA-256, tree, and fetch-all-before-write gates. The completed
+projection is assembled in a same-volume staging root and committed by rename;
+an existing destination is preserved through rollback until replacement
+succeeds, and bounded Git subprocesses time out after 60 seconds.
+
+The fresh-thread stable report observes 55 user-scope Skills disabled in every effective
+arm, six system Skills preserved, and only the exact repo treatment enabled:
+none for native, `grill-with-docs` for local, and `domain-modeling`,
+`grill-with-docs`, plus `grilling` for current Matt. Two independent outputs
+were byte-identical at file SHA-256
+`849a014057a8d8696da1a9afcfe77c0eea80e1b3541ab8791a82272e58578798`.
+The governed evidence is
+`audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json`;
+both temporary report files and all process roots were removed.
+
+Current status is
+`no-model-admission-plan-and-runtime-adapter-preflight-complete-live-dispatch-not-authorized`.
+Next: review whether a separate live-dispatch adapter and authority decision
+are justified. Dispatch readiness, live request transmission, loader and
+instruction delivery, behavior, semantic continuity, treatment value, and
+cross-host value remain false/unproved.
+
+Fresh-thread closure review corrected four pre-commit gaps: inventory requests
+are now distinguished from unsent phase templates; each report freezes and
+checks its observed host inventory baseline instead of promoting the earlier
+41-Skill snapshot into a permanent runtime constant; the composition is fully
+assembled in a same-volume staging root before rename with rollback protection;
+and Git subprocesses have a 60-second timeout. The unused authenticated `gh
+api` transport was removed. Two new real dry runs were byte-identical at the
+55-user/6-system snapshot. A 239-test SEM-03/control-chain/acceptance batch,
+the protocol validator, `git diff --check`, and `scripts/verify.py` passed. The
+first `verify.py` attempt had no assertion failure but hit WinError 32/5 while
+removing one `aah-incident-zero-model-*` Windows Temp root; after read-only
+attribution showed no owning process, that exact root was deleted and the full
+verifier rerun passed. Repository `.tmp` and generated `__pycache__` roots were
+then removed.

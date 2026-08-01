@@ -39,45 +39,49 @@ CURRENT_TREE_SHA256 = (
 PHASE_ORDER = list(PHASE_MUTABLE_FILES)
 PHASE_PROMPTS = {
     "SEM-PHASE-1-ELICIT": (
-        "Read TASK.json, DRAFT_PITCH_PLAN.md, and src/video_models.py. Update "
-        "only SEMANTIC_REVIEW.json. Identify the highest-priority unresolved "
+        "Read public/TASK.json, public/DRAFT_PITCH_PLAN.md, and "
+        "public/src/video_models.py. Update only public/SEMANTIC_REVIEW.json. "
+        "Identify the highest-priority unresolved "
         "domain decision without inventing human acceptance."
     ),
     "SEM-PHASE-2-MODEL": (
-        "HUMAN_DECISIONS.json has now been injected by the parent. Read it "
-        "with SEMANTIC_REVIEW.json and update only SEMANTIC_AUTHORITY.json. "
+        "public/HUMAN_DECISIONS.json has now been injected by the parent. "
+        "Read it with public/SEMANTIC_REVIEW.json and update only "
+        "public/SEMANTIC_AUTHORITY.json. "
         "Preserve term and decision identities without adding an implementation plan."
     ),
     "SEM-PHASE-3-SPEC": (
-        "Read SEMANTIC_AUTHORITY.json and update only SPECIFICATION.json. "
+        "Read public/SEMANTIC_AUTHORITY.json and update only "
+        "public/SPECIFICATION.json. "
         "Consume the accepted terms and decisions without promoting implementation authority."
     ),
     "SEM-PHASE-4-REVIEW-HANDOFF": (
-        "Read the source, semantic authority, and specification. Update only "
-        "IMPLEMENTATION_REVIEW.json, HANDOFF.json, and MEASUREMENTS.json. "
+        "Read the public source, semantic authority, and specification. Update "
+        "only public/IMPLEMENTATION_REVIEW.json, public/HANDOFF.json, and "
+        "public/MEASUREMENTS.json. "
         "Detect unresolved source conflicts and do not promote release or closure readiness."
     ),
 }
 PHASE_INPUTS = {
     "SEM-PHASE-1-ELICIT": [
-        "TASK.json",
-        "DRAFT_PITCH_PLAN.md",
-        "src/video_models.py",
+        "public/TASK.json",
+        "public/DRAFT_PITCH_PLAN.md",
+        "public/src/video_models.py",
     ],
     "SEM-PHASE-2-MODEL": [
-        "TASK.json",
-        "SEMANTIC_REVIEW.json",
-        "HUMAN_DECISIONS.json",
+        "public/TASK.json",
+        "public/SEMANTIC_REVIEW.json",
+        "public/HUMAN_DECISIONS.json",
     ],
     "SEM-PHASE-3-SPEC": [
-        "TASK.json",
-        "SEMANTIC_AUTHORITY.json",
+        "public/TASK.json",
+        "public/SEMANTIC_AUTHORITY.json",
     ],
     "SEM-PHASE-4-REVIEW-HANDOFF": [
-        "TASK.json",
-        "src/video_models.py",
-        "SEMANTIC_AUTHORITY.json",
-        "SPECIFICATION.json",
+        "public/TASK.json",
+        "public/src/video_models.py",
+        "public/SEMANTIC_AUTHORITY.json",
+        "public/SPECIFICATION.json",
     ],
 }
 
@@ -185,6 +189,12 @@ def compile_execution_plan(treatment_id: str, run_id: str) -> dict[str, Any]:
             "writableRoot": "public",
             "externalWritesAllowed": False,
         },
+        "workspaceLayout": {
+            "runtimeRoot": "runtime",
+            "publicPacketRoot": "runtime/public",
+            "skillProjectionRoot": "runtime/.agents/skills",
+            "parentControlRoot": "parent",
+        },
         "candidateRunnerAssessment": {
             "path": "scripts/run_human_ai_collaboration_weak_agent_trial.py",
             "acceptsSemanticTreatmentIds": False,
@@ -257,6 +267,13 @@ def validate_execution_plan(plan: dict[str, Any]) -> list[str]:
         "externalWritesAllowed": False,
     }:
         failures.append("hard-fail-sandbox-boundary")
+    if plan.get("workspaceLayout") != {
+        "runtimeRoot": "runtime",
+        "publicPacketRoot": "runtime/public",
+        "skillProjectionRoot": "runtime/.agents/skills",
+        "parentControlRoot": "parent",
+    }:
+        failures.append("hard-fail-workspace-layout")
 
     candidate = plan.get("candidateRunnerAssessment", {})
     if (
@@ -284,6 +301,11 @@ def validate_execution_plan(plan: dict[str, Any]) -> list[str]:
         or any(phase.get("closeThreadAfterPhase") is not True for phase in phases)
         or [phase.get("injectHumanDecisionsBeforePhase") for phase in phases]
         != [False, True, False, False]
+        or any(
+            not path.startswith("public/")
+            for phase in phases
+            for path in phase.get("inputFiles", [])
+        )
         or any(
             phase.get("mutableFiles") != list(PHASE_MUTABLE_FILES[phase["id"]])
             for phase in phases
@@ -343,7 +365,8 @@ def materialize_execution_plan(
             raise RuntimeError("execution-plan output must be empty")
     else:
         output.mkdir(parents=True)
-    public_root = output / "public"
+    runtime_root = output / "runtime"
+    public_root = runtime_root / "public"
     parent_root = output / "parent"
     parent_root.mkdir()
     public_manifest = build_packet(public_root, treatment_id)

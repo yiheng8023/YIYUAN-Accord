@@ -471,10 +471,24 @@ no independent loader or instruction-delivery event. A dedicated compiler now
 materializes one parent plan and one oracle-isolated public packet for each
 treatment with visible `gpt-5.3-codex-spark`/`low` routing, zero dispatch
 budget, no fallback, bounded sandboxing, four fresh phase threads, human
-decision injection, hard stops, and exact cleanup. All three bundles passed and
-the temporary root was removed. This is adapter-plan evidence only: the runtime
-adapter, dispatch readiness, every model run, loader/instruction delivery,
-behavior, continuity, value, and cross-host claims remain open.
+decision injection, hard stops, and exact cleanup. Parent controls remain
+outside model-visible `runtime/`; task and Skill roots are isolated beneath it.
+All three bundles passed and the temporary root was removed.
+
+A dedicated dry runtime adapter then compiled all twelve phase request
+templates without transmitting them. Six isolated app-server
+initialization/`skills/list` sessions transmitted twelve inventory requests and
+verified exact effective treatment inventories: 55 user-scope Skills disabled
+in the fresh-thread snapshot, six system Skills preserved, and
+only the exact repo Skills enabled per arm. Two GitHub REST/API rate-limit
+stops produced no report or partial projection and remain external transport
+observations. Exact-revision Git object retrieval preserved pinned Blob,
+SHA-256, license, fetch-all-before-write, same-volume staging/rename, rollback,
+and bounded-subprocess checks. The final report reproduced
+byte-for-byte and retained no process root. This is zero-model runtime
+materialization and inventory-isolation evidence only: dispatch readiness,
+every model run, loader/instruction delivery, behavior, continuity, value,
+and cross-host claims remain open.
 
 ## Program closeout cleanup gate
 

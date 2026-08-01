@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "human-ai-collaboration-semantic-authority-continuity-protocol-2026-07-28",
   "date": "2026-07-28",
-  "status": "no-model-admission-and-plan-preflight-complete-live-dispatch-not-authorized",
+  "status": "no-model-admission-plan-and-runtime-adapter-preflight-complete-live-dispatch-not-authorized",
   "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
   "matrixCellId": "SEM-03",
   "purpose": "Falsifiably compare native reasoning, the exact local adapted grill-with-docs monolith, and the exact current Matt grilling plus domain-modeling composition on durable semantic continuity across fresh lifecycle stages without treating source structure, exposure, terminal correctness, or one glossary as value proof.",
@@ -19,7 +19,9 @@
     "currentMattNoModelExposureRefreshReport": "audits/human-ai-collaboration-semantic-authority-current-matt-no-model-exposure-2026-07-31/REPORT.json",
     "nativeLocalNoModelExposureAndOracleReport": "audits/human-ai-collaboration-semantic-authority-native-local-no-model-exposure-2026-08-01/REPORT.json",
     "semanticExecutionPlanBuilder": "scripts/build_human_ai_collaboration_semantic_authority_execution_plan.py",
-    "semanticExecutionPlanPreflightReport": "audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json"
+    "semanticExecutionPlanPreflightReport": "audits/human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01/REPORT.json",
+    "semanticDryRuntimeAdapter": "scripts/run_human_ai_collaboration_semantic_authority_runtime_adapter.py",
+    "semanticDryRuntimeAdapterPreflightReport": "audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json"
   },
   "treatments": [
     {
@@ -182,7 +184,9 @@
     "existingRunnerInstructionDeliveryProved": false,
     "semanticExecutionPlanAdapterImplemented": true,
     "semanticExecutionPlanPreflightPass": true,
-    "semanticRuntimeAdapterImplemented": false,
+    "semanticDryRuntimeAdapterImplemented": true,
+    "semanticDryRuntimeAdapterPreflightPass": true,
+    "semanticLiveRuntimeAdapterImplemented": false,
     "dispatchReadinessProved": false,
     "minimumValidRunsPerTreatment": 3,
     "liveRunAuthorizedByThisRecord": false
@@ -209,7 +213,7 @@
     "candidatePreferenceAllowed": false,
     "ccMutationAllowed": false,
     "selfAuthoredResidualGapProved": false,
-    "nextBoundedAction": "Keep model runs at zero. Reuse the compiled three-treatment, four-fresh-thread execution plans to implement and dry-validate a dedicated SEM-03 runtime adapter over existing app-server session, inventory, route, sandbox, process-boundary, and cleanup primitives. Preserve bounded association when no independent loader event exists. Dispatch readiness remains false until visible gpt-5.3-codex-spark/low routing, exact treatment materialization, cost and sandbox boundaries, stop conditions, cleanup, and separate dispatch authority are all bound."
+    "nextBoundedAction": "Keep model runs at zero. Review the byte-stable dedicated SEM-03 dry runtime-adapter preflight, then bind a separate live-dispatch adapter and authority decision only if the visible gpt-5.3-codex-spark/low route, exact treatment materialization, cost and sandbox boundaries, stop conditions, parent observation, and cleanup remain explicit. Preserve bounded association when no independent loader event exists."
   },
   "claimBoundary": {
     "semanticContinuityProved": false,

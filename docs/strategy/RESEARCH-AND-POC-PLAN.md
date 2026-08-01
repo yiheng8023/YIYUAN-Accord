@@ -1826,13 +1826,32 @@ oracle-isolated public packet for native, local monolith, and current Matt
 composition arms. Preflight passed for all three with the frozen visible
 `gpt-5.3-codex-spark`/`low` route, zero dispatch budget, no fallback, no
 network, bounded workspace-write, four fresh phase threads, human-decision
-injection, hard stops, and exact cleanup. No model, thread, or turn ran and no
-temporary root remains.
+injection, hard stops, and exact cleanup. The model-visible `runtime/` root is
+separate from parent control files; its packet and Skill projection roots are
+`runtime/public/` and `runtime/.agents/skills/`. No model, thread, or turn ran
+and no temporary root remains.
 
-The next bounded action is to implement and dry-validate a dedicated SEM-03
-runtime adapter by reusing the healthy app-server primitives. It must preserve
-the evidence ceiling: structured Skill input is only bounded treatment
-association unless an independent loader event exists. Dispatch readiness and
-live model authority remain false. This checkpoint changes neither project
-neutrality nor the priority order for capability reuse and does not establish
-candidate behavior, value, or a residual self-authored need.
+The dedicated dry runtime adapter is now implemented and byte-stable. It
+compiled twelve phase request templates without transmitting them and used six
+isolated app-server initialization/`skills/list` sessions to verify the native,
+exact local, and exact current-Matt effective inventories. Those sessions sent
+exactly twelve inventory requests while all twelve phase templates stayed
+unsent. The fresh-thread snapshot's 55 user-scope Skills were disabled in every
+effective arm, six system Skills were preserved, and only each arm's exact repo
+projection was enabled. Zero thread, turn, or
+model request ran.
+
+Two REST/API materialization attempts were blocked by GitHub rate limits before
+writing a report or partial projection. Exact-revision Git object transport
+then succeeded while retaining Blob, SHA-256, license, and transactional projection
+isolation through fetch-all-before-write, same-volume staging/rename, and
+rollback checks; the transport failures are not candidate evidence. The
+byte-identical report pair is governed at
+`audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json`.
+
+The next bounded action is a review of whether a separate live-dispatch
+adapter and authority decision are justified. Structured Skill input remains
+only bounded treatment association unless an independent loader event exists.
+Dispatch readiness and live model authority remain false. This checkpoint
+changes neither project neutrality nor the capability-reuse order and does not
+establish candidate behavior, value, or residual self-authored need.

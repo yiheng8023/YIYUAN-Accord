@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import copy
 from pathlib import Path
+from types import SimpleNamespace
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts.build_human_ai_collaboration_semantic_authority_composition_projection import (
+    _pinned_git_object_reader,
     materialize_composition,
 )
 from scripts.build_source_pinned_skill_projection import (
@@ -25,6 +28,51 @@ def record(path: str, content: bytes) -> dict[str, object]:
 
 
 class SemanticAuthorityCompositionProjectionTests(unittest.TestCase):
+    def test_git_object_reader_fetches_one_exact_commit_then_reads_blobs(self) -> None:
+        revision = "b" * 40
+        files = {
+            "skills/example/SKILL.md": b"---\nname: example\n---\n",
+            "LICENSE": b"MIT\n",
+        }
+        calls = []
+
+        def runner(command, **kwargs):
+            calls.append((command, kwargs))
+            if "rev-parse" in command:
+                return SimpleNamespace(
+                    returncode=0,
+                    stdout=(revision + "\n").encode(),
+                    stderr=b"",
+                )
+            if "show" in command:
+                path = command[-1].split(":", 1)[1]
+                return SimpleNamespace(returncode=0, stdout=files[path], stderr=b"")
+            return SimpleNamespace(returncode=0, stdout=b"", stderr=b"")
+
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary)
+            with _pinned_git_object_reader(
+                "mattpocock/skills",
+                revision,
+                parent,
+                command_runner=runner,
+            ) as reader:
+                self.assertEqual(
+                    files["skills/example/SKILL.md"],
+                    reader(
+                        "mattpocock/skills",
+                        revision,
+                        "skills/example/SKILL.md",
+                    ),
+                )
+            self.assertEqual([], list(parent.iterdir()))
+
+        fetch_calls = [command for command, _ in calls if "fetch" in command]
+        self.assertEqual(1, len(fetch_calls))
+        self.assertIn(revision, fetch_calls[0])
+        self.assertTrue(any("show" in command for command, _ in calls))
+        self.assertTrue(all(kwargs["timeout"] == 60 for _, kwargs in calls))
+
     def fixture(self) -> tuple[dict, dict[str, bytes]]:
         files = {
             "skills/engineering/grill-with-docs/SKILL.md": (
@@ -140,8 +188,40 @@ class SemanticAuthorityCompositionProjectionTests(unittest.TestCase):
                     admission=admission,
                     github_reader=reader,
                 )
-            self.assertTrue(root.is_dir())
-            self.assertEqual([], list(root.iterdir()))
+            self.assertFalse(root.exists())
+
+    def test_write_failure_rolls_back_existing_output_without_partial_projection(self) -> None:
+        admission, files = self.fixture()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "projection"
+            root.mkdir()
+            preserved = root / "user.txt"
+            preserved.write_text("preserve", encoding="utf-8")
+            original_write = Path.write_bytes
+            writes = 0
+
+            def fail_second_write(path: Path, content: bytes) -> int:
+                nonlocal writes
+                writes += 1
+                if writes == 2:
+                    raise OSError("injected write failure")
+                return original_write(path, content)
+
+            with patch.object(Path, "write_bytes", fail_second_write):
+                with self.assertRaisesRegex(OSError, "injected write failure"):
+                    materialize_composition(
+                        root,
+                        admission=admission,
+                        allow_existing=True,
+                        github_reader=lambda _r, _v, path: files[path],
+                    )
+
+            self.assertEqual("preserve", preserved.read_text(encoding="utf-8"))
+            self.assertFalse((root / ".agents").exists())
+            self.assertFalse((root / ".aah-provenance").exists())
+            self.assertFalse(
+                (root / "SEMANTIC-AUTHORITY-COMPOSITION-PROJECTION.json").exists()
+            )
 
 
 if __name__ == "__main__":

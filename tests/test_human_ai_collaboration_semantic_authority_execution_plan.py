@@ -83,6 +83,15 @@ class SemanticAuthorityExecutionPlanTests(unittest.TestCase):
     def test_plan_requires_four_fresh_threads_and_ordered_human_injection(self) -> None:
         plan = compile_execution_plan("SEM-NATIVE", "SEM03-CAL-004")
 
+        self.assertEqual(
+            {
+                "runtimeRoot": "runtime",
+                "publicPacketRoot": "runtime/public",
+                "skillProjectionRoot": "runtime/.agents/skills",
+                "parentControlRoot": "parent",
+            },
+            plan["workspaceLayout"],
+        )
         phases = plan["lifecyclePhases"]
         self.assertEqual(
             [
@@ -99,6 +108,13 @@ class SemanticAuthorityExecutionPlanTests(unittest.TestCase):
             [phase["injectHumanDecisionsBeforePhase"] for phase in phases],
         )
         self.assertTrue(all(phase["closeThreadAfterPhase"] for phase in phases))
+        self.assertTrue(
+            all(
+                path.startswith("public/")
+                for phase in phases
+                for path in phase["inputFiles"]
+            )
+        )
 
     def test_plan_rejects_loader_and_instruction_delivery_promotion(self) -> None:
         plan = compile_execution_plan(
@@ -134,8 +150,10 @@ class SemanticAuthorityExecutionPlanTests(unittest.TestCase):
                 "SEM03-CAL-007",
             )
 
+            runtime_root = output / "runtime"
+            public_root = runtime_root / "public"
             public_task = json.loads(
-                (output / "public" / "TASK.json").read_text(encoding="utf-8")
+                (public_root / "TASK.json").read_text(encoding="utf-8")
             )
             parent_plan = json.loads(
                 (output / "parent" / "EXECUTION_PLAN.json").read_text(
@@ -144,11 +162,12 @@ class SemanticAuthorityExecutionPlanTests(unittest.TestCase):
             )
             self.assertFalse(public_task["privateOracleIncluded"])
             self.assertFalse(parent_plan["authority"]["modelDispatchAuthorized"])
+            self.assertFalse((runtime_root / "parent").exists())
             self.assertEqual("compiled-no-dispatch", receipt["status"])
             self.assertEqual([], receipt["failureCodes"])
             rendered_public = "\n".join(
                 path.read_text(encoding="utf-8")
-                for path in (output / "public").rglob("*")
+                for path in public_root.rglob("*")
                 if path.is_file()
             )
             self.assertNotIn("SEM03-PRIVATE-ORACLE-CANARY-7D91C0E5", rendered_public)
