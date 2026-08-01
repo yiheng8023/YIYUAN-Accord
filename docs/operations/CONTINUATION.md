@@ -3130,3 +3130,50 @@ No model request, live host probe, configuration mutation, external discovery,
 CC Switch action, Skill change, or self-authored runtime occurred. The next
 gate is one bound workload only if fresh host behavior could change the fallback
 or residual-gap decision.
+
+## 2026-08-02 Codex 0.146.0 native reload/release and adapter-layer correction checkpoint
+
+The installed Windows Codex CLI was re-bound as `codex-cli 0.146.0`, so the
+historical `0.145.0` reload-retention result was not treated as current host
+truth. Official OpenAI release, merge-commit, and exact source Blob/SHA-256
+identities are frozen in
+[`mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.json`](../../registry/mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.json).
+
+Three sequential isolated, no-model repetitions reused the existing
+reload/release attribution probe. In three of three runs, configuration disable
+plus same-thread `config/mcpServer/reload` was followed by one exact matching
+Sentinel stop inside the ten-second window. The original thread then reported
+the server unknown, byte-exact configuration restoration succeeded, and a new-
+thread recovery control succeeded. No model turn or model request was started.
+Application logs did record an unauthenticated Responses WebSocket attempt that
+failed before any model turn, so zero network traffic is not claimed.
+
+The exact process identity includes PID, creation time, image path, and parent PID.
+The first repetition observed the old PID reused by a different `sleep.exe`
+process; PID-only release reasoning therefore fails closed. Across all runs,
+63 process samples, three exact stop events, three verified cleanups, and three
+graceful app-server exits were retained. Release latency was approximately
+`696-718 ms` for the tested Sentinel boundary. The three isolated process roots
+were removed; the three raw reports remain governed evidence.
+
+The raw producer reports remain unmodified, including their overbroad
+`provesReloadCausedOldRuntimeRelease=true` field. The canonical evidence rejects
+that causal wording because configuration disable preceded reload and no
+ablation isolated reload alone. Only the joint sequence is supported.
+
+The cross-host projection now makes the architectural correction explicit:
+portable decision contract, host-neutral adapter contract, and host-specific
+implementation are distinct. The neutral contract describes operations and
+degradation but is not a universal runtime. Kimi's two executable prototypes,
+one shared injection infrastructure, and two rule-text groups remain a pinned
+synthetic host mechanism; Codex uses its native app-server runtime and refresh
+path. Neither mechanism defines the other Agent.
+
+This is a bounded native-current-version win, not generalized lifecycle proof.
+Request acceptance does not prove runtime state outside the observed release;
+task-end semantics, concurrent ownership, leases, arbitrary stdio and remote
+HTTP servers, stable resource benefit, cross-host parity, universal MCP
+lifecycle, crash recovery, and production readiness remain open. The
+self-authored controller remains ineligible. The next decision gate is one
+bound workload comparing static-minimal and native phase-gated profiles before
+any targeted adapter or residual-gap claim.

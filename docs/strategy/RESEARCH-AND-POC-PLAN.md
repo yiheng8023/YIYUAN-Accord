@@ -35,23 +35,32 @@ rules-plus-practice comparison. No live model ran.
 
 The cross-host contract gate now has a bounded zero-model
 [projection](../../registry/cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json),
-not another Kimi-shaped adapter. The same portable outcome, authority,
-observability, lifecycle, fallback, and claim contract is mapped to at least two
-materially different host control mechanisms, with unsupported operations
-negotiated or degraded explicitly. Kimi supplies synthetic pre-tool call
-admission evidence only; it proves neither schema exposure nor process release.
-Historical Codex `0.145.0` evidence supplies a startup/new-thread profile
-boundary plus one observed thirty-minute idle fallback; reload and unsubscribe
-did not prove immediate release. Each host-local probe remains evidence
-instrumentation and does not become the product adapter. A targeted adapter may
-remain host-specific; a generalized product claim waits for current-version,
-decision-relevant cross-host behavior evidence. This closes contract-field and
-degradation mapping only. It does not prove parity, same-session dynamic
-lifecycle, stable resource benefit, or a residual self-authored controller gap.
-Retain the Kimi replay runner only as a provisional reproducer. Supersede or
-remove it in a separately reviewed cleanup if it changes no decision or if a
-lighter replay preserves the same falsifiers; accumulated evidence code is not
-a permanent product asset by default.
+not another Kimi-shaped adapter. It separates a portable decision contract,
+host-neutral adapter contract, and host-specific implementation and evidence.
+The middle contract names common lifecycle operations and explicit degradation;
+it is not a universal runtime. Kimi remains a synthetic pre-tool call-admission
+mechanism: two executable prototypes (`context-usage`, `mcp-gate`), one shared
+injection infrastructure (`session-start`), and two rule-text groups. It proves
+neither schema exposure nor process release.
+
+Codex `0.146.0` changes the current host decision without being generalized to
+Kimi or another Agent. Official-source-bound, isolated no-model evidence
+observed three of three exact baseline Sentinel runtimes release after
+configuration disable plus same-thread reload, followed by same-thread unknown-
+server rejection, byte-exact configuration restoration, and new-thread recovery.
+One run also caught PID reuse by a different process, so exact process identity
+rather than PID-only reasoning remains mandatory. This is a bounded
+native-current-version win over the separately bound `0.145.0` retention result.
+
+It does not prove task-end release, arbitrary stdio or remote-HTTP lifecycle,
+owner or lease safety, cross-host parity, stable resource benefit, universal
+MCP lifecycle, or a residual self-authored controller gap. The self-authored
+controller remains ineligible. The next gate is one bound workload comparing a
+static-minimal profile with the current host-native phase-gated profile; only a
+reproducible remaining gap can justify a targeted adapter or further cross-host
+comparison. Retain the Kimi replay runner only as a provisional reproducer and
+remove or supersede it under separately reviewed cleanup if a lighter falsifier
+preserves the decision value.
 
 Working scenario and evidence gate:
 [`POC-SCENARIO-EVIDENCE-MATRIX.md`](POC-SCENARIO-EVIDENCE-MATRIX.md).

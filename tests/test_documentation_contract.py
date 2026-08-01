@@ -27,6 +27,7 @@ class DocumentationContractTests(unittest.TestCase):
         for phrase in (
             "Current state:",
             "Current operating boundary:",
+            "portable decision contract, host-neutral adapter contract, and host-specific implementation",
             "Current single action:",
             "governed Harness path against a lightweight or ad-hoc path",
             "Evidence archive:",
@@ -36,6 +37,7 @@ class DocumentationContractTests(unittest.TestCase):
         for phrase in (
             "当前状态：",
             "当前运行边界：",
+            "可移植决策合同、宿主中立适配合同与宿主特定实现",
             "当前唯一行动：",
             "受治理Harness路径与轻量或临时路径",
             "证据入口：",
@@ -141,6 +143,7 @@ class DocumentationContractTests(unittest.TestCase):
 
         for phrase in (
             "A host-local calibration probe is not a product adapter",
+            "portable decision contract, host-neutral adapter contract, and host-specific implementation and evidence",
             "must not define a portable lane from one Agent's artifact shape",
             "thin host adapters translate only the unavoidable execution edge",
             "A targeted adapter may remain honestly host-specific",
@@ -152,9 +155,9 @@ class DocumentationContractTests(unittest.TestCase):
 
         for phrase in (
             "cross-host contract gate",
-            "at least two materially different host control mechanisms",
-            "host-local probe remains evidence instrumentation",
-            "does not become the product adapter",
+            "two executable prototypes (`context-usage`, `mcp-gate`)",
+            "one shared injection infrastructure",
+            "it is not a universal runtime",
         ):
             with self.subTest(surface="plan", phrase=phrase):
                 self.assertIn(phrase, plan)
@@ -171,13 +174,14 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(surface=surface[:32]):
                 self.assertIn(mapping_link, surface)
                 self.assertIn("pre-tool call", surface)
-                self.assertIn("thirty-minute idle", surface)
+                self.assertIn("0.146.0", surface)
                 self.assertIn("residual self-authored", surface)
 
         for phrase in (
-            "closes contract-field and degradation mapping only",
-            "does not prove parity",
-            "same-session dynamic lifecycle",
+            "portable decision contract, host-neutral adapter contract, and host-specific implementation",
+            "three of three",
+            "bounded native-current-version win",
+            "does not prove task-end release",
             "stable resource benefit",
         ):
             with self.subTest(surface="plan", phrase=phrase):
@@ -185,8 +189,9 @@ class DocumentationContractTests(unittest.TestCase):
 
         for phrase in (
             "request acceptance does not prove runtime state",
-            "schema-list introspection nor current-host behavior is claimed",
-            "No model request, live host probe, configuration mutation",
+            "exact process identity",
+            "No model turn or model request",
+            "self-authored controller remains ineligible",
             "universal MCP lifecycle",
         ):
             with self.subTest(surface="continuation", phrase=phrase):

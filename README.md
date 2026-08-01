@@ -11,15 +11,17 @@ head so the user can focus on creation, decisions, and bounded authorization.
 
 - **Current state:** research and falsifiable proof; no host-neutral runtime,
   broad candidate value, or residual self-authored gap is proved.
-- **Current operating boundary:** portable governance and lifecycle contracts
-  are tool-neutral. CC Switch is one current operational adapter where
-  supported, not the portable product contract. Native host authorization and
+- **Current operating boundary:** the portable decision contract, host-neutral
+  adapter contract, and host-specific implementation are separate layers.
+  CC Switch is one current operational adapter where supported, not the
+  portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
 - **Current single action:** bind one decision-relevant real task and exact
   comparison artifacts, then compare the governed Harness path against a
   lightweight or ad-hoc path on outcome quality, user orchestration burden,
-  lifecycle/resource cost, recovery, and net benefit. Add no governance layer
-  or self-authored capability until this comparison exposes a residual gap.
+  lifecycle/resource cost, recovery, and net benefit. Use the current host's
+  native path before a targeted adapter, and add no generalized runtime or
+  self-authored capability until this comparison exposes a residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and
   [continuation](docs/operations/CONTINUATION.md).

@@ -2,15 +2,16 @@
   "schema": 1,
   "id": "cross-host-mcp-lifecycle-contract-mapping-2026-08-02",
   "date": "2026-08-02",
-  "status": "cross-host-contract-mapped-no-generalized-runtime-claim",
+  "status": "cross-host-contract-mapped-current-codex-bounded-native-win-no-generalized-runtime-claim",
   "laneId": "lane-3-mcp-on-demand-activation-and-release",
   "scope": {
-    "mode": "zero-model-existing-evidence-projection",
+    "mode": "zero-model-version-aware-evidence-projection",
     "hostCount": 2,
     "modelRequestCount": 0,
-    "liveHostProbeCount": 0,
-    "configurationMutationCount": 0,
-    "externalDiscoveryCount": 0,
+    "mappingExecutionLiveHostProbeCount": 0,
+    "boundSourceLiveHostProbeRepetitionCount": 3,
+    "mappingConfigurationMutationCount": 0,
+    "boundOfficialSourceSnapshotCount": 1,
     "selfAuthoredRuntimeAdded": false
   },
   "sourceBindings": [
@@ -48,6 +49,11 @@
       "path": "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json",
       "role": "codex-idle-unload-evidence",
       "fileSha256": "2c4b8d5e1eff54ce0a2a7c2b8b379cba95c60a917d6f5e3161ac591e2591026e"
+    },
+    {
+      "path": "registry/mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.json",
+      "role": "codex-current-version-reload-release-evidence",
+      "fileSha256": "3e7c43fbcfbfd866d9ea02252148d3143b6971f08f65fc49db81829bc7f45d94"
     }
   ],
   "portableContract": {
@@ -67,12 +73,55 @@
     "fallbackRule": "startup-or-new-thread-profile-or-documented-native-idle-timeout-only-where-host-evidence-supports-it",
     "unsupportedRule": "mark-unavailable-or-unproved-and-degrade-explicitly"
   },
+  "architectureLayers": [
+    {
+      "id": "portable-decision-contract",
+      "responsibility": "host-independent desired state authority evidence and fallback semantics",
+      "mustNotContain": "one-host-actuation-assumptions"
+    },
+    {
+      "id": "host-neutral-adapter-contract",
+      "responsibility": "map portable lifecycle states onto declared host capabilities while preserving unsupported operations",
+      "operations": [
+        "inspect-host-capabilities",
+        "plan-minimal-authorized-set",
+        "request-host-native-activation-or-call-admission",
+        "observe-schema-and-runtime-state-separately",
+        "request-release",
+        "observe-exact-release",
+        "recover-or-degrade-explicitly"
+      ],
+      "authorityBoundary": "host-native-enforcement-and-lifecycle-remain-authoritative",
+      "isUniversalRuntimeImplementation": false
+    },
+    {
+      "id": "host-specific-implementation-and-evidence",
+      "responsibility": "bind one host mechanism version authority and observed lifecycle limits without promotion to another host",
+      "mappedHostMechanismFamilies": [
+        "kimi-code-synthetic-mechanism",
+        "codex-cli-app-server"
+      ],
+      "crossHostByteParityRequired": false
+    }
+  ],
   "hostMappings": [
     {
       "hostId": "kimi-code",
       "mechanismClass": "pre-tool-call-admission-hook",
       "evidenceState": "synthetic-mechanism-replay-only",
       "freshness": "pinned-revision-not-current-live-host-proof",
+      "hostMechanismTopology": {
+        "executablePrototypes": [
+          "hooks/context-usage.mjs",
+          "hooks/mcp-gate.mjs"
+        ],
+        "sharedInjectionInfrastructure": "hooks/session-start.mjs",
+        "ruleTextGroups": [
+          "AGENTS.md#上下文交接协议",
+          "AGENTS.md#Git纪律"
+        ],
+        "lane2ExecutablePrototype": null
+      },
       "contractProjection": {
         "selected": "portable-contract-only",
         "activation-authorized": "not-observed",
@@ -87,28 +136,30 @@
       "degradedFallback": "requires-separate-host-native-lifecycle-evidence"
     },
     {
-      "hostId": "codex-cli-app-server-0.145.0-windows",
-      "mechanismClass": "startup-profile-and-app-server-process-lifecycle",
-      "evidenceState": "bounded-historical-live-host-evidence",
-      "freshness": "historical-version-bound-not-current-host-proof",
+      "hostId": "codex-cli-app-server-0.146.0-windows",
+      "mechanismClass": "version-aware-startup-profile-app-server-refresh-and-process-lifecycle",
+      "evidenceState": "bounded-current-reload-release-plus-historical-startup-idle-evidence",
+      "freshness": "current-for-0.146.0-reload-release-only-historical-for-startup-idle-and-unsubscribe",
       "contractProjection": {
         "selected": "portable-offline-contract-only",
         "activation-authorized": "bounded-probe-authority-only-not-a-host-state-observation",
-        "call-admitted": "startup-full-filtered-disabled-boundary-observed",
+        "call-admitted": "historical-startup-boundaries-plus-current-same-thread-disabled-rejection-observed",
         "schema-exposed": "not-observed-schema-list-not-called",
-        "runtime-loaded": "enabled-start-and-disabled-start-suppression-observed",
-        "release-requested": "reload-and-unsubscribe-accepted-not-release-proof",
-        "runtime-released": "single-sentinel-thirty-minute-idle-unload-observed",
-        "recovered": "new-thread-new-instance-recovery-observed"
+        "runtime-loaded": "historical-enabled-start-plus-current-baseline-load-observed",
+        "release-requested": "current-config-disable-reload-accepted-with-historical-unsubscribe-separated",
+        "runtime-released": "three-of-three-exact-baseline-release-after-config-disable-and-reload",
+        "recovered": "three-of-three-exact-config-restore-new-thread-control-succeeded"
       },
-      "effectiveBoundary": "startup-new-thread-profile-plus-observed-idle-fallback",
-      "degradedFallback": "startup-or-new-thread-profile-or-observed-native-idle-path"
+      "effectiveBoundary": "bounded-current-config-disable-reload-release-plus-version-bound-startup-new-thread-and-idle-fallback",
+      "degradedFallback": "current-native-disable-reload-only-for-tested-boundary-otherwise-version-bound-startup-new-thread-or-idle-path"
     }
   ],
   "decision": {
     "portableContractFieldsMapped": true,
     "materiallyDifferentMechanismsMapped": true,
+    "portableAdapterHostImplementationSeparationEnforced": true,
     "unsupportedOperationsExplicit": true,
+    "boundedCurrentCodexConfigDisablePlusReloadReleaseProved": true,
     "generalizedRuntimeCapabilityProved": false,
     "crossHostParityProved": false,
     "sameSessionDynamicLifecycleProved": false,

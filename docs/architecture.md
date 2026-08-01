@@ -110,6 +110,14 @@ are forbidden, and newly introduced conflicts.
 
 ## Portability Boundary
 
+The portability boundary has three explicit layers: portable decision
+contract, host-neutral adapter contract, and host-specific implementation and
+evidence. The middle layer defines common lifecycle operations, unsupported
+states, authority, observation, recovery, and degradation semantics; it is not
+a universal runtime implementation. The final layer may legitimately use
+different Hooks, permission rules, approval surfaces, APIs, processes, or
+configuration models on different Agents.
+
 The portable core describes goals, inputs, outputs, invariants, decisions, and
 verification. Adapters translate only unavoidable environment details such as
 tool names, hook event shapes, filesystem conventions, and agent-specific

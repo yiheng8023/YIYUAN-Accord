@@ -176,6 +176,10 @@ from validate_context_handoff_receiver_delta_ledger_evidence import (
 from validate_mcp_reload_release_attribution_evidence import (
     validate_evidence as validate_mcp_reload_release_attribution_evidence,
 )
+from validate_mcp_reload_release_version_change_evidence import (
+    REQUIRED_FILES as MCP_RELOAD_RELEASE_VERSION_CHANGE_REQUIRED_FILES,
+    validate_evidence as validate_mcp_reload_release_version_change_evidence,
+)
 from validate_mcp_thread_unsubscribe_release_attribution_evidence import (
     validate_evidence as validate_mcp_thread_unsubscribe_release_attribution_evidence,
 )
@@ -522,6 +526,7 @@ REQUIRED_FILES = (
     "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json",
     "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json",
     "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json",
+    *MCP_RELOAD_RELEASE_VERSION_CHANGE_REQUIRED_FILES,
     "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
     "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
     *CROSS_HOST_MCP_LIFECYCLE_MAPPING_REQUIRED_FILES,
@@ -1936,6 +1941,9 @@ def verify() -> None:
     mcp_reload_release_attribution_doc = load(
         "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json"
     )
+    mcp_reload_release_version_change_doc = load(
+        "registry/mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.json"
+    )
     mcp_thread_unsubscribe_release_attribution_doc = load(
         "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json"
     )
@@ -2932,6 +2940,11 @@ def verify() -> None:
     )
     validate_mcp_reload_release_attribution_evidence(
         mcp_reload_release_attribution_doc,
+        root=ROOT,
+        program_map=program_acceptance_map_doc,
+    )
+    validate_mcp_reload_release_version_change_evidence(
+        mcp_reload_release_version_change_doc,
         root=ROOT,
         program_map=program_acceptance_map_doc,
     )

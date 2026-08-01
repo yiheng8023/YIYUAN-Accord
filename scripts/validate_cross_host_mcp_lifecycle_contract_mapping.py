@@ -46,6 +46,10 @@ SOURCE_SPECS = (
         "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json",
         "codex-idle-unload-evidence",
     ),
+    (
+        "registry/mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.json",
+        "codex-current-version-reload-release-evidence",
+    ),
 )
 
 
@@ -65,6 +69,7 @@ def _require_source_evidence(sources: dict[str, dict[str, Any]]) -> None:
     reload_evidence = sources[SOURCE_SPECS[4][0]]
     unsubscribe = sources[SOURCE_SPECS[5][0]]
     idle = sources[SOURCE_SPECS[6][0]]
+    current_reload = sources[SOURCE_SPECS[7][0]]
 
     if (
         selection.get("policy", {}).get("selectionDoesNotAuthorizeActivation")
@@ -114,6 +119,38 @@ def _require_source_evidence(sources: dict[str, dict[str, Any]]) -> None:
         is not False
     ):
         raise RuntimeError("Cross-host MCP Kimi source evidence drifted")
+    topology = kimi.get("topology", {})
+    lanes = {
+        row.get("id"): row
+        for row in topology.get("lanes", [])
+        if isinstance(row, dict)
+    }
+    if (
+        topology.get("executablePrototypeCount") != 2
+        or topology.get("sharedInfrastructureCount") != 1
+        or topology.get("ruleTextGroupCount") != 2
+        or lanes.get("lane-1-context-lifecycle-handoff", {}).get(
+            "executablePrototype"
+        )
+        != "hooks/context-usage.mjs"
+        or lanes.get("lane-3-mcp-on-demand-activation", {}).get(
+            "executablePrototype"
+        )
+        != "hooks/mcp-gate.mjs"
+        or lanes.get("lane-1-context-lifecycle-handoff", {}).get(
+            "sharedInfrastructure"
+        )
+        != ["hooks/session-start.mjs"]
+        or lanes.get("lane-3-mcp-on-demand-activation", {}).get(
+            "sharedInfrastructure"
+        )
+        != ["hooks/session-start.mjs"]
+        or lanes.get("lane-2-branch-worktree-judgment", {}).get(
+            "executablePrototype"
+        )
+        is not None
+    ):
+        raise RuntimeError("Cross-host MCP Kimi topology evidence drifted")
 
     startup_conclusions = startup.get("supportedConclusions", {})
     if (
@@ -186,6 +223,46 @@ def _require_source_evidence(sources: dict[str, dict[str, Any]]) -> None:
         is not False
     ):
         raise RuntimeError("Cross-host MCP Codex idle evidence drifted")
+    if (
+        current_reload.get("status")
+        != (
+            "observed-three-repetition-single-host-version-bounded-config-"
+            "disable-plus-reload-release"
+        )
+        or current_reload.get("hostBinding", {}).get("codexVersion")
+        != "codex-cli 0.146.0"
+        or current_reload.get("aggregateObservation", {}).get(
+            "validRepetitionCount"
+        )
+        != 3
+        or current_reload.get("aggregateObservation", {}).get(
+            "reloadReleaseObservedCount"
+        )
+        != 3
+        or current_reload.get("aggregateObservation", {}).get(
+            "loadedRuntimeRetainedCount"
+        )
+        != 0
+        or current_reload.get("decision", {}).get(
+            "boundedNativeSameThreadConfigDisablePlusReloadAndReleaseObserved"
+        )
+        is not True
+        or current_reload.get("decision", {}).get(
+            "selfAuthoredControllerEligible"
+        )
+        is not False
+        or current_reload.get("claimBoundary", {}).get(
+            "taskEndImmediateReleaseProved"
+        )
+        is not False
+        or current_reload.get("claimBoundary", {}).get("crossHostParityProved")
+        is not False
+        or current_reload.get("claimBoundary", {}).get(
+            "residualNeedForSelfAuthoredControllerProved"
+        )
+        is not False
+    ):
+        raise RuntimeError("Cross-host MCP current Codex evidence drifted")
 
 
 def build_mapping(*, root: Path = ROOT) -> dict[str, Any]:
@@ -195,15 +272,19 @@ def build_mapping(*, root: Path = ROOT) -> dict[str, Any]:
         "schema": 1,
         "id": "cross-host-mcp-lifecycle-contract-mapping-2026-08-02",
         "date": "2026-08-02",
-        "status": "cross-host-contract-mapped-no-generalized-runtime-claim",
+        "status": (
+            "cross-host-contract-mapped-current-codex-bounded-native-win-"
+            "no-generalized-runtime-claim"
+        ),
         "laneId": "lane-3-mcp-on-demand-activation-and-release",
         "scope": {
-            "mode": "zero-model-existing-evidence-projection",
+            "mode": "zero-model-version-aware-evidence-projection",
             "hostCount": 2,
             "modelRequestCount": 0,
-            "liveHostProbeCount": 0,
-            "configurationMutationCount": 0,
-            "externalDiscoveryCount": 0,
+            "mappingExecutionLiveHostProbeCount": 0,
+            "boundSourceLiveHostProbeRepetitionCount": 3,
+            "mappingConfigurationMutationCount": 0,
+            "boundOfficialSourceSnapshotCount": 1,
             "selfAuthoredRuntimeAdded": False,
         },
         "sourceBindings": [
@@ -234,12 +315,66 @@ def build_mapping(*, root: Path = ROOT) -> dict[str, Any]:
             ),
             "unsupportedRule": "mark-unavailable-or-unproved-and-degrade-explicitly",
         },
+        "architectureLayers": [
+            {
+                "id": "portable-decision-contract",
+                "responsibility": (
+                    "host-independent desired state authority evidence and "
+                    "fallback semantics"
+                ),
+                "mustNotContain": "one-host-actuation-assumptions",
+            },
+            {
+                "id": "host-neutral-adapter-contract",
+                "responsibility": (
+                    "map portable lifecycle states onto declared host "
+                    "capabilities while preserving unsupported operations"
+                ),
+                "operations": [
+                    "inspect-host-capabilities",
+                    "plan-minimal-authorized-set",
+                    "request-host-native-activation-or-call-admission",
+                    "observe-schema-and-runtime-state-separately",
+                    "request-release",
+                    "observe-exact-release",
+                    "recover-or-degrade-explicitly",
+                ],
+                "authorityBoundary": (
+                    "host-native-enforcement-and-lifecycle-remain-authoritative"
+                ),
+                "isUniversalRuntimeImplementation": False,
+            },
+            {
+                "id": "host-specific-implementation-and-evidence",
+                "responsibility": (
+                    "bind one host mechanism version authority and observed "
+                    "lifecycle limits without promotion to another host"
+                ),
+                "mappedHostMechanismFamilies": [
+                    "kimi-code-synthetic-mechanism",
+                    "codex-cli-app-server",
+                ],
+                "crossHostByteParityRequired": False,
+            },
+        ],
         "hostMappings": [
             {
                 "hostId": "kimi-code",
                 "mechanismClass": "pre-tool-call-admission-hook",
                 "evidenceState": "synthetic-mechanism-replay-only",
                 "freshness": "pinned-revision-not-current-live-host-proof",
+                "hostMechanismTopology": {
+                    "executablePrototypes": [
+                        "hooks/context-usage.mjs",
+                        "hooks/mcp-gate.mjs",
+                    ],
+                    "sharedInjectionInfrastructure": "hooks/session-start.mjs",
+                    "ruleTextGroups": [
+                        "AGENTS.md#上下文交接协议",
+                        "AGENTS.md#Git纪律",
+                    ],
+                    "lane2ExecutablePrototype": None,
+                },
                 "contractProjection": {
                     "selected": "portable-contract-only",
                     "activation-authorized": "not-observed",
@@ -254,34 +389,62 @@ def build_mapping(*, root: Path = ROOT) -> dict[str, Any]:
                 "degradedFallback": "requires-separate-host-native-lifecycle-evidence",
             },
             {
-                "hostId": "codex-cli-app-server-0.145.0-windows",
-                "mechanismClass": "startup-profile-and-app-server-process-lifecycle",
-                "evidenceState": "bounded-historical-live-host-evidence",
-                "freshness": "historical-version-bound-not-current-host-proof",
+                "hostId": "codex-cli-app-server-0.146.0-windows",
+                "mechanismClass": (
+                    "version-aware-startup-profile-app-server-refresh-and-"
+                    "process-lifecycle"
+                ),
+                "evidenceState": (
+                    "bounded-current-reload-release-plus-historical-"
+                    "startup-idle-evidence"
+                ),
+                "freshness": (
+                    "current-for-0.146.0-reload-release-only-historical-for-"
+                    "startup-idle-and-unsubscribe"
+                ),
                 "contractProjection": {
                     "selected": "portable-offline-contract-only",
                     "activation-authorized": (
                         "bounded-probe-authority-only-not-a-host-state-observation"
                     ),
-                    "call-admitted": "startup-full-filtered-disabled-boundary-observed",
+                    "call-admitted": (
+                        "historical-startup-boundaries-plus-current-same-thread-"
+                        "disabled-rejection-observed"
+                    ),
                     "schema-exposed": "not-observed-schema-list-not-called",
-                    "runtime-loaded": "enabled-start-and-disabled-start-suppression-observed",
-                    "release-requested": "reload-and-unsubscribe-accepted-not-release-proof",
-                    "runtime-released": "single-sentinel-thirty-minute-idle-unload-observed",
-                    "recovered": "new-thread-new-instance-recovery-observed",
+                    "runtime-loaded": (
+                        "historical-enabled-start-plus-current-baseline-load-"
+                        "observed"
+                    ),
+                    "release-requested": (
+                        "current-config-disable-reload-accepted-with-historical-"
+                        "unsubscribe-separated"
+                    ),
+                    "runtime-released": (
+                        "three-of-three-exact-baseline-release-after-config-"
+                        "disable-and-reload"
+                    ),
+                    "recovered": (
+                        "three-of-three-exact-config-restore-new-thread-control-"
+                        "succeeded"
+                    ),
                 },
                 "effectiveBoundary": (
-                    "startup-new-thread-profile-plus-observed-idle-fallback"
+                    "bounded-current-config-disable-reload-release-plus-version-"
+                    "bound-startup-new-thread-and-idle-fallback"
                 ),
                 "degradedFallback": (
-                    "startup-or-new-thread-profile-or-observed-native-idle-path"
+                    "current-native-disable-reload-only-for-tested-boundary-"
+                    "otherwise-version-bound-startup-new-thread-or-idle-path"
                 ),
             },
         ],
         "decision": {
             "portableContractFieldsMapped": True,
             "materiallyDifferentMechanismsMapped": True,
+            "portableAdapterHostImplementationSeparationEnforced": True,
             "unsupportedOperationsExplicit": True,
+            "boundedCurrentCodexConfigDisablePlusReloadReleaseProved": True,
             "generalizedRuntimeCapabilityProved": False,
             "crossHostParityProved": False,
             "sameSessionDynamicLifecycleProved": False,

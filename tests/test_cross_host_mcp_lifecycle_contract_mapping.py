@@ -27,7 +27,7 @@ class CrossHostMcpLifecycleContractMappingTests(unittest.TestCase):
     def test_current_mapping_passes_without_generalized_runtime_claim(self) -> None:
         validate_mapping(copy.deepcopy(self.document), root=ROOT)
         self.assertEqual(
-            "cross-host-contract-mapped-no-generalized-runtime-claim",
+            "cross-host-contract-mapped-current-codex-bounded-native-win-no-generalized-runtime-claim",
             self.document["status"],
         )
         self.assertFalse(
@@ -38,6 +38,15 @@ class CrossHostMcpLifecycleContractMappingTests(unittest.TestCase):
         )
         self.assertTrue(
             self.document["decision"]["materiallyDifferentMechanismsMapped"]
+        )
+        self.assertTrue(
+            self.document["decision"][
+                "boundedCurrentCodexConfigDisablePlusReloadReleaseProved"
+            ]
+        )
+        self.assertNotIn(
+            "boundedCurrentCodexReloadReleaseProved",
+            self.document["decision"],
         )
         self.assertTrue(all(value is False for value in self.document["claimBoundary"].values()))
         for key in (
@@ -50,6 +59,62 @@ class CrossHostMcpLifecycleContractMappingTests(unittest.TestCase):
         ):
             with self.subTest(decision=key):
                 self.assertFalse(self.document["decision"][key])
+
+    def test_portable_adapter_and_host_implementation_layers_stay_distinct(self) -> None:
+        layers = self.document["architectureLayers"]
+        self.assertEqual(
+            [
+                "portable-decision-contract",
+                "host-neutral-adapter-contract",
+                "host-specific-implementation-and-evidence",
+            ],
+            [item["id"] for item in layers],
+        )
+        neutral = layers[1]
+        self.assertFalse(neutral["isUniversalRuntimeImplementation"])
+        self.assertEqual(
+            "host-native-enforcement-and-lifecycle-remain-authoritative",
+            neutral["authorityBoundary"],
+        )
+        host_layer = layers[2]
+        self.assertNotIn("currentHostAdapters", host_layer)
+        self.assertEqual(
+            ["kimi-code-synthetic-mechanism", "codex-cli-app-server"],
+            host_layer["mappedHostMechanismFamilies"],
+        )
+
+    def test_kimi_topology_is_not_collapsed_into_three_independent_prototypes(self) -> None:
+        kimi = self.document["hostMappings"][0]
+        self.assertEqual(
+            {
+                "executablePrototypes": [
+                    "hooks/context-usage.mjs",
+                    "hooks/mcp-gate.mjs",
+                ],
+                "sharedInjectionInfrastructure": "hooks/session-start.mjs",
+                "ruleTextGroups": [
+                    "AGENTS.md#上下文交接协议",
+                    "AGENTS.md#Git纪律",
+                ],
+                "lane2ExecutablePrototype": None,
+            },
+            kimi["hostMechanismTopology"],
+        )
+
+    def test_current_codex_win_is_version_and_operation_bounded(self) -> None:
+        codex = self.document["hostMappings"][1]
+        self.assertEqual(
+            "codex-cli-app-server-0.146.0-windows",
+            codex["hostId"],
+        )
+        self.assertEqual(
+            "three-of-three-exact-baseline-release-after-config-disable-and-reload",
+            codex["contractProjection"]["runtime-released"],
+        )
+        self.assertEqual(
+            "current-for-0.146.0-reload-release-only-historical-for-startup-idle-and-unsubscribe",
+            codex["freshness"],
+        )
 
     def test_source_binding_drift_fails_closed(self) -> None:
         mutated = copy.deepcopy(self.document)
@@ -128,7 +193,7 @@ class CrossHostMcpLifecycleContractMappingTests(unittest.TestCase):
             self.document["hostMappings"][0]["effectiveBoundary"],
         )
         self.assertEqual(
-            "startup-new-thread-profile-plus-observed-idle-fallback",
+            "bounded-current-config-disable-reload-release-plus-version-bound-startup-new-thread-and-idle-fallback",
             self.document["hostMappings"][1]["effectiveBoundary"],
         )
         self.assertEqual(
@@ -138,7 +203,7 @@ class CrossHostMcpLifecycleContractMappingTests(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            "startup-or-new-thread-profile-or-observed-native-idle-path",
+            "current-native-disable-reload-only-for-tested-boundary-otherwise-version-bound-startup-new-thread-or-idle-path",
             self.document["hostMappings"][1]["degradedFallback"],
         )
 

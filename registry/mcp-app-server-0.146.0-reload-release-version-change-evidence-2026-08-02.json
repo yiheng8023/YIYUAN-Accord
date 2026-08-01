@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "id": "mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02",
+  "date": "2026-08-02",
+  "status": "observed-three-repetition-single-host-version-bounded-config-disable-plus-reload-release",
+  "purpose": "Re-evaluate the 0.145.0 reload-retention result after the installed Codex host and official MCP runtime implementation changed to 0.146.0.",
+  "officialSourceSnapshot": {
+    "repository": "openai/codex",
+    "retrievedAt": "2026-08-02T01:43:01+08:00",
+    "releaseTag": "rust-v0.146.0",
+    "annotatedTagObject": "be449751a978f02e5bbba886999662956c7f38f5",
+    "releaseCommit": "e363b08c9175ac1cbe5893615dd2cb9ddf95043b",
+    "publishedAt": "2026-07-29T01:42:51Z",
+    "releaseUrl": "https://github.com/openai/codex/releases/tag/rust-v0.146.0",
+    "relevantPullRequests": [
+      {
+        "number": 34550,
+        "mergeCommit": "27a9c4d6bd1f6875127a2f0f6c2c10d95b5e5b09",
+        "role": "thread-scoped-refresh-regression-coverage",
+        "url": "https://github.com/openai/codex/pull/34550"
+      },
+      {
+        "number": 34930,
+        "mergeCommit": "e497325a6a1743cfadeee41a6b5f05ebf7fd0221",
+        "role": "thread-mcp-runtime-ownership-and-atomic-publication",
+        "url": "https://github.com/openai/codex/pull/34930"
+      },
+      {
+        "number": 34952,
+        "mergeCommit": "e19e65317a333ce725b18ac6f1e3bc904b74d2a1",
+        "role": "connection-reconciliation-and-reuse",
+        "url": "https://github.com/openai/codex/pull/34952"
+      },
+      {
+        "number": 35151,
+        "mergeCommit": "f201c30c52a35f819262865a53df94b6f4ea7a50",
+        "role": "explicit-refresh-reconnect",
+        "url": "https://github.com/openai/codex/pull/35151"
+      },
+      {
+        "number": 35204,
+        "mergeCommit": "3645a4397c4889ea483a3b9a61ad7cf5921aa384",
+        "role": "thread-startup-runtime-invalidation",
+        "url": "https://github.com/openai/codex/pull/35204"
+      },
+      {
+        "number": 35216,
+        "mergeCommit": "58b427722857117ac3e702b9eb406d47616022e2",
+        "role": "best-effort-config-refresh-across-threads",
+        "url": "https://github.com/openai/codex/pull/35216"
+      }
+    ],
+    "sourceFiles": [
+      {
+        "path": "codex-rs/codex-mcp/src/runtime.rs",
+        "gitBlob": "9cad1c0251a5a61f2da6f8efc9aff8518bc44cc2",
+        "bytes": 23972,
+        "sha256": "38ea69ec3fab3e40e4c67ea216e76a41ab5ad1e17d2b025247f2b86ddae2bd3a"
+      },
+      {
+        "path": "codex-rs/codex-mcp/src/connection_manager.rs",
+        "gitBlob": "2e6be9864f842d56d93535e34597875fc185ce14",
+        "bytes": 26654,
+        "sha256": "5749cd2486041e1a53b63f9d6cec81d1a5413d5211cba8fed427f83687d770cf"
+      },
+      {
+        "path": "codex-rs/codex-mcp/src/rmcp_client.rs",
+        "gitBlob": "8901c3672314e9010af8e4c5a370ae1b095e5b45",
+        "bytes": 42837,
+        "sha256": "7e73d5feadc299906753f2aafcc6601cd58fb36784fc46bd220a5ebf54b48474"
+      }
+    ],
+    "boundedInterpretation": {
+      "threadScopedRuntimeAndAtomicPublicationPresent": true,
+      "unchangedConnectionsMayBeReused": true,
+      "explicitRefreshRequestsFreshConnections": true,
+      "connectionAndClientShutdownPathsPresent": true,
+      "sourceAloneProvesObservedProcessRelease": false,
+      "sourceAloneProvesTaskEndRelease": false,
+      "sourceAloneProvesResourceBenefit": false
+    }
+  },
+  "hostBinding": {
+    "host": "Windows Codex CLI app-server",
+    "codexVersion": "codex-cli 0.146.0",
+    "probeId": "codex-app-server-mcp-reload-release-attribution-v1",
+    "probeScript": {
+      "path": "scripts/probe_codex_app_server_mcp_reload_release_attribution.py",
+      "sha256": "c418737169a3133bc0bfb2df18e7b26600158c2bcd98b28a004f4dec79d83e4b"
+    },
+    "sentinel": {
+      "path": "scripts/mcp_lifecycle_sentinel.py",
+      "version": "1.1.0",
+      "sha256": "48656683eaff80d0162fc230b111880ee59cc619475187531b09c341136ee590"
+    },
+    "postRunBinaryObservation": {
+      "path": "C:/Users/15521/AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+      "bytes": 358650672,
+      "sha256": "bc343ba420dc2e2e9f59e6fc5e5bf0aae1cd8c771fc319665241fc9c0271fddb",
+      "rawReportSelfBindsBinaryDigest": false
+    },
+    "observationSecondsPerRepetition": 10.0,
+    "sampleIntervalSeconds": 0.5,
+    "formalRepetitionCount": 3
+  },
+  "authorityAndIsolation": {
+    "isolatedCodexHomePerRepetition": true,
+    "currentUserConfigCopied": false,
+    "currentAuthenticationCopied": false,
+    "currentPluginsCopied": false,
+    "pluginAppAndSharingFeaturesDisabled": true,
+    "modelTurnStarted": false,
+    "modelRequestSent": false,
+    "globalConfigurationChanged": false,
+    "installedMcpConfigurationChanged": false,
+    "pidSignalCleanupUsed": false,
+    "applicationLogExternalNetworkAttemptObservedInEveryRepetition": true,
+    "externalNetworkAttemptOutcome": "unauthenticated Responses WebSocket connection failed before any model turn or model request"
+  },
+  "formalEvidence": [
+    {
+      "path": "audits/mcp-reload-release-attribution-0.146.0-2026-08-02/evidence-01.json",
+      "sha256": "cd3d52407fef29fec5e117bb62506e652fdd133c43a4911d2931e8e3e60cad53",
+      "bytes": 37568,
+      "baselinePid": 9144,
+      "baselineInstanceId": "12a75c88-a186-45f1-ac00-639a4db106bb",
+      "threadA": "019fbe64-e37b-7811-b208-cc4ae394122f",
+      "threadB": "019fbe65-0bd8-75f3-b8ea-57e9bd08038b"
+    },
+    {
+      "path": "audits/mcp-reload-release-attribution-0.146.0-2026-08-02/evidence-02.json",
+      "sha256": "cd237a4262e910f4d0ab13cadd9da6386bc44b3de4eca79693f6f6efaf5a6421",
+      "bytes": 37743,
+      "baselinePid": 28692,
+      "baselineInstanceId": "c6dcee07-01b1-4d15-ab18-7e2300a38195",
+      "threadA": "019fbe65-d04f-70d3-ab6d-11a4d9bf72b4",
+      "threadB": "019fbe65-f857-7e13-b5e5-b8b083678207"
+    },
+    {
+      "path": "audits/mcp-reload-release-attribution-0.146.0-2026-08-02/evidence-03.json",
+      "sha256": "de65c42ff8731b887c0c6b64e6f5632e9ff014871cc4dd4e085cfa92449d6ded",
+      "bytes": 37757,
+      "baselinePid": 37996,
+      "baselineInstanceId": "93ac280a-a2e0-4501-b151-bf4118c1b5ff",
+      "threadA": "019fbe66-4f60-7f71-8329-9def37e85080",
+      "threadB": "019fbe66-7774-7523-8a1f-5c5256c0d3df"
+    }
+  ],
+  "rawProducerClaimCorrection": {
+    "field": "claimBoundary.provesReloadCausedOldRuntimeRelease",
+    "recordedValue": true,
+    "canonicalDisposition": "rejected-confounded-by-prior-config-disable-no-ablation",
+    "rawFilesPreservedUnmodified": true,
+    "canonicalAllowedClaim": "release-observed-after-config-disable-plus-reload"
+  },
+  "aggregateObservation": {
+    "validRepetitionCount": 3,
+    "reloadReleaseObservedCount": 3,
+    "loadedRuntimeRetainedCount": 0,
+    "exactProcessIdentitySampleCount": 63,
+    "sameExactIdentitySampleCount": 6,
+    "attributionWindowStopEventCount": 3,
+    "postWindowSameThreadUnknownServerCount": 3,
+    "exactConfigRestoreCount": 3,
+    "restoredNewThreadControlSuccessCount": 3,
+    "postRestoreDistinctSentinelStartCount": 6,
+    "verifiedCleanupCount": 3,
+    "gracefulAppServerShutdownCount": 3,
+    "applicationLogExternalNetworkAttemptCount": 3,
+    "pidReuseDifferentIdentityCount": 1,
+    "releaseLatencyMilliseconds": [717.753, 717.591, 695.64]
+  },
+  "versionComparison": {
+    "priorEvidence": "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json",
+    "priorResult": "three-of-three-loaded-runtime-retained-for-five-seconds",
+    "currentResult": "three-of-three-exact-baseline-runtimes-released-after-config-disable-plus-reload-inside-ten-second-window",
+    "behaviorChangedAcrossBoundVersions": true,
+    "crossVersionParityProved": false,
+    "priorEvidenceInvalidatedForItsBoundVersion": false
+  },
+  "decision": {
+    "boundedNativeSameThreadConfigDisablePlusReloadAndReleaseObserved": true,
+    "nativeCurrentVersionMustPrecedeCustomController": true,
+    "selfAuthoredControllerEligible": false,
+    "dynamicRuntimeControlAssessment": "partial-native-current-version-win",
+    "remainingDecisionGaps": [
+      "task-end-versus-config-disable-semantics",
+      "concurrent-or-overlapping-owner-safety",
+      "per-thread-runtime-multiplication-cost",
+      "arbitrary-local-stdio-and-remote-http-behavior",
+      "stable-total-host-resource-benefit",
+      "failure-recovery-and-rollback"
+    ],
+    "nextGate": "compare static-minimal and native phase-gated profiles on one bound workload before any residual self-authored controller claim"
+  },
+  "claimBoundary": {
+    "reloadAloneCausedReleaseProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "sameThreadHotEnableDisableForArbitraryMcpProved": false,
+    "leaseOrReferenceCountProved": false,
+    "perThreadOneProcessRuleProved": false,
+    "stableResourceSavingsProved": false,
+    "genericCrashRecoveryProved": false,
+    "remoteHttpLifecycleProved": false,
+    "crossHostParityProved": false,
+    "crossVersionParityProved": false,
+    "noNetworkTrafficProved": false,
+    "residualNeedForSelfAuthoredControllerProved": false,
+    "productionReadinessProved": false
+  },
+  "cleanupDisposition": {
+    "repositoryAudit": "retain-three-raw-reports-and-derived-evidence",
+    "isolatedProbeRootsRemoved": true,
+    "repositoryTmpRootEmptyAfterRemoval": true,
+    "deletionAuthorizedForRetainedAudit": false
+  },
+  "documentation": "docs/mcp-app-server-0.146.0-reload-release-version-change-evidence-2026-08-02.md"
+}
