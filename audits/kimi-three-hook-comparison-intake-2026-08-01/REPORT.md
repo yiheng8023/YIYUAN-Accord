@@ -12,8 +12,9 @@ standalone replay package.
 - branch: `master`
 - revision: `3d51621f5f74b5f56cc286e233d2b2396fb62c3f`
 - repository posture at inspection: clean, `0/0` against `origin/master`
-- candidate identity: leading local candidate for the externally reported
-  three prototypes; user confirmation remains open
+- candidate topology: user-confirmed two executable prototypes
+  (`context-usage`, `mcp-gate`), one shared injection infrastructure
+  (`session-start`), and two `AGENTS.md` rule groups
 - reported compatibility PR: not bound
 
 | Artifact | SHA-256 | Git blob |
@@ -78,5 +79,20 @@ schemas, processes, or connections.
 
 The exact-comparison gate remains open. A decision-relevant replay needs a
 retained evaluator and output, the same bound task on both paths, a pressure
-state when pressure behavior is claimed, and separately bound comparisons for
-`session-start` and `mcp-gate`.
+state when pressure behavior is claimed, task-bound lane 1/lane 3 comparisons,
+and a bound lane 2 rules-plus-practice comparison. `session-start` is shared
+injection infrastructure, not an independent prototype arm.
+
+## Retained mechanism replay follow-on
+
+The later [retained replay](../kimi-three-hook-comparison-replay-2026-08-01/REPORT.json)
+binds the same exact revision and all eight source artifacts, including
+`AGENTS.md`. Its 13 isolated Hook cases and two rule cases pass. Only the three
+Hook bodies execute; the gate file seeds a baseline before synthetic mutation,
+while registration and operator-contract artifacts are static bindings and the
+permission file is context only. This does not prove host Hook registration,
+Skill instruction delivery, or permission-rule effect. That closes synthetic Hook-case replayability
+and topology-identity limitations only. The sanitized
+live trace above still has no retained evaluator or raw output, and the
+exact-comparison gate remains open for real-task lane 1/lane 3 observations and
+a bound lane 2 rules-plus-practice comparison.

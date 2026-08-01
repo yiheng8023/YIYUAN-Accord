@@ -45,7 +45,7 @@ class DocumentationContractTests(unittest.TestCase):
         for phrase in (
             "one decision-relevant real task",
             "exact comparison artifacts",
-            "leading local candidate for the three reported kimi-side prototypes",
+            "user-confirmed kimi topology",
             "composition rather than replacement",
             "net benefit",
             "no new governance layer",
@@ -53,30 +53,40 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(surface="Plan", phrase=phrase):
                 self.assertIn(phrase, normalized_plan.lower())
 
-    def test_kimi_comparison_intake_links_evidence_and_keeps_gate_open(self) -> None:
+    def test_kimi_comparison_surfaces_separate_replay_from_real_task_evidence(self) -> None:
         plan = read("docs/strategy/RESEARCH-AND-POC-PLAN.md")
         continuation = read("docs/operations/CONTINUATION.md")
-        report = read("audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md")
+        intake = read("audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md")
         normalized_plan = " ".join(plan.split())
         normalized_continuation = " ".join(continuation.split())
-        normalized_report = " ".join(report.split())
-        report_link = (
-            "../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md"
+        normalized_intake = " ".join(intake.split())
+        normalized_plan_lower = normalized_plan.lower()
+        normalized_continuation_lower = normalized_continuation.lower()
+        replay_link = (
+            "../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json"
         )
 
-        self.assertIn(report_link, normalized_plan)
-        self.assertIn(report_link, normalized_continuation)
+        self.assertIn(replay_link, normalized_plan)
+        self.assertIn(replay_link, normalized_continuation)
 
         for phrase in (
-            "3d51621f5f74b5f56cc286e233d2b2396fb62c3f",
-            "not a standalone reproducible comparison artifact",
-            "exact-comparison gate",
+            "13",
+            "3.592",
+            "single-purpose evidence instrument",
+            "only the three hook bodies execute",
+            "all eight artifacts were executed is false",
+            "does not prove host hook registration",
             "residual self-authored gap",
         ):
             with self.subTest(surface="plan", phrase=phrase):
-                self.assertIn(phrase, normalized_plan)
+                self.assertIn(phrase.lower(), normalized_plan_lower)
             with self.subTest(surface="continuation", phrase=phrase):
-                self.assertIn(phrase, normalized_continuation)
+                self.assertIn(phrase.lower(), normalized_continuation_lower)
+
+        self.assertIn(
+            "3d51621f5f74b5f56cc286e233d2b2396fb62c3f",
+            normalized_continuation,
+        )
 
         for phrase in (
             "hooks/mcp-gate.mjs",
@@ -85,41 +95,69 @@ class DocumentationContractTests(unittest.TestCase):
             "173234",
             "1048576",
             "CONTINUE",
-            "user confirmation remains open",
+            "user-confirmed two executable prototypes",
             "not independently replayable from this repository alone",
             "does not unload schemas, processes, or connections",
+            "retained mechanism replay follow-on",
+            "not an independent prototype arm",
+            "only the three hook bodies execute",
+            "does not prove host hook registration",
         ):
-            with self.subTest(surface="report", phrase=phrase):
-                self.assertIn(phrase, normalized_report)
+            with self.subTest(surface="intake", phrase=phrase):
+                self.assertIn(phrase.lower(), normalized_intake.lower())
 
         self.assertIn(
-            "no pressure attribution, resource savings, cross-host parity, or "
-            "residual self-authored gap is proved",
+            "No live-host acceptance, pressure attribution, resource savings, "
+            "cross-host parity, dynamic MCP lifecycle, or residual self-authored "
+            "gap is proved",
             normalized_plan,
         )
         self.assertIn(
-            "It does not establish pressure attribution, resource savings, "
-            "cross-host parity, or a residual self-authored gap",
+            "the compatibility PR, cc-switch worktree-practice artifact, live-host "
+            "acceptance, real pressure attribution, resource savings, cross-host "
+            "parity, dynamic MCP lifecycle, and same-task lane value remain open",
             normalized_continuation,
         )
         self.assertIn(
             "not pressure attribution, a stable benchmark, resource-savings "
             "evidence, cross-host parity, or a live-model result",
-            normalized_report,
-        )
-        self.assertIn(
-            "It does not establish a residual self-authored gap",
-            normalized_report,
+            normalized_intake,
         )
         self.assertIn("No live model ran", normalized_plan)
-        self.assertIn("no live model", normalized_continuation)
-        self.assertIn("live-model result", normalized_report)
+        self.assertIn("no live Kimi configuration", normalized_continuation)
+        self.assertIn("live-model result", normalized_intake)
         self.assertIn(
             "exact-comparison gate therefore remains open",
             normalized_plan,
         )
-        self.assertIn("exact-comparison gate remains open", normalized_continuation)
-        self.assertIn("exact-comparison gate remains open", normalized_report)
+        self.assertIn("exact-comparison gate is not closed", normalized_continuation)
+        self.assertIn("exact-comparison gate remains open", normalized_intake)
+
+    def test_portability_boundary_separates_contract_adapter_and_host_probe(self) -> None:
+        architecture = " ".join(read("docs/architecture.md").split())
+        plan = " ".join(
+            read("docs/strategy/RESEARCH-AND-POC-PLAN.md").split()
+        )
+
+        for phrase in (
+            "A host-local calibration probe is not a product adapter",
+            "must not define a portable lane from one Agent's artifact shape",
+            "thin host adapters translate only the unavoidable execution edge",
+            "A targeted adapter may remain honestly host-specific",
+            "A generalized product claim needs evidence from materially different host mechanisms",
+            "must negotiate or degrade explicitly",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, architecture)
+
+        for phrase in (
+            "cross-host contract gate",
+            "at least two materially different host control mechanisms",
+            "host-local probe remains evidence instrumentation",
+            "does not become the product adapter",
+        ):
+            with self.subTest(surface="plan", phrase=phrase):
+                self.assertIn(phrase, plan)
 
     def test_operational_manager_and_host_enforcement_are_adapter_neutral(self) -> None:
         agents = read("AGENTS.md")

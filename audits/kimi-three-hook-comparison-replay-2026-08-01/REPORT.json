@@ -1,0 +1,281 @@
+{
+  "schema": 1,
+  "id": "kimi-three-hook-comparison-replay-v1",
+  "status": "valid-mechanism-replay-only",
+  "evaluationDate": "2026-08-01",
+  "source": {
+    "repository": "kimi-code-user-config",
+    "pinnedRevision": "3d51621f5f74b5f56cc286e233d2b2396fb62c3f",
+    "headAtRun": "3d51621f5f74b5f56cc286e233d2b2396fb62c3f",
+    "headMatchesPinnedRevision": true,
+    "artifacts": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "ff87576699d4dfbfb11ca33f8819ff98805561c11c55d67b51e36c88e6125673"
+      },
+      {
+        "path": "config.hooks.toml",
+        "sha256": "aaff759ee5d57d11165e1025c66158ff2674b677fe8366eabb0139d2cc012bb3"
+      },
+      {
+        "path": "config.permission.toml",
+        "sha256": "a876381226447b6cd66de851443b95a9e3b64eded9a10d2bc085643fb808c7b3"
+      },
+      {
+        "path": "hooks/context-usage.mjs",
+        "sha256": "884c40f92e9fdc7e9da8b1a2a03647746a0ca26820f09c7f6709586fde1e35ae"
+      },
+      {
+        "path": "hooks/mcp-gate.mjs",
+        "sha256": "b1a21741b99c8da39c10c0da4acd9e77052ad7704a7cdc6c5a0519f6c2f16af9"
+      },
+      {
+        "path": "hooks/session-start.mjs",
+        "sha256": "7d32d1f2ae9c80eda12af2722cc0dcfb59b6f4af7bbe3574f240dbc7aead122d"
+      },
+      {
+        "path": "mcp-gate.json",
+        "sha256": "8e007ccf299637b3d54193cc8686bf9a525fbe4713b4569b56e52c1c469be79e"
+      },
+      {
+        "path": "skills/mcp-gate/SKILL.md",
+        "sha256": "c183602591390d19cd028cb11dbbf71512d139be836664808875b812b9a141de"
+      }
+    ]
+  },
+  "topology": {
+    "userConfirmed": true,
+    "executablePrototypeCount": 2,
+    "sharedInfrastructureCount": 1,
+    "ruleTextGroupCount": 2,
+    "lanes": [
+      {
+        "id": "lane-1-context-lifecycle-handoff",
+        "executablePrototype": "hooks/context-usage.mjs",
+        "sharedInfrastructure": [
+          "hooks/session-start.mjs"
+        ],
+        "ruleText": "AGENTS.md#上下文交接协议",
+        "runtimeState": "handoff.md"
+      },
+      {
+        "id": "lane-2-branch-worktree-judgment",
+        "executablePrototype": null,
+        "sharedInfrastructure": [],
+        "ruleText": "AGENTS.md#Git纪律",
+        "practice": "cc-switch-worktree-practice-unbound"
+      },
+      {
+        "id": "lane-3-mcp-on-demand-activation",
+        "executablePrototype": "hooks/mcp-gate.mjs",
+        "sharedInfrastructure": [
+          "hooks/session-start.mjs"
+        ],
+        "supportingArtifacts": [
+          "mcp-gate.json",
+          "skills/mcp-gate/SKILL.md",
+          "config.hooks.toml"
+        ]
+      }
+    ]
+  },
+  "artifactTreatments": {
+    "AGENTS.md": "rule-text-static-binding",
+    "config.hooks.toml": "hook-registration-static-binding",
+    "config.permission.toml": "bound-context-not-replay-input",
+    "hooks/context-usage.mjs": "executed-synthetic-fixture",
+    "hooks/mcp-gate.mjs": "executed-synthetic-fixture",
+    "hooks/session-start.mjs": "executed-synthetic-fixture",
+    "mcp-gate.json": "configuration-seed-then-synthetic-mutation",
+    "skills/mcp-gate/SKILL.md": "operator-contract-static-binding"
+  },
+  "runtime": {
+    "nodeVersion": "v24.18.0",
+    "syntaxCheckProcessCount": 3,
+    "hookProcessCount": 13
+  },
+  "mechanismCases": [
+    {
+      "id": "mcp-pinned-default-on",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "mcp-explicit-off",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "1489de9013523d1e91762b023aa19632d39e08e8b6fe5f7249918148a1785ffa"
+    },
+    {
+      "id": "mcp-default-off",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a482bad009f2767ef0174520857290accf8fddb25183024a55bfb5fc063858ea"
+    },
+    {
+      "id": "mcp-explicit-on",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "mcp-built-in-pass",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "mcp-missing-gate-fail-open",
+      "hook": "mcp-gate",
+      "role": "executable-prototype-lane-3",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "session-fresh-injection",
+      "hook": "session-start",
+      "role": "shared-injection-infrastructure",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "aa9d2a1d51e13a1893061746ea15d40e8c6945036cf361e28ea7dacd11974f6e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "session-stale-handoff-excluded",
+      "hook": "session-start",
+      "role": "shared-injection-infrastructure",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "ae8a7cde44a94542b6a92847805c630f11158aebc40dd705f3a3e1bb81b308b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "context-low-continue",
+      "hook": "context-usage",
+      "role": "executable-prototype-lane-1",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "harnessState": "CONTINUE",
+      "harnessClassification": "supported-signal-no-advisory-trigger",
+      "harnessFollowOn": "none"
+    },
+    {
+      "id": "context-warning-wait",
+      "hook": "context-usage",
+      "role": "executable-prototype-lane-1",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "3e459dc5bb3cd1889d3d5c543e44389b01dcbd178c4c741942a6fdfb2ccc7cac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "harnessState": "WAIT",
+      "harnessClassification": "missing-explicit-thread-authority",
+      "harnessFollowOn": "prepare-or-use-existing-ctx04-ctx05-packet-only"
+    },
+    {
+      "id": "context-warning-hysteresis",
+      "hook": "context-usage",
+      "role": "executable-prototype-lane-1",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "harnessState": "WAIT",
+      "harnessClassification": "missing-explicit-thread-authority",
+      "harnessFollowOn": "prepare-or-use-existing-ctx04-ctx05-packet-only"
+    },
+    {
+      "id": "context-critical-wait",
+      "hook": "context-usage",
+      "role": "executable-prototype-lane-1",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "d940acc5ce5803848e9cc4ff30b227798c7f5c82d1164c811ebadf0383f22790",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "harnessState": "WAIT",
+      "harnessClassification": "missing-explicit-thread-authority",
+      "harnessFollowOn": "prepare-or-use-existing-ctx04-ctx05-packet-only"
+    },
+    {
+      "id": "context-compaction-reset",
+      "hook": "context-usage",
+      "role": "executable-prototype-lane-1",
+      "passed": true,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "harnessState": "CONTINUE",
+      "harnessClassification": "supported-signal-no-advisory-trigger",
+      "harnessFollowOn": "none"
+    }
+  ],
+  "ruleCases": [
+    {
+      "id": "lane-1-context-handoff-rules",
+      "role": "rule-text",
+      "passed": true
+    },
+    {
+      "id": "lane-2-git-discipline-rules",
+      "role": "rule-text-no-executable-prototype",
+      "passed": true
+    }
+  ],
+  "evidenceCost": {
+    "sourceArtifactCount": 8,
+    "mechanismCaseCount": 13,
+    "ruleCaseCount": 2,
+    "userActionCount": 0,
+    "modelRequestCount": 0,
+    "candidateHookSourceBytes": 7286,
+    "candidateHookSourceLines": 169,
+    "evaluatorSourceBytes": 26173,
+    "evaluatorSourceLines": 719,
+    "evaluatorSourceSha256": "9686e2f8bda4731e20efa89cf72ac096d839edf72605f6cd48e780e00a0bdb06",
+    "evaluatorToCandidateHookByteRatio": 3.592,
+    "excludesTestsReportsAndDocumentation": true
+  },
+  "temporaryCarrier": "system-temporary-directory",
+  "liveConfigurationRead": false,
+  "liveConfigurationWritten": false,
+  "networkCapabilityInvokedByEvaluator": false,
+  "modelRequestSent": false,
+  "isolatedTemporaryRootRemoved": true,
+  "claimBoundary": {
+    "compatibilityPrBound": false,
+    "allThreeHooksAreIndependentPrototypes": false,
+    "lane2ExecutablePrototypeExists": false,
+    "ccSwitchWorktreePracticeArtifactBound": false,
+    "allBoundArtifactsExecuted": false,
+    "hostHookRegistrationProved": false,
+    "skillInstructionDeliveryProved": false,
+    "permissionRuleEffectProved": false,
+    "liveHostAcceptanceProved": false,
+    "liveModelBehaviorProved": false,
+    "pressureAttributionProved": false,
+    "resourceSavingsProved": false,
+    "crossHostParityProved": false,
+    "dynamicMcpLifecycleProved": false,
+    "residualSelfAuthoredGapProved": false
+  },
+  "reportSha256": "d8cf03acbc010c1849ff42182f094415b3460c33d9a4b291f037feabfc9d8458"
+}

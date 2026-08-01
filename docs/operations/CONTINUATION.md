@@ -2997,21 +2997,22 @@ Repository `.tmp` is absent. The generated `scripts/__pycache__` was removed
 after verification. Neither implementation review nor green tests change the
 open independent content-review or live-trial gates.
 
-## 2026-08-01 Kimi three-Hook comparison intake checkpoint
+## 2026-08-01 Kimi Hook topology comparison intake checkpoint
 
-The leading local candidate for the three reported Kimi prototypes is the clean
-`kimi-code-user-config` checkout at exact revision
-`3d51621f5f74b5f56cc286e233d2b2396fb62c3f`: `hooks/mcp-gate.mjs`,
-`hooks/session-start.mjs`, and `hooks/context-usage.mjs`. All three Hooks, the
-`mcp-gate` Skill, and its gate JSON are byte-identical to the current user
-projection. The exact hashes, probe boundary, sanitized observation, and claim
-limits are frozen in
+The clean `kimi-code-user-config` checkout at exact revision
+`3d51621f5f74b5f56cc286e233d2b2396fb62c3f` contains two user-confirmed
+executable prototypes, `hooks/context-usage.mjs` for lane 1 and
+`hooks/mcp-gate.mjs` for lane 3. `hooks/session-start.mjs` is shared injection
+infrastructure for memory, handoff, and gate visibility, not a third prototype.
+Lane 2 has no executable artifact; it is the `AGENTS.md` Git-discipline rules
+plus cc-switch worktree practice. The exact hashes, initial probe boundary,
+sanitized observation, and claim limits are frozen in
 [`REPORT.md`](../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md).
 An isolated no-model, no-network probe reported 24 passing mechanism assertions
 and left both repositories and the live Kimi configuration unchanged, but its
 temporary evaluator and raw output were removed; it is not a standalone
-reproducible comparison artifact. The user still needs to confirm that this is
-the externally reported trio; the reported compatibility PR remains unbound.
+reproducible comparison artifact. The reported compatibility PR and the exact
+cc-switch worktree-practice artifact remain unbound.
 
 The first same-task comparison used a sanitized read-only extraction of the
 current Kimi usage trace. The last observed total was `173234` against a
@@ -3025,7 +3026,71 @@ cross-host parity, or a residual self-authored gap.
 `mcp-gate` is a useful Kimi control adapter, not a dynamic MCP resource-lifecycle
 implementation: it blocks selected calls, fails open on missing or malformed
 state, and does not unload schemas, processes, or connections. Remaining work
-is a separately bound same-task comparison for `session-start`, `mcp-gate`, and
-a real pressure-state observation. Repository `.tmp` and isolated runtime roots
+is retained real-task evidence for lane 1/lane 3 and a bound rules-plus-practice
+comparison for lane 2. Repository `.tmp` and isolated runtime roots
 were removed after the probes; no live model, config mutation, install, or CC
 Switch action occurred. The exact-comparison gate remains open.
+
+## 2026-08-01 retained Kimi Hook mechanism replay checkpoint
+
+The prior ephemeral-probe limitation is narrowed by
+[`REPORT.json`](../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json)
+and `scripts/run_kimi_hook_comparison_replay.py`. The runner binds eight source
+artifacts from exact local Git revision
+`3d51621f5f74b5f56cc286e233d2b2396fb62c3f`, validates every SHA-256 before
+use, and runs only the two prototypes plus shared injection infrastructure
+against an isolated synthetic Kimi home. The pinned gate file seeds one
+default-on baseline before deliberate synthetic mutation. Hook registration
+and the operator contract are static bindings; the permission file is bound
+context rather than a replay input. Only the three Hook bodies execute; all
+eight artifacts were executed is false. This does not prove host Hook
+registration, Skill instruction delivery, or permission-rule effect.
+`13` Hook cases cover MCP pinned-default, explicit/default blocking, allowed and built-in
+pass-through, missing-state fail-open, fresh/stale session injection, context
+warning/hysteresis/critical/reset behavior, and the existing Harness
+`CONTINUE`/`WAIT` authority decisions. Two additional cases bind the exact
+context-handoff and Git-discipline rule groups from `AGENTS.md`; lane 2 remains
+explicitly non-executable.
+
+The current report body digest is
+`d8cf03acbc010c1849ff42182f094415b3460c33d9a4b291f037feabfc9d8458`.
+The current fail-closed report file SHA-256 is
+`9d413a4c74f4dcd95875c6c4a0aa52d5d266c43045c823a2c23b91ba1e9317d2`;
+two final claim-boundary-corrected runs were byte-identical at that digest.
+The first attempt stopped before Hook execution because `C:\tmp` rejected child
+directory creation; the successful runs used the system temporary directory.
+All replay and verification roots were removed, and no live Kimi configuration,
+network capability, model, install, or CC Switch action was used.
+
+The replay also exposes governance cost rather than hiding it: the retained
+evaluator is 719 lines and 26,173 normalized bytes versus 169 lines and 7,286
+bytes for the three Hook bodies, a 3.592 ratio before tests, reports,
+or documentation. Keep it as a single-purpose evidence instrument and do not
+generalize it into another adapter framework without a residual gap. Mechanism
+replayability and topology identity are covered; the compatibility PR,
+cc-switch worktree-practice artifact, live-host acceptance, real pressure
+attribution, resource savings, cross-host parity, dynamic MCP lifecycle, and
+same-task lane value remain open. The exact-comparison gate is not closed.
+
+This checkpoint also corrects the abstraction direction. Kimi artifacts are
+one host implementation and evidence source; they do not define a portable
+lane. The next architecture gate maps one portable contract to at least two
+materially different host mechanisms and records explicit negotiation or
+degradation where a host lacks a control. Keep host-local probes separate from
+thin product adapters, and do not generalize the retained Kimi runner.
+Retain the runner provisionally through that decision only. Supersede or remove
+it under reviewed cleanup if it changes no decision or a lighter replay keeps
+the same falsification power.
+
+Independent Spec and Standards review rejected the first retained version. It
+had replaced the pinned gate's `default:on` seed with a synthetic `default:off`
+fixture while wording all eight artifacts as replay inputs; it also allowed an
+arbitrary temporary parent to inherit system-temp/no-live-config claims, did
+not lock runtime or evidence-cost identity, and used a check-then-replace output
+path with a concurrent overwrite race. The repaired runner executes the pinned
+default first, classifies every artifact's treatment, keeps
+`allBoundArtifactsExecuted=false`, confines execution below the resolved system
+temporary root, locks Node and evaluator/cost identities, and publishes via a
+same-directory hard link that fails if the destination already exists. Negative
+tests cover concurrent creation and rehashed runtime/cost tampering. Fresh Spec
+and Standards re-review report zero remaining blockers.

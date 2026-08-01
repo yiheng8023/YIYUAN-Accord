@@ -130,3 +130,12 @@ Authorization is likewise host-owned rather than dialog-shaped. A host adapter
 may bind approval dialogs, permission rules, Hooks, policy files, or another
 native enforcement mechanism, but it must expose the effective authority and
 verification boundary without pretending unsupported controls exist.
+
+A host-local calibration probe is not a product adapter and must not define a
+portable lane from one Agent's artifact shape. Portable contracts define the
+outcome, authority, observability, lifecycle, fallback, and claim boundary;
+thin host adapters translate only the unavoidable execution edge. A targeted
+adapter may remain honestly host-specific. A generalized product claim needs
+evidence from materially different host mechanisms, while unsupported hosts
+must negotiate or degrade explicitly rather than inherit another host's Hook,
+rule-file, or control-plane assumptions.

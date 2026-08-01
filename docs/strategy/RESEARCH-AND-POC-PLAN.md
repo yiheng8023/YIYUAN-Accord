@@ -10,17 +10,41 @@ framework, Skill, Hook, or hard standard follows unless that comparison leaves
 a reproducible residual gap after native, official, reviewed external, and
 composed alternatives.
 
-A leading local candidate for the three reported Kimi-side prototypes is bound
-at exact revision `3d51621f5f74b5f56cc286e233d2b2396fb62c3f`; its three Hooks
-and the provisional `context-usage` comparison are frozen in the
-[Kimi three-Hook comparison intake](../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md).
-The current working decision favors composition rather than replacement, but
-the retained intake is not a standalone reproducible comparison artifact. The
-exact trio still requires user confirmation, the reported compatibility PR
-remains unbound, and no pressure attribution, resource savings, cross-host
-parity, or residual self-authored gap is proved. The exact-comparison gate
-therefore remains open for a retained same-task replay and the other two Hooks.
-No live model ran.
+The user-confirmed Kimi topology now has a retained zero-model
+[mechanism replay](../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json):
+two executable prototypes (`context-usage`, `mcp-gate`), one shared injection
+infrastructure (`session-start`), and two exact `AGENTS.md` rule groups are
+bound. Thirteen synthetic Hook cases and two rule cases pass. Only the three
+Hook bodies execute: the pinned gate file seeds one baseline before synthetic
+mutation, Hook registration and the operator contract are static bindings, and
+the permission file is bound context rather than a replay input. The claim that
+all eight artifacts were executed is false. Static identity does not prove host
+Hook registration, Skill instruction delivery, or permission-rule effect. This
+closes only synthetic Hook case replayability and topology identity. The
+719-line, 26,173-byte evaluator is already 3.592 times the three Hook bodies by bytes, excluding tests, reports,
+and documentation, so it remains a single-purpose evidence instrument rather
+than a reusable product adapter.
+
+The working decision still favors composition rather than replacement. Lane 2
+has no executable prototype; its cc-switch worktree-practice artifact and the
+compatibility PR remain unbound. No live-host acceptance, pressure attribution,
+resource savings, cross-host parity, dynamic MCP lifecycle, or residual
+self-authored gap is proved. The exact-comparison gate therefore remains open
+for retained real-task lane 1/lane 3 observations and a task-bound lane 2
+rules-plus-practice comparison. No live model ran.
+
+The next architectural gate is a cross-host contract gate, not another
+Kimi-shaped adapter. The same portable outcome, authority, observability,
+lifecycle, fallback, and claim contract must be mapped to at least two
+materially different host control mechanisms, with unsupported operations
+negotiated or degraded explicitly. Each host-local probe remains evidence
+instrumentation and does not become the product adapter. A targeted adapter may
+remain host-specific; a generalized product claim waits for cross-host evidence.
+Retain this runner only as a provisional reproducer for this checkpoint. At the
+cross-host gate, supersede or remove it in a separately reviewed cleanup if it
+does not change a decision or if a lighter replay preserves the same
+falsifiers; accumulated evidence code is not a permanent product asset by
+default.
 
 Working scenario and evidence gate:
 [`POC-SCENARIO-EVIDENCE-MATRIX.md`](POC-SCENARIO-EVIDENCE-MATRIX.md).
