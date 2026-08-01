@@ -159,6 +159,39 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(surface="plan", phrase=phrase):
                 self.assertIn(phrase, plan)
 
+    def test_cross_host_mcp_mapping_is_bounded_to_mechanisms_and_degradation(self) -> None:
+        plan = " ".join(read("docs/strategy/RESEARCH-AND-POC-PLAN.md").split())
+        continuation = " ".join(read("docs/operations/CONTINUATION.md").split())
+        mapping_link = (
+            "../../registry/"
+            "cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json"
+        )
+
+        for surface in (plan, continuation):
+            with self.subTest(surface=surface[:32]):
+                self.assertIn(mapping_link, surface)
+                self.assertIn("pre-tool call", surface)
+                self.assertIn("thirty-minute idle", surface)
+                self.assertIn("residual self-authored", surface)
+
+        for phrase in (
+            "closes contract-field and degradation mapping only",
+            "does not prove parity",
+            "same-session dynamic lifecycle",
+            "stable resource benefit",
+        ):
+            with self.subTest(surface="plan", phrase=phrase):
+                self.assertIn(phrase, plan)
+
+        for phrase in (
+            "request acceptance does not prove runtime state",
+            "schema-list introspection nor current-host behavior is claimed",
+            "No model request, live host probe, configuration mutation",
+            "universal MCP lifecycle",
+        ):
+            with self.subTest(surface="continuation", phrase=phrase):
+                self.assertIn(phrase, continuation)
+
     def test_operational_manager_and_host_enforcement_are_adapter_neutral(self) -> None:
         agents = read("AGENTS.md")
         english = read("README.md")

@@ -475,6 +475,10 @@ from validate_human_ai_collaboration_unknown_quadrant_packet_overlay_poc_evidenc
 from validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision import (
     validate_decision as validate_human_ai_collaboration_unknown_quadrant_parent_oracle_seam_reuse_decision,
 )
+from validate_cross_host_mcp_lifecycle_contract_mapping import (
+    REQUIRED_FILES as CROSS_HOST_MCP_LIFECYCLE_MAPPING_REQUIRED_FILES,
+    validate_mapping as validate_cross_host_mcp_lifecycle_contract_mapping,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 UPSTREAM_SOURCE_ID = "github:addyosmani/agent-skills"
@@ -520,6 +524,7 @@ REQUIRED_FILES = (
     "registry/mcp-app-server-0.145.0-multi-connection-subscription-preflight-evidence-2026-07-27.json",
     "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
     "tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json",
+    *CROSS_HOST_MCP_LIFECYCLE_MAPPING_REQUIRED_FILES,
     "scripts/evaluate_agent_resource_pressure_attribution.py",
     "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json",
     "tests/fixtures/agent-resource-pressure-attribution-fixtures-2026-07-31.json",
@@ -1948,6 +1953,9 @@ def verify() -> None:
     )
     mcp_task_lifecycle_contract_doc = load("registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json")
     mcp_task_lifecycle_fixture_doc = load("tests/fixtures/mcp-task-lifecycle-evidence-2026-07-23.json")
+    cross_host_mcp_lifecycle_contract_mapping_doc = load(
+        "registry/cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json"
+    )
     agent_resource_pressure_attribution_protocol_doc = load(
         "registry/agent-resource-pressure-attribution-protocol-2026-07-31.json"
     )
@@ -2952,6 +2960,10 @@ def verify() -> None:
     validate_mcp_task_lifecycle_evidence_contract(
         mcp_task_lifecycle_contract_doc,
         mcp_task_lifecycle_fixture_doc,
+    )
+    validate_cross_host_mcp_lifecycle_contract_mapping(
+        cross_host_mcp_lifecycle_contract_mapping_doc,
+        root=ROOT,
     )
     validate_agent_resource_pressure_attribution_protocol(
         agent_resource_pressure_attribution_protocol_doc,

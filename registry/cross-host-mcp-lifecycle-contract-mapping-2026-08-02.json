@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "id": "cross-host-mcp-lifecycle-contract-mapping-2026-08-02",
+  "date": "2026-08-02",
+  "status": "cross-host-contract-mapped-no-generalized-runtime-claim",
+  "laneId": "lane-3-mcp-on-demand-activation-and-release",
+  "scope": {
+    "mode": "zero-model-existing-evidence-projection",
+    "hostCount": 2,
+    "modelRequestCount": 0,
+    "liveHostProbeCount": 0,
+    "configurationMutationCount": 0,
+    "externalDiscoveryCount": 0,
+    "selfAuthoredRuntimeAdded": false
+  },
+  "sourceBindings": [
+    {
+      "path": "registry/mcp-task-selection-decision-contract-2026-07-23.json",
+      "role": "portable-selection-contract",
+      "fileSha256": "bbe554550de1354ff4d90960eb5c1675458ad14b0b0c3b8edbd28adeaed07efc"
+    },
+    {
+      "path": "registry/mcp-task-lifecycle-evidence-contract-2026-07-23.json",
+      "role": "portable-lifecycle-contract",
+      "fileSha256": "180cf6b9f782a87cb336acce0335219553b0f531c9269b3eaab08b23ac547a6d"
+    },
+    {
+      "path": "audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json",
+      "role": "kimi-synthetic-mechanism-evidence",
+      "fileSha256": "9d413a4c74f4dcd95875c6c4a0aa52d5d266c43045c823a2c23b91ba1e9317d2"
+    },
+    {
+      "path": "registry/mcp-app-server-0.145.0-startup-profile-evidence-2026-07-23.json",
+      "role": "codex-startup-profile-evidence",
+      "fileSha256": "5bcce9e1174101304acd99a85b0d470a325c9cb38260f9a68f997defe2a99ee8"
+    },
+    {
+      "path": "registry/mcp-app-server-0.145.0-reload-release-attribution-evidence-2026-07-27.json",
+      "role": "codex-reload-release-falsifier",
+      "fileSha256": "ba6820dee739732435c27de558f0994bf394f34662bb2f13e2b2cd94ff260275"
+    },
+    {
+      "path": "registry/mcp-app-server-0.145.0-thread-unsubscribe-release-attribution-evidence-2026-07-27.json",
+      "role": "codex-unsubscribe-release-falsifier",
+      "fileSha256": "17b3dbc10f9f090e020947b19e2d477e13f1e3e46abe2697a343ebc5b293779e"
+    },
+    {
+      "path": "registry/mcp-app-server-0.145.0-idle-unload-evidence-2026-07-23.json",
+      "role": "codex-idle-unload-evidence",
+      "fileSha256": "2c4b8d5e1eff54ce0a2a7c2b8b379cba95c60a917d6f5e3161ac591e2591026e"
+    }
+  ],
+  "portableContract": {
+    "desiredState": "smallest-authorized-task-or-phase-mcp-set",
+    "lifecycleStates": [
+      "selected",
+      "activation-authorized",
+      "call-admitted",
+      "schema-exposed",
+      "runtime-loaded",
+      "release-requested",
+      "runtime-released",
+      "recovered"
+    ],
+    "authorityRule": "selection-does-not-authorize-activation-or-release",
+    "observationRule": "request-acceptance-does-not-prove-runtime-state",
+    "fallbackRule": "startup-or-new-thread-profile-or-documented-native-idle-timeout-only-where-host-evidence-supports-it",
+    "unsupportedRule": "mark-unavailable-or-unproved-and-degrade-explicitly"
+  },
+  "hostMappings": [
+    {
+      "hostId": "kimi-code",
+      "mechanismClass": "pre-tool-call-admission-hook",
+      "evidenceState": "synthetic-mechanism-replay-only",
+      "freshness": "pinned-revision-not-current-live-host-proof",
+      "contractProjection": {
+        "selected": "portable-contract-only",
+        "activation-authorized": "not-observed",
+        "call-admitted": "synthetic-explicit-default-and-fail-open-replayed",
+        "schema-exposed": "not-observed",
+        "runtime-loaded": "not-observed",
+        "release-requested": "operator-contract-static-only",
+        "runtime-released": "not-observed",
+        "recovered": "not-observed"
+      },
+      "effectiveBoundary": "call-admission-only-no-schema-or-process-release",
+      "degradedFallback": "requires-separate-host-native-lifecycle-evidence"
+    },
+    {
+      "hostId": "codex-cli-app-server-0.145.0-windows",
+      "mechanismClass": "startup-profile-and-app-server-process-lifecycle",
+      "evidenceState": "bounded-historical-live-host-evidence",
+      "freshness": "historical-version-bound-not-current-host-proof",
+      "contractProjection": {
+        "selected": "portable-offline-contract-only",
+        "activation-authorized": "bounded-probe-authority-only-not-a-host-state-observation",
+        "call-admitted": "startup-full-filtered-disabled-boundary-observed",
+        "schema-exposed": "not-observed-schema-list-not-called",
+        "runtime-loaded": "enabled-start-and-disabled-start-suppression-observed",
+        "release-requested": "reload-and-unsubscribe-accepted-not-release-proof",
+        "runtime-released": "single-sentinel-thirty-minute-idle-unload-observed",
+        "recovered": "new-thread-new-instance-recovery-observed"
+      },
+      "effectiveBoundary": "startup-new-thread-profile-plus-observed-idle-fallback",
+      "degradedFallback": "startup-or-new-thread-profile-or-observed-native-idle-path"
+    }
+  ],
+  "decision": {
+    "portableContractFieldsMapped": true,
+    "materiallyDifferentMechanismsMapped": true,
+    "unsupportedOperationsExplicit": true,
+    "generalizedRuntimeCapabilityProved": false,
+    "crossHostParityProved": false,
+    "sameSessionDynamicLifecycleProved": false,
+    "stableResourceBenefitProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "selfAuthoredControllerEligible": false,
+    "nextGate": "use one bound workload only when current-version or cross-host behavior would change the fallback or residual-gap decision"
+  },
+  "claimBoundary": {
+    "currentKimiHostBehaviorProved": false,
+    "currentCodexHostBehaviorProved": false,
+    "crossHostParityProved": false,
+    "sameSessionSwitchingProved": false,
+    "taskEndImmediateReleaseProved": false,
+    "leaseOrReferenceCountProved": false,
+    "stableResourceBenefitProved": false,
+    "universalMcpLifecycleProved": false,
+    "selfAuthoredResidualGapProved": false,
+    "productionReadinessProved": false
+  }
+}

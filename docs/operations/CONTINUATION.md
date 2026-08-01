@@ -3094,3 +3094,39 @@ temporary root, locks Node and evaluator/cost identities, and publishes via a
 same-directory hard link that fails if the destination already exists. Negative
 tests cover concurrent creation and rehashed runtime/cost tampering. Fresh Spec
 and Standards re-review report zero remaining blockers.
+
+## 2026-08-02 cross-host MCP lifecycle contract-mapping checkpoint
+
+The lane 3 portability correction now has a deterministic zero-model
+projection at
+[`cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json`](../../registry/cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json).
+It binds the existing portable MCP selection and lifecycle contracts, the
+pinned Kimi Hook replay, and four bounded Codex `0.145.0` lifecycle evidence
+records by exact file SHA-256. No source artifact was fetched, installed, or
+executed during this projection.
+
+The shared contract separates `selected`, `activation-authorized`,
+`call-admitted`, `schema-exposed`, `runtime-loaded`, `release-requested`,
+`runtime-released`, and `recovered`. It preserves two negative authority rules:
+selection does not authorize activation or release, and request acceptance does
+not prove runtime state. Unsupported host operations must remain unavailable or
+unproved and degrade explicitly.
+
+The two mechanisms are intentionally not normalized into false parity. Kimi is
+mapped as a synthetic pre-tool call-admission Hook only: host registration,
+schema exposure, runtime load, process or connection release, and recovery stay
+unobserved. Codex is mapped as historical Windows app-server evidence: startup
+profiles established a direct-call exposure boundary and server-disable start
+suppression, while neither schema-list introspection nor current-host behavior
+is claimed. Reload and unsubscribe requests did not prove immediate release;
+one sentinel showed the documented thirty-minute idle unload and new-thread
+recovery path.
+
+This closes contract-field, mechanism-class, and explicit-degradation mapping
+only. It proves no current Kimi or Codex behavior, cross-host parity,
+same-session switching, task-end immediate release, stable resource benefit,
+universal MCP lifecycle, residual self-authored gap, or production readiness.
+No model request, live host probe, configuration mutation, external discovery,
+CC Switch action, Skill change, or self-authored runtime occurred. The next
+gate is one bound workload only if fresh host behavior could change the fallback
+or residual-gap decision.

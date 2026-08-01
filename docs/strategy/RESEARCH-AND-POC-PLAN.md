@@ -33,18 +33,25 @@ self-authored gap is proved. The exact-comparison gate therefore remains open
 for retained real-task lane 1/lane 3 observations and a task-bound lane 2
 rules-plus-practice comparison. No live model ran.
 
-The next architectural gate is a cross-host contract gate, not another
-Kimi-shaped adapter. The same portable outcome, authority, observability,
-lifecycle, fallback, and claim contract must be mapped to at least two
+The cross-host contract gate now has a bounded zero-model
+[projection](../../registry/cross-host-mcp-lifecycle-contract-mapping-2026-08-02.json),
+not another Kimi-shaped adapter. The same portable outcome, authority,
+observability, lifecycle, fallback, and claim contract is mapped to at least two
 materially different host control mechanisms, with unsupported operations
-negotiated or degraded explicitly. Each host-local probe remains evidence
+negotiated or degraded explicitly. Kimi supplies synthetic pre-tool call
+admission evidence only; it proves neither schema exposure nor process release.
+Historical Codex `0.145.0` evidence supplies a startup/new-thread profile
+boundary plus one observed thirty-minute idle fallback; reload and unsubscribe
+did not prove immediate release. Each host-local probe remains evidence
 instrumentation and does not become the product adapter. A targeted adapter may
-remain host-specific; a generalized product claim waits for cross-host evidence.
-Retain this runner only as a provisional reproducer for this checkpoint. At the
-cross-host gate, supersede or remove it in a separately reviewed cleanup if it
-does not change a decision or if a lighter replay preserves the same
-falsifiers; accumulated evidence code is not a permanent product asset by
-default.
+remain host-specific; a generalized product claim waits for current-version,
+decision-relevant cross-host behavior evidence. This closes contract-field and
+degradation mapping only. It does not prove parity, same-session dynamic
+lifecycle, stable resource benefit, or a residual self-authored controller gap.
+Retain the Kimi replay runner only as a provisional reproducer. Supersede or
+remove it in a separately reviewed cleanup if it changes no decision or if a
+lighter replay preserves the same falsifiers; accumulated evidence code is not
+a permanent product asset by default.
 
 Working scenario and evidence gate:
 [`POC-SCENARIO-EVIDENCE-MATRIX.md`](POC-SCENARIO-EVIDENCE-MATRIX.md).
