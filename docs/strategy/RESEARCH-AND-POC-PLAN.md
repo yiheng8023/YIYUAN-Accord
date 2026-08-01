@@ -10,15 +10,17 @@ framework, Skill, Hook, or hard standard follows unless that comparison leaves
 a reproducible residual gap after native, official, reviewed external, and
 composed alternatives.
 
-The three currently reported Kimi-side prototypes, their pending compatibility
-PR, and the prior `mcp-gate` lesson are not bound to repository artifacts in
-this workspace. They are valuable candidate inputs, not current evidence.
-The intended comparison topology is those three exact Kimi prototypes against
-the corresponding governed Harness implementations on the same real task.
-Before that comparison, bind the exact repository/path/revision, task,
-authority boundary, observable outcome, resource/lifecycle measurements,
-fallback, and cleanup surface. Until then, the decision gate is ready for
-intake but no comparison result or adapter abstraction is proved.
+A leading local candidate for the three reported Kimi-side prototypes is bound
+at exact revision `3d51621f5f74b5f56cc286e233d2b2396fb62c3f`; its three Hooks
+and the provisional `context-usage` comparison are frozen in the
+[Kimi three-Hook comparison intake](../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md).
+The current working decision favors composition rather than replacement, but
+the retained intake is not a standalone reproducible comparison artifact. The
+exact trio still requires user confirmation, the reported compatibility PR
+remains unbound, and no pressure attribution, resource savings, cross-host
+parity, or residual self-authored gap is proved. The exact-comparison gate
+therefore remains open for a retained same-task replay and the other two Hooks.
+No live model ran.
 
 Working scenario and evidence gate:
 [`POC-SCENARIO-EVIDENCE-MATRIX.md`](POC-SCENARIO-EVIDENCE-MATRIX.md).

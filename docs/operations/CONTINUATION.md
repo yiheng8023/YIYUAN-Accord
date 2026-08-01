@@ -2996,3 +2996,36 @@ standalone readiness validator; `git diff --check`; and `scripts/verify.py`.
 Repository `.tmp` is absent. The generated `scripts/__pycache__` was removed
 after verification. Neither implementation review nor green tests change the
 open independent content-review or live-trial gates.
+
+## 2026-08-01 Kimi three-Hook comparison intake checkpoint
+
+The leading local candidate for the three reported Kimi prototypes is the clean
+`kimi-code-user-config` checkout at exact revision
+`3d51621f5f74b5f56cc286e233d2b2396fb62c3f`: `hooks/mcp-gate.mjs`,
+`hooks/session-start.mjs`, and `hooks/context-usage.mjs`. All three Hooks, the
+`mcp-gate` Skill, and its gate JSON are byte-identical to the current user
+projection. The exact hashes, probe boundary, sanitized observation, and claim
+limits are frozen in
+[`REPORT.md`](../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md).
+An isolated no-model, no-network probe reported 24 passing mechanism assertions
+and left both repositories and the live Kimi configuration unchanged, but its
+temporary evaluator and raw output were removed; it is not a standalone
+reproducible comparison artifact. The user still needs to confirm that this is
+the externally reported trio; the reported compatibility PR remains unbound.
+
+The first same-task comparison used a sanitized read-only extraction of the
+current Kimi usage trace. The last observed total was `173234` against a
+`1048576` context maximum; `context-usage.mjs` emitted no reminder, while the
+portable Harness advisory contract returned `CONTINUE`. The narrow result is a
+composition boundary: the Kimi Hook provides host-specific event and telemetry
+extraction, and the Harness provides portable decision, authority, and claim
+semantics. It does not establish pressure attribution, resource savings,
+cross-host parity, or a residual self-authored gap.
+
+`mcp-gate` is a useful Kimi control adapter, not a dynamic MCP resource-lifecycle
+implementation: it blocks selected calls, fails open on missing or malformed
+state, and does not unload schemas, processes, or connections. Remaining work
+is a separately bound same-task comparison for `session-start`, `mcp-gate`, and
+a real pressure-state observation. Repository `.tmp` and isolated runtime roots
+were removed after the probes; no live model, config mutation, install, or CC
+Switch action occurred. The exact-comparison gate remains open.

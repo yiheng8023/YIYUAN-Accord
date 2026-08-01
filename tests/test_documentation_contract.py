@@ -45,13 +45,81 @@ class DocumentationContractTests(unittest.TestCase):
         for phrase in (
             "one decision-relevant real task",
             "exact comparison artifacts",
-            "three exact kimi prototypes",
-            "corresponding governed harness implementations",
+            "leading local candidate for the three reported kimi-side prototypes",
+            "composition rather than replacement",
             "net benefit",
             "no new governance layer",
         ):
             with self.subTest(surface="Plan", phrase=phrase):
                 self.assertIn(phrase, normalized_plan.lower())
+
+    def test_kimi_comparison_intake_links_evidence_and_keeps_gate_open(self) -> None:
+        plan = read("docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        continuation = read("docs/operations/CONTINUATION.md")
+        report = read("audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md")
+        normalized_plan = " ".join(plan.split())
+        normalized_continuation = " ".join(continuation.split())
+        normalized_report = " ".join(report.split())
+        report_link = (
+            "../../audits/kimi-three-hook-comparison-intake-2026-08-01/REPORT.md"
+        )
+
+        self.assertIn(report_link, normalized_plan)
+        self.assertIn(report_link, normalized_continuation)
+
+        for phrase in (
+            "3d51621f5f74b5f56cc286e233d2b2396fb62c3f",
+            "not a standalone reproducible comparison artifact",
+            "exact-comparison gate",
+            "residual self-authored gap",
+        ):
+            with self.subTest(surface="plan", phrase=phrase):
+                self.assertIn(phrase, normalized_plan)
+            with self.subTest(surface="continuation", phrase=phrase):
+                self.assertIn(phrase, normalized_continuation)
+
+        for phrase in (
+            "hooks/mcp-gate.mjs",
+            "hooks/session-start.mjs",
+            "hooks/context-usage.mjs",
+            "173234",
+            "1048576",
+            "CONTINUE",
+            "user confirmation remains open",
+            "not independently replayable from this repository alone",
+            "does not unload schemas, processes, or connections",
+        ):
+            with self.subTest(surface="report", phrase=phrase):
+                self.assertIn(phrase, normalized_report)
+
+        self.assertIn(
+            "no pressure attribution, resource savings, cross-host parity, or "
+            "residual self-authored gap is proved",
+            normalized_plan,
+        )
+        self.assertIn(
+            "It does not establish pressure attribution, resource savings, "
+            "cross-host parity, or a residual self-authored gap",
+            normalized_continuation,
+        )
+        self.assertIn(
+            "not pressure attribution, a stable benchmark, resource-savings "
+            "evidence, cross-host parity, or a live-model result",
+            normalized_report,
+        )
+        self.assertIn(
+            "It does not establish a residual self-authored gap",
+            normalized_report,
+        )
+        self.assertIn("No live model ran", normalized_plan)
+        self.assertIn("no live model", normalized_continuation)
+        self.assertIn("live-model result", normalized_report)
+        self.assertIn(
+            "exact-comparison gate therefore remains open",
+            normalized_plan,
+        )
+        self.assertIn("exact-comparison gate remains open", normalized_continuation)
+        self.assertIn("exact-comparison gate remains open", normalized_report)
 
     def test_operational_manager_and_host_enforcement_are_adapter_neutral(self) -> None:
         agents = read("AGENTS.md")
