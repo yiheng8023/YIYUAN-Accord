@@ -283,8 +283,47 @@ The governed report is
 [`audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json).
 
 The protocol status is now
-`no-model-admission-plan-and-runtime-adapter-preflight-complete-live-dispatch-not-authorized`.
+`no-model-admission-plan-runtime-adapter-and-offline-authority-gate-preflight-complete-live-dispatch-not-authorized`.
 Dry runtime materialization and inventory isolation are proved; live request
 transmission, loader invocation, instruction delivery, behavior, continuity,
 value, cross-host value, dispatch readiness, and live-dispatch authority remain
 open.
+
+## 2026-08-01 live-dispatch adapter decision checkpoint
+
+The post-preflight review concludes that a separate thin live adapter is
+justified, but it is not implemented and no dispatch authority exists. Adding
+a send flag to the dry adapter would collapse its no-dispatch evidence
+boundary. The shared weak-Agent runner still cannot represent the SEM-03
+treatments or four-phase parent authority contract.
+
+A fresh official Codex app-server review confirms parent-observable
+`model/rerouted` and `thread/tokenUsage/updated` events plus bounded
+`turn/interrupt`. It also confirms that final-subscriber `thread/unsubscribe`
+does not guarantee immediate unload: the documented inactivity grace period is
+30 minutes. Therefore the required live design uses one app-server process and
+one ephemeral thread per phase, followed by exact process exit, rather than a
+long-lived session.
+
+The governed decision freezes source identity, reuse scope, route, request
+budget, parent observations, interruption and cleanup sequence, hard stops,
+human-decision injection, authority, and claim ceilings. Its offline,
+deny-by-default authority gate is now implemented and tested without transport.
+With no authority receipt, all three treatments compile to zero process,
+zero thread, zero turn, and zero model budget. A synthetic test-only receipt
+still cannot authorize app-server or model requests. The governed report is
+byte-bound at file SHA-256
+`80083c3ccbd4b48741a6836cfda7d30eab92f307e4a45f8c3a0b1975b04f8f14`
+and embedded digest
+`5920ac58cf20a26bcca18844a660eaa126d854aa2abfea03839f1874507eaac2`.
+Model requests remain zero, and no Skill/Hook need or candidate preference is
+established.
+
+The decision record is
+[`registry/human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01.json`](../../registry/human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01.json),
+with rationale in
+[`HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-LIVE-DISPATCH-ADAPTER-DECISION-2026-08-01.md`](HUMAN-AI-COLLABORATION-SEMANTIC-AUTHORITY-LIVE-DISPATCH-ADAPTER-DECISION-2026-08-01.md).
+The offline gate builder and governed report are
+[`scripts/build_human_ai_collaboration_semantic_authority_live_dispatch_gate.py`](../../scripts/build_human_ai_collaboration_semantic_authority_live_dispatch_gate.py)
+and
+[`audits/human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01/REPORT.json`](../../audits/human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01/REPORT.json).

@@ -280,6 +280,8 @@
         "evidence.human-ai-collaboration-semantic-authority-native-local-no-model-exposure-and-oracle-2026-08-01",
         "evidence.human-ai-collaboration-semantic-authority-execution-plan-preflight-2026-08-01",
         "evidence.human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01",
+        "evidence.human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01",
+        "evidence.human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
       ]
@@ -2544,6 +2546,24 @@
       "id": "evidence.human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01",
       "path": "audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json",
       "kind": "byte-stable-three-treatment-dedicated-runtime-adapter-preflight-six-app-server-inventory-sessions-twelve-unsent-request-templates-zero-thread-zero-turn-zero-model-no-loader-instruction-behavior-continuity-or-value-proof",
+      "asOf": "2026-08-01",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01",
+      "path": "registry/human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01.json",
+      "kind": "official-source-bound-separate-thin-live-adapter-justified-not-implemented-deny-by-default-authority-receipt-and-per-phase-process-contract-zero-model-no-skill-hook-or-candidate-preference-proof",
+      "asOf": "2026-08-01",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01",
+      "path": "audits/human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01/REPORT.json",
+      "kind": "offline-deny-by-default-authority-gate-preflight-three-treatment-matrix-zero-process-zero-thread-zero-turn-zero-model-no-live-dispatch-or-value-proof",
       "asOf": "2026-08-01",
       "supports": [
         "acceptance.end-to-end-process-fidelity"

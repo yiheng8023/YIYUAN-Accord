@@ -7,6 +7,26 @@ import hashlib
 import json
 from pathlib import Path
 
+try:
+    from .build_human_ai_collaboration_semantic_authority_live_dispatch_gate import (
+        DECISION_SHA256,
+        validate_zero_authority_matrix,
+    )
+except ImportError:
+    from build_human_ai_collaboration_semantic_authority_live_dispatch_gate import (
+        DECISION_SHA256,
+        validate_zero_authority_matrix,
+    )
+
+try:
+    from .validate_human_ai_collaboration_semantic_authority_live_dispatch_adapter_decision import (
+        validate_decision as validate_live_adapter_decision,
+    )
+except ImportError:
+    from validate_human_ai_collaboration_semantic_authority_live_dispatch_adapter_decision import (
+        validate_decision as validate_live_adapter_decision,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 PROTOCOL_PATH = Path(
@@ -35,6 +55,17 @@ RUNTIME_ADAPTER_PREFLIGHT_REPORT_PATH = Path(
     "audits/human-ai-collaboration-semantic-authority-runtime-adapter-"
     "preflight-2026-08-01/REPORT.json"
 )
+LIVE_ADAPTER_DECISION_PATH = Path(
+    "registry/human-ai-collaboration-semantic-authority-live-dispatch-adapter-"
+    "decision-2026-08-01.json"
+)
+LIVE_DISPATCH_GATE_BUILDER_PATH = Path(
+    "scripts/build_human_ai_collaboration_semantic_authority_live_dispatch_gate.py"
+)
+LIVE_DISPATCH_GATE_PREFLIGHT_REPORT_PATH = Path(
+    "audits/human-ai-collaboration-semantic-authority-live-dispatch-gate-"
+    "preflight-2026-08-01/REPORT.json"
+)
 
 
 def _require(condition: bool, message: str) -> None:
@@ -53,7 +84,8 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         document.get("schema") == 1
         and document.get("status")
         == (
-            "no-model-admission-plan-and-runtime-adapter-preflight-complete-"
+            "no-model-admission-plan-runtime-adapter-and-offline-authority-"
+            "gate-preflight-complete-"
             "live-dispatch-not-authorized"
         )
         and document.get("scenarioId") == "HAC-SEMANTIC-AUTHORITY-01"
@@ -114,10 +146,39 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         "semanticDryRuntimeAdapterPreflightReport": str(
             RUNTIME_ADAPTER_PREFLIGHT_REPORT_PATH
         ).replace("\\", "/"),
+        "semanticLiveAdapterDecision": str(LIVE_ADAPTER_DECISION_PATH).replace(
+            "\\", "/"
+        ),
+        "semanticLiveDispatchGateBuilder": str(
+            LIVE_DISPATCH_GATE_BUILDER_PATH
+        ).replace("\\", "/"),
+        "semanticLiveDispatchGatePreflightReport": str(
+            LIVE_DISPATCH_GATE_PREFLIGHT_REPORT_PATH
+        ).replace("\\", "/"),
     }
     _require(sources == expected_sources, "Semantic continuity source bindings drifted")
     for relative in sources.values():
         _require((root / relative).is_file(), f"Semantic continuity source missing: {relative}")
+    live_adapter_decision = json.loads(
+        (root / LIVE_ADAPTER_DECISION_PATH).read_text(encoding="utf-8")
+    )
+    _require(
+        validate_live_adapter_decision(live_adapter_decision) == [],
+        "Semantic continuity live-adapter decision evidence drifted",
+    )
+    _require(
+        live_adapter_decision.get("decisionSha256") == DECISION_SHA256,
+        "Semantic continuity live-adapter decision/gate digest binding drifted",
+    )
+    live_dispatch_gate_report = json.loads(
+        (root / LIVE_DISPATCH_GATE_PREFLIGHT_REPORT_PATH).read_text(
+            encoding="utf-8"
+        )
+    )
+    _require(
+        validate_zero_authority_matrix(live_dispatch_gate_report) == [],
+        "Semantic continuity offline authority-gate evidence drifted",
+    )
 
     treatments = _index(document.get("treatments", []), "id", "Treatment")
     _require(
@@ -313,6 +374,16 @@ def validate_protocol(document: dict, *, root: Path = ROOT) -> None:
         gate.get("semanticDryRuntimeAdapterImplemented") is True
         and gate.get("semanticDryRuntimeAdapterPreflightPass") is True,
         "Semantic continuity dry runtime-adapter preflight was not recorded",
+    )
+    _require(
+        gate.get("semanticLiveAdapterDecisionOutcome")
+        == "separate-thin-live-adapter-justified-not-implemented",
+        "Semantic continuity live-adapter decision was not recorded",
+    )
+    _require(
+        gate.get("semanticOfflineAuthorityGateImplemented") is True
+        and gate.get("semanticOfflineGatePreflightPass") is True,
+        "Semantic continuity offline authority-gate preflight was not recorded",
     )
     _require(
         gate.get("semanticLiveRuntimeAdapterImplemented") is False,

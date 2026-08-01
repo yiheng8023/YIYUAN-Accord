@@ -490,6 +490,21 @@ materialization and inventory-isolation evidence only: dispatch readiness,
 every model run, loader/instruction delivery, behavior, continuity, value,
 and cross-host claims remain open.
 
+The subsequent live-adapter decision review used the byte-stable dry report,
+the shared-runner compatibility audit, Codex CLI `0.146.0`, and a fresh
+source-identified official app-server manual snapshot. A separate thin adapter
+is justified because the dry adapter must remain non-transmitting and the
+shared runner cannot preserve SEM-03 treatment/phase authority. The required
+design reuses existing app-server and projection primitives, requires one
+process and one ephemeral thread per phase, observes route rerouting and token
+usage from the parent, interrupts bounded failures, and proves exact process
+exit and temporary cleanup. The live adapter is not implemented or
+dispatch-ready. A pure offline authority gate now fail-closes all three
+treatments to zero process, thread, turn, and model budget without a live
+receipt; synthetic test-only receipts cannot promote authority. No model,
+candidate instruction, Skill, Hook, CC mutation, preference, or residual-gap
+claim is authorized.
+
 ## Program closeout cleanup gate
 
 Program closeout is blocked until the portfolio/closeout gate inventories and

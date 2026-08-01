@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-v1",
+  "status": "blocked-no-live-authority",
+  "treatments": [
+    {
+      "treatmentId": "SEM-LOCAL-ADAPTED-MONOLITH",
+      "planSha256": "6f0c0d77b1caf76b2072d89e8317f6bcb78eb0f692ca58f6602e3e6489a4866c",
+      "gate": {
+        "schema": 1,
+        "id": "human-ai-collaboration-semantic-authority-live-dispatch-gate-v1",
+        "status": "blocked-missing-live-authority-receipt",
+        "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
+        "runId": "SEM03-LIVE-GATE-LOCAL-001",
+        "treatmentId": "SEM-LOCAL-ADAPTED-MONOLITH",
+        "planSha256": "6f0c0d77b1caf76b2072d89e8317f6bcb78eb0f692ca58f6602e3e6489a4866c",
+        "adapterDecisionSha256": "aa030f64aef99eb41dc1c749a415a7ed6f3f3470c6d4385e800ab13306d0bfbe",
+        "mayCreateAppServerProcess": false,
+        "modelRequestBudget": 0,
+        "authorizedPhases": [],
+        "modelRequestSent": false,
+        "threadStarted": false,
+        "turnStarted": false,
+        "gateSha256": "f275e8d862f74e5bae3fd0ccff9f93e2e73a267039ad871d4bac02431fb207f0"
+      }
+    },
+    {
+      "treatmentId": "SEM-MATT-CURRENT-COMPOSITION",
+      "planSha256": "884895c86e96035d96e34cc13a860595ef4316e8ac29f2eea62bb74f3730ef61",
+      "gate": {
+        "schema": 1,
+        "id": "human-ai-collaboration-semantic-authority-live-dispatch-gate-v1",
+        "status": "blocked-missing-live-authority-receipt",
+        "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
+        "runId": "SEM03-LIVE-GATE-CURRENT-001",
+        "treatmentId": "SEM-MATT-CURRENT-COMPOSITION",
+        "planSha256": "884895c86e96035d96e34cc13a860595ef4316e8ac29f2eea62bb74f3730ef61",
+        "adapterDecisionSha256": "aa030f64aef99eb41dc1c749a415a7ed6f3f3470c6d4385e800ab13306d0bfbe",
+        "mayCreateAppServerProcess": false,
+        "modelRequestBudget": 0,
+        "authorizedPhases": [],
+        "modelRequestSent": false,
+        "threadStarted": false,
+        "turnStarted": false,
+        "gateSha256": "67ac41f801961c2033f6b69eabfd5c36047901917bdd34ed5097242dbaab2e74"
+      }
+    },
+    {
+      "treatmentId": "SEM-NATIVE",
+      "planSha256": "cd1d48e4451c853aab81a7455254c424d97658bc34bcb5f56c0aaf0c8939976a",
+      "gate": {
+        "schema": 1,
+        "id": "human-ai-collaboration-semantic-authority-live-dispatch-gate-v1",
+        "status": "blocked-missing-live-authority-receipt",
+        "scenarioId": "HAC-SEMANTIC-AUTHORITY-01",
+        "runId": "SEM03-LIVE-GATE-NATIVE-001",
+        "treatmentId": "SEM-NATIVE",
+        "planSha256": "cd1d48e4451c853aab81a7455254c424d97658bc34bcb5f56c0aaf0c8939976a",
+        "adapterDecisionSha256": "aa030f64aef99eb41dc1c749a415a7ed6f3f3470c6d4385e800ab13306d0bfbe",
+        "mayCreateAppServerProcess": false,
+        "modelRequestBudget": 0,
+        "authorizedPhases": [],
+        "modelRequestSent": false,
+        "threadStarted": false,
+        "turnStarted": false,
+        "gateSha256": "2d585205318d95ce45450f0383a2ae6b38a455ecf92cc997c1e5d9f6644d4846"
+      }
+    }
+  ],
+  "authorityReceiptPresent": false,
+  "appServerProcessStarted": false,
+  "threadStarted": false,
+  "turnStarted": false,
+  "modelRequestSent": false,
+  "claimBoundary": {
+    "liveAdapterImplemented": false,
+    "dispatchReadinessProved": false,
+    "loaderInvocationProved": false,
+    "behavioralCausationProved": false,
+    "treatmentValueProved": false
+  },
+  "reportSha256": "5920ac58cf20a26bcca18844a660eaa126d854aa2abfea03839f1874507eaac2"
+}

@@ -1849,9 +1849,32 @@ rollback checks; the transport failures are not candidate evidence. The
 byte-identical report pair is governed at
 `audits/human-ai-collaboration-semantic-authority-runtime-adapter-preflight-2026-08-01/REPORT.json`.
 
-The next bounded action is a review of whether a separate live-dispatch
-adapter and authority decision are justified. Structured Skill input remains
+The subsequent bounded action reviewed whether a separate live-dispatch
+adapter and authority decision were justified. Structured Skill input remains
 only bounded treatment association unless an independent loader event exists.
 Dispatch readiness and live model authority remain false. This checkpoint
 changes neither project neutrality nor the capability-reuse order and does not
 establish candidate behavior, value, or residual self-authored need.
+
+## 2026-08-01 SEM-03 live-dispatch adapter decision checkpoint
+
+That review now concludes that a separate thin live adapter is justified but
+must remain distinct from the dry adapter and the incompatible shared runner.
+A fresh official Codex app-server source snapshot confirms observable
+`model/rerouted` and `thread/tokenUsage/updated` events and bounded
+`turn/interrupt`; it also shows that `thread/unsubscribe` can retain an idle
+thread for a 30-minute grace period. The required resource boundary is
+therefore one app-server process and one ephemeral thread per phase, with exact
+process exit rather than a long-lived session.
+
+The governed decision freezes the four-request per-run ceiling, exact
+Spark/low/no-fallback route, parent observations, hard stops, interruption and
+cleanup sequence, and phase-2 human-decision injection. It authorizes no model
+request or live authority receipt. The offline deny-by-default authority gate
+is now implemented and tested: absent a receipt, each treatment receives zero
+process and model budget; a synthetic test-only receipt still denies both.
+The governed report proves only offline fail-closed structure. App-server
+process creation and any live transport still require a separately governed
+per-run authority receipt and independent authority decision. This checkpoint
+proves no loader event, behavior, treatment value, candidate preference,
+Skill/Hook need, or self-authored residual gap.

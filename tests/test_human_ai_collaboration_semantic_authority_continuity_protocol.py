@@ -73,6 +73,51 @@ class SemanticAuthorityContinuityProtocolTests(unittest.TestCase):
         self.assertIs(gate["semanticLiveRuntimeAdapterImplemented"], False)
         self.assertIs(gate["dispatchReadinessProved"], False)
 
+    def test_live_adapter_decision_is_bound_without_implementation_promotion(self) -> None:
+        self.assertEqual(
+            (
+                "registry/human-ai-collaboration-semantic-authority-live-"
+                "dispatch-adapter-decision-2026-08-01.json"
+            ),
+            self.document["sourceBindings"]["semanticLiveAdapterDecision"],
+        )
+        gate = self.document["executionAdmission"]
+        self.assertEqual(
+            "separate-thin-live-adapter-justified-not-implemented",
+            gate["semanticLiveAdapterDecisionOutcome"],
+        )
+        self.assertIs(gate["semanticLiveRuntimeAdapterImplemented"], False)
+        self.assertIs(gate["liveRunAuthorizedByThisRecord"], False)
+
+    def test_offline_live_dispatch_gate_is_bound_without_live_promotion(self) -> None:
+        sources = self.document["sourceBindings"]
+        self.assertEqual(
+            (
+                "scripts/build_human_ai_collaboration_semantic_authority_"
+                "live_dispatch_gate.py"
+            ),
+            sources["semanticLiveDispatchGateBuilder"],
+        )
+        self.assertEqual(
+            (
+                "audits/human-ai-collaboration-semantic-authority-live-"
+                "dispatch-gate-preflight-2026-08-01/REPORT.json"
+            ),
+            sources["semanticLiveDispatchGatePreflightReport"],
+        )
+        gate = self.document["executionAdmission"]
+        self.assertIs(gate["semanticOfflineAuthorityGateImplemented"], True)
+        self.assertIs(gate["semanticOfflineGatePreflightPass"], True)
+        self.assertIs(gate["semanticLiveRuntimeAdapterImplemented"], False)
+        self.assertIs(gate["dispatchReadinessProved"], False)
+        self.assertIs(gate["liveRunAuthorizedByThisRecord"], False)
+
+    def test_rejects_offline_gate_preflight_rollback(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["executionAdmission"]["semanticOfflineGatePreflightPass"] = False
+        with self.assertRaisesRegex(RuntimeError, "offline authority-gate preflight"):
+            self.validate(document)
+
     def test_rejects_existing_runner_semantic_support_promotion(self) -> None:
         document = copy.deepcopy(self.document)
         document["executionAdmission"][

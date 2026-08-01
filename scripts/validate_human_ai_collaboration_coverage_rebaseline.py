@@ -187,6 +187,14 @@ SEMANTIC_RUNTIME_ADAPTER_PREFLIGHT_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-semantic-authority-runtime-adapter-"
     "preflight-2026-08-01"
 )
+SEMANTIC_LIVE_ADAPTER_DECISION_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-semantic-authority-live-dispatch-"
+    "adapter-decision-2026-08-01"
+)
+SEMANTIC_LIVE_DISPATCH_GATE_PREFLIGHT_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-semantic-authority-live-dispatch-"
+    "gate-preflight-2026-08-01"
+)
 DOCUMENTATION_PATH = (
     "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md"
 )
@@ -554,6 +562,8 @@ def validate_rebaseline(
                 NATIVE_LOCAL_EXPOSURE_ORACLE_EVIDENCE_ID,
                 SEMANTIC_EXECUTION_PLAN_PREFLIGHT_EVIDENCE_ID,
                 SEMANTIC_RUNTIME_ADAPTER_PREFLIGHT_EVIDENCE_ID,
+                SEMANTIC_LIVE_ADAPTER_DECISION_EVIDENCE_ID,
+                SEMANTIC_LIVE_DISPATCH_GATE_PREFLIGHT_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
             ]

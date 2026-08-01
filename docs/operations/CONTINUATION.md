@@ -2854,3 +2854,46 @@ removing one `aah-incident-zero-model-*` Windows Temp root; after read-only
 attribution showed no owning process, that exact root was deleted and the full
 verifier rerun passed. Repository `.tmp` and generated `__pycache__` roots were
 then removed.
+
+## 2026-08-01 SEM-03 live-dispatch adapter decision checkpoint
+
+At clean `88d23974bf4c652b790f439cd7e2bd396b630a79`, the next no-model review
+confirmed that a separate thin live adapter is justified but not implemented.
+Do not add a send flag to the dry adapter and do not call the shared weak-Agent
+runner directly: the former would collapse its no-dispatch evidence boundary,
+and the latter cannot preserve SEM-03 treatment identities or four-phase parent
+authority.
+
+The review used `codex-cli 0.146.0` and a fresh official app-server manual
+snapshot identified at 1,837,849 bytes and SHA-256
+`f03e415eedbdfc2682e0e4b9d5e5b0b045d3b3a9568f5c01204f22df619c2cb4`.
+Officially exposed `model/rerouted`, `thread/tokenUsage/updated`, and
+`turn/interrupt` support parent observation and bounded stopping. Because
+final-subscriber `thread/unsubscribe` has a documented 30-minute inactivity
+grace period, the required design uses one app-server process and one ephemeral
+thread per phase, then verifies exact process exit and temporary cleanup.
+
+The governed decision and validator are
+`registry/human-ai-collaboration-semantic-authority-live-dispatch-adapter-decision-2026-08-01.json`
+and
+`scripts/validate_human_ai_collaboration_semantic_authority_live_dispatch_adapter_decision.py`.
+The offline deny-by-default authority gate is now implemented at
+`scripts/build_human_ai_collaboration_semantic_authority_live_dispatch_gate.py`.
+Its three-treatment preflight starts zero app-server processes, threads, turns,
+or model requests; missing authority yields zero budget, and the only accepted
+synthetic receipt explicitly denies process creation and dispatch. The governed
+report is
+`audits/human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01/REPORT.json`,
+with file SHA-256
+`80083c3ccbd4b48741a6836cfda7d30eab92f307e4a45f8c3a0b1975b04f8f14`
+and embedded digest
+`5920ac58cf20a26bcca18844a660eaa126d854aa2abfea03839f1874507eaac2`.
+Report output is same-directory staged and atomically replaced; the failure
+test proves staging cleanup and no partial destination.
+
+No live adapter, live authority receipt, app-server execution, or model
+dispatch is authorized. Loader delivery, behavior, continuity, value,
+candidate preference, cross-host value, Skill/Hook need, and self-authored
+residual gap all remain false/unproved. A live transport implementation or
+per-run live authority receipt requires a new authority decision; other
+no-model candidate-governance work may continue independently.
