@@ -7,6 +7,23 @@ Its north star is to move Agent learning, capability selection, resource
 scheduling, context continuity, and engineering coordination out of the user's
 head so the user can focus on creation, decisions, and bounded authorization.
 
+## Decision card
+
+- **Current state:** research and falsifiable proof; no host-neutral runtime,
+  broad candidate value, or residual self-authored gap is proved.
+- **Current operating boundary:** portable governance and lifecycle contracts
+  are tool-neutral. CC Switch is one current operational adapter where
+  supported, not the portable product contract. Native host authorization and
+  permission enforcement surfaces retain authority.
+- **Current single action:** bind one decision-relevant real task and exact
+  comparison artifacts, then compare the governed Harness path against a
+  lightweight or ad-hoc path on outcome quality, user orchestration burden,
+  lifecycle/resource cost, recovery, and net benefit. Add no governance layer
+  or self-authored capability until this comparison exposes a residual gap.
+- **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
+  [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and
+  [continuation](docs/operations/CONTINUATION.md).
+
 ## Current phase
 
 This private repository was bootstrapped on 2026-07-18 from the complete Git
@@ -23,8 +40,10 @@ the required control surfaces. The first three proof lanes are:
 
 Native and official capabilities are evaluated first, then maintained external
 implementations, and only then residual-gap authoring. Host approval dialogs
-remain the permission enforcement surface; this project should minimize and
-respect them, not replace them.
+are one form of the native host authorization and permission enforcement
+surfaces; permission rules or equivalent host-owned mechanisms may serve that
+role on other hosts. This project should minimize and respect those surfaces,
+not replace them.
 
 ## Start here
 
@@ -124,10 +143,12 @@ CALIBRATION is not Skill or Manager product authority. Standard admission and
 final carriage remain with the applicable project authority.
 
 The current approved release is a seed, not sufficient coverage of human-AI
-collaboration shortfalls. The current strategy uses CC Switch for operational
-source, install, update, distribution, backup, and restore management. This is
-the target operating model, not a claim that the existing pool has already
-been migrated: a 2026-07-18 read-only audit found 43 active CC Switch targets,
+collaboration shortfalls. The current characterized consumer path uses CC
+Switch where supported for operational source, install, update, distribution,
+backup, and restore management. It is a replaceable consumer adapter, not a
+portable Harness dependency or universal target operating model. This is not a
+claim that the existing pool has already been migrated: a 2026-07-18 read-only
+audit found 43 active CC Switch targets,
 42 local database rows, zero source-backed rows, and one missing row. The 19
 legacy curated targets still exactly match this repository's adapted release.
 The source-preserving pool acceptance is therefore partial pending per-Skill

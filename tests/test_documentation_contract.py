@@ -10,6 +10,88 @@ def read(path: str) -> str:
 
 
 class DocumentationContractTests(unittest.TestCase):
+    def test_entry_surfaces_show_one_current_decision_before_evidence_depth(self) -> None:
+        english = read("README.md")
+        chinese = read("README.zh-CN.md")
+        plan = read("docs/strategy/RESEARCH-AND-POC-PLAN.md")
+        normalized_english = " ".join(english.split())
+        compact_chinese = "".join(chinese.split())
+        normalized_plan = " ".join(plan.split())
+
+        self.assertLess(english.index("## Decision card"), english.index("## Current phase"))
+        self.assertLess(chinese.index("## 决策卡"), chinese.index("## 当前阶段"))
+        self.assertLess(
+            plan.index("## Current decision gate"),
+            plan.index("Working scenario and evidence gate:"),
+        )
+        for phrase in (
+            "Current state:",
+            "Current operating boundary:",
+            "Current single action:",
+            "governed Harness path against a lightweight or ad-hoc path",
+            "Evidence archive:",
+        ):
+            with self.subTest(surface="English", phrase=phrase):
+                self.assertIn(phrase, normalized_english)
+        for phrase in (
+            "当前状态：",
+            "当前运行边界：",
+            "当前唯一行动：",
+            "受治理Harness路径与轻量或临时路径",
+            "证据入口：",
+        ):
+            with self.subTest(surface="Chinese", phrase=phrase):
+                self.assertIn("".join(phrase.split()), compact_chinese)
+        for phrase in (
+            "one decision-relevant real task",
+            "exact comparison artifacts",
+            "three exact kimi prototypes",
+            "corresponding governed harness implementations",
+            "net benefit",
+            "no new governance layer",
+        ):
+            with self.subTest(surface="Plan", phrase=phrase):
+                self.assertIn(phrase, normalized_plan.lower())
+
+    def test_operational_manager_and_host_enforcement_are_adapter_neutral(self) -> None:
+        agents = read("AGENTS.md")
+        english = read("README.md")
+        chinese = read("README.zh-CN.md")
+        architecture = read("docs/architecture.md")
+        normalized_agents = " ".join(agents.split())
+        normalized_english = " ".join(english.split())
+        compact_chinese = "".join(chinese.split())
+        normalized_architecture = " ".join(architecture.split())
+
+        self.assertIn(
+            "native host authorization and permission enforcement surfaces",
+            normalized_agents,
+        )
+        self.assertIn(
+            "native host authorization and permission enforcement surfaces",
+            normalized_english,
+        )
+        self.assertIn("宿主原生授权与权限强制面", compact_chinese)
+        self.assertIn(
+            "CC Switch is one current operational adapter where supported, "
+            "not the portable product contract.",
+            normalized_english,
+        )
+        self.assertIn(
+            "CCSwitch是受支持场景下的一个当前操作适配器，不是可移植产品合同",
+            compact_chinese,
+        )
+        self.assertIn(
+            "Operational managers are replaceable adapters, not the portable contract.",
+            normalized_architecture,
+        )
+        self.assertNotIn(
+            "Host approval dialogs remain the permission enforcement surface",
+            english,
+        )
+        self.assertNotIn("宿主原生授权弹窗继续负责权限强制", chinese)
+        self.assertNotIn("这是目标运行模型", chinese)
+
     def test_readmes_use_matching_language_switches_and_role_structure(self) -> None:
         english = read("README.md")
         chinese = read("README.zh-CN.md")

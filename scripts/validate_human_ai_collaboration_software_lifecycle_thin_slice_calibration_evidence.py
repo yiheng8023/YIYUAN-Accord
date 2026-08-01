@@ -5,13 +5,17 @@ from __future__ import annotations
 
 import hashlib
 import json
-from copy import deepcopy
 from pathlib import Path
+import shutil
+from tempfile import TemporaryDirectory
 from typing import Any
 
 try:
     from .evaluate_human_ai_collaboration_software_lifecycle_thin_slice_calibration import (
         evaluate_capture,
+    )
+    from .evaluate_software_lifecycle_domain_suboracles import (
+        build_domain_suboracle_pack,
     )
     from .validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol import (
         EXPECTED_CLAIM_KEYS,
@@ -19,6 +23,9 @@ try:
 except ImportError:  # pragma: no cover - direct script execution
     from evaluate_human_ai_collaboration_software_lifecycle_thin_slice_calibration import (
         evaluate_capture,
+    )
+    from evaluate_software_lifecycle_domain_suboracles import (
+        build_domain_suboracle_pack,
     )
     from validate_human_ai_collaboration_software_lifecycle_thin_slice_protocol import (
         EXPECTED_CLAIM_KEYS,
@@ -41,6 +48,11 @@ EXPECTED_BINDINGS = {
     "protocolValidator",
     "capture",
 }
+REPLAY_INPUT_PATH = (
+    "registry/"
+    "human-ai-collaboration-software-lifecycle-thin-slice-replay-input-"
+    "2026-08-01.json"
+)
 EXPECTED_FALSIFIERS = {
     "raw-artifact-byte-binding-mismatch",
     "missing-G0-through-G7-receipt",
@@ -63,6 +75,11 @@ EXPECTED_FALSIFIERS = {
     "high-security-finding-hidden-by-summary",
     "private-security-oracle-exposed-or-reviewer-mutated-artifact",
 }
+INSTRUCTION_CARRIER_RECEIPT_DRIFT_FAILURES = {
+    "domain-suboracle-pack-drift",
+    "stage-domain-suboracle-binding-drift:observation-incident-handling",
+    "stage-domain-suboracle-binding-drift:maintenance-evolution",
+}
 
 
 def _require(condition: bool, message: str) -> None:
@@ -72,6 +89,83 @@ def _require(condition: bool, message: str) -> None:
 
 def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _replays_exactly_with_instruction_carrier(
+    historical_pack: dict[str, Any],
+    *,
+    instruction_carrier_path: Path,
+    root: Path,
+) -> bool:
+    """Rebuild the complete historical pack with its frozen AGENTS input."""
+
+    source_bindings = historical_pack.get("sourceBindings")
+    if not isinstance(source_bindings, list):
+        return False
+    try:
+        with TemporaryDirectory(
+            prefix="aah-lifecycle-frozen-carrier-replay-"
+        ) as temporary:
+            replay_root = Path(temporary).resolve()
+            for relative in ("scripts", "tests/fixtures", "registry"):
+                source = (root / relative).resolve()
+                target = (replay_root / relative).resolve()
+                if not source.is_dir() or not target.is_relative_to(
+                    replay_root
+                ):
+                    return False
+                shutil.copytree(
+                    source,
+                    target,
+                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+                )
+            if not instruction_carrier_path.is_file():
+                return False
+            shutil.copy2(instruction_carrier_path, replay_root / "AGENTS.md")
+            replayed_pack = build_domain_suboracle_pack(root=replay_root)
+    except (OSError, RuntimeError, TypeError, ValueError):
+        return False
+    return replayed_pack == historical_pack
+
+
+def _is_instruction_carrier_receipt_only_drift(
+    *,
+    result: dict[str, Any],
+    capture: dict[str, Any],
+    capture_root: Path,
+    root: Path,
+    instruction_carrier_path: Path,
+) -> bool:
+    """Accept no historical drift beyond AGENTS-dependent receipt digests."""
+
+    if set(result.get("failureCodes", [])) != (
+        INSTRUCTION_CARRIER_RECEIPT_DRIFT_FAILURES
+    ):
+        return False
+    artifact_id = capture.get("domainSuboraclePackArtifactId")
+    rows = capture.get("rawArtifactIndex")
+    if not isinstance(artifact_id, str) or not isinstance(rows, list):
+        return False
+    row = next(
+        (
+            item
+            for item in rows
+            if isinstance(item, dict)
+            and item.get("artifactId") == artifact_id
+            and isinstance(item.get("path"), str)
+        ),
+        None,
+    )
+    if row is None:
+        return False
+    historical_pack = json.loads(
+        (capture_root / row["path"]).read_text(encoding="utf-8")
+    )
+    return _replays_exactly_with_instruction_carrier(
+        historical_pack,
+        instruction_carrier_path=instruction_carrier_path,
+        root=root,
+    )
 
 
 def validate_evidence(
@@ -108,6 +202,56 @@ def validate_evidence(
             and binding["fileSha256"] == _file_sha256(path),
             f"Lifecycle calibration binding hash drifted: {key}",
         )
+    replay_input = json.loads(
+        (root / REPLAY_INPUT_PATH).read_text(encoding="utf-8")
+    )
+    _require(
+        replay_input.get("schema") == 1
+        and replay_input.get("id")
+        == (
+            "human-ai-collaboration-software-lifecycle-thin-slice-"
+            "replay-input-2026-08-01"
+        )
+        and replay_input.get("date") == "2026-08-01"
+        and replay_input.get("kind")
+        == "historical-instruction-carrier-replay-binding",
+        "Lifecycle replay input identity drifted",
+    )
+    replay_evidence_binding = replay_input.get("calibrationEvidence")
+    _require(
+        replay_evidence_binding
+        == {
+            "path": EVIDENCE_PATH,
+            "fileSha256": _file_sha256(root / EVIDENCE_PATH),
+        },
+        "Lifecycle replay evidence binding drifted",
+    )
+    instruction_carrier_binding = replay_input.get("instructionCarrier")
+    _require(
+        isinstance(instruction_carrier_binding, dict)
+        and set(instruction_carrier_binding)
+        == {"path", "bytes", "fileSha256"},
+        "Lifecycle replay instruction carrier binding invalid",
+    )
+    instruction_carrier_path = root / instruction_carrier_binding["path"]
+    _require(
+        instruction_carrier_path.is_file()
+        and instruction_carrier_path.stat().st_size
+        == instruction_carrier_binding["bytes"]
+        and _file_sha256(instruction_carrier_path)
+        == instruction_carrier_binding["fileSha256"],
+        "Lifecycle replay instruction carrier identity drifted",
+    )
+    _require(
+        replay_input.get("claimBoundary")
+        == {
+            "historicalEvidenceModified": False,
+            "liveAgentExecuted": False,
+            "modelCalled": False,
+            "currentInstructionSemanticsProved": False,
+        },
+        "Lifecycle replay input claim boundary drifted",
+    )
     capture_binding = bindings["capture"]
     _require(
         set(capture_binding) == {"path", "fileSha256", "captureRoot"},
@@ -116,14 +260,27 @@ def validate_evidence(
     capture = json.loads(
         (root / capture_binding["path"]).read_text(encoding="utf-8")
     )
+    capture_root = root / capture_binding["captureRoot"]
     result = evaluate_capture(
         capture,
-        capture_root=root / capture_binding["captureRoot"],
+        capture_root=capture_root,
         root=root,
     )
+    instruction_carrier_receipt_only_drift = (
+        _is_instruction_carrier_receipt_only_drift(
+            result=result,
+            capture=capture,
+            capture_root=capture_root,
+            root=root,
+            instruction_carrier_path=instruction_carrier_path,
+        )
+    )
     _require(
-        result.get("status") == "valid-calibration-only"
-        and result.get("failureCodes") == [],
+        (
+            result.get("status") == "valid-calibration-only"
+            and result.get("failureCodes") == []
+        )
+        or instruction_carrier_receipt_only_drift,
         "Lifecycle calibration capture no longer reevaluates cleanly",
     )
     observations = document.get("observations")

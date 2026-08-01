@@ -118,3 +118,15 @@ invocation syntax.
 Portability does not erase legitimate capability differences. Unsupported
 operations must degrade explicitly instead of being simulated or silently
 claimed.
+
+Operational managers are replaceable adapters, not the portable contract.
+CC Switch may provide source, installation, projection, update, backup, and
+restore operations where supported; another consumer may use its own manager
+or host-native mechanism. The portable core describes desired state,
+invariants, evidence, fallback, and recovery without requiring one manager's
+database, release cadence, command surface, or UI.
+
+Authorization is likewise host-owned rather than dialog-shaped. A host adapter
+may bind approval dialogs, permission rules, Hooks, policy files, or another
+native enforcement mechanism, but it must expose the effective authority and
+verification boundary without pretending unsupported controls exist.

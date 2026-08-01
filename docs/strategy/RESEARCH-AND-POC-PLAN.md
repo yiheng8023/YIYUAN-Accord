@@ -1,5 +1,25 @@
 # Research And Proof Plan
 
+## Current decision gate
+
+Bind one decision-relevant real task and its exact comparison artifacts, then
+compare the governed Harness path with a lightweight or ad-hoc path. Measure
+outcome quality, user orchestration burden, lifecycle and resource cost,
+recovery, evidence cost, and net benefit. No new governance layer, adapter
+framework, Skill, Hook, or hard standard follows unless that comparison leaves
+a reproducible residual gap after native, official, reviewed external, and
+composed alternatives.
+
+The three currently reported Kimi-side prototypes, their pending compatibility
+PR, and the prior `mcp-gate` lesson are not bound to repository artifacts in
+this workspace. They are valuable candidate inputs, not current evidence.
+The intended comparison topology is those three exact Kimi prototypes against
+the corresponding governed Harness implementations on the same real task.
+Before that comparison, bind the exact repository/path/revision, task,
+authority boundary, observable outcome, resource/lifecycle measurements,
+fallback, and cleanup surface. Until then, the decision gate is ready for
+intake but no comparison result or adapter abstraction is proved.
+
 Working scenario and evidence gate:
 [`POC-SCENARIO-EVIDENCE-MATRIX.md`](POC-SCENARIO-EVIDENCE-MATRIX.md).
 

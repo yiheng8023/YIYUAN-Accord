@@ -39,10 +39,9 @@ Context governance concerns the effective lifetime of a collaboration, not a
 single universal token percentage. Support transparent counters, opaque hosts,
 automatic compression, heuristic fallback, and repository-anchored handoff.
 
-Use native host authorization and permission enforcement surfaces as the
-boundary, including approval dialogs, permission rules, or an equivalent
-host-owned mechanism. Plan and batch operations to avoid unnecessary prompts,
-but do not bypass or reproduce the host permission system.
+Use native host approval dialogs as the enforcement boundary. Plan and batch
+operations to avoid unnecessary prompts, but do not bypass or reproduce the
+host permission system.
 
 Before repository changes, inspect branch, status, HEAD, upstream, and relevant
 dirty files. Preserve inherited evidence and user changes. Do not delete the
