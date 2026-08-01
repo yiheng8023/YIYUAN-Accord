@@ -505,6 +505,26 @@ receipt; synthetic test-only receipts cannot promote authority. No model,
 candidate instruction, Skill, Hook, CC mutation, preference, or residual-gap
 claim is authorized.
 
+## GEN-LEARNING-01 independent-review readiness
+
+The
+[2026-08-01 readiness package](HUMAN-AI-COLLABORATION-LEARNING-NORU-INDEPENDENT-REVIEW-READINESS-2026-08-01.md)
+freezes the Noru learning baseline, fixed-fixture protocol, public learning
+packet, private oracle, calibration record, validator, and tests as ten exact
+Git objects at `3f165a4`. Three subject packages cover the target exactly, and
+ten review axes keep correctness, form balance, misconception coverage,
+readability, accessibility, oracle isolation, cleanup and participant safety,
+claim authority, deterministic controls, and residual-gap judgment visible
+without allowing strengths on one axis to cancel failures on another.
+
+This is a reproducible surface for a later distinct reviewer, not a review
+result. No receipt exists; no reviewer, model, official account, candidate, or
+participant was dispatched. Content correctness, human readability,
+accessibility in use, form equivalence, safeguards, learning effect, value,
+live readiness, Skill or hard-standard need, and acceptance remain unproved.
+Both mapped acceptance criteria stay `partial`, and any review or pilot still
+requires its own authority gate.
+
 ## Current cross-scenario candidate capability coverage
 
 The

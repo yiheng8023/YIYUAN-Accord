@@ -221,6 +221,10 @@ from validate_human_ai_collaboration_learning_fixed_fixture_protocol import (
 from validate_human_ai_collaboration_learning_noru_material_calibration import (
     validate_calibration as validate_human_ai_collaboration_learning_noru_material_calibration,
 )
+from validate_human_ai_collaboration_learning_noru_independent_review_packet import (
+    LEARNING_NORU_INDEPENDENT_REVIEW_REQUIRED_FILES,
+    validate_packet as validate_human_ai_collaboration_learning_noru_independent_review_packet,
+)
 from validate_multidimensional_software_engineering_evaluation_contract import (
     validate_contract as validate_multidimensional_software_engineering_evaluation_contract,
 )
@@ -562,6 +566,7 @@ REQUIRED_FILES = (
     "tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json",
     "scripts/validate_human_ai_collaboration_learning_noru_material_calibration.py",
     "tests/test_human_ai_collaboration_learning_noru_material_calibration.py",
+    *LEARNING_NORU_INDEPENDENT_REVIEW_REQUIRED_FILES,
     "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-EVALUATION-CONTRACT-2026-07-31.md",
     "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_contract.py",
@@ -1988,6 +1993,9 @@ def verify() -> None:
     human_ai_collaboration_learning_noru_material_calibration_doc = load(
         "registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json"
     )
+    human_ai_collaboration_learning_noru_independent_review_packet_doc = load(
+        "registry/human-ai-collaboration-learning-noru-independent-review-packet-2026-08-01.json"
+    )
     human_ai_collaboration_learning_noru_public_packet_doc = load(
         "tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json"
     )
@@ -3007,6 +3015,10 @@ def verify() -> None:
         public_packet=human_ai_collaboration_learning_noru_public_packet_doc,
         private_oracle=human_ai_collaboration_learning_noru_private_oracle_doc,
         program_plan=curation_program_plan_doc,
+    )
+    validate_human_ai_collaboration_learning_noru_independent_review_packet(
+        human_ai_collaboration_learning_noru_independent_review_packet_doc,
+        root=ROOT,
     )
     validate_multidimensional_software_engineering_evaluation_contract(
         multidimensional_software_engineering_evaluation_contract_doc,

@@ -2950,3 +2950,49 @@ missing behavioral evidence. A future comparison must bind one
 decision-relevant task/mechanism gap, current source and host identities,
 authority, oracle, fallback, cleanup, and claim ceiling. SEM-03 live transport
 and model authority remain a separate gate.
+
+## 2026-08-01 GEN-LEARNING-01 independent-review readiness checkpoint
+
+Starting from clean `main` at
+`3f165a447fcf10889e62e21d0821fd4ca1dc7710`, the next no-model slice reused
+the existing exact-Git-object review-packet mechanism to prepare the open Noru
+material review. The contract and generated packet bind ten committed files
+covering the learning baseline, fixed-fixture protocol, public packet, private
+oracle, calibration record, validators, and tests. The target is divided into
+three non-overlapping subject packages whose paths exactly cover the manifest.
+
+The packet declares ten non-cancelling review axes and a future receipt shape
+requiring a distinct accountable reviewer identity and process, prior-
+involvement and identity evidence, visible disagreements, and high/critical
+finding disposition. The contract validator locks the complete producer,
+receipt, claim, and authority boundaries. The packet builder reconstructs Blob
+IDs and content hashes from the exact revision and checks a canonical manifest
+and packet digest offline.
+
+No independent review has occurred and no receipt exists. No model, reviewer,
+participant, official account, candidate, external capability, CC Switch, or
+global configuration was invoked or changed. Content correctness, form
+equivalence, readability, accessibility in use, participant safeguards,
+learning effect, candidate value, Skill or hard-standard need, live readiness,
+acceptance, and release remain false or unproved. The solution-neutral and
+residual-gap acceptances remain `partial`. A later review receipt cannot
+authorize a pilot; reviewer execution and live-trial authority are separate
+gates.
+
+Implementation review is not Noru content review. Parallel Spec and Standards
+review of this change found and closed five fail-closed defects: duplicate axes
+could satisfy a set-only check; receipts bound only the target manifest rather
+than the full packet digest; a strong overall outcome could cancel a rejected
+axis; free-form evidence references could escape the frozen manifest; and
+correction records could be empty or mapped to the wrong axis. The repaired
+receipt validator binds the full packet digest, preserves the weakest axis,
+locks axis/finding/disagreement/correction evidence to manifest paths, blocks
+bounded acceptance with high/critical findings, and requires every
+`accept-with-corrections` axis to have its own structured correction record.
+
+Fresh post-review checks passed: 36 packet-mechanism tests; 144 focused
+learning/review/rebaseline/scenario/acceptance tests; exact packet rebuild; the
+standalone readiness validator; `git diff --check`; and `scripts/verify.py`.
+Repository `.tmp` is absent. The generated `scripts/__pycache__` was removed
+after verification. Neither implementation review nor green tests change the
+open independent content-review or live-trial gates.

@@ -204,7 +204,8 @@
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"
+        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
+        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01"
       ]
     },
     {
@@ -386,7 +387,8 @@
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"
+        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
+        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01"
       ]
     },
     {
@@ -2712,6 +2714,16 @@
       "id": "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
       "path": "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json",
       "kind": "zero-model-thirteen-scenario-six-route-current-coverage-overlap-conflict-fallback-unassessed-and-subtractive-decision-no-behavior-value-or-residual-gap-promotion",
+      "asOf": "2026-08-01",
+      "supports": [
+        "acceptance.solution-neutral-collaboration-rebaseline",
+        "acceptance.residual-gap-proof"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01",
+      "path": "registry/human-ai-collaboration-learning-noru-independent-review-packet-2026-08-01.json",
+      "kind": "exact-git-object-bound-learning-material-independent-review-readiness-packet-review-not-performed-live-trial-blocked-no-value-or-residual-gap-promotion",
       "asOf": "2026-08-01",
       "supports": [
         "acceptance.solution-neutral-collaboration-rebaseline",

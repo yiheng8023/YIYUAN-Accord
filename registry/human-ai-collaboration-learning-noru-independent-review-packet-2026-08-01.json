@@ -1,0 +1,291 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-learning-noru-independent-review-packet-2026-08-01",
+  "date": "2026-08-01",
+  "status": "prepared-not-reviewed-live-trial-blocked",
+  "contractBinding": {
+    "path": "registry/human-ai-collaboration-learning-noru-independent-review-readiness-contract-2026-08-01.json",
+    "sha256": "80cc5cc362cb84b48e7a27fb323c223f21da8563bf84e4ce72695201f2f8a9d6"
+  },
+  "targetBinding": {
+    "revision": "3f165a447fcf10889e62e21d0821fd4ca1dc7710",
+    "pathCount": 10,
+    "manifestSha256": "6d51a7274106a6ed2858b8f626d7ece79ff71da483f7392fbbc9889d8123bff4",
+    "files": [
+      {
+        "path": "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-CAPABILITY-BASELINE-2026-07-31.md",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "2c1316b95c3ed6b7cc7a569f722618464d887bc2",
+        "contentSha256": "f0a6efba785644130bdb7f52d008b3d49743e940a5c20b6cd0c218dafb64b245"
+      },
+      {
+        "path": "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "efc8b5ea508a0834f93f3385cd4e73bec129f541",
+        "contentSha256": "98fd9682cd8cc696a3379f32d8cfbe116f452b5db0bf262f6c6d7d649d2c0a76"
+      },
+      {
+        "path": "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-NORU-MATERIAL-CALIBRATION-2026-07-31.md",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "83f08204cd33391f998d59a1271dfd95a82504e5",
+        "contentSha256": "ecb55b394a446a10cc7d6321af7ae5d47bbdc00ccacf4023d465e0b18fb5666d"
+      },
+      {
+        "path": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "75995f6ca57881803bf897b72a9c3867f0cc89e0",
+        "contentSha256": "d0bb1082647cb08be4ce91203b27e384d62ba1090b8724cc3c459ac90524c001"
+      },
+      {
+        "path": "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "5b9d2523e3b1120e112a8a8957f8162d6b2e6642",
+        "contentSha256": "560e205c1efe1b49f18f804e48e4587510391c2008b02c51291b9608ae7c23a5"
+      },
+      {
+        "path": "registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "0d3ad765e8a7d408edb90c05c7e3d20871c4fae0",
+        "contentSha256": "d378df78b1e188764ecfe3ed8307a207d3324c803d7b64cb5a92b0bd7813eb73"
+      },
+      {
+        "path": "scripts/validate_human_ai_collaboration_learning_noru_material_calibration.py",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "12854b18f9d9868cbe82ebb4a6a96f19bf7f696a",
+        "contentSha256": "d39877388cacfa18ff562e7f458b6e0405e88925998910d693781aaf33233a2e"
+      },
+      {
+        "path": "tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "58e522de6a8bef228b04ed51f17e3608b847305f",
+        "contentSha256": "19a10d71146158e15d29cdaf4c748ea8a30d862c6989b29f77c157b0142f190e"
+      },
+      {
+        "path": "tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "7e15573ab5ee1652c839b7b10a29f0e08c2e9fe6",
+        "contentSha256": "79ac64aaa4258a993c443400fc1deb21658d0e5197e8d1df6df41fe9c093c04f"
+      },
+      {
+        "path": "tests/test_human_ai_collaboration_learning_noru_material_calibration.py",
+        "mode": "100644",
+        "objectType": "blob",
+        "gitObjectId": "e71dc59992f23e44466ce6390a0db1a4f783c698",
+        "contentSha256": "f469e4373f51976f7964a3384be4314ae9461e91b4324c9304500a5d83dfb3a4"
+      }
+    ]
+  },
+  "subjectPackages": [
+    {
+      "id": "learning-route-and-fixed-fixture-contract",
+      "paths": [
+        "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-CAPABILITY-BASELINE-2026-07-31.md",
+        "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-FIXED-FIXTURE-PROTOCOL-2026-07-31.md",
+        "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+        "registry/human-ai-collaboration-learning-fixed-fixture-protocol-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "noru-public-private-material-and-calibration",
+      "paths": [
+        "docs/strategy/HUMAN-AI-COLLABORATION-LEARNING-NORU-MATERIAL-CALIBRATION-2026-07-31.md",
+        "registry/human-ai-collaboration-learning-noru-material-calibration-2026-07-31.json",
+        "tests/fixtures/human-ai-learning-noru-private-oracle-2026-07-31.json",
+        "tests/fixtures/human-ai-learning-noru-public-packet-2026-07-31.json"
+      ]
+    },
+    {
+      "id": "deterministic-calibration-and-negative-controls",
+      "paths": [
+        "scripts/validate_human_ai_collaboration_learning_noru_material_calibration.py",
+        "tests/test_human_ai_collaboration_learning_noru_material_calibration.py"
+      ]
+    }
+  ],
+  "producerBoundary": {
+    "packetProducerIdentity": "codex-goal-turn-learning-review-packet-producer-2026-08-01",
+    "packetProducerProcessId": "codex-thread-019fbc6f-ffcb-76f0-82b2-1f51d60e9028-learning-review-preparation",
+    "reportEvaluatorIdentities": [
+      "current-task Noru material and oracle producer",
+      "current-task deterministic calibration evaluator"
+    ],
+    "identityEvidenceIsCryptographic": false,
+    "sameTaskRereadQualifiesAsIndependentReview": false,
+    "reviewSkillInvocationAloneQualifiesAsIndependentReview": false,
+    "distinctExecutionIdentityRequired": true,
+    "distinctProcessIdRequired": true,
+    "privateReasoningTransferAllowed": false,
+    "reviewerArtifactMutationAllowed": false
+  },
+  "reviewAxes": [
+    {
+      "id": "content-and-answer-key-correctness",
+      "question": "Are every Noru rule, worked example, practice item, assessment answer, scoring boundary, and executable oracle case correct and internally consistent?"
+    },
+    {
+      "id": "immediate-delayed-form-balance",
+      "question": "Are the immediate and delayed forms comparable enough for the intended bounded use, with the known wrap-versus-advance difference and any additional asymmetry explicitly reported rather than called equivalent?"
+    },
+    {
+      "id": "misconception-coverage-and-falsifiers",
+      "question": "Do misconception labels cover material wrong-reasoning classes without confusing accessibility barriers, wording ambiguity, or delivery style with domain misunderstanding?"
+    },
+    {
+      "id": "readability-and-instruction-clarity",
+      "question": "Can a learner understand the glossary, rules, examples, practice instructions, response format, and allowed help without private-oracle knowledge or unstated assumptions?"
+    },
+    {
+      "id": "accessibility-and-accommodation-boundary",
+      "question": "Does the text-only packet support linear reading and the declared accommodations, while keeping accessibility in use and screen-reader behavior unproved until actually reviewed?"
+    },
+    {
+      "id": "public-private-oracle-isolation",
+      "question": "Are assessment answers, scoring, misconception labels, and private identifiers absent from every learner or tutor surface and protected from accidental inclusion?"
+    },
+    {
+      "id": "cleanup-data-and-participant-safety-boundary",
+      "question": "Are the exact disposable root, before/after manifests, forbidden data, retention decision, participant-contact prohibition, and later consent/privacy/withdrawal/safeguarding gates complete and fail-closed?"
+    },
+    {
+      "id": "claim-authority-and-live-readiness",
+      "question": "Do structural calibration, independent review, participant safeguards, form equivalence, learning effect, candidate value, live readiness, acceptance, and release remain distinct?"
+    },
+    {
+      "id": "deterministic-reproduction-and-negative-controls",
+      "question": "Can the frozen validator be rerun from exact Git objects, and do negative controls reject answer leakage, oracle drift, item overlap, unresolved misconceptions, form-equivalence promotion, cleanup broadening, and usability-claim promotion?"
+    },
+    {
+      "id": "capability-reuse-and-residual-gap-boundary",
+      "question": "Does the package preserve the native, official, reviewed-external, and human-control comparison without treating the packet, review workflow, missing live evidence, or reviewer preference as proof that a Skill or hard standard is needed?"
+    }
+  ],
+  "receiptContract": {
+    "requiredTopLevelFields": [
+      "schema",
+      "id",
+      "packetId",
+      "packetManifestSha256",
+      "packetSha256",
+      "reviewStatus",
+      "reviewedAt",
+      "reviewer",
+      "independence",
+      "axisResults",
+      "findings",
+      "disagreements",
+      "correctionsRequired",
+      "overallOutcome",
+      "limitations",
+      "claimBoundary"
+    ],
+    "allowedReviewStatus": [
+      "performed"
+    ],
+    "allowedAxisOutcomes": [
+      "accept-bounded",
+      "accept-with-corrections",
+      "reject",
+      "insufficient-evidence"
+    ],
+    "allowedOverallOutcomes": [
+      "accept-bounded",
+      "accept-with-corrections",
+      "reject",
+      "insufficient-evidence"
+    ],
+    "allowedFindingSeverities": [
+      "informational",
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "correctionRecordFields": [
+      "id",
+      "axisId",
+      "statement",
+      "evidenceRefs"
+    ],
+    "allReviewAxesRequiredExactlyOnce": true,
+    "overallOutcomeMayNotBeStrongerThanAnyAxis": true,
+    "acceptWithCorrectionsRequiresCorrectionRecord": true,
+    "everyAcceptWithCorrectionsAxisRequiresCorrectionRecord": true,
+    "highOrCriticalFindingBlocksAcceptBounded": true,
+    "reviewerIdentityMustDifferFromAllProducerIdentities": true,
+    "reviewProcessMustDifferFromProducerProcess": true,
+    "priorInvolvementDisclosureRequired": true,
+    "identityEvidenceRequired": true,
+    "findingEvidenceReferencesRequired": true,
+    "highAndCriticalFindingDispositionRequired": true,
+    "disagreementsMustRemainVisible": true,
+    "acceptanceAuthorityMayBeExercisedByReceipt": false,
+    "hardStandardMayBePromotedByReceipt": false,
+    "skillNecessityMayBeProvedByReceipt": false,
+    "liveTrialMayBeAuthorizedByReceipt": false,
+    "requiredClaimBoundary": {
+      "acceptanceAuthorityExercised": false,
+      "hardStandardPromoted": false,
+      "skillNecessityProved": false,
+      "liveTrialAuthorized": false,
+      "broadPopulationValidityProved": false,
+      "independentReviewProvedBeyondDeclaredIdentityEvidence": false
+    }
+  },
+  "packetState": {
+    "reviewPerformed": false,
+    "reviewReceiptPath": null,
+    "candidateCoveragePrerequisiteSatisfied": true,
+    "acceptanceDecisionRequested": false,
+    "modelDispatchPerformed": false,
+    "participantContactPerformed": false,
+    "externalWritePerformed": false
+  },
+  "reproduction": {
+    "requiresRepositoryWithTargetGitObjects": true,
+    "networkRequired": false,
+    "modelRequired": false,
+    "commands": [
+      "python -B scripts/build_human_ai_collaboration_learning_noru_independent_review_packet.py --check",
+      "python -B scripts/validate_human_ai_collaboration_learning_noru_independent_review_packet.py",
+      "python -B -m unittest tests.test_human_ai_collaboration_learning_noru_independent_review_packet"
+    ]
+  },
+  "claimBoundary": {
+    "provesTargetArtifactsFrozen": true,
+    "provesManifestRebuildableFromGit": true,
+    "provesIndependentReviewPerformed": false,
+    "provesReviewerIdentityBeyondFutureReceiptEvidence": false,
+    "provesContentAndAnswerKeyCorrect": false,
+    "provesHumanReadability": false,
+    "provesAccessibilityInUse": false,
+    "provesParallelFormDifficultyEquivalence": false,
+    "provesParticipantSafeguardsComplete": false,
+    "provesLearningEffect": false,
+    "provesCandidateValue": false,
+    "provesLiveTrialReadiness": false,
+    "provesSkillOrHardStandardNeed": false,
+    "authorizesAcceptanceReleaseOrLiveTrial": false
+  },
+  "authorityBoundary": {
+    "independentReviewerDispatchAuthorized": false,
+    "newThreadOrSubagentAuthorized": false,
+    "modelOrCandidateExecutionAuthorized": false,
+    "officialAccountAccessAuthorized": false,
+    "participantContactOrTrialAuthorized": false,
+    "externalCapabilityMutationAuthorized": false,
+    "ccSwitchOrGlobalConfigMutationAuthorized": false,
+    "reviewerMutationOfTargetArtifactsAuthorized": false,
+    "hardStandardPromotionAuthorized": false,
+    "acceptanceReleaseOrLiveTrialAuthorized": false
+  },
+  "packetSha256": "426bc5e9184fffbbc88b059b7820690660cfe28f40123e85527aeeb6e7ffd196"
+}

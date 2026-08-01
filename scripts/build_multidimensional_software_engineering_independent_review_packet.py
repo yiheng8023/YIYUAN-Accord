@@ -253,7 +253,7 @@ def _run_git(
     )
 
 
-def _git_manifest(
+def git_blob_manifest(
     revision: str,
     paths: list[str],
     *,
@@ -310,7 +310,7 @@ def build_packet(
     contract_path = root / CONTRACT_PATH
     contract = contract or _load(contract_path)
     validate_contract(contract)
-    manifest = _git_manifest(
+    manifest = git_blob_manifest(
         contract["targetRevision"],
         contract["targetPaths"],
         root=root,

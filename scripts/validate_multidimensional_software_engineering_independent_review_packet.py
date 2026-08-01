@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 try:
     from .build_multidimensional_software_engineering_independent_review_packet import (
@@ -318,6 +318,8 @@ def validate_review_receipt(
     packet: dict[str, Any] | None = None,
     contract: dict[str, Any] | None = None,
     root: Path = ROOT,
+    packet_builder: Callable[..., dict[str, Any]] = build_packet,
+    contract_validator: Callable[[dict[str, Any]], None] = validate_contract,
 ) -> None:
     """Validate a later receipt without treating it as acceptance.
 
@@ -329,9 +331,9 @@ def validate_review_receipt(
     root = root.resolve()
     contract = contract or _load(root / CONTRACT_PATH)
     packet = packet or _load(root / PACKET_PATH)
-    validate_contract(contract)
+    contract_validator(contract)
     _require(
-        packet == build_packet(contract, root=root),
+        packet == packet_builder(contract, root=root),
         "Review receipt references a stale packet",
     )
     receipt_contract = contract["receiptContract"]
@@ -344,12 +346,17 @@ def validate_review_receipt(
         isinstance(receipt.get("id"), str) and bool(receipt["id"]),
         "Review receipt identity is missing",
     )
-    _require(
+    packet_binding_matches = (
         receipt.get("packetId") == packet["id"]
         and receipt.get("packetManifestSha256")
-        == packet["targetBinding"]["manifestSha256"],
-        "Review receipt packet binding drifted",
+        == packet["targetBinding"]["manifestSha256"]
     )
+    if "packetSha256" in receipt_contract["requiredTopLevelFields"]:
+        packet_binding_matches = (
+            packet_binding_matches
+            and receipt.get("packetSha256") == packet.get("packetSha256")
+        )
+    _require(packet_binding_matches, "Review receipt packet binding drifted")
     _require(
         receipt.get("reviewStatus") in receipt_contract["allowedReviewStatus"],
         "Review receipt status drifted",
@@ -419,6 +426,9 @@ def validate_review_receipt(
     )
 
     axis_ids = {item["id"] for item in contract["reviewAxes"]}
+    manifest_paths = {
+        item["path"] for item in packet["targetBinding"]["files"]
+    }
     axis_results = receipt.get("axisResults")
     _require(
         isinstance(axis_results, list)
@@ -439,11 +449,16 @@ def validate_review_receipt(
             and isinstance(result["evidenceRefs"], list)
             and bool(result["evidenceRefs"])
             and all(
-                isinstance(item, str) and bool(item)
+                isinstance(item, str)
+                and bool(item)
+                and item in manifest_paths
                 for item in result["evidenceRefs"]
             )
             and isinstance(result["limitations"], list),
-            f"Review axis result is incomplete: {result['axisId']}",
+            (
+                "Review axis result is incomplete or references evidence "
+                f"outside the packet manifest: {result['axisId']}"
+            ),
         )
 
     findings = receipt.get("findings")
@@ -478,7 +493,9 @@ def validate_review_receipt(
             and isinstance(finding["evidenceRefs"], list)
             and bool(finding["evidenceRefs"])
             and all(
-                isinstance(item, str) and bool(item)
+                isinstance(item, str)
+                and bool(item)
+                and item in manifest_paths
                 for item in finding["evidenceRefs"]
             )
             and isinstance(finding["disposition"], str),
@@ -502,18 +519,95 @@ def validate_review_receipt(
             and bool(disagreement["statement"])
             and isinstance(disagreement["evidenceRefs"], list)
             and bool(disagreement["evidenceRefs"])
+            and all(
+                isinstance(item, str)
+                and bool(item)
+                and item in manifest_paths
+                for item in disagreement["evidenceRefs"]
+            )
             and isinstance(disagreement["disposition"], str),
             "Review disagreement record is incomplete",
         )
 
+    corrections = receipt.get("correctionsRequired")
+    _require(isinstance(corrections, list), "Review corrections are missing")
+    correction_fields = set(
+        receipt_contract.get(
+            "correctionRecordFields",
+            ["id", "axisId", "statement", "evidenceRefs"],
+        )
+    )
+    correction_ids: set[str] = set()
+    for correction in corrections:
+        _require(
+            set(correction) == correction_fields
+            and isinstance(correction["id"], str)
+            and bool(correction["id"])
+            and correction["id"] not in correction_ids
+            and correction["axisId"] in axis_ids
+            and isinstance(correction["statement"], str)
+            and bool(correction["statement"])
+            and isinstance(correction["evidenceRefs"], list)
+            and bool(correction["evidenceRefs"])
+            and all(
+                isinstance(item, str)
+                and bool(item)
+                and item in manifest_paths
+                for item in correction["evidenceRefs"]
+            ),
+            "Review correction record is incomplete or outside the packet manifest",
+        )
+        correction_ids.add(correction["id"])
+    correction_axis_ids = {correction["axisId"] for correction in corrections}
+    required_correction_axis_ids = {
+        result["axisId"]
+        for result in axis_results
+        if result["outcome"] == "accept-with-corrections"
+    }
     _require(
-        isinstance(receipt.get("correctionsRequired"), list),
-        "Review corrections are missing",
+        required_correction_axis_ids <= correction_axis_ids,
+        "Review correction record does not cover each axis requiring correction",
     )
     _require(
         receipt.get("overallOutcome")
         in receipt_contract["allowedOverallOutcomes"],
         "Review overall outcome drifted",
+    )
+    corrections_required = (
+        receipt["overallOutcome"] == "accept-with-corrections"
+        or any(
+            result["outcome"] == "accept-with-corrections"
+            for result in axis_results
+        )
+    )
+    _require(
+        not corrections_required or bool(corrections),
+        "Review accept-with-corrections requires a correction record",
+    )
+    _require(
+        not corrections or receipt["overallOutcome"] != "accept-bounded",
+        "Review correction records cannot be hidden by accept-bounded",
+    )
+    outcome_strength = {
+        "accept-bounded": 0,
+        "accept-with-corrections": 1,
+        "insufficient-evidence": 2,
+        "reject": 3,
+    }
+    weakest_axis = max(
+        outcome_strength[result["outcome"]] for result in axis_results
+    )
+    _require(
+        outcome_strength[receipt["overallOutcome"]] >= weakest_axis,
+        "Review overall outcome cancels a weaker axis",
+    )
+    _require(
+        receipt["overallOutcome"] != "accept-bounded"
+        or not any(
+            finding["severity"] in {"high", "critical"}
+            for finding in findings
+        ),
+        "Review cannot accept-bounded with a high or critical finding",
     )
     _require(
         isinstance(receipt.get("limitations"), list)
@@ -525,15 +619,18 @@ def validate_review_receipt(
         "Review receipt limitations are missing",
     )
     claims = receipt.get("claimBoundary", {})
-    _require(
-        claims
-        == {
+    expected_claims = receipt_contract.get(
+        "requiredClaimBoundary",
+        {
             "acceptanceAuthorityExercised": False,
             "hardStandardPromoted": False,
             "skillNecessityProved": False,
             "broadPopulationValidityProved": False,
             "independentReviewProvedBeyondDeclaredIdentityEvidence": False,
         },
+    )
+    _require(
+        claims == expected_claims,
         "Review receipt exceeded review authority",
     )
 

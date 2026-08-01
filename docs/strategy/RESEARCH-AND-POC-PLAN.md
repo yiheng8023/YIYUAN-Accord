@@ -1693,6 +1693,24 @@ human review of content, form balance, readability, accessibility, and cleanup
 remains open. Participant safeguards, power, treatment exposure, learning
 effect, candidate value, and live readiness remain unproved and blocked.
 
+The follow-up
+[independent-review readiness package](HUMAN-AI-COLLABORATION-LEARNING-NORU-INDEPENDENT-REVIEW-READINESS-2026-08-01.md)
+freezes ten exact Git blobs at `3f165a4`, partitions them into three complete
+subject packages, and defines ten non-cancelling review axes. Its offline
+builder reconstructs the packet from Git objects and verifies Blob IDs,
+content SHA-256 values, the canonical manifest, and packet digest without
+network or model use.
+
+The later receipt must name a distinct accountable reviewer and process,
+disclose prior involvement, preserve disagreements, and disposition high or
+critical findings. The readiness packet itself contains no receipt and proves
+no content correctness, readability, accessibility in use, form equivalence,
+participant safeguard completeness, learning effect, candidate value, live
+readiness, Skill need, acceptance, or release state. Even a valid receipt
+cannot authorize a pilot; reviewer execution and any live trial remain
+separately governed transactions. Both linked program acceptances remain
+`partial`.
+
 ## 2026-07-31 GEN-CREATIVE-01 candidate-coverage checkpoint
 
 The next general-domain slice binds `GEN-CREATIVE-01` without changing the
