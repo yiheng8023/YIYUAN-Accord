@@ -203,7 +203,8 @@
         "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01",
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
+        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"
       ]
     },
     {
@@ -384,7 +385,8 @@
         "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
+        "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"
       ]
     },
     {
@@ -2703,6 +2705,16 @@
         "acceptance.solution-neutral-collaboration-rebaseline",
         "acceptance.capability-survey-result-package",
         "acceptance.cross-agent-claim-limits",
+        "acceptance.residual-gap-proof"
+      ]
+    },
+    {
+      "id": "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
+      "path": "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json",
+      "kind": "zero-model-thirteen-scenario-six-route-current-coverage-overlap-conflict-fallback-unassessed-and-subtractive-decision-no-behavior-value-or-residual-gap-promotion",
+      "asOf": "2026-08-01",
+      "supports": [
+        "acceptance.solution-neutral-collaboration-rebaseline",
         "acceptance.residual-gap-proof"
       ]
     }

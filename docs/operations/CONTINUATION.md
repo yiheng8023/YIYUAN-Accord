@@ -2897,3 +2897,56 @@ candidate preference, cross-host value, Skill/Hook need, and self-authored
 residual gap all remain false/unproved. A live transport implementation or
 per-run live authority receipt requires a new authority decision; other
 no-model candidate-governance work may continue independently.
+
+## 2026-08-01 current candidate capability coverage reconciliation checkpoint
+
+This no-model slice started from clean `main` at
+`2295c8cbaaf0eae7f4d62a0a9dbdba143df4ccea`, equal to `origin/main` with
+ahead/behind `0/0`. It consolidates the exact current repository evidence that
+accumulated after the 2026-07-27 candidate coverage audit; it does not perform
+new ecosystem discovery or treat the handoff as evidence.
+
+The governed reconciliation maps native, official, reviewed external,
+composed, human-control, and residual/self-authored routes for all thirteen
+scenario identities. Of 78 route cells, 50 have bounded mappings, 15 remain
+explicitly unassessed, and all 13 residual cells remain
+`not-eligible-no-residual-gap`. Six overlap groups, five fail-closed conflict
+groups, native-first/human-last fallbacks, nine dimension projections, and
+fourteen software-lifecycle projections are explicit. Every inherited
+scenario evidence state is unchanged and every dimension/lifecycle projection
+retains `liveDomainValueProved=false`.
+
+The record is linked only to the still-`partial`
+`acceptance.solution-neutral-collaboration-rebaseline` and
+`acceptance.residual-gap-proof` criteria. The validator requires exact source
+bytes and hashes, the complete route-state vocabulary, complete authority and
+claim boundaries, recomputed scenario/dimension/lifecycle counts, and the
+exact acceptance evidence entry. Unknown evidence states, missing authority
+keys, claim promotion, and human-control-bypassing fallbacks fail closed.
+
+Fresh checks passed: 15 focused reconciliation tests; 67 combined
+reconciliation/rebaseline/scenario-matrix tests; 26 three-lane acceptance tests;
+the standalone reconciliation validator; `git diff --check`; and
+`scripts/verify.py`. No model request, external discovery, installation,
+candidate execution, CC Switch mutation, global configuration mutation,
+portfolio mutation, or self-authored promotion occurred.
+
+Independent Standards and Spec review then found that the first validator
+accepted a legal-looking but unreviewed candidate/state/evidence-ceiling
+substitution and allowed the sixth declared overlap group to disappear. The
+repaired validator retains its granular semantic checks and additionally locks
+canonical SHA-256 projections for all scenario routes, six overlap groups,
+five conflict groups, and seven unassessed groups. Negative tests now reject a
+valid-vocabulary but unreviewed ceiling and a missing reviewed overlap. The
+verify integration test no longer parses `verify.py` internals; the validator
+exports one stable required-file tuple that `verify.py` consumes directly.
+After repair, the full four-module batch passed 93 tests and `scripts/verify.py`
+passed again.
+
+The current action is subtraction: stop untargeted candidate-name discovery;
+do not install for an unassessed cell; do not compose before separate-arm
+attribution; do not retire from static overlap; and do not self-author from
+missing behavioral evidence. A future comparison must bind one
+decision-relevant task/mechanism gap, current source and host identities,
+authority, oracle, fallback, cleanup, and claim ceiling. SEM-03 live transport
+and model authority remain a separate gate.

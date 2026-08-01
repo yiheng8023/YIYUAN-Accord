@@ -167,6 +167,10 @@ CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID = (
 ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
 )
+CURRENT_CANDIDATE_COVERAGE_RECONCILIATION_EVIDENCE_ID = (
+    "evidence.human-ai-collaboration-current-candidate-capability-coverage-"
+    "reconciliation-2026-08-01"
+)
 SEMANTIC_AUTHORITY_CONTINUITY_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-semantic-authority-"
     "continuity-protocol-2026-07-28"
@@ -470,6 +474,7 @@ def validate_rebaseline(
                 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID,
                 CREATIVE_CAPABILITY_BASELINE_EVIDENCE_ID,
                 ACCESS_COMMS_CAPABILITY_BASELINE_EVIDENCE_ID,
+                CURRENT_CANDIDATE_COVERAGE_RECONCILIATION_EVIDENCE_ID,
             ]
         if (
             acceptance_id

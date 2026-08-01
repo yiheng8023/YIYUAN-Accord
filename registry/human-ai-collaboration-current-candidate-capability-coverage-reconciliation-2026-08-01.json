@@ -1,0 +1,503 @@
+{
+  "schema": 1,
+  "id": "human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
+  "date": "2026-08-01",
+  "status": "zero-model-current-coverage-mapped-overlap-conflict-fallback-and-unassessed-cells-no-evidence-promotion",
+  "purpose": "Reconcile the current native, official, reviewed external, composed, and human-control candidate coverage without promoting source, exposure, synthetic behavior, domain value, or residual-gap claims.",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "bytes": 76246,
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9",
+      "role": "authoritative-scenario-identities-and-inherited-evidence-states"
+    },
+    {
+      "path": "registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json",
+      "bytes": 11712,
+      "sha256": "9c7912d1b859274675b98d5622b091caf2bc2779ca416806c6629be849940d69",
+      "role": "bounded-external-candidate-behavior-source-exposure-and-gap-classification"
+    },
+    {
+      "path": "registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json",
+      "bytes": 12120,
+      "sha256": "d0bb1082647cb08be4ce91203b27e384d62ba1090b8724cc3c459ac90524c001",
+      "role": "learning-native-official-external-human-representative-set"
+    },
+    {
+      "path": "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json",
+      "bytes": 13136,
+      "sha256": "4da4ac66da0c4577e05cbfe0968c1a139612084bfa2e632a09be25b106a5eea6",
+      "role": "creative-native-official-conditional-composition-human-representative-set"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json",
+      "bytes": 12509,
+      "sha256": "a141513ec71a8127fb37ee4803ccab4c3bdd7aca8be0e91755f87fa659ed4239",
+      "role": "access-comms-ordered-native-official-external-composed-human-route"
+    },
+    {
+      "path": "registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json",
+      "bytes": 10894,
+      "sha256": "2d9c4d1e0313e0de53dc91ae1f453828d0e2b017780c1ae1483ea253cc9578a6",
+      "role": "organization-decision-five-arm-zero-model-route-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json",
+      "bytes": 13766,
+      "sha256": "34824b350d09a8c667723004f64af60b932be5b5dd3bd605816da3efc65a0330",
+      "role": "engineering-management-five-arm-zero-model-route-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json",
+      "bytes": 6048,
+      "sha256": "822c87738914f81ae621f9591ed330ea4f877b20b610949e1ee17fff6a5fd57a",
+      "role": "architecture-and-verify-secure-zero-model-mechanism-calibration"
+    },
+    {
+      "path": "registry/human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30.json",
+      "bytes": 10210,
+      "sha256": "98bc807ba4a37f7159116a7da67741180c869b92084c1ca849d492aaa671e2eb",
+      "role": "release-change-current-cc-body-projection-and-task-listing-boundary"
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenarioId": "GEN-CREATIVE-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json"],
+      "fallbackOrder": ["N", "O", "E", "C", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-contract-only", "candidateIds": ["alternative.native-open-divergence"], "evidenceCeiling": "source-bound-protocol-design"},
+        "O": {"state": "represented-source-static", "candidateIds": ["official.openai-creative-production-0.1.25"], "evidenceCeiling": "source-and-current-host-cache-metadata"},
+        "E": {"state": "conditional-source-static", "candidateIds": ["external.matt-grilling-2ab9580"], "evidenceCeiling": "source-and-current-projection-metadata"},
+        "C": {"state": "represented-source-static", "candidateIds": ["composition.conditional-grilling-then-official-production"], "evidenceCeiling": "composition-design-only"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.human-led-ideation"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "GEN-RESEARCH-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json"],
+      "fallbackOrder": ["N", "C", "H"],
+      "inheritedEvidenceState": "bounded-synthetic-v2-source-backed-smoke-pass-no-topology-comparison",
+      "routeCoverage": {
+        "N": {"state": "represented-bounded-synthetic-association", "candidateIds": ["alternative.native-source-synthesis"], "evidenceCeiling": "one-absolute-task-valid-source-backed-transport-repetition"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "C": {"state": "mechanism-calibrated-no-candidate-value", "candidateIds": ["composition.parent-scoped-source-transport"], "evidenceCeiling": "zero-model-process-mechanism-plus-one-transport-smoke"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.human-researcher"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "GEN-LEARNING-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-learning-capability-baseline-2026-07-31.json"],
+      "fallbackOrder": ["N", "O", "E", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-contract-only", "candidateIds": ["alternative.native-no-dedicated-learning-capability"], "evidenceCeiling": "source-bound-protocol-design"},
+        "O": {"state": "represented-source-static", "candidateIds": ["alternative.official-host-learning-mode"], "evidenceCeiling": "dated-official-product-metadata"},
+        "E": {"state": "represented-source-static", "candidateIds": ["alternative.matt-teach-explicit"], "evidenceCeiling": "exact-source-and-projection-metadata"},
+        "C": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["alternative.human-instructor-control"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "GEN-ORG-DECISION-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json"],
+      "fallbackOrder": ["N", "O", "E", "C", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-no-model", "candidateIds": ["arm.native-no-skill"], "evidenceCeiling": "zero-model-protocol-calibration"},
+        "O": {"state": "conditional-source-static", "candidateIds": ["official.openai-data-analytics-0.2.8-13ceeea1f599"], "evidenceCeiling": "current-host-cache-metadata-supplement-only"},
+        "E": {"state": "represented-source-static", "candidateIds": ["arm.pm-stakeholder-map", "arm.pm-strategy-red-team"], "evidenceCeiling": "exact-source-component-metadata"},
+        "C": {"state": "represented-no-model", "candidateIds": ["arm.pm-ordered-composition"], "evidenceCeiling": "zero-model-protocol-calibration"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["arm.human-only-facilitated-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "GEN-ACCESS-COMMS-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json"],
+      "fallbackOrder": ["N", "C", "O", "E", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-no-model", "candidateIds": ["route.native-semantic-adaptation"], "evidenceCeiling": "zero-model-structured-semantic-gate"},
+        "O": {"state": "conditional-source-static", "candidateIds": ["official.openai-primary-runtime-documents-26.730.11710"], "evidenceCeiling": "current-host-cache-metadata-narrow-carrier-role"},
+        "E": {"state": "conditional-source-static", "candidateIds": ["external.microsoft-azure-ai-translation-text-py"], "evidenceCeiling": "source-metadata-not-installed-or-executed"},
+        "C": {"state": "represented-no-model", "candidateIds": ["composition.source-lock-native-gate-carrier-review"], "evidenceCeiling": "ordered-route-and-zero-model-gate"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.bilingual-domain-accessibility-recipient-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-DISCOVERY-REQ-01",
+      "evidenceSourcePaths": ["registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"],
+      "fallbackOrder": ["N", "E", "H"],
+      "inheritedEvidenceState": "bounded-synthetic-live-agent-evidence-no-loader-causation-or-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-bounded-synthetic-association", "candidateIds": ["native.requirements-control"], "evidenceCeiling": "three-valid-synthetic-pairs"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "represented-bounded-synthetic-association", "candidateIds": ["cc.grill-with-docs"], "evidenceCeiling": "selected-exposure-and-three-valid-synthetic-pairs-no-causation"},
+        "C": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.human-requirements-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-ARCH-DESIGN-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json"],
+      "fallbackOrder": ["N", "C", "H"],
+      "inheritedEvidenceState": "zero-model-seeded-control-calibration-no-live-agent-or-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "mechanism-calibrated-no-candidate-value", "candidateIds": ["native.architecture-control"], "evidenceCeiling": "zero-model-seeded-control-calibration"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "C": {"state": "mechanism-calibrated-no-candidate-value", "candidateIds": ["composition.software-lifecycle-thin-slice"], "evidenceCeiling": "zero-model-process-mechanism"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.independent-architecture-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-IMPLEMENT-REVIEW-01",
+      "evidenceSourcePaths": ["registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"],
+      "fallbackOrder": ["N", "E", "H"],
+      "inheritedEvidenceState": "bounded-synthetic-live-agent-evidence-no-loader-causation-or-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-bounded-synthetic-association", "candidateIds": ["native.implementation-review-control"], "evidenceCeiling": "three-valid-synthetic-pairs"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "represented-bounded-synthetic-association", "candidateIds": ["cc.disciplined-coding"], "evidenceCeiling": "three-valid-synthetic-pairs-no-loader-causation"},
+        "C": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.independent-code-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-VERIFY-SECURE-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-evidence-2026-07-27.json"],
+      "fallbackOrder": ["N", "O", "C", "H"],
+      "inheritedEvidenceState": "zero-model-seeded-fault-calibration-no-live-agent-or-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "mechanism-calibrated-no-candidate-value", "candidateIds": ["native.verify-secure-control"], "evidenceCeiling": "zero-model-seeded-fault-calibration"},
+        "O": {"state": "represented-source-static", "candidateIds": ["official.codex-security-design-input"], "evidenceCeiling": "dated-design-input-only"},
+        "E": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "C": {"state": "mechanism-calibrated-no-candidate-value", "candidateIds": ["composition.software-lifecycle-thin-slice"], "evidenceCeiling": "zero-model-process-mechanism"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.independent-security-review"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-RELEASE-CHANGE-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-release-change-current-cc-codex-no-model-preflight-2026-07-30.json"],
+      "fallbackOrder": ["N", "E", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-no-model", "candidateIds": ["native.release-change-control"], "evidenceCeiling": "repository-and-current-host-no-model-preflight"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "represented-no-model", "candidateIds": ["skill.curated.ci-cd-and-automation", "skill.curated.shipping-and-launch"], "evidenceCeiling": "approved-source-current-cc-body-projection-and-task-listing-no-instruction-delivery"},
+        "C": {"state": "deferred-to-preserve-attribution", "candidateIds": ["composition.ci-cd-then-shipping"], "evidenceCeiling": "design-only-first-comparison-must-separate-arms"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.accountable-release-authority"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-OPS-INCIDENT-01",
+      "evidenceSourcePaths": ["registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"],
+      "fallbackOrder": ["N", "E", "H"],
+      "inheritedEvidenceState": "bounded-synthetic-live-agent-evidence-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-bounded-synthetic-association", "candidateIds": ["native.incident-control"], "evidenceCeiling": "three-valid-synthetic-pairs"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "represented-bounded-synthetic-association", "candidateIds": ["cc.diagnose", "matt.current-diagnosing-bugs"], "evidenceCeiling": "bounded-source-pinned-synthetic-association-no-causation"},
+        "C": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.human-incident-owner"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-MAINT-MIGRATE-01",
+      "evidenceSourcePaths": ["registry/other-cc-and-external-skill-scenario-coverage-audit-2026-07-27.json"],
+      "fallbackOrder": ["N", "E", "H"],
+      "inheritedEvidenceState": "bounded-synthetic-live-agent-evidence-no-loader-causation-or-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-bounded-synthetic-association", "candidateIds": ["native.maintenance-migration-control"], "evidenceCeiling": "three-valid-synthetic-pairs"},
+        "O": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "E": {"state": "represented-bounded-synthetic-association", "candidateIds": ["cc.deprecation-and-migration"], "evidenceCeiling": "three-valid-synthetic-pairs-no-loader-causation"},
+        "C": {"state": "unassessed", "candidateIds": [], "evidenceCeiling": "none"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["control.human-migration-owner"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    },
+    {
+      "scenarioId": "SE-MGMT-PRACTICE-01",
+      "evidenceSourcePaths": ["registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json"],
+      "fallbackOrder": ["N", "O", "E", "C", "H"],
+      "inheritedEvidenceState": "planned-no-live-domain-evidence",
+      "routeCoverage": {
+        "N": {"state": "represented-no-model", "candidateIds": ["arm.native-no-skill"], "evidenceCeiling": "zero-model-protocol-calibration"},
+        "O": {"state": "represented-source-static", "candidateIds": ["arm.official-data-analytics-sequence"], "evidenceCeiling": "current-host-cache-metadata-and-zero-model-arm-design"},
+        "E": {"state": "represented-source-static", "candidateIds": ["arm.pm-ordered-composition"], "evidenceCeiling": "exact-source-component-metadata-and-zero-model-arm-design"},
+        "C": {"state": "represented-no-model", "candidateIds": ["arm.official-pm-composition"], "evidenceCeiling": "zero-model-protocol-calibration"},
+        "H": {"state": "required-human-control-unexecuted", "candidateIds": ["arm.human-team-led-control"], "evidenceCeiling": "required-control-design"},
+        "R": {"state": "not-eligible-no-residual-gap", "candidateIds": [], "evidenceCeiling": "none"}
+      }
+    }
+  ],
+  "coverageSummary": {
+    "scenarioCount": 13,
+    "routeCellCount": 78,
+    "mappedRouteCellCount": 50,
+    "unassessedRouteCellCount": 15,
+    "residualIneligibleCellCount": 13,
+    "liveDomainValueScenarioCount": 0
+  },
+  "dimensionCoverage": [
+    {
+      "axisId": "axis.capability-data-authority-and-action",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 50,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.cognition-competence-and-agency",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 39,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.context-knowledge-state-and-provenance",
+      "scenarioIds": ["GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 45,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.evidence-assurance-and-accountability",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 50,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.goals-values-and-intent",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 50,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.lifecycle-operations-and-evolution",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 45,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.organization-incentives-and-impacts",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 43,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.subjects-and-affected-parties",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 44,
+      "liveDomainValueProved": false
+    },
+    {
+      "axisId": "axis.work-and-collaboration-modes",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "mappedRouteCellCount": 50,
+      "liveDomainValueProved": false
+    }
+  ],
+  "softwareLifecycleCoverage": [
+    {"sliceId": "detailed-design-and-modeling", "scenarioIds": ["SE-ARCH-DESIGN-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "engineering-management-economics-teamwork-and-professional-practice", "scenarioIds": ["SE-MGMT-PRACTICE-01"], "mappedRouteCellCount": 5, "liveDomainValueProved": false},
+    {"sliceId": "implementation-build-and-dependency-management", "scenarioIds": ["SE-IMPLEMENT-REVIEW-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "incident-response-recovery-and-learning", "scenarioIds": ["SE-OPS-INCIDENT-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "maintenance-evolution-refactoring-and-technical-debt", "scenarioIds": ["SE-MAINT-MIGRATE-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "migration-deprecation-retirement-and-disposal", "scenarioIds": ["SE-MAINT-MIGRATE-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "operations-observability-reliability-and-support", "scenarioIds": ["SE-OPS-INCIDENT-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "release-delivery-deployment-and-change-management", "scenarioIds": ["SE-RELEASE-CHANGE-01"], "mappedRouteCellCount": 4, "liveDomainValueProved": false},
+    {"sliceId": "review-static-quality-and-configuration-control", "scenarioIds": ["SE-IMPLEMENT-REVIEW-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "security-privacy-safety-and-software-supply-chain", "scenarioIds": ["SE-VERIFY-SECURE-01"], "mappedRouteCellCount": 4, "liveDomainValueProved": false},
+    {"sliceId": "stakeholder-needs-and-requirements", "scenarioIds": ["SE-DISCOVERY-REQ-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "strategy-product-discovery-acquisition-and-supply", "scenarioIds": ["SE-DISCOVERY-REQ-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "system-and-software-architecture", "scenarioIds": ["SE-ARCH-DESIGN-01"], "mappedRouteCellCount": 3, "liveDomainValueProved": false},
+    {"sliceId": "verification-validation-testing-and-acceptance", "scenarioIds": ["SE-VERIFY-SECURE-01"], "mappedRouteCellCount": 4, "liveDomainValueProved": false}
+  ],
+  "overlapGroups": [
+    {
+      "id": "overlap.creative-intake-and-production",
+      "scenarioIds": ["GEN-CREATIVE-01"],
+      "candidateIds": ["external.matt-grilling-2ab9580", "official.openai-creative-production-0.1.25"],
+      "sharedSurface": "brief interpretation before creative production",
+      "separationRule": "Use grilling only for consequential missing decisions; keep intentionally open aesthetic preference and production behavior attributable to the official route.",
+      "marginalValueProved": false
+    },
+    {
+      "id": "overlap.learning-guidance-and-workspace",
+      "scenarioIds": ["GEN-LEARNING-01"],
+      "candidateIds": ["alternative.official-host-learning-mode", "alternative.matt-teach-explicit", "alternative.human-instructor-control"],
+      "sharedSurface": "guided explanation practice and feedback",
+      "separationRule": "Separate host-specific interaction, durable workspace effects, and accountable educator judgment in distinct arms.",
+      "marginalValueProved": false
+    },
+    {
+      "id": "overlap.organization-and-management-evidence-authority",
+      "scenarioIds": ["GEN-ORG-DECISION-01", "SE-MGMT-PRACTICE-01"],
+      "candidateIds": ["official.openai-data-analytics-0.2.8-13ceeea1f599", "arm.pm-stakeholder-map", "arm.pm-strategy-red-team", "arm.human-team-led-control"],
+      "sharedSurface": "evidence organization options guardrails affected parties and monitoring",
+      "separationRule": "Official analysis supplies evidence and KPIs, PM components supply affected-party and red-team structure, and humans retain consultation and decision authority.",
+      "marginalValueProved": false
+    },
+    {
+      "id": "overlap.access-comms-semantic-and-carrier",
+      "scenarioIds": ["GEN-ACCESS-COMMS-01"],
+      "candidateIds": ["route.native-semantic-adaptation", "official.openai-primary-runtime-documents-26.730.11710", "external.microsoft-azure-ai-translation-text-py"],
+      "sharedSurface": "message adaptation and downstream presentation",
+      "separationRule": "Keep semantic and terminology fidelity distinct from document-carrier checks, service translation, recipient evidence, and release authority.",
+      "marginalValueProved": false
+    },
+    {
+      "id": "overlap.release-pipeline-and-readiness",
+      "scenarioIds": ["SE-RELEASE-CHANGE-01"],
+      "candidateIds": ["skill.curated.ci-cd-and-automation", "skill.curated.shipping-and-launch"],
+      "sharedSurface": "staged delivery rollback monitoring and validation",
+      "separationRule": "Pipeline design and automated gates remain separate from final GO or NO-GO, communication, rollout, and post-change evidence; first comparison uses separate arms.",
+      "marginalValueProved": false
+    },
+    {
+      "id": "overlap.software-native-and-external-method",
+      "scenarioIds": ["SE-DISCOVERY-REQ-01", "SE-IMPLEMENT-REVIEW-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01"],
+      "candidateIds": ["cc.grill-with-docs", "cc.disciplined-coding", "cc.diagnose", "matt.current-diagnosing-bugs", "cc.deprecation-and-migration"],
+      "sharedSurface": "structured method layered over ordinary native reasoning",
+      "separationRule": "Preserve native control and exact selected exposure; bounded association without an independent loader event receives no causal or default-route credit.",
+      "marginalValueProved": false
+    }
+  ],
+  "conflictGroups": [
+    {
+      "id": "conflict.human-authority-substitution",
+      "appliesTo": ["all-scenarios"],
+      "conflict": "Analytical or procedural quality may be mistaken for consultation acceptance release grading or decision authority.",
+      "failClosedResolution": "End every fallback at the accountable human control and keep authority claims false."
+    },
+    {
+      "id": "conflict.composition-attribution",
+      "appliesTo": ["GEN-CREATIVE-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-RELEASE-CHANGE-01", "SE-MGMT-PRACTICE-01"],
+      "conflict": "A composed result can hide which component caused benefit loss or added lifecycle cost.",
+      "failClosedResolution": "Use separate arms before composition and do not credit marginal value without attributable evidence."
+    },
+    {
+      "id": "conflict.account-data-network-write-boundary",
+      "appliesTo": ["GEN-CREATIVE-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-MGMT-PRACTICE-01"],
+      "conflict": "Official or service-backed routes may require accounts connected data network MCP board or artifact writes not authorized by static coverage.",
+      "failClosedResolution": "Keep the route static or conditional until a task-specific data account cost permission and verification boundary is authorized."
+    },
+    {
+      "id": "conflict.host-source-and-version-drift",
+      "appliesTo": ["all-external-and-official-routes"],
+      "conflict": "Catalog listing local projection cache or historical behavior may diverge from current upstream and current-host exposure.",
+      "failClosedResolution": "Bind exact source revision and current host exposure separately and downgrade stale behavior to historical metadata."
+    },
+    {
+      "id": "conflict.lifecycle-and-cleanup-cost",
+      "appliesTo": ["all-non-native-routes"],
+      "conflict": "Persistent workspace mutation background services generated artifacts or manager projections can cost more than the task benefit.",
+      "failClosedResolution": "Use the smallest task-scoped route with explicit cleanup and stop at native or human fallback when marginal value is unproved."
+    }
+  ],
+  "unassessedCells": [
+    {
+      "id": "unassessed.official-route",
+      "scenarioIds": ["GEN-RESEARCH-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01"],
+      "reason": "No source-bound official treatment is currently justified for the scenario.",
+      "recheckTrigger": "A bound task exposes an official mechanism gap or a current official route materially changes."
+    },
+    {
+      "id": "unassessed.external-route",
+      "scenarioIds": ["GEN-RESEARCH-01", "SE-ARCH-DESIGN-01", "SE-VERIFY-SECURE-01"],
+      "reason": "No reviewed external treatment has passed scenario-specific source and overlap binding.",
+      "recheckTrigger": "A specific uncovered mechanism survives native and official comparison."
+    },
+    {
+      "id": "unassessed.composition-route",
+      "scenarioIds": ["GEN-LEARNING-01", "SE-DISCOVERY-REQ-01", "SE-IMPLEMENT-REVIEW-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01"],
+      "reason": "No composition has an attributable marginal-value contract for this scenario.",
+      "recheckTrigger": "Distinct components each pass their separate-arm gate and one residual handoff gap remains."
+    },
+    {
+      "id": "unassessed.independent-instruction-delivery",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "reason": "Static source exposure or structured input does not independently prove instructions reached the model.",
+      "recheckTrigger": "A host supplies an attributable loader or instruction-delivery event or the acceptance boundary is separately revised."
+    },
+    {
+      "id": "unassessed.human-control-execution",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "reason": "Required human control arms are designed but not executed as comparable evidence.",
+      "recheckTrigger": "A separately accountable participant or domain review protocol is authorized."
+    },
+    {
+      "id": "unassessed.live-domain-and-affected-subject-value",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "reason": "No scenario has live-domain value evidence or accountable affected-subject validation.",
+      "recheckTrigger": "A bounded real-domain protocol passes participant authority safety and privacy review."
+    },
+    {
+      "id": "unassessed.cross-host-and-longitudinal-value",
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-RESEARCH-01", "GEN-LEARNING-01", "GEN-ORG-DECISION-01", "GEN-ACCESS-COMMS-01", "SE-DISCOVERY-REQ-01", "SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01", "SE-RELEASE-CHANGE-01", "SE-OPS-INCIDENT-01", "SE-MAINT-MIGRATE-01", "SE-MGMT-PRACTICE-01"],
+      "reason": "Current evidence does not establish cross-host portability or longitudinal outcome benefit.",
+      "recheckTrigger": "The same bound workload and evidence contract run on multiple hosts or over a justified time window."
+    }
+  ],
+  "coverageDecision": {
+    "representativeCoverageMapped": true,
+    "widerUntargetedDiscoveryNeededNow": false,
+    "unassessedCellIsResidualGap": false,
+    "currentEvidenceSupportsPortfolioMutation": false,
+    "liveComparisonReady": false,
+    "selfAuthoredGapEligible": false
+  },
+  "subtractionDecisions": [
+    "stop-untargeted-candidate-name-discovery",
+    "do-not-install-to-fill-unassessed-cells",
+    "do-not-compose-before-separate-arm-attribution",
+    "do-not-retire-from-static-overlap-or-counts",
+    "do-not-self-author-from-missing-behavioral-evidence"
+  ],
+  "recheckTriggers": [
+    "a-bound-task-exposes-one-specific-unassessed-mechanism",
+    "a-current-route-fails-source-health-or-task-scoped-exposure",
+    "an-official-or-upstream-source-materially-changes",
+    "a-separate-arm-comparison-leaves-an-attributable-composition-gap",
+    "a-repeated-behavioral-failure-survives-native-official-external-composed-and-human-fallback"
+  ],
+  "nextBoundedAction": "Use this map to select only one decision-relevant behavioral or mechanism gap with a bound task, current source and host identity, authority, oracle, fallback, cleanup, and claim boundary. Do not treat the fifteen unassessed route cells as an installation backlog or a residual self-authored gap.",
+  "executionCounters": {
+    "externalDiscoveryCount": 0,
+    "installationCount": 0,
+    "candidateExecutionCount": 0,
+    "modelRequestCount": 0,
+    "ccSwitchMutationCount": 0,
+    "globalConfigurationMutationCount": 0
+  },
+  "authorityBoundary": {
+    "repositoryReconciliationWritesAuthorized": true,
+    "externalDiscoveryAuthorized": false,
+    "installationOrAccountConnectionAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "ccSwitchOrGlobalConfigurationMutationAuthorized": false,
+    "portfolioMutationAuthorized": false,
+    "selfAuthoredCapabilityAuthorized": false,
+    "hardStandardPromotionAuthorized": false
+  },
+  "claimBoundary": {
+    "instructionDeliveryProved": false,
+    "candidateCausationProved": false,
+    "liveDomainValueProved": false,
+    "crossHostValueProved": false,
+    "humanControlExecuted": false,
+    "residualSelfAuthoredGapProved": false
+  }
+}

@@ -1878,3 +1878,29 @@ process creation and any live transport still require a separately governed
 per-run authority receipt and independent authority decision. This checkpoint
 proves no loader event, behavior, treatment value, candidate preference,
 Skill/Hook need, or self-authored residual gap.
+
+## 2026-08-01 current candidate capability coverage reconciliation
+
+The current zero-model candidate evidence is now reconciled across all thirteen
+governed human-AI collaboration scenarios and the six route classes: native,
+official, reviewed external, composed, human control, and residual/self-authored.
+The exact map records 50 bounded mapped cells, 15 explicitly unassessed
+official/external/composition cells, and 13 residual cells that remain
+`not-eligible-no-residual-gap`.
+
+This is a subtraction checkpoint, not a catalog expansion or scoring result.
+It preserves every inherited scenario evidence state, maps six recurring
+overlap groups and five fail-closed conflict groups, and carries each scenario
+through a native-first fallback that ends at accountable human control. All
+nine evaluation dimensions and fourteen software-lifecycle slices remain
+coverage coordinates with `liveDomainValueProved=false`.
+
+Untargeted candidate-name discovery therefore stops. An unassessed cell is not
+an install backlog or residual gap; static overlap is not retirement evidence;
+composition waits for separate-arm attribution; missing behavioral evidence
+does not authorize a new Skill, Hook, MCP controller, or hard standard. Reopen
+targeted discovery only for a bound task with a specific current-capability or
+mechanism gap, source/host drift, authority boundary, oracle, fallback,
+cleanup, and claim ceiling. This checkpoint performs no external discovery,
+installation, candidate execution, model dispatch, CC Switch mutation, global
+configuration change, or portfolio mutation.

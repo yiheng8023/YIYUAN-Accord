@@ -505,6 +505,31 @@ receipt; synthetic test-only receipts cannot promote authority. No model,
 candidate instruction, Skill, Hook, CC mutation, preference, or residual-gap
 claim is authorized.
 
+## Current cross-scenario candidate capability coverage
+
+The
+[2026-08-01 reconciliation](HUMAN-AI-COLLABORATION-CURRENT-CANDIDATE-CAPABILITY-COVERAGE-RECONCILIATION-2026-08-01.md)
+projects the current native, official, reviewed-external, composed,
+human-control, and residual routes back onto all thirteen scenario identities.
+It preserves the evidence state already carried by this matrix: no planned row
+becomes behavioral, no synthetic association becomes domain value, and no
+mechanism calibration becomes candidate competence.
+
+Across 78 route cells, 50 have bounded current mappings, 15 remain explicitly
+unassessed, and all 13 residual/self-authored cells remain ineligible because
+no residual gap is proved. Six overlap groups, five fail-closed conflict
+groups, native-first/human-last fallbacks, nine dimension projections, and all
+fourteen software-lifecycle projections are explicit. Every dimension and
+lifecycle projection retains `liveDomainValueProved=false`.
+
+The resulting action is subtraction: stop untargeted candidate-name discovery,
+do not install merely to fill an unassessed cell, do not compose before
+separate-arm attribution, do not retire from static overlap, and do not
+self-author from missing behavioral evidence. A future targeted comparison
+must start from a task-bound gap and a separately authorized verification
+surface; this reconciliation itself authorizes no live work or portfolio
+mutation.
+
 ## Program closeout cleanup gate
 
 Program closeout is blocked until the portfolio/closeout gate inventories and

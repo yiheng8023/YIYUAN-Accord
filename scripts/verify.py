@@ -114,6 +114,10 @@ from build_skill_source_lineage_collision_index import (
 from validate_human_ai_collaboration_coverage_rebaseline import (
     validate_rebaseline as validate_human_ai_collaboration_coverage_rebaseline,
 )
+from validate_human_ai_collaboration_current_candidate_capability_coverage_reconciliation import (
+    CURRENT_CANDIDATE_COVERAGE_REQUIRED_FILES,
+    validate_reconciliation as validate_human_ai_collaboration_current_candidate_capability_coverage_reconciliation,
+)
 from validate_user_supplied_human_ai_sdlc_research_intake import (
     validate_intake as validate_user_supplied_human_ai_sdlc_research_intake,
 )
@@ -781,6 +785,7 @@ REQUIRED_FILES = (
     "docs/strategy/HUMAN-AI-COLLABORATION-COVERAGE-REBASELINE-2026-07-24.md",
     "scripts/validate_human_ai_collaboration_coverage_rebaseline.py",
     "tests/test_human_ai_collaboration_coverage_rebaseline.py",
+    *CURRENT_CANDIDATE_COVERAGE_REQUIRED_FILES,
     "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json",
     "docs/strategy/USER-SUPPLIED-HUMAN-AI-SDLC-RESEARCH-INTAKE-2026-07-24.md",
     "scripts/validate_user_supplied_human_ai_sdlc_research_intake.py",
@@ -1647,6 +1652,9 @@ def verify() -> None:
     human_ai_collaboration_coverage_rebaseline_doc = load(
         "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json"
     )
+    human_ai_collaboration_current_candidate_capability_coverage_reconciliation_doc = load(
+        "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json"
+    )
     user_supplied_human_ai_sdlc_research_intake_doc = load(
         "registry/user-supplied-human-ai-sdlc-research-intake-2026-07-24.json"
     )
@@ -2304,6 +2312,10 @@ def verify() -> None:
         human_ai_collaboration_coverage_rebaseline_doc,
         curation_program_plan_doc,
         program_acceptance_map_doc,
+        root=ROOT,
+    )
+    validate_human_ai_collaboration_current_candidate_capability_coverage_reconciliation(
+        human_ai_collaboration_current_candidate_capability_coverage_reconciliation_doc,
         root=ROOT,
     )
     validate_user_supplied_human_ai_sdlc_research_intake(
