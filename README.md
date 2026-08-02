@@ -698,6 +698,12 @@ consumer must probe its currently visible, authorized capability inventory.
   its preflight controls are preserved as positive evidence while executable,
   credential, browser-data, cost, persistence, publishing, and host-lifecycle
   review keep registration and installation held.
+- `registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json`:
+  exact-object review of one continuity system projected through 18 divergent
+  Skill bodies and separate host Hook adapters; durable-file, reinjection, and
+  attestation mechanisms advance only to isolated comparison, while transcript
+  access, completion authority, host dependencies, and Skill-only manager
+  incompleteness keep registration and installation held.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.

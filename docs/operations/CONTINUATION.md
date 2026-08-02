@@ -3432,3 +3432,39 @@ review into a catalog-level approval. The source is held for deep review, not
 classified as a failed candidate. No CC Switch registration, installation,
 enablement, exposure, execution, or value claim occurred. The governed record
 is `registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json`.
+
+## 2026-08-03 planning-with-files system adjudication checkpoint
+
+Exact upstream `OthmanAdi/planning-with-files` was reviewed from a bare Git
+object root at current `master` and peeled `v3.9.0` commit
+`0e2b00ce4e8d1789cbcb16a41f7c9510b212b942`, tree
+`3e0fcc7dbe1e7f12ca92653aff87268a423daa49`. The 535-file source was read
+without checkout or third-party code execution. The exact root and empty
+repository `.tmp` parent were removed after the governed record was written.
+
+The eighteen `SKILL.md` paths are not eighteen independent capabilities. They
+are twelve host projections plus six canonical/language variants, with seven
+declared names and eighteen different bodies. The canonical Skill and Codex
+Skill are not byte-equivalent. The full Codex integration also requires a
+separate Hook manifest and adapter directory, host Hook enablement and trust,
+and Python plus Git Bash for the Windows shell-backed events. A CC Switch
+Skill-only projection would therefore be dependency-incomplete and selecting
+one shared-name path would not establish cross-host parity.
+
+The durable three-file state, event-driven reinjection, plan isolation, and
+attestation mechanisms are retained as eligible isolated comparison slices.
+The transcript catchup slice is held because it reads Codex rollout JSONL,
+Claude session JSONL, or OpenCode SQLite and can re-inject user, assistant, and
+tool excerpts. Completion-gated modes are held behind host stop-authority and
+documentation/implementation reconciliation: the pinned documentation says an
+attested allowlisted `AcceptanceCheck` may run, but the reviewed runtime source
+contains no corresponding parser or executor.
+
+The source's disclosed benchmark and Windows failure history are useful
+positive evidence, including explicit token/time cost and small-trial limits;
+the Harness did not re-execute those author-run comparisons. The candidate is
+not failed or rejected. Its mechanisms advance only to a zero-execution
+comparison protocol, while full-system source registration, installation,
+enablement, Hook trust, transcript access, and execution remain unauthorized.
+The governed record is
+`registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json`.

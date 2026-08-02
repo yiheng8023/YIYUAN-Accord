@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-planning-with-files-system-adjudication-2026-08-03",
+  "date": "2026-08-03",
+  "status": "exact-source-mechanism-comparison-eligible-full-system-install-held",
+  "purpose": "Separate the reusable continuity mechanisms in planning-with-files from its full multi-host Skill, Hook, transcript, persistence, completion-gate, and host-adapter system so that catalog count or one-click Skill installation cannot bypass dependency, privacy, authority, and lifecycle review.",
+  "source": {
+    "repository": "OthmanAdi/planning-with-files",
+    "url": "https://github.com/OthmanAdi/planning-with-files",
+    "branch": "master",
+    "commit": "0e2b00ce4e8d1789cbcb16a41f7c9510b212b942",
+    "tree": "3e0fcc7dbe1e7f12ca92653aff87268a423daa49",
+    "release": "v3.9.0",
+    "releaseTagPeeledCommitMatches": true,
+    "remoteHeadMatchesPin": true,
+    "license": "MIT",
+    "licenseBlob": "a00edac2c06c65f72f6fa7dc75512541213aa771",
+    "licenseSha256": "4f2e5ecfaa4e0833621cfe54c0bdc2f60f086c0925540d7bdc713517eafb3c84",
+    "reviewMode": "exact-bare-git-object-read-only",
+    "gitObjectClosureAvailable": true,
+    "thirdPartyCodeExecuted": false,
+    "payloadModified": false,
+    "sourceFilesVendoredIntoHarness": false
+  },
+  "payloadSurface": {
+    "repositoryFileCount": 535,
+    "repositoryBytes": 13701298,
+    "preflightScriptLikeFileCount": 324,
+    "skillMdPathCount": 18,
+    "hostProjectionCount": 12,
+    "languageVariantCountIncludingCanonical": 6,
+    "uniqueDeclaredNames": 7,
+    "uniqueSkillMdHashes": 18,
+    "hookLikePathCount": 57,
+    "canonicalSkill": {
+      "path": "skills/planning-with-files/SKILL.md",
+      "blob": "7d18dce9d9f61a2026a461939a51346ebc88a1e0",
+      "sha256": "6bbdb2201bde30e52a44a135027da204d46a14d8121957098242243d48b184e2",
+      "bytes": 30583
+    },
+    "codexSkill": {
+      "path": ".codex/skills/planning-with-files/SKILL.md",
+      "blob": "bfa4355de05f1aec8b25202a0a80dd8ef8d9058d",
+      "sha256": "3df8ec96cf535ee01067fb6e281c2d194844d935bf8d932239a6f4ec15941660",
+      "bytes": 10556,
+      "byteEqualToCanonical": false
+    },
+    "codexHooks": {
+      "manifestPath": ".codex/hooks.json",
+      "manifestSha256": "e07ce02881c392405b9f532170bf41a7765e017c12b42ef3c0e209da0dfe156e",
+      "events": [
+        "SessionStart",
+        "UserPromptSubmit",
+        "PreToolUse",
+        "PermissionRequest",
+        "PostToolUse",
+        "PreCompact",
+        "Stop"
+      ],
+      "windowsRequiresPython": true,
+      "windowsRequiresGitBashForShellHooks": true
+    },
+    "piPeerDependency": "@earendil-works/pi-coding-agent",
+    "interpretation": "The eighteen Skill paths are host and language projections of one system, not eighteen independent capability units. Every Skill body has a distinct hash, so the manager must select an exact projection and cannot infer parity from the shared declared name."
+  },
+  "mechanismSlices": [
+    {
+      "id": "durable-three-file-working-state",
+      "surface": "task_plan.md, findings.md, progress.md plus optional isolated .planning/<id>/ state",
+      "disposition": "advance-to-isolated-behavior-comparison",
+      "reason": "This is a concrete process-loss and fresh-session recovery mechanism that is not equivalent to a transient model plan."
+    },
+    {
+      "id": "event-driven-plan-reinjection",
+      "surface": "turn, tool, compact, permission, and stop lifecycle adapters",
+      "disposition": "advance-to-isolated-cost-and-attribution-comparison",
+      "reason": "The mechanism can reduce drift but also adds instruction recitation, token cost, Hook ordering, trust, and duplicate-injection risk."
+    },
+    {
+      "id": "cross-session-transcript-catchup",
+      "surface": "read-only parsing of Codex rollout JSONL, Claude project JSONL, or OpenCode SQLite by host projection",
+      "disposition": "hold-for-privacy-schema-and-current-session-attribution-review",
+      "reason": "It may place prior user, assistant, and tool excerpts back into model context and therefore crosses a broader local-data boundary than reading repository planning files alone."
+    },
+    {
+      "id": "plan-isolation-and-attestation",
+      "surface": "PLAN_ID, PWF_PLAN_ROOT, per-session sentinels, path containment, SHA-256 attestation, and ambiguity fail-closed behavior",
+      "disposition": "advance-to-isolated-mechanism-comparison",
+      "reason": "These controls directly address wrong-plan injection and tamper amplification without proving cross-host behavior parity."
+    },
+    {
+      "id": "opt-in-autonomous-and-completion-gated-modes",
+      "surface": ".mode, .stop_blocks, ledger-<agent>.jsonl, host-specific block or follow-up behavior",
+      "disposition": "hold-for-host-semantics-and-documentation-implementation-reconciliation",
+      "reason": "Completion control changes stop authority and the exact source documentation describes AcceptanceCheck execution that was not found in the reviewed runtime source."
+    },
+    {
+      "id": "multi-host-distribution",
+      "surface": "twelve host projections, six language variants, separate Hook adapters, and divergent bodies",
+      "disposition": "architecture-reference-not-one-portable-skill",
+      "reason": "Host-specific packaging is useful evidence, but shared naming and separate bodies do not establish one dependency-complete cross-host unit."
+    }
+  ],
+  "positiveControls": [
+    "per-invocation PLANNING_DISABLED opt-out",
+    "explicit PWF_PLAN_ROOT and PLAN_ID binding",
+    "nested-root ambiguity fail-closed behavior",
+    "path containment and symlink checks",
+    "opt-in attestation and v3 modes",
+    "session attachment sentinels",
+    "completion-gate block cap and stall backstop claims",
+    "no runtime network client call found by the bounded static source search",
+    "source-reported evaluation discloses token and time overhead",
+    "source-reported Windows mechanism failures and later fixes"
+  ],
+  "authorityAndDataBoundaries": {
+    "readsRepositoryPlanningFiles": true,
+    "writesRepositoryPlanningFiles": true,
+    "writesRepositoryPlanningState": true,
+    "writesUserCacheState": true,
+    "readsCodexSessionRollouts": true,
+    "mayReadClaudeSessionTranscripts": true,
+    "mayReadOpenCodeSqlite": true,
+    "injectsFileAndTranscriptContentIntoModelContext": true,
+    "registersAutomaticHostHooksWhenFullyIntegrated": true,
+    "mayInfluencePermissionAndStopSurfaces": true,
+    "performsExternalNetworkCallsInReviewedRuntimeScripts": false,
+    "requiredFutureReview": [
+      "per-host exact adapter selection and current protocol validation",
+      "Hook trust, ordering, duplication, failure, timeout, and disablement behavior",
+      "rollout and transcript privacy, schema drift, redaction, and current-session attribution",
+      "project-state ownership, ignore policy, cleanup, collision, and parallel-task lifecycle",
+      "recitation and context cost versus native compaction and repository continuation",
+      "completion-gate authority and host-specific stop semantics",
+      "AcceptanceCheck documentation versus implementation reconciliation",
+      "bounded behavior comparison against native, Matt handoff composition, repository continuation, and the Kimi continuity prototype"
+    ]
+  },
+  "currentCodexObservation": {
+    "version": "codex-cli 0.146.0",
+    "hooksFeatureMaturity": "stable",
+    "hooksFeatureEffective": true,
+    "hookTrustBypassFlagVisible": true,
+    "candidateHookTrustGranted": false,
+    "candidateHookInvocationProved": false,
+    "meaning": "The host exposes a Hook capability and separate trust boundary. This does not prove that the candidate adapter is configured, trusted, loaded, or protocol-compatible in Codex Desktop or any other host."
+  },
+  "documentationImplementationFinding": {
+    "claim": "MIGRATION.md states that an attested allowlisted AcceptanceCheck command may be run by the completion gate.",
+    "staticObservation": "No AcceptanceCheck parser or executor was found in the reviewed runtime shell, PowerShell, Python, JavaScript, or TypeScript source at the pinned revision; only documentation and templates mention the field.",
+    "disposition": "unimplemented-or-unproved-pending-upstream-clarification",
+    "candidateFailure": false
+  },
+  "authorReportedEvaluation": {
+    "independentlyReexecutedByHarness": false,
+    "workflowAssertionResult": "29/30 with skill at v2.21.0",
+    "blindComparisonResult": "3/3 with-skill wins",
+    "reportedAverageTokenOverhead": "approximately 68 percent",
+    "reportedAverageTimeOverhead": "approximately 17 percent",
+    "unforcedEngagementResult": "5/8 across the reported O1 and O2 cells",
+    "reportedRecoveryResult": "5.0 stage-2 turns versus 13.3 native turns in a three-trial forced recovery task",
+    "limits": [
+      "author-run and partly internal",
+      "several assertions directly reward the candidate's own three-file structure",
+      "small trial counts",
+      "multiple versions and dates across result sections",
+      "not current Codex Desktop or cross-host Harness evidence",
+      "does not prove net value for this user's workflows"
+    ]
+  },
+  "currentCapabilityOverlap": {
+    "routesObserved": [
+      "native Codex planning, compaction, resume, memory, and task surfaces",
+      "repository-owned continuation bootstrap and handoff evidence",
+      "Matt handoff, to-spec, to-tickets, and wayfinder composition candidates",
+      "intent-contract, capability-router, and closure-contract process controls",
+      "Kimi context-usage and session-start continuity prototype"
+    ],
+    "meaning": "The candidate supplies stronger automatic file and Hook mechanisms than a plain planning Skill, but overlap does not prove equivalence, redundancy, superiority, retirement authority, or a residual self-authored gap.",
+    "currentRoutesInsufficient": false,
+    "removalAuthorized": false,
+    "selfAuthoredReplacementAuthorized": false
+  },
+  "disposition": "split-advance-continuity-mechanisms-to-isolated-comparison-hold-full-system-manager-install",
+  "candidateFailure": false,
+  "cleanup": {
+    "reviewRoot": "C:\\Projects\\agent-autonomy-harness\\.tmp\\aah-planning-with-files-review-20260803.git",
+    "reviewRootRemoved": true,
+    "repositoryTmpRemovedAfter": true
+  },
+  "managerBoundary": {
+    "manager": "CC Switch 3.19.1",
+    "repositoryRegistrationExecuted": false,
+    "candidateInstallationExecuted": false,
+    "candidateEnablementExecuted": false,
+    "candidateExecutionAuthorized": false,
+    "skillOnlyProjectionDependencyComplete": false,
+    "atomicDefaultDisabledInstallProved": false,
+    "reason": "A Skill-only manager projection would omit the separately shipped Codex Hook manifest and adapter directory, host Hook enablement and trust state, and Windows Python or Git Bash dependencies. Selecting among eighteen divergent SKILL.md paths is also an unresolved manager-path decision.",
+    "nextSafeAction": "Use the exact source as a split mechanism comparator. First build a zero-execution host and data-boundary protocol; only a later separately authorized isolated run may execute one exact host projection. Do not register or install the full source merely to increase portfolio count."
+  },
+  "claimBoundary": {
+    "candidateInstalled": false,
+    "hostExposed": false,
+    "hookConfigured": false,
+    "hookTrusted": false,
+    "hookInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "transcriptCatchupSafetyProved": false,
+    "behaviorProved": false,
+    "netValueProved": false,
+    "crossHostParityProved": false,
+    "managerDependencyClosureProved": false,
+    "currentRoutesInsufficient": false,
+    "residualSelfAuthoredGapProved": false,
+    "candidateAdmissionApproved": false
+  }
+}

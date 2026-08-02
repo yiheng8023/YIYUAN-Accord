@@ -514,6 +514,10 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
   对一个 Skill、123 个目录文件的多提供商研究子系统进行精确对象审查；保留其 preflight
   控制作为正向证据，同时因可执行面、凭据、浏览器数据、成本、持久化、发布和宿主生命
   周期仍待深审而继续暂缓注册与安装；
+- `registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json`：
+  对一个由 18 个不同 Skill 投影和独立宿主 Hook 适配器组成的持续性系统进行精确对象审查；
+  文件化续接、再注入和 attestation 机制仅进入隔离对照，跨会话记录读取、完成权限、宿主
+  依赖与仅投影 Skill 时的依赖不完整继续阻止注册和安装；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 
