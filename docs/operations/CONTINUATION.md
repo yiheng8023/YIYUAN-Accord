@@ -3372,3 +3372,37 @@ value-proved. The governed record is
 The exact temporary review root initially resisted recursive deletion under its
 clone-created ACL. Full control was granted only on that validated `C:\tmp`
 root, after which it was removed; repository `.tmp` remains absent.
+
+## 2026-08-03 Corey Haines marketing representative Skill adjudication checkpoint
+
+The next representative batch used a bare, non-active Git object root for
+`coreyhaines31/marketingskills` commit
+`7868cb9251fad80a73d26e488a5ad5f6c4a9f335` and tree
+`795fbd548840b43ee3e5a69cbfdda280a22c0422`. An initial `C:\tmp` root creation
+was denied before any path was written, so the exact bare object store was
+created under repository `.tmp`, reviewed without checkout or third-party code
+execution, and removed afterward together with the now-empty `.tmp` parent.
+
+The source contains 49 Skill paths and 67 repository-level script-like files,
+but no Skill path itself bundles an executable. This distinction is preserved:
+repository scripts are not attributed to every Skill, while instruction-only
+Skills are still held when they reference repository tools, accounts, shared
+state, schedulers, or other capabilities not supplied by selective installation.
+
+Nine representative Skills were reviewed. `copywriting`, `copy-editing`, and
+`customer-research` advance only to default-disabled behavior-comparison
+candidates; the latter retains task-bound privacy, provenance, quotation, and
+external-research gates. `marketing-ideas` is held because the PM source exposes
+the same declared name. `product-marketing` is held because it claims a
+persistent `.agents/product-marketing.md` authority for the wider suite, and
+`marketing-loops` is held for a portable scheduling, state, resource, kill
+switch, and human-checkpoint adapter rather than direct Skill admission.
+
+`analytics` is not selectively dependency-complete because it links outside its
+Skill directory into repository-level tool and integration guides. `cold-email`
+is held behind prospect-data, jurisdictional compliance, sending, suppression,
+and cadence boundaries. `marketing-council` remains reference-only despite good
+simulation disclaimers because direct evidence-grounded challenge routes already
+overlap its persona simulation. No CC Switch source was registered and no Skill
+was installed, enabled, exposed, invoked, or value-proved. The governed record
+is `registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json`.

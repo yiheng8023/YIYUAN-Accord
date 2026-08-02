@@ -506,6 +506,10 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
 - `registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json`：
   对 68 项 PM 目录中 13 项代表样本进行精确 Git 对象审查，形成三项待对照候选及明确的
   依赖、重叠、偏好模板和高风险领域暂缓裁决；未注册来源，也未安装；
+- `registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json`：
+  对 49 项营销目录中的 9 项代表样本进行精确 Git 对象审查，将三项有界待对照候选与
+  同名冲突、持久上下文、周期调度、仓库级依赖、外联和人物模拟暂缓项分离；未注册来源，
+  也未安装；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 

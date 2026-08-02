@@ -688,6 +688,11 @@ consumer must probe its currently visible, authorized capability inventory.
   catalog, with three comparison candidates and explicit dependency, overlap,
   opinionated-template, and high-stakes holds; no source registration or
   installation occurred.
+- `registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json`:
+  exact-object review of nine representative Skills from the 49-Skill marketing
+  catalog, separating three bounded comparison candidates from name collision,
+  persistent-context, recurring-scheduler, repository-dependency, outbound,
+  and persona-simulation holds; no source registration or installation occurred.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.
