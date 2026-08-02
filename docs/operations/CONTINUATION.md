@@ -3406,3 +3406,29 @@ simulation disclaimers because direct evidence-grounded challenge routes already
 overlap its persona simulation. No CC Switch source was registered and no Skill
 was installed, enabled, exposed, invoked, or value-proved. The governed record
 is `registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json`.
+
+## 2026-08-03 last30days single-Skill deep-review gate checkpoint
+
+Exact upstream `mvanhorn/last30days-skill` was acquired at commit
+`52f53312ff2f272e16bbc1785e1c04f9d9c19b31` and tree
+`efedede937eb771d144f4416e8a8da108a9c6e8e` into a bare repository `.tmp`
+object root. The object graph was inspected without checkout or third-party code
+execution, then the exact review root and empty `.tmp` parent were removed.
+
+The repository declares one Skill, but that Skill directory contains 123 files,
+110 script-like files, a 222,241-byte instruction body, a 153,563-byte Python
+engine, and a vendored Node X-search client. Although `pyproject.toml` declares
+no runtime package dependencies, the operational surface includes Python,
+Node, optional `yt-dlp`, subprocesses, many public and authenticated network
+providers, optional browser-cookie extraction, local SQLite and file state,
+host-specific path resolution, and optional public HTML publishing.
+
+The source includes material positive controls: a permission preflight,
+browser-cookie opt-in, explicit publishing opt-in, credential-redaction claims,
+provider outcome distinctions, citations, and diagnostics. Those controls do
+not collapse the remaining code, provider terms, credentials, cost, browser
+data, persistence, cleanup, instruction-attention, cross-host, and behavior
+review into a catalog-level approval. The source is held for deep review, not
+classified as a failed candidate. No CC Switch registration, installation,
+enablement, exposure, execution, or value claim occurred. The governed record
+is `registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json`.

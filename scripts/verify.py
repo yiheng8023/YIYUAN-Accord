@@ -1245,6 +1245,8 @@ REQUIRED_FILES = (
     "tests/test_skill_portfolio_phuryn_pm_representative_adjudication.py",
     "registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json",
     "tests/test_skill_portfolio_coreyhaines_marketing_representative_adjudication.py",
+    "registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json",
+    "tests/test_skill_portfolio_last30days_deep_review_gate.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

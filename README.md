@@ -693,6 +693,11 @@ consumer must probe its currently visible, authorized capability inventory.
   catalog, separating three bounded comparison candidates from name collision,
   persistent-context, recurring-scheduler, repository-dependency, outbound,
   and persona-simulation holds; no source registration or installation occurred.
+- `registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json`:
+  exact-object review of a one-Skill, 123-file multi-provider research subsystem;
+  its preflight controls are preserved as positive evidence while executable,
+  credential, browser-data, cost, persistence, publishing, and host-lifecycle
+  review keep registration and installation held.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.
