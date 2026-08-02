@@ -1249,6 +1249,8 @@ REQUIRED_FILES = (
     "tests/test_skill_portfolio_last30days_deep_review_gate.py",
     "registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json",
     "tests/test_skill_portfolio_planning_with_files_system_adjudication.py",
+    "registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json",
+    "tests/test_cc_switch_3191_default_disabled_install_adjudication.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

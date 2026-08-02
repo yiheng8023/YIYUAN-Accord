@@ -704,6 +704,12 @@ consumer must probe its currently visible, authorized capability inventory.
   attestation mechanisms advance only to isolated comparison, while transcript
   access, completion authority, host dependencies, and Skill-only manager
   incompleteness keep registration and installation held.
+- `registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json`:
+  exact-source adjudication of CC Switch's repository-install transaction. The
+  current command requires one app, enables it, and projects before returning;
+  a later disable is not atomic. CC Switch remains the manager, while live
+  candidate installation stays held pending a native or proved thin inactive
+  transaction.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.

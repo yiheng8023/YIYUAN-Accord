@@ -3468,3 +3468,34 @@ comparison protocol, while full-system source registration, installation,
 enablement, Hook trust, transcript access, and execution remain unauthorized.
 The governed record is
 `registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json`.
+
+## 2026-08-03 CC Switch default-disabled repository-install adjudication checkpoint
+
+The portfolio manager gate was inspected against the installed CC Switch
+`3.19.1` binary and exact official tag `v3.19.1`: tag object
+`7da48a05f51aa8099bc9dbdfae20d45a33fdc39a`, commit
+`28529620f438b2ed25c812f6364825d846a4a9d6`, and tree
+`d615f1b31ab77880b20d52c9b66e3261174968a8`. The current official `main` at
+`8383076791f2c0d34f3a249f43f95e8a3906c0a7` retains byte-identical relevant
+command, service, app-state, and frontend API files. It is moving unreleased
+source and was used only to check whether the narrow gap had already changed.
+
+The repository install command still requires `current_app`. Its service
+constructs `SkillApps::only(current_app)`, writes the manager row, projects the
+Skill to that app, and only then returns. A later `toggle_skill_app(..., false)`
+removes the projection before changing the database flag, so install-then-
+disable has both a transient exposure and a failure window. It is not an
+atomic default-disabled transaction. The import path can accept an empty app
+set, but only for bytes already present in fixed live search roots; it neither
+acquires nor pins the reviewed repository payload and would require a separate
+staging writer.
+
+This is a manager-interface gap, not grounds to replace CC Switch or revise the
+main plan. Source registration, discovery, uninstall backup, and bounded
+restore remain reusable. Candidate installation stays held while the remedy
+order remains native inactive install, upstream enhancement, then only a
+proved thin adapter if the residual benefit exceeds its lifecycle cost. No
+manager command, database write, candidate execution, consumer projection,
+model request, or live Skill mutation occurred. The exact bare review root and
+empty repository `.tmp` parent were removed. The governed record is
+`registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json`.

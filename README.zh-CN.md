@@ -518,6 +518,10 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
   对一个由 18 个不同 Skill 投影和独立宿主 Hook 适配器组成的持续性系统进行精确对象审查；
   文件化续接、再注入和 attestation 机制仅进入隔离对照，跨会话记录读取、完成权限、宿主
   依赖与仅投影 Skill 时的依赖不完整继续阻止注册和安装；
+- `registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json`：
+  对 CC Switch 仓库安装事务进行精确源码裁决；当前命令必须指定一个 Agent，先启用并投影
+  后才返回，随后再禁用不具备原子性。继续保留 CC Switch 管理器，但在原生或经证明的薄型
+  非激活事务出现前，真实候选安装仍暂缓；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 
