@@ -3302,3 +3302,39 @@ the debug listener. The governed record is
 This proves the bounded manager subtraction and observed post-state only. It
 does not prove live restore behavior, host reload, remaining portfolio value,
 replacement admission, task-time invocation, or cross-host value.
+
+## 2026-08-02 Kepano Obsidian source adjudication and manager registration checkpoint
+
+The first post-subtraction Skill-level cohort used exact upstream
+`kepano/obsidian-skills` at commit
+`a1dc48e68138490d522c04cbf5822214c6eb1202` and tree
+`49d7c3b7f6aa4d266631c886284415d111070941`. Its five Skill bodies and five
+reference files are MIT-licensed, dependency-complete at the payload layer,
+and contain no bundled executable files. The payload was neither modified nor
+vendored.
+
+`json-canvas`, `obsidian-bases`, and `obsidian-markdown` advance to
+manager-install candidates with a required default-disabled state. `defuddle`
+and `obsidian-cli` remain held because neither CLI is present; the former also
+proposes a global npm install and broad web retrieval, while the latter can
+read or mutate vault data and run application-context JavaScript. The current
+unattributed `obsidian-vault` Skill remains installed pending a scenario-bound
+behavior comparison; overlap alone is not removal authority.
+
+CC Switch 3.19.1 then registered `kepano/obsidian-skills` `main` through its
+own `add_skill_repo` command. The manager source count changed from six to
+seven. A read-only discovery returned 996 total entries and exactly the five
+reviewed Kepano names. The independent Git `origin/main` still matched the
+reviewed pin, but CC discovery did not expose a commit or payload digest, so
+only manager registration and discovered names are proved. The Skill database
+remained at 42 rows and none of the five candidate paths appeared in CC,
+common, Claude, or Codex roots.
+
+The temporary localhost bridge and exact Git review root were removed and CC
+Switch returned to ordinary startup without the debug port. Installation is
+held because the current manager install command requires a `current_app` and
+no atomic default-disabled install has been proved. Do not silently convert
+portfolio installation authority into transient host activation. The records
+are `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json`
+and
+`registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json`.

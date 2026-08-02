@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02",
+  "date": "2026-08-02",
+  "status": "verified-manager-repository-registration-no-install",
+  "predecessor": "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json",
+  "source": {
+    "repository": "kepano/obsidian-skills",
+    "reviewedCommit": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+    "reviewedTree": "49d7c3b7f6aa4d266631c886284415d111070941",
+    "reviewedOriginMainMatchedPinAtRegistration": true,
+    "payloadModified": false,
+    "payloadVendored": false
+  },
+  "managerEvent": {
+    "manager": "CC Switch",
+    "managerVersion": "3.19.1",
+    "command": "add_skill_repo",
+    "repositoriesBefore": 6,
+    "repositoriesAfter": 7,
+    "repository": {
+      "owner": "kepano",
+      "name": "obsidian-skills",
+      "branch": "main",
+      "enabled": true
+    },
+    "commandResult": true,
+    "candidateInstallationExecuted": false,
+    "hostEnablementChanged": false,
+    "directDatabaseWrite": false
+  },
+  "discovery": {
+    "command": "discover_available_skills",
+    "allDiscoverableCount": 996,
+    "sourceSkillCount": 5,
+    "names": [
+      "defuddle",
+      "json-canvas",
+      "obsidian-bases",
+      "obsidian-cli",
+      "obsidian-markdown"
+    ],
+    "managerReportedBranch": "main",
+    "reviewedOriginMainMatchedPin": true,
+    "managerExposedCommitOrPayloadDigest": false,
+    "discoveryTransportFailure": false
+  },
+  "postState": {
+    "databaseSkillRows": 42,
+    "sourceAttributedMattRows": 22,
+    "candidateRowsPresent": 0,
+    "candidatePathsAcrossFourRoots": 0,
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "candidateHostExposed": false
+  },
+  "cleanup": {
+    "debugPortClosed": true,
+    "standardCcSwitchRestarted": true,
+    "temporaryBridgeRemoved": true,
+    "temporarySourceReviewRootRemoved": true,
+    "managerRepositoryRegistrationRetained": true
+  },
+  "nextGate": {
+    "candidateNames": ["json-canvas", "obsidian-bases", "obsidian-markdown"],
+    "requiredCondition": "A manager path that does not transiently activate a host, or separate authority for the exact transient host projection followed by immediate disable and verification.",
+    "defuddleAndObsidianCliRemainHeld": true
+  },
+  "claimBoundary": {
+    "managerRepositoryRegistered": true,
+    "managerDiscoveryNamesProved": true,
+    "managerDiscoveryPayloadBytesProved": false,
+    "candidateInstalled": false,
+    "hostExposed": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostPortabilityProved": false
+  }
+}

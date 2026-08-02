@@ -501,6 +501,8 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
   将 13 个逐文件一致的弃用派生体与 6 个同名 Matt 上游 Skill 分离；
 - `registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json`：
   这 13 个派生体的管理器减法事件、保留备份、事后状态与清理边界；
+- `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json` 及其
+  管理器注册事件：精确五项审查、三项暂缓安装候选与不安装的来源发现；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 

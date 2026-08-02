@@ -1239,6 +1239,8 @@ REQUIRED_FILES = (
     "registry/legacy-adapted-live-lineage-reconciliation-2026-08-02.json",
     "registry/cc-switch-legacy-adapted-thirteen-removal-preview-2026-08-02.json",
     "registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json",
+    "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json",
+    "registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

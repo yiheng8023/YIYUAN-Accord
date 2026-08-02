@@ -680,6 +680,9 @@ consumer must probe its currently visible, authorized capability inventory.
 - `registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json`:
   the manager-backed subtraction event, retained backups, post-state, and
   cleanup boundary for those 13 derivatives.
+- `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json` and
+  its manager-registration event: exact five-Skill review, three held-back
+  install candidates, and repository discovery without installation.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.

@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-kepano-obsidian-adjudication-2026-08-02",
+  "date": "2026-08-02",
+  "status": "reviewed-source-cohort-manager-registration-eligible-install-held",
+  "purpose": "Adjudicate the smallest exact-upstream Obsidian source cohort without rewriting payloads, assuming low lifecycle cost from Skill count, or conflating manager registration with installation and activation.",
+  "source": {
+    "repository": "kepano/obsidian-skills",
+    "url": "https://github.com/kepano/obsidian-skills",
+    "branch": "main",
+    "commit": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+    "tree": "49d7c3b7f6aa4d266631c886284415d111070941",
+    "license": "MIT",
+    "licenseSha256": "247619161a610ee98dbaa2337da2d2d64e84ff33d946e79a7c93ab9335cdebb1",
+    "worktreeClean": true,
+    "payloadModified": false,
+    "sourceFilesVendoredIntoHarness": false,
+    "skillCount": 5,
+    "bundledExecutableFileCount": 0
+  },
+  "skills": [
+    {
+      "name": "defuddle",
+      "path": "skills/defuddle/SKILL.md",
+      "sha256": "a4f046b1830f0b3f6b5b344d7595437fbd1f8d70ad79447ae393fde48043d460",
+      "dependencyFiles": [],
+      "executableFileCount": 0,
+      "runtimeDependency": "defuddle CLI",
+      "runtimeDependencyPresent": false,
+      "permissionAndDataBoundary": "Would fetch user-supplied web URLs and proposes a global npm install when absent.",
+      "overlap": ["native or runtime web retrieval", "browser and research capability"],
+      "disposition": "hold-missing-runtime-dependency",
+      "reason": "Missing CLI, global-install instruction, external network/data boundary, and broad web-route overlap require a later task-bound comparison."
+    },
+    {
+      "name": "json-canvas",
+      "path": "skills/json-canvas/SKILL.md",
+      "sha256": "788535277bc5f460bec97d467615a2ce97e2957dad1b1fc961e645f64c827128",
+      "dependencyFiles": [
+        {"path": "skills/json-canvas/references/EXAMPLES.md", "sha256": "c6fce2e043f98d5bf3c52662a0261aa3e12d5eabbb37585e3c4c52a968b109a1"}
+      ],
+      "executableFileCount": 0,
+      "runtimeDependency": null,
+      "runtimeDependencyPresent": true,
+      "permissionAndDataBoundary": "Pure JSON Canvas file-format guidance; task-time file writes remain separately authorized.",
+      "overlap": ["native JSON editing", "diagram generation"],
+      "distinctCoverage": "JSON Canvas schema, referential integrity, layout, and validation rules.",
+      "disposition": "manager-install-candidate-default-disabled",
+      "reason": "Dependency-complete, low executable surface, portable format guidance with distinct validation semantics."
+    },
+    {
+      "name": "obsidian-bases",
+      "path": "skills/obsidian-bases/SKILL.md",
+      "sha256": "83bc04a2c306a61c216c0cfecbb4d032cc763896623d229cd2a6dab811083032",
+      "dependencyFiles": [
+        {"path": "skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md", "sha256": "0d0cd128bc5070ef1aba2baef41bd55b31b3f56961975934d7a5172396ca0006"}
+      ],
+      "executableFileCount": 0,
+      "runtimeDependency": null,
+      "runtimeDependencyPresent": true,
+      "permissionAndDataBoundary": "Pure .base YAML and formula guidance; task-time vault access remains separately authorized.",
+      "overlap": ["native YAML editing", "current local Obsidian vault workflow"],
+      "distinctCoverage": "Obsidian Bases schema, formula, view, summary, and validation semantics.",
+      "disposition": "manager-install-candidate-default-disabled",
+      "reason": "Dependency-complete, low executable surface, and no current Skill supplies the same Bases reference closure."
+    },
+    {
+      "name": "obsidian-cli",
+      "path": "skills/obsidian-cli/SKILL.md",
+      "sha256": "b4d398c64e086d84cfd51bed896b9bdc243a5fd8a9ea2815a261cd9cb4da3155",
+      "dependencyFiles": [],
+      "executableFileCount": 0,
+      "runtimeDependency": "obsidian CLI and running Obsidian instance",
+      "runtimeDependencyPresent": false,
+      "permissionAndDataBoundary": "Can read and mutate vault data and invoke application-context JavaScript through obsidian eval.",
+      "overlap": ["current local obsidian-vault Skill", "native filesystem and app control"],
+      "disposition": "hold-missing-runtime-dependency",
+      "reason": "Missing CLI and materially broader local-application and vault authority require a task-bound dependency and permission review."
+    },
+    {
+      "name": "obsidian-markdown",
+      "path": "skills/obsidian-markdown/SKILL.md",
+      "sha256": "ef409b7eeda59e2e0c5cdead334dcc997dc9459d689859b3a610ffa9af5cabc5",
+      "dependencyFiles": [
+        {"path": "skills/obsidian-markdown/references/CALLOUTS.md", "sha256": "3b8f63c90f692ac40e6989fda2ab2fed3bb482ff515176b40d18dac8402e516b"},
+        {"path": "skills/obsidian-markdown/references/EMBEDS.md", "sha256": "d9f9f485ded6a32b4d76e59eaddc442bd09faf851d755f052759fc9ab1a25b2c"},
+        {"path": "skills/obsidian-markdown/references/PROPERTIES.md", "sha256": "28da58935ca3296f30b7e9aa25f2a695963dc0a3e4062638428d3bcb2094562a"}
+      ],
+      "executableFileCount": 0,
+      "runtimeDependency": null,
+      "runtimeDependencyPresent": true,
+      "permissionAndDataBoundary": "Pure Obsidian-flavored Markdown guidance; task-time note access and writes remain separately authorized.",
+      "overlap": ["native Markdown editing", "current local Obsidian vault workflow"],
+      "distinctCoverage": "Wikilinks, embeds, callouts, properties, and Obsidian-specific validation semantics.",
+      "disposition": "manager-install-candidate-default-disabled",
+      "reason": "Dependency-complete, low executable surface, and more precise syntax coverage without imposing a vault organization model."
+    }
+  ],
+  "currentPortfolioOverlap": {
+    "currentSkill": "local:obsidian-vault",
+    "sourceAttributed": false,
+    "currentAssumptions": ["configured vault path", "flat vault", "title-case note names", "shell find and grep"],
+    "disposition": "retain-pending-behavioral-comparison",
+    "removalAuthorized": false,
+    "reason": "The upstream format Skills do not reproduce the existing vault-discovery and organization workflow, while the existing workflow's incremental value is untested."
+  },
+  "managerBoundary": {
+    "manager": "CC Switch 3.19.1",
+    "repositoryRegistrationEligible": true,
+    "repositoryRegistrationInstallsPayload": false,
+    "installRequiresCurrentApp": true,
+    "atomicDefaultDisabledInstallProved": false,
+    "candidateInstallationExecuted": false,
+    "transientHostActivationAuthorized": false,
+    "nextSafeAction": "Register the exact upstream repository as a discovery source, verify the discovered five-Skill snapshot against the pinned revision, and prepare a default-disabled installation mechanism or request separate transient-host activation authority."
+  },
+  "claimBoundary": {
+    "managerRepositoryRegistered": false,
+    "candidateInstalled": false,
+    "hostExposed": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "currentObsidianVaultSkillRedundant": false,
+    "crossHostPortabilityProved": false
+  }
+}
