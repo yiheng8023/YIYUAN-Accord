@@ -11,17 +11,20 @@ head so the user can focus on creation, decisions, and bounded authorization.
 
 - **Current state:** research and falsifiable proof; no host-neutral runtime,
   broad candidate value, or residual self-authored gap is proved.
+- **Current Skill authority:** active adapted third-party payload release: `0`.
+  The inherited 19-Skill/40-file manifest is deprecated transition evidence;
+  it remains hash-bound history, not a current install or update source.
 - **Current operating boundary:** the portable decision contract, host-neutral
   adapter contract, and host-specific implementation are separate layers.
   CC Switch is one current operational adapter where supported, not the
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
-- **Current single action:** bind one decision-relevant real task and exact
-  comparison artifacts, then compare the governed Harness path against a
-  lightweight or ad-hoc path on outcome quality, user orchestration burden,
-  lifecycle/resource cost, recovery, and net benefit. Use the current host's
-  native path before a targeted adapter, and add no generalized runtime or
-  self-authored capability until this comparison exposes a residual gap.
+- **Current action:** build a bounded, source-preserving, inactive candidate
+  pool from named CC Switch, official, and reviewed external sources; review
+  exact revisions before a separately authorized manager transaction. Keep
+  task-time activation minimal and task-scoped. Real-task Harness-versus-
+  lightweight comparisons continue in parallel; self-author only after reuse
+  and composition leave a reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and
   [continuation](docs/operations/CONTINUATION.md).
@@ -80,18 +83,20 @@ sync/backup, verification, and restore without proving current consumer state.
 
 ## What This Repository Provides
 
-- Reviewed, portable Skill bodies under `skills/`.
-- Source pins, licenses, provenance, selection decisions, and adapted hashes.
+- Source pins, licenses, provenance, review decisions, and exact upstream
+  identity for current third-party candidates.
+- Legacy adapted Skill bodies under `skills/` as deprecated transition evidence.
 - Security, portability, overlap, lifecycle, and conflict evidence.
 - Authoritative registries for Skills, capabilities, relations, conflicts, and
   recipes.
 - Deterministic generated projections and a schema-1 release manifest.
 
-The current approved release contains 19 Skills and 40 files: 5 reviewed
-adaptations from `addyosmani/agent-skills`, 13 from `mattpocock/skills`, and
-1 from `kepano/obsidian-skills`.
-All have complete pinned Git provenance; the prior incomplete local baseline is
-retained only as non-runtime historical evidence.
+The inherited release contains 19 Skills and 40 files: 5 adapted from
+`addyosmani/agent-skills`, 13 from `mattpocock/skills`, and 1 from
+`kepano/obsidian-skills`. It is deprecated transition evidence because those
+payloads were neutralized or generalized. The current policy does not rewrite
+third-party Skill bodies. The exact legacy manifest remains retained only for
+history, provenance, migration, and rollback analysis.
 
 ## Strategic Positioning
 
@@ -105,7 +110,8 @@ The repository is multi-domain. Human-AI collaboration shortfalls are one
 evidence-backed demand lane, not the repository's whole mission. Its stable
 operating rule is reuse before build: establish the demand, compare native,
 official, runtime, single-Skill, composed-Skill, and other Harness alternatives,
-then prove a residual gap before adapting or authoring anything. Discovery
+then prove a residual gap before authoring any repository-owned capability.
+Third-party bodies remain upstream-owned and unchanged. Discovery
 volume, popularity, or an old draft is not gap evidence.
 
 The intended external-brain outcome is decision-ready rather than inventory
@@ -144,8 +150,8 @@ The pinned human-AI collaboration-shortfalls corpus in
 CALIBRATION is not Skill or Manager product authority. Standard admission and
 final carriage remain with the applicable project authority.
 
-The current approved release is a seed, not sufficient coverage of human-AI
-collaboration shortfalls. The current characterized consumer path uses CC
+The inherited adapted release is deprecated and is not current coverage of
+human-AI collaboration shortfalls. The current characterized consumer path uses CC
 Switch where supported for operational source, install, update, distribution,
 backup, and restore management. It is a replaceable consumer adapter, not a
 portable Harness dependency or universal target operating model. This is not a
@@ -351,10 +357,11 @@ public template such as `codex-user-config-template` or
 `claude-user-config-template`, with placeholders and user-owned setup guidance,
 not a copy of the private repository.
 
-Discovery sources, configuration repositories, public templates, this curated
-repository, and CC Switch each retain a bounded role. This repository owns
-curated Skill intake and release decisions; CC Switch provides operational
-Skill management for supported Agents; consumer environments own their
+Discovery sources, configuration repositories, public templates, this
+governance repository, and CC Switch each retain a bounded role. This
+repository owns candidate review, routing, composition, admission metadata,
+and self-authored residual-gap releases; upstreams own third-party bodies. CC
+Switch provides operational Skill management for supported Agents; consumer environments own their
 instruction, Skill, Hook, and live-loader behavior.
 
 Shared Skills and their portable instruction/Skill/Hook/verification chain are
@@ -369,12 +376,15 @@ Three layers are deliberately noninterchangeable:
 1. An official, runtime-owned, built-in, or first-party Skill may appear only
    in dated overlap evidence; neither its body nor runtime identity is managed
    inventory, vendored, or released here.
-2. A third-party candidate remains in source/intake/selection/audit surfaces
-   until it passes source pinning, license, provenance, security, portability,
-   overlap, adaptation, and validation. It must not enter an execution path.
-3. A curated approved Skill with `status=approved` may enter `skills/` and the
-   manifest. In schema 1, `registry/skills.json` is the approved release
-   inventory.
+2. A third-party candidate remains exact upstream. Its source pin, license,
+   provenance, security, dependencies, portability, overlap, maintenance, and
+   validation are governed before a separately authorized manager transaction;
+   its body does not enter this repository's current product release.
+3. A repository-authored residual-gap Skill may enter a future active release
+   only after necessity and admission close. The current active adapted third-
+   party payload count is zero. `registry/skills.json`, `registry/routing.json`,
+   and `release-manifest.json` retain the deprecated schema-1 transition release
+   for historical verification only.
 
 A repository-authored gap-fill is a candidate origin, not a fourth release
 layer and not a platform/runtime/vendor first-party baseline. It remains
@@ -655,9 +665,12 @@ consumer must probe its currently visible, authorized capability inventory.
 - `docs/public-private-boundary.md`: public/private release boundary and user-config template guidance.
 - `docs/sustainability.md`: cost posture, funding boundaries, and free-first discipline.
 - `generated/`: deterministic derived projections, never a second truth source.
-- `registry/routing.json` and `registry/scenarios.json`: approved routing
+- `registry/routing.json` and `registry/scenarios.json`: legacy adapted-routing
   metadata and the 105-case structured policy corpus.
-- `release-manifest.json`: exact approved payload paths, sizes, and hashes.
+- `registry/skill-portfolio-current-authority.json`: current Skill
+  payload and portfolio/activation authority.
+- `release-manifest.json`: exact deprecated transition payload paths, sizes,
+  and hashes.
 - `scripts/`: validation and deterministic projection generation only.
 
 ## Verification
@@ -681,14 +694,14 @@ It does not install a Skill.
 
 Treat each upstream revision as a new immutable intake: pin it, preserve its
 license and provenance, review executable surfaces, assess security,
-portability and overlap, adapt minimally, validate, update topology, and only
-then approve a new release inventory. Candidate dispositions may be `merge`,
-`adapter-only`, `recipe-only`, or `reject`; they are not runtime approval.
+portability, dependencies, maintenance, and overlap, then record the review and
+manager-transaction decision without rewriting the payload. Candidate
+dispositions are not runtime approval.
 
-Official external capability baselines may be used for comparison, but the same
-license, provenance, security, portability, overlap, and neutralization gates
-apply before any adaptation. Source-available or all-rights-reserved official
-content remains reference-only unless a separate permission path is approved.
+Official external capability baselines may be used for comparison, but license,
+provenance, security, portability, dependency, overlap, and maintenance gates
+still apply before use. Source-available or all-rights-reserved official content
+remains reference-only unless a separate permission path is approved.
 
 User-starred repositories may seed discovery, but stars are not approval. A
 starred source may become an official baseline, third-party candidate, discovery
@@ -698,8 +711,8 @@ live execution path until the normal intake process closes.
 
 Historical discovery records may remain source evidence, but no discovery
 source has a privileged admission path. Every candidate remains advisory until
-this repository completes intake, review, adaptation, validation, topology
-update, and release-manifest update.
+intake, exact-source review, validation, topology/metadata update, and the
+applicable manager/consumer authority close.
 
 ## Safety Boundaries
 

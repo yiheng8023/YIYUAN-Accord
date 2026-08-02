@@ -19,20 +19,22 @@ environment-owned or ecosystem-owned capability source used to answer:
 - whether any gap is functional, procedural, resource-based, script-based,
   trigger-based, artifact-standard-based, license-based, or portability-based;
 - whether the correct disposition is `covered`, `reference`,
-  `adapt-candidate`, or `skip`.
+  `review-candidate`, or `skip`.
 
 Baseline status does not create ownership. It is not managed inventory, not an
 approved Skill, not release payload, not proof of live availability, and not an
 execution route.
 
-## Relationship To Curated Skills
+## Relationship To Governed Candidates
 
-Official external baselines and curated approved Skills serve different roles:
+Official external baselines and reviewed candidates serve different roles:
 
 - An official external baseline is evidence for coverage comparison, gap
   analysis, routing calibration, and future intake decisions.
-- A curated approved Skill is reviewed, adapted, validated, portable content
-  that may enter `skills/` and `release-manifest.json`.
+- A reviewed candidate preserves exact upstream identity and bytes while this
+  repository governs provenance, license, security, dependency, maintenance,
+  overlap, routing, composition, and admission evidence. Its body does not
+  enter `skills/` or `release-manifest.json`.
 
 The transition from baseline evidence to curated content is never automatic.
 It requires the normal intake path:
@@ -45,12 +47,10 @@ discover
 -> security review
 -> portability review
 -> overlap review
--> neutralization
--> adaptation
 -> validation
 -> topology update
--> release manifest update
--> approved release
+-> reviewed candidate decision
+-> separately authorized manager or host transaction
 ```
 
 ## Disposition Semantics
@@ -59,13 +59,13 @@ discover
   is materially sufficient for the relevant workflow. Do not duplicate it.
 - `reference`: the source is useful as evidence or design input, but should not
   be copied, adapted, executed, or released.
-- `adapt-candidate`: a potential future work item exists, but only after
-  license, provenance, security, portability, overlap, neutralization,
-  validation, and topology review.
+- `review-candidate`: an exact-upstream candidate may be worth further review,
+  but no installation, enablement, execution, or promotion follows without its
+  separate authority and verification boundary.
 - `skip`: the source is product-specific, not portable, not useful, unsafe,
   license-incompatible, redundant, or outside repository scope.
 
-`adapt-candidate` is not approval. `reference` is not execution. `covered` is
+`review-candidate` is not approval. `reference` is not execution. `covered` is
 not installation proof. `skip` does not erase historical evidence.
 
 ## Required Matrix Fields

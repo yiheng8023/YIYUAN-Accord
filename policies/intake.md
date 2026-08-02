@@ -1,5 +1,12 @@
 # Intake Policy
 
+Current policy preserves third-party payloads exact upstream. This repository
+governs their source identity, license, security, dependencies, maintenance,
+overlap, quality, routing, composition, admission metadata, and consumer
+evidence; it does not neutralize, generalize, or otherwise rewrite their bodies.
+The inherited schema-1 adapted release is deprecated transition evidence under
+`registry/skill-portfolio-current-authority.json`.
+
 Treat every upstream Skill, prompt, Hook, script, command, adapter, and setup
 document as executable supply-chain input. Pin an immutable revision, preserve
 license and provenance, inspect every executable surface, record every upstream
@@ -7,18 +14,17 @@ Skill disposition, and approve only a minimal non-overlapping runtime set.
 
 Keep the intake state separate from release state:
 
-- Intake governs third-party Skill bodies against an abstract, product-neutral
-  capability taxonomy. Official, runtime-owned, built-in, and first-party Skill
-  bodies are not governed or inventoried here. They may be consulted only as
-  dated overlap evidence, never as managed inventory, repository-owned content,
-  or proof of current availability; their bodies must not be vendored or added
-  to the manifest.
+- Intake governs third-party Skill metadata and review against an abstract,
+  product-neutral capability taxonomy. Official, runtime-owned, built-in, and
+  first-party Skill bodies are not governed or inventoried here. None of those
+  bodies becomes repository-owned content or proof of current availability.
 - A third-party candidate must pass source pinning, license, provenance,
-  security, portability, overlap, adaptation, and validation review. Before a
-  recorded approval, it must not enter an execution path.
-- Only curated approved content with `status=approved` may enter `skills/` and
-  the manifest. `registry/skills.json` is the schema-1 approved release
-  inventory, not a candidate backlog.
+  security, dependencies, maintenance, portability, overlap, and validation
+  review. Before a recorded approval and separate manager/consumer authority,
+  it must not enter an execution path.
+- Only an admitted repository-authored residual-gap payload may enter a future
+  active repository release. `registry/skills.json` and the schema-1 manifest
+  retain the deprecated adapted transition release for historical verification.
 
 Repository-authored gap-fill work is an origin inside the same non-executable
 candidate state; it is not a fourth release layer, not an approved Skill, and

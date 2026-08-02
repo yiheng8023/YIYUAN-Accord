@@ -1,5 +1,11 @@
 # Architecture
 
+> Current Skill-payload authority: third-party bodies remain exact upstream and
+> are consumed through the host or an operational manager. The inherited
+> schema-1 adapted release described below is deprecated transition evidence,
+> not current install/update authority. See
+> `registry/skill-portfolio-current-authority.json`.
+
 ## Producer / Consumer Model
 
 Consumer configuration repositories own portable user configuration,

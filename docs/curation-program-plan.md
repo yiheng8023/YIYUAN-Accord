@@ -1,5 +1,11 @@
 # Curation Program Plan
 
+> Current authority override (2026-08-02): the inherited 19 adapted third-party
+> payloads are deprecated transition evidence. Third-party bodies remain exact
+> upstream; this program now governs bounded portfolio curation, metadata,
+> comparison, manager/consumer decisions, and residual-gap self-authoring. See
+> `registry/skill-portfolio-current-authority.json`.
+
 This is the human-readable projection of the machine program authority in
 `registry/curation-program-plan.json`. The objective, acceptance, verification,
 and evidence mapping lives in `registry/program-acceptance-map.json`. Bounded

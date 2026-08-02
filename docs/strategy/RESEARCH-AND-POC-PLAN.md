@@ -10,6 +10,16 @@ framework, Skill, Hook, or hard standard follows unless that comparison leaves
 a reproducible residual gap after native, official, reviewed external, and
 composed alternatives.
 
+Skill supply now uses a separate portfolio curation mode. It may build a broad
+but bounded inactive candidate pool without binding every candidate to one
+end-user task when coverage objectives, sources, isolation, review/admission
+criteria, authority, verification, cleanup, and a stop rule are explicit.
+Third-party payloads remain exact upstream. Portfolio admission or a separately
+authorized default-disabled CC Switch installation is not task-time activation,
+host exposure, invocation, behavior, or value evidence. The inherited 19
+neutralized/generalized payloads are deprecated transition evidence and no
+longer current install/update authority.
+
 The user-confirmed Kimi topology now has a retained zero-model
 [mechanism replay](../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json):
 two executable prototypes (`context-usage`, `mcp-gate`), one shared injection

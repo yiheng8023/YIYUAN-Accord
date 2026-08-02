@@ -26,14 +26,25 @@ Hooks, MCPs, Plugins, Apps, and native Agent capabilities as one broad chain
 with different authority and lifecycle costs. Do not keep every external
 capability permanently active.
 
-For the inherited capability-curation component, preserve its three distinct
-governance classes. An official, runtime-owned, or built-in Skill remains dated
-external capability metadata and must not be vendored. A third-party candidate
-must not enter an execution path before review. Only a curated approved Skill
-with `status=approved` may enter the approved release inventory.
-Its admission still requires license/provenance, security, portability, overlap,
-and validation review. The inherited component does not write to `codex-user-config`;
-consumer integration remains separately governed.
+Preserve three distinct governance classes. An official, runtime-owned, or
+built-in Skill remains dated external capability metadata and must not be
+vendored. A third-party candidate remains exact upstream and must not enter an
+execution path before license/provenance, security, dependency, maintenance,
+portability, overlap, and validation review plus separate manager/consumer
+authority; its body does not enter the current repository release. Only an
+admitted repository-authored residual-gap Skill may enter a future active
+release inventory. Consumer integration remains separately governed and this
+repository does not write to `codex-user-config`.
+
+The inherited 19 adapted third-party payloads are deprecated transition
+evidence, not current installation or update authority. Preserve third-party
+payload identity and bytes exact upstream by default; put portability,
+compatibility, routing, composition, and host differences in metadata, Recipes,
+adapters, or repository-owned wrappers. Portfolio curation is distinct from
+task-time activation: a bounded coverage/source/isolation/review/authority/
+verification/stop-rule contract may drive broad inactive-pool discovery and
+review without one end-user task, while installation, enablement, execution,
+and persistent activation remain separately governed.
 
 Context governance concerns the effective lifetime of a collaboration, not a
 single universal token percentage. Support transparent counters, opaque hosts,

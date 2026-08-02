@@ -3177,3 +3177,41 @@ lifecycle, crash recovery, and production readiness remain open. The
 self-authored controller remains ineligible. The next decision gate is one
 bound workload comparing static-minimal and native phase-gated profiles before
 any targeted adapter or residual-gap claim.
+
+## 2026-08-02 Skill portfolio authority and router correction checkpoint
+
+The inherited 19-Skill adapted release is now explicitly deprecated transition
+evidence. Its manifest, payloads, registries, and hashes remain available for
+history, provenance, migration, rollback analysis, and falsification; they are
+not current install, update, or routing authority. This does not authorize
+removing same-name live Skills, because those may be independently installed
+exact-upstream copies.
+
+Current authority is machine-readable at
+[`skill-portfolio-current-authority.json`](../../registry/skill-portfolio-current-authority.json).
+It records zero active adapted third-party payload releases, rejects legacy
+routing authority, and keeps third-party Skill identity and bytes exact
+upstream. Compatibility, routing, composition, policy, and host differences
+belong in metadata, Recipes, adapters, or separately owned wrappers; a modified
+fork is a new identity.
+
+Capability governance now distinguishes bounded portfolio curation from
+task-time activation. A complete coverage/source/isolation/review/authority/
+verification/cleanup/stop-rule contract may discover and review an inactive
+candidate cohort without one end-user task. Installation, enablement, account
+connection, execution, promotion, and persistent activation remain separate
+state transitions. Task-time routes remain bound to a concrete task and gap.
+
+The paired `codex-user-config` correction is isolated on branch
+`codex/capability-router-portfolio-curation`. Its installer refuses any manifest
+whose current portfolio authority has no active release, and its router treats a
+deprecated projection remaining on disk as historical metadata only. Pin that
+consumer branch to the exact Harness commit carrying this checkpoint before
+reviewing merge or live projection. No CC Switch state, live Skill directory,
+Hook, MCP, Plugin, App, or consumer projection was changed by this checkpoint.
+
+The user supplied Matt Pocock's exact X locator
+<https://x.com/i/status/2083563195671667176>. Source identity is bound, but the
+current retrieval surface returned no post body, so exact wording and thread
+context remain pending independent capture; do not promote the interpretation
+into a general rejection of specs.

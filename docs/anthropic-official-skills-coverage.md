@@ -4,6 +4,13 @@ Inspection date: 2026-06-24
 Source: <https://github.com/anthropics/skills>  
 Reviewed revision: `57546260929473d4e0d1c1bb75297be2fdfa1949`
 
+Current authority note: this is a dated 2026-06-24 coverage snapshot. Its
+legacy `adapt-candidate`, neutralization, adaptation, and approved-release
+language is superseded by
+`registry/skill-portfolio-current-authority.json`. Current review preserves
+external Skill bodies exact upstream and keeps official/runtime bodies outside
+this repository's release. The historical matrix remains evidence only.
+
 Anthropic official Skills are the first recorded official external capability
 baseline instance in this repository.
 
@@ -87,8 +94,8 @@ per Skill or described by repository documentation:
 
 ## Required Future Intake Path
 
-Any future work item that imports or adapts from this baseline must follow the
-same gate as every other upstream source:
+Any future work item that evaluates this baseline follows the current
+source-preserving gate:
 
 ```text
 discover
@@ -98,12 +105,10 @@ discover
 -> security review
 -> portability review
 -> overlap review
--> neutralization
--> adaptation
 -> validation
 -> topology update
--> release manifest update
--> approved release
+-> reviewed candidate decision
+-> separately authorized manager or host transaction
 ```
 
 Until that path completes, the official Anthropic Skills remain dated external

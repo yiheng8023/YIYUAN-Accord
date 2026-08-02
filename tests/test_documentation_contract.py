@@ -28,8 +28,8 @@ class DocumentationContractTests(unittest.TestCase):
             "Current state:",
             "Current operating boundary:",
             "portable decision contract, host-neutral adapter contract, and host-specific implementation",
-            "Current single action:",
-            "governed Harness path against a lightweight or ad-hoc path",
+            "Current action:",
+            "source-preserving, inactive candidate pool",
             "Evidence archive:",
         ):
             with self.subTest(surface="English", phrase=phrase):
@@ -38,8 +38,8 @@ class DocumentationContractTests(unittest.TestCase):
             "当前状态：",
             "当前运行边界：",
             "可移植决策合同、宿主中立适配合同与宿主特定实现",
-            "当前唯一行动：",
-            "受治理Harness路径与轻量或临时路径",
+            "当前行动：",
+            "来源保真、默认不活跃的候选池",
             "证据入口：",
         ):
             with self.subTest(surface="Chinese", phrase=phrase):
@@ -269,9 +269,10 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(readme="Chinese", heading=heading):
                 self.assertIn(heading, chinese)
 
-    def test_governance_documents_define_three_noninterchangeable_layers(self) -> None:
-        corpus = "\n".join(
-            (
+    def test_governance_documents_define_current_noninterchangeable_layers(self) -> None:
+        corpus = " ".join(
+            "\n".join(
+                (
                 read("AGENTS.md"),
                 read("README.md"),
                 read("docs/architecture.md"),
@@ -279,18 +280,19 @@ class DocumentationContractTests(unittest.TestCase):
                 read("docs/official-external-capability-baselines.md"),
                 read("docs/anthropic-official-skills-coverage.md"),
                 read("docs/starred-capability-source-discovery.md"),
-            )
+                )
+            ).split()
         )
 
         for phrase in (
-            "official, runtime-owned, or built-in",
-            "external capability metadata",
-            "must not be vendored",
+            "Official, runtime-owned, or built-in Skill bodies",
+            "dated overlap evidence",
+            "third-party payloads exact upstream",
             "third-party candidate",
             "must not enter an execution path",
-            "curated approved",
-            "status=approved",
-            "approved release inventory",
+            "admitted repository-authored residual-gap payload",
+            "future active release inventory",
+            "deprecated adapted transition release",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, corpus)
@@ -308,7 +310,8 @@ class DocumentationContractTests(unittest.TestCase):
             "official external baseline",
             "index / awesome list",
             "risk / exclusion",
-            "normal intake process",
+            "Third-party Skill bodies remain exact upstream",
+            "separate authority",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, discovery)
@@ -341,8 +344,9 @@ class DocumentationContractTests(unittest.TestCase):
             "coverage comparison",
             "gap analysis",
             "routing calibration",
-            "adapt-candidate",
-            "approved release",
+            "review-candidate",
+            "exact upstream identity and bytes",
+            "separately authorized manager or host transaction",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, baseline_policy)
@@ -354,9 +358,11 @@ class DocumentationContractTests(unittest.TestCase):
             "all-rights-reserved",
             "covered",
             "reference",
-            "adapt-candidate",
             "skip",
             "release-manifest.json",
+            "Current authority note",
+            "exact upstream",
+            "historical matrix remains evidence only",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, coverage)
@@ -365,7 +371,7 @@ class DocumentationContractTests(unittest.TestCase):
             "official external capability baselines",
             "does not approve import",
             "license/provenance",
-            "neutralization",
+            "exact upstream",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, corpus)

@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "asOf": "2026-08-02",
+  "status": "current-policy-authority",
+  "activeRelease": null,
+  "activeAdaptedThirdPartyPayloadReleaseCount": 0,
+  "legacyAdaptedRelease": {
+    "manifest": "release-manifest.json",
+    "skillRegistry": "registry/skills.json",
+    "routingRegistry": "registry/routing.json",
+    "status": "deprecated-transition-evidence",
+    "reason": "The inherited release rewrote third-party Skill bodies for agent neutrality and generalization. Current policy preserves third-party payloads unchanged and no longer treats those derivatives as current install or update authority.",
+    "skillCount": 19,
+    "fileCount": 40,
+    "manifestSha256": "ca3c87d51ab8215d020f241a280e2dcfa97806dba63c73282b2db21f5daaa587",
+    "skillIds": [
+      "skill.curated.ci-cd-and-automation",
+      "skill.curated.deprecation-and-migration",
+      "skill.curated.diagnose",
+      "skill.curated.grill-with-docs",
+      "skill.curated.handoff",
+      "skill.curated.improve-codebase-architecture",
+      "skill.curated.migrate-to-shoehorn",
+      "skill.curated.observability-and-instrumentation",
+      "skill.curated.obsidian-open-format-knowledge-files",
+      "skill.curated.performance-optimization",
+      "skill.curated.prototype",
+      "skill.curated.review",
+      "skill.curated.setup-project-skills",
+      "skill.curated.shipping-and-launch",
+      "skill.curated.tdd",
+      "skill.curated.to-issues",
+      "skill.curated.to-prd",
+      "skill.curated.triage",
+      "skill.curated.ubiquitous-language"
+    ],
+    "historicalEvidenceRetained": true,
+    "routingProjectionCurrentAuthority": false,
+    "consumerMutationAuthorized": false,
+    "sameNameLiveSkillAutoRemovalAuthorized": false
+  },
+  "thirdPartyPayloadPolicy": {
+    "ownership": "upstream",
+    "bodyTreatment": "exact-upstream-unchanged",
+    "allowedHarnessArtifacts": [
+      "source-and-revision-metadata",
+      "license-and-provenance-records",
+      "security-and-dependency-review",
+      "quality-overlap-and-maintenance-review",
+      "routing-and-conflict-metadata",
+      "recipes",
+      "host-adapters",
+      "repository-owned-wrappers",
+      "consumer-projection-and-rollback-evidence"
+    ],
+    "modifiedDerivativeRequiresSeparateIdentity": true
+  },
+  "operatingModes": {
+    "portfolioCuration": {
+      "requiresOneEndUserTask": false,
+      "requiredBindings": [
+        "coverage-objective-or-demand-taxonomy",
+        "candidate-and-source-boundary",
+        "account-and-data-boundary",
+        "inactive-acquisition-isolation",
+        "review-and-admission-criteria",
+        "authority-boundary",
+        "verification-surface",
+        "cohort-or-stop-rule",
+        "cleanup-and-rollback"
+      ],
+      "allowedActions": [
+        "discover",
+        "acquire-exact-revision-into-inactive-root",
+        "review",
+        "compare",
+        "reject",
+        "record-admission-decision",
+        "prepare-manager-transaction"
+      ],
+      "separatelyAuthorizedActions": [
+        "install",
+        "enable",
+        "connect-account",
+        "execute",
+        "promote",
+        "persistently-activate"
+      ]
+    },
+    "taskTimeActivation": {
+      "requiresBoundTaskAndGap": true,
+      "defaultState": "minimal-task-scoped",
+      "installationIsNotActivation": true,
+      "activationIsNotBehaviorOrValueEvidence": true
+    }
+  },
+  "managerBoundary": {
+    "currentOperationalAdapter": "CC Switch where suitable",
+    "portableProductDependency": false,
+    "defaultReviewedPoolState": "inactive-until-separately-authorized"
+  },
+  "selfAuthoredBoundary": {
+    "residualGapRequired": true,
+    "currentPriority": "not-before-candidate-and-composition-reuse"
+  }
+}

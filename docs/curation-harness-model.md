@@ -1,5 +1,12 @@
 # Curation Harness Model
 
+> Current authority override (2026-08-02): third-party Skill bodies remain
+> exact upstream. The inherited neutralized/generalized payload release in this
+> model is deprecated transition evidence. Current portfolio curation governs
+> metadata and inactive candidate review; manager installation and task-time
+> activation are separate. See
+> `registry/skill-portfolio-current-authority.json`.
+
 `agent-skills-curated` is a continuous curation harness for portable,
 agent-neutral Skills. It is the first terminal MVP in a broader resource system,
 not the whole upstream ecosystem, not a one-time collection task, and not a

@@ -1233,6 +1233,7 @@ REQUIRED_FILES = (
     "registry/mvp03-release-routing-execution.json",
     "registry/mvp06-lifecycle-feedback.json",
     "registry/admissions.json", "registry/routing.json", "registry/scenarios.json",
+    "registry/skill-portfolio-current-authority.json",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

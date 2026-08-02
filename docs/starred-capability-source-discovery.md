@@ -3,6 +3,11 @@
 Inspection date: 2026-06-24  
 Discovery surface: <https://github.com/yiheng8023?tab=stars>
 
+Current authority note: this dated discovery record does not authorize
+neutralization or adaptation. Third-party Skill bodies remain exact upstream;
+the inherited adapted 19-Skill release is deprecated transition evidence under
+`registry/skill-portfolio-current-authority.json`.
+
 This document records a user-curated discovery surface for future Skill and
 capability-source intake. It is not approval, not installation, not managed
 inventory, and not an execution path.
@@ -61,7 +66,7 @@ The goal is cross-agent capability sharing:
 | third-party skill source | Repository appears to contain reusable Skills, agents, commands, prompts, or workflows | candidate; must pass intake |
 | index / awesome list | Curated list of other projects | discovery index only |
 | agent runtime / harness | Tooling that may expose capabilities but is not directly a Skill source | capability baseline or adapter research |
-| methodology / standards | Behavioral or workflow guidance | reference or candidate for neutralized guidance |
+| methodology / standards | Behavioral or workflow guidance | reference or exact-source review candidate |
 | risk / exclusion | Source may raise license, ToS, leaked-prompt, proxy, credential, or maintenance concerns | reject or reference-only until reviewed |
 
 ## Initial Starred Source Triage
@@ -72,8 +77,8 @@ The following rows are initial triage only. They are intentionally conservative.
 | --- | --- | --- | --- |
 | `openai/skills` | official external baseline | baseline / reference | Official source for Codex capability comparison; do not vendor by default. |
 | `anthropics/skills` | official external baseline | baseline / reference | Already recorded as first official baseline instance. |
-| `addyosmani/agent-skills` | third-party skill source | partially adopted / continue candidate review | Existing approved subset is already curated; future revisions require fresh intake. |
-| `mattpocock/skills` | third-party skill source | partially adopted / continue candidate review | Existing approved subset is already curated; future revisions require fresh intake. |
+| `addyosmani/agent-skills` | third-party skill source | historical adapted subset deprecated / fresh candidate review | The old adapted subset is transition evidence only; any current candidate starts from an exact upstream revision. |
+| `mattpocock/skills` | third-party skill source | historical adapted subset deprecated / fresh candidate review | The old adapted subset is transition evidence only; any current candidate starts from an exact upstream revision. |
 | `kepano/obsidian-skills` | third-party skill source | candidate | Potential Obsidian workflow coverage; requires license, tool dependency, and portability review. |
 | `obra/superpowers` | methodology / skill framework | reference / candidate | Installed ecosystem already exposes Superpowers; future curated use must avoid duplicating runtime-owned capability. |
 | `alchaincyf/huashu-design` | third-party skill source | candidate | Design workflow candidate; requires license, asset, export, and agent-neutrality review. |
@@ -109,9 +114,10 @@ Stars are only discovery hints. A starred repository may become:
 - reference-only evidence;
 - rejected.
 
-No starred source may enter `skills/`, `release-manifest.json`, generated
-routing projections, or a live execution path until it has completed the
-normal intake process.
+No starred third-party body enters `skills/` or `release-manifest.json` under
+the current policy. Exact-upstream candidates may enter governed metadata and,
+only after review plus separate authority, a manager transaction. Discovery or
+review alone never enters a live execution path.
 
 ## Discovery Disposition Feedback
 
@@ -129,7 +135,8 @@ approval surface, not a release manifest, and not runtime inventory.
 1. Separate direct Skill sources from indexes and agent runtimes.
 2. For each direct Skill source, pin a revision and record license posture.
 3. Sample representative Skills for overlap, quality, security, portability,
-   and agent-neutrality.
+   source fidelity, and host compatibility without rewriting the payload.
 4. Prefer `covered` or `reference` when Codex native/runtime/plugin capability
    is already materially sufficient.
-5. Promote only proven gaps with cross-agent value into curated candidates.
+5. Admit only reviewed exact-upstream candidates; prove a residual gap before
+   authoring any repository-owned replacement or wrapper.

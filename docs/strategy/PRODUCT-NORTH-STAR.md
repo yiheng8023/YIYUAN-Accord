@@ -27,8 +27,9 @@ resilience, and long-term system health as AI increases execution speed.
 - durable shared domain language and decision continuity across lifecycle hops;
 - evidence-based branch, worktree, verification, rollback, and cleanup choices;
 - reusable cross-Agent contracts with honest host-specific adapters;
-- task-bound discovery when the current native and loaded ecosystem is
-  insufficient or stale, without turning discovery into automatic admission;
+- bounded portfolio-level curation for broad inactive candidate coverage, plus
+  task-bound discovery when the current native and loaded ecosystem is
+  insufficient or stale, without turning either into automatic activation;
 - native and external reuse before residual-gap implementation;
 - AI-era revalidation of classical engineering principles without blanket
   revival of legacy process or blanket dismissal of pre-AI experience.
@@ -117,7 +118,8 @@ hard-standard promotion, broad-population validity, and Skill necessity.
    runtimes must actuate and observe it.
 3. **Host adapters** — Codex, Claude Code, and future host-specific paths,
    Hooks, events, telemetry, thread APIs, and commands.
-4. **Capability ecosystem** — task-bound source discovery, revision pinning,
+4. **Capability ecosystem** — bounded portfolio-level curation or task-bound
+   source discovery, revision pinning,
    security,
    quality, superiority, overlap, redundancy, naming, permissions, and update
    review for Skills, MCPs, Plugins, Apps, Hooks, and future capability types.
@@ -126,12 +128,15 @@ hard-standard promotion, broad-population validity, and Skill necessity.
 
 The capability universe is dynamic. A current inventory is only a dated
 snapshot of what the host can see, not proof that the best suitable capability
-is already installed or loaded. `capability-router` should first use healthy
-current capability, then trigger targeted discovery when a bound task exposes
-an evidenced gap, current options are materially weaker or stale, or ecosystem
-drift is decision-relevant. Discovery does not itself authorize download,
-installation, account connection, execution, persistent enablement, or
-admission; those remain separately governed and verified.
+is already installed or loaded. `capability-router` must distinguish two
+modes. Task-time routing first uses healthy current capability and triggers
+targeted discovery for an evidenced gap or material drift. Portfolio-level
+curation may discover and review a bounded inactive cohort without one end-user
+task when its coverage objective, sources, isolation, authority, admission
+criteria, verification, cleanup, and stop rule are bound. Neither mode by
+itself authorizes installation, enablement, account connection, execution, or
+persistent activation. Third-party payloads remain exact upstream; portability
+differences belong in metadata, Recipes, adapters, or owned wrappers.
 
 The lifecycle chain also has distinct responsibilities: `AGENTS.md` supplies
 portable constraints, Skills produce bounded semantic desired state, Hooks may
