@@ -1241,6 +1241,8 @@ REQUIRED_FILES = (
     "registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json",
     "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json",
     "registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json",
+    "registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json",
+    "tests/test_skill_portfolio_phuryn_pm_representative_adjudication.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

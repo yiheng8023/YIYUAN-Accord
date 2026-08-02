@@ -503,6 +503,9 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
   这 13 个派生体的管理器减法事件、保留备份、事后状态与清理边界；
 - `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json` 及其
   管理器注册事件：精确五项审查、三项暂缓安装候选与不安装的来源发现；
+- `registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json`：
+  对 68 项 PM 目录中 13 项代表样本进行精确 Git 对象审查，形成三项待对照候选及明确的
+  依赖、重叠、偏好模板和高风险领域暂缓裁决；未注册来源，也未安装；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 

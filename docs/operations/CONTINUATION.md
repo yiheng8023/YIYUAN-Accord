@@ -3338,3 +3338,37 @@ portfolio installation authority into transient host activation. The records
 are `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json`
 and
 `registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json`.
+
+## 2026-08-03 Phuryn PM representative Skill adjudication checkpoint
+
+The next portfolio batch reviewed exact upstream `phuryn/pm-skills` at commit
+`18468a95b427e70e258b51389796367c6f684e7d` and tree
+`514548cbf646ce42fb9ea9a8cc901f05373ab2ff`. The exact-revision clone acquired
+the complete Git object graph, but Windows denied creation of the detached
+checkout's `.git/index.lock`. The pinned commit, tree, license, and selected
+payload bytes were therefore verified and read directly from Git objects. This
+is a checkout-materialization limitation, not candidate failure; no third-party
+code was executed and no payload was modified or vendored.
+
+The catalog exposes 68 Skill paths across nine plugin families, so the whole
+marketplace remains an invalid admission unit. A 13-Skill representative slice
+covered low-dependency methods plus dependency, overlap, opinionated-template,
+and high-stakes counterexamples. `strategy-red-team`, `interview-script`, and
+`opportunity-solution-tree` advance only to default-disabled, behavior-comparison
+candidates. `intended-vs-implemented` remains a composition candidate because
+it depends on `shipping-artifacts`; the latter assumes plugin commands and a
+fixed `documentation/` layout that a selective Skill install would not supply.
+`prioritize-assumptions` also lacks its declared Skill dependency.
+
+`pre-mortem`, `create-prd`, `test-scenarios`, and `user-stories` remain
+reference-only because of overlap or opinionated side effects and templates.
+The third-party `market-sizing` route is held behind the currently visible
+OpenAI-curated route of the same capability name; visibility is only overlap
+metadata, not behavior evidence. `draft-nda` and `privacy-policy` are held for
+current authoritative legal and domain review. No CC Switch source was
+registered, and no candidate was installed, enabled, exposed, invoked, or
+value-proved. The governed record is
+`registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json`.
+The exact temporary review root initially resisted recursive deletion under its
+clone-created ACL. Full control was granted only on that validated `C:\tmp`
+root, after which it was removed; repository `.tmp` remains absent.

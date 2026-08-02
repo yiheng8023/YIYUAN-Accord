@@ -683,6 +683,11 @@ consumer must probe its currently visible, authorized capability inventory.
 - `registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json` and
   its manager-registration event: exact five-Skill review, three held-back
   install candidates, and repository discovery without installation.
+- `registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json`:
+  exact-object review of a representative 13-Skill slice from the 68-Skill PM
+  catalog, with three comparison candidates and explicit dependency, overlap,
+  opinionated-template, and high-stakes holds; no source registration or
+  installation occurred.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.
