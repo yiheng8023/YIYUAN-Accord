@@ -26,6 +26,7 @@ head so the user can focus on creation, decisions, and bounded authorization.
   lightweight comparisons continue in parallel; self-author only after reuse
   and composition leave a reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
+  [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and
   [continuation](docs/operations/CONTINUATION.md).
 
@@ -669,6 +670,16 @@ consumer must probe its currently visible, authorized capability inventory.
   metadata and the 105-case structured policy corpus.
 - `registry/skill-portfolio-current-authority.json`: current Skill
   payload and portfolio/activation authority.
+- `registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json`:
+  bounded current source screening and the nine-source exact-acquisition cohort.
+- `registry/skill-portfolio-exact-acquisition-static-preflight-2026-08-02.json`:
+  exact clean acquisition, static dependency signals, and collision evidence.
+- `registry/legacy-adapted-live-lineage-reconciliation-2026-08-02.json`:
+  the 13 byte-exact deprecated live derivatives separated from six same-name
+  Matt upstream Skills.
+- `registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json`:
+  the manager-backed subtraction event, retained backups, post-state, and
+  cleanup boundary for those 13 derivatives.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.

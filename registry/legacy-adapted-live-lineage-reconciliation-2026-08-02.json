@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "id": "legacy-adapted-live-lineage-reconciliation-2026-08-02",
+  "date": "2026-08-02",
+  "status": "lineage-disambiguated-removal-preview-eligible",
+  "purpose": "Distinguish byte-exact live copies of the deprecated adapted release from independent same-name exact-upstream Skills before any CC Switch removal.",
+  "deprecatedReleaseSkillNames": [
+    "ci-cd-and-automation",
+    "deprecation-and-migration",
+    "diagnose",
+    "grill-with-docs",
+    "handoff",
+    "improve-codebase-architecture",
+    "migrate-to-shoehorn",
+    "observability-and-instrumentation",
+    "obsidian-open-format-knowledge-files",
+    "performance-optimization",
+    "prototype",
+    "review",
+    "setup-project-skills",
+    "shipping-and-launch",
+    "tdd",
+    "to-issues",
+    "to-prd",
+    "triage",
+    "ubiquitous-language"
+  ],
+  "comparisonMethod": {
+    "legacyRoot": "C:/Projects/agent-autonomy-harness/skills",
+    "liveCcRoot": "C:/Users/15521/.cc-switch/skills",
+    "fileIdentity": "relative-path plus SHA-256",
+    "treeIdentity": "sorted relative-path NUL byte-count NUL SHA-256 records joined by LF then SHA-256",
+    "databaseReadMode": "sqlite-uri-mode-ro",
+    "sameNameAloneSufficient": false
+  },
+  "liveByteExactDeprecatedDerivatives": [
+    {"name": "ci-cd-and-automation", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 11470, "treeManifestSha256": "b99b47b56d6e64723953296bf89bf4988a7efe067bd99c5335454188b285d944", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "deprecation-and-migration", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 12510, "treeManifestSha256": "808f8b30708ad2b9afe201ae7764bd1aa97bbe8502a0f06ad35b57fbb1aa8e35", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "diagnose", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 2, "bytes": 8328, "treeManifestSha256": "58d74dc854790dc503e3318d7aa1409a250e81e3f46fd8846acbb4066591cf71", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "migrate-to-shoehorn", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 3377, "treeManifestSha256": "940502ba97968befc9a4736d957fe2765876320ed489e1db5f46efbab7c6e64a", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "observability-and-instrumentation", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 11761, "treeManifestSha256": "fdd4e946773fba0864055a74298dec28b486b2e535d0a7d70d615f5eaa38c1e6", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "obsidian-open-format-knowledge-files", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 4394, "treeManifestSha256": "b58dfbcaff782712a1afb5df371226818ac4f91e592aa5d2ac4ffc52bb924e51", "agentsProjectionKind": "junction", "codexProjectionKind": "junction"},
+    {"name": "performance-optimization", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 13282, "treeManifestSha256": "90f75e956af4c15cd6a98658e81ee8eaa5f69e2d36e728e8a6ad4094c76b3008", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "review", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 6406, "treeManifestSha256": "fb3f74d99d729b617fbd009a589a3adcc9cb68aa44194b919b57472cd2f5c6e0", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "setup-project-skills", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 6, "bytes": 13532, "treeManifestSha256": "67038103dc71c8e488ab5f89f4308d298951c8d0071420b0f3644036e565e30f", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "shipping-and-launch", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 11464, "treeManifestSha256": "71cabfbce6288267c1b1821fcae556af0f639354e4feb48b45da06be5765c04a", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "to-issues", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 4082, "treeManifestSha256": "0aea7d938d03b34ac6abbabeaa736f885bd17569aacd0f033364497ecca17371", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "to-prd", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 3643, "treeManifestSha256": "310e2734b060b94c2cb8b7f26f268bb23e27d7ceeb4115759dca840982f5342b", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"},
+    {"name": "ubiquitous-language", "managerSource": "local-or-unattributed", "legacyTreeExact": true, "fileCount": 1, "bytes": 4890, "treeManifestSha256": "d6004b0692a626ca3564ff99907a40dbe7f389b0095c325bc64e7e15ccf3f478", "agentsProjectionKind": "symlink", "codexProjectionKind": "symlink"}
+  ],
+  "sameNameIndependentUpstreams": [
+    {"name": "grill-with-docs", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 3, "liveFileCount": 2, "diffRows": 5, "disposition": "retain-as-independent-upstream-object"},
+    {"name": "handoff", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 1, "liveFileCount": 2, "diffRows": 3, "disposition": "retain-as-independent-upstream-object"},
+    {"name": "improve-codebase-architecture", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 5, "liveFileCount": 3, "diffRows": 8, "disposition": "retain-as-independent-upstream-object"},
+    {"name": "prototype", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 3, "liveFileCount": 4, "diffRows": 7, "disposition": "retain-as-independent-upstream-object"},
+    {"name": "tdd", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 6, "liveFileCount": 4, "diffRows": 10, "disposition": "retain-as-independent-upstream-object"},
+    {"name": "triage", "managerSource": "mattpocock/skills", "legacyTreeExact": false, "legacyFileCount": 3, "liveFileCount": 4, "diffRows": 7, "disposition": "retain-as-independent-upstream-object"}
+  ],
+  "dependencyRepair": {
+    "problem": "The current capability-router sequence example named the deprecated adapted diagnose identity.",
+    "repair": "Use a generic diagnostic capability route bound at task time to a current native, official, or reviewed capability.",
+    "consumerRepository": "https://github.com/yiheng8023/codex-user-config",
+    "consumerCommit": "5b49c53b4dc220b6b10f5caf29d3aef8a7841327",
+    "consumerHeadEqualsOriginMain": true,
+    "consumerVerifierPassed": true,
+    "liveProjectionAppliedWithoutHookOrCuratedInstall": true,
+    "deprecatedDiagnoseIdentityReferencedByLiveConsumerProjection": false
+  },
+  "nextTransactionBoundary": {
+    "eligibleCohort": "liveByteExactDeprecatedDerivatives",
+    "cohortCount": 13,
+    "managerCommand": "uninstall_skill_unified",
+    "canaryRequired": true,
+    "backupAndReverseOrderRestoreRequired": true,
+    "stopOnFirstFailure": true,
+    "verifyDatabaseRowCcTreeAgentsProjectionCodexProjectionAfterEachItem": true,
+    "removeBrokenCommonAgentsLinksOnlyAfterFullManagerSuccess": true,
+    "sameNameIndependentUpstreamsExcluded": true,
+    "otherLocalOrUnattributedRowsExcluded": true
+  },
+  "authorityBoundary": {
+    "lineageReadAuthorized": true,
+    "consumerDependencyRepairAuthorized": true,
+    "removalPreviewEligible": true,
+    "removalExecuted": false,
+    "directDatabaseWriteAuthorized": false,
+    "unrelatedLocalSkillMutationAuthorized": false
+  },
+  "executionCounters": {
+    "legacySkillNamesCompared": 19,
+    "byteExactDeprecatedLiveTrees": 13,
+    "independentSameNameUpstreams": 6,
+    "consumerFilesChanged": 3,
+    "ccSwitchMutations": 0,
+    "modelRequests": 0
+  },
+  "claimBoundary": {
+    "allLocalRowsClassified": false,
+    "removalExecuted": false,
+    "postRemovalHostExposureProved": false,
+    "replacementAdmissionProved": false,
+    "portfolioValueProved": false
+  }
+}

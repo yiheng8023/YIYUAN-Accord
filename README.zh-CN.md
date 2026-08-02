@@ -21,6 +21,7 @@
   启用保持最小、按需。真实任务的 Harness 与轻量路径对照并行推进；复用和组合留下可
   复现残余缺口后才自研。
 - **证据入口：** [当前计划](docs/strategy/RESEARCH-AND-POC-PLAN.md)、
+  [非激活 Skill 来源池](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md)、
   [场景矩阵](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md)与
   [接续记录](docs/operations/CONTINUATION.md)。
 
@@ -492,6 +493,14 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
   结构化策略语料；
 - `registry/skill-portfolio-current-authority.json`：当前 Skill payload 与
   “组合建设/任务启用”权威；
+- `registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json`：
+  当前有界来源筛选与 9 个来源的精确下载审查批次；
+- `registry/skill-portfolio-exact-acquisition-static-preflight-2026-08-02.json`：
+  精确干净下载、静态依赖信号与冲突证据；
+- `registry/legacy-adapted-live-lineage-reconciliation-2026-08-02.json`：
+  将 13 个逐文件一致的弃用派生体与 6 个同名 Matt 上游 Skill 分离；
+- `registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json`：
+  这 13 个派生体的管理器减法事件、保留备份、事后状态与清理边界；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 

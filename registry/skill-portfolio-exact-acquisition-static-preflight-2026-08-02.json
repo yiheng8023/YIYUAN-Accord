@@ -1,0 +1,178 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-exact-acquisition-static-preflight-2026-08-02",
+  "date": "2026-08-02",
+  "observedAt": "2026-08-02T20:43:00+08:00",
+  "status": "exact-acquisition-complete-static-review-open",
+  "purpose": "Prove exact, clean, non-active acquisition and bounded static screening for the nine-source cohort without executing third-party payloads or promoting admission claims.",
+  "acquisitionRoot": {
+    "path": "C:/Users/15521/AppData/Local/Temp/aah-skill-source-review-20260802",
+    "insideAgentDiscoveryRoot": false,
+    "insideCcSwitchSkillRoot": false,
+    "persistentPayloadStore": false,
+    "cleanupRequiredAfterEvidenceFreeze": true
+  },
+  "transportBatches": [
+    {
+      "sources": ["github:anthropics/skills", "github:addyosmani/agent-skills", "github:JimLiu/baoyu-skills"],
+      "result": "completed",
+      "candidateFailureCount": 0,
+      "postTimeoutIndividualIntegrityProved": false
+    },
+    {
+      "sources": ["github:phuryn/pm-skills", "github:kepano/obsidian-skills", "github:K-Dense-AI/scientific-agent-skills"],
+      "result": "observer-timeout",
+      "candidateFailureCount": 0,
+      "postTimeoutIndividualIntegrityProved": true,
+      "note": "The enclosing parallel observer timed out. Each repository subsequently had the pinned HEAD, a clean worktree, the expected Skill count, and no live Git process."
+    },
+    {
+      "sources": ["github:coreyhaines31/marketingskills", "github:mvanhorn/last30days-skill", "github:OthmanAdi/planning-with-files"],
+      "result": "observer-timeout",
+      "candidateFailureCount": 0,
+      "postTimeoutIndividualIntegrityProved": true,
+      "note": "The enclosing parallel observer timed out. Each repository subsequently had the pinned HEAD, a clean worktree, the expected Skill count, and no live Git process."
+    }
+  ],
+  "sources": [
+    {
+      "id": "github:anthropics/skills",
+      "commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+      "tree": "a87780349fa9dc5c65c9a11dcc7151ec297f21a1",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 18, "uniqueDeclaredNames": 18, "uniqueSkillMdHashes": 18, "fileCount": 411, "bytes": 10741710, "scriptLikeFileCount": 73, "manifestCount": 2, "licenseArtifactCount": 16, "skillsWithSiblingLicense": 16},
+      "staticSignals": {"skillsMentioningInstallTools": 9, "skillsMentioningCredentials": 5, "skillsMentioningUrls": 6, "skillsMentioningMcp": 3, "scriptBearingSkillPaths": 10},
+      "reviewNotes": ["No repository-root license artifact was observed; 16 of 18 Skill paths have sibling license artifacts.", "doc-coauthoring and the template path require separate license treatment.", "pdf and skill-creator have exact-name current-runtime collisions; docx, pptx, and xlsx have strong runtime-equivalent overlap."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:addyosmani/agent-skills",
+      "commit": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "tree": "d0d903cfb69e783b05b45c0773ad8a2ec3916a3e",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 24, "uniqueDeclaredNames": 24, "uniqueSkillMdHashes": 24, "fileCount": 176, "bytes": 748380, "scriptLikeFileCount": 33, "manifestCount": 1, "licenseArtifactCount": 1, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 14, "skillsMentioningCredentials": 15, "skillsMentioningUrls": 4, "skillsMentioningMcp": 5, "scriptBearingSkillPaths": 1},
+      "reviewNotes": ["Five names collide with current CC Switch local rows and are priority lineage-replacement candidates, not additive installs.", "The catalog contains several competing development-process philosophies that require routing and conflict review rather than whole-suite activation."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:JimLiu/baoyu-skills",
+      "commit": "6b7a2e417500561a5ecdd0b168332f4142584617",
+      "tree": "22d34a6f2c157ea249a2e3d0c04b17cd023289b9",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 22, "uniqueDeclaredNames": 22, "uniqueSkillMdHashes": 22, "fileCount": 920, "bytes": 32946184, "scriptLikeFileCount": 300, "manifestCount": 16, "licenseArtifactCount": 2, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 15, "skillsMentioningCredentials": 16, "skillsMentioningUrls": 21, "skillsMentioningMcp": 1, "scriptBearingSkillPaths": 16},
+      "reviewNotes": ["Most Skills cross external sites, tools, credentials, or publishing surfaces.", "Danger-labelled and publishing Skills require higher-risk task binding and must not enter a default-enabled cohort."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:phuryn/pm-skills",
+      "commit": "18468a95b427e70e258b51389796367c6f684e7d",
+      "tree": "514548cbf646ce42fb9ea9a8cc901f05373ab2ff",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 68, "uniqueDeclaredNames": 68, "uniqueSkillMdHashes": 68, "fileCount": 147, "bytes": 6240946, "scriptLikeFileCount": 3, "manifestCount": 0, "licenseArtifactCount": 1, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 0, "skillsMentioningCredentials": 2, "skillsMentioningUrls": 56, "skillsMentioningMcp": 0, "scriptBearingSkillPaths": 0},
+      "reviewNotes": ["The suite is mostly instruction and reference material with broad product-lifecycle coverage.", "High URL prevalence and 68-way overlap require representative selection; the whole marketplace is not an admission unit."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:kepano/obsidian-skills",
+      "commit": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "tree": "49d7c3b7f6aa4d266631c886284415d111070941",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 5, "uniqueDeclaredNames": 5, "uniqueSkillMdHashes": 5, "fileCount": 14, "bytes": 53865, "scriptLikeFileCount": 0, "manifestCount": 0, "licenseArtifactCount": 1, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 1, "skillsMentioningCredentials": 1, "skillsMentioningUrls": 4, "skillsMentioningMcp": 0, "scriptBearingSkillPaths": 0},
+      "reviewNotes": ["Smallest complete catalog and no executable file surface.", "Compare exact upstream capabilities against the two current local Obsidian Skills before replacement, coexistence, or subtraction."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:K-Dense-AI/scientific-agent-skills",
+      "commit": "ad21a3868923628330734375dddbf7b86ea84222",
+      "tree": "30fbe6249859378466dde41fe13200ad3766c142",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 158, "uniqueDeclaredNames": 158, "uniqueSkillMdHashes": 158, "fileCount": 2383, "bytes": 271853718, "scriptLikeFileCount": 668, "manifestCount": 3, "licenseArtifactCount": 6, "skillsWithSiblingLicense": 5},
+      "staticSignals": {"skillsMentioningInstallTools": 125, "skillsMentioningCredentials": 82, "skillsMentioningUrls": 116, "skillsMentioningMcp": 9, "scriptBearingSkillPaths": 101},
+      "reviewNotes": ["Large specialist catalog with substantial code, dependency, data-source, and credential surface.", "Repository MIT metadata does not replace per-dependency or per-service review.", "docx, pdf, pptx, and xlsx collide with Anthropic names and overlap current runtime capabilities."],
+      "disposition": "representative-skill-review-only"
+    },
+    {
+      "id": "github:coreyhaines31/marketingskills",
+      "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "tree": "795fbd548840b43ee3e5a69cbfdda280a22c0422",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 49, "uniqueDeclaredNames": 49, "uniqueSkillMdHashes": 49, "fileCount": 429, "bytes": 3447047, "scriptLikeFileCount": 67, "manifestCount": 0, "licenseArtifactCount": 1, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 5, "skillsMentioningCredentials": 12, "skillsMentioningUrls": 7, "skillsMentioningMcp": 11, "scriptBearingSkillPaths": 0},
+      "reviewNotes": ["Broad non-engineering demand coverage with semantic overlap against product, analytics, research, and creative official plugins.", "marketing-ideas collides with the PM source and needs a one-route or composition decision."],
+      "disposition": "skill-level-review-required"
+    },
+    {
+      "id": "github:mvanhorn/last30days-skill",
+      "commit": "52f53312ff2f272e16bbc1785e1c04f9d9c19b31",
+      "tree": "efedede937eb771d144f4416e8a8da108a9c6e8e",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 1, "uniqueDeclaredNames": 1, "uniqueSkillMdHashes": 1, "fileCount": 442, "bytes": 31516702, "scriptLikeFileCount": 305, "manifestCount": 4, "licenseArtifactCount": 2, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 1, "skillsMentioningCredentials": 1, "skillsMentioningUrls": 1, "skillsMentioningMcp": 1, "scriptBearingSkillPaths": 1},
+      "reviewNotes": ["One Skill carries a disproportionately large code and external-data surface.", "Do not mistake one Skill identity for low lifecycle cost; credentials, scraping, citations, service rules, and supply chain require separate review."],
+      "disposition": "deep-review-before-admission"
+    },
+    {
+      "id": "github:OthmanAdi/planning-with-files",
+      "commit": "0e2b00ce4e8d1789cbcb16a41f7c9510b212b942",
+      "tree": "3e0fcc7dbe1e7f12ca92653aff87268a423daa49",
+      "headMatchesPin": true,
+      "worktreeStatusRows": 0,
+      "inventory": {"skillMdPathCount": 18, "uniqueDeclaredNames": 7, "uniqueSkillMdHashes": 18, "fileCount": 535, "bytes": 13701298, "scriptLikeFileCount": 324, "manifestCount": 3, "licenseArtifactCount": 1, "skillsWithSiblingLicense": 0},
+      "staticSignals": {"skillsMentioningInstallTools": 3, "skillsMentioningCredentials": 2, "skillsMentioningUrls": 1, "skillsMentioningMcp": 0, "scriptBearingSkillPaths": 18},
+      "reviewNotes": ["Eighteen Skill paths include host projections and six language variants rather than eighteen independent capabilities.", "Per-turn injection, Hook-like support, persistence, and completion gates overlap the Harness continuity and authority chain; review mechanism and host adapter separately from the Skill text."],
+      "disposition": "mechanism-and-host-variant-review-required"
+    }
+  ],
+  "metricLimits": [
+    "Keyword counts are screening signals, not proof of behavior, security risk, dependency installation, or data access.",
+    "Script-bearing counts may repeat host-projected variants.",
+    "Repository license artifacts do not prove every dependency, service, dataset, or embedded asset is redistributable or suitable."
+  ],
+  "nameCollisions": {
+    "crossSource": ["docx", "marketing-ideas", "pdf", "pptx", "xlsx"],
+    "currentCcSwitch": ["ci-cd-and-automation", "deprecation-and-migration", "observability-and-instrumentation", "pdf", "performance-optimization", "shipping-and-launch"],
+    "currentRuntimeExact": ["pdf", "skill-creator"],
+    "semanticOverlapReviewOpen": ["Anthropic and K-Dense office-document Skills versus primary-runtime document plugins", "Kepano Obsidian Skills versus current local Obsidian Skills", "PM and marketing catalogs versus official product, analytics, research, and creative plugins"]
+  },
+  "nextReviewOrder": [
+    "Reconcile the thirteen live local rows that are byte-exact copies of the deprecated adapted release.",
+    "Review Addy exact-upstream replacements for the five same-name local adapted rows.",
+    "Review the five small Kepano Skills against current local Obsidian coverage.",
+    "Select representative low-dependency PM and marketing Skills by uncovered demand cell rather than catalog size.",
+    "Treat Anthropic document and Skill-authoring items as native/runtime overlap comparisons before any CC install.",
+    "Keep K-Dense, Baoyu publishing, last30days, and planning reinjection paths behind deeper dependency, permission, and lifecycle gates."
+  ],
+  "executionCounters": {
+    "sourceRepositoriesAcquired": 9,
+    "skillMdPathsObserved": 363,
+    "thirdPartyScriptExecutions": 0,
+    "modelRequests": 0,
+    "ccSwitchMutations": 0,
+    "activeSkillRootWrites": 0,
+    "accountConnections": 0
+  },
+  "claimBoundary": {
+    "skillLevelLicenseComplete": false,
+    "dependencyComplete": false,
+    "securityReviewComplete": false,
+    "admissionProved": false,
+    "installationProved": false,
+    "enablementProved": false,
+    "hostExposureProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostValueProved": false
+  }
+}

@@ -3215,3 +3215,90 @@ The user supplied Matt Pocock's exact X locator
 current retrieval surface returned no post body, so exact wording and thread
 context remain pending independent capture; do not promote the interpretation
 into a general rejection of specs.
+
+## 2026-08-02 inactive Skill source pool and consumer projection checkpoint
+
+The paired `codex-user-config` correction is no longer branch-only. Main now
+contains the topology cleanup commit `461b63b` and merge commit
+`dabfadb221a2c91facd31d7291b1207651232425`; local `HEAD` equals
+`origin/main`. The protected research-intake `.tmp` root remains untracked and
+was not staged, deleted, or rewritten.
+
+The consumer base projection was first materialized in an isolated temporary
+home. Against the live user configuration, only the global `AGENTS.md` and two
+copies of `capability-router` differed; both copies of `intent-contract` and
+`closure-contract` were already byte-equivalent. The live projection was then
+applied without `--enable-hook` and without `--install-curated-skills`. All
+seven projected targets matched the isolated result, no managed Hook reference
+was found, and consumer `scripts/verify.py` passed. The isolated projection and
+short-lived rollback backup were then removed by exact path.
+
+Current CC Switch 3.19.1 read-only database evidence records 55 Skill rows, all
+55 enabled for Codex and Claude: 22 source-attributed Matt rows and 33 local or
+unattributed rows. This is not evidence that all 55 should remain, that all 33
+are old derivatives, or that any row has host behavior or value. The old
+19-Skill adapted release can only be reconciled by source lineage, exact
+revision, payload digest, and manager-row identity; name equality is
+insufficient.
+
+The bounded source pool at
+[`skill-portfolio-inactive-source-candidate-pool-2026-08-02.json`](../../registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json)
+freezes 22 current GitHub source identities and revisions. Nine payload catalogs
+advance to exact acquisition in a non-active review root; six large or mixed
+sources remain discovery indexes, three whole systems remain architecture or
+manager inputs, three current official/plugin routes are not duplicated, and
+Matt receives a separate installed-delta review. No candidate payload has yet
+been admitted, installed, enabled, executed, or value-proved.
+
+All nine exact revisions were acquired into one non-active temporary review
+root and individually verified at the pinned commit with a clean worktree. Two
+parallel observer calls timed out after the underlying checkouts had completed;
+the nine individual integrity checks and zero live Git processes distinguish
+observer timeout from candidate failure. No third-party script, model request,
+account connection, active Skill-root write, or CC Switch mutation occurred.
+
+Static screening observed 363 `SKILL.md` paths, five cross-source exact-name
+collisions, six exact-name collisions with current CC rows, and two exact-name
+current-runtime collisions. These are routing and review inputs, not risk or
+value verdicts. Large K-Dense, Baoyu, last30days, and planning reinjection
+surfaces remain behind deeper dependency and permission review.
+
+The old 19/live-55 lineage ambiguity is closed at the byte level. Thirteen
+local or unattributed CC trees match the deprecated adapted release exactly;
+six same-name entries are source-attributed Matt trees and differ. The latter
+are excluded from removal. The only remaining external dependency was a
+hard-coded `diagnose` identity in the first-party router example. It was
+replaced by a task-bound generic diagnostic-capability route, validated,
+projected live without Hook or curated installation, committed, and pushed as
+`5b49c53b4dc220b6b10f5caf29d3aef8a7841327`; consumer `HEAD` equals
+`origin/main`. No CC row or CC payload was changed by that repair.
+
+## 2026-08-02 legacy adapted thirteen-Skill manager removal event checkpoint
+
+The byte-level lineage result is now reflected in live CC Switch state. The
+user-authorized transaction used CC Switch 3.19.1's own
+`uninstall_skill_unified` Tauri command through a temporary localhost WebView2
+bridge. `local:review` was the canary. Its database row, CC source tree, and
+Claude/Codex projections disappeared only after the manager created backup
+`20260802_145032_review`; the remaining twelve were then processed
+sequentially with a stop-on-first-failure check after every item. No direct
+database write, candidate body execution, model request, account connection,
+or replacement installation occurred.
+
+The final database contains 42 Skills: 22 source-attributed Matt rows and 20
+local or unattributed rows, all still enabled for Claude and Codex. All 13
+deprecated derivative rows and their CC, common, Claude, and Codex paths are
+absent. The six same-name Matt upstream Skills and the three first-party
+control Skills remain present. The common `~/.agents/skills` root remains with
+42 entries, and a complete link scan across common, Claude, and Codex roots
+found zero broken links. Both Trae-owned roots remain outside the transaction.
+
+All 13 new manager backups are present inside the manager's current 20-backup
+retention set. After post-state verification, the temporary bridge, localhost
+debug listener, official-source review checkout, and external recovery ZIP and
+manifest were removed by exact path; CC Switch was restarted normally without
+the debug listener. The governed record is
+`registry/cc-switch-legacy-adapted-thirteen-removal-event-2026-08-02.json`.
+This proves the bounded manager subtraction and observed post-state only. It
+does not prove live restore behavior, host reload, remaining portfolio value,
+replacement admission, task-time invocation, or cross-host value.
