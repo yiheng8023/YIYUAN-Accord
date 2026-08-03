@@ -20,12 +20,12 @@ head so the user can focus on creation, decisions, and bounded authorization.
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
 - **Current action:** the bounded source gates and seventeen-candidate demand
-  map are frozen. The first five source-free effect oracles—decision challenge,
-  engineering lifecycle, product discovery, marketing writing, and customer
-  research—are calibrated; internal communications is next. Payload
-  installation, execution, and task-time activation remain separate and
-  minimal; self-author only after reuse and composition leave a reproducible
-  residual gap.
+  map are frozen. The first six source-free effect oracles—decision challenge,
+  engineering lifecycle, product discovery, marketing writing, customer
+  research, and internal communications—are calibrated; visual method is next.
+  Payload installation, execution, and task-time activation remain separate
+  and minimal; self-author only after reuse and composition leave a
+  reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and

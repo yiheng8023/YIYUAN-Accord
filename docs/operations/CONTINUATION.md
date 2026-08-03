@@ -3871,3 +3871,25 @@ remain false. The governed protocol is
 `registry/skill-portfolio-customer-research-zero-model-protocol-2026-08-03.json`.
 Continue next with internal communications after a fresh repository truth
 check.
+
+## 2026-08-03 internal-communications zero-model effect-oracle checkpoint
+
+The sixth mapped effect group now has one source-free incremental packet over
+the existing access/communications baseline and oracle. Five single-fault
+cases cover audience-fit loss, carrier-fit loss, source-trace omission,
+account/data-boundary loss, and send/publication-authority transfer. The parent
+scenario was not copied or re-executed.
+
+The protocol binds the exact official-upstream `internal-comms` identity and a
+static five-dimension eligibility set. Official status remains metadata, not
+behavior, value, vendoring, installation, account/data, send, or publication
+authority. Future attribution remains native/current first followed by the one
+candidate; composition is ineligible.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, organizational account/data access, message delivery, publication,
+and external writes are zero. Communication effectiveness, current candidate
+behavior/value, audience/carrier fit, live exposure, residual self-authored
+need, and hard-standard eligibility remain false. The governed protocol is
+`registry/skill-portfolio-internal-communications-zero-model-protocol-2026-08-03.json`.
+Continue next with visual method after a fresh repository truth check.

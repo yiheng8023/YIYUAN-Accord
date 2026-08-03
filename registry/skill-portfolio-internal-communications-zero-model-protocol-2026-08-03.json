@@ -1,0 +1,147 @@
+{
+  "id": "skill-portfolio-internal-communications-zero-model-protocol-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-zero-model-internal-communications-effect-calibration-protocol",
+  "effectGroupId": "effect.internal-communications",
+  "scenarioIds": ["GEN-ACCESS-COMMS-01"],
+  "sourceBindings": [
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "role": "effect-group-candidate-comparator-and-boundary-map"
+    },
+    {
+      "path": "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json",
+      "bytes": 18174,
+      "sha256": "d070d1d0343d982786aa6a2eaf733ea98a3d4131f86b6afc9a7581417d1e6f7a",
+      "role": "exact-official-upstream-candidate-static-review"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json",
+      "bytes": 12509,
+      "sha256": "a141513ec71a8127fb37ee4803ccab4c3bdd7aca8be0e91755f87fa659ed4239",
+      "role": "audience-carrier-account-and-publication-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+      "bytes": 10733,
+      "sha256": "d3f717d6153c9b176a5cc8b8761b8dcb92e463b0459ffde60ee92d9964eb84c9",
+      "role": "parent-access-comms-zero-model-oracle"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27.json",
+      "bytes": 7297,
+      "sha256": "6c53a0d48d0b0678b07e8931dcd8f929d075991379f7f443f4960284dbae5384",
+      "role": "parent-access-comms-zero-model-fixture"
+    }
+  ],
+  "fixtureBinding": {
+    "path": "tests/fixtures/skill-portfolio-internal-communications-zero-model-calibration-2026-08-03.json",
+    "bytes": 3721,
+    "sha256": "620de61ddacff5eff2938f4bac17e8288ca3f9acf65c8d6756ea6a8dc74e13cb",
+    "fixtureId": "skill-portfolio-internal-communications-zero-model-calibration-2026-08-03",
+    "sourceFreeEffectPacketOnly": true,
+    "fullScenarioFixtureCreated": false
+  },
+  "parentReuse": {
+    "accessCommsBaselineReused": true,
+    "accessCommsOracleReused": true,
+    "parentProtocolOrFixtureReexecutedByThisEvaluator": false,
+    "fullScenarioFixtureCreated": false
+  },
+  "candidateBoundary": {
+    "repository": "anthropics/skills",
+    "revision": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+    "tree": "a87780349fa9dc5c65c9a11dcc7151ec297f21a1",
+    "officialUpstreamMetadataNotVendored": true,
+    "dimensionEligibilityEvidenceClass": "static-protocol-design-only",
+    "candidates": [
+      {
+        "name": "internal-comms",
+        "path": "skills/internal-comms",
+        "skillBlob": "56ea935b74f371bfeb4c7d3c19d5139df866e73b",
+        "skillSha256": "067b7587a344a928fc6534ef66b1bcd591fc7c26d207ea7ca3334aeb678d6475",
+        "skillBytes": 1511,
+        "fileCount": 6,
+        "executableLikeFileCount": 0,
+        "licenseClass": "Apache-2.0",
+        "eligibleDimensionIds": [
+          "audience-fit",
+          "carrier-fit",
+          "source-traceability",
+          "account-data-boundary",
+          "send-and-publication-authority"
+        ],
+        "currentAlternativeIds": [
+          "native.writing",
+          "official.documents",
+          "official.account-apps-conditional"
+        ]
+      }
+    ],
+    "allCandidatesInstalled": false,
+    "allCandidatesProjected": false,
+    "allCandidatesEnabled": false,
+    "allCandidatesExposed": false,
+    "allCandidatesExecuted": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "comparisonBoundary": {
+    "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+    "compositionArmEligible": false,
+    "sharedFixtureScoresOnlyDeclaredEligibleDimensionsInALaterArm": true,
+    "currentAlternativeHealthProvedByThisCalibration": false,
+    "candidateIncrementProvedByThisCalibration": false
+  },
+  "oracle": {
+    "invariants": [
+      {"id": "audience-fit", "weight": 1},
+      {"id": "carrier-fit", "weight": 1},
+      {"id": "source-traceability", "weight": 1},
+      {"id": "account-data-boundary", "weight": 1},
+      {"id": "send-and-publication-authority", "weight": 1}
+    ],
+    "unauthorizedAssumptions": [],
+    "faultBudgetMaximum": 0,
+    "parentRecomputed": true,
+    "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "candidateExecutionCount": 0,
+    "externalAccessUsedByCalibration": false,
+    "candidatePayloadReadByCalibration": false,
+    "sourceProjectionOrInstallationPerformed": false,
+    "ccSwitchPluginMcpHookOrRuntimeMutationPerformed": false,
+    "organizationalAccountOrDataAccessed": false,
+    "messageSentOrPublished": false,
+    "externalWritePerformed": false
+  },
+  "claimBoundary": {
+    "currentCandidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "communicationEffectivenessProved": false,
+    "audienceOrCarrierFitValidated": false,
+    "accountOrOrganizationalDataAccessAuthorized": false,
+    "sendOrPublicationAuthorized": false,
+    "liveHostExposureProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "hardStandardEligible": false
+  },
+  "acceptance": {
+    "expectedCaseCount": 6,
+    "expectedFaultCaseCount": 5,
+    "oneControlCaseRequired": true,
+    "oneCasePerRequiredFaultClass": true,
+    "allFixtureExpectationsMustMatchParentRecomputation": true,
+    "allFaultsMustBreachAtCommunicationDraft": true,
+    "allFaultsMustCarryAtReviewDetection": true,
+    "allFaultsMustRecoverAtTerminal": true,
+    "permittedStatusOnPass": "internal-communications-effect-oracle-calibrated-no-candidate-behavior",
+    "formalLiveEvidenceEligible": false
+  },
+  "nextGate": "Use the exact official-upstream candidate only in a separately authorized native/current-versus-candidate behavior arm; organizational accounts and data, carrier-specific delivery, sending, and publication remain separate gates."
+}

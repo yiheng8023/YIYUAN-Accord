@@ -2242,3 +2242,23 @@ research quality, consent, privacy satisfaction, residual self-authored need,
 and hard-standard promotion remain false. The next zero-execution effect group
 is internal communications. No main-plan, process, or acceptance change is
 required.
+
+## 2026-08-03 internal-communications incremental oracle checkpoint
+
+The sixth effect group reuses the `GEN-ACCESS-COMMS-01` baseline and oracle,
+then adds five source-free dimensions: audience fit, carrier fit, source
+traceability, account/data boundaries, and send/publication authority. One
+control and five single-fault mutations use the shared effect runner; the
+parent scenario is neither duplicated nor re-executed.
+
+The exact Anthropic `internal-comms` item is official-upstream metadata, but
+official status does not prove behavior or authorize vendoring, installation,
+account connection, organizational-data access, sending, or publication. Its
+five-dimension eligibility remains static protocol design only.
+
+No candidate payload, organizational account/data, or live host is touched.
+Model dispatch, install/projection, CC Switch mutation, message delivery,
+publication, external writes, behavior/value, communication effectiveness,
+audience/carrier validation, residual self-authored need, and hard-standard
+promotion remain false. The next zero-execution effect group is visual method.
+No main-plan, process, or acceptance change is required.
