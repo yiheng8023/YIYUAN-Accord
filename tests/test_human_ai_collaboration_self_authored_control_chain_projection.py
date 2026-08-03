@@ -72,7 +72,7 @@ class SelfAuthoredControlChainProjectionTests(unittest.TestCase):
             self.assertEqual(3, len(manifest["skillPaths"]))
             self.assertTrue(
                 all(
-                    Path(path).is_relative_to(output)
+                    Path(path).is_relative_to(output.resolve())
                     for path in manifest["skillPaths"].values()
                 )
             )

@@ -11,11 +11,13 @@ from typing import Any
 
 try:
     from .repository_text_identity import (
+        repository_text_identity_candidates,
         repository_text_sha256,
         windows_crlf_projection_sha256,
     )
 except ImportError:  # pragma: no cover - direct script execution
     from repository_text_identity import (
+        repository_text_identity_candidates,
         repository_text_sha256,
         windows_crlf_projection_sha256,
     )
@@ -64,6 +66,14 @@ def _repository_text_sha256(path: Path) -> str:
 
 def _windows_crlf_projection_sha256(path: Path) -> str:
     return windows_crlf_projection_sha256(path, uppercase=True)
+
+
+def _repository_text_hash_matches(path: Path, expected_sha256: str) -> bool:
+    expected = expected_sha256.upper()
+    return any(
+        hashlib.sha256(candidate).hexdigest().upper() == expected
+        for candidate in repository_text_identity_candidates(path)
+    )
 
 
 def _canonical_report_sha256(report: dict[str, Any]) -> str:
@@ -216,8 +226,10 @@ def validate_document(
     calibration_path = root / str(calibration.get("path"))
     _require(
         calibration_path.is_file()
-        and _sha256(calibration_path)
-        == str(calibration.get("sha256", "")).upper()
+        and _repository_text_hash_matches(
+            calibration_path,
+            str(calibration.get("sha256", "")),
+        )
         and calibration.get("acquisitionPath") == "thread-resume"
         and calibration.get("result")
         == "advertised-rollout-path-did-not-materialize",

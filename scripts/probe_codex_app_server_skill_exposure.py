@@ -22,7 +22,7 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import queue
 import shutil
 import subprocess
@@ -589,18 +589,24 @@ def validate_probe_report(report: dict[str, Any]) -> list[str]:
     sandbox = thread.get("sandbox")
     if not isinstance(sandbox, dict) or sandbox.get("type") != "readOnly":
         failures.append("fail-sandbox-mismatch")
-    expected_sources = {
-        str(Path.home() / ".codex" / "AGENTS.md").replace("\\", "/").lower(),
-        str(
-            Path(report.get("repository", {}).get("path", ""))
-            / "AGENTS.md"
-        ).replace("\\", "/").lower(),
-    }
     observed_sources = {
         str(path).replace("\\", "/").lower()
         for path in thread.get("instructionSources", [])
     }
-    if not expected_sources.issubset(observed_sources):
+    repository_source = str(
+        Path(report.get("repository", {}).get("path", "")) / "AGENTS.md"
+    ).replace("\\", "/").lower()
+    global_sources = [
+        source
+        for source in observed_sources
+        if source.endswith("/.codex/agents.md")
+        and (
+            Path(source).is_absolute()
+            or PureWindowsPath(source).is_absolute()
+            or PurePosixPath(source).is_absolute()
+        )
+    ]
+    if repository_source not in observed_sources or len(global_sources) != 1:
         failures.append("fail-instruction-source-binding")
 
     turn = report.get("markerTurn", {})

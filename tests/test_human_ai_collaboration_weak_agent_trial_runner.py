@@ -563,6 +563,29 @@ class HumanAiCollaborationWeakAgentTrialRunnerTests(unittest.TestCase):
             len(evidence["authorizedExternalReadCommandSha256"]),
         )
 
+    def test_process_boundary_allows_windows_short_path_token(self) -> None:
+        selected = Path(
+            r"C:\Users\RUNNER~1\AppData\Local\Temp\selected\SKILL.md"
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            evidence = process_boundary_evidence(
+                [
+                    {
+                        "type": "commandExecution",
+                        "command": f'Get-Content -Raw "{selected}"',
+                        "exitCode": 0,
+                        "status": "completed",
+                    }
+                ],
+                allowed_external_read_paths=(selected,),
+                trial_root=Path(temporary),
+            )
+        self.assertFalse(evidence["outOfScopeReadObserved"])
+        self.assertEqual(
+            ["SKILL.md"],
+            evidence["authorizedExternalReadBasenames"],
+        )
+
     def test_item_evidence_records_commands_and_hashes_diffs(self) -> None:
         evidence = item_evidence(
             [

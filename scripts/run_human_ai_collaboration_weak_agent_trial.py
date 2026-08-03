@@ -137,7 +137,7 @@ FORBIDDEN_ITEM_TYPES = {
 }
 HOST_PROJECTION_MARKER_DIRS = (".agents", ".codex", ".git")
 COMMAND_FILE_TOKEN = re.compile(
-    r"(?i)(?:[a-z]:[\\/]|/)?(?:[\w .-]+[\\/])*[\w.-]+\.(?:py|json|md|patch|tmp|bak)"
+    r"(?i)(?:[a-z]:[\\/]|/)?(?:[\w ~.-]+[\\/])*[\w~.-]+\.(?:py|json|md|patch|tmp|bak)"
 )
 WRITE_COMMAND_MARKERS = (
     "apply_patch",
@@ -616,38 +616,52 @@ def process_boundary_evidence(
     authorized_external_read_basenames: set[str] = set()
     authorized_external_read_command_hashes: set[str] = set()
     allowed_write_names = {path.lower() for path in allowed_mutable_files}
-    allowed_external_reads = {
-        ("native", os.path.normcase(str(path.expanduser().resolve(strict=False))))
-        for path in allowed_external_read_paths
-    }
+    def absolute_path_identity(
+        raw_path: str,
+    ) -> tuple[tuple[str, str], str, Path | None] | None:
+        candidate = Path(raw_path)
+        if candidate.is_absolute():
+            native = candidate.resolve(strict=False)
+            return (
+                ("native", os.path.normcase(str(native))),
+                native.name,
+                native,
+            )
+        windows = PureWindowsPath(raw_path)
+        if windows.is_absolute():
+            return (
+                (
+                    "windows",
+                    str(windows).replace("\\", "/").casefold(),
+                ),
+                windows.name,
+                None,
+            )
+        posix = PurePosixPath(raw_path)
+        if posix.is_absolute():
+            return (("posix", str(posix)), posix.name, None)
+        return None
+
+    allowed_external_reads: set[tuple[str, str]] = set()
+    for path in allowed_external_read_paths:
+        raw_path = str(path.expanduser())
+        parsed = absolute_path_identity(raw_path)
+        if parsed is None:
+            parsed = absolute_path_identity(
+                str(path.expanduser().resolve(strict=False))
+            )
+        if parsed is not None:
+            allowed_external_reads.add(parsed[0])
     for item in commands:
         command = str(item.get("command", ""))
         lowered = command.lower()
         if trial_root is not None:
             root = trial_root.resolve()
             for match in COMMAND_FILE_TOKEN.findall(command):
-                candidate = Path(match)
-                native_candidate: Path | None = None
-                if candidate.is_absolute():
-                    native_candidate = candidate.resolve(strict=False)
-                    identity = (
-                        "native",
-                        os.path.normcase(str(native_candidate)),
-                    )
-                    basename = native_candidate.name
-                elif PureWindowsPath(match).is_absolute():
-                    windows_candidate = PureWindowsPath(match)
-                    identity = (
-                        "windows",
-                        str(windows_candidate).replace("\\", "/").casefold(),
-                    )
-                    basename = windows_candidate.name
-                elif PurePosixPath(match).is_absolute():
-                    posix_candidate = PurePosixPath(match)
-                    identity = ("posix", str(posix_candidate))
-                    basename = posix_candidate.name
-                else:
+                parsed = absolute_path_identity(match)
+                if parsed is None:
                     continue
+                identity, basename, native_candidate = parsed
                 if native_candidate is None or not native_candidate.is_relative_to(root):
                     command_hash = sha256_bytes(command.encode("utf-8"))
                     if identity in allowed_external_reads:

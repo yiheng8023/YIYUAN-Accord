@@ -2510,3 +2510,18 @@ adjudication on Ubuntu, Windows, and macOS is the next gate. No candidate,
 CC Switch runtime state, consumer projection, model, Hook, MCP, account, or
 installed Skill was changed, and the main process and acceptance framework do
 not otherwise change.
+
+### 2026-08-04 exact-SHA residual-root follow-up
+
+The first pushed repair SHA `8a7af925...` remained red on all three matrix
+hosts. The many verifier failures collapsed to five residual assumptions:
+physical EOL for one excluded log, current-Home substitution while validating
+frozen Skill evidence, Windows long/8.3 path aliasing, omission of `~` from
+absolute command tokens, and resolved-versus-unresolved temporary test paths.
+
+The follow-up removes those assumptions without changing the historical
+observations or their claim boundaries. The exact remote failure identities
+pass 72/72 locally, the affected modules pass across Windows and WSL, and the
+top-level verifier passes. A fresh exact-SHA matrix remains mandatory; no
+runtime capability, candidate, live manager state, or model authority is
+promoted by this repair.

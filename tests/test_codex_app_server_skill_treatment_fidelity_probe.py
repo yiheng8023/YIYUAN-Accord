@@ -4,6 +4,7 @@ import copy
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 from scripts.probe_codex_app_server_skill_treatment_fidelity import (
     ARM_ORDERS,
@@ -103,6 +104,20 @@ class CodexSkillTreatmentFidelityProbeTests(unittest.TestCase):
             ]
             selected = select_canary(inventory, expected_path=path)
             self.assertEqual(selected["scope"], "repo")
+
+    def test_select_canary_accepts_equivalent_short_path_alias(self) -> None:
+        expected = Path("C:/Users/runneradmin/AppData/Local/Temp/canary/SKILL.md")
+        inventory = [
+            {
+                "name": SKILL_NAME,
+                "path": "C:/Users/RUNNER~1/AppData/Local/Temp/canary/SKILL.md",
+                "scope": "repo",
+                "enabled": True,
+            }
+        ]
+        with mock.patch("os.path.samefile", return_value=True):
+            selected = select_canary(inventory, expected_path=expected)
+        self.assertEqual(selected["scope"], "repo")
 
     def test_inventory_comparison_isolates_repo_canary(self) -> None:
         canary_path = "C:/tmp/trial/.agents/skills/treatment-fidelity-canary/SKILL.md"

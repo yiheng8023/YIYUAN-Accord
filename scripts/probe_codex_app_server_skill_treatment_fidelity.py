@@ -146,11 +146,21 @@ def select_canary(
     expected_path: Path,
 ) -> dict[str, Any]:
     target = expected_path.resolve().as_posix().lower()
+
+    def matches_expected_path(raw_path: object) -> bool:
+        candidate = Path(str(raw_path))
+        try:
+            if os.path.samefile(candidate, expected_path):
+                return True
+        except OSError:
+            pass
+        return str(raw_path).replace("\\", "/").lower() == target
+
     matches = [
         row
         for row in skills
         if row.get("name") == SKILL_NAME
-        and str(row.get("path", "")).replace("\\", "/").lower() == target
+        and matches_expected_path(row.get("path", ""))
         and row.get("scope") in CONFIGURABLE_SCOPES
     ]
     if len(matches) != 1:

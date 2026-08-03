@@ -26255,7 +26255,17 @@ def validate_codex_app_server_selected_skill_exposure_evidence(
         )
     ):
         raise RuntimeError("Codex selected Skill exposure digest drifted.")
-    failures = validate_codex_selected_skill_exposure_report(document)
+    selected_skill = document.get("selectedSkill", {})
+    selected_path = (
+        Path(str(selected_skill.get("path")))
+        if isinstance(selected_skill, dict)
+        and isinstance(selected_skill.get("path"), str)
+        else Path()
+    )
+    failures = validate_codex_selected_skill_exposure_report(
+        document,
+        expected_path=selected_path,
+    )
     if failures:
         raise RuntimeError(
             "Codex selected Skill exposure evidence failed: "

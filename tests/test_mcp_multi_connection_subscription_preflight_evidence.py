@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
+import tempfile
 import unittest
 
 from scripts.validate_mcp_multi_connection_subscription_preflight_evidence import (
     EVIDENCE_PATH,
+    _repository_text_hash_matches,
     validate_document,
     validate_evidence,
 )
@@ -16,6 +19,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class MultiConnectionSubscriptionPreflightEvidenceTests(unittest.TestCase):
+    def test_historical_log_hash_accepts_lf_or_crlf_checkout(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "calibration.log"
+            path.write_bytes(b"line\n")
+            expected = hashlib.sha256(b"line\r\n").hexdigest()
+            self.assertTrue(_repository_text_hash_matches(path, expected))
+
     def test_current_evidence_validates(self) -> None:
         summary = validate_evidence(ROOT, ROOT / EVIDENCE_PATH)
         self.assertEqual(summary["status"], "validated")

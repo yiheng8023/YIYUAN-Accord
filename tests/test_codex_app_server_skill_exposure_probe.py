@@ -224,6 +224,13 @@ class CodexAppServerSkillExposureProbeTests(unittest.TestCase):
     def test_validator_accepts_narrow_passing_report(self) -> None:
         self.assertEqual([], validate_probe_report(passing_report()))
 
+    def test_validator_accepts_frozen_global_instruction_source(self) -> None:
+        report = passing_report()
+        report["threadTelemetry"]["instructionSources"][0] = (
+            "C:/Users/frozen-observer/.codex/AGENTS.md"
+        )
+        self.assertEqual([], validate_probe_report(report))
+
     def test_validator_rejects_model_or_effort_substitution(self) -> None:
         report = passing_report()
         report["threadTelemetry"]["model"] = "gpt-5.6-sol"

@@ -4195,3 +4195,25 @@ The checkpoint is still local until an exact pushed SHA passes the intended
 Ubuntu, Windows, and macOS matrix. Do not promote it to green cross-host CI,
 candidate admission, live installation, model authority, or self-authored
 capability necessity before that remote result.
+
+## 2026-08-04 exact-SHA second differential checkpoint
+
+Exact SHA `8a7af9254a520858e9f5b581f2ab614c72012643` did not pass the matrix.
+Main run `30848431366` completed red on all three hosts: Windows reported 21
+failures and 5 errors, macOS 23 failures and 6 errors with 4 skips, and Ubuntu
+22 failures and 5 errors with 4 skips. Most integration identities were
+cascades from a small remaining root set, not independent regressions.
+
+The second root set was: an excluded calibration log still hashed physical EOL;
+frozen Skill evidence compared against the CI runner's current Home; Windows
+temporary paths could use an equivalent 8.3 alias; the weak-agent token parser
+omitted `~`; and one projection assertion compared an unresolved temporary root
+against resolved manifest paths. The follow-up keeps frozen report identity
+digest-bound, validates instruction-source roles without substituting current
+Home, uses file identity for live path aliases, recognizes both path syntaxes,
+and normalizes only the test assertion boundary.
+
+All 72 exact failed/error identities from the remote log now pass locally;
+the broader affected set passes 73/73 on Windows and 71/71 plus 2/2 under the
+correct WSL Git bridge. The verifier and diff check pass. This is still not a
+green matrix claim; a new exact SHA must adjudicate all three hosts.
