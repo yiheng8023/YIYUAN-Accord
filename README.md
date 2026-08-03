@@ -19,13 +19,12 @@ head so the user can focus on creation, decisions, and bounded authorization.
   CC Switch is one current operational adapter where supported, not the
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
-- **Current action:** the bounded source gates and seventeen-candidate demand
-  map are frozen. The first seven source-free effect oracles—decision
-  challenge, engineering lifecycle, product discovery, marketing writing,
-  customer research, internal communications, and visual method—are
-  calibrated; Obsidian format semantics is next. Payload installation,
-  execution, and task-time activation remain separate and minimal; self-author
-  only after reuse and composition leave a reproducible residual gap.
+- **Current action:** the bounded source gates, seventeen-candidate demand map,
+  and all eight zero-model effect oracles are calibrated. The next action is a
+  cross-group closure review before any separately authorized live behavior
+  arm. Payload installation, execution, and task-time activation remain
+  separate and minimal; self-author only after reuse and composition leave a
+  reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and

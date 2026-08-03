@@ -3916,3 +3916,26 @@ hard-standard eligibility remain false. The governed protocol is
 `registry/skill-portfolio-visual-method-zero-model-protocol-2026-08-03.json`.
 Continue next with Obsidian format semantics after a fresh repository truth
 check.
+
+## 2026-08-03 Obsidian format-semantics zero-model effect-oracle checkpoint
+
+The eighth mapped effect group now has one domain-only source-free format
+packet. Five single-fault cases cover format-validity loss, referential-
+integrity loss, source-preservation loss, bounded-file-write loss, and an
+imposed vault-organization assumption. There is no scenario mapping, so this
+fixture is not scenario coverage and does not prove a residual gap.
+
+The protocol binds exact `json-canvas`, `obsidian-bases`, and
+`obsidian-markdown` identities plus candidate-specific static dimension sets.
+It also binds the prior CC Switch registration event: repository registration
+and candidate-name discovery are true, while payload bytes, installation,
+exposure, invocation, instruction delivery, behavior, and value remain false.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, vault/note access, and file/vault writes are zero. Format correctness
+beyond the fixture, scenario coverage, residual self-authored need, and
+hard-standard eligibility remain false. The governed protocol is
+`registry/skill-portfolio-obsidian-format-semantics-zero-model-protocol-2026-08-03.json`.
+All eight mapped effect groups now have zero-model oracles. Continue with a
+cross-group closure review; do not start a live arm, install candidates, or
+promote residual/self-authored need from this checkpoint.

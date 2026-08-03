@@ -1,0 +1,106 @@
+{
+  "id": "skill-portfolio-obsidian-format-semantics-zero-model-calibration-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-source-free-domain-only-obsidian-format-semantics-fixture",
+  "effectGroupId": "effect.obsidian-format-semantics",
+  "scenarioBindings": {
+    "scenarioIds": [],
+    "domainOnlyFixture": true,
+    "absenceOfScenarioMappingPromotedToResidualGap": false
+  },
+  "canonicalObsidianFormatPacket": {
+    "formatValidity": {
+      "formatId": "obsidian-markdown-and-linked-artifact-semantics",
+      "schemaValidated": true
+    },
+    "referentialIntegrity": {
+      "declaredReferenceIds": ["reference.note-a"],
+      "resolvedReferenceIds": ["reference.note-a"],
+      "brokenReferenceIds": []
+    },
+    "sourcePreservation": {
+      "sourceIds": ["source.user-bound-note-content"],
+      "preserved": true
+    },
+    "boundedFileWrite": {
+      "targetPath": "authorized-output/example.md",
+      "withinAuthorizedRoot": true,
+      "writeAuthorized": false
+    },
+    "vaultOrganizationAssumption": {
+      "organizationModelAssumed": false,
+      "userVaultStructureRequired": false
+    }
+  },
+  "cases": [
+    {
+      "id": "control-lossless",
+      "faultClass": "control",
+      "overrides": {},
+      "expectedActiveLossIds": [],
+      "expectedCumulativeUniqueLossIds": []
+    },
+    {
+      "id": "format-validity-lost",
+      "faultClass": "format-validity-loss",
+      "overrides": {"formatValidity": {"formatId": "unknown", "schemaValidated": false}},
+      "expectedActiveLossIds": ["invariant-changed:format-validity"],
+      "expectedCumulativeUniqueLossIds": ["invariant-changed:format-validity"]
+    },
+    {
+      "id": "referential-integrity-lost",
+      "faultClass": "referential-integrity-loss",
+      "overrides": {
+        "referentialIntegrity": {
+          "declaredReferenceIds": ["reference.note-a"],
+          "resolvedReferenceIds": [],
+          "brokenReferenceIds": ["reference.note-a"]
+        }
+      },
+      "expectedActiveLossIds": ["invariant-changed:referential-integrity"],
+      "expectedCumulativeUniqueLossIds": ["invariant-changed:referential-integrity"]
+    },
+    {
+      "id": "source-preservation-lost",
+      "faultClass": "source-preservation-loss",
+      "overrides": {"sourcePreservation": {"sourceIds": [], "preserved": false}},
+      "expectedActiveLossIds": ["invariant-changed:source-preservation"],
+      "expectedCumulativeUniqueLossIds": ["invariant-changed:source-preservation"]
+    },
+    {
+      "id": "bounded-file-write-lost",
+      "faultClass": "bounded-file-write-loss",
+      "overrides": {
+        "boundedFileWrite": {
+          "targetPath": "../unbound-output.md",
+          "withinAuthorizedRoot": false,
+          "writeAuthorized": true
+        }
+      },
+      "expectedActiveLossIds": ["invariant-changed:bounded-file-write"],
+      "expectedCumulativeUniqueLossIds": ["invariant-changed:bounded-file-write"]
+    },
+    {
+      "id": "vault-organization-assumed",
+      "faultClass": "vault-organization-assumption",
+      "overrides": {
+        "vaultOrganizationAssumption": {
+          "organizationModelAssumed": true,
+          "userVaultStructureRequired": true
+        }
+      },
+      "expectedActiveLossIds": ["invariant-changed:no-vault-organization-assumption"],
+      "expectedCumulativeUniqueLossIds": ["invariant-changed:no-vault-organization-assumption"]
+    }
+  ],
+  "claimBoundary": {
+    "currentCandidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "formatCorrectnessProvedBeyondFixture": false,
+    "vaultAccessOrWriteAuthorized": false,
+    "vaultOrganizationModelAccepted": false,
+    "scenarioCoverageOrResidualGapProved": false,
+    "liveHostExposureProved": false,
+    "hardStandardEligible": false
+  }
+}

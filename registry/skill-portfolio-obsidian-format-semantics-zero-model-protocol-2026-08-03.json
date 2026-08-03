@@ -1,0 +1,150 @@
+{
+  "id": "skill-portfolio-obsidian-format-semantics-zero-model-protocol-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-zero-model-domain-only-obsidian-format-semantics-effect-calibration-protocol",
+  "effectGroupId": "effect.obsidian-format-semantics",
+  "scenarioIds": [],
+  "sourceBindings": [
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "role": "domain-only-effect-group-candidate-comparator-and-boundary-map"
+    },
+    {
+      "path": "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json",
+      "bytes": 7143,
+      "sha256": "c3ad6063fe0b015b32d2f4a04a1ddefdeeb68808066b2d60b1460ac8cda85eac",
+      "role": "exact-current-candidate-static-review"
+    },
+    {
+      "path": "registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json",
+      "bytes": 2659,
+      "sha256": "6b6ce22f3500cea2a6acfc605812c209643151c2ba7f159f9f29975390dd7463",
+      "role": "manager-repository-registration-without-install"
+    }
+  ],
+  "fixtureBinding": {
+    "path": "tests/fixtures/skill-portfolio-obsidian-format-semantics-zero-model-calibration-2026-08-03.json",
+    "bytes": 3766,
+    "sha256": "f971af9cd50d3a848af22af5ecd9aa9f35c8e48ed8123fb20c60be5123cd7783",
+    "fixtureId": "skill-portfolio-obsidian-format-semantics-zero-model-calibration-2026-08-03",
+    "sourceFreeEffectPacketOnly": true,
+    "domainOnlyFixture": true,
+    "fullScenarioFixtureCreated": false
+  },
+  "domainOnlyBoundary": {
+    "scenarioMappingAbsent": true,
+    "absenceOfScenarioMappingPromotedToResidualGap": false,
+    "formatFixturePromotedToScenarioCoverage": false,
+    "fullScenarioFixtureCreated": false
+  },
+  "managerRegistrationBoundary": {
+    "managerRepositoryRegistered": true,
+    "managerDiscoveryNamesProved": true,
+    "managerDiscoveryPayloadBytesProved": false,
+    "candidateInstalled": false,
+    "hostExposed": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false
+  },
+  "candidateBoundary": {
+    "repository": "kepano/obsidian-skills",
+    "revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+    "tree": "49d7c3b7f6aa4d266631c886284415d111070941",
+    "dimensionEligibilityEvidenceClass": "static-protocol-design-only",
+    "candidates": [
+      {
+        "name": "json-canvas",
+        "path": "skills/json-canvas/SKILL.md",
+        "sha256": "788535277bc5f460bec97d467615a2ce97e2957dad1b1fc961e645f64c827128",
+        "dependencyFiles": [{"path": "skills/json-canvas/references/EXAMPLES.md", "sha256": "c6fce2e043f98d5bf3c52662a0261aa3e12d5eabbb37585e3c4c52a968b109a1"}],
+        "eligibleDimensionIds": ["format-validity", "referential-integrity", "source-preservation", "bounded-file-write"],
+        "currentAlternativeIds": ["native.json-editing", "official.figma-diagram-generation"]
+      },
+      {
+        "name": "obsidian-bases",
+        "path": "skills/obsidian-bases/SKILL.md",
+        "sha256": "83bc04a2c306a61c216c0cfecbb4d032cc763896623d229cd2a6dab811083032",
+        "dependencyFiles": [{"path": "skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md", "sha256": "0d0cd128bc5070ef1aba2baef41bd55b31b3f56961975934d7a5172396ca0006"}],
+        "eligibleDimensionIds": ["format-validity", "referential-integrity", "source-preservation", "bounded-file-write", "no-vault-organization-assumption"],
+        "currentAlternativeIds": ["native.yaml-editing", "managed.obsidian-vault"]
+      },
+      {
+        "name": "obsidian-markdown",
+        "path": "skills/obsidian-markdown/SKILL.md",
+        "sha256": "ef409b7eeda59e2e0c5cdead334dcc997dc9459d689859b3a610ffa9af5cabc5",
+        "dependencyFiles": [
+          {"path": "skills/obsidian-markdown/references/CALLOUTS.md", "sha256": "3b8f63c90f692ac40e6989fda2ab2fed3bb482ff515176b40d18dac8402e516b"},
+          {"path": "skills/obsidian-markdown/references/EMBEDS.md", "sha256": "d9f9f485ded6a32b4d76e59eaddc442bd09faf851d755f052759fc9ab1a25b2c"},
+          {"path": "skills/obsidian-markdown/references/PROPERTIES.md", "sha256": "28da58935ca3296f30b7e9aa25f2a695963dc0a3e4062638428d3bcb2094562a"}
+        ],
+        "eligibleDimensionIds": ["format-validity", "referential-integrity", "source-preservation", "bounded-file-write", "no-vault-organization-assumption"],
+        "currentAlternativeIds": ["native.markdown-editing", "managed.obsidian-vault"]
+      }
+    ],
+    "allCandidatesInstalled": false,
+    "allCandidatesProjected": false,
+    "allCandidatesEnabled": false,
+    "allCandidatesExposed": false,
+    "allCandidatesExecuted": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "comparisonBoundary": {
+    "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+    "compositionArmEligible": false,
+    "sharedFixtureScoresOnlyDeclaredEligibleDimensionsInALaterArm": true,
+    "currentAlternativeHealthProvedByThisCalibration": false,
+    "candidateIncrementProvedByThisCalibration": false
+  },
+  "oracle": {
+    "invariants": [
+      {"id": "format-validity", "weight": 1},
+      {"id": "referential-integrity", "weight": 1},
+      {"id": "source-preservation", "weight": 1},
+      {"id": "bounded-file-write", "weight": 1},
+      {"id": "no-vault-organization-assumption", "weight": 1}
+    ],
+    "unauthorizedAssumptions": [],
+    "faultBudgetMaximum": 0,
+    "parentRecomputed": true,
+    "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "candidateExecutionCount": 0,
+    "externalAccessUsedByCalibration": false,
+    "candidatePayloadReadByCalibration": false,
+    "sourceProjectionOrInstallationPerformed": false,
+    "ccSwitchPluginMcpHookOrRuntimeMutationPerformed": false,
+    "vaultOrNoteDataAccessed": false,
+    "fileOrVaultWritePerformed": false
+  },
+  "claimBoundary": {
+    "currentCandidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "formatCorrectnessProvedBeyondFixture": false,
+    "vaultAccessOrWriteAuthorized": false,
+    "vaultOrganizationModelAccepted": false,
+    "scenarioCoverageOrResidualGapProved": false,
+    "liveHostExposureProved": false,
+    "hardStandardEligible": false
+  },
+  "acceptance": {
+    "expectedCaseCount": 6,
+    "expectedFaultCaseCount": 5,
+    "oneControlCaseRequired": true,
+    "oneCasePerRequiredFaultClass": true,
+    "allFixtureExpectationsMustMatchParentRecomputation": true,
+    "allFaultsMustBreachAtFormatDraft": true,
+    "allFaultsMustCarryAtReviewDetection": true,
+    "allFaultsMustRecoverAtTerminal": true,
+    "permittedStatusOnPass": "obsidian-format-semantics-effect-oracle-calibrated-no-candidate-behavior",
+    "formalLiveEvidenceEligible": false
+  },
+  "nextGate": "Bind a real user-provided file-format task before any behavior arm; vault access, file writes, organization assumptions, candidate installation, and residual-gap claims remain separate gates."
+}

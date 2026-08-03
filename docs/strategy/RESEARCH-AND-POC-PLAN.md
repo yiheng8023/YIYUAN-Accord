@@ -2282,3 +2282,24 @@ cost/backend authorization, artifact writes, behavior/value, visual quality,
 generalized preference, residual self-authored need, and hard-standard
 promotion remain false. The next zero-execution effect group is Obsidian format
 semantics. No main-plan, process, or acceptance change is required.
+
+## 2026-08-03 Obsidian format-semantics oracle checkpoint
+
+The eighth and final mapped effect group uses one domain-only source-free
+format packet. Five single-fault mutations cover format validity, referential
+integrity, source preservation, bounded file writes, and avoidance of an
+imposed vault-organization model. This is deliberately not a governed scenario
+fixture; it does not fill scenario coverage or prove a residual gap.
+
+The three exact Kepano candidates have static dimension subsets. CC Switch
+repository registration and candidate-name discovery are reused as bounded
+evidence only; payload bytes, installation, exposure, invocation, instruction
+delivery, behavior, and value remain unproved.
+
+No candidate payload, vault, note, or live host is touched. Model dispatch,
+install/projection, CC Switch mutation, file/vault writes, behavior/value,
+format correctness beyond the fixture, scenario coverage, residual
+self-authored need, and hard-standard promotion remain false. All eight mapped
+effect groups now have zero-model oracles. The next step is a cross-group
+closure review before any separately authorized live behavior arm; the main
+plan, process, and acceptance framework remain unchanged.
