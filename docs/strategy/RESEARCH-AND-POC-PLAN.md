@@ -2303,3 +2303,23 @@ self-authored need, and hard-standard promotion remain false. All eight mapped
 effect groups now have zero-model oracles. The next step is a cross-group
 closure review before any separately authorized live behavior arm; the main
 plan, process, and acceptance framework remain unchanged.
+
+## 2026-08-03 eight-group zero-model suite closure checkpoint
+
+The cross-group validator now reruns all eight effect oracles and reconciles
+their candidate identities against the frozen demand map. The suite covers all
+17 static candidates exactly once through 50 cases: 8 controls and 42
+single-fault mutations. A duplicate or missing candidate mapping fails closed.
+
+Every group retains zero Agent dispatches, model calls, and candidate
+executions, and every group claim boundary remains false. The domain-only
+Obsidian fixture is not promoted to scenario coverage. Historical comparisons,
+manager registration, official metadata, and preference packets keep their
+original bounded meanings.
+
+This closes only the zero-model oracle-construction stage. Candidate
+installation, live behavior/value, residual self-authored need, and
+hard-standard promotion remain unproved and unauthorized. The next possible
+stage requires separate authority for a native/current-versus-one-candidate
+behavior arm with visible routing, no silent model substitution, task/data/cost
+boundaries, stop/cleanup rules, and acceptance evidence.

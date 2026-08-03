@@ -240,6 +240,9 @@ from validate_skill_portfolio_visual_method_zero_model_protocol import (
 from validate_skill_portfolio_obsidian_format_semantics_zero_model_protocol import (
     validate_protocol as validate_skill_portfolio_obsidian_format_semantics_zero_model_protocol,
 )
+from validate_skill_portfolio_zero_model_effect_oracle_suite import (
+    validate_suite as validate_skill_portfolio_zero_model_effect_oracle_suite,
+)
 from validate_human_ai_collaboration_engineering_management_zero_model_protocol import (
     validate_protocol as validate_human_ai_collaboration_engineering_management_zero_model_protocol,
 )
@@ -631,6 +634,9 @@ REQUIRED_FILES = (
     "scripts/validate_skill_portfolio_obsidian_format_semantics_zero_model_protocol.py",
     "tests/fixtures/skill-portfolio-obsidian-format-semantics-zero-model-calibration-2026-08-03.json",
     "tests/test_skill_portfolio_obsidian_format_semantics_zero_model_calibration.py",
+    "docs/strategy/SKILL-PORTFOLIO-ZERO-MODEL-EFFECT-ORACLE-SUITE-CLOSURE-2026-08-03.md",
+    "scripts/validate_skill_portfolio_zero_model_effect_oracle_suite.py",
+    "tests/test_skill_portfolio_zero_model_effect_oracle_suite.py",
     "docs/strategy/HUMAN-AI-COLLABORATION-ENGINEERING-MANAGEMENT-ZERO-MODEL-CALIBRATION-2026-07-31.md",
     "registry/human-ai-collaboration-engineering-management-zero-model-protocol-2026-07-31.json",
     "scripts/evaluate_human_ai_collaboration_engineering_management_zero_model_calibration.py",
@@ -3132,6 +3138,7 @@ def verify() -> None:
     validate_skill_portfolio_internal_communications_zero_model_protocol(ROOT)
     validate_skill_portfolio_visual_method_zero_model_protocol(ROOT)
     validate_skill_portfolio_obsidian_format_semantics_zero_model_protocol(ROOT)
+    validate_skill_portfolio_zero_model_effect_oracle_suite(ROOT)
     validate_human_ai_collaboration_engineering_management_zero_model_protocol(
         human_ai_collaboration_engineering_management_zero_model_protocol_doc,
         root=ROOT,

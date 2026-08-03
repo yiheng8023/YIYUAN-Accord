@@ -3939,3 +3939,25 @@ hard-standard eligibility remain false. The governed protocol is
 All eight mapped effect groups now have zero-model oracles. Continue with a
 cross-group closure review; do not start a live arm, install candidates, or
 promote residual/self-authored need from this checkpoint.
+
+## 2026-08-03 eight-group zero-model suite closure checkpoint
+
+The cross-group suite validator reruns all eight effect-group evaluators and
+reconciles them against the frozen 17-candidate demand map. It verifies 50
+cases total: 8 controls and 42 single-fault cases. Every candidate appears in
+exactly one effect group; duplicate or missing cross-group coverage fails
+closed.
+
+All group claim boundaries remain false, with zero Agent dispatches, model
+calls, and candidate executions. The domain-only Obsidian packet remains
+non-scenario evidence. Reused historical comparisons, manager registration,
+official metadata, preference packets, and parent protocols are not promoted
+beyond their original claim ceilings.
+
+The governed validator is
+`scripts/validate_skill_portfolio_zero_model_effect_oracle_suite.py`. This
+closes the zero-model oracle-construction stage only. Candidate installation,
+live behavior/value, residual self-authored need, and hard-standard promotion
+remain unproved and unauthorized. Before any next arm, bind separate dispatch
+authority, exact visible model route with no silent substitution, task/data/
+cost boundaries, stop and cleanup rules, and acceptance evidence.
