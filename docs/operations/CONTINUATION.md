@@ -4125,3 +4125,38 @@ separate manager-install authority, rollback verification, and post-install
 lifecycle evidence would still be required. No Skill was installed, enabled,
 exposed, invoked, or executed; no account, consumer projection, model, Hook,
 MCP, or live CC Switch database mutation occurred in this checkpoint.
+
+## 2026-08-04 exact-SHA CI differential checkpoint
+
+The local 2,544-test result did not establish a healthy cross-platform CI
+baseline. The exact parent commit `eff5c19d978de7b8a1200fb081c92efa268a8e16`
+already failed all three GitHub Actions matrix jobs: Ubuntu reported 247 unique
+failed/error test identities, Windows 201, and macOS 249. These are inherited
+remote failures rather than a green baseline that the checkout-identity slice
+regressed.
+
+The first integrated exact SHA `f29f981c85c49e2eb36730101b70a4f164e8a771`
+reduced those unique sets to 175 on Ubuntu, 124 on Windows, and 177 on macOS.
+Failure-set comparison found zero new Windows identities and one shared new
+identity on Ubuntu/macOS: the recorded Skill-ablation capture portability
+test. That test exposed a separate path-identity defect: a Windows absolute
+path stored in historical evidence was being re-resolved as a relative path
+on non-Windows hosts.
+
+Commit `66a88011d7ae83ec8c48f041f64788003d8d6422` now treats recorded Windows
+drive/UNC paths as host-neutral lexical identities while preserving native
+resolution for current-host synthetic fixtures. The focused module passes
+13/13 and the top-level verifier passes locally. Its completed Ubuntu matrix
+job reports 170 unique failed/error identities, with zero identities absent
+from the parent failure set; the newly introduced portability identity and its
+cascades are gone. This is a no-new-regression differential, not a green CI
+claim.
+
+Keep the remaining cross-platform baseline debt separate from the 16-plus-1
+candidate transaction and CC Switch upstream contribution. The next bounded
+CI slice should cluster and remove repository tests' dependencies on physical
+checkout EOL, recorded local absolute paths, installed user Plugins/Skills,
+Windows-only live probes, and local cleanup inventory. Host-specific live
+evidence may be explicitly classified and skipped where inapplicable, but a
+skip must not be relabeled as cross-host proof. No candidate installation,
+manager mutation, or model dispatch is authorized by this CI finding.

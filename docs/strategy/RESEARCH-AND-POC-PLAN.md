@@ -2449,3 +2449,36 @@ The 17-item review inventory, 16-item inactive transaction cohort, and one held
 `customer-research` item remain unchanged. No live installation, enablement,
 consumer projection, account connection, model, Hook, MCP, or candidate
 execution follows from this integration checkpoint.
+
+### 2026-08-04 cross-platform CI debt follow-up
+
+Exact-SHA GitHub Actions falsified the assumption that a green Windows
+worktree run implied a healthy repository CI baseline. The parent commit was
+already red on Ubuntu, Windows, and macOS. Checkout-identity changes reduced
+each failure set, and the one newly introduced non-Windows path-identity
+failure was removed at `66a88011...`; the completed Ubuntu differential then
+contained no failure identity absent from the parent. The remaining matrix
+failures are inherited validation debt, not candidate-Skill failure evidence.
+
+Treat cross-platform CI repair as a separate repository-engineering slice,
+not a new product hard standard and not a reason to widen live capability
+authority. Its acceptance surface is:
+
+1. repository-intrinsic tests use governed repository identities rather than
+   physical checkout EOL or one workstation's absolute paths;
+2. clean runners do not require user-installed Plugins, Skills, Apps, or local
+   schema caches to validate frozen repository evidence;
+3. Windows-only live-host probes expose testable pure seams, while genuinely
+   host-specific execution is explicitly classified instead of failing before
+   fixture assertions;
+4. cleanup inventory distinguishes runner-generated process roots from
+   governed debt without silently deleting either; and
+5. an exact final SHA passes the intended Ubuntu, Windows, and macOS matrix, or
+   any deliberately excluded host cell is documented as unproved rather than
+   green.
+
+Do not mix this repair with the 16-candidate inactive transaction, PR 6086
+review, live installation, model arms, or self-authored Skill necessity. The
+first implementation step is a failure-family inventory and one red-capable
+fixture per root cause; broad snapshot refresh or evidence rewriting is not an
+acceptable shortcut.
