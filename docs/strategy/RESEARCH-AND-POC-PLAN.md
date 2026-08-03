@@ -2262,3 +2262,23 @@ publication, external writes, behavior/value, communication effectiveness,
 audience/carrier validation, residual self-authored need, and hard-standard
 promotion remain false. The next zero-execution effect group is visual method.
 No main-plan, process, or acceptance change is required.
+
+## 2026-08-03 visual-method incremental oracle checkpoint
+
+The seventh effect group reuses the creative-capability baseline and bounded
+preference packet, then adds five source-free dimensions: source faithfulness,
+layout/visual planning, confirmation, native-backend preference, and an
+artifact-manifest/write boundary. One control and five single-fault mutations
+use the shared effect runner; the parent scenario is not duplicated or run.
+
+The three exact Baoyu candidates share a static five-dimension eligibility
+set. That set is protocol design only. Their native-backend preference does not
+authorize an image-model call, cost, external backend, preference write, or
+generated artifact; user visual judgment remains authoritative.
+
+No candidate payload, source content, model, backend, or live host is touched.
+Model dispatch, install/projection, CC Switch mutation, image generation,
+cost/backend authorization, artifact writes, behavior/value, visual quality,
+generalized preference, residual self-authored need, and hard-standard
+promotion remain false. The next zero-execution effect group is Obsidian format
+semantics. No main-plan, process, or acceptance change is required.

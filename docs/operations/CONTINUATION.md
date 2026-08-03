@@ -3893,3 +3893,26 @@ behavior/value, audience/carrier fit, live exposure, residual self-authored
 need, and hard-standard eligibility remain false. The governed protocol is
 `registry/skill-portfolio-internal-communications-zero-model-protocol-2026-08-03.json`.
 Continue next with visual method after a fresh repository truth check.
+
+## 2026-08-03 visual-method zero-model effect-oracle checkpoint
+
+The seventh mapped effect group now has one source-free incremental packet over
+the creative-capability baseline and bounded preference packet. Five
+single-fault cases cover source-faithfulness loss, visual-plan omission,
+confirmation bypass, native-backend-preference loss, and artifact/write-boundary
+loss. The parent scenario was not copied or run.
+
+The protocol binds exact `baoyu-article-illustrator`, `baoyu-cover-image`, and
+`baoyu-infographic` identities plus a static five-dimension eligibility set.
+Native image generation remains the preferred future comparator, not an
+authorized call. Future attribution remains native/current first followed by
+one candidate; composition is ineligible.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, image generation, backend/cost authorization, and artifact writes are
+zero. Visual quality, source faithfulness, current candidate behavior/value,
+generalized preference, live exposure, residual self-authored need, and
+hard-standard eligibility remain false. The governed protocol is
+`registry/skill-portfolio-visual-method-zero-model-protocol-2026-08-03.json`.
+Continue next with Obsidian format semantics after a fresh repository truth
+check.
