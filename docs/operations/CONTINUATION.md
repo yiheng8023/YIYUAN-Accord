@@ -3681,3 +3681,39 @@ installed, enabled, executed, exposed, or projected. The failed bare review
 root and empty repository `.tmp` parent were precisely removed. The governed
 record is
 `registry/skill-portfolio-kdense-scientific-representative-adjudication-2026-08-03.json`.
+
+## 2026-08-03 bounded nine-source cohort reconciliation checkpoint
+
+The August 2 inactive source cohort now has a current gate record for all nine
+sources. The exact preflight surface contained 363 `SKILL.md` paths, 5,457
+files, and 371,249,850 bytes. Gate coverage must not be confused with itemized
+coverage: four sources were adjudicated item by item, three used representative
+exact-item or source samples, and two received deep executable or system-
+mechanism gates. Neither all 363 paths nor the wider ecosystem is claimed
+complete.
+
+Seventeen unique static default-disabled candidates survive across six
+sources: three Obsidian methods, three PM methods, three marketing methods,
+Anthropic `internal-comms`, four Addy engineering methods, and three Baoyu
+native-image-backed methods. They are static candidate selections, not install
+readiness or behavior/value evidence. K-Dense advances no candidate from its
+representative slice; last30days remains a deep executable subsystem hold; and
+planning-with-files advances split mechanism comparisons rather than a full
+manager candidate.
+
+One source repository, `kepano/obsidian-skills`, is registered with CC Switch
+for discovery. Registration is not installation: candidate rows, installs,
+enablements, host exposures, and executions all remain zero. CC Switch 3.19.1
+still lacks the proved atomic default-disabled repository transaction, so all
+seventeen selections stay inactive and no parallel manager, direct database
+write, or manual SSOT staging is authorized.
+
+The planned phase transition is now eligible at zero execution: freeze
+untargeted candidate-name discovery, map the seventeen candidates and separate
+Recipe/mechanism inputs to demand cells and current capabilities, deduplicate
+by effect and boundary, and prepare deterministic comparison oracles and
+attribution. Targeted discovery may reopen only for a mapped residual, material
+source/host drift, or a new phase-specific boundary. Live behavior arms,
+installation, self-authored residual work, manual user testing, and hard
+standard promotion remain ineligible. The governed record is
+`registry/skill-portfolio-bound-cohort-reconciliation-2026-08-03.json`.

@@ -2069,3 +2069,33 @@ or lab actuation stays task-time-only. Reopen only a bounded demand-linked
 subset with exact directory, license, dependency, service, data, security,
 host, fallback, and cleanup closure. No plan, process, acceptance, or hard-
 standard change is justified by this checkpoint.
+
+## 2026-08-03 bounded candidate cohort phase-transition checkpoint
+
+All nine sources in the bounded inactive cohort now have source-specific gate
+records. This closes the current source-gate batch, not every item: the exact
+preflight counted 363 Skill paths, while only four sources received itemized
+catalog adjudication. Three sources used representative review and two used
+deep system or mechanism gates. Ecosystem completeness is explicitly unproved.
+
+The cross-source result is seventeen unique static default-disabled candidates
+from six sources. Three other sources yield no current manager candidate.
+Several useful Recipe and mechanism inputs remain separate from that count,
+including Addy observability/performance compositions, Anthropic theme
+composition, K-Dense literature-review composition, and planning-with-files
+state, reinjection, and attestation mechanisms.
+
+This is the intended transition from bounded acquisition to mapping and
+simulation. Untargeted candidate-name discovery stops; deterministic demand
+mapping, current-capability overlap, effect-level deduplication, comparison
+oracles, and attribution may proceed without installing or executing payloads.
+Targeted discovery can reopen only after mapping exposes a specific gap or a
+material source, host, data, authority, or carrier change.
+
+The lifecycle gate remains closed. Only the Kepano repository is registered
+for discovery, while candidate rows, installs, enablements, exposures,
+executions, behavior proofs, and value proofs remain zero. CC Switch 3.19.1 has
+no proved atomic default-disabled repository install. Live comparison, user
+manual testing, self-authored residual implementation, and hard-standard
+promotion therefore remain later gates. The main plan, process, and acceptance
+framework require no change.

@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-bound-cohort-reconciliation-2026-08-03",
+  "date": "2026-08-03",
+  "status": "nine-source-gate-reconciled-zero-install-next-stage-bounded",
+  "purpose": "Reconcile the nine-source inactive cohort after source-specific gates, distinguish source-gate coverage from itemized Skill coverage, freeze the static default-disabled candidate set, and decide the next zero-execution stage without broadening discovery or crossing the manager-install boundary.",
+  "predecessors": [
+    "registry/skill-portfolio-current-authority.json",
+    "registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json",
+    "registry/skill-portfolio-exact-acquisition-static-preflight-2026-08-02.json",
+    "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json",
+    "registry/skill-portfolio-kepano-obsidian-manager-registration-event-2026-08-02.json",
+    "registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json",
+    "registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json",
+    "registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-kdense-scientific-representative-adjudication-2026-08-03.json"
+  ],
+  "sourceGateCoverage": {
+    "boundSourceCount": 9,
+    "sourcesWithCurrentGateRecord": 9,
+    "preflightSkillMdPathCount": 363,
+    "preflightFileCount": 5457,
+    "preflightBytes": 371249850,
+    "exactItemizedSourceCount": 4,
+    "representativeSourceCount": 3,
+    "deepSystemGateSourceCount": 2,
+    "allSkillPathsItemized": false,
+    "ecosystemCompletenessProved": false,
+    "coverageMeaning": "Every source in the bounded August 2 cohort has a current source-specific gate. This is not a claim that all 363 Skill paths were individually reviewed or that the wider ecosystem is complete.",
+    "sources": [
+      {
+        "repository": "anthropics/skills",
+        "commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+        "preflightSkillMdPathCount": 18,
+        "gateMode": "exact-itemized",
+        "gateRecord": "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "addyosmani/agent-skills",
+        "commit": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+        "preflightSkillMdPathCount": 24,
+        "gateMode": "exact-itemized",
+        "gateRecord": "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "JimLiu/baoyu-skills",
+        "commit": "6b7a2e417500561a5ecdd0b168332f4142584617",
+        "preflightSkillMdPathCount": 22,
+        "gateMode": "exact-itemized",
+        "gateRecord": "registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "kepano/obsidian-skills",
+        "commit": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+        "preflightSkillMdPathCount": 5,
+        "gateMode": "exact-itemized",
+        "gateRecord": "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json"
+      },
+      {
+        "repository": "phuryn/pm-skills",
+        "commit": "18468a95b427e70e258b51389796367c6f684e7d",
+        "preflightSkillMdPathCount": 68,
+        "gateMode": "representative-exact-items",
+        "gateRecord": "registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "coreyhaines31/marketingskills",
+        "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+        "preflightSkillMdPathCount": 49,
+        "gateMode": "representative-exact-items",
+        "gateRecord": "registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "K-Dense-AI/scientific-agent-skills",
+        "commit": "ad21a3868923628330734375dddbf7b86ea84222",
+        "preflightSkillMdPathCount": 158,
+        "gateMode": "representative-source-and-one-exact-body",
+        "gateRecord": "registry/skill-portfolio-kdense-scientific-representative-adjudication-2026-08-03.json"
+      },
+      {
+        "repository": "mvanhorn/last30days-skill",
+        "commit": "52f53312ff2f272e16bbc1785e1c04f9d9c19b31",
+        "preflightSkillMdPathCount": 1,
+        "gateMode": "deep-executable-system-gate",
+        "gateRecord": "registry/skill-portfolio-last30days-deep-review-gate-2026-08-03.json"
+      },
+      {
+        "repository": "OthmanAdi/planning-with-files",
+        "commit": "0e2b00ce4e8d1789cbcb16a41f7c9510b212b942",
+        "preflightSkillMdPathCount": 18,
+        "gateMode": "mechanism-and-host-system-gate",
+        "gateRecord": "registry/skill-portfolio-planning-with-files-system-adjudication-2026-08-03.json"
+      }
+    ]
+  },
+  "staticDefaultDisabledCandidates": {
+    "count": 17,
+    "sourceCount": 6,
+    "bySource": {
+      "kepano/obsidian-skills": [
+        "json-canvas",
+        "obsidian-bases",
+        "obsidian-markdown"
+      ],
+      "phuryn/pm-skills": [
+        "strategy-red-team",
+        "interview-script",
+        "opportunity-solution-tree"
+      ],
+      "coreyhaines31/marketingskills": [
+        "copywriting",
+        "copy-editing",
+        "customer-research"
+      ],
+      "anthropics/skills": [
+        "internal-comms"
+      ],
+      "addyosmani/agent-skills": [
+        "ci-cd-and-automation",
+        "deprecation-and-migration",
+        "documentation-and-adrs",
+        "source-driven-development"
+      ],
+      "JimLiu/baoyu-skills": [
+        "baoyu-article-illustrator",
+        "baoyu-cover-image",
+        "baoyu-infographic"
+      ]
+    },
+    "namesUniqueAcrossThisCohort": true,
+    "selectionMeaning": "A source-specific static gate found a plausible distinct method or instruction unit suitable for later default-disabled comparison. Selection is not installation readiness, enablement, exposure, behavior, value, portability, or final admission evidence.",
+    "allBlockedByAtomicDefaultDisabledManagerGap": true
+  },
+  "sourcesWithoutStaticManagerCandidates": {
+    "K-Dense-AI/scientific-agent-skills": "representative-item-closure-incomplete",
+    "mvanhorn/last30days-skill": "deep-executable-external-data-and-host-lifecycle-review",
+    "OthmanAdi/planning-with-files": "split-mechanism-comparison-full-system-held"
+  },
+  "compositionAndMechanismInputs": {
+    "skillCompositionInputs": [
+      {
+        "source": "phuryn/pm-skills",
+        "name": "intended-vs-implemented",
+        "state": "dependency-review-required"
+      },
+      {
+        "source": "anthropics/skills",
+        "name": "theme-factory",
+        "state": "compose-with-current-official-document-runtimes"
+      },
+      {
+        "source": "addyosmani/agent-skills",
+        "name": "observability-and-instrumentation",
+        "state": "dependency-complete-composition-candidate"
+      },
+      {
+        "source": "addyosmani/agent-skills",
+        "name": "performance-optimization",
+        "state": "dependency-complete-composition-candidate"
+      },
+      {
+        "source": "K-Dense-AI/scientific-agent-skills",
+        "name": "literature-review",
+        "state": "dependency-heavy-composition-only"
+      }
+    ],
+    "planningMechanismInputs": [
+      "durable-three-file-working-state",
+      "event-driven-plan-reinjection",
+      "plan-isolation-and-attestation"
+    ],
+    "meaning": "These are Recipe, adapter, or isolated mechanism comparison inputs. They do not enter the 17-Skill manager candidate count and do not prove self-authored residual need."
+  },
+  "lifecycleState": {
+    "manager": "CC Switch 3.19.1",
+    "managerRepositoryRegistrations": 1,
+    "registeredSources": ["kepano/obsidian-skills"],
+    "repositoryRegistrationIsNotInstallation": true,
+    "managerCandidateRows": 0,
+    "candidateInstallations": 0,
+    "candidateEnablements": 0,
+    "candidateHostExposures": 0,
+    "candidateExecutions": 0,
+    "behaviorOrValueProofs": 0,
+    "atomicDefaultDisabledManagerInstallProved": false,
+    "parallelManagerAuthorized": false,
+    "directDatabaseWriteAuthorized": false,
+    "manualSsotStagingAuthorized": false
+  },
+  "nextStageGate": {
+    "boundedCohortSourceGateReconciliationComplete": true,
+    "zeroExecutionDemandMappingEligible": true,
+    "zeroExecutionComparisonProtocolPreparationEligible": true,
+    "moreUntargetedCandidateNameDiscoveryAuthorized": false,
+    "targetedDiscoveryReopenConditions": [
+      "a mapped demand cell has a specific current-capability or mechanism gap",
+      "a reviewed source or host materially drifts",
+      "a phase change introduces a new data, authority, or carrier requirement"
+    ],
+    "liveBehaviorExperimentEligible": false,
+    "candidateInstallationEligible": false,
+    "selfAuthoredResidualGapEligible": false,
+    "hardStandardPromotionEligible": false,
+    "manualUserTestingRequiredNow": false,
+    "reason": "The current cohort is broad enough to move from source collection to deterministic demand mapping and comparison-protocol preparation. Live candidate arms remain blocked by the manager's non-atomic install behavior and by missing treatment-specific authority and evidence."
+  },
+  "decision": {
+    "currentCohortDisposition": "freeze-source-expansion-and-map-seventeen-static-candidates-plus-composition-inputs",
+    "planChangeRequired": false,
+    "processChangeRequired": false,
+    "acceptanceChangeRequired": false,
+    "mainPlanInterpretation": "This is the planned transition from bounded broad acquisition to mapping and simulation, not a reversal of subtraction or an assertion that more Skills are inherently better."
+  },
+  "claimBoundary": {
+    "all363SkillPathsItemized": false,
+    "ecosystemCompletenessProved": false,
+    "candidateInstallationReady": false,
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "hostExposureProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostPortabilityProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "hardStandardNeedProved": false
+  },
+  "nextAction": "Build a deterministic demand-to-candidate and current-capability matrix for the seventeen static candidates and the separate composition or mechanism inputs. Deduplicate by effect and boundary, define no-model comparison oracles and attribution, and keep every candidate inactive until the CC Switch atomic default-disabled transaction or another separately authorized manager remedy is proved."
+}
