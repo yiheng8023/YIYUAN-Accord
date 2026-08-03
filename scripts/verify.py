@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import copy
+import hashlib
 import re
 import subprocess
 import sys
@@ -1762,6 +1763,9 @@ REQUIRED_FILES = (
     "drafts/mvp02-adaptation/spec-driven-development/DRAFT.md",
     "drafts/mvp02-adaptation/documentation-and-adrs/DRAFT.md",
     "drafts/mvp02-adaptation/code-review-and-quality/DRAFT.md",
+    "scripts/build_cc_switch_candidate_cohort_transaction_preview.py",
+    "tests/test_cc_switch_candidate_cohort_transaction_preview.py",
+    "audits/cc-switch-candidate-cohort-transaction-preview-2026-08-03/REPORT.json",
 )
 
 
@@ -3308,6 +3312,11 @@ def verify() -> None:
         skill_source_lineage_collision_index_doc
     )
     validate_cc_switch_live_drift_and_transaction_gate(cc_switch_live_drift_doc)
+    validate_cc_switch_candidate_cohort_transaction_preview(
+        load(
+            "audits/cc-switch-candidate-cohort-transaction-preview-2026-08-03/REPORT.json"
+        )
+    )
     validate_cc_switch_recovery_preflight(cc_switch_recovery_preflight_doc)
     validate_cc_switch_stale_row_reconciliation_gap(cc_switch_stale_row_gap_doc)
     validate_skill_ecosystem_overlap_and_ablation_matrix(
@@ -26390,6 +26399,135 @@ def validate_codex_app_server_selected_skill_exposure_evidence(
         if link not in path.read_text(encoding="utf-8"):
             raise RuntimeError(
                 f"Codex selected Skill link missing from {path.name}."
+            )
+
+
+def validate_cc_switch_candidate_cohort_transaction_preview(
+    document: dict[str, object],
+) -> None:
+    expected = {
+        "schema": 1,
+        "status": "preview-built-zero-live-mutation-manager-fork-unmerged",
+        "candidateCount": 17,
+        "sourceCount": 6,
+        "collisionCount": 0,
+        "allInitialAppsDisabled": True,
+    }
+    for key, value in expected.items():
+        if document.get(key) != value:
+            raise RuntimeError(
+                f"CC Switch candidate cohort preview {key} drifted."
+            )
+
+    contribution = document.get("managerContribution")
+    if not isinstance(contribution, dict) or contribution != {
+        "upstreamRepository": "farion1231/cc-switch",
+        "upstreamBase": "492245dcb9196b0169e227d9eae2ab91466c0058",
+        "forkBranch": "yiheng8023:codex/inactive-skill-cohort-transaction",
+        "forkHead": "3db0288c2e3d34d26578839c3c14296eed7c6476",
+        "draftPullRequest": "https://github.com/farion1231/cc-switch/pull/6086",
+        "state": "open-draft-review-required",
+        "merged": False,
+        "released": False,
+        "liveRuntimeAvailable": False,
+        "supportBoundary": "exact-nested-repository-relative-source-path",
+        "trustBoundary": {
+            "revisionObjectTypeIndependentlyProved": False,
+            "dependencyClosureSemanticallyProvedByManager": False,
+            "materializedSourceTreeHashVerifiedByManager": True,
+            "exactNestedSourcePathRequired": True,
+            "repositoryRootSkillSupported": False,
+            "recoveryDurability": "interrupted-process-only",
+        },
+    }:
+        raise RuntimeError("CC Switch candidate cohort contribution boundary drifted.")
+
+    transaction = document.get("transaction")
+    if not isinstance(transaction, dict):
+        raise RuntimeError("CC Switch candidate cohort transaction is required.")
+    blockers = transaction.get("blockers")
+    if (
+        transaction.get("executionEligible") is not False
+        or not isinstance(blockers, list)
+        or not any("not merged, released" in item for item in blockers)
+        or not any("operational dependency adjudication" in item for item in blockers)
+    ):
+        raise RuntimeError("CC Switch candidate cohort blockers drifted.")
+
+    candidates = document.get("candidates")
+    if not isinstance(candidates, list) or len(candidates) != 17:
+        raise RuntimeError("CC Switch candidate cohort inventory drifted.")
+    incomplete: list[str] = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            raise RuntimeError("CC Switch candidate cohort item must be an object.")
+        revision = candidate.get("revision")
+        source_path = candidate.get("sourcePath")
+        admission = candidate.get("managerAdmission")
+        if (
+            not isinstance(revision, str)
+            or re.fullmatch(r"[0-9a-f]{40}", revision) is None
+            or not isinstance(source_path, str)
+            or source_path in {"", "."}
+            or not isinstance(admission, dict)
+            or re.fullmatch(r"[0-9a-f]{64}", str(admission.get("sourceTreeHash", "")))
+            is None
+            or re.fullmatch(
+                r"[0-9a-f]{64}",
+                str(admission.get("dependencyClosureDigest", "")),
+            )
+            is None
+        ):
+            raise RuntimeError("CC Switch candidate cohort admission drifted.")
+        if admission.get("dependencyComplete") is not True:
+            incomplete.append(str(candidate.get("name")))
+    if incomplete != ["customer-research"]:
+        raise RuntimeError("CC Switch dependency-complete boundary drifted.")
+
+    counters = document.get("executionCounters")
+    if counters != {
+        "networkCalls": 0,
+        "thirdPartyScriptExecutions": 0,
+        "managerInvocations": 0,
+        "managerMutations": 0,
+        "consumerWrites": 0,
+        "modelCalls": 0,
+    }:
+        raise RuntimeError("CC Switch candidate cohort no-mutation boundary drifted.")
+
+    claims = document.get("claimBoundary")
+    if (
+        not isinstance(claims, dict)
+        or claims.get("managerBatchTransactionImplementedInFork") is not True
+        or claims.get("managerBatchTransactionMergedOrReleased") is not False
+        or claims.get("managerBatchTransactionImplemented") is not False
+        or claims.get("candidateInstalled") is not False
+        or claims.get("candidateEnabled") is not False
+        or claims.get("candidateExposed") is not False
+        or claims.get("candidateExecuted") is not False
+        or claims.get("candidateBehaviorOrValueProved") is not False
+    ):
+        raise RuntimeError("CC Switch candidate cohort claim boundary drifted.")
+
+    digest = document.get("reportSha256")
+    body = {key: value for key, value in document.items() if key != "reportSha256"}
+    encoded = json.dumps(
+        body,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    if digest != hashlib.sha256(encoded).hexdigest():
+        raise RuntimeError("CC Switch candidate cohort report digest drifted.")
+
+    evidence_link = "cc-switch-candidate-cohort-transaction-preview-2026-08-03"
+    for path in (
+        ROOT / "docs/operations/CONTINUATION.md",
+        ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    ):
+        if evidence_link not in path.read_text(encoding="utf-8"):
+            raise RuntimeError(
+                f"CC Switch candidate cohort evidence link missing from {path.name}."
             )
 
 

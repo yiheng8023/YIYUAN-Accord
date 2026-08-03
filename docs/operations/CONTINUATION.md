@@ -4009,3 +4009,38 @@ baseline worktrees and all build artifacts were removed; the clean fork
 worktree remains for upstream review. Keep the 17 candidates inactive. The
 next gate is upstream review and a separate decision on the residual cohort
 transaction, not live installation.
+
+## 2026-08-03 CC Switch atomic inactive-cohort contribution checkpoint
+
+Repository truth for the external CC Switch slice was frozen at upstream
+`492245dcb9196b0169e227d9eae2ab91466c0058`. Fork branch
+`codex/inactive-skill-cohort-transaction` is pushed at
+`3db0288c2e3d34d26578839c3c14296eed7c6476`; upstream
+[draft PR 6086](https://github.com/farion1231/cc-switch/pull/6086) is open and
+review-required. It supersedes the narrower draft PR 6083 without treating the
+new draft as merged, released, or available in the live manager.
+
+The fork implements an exact-revision, default-disabled, recoverable cohort
+transaction with bounded acquisition, fetch-all-before-write, complete tree
+identity, a shared Skill write lock, startup/explicit recovery, full-row
+database rollback, broken-symlink collision handling, and zero consumer
+projection. Two independent final reviews found no blocker inside the declared
+nested-path and caller-owned-admission scope. Rust fmt/Clippy, 37 focused Rust
+tests, TypeScript, relevant Prettier, eight frontend regression tests, and the
+Vite production build pass. The prior full Rust run retained four exact
+upstream `model_pricing` baseline failures and no new assertion failure.
+
+Harness evidence is
+`audits/cc-switch-candidate-cohort-transaction-preview-2026-08-03/REPORT.json`.
+It records 17 candidates from six sources, zero live collisions, all requested
+apps disabled, and zero network/manager/consumer/model operations during report
+generation. `customer-research` remains dependency-incomplete because its
+reviewed tree links to an out-of-root SparkToro file. Execution eligibility is
+therefore false even if the manager patch later merges.
+
+Do not claim independent Git object-type proof, semantic dependency proof,
+repository-root Skill support, power-loss durability, runtime installation,
+enablement, exposure, behavior, or value. Do not install the cohort, mutate CC
+Switch, or start a model arm from this checkpoint. Next: verify fresh repository
+truth, upstream PR state and exact head; resolve the one dependency boundary;
+then seek separate live-install authority only if all gates remain satisfied.

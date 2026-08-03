@@ -1,0 +1,801 @@
+{
+  "schema": 1,
+  "status": "preview-built-zero-live-mutation-manager-fork-unmerged",
+  "candidateCount": 17,
+  "sourceCount": 6,
+  "collisionCount": 0,
+  "allInitialAppsDisabled": true,
+  "sources": [
+    {
+      "repository": "kepano/obsidian-skills",
+      "revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "candidateNames": [
+        "json-canvas",
+        "obsidian-bases",
+        "obsidian-markdown"
+      ]
+    },
+    {
+      "repository": "phuryn/pm-skills",
+      "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+      "candidateNames": [
+        "strategy-red-team",
+        "interview-script",
+        "opportunity-solution-tree"
+      ]
+    },
+    {
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "candidateNames": [
+        "copywriting",
+        "copy-editing",
+        "customer-research"
+      ]
+    },
+    {
+      "repository": "anthropics/skills",
+      "revision": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+      "candidateNames": [
+        "internal-comms"
+      ]
+    },
+    {
+      "repository": "addyosmani/agent-skills",
+      "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "candidateNames": [
+        "ci-cd-and-automation",
+        "deprecation-and-migration",
+        "documentation-and-adrs",
+        "source-driven-development"
+      ]
+    },
+    {
+      "repository": "JimLiu/baoyu-skills",
+      "revision": "6b7a2e417500561a5ecdd0b168332f4142584617",
+      "candidateNames": [
+        "baoyu-article-illustrator",
+        "baoyu-cover-image",
+        "baoyu-infographic"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "name": "json-canvas",
+      "source": "kepano/obsidian-skills",
+      "revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "sourcePath": "skills/json-canvas",
+      "installDirectory": "json-canvas",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "788535277bc5f460bec97d467615a2ce97e2957dad1b1fc961e645f64c827128",
+      "payloadTreeSha256": "c8d42e6dc0ab05998b14d50905d2b3af27ef738165c9770d3fb43fbabf45529b",
+      "managerAdmission": {
+        "sourceTreeHash": "cd130fc9fcd7c98812df0ca17d11c2be99b2f8f900acdb86e67bd506b77b5fde",
+        "dependencyClosureDigest": "d5b312a86bd4170830e7eb08564c63034b4d048c3e57378825cb246c7eae112c",
+        "dependencyComplete": true
+      },
+      "fileCount": 2,
+      "bytes": 14673,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [
+        "skills/json-canvas/references/EXAMPLES.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1098,
+          "sha256": "247619161a610ee98dbaa2337da2d2d64e84ff33d946e79a7c93ab9335cdebb1"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "obsidian-bases",
+      "source": "kepano/obsidian-skills",
+      "revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "sourcePath": "skills/obsidian-bases",
+      "installDirectory": "obsidian-bases",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "83bc04a2c306a61c216c0cfecbb4d032cc763896623d229cd2a6dab811083032",
+      "payloadTreeSha256": "6fa010933569a1a2aae9bfc99b6a9cfb329932de5d62f2d25e15610f212cb7cc",
+      "managerAdmission": {
+        "sourceTreeHash": "8b0878f9c342a78fb14496610b622d9afbf41dd675e1e61b0f5b700595fa97cd",
+        "dependencyClosureDigest": "562611439fedf71e410a0faa65e4ee5ab1e2a5dc2d896addbbd5e84ec4910f37",
+        "dependencyComplete": true
+      },
+      "fileCount": 2,
+      "bytes": 21237,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [
+        "skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1098,
+          "sha256": "247619161a610ee98dbaa2337da2d2d64e84ff33d946e79a7c93ab9335cdebb1"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "obsidian-markdown",
+      "source": "kepano/obsidian-skills",
+      "revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "sourcePath": "skills/obsidian-markdown",
+      "installDirectory": "obsidian-markdown",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "ef409b7eeda59e2e0c5cdead334dcc997dc9459d689859b3a610ffa9af5cabc5",
+      "payloadTreeSha256": "76436cb27ab245037c5f04ba6c877fc735a4e00542d6317321c45d9ca9f6684a",
+      "managerAdmission": {
+        "sourceTreeHash": "58a20c8b3abfb4ece73273551705aae8137becdff65d6c16db3abc5796356d1b",
+        "dependencyClosureDigest": "16cde1d7e08c3f27e8f4b3cacfd9905d20de0d0303fd684d8cbf1988da100556",
+        "dependencyComplete": true
+      },
+      "fileCount": 4,
+      "bytes": 9000,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [
+        "skills/obsidian-markdown/references/CALLOUTS.md",
+        "skills/obsidian-markdown/references/EMBEDS.md",
+        "skills/obsidian-markdown/references/PROPERTIES.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1098,
+          "sha256": "247619161a610ee98dbaa2337da2d2d64e84ff33d946e79a7c93ab9335cdebb1"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "strategy-red-team",
+      "source": "phuryn/pm-skills",
+      "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+      "sourcePath": "pm-execution/skills/strategy-red-team",
+      "installDirectory": "strategy-red-team",
+      "effectGroupId": "effect.decision-challenge",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "adbb7ed024df75243710823d7a2182920b8060f193500bf3fac7c24e84b34189",
+      "payloadTreeSha256": "a382da0ac0a957a85519c2d4eed0879a090c525006670acd19e7f69ea44aef81",
+      "managerAdmission": {
+        "sourceTreeHash": "c5e040725a70a2d3b61dea4c66ca12f3b8a491a955e93dbe36e9ccf2f2079ee7",
+        "dependencyClosureDigest": "23ee1a409a9bf31efe02b25037f65c7a601216cd3e30601e522e78c647aa0b41",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 4587,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1089,
+          "sha256": "591ab4c6a9e75f1f2cf517522759f96eb19f928ee72e637f32fd7d1337c533df"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "interview-script",
+      "source": "phuryn/pm-skills",
+      "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+      "sourcePath": "pm-product-discovery/skills/interview-script",
+      "installDirectory": "interview-script",
+      "effectGroupId": "effect.product-discovery",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "be9fe91ec26b2ffea82578177f1e7e60be0a22b2a09cef9f1af62e5c21ee4819",
+      "payloadTreeSha256": "219004385d27459ff3cc67a04a7a46a05efe93d8d2de187fe2f5f220c8e826c2",
+      "managerAdmission": {
+        "sourceTreeHash": "ef31edfc1c411991b21b7a2c6b51966fce57d14050786e8da882ec340da2f16c",
+        "dependencyClosureDigest": "bb57dc06fc320ca852743c1bdf58d8c4660f8988d74d73f862fc976a85c74466",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 4922,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1089,
+          "sha256": "591ab4c6a9e75f1f2cf517522759f96eb19f928ee72e637f32fd7d1337c533df"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "opportunity-solution-tree",
+      "source": "phuryn/pm-skills",
+      "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+      "sourcePath": "pm-product-discovery/skills/opportunity-solution-tree",
+      "installDirectory": "opportunity-solution-tree",
+      "effectGroupId": "effect.product-discovery",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "67c8644730477fd7518bfac3fda51358f236f55eb4070de4678256679a419180",
+      "payloadTreeSha256": "78e4940eda34898a0ced4f09b15279dcbc881e61b0c84b9699b4100948afe306",
+      "managerAdmission": {
+        "sourceTreeHash": "cf2262b4553e14944d8e2f87666544377f451a52dd474f0a71ad17211c65c9c1",
+        "dependencyClosureDigest": "ca7655411e3793666153289528bb460efdf159afd27c0937f50b9b4f2a3f9c8f",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 4345,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1089,
+          "sha256": "591ab4c6a9e75f1f2cf517522759f96eb19f928ee72e637f32fd7d1337c533df"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "copywriting",
+      "source": "coreyhaines31/marketingskills",
+      "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "sourcePath": "skills/copywriting",
+      "installDirectory": "copywriting",
+      "effectGroupId": "effect.marketing-writing",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "37909bbc83d050fb8375e5b1df96725b6f7c7c3b6163d278c849fd58cac073b6",
+      "payloadTreeSha256": "0d5a8dba6dfb8f3e4d7f79d941184455fec24a65be0bffe01bdab8a56406c5ef",
+      "managerAdmission": {
+        "sourceTreeHash": "de24fecffb7c70af7f4427007e527f6a1de43581dfbfa9811ba4604536c8706e",
+        "dependencyClosureDigest": "8fe1f69c638fc6b3949d8ffa6760c640ed1bcf6f568cb9cd57858d271728e504",
+        "dependencyComplete": true
+      },
+      "fileCount": 4,
+      "bytes": 30295,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [
+        "skills/copywriting/references/copy-frameworks.md",
+        "skills/copywriting/references/natural-transitions.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1090,
+          "sha256": "3bb73920cd10a04b0ce3f28b84bada69e9286d0c33cf654ff10c279409791aa9"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "copy-editing",
+      "source": "coreyhaines31/marketingskills",
+      "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "sourcePath": "skills/copy-editing",
+      "installDirectory": "copy-editing",
+      "effectGroupId": "effect.marketing-writing",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "3d64c76f6b23e9b624a724234de78259b5cffdb3e375513a52baf5f3cc502533",
+      "payloadTreeSha256": "599fc823d45345caec41959ddf89d3e846155acf5e505f51aa90451228a0824b",
+      "managerAdmission": {
+        "sourceTreeHash": "f64d3ab300a0f7ad597d34d616df3eba8ea694d14ee4db2b756a55ce5202178b",
+        "dependencyClosureDigest": "df35567241bd2ca3c73a7830cd0f35f028b8cf346ed7d78cec35da44a7b06e78",
+        "dependencyComplete": true
+      },
+      "fileCount": 5,
+      "bytes": 35875,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [
+        "skills/copy-editing/references/checklist.md",
+        "skills/copy-editing/references/content-refresh.md",
+        "skills/copy-editing/references/plain-english-alternatives.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1090,
+          "sha256": "3bb73920cd10a04b0ce3f28b84bada69e9286d0c33cf654ff10c279409791aa9"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "customer-research",
+      "source": "coreyhaines31/marketingskills",
+      "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "sourcePath": "skills/customer-research",
+      "installDirectory": "customer-research",
+      "effectGroupId": "effect.customer-research",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "1b50c866840071c0c43253077d084fc8cc4306a7feff85662251dc42b2e4664f",
+      "payloadTreeSha256": "0f8f248ce4f5532d5c5040ee529ddbb05b9ecc6a836407ce05adfa527ef897e8",
+      "managerAdmission": {
+        "sourceTreeHash": "8aad1a2bc76a0f5ddc56e2abde5a7f74d7fcbc7f19d335e75d6a262f45da4cb7",
+        "dependencyClosureDigest": "146926fe1d489eb526c366bc213fc48220c329cb48e75e665b689cc5350a5587",
+        "dependencyComplete": false
+      },
+      "fileCount": 3,
+      "bytes": 40802,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [
+        {
+          "source": "references/source-guides.md",
+          "target": "../../../tools/integrations/sparktoro.md"
+        }
+      ],
+      "declaredDependencies": [
+        "skills/customer-research/references/source-guides.md"
+      ],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1090,
+          "sha256": "3bb73920cd10a04b0ce3f28b84bada69e9286d0c33cf654ff10c279409791aa9"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "internal-comms",
+      "source": "anthropics/skills",
+      "revision": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
+      "sourcePath": "skills/internal-comms",
+      "installDirectory": "internal-comms",
+      "effectGroupId": "effect.internal-communications",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "c5c061ab25b33fab2358a9be53a5cc0d528ec7c3e8a29285a041ffc95d0d8947",
+      "payloadTreeSha256": "682a4e7440f220128dd91176dd29c4509d5be6a24367f1531d5fc9b694b73c71",
+      "managerAdmission": {
+        "sourceTreeHash": "fd18927f662f6493de8eca5e9e4ffe7ba1199a5e086754adcf89fac228410294",
+        "dependencyClosureDigest": "531fdb2b01b624fd5058bac95bcee9284d2a4ac48c2a9f20ec68960df01b9082",
+        "dependencyComplete": true
+      },
+      "fileCount": 6,
+      "bytes": 22781,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "skills/internal-comms/LICENSE.txt",
+          "bytes": 11546,
+          "sha256": "52b223c318576d65c32f70cb745f31352730e9f4c2c2c2570a66ce700f4f5a64"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "ci-cd-and-automation",
+      "source": "addyosmani/agent-skills",
+      "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "sourcePath": "skills/ci-cd-and-automation",
+      "installDirectory": "ci-cd-and-automation",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+      "payloadTreeSha256": "13d29d665193fc314556ab04abc2a3dbe45915b093d61424602b772f0485a06e",
+      "managerAdmission": {
+        "sourceTreeHash": "f5413cc3b664a1720f4a1122b111fa39ea3641fc590720e9f80f9fb2ba950fb2",
+        "dependencyClosureDigest": "a329c036a7e079c7ac10307d7c78f6ca49c7ccbc4bd87a9d44e5733af7660fe7",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 11332,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "deprecation-and-migration",
+      "source": "addyosmani/agent-skills",
+      "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "sourcePath": "skills/deprecation-and-migration",
+      "installDirectory": "deprecation-and-migration",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "92d9846321fab624eded7ac55d19a7738cfd2321c2be2e35eb153dcacf7359de",
+      "payloadTreeSha256": "e2c2111d8ce229cc298ebaf74bf85f7b8fab2376da8d5e05080f3b89890ce747",
+      "managerAdmission": {
+        "sourceTreeHash": "8e346df1f564a607a65acec0c406bfcd29a7e1873d5470f43de342ff987b220a",
+        "dependencyClosureDigest": "6a07d235fb677927fd3f370cae4920a7f32e7478f994e84e49be59774030c08f",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 12516,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "documentation-and-adrs",
+      "source": "addyosmani/agent-skills",
+      "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "sourcePath": "skills/documentation-and-adrs",
+      "installDirectory": "documentation-and-adrs",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+      "payloadTreeSha256": "3c2ad84e9c6f0ea6282ce80bef6142b4f5f12dbb7d79ee13906d2008c0a6f4ff",
+      "managerAdmission": {
+        "sourceTreeHash": "ab5fdd70fa38994ac2b9a440a9a0e990e96f029677a4ca32e0049fd8c8cf4491",
+        "dependencyClosureDigest": "e587c2c4d7c7847546cba8b04dc3c1d45f99f2ef2eb8beae354f68d5861166d1",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 9782,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "source-driven-development",
+      "source": "addyosmani/agent-skills",
+      "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+      "sourcePath": "skills/source-driven-development",
+      "installDirectory": "source-driven-development",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "b979e7531ea601ed14a090f32a5b135db517c48ab9821c5e8b09efd80f4ff4d8",
+      "payloadTreeSha256": "46c6ac108edd3fafb416d4fef2e400f5d8fc95d0933208240e7e379e26560349",
+      "managerAdmission": {
+        "sourceTreeHash": "c9452e15b892f13b1876149320500bacf60cd32221ab35fbc92aaadb405d50ef",
+        "dependencyClosureDigest": "b9a01c4d36026f7aff73cf1c3f116510abf7e16e380d4e842e1bd8a226e4e460",
+        "dependencyComplete": true
+      },
+      "fileCount": 1,
+      "bytes": 8204,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "baoyu-article-illustrator",
+      "source": "JimLiu/baoyu-skills",
+      "revision": "6b7a2e417500561a5ecdd0b168332f4142584617",
+      "sourcePath": "skills/baoyu-article-illustrator",
+      "installDirectory": "baoyu-article-illustrator",
+      "effectGroupId": "effect.visual-method",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "5f99fc77bdf524fe0cfff36f17844ce6425ae2c45cb139836fe77727dcb65370",
+      "payloadTreeSha256": "1be4c1514b13723feb827bd4df3bc88c5f75b3872938d662efa1d4ffee4d3071",
+      "managerAdmission": {
+        "sourceTreeHash": "0455402ba46fb06db13b6ae1fe9891e5360c2a1ab6dce43826c102597e1f664c",
+        "dependencyClosureDigest": "a22864fe3ea2aca794d31d7abe20d7f034440192ef7861d80e4a9d94f02ef2e3",
+        "dependencyComplete": true
+      },
+      "fileCount": 37,
+      "bytes": 140562,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1085,
+          "sha256": "3a4fa1a0d481411c0bda3cd27f4856ac2b7c25625b37091dd8f416e38ae39c96"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "baoyu-cover-image",
+      "source": "JimLiu/baoyu-skills",
+      "revision": "6b7a2e417500561a5ecdd0b168332f4142584617",
+      "sourcePath": "skills/baoyu-cover-image",
+      "installDirectory": "baoyu-cover-image",
+      "effectGroupId": "effect.visual-method",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "f4534d931bd394e5a4fb0d2c1318a6efd3d9d87dd80027517688dea84ce9e5fd",
+      "payloadTreeSha256": "77210708adc69210080e09a450aa6310350a7d355e9ea96f19a2d9dfe1657702",
+      "managerAdmission": {
+        "sourceTreeHash": "6faf13d586b2098b17d45a7b2d5f3e0801f1a10afc86ce28fc4c09223bcbb26c",
+        "dependencyClosureDigest": "2892cf7f279ffe09fbec6e77927707c34c622630082cfa7c07b35d5d187efd67",
+        "dependencyComplete": true
+      },
+      "fileCount": 35,
+      "bytes": 108819,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1085,
+          "sha256": "3a4fa1a0d481411c0bda3cd27f4856ac2b7c25625b37091dd8f416e38ae39c96"
+        }
+      ],
+      "collisionFree": true
+    },
+    {
+      "name": "baoyu-infographic",
+      "source": "JimLiu/baoyu-skills",
+      "revision": "6b7a2e417500561a5ecdd0b168332f4142584617",
+      "sourcePath": "skills/baoyu-infographic",
+      "installDirectory": "baoyu-infographic",
+      "effectGroupId": "effect.visual-method",
+      "initialApps": {
+        "claude": false,
+        "codex": false,
+        "gemini": false,
+        "grokbuild": false,
+        "opencode": false,
+        "hermes": false
+      },
+      "entrypointSha256": "f6121cbf49a3e2ef62aa69b79d09f98786d2f90b6bb450aa42ebaaa1fd76d4ab",
+      "payloadTreeSha256": "c63eb517f04a7857f232014e544a80e47f63caa428dcbe88a72a37294c8e22a1",
+      "managerAdmission": {
+        "sourceTreeHash": "81e57f194d3c823133b3c8761b34ab74525a1e3eb82f62c0ba9613a96694759c",
+        "dependencyClosureDigest": "28a14073d7d0d5d4af5b223ded367eb34d6ae1c5525c31b2a99ec2bfa91c9d87",
+        "dependencyComplete": true
+      },
+      "fileCount": 50,
+      "bytes": 97849,
+      "scriptLikeFileCount": 0,
+      "outOfRootMarkdownLinks": [],
+      "declaredDependencies": [],
+      "declaredDependenciesVerified": true,
+      "licenseArtifacts": [
+        {
+          "path": "LICENSE",
+          "bytes": 1085,
+          "sha256": "3a4fa1a0d481411c0bda3cd27f4856ac2b7c25625b37091dd8f416e38ae39c96"
+        }
+      ],
+      "collisionFree": true
+    }
+  ],
+  "collisions": [],
+  "managerSnapshot": {
+    "databasePath": "C:/Users/15521/.cc-switch/cc-switch.db",
+    "databaseSha256Before": "344b082935d2b5af09b065e6fb2c3a838eb571edf9989327a75c1fec9da15d10",
+    "databaseSha256After": "344b082935d2b5af09b065e6fb2c3a838eb571edf9989327a75c1fec9da15d10",
+    "databaseReadOnly": true,
+    "managerRowCount": 42,
+    "ssotRoot": "C:/Users/15521/.cc-switch/skills",
+    "consumerRoots": [
+      "C:/Users/15521/.agents/skills",
+      "C:/Users/15521/.codex/skills",
+      "C:/Users/15521/.claude/skills"
+    ]
+  },
+  "managerContribution": {
+    "upstreamRepository": "farion1231/cc-switch",
+    "upstreamBase": "492245dcb9196b0169e227d9eae2ab91466c0058",
+    "forkBranch": "yiheng8023:codex/inactive-skill-cohort-transaction",
+    "forkHead": "3db0288c2e3d34d26578839c3c14296eed7c6476",
+    "draftPullRequest": "https://github.com/farion1231/cc-switch/pull/6086",
+    "state": "open-draft-review-required",
+    "merged": false,
+    "released": false,
+    "liveRuntimeAvailable": false,
+    "supportBoundary": "exact-nested-repository-relative-source-path",
+    "trustBoundary": {
+      "revisionObjectTypeIndependentlyProved": false,
+      "dependencyClosureSemanticallyProvedByManager": false,
+      "materializedSourceTreeHashVerifiedByManager": true,
+      "exactNestedSourcePathRequired": true,
+      "repositoryRootSkillSupported": false,
+      "recoveryDurability": "interrupted-process-only"
+    }
+  },
+  "transaction": {
+    "kind": "preview-only-exact-revision-inactive-cohort",
+    "atomicBoundary": "17-candidate-cohort",
+    "requestedInitialApps": {
+      "claude": false,
+      "codex": false,
+      "gemini": false,
+      "grokbuild": false,
+      "opencode": false,
+      "hermes": false
+    },
+    "executionEligible": false,
+    "blockers": [
+      "CC Switch draft PR 6086 is not merged, released, or available in the live manager runtime",
+      "script-like files or out-of-root Markdown links require candidate-specific operational dependency adjudication"
+    ],
+    "backupPlan": [
+      "freeze and verify the live database, SSOT, consumer-root, and candidate-source digests",
+      "create a manager-owned database and SSOT rollback point before the first mutation",
+      "retain a durable transaction journal until post-commit verification succeeds"
+    ],
+    "rollbackPlan": [
+      "restore every pre-existing manager row and SSOT path from the frozen pre-state",
+      "remove only transaction-created inactive rows and SSOT paths",
+      "verify every consumer root remains byte/path unchanged",
+      "retain failed or ambiguous journals for explicit recovery rather than retrying"
+    ]
+  },
+  "executionCounters": {
+    "networkCalls": 0,
+    "thirdPartyScriptExecutions": 0,
+    "managerInvocations": 0,
+    "managerMutations": 0,
+    "consumerWrites": 0,
+    "modelCalls": 0
+  },
+  "claimBoundary": {
+    "exactSourceRevisionVerified": true,
+    "fullCandidateDirectoryInventoried": true,
+    "gateDeclaredDependencyFilesVerified": true,
+    "operationalDependencyClosureProved": false,
+    "managerBatchTransactionImplemented": false,
+    "managerBatchTransactionImplementedInFork": true,
+    "managerBatchTransactionMergedOrReleased": false,
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "candidateExposed": false,
+    "candidateExecuted": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "reportSha256": "997a2b04618ea16b6d0722b6788106fce3e7eb44a167d312f94067cf90a44342"
+}

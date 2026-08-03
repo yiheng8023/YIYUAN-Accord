@@ -2360,3 +2360,29 @@ rollback, and process-loss recovery remain outside the patch. Keep all 17
 candidates inactive while upstream review and the remaining transaction-design
 decision proceed independently. No main-process or acceptance-framework change
 is required.
+
+### 2026-08-03 atomic inactive-cohort fork follow-up
+
+The separately authorized fork follow-up now extends the single-item primitive
+with a bounded atomic inactive-cohort transaction. Fork head
+`3db0288c2e3d34d26578839c3c14296eed7c6476`, based on exact upstream
+`492245dcb9196b0169e227d9eae2ab91466c0058`, is published as
+[draft PR 6086](https://github.com/farion1231/cc-switch/pull/6086). The patch
+prefetches all repositories before mutation, verifies exact nested source paths
+and full materialized tree hashes, starts every app disabled, journals the
+filesystem/database commit, recovers interrupted transactions, and serializes
+ordinary Skill and sync-snapshot writes through one manager lock.
+
+The [17-candidate transaction preview](../../audits/cc-switch-candidate-cohort-transaction-preview-2026-08-03/REPORT.json)
+records six exact sources, zero live collisions, zero manager/consumer/model
+operations, and one unresolved dependency boundary: `customer-research` links
+outside its candidate root to `../../../tools/integrations/sparktoro.md`.
+Therefore execution eligibility remains false. The revision object type and
+semantic dependency decision remain trusted caller assertions; the manager
+checks shape, exact archive/path, admitted dependency state, and actual tree
+hash. Repository-root Skills and power-loss durability are not claimed.
+
+PR creation is not runtime availability. The change is not merged, released,
+installed, enabled, exposed, or behavior/value tested, and no current acceptance
+gate is promoted. Continue only with upstream review and resolution of the one
+dependency-closure debt before seeking separate live-install authority.
