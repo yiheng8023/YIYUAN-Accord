@@ -126,6 +126,12 @@ def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
+def windows_crlf_projection_sha256(path: Path) -> str:
+    data = path.read_bytes()
+    _require(b"\r\n" not in data, f"Repository evidence is not LF: {path}")
+    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest().upper()
+
+
 def canonical_json_sha256(value: Any) -> str:
     encoded = json.dumps(
         value,
@@ -302,8 +308,13 @@ def _validate_sources(record: dict[str, Any], *, root: Path) -> None:
         *expected["formalReports"],
     ):
         path = root / str(binding["path"])
+        observed_hash = (
+            windows_crlf_projection_sha256(path)
+            if binding in expected["formalReports"] and path.is_file()
+            else file_sha256(path) if path.is_file() else None
+        )
         _require(
-            path.is_file() and file_sha256(path) == binding["sha256"],
+            path.is_file() and observed_hash == binding["sha256"],
             f"Bound source SHA256 drifted: {binding['path']}",
         )
 

@@ -47,6 +47,21 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
+def _repository_text_sha256(path: Path) -> str:
+    data = path.read_bytes()
+    _require(
+        b"\r" not in data.replace(b"\r\n", b""),
+        f"Invalid text EOL: {path}",
+    )
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest().upper()
+
+
+def _windows_crlf_projection_sha256(path: Path) -> str:
+    data = path.read_bytes()
+    _require(b"\r\n" not in data, f"Repository evidence is not LF: {path}")
+    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest().upper()
+
+
 def _canonical_report_sha256(report: dict[str, Any]) -> str:
     payload = dict(report)
     payload.pop("reportSha256", None)
@@ -70,8 +85,13 @@ def _load_bound_json(
     if not path.is_absolute():
         path = root / path
     _require(path.is_file(), f"{label} is missing: {path}")
+    observed_hash = (
+        _windows_crlf_projection_sha256(path)
+        if root.resolve() in path.resolve().parents and path.suffix == ".json"
+        else _sha256(path)
+    )
     _require(
-        _sha256(path) == str(item.get("sha256", "")).upper(),
+        observed_hash == str(item.get("sha256", "")).upper(),
         f"{label} hash drifted: {path}",
     )
     value = json.loads(path.read_text(encoding="utf-8"))
@@ -100,9 +120,14 @@ def validate_document(
         raw_path = binding.get("path")
         _require(isinstance(raw_path, str), f"{key} path is invalid")
         path = root / raw_path
+        observed_hash = (
+            _repository_text_sha256(path)
+            if key == "bridgeScript" and path.is_file()
+            else _sha256(path) if path.is_file() else None
+        )
         _require(
             path.is_file()
-            and _sha256(path) == str(binding.get("sha256", "")).upper(),
+            and observed_hash == str(binding.get("sha256", "")).upper(),
             f"{key} binding drifted",
         )
 

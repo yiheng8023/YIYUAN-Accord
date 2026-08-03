@@ -37,7 +37,10 @@
     {
       "path": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
       "bytes": 22335,
-      "sha256": "96b659c341279d6c42760ac7d45ef9437c613e7323b6f193badad3ffdc0b4664"
+      "sha256": "96b659c341279d6c42760ac7d45ef9437c613e7323b6f193badad3ffdc0b4664",
+      "repositoryBytes": 21958,
+      "repositorySha256": "8bd0c8cb747ac3d8968340e3601f10eacbbe9d2629b854c0c7273400391a7dbb",
+      "captureTransform": "repository-lf-to-observed-windows-crlf"
     },
     {
       "path": "registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json",

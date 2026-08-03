@@ -2,6 +2,7 @@ import copy
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from scripts.assess_process_fidelity_raw_event_trace_eligibility import (
     ASSESSMENT_EVIDENCE_PATH,
@@ -65,6 +66,40 @@ class ProcessFidelityRawEventTraceEligibilityAssessmentTests(
         mutated["decision"]["formalProcessCohortMustStartFromZero"] = False
         with self.assertRaisesRegex(RuntimeError, "decision"):
             validate_evidence(mutated, root=ROOT)
+
+    def test_durable_input_repository_hash_is_required(self) -> None:
+        mutated_smoke = copy.deepcopy(self.smoke)
+        mutated_smoke["durableRunEvidence"][
+            "rawReportRepositoryFileSha256"
+        ] = "0" * 64
+
+        def load_with_mutated_smoke(path: Path) -> dict:
+            if path == ROOT / SMOKE_EVIDENCE_PATH:
+                return mutated_smoke
+            return json.loads(path.read_text(encoding="utf-8"))
+
+        with patch(
+            "scripts.assess_process_fidelity_raw_event_trace_eligibility._load",
+            side_effect=load_with_mutated_smoke,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "repository input hash"):
+                validate_evidence(self.evidence, root=ROOT)
+
+    def test_durable_input_capture_hash_is_still_required(self) -> None:
+        mutated_smoke = copy.deepcopy(self.smoke)
+        mutated_smoke["durableRunEvidence"]["rawReportFileSha256"] = "0" * 64
+
+        def load_with_mutated_smoke(path: Path) -> dict:
+            if path == ROOT / SMOKE_EVIDENCE_PATH:
+                return mutated_smoke
+            return json.loads(path.read_text(encoding="utf-8"))
+
+        with patch(
+            "scripts.assess_process_fidelity_raw_event_trace_eligibility._load",
+            side_effect=load_with_mutated_smoke,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "capture input hash"):
+                validate_evidence(self.evidence, root=ROOT)
 
 
 if __name__ == "__main__":

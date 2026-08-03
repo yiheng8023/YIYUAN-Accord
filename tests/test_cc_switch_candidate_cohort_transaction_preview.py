@@ -179,10 +179,18 @@ class CcSwitchCandidateCohortTransactionPreviewTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(result.stdout)
             self.assertEqual(report["candidateCount"], 2)
+            self.assertEqual(report["transactionCandidateCount"], 2)
+            self.assertEqual(report["heldCandidateCount"], 0)
+            self.assertEqual(report["heldCandidates"], [])
             self.assertEqual(report["sourceCount"], 1)
             self.assertEqual(report["collisionCount"], 0)
             self.assertTrue(report["allInitialAppsDisabled"])
             self.assertFalse(report["transaction"]["executionEligible"])
+            self.assertTrue(report["transaction"]["dependencyComplete"])
+            self.assertEqual(
+                report["transaction"]["candidateNames"],
+                ["alpha", "beta"],
+            )
             self.assertEqual(
                 report["status"],
                 "preview-built-zero-live-mutation-manager-fork-unmerged",
@@ -325,6 +333,20 @@ class CcSwitchCandidateCohortTransactionPreviewTests(unittest.TestCase):
             )
             self.assertFalse(report["claimBoundary"]["operationalDependencyClosureProved"])
             self.assertFalse(alpha["managerAdmission"]["dependencyComplete"])
+            self.assertEqual(report["transactionCandidateCount"], 1)
+            self.assertEqual(report["heldCandidateCount"], 1)
+            self.assertEqual(report["transaction"]["candidateNames"], ["beta"])
+            self.assertTrue(report["transaction"]["dependencyComplete"])
+            self.assertEqual(report["heldCandidates"][0]["name"], "alpha")
+            self.assertEqual(
+                report["heldCandidates"][0]["disposition"],
+                "review-only-held-out-of-transaction",
+            )
+            self.assertTrue(
+                report["claimBoundary"][
+                    "transactionCohortOperationalDependencyClosureProved"
+                ]
+            )
 
 
 if __name__ == "__main__":

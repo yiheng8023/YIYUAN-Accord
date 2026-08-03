@@ -2386,3 +2386,30 @@ PR creation is not runtime availability. The change is not merged, released,
 installed, enabled, exposed, or behavior/value tested, and no current acceptance
 gate is promoted. Continue only with upstream review and resolution of the one
 dependency-closure debt before seeking separate live-install authority.
+
+### 2026-08-04 dependency-closure subtraction follow-up
+
+The unresolved `customer-research` boundary was rechecked against exact
+`coreyhaines31/marketingskills@7868cb9251fad80a73d26e488a5ad5f6c4a9f335`;
+current upstream `main` is unchanged. Its out-of-root SparkToro link is an
+optional detail/pricing reference, not an execution dependency, but the link
+would still be broken after exact selective installation. The target identity
+is preserved as Git blob `9641d1e5fdcdb500da68a70480678fe3954c29fb`,
+4,719 bytes, repository SHA-256
+`00961feb89821d20b61ecc0a7bef196669190eac8bb2bbe8029fd596c5fd6118`.
+
+Accordingly, the governed review inventory remains 17 candidates while the
+proposed inactive transaction cohort is reduced to the 16 dependency-complete
+candidates. `customer-research` remains review-only rather than being modified,
+wrapped, installed with a broken link, or falsely promoted. This is a bounded
+admission correction, not a change to the demand map, eight zero-model oracles,
+main process, or acceptance framework.
+
+The refreshed preview is reproducible from six pinned repositories, records
+zero collision and zero live mutation, and has report SHA-256
+`1c2fcd49d3efb3d2eb33616e63f38ea8d4772d0f318724b9e3f05e525cbd7fad`.
+Draft PR 6086 remains the sole runtime blocker for the 16-candidate transaction;
+its existence is not installation or release evidence. No live arm is opened,
+and `customer-research` can re-enter only after upstream repair or a separately
+governed dependency mechanism preserves exact upstream identity and reference
+closure.

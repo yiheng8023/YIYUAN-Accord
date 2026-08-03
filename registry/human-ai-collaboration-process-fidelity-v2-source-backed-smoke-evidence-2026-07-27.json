@@ -29,15 +29,25 @@
     "runnerFileSha256": "182CA8A2D0F6A823839A3EE1A90810AAF8DCD2867ACEB82D92845A802910272A"
   },
   "durableRunEvidence": {
+    "repositoryFileIdentity": {
+      "algorithm": "sha256",
+      "gitAttributes": "*.json text eol=lf",
+      "captureTransform": "repository-lf-to-observed-windows-crlf",
+      "meaning": "Repository hashes bind the governed LF Git representation; existing FileSha256 fields preserve the original Windows CRLF capture identity."
+    },
     "rawReportPath": "audits/process-fidelity-v2-source-backed-r2-2026-07-27/RAW-REPORT.json",
     "rawReportFileSha256": "6C40C51606CC6ED2330B3D725D9A81D0BEEA351A8420BBBEFB4A93F8C7273C88",
+    "rawReportRepositoryFileSha256": "821861719e20fa601caf861781bdb32d005d5266fa3ab76e03024c37144453fd",
     "rawReportCanonicalSha256": "eef51710fa16b9aad4dbf76a0896ad8e3f76581b619525b963f5629dfb8aa56c",
     "trialPacketPath": "audits/process-fidelity-v2-source-backed-r2-2026-07-27/TRIAL-PACKET.json",
     "trialPacketFileSha256": "DD8555203AF47817B622D3CED7D3BAFD14222E2656AC9ED49ECC983784F18246",
+    "trialPacketRepositoryFileSha256": "04b2da52be19ff1983ce4d73d9bfa12bcaa65903c959c4ee7fa650cdc500a790",
     "buildManifestPath": "audits/process-fidelity-v2-source-backed-r2-2026-07-27/BUILD-MANIFEST.json",
     "buildManifestFileSha256": "9133AA6E2A0D5E947D9031EEC17DF489EEE66A63EA2E145DE594AABE8CAFF7D6",
+    "buildManifestRepositoryFileSha256": "33824982fa6bfb37f664c52fda69036b2b95a149f3f718390312348489ff0d42",
     "publicSourceBundlePath": "audits/process-fidelity-v2-source-backed-r2-2026-07-27/PUBLIC-SOURCE-BUNDLE.json",
     "publicSourceBundleFileSha256": "B4CB9617DCD912C7C7D1A2B15F44C42EBD6CEA4E5D5C557A7E871548157F761F",
+    "publicSourceBundleRepositoryFileSha256": "cfd7cfcfbf7568fee3948ea8e328e03986cfea33e0eeeac3c27b3b59a69e4e08",
     "atDispatchProtocolFileSha256": "7D5FF7A9E0B538204A6BA9CEEAECFAF8DE09855EE42DA0C7957A909491161357",
     "sourceFixtureFileSha256": "D4894B4004824160A80DCDCDA6ABEA6561E54D7E73122A9675395D1312274374",
     "threadId": "019f9fb9-48d6-7252-94f2-9c93774f7a61",

@@ -89,6 +89,7 @@ from evaluate_mcp_same_thread_refresh_evidence import (
     evaluate_fixture_document as evaluate_mcp_same_thread_refresh_fixture_document,
 )
 from revalidate_skill_ablation_host_transaction import (
+    canonical_contract_source_path_matches,
     sha256_bytes as sha256_skill_ablation_transaction_bytes,
     validate_revalidation_report as validate_skill_ablation_transaction_revalidation_report,
 )
@@ -18958,8 +18959,7 @@ def validate_skill_ablation_host_transaction_revalidation(
     if (
         not isinstance(source, dict)
         or source.get("sha256") != expected_contract_sha256
-        or source.get("path")
-        != contract_path.resolve(strict=True).as_posix()
+        or not canonical_contract_source_path_matches(source.get("path"))
     ):
         raise RuntimeError(
             "Skill ablation transaction revalidation source binding drifted."
@@ -26409,6 +26409,8 @@ def validate_cc_switch_candidate_cohort_transaction_preview(
         "schema": 1,
         "status": "preview-built-zero-live-mutation-manager-fork-unmerged",
         "candidateCount": 17,
+        "transactionCandidateCount": 16,
+        "heldCandidateCount": 1,
         "sourceCount": 6,
         "collisionCount": 0,
         "allInitialAppsDisabled": True,
@@ -26448,9 +26450,11 @@ def validate_cc_switch_candidate_cohort_transaction_preview(
     blockers = transaction.get("blockers")
     if (
         transaction.get("executionEligible") is not False
+        or transaction.get("atomicBoundary") != "16-candidate-cohort"
+        or transaction.get("dependencyComplete") is not True
         or not isinstance(blockers, list)
         or not any("not merged, released" in item for item in blockers)
-        or not any("operational dependency adjudication" in item for item in blockers)
+        or any("operational dependency adjudication" in item for item in blockers)
     ):
         raise RuntimeError("CC Switch candidate cohort blockers drifted.")
 
@@ -26483,6 +26487,53 @@ def validate_cc_switch_candidate_cohort_transaction_preview(
             incomplete.append(str(candidate.get("name")))
     if incomplete != ["customer-research"]:
         raise RuntimeError("CC Switch dependency-complete boundary drifted.")
+    held = document.get("heldCandidates")
+    if held != [
+        {
+            "name": "customer-research",
+            "source": "coreyhaines31/marketingskills",
+            "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+            "disposition": "review-only-held-out-of-transaction",
+            "reason": (
+                "optional SparkToro detail reference is outside the selective "
+                "Skill root; installing the exact candidate directory would leave "
+                "a broken link"
+            ),
+            "scriptLikeFileCount": 0,
+            "outOfRootMarkdownLinks": [
+                {
+                    "source": "references/source-guides.md",
+                    "target": "../../../tools/integrations/sparktoro.md",
+                }
+            ],
+            "adjudication": {
+                "classification": (
+                    "optional-information-reference-but-selective-install-link-would-break"
+                ),
+                "operationalCoreDependency": False,
+                "selectiveInstallReferenceClosureComplete": False,
+                "linkPurpose": "full-tool-details-and-pricing-only",
+                "upstreamCurrentMainStillHasSameBoundary": True,
+                "target": {
+                    "path": "tools/integrations/sparktoro.md",
+                    "gitBlob": "9641d1e5fdcdb500da68a70480678fe3954c29fb",
+                    "bytes": 4719,
+                    "sha256": (
+                        "00961feb89821d20b61ecc0a7bef196669190eac8bb2bbe8029fd596c5fd6118"
+                    ),
+                },
+            },
+        }
+    ]:
+        raise RuntimeError("CC Switch held-candidate adjudication drifted.")
+    transaction_names = transaction.get("candidateNames")
+    expected_transaction_names = [
+        str(candidate.get("name"))
+        for candidate in candidates
+        if candidate.get("name") != "customer-research"
+    ]
+    if transaction_names != expected_transaction_names:
+        raise RuntimeError("CC Switch transaction cohort membership drifted.")
 
     counters = document.get("executionCounters")
     if counters != {
@@ -26501,6 +26552,9 @@ def validate_cc_switch_candidate_cohort_transaction_preview(
         or claims.get("managerBatchTransactionImplementedInFork") is not True
         or claims.get("managerBatchTransactionMergedOrReleased") is not False
         or claims.get("managerBatchTransactionImplemented") is not False
+        or claims.get("operationalDependencyClosureProved") is not False
+        or claims.get("transactionCohortOperationalDependencyClosureProved")
+        is not True
         or claims.get("candidateInstalled") is not False
         or claims.get("candidateEnabled") is not False
         or claims.get("candidateExposed") is not False

@@ -39,10 +39,16 @@ class ProcessFidelityV2SourceBackedSmokeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "at-dispatch"):
             validate_evidence(mutated, root=ROOT)
 
-    def test_durable_raw_report_hash_is_required(self) -> None:
+    def test_durable_raw_report_repository_hash_is_required(self) -> None:
+        mutated = copy.deepcopy(self.document)
+        mutated["durableRunEvidence"]["rawReportRepositoryFileSha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "durable file hash"):
+            validate_evidence(mutated, root=ROOT)
+
+    def test_durable_raw_report_capture_hash_is_still_required(self) -> None:
         mutated = copy.deepcopy(self.document)
         mutated["durableRunEvidence"]["rawReportFileSha256"] = "0" * 64
-        with self.assertRaisesRegex(RuntimeError, "durable file hash"):
+        with self.assertRaisesRegex(RuntimeError, "capture file hash"):
             validate_evidence(mutated, root=ROOT)
 
     def test_general_filesystem_authority_is_rejected(self) -> None:

@@ -7,7 +7,7 @@
     {
       "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
       "bytes": 22217,
-      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "sha256": "5ce5b277a52ae8c89345cfe59f088f1e09bed77f79bd7a02b663e1a52eed1cc7",
       "role": "effect-group-candidate-comparator-and-boundary-map"
     },
     {
@@ -38,6 +38,9 @@
       "path": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
       "bytes": 22335,
       "sha256": "96b659c341279d6c42760ac7d45ef9437c613e7323b6f193badad3ffdc0b4664",
+      "repositoryBytes": 21958,
+      "repositorySha256": "8bd0c8cb747ac3d8968340e3601f10eacbbe9d2629b854c0c7273400391a7dbb",
+      "captureTransform": "repository-lf-to-observed-windows-crlf",
       "role": "source-freshness-and-offline-snapshot-boundary-input"
     }
   ],

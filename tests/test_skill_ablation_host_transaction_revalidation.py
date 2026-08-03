@@ -223,6 +223,18 @@ class SkillAblationHostTransactionRevalidationTests(unittest.TestCase):
             validate_revalidation_report(report, contract),
         )
 
+    def test_recorded_capture_path_is_portable_to_current_worktree(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        contract = json.loads(
+            (root / "registry/skill-ablation-host-config-transaction-2026-07-19.json")
+            .read_text(encoding="utf-8")
+        )
+        report = json.loads(
+            (root / "registry/skill-ablation-host-transaction-revalidation-2026-07-24.json")
+            .read_text(encoding="utf-8")
+        )
+        self.assertEqual([], validate_revalidation_report(report, contract))
+
     def test_semantic_toml_count_accepts_header_with_trailing_comment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

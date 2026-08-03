@@ -46,6 +46,12 @@ def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _windows_crlf_projection_sha256(path: Path) -> str:
+    data = path.read_bytes()
+    _require(b"\r\n" not in data, f"Repository evidence is not LF-normalized: {path}")
+    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest()
+
+
 def _validate_manifest(root: Path, manifest_path: Path) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     body = dict(manifest)
@@ -69,10 +75,22 @@ def _validate_manifest(root: Path, manifest_path: Path) -> dict[str, Any]:
     )
     for relative, item in indexed.items():
         path = audit_root / relative
+        data = path.read_bytes() if path.is_file() else b""
+        exact_capture_match = (
+            len(data) == item.get("bytes")
+            and hashlib.sha256(data).hexdigest().lower()
+            == str(item.get("sha256", "")).lower()
+        )
+        crlf_projection = data.replace(b"\n", b"\r\n")
+        normalized_repository_match = (
+            path.suffix.lower() in {".json", ".md"}
+            and b"\r\n" not in data
+            and len(crlf_projection) == item.get("bytes")
+            and hashlib.sha256(crlf_projection).hexdigest().lower()
+            == str(item.get("sha256", "")).lower()
+        )
         _require(
-            path.stat().st_size == item.get("bytes")
-            and _file_sha256(path).lower()
-            == item.get("sha256", "").lower(),
+            path.is_file() and (exact_capture_match or normalized_repository_match),
             f"Adapter/evaluator audit file hash drifted: {relative}",
         )
     _require(
@@ -123,6 +141,12 @@ def validate_evidence(
     audit = document.get("auditEvidence")
     _require(
         isinstance(audit, dict)
+        and audit.get("repositoryFileIdentity")
+        == {
+            "algorithm": "sha256",
+            "gitAttributes": "*.json and *.md text eol=lf",
+            "captureTransform": "repository-lf-to-observed-windows-crlf",
+        }
         and not str(audit.get("root", "")).startswith(".tmp")
         and (root / audit["root"]).is_dir()
         and audit.get("repositoryLocalNonTemporaryDestinationBound") is True
@@ -136,11 +160,18 @@ def validate_evidence(
     _require(
         manifest_path.is_file()
         and report_path.is_file()
-        and audit.get("manifestFileSha256", "").lower()
+        and audit.get("manifestRepositoryFileSha256", "").lower()
         == _file_sha256(manifest_path).lower()
-        and audit.get("reportFileSha256", "").lower()
+        and audit.get("reportRepositoryFileSha256", "").lower()
         == _file_sha256(report_path).lower(),
         "Adapter/evaluator audit evidence hash drifted",
+    )
+    _require(
+        audit.get("manifestFileSha256", "").lower()
+        == _windows_crlf_projection_sha256(manifest_path).lower()
+        and audit.get("reportFileSha256", "").lower()
+        == _windows_crlf_projection_sha256(report_path).lower(),
+        "Adapter/evaluator audit evidence capture hash drifted",
     )
     _validate_manifest(root, manifest_path)
     report = json.loads(report_path.read_text(encoding="utf-8"))

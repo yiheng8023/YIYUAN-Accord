@@ -137,6 +137,28 @@ class EngineeringManagementZeroModelCalibrationTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "Fixture binding drifted"):
             self.evaluate(protocol=protocol)
 
+    def test_source_snapshot_repository_identity_is_required(self) -> None:
+        protocol = copy.deepcopy(self.protocol)
+        binding = next(
+            item
+            for item in protocol["sourceBindings"]
+            if item["path"].endswith("software-engineering-source-snapshot-2026-07-31.json")
+        )
+        binding["repositorySha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "repository binding drifted"):
+            self.evaluate(protocol=protocol)
+
+    def test_source_snapshot_capture_identity_is_still_required(self) -> None:
+        protocol = copy.deepcopy(self.protocol)
+        binding = next(
+            item
+            for item in protocol["sourceBindings"]
+            if item["path"].endswith("software-engineering-source-snapshot-2026-07-31.json")
+        )
+        binding["sha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "capture binding drifted"):
+            self.evaluate(protocol=protocol)
+
     def test_source_scenario_evidence_cannot_be_promoted(self) -> None:
         protocol = copy.deepcopy(self.protocol)
         protocol["scenarioBinding"]["evidenceStateMustRemain"] = "verified"

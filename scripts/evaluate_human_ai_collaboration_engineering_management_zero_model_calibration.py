@@ -502,6 +502,29 @@ def _validate_protocol_and_fixture(
             binding.get("path"),
             label="Protocol source binding",
         )
+        if "repositorySha256" in binding or "repositoryBytes" in binding:
+            _require(
+                binding.get("captureTransform")
+                == "repository-lf-to-observed-windows-crlf",
+                "Protocol source capture transform drifted",
+            )
+            _require(
+                path.stat().st_size == binding.get("repositoryBytes")
+                and _file_sha256(path) == binding.get("repositorySha256"),
+                f"Protocol source repository binding drifted: {binding.get('path')}",
+            )
+            data = path.read_bytes()
+            _require(
+                b"\r\n" not in data,
+                f"Protocol source repository EOL drifted: {binding.get('path')}",
+            )
+            capture = data.replace(b"\n", b"\r\n")
+            _require(
+                len(capture) == binding.get("bytes")
+                and hashlib.sha256(capture).hexdigest() == binding.get("sha256"),
+                f"Protocol source capture binding drifted: {binding.get('path')}",
+            )
+            continue
         _require(
             path.stat().st_size == binding.get("bytes")
             and _file_sha256(path) == binding.get("sha256"),

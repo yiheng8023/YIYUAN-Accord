@@ -37,6 +37,13 @@ class MultiConnectionSubscriptionPreflightEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "Claim boundary"):
             validate_document(ROOT, changed)
 
+    def test_bridge_repository_text_hash_is_required(self) -> None:
+        document = json.loads((ROOT / EVIDENCE_PATH).read_text(encoding="utf-8"))
+        changed = deepcopy(document)
+        changed["hostBinding"]["bridgeScript"]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "bridgeScript binding drifted"):
+            validate_document(ROOT, changed)
+
 
 if __name__ == "__main__":
     unittest.main()

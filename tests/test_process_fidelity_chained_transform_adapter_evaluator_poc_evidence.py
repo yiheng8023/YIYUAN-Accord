@@ -49,6 +49,18 @@ class ProcessFidelityChainedTransformAdapterEvaluatorPocEvidenceTests(
         with self.assertRaisesRegex(RuntimeError, "audit evidence boundary"):
             validate_evidence(mutated, root=ROOT)
 
+    def test_repository_manifest_hash_is_required(self) -> None:
+        mutated = copy.deepcopy(self.document)
+        mutated["auditEvidence"]["manifestRepositoryFileSha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "audit evidence hash"):
+            validate_evidence(mutated, root=ROOT)
+
+    def test_capture_manifest_hash_is_still_required(self) -> None:
+        mutated = copy.deepcopy(self.document)
+        mutated["auditEvidence"]["manifestFileSha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "capture hash"):
+            validate_evidence(mutated, root=ROOT)
+
     def test_claim_promotion_fails_closed(self) -> None:
         mutated = copy.deepcopy(self.document)
         mutated["claimBoundary"]["liveAgentBehaviorProved"] = True

@@ -50,8 +50,40 @@ def canonical_sha256(value: Any) -> str:
 def validate_file_binding(binding: dict[str, Any], *, root: Path) -> None:
     path = root / binding["path"]
     require(path.is_file(), f"Bound source is missing: {binding['path']}")
-    require(path.stat().st_size == binding["bytes"], "Bound source byte count drifted")
-    require(file_sha256(path) == binding["sha256"], "Bound source digest drifted")
+    if "repositorySha256" in binding or "repositoryBytes" in binding:
+        require(
+            binding.get("captureTransform")
+            == "repository-lf-to-observed-windows-crlf",
+            "Bound source capture transform drifted",
+        )
+        require(
+            path.stat().st_size == binding.get("repositoryBytes"),
+            "Bound source repository byte count drifted",
+        )
+        require(
+            file_sha256(path) == binding.get("repositorySha256"),
+            "Bound source repository digest drifted",
+        )
+        data = path.read_bytes()
+        require(b"\r\n" not in data, "Bound source repository EOL drifted")
+        capture = data.replace(b"\n", b"\r\n")
+        require(
+            len(capture) == binding["bytes"],
+            "Bound source capture byte count drifted",
+        )
+        require(
+            hashlib.sha256(capture).hexdigest() == binding["sha256"],
+            "Bound source capture digest drifted",
+        )
+        return
+    require(
+        path.stat().st_size == binding["bytes"],
+        "Bound source byte count drifted",
+    )
+    require(
+        file_sha256(path) == binding["sha256"],
+        "Bound source digest drifted",
+    )
 
 
 def apply_overrides(

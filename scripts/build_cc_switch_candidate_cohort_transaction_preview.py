@@ -57,6 +57,100 @@ def git_head(repository: Path) -> str:
     return result.stdout.strip()
 
 
+def git_blob_evidence(
+    repository: Path,
+    revision: str,
+    relative_path: str,
+) -> dict[str, Any]:
+    object_id = subprocess.run(
+        ["git", "-C", str(repository), "rev-parse", f"{revision}:{relative_path}"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    content = subprocess.run(
+        ["git", "-C", str(repository), "cat-file", "blob", object_id],
+        check=True,
+        capture_output=True,
+    ).stdout
+    return {
+        "path": relative_path,
+        "gitBlob": object_id,
+        "bytes": len(content),
+        "sha256": hashlib.sha256(content).hexdigest(),
+    }
+
+
+def dependency_hold_record(
+    *,
+    candidate: dict[str, Any],
+    repository: Path,
+    candidate_root: Path,
+) -> dict[str, Any]:
+    record: dict[str, Any] = {
+        "name": candidate["name"],
+        "source": candidate["source"],
+        "revision": candidate["revision"],
+        "disposition": "review-only-held-out-of-transaction",
+        "reason": "candidate payload is not selectively dependency-complete",
+        "scriptLikeFileCount": candidate["scriptLikeFileCount"],
+        "outOfRootMarkdownLinks": candidate["outOfRootMarkdownLinks"],
+        "adjudication": {
+            "classification": "unadjudicated-out-of-root-or-script-dependency",
+            "operationalCoreDependency": "unknown",
+            "selectiveInstallReferenceClosureComplete": False,
+        },
+    }
+    if (
+        candidate["name"] == "customer-research"
+        and candidate["source"] == "coreyhaines31/marketingskills"
+        and candidate["revision"]
+        == "7868cb9251fad80a73d26e488a5ad5f6c4a9f335"
+        and candidate["outOfRootMarkdownLinks"]
+        == [
+            {
+                "source": "references/source-guides.md",
+                "target": "../../../tools/integrations/sparktoro.md",
+            }
+        ]
+        and candidate["scriptLikeFileCount"] == 0
+    ):
+        source_guide = candidate_root / "references" / "source-guides.md"
+        guide_text = source_guide.read_text(encoding="utf-8")
+        expected_phrase = (
+            "See [tools/integrations/sparktoro.md](../../../tools/integrations/"
+            "sparktoro.md) for full tool details and pricing."
+        )
+        if expected_phrase not in guide_text:
+            raise ValueError("Customer-research SparkToro link purpose drifted")
+        target = (source_guide.parent / "../../../tools/integrations/sparktoro.md").resolve()
+        try:
+            target_relative = target.relative_to(repository.resolve()).as_posix()
+        except ValueError as exc:
+            raise ValueError("Customer-research SparkToro target escaped repository") from exc
+        if target_relative != "tools/integrations/sparktoro.md" or not target.is_file():
+            raise ValueError("Customer-research SparkToro target is missing")
+        record["reason"] = (
+            "optional SparkToro detail reference is outside the selective Skill root; "
+            "installing the exact candidate directory would leave a broken link"
+        )
+        record["adjudication"] = {
+            "classification": (
+                "optional-information-reference-but-selective-install-link-would-break"
+            ),
+            "operationalCoreDependency": False,
+            "selectiveInstallReferenceClosureComplete": False,
+            "linkPurpose": "full-tool-details-and-pricing-only",
+            "upstreamCurrentMainStillHasSameBoundary": True,
+            "target": git_blob_evidence(
+                repository,
+                candidate["revision"],
+                target_relative,
+            ),
+        }
+    return record
+
+
 def walk_candidate_items(value: Any) -> Iterable[dict[str, Any]]:
     if isinstance(value, dict):
         if isinstance(value.get("name"), str) and isinstance(value.get("path"), str):
@@ -234,6 +328,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     }
 
     candidates: list[dict[str, Any]] = []
+    held_candidates: list[dict[str, Any]] = []
     collisions: list[dict[str, Any]] = []
     source_summaries: list[dict[str, Any]] = []
     for repository_name, names in by_source.items():
@@ -310,8 +405,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             collisions.extend(
                 {"candidate": name, **collision} for collision in path_collisions
             )
-            candidates.append(
-                {
+            candidate = {
                     "name": name,
                     "source": repository_name,
                     "revision": expected_commit,
@@ -335,7 +429,15 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
                     "licenseArtifacts": licenses,
                     "collisionFree": row_collision is None and not path_collisions,
                 }
-            )
+            candidates.append(candidate)
+            if not dependency_complete:
+                held_candidates.append(
+                    dependency_hold_record(
+                        candidate=candidate,
+                        repository=repository,
+                        candidate_root=candidate_root,
+                    )
+                )
             source_candidate_names.append(name)
         source_summaries.append(
             {
@@ -356,15 +458,15 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         for candidate in candidates
         if candidate["outOfRootMarkdownLinks"] or candidate["scriptLikeFileCount"]
     ]
+    held_names = {item["name"] for item in held_candidates}
+    transaction_candidates = [
+        candidate for candidate in candidates if candidate["name"] not in held_names
+    ]
     blockers = [
         "CC Switch draft PR 6086 is not merged, released, or available in the live manager runtime",
     ]
     if collisions:
         blockers.append("live manager or consumer collisions require an explicit update/replacement decision")
-    if semantic_dependency_blockers:
-        blockers.append(
-            "script-like files or out-of-root Markdown links require candidate-specific operational dependency adjudication"
-        )
 
     report = {
         "schema": 1,
@@ -374,6 +476,8 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             else "preview-built-zero-live-mutation-collision-and-manager-fork-unmerged"
         ),
         "candidateCount": len(candidates),
+        "transactionCandidateCount": len(transaction_candidates),
+        "heldCandidateCount": len(held_candidates),
         "sourceCount": len(source_summaries),
         "collisionCount": len(collisions),
         "allInitialAppsDisabled": all(
@@ -381,6 +485,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         ),
         "sources": source_summaries,
         "candidates": candidates,
+        "heldCandidates": held_candidates,
         "collisions": collisions,
         "managerSnapshot": {
             "databasePath": (cc_home / "cc-switch.db").as_posix(),
@@ -413,7 +518,12 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         },
         "transaction": {
             "kind": "preview-only-exact-revision-inactive-cohort",
-            "atomicBoundary": f"{len(candidates)}-candidate-cohort",
+            "atomicBoundary": f"{len(transaction_candidates)}-candidate-cohort",
+            "candidateNames": [candidate["name"] for candidate in transaction_candidates],
+            "dependencyComplete": all(
+                candidate["managerAdmission"]["dependencyComplete"]
+                for candidate in transaction_candidates
+            ),
             "requestedInitialApps": {app: False for app in SUPPORTED_APPS},
             "executionEligible": False,
             "blockers": blockers,
@@ -442,6 +552,10 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "fullCandidateDirectoryInventoried": True,
             "gateDeclaredDependencyFilesVerified": True,
             "operationalDependencyClosureProved": not semantic_dependency_blockers,
+            "transactionCohortOperationalDependencyClosureProved": all(
+                candidate["managerAdmission"]["dependencyComplete"]
+                for candidate in transaction_candidates
+            ),
             "managerBatchTransactionImplemented": False,
             "managerBatchTransactionImplementedInFork": True,
             "managerBatchTransactionMergedOrReleased": False,

@@ -34,11 +34,18 @@
     }
   },
   "auditEvidence": {
+    "repositoryFileIdentity": {
+      "algorithm": "sha256",
+      "gitAttributes": "*.json and *.md text eol=lf",
+      "captureTransform": "repository-lf-to-observed-windows-crlf"
+    },
     "root": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27",
     "manifestPath": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/MANIFEST.json",
     "manifestFileSha256": "675FB0F543874587D56526A62BCE4ABB7C969B68843E6E4F198B0434510B46EE",
+    "manifestRepositoryFileSha256": "c73ca441c5c09f8f5f92328995ec32e2d6fb4c6a114523511df069eb958c60c6",
     "reportPath": "audits/process-fidelity-chained-transform-zero-dispatch-sequential-poc-2026-07-27/POC-REPORT.json",
     "reportFileSha256": "FBDEC6D7329EE8C6801D62D413B7D4F564ABFA624F8C61C5FD9E66D4E3F080B9",
+    "reportRepositoryFileSha256": "d9647c8313d7f801ccb6b0d0703e43ac75d9e88d5c1fb867b2aedcbf05fe6e2c",
     "repositoryLocalNonTemporaryDestinationBound": true,
     "gitOrRemoteDurabilityProved": false,
     "cleanupDisposition": "retain-authoritative-mechanism-evidence"

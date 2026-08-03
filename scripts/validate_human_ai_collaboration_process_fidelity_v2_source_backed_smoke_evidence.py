@@ -30,6 +30,12 @@ def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _windows_crlf_projection_sha256(path: Path) -> str:
+    data = path.read_bytes()
+    _require(b"\r\n" not in data, f"Repository evidence is not LF-normalized: {path}")
+    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest()
+
+
 def _canonical_sha256(value: Any) -> str:
     payload = json.dumps(
         value,
@@ -92,28 +98,61 @@ def validate_evidence(document: dict[str, Any], *, root: Path = ROOT) -> None:
         is False,
         "Smoke evidence durable run boundary drifted",
     )
+    _require(
+        durable.get("repositoryFileIdentity")
+        == {
+            "algorithm": "sha256",
+            "gitAttributes": "*.json text eol=lf",
+            "captureTransform": "repository-lf-to-observed-windows-crlf",
+            "meaning": (
+                "Repository hashes bind the governed LF Git representation; "
+                "existing FileSha256 fields preserve the original Windows CRLF "
+                "capture identity."
+            ),
+        },
+        "Smoke evidence repository file identity boundary drifted",
+    )
     durable_paths = {
-        "rawReportPath": "rawReportFileSha256",
-        "trialPacketPath": "trialPacketFileSha256",
-        "buildManifestPath": "buildManifestFileSha256",
-        "publicSourceBundlePath": "publicSourceBundleFileSha256",
+        "rawReportPath": (
+            "rawReportFileSha256",
+            "rawReportRepositoryFileSha256",
+        ),
+        "trialPacketPath": (
+            "trialPacketFileSha256",
+            "trialPacketRepositoryFileSha256",
+        ),
+        "buildManifestPath": (
+            "buildManifestFileSha256",
+            "buildManifestRepositoryFileSha256",
+        ),
+        "publicSourceBundlePath": (
+            "publicSourceBundleFileSha256",
+            "publicSourceBundleRepositoryFileSha256",
+        ),
     }
     loaded: dict[str, dict[str, Any]] = {}
-    for path_key, hash_key in durable_paths.items():
+    for path_key, (capture_hash_key, repository_hash_key) in durable_paths.items():
         relative = durable.get(path_key)
-        expected_hash = durable.get(hash_key)
+        capture_hash = durable.get(capture_hash_key)
+        repository_hash = durable.get(repository_hash_key)
         _require(
             isinstance(relative, str)
             and relative.startswith("audits/")
-            and isinstance(expected_hash, str)
-            and bool(expected_hash),
+            and isinstance(capture_hash, str)
+            and bool(capture_hash)
+            and isinstance(repository_hash, str)
+            and bool(repository_hash),
             f"Smoke evidence durable path binding drifted: {path_key}",
         )
         path = root / relative
         _require(path.is_file(), f"Smoke evidence durable file missing: {relative}")
         _require(
-            _file_sha256(path).lower() == expected_hash.lower(),
+            _file_sha256(path).lower() == repository_hash.lower(),
             f"Smoke evidence durable file hash drifted: {relative}",
+        )
+        _require(
+            _windows_crlf_projection_sha256(path).lower() == capture_hash.lower(),
+            f"Smoke evidence capture file hash drifted: {relative}",
         )
         loaded[path_key] = json.loads(path.read_text(encoding="utf-8"))
 

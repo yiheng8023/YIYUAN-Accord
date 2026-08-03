@@ -9,6 +9,7 @@ from scripts.validate_mcp_thread_unsubscribe_release_attribution_evidence import
     PROGRAM_ACCEPTANCE_PATH,
     PROGRAM_EVIDENCE_ID,
     ROOT,
+    _resolve_captured_repository_path,
     validate_evidence,
 )
 
@@ -145,6 +146,36 @@ class McpThreadUnsubscribeReleaseAttributionEvidenceTests(
                 "documentation boundary missing",
             ):
                 validate_evidence(deepcopy(self.document), root=ROOT)
+
+    def test_captured_repository_path_projects_into_current_worktree(self) -> None:
+        observed = _resolve_captured_repository_path(
+            (
+                "C:/Projects/agent-autonomy-harness/scripts/"
+                "probe_codex_app_server_mcp_idle_unload.py"
+            ),
+            root=ROOT,
+            repetition=1,
+        )
+        self.assertEqual(
+            (ROOT / "scripts/probe_codex_app_server_mcp_idle_unload.py").resolve(),
+            observed,
+        )
+
+    def test_captured_repository_path_rejects_other_roots(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "capture root drifted"):
+            _resolve_captured_repository_path(
+                "C:/Projects/other-repository/scripts/probe.py",
+                root=ROOT,
+                repetition=1,
+            )
+
+    def test_captured_repository_path_rejects_parent_traversal(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "path is invalid"):
+            _resolve_captured_repository_path(
+                "C:/Projects/agent-autonomy-harness/scripts/../../outside.py",
+                root=ROOT,
+                repetition=1,
+            )
 
 
 if __name__ == "__main__":

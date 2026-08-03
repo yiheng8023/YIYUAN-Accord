@@ -21,7 +21,9 @@ head so the user can focus on creation, decisions, and bounded authorization.
   permission enforcement surfaces retain authority.
 - **Current action:** the bounded source gates, seventeen-candidate demand map,
   all eight zero-model effect oracles, and their cross-group closure review are
-  calibrated. The next possible stage is a separately authorized
+  calibrated. The source-preserving, inactive candidate pool retains all 17
+  reviewed candidates; only the 16 dependency-complete candidates are in the
+  transaction cohort, while `customer-research` remains review-only. The next possible stage is a separately authorized
   native/current-versus-one-candidate live behavior arm. Payload installation,
   execution, and task-time activation remain separate and minimal; self-author
   only after reuse and composition leave a reproducible residual gap.

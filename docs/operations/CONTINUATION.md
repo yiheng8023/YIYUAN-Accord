@@ -4044,3 +4044,34 @@ enablement, exposure, behavior, or value. Do not install the cohort, mutate CC
 Switch, or start a model arm from this checkpoint. Next: verify fresh repository
 truth, upstream PR state and exact head; resolve the one dependency boundary;
 then seek separate live-install authority only if all gates remain satisfied.
+
+## 2026-08-04 customer-research dependency adjudication checkpoint
+
+Fresh exact-revision acquisition reconfirmed
+`coreyhaines31/marketingskills@7868cb9251fad80a73d26e488a5ad5f6c4a9f335`;
+upstream `main` still resolves to that same commit. The only out-of-root link in
+`customer-research` is in `references/source-guides.md` and points to
+`tools/integrations/sparktoro.md` for additional tool details and pricing. The
+target is Git blob `9641d1e5fdcdb500da68a70480678fe3954c29fb`, 4,719 bytes,
+with repository SHA-256
+`00961feb89821d20b61ecc0a7bef196669190eac8bb2bbe8029fd596c5fd6118`.
+It is not an executable or a core research workflow dependency, but selective
+installation of the exact Skill directory would leave the upstream link
+broken. Therefore dependency completeness must not be promoted.
+
+The transaction preview now preserves all 17 candidates in the review
+inventory, holds `customer-research` as review-only, and defines a 16-candidate
+dependency-complete inactive transaction cohort. The live CC Switch database
+was read only; its current before/after digest is
+`30836946bb42d9dc762fc9947d9f080fe5af01239626370e9b97a147041a3a4b`,
+with 42 rows, zero collision, and zero manager, consumer, or model operation.
+The preview exactly reproduces from six pinned source repositories and has
+report SHA-256
+`1c2fcd49d3efb3d2eb33616e63f38ea8d4772d0f318724b9e3f05e525cbd7fad`.
+
+This resolves the semantic boundary by subtraction, not by rewriting a
+third-party payload or declaring a broken reference complete. Draft PR 6086
+remains unmerged and unreleased, so the 16-candidate transaction is still not
+execution-eligible. No Skill was installed, enabled, exposed, or executed; no
+model arm started. A future `customer-research` admission requires an upstream
+repair or a separately governed exact-upstream-compatible dependency adapter.

@@ -25,6 +25,10 @@ CANONICAL_CONTRACT_PATH = (
     / "registry"
     / "skill-ablation-host-config-transaction-2026-07-19.json"
 )
+RECORDED_CAPTURE_CONTRACT_PATH = (
+    "C:/Projects/agent-autonomy-harness/registry/"
+    "skill-ablation-host-config-transaction-2026-07-19.json"
+)
 MATCH_STATUS = "preconditions-match-authorization-still-required"
 BLOCKED_STATUS = "blocked-baseline-drift-reintake-required"
 CLAIM_KEYS = {
@@ -72,6 +76,13 @@ def _path(value: str) -> Path:
 
 def _display_path(path: Path) -> str:
     return path.resolve(strict=False).as_posix()
+
+
+def canonical_contract_source_path_matches(value: Any) -> bool:
+    return isinstance(value, str) and value in {
+        _display_path(CANONICAL_CONTRACT_PATH),
+        RECORDED_CAPTURE_CONTRACT_PATH,
+    }
 
 
 def _stat_identity(stat_result: Any) -> tuple[int, int]:
@@ -520,7 +531,7 @@ def validate_revalidation_report(
     if (
         contract != canonical_contract
         or not isinstance(source, dict)
-        or source.get("path") != _display_path(CANONICAL_CONTRACT_PATH)
+        or not canonical_contract_source_path_matches(source.get("path"))
     ):
         return ["fail-source-contract-binding"]
     return _validate_revalidation_report_against_digest(

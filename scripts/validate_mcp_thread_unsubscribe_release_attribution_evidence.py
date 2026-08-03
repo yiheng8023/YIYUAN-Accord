@@ -130,6 +130,7 @@ EXPECTED_SCHEMA_BINDINGS = [
         ),
     },
 ]
+CAPTURE_REPOSITORY_PREFIX = "C:/Projects/agent-autonomy-harness/"
 
 
 def _require(condition: bool, message: str) -> None:
@@ -172,6 +173,32 @@ def _load_program_map(
     return document
 
 
+def _resolve_captured_repository_path(
+    raw_path: str,
+    *,
+    root: Path,
+    repetition: int,
+) -> Path:
+    normalized = raw_path.replace("\\", "/")
+    _require(
+        normalized.startswith(CAPTURE_REPOSITORY_PREFIX),
+        f"Formal pair {repetition} dependency capture root drifted",
+    )
+    relative_parts = normalized[len(CAPTURE_REPOSITORY_PREFIX) :].split("/")
+    _require(
+        bool(relative_parts)
+        and relative_parts[0] == "scripts"
+        and all(part not in {"", ".", ".."} for part in relative_parts),
+        f"Formal pair {repetition} dependency path is invalid",
+    )
+    path = (root / Path(*relative_parts)).resolve()
+    _require(
+        root.resolve() in path.parents,
+        f"Formal pair {repetition} dependency escaped repository",
+    )
+    return path
+
+
 def _validate_dependency_bindings(
     bindings: Any,
     *,
@@ -191,19 +218,16 @@ def _validate_dependency_bindings(
             isinstance(raw_path, str),
             f"Formal pair {repetition} dependency path is invalid",
         )
-        path = Path(raw_path)
-        if not path.is_absolute():
-            path = root / path
-        path = path.resolve()
+        path = _resolve_captured_repository_path(
+            raw_path,
+            root=root,
+            repetition=repetition,
+        )
         _require(
             path.is_file()
             and _sha256(path).lower()
             == str(binding.get("sha256", "")).lower(),
             f"Formal pair {repetition} dependency binding drifted",
-        )
-        _require(
-            root.resolve() in path.parents,
-            f"Formal pair {repetition} dependency escaped repository",
         )
         observed_paths.add(path)
     _require(
