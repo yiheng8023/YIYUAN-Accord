@@ -2172,3 +2172,27 @@ migration, release, deployment, current-comparator health, behavior/value,
 production readiness, residual self-authored need, and hard-standard
 eligibility remain unproved. The next zero-execution effect group is product
 discovery. No main-plan, process, or acceptance change is required.
+
+## 2026-08-03 product-discovery incremental oracle checkpoint
+
+The third effect group reuses the existing source-bound
+`SE-DISCOVERY-REQ-01` protocol and fixture, then adds only five missing effect
+dimensions: evidence linkage, anti-leading language, participant consent
+boundaries, outcome/opportunity/solution/test traceability, and uncertainty
+visibility. One control and five single-fault mutations use the shared effect
+case runner; no full scenario is duplicated.
+
+The two exact Phuryn candidates have separate static eligibility subsets so a
+future one-candidate arm is not scored against unrelated dimensions. The
+matrix is protocol design only, not candidate capability evidence. The prior
+live comparison used `cc.grill-with-docs`; both historical arms had zero full
+hidden-contract passes. That result is preserved as a claim ceiling and is not
+promoted to either current candidate, product-discovery competence, preference,
+or residual-gap evidence.
+
+No candidate payload, participant, account, or live host is touched. Model
+dispatch, install/projection, contact, recording, data collection/retention,
+artifact writes, behavior/value, requirements completeness, consent,
+self-authored necessity, and hard-standard promotion remain false. The next
+zero-execution effect group is marketing writing. No main-plan, process, or
+acceptance change is required.

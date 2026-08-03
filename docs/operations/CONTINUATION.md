@@ -3801,3 +3801,26 @@ self-authored need, and hard-standard eligibility remain false. The governed
 protocol is
 `registry/skill-portfolio-engineering-lifecycle-zero-model-protocol-2026-08-03.json`.
 Continue next with product discovery after a fresh repository truth check.
+
+## 2026-08-03 product-discovery zero-model effect-oracle checkpoint
+
+The third mapped effect group now has one source-free incremental packet over
+the existing `SE-DISCOVERY-REQ-01` requirements protocol and fixture. Five
+single-fault cases cover evidence-link omission, leading-language introduction,
+consent-boundary loss, opportunity/solution trace omission, and uncertainty
+suppression. No full scenario was copied.
+
+The protocol binds exact `interview-script` and `opportunity-solution-tree`
+identities and candidate-specific static dimension subsets. It also binds the
+historical `cc.grill-with-docs` comparison, where both arms recorded zero full
+hidden-contract passes. That older candidate and result remain claim-boundary
+inputs only; they are not current-candidate proof or a preference.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, participant contact, recording, data collection/retention, and
+discovery artifact writes are zero. Product discovery, requirements
+completeness, participant consent, current candidate behavior/value, live
+exposure, residual self-authored need, and hard-standard eligibility remain
+false. The governed protocol is
+`registry/skill-portfolio-product-discovery-zero-model-protocol-2026-08-03.json`.
+Continue next with marketing writing after a fresh repository truth check.
