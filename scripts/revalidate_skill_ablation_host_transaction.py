@@ -14,7 +14,7 @@ import copy
 from datetime import UTC, datetime
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import tomllib
 from typing import Any, Callable
 
@@ -76,6 +76,21 @@ def _path(value: str) -> Path:
 
 def _display_path(path: Path) -> str:
     return path.resolve(strict=False).as_posix()
+
+
+def recorded_path_identity(value: str) -> str:
+    """Return a host-neutral identity for a path stored in evidence.
+
+    Windows drive and UNC paths are lexical evidence identities even when the
+    validator runs on a non-Windows host. Native paths continue to resolve on
+    the current host so synthetic transaction fixtures keep their prior
+    semantics.
+    """
+
+    windows_path = PureWindowsPath(value)
+    if windows_path.drive:
+        return windows_path.as_posix()
+    return _display_path(Path(value))
 
 
 def canonical_contract_source_path_matches(value: Any) -> bool:
@@ -423,7 +438,7 @@ def _validate_revalidation_report_against_digest(
         isinstance(config, dict)
         and set(config) == expected_config_keys
         and config.get("path")
-        == _display_path(_path(contract["observedBaseline"]["configPath"]))
+        == recorded_path_identity(contract["observedBaseline"]["configPath"])
     )
     if not config_shape_valid:
         failures.append("fail-config-observation-shape")
@@ -449,7 +464,7 @@ def _validate_revalidation_report_against_digest(
                 "sha256Matches",
             }
             or observed.get("name") != expected.get("name")
-            or observed.get("path") != _display_path(_path(expected["path"]))
+            or observed.get("path") != recorded_path_identity(expected["path"])
             or observed.get("expectedSha256") != expected.get("sha256")
             for observed, expected in zip(targets, expected_targets)
         )
@@ -464,8 +479,8 @@ def _validate_revalidation_report_against_digest(
         failures.append("fail-target-observation-manifest")
 
     backup = report.get("backupObservation")
-    expected_backup_path = _display_path(
-        _path(contract["transaction"]["backupPath"])
+    expected_backup_path = recorded_path_identity(
+        contract["transaction"]["backupPath"]
     )
     backup_shape_valid = (
         isinstance(backup, dict)

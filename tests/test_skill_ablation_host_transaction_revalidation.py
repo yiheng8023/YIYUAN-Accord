@@ -14,6 +14,7 @@ from scripts.revalidate_skill_ablation_host_transaction import (
     _validate_revalidation_report_against_digest,
     build_revalidation_report,
     canonical_sha256,
+    recorded_path_identity,
     validate_revalidation_report,
 )
 
@@ -234,6 +235,12 @@ class SkillAblationHostTransactionRevalidationTests(unittest.TestCase):
             .read_text(encoding="utf-8")
         )
         self.assertEqual([], validate_revalidation_report(report, contract))
+
+    def test_recorded_windows_path_identity_is_host_neutral(self) -> None:
+        self.assertEqual(
+            "C:/Users/15521/.codex/config.toml",
+            recorded_path_identity(r"C:\Users\15521\.codex\config.toml"),
+        )
 
     def test_semantic_toml_count_accepts_header_with_trailing_comment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
