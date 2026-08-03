@@ -3543,3 +3543,52 @@ review root and empty repository `.tmp` parent were removed. The current CC
 Switch inactive-install gap still blocks even the one manager candidate. The
 governed record is
 `registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json`.
+
+## 2026-08-03 Addy Agent Skills exact itemized adjudication checkpoint
+
+The next inactive review bound current `addyosmani/agent-skills` `main` to
+commit `7829ffd90d973b6325f5f12f1b1226dcace74443` and tree
+`d0d903cfb69e783b05b45c0773ad8a2ec3916a3e`. The exact 176-file,
+748,380-byte MIT source was read from a bare Git object root without checkout,
+payload modification, vendoring, or third-party code execution. Four exact-SHA
+GitHub checks were successful. The upstream catalog has one eval case per Skill
+and runs structural plus lexical-routing checks in CI, but its behavioral tier
+is an on-demand Claude executor/grader and no behavioral results are committed;
+this is strong upstream process evidence, not current cross-host value proof.
+
+The repository contains 24 Skills: 23 lifecycle units plus the
+`using-agent-skills` meta-router. Only 28 of 176 files are inside Skill roots;
+eleven Skill bodies reference repository-root support files. A name-only or
+directory-only selective projection is therefore incomplete for those eleven.
+The Codex Plugin manifest intentionally declares empty hooks. Claude's separate
+session-start Hook injects the meta-router and requires `jq`; no Hook entered
+the current review or admission path.
+
+Four dependency-free instruction units advance as default-disabled manager
+candidates: `ci-cd-and-automation`, `deprecation-and-migration`,
+`documentation-and-adrs`, and `source-driven-development`. Observability and
+performance advance only as dependency-complete composition candidates with
+their exact upstream checklists. API/interface design and code simplification
+remain same-task comparisons. Context engineering and doubt-driven development
+remain architecture inputs for the Harness context/topology/resource lanes;
+the latter can spawn fresh reviewers or external CLIs and mandates interactive
+cross-model offers, so it is not a low-cost default route.
+
+Browser, debugging, UI, Git, ideation, incremental implementation, interviewing,
+planning, security, TDD, and meta-routing surfaces overlap current official or
+already-managed routes, carry fixed host/layout assumptions, or both. The
+meta-router's mandatory Skill/spec posture conflicts with native-first minimal
+sufficiency and event-driven discovery, so it remains routing-test material,
+not ambient authority. Spec and shipping workflows remain bounded methodology
+comparisons rather than universal hard standards.
+
+Five deprecated transition payloads were source-attributed to this repository:
+CI/CD, deprecation, observability, performance, and shipping. Each differs from
+current upstream bytes, with line-sequence ratios from 0.670565 to 0.936471.
+That history corroborates recurring demand but does not restore the modified
+derivatives as current authority. No source registration, manager install,
+enablement, Hook activation, model request, candidate execution, or consumer
+projection occurred. The main plan, process, and acceptance framework remain
+unchanged; even the six surviving candidates remain behind the separately
+proved CC Switch atomic default-disabled install gap. The governed record is
+`registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json`.

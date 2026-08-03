@@ -525,6 +525,9 @@ Schema 2 的运行时覆盖通过结构契约保持产品中立：`runtime-resol
 - `registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json`：
   精确审查 Anthropic 当前 17 个官方 Plugin Skill 与一个非能力模板，区分受限文档实现、
   当前宿主重叠、参考/组合输入及一个低依赖默认禁用管理器候选，未安装整个目录；
+- `registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json`：
+  精确逐项审查 Addy Osmani 当前 24 项软工 Skill，保留四个独立候选和两个依赖完整组合
+  候选，拒绝把刚性元路由设为环境常驻，并继续隔离当前官方重叠项与五个弃用派生物；
 - `release-manifest.json`：弃用过渡 payload 的精确路径、大小和哈希；
 - `scripts/`：只负责验证和确定性投影生成。
 

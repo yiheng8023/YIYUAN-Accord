@@ -1253,6 +1253,8 @@ REQUIRED_FILES = (
     "tests/test_cc_switch_3191_default_disabled_install_adjudication.py",
     "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json",
     "tests/test_skill_portfolio_anthropic_official_catalog_adjudication.py",
+    "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json",
+    "tests/test_skill_portfolio_addy_agent_skills_adjudication.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

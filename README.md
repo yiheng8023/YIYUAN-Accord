@@ -715,6 +715,11 @@ consumer must probe its currently visible, authorized capability inventory.
   non-capability template. It separates restricted document implementations,
   current host overlap, reference and composition inputs, and one low-dependency
   default-disabled manager candidate without installing the catalog.
+- `registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json`:
+  exact current itemized review of Addy Osmani's 24-Skill engineering catalog.
+  It retains four standalone and two dependency-complete composition candidates,
+  rejects an ambient rigid meta-router, and keeps current official overlaps and
+  the five deprecated adapted derivatives out of the live path.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.
