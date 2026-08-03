@@ -2147,3 +2147,28 @@ is engineering lifecycle. A live native/current-versus-one-candidate trial
 remains separately authorized and requires its own exposure, route, stop,
 cleanup, and acceptance evidence. The main plan, process, and acceptance
 framework remain unchanged.
+
+## 2026-08-03 engineering-lifecycle shared oracle checkpoint
+
+The second effect group now has one shared source-free lifecycle packet rather
+than four duplicated candidate fixtures. Six single-fault mutations calibrate
+repository-convention omission, traceability omission, verification omission,
+rollback-safeguard loss, source-freshness omission, and destructive/release
+authority transfer. The shared case runner introduced here also replaces the
+first effect group's duplicate case-loop implementation without changing its
+observable report or tests.
+
+The protocol binds the four exact Addy candidates and a static candidate-to-
+dimension eligibility matrix. That matrix is protocol design only: it limits
+which dimensions a future one-candidate arm may score and is not evidence that
+the candidate supplies those effects. Historical release and migration
+protocols, the carrier-neutral engineering-evaluation contract, and its source
+snapshot are reuse inputs only. Older adapted evidence is not promoted to the
+current exact-upstream candidate identities or to a general preference.
+
+No candidate payload is read or executed. Install, projection, manager
+mutation, model dispatch, account or secret access, repository workflow write,
+migration, release, deployment, current-comparator health, behavior/value,
+production readiness, residual self-authored need, and hard-standard
+eligibility remain unproved. The next zero-execution effect group is product
+discovery. No main-plan, process, or acceptance change is required.

@@ -17,8 +17,9 @@
   层次。CC Switch 是受支持场景下的一个当前操作适配器，不是可移植产品合同；授权、
   生命周期与权限强制权威仍属于宿主原生控制面。
 - **当前行动：** 已冻结有边界的来源闸门与 17 项候选需求映射；按证据复用顺序构建
-  不读取候选 payload 的确定性 effect oracle，先从决策挑战开始。具体任务中的启用仍须
-  最小化并单独授权；只有复用与组合留下可复现残余缺口后才自研。
+  不读取候选 payload 的确定性 effect oracle；决策挑战与工程生命周期两组已校准，
+  下一组是产品发现。安装、执行与具体任务启用仍须分离、最小化并单独授权；只有复用
+  与组合留下可复现残余缺口后才自研。
 - **证据入口：** [当前计划](docs/strategy/RESEARCH-AND-POC-PLAN.md)、
   [非激活 Skill 来源池](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md)、
   [场景矩阵](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md)与

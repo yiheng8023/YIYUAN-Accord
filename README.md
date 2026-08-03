@@ -20,9 +20,9 @@ head so the user can focus on creation, decisions, and bounded authorization.
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
 - **Current action:** the bounded source gates and seventeen-candidate demand
-  map are frozen. Build source-free effect oracles in evidence-reuse order,
-  starting with decision challenge, without installing or executing payloads.
-  Task-time activation stays minimal and separately authorized; self-author
+  map are frozen. Decision-challenge and engineering-lifecycle source-free
+  effect oracles are calibrated; product discovery is next. Payload install,
+  execution, and task-time activation remain separate and minimal; self-author
   only after reuse and composition leave a reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),

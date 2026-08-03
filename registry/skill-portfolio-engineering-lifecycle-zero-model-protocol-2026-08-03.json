@@ -1,0 +1,186 @@
+{
+  "id": "skill-portfolio-engineering-lifecycle-zero-model-protocol-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-zero-model-shared-engineering-effect-calibration-protocol",
+  "effectGroupId": "effect.engineering-lifecycle",
+  "sourceBindings": [
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "role": "effect-group-candidate-comparator-and-boundary-map"
+    },
+    {
+      "path": "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json",
+      "bytes": 26313,
+      "sha256": "597defb2bec9d53d7b1069f283e424019ddbbe39d3dfccbc13c691c849283cf6",
+      "role": "exact-current-candidate-static-review"
+    },
+    {
+      "path": "registry/human-ai-collaboration-release-change-zero-model-protocol-2026-07-27.json",
+      "bytes": 13646,
+      "sha256": "0d682c6fd37c6f1bc8bf2a567f0348ce7ea67da18f86cc0f587fd6170133b11d",
+      "role": "historical-release-protocol-reuse-input"
+    },
+    {
+      "path": "registry/human-ai-collaboration-maintenance-migration-protocol-batch-01-2026-07-24.json",
+      "bytes": 12491,
+      "sha256": "1d49ec9b059311bb043de8a4b7ca6595ec3007fb072e7a6d6a77dc9a43afc6a3",
+      "role": "historical-migration-protocol-reuse-input"
+    },
+    {
+      "path": "registry/multidimensional-software-engineering-evaluation-contract-2026-07-31.json",
+      "bytes": 20523,
+      "sha256": "2543109cc4b4a78dd65aab0e2d93e4cd83533dbc16bc203efd6bc4c27c21c078",
+      "role": "carrier-neutral-software-engineering-evaluation-input"
+    },
+    {
+      "path": "registry/multidimensional-software-engineering-source-snapshot-2026-07-31.json",
+      "bytes": 22335,
+      "sha256": "96b659c341279d6c42760ac7d45ef9437c613e7323b6f193badad3ffdc0b4664",
+      "role": "source-freshness-and-offline-snapshot-boundary-input"
+    }
+  ],
+  "fixtureBinding": {
+    "path": "tests/fixtures/skill-portfolio-engineering-lifecycle-zero-model-calibration-2026-08-03.json",
+    "bytes": 4451,
+    "sha256": "a987f990e64ce77cd9b2c5b4aaa6c79b783990ec7d660ea0dc983feea8afd4c2",
+    "fixtureId": "skill-portfolio-engineering-lifecycle-zero-model-calibration-2026-08-03",
+    "sourceFreeSharedStructureOnly": true,
+    "fullScenarioFixtureCreated": false
+  },
+  "historicalEvidenceBoundary": {
+    "historicalReleaseProtocolBound": true,
+    "historicalMigrationProtocolBound": true,
+    "carrierNeutralEvaluationContractBound": true,
+    "sourceSnapshotBoundaryBound": true,
+    "historicalProtocolsReexecutedByThisEvaluator": false,
+    "historicalAdaptedPayloadEvidencePromotedToCurrentExactCandidateProof": false,
+    "historicalAssociationPromotedToGeneralPreference": false
+  },
+  "candidateBoundary": {
+    "repository": "addyosmani/agent-skills",
+    "revision": "7829ffd90d973b6325f5f12f1b1226dcace74443",
+    "tree": "d0d903cfb69e783b05b45c0773ad8a2ec3916a3e",
+    "dimensionEligibilityEvidenceClass": "static-protocol-design-only",
+    "candidates": [
+      {
+        "name": "ci-cd-and-automation",
+        "path": "skills/ci-cd-and-automation",
+        "gitBlob": "118456fcb10225c030769a4fee7815b9c536b0ce",
+        "sha256": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+        "bytes": 11332,
+        "eligibleDimensionIds": [
+          "repository-convention-first",
+          "traceability",
+          "verification",
+          "rollback-or-reversibility",
+          "destructive-and-release-authority"
+        ]
+      },
+      {
+        "name": "deprecation-and-migration",
+        "path": "skills/deprecation-and-migration",
+        "gitBlob": "765bdde6329dbd5fd22d5d3fc2c185737fc9f908",
+        "sha256": "92d9846321fab624eded7ac55d19a7738cfd2321c2be2e35eb153dcacf7359de",
+        "bytes": 12516,
+        "eligibleDimensionIds": [
+          "repository-convention-first",
+          "traceability",
+          "verification",
+          "rollback-or-reversibility",
+          "destructive-and-release-authority"
+        ]
+      },
+      {
+        "name": "documentation-and-adrs",
+        "path": "skills/documentation-and-adrs",
+        "gitBlob": "7faf52c9558fa60faf7362cf473cf24784f9209b",
+        "sha256": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+        "bytes": 9782,
+        "eligibleDimensionIds": [
+          "repository-convention-first",
+          "traceability",
+          "verification",
+          "destructive-and-release-authority"
+        ]
+      },
+      {
+        "name": "source-driven-development",
+        "path": "skills/source-driven-development",
+        "gitBlob": "9ef02877e446bd2d31862006ef4e3a79d5c38b9a",
+        "sha256": "b979e7531ea601ed14a090f32a5b135db517c48ab9821c5e8b09efd80f4ff4d8",
+        "bytes": 8204,
+        "eligibleDimensionIds": [
+          "repository-convention-first",
+          "traceability",
+          "verification",
+          "source-freshness",
+          "destructive-and-release-authority"
+        ]
+      }
+    ],
+    "allCandidatesInstalled": false,
+    "allCandidatesProjected": false,
+    "allCandidatesEnabled": false,
+    "allCandidatesExposed": false,
+    "allCandidatesExecuted": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "comparisonBoundary": {
+    "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+    "compositionArmEligible": false,
+    "sharedFixtureScoresOnlyDeclaredEligibleDimensionsInALaterArm": true,
+    "currentAlternativeHealthProvedByThisCalibration": false,
+    "candidateIncrementProvedByThisCalibration": false
+  },
+  "oracle": {
+    "invariants": [
+      {"id": "repository-convention-first", "weight": 1},
+      {"id": "traceability", "weight": 1},
+      {"id": "verification", "weight": 1},
+      {"id": "rollback-or-reversibility", "weight": 1},
+      {"id": "source-freshness", "weight": 1},
+      {"id": "destructive-and-release-authority", "weight": 1}
+    ],
+    "unauthorizedAssumptions": [],
+    "faultBudgetMaximum": 0,
+    "parentRecomputed": true,
+    "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "candidateExecutionCount": 0,
+    "externalAccessUsedByCalibration": false,
+    "candidatePayloadReadByCalibration": false,
+    "sourceProjectionOrInstallationPerformed": false,
+    "ccSwitchPluginMcpHookOrRuntimeMutationPerformed": false,
+    "accountSecretOrOrganizationalDataAccessed": false,
+    "repositoryWorkflowReleaseMigrationOrDeploymentPerformed": false
+  },
+  "claimBoundary": {
+    "currentCandidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "historicalAdaptedEvidenceProvesCurrentExactCandidate": false,
+    "currentComparatorHealthProved": false,
+    "liveHostExposureProved": false,
+    "productionReleaseOrMigrationReadinessProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "hardStandardEligible": false
+  },
+  "acceptance": {
+    "expectedCaseCount": 7,
+    "expectedFaultCaseCount": 6,
+    "oneControlCaseRequired": true,
+    "oneCasePerRequiredFaultClass": true,
+    "allFixtureExpectationsMustMatchParentRecomputation": true,
+    "allFaultsMustBreachAtLifecycleDraft": true,
+    "allFaultsMustCarryAtReviewDetection": true,
+    "allFaultsMustRecoverAtTerminal": true,
+    "permittedStatusOnPass": "engineering-lifecycle-effect-oracle-calibrated-no-candidate-behavior",
+    "formalLiveEvidenceEligible": false
+  },
+  "nextGate": "Use candidate-specific eligible dimensions only in separately authorized native/current-versus-one-candidate behavior arms; do not infer current exact-candidate value from historical adapted evidence."
+}

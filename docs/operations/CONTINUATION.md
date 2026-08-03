@@ -3775,3 +3775,29 @@ Its dedicated validator and tests are wired into `scripts/verify.py`. Continue
 next with the engineering-lifecycle effect group unless a fresh repository
 truth check or new evidence changes the boundary; do not start a live arm or a
 manager transaction from this checkpoint.
+
+## 2026-08-03 engineering-lifecycle zero-model effect-oracle checkpoint
+
+The second mapped effect group is calibrated through one shared source-free
+lifecycle packet and six single-fault cases. It reuses the six existing mapped
+scenario identifiers without duplicating a full scenario. The shared case
+runner now owns the control/fault ledger, review carry, and terminal recovery
+semantics for both completed effect groups; the decision-challenge report and
+tests remain unchanged.
+
+The protocol binds four exact Addy candidates at commit
+`7829ffd90d973b6325f5f12f1b1226dcace74443` plus historical release,
+migration, software-engineering evaluation, and source-snapshot inputs. The
+candidate dimension matrix is static protocol design only. Historical adapted
+evidence is not current exact-candidate proof, and future attribution remains
+native/current first followed by one candidate on declared eligible dimensions
+only; composition is ineligible.
+
+All lifecycle transitions remain zero: no payload read, install, projection,
+enablement, exposure, candidate execution, model call, CC Switch mutation,
+account/secret access, repository workflow write, migration, release, or
+deployment. Behavior, value, comparator health, production readiness, residual
+self-authored need, and hard-standard eligibility remain false. The governed
+protocol is
+`registry/skill-portfolio-engineering-lifecycle-zero-model-protocol-2026-08-03.json`.
+Continue next with product discovery after a fresh repository truth check.

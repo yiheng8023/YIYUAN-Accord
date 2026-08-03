@@ -4,18 +4,23 @@
 from __future__ import annotations
 
 import copy
-import hashlib
 import json
 from pathlib import Path
 from typing import Any
 
 try:
-    from .evaluate_process_fidelity_cumulative_loss_accounting import (
-        build_cumulative_loss_ledger,
+    from .evaluate_skill_portfolio_zero_model_effect_cases import (
+        evaluate_case_matrix,
+        load_json_object as _load,
+        require as _require,
+        validate_file_binding as _validate_file_binding,
     )
 except ImportError:  # pragma: no cover - direct script execution
-    from evaluate_process_fidelity_cumulative_loss_accounting import (
-        build_cumulative_loss_ledger,
+    from evaluate_skill_portfolio_zero_model_effect_cases import (
+        evaluate_case_matrix,
+        load_json_object as _load,
+        require as _require,
+        validate_file_binding as _validate_file_binding,
     )
 
 
@@ -62,38 +67,6 @@ EXPECTED_OVERRIDE_BY_FAULT: dict[str, dict[str, Any]] = {
         "agentRole": "final-decision-maker",
     },
 }
-
-
-def _require(condition: bool, message: str) -> None:
-    if not condition:
-        raise RuntimeError(message)
-
-
-def _load(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
-    _require(isinstance(value, dict), f"Expected JSON object: {path}")
-    return value
-
-
-def _file_sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _canonical_sha256(value: Any) -> str:
-    payload = json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
-
-
-def _validate_file_binding(binding: dict[str, Any], *, root: Path) -> None:
-    path = root / binding["path"]
-    _require(path.is_file(), f"Bound source is missing: {binding['path']}")
-    _require(path.stat().st_size == binding["bytes"], "Bound source byte count drifted")
-    _require(_file_sha256(path) == binding["sha256"], "Bound source digest drifted")
 
 
 def _validate_protocol_and_fixture(
@@ -291,14 +264,6 @@ def _validate_protocol_and_fixture(
     )
 
 
-def _apply_overrides(canonical: dict[str, Any], overrides: dict[str, Any]) -> dict[str, Any]:
-    _require(set(overrides).issubset(canonical), "Fault mutation shape drifted")
-    packet = copy.deepcopy(canonical)
-    for key, value in overrides.items():
-        packet[key] = copy.deepcopy(value)
-    return packet
-
-
 def _score_packet(packet: dict[str, Any], canonical: dict[str, Any]) -> dict[str, Any]:
     losses: list[str] = []
     steelman = packet.get("steelmanClaim")
@@ -338,95 +303,24 @@ def evaluate_calibration(
 ) -> dict[str, Any]:
     root = root.resolve()
     _validate_protocol_and_fixture(protocol, fixture, root=root)
-    canonical = fixture.get("canonicalChallengePacket")
-    _require(isinstance(canonical, dict), "Canonical challenge packet is missing")
-    _require(
-        _score_packet(canonical, canonical)
-        == {"activeLossIds": [], "weightedDelta": 0},
-        "Canonical challenge packet is not lossless",
-    )
-    cases = fixture.get("cases")
     acceptance = protocol.get("acceptance")
-    _require(isinstance(cases, list), "Fixture cases are missing")
     _require(isinstance(acceptance, dict), "Protocol acceptance is missing")
-    _require(len(cases) == acceptance.get("expectedCaseCount"), "Fixture case count drifted")
-
-    results: list[dict[str, Any]] = []
-    case_ids: set[str] = set()
-    fault_classes: list[str] = []
-    for case in cases:
-        _require(isinstance(case, dict), "Fixture case must be an object")
-        case_id = case.get("id")
-        fault_class = case.get("faultClass")
-        _require(
-            isinstance(case_id, str) and case_id and case_id not in case_ids,
-            "Fixture case identities drifted",
-        )
-        _require(fault_class in EXPECTED_OVERRIDE_BY_FAULT, "Fixture fault class is unknown")
-        case_ids.add(case_id)
-        fault_classes.append(fault_class)
-        overrides = case.get("overrides")
-        _require(
-            overrides == EXPECTED_OVERRIDE_BY_FAULT[fault_class],
-            "Fault mutation shape drifted",
-        )
-        score = _score_packet(_apply_overrides(canonical, overrides), canonical)
-        expected_active = sorted(case.get("expectedActiveLossIds", []))
-        expected_unique = sorted(case.get("expectedCumulativeUniqueLossIds", []))
-        _require(score["activeLossIds"] == expected_active, "Expected active loss set drifted")
-        stages = [
-            {"stageId": "parent-scenario-anchor", "activeLossIds": [], "weightedDelta": 0},
-            {"stageId": "challenge-draft", **score},
-            {"stageId": "review-detection", **score},
-            {"stageId": "human-decision-recovery", "activeLossIds": [], "weightedDelta": 0},
-        ]
-        ledger = build_cumulative_loss_ledger(
-            stages,
-            protocol,
-            cumulative_unique_loss_weight_max=protocol["oracle"]["faultBudgetMaximum"],
-        )
-        _require(
-            ledger["cumulativeUniqueLossIds"] == expected_unique,
-            "Expected cumulative unique loss set drifted",
-        )
-        if fault_class == "control":
-            _require(ledger["budgetExceededAtHop"] is None, "Control breached the loss budget")
-        else:
-            _require(
-                ledger["budgetExceededAtHop"] == "challenge-draft",
-                "Fault did not breach at challenge draft",
-            )
-        _require(
-            ledger["hops"][-1]["activeLossIds"] == []
-            and ledger["terminalRecoveryDoesNotEraseHistoricalUniqueLoss"] is True,
-            "Terminal recovery semantics drifted",
-        )
-        results.append(
-            {
-                "id": case_id,
-                "faultClass": fault_class,
-                "activeLossIds": score["activeLossIds"],
-                "stages": stages,
-                "cumulativeLoss": ledger,
-            }
-        )
-
-    _require(fault_classes.count("control") == 1, "Exactly one control is required")
-    observed_faults = {value for value in fault_classes if value != "control"}
-    _require(
-        observed_faults == REQUIRED_FAULT_CLASSES
-        and len(fault_classes) - 1 == len(REQUIRED_FAULT_CLASSES),
-        "Fixture fault-class coverage drifted",
+    matrix = evaluate_case_matrix(
+        protocol=protocol,
+        fixture=fixture,
+        root=root,
+        repository_fixture_path=FIXTURE_PATH,
+        canonical_packet_key="canonicalChallengePacket",
+        expected_override_by_fault=EXPECTED_OVERRIDE_BY_FAULT,
+        required_fault_classes=REQUIRED_FAULT_CLASSES,
+        score_packet=_score_packet,
+        source_stage_id="parent-scenario-anchor",
+        active_stage_id="challenge-draft",
+        review_stage_id="review-detection",
+        recovery_stage_id="human-decision-recovery",
     )
-    _require(
-        len(results) - 1 == acceptance.get("expectedFaultCaseCount"),
-        "Fixture fault case count drifted",
-    )
-    repository_fixture = _load(root / FIXTURE_PATH)
-    _require(
-        _canonical_sha256(fixture) == _canonical_sha256(repository_fixture),
-        "Passed fixture must equal the hash-bound repository object",
-    )
+    results = matrix["results"]
+    observed_faults = matrix["observedFaultClasses"]
     return {
         "outcome": "valid-zero-model-effect-calibration",
         "status": acceptance["permittedStatusOnPass"],
