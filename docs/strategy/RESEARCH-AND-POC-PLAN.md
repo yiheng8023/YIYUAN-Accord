@@ -2123,3 +2123,27 @@ eligible. Candidate payload projection, model dispatch, installation,
 enablement, manual user testing, composition, self-authored implementation, and
 hard-standard promotion remain later gates. No plan, process, or acceptance
 change is required.
+
+## 2026-08-03 decision-challenge incremental oracle checkpoint
+
+The first effect group now has a thin source-free deterministic extension over
+the existing `GEN-ORG-DECISION-01` protocol. It does not duplicate or rerun the
+parent fifteen-case fixture. One lossless challenge packet and six single-fault
+mutations calibrate steelman omission and distortion, failure-assumption
+omission, falsification-signal omission, cheap-test safeguard loss, and human
+decision-authority transfer.
+
+The package byte-binds the parent protocol and fixture, the seventeen-candidate
+demand map, the Phuryn representative adjudication, and the exact
+`strategy-red-team` identity. It does not read the candidate payload during
+calibration. Passing proves only deterministic detection and cumulative-loss
+retention for the declared structured faults. Candidate behavior, comparative
+increment, current-comparator health, live exposure, organizational decision
+quality, residual self-authored need, and hard-standard eligibility remain
+false.
+
+No user action is required at this gate. The next zero-execution effect group
+is engineering lifecycle. A live native/current-versus-one-candidate trial
+remains separately authorized and requires its own exposure, route, stop,
+cleanup, and acceptance evidence. The main plan, process, and acceptance
+framework remain unchanged.

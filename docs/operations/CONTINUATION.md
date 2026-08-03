@@ -3750,3 +3750,28 @@ eligible. Installation, projection, candidate execution, model dispatch, user
 manual testing, manager mutation, self-authored work, and hard-standard
 promotion remain false. The governed record is
 `registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json`.
+
+## 2026-08-03 decision-challenge zero-model effect-oracle checkpoint
+
+The first mapped effect group is calibrated by a thin deterministic extension,
+not a new full scenario. It reuses the frozen `GEN-ORG-DECISION-01` protocol and
+fixture and adds one source-free challenge packet plus six single-fault cases:
+steelman omission, steelman distortion, failure-assumption omission,
+falsification-signal omission, cheap-test safeguard loss, and decision-
+authority transfer. All faults are detected at `challenge-draft`, carried at
+review, and remain in cumulative history after human recovery.
+
+The protocol byte-binds the parent protocol/fixture, the current candidate
+demand map, the Phuryn adjudication, and exact `strategy-red-team` identity.
+The evaluator does not read or execute that candidate. Agent dispatch, model
+calls, candidate execution, install/projection, CC Switch mutation, account or
+organizational-data access, and real decision effects are all zero. The report
+cannot establish candidate behavior, comparative value, live exposure,
+decision quality, residual self-authored need, or hard-standard eligibility.
+
+The governed protocol is
+`registry/skill-portfolio-decision-challenge-zero-model-protocol-2026-08-03.json`.
+Its dedicated validator and tests are wired into `scripts/verify.py`. Continue
+next with the engineering-lifecycle effect group unless a fresh repository
+truth check or new evidence changes the boundary; do not start a live arm or a
+manager transaction from this checkpoint.

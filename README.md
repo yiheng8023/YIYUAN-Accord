@@ -19,12 +19,11 @@ head so the user can focus on creation, decisions, and bounded authorization.
   CC Switch is one current operational adapter where supported, not the
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
-- **Current action:** build a bounded, source-preserving, inactive candidate
-  pool from named CC Switch, official, and reviewed external sources; review
-  exact revisions before a separately authorized manager transaction. Keep
-  task-time activation minimal and task-scoped. Real-task Harness-versus-
-  lightweight comparisons continue in parallel; self-author only after reuse
-  and composition leave a reproducible residual gap.
+- **Current action:** the bounded source gates and seventeen-candidate demand
+  map are frozen. Build source-free effect oracles in evidence-reuse order,
+  starting with decision challenge, without installing or executing payloads.
+  Task-time activation stays minimal and separately authorized; self-author
+  only after reuse and composition leave a reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and

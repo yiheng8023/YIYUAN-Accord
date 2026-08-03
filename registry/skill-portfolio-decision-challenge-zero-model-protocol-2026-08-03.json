@@ -1,0 +1,126 @@
+{
+  "id": "skill-portfolio-decision-challenge-zero-model-protocol-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-zero-model-incremental-effect-calibration-protocol",
+  "effectGroupId": "effect.decision-challenge",
+  "scenarioId": "GEN-ORG-DECISION-01",
+  "sourceBindings": [
+    {
+      "path": "registry/human-ai-collaboration-org-decision-zero-model-protocol-2026-07-31.json",
+      "bytes": 10894,
+      "sha256": "2d9c4d1e0313e0de53dc91ae1f453828d0e2b017780c1ae1483ea253cc9578a6",
+      "role": "parent-organizational-decision-oracle"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-org-decision-zero-model-calibration-2026-07-31.json",
+      "bytes": 9800,
+      "sha256": "8f0005c5cb99bd96e5bd6af1c8bebfc9d208caf50f7605857875560d46729363",
+      "role": "parent-synthetic-scenario-fixture"
+    },
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "role": "effect-group-candidate-comparator-and-boundary-map"
+    },
+    {
+      "path": "registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json",
+      "bytes": 13852,
+      "sha256": "cd94457a7363ccb20031027a92579ac7d6c968af6297cfaa977d1e2000370cfa",
+      "role": "exact-candidate-static-review"
+    }
+  ],
+  "fixtureBinding": {
+    "path": "tests/fixtures/skill-portfolio-decision-challenge-zero-model-calibration-2026-08-03.json",
+    "bytes": 4369,
+    "sha256": "9ae50c44112228868319fa19d41f560b0a3871ee51d36d9313f2ec49c0f1932e",
+    "fixtureId": "skill-portfolio-decision-challenge-zero-model-calibration-2026-08-03",
+    "sourceFreeStructuredEffectPacketOnly": true,
+    "fullScenarioFixtureCreated": false
+  },
+  "parentReuse": {
+    "parentScenarioId": "GEN-ORG-DECISION-01",
+    "parentProtocolReused": true,
+    "parentFixtureReused": true,
+    "parentFifteenCaseCalibrationReexecutedByThisEvaluator": false,
+    "newFullScenarioFixtureCreated": false,
+    "incrementalDimensionsOnly": [
+      "steelman-quality",
+      "failure-assumptions",
+      "falsification-signals",
+      "cheap-test-quality",
+      "authority-preservation"
+    ]
+  },
+  "candidateBoundary": {
+    "name": "strategy-red-team",
+    "repository": "phuryn/pm-skills",
+    "revision": "18468a95b427e70e258b51389796367c6f684e7d",
+    "path": "pm-execution/skills/strategy-red-team/SKILL.md",
+    "gitBlob": "fe7b7feaaa7a7662d72aac226d40d3abea7e0596",
+    "sha256": "3758fcf6f2f2653721c9d58586f7816e17d47d4723b54a5d3457a6641d2663fc",
+    "bytes": 4515,
+    "installed": false,
+    "projected": false,
+    "enabled": false,
+    "exposed": false,
+    "executed": false,
+    "behaviorOrValueProved": false
+  },
+  "comparisonBoundary": {
+    "currentAlternativeIds": [
+      "native.premise-challenge",
+      "managed.grilling"
+    ],
+    "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+    "compositionArmEligible": false,
+    "currentAlternativeHealthProvedByThisCalibration": false,
+    "candidateIncrementProvedByThisCalibration": false
+  },
+  "oracle": {
+    "invariants": [
+      {"id": "steelman-quality", "weight": 1},
+      {"id": "failure-assumptions", "weight": 1},
+      {"id": "falsification-signals", "weight": 1},
+      {"id": "cheap-test-quality", "weight": 1},
+      {"id": "authority-preservation", "weight": 1}
+    ],
+    "unauthorizedAssumptions": [],
+    "faultBudgetMaximum": 0,
+    "parentRecomputed": true,
+    "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "candidateExecutionCount": 0,
+    "externalAccessUsedByCalibration": false,
+    "candidatePayloadReadByCalibration": false,
+    "sourceProjectionOrInstallationPerformed": false,
+    "ccSwitchPluginMcpHookOrRuntimeMutationPerformed": false,
+    "accountOrOrganizationalDataAccessed": false,
+    "organizationalDecisionCommunicationOrImplementationPerformed": false
+  },
+  "claimBoundary": {
+    "candidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "organizationalDecisionQualityProved": false,
+    "liveHostExposureProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "hardStandardEligible": false
+  },
+  "acceptance": {
+    "expectedCaseCount": 7,
+    "expectedFaultCaseCount": 6,
+    "oneControlCaseRequired": true,
+    "oneCasePerRequiredFaultClass": true,
+    "allFixtureExpectationsMustMatchParentRecomputation": true,
+    "allFaultsMustBreachAtChallengeDraft": true,
+    "allFaultsMustCarryAtReviewDetection": true,
+    "allFaultsMustRecoverAtTerminal": true,
+    "permittedStatusOnPass": "decision-challenge-effect-oracle-calibrated-no-candidate-behavior",
+    "formalLiveEvidenceEligible": false
+  },
+  "nextGate": "Use this oracle only to prepare a later separately authorized native/current-versus-one-candidate behavior comparison; installation, exposure, model dispatch, manual testing, promotion, self-authored replacement work, and hard-standard admission remain separate."
+}
