@@ -25,12 +25,30 @@ class CcSwitchInactiveInstallTransactionSimulationTests(unittest.TestCase):
         decision = json.loads(DECISION.read_text(encoding="utf-8"))
         report = run_failure_matrix()
         self.assertEqual(decision["matrix"], report)
-        self.assertEqual(decision["status"], "verified-zero-live-state-design-only")
+        self.assertEqual(
+            decision["status"],
+            "verified-zero-live-state-design-plus-draft-upstream-primitive",
+        )
         self.assertEqual(
             decision["decision"]["disposition"],
-            "upstream-change-preferred-live-install-still-held",
+            "draft-upstream-primitive-open-live-install-still-held",
+        )
+        contribution = decision["upstreamContribution"]
+        self.assertEqual(contribution["status"], "draft-pr-open-partial-primitive")
+        self.assertEqual(contribution["pullRequest"]["number"], 6083)
+        self.assertTrue(contribution["pullRequest"]["draft"])
+        self.assertEqual(
+            contribution["pullRequest"]["headCommit"],
+            "6ea70c02184ef1b01476a875f67c302bd304cf0b",
+        )
+        self.assertTrue(
+            decision["claimBoundary"]["draftPatchBuildAndNarrowBehaviorProved"]
         )
         self.assertFalse(decision["claimBoundary"]["ccSwitchRuntimeBehaviorProved"])
+        self.assertFalse(decision["claimBoundary"]["upstreamPatchMerged"])
+        self.assertFalse(decision["claimBoundary"]["upstreamPatchReleased"])
+        self.assertFalse(decision["claimBoundary"]["installedRuntimeChanged"])
+        self.assertFalse(decision["claimBoundary"]["fullRequiredSemanticsProved"])
         self.assertFalse(decision["claimBoundary"]["candidateInstallAuthorized"])
         self.assertFalse(decision["claimBoundary"]["thinAdapterJustified"])
 

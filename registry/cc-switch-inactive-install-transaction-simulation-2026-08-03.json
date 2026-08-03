@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "cc-switch-inactive-install-transaction-simulation-2026-08-03",
   "date": "2026-08-03",
-  "status": "verified-zero-live-state-design-only",
+  "status": "verified-zero-live-state-design-plus-draft-upstream-primitive",
   "purpose": "Test the minimum transaction semantics required to acquire an exact reviewed Skill cohort into a CC Switch-owned SSOT with every consumer disabled, without touching the installed manager, live database, real SSOT, or Agent projections.",
   "predecessors": [
     "registry/skill-portfolio-current-authority.json",
@@ -40,6 +40,53 @@
     "realManagerDatabase": false,
     "realCcSwitchBinary": false
   },
+  "upstreamContribution": {
+    "status": "draft-pr-open-partial-primitive",
+    "repository": "farion1231/cc-switch",
+    "issue": {
+      "number": 6082,
+      "url": "https://github.com/farion1231/cc-switch/issues/6082"
+    },
+    "pullRequest": {
+      "number": 6083,
+      "url": "https://github.com/farion1231/cc-switch/pull/6083",
+      "draft": true,
+      "state": "OPEN",
+      "baseBranch": "main",
+      "baseCommit": "eb356e15bd898a434fde7ca74e5e3a2aec6c90e4",
+      "headRepository": "yiheng8023/cc-switch",
+      "headBranch": "codex/inactive-skill-install",
+      "headCommit": "6ea70c02184ef1b01476a875f67c302bd304cf0b"
+    },
+    "implementedSemantics": [
+      "expose an explicit initial SkillApps set through the Rust install service",
+      "persist one repository Skill with every app false when the explicit set is empty",
+      "skip consumer projection for that empty set",
+      "do not implicitly enable an existing same-source Skill when the explicit set is empty",
+      "preserve the existing default-true command and UI behavior when the new option is omitted"
+    ],
+    "notImplementedSemantics": [
+      "dependency-complete cohort acquisition and verification before writes",
+      "cohort-wide identity, path, digest, and existing-state validation",
+      "durable transaction journaling",
+      "ordinary cohort rollback",
+      "process-loss recovery",
+      "cohort-wide atomicity"
+    ],
+    "verification": {
+      "rustTargeted": "2 passed",
+      "frontendTargeted": "8 passed",
+      "typescript": "passed",
+      "prettier": "passed",
+      "viteBuild": "passed with non-blocking upstream warnings",
+      "cargoFmt": "passed",
+      "cargoClippy": "passed with one pre-existing unrelated warning",
+      "cargoBuild": "passed",
+      "frontendFullSuite": "two existing order-sensitive App integration failures; the module passed 4 of 4 in isolation",
+      "rustFullSuite": "2245 passed, 1 failed, 2 ignored",
+      "upstreamBaselineComparison": "the sole model-pricing failure reproduced unchanged at the exact base commit"
+    }
+  },
   "matrix": {
     "caseCount": 15,
     "passedCaseCount": 15,
@@ -70,8 +117,8 @@
     "networkCalls": 0
   },
   "decision": {
-    "disposition": "upstream-change-preferred-live-install-still-held",
-    "reason": "The disposable design shows that a default-disabled transaction is mechanically coherent, but the installed CC Switch command does not expose these semantics. A thin external adapter would need to own manager SSOT/database internals and recovery, increasing drift and trust cost. Prefer an upstream inactive-install mode with the same failure matrix before considering that adapter.",
+    "disposition": "draft-upstream-primitive-open-live-install-still-held",
+    "reason": "A draft upstream contribution now proves the narrow single-Skill empty-app primitive can build and behave as intended. It does not implement the dependency-complete cohort transaction, journal, rollback, or crash recovery required by the disposable design, and it is not merged, released, or installed. Keep live installation held while upstream review and the remaining transaction design stay separate.",
     "existingInstallThenDisableEligible": false,
     "directDatabaseOrSsotWriteEligible": false,
     "parallelManagerEligible": false,
@@ -81,8 +128,13 @@
   },
   "claimBoundary": {
     "transactionSemanticsFalsifierPassed": true,
+    "draftPatchBuildAndNarrowBehaviorProved": true,
     "ccSwitchRuntimeBehaviorProved": false,
     "upstreamImplementationProved": false,
+    "upstreamPatchMerged": false,
+    "upstreamPatchReleased": false,
+    "installedRuntimeChanged": false,
+    "fullRequiredSemanticsProved": false,
     "thinAdapterJustified": false,
     "candidateInstallAuthorized": false,
     "candidateInstalled": false,
@@ -94,8 +146,10 @@
     "disposableHomesRemovedByTemporaryDirectory": true,
     "sourceRefreshBareRootRemoved": true,
     "repositoryTmpAbsentAfter": true,
+    "contributionBuildArtifactsRemoved": true,
+    "forkWorktreeRetainedCleanForReview": true,
     "liveCcSwitchStateChanged": false,
     "liveConsumerRootsChanged": false
   },
-  "nextGate": "Prepare a source-level upstream change proposal and its Rust-side disposable-home tests only under separate third-party source/build and external-contribution authority. Until then, keep the 17-candidate cohort inactive and do not substitute install-then-disable, direct database writes, manual SSOT staging, or another manager."
+  "nextGate": "Await and respond to upstream review of draft PR 6083 while separately deciding whether the full dependency-complete cohort transaction belongs upstream. Keep the 17-candidate cohort inactive; do not treat the draft primitive as merged, released, installed, or equivalent to the simulator's full transaction semantics."
 }

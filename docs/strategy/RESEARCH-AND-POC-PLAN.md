@@ -2341,3 +2341,22 @@ failure tests; a thin adapter remains unjustified because it would own private
 manager SSOT/database and recovery semantics. Third-party source/build and
 external-contribution authority are the next gate. The 17-candidate cohort
 remains inactive; the main process and acceptance framework do not change.
+
+### 2026-08-03 upstream contribution follow-up
+
+The authorized source/build slice opened CC Switch
+[issue 6082](https://github.com/farion1231/cc-switch/issues/6082) and
+[draft PR 6083](https://github.com/farion1231/cc-switch/pull/6083), based on
+exact upstream `eb356e15bd898a434fde7ca74e5e3a2aec6c90e4` with fork head
+`6ea70c02184ef1b01476a875f67c302bd304cf0b`. The patch proves only the
+single-Skill empty-app primitive: all app flags false, no consumer projection,
+and no implicit enablement for an existing same-source row. Targeted tests and
+both frontend/Rust builds passed; the two full-suite anomalies were reproduced
+as order-sensitive or exact-upstream-baseline failures.
+
+The draft is not merged, released, installed, or equivalent to the simulator's
+dependency-complete cohort transaction. Journaling, cohort-wide atomicity,
+rollback, and process-loss recovery remain outside the patch. Keep all 17
+candidates inactive while upstream review and the remaining transaction-design
+decision proceed independently. No main-process or acceptance-framework change
+is required.

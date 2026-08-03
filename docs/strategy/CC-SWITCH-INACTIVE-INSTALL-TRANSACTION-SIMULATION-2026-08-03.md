@@ -56,5 +56,30 @@ or portable.
 
 The governed record is
 `registry/cc-switch-inactive-install-transaction-simulation-2026-08-03.json`.
-The next boundary is third-party source/build and external-contribution
-authority for an upstream implementation proposal and Rust-side failure tests.
+
+## Upstream contribution follow-up
+
+The separately authorized source/build slice produced
+[issue 6082](https://github.com/farion1231/cc-switch/issues/6082) and
+[draft PR 6083](https://github.com/farion1231/cc-switch/pull/6083). The draft
+is based on exact upstream commit
+`eb356e15bd898a434fde7ca74e5e3a2aec6c90e4`; its fork head is
+`6ea70c02184ef1b01476a875f67c302bd304cf0b`.
+
+The patch implements only the narrow single-Skill primitive: an explicit empty
+`SkillApps` set persists all app flags false, skips consumer projection, and
+does not implicitly enable an existing same-source Skill. The existing command
+and UI behavior remain default-enabled when the new option is omitted.
+
+Targeted Rust and frontend tests passed, as did TypeScript, formatting, Vite
+build, Cargo formatting, Clippy, and Cargo build. The full frontend suite had
+two existing order-sensitive `App` integration failures whose module passed
+four of four in isolation. The full Rust suite had one model-pricing failure;
+the same failure reproduced at the exact upstream base commit.
+
+This is a draft contribution, not a merged, released, or installed CC Switch
+capability. It does not implement dependency-complete cohort acquisition,
+cohort-wide validation or atomicity, journaling, rollback, or process-loss
+recovery. No live manager state or consumer projection changed. The next gate
+is upstream review plus a separate decision on the remaining cohort transaction
+semantics; the 17 candidates stay inactive.

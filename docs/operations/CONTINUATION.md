@@ -3982,3 +3982,30 @@ do not substitute install-then-disable, direct database writes, manual SSOT
 staging, a parallel manager, or a live thin adapter. The next boundary is
 separate authority for third-party source/build work and an external upstream
 contribution.
+
+## 2026-08-03 CC Switch inactive-install upstream contribution checkpoint
+
+The separately authorized CC Switch source/build slice used exact upstream
+base `eb356e15bd898a434fde7ca74e5e3a2aec6c90e4`. Fork branch
+`codex/inactive-skill-install` is pushed at
+`6ea70c02184ef1b01476a875f67c302bd304cf0b`. Upstream
+[issue 6082](https://github.com/farion1231/cc-switch/issues/6082) and
+[draft PR 6083](https://github.com/farion1231/cc-switch/pull/6083) are open.
+
+The patch implements only a single-Skill empty-`SkillApps` primitive. It keeps
+all app flags false, skips consumer projection, and does not enable an existing
+same-source Skill when the explicit app set is empty. Existing callers retain
+default-enabled behavior. Targeted Rust tests passed 2/2 and targeted frontend
+tests passed 8/8; TypeScript, Prettier, Vite build, Cargo fmt, Clippy, and Cargo
+build passed. The frontend `App` module passed 4/4 alone after two order-sensitive
+full-suite failures. The sole full Rust model-pricing failure reproduced at the
+exact upstream base, so it is not attributed to this patch.
+
+This checkpoint does not prove a merged, released, installed, or live runtime
+capability and does not satisfy the simulator's complete cohort, journal,
+rollback, crash-recovery, or atomicity semantics. No live CC Switch state,
+database, SSOT, consumer projection, candidate, or model was used. Disposable
+baseline worktrees and all build artifacts were removed; the clean fork
+worktree remains for upstream review. Keep the 17 candidates inactive. The
+next gate is upstream review and a separate decision on the residual cohort
+transaction, not live installation.
