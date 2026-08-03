@@ -4075,3 +4075,53 @@ remains unmerged and unreleased, so the 16-candidate transaction is still not
 execution-eligible. No Skill was installed, enabled, exposed, or executed; no
 model arm started. A future `customer-research` admission requires an upstream
 repair or a separately governed exact-upstream-compatible dependency adapter.
+
+## 2026-08-04 main integration and checkout-identity checkpoint
+
+Live repository truth superseded the incoming navigation hashes. Harness
+`main` and `origin/main` were both `eff5c19d978de7b8a1200fb081c92efa268a8e16`,
+not the supplied `6a773ac...` clue. The already reviewed candidate-preview
+branch was a clean fast-forward descendant and was integrated through the
+16-plus-1 transaction evidence. The pre-checkpoint code head is
+`be3e9aedae8805363796240e77b66b6ac35d4d7d`; the documentation commit that
+contains this checkpoint necessarily advances it.
+
+The requested `codex-user-config` branch
+`0c0ee7e24ab9ffe81a6b06cc10ff3658f99dbe34` was not pending integration. It is
+already an ancestor of clean `main`/`origin/main` at
+`fff0041bf074996b63a4f178741ccbc1bf0d6657`. Current repository verification
+passed. The repository, `~/.agents`, and `~/.codex` capability-router Skill and
+reference hashes are byte-equal; the global `~/.codex/AGENTS.md` is also
+byte-equal to the repository source. This proves current projection identity
+and this task's explicit Skill load, not stable implicit loading or behavioral
+causation. The inherited untracked research `.tmp` package and ignored
+`scripts/__pycache__` in that repository were not changed or cleaned.
+
+The first post-fast-forward Harness verification on the long-lived Windows
+main checkout exposed that earlier dual-identity validators still hashed
+physical CRLF checkout bytes as though they were governed LF repository bytes.
+After the smoke validator was fixed, the next run exposed the same defect in
+the chained-transform evidence. The repair therefore introduced one shared
+`repository_text_identity` primitive and connected every affected smoke,
+raw-event, chained-transform, engineering-management, engineering-lifecycle,
+multi-connection, and creator-close validation path. It accepts only exact LF
+or its deterministic all-CRLF checkout projection and rejects mixed line
+endings or lone carriage returns. Historical evidence and capture hashes were
+not rewritten.
+
+Eighty-one focused tests passed after the shared repair. The first real-main
+full run then passed 2,542 tests and failed only the two newly added fixture
+construction tests because those tests themselves assumed their source
+checkout was LF. Their fixture builder now normalizes through the same strict
+primitive before producing CRLF. The final real-main run passed all 2,544 tests
+in 734.170 seconds, and `scripts/verify.py` passed on the CRLF checkout.
+
+CC Switch draft PR 6086 remains open, draft, review-required, and blocked at
+fork head `3db0288c2e3d34d26578839c3c14296eed7c6476`. Its body already superseded
+draft PR 6083, so PR 6083 was closed with a pointer to 6086 to remove duplicate
+review. Issue 6082 remains open. PR merge and release are required external
+gates, not sufficient live-install authority: fresh transaction preflight,
+separate manager-install authority, rollback verification, and post-install
+lifecycle evidence would still be required. No Skill was installed, enabled,
+exposed, invoked, or executed; no account, consumer projection, model, Hook,
+MCP, or live CC Switch database mutation occurred in this checkpoint.

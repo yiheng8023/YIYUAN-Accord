@@ -2408,8 +2408,44 @@ main process, or acceptance framework.
 The refreshed preview is reproducible from six pinned repositories, records
 zero collision and zero live mutation, and has report SHA-256
 `1c2fcd49d3efb3d2eb33616e63f38ea8d4772d0f318724b9e3f05e525cbd7fad`.
-Draft PR 6086 remains the sole runtime blocker for the 16-candidate transaction;
-its existence is not installation or release evidence. No live arm is opened,
-and `customer-research` can re-enter only after upstream repair or a separately
-governed dependency mechanism preserves exact upstream identity and reference
-closure.
+Draft PR 6086 remains one required external runtime gate for the 16-candidate
+transaction; its existence is not merge, release, installation, or live
+authority evidence. Fresh transaction preflight, separate manager-install
+authority, rollback verification, and post-install lifecycle evidence remain
+additional gates. No live arm is opened, and `customer-research` can re-enter
+only after upstream repair or a separately governed dependency mechanism
+preserves exact upstream identity and reference closure.
+
+### 2026-08-04 authority integration and checkout portability follow-up
+
+Fresh truth recovery corrected two stale navigation assumptions. Harness main
+was `eff5c19...` before the already validated candidate-preview branch was
+fast-forwarded; the supplied `6a773ac...` value was not current local or remote
+truth. The `codex-user-config` portfolio-curation commit `0c0ee7e...` was
+already merged into its current `fff0041...` main, whose verifier passes. Its
+repository and live `.agents`/`.codex` router payloads are byte-equal. This is
+projection evidence only, not universal implicit-loading or behavior proof.
+
+Running Harness verification on the long-lived Windows main checkout then
+falsified the earlier claim that repository/capture dual identity was portable:
+old tracked evidence remained physically CRLF even though Git attributes and
+blob identity were LF. A shared strict text-identity primitive now derives the
+governed LF representation from either an all-LF or deterministic all-CRLF
+checkout and rejects mixed EOL or lone carriage returns. The smoke, raw-event,
+chained-transform, engineering-management, engineering-lifecycle, MCP
+multi-connection, and creator-close paths use that one rule. Capture hashes
+and historical evidence remain unchanged.
+
+Focused validation passed 81 cases. One full real-main run exposed only two
+new test-fixture assumptions after 2,542 other tests passed; those tests were
+corrected to use the strict checkout identity before producing CRLF fixtures.
+The final real-main run passed all 2,544 tests in 734.170 seconds, and the
+top-level verifier passes on the CRLF checkout.
+
+Upstream draft PR 6086 remains open and review-required. The superseded draft
+PR 6083 was closed with an explicit pointer to 6086; issue 6082 stays open.
+This reduces upstream review duplication without promoting runtime readiness.
+The 17-item review inventory, 16-item inactive transaction cohort, and one held
+`customer-research` item remain unchanged. No live installation, enablement,
+consumer projection, account connection, model, Hook, MCP, or candidate
+execution follows from this integration checkpoint.
