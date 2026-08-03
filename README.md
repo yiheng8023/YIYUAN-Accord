@@ -710,6 +710,11 @@ consumer must probe its currently visible, authorized capability inventory.
   a later disable is not atomic. CC Switch remains the manager, while live
   candidate installation stays held pending a native or proved thin inactive
   transaction.
+- `registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json`:
+  exact current review of Anthropic's 17 official Plugin Skills plus one
+  non-capability template. It separates restricted document implementations,
+  current host overlap, reference and composition inputs, and one low-dependency
+  default-disabled manager candidate without installing the catalog.
 - `release-manifest.json`: exact deprecated transition payload paths, sizes,
   and hashes.
 - `scripts/`: validation and deterministic projection generation only.

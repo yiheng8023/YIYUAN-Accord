@@ -3499,3 +3499,47 @@ manager command, database write, candidate execution, consumer projection,
 model request, or live Skill mutation occurred. The exact bare review root and
 empty repository `.tmp` parent were removed. The governed record is
 `registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json`.
+
+## 2026-08-03 Anthropic official Skill catalog itemized adjudication checkpoint
+
+The next inactive source review used exact current `anthropics/skills` commit
+`b29e7cf65e5cb78a5ac33d582270551bc74a14eb` and tree
+`a87780349fa9dc5c65c9a11dcc7151ec297f21a1`. Remote `main` matched the pin.
+The 411-file, 10,635,602-byte source was read from a bare Git object root with
+no checkout, payload modification, vendoring, or third-party code execution.
+The total reconciles to 406 files under the eighteen itemized Skill/template
+roots plus five repository support files: marketplace metadata, `.gitignore`,
+README, third-party notices, and the Agent Skills specification.
+
+The recursive surface contains 18 `SKILL.md` files, but the official Plugin
+marketplace declares only 17 Skills: four `document-skills`, twelve
+`example-skills`, and one `claude-api` Skill. `template/SKILL.md` is scaffolding,
+not a Plugin capability. This makes the CC/catalog count an inventory fact,
+not an admissible capability count.
+
+Licensing prevents a catalog-wide shared installation. Twelve actual Skills
+carry Apache-2.0 terms. `docx`, `pdf`, `pptx`, and `xlsx` instead carry
+Anthropic source-available terms that prohibit ordinary retained copies outside
+authorized Anthropic-service use; current Claude Plugin routes and current
+Codex official document runtimes already cover those host surfaces.
+`doc-coauthoring` has no per-Skill license and the repository has no blanket
+top-level license, so its useful fresh-reader workflow remains held rather than
+silently treated as Apache-licensed.
+
+Only `internal-comms` advances to a default-disabled manager-install candidate:
+it is a six-file Apache package with zero executable-like files, while optional
+Slack, email, calendar, and document access remains a separate task-time
+account/data gate. `frontend-design` advances to same-task comparison against
+current official Codex design routes; `theme-factory` becomes a Recipe input
+for current document runtimes. `skill-creator` and `webapp-testing` are not
+duplicated over current system/browser routes. Host-branded, asset-heavy,
+global-package-install, paid-model, unpinned-dependency, missing-license, and
+restricted-license items remain reference or held surfaces, not candidate
+failures.
+
+No source registration, installation, enablement, account access, model
+request, candidate execution, or consumer projection occurred. The exact bare
+review root and empty repository `.tmp` parent were removed. The current CC
+Switch inactive-install gap still blocks even the one manager candidate. The
+governed record is
+`registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json`.
