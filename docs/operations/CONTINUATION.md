@@ -3635,3 +3635,49 @@ The exact decision is
 `registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json`. After
 verification and exact cleanup, the next bounded catalog slice is a
 representative K-Dense scientific review, not bulk scientific installation.
+
+## 2026-08-03 K-Dense scientific representative gate checkpoint
+
+The large-source follow-up reuses the exact Git-object static preflight for
+`K-Dense-AI/scientific-agent-skills` commit
+`ad21a3868923628330734375dddbf7b86ea84222`, tree
+`30fbe6249859378466dde41fe13200ad3766c142`. The current GitHub tags page binds
+stable release `v2.62.0` to the same abbreviated commit. Current `main` was not
+reverified: HTTPS Git, SSH-over-443, partial fetch, GitHub API, and Raw paths
+were interrupted or unavailable. Those failures are `blocked-external`, not
+candidate failure.
+
+The exact preflight inventory remains 158 unique Skill bodies across 2,383
+files and 271,853,718 bytes, including 668 script-like files and 101
+script-bearing Skill paths. That surface is too heterogeneous for a catalog
+admission. Upstream now also recommends a topical subset, requires individual
+Skill-license review, warns that community contributions are not exhaustively
+reviewed, and describes scanner output as a review signal rather than an audit
+or certification.
+
+A sixteen-name representative cohort covers method/control, discovery/data,
+analytics, specialist packages, high-stakes or physical actuation, and current
+official-runtime collision classes. Only `literature-review` obtained a full
+rendered exact-commit body in this slice; the other fifteen names remain
+catalog-level evidence. The exact body is a dependency-heavy composition: it
+uses an authenticated external search CLI, sibling scientific Skills, network
+research, citation/PDF tooling, and mandatory generated figures. The page did
+not yield Raw bytes, so independent Blob or SHA-256 identity is not claimed.
+
+Upstream triage is preserved without distortion. Its 2026-07-27 scan covered
+154 Skills and reported 33 CRITICAL plus 8 HIGH findings, while the narrative
+calls the set 40 and says none survived verification. That 41-versus-40 count
+is not reconciled, and the Harness did not rerun the individual checks. Several
+different real issues were documented as fixed. The older triage neither
+condemns nor certifies the pinned 158-Skill payload. Exact item-level license,
+dependency, code, service, data, host, and task boundaries still control
+admission.
+
+No default-disabled candidate advances from this slice. Office-document names
+remain official-runtime collision comparisons; clinical decision support and
+Opentrons remain task-time high-boundary surfaces; all other sampled names need
+exact body and dependency closure before a candidate decision. No Skill was
+installed, enabled, executed, exposed, or projected. The failed bare review
+root and empty repository `.tmp` parent were precisely removed. The governed
+record is
+`registry/skill-portfolio-kdense-scientific-representative-adjudication-2026-08-03.json`.

@@ -1,0 +1,282 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-kdense-scientific-representative-adjudication-2026-08-03",
+  "date": "2026-08-03",
+  "status": "representative-source-and-one-exact-skill-gate-no-admission",
+  "purpose": "Apply a bounded representative gate to the large K-Dense scientific Skill source without representing the sample as a 158-item review, executing third-party code, installing a Skill, or promoting automated scanner output into a security verdict.",
+  "predecessors": [
+    "registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json",
+    "registry/skill-portfolio-exact-acquisition-static-preflight-2026-08-02.json",
+    "registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json"
+  ],
+  "source": {
+    "repository": "K-Dense-AI/scientific-agent-skills",
+    "url": "https://github.com/K-Dense-AI/scientific-agent-skills.git",
+    "defaultBranch": "main",
+    "commit": "ad21a3868923628330734375dddbf7b86ea84222",
+    "tree": "30fbe6249859378466dde41fe13200ad3766c142",
+    "pinWasCurrentAtExactStaticPreflight": true,
+    "stableTag": "v2.62.0",
+    "stableTagMatchesPin": true,
+    "stableTagObservedAt": "2026-08-03",
+    "remoteMainCurrentReverified": false,
+    "remoteMainCurrentReverificationReason": "HTTPS Git, GitHub API, and partial-fetch transports were interrupted before current-main identity could be rebound. The GitHub tags page independently exposed v2.62.0 at ad21a38, but a stable tag is not proof that main remains at that commit.",
+    "payloadModified": false,
+    "payloadVendored": false,
+    "thirdPartyCodeExecuted": false
+  },
+  "catalogSurface": {
+    "skillMdPathCount": 158,
+    "uniqueDeclaredNames": 158,
+    "uniqueSkillMdHashes": 158,
+    "fileCount": 2383,
+    "bytes": 271853718,
+    "scriptLikeFileCount": 668,
+    "scriptBearingSkillPaths": 101,
+    "manifestCount": 3,
+    "licenseArtifactCount": 6,
+    "skillsWithSiblingLicense": 5,
+    "skillsMentioningInstallTools": 125,
+    "skillsMentioningCredentials": 82,
+    "skillsMentioningUrls": 116,
+    "skillsMentioningMcp": 9,
+    "wholeCatalogReviewComplete": false,
+    "inventoryAuthority": "exact Git-object static preflight at the pinned commit; keyword and file counts are screening signals only"
+  },
+  "upstreamCurrentGuidance": {
+    "observedAt": "2026-08-03",
+    "declaredSkillCount": 158,
+    "scriptBearingSkillsClaimTestsAndStructuralCi": true,
+    "topicalSubsetRecommended": true,
+    "wholeCatalogInstallRecommended": false,
+    "communityContributionsExhaustivelyReviewedGuaranteed": false,
+    "individualSkillLicenseReviewRequired": true,
+    "hostOptionalMetadataBehaviorMayDiffer": true,
+    "sourceLocators": [
+      "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "https://github.com/K-Dense-AI/scientific-agent-skills/tags",
+      "https://github.com/K-Dense-AI/scientific-agent-skills/security",
+      "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/docs/security-triage.md"
+    ],
+    "currentPageEvidenceIsExactPinnedPayloadEvidence": false
+  },
+  "representativeCohort": {
+    "selectionRule": "Sample method and control, discovery and data, common analytics, specialist packages, high-stakes or physical actuation, and current official-runtime collision classes. This is a screening cohort, not statistical sampling and not a generalization proof.",
+    "declaredSampleCount": 16,
+    "names": [
+      "experimental-design",
+      "peer-review",
+      "hypothesis-generation",
+      "database-lookup",
+      "get-available-resources",
+      "literature-review",
+      "exploratory-data-analysis",
+      "matplotlib",
+      "scanpy",
+      "astropy",
+      "clinical-decision-support",
+      "opentrons-integration",
+      "docx",
+      "pdf",
+      "pptx",
+      "xlsx"
+    ],
+    "exactSkillBodyReviewed": ["literature-review"],
+    "catalogLevelOnly": [
+      "experimental-design",
+      "peer-review",
+      "hypothesis-generation",
+      "database-lookup",
+      "get-available-resources",
+      "exploratory-data-analysis",
+      "matplotlib",
+      "scanpy",
+      "astropy",
+      "clinical-decision-support",
+      "opentrons-integration",
+      "docx",
+      "pdf",
+      "pptx",
+      "xlsx"
+    ],
+    "allSampleBodiesExactBound": false,
+    "representativeBehaviorGeneralizableToCatalog": false,
+    "itemizedAdjudicationComplete": false
+  },
+  "exactSkillBodyEvidence": {
+    "literature-review": {
+      "path": "skills/literature-review/SKILL.md",
+      "commit": "ad21a3868923628330734375dddbf7b86ea84222",
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/ad21a3868923628330734375dddbf7b86ea84222/skills/literature-review/SKILL.md",
+      "pageExposedFullBody": true,
+      "byteIdentityProved": false,
+      "reasonByteIdentityNotProved": "The exact-commit GitHub page exposed the full rendered body, but Raw and Git-object transports did not provide bytes for an independent blob or SHA-256 calculation in this slice.",
+      "license": "MIT",
+      "allowedTools": ["Read", "Write", "Edit", "Bash"],
+      "optionalCredentials": ["OPENROUTER_API_KEY"],
+      "requiredExternalTools": ["parallel-cli", "requests", "pandoc", "LaTeX"],
+      "skillDependencies": [
+        "parallel-web",
+        "scientific-schematics",
+        "gget",
+        "bioservices",
+        "datacommons-client"
+      ],
+      "bundledScripts": [
+        "verify_citations.py",
+        "generate_pdf.py",
+        "search_databases.py"
+      ],
+      "mandatoryGeneratedFigures": true,
+      "minimumDatabaseCount": 3,
+      "writesResearchAndGeneratedArtifacts": true,
+      "disposition": "dependency-heavy-composition-only",
+      "reason": "The methodology is substantive, but the Skill mandates generated figures and composes an authenticated external search CLI, several sibling scientific Skills, network research, citation verification, and a document toolchain. It is neither a standalone default-disabled candidate nor a low-boundary ambient route."
+    }
+  },
+  "upstreamSecurityGovernance": {
+    "securityPolicyObservedAt": "2026-08-03",
+    "changedSkillsScannedOnPullRequests": true,
+    "scheduledScanIncrementalWeekly": true,
+    "fullRescanAtLeastEveryDays": 30,
+    "scannerEvidenceAuthority": "review-signal-only",
+    "scannerIsAuditCertificationOrGuarantee": false,
+    "triagedScan": {
+      "scanTime": "2026-07-27T10:38:00Z",
+      "scannerVersion": "2.0.12",
+      "skillsInScan": 154,
+      "totalFindings": 817,
+      "criticalFindings": 33,
+      "highFindings": 8,
+      "mediumFindings": 222,
+      "lowFindings": 554,
+      "reportedCriticalPlusHighArithmetic": 41,
+      "triageNarrativeCriticalAndHighCount": 40,
+      "severityCountReconciliationComplete": false,
+      "criticalAndHighSurvivingVerificationClaimedByUpstream": 0,
+      "harnessIndependentFindingVerificationRun": false,
+      "appliesExactlyToPinned158SkillPayloadProved": false
+    },
+    "realIssuesAndFixesDocumented": true,
+    "documentedFixedExamples": [
+      "predictable-office-shim-path-in-docx-pptx-xlsx",
+      "unattended-break-system-packages-in-imaging-data-commons",
+      "unquoted-module-load-in-pacsomatic",
+      "unbounded-remote-endpoint-in-autoskill",
+      "untrusted-remote-catalog-rendering-in-hugging-science",
+      "consent-and-scope-gap-in-dhdna-profiler",
+      "activation-priority-manipulation-in-liteparse"
+    ],
+    "securityCertificationProved": false,
+    "candidateFailureFromAutomatedFindings": false,
+    "interpretation": "Upstream scanning and triage are positive maintenance signals, not a substitute for exact item-level license, dependency, code, service, data, host, and task-boundary review. The triage metadata reports 33 CRITICAL and 8 HIGH findings while its narrative says all 40 CRITICAL/HIGH findings were false positives; that unresolved 41-versus-40 count is preserved rather than normalized. The Harness did not independently rerun the finding checks. Triage of an older 154-Skill scan cannot certify the pinned 158-Skill source."
+  },
+  "overlapAndBoundary": {
+    "officialRuntimeCollisions": ["docx", "pdf", "pptx", "xlsx"],
+    "currentOfficialRoutes": [
+      "Documents",
+      "PDF",
+      "Presentations",
+      "Spreadsheets",
+      "Data Analytics",
+      "imagegen"
+    ],
+    "methodCandidatesRequiringExactBodyReview": [
+      "experimental-design",
+      "peer-review",
+      "hypothesis-generation"
+    ],
+    "discoveryCandidatesRequiringExactDataAndNetworkReview": [
+      "database-lookup",
+      "get-available-resources"
+    ],
+    "analyticsAndPackageCandidatesRequiringOfficialRouteAndDependencyComparison": [
+      "exploratory-data-analysis",
+      "matplotlib",
+      "scanpy",
+      "astropy"
+    ],
+    "highStakesOrPhysicalActuation": [
+      "clinical-decision-support",
+      "opentrons-integration"
+    ],
+    "overlapIsRejectionProof": false,
+    "catalogDescriptionIsIncrementalValueProof": false
+  },
+  "acquisitionAttempt": {
+    "date": "2026-08-03",
+    "reviewRoot": "C:/Projects/agent-autonomy-harness/.tmp/aah-kdense-scientific-review-20260803.git",
+    "result": "blocked-external",
+    "candidateFailure": false,
+    "targetCommitFetchedThisTurn": false,
+    "checkoutCreated": false,
+    "thirdPartyCodeExecuted": false,
+    "attempts": [
+      "HTTPS git ls-remote ended with an unexpected TLS EOF",
+      "SSH over port 443 ls-remote timed out",
+      "single-commit blobless partial fetch was reset",
+      "GitHub contents API connection was forcibly closed",
+      "exact Raw URLs returned cache misses"
+    ],
+    "successfulFallbacks": [
+      "existing exact Git-object static preflight at the pinned commit",
+      "GitHub tags page exposing v2.62.0 at ad21a38",
+      "exact-commit rendered GitHub page for literature-review/SKILL.md",
+      "current upstream README, security policy, and security triage pages"
+    ]
+  },
+  "decision": {
+    "managerInstallCandidatesDefaultDisabled": [],
+    "wholeCatalogInstallEligible": false,
+    "wholeCatalogReviewEligibleFromThisEvidence": false,
+    "itemLevelLicenseDependencyAndSecurityClosureRequired": true,
+    "officialRuntimeCollisionComparison": ["docx", "pdf", "pptx", "xlsx"],
+    "taskTimeHighBoundaryOnly": [
+      "clinical-decision-support",
+      "opentrons-integration"
+    ],
+    "dependencyHeavyCompositionOnly": ["literature-review"],
+    "exactBodyReviewStillRequiredBeforeCandidateDecision": [
+      "experimental-design",
+      "peer-review",
+      "hypothesis-generation",
+      "database-lookup",
+      "get-available-resources",
+      "exploratory-data-analysis",
+      "matplotlib",
+      "scanpy",
+      "astropy",
+      "clinical-decision-support",
+      "opentrons-integration",
+      "docx",
+      "pdf",
+      "pptx",
+      "xlsx"
+    ],
+    "blockedByCurrentInactiveInstallGap": true,
+    "installationAuthorized": false,
+    "executionAuthorized": false
+  },
+  "cleanup": {
+    "reviewRoot": "C:/Projects/agent-autonomy-harness/.tmp/aah-kdense-scientific-review-20260803.git",
+    "reviewRootRemoved": true,
+    "repositoryTmpRemovedAfter": true,
+    "liveManagerStateChanged": false,
+    "liveConsumerStateChanged": false
+  },
+  "claimBoundary": {
+    "wholeCatalogItemizedReviewProved": false,
+    "allRepresentativeBodiesExactBound": false,
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "thirdPartyCodeExecuted": false,
+    "hostExposed": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostPortabilityProved": false,
+    "securityCertificationProved": false
+  },
+  "nextGate": "Keep the entire K-Dense source inactive. Revisit only a bounded demand-linked subset, reacquire its exact Skill directory and dependency closure when GitHub transport is healthy, compare official/runtime equivalence, and perform item-level license and security review before proposing any default-disabled manager transaction."
+}

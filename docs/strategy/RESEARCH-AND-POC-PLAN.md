@@ -2033,3 +2033,39 @@ than failed candidates. No installation, enablement, execution, CC Switch
 mutation, account access, or consumer projection follows from this checkpoint;
 the atomic default-disabled manager gap still blocks even the three selected
 candidates.
+
+## 2026-08-03 K-Dense scientific representative gate checkpoint
+
+The next large-catalog slice applies the predeclared representative-review
+stop rule rather than attempting 158 itemized admissions. It reuses the exact
+2026-08-02 Git-object preflight for commit
+`ad21a3868923628330734375dddbf7b86ea84222` and tree
+`30fbe6249859378466dde41fe13200ad3766c142`; GitHub's current tags page maps
+stable `v2.62.0` to that commit. Current `main` identity remains unverified in
+this slice because every local exact transport was externally interrupted.
+
+The sixteen-name cohort spans research methods, discovery and data access,
+general analytics, specialist packages, clinical and physical actuation, and
+document-name collisions. Only `literature-review` has a full rendered
+exact-commit body. It is retained as a dependency-heavy composition input, not
+an ambient route: the Skill requires an authenticated search CLI, sibling
+Skills, network sources, citation and PDF tooling, mandatory generated figures,
+and task outputs. Raw byte identity was unavailable and is not inferred from a
+rendered page. The remaining fifteen entries do not advance beyond catalog-
+level screening.
+
+Automated upstream security findings are not candidate verdicts. The upstream
+triage metadata reports 33 CRITICAL and 8 HIGH results in its older 154-Skill
+scan, while its narrative calls the set 40 and says none survived verification.
+The unresolved 41-versus-40 count and the absence of a Harness rerun remain
+explicit. Separately documented real fixes are useful maintenance evidence but
+neither an exact security review of the pinned 158-Skill source nor a
+certification.
+
+The decision is therefore subtractive: no K-Dense Skill becomes a manager
+candidate from this batch, no whole-catalog transaction is eligible, office
+document names stay behind current official-runtime comparisons, and clinical
+or lab actuation stays task-time-only. Reopen only a bounded demand-linked
+subset with exact directory, license, dependency, service, data, security,
+host, fallback, and cleanup closure. No plan, process, acceptance, or hard-
+standard change is justified by this checkpoint.
