@@ -3847,3 +3847,27 @@ generalized preference, live exposure, residual self-authored need, and
 hard-standard eligibility remain false. The governed protocol is
 `registry/skill-portfolio-marketing-writing-zero-model-protocol-2026-08-03.json`.
 Continue next with customer research after a fresh repository truth check.
+
+## 2026-08-03 customer-research zero-model effect-oracle checkpoint
+
+The fifth mapped effect group now has one source-free incremental packet over
+the existing synthetic research oracle and product-discovery consent/retention
+boundary. Five single-fault cases cover provenance omission, confidence-label
+omission, bias/proxy-limit loss, an invented quotation, and privacy/retention
+boundary loss. No parent scenario was copied or re-executed.
+
+The protocol binds the exact `customer-research` identity and dependency file
+plus a static five-dimension eligibility set. The parent research protocol is
+offline-oracle ready but live-comparison not ready, so neither it nor older live
+results establish current comparator health. Future attribution remains
+native/current first followed by the one candidate; composition is ineligible.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, external research, customer/participant data access, contact,
+recording, collection, retention, and deletion are zero. Research quality,
+current candidate behavior/value, participant consent, privacy satisfaction,
+live exposure, residual self-authored need, and hard-standard eligibility
+remain false. The governed protocol is
+`registry/skill-portfolio-customer-research-zero-model-protocol-2026-08-03.json`.
+Continue next with internal communications after a fresh repository truth
+check.

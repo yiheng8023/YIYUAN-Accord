@@ -2219,3 +2219,26 @@ external writes, behavior/value, marketing effectiveness, generalized
 preference, residual self-authored need, and hard-standard promotion remain
 false. The next zero-execution effect group is customer research. No main-plan,
 process, or acceptance change is required.
+
+## 2026-08-03 customer-research incremental oracle checkpoint
+
+The fifth effect group reuses the synthetic `GEN-RESEARCH-01` offline oracle
+and the product-discovery consent/retention boundary, then adds five
+source-free effect dimensions: provenance, confidence labels, bias/proxy
+limits, no invented quotation, and privacy/retention boundaries. One control
+and five single-fault mutations use the shared effect case runner; neither
+parent scenario is duplicated or re-executed.
+
+The exact `customer-research` candidate is mapped to all five dimensions, but
+that eligibility is static protocol design only. The parent research protocol
+remains offline-oracle ready and live-comparison not ready; this calibration
+does not promote older live results to current comparator health or general
+research quality.
+
+No candidate payload, external source, customer/participant data, account, or
+live host is touched. Model dispatch, install/projection, CC Switch mutation,
+contact, recording, collection, retention/deletion actions, behavior/value,
+research quality, consent, privacy satisfaction, residual self-authored need,
+and hard-standard promotion remain false. The next zero-execution effect group
+is internal communications. No main-plan, process, or acceptance change is
+required.
