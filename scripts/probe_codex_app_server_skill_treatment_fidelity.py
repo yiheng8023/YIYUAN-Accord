@@ -145,7 +145,10 @@ def select_canary(
     *,
     expected_path: Path,
 ) -> dict[str, Any]:
-    target = expected_path.resolve().as_posix().lower()
+    targets = {
+        expected_path.as_posix().lower(),
+        expected_path.resolve().as_posix().lower(),
+    }
 
     def matches_expected_path(raw_path: object) -> bool:
         candidate = Path(str(raw_path))
@@ -154,7 +157,7 @@ def select_canary(
                 return True
         except OSError:
             pass
-        return str(raw_path).replace("\\", "/").lower() == target
+        return str(raw_path).replace("\\", "/").lower() in targets
 
     matches = [
         row

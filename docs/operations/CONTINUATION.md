@@ -4217,3 +4217,20 @@ All 72 exact failed/error identities from the remote log now pass locally;
 the broader affected set passes 73/73 on Windows and 71/71 plus 2/2 under the
 correct WSL Git bridge. The verifier and diff check pass. This is still not a
 green matrix claim; a new exact SHA must adjudicate all three hosts.
+
+## 2026-08-04 exact-SHA single-residual checkpoint
+
+Exact SHA `647d055656079d9da7da82e4c6c5022d8cfab73c` made Ubuntu fully green.
+Windows and macOS each retained exactly one error in
+`test_select_canary_accepts_repo_scope`; all other 2,555 identities passed on
+those hosts. Main run `30850278826` is therefore a two-host single-residual
+result, not a green matrix.
+
+The remaining fixture intentionally did not create its declared file. File
+identity comparison correctly could not run, while path resolution changed
+the spelling on both failing hosts: Windows short-to-long temp identity and
+macOS `/var` to `/private/var`. The fallback now preserves both the caller's
+raw absolute path and its resolved form; materialized files still prefer
+`samefile`. The focused module passes 10/10 on Windows and 10/10 on WSL, and
+the verifier and diff check pass. A third exact SHA remains the final matrix
+gate for this repair slice.

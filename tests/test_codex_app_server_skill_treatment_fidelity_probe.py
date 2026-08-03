@@ -119,6 +119,31 @@ class CodexSkillTreatmentFidelityProbeTests(unittest.TestCase):
             selected = select_canary(inventory, expected_path=expected)
         self.assertEqual(selected["scope"], "repo")
 
+    def test_select_canary_preserves_unmaterialized_raw_path(self) -> None:
+        expected = Path(
+            "C:/Users/RUNNER~1/AppData/Local/Temp/canary/SKILL.md"
+        )
+        inventory = [
+            {
+                "name": SKILL_NAME,
+                "path": expected.as_posix(),
+                "scope": "repo",
+                "enabled": True,
+            }
+        ]
+        with (
+            mock.patch("os.path.samefile", side_effect=FileNotFoundError),
+            mock.patch.object(
+                Path,
+                "resolve",
+                return_value=Path(
+                    "C:/Users/runneradmin/AppData/Local/Temp/canary/SKILL.md"
+                ),
+            ),
+        ):
+            selected = select_canary(inventory, expected_path=expected)
+        self.assertEqual(selected["scope"], "repo")
+
     def test_inventory_comparison_isolates_repo_canary(self) -> None:
         canary_path = "C:/tmp/trial/.agents/skills/treatment-fidelity-canary/SKILL.md"
         control = [

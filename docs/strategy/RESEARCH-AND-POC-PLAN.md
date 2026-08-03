@@ -2525,3 +2525,14 @@ pass 72/72 locally, the affected modules pass across Windows and WSL, and the
 top-level verifier passes. A fresh exact-SHA matrix remains mandatory; no
 runtime capability, candidate, live manager state, or model authority is
 promoted by this repair.
+
+### 2026-08-04 single-residual path-identity follow-up
+
+Exact SHA `647d055...` passes the complete Ubuntu matrix and leaves one shared
+fixture error on Windows and macOS. The fixture's path was deliberately
+unmaterialized, so live file identity was unavailable; resolving the lexical
+path changed Windows short-path and macOS `/var` spellings. The fallback now
+accepts the exact raw caller path or its resolved spelling while retaining
+file-identity priority for real files. Focused cross-host tests and the
+verifier pass; one more exact-SHA matrix is required before the cross-platform
+repair slice can be called green.
