@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-baoyu-skills-adjudication-2026-08-03",
+  "date": "2026-08-03",
+  "status": "exact-itemized-adjudication-no-live-admission",
+  "purpose": "Adjudicate the exact current JimLiu/baoyu-skills catalog at Skill granularity without executing third-party code, installing a Skill, or treating a source-catalog count as an admission decision.",
+  "predecessors": [
+    "registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json",
+    "registry/skill-portfolio-exact-acquisition-static-preflight-2026-08-02.json",
+    "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json"
+  ],
+  "source": {
+    "repository": "JimLiu/baoyu-skills",
+    "url": "https://github.com/JimLiu/baoyu-skills.git",
+    "defaultBranch": "main",
+    "commit": "6b7a2e417500561a5ecdd0b168332f4142584617",
+    "tree": "22d34a6f2c157ea249a2e3d0c04b17cd023289b9",
+    "remoteMainMatchesPin": true,
+    "commitTime": "2026-07-03T20:22:55-05:00",
+    "commitSubject": "更新 baoyu-wechat-summary 技能：调整输出顺序并拆分环境/群记忆参考文件",
+    "fileCount": 920,
+    "gitObjectBytes": 32685489,
+    "acquisition": "single exact-commit fetch into a bare non-active Git object root",
+    "checkoutCreated": false,
+    "thirdPartyCodeExecuted": false,
+    "payloadModified": false,
+    "payloadVendored": false,
+    "identityFiles": [
+      {"path": "LICENSE", "gitBlob": "9f2cc0d74570c5841f02b639593d12a70dc7dc65", "sha256": "601839401f6ce68b7a8aec0f7ba247ab8ef0848113378220bec4b2615cc84ee7", "bytes": 1064},
+      {"path": "README.md", "gitBlob": "eb7cdd139af53d040fb3cc047fb1e2ffa586a6b6", "sha256": "c9c4eeffe6b3dfe914c3e9fd774d18f42bcfc8ef93e9bd28921816b4e4ffd819", "bytes": 60217},
+      {"path": "package.json", "gitBlob": "9fdd02c046226170f98a438e56084e5854863f2a", "sha256": "0169138d1d2343b24c70c597c99c026e9dae5bf09326fb3753565e3ab3857a9a", "bytes": 702},
+      {"path": ".claude-plugin/marketplace.json", "gitBlob": "e085e9ab7edc9f14f368c5f05f6eae36b42efaa9", "sha256": "78daf8ef39489fd01d191961c623f41d05da220a21bb81479e111f275cef7172", "bytes": 1311}
+    ]
+  },
+  "catalogSurface": {
+    "skillMdCount": 22,
+    "pluginSkillCount": 21,
+    "internalMaintainerSkillCount": 1,
+    "repositoryFileCount": 920,
+    "scriptBearingSkillCount": 16,
+    "testFileCount": 27,
+    "marketplacePluginCount": 1,
+    "countExplanation": "The repository has 21 paths explicitly listed in .claude-plugin/marketplace.json plus .claude/skills/release-skills. A scanner that searches every SKILL.md can therefore report 22 even though the published plugin declares 21 user-facing Skills.",
+    "bulkInstallRecommendedByUpstream": false,
+    "upstreamReadmeSelectiveInstallGuidance": true
+  },
+  "upstreamQualityEvidence": {
+    "license": "MIT",
+    "workflowFileCount": 2,
+    "testFileCount": 27,
+    "rootTestCommand": "node ./scripts/run-node-tests.mjs",
+    "remoteCheckObservation": "blocked-external",
+    "remoteCheckObservationDetails": "Exact-commit GitHub check-run observation could not be retrieved because the local HTTPS credential layer failed for both PowerShell and curl, while exact Git transport and remote-main identity succeeded.",
+    "candidateFailureFromRemoteCheckObservation": false,
+    "thirdPartyTestsExecutedLocally": false,
+    "behavioralResultsCommitted": false,
+    "provesCurrentCrossHostBehaviorOrValue": false
+  },
+  "dependencyBoundary": {
+    "runtimeFamily": "Most script-bearing Skills expect bun or npx -y bun; installation or implicit package download is a later setup and trust transition.",
+    "selectiveInstallUnboundImports": {
+      "baoyu-comic": ["pdf-lib"],
+      "baoyu-compress-image": ["sharp"],
+      "baoyu-diagram": ["sharp"],
+      "baoyu-slide-deck": ["pdf-lib", "pptxgenjs"]
+    },
+    "reason": "Those imports are supplied only by the repository-root package manifest, not by a manifest inside the selectively copied Skill directory used by the current manager layout.",
+    "packageBearingSkillDirectories": 9,
+    "reverseEngineeredApiSkills": ["baoyu-danger-gemini-web", "baoyu-danger-x-to-markdown"],
+    "publicMutationSkills": ["release-skills", "baoyu-post-to-wechat", "baoyu-post-to-weibo", "baoyu-post-to-x"],
+    "privateDataSandboxBypassSkills": ["baoyu-wechat-summary"]
+  },
+  "currentOverlap": {
+    "officialOrRuntimeRoutes": [
+      "imagegen",
+      "Presentations",
+      "Documents",
+      "Figma diagram generation",
+      "Chrome, browser, and computer-use control"
+    ],
+    "managedRoutes": ["edit-article", "design-an-interface", "research"],
+    "interpretation": "Backend or carrier overlap does not erase Baoyu's higher-level methods. The three selected method candidates explicitly prefer a current native image backend and add article, cover, or infographic structure. Static overlap still proves neither incremental behavior nor value.",
+    "duplicateOfficialImageBackendAdmission": false,
+    "duplicateOfficialPresentationAdmission": false
+  },
+  "decision": {
+    "managerInstallCandidatesDefaultDisabled": [
+      "baoyu-article-illustrator",
+      "baoyu-cover-image",
+      "baoyu-infographic"
+    ],
+    "taskTimeHighBoundaryOnly": [
+      "baoyu-danger-gemini-web",
+      "baoyu-danger-x-to-markdown",
+      "baoyu-electron-extract",
+      "baoyu-image-gen",
+      "baoyu-post-to-wechat",
+      "baoyu-post-to-weibo",
+      "baoyu-post-to-x",
+      "baoyu-url-to-markdown",
+      "baoyu-wechat-summary",
+      "baoyu-youtube-transcript"
+    ],
+    "methodOrUtilityComparisonOnly": [
+      "baoyu-comic",
+      "baoyu-compress-image",
+      "baoyu-diagram",
+      "baoyu-format-markdown",
+      "baoyu-markdown-to-html",
+      "baoyu-slide-deck",
+      "baoyu-translate",
+      "baoyu-xhs-images"
+    ],
+    "internalMaintainerExcluded": ["release-skills"],
+    "wholeCatalogInstallEligible": false,
+    "blockedByCurrentInactiveInstallGap": true,
+    "installationAuthorized": false,
+    "executionAuthorized": false
+  },
+  "items": [
+    {"name": "release-skills", "path": ".claude/skills/release-skills", "skillBlob": "dc5659df47a565d7c50657a35ade77516e56823c", "skillSha256": "f320492bbc9ced7d00d07c55c4adf5b20e34214a42bf037b68ccaa4a6c62e377", "skillBytes": 20165, "fileCount": 1, "scriptLikeFileCount": 0, "disposition": "internal-maintainer-skill-not-plugin-candidate", "reason": "This repository-maintainer workflow is outside the 21 paths declared by the plugin and governs releases, tags, pushes, and GitHub Releases already covered by repository rules and current GitHub/Superpowers routes.", "candidateFailure": false},
+    {"name": "baoyu-article-illustrator", "path": "skills/baoyu-article-illustrator", "skillBlob": "87e27e6d83f420605de2f6992454d71874d8dc44", "skillSha256": "ce1c7bfe9b93e5afac1dbeac95a03f8abf8c102aeecc34a33d8f13dc10e64acd", "skillBytes": 17179, "fileCount": 37, "scriptLikeFileCount": 0, "disposition": "manager-install-candidate-default-disabled-native-image-backend", "reason": "Adds a reproducible article-level illustration plan, prompt records, confirmation gate, and backend-neutral composition while explicitly preferring the current native image backend. First-use preferences and generated files remain task-time writes.", "candidateFailure": false},
+    {"name": "baoyu-comic", "path": "skills/baoyu-comic", "skillBlob": "e25f4d514f12a7e1de848a6c0605d156f85daf5e", "skillSha256": "98d5de8650a3401c1ee97b3f78ebacef72f3f570ef7fe7290b192ac7d24330bc", "skillBytes": 22517, "fileCount": 39, "scriptLikeFileCount": 1, "disposition": "specialized-creative-comparison-unbound-pdf-dependency", "reason": "The educational-comic method is substantive but specialized, depends on image generation, and its PDF script imports root-only pdf-lib under selective manager installation.", "candidateFailure": false},
+    {"name": "baoyu-compress-image", "path": "skills/baoyu-compress-image", "skillBlob": "a7f7363ebef4089c1d69e7a2ba20f0ace72c8ff4", "skillSha256": "b14b2ac50b798aa7cdac1ba489a5963312b0faf538fdb3f88e69733045c3f9dc", "skillBytes": 2409, "fileCount": 2, "scriptLikeFileCount": 1, "disposition": "utility-value-dependency-and-replacement-semantics-review", "reason": "Image compression is useful, but the selective directory has no sharp manifest, Windows tool detection uses which, and the default non-keep path can rename or replace originals. It needs a dependency and destructive-semantics comparison before admission.", "candidateFailure": false},
+    {"name": "baoyu-cover-image", "path": "skills/baoyu-cover-image", "skillBlob": "abaa5497c2d4989c3ae188d73fa02d92ce68a91f", "skillSha256": "36804fce98bcb9ebe4a51c26f6f276a807805aab980ca4a0718daa40a5cc7fda", "skillBytes": 17931, "fileCount": 35, "scriptLikeFileCount": 0, "disposition": "manager-install-candidate-default-disabled-native-image-backend", "reason": "Adds a bounded five-dimension cover workflow and confirmation boundary on top of a native-first image backend without shipping executable code. Preference and output writes remain task-bound.", "candidateFailure": false},
+    {"name": "baoyu-danger-gemini-web", "path": "skills/baoyu-danger-gemini-web", "skillBlob": "8dbbc5355a2c65111836d328e2a8b1a9d3228499", "skillSha256": "290c0f8b3957a21de068f8732f324aa6c05a72bc2bf23f962fe9fa874b2c0271", "skillBytes": 6518, "fileCount": 28, "scriptLikeFileCount": 25, "disposition": "task-time-only-reverse-engineered-cookie-consent", "reason": "Uses an unofficial reverse-engineered Gemini Web surface, browser authentication, cached cookies, and explicit consent. Current official image generation remains the default route.", "candidateFailure": false},
+    {"name": "baoyu-danger-x-to-markdown", "path": "skills/baoyu-danger-x-to-markdown", "skillBlob": "654ae8412ef8b6ec441770b0ce1b2a99748e9ffe", "skillSha256": "2b34a2e4d50cd201f5a7bbb856c9c04e2b04f0e0f28fca21f165270fec957cef", "skillBytes": 7389, "fileCount": 20, "scriptLikeFileCount": 16, "disposition": "task-time-only-reverse-engineered-x-auth-consent", "reason": "Uses an unofficial X surface with tokens or browser cookies, account risk, consent state, and optional media download. It is not a general inactive admission candidate.", "candidateFailure": false},
+    {"name": "baoyu-diagram", "path": "skills/baoyu-diagram", "skillBlob": "22afeae4e7175f20d5f5570e258ce30b13de0727", "skillSha256": "55a2d050c3a2faea8721d1cec31749dfafa7e7d346a586e99e757f77a3526860", "skillBytes": 12272, "fileCount": 6, "scriptLikeFileCount": 1, "disposition": "useful-method-selective-install-dependency-gap", "reason": "Direct SVG generation is a useful account-free diagram method, but the required final PNG conversion imports root-only sharp. Exact selective installation is not dependency-complete.", "candidateFailure": false},
+    {"name": "baoyu-electron-extract", "path": "skills/baoyu-electron-extract", "skillBlob": "212445f51808f2947f221624d7d0ce9ae4703f49", "skillSha256": "3f8714f3030dd12e2b11a60ed5e561c0b2297de5b31251b40f6da081e06ae4ee", "skillBytes": 10331, "fileCount": 3, "scriptLikeFileCount": 2, "disposition": "task-time-only-local-app-extraction-rights-boundary", "reason": "Reads and reconstructs installed application bundles and may format extracted source. It requires a bound app, rights and data boundary, exact output root, and user-authorized writes.", "candidateFailure": false},
+    {"name": "baoyu-format-markdown", "path": "skills/baoyu-format-markdown", "skillBlob": "1bb166fbaee1f5f249ef48feb22685fa9cc25eba", "skillSha256": "39bd9eeb5373365c84ac139b85a11311eab57710707e54b101e41085636b56bb", "skillBytes": 14003, "fileCount": 8, "scriptLikeFileCount": 3, "disposition": "current-document-and-edit-route-comparison-persistent-workfiles", "reason": "Provides a careful formatting method and complete local manifest, but overlaps Documents and edit-article, creates analysis and formatted artifacts, and offers an in-place typography branch. Compare on a bound content task before adding another ambient route.", "candidateFailure": false},
+    {"name": "baoyu-image-gen", "path": "skills/baoyu-image-gen", "skillBlob": "f468e541773d6183a86da0ab07eec1a09ef5dde7", "skillSha256": "de09b723bdc7b19d74e508d0b63e2306f03b4e48ab2b83c90ac6c99c0b7de4d0", "skillBytes": 20666, "fileCount": 49, "scriptLikeFileCount": 36, "disposition": "task-time-only-official-imagegen-overlap-multi-provider-credentials", "reason": "The current official imagegen route is preferred. This alternative adds many provider keys, endpoints, network calls, concurrency, Codex CLI spawning, and persistent configuration and is only eligible for a proved provider-specific gap.", "candidateFailure": false},
+    {"name": "baoyu-infographic", "path": "skills/baoyu-infographic", "skillBlob": "8212eaa182e66bde7c7ceae7dd23e86d2dadda10", "skillSha256": "1572aaa294c5f7547889f520b6efeed979aeaaf58b4e7c4bcaaa26ace2ee3564", "skillBytes": 19957, "fileCount": 50, "scriptLikeFileCount": 0, "disposition": "manager-install-candidate-default-disabled-native-image-backend", "reason": "Adds a source-preserving layout and visual-style method, prompt record, confirmation gate, and explicit native image-backend preference without executable code. Behavioral value remains unproved.", "candidateFailure": false},
+    {"name": "baoyu-markdown-to-html", "path": "skills/baoyu-markdown-to-html", "skillBlob": "56987832f42a9819c64bea90857476a1a48827f7", "skillSha256": "f4a5bb1697f9387557897a9c58b6406765728089a8d84cfbb6c40a93c3d136f7", "skillBytes": 10060, "fileCount": 5, "scriptLikeFileCount": 2, "disposition": "wechat-carrier-comparison-package-and-browser-dependencies", "reason": "The conversion method is carrier-specific and depends on baoyu-md and baoyu-chrome-cdp packages, with optional browser rendering. Keep it with a bound WeChat publishing need rather than general admission.", "candidateFailure": false},
+    {"name": "baoyu-post-to-wechat", "path": "skills/baoyu-post-to-wechat", "skillBlob": "6e6815ab259ccc18722b6629483a69a281069bda", "skillSha256": "e15f1b5a51b8443ef1c8191c036301fd9b3e028069b82b625f327b0344cbc9d8", "skillBytes": 14864, "fileCount": 29, "scriptLikeFileCount": 21, "disposition": "task-time-only-account-secrets-browser-api-ssh-publishing", "reason": "Crosses WeChat account credentials, API or browser control, uploads, draft creation, and optional SSH proxying. It requires task-time authority and final publication control.", "candidateFailure": false},
+    {"name": "baoyu-post-to-weibo", "path": "skills/baoyu-post-to-weibo", "skillBlob": "e40e59d4bc743420caf3275d063f522ccebf5dfb", "skillSha256": "afc5eb6d748f8d4ff521a3bec024e51fc77d35344a502555486f029871d262d0", "skillBytes": 5521, "fileCount": 9, "scriptLikeFileCount": 6, "disposition": "task-time-only-account-browser-publication", "reason": "Fills Weibo posts and articles through Chrome CDP and leaves final publication to the user. Account and public-write boundaries make it task-time only.", "candidateFailure": false},
+    {"name": "baoyu-post-to-x", "path": "skills/baoyu-post-to-x", "skillBlob": "bde07c29e29dd13d8ae303a1a770765c4fc3c231", "skillSha256": "6eca9de552dd0b7bebfbbab9192a915f73ac40396ca89501dfcfbb94efb141fc", "skillBytes": 17668, "fileCount": 16, "scriptLikeFileCount": 11, "disposition": "task-time-only-account-browser-publication", "reason": "Composes current Chrome or computer-use controls and CDP fallbacks, with media uploads and an explicit final publish gate. It remains an account-bound public-write route.", "candidateFailure": false},
+    {"name": "baoyu-slide-deck", "path": "skills/baoyu-slide-deck", "skillBlob": "0b4e31539ca82cda246d4957cee29473fa8cf0d0", "skillSha256": "0e988f065a1886224a501614d059e90019360ccce9fc5f5417e8719e5777efd8", "skillBytes": 23350, "fileCount": 35, "scriptLikeFileCount": 2, "disposition": "official-presentations-overlap-unbound-root-dependencies", "reason": "Current official Presentations already owns deck carriers. Baoyu's image-deck method may be compared on a bound task, but its PDF and PPTX scripts import root-only pdf-lib and pptxgenjs.", "candidateFailure": false},
+    {"name": "baoyu-translate", "path": "skills/baoyu-translate", "skillBlob": "401aa885d51543e871b2f531603e5b0294298e5c", "skillSha256": "772f7170a61f1246d7505c97539579bb4d055f21653462e8cfaaddc65a3a5b31", "skillBytes": 15844, "fileCount": 11, "scriptLikeFileCount": 2, "disposition": "method-comparison-persistent-preferences-and-subagent-cost", "reason": "The three-mode translation and glossary method is substantive and dependency-complete, but blocks first use on persistent EXTEND.md creation and may spawn one subagent per chunk. Existing access/communication evidence says the next gap is behavior, accessibility, and recipient evidence rather than another ambient route.", "candidateFailure": false},
+    {"name": "baoyu-url-to-markdown", "path": "skills/baoyu-url-to-markdown", "skillBlob": "adad2b70be26c97934b338ca5d2b7248956a4dbf", "skillSha256": "40913749b0e95165b02771bdf17bb8ed9fa0a72787d3e09571341ab7148359d0", "skillBytes": 8520, "fileCount": 48, "scriptLikeFileCount": 41, "disposition": "task-time-only-current-browser-overlap-login-and-network", "reason": "Adds a substantial browser/CDP extraction stack, site adapters, login and CAPTCHA waits, snapshots, and network data boundaries already partially covered by current browser and Chrome routes.", "candidateFailure": false},
+    {"name": "baoyu-wechat-summary", "path": "skills/baoyu-wechat-summary", "skillBlob": "b5bd8fa76ee347fe39e54496c42c9e130775cea1", "skillSha256": "6fe746670aedb1955dac6f74b096253f1935f916cc74a9709006205152c0bb86", "skillBytes": 33328, "fileCount": 6, "scriptLikeFileCount": 0, "disposition": "task-time-only-private-data-sandbox-bypass-macos", "reason": "Requires macOS WeChat, an external wx-cli, private chat history, persistent profiles and group memory, and instructs disabling the sandbox for every command. It is neither portable nor suitable for broad admission.", "candidateFailure": false},
+    {"name": "baoyu-xhs-images", "path": "skills/baoyu-xhs-images", "skillBlob": "a7bb63b0c9e049f6c3e052d8a781d08f80a1dd78", "skillSha256": "17bf5498641cc60cb98f0cc15fbea27fd42777d119a39fb54fd6418840442bba", "skillBytes": 29570, "fileCount": 29, "scriptLikeFileCount": 0, "disposition": "specialized-social-image-method-comparison", "reason": "The style and layout system is reusable but optimized for a specific social-content carrier and overlaps the selected infographic and cover methods. Revisit for a bound Xiaohongshu or image-card workload.", "candidateFailure": false},
+    {"name": "baoyu-youtube-transcript", "path": "skills/baoyu-youtube-transcript", "skillBlob": "35a05640d56622839e2dd748afffd3dc3531849f", "skillSha256": "b7085574c6bf72e07c578db14316682b9ebf1e841d9db62916d284efd84c96cc", "skillBytes": 9704, "fileCount": 9, "scriptLikeFileCount": 7, "disposition": "task-time-only-external-media-network-and-tool-install-boundary", "reason": "Fetches YouTube data, caches media metadata, retries alternate identities, and may fall back to yt-dlp. The instruction to make yt-dlp available cannot override the Harness installation authority gate.", "candidateFailure": false}
+  ],
+  "cleanup": {
+    "reviewRoot": "C:/Projects/agent-autonomy-harness/.tmp/aah-baoyu-skills-review-20260803.git",
+    "reviewRootRemoved": true,
+    "repositoryTmpRemovedAfter": true,
+    "liveManagerStateChanged": false,
+    "liveConsumerStateChanged": false
+  },
+  "claimBoundary": {
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "thirdPartyCodeExecuted": false,
+    "hookActivated": false,
+    "hostExposed": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "nextGate": "Keep the three native-image-backend method candidates inactive behind the atomic default-disabled manager gap, preserve the other methods as exact comparison metadata, and continue the bounded cohort with K-Dense representative scientific Skill review."
+}

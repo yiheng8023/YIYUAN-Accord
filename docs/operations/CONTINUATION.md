@@ -3592,3 +3592,46 @@ projection occurred. The main plan, process, and acceptance framework remain
 unchanged; even the six surviving candidates remain behind the separately
 proved CC Switch atomic default-disabled install gap. The governed record is
 `registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json`.
+
+## 2026-08-03 Baoyu exact itemized adjudication checkpoint
+
+The next inactive review bound current `JimLiu/baoyu-skills` `main` to commit
+`6b7a2e417500561a5ecdd0b168332f4142584617` and tree
+`22d34a6f2c157ea249a2e3d0c04b17cd023289b9`. Remote `main` matched the pin. The
+920-file, 32,685,489-byte MIT Git-object surface was inspected from one bare
+repository-local review root with no checkout, payload modification, vendoring,
+or third-party code execution.
+
+The apparent count difference is structural rather than stale retirement:
+`.claude-plugin/marketplace.json` declares 21 user-facing Skills, while a
+recursive scanner additionally finds the internal
+`.claude/skills/release-skills` maintainer workflow and reports 22. That
+internal workflow includes tag, push, and GitHub Release behavior and is not a
+portfolio candidate.
+
+Sixteen Skills carry scripts. Four selectively copied directories have imports
+bound only by the repository-root package manifest: `baoyu-comic` needs
+`pdf-lib`, `baoyu-compress-image` and `baoyu-diagram` need `sharp`, and
+`baoyu-slide-deck` needs `pdf-lib` plus `pptxgenjs`. The compression utility
+also needs a later destructive-semantics and Windows tool-detection review.
+These are dependency or mechanism gates, not candidate failures.
+
+Three script-free methods advance as default-disabled manager candidates:
+`baoyu-article-illustrator`, `baoyu-cover-image`, and `baoyu-infographic`.
+They explicitly prefer the current native image backend and supply a distinct
+confirmation-gated workflow layer. Reverse-engineered APIs, account and cookie
+access, public posting, private WeChat data with sandbox bypass, browser/CDP
+extraction, installed-app extraction, and YouTube tool fallback remain
+task-time-only. Other useful methods remain same-task comparisons because of
+current official overlap, persistent setup, lifecycle cost, specialization, or
+dependency closure.
+
+The GitHub check-run endpoint could not be observed through the current local
+HTTPS credential layer. Exact Git transport, identity, two committed workflow
+files, and 27 committed test files remain valid bounded evidence; no green CI
+claim or candidate-failure claim is made. No Skill was installed, enabled,
+executed, exposed, or projected, and no CC Switch or consumer state changed.
+The exact decision is
+`registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json`. After
+verification and exact cleanup, the next bounded catalog slice is a
+representative K-Dense scientific review, not bulk scientific installation.

@@ -1994,3 +1994,42 @@ mechanism gap, source/host drift, authority boundary, oracle, fallback,
 cleanup, and claim ceiling. This checkpoint performs no external discovery,
 installation, candidate execution, model dispatch, CC Switch mutation, global
 configuration change, or portfolio mutation.
+
+## 2026-08-03 Baoyu exact itemized adjudication checkpoint
+
+The bounded portfolio cohort now includes an exact item-level review of
+`JimLiu/baoyu-skills` current `main` commit
+`6b7a2e417500561a5ecdd0b168332f4142584617`, tree
+`22d34a6f2c157ea249a2e3d0c04b17cd023289b9`. The 920-file MIT source was read
+from a bare non-active Git object root without checkout, payload modification,
+vendoring, or third-party code execution. Exact Git transport and remote-main
+identity succeeded. A separate GitHub check-run query was blocked by the local
+HTTPS credential layer, so the repository's two workflows and 27 test files
+are retained as static quality evidence rather than misreported as observed
+green checks.
+
+The repository count is now reconciled: the marketplace declares 21
+user-facing Skill paths, while a repository-wide scanner also finds the
+internal `.claude/skills/release-skills` maintainer workflow and may therefore
+display 22. Sixteen Skills contain scripts. Four selectively copied Skill
+directories import packages declared only at the repository root: comic
+(`pdf-lib`), compression and diagram (`sharp`), and slide deck (`pdf-lib`,
+`pptxgenjs`). Their methods may still be useful, but the current CC Switch
+per-directory layout is not dependency-complete for them.
+
+Three script-free, higher-level methods advance as default-disabled manager
+candidates: article illustration, cover generation, and infographic
+generation. Each explicitly prefers a current native image backend and adds a
+confirmation-gated planning or structure layer rather than duplicating the
+backend itself. This remains static suitability evidence; setup preferences,
+generated files, model or tool calls, behavior, and value stay unproved.
+
+Reverse-engineered APIs, account or cookie access, public publishing,
+installed-app extraction, browser/CDP scraping, WeChat private-data and
+sandbox-bypass behavior, and YouTube tool fallback remain task-time-only
+surfaces. Translation, formatting, diagrams, decks, comics, Markdown-to-HTML,
+compression, and Xiaohongshu cards remain exact comparison metadata rather
+than failed candidates. No installation, enablement, execution, CC Switch
+mutation, account access, or consumer projection follows from this checkpoint;
+the atomic default-disabled manager gap still blocks even the three selected
+candidates.
