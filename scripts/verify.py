@@ -1261,6 +1261,8 @@ REQUIRED_FILES = (
     "tests/test_skill_portfolio_kdense_scientific_representative_adjudication.py",
     "registry/skill-portfolio-bound-cohort-reconciliation-2026-08-03.json",
     "tests/test_skill_portfolio_bound_cohort_reconciliation.py",
+    "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+    "tests/test_skill_portfolio_candidate_demand_mapping.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",

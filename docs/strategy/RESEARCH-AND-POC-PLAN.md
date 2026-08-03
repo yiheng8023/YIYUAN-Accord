@@ -2099,3 +2099,27 @@ no proved atomic default-disabled repository install. Live comparison, user
 manual testing, self-authored residual implementation, and hard-standard
 promotion therefore remain later gates. The main plan, process, and acceptance
 framework require no change.
+
+## 2026-08-03 static-candidate demand and comparator mapping checkpoint
+
+The seventeen-candidate set is now deterministically mapped to existing
+portfolio domains and governed scenarios. Each row identifies one effect
+group, dated current comparators, one incremental hypothesis, and explicit
+data/account/write/cost/authority boundaries. The map proves neither comparator
+health nor candidate increment; those remain treatment questions.
+
+Eight reusable effect groups define future fixture contracts while preserving
+one-candidate attribution. Existing governed scenarios support seven groups.
+The Obsidian schema/format group stays domain-only because forcing it into an
+unrelated scenario would manufacture coverage. Likewise, three portfolio
+domains without a new candidate are not residual gaps; the full route space
+still includes native, official, managed, composed, and human control.
+
+Protocol preparation proceeds in evidence-reuse order: decision challenge,
+engineering lifecycle, product discovery, marketing writing, customer
+research, internal communications, visual methods, and finally Obsidian format
+semantics. At this checkpoint only source-free deterministic fixture design is
+eligible. Candidate payload projection, model dispatch, installation,
+enablement, manual user testing, composition, self-authored implementation, and
+hard-standard promotion remain later gates. No plan, process, or acceptance
+change is required.

@@ -1,0 +1,361 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-candidate-demand-mapping-2026-08-03",
+  "date": "2026-08-03",
+  "status": "seventeen-static-candidates-mapped-to-domains-scenarios-effects-and-current-comparators-no-execution",
+  "purpose": "Map the frozen seventeen-candidate cohort to existing portfolio domains, governed scenarios, current comparator routes, effect groups, incremental hypotheses, and authority boundaries without installing or executing a candidate or inventing new scenarios to force coverage.",
+  "sourceBindings": [
+    {"path": "registry/skill-portfolio-bound-cohort-reconciliation-2026-08-03.json", "bytes": 10885, "sha256": "3d6cab25ca88b404e028eba8156f7d67651617c02f9ff99008a753f9f621e232", "role": "frozen-seventeen-candidate-set-and-lifecycle-gate"},
+    {"path": "registry/collaboration-domain-coverage.json", "bytes": 6763, "sha256": "a9d50c7cc7e4f71e4cee245cdd32988416fd25e00b845f3b2d323d15ba39e1ed", "role": "ten-domain-portfolio-coverage-planning-authority"},
+    {"path": "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json", "bytes": 36894, "sha256": "9d11cfbb4530c2612760f918b22fc53b3d6cf09fd117a86226baac7a8fa0309d", "role": "thirteen-scenario-and-current-route-coverage-authority"},
+    {"path": "registry/skill-portfolio-kepano-obsidian-adjudication-2026-08-02.json", "bytes": 7143, "sha256": "c3ad6063fe0b015b32d2f4a04a1ddefdeeb68808066b2d60b1460ac8cda85eac", "role": "obsidian-candidate-effect-and-boundary-evidence"},
+    {"path": "registry/skill-portfolio-phuryn-pm-representative-adjudication-2026-08-03.json", "bytes": 13852, "sha256": "cd94457a7363ccb20031027a92579ac7d6c968af6297cfaa977d1e2000370cfa", "role": "pm-candidate-effect-and-boundary-evidence"},
+    {"path": "registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json", "bytes": 13754, "sha256": "739cff6adc2be2291b0ef64aa0afe779f3897443c205d615f6a85346e77c6442", "role": "marketing-candidate-effect-and-boundary-evidence"},
+    {"path": "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json", "bytes": 18174, "sha256": "d070d1d0343d982786aa6a2eaf733ea98a3d4131f86b6afc9a7581417d1e6f7a", "role": "internal-comms-candidate-effect-and-boundary-evidence"},
+    {"path": "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json", "bytes": 26313, "sha256": "597defb2bec9d53d7b1069f283e424019ddbbe39d3dfccbc13c691c849283cf6", "role": "engineering-candidate-effect-and-boundary-evidence"},
+    {"path": "registry/skill-portfolio-baoyu-skills-adjudication-2026-08-03.json", "bytes": 20003, "sha256": "34de673bb23373b8e3ed9f40eaf3f2621196b5dac7fe639e7f6f101aca61cbaa", "role": "visual-method-candidate-effect-and-boundary-evidence"}
+  ],
+  "scenarioAuthority": {
+    "source": "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json",
+    "scenarioIds": [
+      "GEN-CREATIVE-01",
+      "GEN-RESEARCH-01",
+      "GEN-LEARNING-01",
+      "GEN-ORG-DECISION-01",
+      "GEN-ACCESS-COMMS-01",
+      "SE-DISCOVERY-REQ-01",
+      "SE-ARCH-DESIGN-01",
+      "SE-IMPLEMENT-REVIEW-01",
+      "SE-VERIFY-SECURE-01",
+      "SE-RELEASE-CHANGE-01",
+      "SE-OPS-INCIDENT-01",
+      "SE-MAINT-MIGRATE-01",
+      "SE-MGMT-PRACTICE-01"
+    ],
+    "scenarioSetExhaustive": false,
+    "mappingMayCreateScenario": false
+  },
+  "effectGroups": [
+    {
+      "id": "effect.obsidian-format-semantics",
+      "candidateNames": ["json-canvas", "obsidian-bases", "obsidian-markdown"],
+      "oracleDimensions": ["format-validity", "referential-integrity", "source-preservation", "bounded-file-write", "no-vault-organization-assumption"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.decision-challenge",
+      "candidateNames": ["strategy-red-team"],
+      "oracleDimensions": ["steelman-quality", "failure-assumptions", "falsification-signals", "cheap-test-quality", "authority-preservation"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.product-discovery",
+      "candidateNames": ["interview-script", "opportunity-solution-tree"],
+      "oracleDimensions": ["evidence-linkage", "anti-leading-language", "consent-boundary", "outcome-opportunity-solution-traceability", "uncertainty-visibility"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.marketing-writing",
+      "candidateNames": ["copywriting", "copy-editing"],
+      "oracleDimensions": ["source-and-intent-preservation", "claim-support", "audience-fit", "alternative-cta-quality", "no-fabricated-testimonial"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.customer-research",
+      "candidateNames": ["customer-research"],
+      "oracleDimensions": ["source-provenance", "confidence-labels", "bias-and-proxy-limits", "no-invented-quotation", "privacy-and-retention-boundary"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.internal-communications",
+      "candidateNames": ["internal-comms"],
+      "oracleDimensions": ["audience-fit", "carrier-fit", "source-traceability", "account-data-boundary", "send-and-publication-authority"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.engineering-lifecycle",
+      "candidateNames": ["ci-cd-and-automation", "deprecation-and-migration", "documentation-and-adrs", "source-driven-development"],
+      "oracleDimensions": ["repository-convention-first", "traceability", "verification", "rollback-or-reversibility", "source-freshness", "destructive-and-release-authority"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    },
+    {
+      "id": "effect.visual-method",
+      "candidateNames": ["baoyu-article-illustrator", "baoyu-cover-image", "baoyu-infographic"],
+      "oracleDimensions": ["source-faithfulness", "layout-or-visual-plan", "confirmation-gate", "native-backend-preference", "artifact-manifest-and-write-boundary"],
+      "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+      "compositionArmEligible": false
+    }
+  ],
+  "candidateMappings": [
+    {
+      "name": "json-canvas",
+      "source": "kepano/obsidian-skills",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "domainIds": ["office-and-knowledge-work", "creative-production-and-design"],
+      "scenarioIds": [],
+      "currentAlternativeIds": ["native.json-editing", "official.figma-diagram-generation"],
+      "incrementalHypothesis": "Exact JSON Canvas schema, referential-integrity, layout, and validation guidance reduces format defects beyond generic JSON or diagram generation.",
+      "boundaryIds": ["write.local-artifact", "data.user-bound-note-content"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "obsidian-bases",
+      "source": "kepano/obsidian-skills",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "domainIds": ["office-and-knowledge-work", "data-analytics-and-reporting"],
+      "scenarioIds": [],
+      "currentAlternativeIds": ["native.yaml-editing", "managed.obsidian-vault"],
+      "incrementalHypothesis": "Obsidian Bases schema, formula, view, and summary semantics add precise validation not supplied by generic YAML editing or vault navigation.",
+      "boundaryIds": ["write.vault", "data.vault"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "obsidian-markdown",
+      "source": "kepano/obsidian-skills",
+      "effectGroupId": "effect.obsidian-format-semantics",
+      "domainIds": ["office-and-knowledge-work"],
+      "scenarioIds": [],
+      "currentAlternativeIds": ["native.markdown-editing", "managed.obsidian-vault"],
+      "incrementalHypothesis": "Wikilink, embed, callout, and property syntax guidance reduces Obsidian-specific defects without imposing a new vault organization model.",
+      "boundaryIds": ["write.vault", "data.vault"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "strategy-red-team",
+      "source": "phuryn/pm-skills",
+      "effectGroupId": "effect.decision-challenge",
+      "domainIds": ["business-and-commercial-work", "operations-projects-and-process"],
+      "scenarioIds": ["GEN-ORG-DECISION-01", "SE-MGMT-PRACTICE-01"],
+      "currentAlternativeIds": ["native.premise-challenge", "managed.grilling"],
+      "incrementalHypothesis": "A compact steelman-to-falsification workflow may expose cheaper validation tests and failure assumptions more consistently than current generic critique routes.",
+      "boundaryIds": ["authority.decision", "cost.optional-cross-model", "claims.uncertainty"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "interview-script",
+      "source": "phuryn/pm-skills",
+      "effectGroupId": "effect.product-discovery",
+      "domainIds": ["business-and-commercial-work", "academic-and-research-work"],
+      "scenarioIds": ["SE-DISCOVERY-REQ-01"],
+      "currentAlternativeIds": ["native.interview-planning", "managed.grilling"],
+      "incrementalHypothesis": "Past-behavior prompts and anti-leading checks may improve discovery-script quality while making recording consent explicit.",
+      "boundaryIds": ["data.participant", "consent.recording", "retention.research-data"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "opportunity-solution-tree",
+      "source": "phuryn/pm-skills",
+      "effectGroupId": "effect.product-discovery",
+      "domainIds": ["business-and-commercial-work", "operations-projects-and-process"],
+      "scenarioIds": ["SE-DISCOVERY-REQ-01"],
+      "currentAlternativeIds": ["native.structured-mapping", "official.figma-diagram-generation"],
+      "incrementalHypothesis": "Traceable outcome-to-opportunity-to-solution-to-test structure may preserve research evidence and assumption visibility better than a generic tree or diagram.",
+      "boundaryIds": ["data.product-research", "write.local-artifact", "claims.evidence-linkage"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "copywriting",
+      "source": "coreyhaines31/marketingskills",
+      "effectGroupId": "effect.marketing-writing",
+      "domainIds": ["business-and-commercial-work", "creative-production-and-design"],
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-ACCESS-COMMS-01"],
+      "currentAlternativeIds": ["native.writing", "official.creative-production", "managed.edit-article"],
+      "incrementalHypothesis": "Marketing-page structure, claim checks, CTA alternatives, and conversion annotations may add domain-specific quality beyond general writing routes.",
+      "boundaryIds": ["claims.marketing", "data.customer-language", "authority.publication"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "copy-editing",
+      "source": "coreyhaines31/marketingskills",
+      "effectGroupId": "effect.marketing-writing",
+      "domainIds": ["business-and-commercial-work", "creative-production-and-design"],
+      "scenarioIds": ["GEN-CREATIVE-01", "GEN-ACCESS-COMMS-01"],
+      "currentAlternativeIds": ["native.editing", "managed.edit-article", "candidate.copywriting"],
+      "incrementalHypothesis": "Seven intent-preserving editing sweeps may improve proof discipline and clarity beyond generic editing, while simulated panel scores remain heuristic only.",
+      "boundaryIds": ["data.user-bound-copy", "claims.marketing", "authority.publication"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "customer-research",
+      "source": "coreyhaines31/marketingskills",
+      "effectGroupId": "effect.customer-research",
+      "domainIds": ["business-and-commercial-work", "academic-and-research-work"],
+      "scenarioIds": ["GEN-RESEARCH-01", "SE-DISCOVERY-REQ-01"],
+      "currentAlternativeIds": ["native.source-synthesis", "managed.research", "candidate.interview-script"],
+      "incrementalHypothesis": "Confidence-labelled voice-of-customer synthesis and proxy-persona limits may reduce invented evidence and expose research gaps beyond generic synthesis.",
+      "boundaryIds": ["data.customer", "consent.participant", "retention.research-data", "network.external-research"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "internal-comms",
+      "source": "anthropics/skills",
+      "effectGroupId": "effect.internal-communications",
+      "domainIds": ["office-and-knowledge-work", "operations-projects-and-process"],
+      "scenarioIds": ["GEN-ACCESS-COMMS-01"],
+      "currentAlternativeIds": ["native.writing", "official.documents", "official.account-apps-conditional"],
+      "incrementalHypothesis": "A small carrier-aware communication method may improve audience and format fit without requiring account access during installation.",
+      "boundaryIds": ["account.external-collaboration", "data.organizational", "authority.send-or-publish"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "ci-cd-and-automation",
+      "source": "addyosmani/agent-skills",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "domainIds": ["software-engineering", "operations-projects-and-process"],
+      "scenarioIds": ["SE-RELEASE-CHANGE-01"],
+      "currentAlternativeIds": ["native.repository-workflow", "official.github", "official.vercel"],
+      "incrementalHypothesis": "A vendor-neutral pipeline, rollout, and rollback method may add reusable delivery discipline beyond host-specific tools.",
+      "boundaryIds": ["write.repository-workflow", "secret.cicd", "authority.deploy-or-release"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "deprecation-and-migration",
+      "source": "addyosmani/agent-skills",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "domainIds": ["software-engineering", "operations-projects-and-process"],
+      "scenarioIds": ["SE-MAINT-MIGRATE-01"],
+      "currentAlternativeIds": ["native.maintenance-migration", "managed.codebase-design"],
+      "incrementalHypothesis": "A dedicated compatibility, communication, rollout, rollback, and retirement workflow may reduce migration loss beyond generic maintenance reasoning.",
+      "boundaryIds": ["write.repository", "authority.destructive-migration", "authority.retirement"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "documentation-and-adrs",
+      "source": "addyosmani/agent-skills",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "domainIds": ["software-engineering", "office-and-knowledge-work"],
+      "scenarioIds": ["SE-ARCH-DESIGN-01", "SE-IMPLEMENT-REVIEW-01"],
+      "currentAlternativeIds": ["native.architecture-reasoning", "managed.codebase-design", "managed.domain-modeling"],
+      "incrementalHypothesis": "Repository-convention-first ADR structure may improve option, decision, consequence, and traceability capture beyond generic document generation.",
+      "boundaryIds": ["write.repository-documentation", "authority.architecture-decision", "claims.decision-history"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "source-driven-development",
+      "source": "addyosmani/agent-skills",
+      "effectGroupId": "effect.engineering-lifecycle",
+      "domainIds": ["software-engineering", "academic-and-research-work"],
+      "scenarioIds": ["GEN-RESEARCH-01", "SE-IMPLEMENT-REVIEW-01", "SE-VERIFY-SECURE-01"],
+      "currentAlternativeIds": ["native.current-source-research", "managed.research", "official.openai-docs-domain-limited"],
+      "incrementalHypothesis": "A vendor-neutral current-documentation workflow may improve source freshness and claim traceability beyond ad hoc technical lookup.",
+      "boundaryIds": ["network.current-docs", "data.external-source", "write.repository", "claims.source-freshness"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "baoyu-article-illustrator",
+      "source": "JimLiu/baoyu-skills",
+      "effectGroupId": "effect.visual-method",
+      "domainIds": ["creative-production-and-design", "office-and-knowledge-work"],
+      "scenarioIds": ["GEN-CREATIVE-01"],
+      "currentAlternativeIds": ["official.imagegen", "official.creative-production"],
+      "incrementalHypothesis": "Article-level illustration planning, prompt records, and confirmation may add source-aware visual placement beyond direct image generation.",
+      "boundaryIds": ["data.source-article", "cost.image-model", "write.generated-artifact", "authority.visual-confirmation"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "baoyu-cover-image",
+      "source": "JimLiu/baoyu-skills",
+      "effectGroupId": "effect.visual-method",
+      "domainIds": ["creative-production-and-design"],
+      "scenarioIds": ["GEN-CREATIVE-01"],
+      "currentAlternativeIds": ["official.imagegen", "official.creative-production"],
+      "incrementalHypothesis": "A bounded five-dimension cover plan and confirmation gate may improve cover intent and consistency beyond a direct generation prompt.",
+      "boundaryIds": ["data.source-content", "cost.image-model", "write.generated-artifact", "authority.visual-confirmation"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    },
+    {
+      "name": "baoyu-infographic",
+      "source": "JimLiu/baoyu-skills",
+      "effectGroupId": "effect.visual-method",
+      "domainIds": ["creative-production-and-design", "data-analytics-and-reporting"],
+      "scenarioIds": ["GEN-CREATIVE-01"],
+      "currentAlternativeIds": ["official.imagegen", "official.creative-production", "official.data-analytics"],
+      "incrementalHypothesis": "Source-preserving layout and visual-style planning may improve information hierarchy and traceability beyond generic image or chart generation.",
+      "boundaryIds": ["data.source-content", "claims.visual-data", "cost.image-model", "write.generated-artifact", "authority.visual-confirmation"],
+      "mappingState": "static-hypothesis-only",
+      "claimCeiling": "mapping-and-protocol-design-only"
+    }
+  ],
+  "coverageInterpretation": {
+    "portfolioDomainAuthorityCount": 10,
+    "candidateMappedDomainIds": [
+      "office-and-knowledge-work",
+      "software-engineering",
+      "business-and-commercial-work",
+      "academic-and-research-work",
+      "creative-production-and-design",
+      "data-analytics-and-reporting",
+      "operations-projects-and-process"
+    ],
+    "portfolioDomainsWithoutNewStaticCandidate": [
+      "daily-life-and-personal-productivity",
+      "education-and-training",
+      "security-privacy-and-compliance"
+    ],
+    "candidateSetCoversEveryPortfolioDomain": false,
+    "candidateSetCoversEveryGovernedScenario": false,
+    "unmappedDomainOrScenarioIsResidualGap": false,
+    "newScenarioAuthorizedByMapping": false,
+    "interpretation": "The candidate pool is an addition comparison set, not the whole capability portfolio. Native, official, already-managed, composed, and human-control routes may cover domains or scenarios without a new candidate. Absence from this seventeen-item set is not a residual gap."
+  },
+  "nextGate": {
+    "mappingCompleteWithinSeventeenCandidateSet": true,
+    "effectGroupFixtureDesignEligible": true,
+    "firstProtocolPreparationOrder": [
+      "effect.decision-challenge",
+      "effect.engineering-lifecycle",
+      "effect.product-discovery",
+      "effect.marketing-writing",
+      "effect.customer-research",
+      "effect.internal-communications",
+      "effect.visual-method",
+      "effect.obsidian-format-semantics"
+    ],
+    "orderReason": "Reuse existing governed scenarios and historical demand first; defer domain-only Obsidian fixtures until the seven scenario-reusing groups have bounded oracles.",
+    "candidateInstallationEligible": false,
+    "candidateExecutionEligible": false,
+    "modelDispatchEligible": false,
+    "userManualTestRequiredNow": false,
+    "selfAuthoredResidualGapEligible": false,
+    "hardStandardPromotionEligible": false,
+    "managerMutationEligible": false
+  },
+  "claimBoundary": {
+    "currentAlternativeHealthProved": false,
+    "candidateIncrementalBehaviorProved": false,
+    "candidateValueProved": false,
+    "candidateRedundancyProved": false,
+    "candidateInstalled": false,
+    "candidateEnabled": false,
+    "candidateExecuted": false,
+    "scenarioCoverageComplete": false,
+    "portfolioDomainCoverageComplete": false,
+    "residualGapProved": false,
+    "selfAuthoredNeedProved": false,
+    "hardStandardNeedProved": false
+  },
+  "nextAction": "Prepare deterministic, source-free fixture contracts for the eight effect groups in the stated order. Reuse existing scenario oracles where present, keep each candidate in a separate arm before any composition, and stop before payload projection, model dispatch, manager mutation, or user manual testing."
+}

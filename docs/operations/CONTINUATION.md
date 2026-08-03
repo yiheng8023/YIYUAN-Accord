@@ -3717,3 +3717,36 @@ source/host drift, or a new phase-specific boundary. Live behavior arms,
 installation, self-authored residual work, manual user testing, and hard
 standard promotion remain ineligible. The governed record is
 `registry/skill-portfolio-bound-cohort-reconciliation-2026-08-03.json`.
+
+## 2026-08-03 seventeen-candidate demand mapping checkpoint
+
+The frozen seventeen static candidates are now mapped exactly once to the
+existing ten-domain portfolio taxonomy, thirteen governed scenarios, current
+native/official/managed comparator routes, an incremental hypothesis, and the
+relevant data, account, write, cost, and authority boundaries. All mapping
+inputs are byte-frozen to the cohort, domain, scenario-coverage, and six source
+adjudication records.
+
+Eight effect groups reduce fixture duplication without merging attribution:
+Obsidian format semantics, decision challenge, product discovery, marketing
+writing, customer research, internal communications, engineering lifecycle,
+and visual method. Each future comparison remains current-or-native first,
+then one candidate arm. No composition arm is eligible before separate-arm
+evidence exists.
+
+The three Obsidian candidates map only to portfolio domains because none of the
+thirteen current scenarios is a defensible format/vault task. No scenario was
+invented to fill that cell. The candidate set maps seven of ten portfolio
+domains and does not add candidates for daily/personal productivity, education,
+or security/privacy/compliance. That absence is not a residual gap: the
+candidate pool is only one layer beside current native, official, managed,
+composed, and human-control routes.
+
+The next zero-execution order reuses governed scenarios and historical demand
+first: decision challenge, engineering lifecycle, product discovery, marketing
+writing, customer research, internal communications, visual method, then the
+domain-only Obsidian format group. Only source-free fixture-contract design is
+eligible. Installation, projection, candidate execution, model dispatch, user
+manual testing, manager mutation, self-authored work, and hard-standard
+promotion remain false. The governed record is
+`registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json`.
