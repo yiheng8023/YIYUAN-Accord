@@ -8,6 +8,7 @@ from scripts.validate_human_ai_collaboration_process_fidelity_v2_source_backed_s
     EVIDENCE_PATH,
     validate_evidence,
 )
+from scripts.repository_text_identity import repository_text_bytes
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -37,8 +38,7 @@ class ProcessFidelityV2SourceBackedSmokeEvidenceTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             data = source.read_bytes()
             if crlf_json and source.suffix == ".json":
-                self.assertNotIn(b"\r\n", data)
-                data = data.replace(b"\n", b"\r\n")
+                data = repository_text_bytes(source).replace(b"\n", b"\r\n")
             target.write_bytes(data)
 
     def test_deterministic_crlf_checkout_projection_is_valid(self) -> None:
