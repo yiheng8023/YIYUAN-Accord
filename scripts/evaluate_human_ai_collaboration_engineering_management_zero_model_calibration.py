@@ -13,10 +13,12 @@ try:
     from .evaluate_process_fidelity_cumulative_loss_accounting import (
         build_cumulative_loss_ledger,
     )
+    from .repository_text_identity import repository_text_bytes
 except ImportError:  # pragma: no cover - direct script execution
     from evaluate_process_fidelity_cumulative_loss_accounting import (
         build_cumulative_loss_ledger,
     )
+    from repository_text_identity import repository_text_bytes
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -508,17 +510,14 @@ def _validate_protocol_and_fixture(
                 == "repository-lf-to-observed-windows-crlf",
                 "Protocol source capture transform drifted",
             )
+            repository_data = repository_text_bytes(path)
             _require(
-                path.stat().st_size == binding.get("repositoryBytes")
-                and _file_sha256(path) == binding.get("repositorySha256"),
+                len(repository_data) == binding.get("repositoryBytes")
+                and hashlib.sha256(repository_data).hexdigest()
+                == binding.get("repositorySha256"),
                 f"Protocol source repository binding drifted: {binding.get('path')}",
             )
-            data = path.read_bytes()
-            _require(
-                b"\r\n" not in data,
-                f"Protocol source repository EOL drifted: {binding.get('path')}",
-            )
-            capture = data.replace(b"\n", b"\r\n")
+            capture = repository_data.replace(b"\n", b"\r\n")
             _require(
                 len(capture) == binding.get("bytes")
                 and hashlib.sha256(capture).hexdigest() == binding.get("sha256"),

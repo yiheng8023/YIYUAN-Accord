@@ -13,10 +13,12 @@ try:
     from .evaluate_process_fidelity_cumulative_loss_accounting import (
         build_cumulative_loss_ledger,
     )
+    from .repository_text_identity import repository_text_bytes
 except ImportError:  # pragma: no cover - direct script execution
     from evaluate_process_fidelity_cumulative_loss_accounting import (
         build_cumulative_loss_ledger,
     )
+    from repository_text_identity import repository_text_bytes
 
 
 PacketScorer = Callable[[dict[str, Any], dict[str, Any]], dict[str, Any]]
@@ -56,17 +58,17 @@ def validate_file_binding(binding: dict[str, Any], *, root: Path) -> None:
             == "repository-lf-to-observed-windows-crlf",
             "Bound source capture transform drifted",
         )
+        repository_data = repository_text_bytes(path)
         require(
-            path.stat().st_size == binding.get("repositoryBytes"),
+            len(repository_data) == binding.get("repositoryBytes"),
             "Bound source repository byte count drifted",
         )
         require(
-            file_sha256(path) == binding.get("repositorySha256"),
+            hashlib.sha256(repository_data).hexdigest()
+            == binding.get("repositorySha256"),
             "Bound source repository digest drifted",
         )
-        data = path.read_bytes()
-        require(b"\r\n" not in data, "Bound source repository EOL drifted")
-        capture = data.replace(b"\n", b"\r\n")
+        capture = repository_data.replace(b"\n", b"\r\n")
         require(
             len(capture) == binding["bytes"],
             "Bound source capture byte count drifted",

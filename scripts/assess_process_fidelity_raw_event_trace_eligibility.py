@@ -9,6 +9,17 @@ import json
 from pathlib import Path
 from typing import Any
 
+try:
+    from .repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
+    )
+except ImportError:  # pragma: no cover - direct script execution
+    from repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 SMOKE_EVIDENCE_PATH = (
@@ -38,15 +49,6 @@ def _load(path: Path) -> dict[str, Any]:
 
 def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _windows_crlf_projection_sha256(path: Path) -> str:
-    data = path.read_bytes()
-    _require(
-        b"\r\n" not in data,
-        f"Repository evidence is not LF-normalized: {path}",
-    )
-    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest()
 
 
 def assess_smoke(
@@ -216,16 +218,16 @@ def validate_evidence(
     raw_path = root / durable["rawReportPath"]
     packet_path = root / durable["trialPacketPath"]
     _require(
-        _file_sha256(raw_path).lower()
+        repository_text_sha256(raw_path).lower()
         == durable["rawReportRepositoryFileSha256"].lower()
-        and _file_sha256(packet_path).lower()
+        and repository_text_sha256(packet_path).lower()
         == durable["trialPacketRepositoryFileSha256"].lower(),
         "Raw-event trace durable repository input hash drifted",
     )
     _require(
-        _windows_crlf_projection_sha256(raw_path).lower()
+        windows_crlf_projection_sha256(raw_path).lower()
         == durable["rawReportFileSha256"].lower()
-        and _windows_crlf_projection_sha256(packet_path).lower()
+        and windows_crlf_projection_sha256(packet_path).lower()
         == durable["trialPacketFileSha256"].lower(),
         "Raw-event trace durable capture input hash drifted",
     )

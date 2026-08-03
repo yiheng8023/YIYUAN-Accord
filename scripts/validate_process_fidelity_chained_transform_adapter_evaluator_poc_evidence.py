@@ -17,12 +17,20 @@ try:
     from .run_process_fidelity_chained_transform_trial import (
         canonical_sha256,
     )
+    from .repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
+    )
 except ImportError:  # pragma: no cover - direct script execution
     from build_process_fidelity_chained_transform_adapter_evaluator_poc import (
         build_poc,
     )
     from run_process_fidelity_chained_transform_trial import (
         canonical_sha256,
+    )
+    from repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
     )
 
 
@@ -44,12 +52,6 @@ def _require(condition: bool, message: str) -> None:
 
 def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _windows_crlf_projection_sha256(path: Path) -> str:
-    data = path.read_bytes()
-    _require(b"\r\n" not in data, f"Repository evidence is not LF-normalized: {path}")
-    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest()
 
 
 def _validate_manifest(root: Path, manifest_path: Path) -> dict[str, Any]:
@@ -161,16 +163,16 @@ def validate_evidence(
         manifest_path.is_file()
         and report_path.is_file()
         and audit.get("manifestRepositoryFileSha256", "").lower()
-        == _file_sha256(manifest_path).lower()
+        == repository_text_sha256(manifest_path).lower()
         and audit.get("reportRepositoryFileSha256", "").lower()
-        == _file_sha256(report_path).lower(),
+        == repository_text_sha256(report_path).lower(),
         "Adapter/evaluator audit evidence hash drifted",
     )
     _require(
         audit.get("manifestFileSha256", "").lower()
-        == _windows_crlf_projection_sha256(manifest_path).lower()
+        == windows_crlf_projection_sha256(manifest_path).lower()
         and audit.get("reportFileSha256", "").lower()
-        == _windows_crlf_projection_sha256(report_path).lower(),
+        == windows_crlf_projection_sha256(report_path).lower(),
         "Adapter/evaluator audit evidence capture hash drifted",
     )
     _validate_manifest(root, manifest_path)

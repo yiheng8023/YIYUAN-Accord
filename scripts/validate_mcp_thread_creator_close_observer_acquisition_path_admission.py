@@ -9,6 +9,15 @@ import json
 from pathlib import Path
 from typing import Any
 
+try:
+    from .repository_text_identity import (
+        windows_crlf_projection_sha256 as _shared_windows_crlf_projection_sha256,
+    )
+except ImportError:  # pragma: no cover - direct script execution
+    from repository_text_identity import (
+        windows_crlf_projection_sha256 as _shared_windows_crlf_projection_sha256,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 RECORD_PATH = (
@@ -127,9 +136,7 @@ def file_sha256(path: Path) -> str:
 
 
 def windows_crlf_projection_sha256(path: Path) -> str:
-    data = path.read_bytes()
-    _require(b"\r\n" not in data, f"Repository evidence is not LF: {path}")
-    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest().upper()
+    return _shared_windows_crlf_projection_sha256(path, uppercase=True)
 
 
 def canonical_json_sha256(value: Any) -> str:

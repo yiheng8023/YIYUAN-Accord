@@ -6,7 +6,7 @@
   "sourceSmokeEvidencePath": "registry/human-ai-collaboration-process-fidelity-v2-source-backed-smoke-evidence-2026-07-27.json",
   "assessor": {
     "path": "scripts/assess_process_fidelity_raw_event_trace_eligibility.py",
-    "fileSha256": "6A472786F1E28C8A47BA6B802ACBFA74391F7AD0DD1F7BB6EC901D77FA9506E3"
+    "fileSha256": "70757D1E41106CB486B26B306DCA0EA73B83B9EB62513B4B263F0095268B2E6F"
   },
   "assessment": {
     "sourceSmokeEvidenceId": "human-ai-collaboration-process-fidelity-v2-source-backed-smoke-evidence-2026-07-27",

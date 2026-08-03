@@ -9,6 +9,17 @@ import json
 from pathlib import Path
 from typing import Any
 
+try:
+    from .repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
+    )
+except ImportError:  # pragma: no cover - direct script execution
+    from repository_text_identity import (
+        repository_text_sha256,
+        windows_crlf_projection_sha256,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 EVIDENCE_PATH = (
@@ -24,29 +35,6 @@ DOC_PATH = (
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise RuntimeError(message)
-
-
-def _repository_content_bytes(path: Path) -> bytes:
-    data = path.read_bytes()
-    if b"\r" not in data:
-        return data
-
-    normalized = data.replace(b"\r\n", b"\n")
-    _require(
-        b"\r" not in normalized
-        and normalized.replace(b"\n", b"\r\n") == data,
-        f"Repository evidence is not a deterministic LF or CRLF checkout: {path}",
-    )
-    return normalized
-
-
-def _repository_sha256(path: Path) -> str:
-    return hashlib.sha256(_repository_content_bytes(path)).hexdigest()
-
-
-def _windows_crlf_projection_sha256(path: Path) -> str:
-    data = _repository_content_bytes(path)
-    return hashlib.sha256(data.replace(b"\n", b"\r\n")).hexdigest()
 
 
 def _canonical_sha256(value: Any) -> str:
@@ -160,11 +148,11 @@ def validate_evidence(document: dict[str, Any], *, root: Path = ROOT) -> None:
         path = root / relative
         _require(path.is_file(), f"Smoke evidence durable file missing: {relative}")
         _require(
-            _repository_sha256(path).lower() == repository_hash.lower(),
+            repository_text_sha256(path).lower() == repository_hash.lower(),
             f"Smoke evidence durable file hash drifted: {relative}",
         )
         _require(
-            _windows_crlf_projection_sha256(path).lower() == capture_hash.lower(),
+            windows_crlf_projection_sha256(path).lower() == capture_hash.lower(),
             f"Smoke evidence capture file hash drifted: {relative}",
         )
         loaded[path_key] = json.loads(path.read_text(encoding="utf-8"))
