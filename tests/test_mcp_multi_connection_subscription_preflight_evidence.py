@@ -44,6 +44,22 @@ class MultiConnectionSubscriptionPreflightEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "bridgeScript binding drifted"):
             validate_document(ROOT, changed)
 
+    def test_missing_repository_relative_schema_is_rejected(self) -> None:
+        document = json.loads((ROOT / EVIDENCE_PATH).read_text(encoding="utf-8"))
+        changed = deepcopy(document)
+        changed["hostBinding"]["stableSchemaEvidence"][0]["path"] = (
+            "registry/missing-schema.json"
+        )
+        with self.assertRaisesRegex(RuntimeError, "schema binding 1 is missing"):
+            validate_document(ROOT, changed)
+
+    def test_historical_external_schema_requires_a_digest(self) -> None:
+        document = json.loads((ROOT / EVIDENCE_PATH).read_text(encoding="utf-8"))
+        changed = deepcopy(document)
+        changed["hostBinding"]["stableSchemaEvidence"][0]["sha256"] = "invalid"
+        with self.assertRaisesRegex(RuntimeError, "schema binding 1 hash is invalid"):
+            validate_document(ROOT, changed)
+
 
 if __name__ == "__main__":
     unittest.main()

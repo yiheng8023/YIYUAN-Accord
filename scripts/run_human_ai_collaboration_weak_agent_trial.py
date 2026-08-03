@@ -8,7 +8,7 @@ from collections import Counter
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import subprocess
 import sys
@@ -137,7 +137,7 @@ FORBIDDEN_ITEM_TYPES = {
 }
 HOST_PROJECTION_MARKER_DIRS = (".agents", ".codex", ".git")
 COMMAND_FILE_TOKEN = re.compile(
-    r"(?i)(?:[a-z]:[\\/])?(?:[\w .-]+[\\/])*[\w.-]+\.(?:py|json|md|patch|tmp|bak)"
+    r"(?i)(?:[a-z]:[\\/]|/)?(?:[\w .-]+[\\/])*[\w.-]+\.(?:py|json|md|patch|tmp|bak)"
 )
 WRITE_COMMAND_MARKERS = (
     "apply_patch",
@@ -617,7 +617,7 @@ def process_boundary_evidence(
     authorized_external_read_command_hashes: set[str] = set()
     allowed_write_names = {path.lower() for path in allowed_mutable_files}
     allowed_external_reads = {
-        path.expanduser().resolve(strict=False)
+        ("native", os.path.normcase(str(path.expanduser().resolve(strict=False))))
         for path in allowed_external_read_paths
     }
     for item in commands:
@@ -627,18 +627,36 @@ def process_boundary_evidence(
             root = trial_root.resolve()
             for match in COMMAND_FILE_TOKEN.findall(command):
                 candidate = Path(match)
-                if not candidate.is_absolute():
+                native_candidate: Path | None = None
+                if candidate.is_absolute():
+                    native_candidate = candidate.resolve(strict=False)
+                    identity = (
+                        "native",
+                        os.path.normcase(str(native_candidate)),
+                    )
+                    basename = native_candidate.name
+                elif PureWindowsPath(match).is_absolute():
+                    windows_candidate = PureWindowsPath(match)
+                    identity = (
+                        "windows",
+                        str(windows_candidate).replace("\\", "/").casefold(),
+                    )
+                    basename = windows_candidate.name
+                elif PurePosixPath(match).is_absolute():
+                    posix_candidate = PurePosixPath(match)
+                    identity = ("posix", str(posix_candidate))
+                    basename = posix_candidate.name
+                else:
                     continue
-                resolved = candidate.resolve(strict=False)
-                if not resolved.is_relative_to(root):
+                if native_candidate is None or not native_candidate.is_relative_to(root):
                     command_hash = sha256_bytes(command.encode("utf-8"))
-                    if resolved in allowed_external_reads:
-                        authorized_external_read_basenames.add(resolved.name)
+                    if identity in allowed_external_reads:
+                        authorized_external_read_basenames.add(basename)
                         authorized_external_read_command_hashes.add(
                             command_hash
                         )
                     else:
-                        out_of_scope_read_basenames.add(resolved.name)
+                        out_of_scope_read_basenames.add(basename)
                         out_of_scope_read_command_hashes.add(command_hash)
         if not any(marker in lowered for marker in WRITE_COMMAND_MARKERS):
             continue

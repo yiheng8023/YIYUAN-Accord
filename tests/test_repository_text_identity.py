@@ -5,6 +5,7 @@ import unittest
 
 from scripts.repository_text_identity import (
     repository_text_bytes,
+    repository_text_identity_matches,
     repository_text_sha256,
     windows_crlf_projection_sha256,
 )
@@ -45,6 +46,38 @@ class RepositoryTextIdentityTests(unittest.TestCase):
                     RuntimeError, "deterministic LF or CRLF"
                 ):
                     repository_text_bytes(path)
+
+    def test_expected_lf_or_crlf_capture_identity_matches_either_checkout(
+        self,
+    ) -> None:
+        lf = b"license\ntext\n"
+        crlf = lf.replace(b"\n", b"\r\n")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, checkout in (("lf", lf), ("crlf", crlf)):
+                path = root / f"{name}.txt"
+                path.write_bytes(checkout)
+                self.assertTrue(
+                    repository_text_identity_matches(
+                        path,
+                        expected_bytes=len(lf),
+                        expected_sha256=hashlib.sha256(lf).hexdigest(),
+                    )
+                )
+                self.assertTrue(
+                    repository_text_identity_matches(
+                        path,
+                        expected_bytes=len(crlf),
+                        expected_sha256=hashlib.sha256(crlf).hexdigest(),
+                    )
+                )
+                self.assertFalse(
+                    repository_text_identity_matches(
+                        path,
+                        expected_bytes=len(crlf),
+                        expected_sha256="0" * 64,
+                    )
+                )
 
 
 if __name__ == "__main__":

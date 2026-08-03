@@ -2485,3 +2485,28 @@ review, live installation, model arms, or self-authored Skill necessity. The
 first implementation step is a failure-family inventory and one red-capable
 fixture per root cause; broad snapshot refresh or evidence rewriting is not an
 acceptable shortcut.
+
+### 2026-08-04 cross-platform root-repair follow-up
+
+The first root-repair batch now satisfies the local acceptance surface without
+rewriting historical evidence. It separates governed text identity from
+physical checkout EOL, offline frozen admission validation from optional live
+Plugin revalidation, pure classifier tests from Windows-only process sampling,
+and repository-relative evidence from historical external Windows paths. It
+also makes cleanup fixture bytes and weak-agent absolute-path evidence
+host-neutral.
+
+Historical lifecycle replay exposed the decisive coupling: replaying an old
+pack with current source is invalid as soon as a bound source legitimately
+evolves. The replay now materializes the exact declared source blobs from Git
+history before applying the frozen instruction carrier and Windows capture
+newline semantics. The CI checkout therefore fetches full history, enforced by
+a workflow contract test.
+
+Windows and WSL Ubuntu each pass the same 174-test affected union; Linux skips
+only the genuine Windows process-identity assertion. The repository verifier
+and diff check pass. This remains a local pre-remote result: exact-SHA matrix
+adjudication on Ubuntu, Windows, and macOS is the next gate. No candidate,
+CC Switch runtime state, consumer projection, model, Hook, MCP, account, or
+installed Skill was changed, and the main process and acceptance framework do
+not otherwise change.

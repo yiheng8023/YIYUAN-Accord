@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 
-from scripts.probe_codex_app_server_mcp_idle_unload import snapshot_process
 from scripts.probe_codex_app_server_mcp_multi_connection_subscription import (
     EXPECTED_SEQUENCES,
     classify_preflight,
@@ -53,8 +53,7 @@ def ledger(
 
 class MultiConnectionSubscriptionProbeTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.sentinel = snapshot_process(os.getpid())
-        self.assertTrue(self.sentinel.get("exists"))
+        self.sentinel = complete_identity(os.getpid(), sys.executable)
         self.thread_id = THREAD_ID
         self.instance_id = "instance-1"
         self.call = {
@@ -95,7 +94,11 @@ class MultiConnectionSubscriptionProbeTests(unittest.TestCase):
     def classify(self, **updates: object) -> dict[str, object]:
         values = dict(self.kwargs)
         values.update(updates)
-        return classify_preflight(**values)
+        with mock.patch(
+            "scripts.probe_codex_app_server_mcp_multi_connection_subscription.snapshot_process",
+            return_value=self.sentinel,
+        ):
+            return classify_preflight(**values)
 
     def test_valid_distinct_connections_are_classified_bounded(self) -> None:
         result = self.classify()

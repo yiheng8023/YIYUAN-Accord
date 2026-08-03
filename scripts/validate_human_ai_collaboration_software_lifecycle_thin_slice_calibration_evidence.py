@@ -5,10 +5,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
+import subprocess
 from tempfile import TemporaryDirectory
 from typing import Any
+from unittest.mock import patch
 
 try:
     from .evaluate_human_ai_collaboration_software_lifecycle_thin_slice_calibration import (
@@ -91,6 +94,95 @@ def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _build_historical_domain_suboracle_pack(*, root: Path) -> dict[str, Any]:
+    """Replay the frozen Windows capture without changing bound source bytes."""
+
+    if os.name == "nt":
+        return build_domain_suboracle_pack(root=root)
+
+    original_write_text = Path.write_text
+    written_paths: set[str] = set()
+
+    def write_with_capture_newlines(
+        path: Path,
+        data: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> int:
+        identity = path.resolve(strict=False).as_posix()
+        if identity not in written_paths:
+            written_paths.add(identity)
+            kwargs = dict(kwargs)
+            kwargs["newline"] = "\r\n"
+        return original_write_text(path, data, *args, **kwargs)
+
+    with patch.object(Path, "write_text", write_with_capture_newlines):
+        return build_domain_suboracle_pack(root=root)
+
+
+def _restore_historical_source_bindings(
+    *,
+    replay_root: Path,
+    repository_root: Path,
+    source_bindings: list[dict[str, Any]],
+) -> bool:
+    """Materialize exact bound source blobs instead of replaying current source."""
+
+    for binding in source_bindings:
+        relative = binding.get("path")
+        expected = binding.get("fileSha256")
+        if not isinstance(relative, str) or not isinstance(expected, str):
+            return False
+        destination = (replay_root / relative).resolve(strict=False)
+        if not destination.is_relative_to(replay_root.resolve()):
+            return False
+        if destination.is_file() and _file_sha256(destination) == expected:
+            continue
+        try:
+            history = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(repository_root),
+                    "log",
+                    "--all",
+                    "--format=%H",
+                    "--",
+                    relative,
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return False
+        matched: bytes | None = None
+        for commit in history.stdout.splitlines():
+            try:
+                blob = subprocess.run(
+                    [
+                        "git",
+                        "-C",
+                        str(repository_root),
+                        "show",
+                        f"{commit}:{relative}",
+                    ],
+                    check=True,
+                    capture_output=True,
+                    timeout=30,
+                ).stdout
+            except (OSError, subprocess.SubprocessError):
+                continue
+            if hashlib.sha256(blob).hexdigest() == expected:
+                matched = blob
+                break
+        if matched is None:
+            return False
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(matched)
+    return True
+
 def _replays_exactly_with_instruction_carrier(
     historical_pack: dict[str, Any],
     *,
@@ -122,7 +214,15 @@ def _replays_exactly_with_instruction_carrier(
             if not instruction_carrier_path.is_file():
                 return False
             shutil.copy2(instruction_carrier_path, replay_root / "AGENTS.md")
-            replayed_pack = build_domain_suboracle_pack(root=replay_root)
+            if not _restore_historical_source_bindings(
+                replay_root=replay_root,
+                repository_root=root,
+                source_bindings=source_bindings,
+            ):
+                return False
+            replayed_pack = _build_historical_domain_suboracle_pack(
+                root=replay_root
+            )
     except (OSError, RuntimeError, TypeError, ValueError):
         return False
     return replayed_pack == historical_pack

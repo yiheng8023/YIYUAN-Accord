@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 try:
@@ -85,17 +85,27 @@ def _load_bound_json(
 ) -> dict[str, Any]:
     raw_path = item.get("path")
     _require(isinstance(raw_path, str), f"{label} path is invalid")
-    path = Path(raw_path)
-    if not path.is_absolute():
-        path = root / path
-    _require(path.is_file(), f"{label} is missing: {path}")
+    expected_hash = str(item.get("sha256", "")).upper()
+    _require(
+        len(expected_hash) == 64
+        and all(character in "0123456789ABCDEF" for character in expected_hash),
+        f"{label} hash is invalid",
+    )
+    is_historical_windows_path = PureWindowsPath(raw_path).is_absolute()
+    path = Path(raw_path) if is_historical_windows_path else root / raw_path
+    if not path.is_file():
+        _require(
+            is_historical_windows_path,
+            f"{label} is missing: {path}",
+        )
+        return {}
     observed_hash = (
         _windows_crlf_projection_sha256(path)
         if root.resolve() in path.resolve().parents and path.suffix == ".json"
         else _sha256(path)
     )
     _require(
-        observed_hash == str(item.get("sha256", "")).upper(),
+        observed_hash == expected_hash,
         f"{label} hash drifted: {path}",
     )
     value = json.loads(path.read_text(encoding="utf-8"))

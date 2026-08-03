@@ -4163,3 +4163,35 @@ Windows-only live probes, and local cleanup inventory. Host-specific live
 evidence may be explicitly classified and skipped where inapplicable, but a
 skip must not be relabeled as cross-host proof. No candidate installation,
 manager mutation, or model dispatch is authorized by this CI finding.
+
+## 2026-08-04 cross-platform CI root-repair checkpoint
+
+The inherited matrix failures were reduced through root-cause repairs rather
+than evidence refresh. Frozen LF/CRLF source identities now validate from
+either checkout form; frozen Superpowers admission evidence validates offline
+without reading a user's current Plugin package, while optional live package
+revalidation remains explicit. The lifecycle replay restores every declared
+historical source binding from an exact Git blob before rebuilding the frozen
+Windows capture. Consequently the validation workflow now fetches full Git
+history; a shallow checkout is insufficient by design.
+
+Pure multi-connection fixtures no longer require a Windows process snapshot,
+but actual process-attribution probes remain Windows-only. Historical external
+schema paths may be absent during offline validation only when their recorded
+Windows absolute identity and SHA-256 are well formed; repository-relative
+bindings remain presence-required. Cleanup fixture bytes are explicit instead
+of host-newline-dependent, and weak-agent command evidence recognizes both
+Windows and POSIX absolute paths without weakening the external-read boundary.
+
+The affected union passes 174 tests on Windows and 174 on WSL Ubuntu, with the
+one genuine Windows process-identity test skipped on Linux. The top-level
+`scripts/verify.py` passes and `git diff --check` is clean. A timed-out full WSL
+run under the mounted Windows worktree left one Python child and its shell;
+both exact in-scope processes were identified, terminated, and rechecked.
+This is cleanup evidence and a concrete resource-lifecycle observation, not a
+product capability claim.
+
+The checkpoint is still local until an exact pushed SHA passes the intended
+Ubuntu, Windows, and macOS matrix. Do not promote it to green cross-host CI,
+candidate admission, live installation, model authority, or self-authored
+capability necessity before that remote result.

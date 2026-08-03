@@ -6,6 +6,13 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class CiContractTests(unittest.TestCase):
+    def test_checkout_fetches_history_bound_by_review_packets(self) -> None:
+        workflow = (ROOT / ".github/workflows/validate.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("fetch-depth: 0", workflow)
+
     def test_governance_contract_tests_run_before_repository_verification(self) -> None:
         workflow = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
 

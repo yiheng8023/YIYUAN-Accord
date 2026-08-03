@@ -115,6 +115,7 @@ def validate_decision(
     document: dict[str, Any],
     *,
     root: Path = ROOT,
+    installed_package_root: Path | None = None,
 ) -> None:
     _require(document.get("schema") == 1, "decision schema must be 1")
     _require(
@@ -237,40 +238,26 @@ def validate_decision(
         "candidate projection identity drifted",
     )
 
-    package_root = _package_root()
-    _require(package_root.is_dir(), "installed Superpowers package is missing")
-    manifest_path = package_root / ".codex-plugin/plugin.json"
-    license_path = package_root / "LICENSE"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    license_text = license_path.read_text(encoding="utf-8")
     manifest_identity = identity.get("pluginManifest", {})
     _require(
         manifest_identity.get("sourcePath") == ".codex-plugin/plugin.json"
-        and manifest_identity.get("bytes") == manifest_path.stat().st_size == 1722
+        and manifest_identity.get("bytes") == 1722
         and manifest_identity.get("sha256")
-        == _sha256(manifest_path)
         == observation["pluginManifest"]["sha256"]
-        and manifest.get("version") == EXPECTED_VERSION
-        and manifest.get("repository") == "https://github.com/obra/superpowers"
-        and manifest.get("license") == "MIT"
-        and manifest.get("hooks") == {}
-        and manifest.get("skills") == "./skills/"
-        and manifest.get("interface", {}).get("capabilities")
-        == ["Interactive", "Read", "Write"],
-        "installed plugin manifest drifted",
+        and observation["pluginManifest"]["bytes"] == 1722,
+        "frozen plugin manifest identity drifted",
     )
     license_identity = identity.get("license", {})
     _require(
         license_identity.get("spdx") == "MIT"
         and license_identity.get("sourcePath") == "LICENSE"
-        and license_identity.get("bytes") == license_path.stat().st_size == 1070
+        and license_identity.get("bytes") == 1070
         and license_identity.get("sha256")
-        == _sha256(license_path)
         == observation["license"]["sha256"]
+        and observation["license"]["bytes"] == 1070
         and license_identity.get("copyright")
-        == "Copyright (c) 2025 Jesse Vincent"
-        and "Copyright (c) 2025 Jesse Vincent" in license_text,
-        "installed package license or attribution drifted",
+        == "Copyright (c) 2025 Jesse Vincent",
+        "frozen package license or attribution drifted",
     )
 
     decision_files = _items_by(identity.get("files", []), "projectedPath")
@@ -281,37 +268,87 @@ def validate_decision(
         "candidate file set drifted",
     )
     for projected_path, decision_file in decision_files.items():
-        source_path = package_root / decision_file["sourcePath"]
         _require(
-            source_path.is_file()
-            and decision_file
+            decision_file
             == {
                 "sourcePath": observed_files[projected_path]["sourcePath"],
                 "projectedPath": projected_path,
                 "bytes": protocol_files[projected_path]["bytes"],
                 "sha256": protocol_files[projected_path]["sha256"],
             }
-            and source_path.stat().st_size == decision_file["bytes"]
-            and _sha256(source_path) == decision_file["sha256"],
+            and observed_files[projected_path]["bytes"]
+            == decision_file["bytes"]
+            and observed_files[projected_path]["sha256"]
+            == decision_file["sha256"],
             f"candidate file identity drifted: {projected_path}",
         )
-    skill_text = (
-        package_root / "skills/test-driven-development/SKILL.md"
-    ).read_text(encoding="utf-8")
-    writing_text = (
-        package_root / "skills/test-driven-development/writing-good-tests.md"
-    ).read_text(encoding="utf-8")
-    for marker in (
-        "npm test path/to/test.test.ts",
-        "Delete means delete",
-        "**Other tests fail?** Fix now.",
-        "[writing-good-tests.md](writing-good-tests.md)",
-    ):
-        _require(marker in skill_text, f"candidate conflict marker missing: {marker}")
-    _require(
-        "superpowers:writing-skills" in writing_text,
-        "unprojected writing-skills reference marker missing",
-    )
+
+    if installed_package_root is not None:
+        package_root = installed_package_root.resolve(strict=False)
+        _require(
+            package_root.is_dir(),
+            "installed Superpowers package is missing",
+        )
+        manifest_path = package_root / ".codex-plugin/plugin.json"
+        license_path = package_root / "LICENSE"
+        _require(
+            manifest_path.is_file(),
+            "installed plugin manifest is missing",
+        )
+        _require(
+            license_path.is_file(),
+            "installed package license is missing",
+        )
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        license_text = license_path.read_text(encoding="utf-8")
+        _require(
+            manifest_path.stat().st_size == manifest_identity["bytes"]
+            and _sha256(manifest_path) == manifest_identity["sha256"]
+            and manifest.get("version") == EXPECTED_VERSION
+            and manifest.get("repository")
+            == "https://github.com/obra/superpowers"
+            and manifest.get("license") == "MIT"
+            and manifest.get("hooks") == {}
+            and manifest.get("skills") == "./skills/"
+            and manifest.get("interface", {}).get("capabilities")
+            == ["Interactive", "Read", "Write"],
+            "installed plugin manifest drifted",
+        )
+        _require(
+            license_path.stat().st_size == license_identity["bytes"]
+            and _sha256(license_path) == license_identity["sha256"]
+            and "Copyright (c) 2025 Jesse Vincent" in license_text,
+            "installed package license or attribution drifted",
+        )
+        for projected_path, decision_file in decision_files.items():
+            source_path = package_root / decision_file["sourcePath"]
+            _require(
+                source_path.is_file()
+                and source_path.stat().st_size == decision_file["bytes"]
+                and _sha256(source_path) == decision_file["sha256"],
+                f"candidate live file identity drifted: {projected_path}",
+            )
+        skill_text = (
+            package_root / "skills/test-driven-development/SKILL.md"
+        ).read_text(encoding="utf-8")
+        writing_text = (
+            package_root
+            / "skills/test-driven-development/writing-good-tests.md"
+        ).read_text(encoding="utf-8")
+        for marker in (
+            "npm test path/to/test.test.ts",
+            "Delete means delete",
+            "**Other tests fail?** Fix now.",
+            "[writing-good-tests.md](writing-good-tests.md)",
+        ):
+            _require(
+                marker in skill_text,
+                f"candidate conflict marker missing: {marker}",
+            )
+        _require(
+            "superpowers:writing-skills" in writing_text,
+            "unprojected writing-skills reference marker missing",
+        )
 
     blocker_ids = {item["id"] for item in audit_candidate["blockers"]}
     _require(

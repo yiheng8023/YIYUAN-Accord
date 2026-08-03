@@ -10,8 +10,10 @@ from typing import Any
 
 try:
     from .evaluate_lifecycle_metabolism_fixtures import evaluate_case
+    from .repository_text_identity import repository_text_identity_candidates
 except ImportError:  # pragma: no cover - direct script execution
     from evaluate_lifecycle_metabolism_fixtures import evaluate_case
+    from repository_text_identity import repository_text_identity_candidates
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -592,13 +594,18 @@ def _validate_source_bindings(
         )
         path = _safe_path(root, binding.get("path"))
         _require(path.is_file(), f"{label} source binding is missing: {path}")
-        content = path.read_bytes()
+        candidates = repository_text_identity_candidates(path)
         _require(
-            len(content) == binding.get("bytes"),
+            any(len(content) == binding.get("bytes") for content in candidates),
             f"{label} source binding byte length drifted: {binding.get('path')}",
         )
         _require(
-            hashlib.sha256(content).hexdigest() == binding.get("sha256"),
+            any(
+                len(content) == binding.get("bytes")
+                and hashlib.sha256(content).hexdigest()
+                == binding.get("sha256")
+                for content in candidates
+            ),
             f"{label} source binding digest drifted: {binding.get('path')}",
         )
 

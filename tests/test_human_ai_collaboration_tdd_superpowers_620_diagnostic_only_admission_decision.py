@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts.validate_human_ai_collaboration_tdd_superpowers_620_diagnostic_only_admission_decision import (
     DECISION_PATH,
@@ -26,6 +27,37 @@ class Superpowers620TddDiagnosticOnlyAdmissionDecisionTests(
 
     def test_current_decision_is_valid(self) -> None:
         validate_decision(self.document)
+
+    def test_offline_decision_validation_does_not_read_home_package(self) -> None:
+        with patch(
+            "scripts.validate_human_ai_collaboration_tdd_superpowers_620_"
+            "diagnostic_only_admission_decision._package_root",
+            side_effect=AssertionError("home package must not be read"),
+        ):
+            validate_decision(self.document)
+
+    def test_explicit_live_revalidation_rejects_missing_package(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            missing = Path(temporary) / "missing-superpowers"
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "installed Superpowers package is missing",
+            ):
+                validate_decision(
+                    self.document,
+                    installed_package_root=missing,
+                )
+
+    def test_explicit_live_revalidation_rejects_missing_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "installed plugin manifest is missing",
+            ):
+                validate_decision(
+                    self.document,
+                    installed_package_root=Path(temporary),
+                )
 
     def test_rejects_source_binding_drift(self) -> None:
         document = copy.deepcopy(self.document)

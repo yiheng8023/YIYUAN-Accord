@@ -97,6 +97,18 @@ class CodexAppServerMcpIdleUnloadProbeTests(unittest.TestCase):
         )
 
     def test_probe_rejects_default_or_nonempty_home_before_launch(self) -> None:
+        if os.name != "nt":
+            with self.assertRaisesRegex(RuntimeError, "requires Windows"):
+                run_probe(
+                    Path.home() / ".codex",
+                    Path(tempfile.gettempdir()) / "unused-mcp-idle-workspace",
+                    SENTINEL,
+                    None,
+                    0,
+                    0.1,
+                    1,
+                )
+            return
         with self.assertRaisesRegex(RuntimeError, "default Codex home"):
             run_probe(
                 Path.home() / ".codex",

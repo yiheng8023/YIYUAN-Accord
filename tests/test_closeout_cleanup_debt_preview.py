@@ -18,9 +18,8 @@ class CloseoutCleanupDebtPreviewTests(unittest.TestCase):
     def fixture(self, root: Path) -> tuple[dict, ...]:
         (root / ".tmp" / "trial-root" / "nested").mkdir(parents=True)
         (root / ".tmp" / "trial-root" / "state.sqlite").write_bytes(b"x" * 7)
-        (root / ".tmp" / "trial-root" / "nested" / "events.jsonl").write_text(
-            "{}\n",
-            encoding="utf-8",
+        (root / ".tmp" / "trial-root" / "nested" / "events.jsonl").write_bytes(
+            b"{}\r\n"
         )
         (root / "docs").mkdir()
         (root / "docs" / "evidence.md").write_text(
