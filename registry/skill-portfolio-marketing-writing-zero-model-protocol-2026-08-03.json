@@ -1,0 +1,201 @@
+{
+  "id": "skill-portfolio-marketing-writing-zero-model-protocol-2026-08-03",
+  "date": "2026-08-03",
+  "status": "frozen-zero-model-marketing-writing-effect-calibration-protocol",
+  "effectGroupId": "effect.marketing-writing",
+  "scenarioIds": ["GEN-ACCESS-COMMS-01", "GEN-CREATIVE-01"],
+  "sourceBindings": [
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "0e5eca675b75040a43eca3f22acde4d16a2f91d7706497198fc46ad42c27bd59",
+      "role": "effect-group-candidate-comparator-and-boundary-map"
+    },
+    {
+      "path": "registry/skill-portfolio-coreyhaines-marketing-representative-adjudication-2026-08-03.json",
+      "bytes": 13754,
+      "sha256": "739cff6adc2be2291b0ef64aa0afe779f3897443c205d615f6a85346e77c6442",
+      "role": "exact-current-candidate-static-review"
+    },
+    {
+      "path": "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json",
+      "bytes": 13136,
+      "sha256": "4da4ac66da0c4577e05cbfe0968c1a139612084bfa2e632a09be25b106a5eea6",
+      "role": "creative-preference-and-human-judgment-boundary"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-unknown-knowns-creative-preference-packet-2026-07-27.json",
+      "bytes": 5808,
+      "sha256": "700ede6d5b56203ace278003ea8f0457858f150b3bd638a39bd42edfd60d810a",
+      "role": "bounded-creative-preference-packet"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-capability-baseline-2026-07-31.json",
+      "bytes": 12509,
+      "sha256": "a141513ec71a8127fb37ee4803ccab4c3bdd7aca8be0e91755f87fa659ed4239",
+      "role": "audience-carrier-and-publication-authority-boundary"
+    },
+    {
+      "path": "registry/human-ai-collaboration-access-comms-zero-model-protocol-2026-07-27.json",
+      "bytes": 10733,
+      "sha256": "d3f717d6153c9b176a5cc8b8761b8dcb92e463b0459ffde60ee92d9964eb84c9",
+      "role": "parent-access-comms-zero-model-oracle"
+    },
+    {
+      "path": "tests/fixtures/human-ai-collaboration-access-comms-zero-model-calibration-2026-07-27.json",
+      "bytes": 7297,
+      "sha256": "6c53a0d48d0b0678b07e8931dcd8f929d075991379f7f443f4960284dbae5384",
+      "role": "parent-access-comms-zero-model-fixture"
+    }
+  ],
+  "fixtureBinding": {
+    "path": "tests/fixtures/skill-portfolio-marketing-writing-zero-model-calibration-2026-08-03.json",
+    "bytes": 3884,
+    "sha256": "462737a6a0ead5b9dba266592e70740169d212cd0eaef580be466c4bf37bb4d8",
+    "fixtureId": "skill-portfolio-marketing-writing-zero-model-calibration-2026-08-03",
+    "sourceFreeEffectPacketOnly": true,
+    "fullScenarioFixtureCreated": false
+  },
+  "parentReuse": {
+    "creativePreferencePacketReused": true,
+    "accessCommsBoundaryReused": true,
+    "parentBaselineProtocolOrFixtureReexecutedByThisEvaluator": false,
+    "userPreferenceGeneralizedBeyondPacket": false,
+    "fullScenarioFixtureCreated": false
+  },
+  "heuristicEvidenceBoundary": {
+    "copyEditingSimulatedPanelMayExistUpstream": true,
+    "simulatedPanelTreatedAsIndependentExpertEvidence": false,
+    "simulatedPanelTreatedAsPublicationAcceptance": false,
+    "marketingCopyQualityScoreTreatedAsBusinessOutcome": false
+  },
+  "candidateBoundary": {
+    "repository": "coreyhaines31/marketingskills",
+    "revision": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+    "tree": "795fbd548840b43ee3e5a69cbfdda280a22c0422",
+    "dimensionEligibilityEvidenceClass": "static-protocol-design-only",
+    "candidates": [
+      {
+        "name": "copywriting",
+        "path": "skills/copywriting/SKILL.md",
+        "sha256": "ecdaabca28863d1472f79ba637842fdf4ac2fd9acc92b215ab7f152e757b2a33",
+        "bytes": 7627,
+        "dependencyFiles": [
+          {
+            "path": "skills/copywriting/references/copy-frameworks.md",
+            "sha256": "f387b6ed4b510efa9f0d3c459f4898971c8b0176e8c34185040cb264eca50186"
+          },
+          {
+            "path": "skills/copywriting/references/natural-transitions.md",
+            "sha256": "4ff23f8943af2f65b072f26f1c53ce55f19cc26d7be211c11cae8e34b43e859f"
+          }
+        ],
+        "eligibleDimensionIds": [
+          "source-and-intent-preservation",
+          "claim-support",
+          "audience-fit",
+          "alternative-cta-quality",
+          "no-fabricated-testimonial"
+        ],
+        "currentAlternativeIds": [
+          "native.writing",
+          "official.creative-production",
+          "managed.edit-article"
+        ]
+      },
+      {
+        "name": "copy-editing",
+        "path": "skills/copy-editing/SKILL.md",
+        "sha256": "9b5a20be3dc5513c8f0b4f4c4960857e4d28ed83698a5b33c8dde9dc75a47bf6",
+        "bytes": 15000,
+        "dependencyFiles": [
+          {
+            "path": "skills/copy-editing/references/checklist.md",
+            "sha256": "db143b969b45b0933fe6eb772992890d1472d036a6c887fc98665e4fb48da43c"
+          },
+          {
+            "path": "skills/copy-editing/references/content-refresh.md",
+            "sha256": "8a3a2d301bb2b8b2a780f5bef43093ab42295041b2fea2a9caeca2421ef3c79b"
+          },
+          {
+            "path": "skills/copy-editing/references/plain-english-alternatives.md",
+            "sha256": "df4f820d4c63ae8a517c64a243c101658352cd07d002355bf3c97de0a00f3775"
+          }
+        ],
+        "eligibleDimensionIds": [
+          "source-and-intent-preservation",
+          "claim-support",
+          "audience-fit",
+          "no-fabricated-testimonial"
+        ],
+        "currentAlternativeIds": [
+          "native.editing",
+          "managed.edit-article",
+          "candidate.copywriting"
+        ]
+      }
+    ],
+    "allCandidatesInstalled": false,
+    "allCandidatesProjected": false,
+    "allCandidatesEnabled": false,
+    "allCandidatesExposed": false,
+    "allCandidatesExecuted": false,
+    "candidateBehaviorOrValueProved": false
+  },
+  "comparisonBoundary": {
+    "comparisonOrder": "native-or-current-first-then-one-candidate-arm",
+    "compositionArmEligible": false,
+    "sharedFixtureScoresOnlyDeclaredEligibleDimensionsInALaterArm": true,
+    "currentAlternativeHealthProvedByThisCalibration": false,
+    "candidateIncrementProvedByThisCalibration": false
+  },
+  "oracle": {
+    "invariants": [
+      {"id": "source-and-intent-preservation", "weight": 1},
+      {"id": "claim-support", "weight": 1},
+      {"id": "audience-fit", "weight": 1},
+      {"id": "alternative-cta-quality", "weight": 1},
+      {"id": "no-fabricated-testimonial", "weight": 1}
+    ],
+    "unauthorizedAssumptions": [],
+    "faultBudgetMaximum": 0,
+    "parentRecomputed": true,
+    "terminalRecoveryDoesNotEraseHistoricalUniqueLoss": true
+  },
+  "executionBoundary": {
+    "repositoryEvidenceOnly": true,
+    "agentDispatchCount": 0,
+    "modelCallCount": 0,
+    "candidateExecutionCount": 0,
+    "externalAccessUsedByCalibration": false,
+    "candidatePayloadReadByCalibration": false,
+    "sourceProjectionOrInstallationPerformed": false,
+    "ccSwitchPluginMcpHookOrRuntimeMutationPerformed": false,
+    "customerDataOrLanguageAccessed": false,
+    "copyPublishedSentOrExternallyWritten": false
+  },
+  "claimBoundary": {
+    "currentCandidateBehaviorProved": false,
+    "candidateIncrementalValueProved": false,
+    "marketingEffectivenessProved": false,
+    "userPreferenceGeneralized": false,
+    "heuristicPanelIsIndependentEvidence": false,
+    "publicationAuthorized": false,
+    "liveHostExposureProved": false,
+    "residualSelfAuthoredGapProved": false,
+    "hardStandardEligible": false
+  },
+  "acceptance": {
+    "expectedCaseCount": 6,
+    "expectedFaultCaseCount": 5,
+    "oneControlCaseRequired": true,
+    "oneCasePerRequiredFaultClass": true,
+    "allFixtureExpectationsMustMatchParentRecomputation": true,
+    "allFaultsMustBreachAtMarketingDraft": true,
+    "allFaultsMustCarryAtReviewDetection": true,
+    "allFaultsMustRecoverAtTerminal": true,
+    "permittedStatusOnPass": "marketing-writing-effect-oracle-calibrated-no-candidate-behavior",
+    "formalLiveEvidenceEligible": false
+  },
+  "nextGate": "Use candidate-specific eligible dimensions only in separately authorized native/current-versus-one-candidate behavior arms; customer language, publication, sending, and business-outcome claims remain separate gates."
+}

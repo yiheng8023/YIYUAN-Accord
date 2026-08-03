@@ -2196,3 +2196,26 @@ artifact writes, behavior/value, requirements completeness, consent,
 self-authored necessity, and hard-standard promotion remain false. The next
 zero-execution effect group is marketing writing. No main-plan, process, or
 acceptance change is required.
+
+## 2026-08-03 marketing-writing incremental oracle checkpoint
+
+The fourth effect group reuses the bounded creative-preference packet and the
+access/communications authority boundary, then adds five source-free effect
+dimensions: source/intent preservation, claim support, audience fit,
+alternative CTA quality, and no fabricated testimonial. One control and five
+single-fault mutations use the shared effect case runner; neither parent
+scenario is duplicated or re-executed.
+
+The two exact Corey Haines candidates have separate static eligibility subsets
+so a future one-candidate arm is not scored against an unrelated dimension.
+The matrix is protocol design only, not candidate capability evidence. The
+optional simulated panel in the upstream editing method remains heuristic and
+is not promoted to independent expert evidence, publication acceptance,
+preference, or a business outcome.
+
+No candidate payload, customer language, account, or live host is touched.
+Model dispatch, install/projection, CC Switch mutation, publication, sending,
+external writes, behavior/value, marketing effectiveness, generalized
+preference, residual self-authored need, and hard-standard promotion remain
+false. The next zero-execution effect group is customer research. No main-plan,
+process, or acceptance change is required.

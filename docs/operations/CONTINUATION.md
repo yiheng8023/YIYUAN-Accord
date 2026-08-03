@@ -3824,3 +3824,26 @@ exposure, residual self-authored need, and hard-standard eligibility remain
 false. The governed protocol is
 `registry/skill-portfolio-product-discovery-zero-model-protocol-2026-08-03.json`.
 Continue next with marketing writing after a fresh repository truth check.
+
+## 2026-08-03 marketing-writing zero-model effect-oracle checkpoint
+
+The fourth mapped effect group now has one source-free incremental packet over
+the existing creative-preference and access/communications evidence. Five
+single-fault cases cover source/intent distortion, claim-support omission,
+audience-fit loss, CTA-alternative omission, and a fabricated testimonial. No
+parent scenario was copied or re-executed.
+
+The protocol binds exact `copywriting` and `copy-editing` identities plus their
+dependency files and candidate-specific static dimension subsets. The
+simulated panel mentioned by the editing method stays heuristic; it is not
+independent expert evidence, publication acceptance, preference, or a business
+outcome. Future attribution remains native/current first followed by one
+candidate on declared eligible dimensions only; composition is ineligible.
+
+Agent dispatch, model calls, payload reads, installation/projection, CC Switch
+mutation, customer-language access, publication, sending, and external writes
+are zero. Marketing effectiveness, current candidate behavior/value,
+generalized preference, live exposure, residual self-authored need, and
+hard-standard eligibility remain false. The governed protocol is
+`registry/skill-portfolio-marketing-writing-zero-model-protocol-2026-08-03.json`.
+Continue next with customer research after a fresh repository truth check.
