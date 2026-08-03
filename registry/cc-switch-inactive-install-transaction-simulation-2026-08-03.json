@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "id": "cc-switch-inactive-install-transaction-simulation-2026-08-03",
+  "date": "2026-08-03",
+  "status": "verified-zero-live-state-design-only",
+  "purpose": "Test the minimum transaction semantics required to acquire an exact reviewed Skill cohort into a CC Switch-owned SSOT with every consumer disabled, without touching the installed manager, live database, real SSOT, or Agent projections.",
+  "predecessors": [
+    "registry/skill-portfolio-current-authority.json",
+    "registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json",
+    "registry/skill-portfolio-bound-cohort-reconciliation-2026-08-03.json"
+  ],
+  "sourceRefresh": {
+    "repository": "farion1231/cc-switch",
+    "latestReleaseTag": "v3.19.1",
+    "releaseCommit": "28529620f438b2ed25c812f6364825d846a4a9d6",
+    "currentMainObserved": "eb356e15bd898a434fde7ca74e5e3a2aec6c90e4",
+    "nativeInactiveRepositoryInstallFound": false,
+    "installedBinaryVersion": "3.19.1",
+    "installedBinarySha256": "5a027ca870be30d75ae00ac81a821ad7421c5419dd2b1a9959f9900f8dc9f0ed",
+    "claimBoundary": "The release remains the installed runtime authority. Current main was read only to check for the named gap and is not adopted as runtime or release authority."
+  },
+  "design": {
+    "kind": "repository-owned disposable-home transaction falsifier",
+    "productionAdapter": false,
+    "upstreamPatchApplied": false,
+    "requiredSemantics": [
+      "accept an explicit empty initial app set instead of requiring current_app",
+      "fetch or materialize and digest-verify the complete dependency-closed cohort before SSOT or database writes",
+      "reject identity, directory, existing-row, existing-SSOT, and digest collisions before mutation",
+      "write a durable transaction journal before atomic same-volume SSOT moves",
+      "write manager rows with every supported app false and skip all consumer projection calls",
+      "restore the exact manager and SSOT pre-state after ordinary failure",
+      "recover the same exact pre-state from the journal after process loss following SSOT or database mutation",
+      "treat an existing same-source row as a separate update decision rather than silently enabling current_app"
+    ],
+    "candidatePayload": "synthetic inert two-Skill dependency-closed fixture",
+    "candidateEntrypointsRead": true,
+    "candidateInstructionsExecuted": false,
+    "realConsumerRoots": false,
+    "realManagerDatabase": false,
+    "realCcSwitchBinary": false
+  },
+  "matrix": {
+    "caseCount": 15,
+    "passedCaseCount": 15,
+    "cases": [
+      {"id": "success-two-candidate-batch", "outcome": "installed-inactive", "passed": true, "preStateRestored": null, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-nonempty-app-set", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-first-source-digest-drift", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-missing-entrypoint", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-missing-dependency", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-duplicate-directory", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-existing-manager-row", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-existing-ssot-directory", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "reject-second-source-before-write", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "cleanup-after-second-stage-error", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "rollback-after-prepare-error", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "rollback-after-first-move-error", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "recover-after-first-move-crash", "outcome": "crash-recovered", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "rollback-after-database-error", "outcome": "rejected-restored", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true},
+      {"id": "recover-after-database-crash", "outcome": "crash-recovered", "passed": true, "preStateRestored": true, "consumerRootsUnchanged": true, "rowsDefaultDisabled": true}
+    ],
+    "allFailureCasesRestoredPreState": true,
+    "allSuccessRowsDefaultDisabled": true,
+    "allConsumerRootsUnchanged": true,
+    "freshRecoveryProcessSimulated": true,
+    "liveManagerInvocations": 0,
+    "candidateExecutions": 0,
+    "modelCalls": 0,
+    "networkCalls": 0
+  },
+  "decision": {
+    "disposition": "upstream-change-preferred-live-install-still-held",
+    "reason": "The disposable design shows that a default-disabled transaction is mechanically coherent, but the installed CC Switch command does not expose these semantics. A thin external adapter would need to own manager SSOT/database internals and recovery, increasing drift and trust cost. Prefer an upstream inactive-install mode with the same failure matrix before considering that adapter.",
+    "existingInstallThenDisableEligible": false,
+    "directDatabaseOrSsotWriteEligible": false,
+    "parallelManagerEligible": false,
+    "liveCandidateInstallEligible": false,
+    "planChangeRequired": false,
+    "acceptanceChangeRequired": false
+  },
+  "claimBoundary": {
+    "transactionSemanticsFalsifierPassed": true,
+    "ccSwitchRuntimeBehaviorProved": false,
+    "upstreamImplementationProved": false,
+    "thinAdapterJustified": false,
+    "candidateInstallAuthorized": false,
+    "candidateInstalled": false,
+    "candidateExposureProved": false,
+    "candidateBehaviorOrValueProved": false,
+    "crossHostPortabilityProved": false
+  },
+  "cleanup": {
+    "disposableHomesRemovedByTemporaryDirectory": true,
+    "sourceRefreshBareRootRemoved": true,
+    "repositoryTmpAbsentAfter": true,
+    "liveCcSwitchStateChanged": false,
+    "liveConsumerRootsChanged": false
+  },
+  "nextGate": "Prepare a source-level upstream change proposal and its Rust-side disposable-home tests only under separate third-party source/build and external-contribution authority. Until then, keep the 17-candidate cohort inactive and do not substitute install-then-disable, direct database writes, manual SSOT staging, or another manager."
+}

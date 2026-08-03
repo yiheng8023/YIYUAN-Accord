@@ -33,6 +33,9 @@ from contracts import (
     validate_sources_lock_document,
 )
 from simulate_routing import run_scenarios
+from simulate_cc_switch_inactive_install_transaction import (
+    run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
+)
 from evaluate_round03_evidence_fixtures import evaluate_fixture_document
 from evaluate_loopy_contract_fixtures import evaluate_fixture_document as evaluate_loopy_contract_fixture_document
 from evaluate_lifecycle_metabolism_fixtures import evaluate_fixture_document as evaluate_lifecycle_metabolism_fixture_document
@@ -1330,6 +1333,10 @@ REQUIRED_FILES = (
     "tests/test_skill_portfolio_planning_with_files_system_adjudication.py",
     "registry/cc-switch-3.19.1-default-disabled-install-adjudication-2026-08-03.json",
     "tests/test_cc_switch_3191_default_disabled_install_adjudication.py",
+    "registry/cc-switch-inactive-install-transaction-simulation-2026-08-03.json",
+    "docs/strategy/CC-SWITCH-INACTIVE-INSTALL-TRANSACTION-SIMULATION-2026-08-03.md",
+    "scripts/simulate_cc_switch_inactive_install_transaction.py",
+    "tests/test_cc_switch_inactive_install_transaction_simulation.py",
     "registry/skill-portfolio-anthropic-official-catalog-adjudication-2026-08-03.json",
     "tests/test_skill_portfolio_anthropic_official_catalog_adjudication.py",
     "registry/skill-portfolio-addy-agent-skills-adjudication-2026-08-03.json",
@@ -3738,6 +3745,11 @@ def verify() -> None:
                     raise RuntimeError(f"Dead adopted-Skill reference in {item['directory']}: {reference}")
 
     subprocess.run([sys.executable, str(ROOT / "scripts/build_topology.py"), "--check"], check=True)
+    inactive_install_decision = load(
+        "registry/cc-switch-inactive-install-transaction-simulation-2026-08-03.json"
+    )
+    if inactive_install_decision.get("matrix") != run_cc_switch_inactive_install_failure_matrix():
+        raise RuntimeError("CC Switch inactive-install failure matrix drifted.")
 
 
 def validate_radar_feedback(feedback_doc: dict[str, object]) -> None:

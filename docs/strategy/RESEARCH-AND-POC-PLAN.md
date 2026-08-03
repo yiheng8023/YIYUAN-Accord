@@ -2323,3 +2323,21 @@ hard-standard promotion remain unproved and unauthorized. The next possible
 stage requires separate authority for a native/current-versus-one-candidate
 behavior arm with visible routing, no silent model substitution, task/data/cost
 boundaries, stop/cleanup rules, and acceptance evidence.
+
+## 2026-08-03 CC Switch inactive-install transaction simulation checkpoint
+
+The latest official CC Switch release remains `v3.19.1`; current upstream
+`main` at `eb356e15bd898a434fde7ca74e5e3a2aec6c90e4` still exposes no repository
+install with an empty initial app set. A repository-owned disposable-home
+falsifier now passes fifteen cases covering exact dependency-closed staging,
+default-disabled rows, unchanged Codex/Claude roots, pre-write rejection,
+ordinary rollback, and fresh recovery after simulated process loss following
+SSOT and database mutation.
+
+This proves only that the required transaction semantics are internally
+coherent. It does not prove CC Switch runtime behavior or authorize a live
+candidate install. Prefer an upstream inactive-install mode with Rust-side
+failure tests; a thin adapter remains unjustified because it would own private
+manager SSOT/database and recovery semantics. Third-party source/build and
+external-contribution authority are the next gate. The 17-candidate cohort
+remains inactive; the main process and acceptance framework do not change.

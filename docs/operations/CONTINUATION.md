@@ -3961,3 +3961,24 @@ live behavior/value, residual self-authored need, and hard-standard promotion
 remain unproved and unauthorized. Before any next arm, bind separate dispatch
 authority, exact visible model route with no silent substitution, task/data/
 cost boundaries, stop and cleanup rules, and acceptance evidence.
+
+## 2026-08-03 CC Switch inactive-install transaction simulation checkpoint
+
+Official tags still stop at `v3.19.1`. A read-only refresh found current
+upstream `main` at `eb356e15bd898a434fde7ca74e5e3a2aec6c90e4`, but no native empty-app
+repository-install route. The exact bare review root was removed.
+
+The disposable-home simulator passes fifteen of fifteen cases. It accepts
+only a dependency-complete, digest-matched cohort with an empty app set; keeps
+all installed rows disabled; leaves Codex and Claude roots unchanged; rejects
+source, dependency, identity, directory, manager-row, and SSOT conflicts before
+write; and restores pre-state after ordinary failures or fresh recovery from
+simulated SSOT/database crash windows.
+
+This is zero-live-state design evidence, not CC Switch execution evidence. No
+manager, live database, real SSOT, consumer root, candidate instruction, model,
+or account ran. Keep the 17 candidates inactive. Prefer an upstream change;
+do not substitute install-then-disable, direct database writes, manual SSOT
+staging, a parallel manager, or a live thin adapter. The next boundary is
+separate authority for third-party source/build work and an external upstream
+contribution.
