@@ -4143,14 +4143,17 @@ test. That test exposed a separate path-identity defect: a Windows absolute
 path stored in historical evidence was being re-resolved as a relative path
 on non-Windows hosts.
 
-Commit `66a88011d7ae83ec8c48f041f64788003d8d6422` now treats recorded Windows
-drive/UNC paths as host-neutral lexical identities while preserving native
-resolution for current-host synthetic fixtures. The focused module passes
-13/13 and the top-level verifier passes locally. Its completed Ubuntu matrix
-job reports 170 unique failed/error identities, with zero identities absent
-from the parent failure set; the newly introduced portability identity and its
-cascades are gone. This is a no-new-regression differential, not a green CI
-claim.
+Commit `66a88011d7ae83ec8c48f041f64788003d8d6422` first treated recorded Windows
+drive/UNC paths as host-neutral lexical identities. Its completed Ubuntu job
+reported 170 unique failed/error identities with zero identities absent from
+the parent set, and macOS later showed the same no-new-failure result. The
+Windows job then falsified the first implementation: five synthetic fixture
+tests needed current-host resolution because runner temporary paths may have a
+different resolved display identity. The follow-up therefore keeps lexical
+Windows evidence identity only on non-Windows hosts and preserves native
+resolution on Windows. The focused module passes 13/13 and the top-level
+verifier passes locally. This is a no-new-regression differential under remote
+recheck, not a green CI claim.
 
 Keep the remaining cross-platform baseline debt separate from the 16-plus-1
 candidate transaction and CC Switch upstream contribution. The next bounded

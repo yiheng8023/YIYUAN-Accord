@@ -2455,10 +2455,13 @@ execution follows from this integration checkpoint.
 Exact-SHA GitHub Actions falsified the assumption that a green Windows
 worktree run implied a healthy repository CI baseline. The parent commit was
 already red on Ubuntu, Windows, and macOS. Checkout-identity changes reduced
-each failure set, and the one newly introduced non-Windows path-identity
-failure was removed at `66a88011...`; the completed Ubuntu differential then
-contained no failure identity absent from the parent. The remaining matrix
-failures are inherited validation debt, not candidate-Skill failure evidence.
+each failure set. The first `66a88011...` path repair removed the newly
+introduced non-Windows identity, but its Windows differential exposed five
+synthetic-fixture regressions because current-host paths still need native
+resolution. The follow-up separates non-Windows lexical evidence identity from
+Windows native resolution and remains subject to exact-SHA remote recheck. The
+remaining parent-set matrix failures are inherited validation debt, not
+candidate-Skill failure evidence.
 
 Treat cross-platform CI repair as a separate repository-engineering slice,
 not a new product hard standard and not a reason to widen live capability

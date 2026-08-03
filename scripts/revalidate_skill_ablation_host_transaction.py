@@ -14,6 +14,7 @@ import copy
 from datetime import UTC, datetime
 import hashlib
 import json
+import os
 from pathlib import Path, PureWindowsPath
 import tomllib
 from typing import Any, Callable
@@ -88,9 +89,9 @@ def recorded_path_identity(value: str) -> str:
     """
 
     windows_path = PureWindowsPath(value)
-    if windows_path.drive:
+    if windows_path.drive and os.name != "nt":
         return windows_path.as_posix()
-    return _display_path(Path(value))
+    return _display_path(_path(value))
 
 
 def canonical_contract_source_path_matches(value: Any) -> bool:
