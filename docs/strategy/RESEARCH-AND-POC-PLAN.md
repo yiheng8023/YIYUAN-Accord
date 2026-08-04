@@ -2632,3 +2632,51 @@ manager-install authority, rollback proof, and per-state post-install evidence
 remain mandatory afterward. No hosted-CI payment, candidate installation,
 enablement, consumer projection, model, Hook, MCP, or account action follows
 from this checkpoint.
+
+### 2026-08-04 released-manager compatibility-path correction
+
+PR 6086 is no longer a mandatory portfolio-install prerequisite. It remains an
+optional upstream atomic-batch improvement. Released CC Switch v3.19.1 can
+retain a managed Skill with all application flags disabled: an exact-tag
+characterization test passed and observed the last consumer projection removed
+while the SSOT and database row remained.
+
+This does not validate the normal repository-install route for the governed
+cohort. That route requires one current app and downloads only GitHub head
+archives, silently falling back from the requested branch to `main` or
+`master`; it cannot bind the reviewed commit SHA. The released local-ZIP route
+can carry independently acquired exact upstream bytes but loses upstream
+repository/revision fields and still creates one transient current-app
+projection before it can be disabled.
+
+The next smallest execution slice is therefore one manager canary, not a
+16-item batch and not a behavior arm: build and verify one exact-upstream
+one-Skill ZIP, freeze database/SSOT/consumer rollback state, use a confirmed
+closed host as the transient app, invoke only CC Switch's own backend, disable
+immediately, prove exact retained SSOT and zero consumer projection, and stop
+on any ambiguity. Current live preflight found zero name collisions for all 16
+dependency-complete candidates and no Gemini process or Gemini Skill root, but
+no rollback snapshot or exact canary ZIP has yet been frozen and no live
+installation occurred. The detailed claim boundary is in
+`registry/cc-switch-3.19.1-exact-zip-sequential-inactive-install-adjudication-2026-08-04.json`.
+
+### 2026-08-04 inactive manager-install result and next gate
+
+The bounded 16-item manager transaction completed through released CC Switch
+v3.19.1. Raw Git blobs at each reviewed revision were the payload identity
+authority; `core.autocrlf` conversion discovered during the canary was treated
+as a material defect, not normalized away. Nine already-inactive entries were
+replaced from raw-object-exact archives before the remaining seven proceeded.
+All 16 now persist after an ordinary manager restart with all host flags false
+and no consumer projection. The review-only `customer-research` candidate
+remains absent.
+
+This advances only the installation and stable-inactive lifecycle states. It
+does not authorize broad enablement or a behavior arm, and it does not make the
+optional upstream atomic-batch PR part of the portable Harness contract. The
+next portfolio step is to select a minimal real task-bound comparison from the
+inactive pool, recheck native/current sufficiency and permissions at that time,
+and enable only the required candidate for a separately bounded host. No model,
+account connection, Hook, MCP, or cross-host action follows from this event.
+The exact transaction evidence is
+`registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json`.

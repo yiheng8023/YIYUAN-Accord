@@ -19,14 +19,16 @@ head so the user can focus on creation, decisions, and bounded authorization.
   CC Switch is one current operational adapter where supported, not the
   portable product contract. Native host authorization, lifecycle, and
   permission enforcement surfaces retain authority.
-- **Current action:** the bounded source gates, seventeen-candidate demand map,
-  all eight zero-model effect oracles, and their cross-group closure review are
-  calibrated. The source-preserving, inactive candidate pool retains all 17
-  reviewed candidates; only the 16 dependency-complete candidates are in the
-  transaction cohort, while `customer-research` remains review-only. The next possible stage is a separately authorized
-  native/current-versus-one-candidate live behavior arm. Payload installation,
-  execution, and task-time activation remain separate and minimal; self-author
-  only after reuse and composition leave a reproducible residual gap.
+- **Current action:** the source-preserving inactive pool retains 17 reviewed
+  candidates; `customer-research` remains review-only. The other 16 were
+  installed through released CC Switch v3.19.1 from raw Git-object-verified,
+  exact-revision one-Skill ZIPs. All 16 persist in the manager after an ordinary
+  restart with every host flag off and zero consumer projections. This proves
+  manager installation and a stable inactive state, not atomic install,
+  enablement, invocation, behavior, value, or portability. PR 6086 remains an
+  optional atomic-batch enhancement rather than a prerequisite. The next stage
+  must keep task-time activation separate and minimal; self-author only after
+  reuse and composition leave a reproducible residual gap.
 - **Evidence archive:** [current plan](docs/strategy/RESEARCH-AND-POC-PLAN.md),
   [inactive Skill source pool](docs/strategy/SKILL-PORTFOLIO-INACTIVE-SOURCE-CANDIDATE-POOL-2026-08-02.md),
   [scenario matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md), and

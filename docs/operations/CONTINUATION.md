@@ -4357,3 +4357,73 @@ that external transition may a fresh live-runtime transaction preflight be
 prepared, followed by separate installation authority, rollback verification,
 and post-install lifecycle evidence for the 16-item dependency-complete
 inactive cohort.
+
+## 2026-08-04 released CC Switch compatibility-path correction
+
+This checkpoint supersedes the preceding statement that PR 6086 merge and
+release are the next mandatory manager gate. The PR remains a useful optional
+atomic-batch enhancement, but making it a prerequisite for ordinary CC Switch
+management incorrectly coupled the Harness to an upstream contribution.
+
+Exact v3.19.1 source at tag commit
+`28529620f438b2ed25c812f6364825d846a4a9d6` shows two distinct released paths.
+`install_skill_unified` always requires `current_app`, constructs
+`SkillApps::only(current_app)`, and writes a consumer projection before return.
+Its repository download also addresses only `refs/heads/<branch>.zip` and falls
+back to `main` then `master`; a commit SHA entered as a branch is therefore not
+an exact-revision acquisition path. `install_skills_from_zip` can instead carry
+an independently acquired exact upstream one-Skill payload, but records it as
+local and does not retain upstream repository or revision fields. Harness
+metadata must continue to carry that provenance.
+
+A disposable exact-tag characterization test passed 1/1 and proved that
+`toggle_skill_app(..., false)` removes the last host projection while retaining
+the manager SSOT and database row with every app disabled. The disposable
+worktree and test home were removed. This proves a stable inactive end state,
+not an atomic inactive install: a projection and install-to-disable failure
+window still exist.
+
+Fresh live read-only preflight found all 16 dependency-complete candidate names
+collision-free across the manager database, CC SSOT, common root, Claude,
+Codex, and Gemini roots. No Gemini process or Gemini Skill root was present.
+No candidate or manager state was changed. The bounded released-version route
+is now to prepare one exact-upstream one-Skill ZIP, freeze a manager-owned
+rollback point with CC Switch stopped, invoke CC Switch's own backend using the
+closed Gemini host as the transient required app, disable it immediately,
+verify retained exact SSOT plus zero consumer projection, and stop on first
+failure. Only a successful canary may authorize the remaining sequential
+items. The governed decision is
+`registry/cc-switch-3.19.1-exact-zip-sequential-inactive-install-adjudication-2026-08-04.json`.
+
+## 2026-08-04 exact-upstream inactive manager-install checkpoint
+
+The released compatibility route completed for the 16 dependency-complete
+candidates. CC Switch v3.19.1 received one independently acquired exact-revision
+one-Skill ZIP at a time through its own backend. Each item used the confirmed
+closed Gemini host only as the API-required transient app and was disabled
+immediately. An ordinary CC Switch restart then retained all 16 database rows
+and manager SSOT directories with all six host flags false and zero projections
+across the common, Codex, Claude, Gemini, Grok, OpenCode, and Hermes consumer
+roots. `customer-research` was not installed.
+
+The first materialization exposed a Windows identity defect: global
+`core.autocrlf=true` changed Markdown line endings in subtree archives even
+though the reviewed revision was correct. The transaction stopped before the
+first report mismatch, switched authority to raw Git blob objects, generated
+archives with `git -c core.autocrlf=false archive`, and audited all nine entries
+already present. Those nine were replaced through CC Switch and the remaining
+seven were then installed. The nine incorrect process backups were removed
+through the manager API; unrelated historical backups were preserved.
+
+The frozen pre-state database contained 42 rows and had SHA-256
+`8cbc55f931481a744c60aef78d325bfeace5e3f6aec25c55e99952642923ec9a`.
+The stopped post-state contained 58 rows and had SHA-256
+`4ad56049ed07d213d2d069548f88c170b169ae999afa84ab2053096a4430cb2c`.
+The loopback-only temporary debug surface was closed before the ordinary
+restart. The transaction-created empty Gemini Skill root and the exact
+repository `.tmp` process root were removed after evidence freeze. This
+evidence proves exact-upstream manager installation and a stable inactive state
+only. It does not prove atomic installation, enablement,
+instruction delivery, invocation, behavior, value, or cross-host portability.
+The durable event is
+`registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json`.
