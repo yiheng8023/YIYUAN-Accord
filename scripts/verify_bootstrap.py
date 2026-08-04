@@ -52,7 +52,7 @@ require(
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
 readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
 require("Agent Autonomy Harness" in readme, "English README identity drifted")
-require("自治协作与能力编排" in readme_zh, "Chinese README identity drifted")
+require("Agent Autonomy Harness" in readme_zh, "Chinese README identity drifted")
 require("scripts/verify_bootstrap.py" in readme, "bootstrap verification not documented")
 
 print("Agent Autonomy Harness bootstrap validation passed.")

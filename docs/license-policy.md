@@ -35,16 +35,20 @@ Attribution should identify this project and, where applicable, the original con
 
 Third-party Skill bodies are governed by their original upstream licenses and any adaptation notices recorded by this repository. The top-level Apache-2.0 license does not relicense third-party Skill bodies beyond what their upstream licenses permit.
 
-For every approved third-party Skill body, this repository should preserve:
+For every historically admitted derivative or future approved third-party
+Skill body, this repository should preserve:
 
 - source repository;
 - pinned revision;
 - original license;
 - original path when applicable;
-- adaptation notes;
+- exact-upstream status or separately owned derivative/adaptation notes;
 - relevant notices in `THIRD_PARTY_NOTICES.md` or source-specific evidence.
 
-If redistribution rights are missing, unclear, source-available only, all-rights-reserved, or otherwise unsuitable, the safe disposition is reference-only, adapter-only, recipe-only, or reject rather than vendoring the body.
+If redistribution rights are missing, unclear, source-available only,
+all-rights-reserved, or otherwise unsuitable, the safe disposition is
+reference-only, adapter-only, recipe-only, or reject rather than vendoring the
+body. Portability metadata must not silently rewrite an upstream body.
 
 ## Official or runtime-owned capability baselines
 
@@ -67,7 +71,7 @@ The following are outside the public license grant unless separately sanitized a
 - private bookmarks;
 - personal preference overlays;
 - account state;
-- local paths;
+- unsanitized local paths when they are not necessary evidence identities;
 - tokens, credentials, OAuth/session state, cookies, and caches;
 - private repository metadata.
 
@@ -77,10 +81,15 @@ Unless a contributor explicitly marks a contribution otherwise before acceptance
 
 - code and governance-machinery contributions are accepted under Apache-2.0;
 - documentation and public governance-text contributions are accepted under CC BY 4.0;
-- third-party Skill suggestions remain references to their upstream source and are not copied into this repository unless their license permits it.
+- third-party Skill suggestions remain references to their upstream source and
+  are not copied into this repository unless their license permits it and the
+  applicable admission authority approves that separate state transition.
 
 ## Commercial use
 
 Commercial use of this repository's Apache-2.0 and CC BY 4.0 materials is allowed under those licenses. Commercial use of third-party Skill bodies, official baselines, or external resources depends on their own licenses and terms, not on this repository.
 
-Funding, sponsorship, paid review work, or paid adaptation must not bypass source pinning, license, provenance, security, portability, overlap, neutralization, validation, or release gates.
+Funding, sponsorship, paid review work, or paid adaptation must not bypass
+source pinning, license, provenance, security, portability, overlap,
+exact-upstream or derivative-ownership classification, validation, or release
+gates.

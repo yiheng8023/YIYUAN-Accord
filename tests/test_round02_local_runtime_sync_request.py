@@ -92,7 +92,7 @@ class Round02LocalRuntimeSyncRequestTests(unittest.TestCase):
         )
         self.assertIn("promoting adapter-only, reference-only, or rejected candidates", disallowed)
 
-    def test_doc_and_readmes_link_the_request(self) -> None:
+    def test_request_registry_links_its_evidence_doc(self) -> None:
         doc_path = self.request["evidence_doc"]
         doc = (ROOT / doc_path).read_text(encoding="utf-8")
         for phrase in [
@@ -105,10 +105,10 @@ class Round02LocalRuntimeSyncRequestTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, doc)
 
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn(doc_path, readme)
-        self.assertIn(doc_path, readme_zh)
+        self.assertEqual(
+            self.request["evidence_doc"],
+            "docs/round02-local-runtime-sync-approval-request.md",
+        )
 
     def test_approval_event_matches_request_scope(self) -> None:
         self.assertEqual(
@@ -156,7 +156,7 @@ class Round02LocalRuntimeSyncRequestTests(unittest.TestCase):
         boundaries = self.execution["boundary_results"]
         self.assertFalse(any(boundaries.values()))
 
-    def test_execution_doc_and_readmes_link_the_result(self) -> None:
+    def test_execution_registry_links_its_evidence_doc(self) -> None:
         doc_path = self.execution["evidence_doc"]
         doc = (ROOT / doc_path).read_text(encoding="utf-8")
         for phrase in [
@@ -167,10 +167,10 @@ class Round02LocalRuntimeSyncRequestTests(unittest.TestCase):
             "cc-switch manifest files matched: 42",
         ]:
             self.assertIn(phrase, doc)
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn(doc_path, readme)
-        self.assertIn(doc_path, readme_zh)
+        self.assertEqual(
+            self.execution["evidence_doc"],
+            "docs/round02-local-runtime-sync-execution.md",
+        )
 
 
 if __name__ == "__main__":

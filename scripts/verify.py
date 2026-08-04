@@ -4234,10 +4234,10 @@ def validate_repository_community_configuration() -> None:
             "Observed behavior", "Expected contract", "Public-data check",
         ],
         "SUPPORT.md": [
-            "Community support is best effort", "private GitHub Security Advisory", "Sponsorship does not change these boundaries",
+            "Community support is best effort", "Private vulnerability reporting is not currently enabled", "Sponsorship does not change these boundaries",
         ],
         "SUPPORT.zh-CN.md": [
-            "社区支持按尽力而为原则", "GitHub 私有安全公告", "赞助不会改变这些边界",
+            "社区支持按尽力而为原则", "当前尚未启用私密漏洞报告", "赞助不会改变这些边界",
         ],
         "SPONSORING.md": [
             "Sponsorship is voluntary", "PayPal", "does not purchase a support SLA",
@@ -4246,10 +4246,17 @@ def validate_repository_community_configuration() -> None:
             "赞助完全自愿", "PayPal", "不购买支持服务等级",
         ],
         "README.md": [
-            "## Sponsor", "WeChat Pay (CNY)", "Alipay (CNY)", "SPONSORING.md",
+            "## Sponsoring", "SPONSORING.md",
         ],
         "README.zh-CN.md": [
-            "## 赞助", "微信支付（人民币）", "支付宝（人民币）", "SPONSORING.zh-CN.md",
+            "## 赞助", "SPONSORING.zh-CN.md",
+        ],
+        "docs/operations/OPEN-SOURCE-READINESS.md": [
+            "Open-source readiness is a multi-gate maintenance contract",
+            "partial-public-baseline-live-control-decisions-open",
+            "secret scanning",
+            "anonymous clean clone",
+            "Hosted GitHub Actions are optional corroboration",
         ],
     }
     for path, phrases in expected_text.items():
@@ -4261,7 +4268,7 @@ def validate_repository_community_configuration() -> None:
     issue_config = (ROOT / ".github/ISSUE_TEMPLATE/config.yml").read_text(encoding="utf-8")
     for phrase in [
         "blank_issues_enabled: true",
-        "security/advisories/new",
+        "blob/main/SECURITY.md",
         "blob/main/SUPPORT.md",
     ]:
         if phrase not in issue_config:
@@ -5744,12 +5751,6 @@ def validate_consumer_mapping_evidence_gap_reconciliation(
         for phrase in phrases:
             if phrase not in text:
                 raise RuntimeError(f"Consumer-mapping doc missing phrase in {doc_path}: {phrase}")
-    readme_text = " ".join((ROOT / "README.md").read_text(encoding="utf-8").split())
-    readme_zh_text = " ".join((ROOT / "README.zh-CN.md").read_text(encoding="utf-8").split())
-    if "Neither is a current supported mapping yet" not in readme_text or "not assumed to be a current downstream" not in readme_text:
-        raise RuntimeError("Consumer-mapping English README still overclaims current downstreams.")
-    if "两者都还不是当前已支持映射" not in readme_zh_text or "被假定为当前下游" not in readme_zh_text:
-        raise RuntimeError("Consumer-mapping Chinese README still overclaims current downstreams.")
 
 
 def validate_user_sovereignty_and_foreign_coexistence_reconciliation(
@@ -8238,11 +8239,6 @@ def validate_cc_switch_disposable_source_update_and_recovery_review(
         for phrase in phrases:
             if phrase not in text:
                 raise RuntimeError(f"CC Switch disposable update doc missing phrase in {doc_path}: {phrase}")
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    for text, path in [(readme, "README.md"), (readme_zh, "README.zh-CN.md")]:
-        if "cc-switch-disposable-source-update-and-recovery-review-2026-07-18" not in text:
-            raise RuntimeError(f"{path} must link the CC Switch disposable update review.")
 
 
 def validate_cc_switch_handoff_real_canary_readonly_preview(
@@ -8395,9 +8391,6 @@ def validate_cc_switch_handoff_real_canary_readonly_preview(
         for phrase in phrases:
             if phrase not in text:
                 raise RuntimeError(f"CC Switch handoff canary doc missing phrase in {doc_path}: {phrase}")
-    for readme_path in ["README.md", "README.zh-CN.md"]:
-        if "cc-switch-handoff-real-canary-readonly-preview-2026-07-18" not in (ROOT / readme_path).read_text(encoding="utf-8"):
-            raise RuntimeError(f"{readme_path} must link the CC Switch handoff canary preview.")
 
 
 def validate_cc_switch_handoff_real_canary_execution(
@@ -8582,9 +8575,6 @@ def validate_cc_switch_handoff_real_canary_execution(
         for phrase in phrases:
             if phrase not in text:
                 raise RuntimeError(f"CC Switch handoff execution doc missing phrase in {doc_path}: {phrase}")
-    for readme_path in ["README.md", "README.zh-CN.md"]:
-        if "cc-switch-handoff-real-canary-execution-2026-07-18" not in (ROOT / readme_path).read_text(encoding="utf-8"):
-            raise RuntimeError(f"{readme_path} must link the CC Switch handoff execution evidence.")
 
 
 def validate_dynamic_runtime_control_gap_review(
@@ -10046,8 +10036,6 @@ def validate_github_repository_configuration_evidence(
     required_phrases = {
         "docs/github-repository-configuration-evidence-2026-07-18.md": "exact-remote-revision result",
         "docs/github-repository-configuration-evidence-2026-07-18.zh-CN.md": "只覆盖这个远端 revision",
-        "README.md": "zero-result CodeQL analyses",
-        "README.zh-CN.md": "CodeQL 零结果分析",
     }
     for doc_path, phrase in required_phrases.items():
         if phrase not in " ".join((ROOT / doc_path).read_text(encoding="utf-8").split()):
@@ -11314,6 +11302,8 @@ def validate_curation_program_plan(
             raise RuntimeError(f"Curation harness doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
+    normalized_readme = " ".join(readme.split())
+    normalized_readme_zh = " ".join(readme_zh.split())
     current_identity_surfaces = {
         "README.md": readme,
         "README.zh-CN.md": readme_zh,
@@ -11344,45 +11334,51 @@ def validate_curation_program_plan(
                     f"Current identity surface {path} still depends on retired topology phrase: "
                     f"{retired_identity_phrase}"
                 )
-    if "docs/curation-program-plan.md" not in readme:
-        raise RuntimeError("README.md must link curation program plan.")
-    if "docs/curation-program-plan.md" not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link curation program plan.")
-    if "docs/curation-harness-model.md" not in readme:
-        raise RuntimeError("README.md must link curation harness model.")
-    if "docs/curation-harness-model.md" not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link curation harness model.")
-    if "registry/program-acceptance-map.json" not in readme:
-        raise RuntimeError("README.md must link program acceptance map.")
-    if "registry/program-acceptance-map.json" not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link program acceptance map.")
+    required_entry_links = [
+        "docs/strategy/PRODUCT-NORTH-STAR.md",
+        "docs/architecture.md",
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+        "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
+        "docs/operations/CONTINUATION.md",
+        "docs/operations/OPEN-SOURCE-READINESS.md",
+        "registry/skill-portfolio-current-authority.json",
+        "registry/program-acceptance-map.json",
+    ]
+    for path, content in (("README.md", readme), ("README.zh-CN.md", readme_zh)):
+        for link in required_entry_links:
+            if link not in content:
+                raise RuntimeError(f"{path} missing current entry-point link: {link}")
+    if len(readme.splitlines()) > 260 or len(readme_zh.splitlines()) > 240:
+        raise RuntimeError("Public README entry surfaces regained inventory-heavy evidence depth.")
     for phrase in [
-        "YIYUAN-CALIBRATION",
-        "read-only candidate, evidence, and research input",
-        "not Skill or Manager product authority",
-        "applicable project authority",
-        "each retain a bounded role",
+        "public research and falsifiable proof",
+        "active adapted third-party payload release: `0`",
+        "17 reviewed exact-upstream candidates",
+        "Sixteen dependency-complete candidates",
+        "zero consumer projections",
+        "CC Switch is a replaceable operational adapter",
+        "Third-party candidates remain exact upstream",
+        "self-authored implementation only for a reproducible residual gap",
     ]:
-        if phrase not in readme:
-            raise RuntimeError(f"README.md must preserve the calibration reference boundary: {phrase}")
+        if phrase not in normalized_readme:
+            raise RuntimeError(f"README.md missing current decision boundary: {phrase}")
     for phrase in [
-        "YIYUAN-CALIBRATION",
-        "只读候选、证据和研究输入",
-        "不是 Skill 或 Manager 产品权威",
-        "适用的项目权威",
-        "各自保有有边界的职责",
+        "公开研究与可证伪 PoC",
+        "活跃的适配后第三方 payload 发布数量为 `0`",
+        "17 个经过审查的精确上游候选",
+        "16 个依赖完整候选",
+        "消费者投影为 0",
+        "CC Switch 在适用场景下是可替换的操作适配器",
+        "第三方候选保持精确上游正文",
+        "只有复现性残余缺口成立后才自研",
     ]:
-        if phrase not in readme_zh:
-            raise RuntimeError(f"README.zh-CN.md must preserve the calibration reference boundary: {phrase}")
+        if phrase not in normalized_readme_zh:
+            raise RuntimeError(f"README.zh-CN.md missing current decision boundary: {phrase}")
+    for path, content in (("README.md", readme), ("README.zh-CN.md", readme_zh)):
+        for stale_phrase in ("This private repository", "本私有仓库"):
+            if stale_phrase in content:
+                raise RuntimeError(f"{path} restored stale private-repository wording: {stale_phrase}")
     manager_design_path = "docs/superpowers/specs/2026-07-15-production-capability-manager-design.md"
-    if manager_design_path not in readme or manager_design_path not in readme_zh:
-        raise RuntimeError("Both README projections must link the production Manager design.")
-    current_strategy_path = "docs/cc-switch-source-preserving-skill-pool-strategy-2026-07-17.md"
-    if current_strategy_path not in readme or current_strategy_path not in readme_zh:
-        raise RuntimeError("Both README projections must link the current CC Switch Skill-pool strategy.")
-    adaptive_strategy_path = "docs/adaptive-harness-source-suite-and-user-sovereignty-2026-07-18.md"
-    if adaptive_strategy_path not in readme or adaptive_strategy_path not in readme_zh:
-        raise RuntimeError("Both README projections must link the adaptive Harness and user-sovereignty strategy.")
     manager_design = " ".join(
         (ROOT / manager_design_path).read_text(encoding="utf-8").split()
     ).lower()
@@ -11434,34 +11430,6 @@ def validate_curation_program_plan(
     ]:
         if phrase not in manager_topology:
             raise RuntimeError(f"Production Manager topology package missing phrase: {phrase}")
-    for phrase in [
-        "multi-domain",
-        "reuse before build",
-        "residual gap",
-        "decision-ready",
-        "repository-authored gap-fill",
-        "dependency graph",
-        "optional branch",
-        "cross-cutting",
-        "exact source pin",
-        "current initiative",
-    ]:
-        if phrase not in readme:
-            raise RuntimeError(f"README.md missing stable program concept: {phrase}")
-    for phrase in [
-        "多领域",
-        "复用优先于自制",
-        "剩余缺口",
-        "决策就绪的外脑",
-        "仓库自制",
-        "依赖图",
-        "可选分支",
-        "跨阶段",
-        "精确来源固定",
-        "当前 initiative",
-    ]:
-        if phrase not in readme_zh:
-            raise RuntimeError(f"README.zh-CN.md missing stable program concept: {phrase}")
 
 
 def validate_round_lifecycle_contract(
@@ -11571,12 +11539,6 @@ def validate_round_lifecycle_contract(
     ]:
         if phrase not in doc:
             raise RuntimeError(f"Round lifecycle doc missing phrase: {phrase}")
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if "docs/round-lifecycle-contract.md" not in readme:
-        raise RuntimeError("README.md must link round lifecycle contract.")
-    if "docs/round-lifecycle-contract.md" not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link round lifecycle contract.")
 
 
 def validate_source_intake_batches(
@@ -11876,10 +11838,6 @@ def validate_round02_candidate_reviews(
             raise RuntimeError(f"Round-02 candidate review doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 candidate review.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 candidate review.")
 
 
 def validate_round02_obsidian_adaptation_gate(
@@ -12098,10 +12056,6 @@ def validate_round02_obsidian_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 Obsidian adaptation gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 Obsidian adaptation gate.")
 
 
 def validate_round02_pm_execution_adaptation_gate(
@@ -12314,10 +12268,6 @@ def validate_round02_pm_execution_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 PM execution adaptation gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 PM execution adaptation gate.")
 
 
 def validate_round02_pm_analytics_adaptation_gate(
@@ -12529,10 +12479,6 @@ def validate_round02_pm_analytics_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 PM analytics adaptation gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 PM analytics adaptation gate.")
 
 
 def validate_round02_pm_market_discovery_adaptation_gate(
@@ -12747,10 +12693,6 @@ def validate_round02_pm_market_discovery_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 PM market/discovery adaptation gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 PM market/discovery adaptation gate.")
 
 
 def validate_round02_pm_toolkit_boundary_adaptation_gate(
@@ -12961,10 +12903,6 @@ def validate_round02_pm_toolkit_boundary_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 PM toolkit adaptation gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 PM toolkit adaptation gate.")
 
 
 def validate_round02_huashu_design_guidance_adaptation_gate(
@@ -13170,10 +13108,6 @@ def validate_round02_huashu_design_guidance_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 Huashu design guidance gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 Huashu design guidance gate.")
 
 
 def validate_round02_huashu_toolchain_media_adaptation_gate(
@@ -13416,10 +13350,6 @@ def validate_round02_huashu_toolchain_media_adaptation_gate(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 Huashu toolchain/media gate.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 Huashu toolchain/media gate.")
 
 
 def validate_round02_release_readiness_review(
@@ -13638,10 +13568,6 @@ def validate_round02_release_readiness_review(
             raise RuntimeError(f"Round-02 release readiness doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 release readiness review.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 release readiness review.")
 
 
 def validate_round02_release_admission_review_template(
@@ -13797,10 +13723,6 @@ def validate_round02_release_admission_review_template(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 release/admission review template.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 release/admission review template.")
 
 
 def validate_round02_release_admission_approval_request(
@@ -13911,10 +13833,6 @@ def validate_round02_release_admission_approval_request(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 release/admission approval request.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 release/admission approval request.")
 
 
 def validate_round02_release_admission_approval_events(
@@ -14203,10 +14121,6 @@ def validate_round02_release_admission_candidate_review(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 release/admission candidate review.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 release/admission candidate review.")
 
 
 def validate_round02_approved_payload_routing_proposal_template(
@@ -14376,10 +14290,6 @@ def validate_round02_approved_payload_routing_proposal_template(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 approved-payload/routing template.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 approved-payload/routing template.")
 
 
 def validate_round02_release_execution_approval_request(
@@ -14554,10 +14464,6 @@ def validate_round02_release_execution_approval_request(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 release execution approval request.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 release execution approval request.")
 
 
 def validate_round02_approved_payload_routing_approval_events(
@@ -14912,10 +14818,6 @@ def validate_round02_approved_payload_routing_proposal(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link Round-02 approved payload/routing proposal.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link Round-02 approved payload/routing proposal.")
     notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text(encoding="utf-8")
     for phrase in ["kepano/obsidian-skills", "Steph Ango", "sources/kepano-obsidian-skills/LICENSE"]:
         if phrase not in notices:
@@ -21002,14 +20904,6 @@ def validate_mvp02_post_approval_execution_plan(
             raise RuntimeError(f"MVP-02 post-approval execution plan doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-02 post-approval execution plan.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-02 post-approval execution plan.")
-    if "docs/mvp02-adapted-draft-review.md" not in readme:
-        raise RuntimeError("README.md must link MVP-02 adapted draft review.")
-    if "docs/mvp02-adapted-draft-review.md" not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-02 adapted draft review.")
 
 
 def validate_mvp02_approval_events(
@@ -21385,10 +21279,6 @@ def validate_mvp03_release_or_routing_preflight(
             raise RuntimeError(f"MVP-03 preflight doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-03 preflight.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-03 preflight.")
 
 
 def validate_mvp03_release_or_routing_review_template(
@@ -21502,10 +21392,6 @@ def validate_mvp03_release_or_routing_review_template(
             raise RuntimeError(f"MVP-03 review template doc missing phrase: {phrase}")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-03 review template.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-03 review template.")
 
 
 def validate_mvp03_release_or_routing_approval_request(
@@ -21591,10 +21477,6 @@ def validate_mvp03_release_or_routing_approval_request(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-03 approval request.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-03 approval request.")
 
 
 def validate_mvp03_approval_events(
@@ -21814,10 +21696,6 @@ def validate_mvp03_release_or_routing_candidate_review(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-03 candidate review.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-03 candidate review.")
 
 
 def validate_mvp03_release_routing_execution(
@@ -21986,10 +21864,6 @@ def validate_mvp03_release_routing_execution(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-03 execution.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-03 execution.")
 
 
 def validate_mvp06_lifecycle_feedback(
@@ -22140,10 +22014,6 @@ def validate_mvp06_lifecycle_feedback(
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
-    if doc_path not in readme:
-        raise RuntimeError("README.md must link MVP-06 lifecycle feedback.")
-    if doc_path not in readme_zh:
-        raise RuntimeError("README.zh-CN.md must link MVP-06 lifecycle feedback.")
 
 
 def validate_cc_switch_live_drift_and_transaction_gate(
@@ -26604,7 +26474,7 @@ def main() -> int:
     except ContractError as exc:
         print(f"Contract error: {exc}", file=sys.stderr)
         return 1
-    print("Agent Skills Curated validation passed.")
+    print("Agent Autonomy Harness validation passed.")
     return 0
 
 

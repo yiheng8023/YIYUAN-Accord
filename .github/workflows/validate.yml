@@ -29,5 +29,5 @@ jobs:
         run: python scripts/build_topology.py --check
       - name: Simulate routing policy
         run: python scripts/simulate_routing.py --all
-      - name: Verify curated Skills
+      - name: Verify Harness contracts
         run: python scripts/verify.py

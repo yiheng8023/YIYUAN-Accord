@@ -1,14 +1,28 @@
 # Support
 
-Community support is best effort. This repository supports questions and reports about curated Skill provenance, license and attribution, security, portability, overlap, conflicts, lifecycle, topology, deterministic verification, and release manifests.
+Community support is best effort.
+
+This repository accepts questions and reports about Harness documentation,
+governance contracts, source and license evidence, deterministic verification,
+host observations, capability overlap, lifecycle behavior, portability,
+cleanup, and public reproducibility.
 
 Before opening an issue:
 
-1. identify the exact repository revision and affected file, Skill, source, registry record, or generated projection;
-2. state whether the item is approved release content, candidate material, historical evidence, an official/runtime baseline, or an external tool;
-3. provide safe reproduction evidence and the verification command used;
-4. remove credentials, private account state, personal memory, private configuration, restricted third-party content, and raw sensitive logs.
+1. identify the exact repository revision and affected artifact;
+2. distinguish current policy, dated evidence, historical transition material,
+   an external candidate, installed manager state, and live host behavior;
+3. provide safe reproduction evidence and the commands used;
+4. remove credentials, private account state, memory, private configuration,
+   restricted content, unnecessary local paths, and raw sensitive logs.
 
-Use a private GitHub Security Advisory for malicious Skills, leaked material, credential exposure, or exploitable supply-chain problems. Public issues are suitable for non-sensitive governance, verification, portability, documentation, and candidate-source discussions.
+Private vulnerability reporting is not currently enabled. Never put
+credentials, leaked or restricted material, exploit payloads, or raw sensitive
+logs in a public issue. A minimal non-sensitive issue may ask the maintainer to
+open a private channel. Public issues remain suitable for non-sensitive
+research, governance, verification, portability, documentation, and
+candidate-source discussion.
 
-This repository does not provide installation support for unapproved candidates, account connection, live Agent configuration, vendor service support, guaranteed response times, or a support SLA. Sponsorship does not change these boundaries.
+The project does not provide a support SLA, vendor-service support, account
+connection, or guaranteed installation and live-Agent configuration support.
+Sponsorship does not change these boundaries.

@@ -1,12 +1,29 @@
-agent-skills-curated
+Agent Autonomy Harness
 Copyright 2026 yiheng8023
 
-Repository-owned governance code, schemas, scripts, tests, workflows, registries, policies, and generated-projection machinery are licensed under the Apache License, Version 2.0, except where a file states otherwise.
+Repository-owned governance code, schemas, scripts, tests, workflows,
+registries, policies, and generated-projection machinery are licensed under the
+Apache License, Version 2.0, except where a file states otherwise.
 
-Repository-owned documentation, taxonomy descriptions, review explanations, and public governance text are intended to be available under Creative Commons Attribution 4.0 International (CC BY 4.0), except where a file states otherwise. See docs/license-policy.md for the precise repository policy.
+Repository-owned documentation, taxonomy descriptions, review explanations,
+and public governance text follow the layered policy in
+docs/license-policy.md. That policy identifies the applicable license and any
+exceptions.
 
-Curated Skill bodies adapted from third-party sources are not relicensed by this repository beyond what their original licenses allow. Their source pins, licenses, provenance, and notices are recorded in sources/, audits/, and THIRD_PARTY_NOTICES.md. The top-level repository license does not override third-party Skill licenses, source-available restrictions, official/runtime ownership, or all-rights-reserved material.
+The skills/ tree and release-manifest.json retain adapted third-party payloads
+as deprecated transition evidence inherited from agent-skills-curated. They are
+not the current product release or installation authority and are not relicensed
+by this repository beyond what their original licenses allow. Source pins,
+licenses, provenance, and notices are recorded in sources/, audits/, and
+THIRD_PARTY_NOTICES.md.
 
-Official/runtime-owned capability baselines, external repositories, and candidate sources may be linked, summarized, or reviewed for coverage. They are not vendored, relicensed, or approved for runtime use unless the normal intake, license, provenance, security, portability, overlap, adaptation, validation, and release gates close.
+Current third-party candidates remain exact upstream by default. Review or
+metadata does not vendor, relicense, admit, install, enable, or approve an
+external body for runtime use. The top-level repository license does not
+override third-party licenses, source-available restrictions, official/runtime
+ownership, or all-rights-reserved material.
 
-Private user configuration, memory, bookmarks, local paths, account state, and personal preferences are outside the public license grant and must not be published unless separately sanitized and explicitly released by their owner.
+Private user configuration, memory, bookmarks, local paths, account state,
+credentials, and personal preferences are outside the public license grant and
+must not be published unless separately sanitized and explicitly released by
+their owner.

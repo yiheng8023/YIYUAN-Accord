@@ -1,58 +1,96 @@
 # Contributing
 
-Thank you for helping improve `agent-skills-curated`.
+Thank you for helping improve Agent Autonomy Harness.
 
-This repository governs reviewed, portable, cross-agent Skill assets. It is not a raw prompt dump, a general resource radar, a user configuration repository, or a live Agent installation surface.
+This is a public research repository for agent-neutral collaboration,
+capability orchestration, lifecycle control, and evidence-bound engineering.
+It is not a prompt dump, a general capability mirror, a user configuration
+repository, or a production runtime.
 
-## Contribution types
+## Useful contributions
 
-Useful contributions include:
+Contributions may include:
 
-- candidate Skill source suggestions with license and provenance evidence;
-- security, portability, overlap, lifecycle, and neutrality reviews;
-- Skill adaptations that reduce agent-specific coupling without weakening safety;
-- registry, topology, conflict, recipe, routing-scenario, or validation improvements;
-- documentation that clarifies official/runtime capability baselines, candidate boundaries, or downstream consumption.
+- reproducible host-capability or lifecycle observations;
+- counterexamples to current assumptions or evidence claims;
+- context, thread, worktree, MCP, Hook, permission, or cleanup experiments;
+- exact-upstream Skill or other capability source suggestions;
+- license, provenance, security, dependency, portability, maintenance, or
+  overlap corrections;
+- deterministic builders, validators, fixtures, and failure controls;
+- documentation and public-accessibility improvements.
 
-## Candidate Skill intake
+## External capability intake
 
-A proposed Skill source must include:
+A proposed external capability should identify:
 
-- canonical source URL;
-- pinned revision or a plan to pin before review;
-- license and redistribution notes;
-- provenance evidence;
-- candidate Skill paths;
-- executable surfaces, install scripts, network access, file writes, or account requirements;
-- portability concerns and agent-specific assumptions;
-- overlap with current curated Skills, official/runtime capabilities, or existing recipes;
-- proposed disposition: `merge`, `adapter-only`, `recipe-only`, `reference`, or `reject`.
+- the concrete demand or bounded portfolio-coverage objective;
+- canonical source and exact revision when available;
+- license, redistribution, provenance, and maintenance evidence;
+- relevant component paths and dependency closure;
+- executable surfaces, install scripts, network access, file writes, accounts,
+  permissions, background processes, and cleanup obligations;
+- host-specific assumptions, overlap, conflicts, fallback, and exit cost;
+- proposed disposition such as `candidate`, `composition`, `reference`,
+  `duplicate`, `reject`, or `needs-evidence`.
 
-A candidate is not approved just because it is useful, popular, starred, official-looking, or already installed locally.
+Popularity, stars, installation, official-looking branding, or usefulness does
+not establish admission or runtime authority.
 
-## Required gates before runtime approval
+## Third-party body policy
 
-Before a Skill can enter `skills/`, release inventory, or a downstream runtime path, it must pass:
+Keep third-party bodies exact upstream by default. Do not neutralize,
+generalize, rename inside, or silently rewrite a third-party Skill to make it
+portable. Put compatibility, naming, routing, composition, policy, and host
+differences in metadata, Recipes, adapters, or repository-owned wrappers.
 
-1. source pinning;
-2. license and provenance review;
-3. security review;
-4. portability and neutralization review;
-5. overlap and conflict review;
-6. adaptation with preserved attribution where required;
-7. validation and generated projection checks;
-8. release-manifest update and verification.
+A modified fork is a separately owned derivative and must not inherit the
+upstream identity or review result automatically.
 
-## Boundaries
+## State-transition gates
 
-Please do not submit:
+Source review, portfolio admission, manager installation, host enablement,
+exposure, invocation, instruction delivery, behavior, value, portability, and
+release are separate decisions. A contribution affecting one state does not
+authorize the next.
 
-- secrets, tokens, private account state, local machine state, personal memory, or private user preferences;
-- leaked prompts, proprietary dumps, or content with unclear redistribution rights as runtime candidates;
-- official/runtime-owned Skill bodies as vendored inventory unless an explicit permission and adaptation path is approved;
-- changes that install Skills, write to live Agent environments, mutate user configuration repositories, or bypass human approval;
-- generated files as hand-authored truth.
+Runtime or external-state changes require an explicit task, authority boundary,
+rollback path, and verification surface. Pull requests must not silently modify
+live Agent configuration, accounts, consumer repositories, or installed
+capabilities.
 
-## Downstream relationship
+## Local verification
 
-Downstream repositories such as `codex-user-config` and `claude-user-config` consume pinned reviewed releases. They do not own third-party Skill-body governance. This repository does not own their private configuration, memory, account state, or runtime installation choices.
+For documentation or narrow changes, run the checks relevant to the affected
+surface. Before broad repository changes, run:
+
+```bash
+python -B scripts/verify_bootstrap.py
+python -B scripts/verify.py
+python -B -m unittest discover -s tests -v
+```
+
+Hosted CI is optional corroboration. A pull request should include the exact
+local commands and limitations rather than treating a remote badge as proof.
+
+## Public-data boundary
+
+Do not submit:
+
+- secrets, tokens, private account state, personal memory, private user
+  preferences, or unsanitized local configuration;
+- leaked prompts, proprietary dumps, restricted bodies, or content with unclear
+  redistribution rights;
+- raw sensitive logs or unnecessary machine/user paths;
+- generated outputs as hand-authored authority;
+- claims broader than the supplied evidence.
+
+See [SECURITY.md](SECURITY.md), [NOTICE](NOTICE), and
+[docs/license-policy.md](docs/license-policy.md) before contributing third-party
+or security-relevant material.
+
+## Review posture
+
+The project may accept, revise, defer, reject, supersede, or remove a proposal.
+Contribution does not imply admission, release, installation, support priority,
+or endorsement. Human acceptance remains separate from automated checks.

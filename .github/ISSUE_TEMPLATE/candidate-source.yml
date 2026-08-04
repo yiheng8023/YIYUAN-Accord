@@ -53,7 +53,7 @@ body:
   - type: textarea
     id: overlap
     attributes:
-      label: Native, official, installed, and curated overlap
+      label: Native, official, installed, and reviewed overlap
       description: Explain why existing capabilities may be insufficient and where redundancy or conflict may exist.
     validations:
       required: true

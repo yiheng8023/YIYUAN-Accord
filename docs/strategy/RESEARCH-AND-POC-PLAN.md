@@ -14,11 +14,22 @@ Skill supply now uses a separate portfolio curation mode. It may build a broad
 but bounded inactive candidate pool without binding every candidate to one
 end-user task when coverage objectives, sources, isolation, review/admission
 criteria, authority, verification, cleanup, and a stop rule are explicit.
-Third-party payloads remain exact upstream. Portfolio admission or a separately
-authorized default-disabled CC Switch installation is not task-time activation,
-host exposure, invocation, behavior, or value evidence. The inherited 19
+Third-party payloads remain exact upstream. The current 17-candidate pool keeps
+`customer-research` review-only; the other 16 exact-revision candidates are now
+managed by released CC Switch v3.19.1 with every host flag off and zero
+consumer projections after an ordinary restart. This proves installation and a
+stable inactive state only, not atomic installation, task-time activation,
+host exposure, invocation, behavior, value, or portability. The inherited 19
 neutralized/generalized payloads are deprecated transition evidence and no
-longer current install/update authority.
+longer current install/update authority. PR 6086 and its fork remain an
+optional upstream contribution rather than a Harness dependency.
+
+The repository is now public. Public visibility does not establish release
+readiness or weaken source, license, privacy, security, provenance, evidence,
+or runtime-authority gates. The public entry points, contributor guidance,
+third-party rights boundary, anonymous clean-clone verification, and GitHub
+repository settings require a separate open-source closure audit. Hosted CI
+remains optional corroboration rather than a paid acceptance dependency.
 
 The user-confirmed Kimi topology now has a retained zero-model
 [mechanism replay](../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json):

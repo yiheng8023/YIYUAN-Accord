@@ -18,29 +18,33 @@ class DocumentationContractTests(unittest.TestCase):
         compact_chinese = "".join(chinese.split())
         normalized_plan = " ".join(plan.split())
 
-        self.assertLess(english.index("## Decision card"), english.index("## Current phase"))
-        self.assertLess(chinese.index("## 决策卡"), chinese.index("## 当前阶段"))
+        self.assertLess(
+            english.index("## Decision card"),
+            english.index("## What problem this project addresses"),
+        )
+        self.assertLess(
+            chinese.index("## 决策卡"),
+            chinese.index("## 本项目解决什么问题"),
+        )
         self.assertLess(
             plan.index("## Current decision gate"),
             plan.index("Working scenario and evidence gate:"),
         )
         for phrase in (
-            "Current state:",
-            "Current operating boundary:",
-            "portable decision contract, host-neutral adapter contract, and host-specific implementation",
-            "Current action:",
-            "source-preserving, inactive candidate pool",
-            "Evidence archive:",
+            "Repository posture:",
+            "Current Skill authority:",
+            "Current inactive pool:",
+            "Current gate:",
+            "Manager boundary:",
         ):
             with self.subTest(surface="English", phrase=phrase):
                 self.assertIn(phrase, normalized_english)
         for phrase in (
-            "当前状态：",
-            "当前运行边界：",
-            "可移植决策合同、宿主中立适配合同与宿主特定实现",
-            "当前行动：",
-            "来源保真、默认不活跃的候选池",
-            "证据入口：",
+            "仓库状态：",
+            "当前 Skill 权威：",
+            "当前非活跃池：",
+            "当前闸门：",
+            "管理器边界：",
         ):
             with self.subTest(surface="Chinese", phrase=phrase):
                 self.assertIn("".join(phrase.split()), compact_chinese)
@@ -212,17 +216,17 @@ class DocumentationContractTests(unittest.TestCase):
             normalized_agents,
         )
         self.assertIn(
-            "native host authorization and permission enforcement surfaces",
+            "Native host authorization and permission enforcement remain authoritative",
             normalized_english,
         )
-        self.assertIn("宿主原生授权与权限强制面", compact_chinese)
+        self.assertIn("宿主原生授权与权限执行始终拥有最终权威", compact_chinese)
         self.assertIn(
-            "CC Switch is one current operational adapter where supported, "
+            "CC Switch is a replaceable operational adapter where suitable, "
             "not the portable product contract.",
             normalized_english,
         )
         self.assertIn(
-            "CCSwitch是受支持场景下的一个当前操作适配器，不是可移植产品合同",
+            "CCSwitch在适用场景下是可替换的操作适配器，不是可移植产品契约",
             compact_chinese,
         )
         self.assertIn(
@@ -244,27 +248,29 @@ class DocumentationContractTests(unittest.TestCase):
         self.assertIn("[English](README.md) | 简体中文", chinese)
 
         for heading in (
-            "## Repository Role",
-            "## What This Repository Provides",
-            "## What This Repository Does Not Own",
-            "## Relationship To The Paired Repository",
-            "## Layout",
+            "## Decision card",
+            "## What problem this project addresses",
+            "## Product boundaries",
+            "## Capability governance",
+            "## Current research lanes",
+            "## Start here",
+            "## Repository map",
             "## Verification",
-            "## Update Rules",
-            "## Safety Boundaries",
+            "## Open-source and safety posture",
         ):
             with self.subTest(readme="English", heading=heading):
                 self.assertIn(heading, english)
 
         for heading in (
-            "## 仓库职责",
-            "## 本仓库提供什么",
-            "## 本仓库不负责什么",
-            "## 与配对仓库的关系",
-            "## 目录结构",
-            "## 验证方式",
-            "## 更新规则",
-            "## 安全边界",
+            "## 决策卡",
+            "## 本项目解决什么问题",
+            "## 产品边界",
+            "## 能力治理",
+            "## 当前研究线",
+            "## 从这里开始",
+            "## 仓库结构",
+            "## 验证",
+            "## 开源与安全边界",
         ):
             with self.subTest(readme="Chinese", heading=heading):
                 self.assertIn(heading, chinese)
@@ -285,14 +291,14 @@ class DocumentationContractTests(unittest.TestCase):
         )
 
         for phrase in (
-            "Official, runtime-owned, or built-in Skill bodies",
+            "Official, runtime-owned, or built-in capabilities",
             "dated overlap evidence",
             "third-party payloads exact upstream",
             "third-party candidate",
             "must not enter an execution path",
-            "admitted repository-authored residual-gap payload",
+            "repository-authored residual-gap Skill",
             "future active release inventory",
-            "deprecated adapted transition release",
+            "deprecated transition evidence",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, corpus)
@@ -319,7 +325,7 @@ class DocumentationContractTests(unittest.TestCase):
         for phrase in (
             "Stars are only discovery hints",
             "do not prove license safety",
-            "must not enter `skills/`",
+            "must not enter an execution path",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, corpus)
@@ -386,7 +392,7 @@ class DocumentationContractTests(unittest.TestCase):
             "native reasoning",
             "recipe or DAG",
             "no skill needed",
-            "human confirmation",
+            "human control",
             "does not install",
             "does not write to `codex-user-config`",
             "does not write to a live Agent environment",
@@ -395,12 +401,16 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, corpus)
 
-    def test_runtime_resolution_is_documented_as_a_structural_contract(self) -> None:
+    def test_runtime_resolution_is_machine_governed_below_the_public_entrypoint(self) -> None:
+        capabilities = read("registry/capabilities.json")
+        schema = read("schemas/v2/capabilities.schema.json")
+        self.assertIn("visible-capability-inventory", capabilities)
+        self.assertIn("runtimeResolution", capabilities)
+        self.assertIn("visible-capability-inventory", schema)
+        self.assertIn("runtimeResolution", schema)
         for path in ("README.md", "README.zh-CN.md"):
-            text = read(path)
             with self.subTest(path=path):
-                self.assertIn("visible-capability-inventory", text)
-                self.assertIn("runtimeResolution", text)
+                self.assertIn("docs/architecture.md", read(path))
 
     def test_governance_roadmap_matches_current_contract_state(self) -> None:
         design = read("docs/superpowers/specs/2026-06-22-governance-contracts-design.md")

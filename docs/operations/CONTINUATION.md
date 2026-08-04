@@ -4427,3 +4427,51 @@ only. It does not prove atomic installation, enablement,
 instruction delivery, invocation, behavior, value, or cross-host portability.
 The durable event is
 `registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json`.
+
+## 2026-08-05 public-entrypoint and open-source baseline checkpoint
+
+This slice started from clean `main` at
+`2d772b926ad8358e614cc68144a1e9b662c75e52`, equal to `origin/main` with
+ahead/behind `0/0`. It changed repository-owned public entrypoints,
+contributor/security/support surfaces, the research-plan decision gate, and
+their tests and verifier. It did not install, enable, expose, invoke, or remove
+any Skill; mutate CC Switch; dispatch a model; connect an account; or enable a
+GitHub repository setting.
+
+The English README fell from 809 lines to 198 and the Chinese README from 593
+to 170. Both now present the current decision card and stable authority links
+before evidence depth. Historical repository names, Skill IDs, and adapted
+payload notices remain only where evidence identity requires them. The
+verifier no longer requires every Round-02/MVP evidence document to be linked
+from the top-level README; those records remain independently validated through
+their registry and evidence contracts. A new line-count and current-decision
+boundary prevents the public entrypoint from regaining inventory-heavy depth.
+
+The dated open-source contract is
+`docs/operations/OPEN-SOURCE-READINESS.md`. A bounded current-tree and
+172-pre-existing-commit high-confidence scan found credential-shaped strings
+only in two synthetic secret-detector fixtures and found no private-key,
+GitHub-token, AWS-key, or Slack-token shape. This is not a comprehensive
+secret-scanner result: `gitleaks` was unavailable and was not installed. One
+hundred tracked files retain absolute or numeric-profile local-path evidence;
+these are privacy and portability surface, not credentials. They were not
+bulk-rewritten because that would invalidate frozen observations and digests.
+
+Live GitHub observation found the repository public on `main`, community health
+100%, Issues enabled, no Pages site, no Release, and no branch protection.
+Secret scanning, non-provider patterns, push protection, validity checks,
+Dependabot security updates, and private vulnerability reporting were disabled;
+the code-scanning API reported no analysis. Public security links now describe
+that absence honestly instead of routing to an unavailable private-advisory
+form. Enabling those controls remains an external setting decision, not an
+implicit consequence of this repository edit. Hosted Actions remain optional
+corroboration rather than a paid acceptance dependency.
+
+Local evidence passes: 27 affected tests, `scripts/verify_bootstrap.py`,
+`scripts/verify.py`, `git diff --check`, and the full 2,565-test suite in
+743.642 seconds. Repository `.tmp` and matching system `aah*` temporary roots
+were absent; the exact Python cache directories created by syntax/test checks
+were removed. Commit, push, remote exact-SHA comparison, and anonymous
+clean-clone bootstrap verification remain the closure steps for this slice.
+They do not close the broader open-source control decisions or the Harness
+research goal.
