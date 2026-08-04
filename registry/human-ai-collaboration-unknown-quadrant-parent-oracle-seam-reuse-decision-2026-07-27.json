@@ -43,8 +43,8 @@
     },
     {
       "path": "tests/test_context_continuation_trial_packet.py",
-      "bytes": 5047,
-      "sha256": "b2673ef3eb965aa21e73369de98c9dcce8e4a5d5068a09e7f83d6dc8ec7c22be",
+      "bytes": 5217,
+      "sha256": "c48519e813f17b95b7889b1a49acecc61b523d24188ab7773b7fd0b180e595f2",
       "role": "default-public-output-excludes-private-oracle-regression"
     }
   ],

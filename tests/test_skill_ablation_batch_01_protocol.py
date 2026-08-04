@@ -296,8 +296,23 @@ class SkillAblationBatch01ProtocolTests(unittest.TestCase):
             build_context_arm_c_receiver(Path("definitely-missing-handoff.md"))
 
     def test_context_c_receiver_rejects_artifact_outside_os_temp(self) -> None:
-        with self.assertRaisesRegex(RuntimeError, "operating-system temporary"):
-            build_context_arm_c_receiver(Path(__file__).resolve())
+        with tempfile.TemporaryDirectory() as fixture_root:
+            fixture = Path(fixture_root)
+            system_temp = fixture / "system-temp"
+            outside_temp = fixture / "outside-system-temp"
+            system_temp.mkdir()
+            outside_temp.mkdir()
+            artifact = outside_temp / "handoff.md"
+            artifact.write_text("bounded handoff", encoding="utf-8")
+            with patch(
+                "scripts.build_skill_ablation_batch_01_packet.tempfile.gettempdir",
+                return_value=str(system_temp),
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "operating-system temporary",
+                ):
+                    build_context_arm_c_receiver(artifact)
 
     def test_prompt_only_noninvocation_is_confounded(self) -> None:
         outcome = evaluate(

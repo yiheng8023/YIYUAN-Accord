@@ -135,14 +135,26 @@ class KimiHookComparisonReplayTests(unittest.TestCase):
         )
 
     def test_temporary_parent_must_be_system_temp(self) -> None:
-        with tempfile.TemporaryDirectory() as safe_parent:
-            self.assertEqual(
-                Path(safe_parent).resolve(),
-                validate_temporary_parent(Path(safe_parent)),
-            )
-        with tempfile.TemporaryDirectory(dir=ROOT) as unsafe_parent:
-            with self.assertRaisesRegex(RuntimeError, "system temporary root"):
-                validate_temporary_parent(Path(unsafe_parent))
+        with tempfile.TemporaryDirectory() as fixture_root:
+            fixture = Path(fixture_root)
+            system_temp = fixture / "system-temp"
+            safe_parent = system_temp / "safe-parent"
+            unsafe_parent = fixture / "outside-system-temp"
+            safe_parent.mkdir(parents=True)
+            unsafe_parent.mkdir()
+            with mock.patch(
+                "scripts.run_kimi_hook_comparison_replay.tempfile.gettempdir",
+                return_value=str(system_temp),
+            ):
+                self.assertEqual(
+                    safe_parent.resolve(),
+                    validate_temporary_parent(safe_parent),
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "system temporary root",
+                ):
+                    validate_temporary_parent(unsafe_parent)
 
     def test_atomic_writer_refuses_overwrite(self) -> None:
         report = json.loads(REPORT.read_text(encoding="utf-8"))

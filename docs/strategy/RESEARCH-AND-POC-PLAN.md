@@ -2476,9 +2476,11 @@ authority. Its acceptance surface is:
    fixture assertions;
 4. cleanup inventory distinguishes runner-generated process roots from
    governed debt without silently deleting either; and
-5. an exact final SHA passes the intended Ubuntu, Windows, and macOS matrix, or
-   any deliberately excluded host cell is documented as unproved rather than
-   green.
+5. one exact revision passes the complete repository verification on each
+   available real host under that host's native filesystem; unavailable host
+   cells are documented as unproved rather than green. Provider-hosted CI may
+   corroborate this evidence, but paid CI availability is not an acceptance
+   dependency.
 
 Do not mix this repair with the 16-candidate inactive transaction, PR 6086
 review, live installation, model arms, or self-authored Skill necessity. The
@@ -2536,3 +2538,33 @@ accepts the exact raw caller path or its resolved spelling while retaining
 file-identity priority for real files. Focused cross-host tests and the
 verifier pass; one more exact-SHA matrix is required before the cross-platform
 repair slice can be called green.
+
+### 2026-08-04 provider-neutral exact-revision verification follow-up
+
+The next GitHub Actions runs for exact SHA `1fc1490684f18087ca768dfe8f656e2566397adb`
+did not start any job step because the provider rejected the account's billing
+or spending-limit state. That is unavailable external infrastructure, not a
+code verdict. The user does not authorize paid Actions as a project dependency,
+so this checkpoint supersedes the earlier mandatory hosted-matrix wording while
+retaining the workflow as optional remote corroboration.
+
+The provider-neutral primary surface now requires complete verification of one
+exact revision on each available real host under its native filesystem. On the
+current Windows host, the `1fc1490...` baseline passes all 2,557 tests, the
+top-level verifier, and the diff check. An isolated clone under WSL's native
+`/tmp` filesystem exposed three portable-test assumptions: one test required an
+upstream even though the observer supports no-upstream repositories, and two
+negative temporary-directory fixtures assumed the checkout itself could never
+be under the operating-system temporary root. Deterministic fixtures remove
+those assumptions; the patched exact baseline passes all 2,557 Linux tests with
+four explicit host-specific skips, plus the verifier and diff check. Every WSL
+process root was exact-prefix checked. Active test roots were removed by exit
+traps; the final cleanup audit found one empty earlier root with no process
+reference and removed it non-recursively. No `aah-*` process root remains.
+
+This is Windows-plus-Linux evidence, not universal cross-platform proof. No real
+macOS host was available, so macOS remains deliberately unproved; the bounded
+`/var` versus `/private/var` fixture only constrains known path semantics and is
+not a substitute for a live macOS run. No new CI provider, candidate capability,
+live installation, manager mutation, consumer projection, model, Hook, MCP, or
+account connection is authorized by this verification model.

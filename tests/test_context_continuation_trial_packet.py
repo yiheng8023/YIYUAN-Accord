@@ -35,7 +35,13 @@ class ContextContinuationTrialPacketTests(unittest.TestCase):
             ).stdout.strip(),
             truth["head"],
         )
-        self.assertEqual("local-refs-only-no-network-refresh", truth["remoteFreshness"])
+        self.assertEqual(
+            {
+                "local-ref-only": "local-refs-only-no-network-refresh",
+                "none": "no-upstream-no-network-refresh",
+            }[observation["freshness"]],
+            truth["remoteFreshness"],
+        )
 
     def test_packet_keeps_correct_head_private_and_injects_wrong_head(self) -> None:
         packet = build_packet("baseline", ROOT)

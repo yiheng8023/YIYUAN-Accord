@@ -4234,3 +4234,36 @@ raw absolute path and its resolved form; materialized files still prefer
 `samefile`. The focused module passes 10/10 on Windows and 10/10 on WSL, and
 the verifier and diff check pass. A third exact SHA remains the final matrix
 gate for this repair slice.
+
+## 2026-08-04 provider-neutral verification checkpoint
+
+Exact SHA `1fc1490684f18087ca768dfe8f656e2566397adb` was pushed after the
+single-residual repair, but GitHub Actions main run `30851278311` and branch run
+`30851232684` started no steps. GitHub reported failed account payments or an
+insufficient spending limit. Treat both runs as billing-blocked external
+infrastructure, not failed code execution. The user does not authorize paying
+for Actions, so hosted CI is optional corroboration and is no longer a mandatory
+acceptance gate. Keep the workflow; do not introduce another external CI
+provider without separately binding its trust, data, account, and cost boundary.
+
+Provider-neutral primary evidence is complete exact-revision verification on
+available real hosts under native filesystems. The clean Windows `1fc1490...`
+baseline passes 2,557 tests, `scripts/verify.py`, and `git diff --check`. A WSL
+native-filesystem isolated clone of the same baseline initially failed only
+three portability tests: a hard-coded upstream expectation and two negative
+temporary-root fixtures whose checkout-based counterexamples became valid when
+the entire clone lived under `/tmp`. The tests now derive the legal freshness
+state and use explicit mocked system-temp/sibling roots. With the governed source
+binding refreshed, the patched baseline passes 2,557 Linux tests with four
+host-specific skips, the top-level verifier, and the diff check. The final WSL
+root `/tmp/aah-full-bound-ekxjMkUN` was removed by the exit trap. A later cleanup
+audit found one empty earlier root, `/tmp/aah-exact-sha-VznA5PzQ`, with no
+content or process reference; it was removed non-recursively. No `aah-*` process
+root remains.
+
+This proves the current slice on Windows and Linux only. No real macOS host was
+available, so macOS remains unproved; targeted `/var` and `/private/var` path
+fixtures are bounded semantic evidence, not a live-host pass. Do not promote
+this checkpoint to universal cross-platform proof, candidate admission, live
+Skill installation, CC Switch mutation, model authority, or self-authored
+capability necessity.
