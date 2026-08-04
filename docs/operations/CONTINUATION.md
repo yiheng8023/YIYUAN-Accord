@@ -4267,3 +4267,57 @@ fixtures are bounded semantic evidence, not a live-host pass. Do not promote
 this checkpoint to universal cross-platform proof, candidate admission, live
 Skill installation, CC Switch mutation, model authority, or self-authored
 capability necessity.
+
+## 2026-08-04 CC Switch PR 6086 review-repair checkpoint
+
+The Harness checkout started this slice clean at
+`d3fbe1072bb45002a082858c17e7837a2ee58ae1`. The requested
+`codex-user-config` portfolio-curation branch was already integrated into its
+current main; the repository and live router projections are byte-equal and its
+verifier passes. Its inherited untracked research root was protected. No merge
+or projection mutation was needed.
+
+The governed 17-item review inventory and 16-item dependency-complete inactive
+transaction cohort remain unchanged. Fresh CC Switch truth showed PR 6086 at
+old head `3db0288c...`, conflicting with upstream main, still draft, and carrying
+two review findings. The existing authorized fork branch merged exact upstream
+`6b8f36431b50385f095b5e66eb20d9c11dcaa73d` through merge commit
+`a2d15ee0d12b44242595de6e8672a136243bd2e9` rather than rewriting public
+history. Test-first commit `e3104670...` repairs both findings:
+
+- recovery now recognizes the narrow rename-completed/journal-not-flushed
+  state only when the journal is prepared or moving, the corresponding staged
+  item is absent, and the SSOT tree hash matches;
+- exact-revision update comparison resolves the full reviewed nested source
+  path retained in the installed Skill ID instead of the first basename match.
+
+The direct regressions failed for the reported reasons before the fixes and
+passed afterward. Current fork head
+`cdfbd15f4d6d19789cf968b10a8a0711eaf67bc4` is byte-equal to the pushed branch.
+Both review threads received exact fix evidence. PR 6086 is now non-draft and
+mergeable against upstream `6b8f364...`, but remains open, review-blocked,
+unmerged, and unreleased. Hosted Actions are optional corroboration only.
+
+Local primary checks passed: Rust format, Clippy with warnings denied,
+TypeScript typecheck, the full frontend suite, 2,310 Rust library tests (2,308
+passed and 2 ignored), and all Rust integration-test binaries. The first Rust
+full run failed four unrelated pricing tests and exposed a real Windows test
+isolation defect: an explicit `CC_SWITCH_TEST_HOME` could still fall back to a
+real legacy `HOME/.cc-switch` database. Tests consequently created eleven
+backup files and modified the pre-existing user `model-pricing.json`. A direct
+two-temp-root regression failed first; commit `cdfbd15f...` then makes the
+explicit test home authoritative. The regression, all seven pricing tests, and
+the full suite pass after the repair without creating new test backup files.
+
+The eleven exact 16:51:53-16:51:54 test-created backup files were verified and
+deleted non-recursively. The modified pre-existing
+`~/.cc-switch/model-pricing.json` has no preserved pre-run image, so it was not
+guessed or overwritten. Its retained SHA-256 is
+`2d3493d3c6c87ed9caef9659668b1a8b7f67e16c4b4bd373db7840df8fc78b58`;
+restoration requires a separate user decision. A running installed CC Switch
+process continued to update `cc-switch.db`, so whole-root immutability is not
+claimed. No Skill installation, enablement, consumer projection, exposure,
+execution, model call, or account connection occurred. The manager transaction
+remains execution-ineligible until upstream merge and release, fresh live
+preflight, separate installation authority, rollback verification, and
+post-install lifecycle evidence.

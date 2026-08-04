@@ -2568,3 +2568,37 @@ macOS host was available, so macOS remains deliberately unproved; the bounded
 not a substitute for a live macOS run. No new CI provider, candidate capability,
 live installation, manager mutation, consumer projection, model, Hook, MCP, or
 account connection is authorized by this verification model.
+
+### 2026-08-04 CC Switch review-repair and local-safety follow-up
+
+Fresh upstream review changed the manager gate without opening it. CC Switch
+PR 6086 was based on stale upstream `492245d...`, conflicted with current
+upstream `6b8f36431b50385f095b5e66eb20d9c11dcaa73d`, and had two substantive
+review findings: the post-rename/pre-journal crash window could block startup,
+and an exact-revision Skill could be update-compared against the wrong nested
+same-name source. The fork merged current upstream without rewriting the
+published branch, preserved both upstream and cohort semantics, and fixed both
+findings test-first. Current fork head is
+`cdfbd15f4d6d19789cf968b10a8a0711eaf67bc4`; PR 6086 is ready for review and
+mergeable, but remains open, review-blocked, unmerged, and unreleased.
+
+Local primary verification passed without depending on hosted Actions:
+`cargo fmt --check`, Clippy with warnings denied, TypeScript typecheck, the full
+frontend suite, 2,310 Rust library tests (2,308 passed and 2 ignored), and every
+Rust integration-test binary. The first full Rust run also exposed an unrelated
+Windows safety defect: `CC_SWITCH_TEST_HOME` could still fall back to a real
+legacy `HOME/.cc-switch` database. That caused tests to write real backup files
+and `model-pricing.json`. Commit `cdfbd15f...` makes the documented explicit
+test home authoritative; the regression and formerly failing pricing tests
+then pass, and a post-fix full run created no new test backup files.
+
+Eleven exact test-created backup files were removed after path and timestamp
+verification. The pre-existing `~/.cc-switch/model-pricing.json` was modified
+before the isolation repair and has no recoverable pre-run image. It is retained
+at SHA-256 `2d3493d3c6c87ed9caef9659668b1a8b7f67e16c4b4bd373db7840df8fc78b58`
+pending a separate user recovery decision; do not guess its former content.
+The live CC Switch process continued to write `cc-switch.db`, so whole-root
+byte immutability is not claimed. No candidate Skill was installed, enabled,
+projected, exposed, or executed. PR merge, release, a fresh live-runtime
+transaction preflight, separate installation authority, rollback verification,
+and post-install lifecycle evidence remain mandatory gates.
