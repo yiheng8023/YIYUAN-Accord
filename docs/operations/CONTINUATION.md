@@ -4321,3 +4321,39 @@ execution, model call, or account connection occurred. The manager transaction
 remains execution-ineligible until upstream merge and release, fresh live
 preflight, separate installation authority, rollback verification, and
 post-install lifecycle evidence.
+
+## 2026-08-04 model-pricing default recovery and PR-thread resolution checkpoint
+
+This checkpoint supersedes only the preceding `model-pricing.json` recovery
+decision. The user selected a default rebuild. The retained test-fixture state
+at SHA-256
+`2d3493d3c6c87ed9caef9659668b1a8b7f67e16c4b4bd373db7840df8fc78b58`
+was replaced atomically, with a same-volume rollback file, by the default
+schema-1 document at SHA-256
+`c55e1eeca1a1b37bc399f25d8784c9c7626c215ded80d6eaa1c7ba391768883b`.
+CC Switch was restarted from its installed executable. Reobservation found no
+`custom-model` database row and retained the built-in `claude-sonnet-5` row at
+input `3`, output `15`, cache read `0.30`, and cache creation `3.75`. The exact
+rollback and rebuild-temporary files were then removed. A later read-only
+recheck found the same default hash, the installed process running, and no
+matching recovery artifact under the CC Switch root or system temporary root.
+
+The recovery restored user-local manager configuration only. It installed,
+enabled, projected, exposed, invoked, or executed no Skill and changed no
+candidate, account, model, Hook, MCP, or consumer lifecycle state.
+
+Fresh upstream inspection kept fork head
+`cdfbd15f4d6d19789cf968b10a8a0711eaf67bc4` byte-equal to its remote. Upstream
+`main` advanced by one unrelated usage commit to
+`59a2bd10407707282dcefe85b290f0ddaf4d0a74`; the local merge tree reports no
+conflict. The two repaired review findings and the separately refuted Windows
+rename finding are now marked resolved. PR 6086 remains open, mergeable,
+review-required, unmerged, and unreleased; the latest release remains
+`v3.19.1`. Hosted Actions remain optional corroboration rather than an
+acceptance dependency.
+
+The next manager gate is upstream human review, merge, and release. Only after
+that external transition may a fresh live-runtime transaction preflight be
+prepared, followed by separate installation authority, rollback verification,
+and post-install lifecycle evidence for the 16-item dependency-complete
+inactive cohort.

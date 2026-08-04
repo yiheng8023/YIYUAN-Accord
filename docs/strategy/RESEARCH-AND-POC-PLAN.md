@@ -2406,7 +2406,8 @@ admission correction, not a change to the demand map, eight zero-model oracles,
 main process, or acceptance framework.
 
 The refreshed preview is reproducible from six pinned repositories, records
-zero collision and zero live mutation, and has report SHA-256
+zero collision and zero live mutation, and has embedded canonical
+`reportSha256`
 `1c2fcd49d3efb3d2eb33616e63f38ea8d4772d0f318724b9e3f05e525cbd7fad`.
 Draft PR 6086 remains one required external runtime gate for the 16-candidate
 transaction; its existence is not merge, release, installation, or live
@@ -2602,3 +2603,32 @@ byte immutability is not claimed. No candidate Skill was installed, enabled,
 projected, exposed, or executed. PR merge, release, a fresh live-runtime
 transaction preflight, separate installation authority, rollback verification,
 and post-install lifecycle evidence remain mandatory gates.
+
+### 2026-08-04 default-recovery and review-thread follow-up
+
+The user selected the default recovery path for the test-polluted
+`model-pricing.json`. A same-volume atomic replacement moved the exact retained
+fixture aside and installed the default schema-1 document at SHA-256
+`c55e1eeca1a1b37bc399f25d8784c9c7626c215ded80d6eaa1c7ba391768883b`.
+After restart, read-only verification found no `custom-model` database row and
+retained the built-in `claude-sonnet-5` pricing row. The exact rollback and
+temporary rebuild artifacts were then removed, and a later read-only check
+found the same active hash and no matching recovery residue. This supersedes
+the prior pending recovery decision without changing candidate or Skill
+lifecycle state.
+
+PR 6086 remains at exact fork head
+`cdfbd15f4d6d19789cf968b10a8a0711eaf67bc4`. The three already answered review
+threads are now resolved: two are backed by the test-first fixes, while the
+Windows rename assertion was contradicted by the Rust standard-library
+contract and direct current-host execution. Upstream `main` has one unrelated
+additional commit and the merge tree remains conflict-free. The PR is still
+open, mergeable, review-required, unmerged, and unreleased; latest release
+`v3.19.1` does not contain the inactive-cohort transaction.
+
+Therefore the lifecycle gate does not open. Upstream human review, merge, and
+release remain the next external transition. Fresh live preflight, separate
+manager-install authority, rollback proof, and per-state post-install evidence
+remain mandatory afterward. No hosted-CI payment, candidate installation,
+enablement, consumer projection, model, Hook, MCP, or account action follows
+from this checkpoint.
