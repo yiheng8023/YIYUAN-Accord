@@ -1338,6 +1338,8 @@ REQUIRED_FILES = (
     "registry/cc-switch-3.19.1-exact-zip-sequential-inactive-install-adjudication-2026-08-04.json",
     "registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json",
     "tests/test_cc_switch_exact_upstream_inactive_install_event.py",
+    "registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json",
+    "tests/test_cc_switch_sixteen_dual_host_enablement_observation.py",
     "registry/cc-switch-inactive-install-transaction-simulation-2026-08-03.json",
     "docs/strategy/CC-SWITCH-INACTIVE-INSTALL-TRANSACTION-SIMULATION-2026-08-03.md",
     "scripts/simulate_cc_switch_inactive_install_transaction.py",

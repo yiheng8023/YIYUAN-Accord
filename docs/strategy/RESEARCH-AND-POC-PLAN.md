@@ -17,9 +17,14 @@ criteria, authority, verification, cleanup, and a stop rule are explicit.
 Third-party payloads remain exact upstream. The current 17-candidate pool keeps
 `customer-research` review-only; the other 16 exact-revision candidates are now
 managed by released CC Switch v3.19.1 with every host flag off and zero
-consumer projections after an ordinary restart. This proves installation and a
-stable inactive state only, not atomic installation, task-time activation,
-host exposure, invocation, behavior, value, or portability. The inherited 19
+consumer projections after an ordinary restart. A later user-selected Codex
+and Claude enablement was observed and then, after its attribution and ambient
+selection costs were made explicit, restored through the manager under the
+user's authorization. This proves installation and a stable inactive state
+only, plus one reversible enable/disable lifecycle transition; it does not
+prove atomic installation, task-time activation, candidate invocation,
+instruction delivery, behavior, value, or portability.
+The inherited 19
 neutralized/generalized payloads are deprecated transition evidence and no
 longer current install/update authority. PR 6086 and its fork remain an
 optional upstream contribution rather than a Harness dependency.
@@ -2696,3 +2701,41 @@ and enable only the required candidate for a separately bounded host. No model,
 account connection, Hook, MCP, or cross-host action follows from this event.
 The exact transaction evidence is
 `registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json`.
+
+### 2026-08-05 transient dual-host enablement and restoration follow-up
+
+The user had selected all 16 newly managed candidates for both Codex and
+Claude. Read-only manager observation found 16 enabled rows and 16 manager
+symlink projections per host. Two isolated Codex Desktop `0.146.0` no-model
+app-server sessions then returned all 16 candidates as enabled user-scope
+Skills both with Plugins disabled and with runtime defaults. They sent only
+`initialize` and `skills/list`: zero thread, turn, or model request ran.
+
+This was not evidence that disabled Skills bypass CC Switch; it was the direct
+effect of the user's enablement. Broad ambient enablement nevertheless made a
+formal one-candidate attribution baseline invalid, increased overlapping
+implicit-selection surface, and kept task-irrelevant candidates visible. No
+executed harm, instruction delivery, invocation, behavior loss, or value loss
+was observed. The two user-provided real tasks were retained only as private
+naturalistic intake: one remaining gap required human domain input or judgment,
+and the other used sufficient current capability while retaining a separate
+source-access or provenance gap. Neither matched a current candidate, so no
+candidate arm opened and no thread locator or private task artifact entered
+the public repository.
+
+After the user explicitly authorized cancellation when negative effects were
+present, CC Switch 3.19.1's own `toggle_skill_app` backend completed all 32
+Codex/Claude disables. It made no direct database write and deleted no Skill or
+row. An ordinary restart retained all 16 SSOT bodies and rows with every host
+flag off and zero consumer projections. Fresh no-model `skills/list` sessions
+returned zero cohort candidates. The temporary loopback debug surface closed;
+the verified database rollback copy and its empty root were sent to the Windows
+Recycle Bin after post-state verification.
+
+The current default is again manager-installed and inactive. A later formal
+comparison must use one real task with a candidate-relevant current-capability
+gap and isolate unselected candidates in a process-scoped or disposable
+runtime. This checkpoint authorizes no bulk enablement, model dispatch,
+candidate behavior claim, self-authored gap, or hard-standard promotion. The
+governed event is
+`registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json`.

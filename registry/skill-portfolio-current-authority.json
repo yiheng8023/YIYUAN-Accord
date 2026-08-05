@@ -1,9 +1,33 @@
 {
   "schema": 1,
-  "asOf": "2026-08-02",
+  "asOf": "2026-08-05",
   "status": "current-policy-authority",
   "activeRelease": null,
   "activeAdaptedThirdPartyPayloadReleaseCount": 0,
+  "currentObservedManagerState": {
+    "event": "registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json",
+    "reviewedCandidateCount": 17,
+    "managerInstalledDependencyCompleteCandidateCount": 16,
+    "reviewOnlyCandidateCount": 1,
+    "reviewOnlyCandidates": [
+      "customer-research"
+    ],
+    "enabledCandidateCountByHost": {
+      "claude": 0,
+      "codex": 0,
+      "gemini": 0,
+      "opencode": 0,
+      "hermes": 0,
+      "grokbuild": 0
+    },
+    "consumerProjectionCount": 0,
+    "ordinaryRestartPersistenceObserved": true,
+    "transientUserEnablementRestoredToInactive": true,
+    "candidateInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false
+  },
   "legacyAdaptedRelease": {
     "manifest": "release-manifest.json",
     "skillRegistry": "registry/skills.json",

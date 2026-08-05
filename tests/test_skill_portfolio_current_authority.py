@@ -50,6 +50,30 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         self.assertNotIn("neutralization", policy["allowedHarnessArtifacts"])
         self.assertNotIn("generalization", policy["allowedHarnessArtifacts"])
 
+    def test_current_manager_state_binds_the_restored_inactive_event(self) -> None:
+        state = self.policy["currentObservedManagerState"]
+        event_path = ROOT / state["event"]
+        event = json.loads(event_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(self.policy["asOf"], "2026-08-05")
+        self.assertEqual(state["reviewedCandidateCount"], 17)
+        self.assertEqual(state["managerInstalledDependencyCompleteCandidateCount"], 16)
+        self.assertEqual(state["reviewOnlyCandidates"], ["customer-research"])
+        self.assertEqual(set(state["enabledCandidateCountByHost"].values()), {0})
+        self.assertEqual(state["consumerProjectionCount"], 0)
+        self.assertTrue(state["ordinaryRestartPersistenceObserved"])
+        self.assertTrue(state["transientUserEnablementRestoredToInactive"])
+        self.assertTrue(
+            event["claimBoundary"]["authorizedStableInactiveRestorationProved"]
+        )
+        for field in (
+            "candidateInvocationProved",
+            "instructionDeliveryProved",
+            "behaviorProved",
+            "valueProved",
+        ):
+            self.assertFalse(state[field])
+
     def test_portfolio_curation_and_task_activation_are_separate_modes(self) -> None:
         modes = self.policy["operatingModes"]
         curation = modes["portfolioCuration"]

@@ -4501,3 +4501,48 @@ control guarantee, comprehensive secret scan, production readiness, release,
 or broad open-source closeout. Commit, push, remote exact-SHA comparison, and
 anonymous clean-clone bootstrap verification remain this slice's closure
 steps.
+
+## 2026-08-05 transient candidate enablement and inactive restoration checkpoint
+
+Fresh repository truth began at clean `main` and `origin/main`
+`16190444cf97eb9b0690bd9be8b19fb8f60862bd`, ahead/behind `0/0`. The user then
+reported that the 16 newly managed exact-upstream candidates had been selected
+in CC Switch. Read-only observation corrected the prior interpretation: every
+candidate was enabled for Codex and Claude, with 16 manager symlink projections
+under each host, while all other manager flags and checked consumer roots
+remained zero. This was user-selected enablement, not disabled-state leakage.
+
+Two isolated Codex Desktop `0.146.0` no-model app-server sessions sent only
+`initialize` and `skills/list`. Both the Plugins-disabled and runtime-default
+sessions listed all 16 as enabled user-scope Skills from the CC Switch SSOT.
+No thread, turn, or model request ran; global Codex configuration and the
+repository remained stable. Listing still proves no instruction delivery,
+invocation, behavior, value, or Claude host exposure.
+
+The two user-provided running tasks were usable as private naturalistic current-
+path observations, but neither opened a candidate arm. One stopped at a human
+domain-input or judgment boundary; the other had a sufficient current route
+and a separate source-access or provenance gap. Thread locators, private paths,
+and task artifacts were not persisted to the public repository.
+
+The user subsequently authorized cancellation when negative effects were
+present. Broad ambient enablement contaminated one-candidate attribution,
+increased overlapping implicit-selection surface, and kept task-irrelevant
+candidates visible, although no executed harm was observed. Through CC Switch
+3.19.1's own `toggle_skill_app` backend, all 32 Codex/Claude flags were disabled
+without direct database writes, payload deletion, or row deletion. An ordinary
+restart retained all 16 manager bodies and rows with six host flags off and
+zero projections across the checked common, Codex, Claude, Gemini, OpenCode,
+Hermes, and Grok roots. Fresh no-model Codex lists contained zero cohort
+candidates. The temporary loopback debug surface closed, the ordinary manager
+process resumed, and the verified rollback copy/root were sent to the Windows
+Recycle Bin.
+
+Current unique action: wait for or bind one real task whose healthy current
+route exposes a gap addressed by exactly one reviewed candidate. Keep the
+normal cohort inactive. If that gate opens, isolate unselected candidates in a
+process-scoped or disposable runtime rather than bulk-changing the user's
+global environment. No live model, candidate behavior arm, account expansion,
+Hook/MCP mutation, self-authored implementation, or hard-standard promotion is
+authorized by this checkpoint. Governed event:
+`registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json`.
