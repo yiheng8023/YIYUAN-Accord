@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "asOf": "2026-08-05",
+  "asOf": "2026-08-06",
   "status": "current-policy-authority",
   "activeRelease": null,
   "activeAdaptedThirdPartyPayloadReleaseCount": 0,
@@ -25,6 +25,29 @@
     "transientUserEnablementRestoredToInactive": true,
     "candidateInvocationProved": false,
     "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false
+  },
+  "currentObservedMattSuiteState": {
+    "event": "registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json",
+    "sourceRowCount": 22,
+    "enabledCountByHost": {
+      "claude": 22,
+      "codex": 22,
+      "gemini": 0,
+      "opencode": 0,
+      "hermes": 0,
+      "grokbuild": 0
+    },
+    "singleExactRevisionExplainsLivePayload": false,
+    "priorPinMatchCount": 14,
+    "currentMainMatchCount": 6,
+    "intermediateTreeCount": 2,
+    "currentPromotedNamesMissingFromManager": 4,
+    "removedUpstreamNameRetainedByManager": true,
+    "automaticRefreshAuthorized": false,
+    "atomicCohortPreviewRequired": true,
+    "invocationProved": false,
     "behaviorProved": false,
     "valueProved": false
   },

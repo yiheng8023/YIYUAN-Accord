@@ -55,7 +55,7 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         event_path = ROOT / state["event"]
         event = json.loads(event_path.read_text(encoding="utf-8"))
 
-        self.assertEqual(self.policy["asOf"], "2026-08-05")
+        self.assertEqual(self.policy["asOf"], "2026-08-06")
         self.assertEqual(state["reviewedCandidateCount"], 17)
         self.assertEqual(state["managerInstalledDependencyCompleteCandidateCount"], 16)
         self.assertEqual(state["reviewOnlyCandidates"], ["customer-research"])
@@ -73,6 +73,27 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
             "valueProved",
         ):
             self.assertFalse(state[field])
+
+    def test_current_matt_suite_is_bound_as_a_mixed_revision_observation(self) -> None:
+        state = self.policy["currentObservedMattSuiteState"]
+        event = load(state["event"])
+        live = event["liveManagerObservation"]
+
+        self.assertEqual(state["sourceRowCount"], 22)
+        self.assertEqual(state["enabledCountByHost"], live["sourceRowsEnabledByHost"])
+        self.assertFalse(state["singleExactRevisionExplainsLivePayload"])
+        self.assertEqual(state["priorPinMatchCount"], 14)
+        self.assertEqual(state["currentMainMatchCount"], 6)
+        self.assertEqual(state["intermediateTreeCount"], 2)
+        self.assertEqual(state["currentPromotedNamesMissingFromManager"], 4)
+        self.assertTrue(state["removedUpstreamNameRetainedByManager"])
+        self.assertFalse(state["automaticRefreshAuthorized"])
+        self.assertTrue(state["atomicCohortPreviewRequired"])
+        self.assertFalse(event["decision"]["perItemBestEffortUpdateSuitable"])
+        self.assertTrue(event["decision"]["atomicCohortUpdateRequiredIfLaterAuthorized"])
+        self.assertFalse(event["claimBoundary"]["loaderExposureProved"])
+        self.assertFalse(event["claimBoundary"]["behaviorProved"])
+        self.assertFalse(event["claimBoundary"]["valueProved"])
 
     def test_portfolio_curation_and_task_activation_are_separate_modes(self) -> None:
         modes = self.policy["operatingModes"]

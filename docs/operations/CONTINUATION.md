@@ -4602,3 +4602,38 @@ subtractive result. The public inventory is fallback-only if the user-owned
 workload cannot supply a bounded experiment. Broad enablement, model dispatch,
 account expansion, Hook/MCP mutation, and self-authored implementation remain
 unauthorized.
+
+## 2026-08-06 Matt v1.2 source-drift and live-hybrid checkpoint
+
+Matt Pocock's public X announcement and official Git history now identify
+`v1.2.0` as a tagged 25-Skill release at peeled commit
+`2ffb184ffbb752faa664c0b204f3c9241b1428e9`. Current upstream `main` is
+`07999e06b58541362f2f3d6de9e2b108ac28dc52`, reports plugin version `1.2.1`,
+and is five commits beyond that tag with no observed `v1.2.1` tag. The former
+22-item promoted manifest became 25: four names were added and
+`writing-great-skills` was replaced by `writing-for-agents`. The recursive
+source tree exposes 35 `SKILL.md` paths, so promoted-manifest count and generic
+whole-tree discovery count remain different authorities.
+
+The SEM-03 exact eight-file package retains its path closure, but current
+upstream changes two `grilling` files. Its interaction contract now uses
+design-tree frontier rounds and explicitly delegates environmental fact
+finding to sub-agents. The old `ed37663...` admission remains valid historical
+evidence only and must not be promoted to current-upstream or cross-host
+behavior evidence.
+
+A live read-only CC Switch observation found the separate Matt suite still has
+22 rows enabled for Claude and Codex, but its central payload is not one exact
+revision: 14 trees match the old suite pin, 6 match current `main`, and 2 retain
+intermediate upstream bytes. The four current additions are absent and the
+removed upstream name remains. This is a mixed best-effort refresh state, not
+proof of local rewriting. The distinct 16-candidate reviewed cohort remains
+fully inactive across all six manager hosts.
+
+No CC Switch, consumer, Skill, Hook, MCP, Plugin, App, account, model, or
+candidate lifecycle state changed. Before any Matt update, first build an
+exact-revision, inactive, manifest-aware preview comparing the promoted 25,
+the possible whole-tree 35, and the live 22. Any later update must be an atomic
+cohort transaction with separate authority; per-item best-effort refresh is
+not suitable. Governed event:
+`registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json`.
