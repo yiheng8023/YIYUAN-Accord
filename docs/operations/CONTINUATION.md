@@ -4637,3 +4637,56 @@ the possible whole-tree 35, and the live 22. Any later update must be an atomic
 cohort transaction with separate authority; per-item best-effort refresh is
 not suitable. Governed event:
 `registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json`.
+
+## 2026-08-06 Matt v1.2.2 exact manifest preview checkpoint
+
+Upstream moved again after the first drift observation. The current exact
+release is annotated tag `v1.2.2` object
+`8651af486bb7c9e695ab1c6f44bd9a79fabb9999`, peeled commit
+`8b36d4fb2635b3c21998dcd8144439c9e5ba7302`; observed `main` equals that
+commit. The earlier `v1.2.0` and transient plugin-version `1.2.1` observations
+remain dated history rather than being rewritten.
+
+A dedicated read-only builder now freezes the release tag, promoted manifest,
+all 25 exact promoted directory trees, the 35-path recursive discovery set,
+the live 22-row manager cohort, and three consumer roots. The manifest delta
+is 21 retained-or-replaced, four added (`to-questionnaire`, `wait-what`,
+`wizard`, `writing-for-agents`), and one removed (`writing-great-skills`). Ten
+recursive Skill paths are not promoted and must not enter through generic
+whole-tree discovery.
+
+Newline-normalized exact-tree comparison classifies the live manager payloads
+as 12 matching both the prior pin and release, two prior-only, six
+release-only, and two matching neither endpoint. This reconciles the prior
+14-old/6-current/2-intermediate observation without falsely crediting the 12
+unchanged trees as refreshes. Both Claude and Codex dedicated consumer roots
+contain 22 CC-managed symlinks. The common `~/.agents/skills` root contains 22
+same-name entries, but only nine are symlinks and 13 are independent
+directories. Consequently, updating the CC SSOT alone cannot prove a single
+release across Codex discovery surfaces; the common directory must remain,
+while disposition of those 13 contents requires separate authority.
+
+Two promoted payloads contain shell templates (`diagnosing-bugs` and
+`wizard`), so operational dependency and execution suitability remain open.
+The preview made zero manager invocations, manager mutations, consumer writes,
+third-party script executions, and model calls. No update is authorized.
+Before an atomic 25-item transaction, separately adjudicate those script
+surfaces and the 13 direct same-name common-root directories. Governed event:
+`registry/mattpocock-skills-v1.2.2-manifest-update-preview-2026-08-06.json`.
+
+Static follow-up distinguished the two shell templates rather than treating
+script presence as automatic candidate failure. `diagnosing-bugs` carries an
+optional last-resort HITL reproduction template; it is neither a loader
+dependency nor directed to run automatically. `wizard` carries the template
+for its intended workflow and can write `.env` plus GitHub Actions secrets or
+variables through authenticated `gh`; it must remain default-disabled unless a
+concrete task binds the credential, account, and side-effect boundaries. No
+script was executed.
+
+The 13 direct same-name directories in `~/.agents/skills` have no sufficient
+manager-ownership proof. Preserve the common directory and those contents in
+place; do not delete, replace, or migrate them automatically. The next safe
+gate is an isolated no-model consumer probe of common-root ownership and Codex
+discovery precedence. Any migration or manager update remains a separate
+authorization. Static adjudication:
+`registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json`.

@@ -77,20 +77,36 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
     def test_current_matt_suite_is_bound_as_a_mixed_revision_observation(self) -> None:
         state = self.policy["currentObservedMattSuiteState"]
         event = load(state["event"])
-        live = event["liveManagerObservation"]
+        live = event["liveManager"]
 
         self.assertEqual(state["sourceRowCount"], 22)
-        self.assertEqual(state["enabledCountByHost"], live["sourceRowsEnabledByHost"])
+        self.assertEqual(state["enabledCountByHost"], live["enabledCountByHost"])
         self.assertFalse(state["singleExactRevisionExplainsLivePayload"])
-        self.assertEqual(state["priorPinMatchCount"], 14)
-        self.assertEqual(state["currentMainMatchCount"], 6)
-        self.assertEqual(state["intermediateTreeCount"], 2)
+        self.assertEqual(state["upstreamReleaseTag"], "v1.2.2")
+        self.assertEqual(state["currentPromotedCount"], 25)
+        self.assertEqual(state["currentRecursiveSkillCount"], 35)
+        self.assertEqual(
+            state["payloadClassificationCounts"],
+            {
+                "bothPriorAndRelease": 12,
+                "priorOnly": 2,
+                "releaseOnly": 6,
+                "neither": 2,
+                "missing": 0,
+            },
+        )
         self.assertEqual(state["currentPromotedNamesMissingFromManager"], 4)
         self.assertTrue(state["removedUpstreamNameRetainedByManager"])
+        self.assertEqual(state["directSameNameCommonRootDirectoryCount"], 13)
+        self.assertFalse(state["directSameNameCommonRootOwnershipProved"])
+        self.assertFalse(state["newWizardAmbientEnablementAllowed"])
         self.assertFalse(state["automaticRefreshAuthorized"])
         self.assertTrue(state["atomicCohortPreviewRequired"])
-        self.assertFalse(event["decision"]["perItemBestEffortUpdateSuitable"])
-        self.assertTrue(event["decision"]["atomicCohortUpdateRequiredIfLaterAuthorized"])
+        self.assertTrue(state["atomicCohortPreviewBuilt"])
+        self.assertFalse(state["atomicCohortExecutionAuthorized"])
+        self.assertFalse(state["singleManagerRevisionClosureAcrossConsumersProved"])
+        self.assertFalse(event["transition"]["perItemBestEffortRefreshSuitable"])
+        self.assertFalse(event["decision"]["executionAuthorized"])
         self.assertFalse(event["claimBoundary"]["loaderExposureProved"])
         self.assertFalse(event["claimBoundary"]["behaviorProved"])
         self.assertFalse(event["claimBoundary"]["valueProved"])

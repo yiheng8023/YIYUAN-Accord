@@ -29,7 +29,13 @@
     "valueProved": false
   },
   "currentObservedMattSuiteState": {
-    "event": "registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json",
+    "event": "registry/mattpocock-skills-v1.2.2-manifest-update-preview-2026-08-06.json",
+    "predecessor": "registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json",
+    "scriptAndCommonRootAdjudication": "registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json",
+    "upstreamReleaseTag": "v1.2.2",
+    "upstreamReleaseCommit": "8b36d4fb2635b3c21998dcd8144439c9e5ba7302",
+    "currentPromotedCount": 25,
+    "currentRecursiveSkillCount": 35,
     "sourceRowCount": 22,
     "enabledCountByHost": {
       "claude": 22,
@@ -40,13 +46,23 @@
       "grokbuild": 0
     },
     "singleExactRevisionExplainsLivePayload": false,
-    "priorPinMatchCount": 14,
-    "currentMainMatchCount": 6,
-    "intermediateTreeCount": 2,
+    "payloadClassificationCounts": {
+      "bothPriorAndRelease": 12,
+      "priorOnly": 2,
+      "releaseOnly": 6,
+      "neither": 2,
+      "missing": 0
+    },
     "currentPromotedNamesMissingFromManager": 4,
     "removedUpstreamNameRetainedByManager": true,
+    "directSameNameCommonRootDirectoryCount": 13,
+    "directSameNameCommonRootOwnershipProved": false,
+    "newWizardAmbientEnablementAllowed": false,
     "automaticRefreshAuthorized": false,
     "atomicCohortPreviewRequired": true,
+    "atomicCohortPreviewBuilt": true,
+    "atomicCohortExecutionAuthorized": false,
+    "singleManagerRevisionClosureAcrossConsumersProved": false,
     "invocationProved": false,
     "behaviorProved": false,
     "valueProved": false
