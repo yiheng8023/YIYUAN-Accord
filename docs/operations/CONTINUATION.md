@@ -4546,3 +4546,29 @@ global environment. No live model, candidate behavior arm, account expansion,
 Hook/MCP mutation, self-authored implementation, or hard-standard promotion is
 authorized by this checkpoint. Governed event:
 `registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json`.
+
+## 2026-08-05 autoresearch exact-source method-reference checkpoint
+
+The repository now retains `karpathy/autoresearch` as a high-value external
+method reference with a different objective and scope from the Harness. The
+source authority is exact revision
+`228791fb499afffb54b46200aca536f79142f117` plus six Git blob identities and a
+deterministic manifest SHA-256. GitHub issue 599 is a dated, mutable external
+counterevidence observation only; it is not recorded as a confirmed defect or
+maintainer decision. An exact license artifact and security policy were not
+observed at the pinned revision.
+
+The multidimensional report reuses the existing evaluation schema. It rates
+method-reference value separately from direct adoption readiness: baseline,
+branch isolation, a narrow mutable surface, fixed-duration rounds, a ledger,
+and keep-or-revert decisions are reusable mechanisms. Direct adoption remains
+blocked by evaluator isolation, host authorization, lifecycle, recovery,
+human-control, provenance, and total-resource boundaries. The report remains
+`research-only`; independent review and acceptance were not sought.
+
+No upstream body was vendored. No clone, dependency installation, GPU run,
+Skill admission, CC Switch mutation, model dispatch, Plugin/App/MCP/Hook
+activation, or cross-repository write occurred. The next gate requires a real
+bounded research task and a simulation comparison against the smallest healthy
+native or ad-hoc loop. This checkpoint creates neither a Skill nor a hard
+standard and does not reorder the mainline plan.

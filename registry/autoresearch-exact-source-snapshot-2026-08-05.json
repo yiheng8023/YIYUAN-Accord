@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "autoresearch-exact-source-snapshot-2026-08-05",
+  "asOf": "2026-08-05",
+  "target": "https://github.com/karpathy/autoresearch",
+  "revision": "228791fb499afffb54b46200aca536f79142f117",
+  "revisionObservation": {
+    "method": "git-ls-remote-and-github-git-tree-api",
+    "observedRef": "refs/heads/master",
+    "observedRevision": "228791fb499afffb54b46200aca536f79142f117",
+    "observedAt": "2026-08-05",
+    "limitations": [
+      "The observation proves the revision and returned Git object identities at observation time; it does not prove future branch state or runtime behavior.",
+      "No upstream source body was vendored into this repository."
+    ]
+  },
+  "gitObjects": [
+    {
+      "path": "README.md",
+      "type": "blob",
+      "oid": "953ea55d5599c45c1be7dad93ec03e47dfa7df9d",
+      "size": 8039,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/README.md"
+    },
+    {
+      "path": "prepare.py",
+      "type": "blob",
+      "oid": "06bea9165abd3ae94ea82dd733997aec7928f40c",
+      "size": 15043,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/prepare.py"
+    },
+    {
+      "path": "program.md",
+      "type": "blob",
+      "oid": "dea9bcc0174f1502d0ba64000b94b81ba605855b",
+      "size": 7039,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/program.md"
+    },
+    {
+      "path": "pyproject.toml",
+      "type": "blob",
+      "oid": "94ae3298925ddae47821f703faf44d4e3b8381bb",
+      "size": 543,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/pyproject.toml"
+    },
+    {
+      "path": "train.py",
+      "type": "blob",
+      "oid": "2e743974c7f06b54311643b314712303fbb26e65",
+      "size": 26230,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/train.py"
+    },
+    {
+      "path": "uv.lock",
+      "type": "blob",
+      "oid": "c840d62f5285b5ce4b5fe62f135cfe8a47bc9915",
+      "size": 443159,
+      "sourceUrl": "https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/uv.lock"
+    }
+  ],
+  "gitObjectManifestSha256": "5a16f3c29ebe513afa5be3bbf3dec1a2c323c1428d64da9ad9d961bddc3afa93",
+  "mutableObservations": [
+    {
+      "type": "github-issue",
+      "locator": "https://github.com/karpathy/autoresearch/issues/599",
+      "observedAt": "2026-08-05",
+      "observedState": "open",
+      "createdAt": "2026-05-31T16:50:04Z",
+      "updatedAt": "2026-06-23T06:37:42Z",
+      "claimUse": "external-observational-counterevidence-only",
+      "scope": "The report raises experiment-integrity risk because the agent-editable training surface participates in evaluation and result reporting.",
+      "limitations": [
+        "This is a mutable external issue report, not a maintainer-confirmed defect, accepted design change, or resolved finding.",
+        "The issue state is dated and is not revision-bound to the source snapshot."
+      ]
+    }
+  ],
+  "licenseArtifactStatus": "not-observed-at-revision",
+  "securityPolicyArtifactStatus": "not-observed-at-revision",
+  "sourceUse": "method-reference-evaluation-only",
+  "authorityBoundary": {
+    "upstreamDownloadAuthorized": false,
+    "upstreamExecutionAuthorized": false,
+    "dependencyInstallationAuthorized": false,
+    "skillOrRuntimeActivationAuthorized": false,
+    "directAdoptionAuthorized": false
+  },
+  "claimBoundary": {
+    "provesExactSixGitObjectIdentities": true,
+    "provesMutableIssueCurrentForever": false,
+    "provesLicenseGrant": false,
+    "provesSecurityReview": false,
+    "provesRuntimeBehavior": false,
+    "provesGeneralResearchFitness": false,
+    "authorizesInstallationOrExecution": false
+  }
+}

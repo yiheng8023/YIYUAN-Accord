@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "targetIdentity": {
+    "type": "external-repository-method-reference",
+    "locator": "https://github.com/karpathy/autoresearch",
+    "revision": "228791fb499afffb54b46200aca536f79142f117",
+    "asOf": "2026-08-05"
+  },
+  "evaluationContext": {
+    "purpose": "Assess whether autoresearch mechanisms are useful references for bounded Harness research loops without installing, executing, or directly adopting the upstream project.",
+    "domain": "agentic machine-learning experiment loop and human-AI research governance",
+    "evaluator": "agent-autonomy-harness same-task source review",
+    "method": "Exact Git revision and blob binding, source inspection, mutable counterevidence review, and application of the repository multidimensional evaluation contract.",
+    "claimScope": "The six observed Git blobs at revision 228791fb plus the dated state of issue 599; not runtime behavior, benchmark value, general research fitness, or current upstream state beyond the observation."
+  },
+  "profileAxes": {
+    "lifecycleStage": "exploration",
+    "criticality": "medium",
+    "exposure": "public",
+    "reversibility": "bounded",
+    "dataSensitivity": "public",
+    "aiInvolvement": "agentic"
+  },
+  "applicableDimensions": [
+    "goal-value-and-requirement-fitness",
+    "intent-and-acceptance-fidelity",
+    "architecture-and-design-integrity",
+    "implementation-and-code-quality",
+    "verification-security-privacy-and-safety",
+    "supply-chain-and-provenance",
+    "delivery-change-and-rollback",
+    "reliability-operability-and-observability",
+    "maintainability-evolution-and-retirement",
+    "collaboration-knowledge-and-accountability",
+    "ai-process-loss-and-human-control",
+    "efficiency-resource-stewardship-and-sustainability"
+  ],
+  "applicableCandidateFloors": [
+    "evidence-truth-and-provenance",
+    "authority-and-data-boundary",
+    "critical-risk-release-block",
+    "rollback-recovery-and-accountability",
+    "third-party-release-provenance",
+    "completion-acceptance-and-readiness-integrity"
+  ],
+  "evidence": [
+    {
+      "id": "evidence.autoresearch-exact-source-snapshot",
+      "source": "registry/autoresearch-exact-source-snapshot-2026-08-05.json",
+      "asOf": "2026-08-05",
+      "scope": "Exact master revision and six Git blob identities, including a deterministic Git-object manifest SHA-256.",
+      "grade": "source-bound",
+      "independence": "tool",
+      "limitations": [
+        "No source body is vendored and no upstream code was executed.",
+        "Git identity does not prove source claims or runtime behavior."
+      ]
+    },
+    {
+      "id": "evidence.autoresearch-protocol-sources",
+      "source": "README.md and program.md at revision 228791fb499afffb54b46200aca536f79142f117",
+      "asOf": "2026-08-05",
+      "scope": "A single-GPU five-minute experiment loop with baseline, dedicated branch, one editable training file, results ledger, commit-or-reset decision, and indefinite continuation until human interruption.",
+      "grade": "source-bound",
+      "independence": "self",
+      "limitations": [
+        "The protocol is upstream-authored guidance, not observed execution or independent effectiveness evidence.",
+        "Its single-GPU LLM optimization scope does not establish general research applicability."
+      ]
+    },
+    {
+      "id": "evidence.autoresearch-code-and-dependency-sources",
+      "source": "train.py, prepare.py, pyproject.toml, and uv.lock at revision 228791fb499afffb54b46200aca536f79142f117",
+      "asOf": "2026-08-05",
+      "scope": "The editable training surface calls evaluation and reports the metric; the repository includes a lock file while project metadata also constrains Python, Torch, CUDA-index, and supporting dependencies.",
+      "grade": "source-bound",
+      "independence": "tool",
+      "limitations": [
+        "No dependency installation, build, static scan, benchmark replay, or GPU execution was performed.",
+        "Dependency presence does not prove reproducibility on another host."
+      ]
+    },
+    {
+      "id": "evidence.autoresearch-issue-599",
+      "source": "https://github.com/karpathy/autoresearch/issues/599 observed 2026-08-05",
+      "asOf": "2026-08-05",
+      "scope": "An open external issue reports that the agent-editable surface may improve the reported metric without improving the model and proposes an optional integrity log.",
+      "grade": "claim-only",
+      "independence": "independent-human",
+      "limitations": [
+        "The issue is mutable and not revision-bound.",
+        "It is not a maintainer-confirmed defect, accepted remedy, or reproduced finding in this evaluation."
+      ]
+    },
+    {
+      "id": "evidence.autoresearch-no-execution-boundary",
+      "source": "Current task authority and repository inspection boundary",
+      "asOf": "2026-08-05",
+      "scope": "The evaluation fetched metadata and source identities only; it did not clone, install, run, enable, or promote autoresearch.",
+      "grade": "deterministic",
+      "independence": "mixed",
+      "limitations": [
+        "Repository-state absence supports the local no-install boundary but cannot prove behavior outside this workspace."
+      ]
+    }
+  ],
+  "dimensionResults": [
+    {
+      "dimensionId": "goal-value-and-requirement-fitness",
+      "assessment": "strong",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources"],
+      "unknowns": ["No Harness task has compared this loop against a lighter ad-hoc or native research path."],
+      "limitations": ["Fitness is limited to method-reference value for bounded empirical loops, not the whole Harness research program."]
+    },
+    {
+      "dimensionId": "intent-and-acceptance-fidelity",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources"],
+      "unknowns": ["No live trial tested whether an agent preserves a user's changing research intent across repeated autonomous rounds."],
+      "limitations": ["The upstream objective and metric are explicit, but Harness adoption criteria and human checkpoints differ."]
+    },
+    {
+      "dimensionId": "architecture-and-design-integrity",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-code-and-dependency-sources", "evidence.autoresearch-issue-599"],
+      "unknowns": ["No external evaluator or attestation layer was observed in the exact source set."],
+      "limitations": ["The agent-editable training surface participates in metric evaluation and reporting, weakening evaluator isolation."]
+    },
+    {
+      "dimensionId": "implementation-and-code-quality",
+      "assessment": "insufficient-evidence",
+      "confidence": "high",
+      "evidenceIds": ["evidence.autoresearch-code-and-dependency-sources", "evidence.autoresearch-no-execution-boundary"],
+      "unknowns": ["Test coverage, portability, runtime failure behavior, and code-review findings were not measured."],
+      "limitations": ["Source inspection without execution or dedicated static analysis cannot support an implementation-quality conclusion."]
+    },
+    {
+      "dimensionId": "verification-security-privacy-and-safety",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources", "evidence.autoresearch-issue-599", "evidence.autoresearch-exact-source-snapshot"],
+      "unknowns": ["No security review, threat model, permission-enforcement test, or experiment-integrity replay was performed."],
+      "limitations": ["The upstream permission-bypass guidance and mutable-metric concern cannot be transplanted into Harness authority boundaries."]
+    },
+    {
+      "dimensionId": "supply-chain-and-provenance",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-exact-source-snapshot", "evidence.autoresearch-code-and-dependency-sources"],
+      "unknowns": ["An exact license artifact and security policy were not observed at the pinned revision; dependency vulnerability and artifact provenance were not assessed."],
+      "limitations": ["Exact source identities and a lock file improve traceability but do not establish reuse rights, dependency trust, or build reproducibility."]
+    },
+    {
+      "dimensionId": "delivery-change-and-rollback",
+      "assessment": "adequate",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources"],
+      "unknowns": ["No rollback drill or recovery from partial experiment state was observed."],
+      "limitations": ["Dedicated branch, commits, and reset are useful mechanisms, while untracked result logs and destructive reset semantics need stronger accountability."]
+    },
+    {
+      "dimensionId": "reliability-operability-and-observability",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources", "evidence.autoresearch-issue-599"],
+      "unknowns": ["Long-run stability, crash recovery, metric attestation, external watchdog behavior, and repeated cross-host outcomes are unknown."],
+      "limitations": ["Fixed round duration and a ledger aid observation, but an indefinite loop lacks an externally enforced lifecycle and trusted result boundary."]
+    },
+    {
+      "dimensionId": "maintainability-evolution-and-retirement",
+      "assessment": "adequate",
+      "confidence": "low",
+      "evidenceIds": ["evidence.autoresearch-exact-source-snapshot", "evidence.autoresearch-protocol-sources"],
+      "unknowns": ["No longitudinal maintenance, upgrade, deprecation, or non-H100 portability evidence was assessed."],
+      "limitations": ["The small protocol surface is understandable, but its hardware and research-domain assumptions are narrow."]
+    },
+    {
+      "dimensionId": "collaboration-knowledge-and-accountability",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources"],
+      "unknowns": ["No evidence shows periodic human review, multi-user responsibility, or durable review of discarded experiments."],
+      "limitations": ["A simple ledger and commits help trace retained changes, while indefinite autonomy and untracked records weaken accountable handoff."]
+    },
+    {
+      "dimensionId": "ai-process-loss-and-human-control",
+      "assessment": "blocked",
+      "confidence": "high",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources", "evidence.autoresearch-issue-599"],
+      "unknowns": ["No live evidence shows that changing intent, stop conditions, anomalies, and failed hypotheses survive every round."],
+      "limitations": ["Direct Harness adoption is blocked until host-enforced permissions, periodic human checkpoints, trusted evaluation, bounded rounds, and recovery receipts exist."]
+    },
+    {
+      "dimensionId": "efficiency-resource-stewardship-and-sustainability",
+      "assessment": "concerning",
+      "confidence": "medium",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources", "evidence.autoresearch-code-and-dependency-sources"],
+      "unknowns": ["Total GPU time, energy, opportunity cost, convergence efficiency, and termination economics were not measured."],
+      "limitations": ["A fixed per-round budget controls local comparability, but indefinite continuation leaves total resource use unbounded."]
+    }
+  ],
+  "floorResults": [
+    {
+      "floorId": "evidence-truth-and-provenance",
+      "result": "blocked",
+      "evidenceIds": ["evidence.autoresearch-exact-source-snapshot", "evidence.autoresearch-issue-599"],
+      "owner": "future Harness experiment authority",
+      "disposition": "Direct reliance is blocked until evaluation and reporting are isolated from the mutable agent surface and independently attested."
+    },
+    {
+      "floorId": "authority-and-data-boundary",
+      "result": "blocked",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources", "evidence.autoresearch-no-execution-boundary"],
+      "owner": "host owner and future experiment authority",
+      "disposition": "Direct adoption is blocked because permission bypass and indefinite execution conflict with host-owned authorization and bounded autonomy."
+    },
+    {
+      "floorId": "critical-risk-release-block",
+      "result": "not-applicable",
+      "evidenceIds": ["evidence.autoresearch-no-execution-boundary"],
+      "owner": "repository owner",
+      "disposition": "No release, deployment, or active runtime admission is proposed by this research-only evaluation."
+    },
+    {
+      "floorId": "rollback-recovery-and-accountability",
+      "result": "unassessed",
+      "evidenceIds": ["evidence.autoresearch-protocol-sources"],
+      "owner": "future Harness experiment authority",
+      "disposition": "Branch and reset guidance exists, but no recovery drill, durable discarded-experiment ledger, or parent observer was verified."
+    },
+    {
+      "floorId": "third-party-release-provenance",
+      "result": "unassessed",
+      "evidenceIds": ["evidence.autoresearch-exact-source-snapshot", "evidence.autoresearch-code-and-dependency-sources"],
+      "owner": "future third-party admission authority",
+      "disposition": "No release artifact, license artifact, dependency audit, or installation provenance was assessed."
+    },
+    {
+      "floorId": "completion-acceptance-and-readiness-integrity",
+      "result": "pass",
+      "evidenceIds": ["evidence.autoresearch-no-execution-boundary", "evidence.autoresearch-exact-source-snapshot"],
+      "owner": "agent-autonomy-harness repository authority",
+      "disposition": "The report remains research-only and explicitly denies installation, execution, direct adoption, broad fitness, independent review, and acceptance."
+    }
+  ],
+  "unknownsAndLimitations": [
+    "No upstream code was downloaded into the workspace, installed, or executed.",
+    "No GPU benchmark, functional test, security scan, dependency audit, or cross-host comparison was performed.",
+    "The GitHub issue is mutable observational counterevidence, not a confirmed or reproduced defect.",
+    "No exact license artifact or security policy was observed at the pinned revision.",
+    "This assessment addresses reference value and adoption gates, not whether autoresearch succeeds at its own benchmark."
+  ],
+  "counterevidenceAndDisagreements": [
+    "The upstream loop is unusually compact and operationally concrete, which supports reuse of mechanisms even though direct adoption is blocked.",
+    "Dedicated branch, fixed-duration rounds, baseline, logging, commit, and reset provide useful controls, but they do not neutralize metric-integrity, permission, lifecycle, or total-resource risks.",
+    "Issue 599 raises a plausible integrity concern but remains an unverified external report and cannot alone prove a defect."
+  ],
+  "humanOrDomainDecisions": [
+    "The repository owner judges autoresearch to have high external reference value while explicitly distinguishing its AI-research objective and scope from the Harness objective.",
+    "A future real Harness research task must define the objective, trusted evaluator, maximum rounds and spend, stop conditions, permission boundary, parent observer, recovery path, and human review cadence before any simulation or execution.",
+    "Any future third-party execution requires a separate license, dependency, security, host compatibility, and admission review."
+  ],
+  "nextEvidenceAndFallback": {
+    "nextEvidence": [
+      "When a real bounded research task exists, compare a lightweight native or ad-hoc loop with a Harness-governed simulation using the same objective and acceptance surface.",
+      "Keep evaluation outside the mutable agent surface and retain tamper-evident per-round receipts.",
+      "Measure governance overhead, outcome quality, stop compliance, recovery, resource use, and process loss before considering implementation reuse."
+    ],
+    "fallback": "Reuse only the abstract mechanisms—fixed rounds, baseline, narrow mutable surface, ledger, branch isolation, keep-or-revert loop—and retain current Harness authority, evidence, lifecycle, and human-control boundaries."
+  },
+  "revalidationAndRetirementTriggers": [
+    "The pinned upstream revision or protocol materially changes.",
+    "Issue 599 is resolved, reproduced, contradicted, or superseded by a trusted integrity mechanism.",
+    "A license artifact, security policy, release artifact, or supported non-H100 path becomes available.",
+    "A real Harness research task reaches the simulation or execution gate.",
+    "A native, official, or reviewed implementation provides a safer equivalent loop."
+  ],
+  "independentReview": {
+    "status": "not-performed",
+    "reviewer": "",
+    "scope": "No independent reviewer has confirmed the source interpretation, dimension judgments, or adoption gates."
+  },
+  "acceptanceAuthority": {
+    "status": "not-sought",
+    "owner": "repository owner and future experiment authority",
+    "scope": "No installation, execution, Skill admission, runtime activation, direct adoption, hard-standard promotion, or general research fitness acceptance is requested."
+  },
+  "statusClaim": "research-only",
+  "claimBoundary": "Autoresearch is retained as a bounded method reference only. It was not installed, not executed, not admitted as a Skill or runtime dependency, and not shown to improve Harness outcomes, preserve semantic continuity, generalize across research domains or hosts, satisfy reuse rights, or meet production, security, acceptance, or hard-standard gates."
+}

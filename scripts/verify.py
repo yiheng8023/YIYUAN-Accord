@@ -267,6 +267,9 @@ from validate_multidimensional_software_engineering_evaluation_contract import (
 from validate_multidimensional_software_engineering_evaluation_report import (
     validate_report as validate_multidimensional_software_engineering_evaluation_report,
 )
+from validate_autoresearch_method_reference_evaluation import (
+    validate_autoresearch_evaluation,
+)
 from validate_multidimensional_software_engineering_source_snapshot import (
     validate_snapshot as validate_multidimensional_software_engineering_source_snapshot,
 )
@@ -671,6 +674,11 @@ REQUIRED_FILES = (
     "registry/multidimensional-software-engineering-codex-desktop-resource-observability-assessment-2026-07-31.json",
     "scripts/validate_multidimensional_software_engineering_evaluation_report.py",
     "tests/test_multidimensional_software_engineering_evaluation_report.py",
+    "docs/strategy/AUTORESEARCH-METHOD-REFERENCE-EVALUATION-2026-08-05.md",
+    "registry/autoresearch-exact-source-snapshot-2026-08-05.json",
+    "registry/autoresearch-multidimensional-software-engineering-evaluation-2026-08-05.json",
+    "scripts/validate_autoresearch_method_reference_evaluation.py",
+    "tests/test_autoresearch_method_reference_evaluation.py",
     "docs/strategy/MULTIDIMENSIONAL-SOFTWARE-ENGINEERING-SOURCE-SNAPSHOT-2026-07-31.md",
     "registry/multidimensional-software-engineering-source-snapshot-contract-2026-07-31.json",
     "registry/multidimensional-software-engineering-source-observation-2026-07-31.json",
@@ -3187,6 +3195,7 @@ def verify() -> None:
         program_plan=curation_program_plan_doc,
     )
     validate_multidimensional_software_engineering_evaluation_report()
+    validate_autoresearch_evaluation()
     validate_multidimensional_software_engineering_source_snapshot()
     validate_multidimensional_software_engineering_independent_review_packet()
     validate_codex_desktop_resource_observability_preflight(

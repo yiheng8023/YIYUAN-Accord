@@ -2739,3 +2739,28 @@ runtime. This checkpoint authorizes no bulk enablement, model dispatch,
 candidate behavior claim, self-authored gap, or hard-standard promotion. The
 governed event is
 `registry/cc-switch-sixteen-codex-claude-enablement-observation-2026-08-05.json`.
+
+### 2026-08-05 autoresearch method-reference evaluation
+
+`karpathy/autoresearch` is retained as a high-value external method reference,
+not as a project with the same objective as the Harness and not as a direct
+dependency candidate. The source snapshot binds exact revision
+`228791fb499afffb54b46200aca536f79142f117`, six Git blob identities, and a
+dated mutable counterevidence observation. No upstream body was vendored and
+no clone, installation, dependency execution, Skill admission, or runtime
+activation occurred.
+
+The reusable reference is the compact empirical loop: baseline, dedicated
+branch, narrow mutable surface, fixed-duration rounds, ledger, and
+keep-or-revert decisions. Direct adoption remains blocked because Harness
+requires host-owned authorization, bounded lifecycle and resource budgets,
+periodic human checkpoints, recovery receipts, and a trusted evaluator outside
+the mutable agent surface. The full decision and multidimensional report are:
+
+- `docs/strategy/AUTORESEARCH-METHOD-REFERENCE-EVALUATION-2026-08-05.md`;
+- `registry/autoresearch-exact-source-snapshot-2026-08-05.json`;
+- `registry/autoresearch-multidimensional-software-engineering-evaluation-2026-08-05.json`.
+
+This does not change the mainline order or create a Skill or hard standard.
+The next evidence gate opens only when a real bounded research task can compare
+the smallest healthy native/ad-hoc loop with a Harness-governed simulation.
