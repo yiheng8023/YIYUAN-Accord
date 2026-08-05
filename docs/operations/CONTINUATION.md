@@ -4572,3 +4572,33 @@ activation, or cross-repository write occurred. The next gate requires a real
 bounded research task and a simulation comparison against the smallest healthy
 native or ad-hoc loop. This checkpoint creates neither a Skill nor a hard
 standard and does not reorder the mainline plan.
+
+## 2026-08-05 real-task source binding and public-fallback checkpoint
+
+A user-owned semi-automated production-CAD R&D chain is now bound as a real,
+long-horizon workload source. It is a product-line-scale need rather than one
+Harness experiment: the Agent participates in research, design, implementation,
+testing, and iteration, while deterministic scripts and the CAD toolchain own
+execution. Existing naturalistic work proves only bounded mechanisms; it does
+not prove production generalization or expose a reviewed-candidate gap. Private
+repository names, thread locators, paths, and task artifacts remain outside the
+public repository.
+
+The dated public fallback inventory at
+`docs/strategy/PUBLIC-REAL-TASK-SOURCING-2026-08-05.md` retains three small,
+open, unassigned `thingctx/thingctx` issues as inactive sourcing inputs. The
+screen used public first-party issue, contribution, and commit surfaces only.
+No issue was claimed; no repository was forked, cloned, downloaded, or run; no
+Skill was enabled; and no external write occurred. Source concentration and
+the repository's short visible history prevent cross-project maturity or value
+claims.
+
+Current unique action: wait for the next naturally occurring, still-unresolved
+subproblem whose source, data and account boundary, allowed side effects, and
+acceptance can be frozen before implementation. Establish the healthy
+native/current baseline first. Open one candidate arm only if that baseline
+leaves a reproducible candidate-relevant gap; absence of a gap is a valid
+subtractive result. The public inventory is fallback-only if the user-owned
+workload cannot supply a bounded experiment. Broad enablement, model dispatch,
+account expansion, Hook/MCP mutation, and self-authored implementation remain
+unauthorized.
