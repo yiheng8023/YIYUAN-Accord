@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "id": "mattpocock-skills-v1.2.2-codex-common-root-collision-and-disposition-2026-08-06",
+  "date": "2026-08-06",
+  "status": "collision-proved-disposition-ready-mutation-held",
+  "inputs": [
+    "registry/mattpocock-skills-v1.2.2-manifest-update-preview-2026-08-06.json",
+    "registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json",
+    "audits/mattpocock-skills/8b36d4fb2635b3c21998dcd8144439c9e5ba7302/manifest-update-preview-2026-08-06/REPORT.json"
+  ],
+  "source": {
+    "repository": "https://github.com/mattpocock/skills",
+    "releaseTag": "v1.2.2",
+    "releaseCommit": "8b36d4fb2635b3c21998dcd8144439c9e5ba7302"
+  },
+  "probe": {
+    "report": "audits/mattpocock-skills/8b36d4fb2635b3c21998dcd8144439c9e5ba7302/codex-common-root-collision-probe-2026-08-06/REPORT.json",
+    "reportFileSha256": "0de716249084c3fffa9b98e4af882bbfe05071c22e215aa62d29e74689d0614d",
+    "reportSha256": "f8bb36d0275334b87c33fce4b8bca1666ab56e98d8d9de9ed2367db961b65228",
+    "host": "Codex Desktop app-server 0.146.0",
+    "sentMethods": [
+      "initialize",
+      "initialized",
+      "skills/list"
+    ],
+    "threadStartCount": 0,
+    "turnStartCount": 0,
+    "modelRequestCount": 0,
+    "pluginFeaturesDisabled": true,
+    "staticMcpTableOverriddenEmpty": true,
+    "allObservedSurfacesStable": true,
+    "directDirectoryBothListedCount": 13,
+    "existingManagerSymlinkControlCodexOnlyCount": 9
+  },
+  "managerRuntime": {
+    "installedVersion": "3.19.1",
+    "installedBinary": "C:/Users/15521/AppData/Local/Programs/CC Switch/cc-switch.exe",
+    "skillStorageLocation": "cc_switch",
+    "skillSyncMethod": "symlink",
+    "latestOfficialReleaseObserved": {
+      "tag": "v3.19.1",
+      "publishedAt": "2026-07-31T14:53:23Z",
+      "url": "https://github.com/farion1231/cc-switch/releases/tag/v3.19.1"
+    },
+    "atomicCohortPullRequestObserved": {
+      "number": 6086,
+      "state": "open",
+      "draft": false,
+      "merged": false,
+      "mergeableState": "dirty",
+      "updatedAt": "2026-08-04T09:20:24Z",
+      "headSha": "cdfbd15f4d6d19789cf968b10a8a0711eaf67bc4",
+      "baseSha": "6b8f36431b50385f095b5e66eb20d9c11dcaa73d",
+      "url": "https://github.com/farion1231/cc-switch/pull/6086"
+    },
+    "releasedAtomicCohortUpdateProved": false,
+    "currentReleaseSupportsSequentialBestEffortOnly": true
+  },
+  "commonRootDisposition": {
+    "root": "~/.agents/skills",
+    "directoryContainerMustRemain": true,
+    "directDirectoryCount": 13,
+    "payloadLineageProved": true,
+    "payloadLineage": "exact Matt prior-release trees at ed37663cc5fbef691ddfecd080dff42f7e7e350d; seven trees are unchanged in v1.2.2",
+    "filesystemInstallerOrActorOwnershipProved": false,
+    "listingCollisionProved": true,
+    "entries": [
+      {
+        "name": "ask-matt",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "code-review",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "codebase-design",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "diagnosing-bugs",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "domain-modeling",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "grilling",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "implement",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "research",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "resolving-merge-conflicts",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "to-spec",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "to-tickets",
+        "sourceTreeClassification": "both-prior-and-release",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "wayfinder",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": true,
+        "proposedAuthorizedDisposition": "backup-then-replace-direct-directory-with-symlink-to-cc-ssot"
+      },
+      {
+        "name": "writing-great-skills",
+        "sourceTreeClassification": "prior-only",
+        "listingClassification": "both-listed",
+        "targetReleaseRetainsName": false,
+        "proposedAuthorizedDisposition": "backup-then-remove-direct-directory-without-replacement"
+      }
+    ],
+    "whySymlinkInsteadOfSecondCopy": "the nine existing common-root manager symlinks collapse to the same CC canonical path in skills/list, while every direct directory remains a separately listed user Skill",
+    "requiredTransaction": [
+      "quiesce manager and reject concurrent Skill-root drift",
+      "capture a recoverable archive and manifest for the exact thirteen directories plus CC database, SSOT, and consumer projections",
+      "replace twelve retained direct directories with links to their existing CC SSOT targets and remove only the retired writing-great-skills directory after backup",
+      "verify exact links, CC payload identity, consumer topology, and zero unexpected paths",
+      "rerun the no-model probe and require thirteen codex-only listing classifications",
+      "rollback the whole thirteen-item cohort on any mismatch"
+    ],
+    "doNot": [
+      "remove ~/.agents/skills itself",
+      "rewrite third-party payload bodies",
+      "leave a mixed partial cohort",
+      "treat listing as loader or instruction-delivery proof"
+    ]
+  },
+  "decision": {
+    "commonRootReconciliationNecessary": true,
+    "commonRootMutationAuthorized": false,
+    "directoryContainerMustRemain": true,
+    "managerAtomicCohortUpdateProved": false,
+    "managerUpdateExecutionEligible": false,
+    "wizardMustRemainDisabled": true,
+    "recommendedSequence": [
+      "obtain exact authority for the reversible thirteen-item common-root transaction",
+      "execute and verify the common-root transaction as one rollback cohort",
+      "keep the v1.2.2 manager update held until an atomic released or separately authorized adapter path is proved",
+      "perform any later manager update as a separate transaction with wizard disabled"
+    ],
+    "nextGate": "request authority for backup plus twelve direct-directory-to-manager-link replacements and one backed-up retired-directory removal; do not update CC Switch yet"
+  },
+  "claimBoundary": {
+    "commonAndDedicatedPathsBothListed": true,
+    "managerSymlinkCanonicalDeduplicationObserved": true,
+    "instructionDeliveryPrecedenceProved": false,
+    "skillLoaderInvocationProved": false,
+    "skillBehaviorProved": false,
+    "filesystemInstallerOrActorOwnershipProved": false,
+    "managerAtomicUpdateSafetyProved": false,
+    "commonRootMutationPerformed": false,
+    "managerMutationPerformed": false,
+    "consumerMutationPerformed": false,
+    "modelDispatched": false
+  }
+}

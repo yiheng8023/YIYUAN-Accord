@@ -4690,3 +4690,35 @@ gate is an isolated no-model consumer probe of common-root ownership and Codex
 discovery precedence. Any migration or manager update remains a separate
 authorization. Static adjudication:
 `registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json`.
+
+## 2026-08-06 Matt common-root no-model collision checkpoint
+
+A dedicated Codex Desktop `0.146.0` app-server probe sent only `initialize`,
+`initialized`, and `skills/list`, with Plugins disabled and the process-local
+static MCP table empty. It created zero threads, turns, and model requests.
+Codex config, CC Switch settings/database/SSOT, the common and dedicated Codex
+Skill roots, and repository posture were byte- or manifest-stable before and
+after the probe.
+
+All 13 direct Matt directories under `~/.agents/skills` were listed alongside
+their CC-managed dedicated consumer paths. In contrast, the nine existing
+common-root manager symlinks collapsed to the same canonical CC path and did
+not produce a second listed row. This proves a real listing collision for the
+direct directories, but not loader choice, instruction-delivery precedence, or
+behavior.
+
+Exact-tree evidence divides the 13 rather than treating them as one unknown
+bucket: six are prior-only (`ask-matt`, `code-review`, `grilling`, `to-spec`,
+`wayfinder`, and retired `writing-great-skills`), while seven are unchanged
+across the prior pin and v1.2.2. Their upstream payload lineage is proved; the
+actor that copied them into the common root is not. The intended reversible
+topology is therefore backup plus replacement of the 12 retained direct
+directories with CC SSOT links, and backed-up removal of only the retired
+directory, while preserving `~/.agents/skills` itself.
+
+No common-root mutation is yet authorized. The installed and latest official
+CC Switch release remains `v3.19.1`; released atomic cohort update support is
+not proved, and PR 6086 remains unmerged. Therefore the Matt v1.2.2 manager
+update is still held independently of the now-decision-ready 13-item cleanup.
+`wizard` remains disabled. Governed disposition:
+`registry/mattpocock-skills-v1.2.2-codex-common-root-collision-and-disposition-2026-08-06.json`.

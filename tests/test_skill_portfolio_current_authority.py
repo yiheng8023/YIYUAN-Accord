@@ -99,11 +99,19 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         self.assertTrue(state["removedUpstreamNameRetainedByManager"])
         self.assertEqual(state["directSameNameCommonRootDirectoryCount"], 13)
         self.assertFalse(state["directSameNameCommonRootOwnershipProved"])
+        self.assertTrue(state["directSameNameCommonRootListingCollisionProved"])
+        self.assertTrue(state["directSameNameCommonRootPayloadLineageProved"])
+        self.assertFalse(state["directSameNameCommonRootMutationAuthorized"])
+        self.assertEqual(
+            state["existingManagerSymlinkCanonicalDeduplicationObservedCount"],
+            9,
+        )
         self.assertFalse(state["newWizardAmbientEnablementAllowed"])
         self.assertFalse(state["automaticRefreshAuthorized"])
         self.assertTrue(state["atomicCohortPreviewRequired"])
         self.assertTrue(state["atomicCohortPreviewBuilt"])
         self.assertFalse(state["atomicCohortExecutionAuthorized"])
+        self.assertFalse(state["releasedManagerAtomicCohortUpdateProved"])
         self.assertFalse(state["singleManagerRevisionClosureAcrossConsumersProved"])
         self.assertFalse(event["transition"]["perItemBestEffortRefreshSuitable"])
         self.assertFalse(event["decision"]["executionAuthorized"])
