@@ -28,8 +28,13 @@ The repository is now public. Public visibility does not establish release
 readiness or weaken source, license, privacy, security, provenance, evidence,
 or runtime-authority gates. The public entry points, contributor guidance,
 third-party rights boundary, anonymous clean-clone verification, and GitHub
-repository settings require a separate open-source closure audit. Hosted CI
-remains optional corroboration rather than a paid acceptance dependency.
+repository settings remain subject to a separate open-source closure audit. A
+dated minimum live security baseline now covers Dependabot alerts and security
+updates, provider-pattern secret scanning and push protection, private
+vulnerability reporting, and force-push/deletion protection on `main` without
+requiring pull requests or paid CI. It does not close open-source readiness or
+the broader research program. Hosted CI remains optional corroboration rather
+than a paid acceptance dependency.
 
 The user-confirmed Kimi topology now has a retained zero-model
 [mechanism replay](../../audits/kimi-three-hook-comparison-replay-2026-08-01/REPORT.json):

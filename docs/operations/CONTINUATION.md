@@ -4475,3 +4475,29 @@ were removed. Commit, push, remote exact-SHA comparison, and anonymous
 clean-clone bootstrap verification remain the closure steps for this slice.
 They do not close the broader open-source control decisions or the Harness
 research goal.
+
+## 2026-08-05 minimum live security baseline checkpoint
+
+This bounded slice started from clean `main` at
+`b7882b48122ba3ae25b920e93f042ff9843e6a93`, equal to the remote `main` SHA
+returned by the GitHub API. The user separately authorized a minimum live
+security baseline. GitHub write responses and independent reads then confirmed
+Dependabot vulnerability alerts and security updates, provider-pattern secret
+scanning and push protection, and private vulnerability reporting enabled.
+`main` now blocks force pushes and deletion for administrators and
+non-administrators while retaining ordinary direct pushes and adding no
+required pull request, review, or status check.
+
+Non-provider secret patterns and validity checks remain disabled. No CodeQL or
+paid Actions dependency was added. The change did not install, enable, expose,
+invoke, or remove any Skill; mutate CC Switch; dispatch a model; connect an
+account; or change Hook, MCP, Plugin, App, candidate, or consumer lifecycle
+state.
+
+The repository security/support surfaces now route sensitive findings to the
+verified private reporting form. The open-source readiness contract and main
+research plan record the dated baseline without promoting it to a permanent
+control guarantee, comprehensive secret scan, production readiness, release,
+or broad open-source closeout. Commit, push, remote exact-SHA comparison, and
+anonymous clean-clone bootstrap verification remain this slice's closure
+steps.

@@ -31,16 +31,43 @@ class OpenSourceReadinessContractTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
-    def test_current_security_docs_do_not_claim_private_reporting_is_enabled(self) -> None:
+    def test_current_security_docs_route_sensitive_reports_privately(self) -> None:
         security = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
         support = (ROOT / "SUPPORT.md").read_text(encoding="utf-8")
         issue_config = (
             ROOT / ".github/ISSUE_TEMPLATE/config.yml"
         ).read_text(encoding="utf-8")
-        self.assertIn("not currently enabled", security)
-        self.assertIn("not currently enabled", support)
-        self.assertNotIn("security/advisories/new", issue_config)
-        self.assertIn("blob/main/SECURITY.md", issue_config)
+        self.assertIn("Private vulnerability reporting is enabled", security)
+        self.assertIn("Private vulnerability reporting is enabled", support)
+        self.assertIn("security/advisories/new", issue_config)
+        self.assertIn("Use private vulnerability reporting", issue_config)
+
+    def test_dated_minimum_live_security_baseline_keeps_optional_controls_explicit(self) -> None:
+        text = " ".join(
+            (ROOT / "docs/operations/OPEN-SOURCE-READINESS.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for phrase in (
+            "minimum-live-security-baseline-applied",
+            "Dependabot vulnerability alerts and security updates were enabled",
+            "Secret scanning and push protection were enabled",
+            "Private vulnerability reporting was enabled",
+            "force pushes and branch deletion were blocked",
+            "Normal direct pushes remain allowed",
+            "non-provider patterns and validity checks remain disabled",
+            "No required pull request, review, status check, or CodeQL workflow was added",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+
+        plan = " ".join(
+            (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        self.assertIn("dated minimum live security baseline", plan)
+        self.assertIn("does not close open-source readiness", plan)
 
 
 if __name__ == "__main__":

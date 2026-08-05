@@ -53,7 +53,7 @@ is closed.
    - Promotion waits for rights, safety, reproducibility, support, and claim
      boundaries appropriate to the promoted artifact.
 
-## Observed baseline on 2026-08-05
+## Initial observed baseline on 2026-08-05
 
 The following is a dated observation and must be rechecked before a current
 claim:
@@ -81,12 +81,34 @@ claim:
   classified evidence for now because bulk rewriting would invalidate frozen
   observations and their digests. New evidence should avoid unnecessary paths.
 
+## Minimum live security baseline applied on 2026-08-05
+
+The user separately authorized the bounded live-control change after the
+initial observation. GitHub API write responses and independent reads then
+reported:
+
+- Dependabot vulnerability alerts and security updates were enabled;
+- Secret scanning and push protection were enabled;
+- Private vulnerability reporting was enabled and the public entry surfaces
+  now route sensitive reports to GitHub's private form;
+- `main` branch protection applied to administrators and non-administrators:
+  force pushes and branch deletion were blocked. Normal direct pushes remain
+  allowed;
+- non-provider patterns and validity checks remain disabled; and
+- No required pull request, review, status check, or CodeQL workflow was added.
+
+This is a `minimum-live-security-baseline-applied` observation, not a permanent
+control guarantee. GitHub settings can drift and must be rechecked for a
+current claim. The bounded repository scan remains narrower than a comprehensive
+secret-history review, and no paid Actions dependency was introduced.
+
 ## Current verdict
 
-`partial-public-baseline-live-control-decisions-open`
+`minimum-live-security-baseline-applied-public-chain-partial`
 
 The current tree has a bounded local entrypoint, rights, and high-confidence
-secret-history review. An anonymous clean clone must verify each exact pushed
-revision before it is claimed. The open-source chain remains open while the
-live GitHub control decisions remain unresolved. This verdict does not block
-ordinary repository work; it blocks broader readiness claims.
+secret-history review plus a dated minimum live-control baseline. An anonymous
+clean clone must verify each exact pushed revision before it is claimed. The
+open-source chain remains partial because this baseline does not establish a
+versioned release, comprehensive secret scan, permanent control state, support
+commitment, production readiness, or broader promotion readiness.

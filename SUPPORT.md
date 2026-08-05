@@ -16,12 +16,12 @@ Before opening an issue:
 4. remove credentials, private account state, memory, private configuration,
    restricted content, unnecessary local paths, and raw sensitive logs.
 
-Private vulnerability reporting is not currently enabled. Never put
-credentials, leaked or restricted material, exploit payloads, or raw sensitive
-logs in a public issue. A minimal non-sensitive issue may ask the maintainer to
-open a private channel. Public issues remain suitable for non-sensitive
-research, governance, verification, portability, documentation, and
-candidate-source discussion.
+Private vulnerability reporting is enabled. Use the
+[GitHub private reporting form](https://github.com/yiheng8023/agent-autonomy-harness/security/advisories/new)
+for credentials, leaked or restricted material, exploit payloads, or raw
+sensitive logs; never put them in a public issue. Public issues remain suitable
+for non-sensitive research, governance, verification, portability,
+documentation, and candidate-source discussion.
 
 The project does not provide a support SLA, vendor-service support, account
 connection, or guaranteed installation and live-Agent configuration support.

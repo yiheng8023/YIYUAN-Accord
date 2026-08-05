@@ -4234,10 +4234,10 @@ def validate_repository_community_configuration() -> None:
             "Observed behavior", "Expected contract", "Public-data check",
         ],
         "SUPPORT.md": [
-            "Community support is best effort", "Private vulnerability reporting is not currently enabled", "Sponsorship does not change these boundaries",
+            "Community support is best effort", "Private vulnerability reporting is enabled", "Sponsorship does not change these boundaries",
         ],
         "SUPPORT.zh-CN.md": [
-            "社区支持按尽力而为原则", "当前尚未启用私密漏洞报告", "赞助不会改变这些边界",
+            "社区支持按尽力而为原则", "当前已启用私密漏洞报告", "赞助不会改变这些边界",
         ],
         "SPONSORING.md": [
             "Sponsorship is voluntary", "PayPal", "does not purchase a support SLA",
@@ -4253,7 +4253,7 @@ def validate_repository_community_configuration() -> None:
         ],
         "docs/operations/OPEN-SOURCE-READINESS.md": [
             "Open-source readiness is a multi-gate maintenance contract",
-            "partial-public-baseline-live-control-decisions-open",
+            "minimum-live-security-baseline-applied-public-chain-partial",
             "secret scanning",
             "anonymous clean clone",
             "Hosted GitHub Actions are optional corroboration",
@@ -4268,7 +4268,7 @@ def validate_repository_community_configuration() -> None:
     issue_config = (ROOT / ".github/ISSUE_TEMPLATE/config.yml").read_text(encoding="utf-8")
     for phrase in [
         "blank_issues_enabled: true",
-        "blob/main/SECURITY.md",
+        "security/advisories/new",
         "blob/main/SUPPORT.md",
     ]:
         if phrase not in issue_config:
