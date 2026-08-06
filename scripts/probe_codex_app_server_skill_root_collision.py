@@ -371,13 +371,18 @@ def main() -> int:
         codex_executable=args.codex_executable,
         timeout_seconds=args.timeout_seconds,
     )
-    content = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(content, encoding="utf-8")
+        write_report(args.output, report)
     else:
+        content = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
         print(content, end="")
     return 0 if report["status"] == "pass" else 1
+
+
+def write_report(path: Path, report: dict[str, Any]) -> None:
+    content = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

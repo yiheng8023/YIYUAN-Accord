@@ -4722,3 +4722,39 @@ not proved, and PR 6086 remains unmerged. Therefore the Matt v1.2.2 manager
 update is still held independently of the now-decision-ready 13-item cleanup.
 `wizard` remains disabled. Governed disposition:
 `registry/mattpocock-skills-v1.2.2-codex-common-root-collision-and-disposition-2026-08-06.json`.
+
+## 2026-08-06 Matt common-root recoverable reconciliation checkpoint
+
+The user separately authorized only the 13-item common-root reconciliation,
+not the Matt v1.2.2 manager update. After CC Switch was quiesced, a recovery
+snapshot froze the selected common-root bodies, the three repository-owned
+contracts, existing CC backup bodies, and the CC SSOT. Archive and sidecar
+digests are recorded in
+`registry/matt-common-root-reconciliation-event-2026-08-06.json`; both passed
+archive-open, path, payload-hash, extraction-hash, and secret-rescan checks.
+The recovery artifacts remain intentionally retained under
+`C:/Users/15521/.cc-switch/skill-backups/` until a separately authorized
+cleanup after the manager-update decision.
+
+A journaled transaction moved all 13 original physical directories into its
+recovery root, installed exact CC SSOT symlinks for the 12 retained names, and
+left the retired `writing-great-skills` common-root name absent. The common
+`~/.agents/skills` container remains. The operation is recoverable as a whole
+cohort and its rollback mechanism is unit-tested, but the filesystem mutation
+was a sequential per-entry transaction: transient partial state was possible,
+and no multi-object atomic filesystem commit is claimed.
+
+After an ordinary hidden CC Switch restart, a second no-model app-server probe
+again sent only `initialize`, `initialized`, and `skills/list`. It created zero
+threads, turns, and model requests. All 13 formerly duplicated names now have
+one canonical CC-managed listed path (`codex-only`), zero remain
+`both-listed`, and the nine prior manager-symlink controls remain canonical.
+This proves listing-path reconciliation only; it does not prove Skill loader
+invocation, instruction delivery, behavior, value, or cross-host portability.
+
+Matt's August 5 X post is recorded as the author's v1.2-series announcement,
+not exact patch authority. The engineering source remains Git tag `v1.2.2`
+peeled to `8b36d4fb2635b3c21998dcd8144439c9e5ba7302`. The CC manager still contains
+the hybrid 22-row Matt cohort, including `writing-great-skills`; `wizard` is
+absent and disabled. Therefore no v1.2.2 manager installation or atomic manager
+update is claimed, and that separate gate remains held.

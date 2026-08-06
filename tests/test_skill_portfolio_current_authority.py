@@ -97,15 +97,32 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         )
         self.assertEqual(state["currentPromotedNamesMissingFromManager"], 4)
         self.assertTrue(state["removedUpstreamNameRetainedByManager"])
-        self.assertEqual(state["directSameNameCommonRootDirectoryCount"], 13)
+        reconciliation = load(state["commonRootReconciliationEvent"])
+        self.assertEqual(state["directSameNameCommonRootDirectoryCount"], 0)
         self.assertFalse(state["directSameNameCommonRootOwnershipProved"])
         self.assertTrue(state["directSameNameCommonRootListingCollisionProved"])
         self.assertTrue(state["directSameNameCommonRootPayloadLineageProved"])
-        self.assertFalse(state["directSameNameCommonRootMutationAuthorized"])
+        self.assertTrue(state["directSameNameCommonRootMutationAuthorized"])
+        self.assertTrue(state["commonRootReconciliationExecuted"])
+        self.assertTrue(state["commonRootReconciliationRecoverable"])
+        self.assertEqual(state["reconciledRetainedManagerSymlinkCount"], 12)
+        self.assertEqual(state["reconciledRetiredCommonRootCopyCount"], 1)
         self.assertEqual(
             state["existingManagerSymlinkCanonicalDeduplicationObservedCount"],
             9,
         )
+        self.assertEqual(
+            state["currentManagerSymlinkCanonicalDeduplicationObservedCount"],
+            21,
+        )
+        self.assertTrue(state["singleCcManagedListingPathAcrossReconciledNamesProved"])
+        self.assertTrue(
+            reconciliation["claimBoundary"][
+                "singleCcManagedListingPathForTheThirteenProved"
+            ]
+        )
+        self.assertFalse(reconciliation["decision"]["mattV122ManagerUpdateExecuted"])
+        self.assertFalse(reconciliation["transaction"]["cohortAtomicFilesystemCommitProved"])
         self.assertFalse(state["newWizardAmbientEnablementAllowed"])
         self.assertFalse(state["automaticRefreshAuthorized"])
         self.assertTrue(state["atomicCohortPreviewRequired"])

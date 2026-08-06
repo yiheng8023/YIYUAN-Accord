@@ -9,6 +9,7 @@ from scripts.probe_codex_app_server_skill_root_collision import (
     classify_collision_rows,
     observe_tree,
     validate_report,
+    write_report,
 )
 
 
@@ -116,6 +117,16 @@ class CodexAppServerSkillRootCollisionProbeTests(unittest.TestCase):
         self.assertEqual([], validate_report(report))
         report["requestBoundary"]["threadStartCount"] = 1
         self.assertIn("hard-fail-thread-created", validate_report(report))
+
+    def test_report_writer_uses_repository_lf_line_endings(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            output = Path(raw) / "REPORT.json"
+
+            write_report(output, {"status": "pass"})
+
+            payload = output.read_bytes()
+        self.assertTrue(payload.endswith(b"\n"))
+        self.assertNotIn(b"\r\n", payload)
 
 
 if __name__ == "__main__":
