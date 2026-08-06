@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-system-manager-reference-cohort-2026-08-06",
+  "asOf": "2026-08-06",
+  "status": "three-source-exact-revision-static-reference-review-complete",
+  "purpose": "Review the three existing system-or-manager-only sources from the bounded 22-source inventory as exact-revision mechanism references without treating them as ordinary Skill candidates, executing them, or changing any live manager or consumer state.",
+  "predecessor": "registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json",
+  "semanticAuthority": "registry/skill-portfolio-current-authority.json",
+  "semanticProjectionId": "portfolio-tasktime-projection-v1",
+  "cohortContract": {
+    "coverageObjective": "Test whether existing external manager, installer, orchestration, recovery, and cross-host adapter mechanisms reduce or reshape any future Harness residual gap before repository-owned implementation is considered.",
+    "sourceBoundary": [
+      "github:stellarlinkco/myclaude",
+      "github:vercel-labs/skills",
+      "github:affaan-m/ECC"
+    ],
+    "accountAndDataBoundary": "Public Git objects only; no private repository, account connection, credential use, telemetry call, or candidate runtime.",
+    "inactiveIsolation": "Partial clones were created under one operating-system temporary root outside every Agent Skill, Plugin, App, MCP, Hook, manager, and consumer discovery root.",
+    "allowedActions": [
+      "git-ls-remote",
+      "partial-clone-without-checkout",
+      "git-object-and-tree-inspection",
+      "static-source-review",
+      "record-reference-disposition"
+    ],
+    "blockedActions": [
+      "dependency-installation",
+      "third-party-script-execution",
+      "skill-installation-or-enablement",
+      "manager-or-consumer-mutation",
+      "plugin-app-mcp-hook-or-account-mutation",
+      "model-dispatch",
+      "direct-adoption",
+      "repository-authored-gap-fill"
+    ],
+    "stopRule": "Stop after all three pre-existing system-or-manager-only sources have a current default-branch revision, exact selected Git-object manifest, lifecycle and authority review, and one reference-only disposition. Do not expand into their Skill catalogs or search for additional systems in this cohort."
+  },
+  "acquisitionObservation": {
+    "method": "git-ls-remote-then-partial-clone-filter-blob-none-no-checkout",
+    "temporaryAcquisitionRootRetained": false,
+    "temporaryAcquisitionRootRemovedAfterReview": true,
+    "upstreamBodyVendoredIntoHarness": false,
+    "thirdPartyCodeExecuted": false,
+    "dependenciesInstalled": false,
+    "liveStateMutated": false,
+    "limitations": [
+      "The observation binds the named default-branch revisions and selected Git objects on 2026-08-06; it does not prove future branch state.",
+      "Static source review does not prove runtime correctness, security, portability, behavior, value, or compatibility with current live manager state.",
+      "Selected-object manifests are review slices, not claims that every file in the three repositories was semantically reviewed."
+    ]
+  },
+  "sources": [
+    {
+      "id": "github:stellarlinkco/myclaude",
+      "url": "https://github.com/stellarlinkco/myclaude",
+      "observedRef": "refs/heads/master",
+      "priorInventoryRevision": "f2e75c1263a2d5f09cdc4bb3dfe3635c635ff296",
+      "revision": "f2e75c1263a2d5f09cdc4bb3dfe3635c635ff296",
+      "commitTime": "2026-05-04T12:25:47+08:00",
+      "commitDeltaFromPriorInventory": 0,
+      "license": "AGPL-3.0",
+      "tree": {
+        "fileCount": 260,
+        "skillMdCount": 11,
+        "agentsMdCount": 0,
+        "hookLikePathCount": 20,
+        "mcpLikePathCount": 0,
+        "installLikePathCount": 6,
+        "pluginManifestCount": 6
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "1b9f26b04e3b8cfa30a2b3ad8e2322b5214e95e4", "size": 6035},
+        {"path": "LICENSE", "type": "blob", "oid": "be3f7b28e564e7dd05eaf59d64adba1a4065ac0e", "size": 34523},
+        {"path": "package.json", "type": "blob", "oid": "4d516ab42ca787c8f8f6f34dcb0a7dadab00776e", "size": 498},
+        {"path": "config.schema.json", "type": "blob", "oid": "006b17f0b143712b2f14d641c2e44187231f7168", "size": 3680},
+        {"path": "hooks/hooks.json", "type": "blob", "oid": "6ae9c19c84e521de342504eb46ff0127e010edb3", "size": 710},
+        {"path": "install.py", "type": "blob", "oid": "7df9cf791ed967b88cc9ec51b6d234c6ca7cb4ca", "size": 55362},
+        {"path": "bin/cli.js", "type": "blob", "oid": "f1e14c81b814a5e4e1c5b6c2eb6657a45493cf17", "size": 40651},
+        {"path": "codeagent-wrapper/README.md", "type": "blob", "oid": "4b0a101bd55d39d6a0d540ff1b5d8b6ba7b82bfa", "size": 9489},
+        {"path": "codeagent-wrapper/internal/backend/codex.go", "type": "blob", "oid": "b3a759cb617d34817bc7400a6874d63b73acf072", "size": 1909},
+        {"path": "codeagent-wrapper/internal/backend/claude.go", "type": "blob", "oid": "ff22b58220ebf975eb0f2a5696f0fd5acc9a19bc", "size": 3863},
+        {"path": "codeagent-wrapper/internal/application/cleanup/cleanup.go", "type": "blob", "oid": "a2fc5607d0606989ce4557652e687a07bce91af9", "size": 918},
+        {"path": "codeagent-wrapper/internal/worktree/worktree.go", "type": "blob", "oid": "dd341f411a013c3582a2fe10e700735162fe1573", "size": 2583}
+      ],
+      "gitObjectManifestSha256": "2ec5ad84247cff9c2fb1374d3ea351a3c2b82125928a190a1da3bc525b87f703",
+      "mechanismFindings": [
+        "The source combines an installer, Claude global hooks, multi-backend model execution, manual or automatic Skill injection, worktree creation, parallel execution, session resume, and log cleanup rather than supplying one bounded manager primitive.",
+        "The installer defaults to a user-level Claude root and supports run-command operations, overwrite, update, uninstall, status backup, and rollback.",
+        "The multi-backend wrapper defaults the Codex path to approval-and-sandbox bypass unless an environment flag disables it, and defaults the Claude path to permission skipping unless separately disabled.",
+        "Its worktree creation primitive is useful comparison input, but it creates branches and worktrees directly and does not bind the Harness authority, acceptance, handoff, or cleanup contracts."
+      ],
+      "disposition": "architecture-and-negative-control-reference-only",
+      "dispositionReason": "The worktree, session, and rollback mechanisms are useful comparison inputs, but default permission bypass, live-root installation, Hooks, model execution, AGPL obligations, and whole-system scope make direct adoption or manager substitution ineligible.",
+      "futureRecheckTrigger": "A task-bound residual orchestration gap remains after current host thread/worktree support and safer reviewed alternatives, with separate model, permission, installation, and license authority."
+    },
+    {
+      "id": "github:vercel-labs/skills",
+      "url": "https://github.com/vercel-labs/skills",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "1164afa5f0e21ebd01e6fc11249759353f494ad1",
+      "revision": "a4d243c3d4f86cdf9385dd1b6a0733f6937e70b5",
+      "commitTime": "2026-08-05T15:25:20Z",
+      "releaseVersionAtRevision": "1.5.22",
+      "commitDeltaFromPriorInventory": 13,
+      "changedPathCountFromPriorInventory": 17,
+      "license": "MIT",
+      "tree": {
+        "fileCount": 115,
+        "skillMdCount": 1,
+        "agentsMdCount": 1,
+        "hookLikePathCount": 0,
+        "mcpLikePathCount": 0,
+        "installLikePathCount": 9,
+        "pluginManifestCount": 0
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "1073bff598af34db6af9c35d967d00afad984ddf", "size": 23906},
+        {"path": "LICENSE", "type": "blob", "oid": "eabe3008f6c0275929faa8b07d406e82717648cc", "size": 1069},
+        {"path": "ThirdPartyNoticeText.txt", "type": "blob", "oid": "d58f1444d59e2c09b4d9a01091d623ba832275e4", "size": 6646},
+        {"path": "package.json", "type": "blob", "oid": "0ad2058d4be8daeb0101924e09e66b59f1187b32", "size": 3110},
+        {"path": "src/agents.ts", "type": "blob", "oid": "f63191ddc48df8fc74ffd334aa80ac8dfb76fc0e", "size": 25033},
+        {"path": "src/install.ts", "type": "blob", "oid": "ae24cc015e8bc6addcafbd58c0498b825c6b6d94", "size": 3239},
+        {"path": "src/installer.ts", "type": "blob", "oid": "f3e5810f4eeaaf1b47aaa61ad7476a2b06537c4e", "size": 42661},
+        {"path": "src/skill-lock.ts", "type": "blob", "oid": "c9694a9e66acd75a5e7e3a2128e6e0f47c6c8143", "size": 9691},
+        {"path": "skills/find-skills/SKILL.md", "type": "blob", "oid": "a41bdd074bb587afd861332cf2f473f3154de4d7", "size": 5472}
+      ],
+      "gitObjectManifestSha256": "8f2f2e780234a26b2f3216b65cf065e29e33bfc30e24f0d0f7c48c0c2b5168ca",
+      "mechanismFindings": [
+        "The CLI provides broad source discovery, temporary prompt generation, per-agent path mapping, a canonical .agents/skills copy, symlink or copy projections, and a state lock containing source and folder-hash metadata.",
+        "The canonical-path and cross-agent mapping are useful adapter inputs for consumer-topology comparison, while skills.sh is a useful discovery surface already integrated by CC Switch.",
+        "Direct add, update, and remove operations write Agent roots; installation cleans the destination before copying, and a failed symlink falls back to an independent copy.",
+        "The reviewed source does not establish a CC Switch-compatible database, backup, default-enabled state, whole-cohort transaction, or rollback contract; its direct install route therefore does not preserve current manager authority."
+      ],
+      "disposition": "discovery-and-consumer-topology-adapter-input-only",
+      "dispositionReason": "Reuse skills.sh discovery and selected topology ideas through CC-owned lifecycle or a separately reviewed adapter; do not execute the direct installer into live roots or treat it as a replacement manager.",
+      "futureRecheckTrigger": "CC Switch exposes a verified import or atomic cohort interface, or an evidenced consumer-topology gap requires a separately reviewed adapter against this exact upstream behavior."
+    },
+    {
+      "id": "github:affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "e4e4163101f162881e628f300a9ca4e6a940bcea",
+      "revision": "623f2c020f052319657674e4e6c29ab5d0ad566b",
+      "commitTime": "2026-08-05T18:17:10-04:00",
+      "releaseVersionAtRevision": "2.1.0",
+      "commitDeltaFromPriorInventory": 16,
+      "changedPathCountFromPriorInventory": 68,
+      "license": "MIT",
+      "securityPolicyObserved": true,
+      "tree": {
+        "fileCount": 3390,
+        "skillMdCount": 894,
+        "agentsMdCount": 14,
+        "hookLikePathCount": 245,
+        "mcpLikePathCount": 22,
+        "installLikePathCount": 61,
+        "pluginManifestCount": 5
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "ccd26fad515b2a1eda3ce070af8ddcf091a9384b", "size": 108936},
+        {"path": "LICENSE", "type": "blob", "oid": "b832b6f642312312367c07688dc7426db40a82ed", "size": 1071},
+        {"path": "SECURITY.md", "type": "blob", "oid": "c7fdcfd9ca4114a3625c77a44e4ac68233eb1d4c", "size": 7187},
+        {"path": "package.json", "type": "blob", "oid": "42c2ec23e7a46d6232a009404e8da1ea661e3e10", "size": 16940},
+        {"path": "agent.yaml", "type": "blob", "oid": "3154f3421b32ca60e62c5948b0a7b244ed910692", "size": 5223},
+        {"path": ".codex/AGENTS.md", "type": "blob", "oid": "70a249ccba0efc99b7bbe98c8e76bc78a552f7a4", "size": 5710},
+        {"path": ".codex-plugin/plugin.json", "type": "blob", "oid": "1745b06391cf2cc5fa7e31db9654ac7e2ec5c93a", "size": 1882},
+        {"path": ".claude-plugin/plugin.json", "type": "blob", "oid": "2b30da1d52a29794f75af5399b7dc430dba8ffd8", "size": 754},
+        {"path": "hooks/hooks.json", "type": "blob", "oid": "00ab4d0aadcd695953973ff5d57064f954d3e09e", "size": 37358},
+        {"path": "scripts/install-plan.js", "type": "blob", "oid": "0be25bc144771a5bc7eb0e84ce0c8c8b8d814f9d", "size": 8946},
+        {"path": "scripts/install-apply.js", "type": "blob", "oid": "8f1b41cca20adcc07e3ac4b3c5be11e58f893dd6", "size": 7699},
+        {"path": "scripts/repair.js", "type": "blob", "oid": "8386208ef46623fb379af1fdc46a16dfe062e88f", "size": 2873},
+        {"path": "scripts/uninstall.js", "type": "blob", "oid": "427ebfc9478c14a36671a3faf61c860fcd886a3e", "size": 2819},
+        {"path": "scripts/sync-ecc-to-codex.sh", "type": "blob", "oid": "43ca4fa53baf9b7de74d3ed35423462cceaa8bb1", "size": 17825},
+        {"path": "scripts/orchestration-status.js", "type": "blob", "oid": "33aaa6881ce5d3eb6fb6e4e8af54c6e224e6779f", "size": 1604},
+        {"path": "scripts/orchestrate-worktrees.js", "type": "blob", "oid": "0368825fc78d8e0307eb917904743c8614371329", "size": 2873},
+        {"path": "docs/ECC-2.0-REFERENCE-ARCHITECTURE.md", "type": "blob", "oid": "fdd919762c9171aaf57da508dd2a88e8745fa8cf", "size": 13247}
+      ],
+      "gitObjectManifestSha256": "27174dfac6dd821c17a73225cbb5a31f4cd6135147918f9978929d69fc610ba1",
+      "mechanismFindings": [
+        "The source explicitly models an operator surface, host adapters, worktree and session runtime, observability and evaluation, promotion, and rollback, overlapping several Harness research questions.",
+        "It supplies selective install planning, dry-run, install-state, repair, uninstall, backup, adapter compliance, status, and bounded evaluator concepts that are useful comparative method inputs.",
+        "It is a large harness and distribution system spanning Agent roots, rules, Hooks, MCP templates, memory, plugins, Git hooks, global configuration, external packages, hosted GitHub integration, and account or credential boundaries.",
+        "Its own documentation marks host parity and some Codex plugin-loading behavior as limited; static repository presence and package counts cannot prove cross-host lifecycle behavior or value."
+      ],
+      "disposition": "high-value-method-and-adapter-reference-only",
+      "dispositionReason": "Compare specific mechanisms when a matching Harness gate opens, but do not bulk import, install, execute, or substitute the whole system for the current manager or portable decision core.",
+      "futureRecheckTrigger": "A bounded Harness mechanism gate has an exact comparator need for selective install planning, install-state recovery, adapter compliance, observability payloads, or promotion-and-rollback loops."
+    }
+  ],
+  "portfolioDecision": {
+    "ordinarySkillCandidateAdded": false,
+    "currentSeventeenCandidatePoolChanged": false,
+    "managerReplacementSelected": false,
+    "repositoryAuthoredImplementationJustified": false,
+    "hardStandardPromotionJustified": false,
+    "discoverySurfaceReused": "skills.sh through CC Switch where suitable",
+    "specificMechanismReferencesRetained": [
+      "vercel-labs/skills canonical consumer topology and source lock",
+      "myclaude worktree, session, and rollback negative-control comparison",
+      "ECC selective install plan, install-state recovery, adapter matrix, observability, and promotion-loop comparison"
+    ],
+    "nextAction": "Return to the existing demand and source inventory. Select another bounded inactive cohort or mechanism fixture only when its coverage objective and stop rule are explicit; use these three sources later only for an exact matching comparator, not as ambient activation routes."
+  },
+  "authorityBoundary": {
+    "sourceDiscoveryAuthorized": true,
+    "exactInactiveAcquisitionAuthorized": true,
+    "staticReviewAuthorized": true,
+    "installAuthorized": false,
+    "enableAuthorized": false,
+    "executeAuthorized": false,
+    "managerMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "pluginAppMcpHookMutationAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "directAdoptionAuthorized": false
+  },
+  "claimBoundary": {
+    "provesThreeExactDefaultBranchRevisions": true,
+    "provesSelectedGitObjectIdentities": true,
+    "provesStaticMechanismOverlap": true,
+    "provesRuntimeBehavior": false,
+    "provesSecurity": false,
+    "provesCrossHostPortability": false,
+    "provesUserValue": false,
+    "provesManagerSuitability": false,
+    "provesResidualGap": false,
+    "authorizesInstallationActivationOrExecution": false
+  }
+}

@@ -205,7 +205,8 @@
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
-        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01"
+        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01",
+        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -388,7 +389,8 @@
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
-        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01"
+        "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01",
+        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -445,7 +447,8 @@
         "evidence.round03-capability-survey-result-package",
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
+        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -474,7 +477,8 @@
         "evidence.completeness-audit",
         "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-creative-capability-baseline-2026-07-31",
-        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31"
+        "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
+        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -2750,6 +2754,18 @@
       "asOf": "2026-08-01",
       "supports": [
         "acceptance.solution-neutral-collaboration-rebaseline",
+        "acceptance.residual-gap-proof"
+      ]
+    },
+    {
+      "id": "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06",
+      "path": "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
+      "kind": "three-source-exact-revision-system-manager-static-reference-cohort-no-install-execution-manager-substitution-or-residual-gap-promotion",
+      "asOf": "2026-08-06",
+      "supports": [
+        "acceptance.solution-neutral-collaboration-rebaseline",
+        "acceptance.capability-survey-result-package",
+        "acceptance.cross-agent-claim-limits",
         "acceptance.residual-gap-proof"
       ]
     }

@@ -4841,3 +4841,31 @@ No Skill, Plugin, App, MCP, Hook, account, manager, consumer root, or model stat
 changed in this checkpoint. The next portfolio action is a bounded inactive
 cohort selected from the existing demand and source inventory; real-task
 behavior sampling proceeds independently when a natural task becomes available.
+
+## 2026-08-06 system and manager reference cohort checkpoint
+
+The next bounded portfolio step reviewed the three pre-existing
+`system-or-manager-review-only` sources rather than waiting for a fabricated
+task or expanding candidate count. Exact current default-branch revisions and
+selected Git objects were frozen for `stellarlinkco/myclaude`,
+`vercel-labs/skills`, and `affaan-m/ECC` under one temporary inactive root.
+Myclaude was unchanged from the prior inventory; Vercel Skills advanced 13
+commits to `a4d243c3d4f86cdf9385dd1b6a0733f6937e70b5` (`1.5.22`); ECC advanced 16
+commits to `623f2c020f052319657674e4e6c29ab5d0ad566b` (`2.1.0`). No checkout was
+placed in a live discovery root, no dependency or third-party script ran, and
+the temporary acquisition root was removed after review.
+
+The dispositions are reference-only. Reuse `skills.sh` discovery through CC
+Switch and retain selected consumer-topology, worktree, recovery, adapter,
+observability, and promotion-loop mechanisms as future exact comparators.
+Myclaude's permission-bypass defaults and live execution system, the Vercel
+CLI's direct Agent-root mutation without CC lifecycle closure, and ECC's broad
+multi-root Hook/MCP/memory/plugin/account surface prevent any of them from
+becoming an ordinary Skill candidate or current manager replacement.
+
+The current 17-candidate pool remains unchanged. This checkpoint proves static
+source identity and mechanism overlap only; it does not prove runtime behavior,
+security, portability, value, residual gap, or production readiness, and it
+authorizes no installation, enablement, consumer/manager mutation, model run,
+self-authored gap fill, or hard standard. Governed event:
+`registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json`.

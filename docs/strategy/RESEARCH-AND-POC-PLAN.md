@@ -2776,3 +2776,31 @@ the mutable agent surface. The full decision and multidimensional report are:
 This does not change the mainline order or create a Skill or hard standard.
 The next evidence gate opens only when a real bounded research task can compare
 the smallest healthy native/ad-hoc loop with a Harness-governed simulation.
+
+## 2026-08-06 system and manager reference cohort checkpoint
+
+The next portfolio cohort used the three `system-or-manager-review-only`
+sources already present in the bounded 22-source inventory. It did not expand
+discovery or turn their Skill catalogs into candidate-count work. Current
+default-branch revisions and selected Git objects were frozen for
+`stellarlinkco/myclaude`, `vercel-labs/skills`, and `affaan-m/ECC` in one
+temporary inactive acquisition root. No upstream body was vendored, dependency
+installed, or third-party code executed.
+
+The review preserves specific external mechanism inputs while rejecting
+whole-system substitution. `skills.sh` discovery and the Vercel CLI's canonical
+consumer topology remain useful adapter inputs only when CC Switch keeps SSOT,
+database, backup, enablement, update, and projection authority. Myclaude's
+worktree, session, and rollback mechanisms are retained as comparison inputs,
+but its live-root installer, Hooks, model dispatch, permission-bypass defaults,
+and AGPL boundary block direct adoption. ECC's selective install planning,
+install-state recovery, adapter matrix, observability, and promotion-loop
+concepts are high-value method references, while its large multi-root Harness,
+Hook, MCP, memory, account, plugin, and configuration surface blocks bulk
+adoption or manager replacement.
+
+The current 17-candidate pool is unchanged. No manager replacement, Skill
+installation, activation, model run, repository-authored residual-gap solution,
+or hard standard is authorized or proved. The exact evidence and dispositions
+are in
+`registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json`.

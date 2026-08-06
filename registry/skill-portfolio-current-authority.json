@@ -86,6 +86,24 @@
     "behaviorProved": false,
     "valueProved": false
   },
+  "currentSystemManagerReferenceCohort": {
+    "event": "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
+    "sourceCount": 3,
+    "sourceIds": [
+      "github:stellarlinkco/myclaude",
+      "github:vercel-labs/skills",
+      "github:affaan-m/ECC"
+    ],
+    "exactDefaultBranchRevisionsObserved": true,
+    "staticMechanismReviewComplete": true,
+    "ordinarySkillCandidateAdded": false,
+    "currentSeventeenCandidatePoolChanged": false,
+    "managerReplacementSelected": false,
+    "directAdoptionAuthorized": false,
+    "runtimeBehaviorProved": false,
+    "crossHostPortabilityProved": false,
+    "userValueProved": false
+  },
   "legacyAdaptedRelease": {
     "manifest": "release-manifest.json",
     "skillRegistry": "registry/skills.json",

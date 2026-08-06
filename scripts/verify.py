@@ -1606,6 +1606,9 @@ REQUIRED_FILES = (
     "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
     "tests/test_portfolio_tasktime_projection_contract.py",
+    "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
+    "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
+    "tests/test_skill_portfolio_system_manager_reference_cohort.py",
     "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
     "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md",
     "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
@@ -1870,6 +1873,67 @@ def verify() -> None:
         is not False
     ):
         raise RuntimeError("CC Switch freshness/manager boundary drifted.")
+
+    manager_reference = load(
+        "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json"
+    )
+    manager_reference_sources = {
+        item.get("id"): item
+        for item in manager_reference.get("sources", [])
+        if isinstance(item, dict)
+    }
+    expected_manager_reference_revisions = {
+        "github:stellarlinkco/myclaude": (
+            "f2e75c1263a2d5f09cdc4bb3dfe3635c635ff296"
+        ),
+        "github:vercel-labs/skills": (
+            "a4d243c3d4f86cdf9385dd1b6a0733f6937e70b5"
+        ),
+        "github:affaan-m/ECC": (
+            "623f2c020f052319657674e4e6c29ab5d0ad566b"
+        ),
+    }
+    if (
+        manager_reference.get("schema") != 1
+        or manager_reference.get("semanticProjectionId") != projection_id
+        or set(manager_reference_sources) != set(expected_manager_reference_revisions)
+        or any(
+            manager_reference_sources[source_id].get("revision") != revision
+            for source_id, revision in expected_manager_reference_revisions.items()
+        )
+    ):
+        raise RuntimeError("System/manager reference cohort identity drifted.")
+    manager_reference_decision = manager_reference.get("portfolioDecision", {})
+    manager_reference_authority = manager_reference.get("authorityBoundary", {})
+    manager_reference_claims = manager_reference.get("claimBoundary", {})
+    if (
+        manager_reference_decision.get("ordinarySkillCandidateAdded") is not False
+        or manager_reference_decision.get("currentSeventeenCandidatePoolChanged")
+        is not False
+        or manager_reference_decision.get("managerReplacementSelected") is not False
+        or manager_reference_decision.get("repositoryAuthoredImplementationJustified")
+        is not False
+        or manager_reference_authority.get("installAuthorized") is not False
+        or manager_reference_authority.get("executeAuthorized") is not False
+        or manager_reference_authority.get("managerMutationAuthorized") is not False
+        or manager_reference_claims.get("provesRuntimeBehavior") is not False
+        or manager_reference_claims.get("provesCrossHostPortability") is not False
+        or manager_reference_claims.get("provesUserValue") is not False
+        or manager_reference_claims.get("provesResidualGap") is not False
+    ):
+        raise RuntimeError("System/manager reference cohort crossed its claim boundary.")
+
+    current_manager_reference = portfolio_authority.get(
+        "currentSystemManagerReferenceCohort", {}
+    )
+    if (
+        current_manager_reference.get("event")
+        != "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json"
+        or current_manager_reference.get("sourceCount") != 3
+        or current_manager_reference.get("managerReplacementSelected") is not False
+        or current_manager_reference.get("directAdoptionAuthorized") is not False
+    ):
+        raise RuntimeError("Current portfolio authority lost the manager reference cohort.")
 
     skills_doc = load("registry/skills.json")
     capabilities_doc = load("registry/capabilities.json")
