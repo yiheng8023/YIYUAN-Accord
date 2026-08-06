@@ -79,6 +79,28 @@
       "directCommand": "npx skills@latest add mattpocock/skills"
     }
   },
+  "deterministicValidation": {
+    "mode": "pure-zero-model-failure-injection",
+    "validator": "scripts/validate_portfolio_tasktime_projection_contract.py",
+    "test": "tests/test_portfolio_tasktime_projection_contract.py",
+    "mutationCaseIds": [
+      "authority-id-drift",
+      "curation-real-task-global-stop",
+      "curation-installation-authority-promotion",
+      "curation-stop-rule-removal",
+      "mechanism-real-task-global-stop",
+      "mechanism-claim-promotion",
+      "task-time-real-task-removal",
+      "task-time-current-gap-removal",
+      "task-time-activation-authority-removal",
+      "user-invented-task-burden-promotion",
+      "direct-installer-manager-authority-promotion",
+      "residual-gap-authoring-gate-removal",
+      "broad-claim-promotion",
+      "acceptance-verification-downgrade"
+    ],
+    "claimBoundary": "projection-consistency-and-fail-closed-mechanism-only"
+  },
   "claimBoundary": {
     "projectionConsistencyProvesBehavior": false,
     "portfolioProgressProvesCandidateValue": false,

@@ -1,0 +1,236 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-three-domain-current-capability-screen-2026-08-06",
+  "date": "2026-08-06",
+  "observedAt": "2026-08-06T20:30:25.9510862+08:00",
+  "integratedAndAuthorityRevalidatedAt": "2026-08-06T21:08:15.1276466+08:00",
+  "status": "three-domain-static-screen-two-current-official-baselines-one-external-review-only-hold",
+  "purpose": "Screen one smallest representative for each portfolio domain not mapped by the preceding seventeen-candidate cohort, preferring current official capability metadata before an exact-upstream external component, without installation, connection, activation, execution, or behavior claims.",
+  "semanticAuthority": {
+    "id": "skill-portfolio-current-authority-v1",
+    "path": "registry/skill-portfolio-current-authority.json",
+    "projectionId": "portfolio-tasktime-projection-v1"
+  },
+  "sourceBindings": [
+    {
+      "path": "registry/collaboration-domain-coverage.json",
+      "bytes": 6763,
+      "sha256": "a9d50c7cc7e4f71e4cee245cdd32988416fd25e00b845f3b2d323d15ba39e1ed",
+      "role": "ten-domain-demand-taxonomy"
+    },
+    {
+      "path": "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
+      "bytes": 22217,
+      "sha256": "5ce5b277a52ae8c89345cfe59f088f1e09bed77f79bd7a02b663e1a52eed1cc7",
+      "role": "preceding-seventeen-candidate-domain-coverage"
+    },
+    {
+      "path": "registry/user-starred-index-child-source-preflight-2026-07-18.json",
+      "bytes": 24306,
+      "sha256": "4387626db95b6b147a867f13f5746b117dcb11b48e6bf94907e5d18f1f070ff8",
+      "role": "pinned-external-child-source-preflight"
+    },
+    {
+      "path": "registry/user-starred-index-child-source-classification-2026-07-18.json",
+      "bytes": 13408,
+      "sha256": "f90756c2fcecad586e844a3f84492bd98f1acb72c144157ca0d8aecd3c4a222e",
+      "role": "bounded-source-cluster-and-stop-rule"
+    },
+    {
+      "path": "registry/skill-portfolio-current-authority.json",
+      "bytes": 7971,
+      "sha256": "0eb1afb5ee2309a9397cf2167cfc97ce2bc56d00a9b8adc5d15c9c7b2b767cd0",
+      "role": "current-portfolio-and-task-time-policy-authority-after-manager-reference-cohort-integration"
+    }
+  ],
+  "cohortContract": {
+    "coverageObjective": "Screen exactly one smallest representative for daily-life-and-personal-productivity, education-and-training, and security-privacy-and-compliance, the three domains absent from the preceding seventeen-candidate mapping.",
+    "candidateAndSourceBoundary": "Two currently visible OpenAI-maintained plugin packages plus the already-pinned intellectronica/agent-skills child source; no catalog expansion and no suite-wide review.",
+    "accountAndDataBoundary": "Public upstream bytes and local plugin-package metadata only; no Google Calendar, Anki, repository-security target, credential, private account, or user payload was accessed.",
+    "inactiveAcquisitionIsolation": "The external source was cloned only into a unique system-temporary review root, no body was executed, and the root was sent to the Windows Recycle Bin after exact digests were frozen. Official packages were read in place as runtime-owned metadata and were not vendored.",
+    "reviewAndAdmissionCriteria": [
+      "exact-source-or-package-identity",
+      "license-and-provenance",
+      "dependency-and-executable-surface",
+      "account-data-and-mutation-boundary",
+      "current-native-or-official-comparator",
+      "host-and-portability-boundary",
+      "claim-ceiling"
+    ],
+    "authorityBoundary": "Read-only static review and repository-owned evidence updates only.",
+    "verificationSurface": "Frozen digests, deterministic tests, top-level verifier, Git diff review, and cleanup recheck.",
+    "stopRule": "Stop after one representative per uncovered domain is classified; do not expand sources, retain payloads, install, connect, activate, execute, or infer a residual gap.",
+    "cleanupAndRollback": "No live root changed. The isolated acquisition root is absent from its original temporary path and recoverable from the Windows Recycle Bin until normal system cleanup. Governed CC Switch recovery artifacts remain retained and untouched."
+  },
+  "candidates": [
+    {
+      "name": "google-calendar-daily-brief",
+      "domainId": "daily-life-and-personal-productivity",
+      "sourceClass": "openai-maintained-current-plugin-metadata",
+      "package": {
+        "name": "google-calendar",
+        "version": "1.2.4",
+        "repository": "https://github.com/openai/plugins",
+        "license": "MIT",
+        "manifestPathWithinPackage": ".codex-plugin/plugin.json",
+        "manifestBytes": 1544,
+        "manifestSha256": "901df60870ce02124c2458511275246f4a3d12ca8bba382de660fc6238d50057"
+      },
+      "component": {
+        "pathWithinPackage": "skills/google-calendar-daily-brief/SKILL.md",
+        "bytes": 3422,
+        "sha256": "df3ab49a6e04ecbee44f045a4de231e27eba47a9ee9ac8cbb2ffc226056d0242",
+        "formatterPathWithinPackage": "skills/google-calendar-daily-brief/scripts/render_day_brief.py",
+        "formatterBytes": 20387,
+        "formatterSha256": "9cdb33827e7f72e4174913c59e92e3dbad8d674b74467a3f9187364b39e435c3"
+      },
+      "increment": "A one-day agenda, conflict, free-window, and remaining-meeting brief directly matches the taxonomy's daily-brief signal.",
+      "dependencies": [
+        "Google Calendar connector and an authorized calendar account for task-time source data",
+        "Python standard library for the optional formatter"
+      ],
+      "staticSurface": "The formatter reads calendar JSON from a named file or stdin and writes Markdown to stdout; no formatter network client, subprocess, or output-file write was observed.",
+      "currentComparatorClasses": [
+        "native scheduling and summarization reasoning",
+        "current Google Calendar plugin and connector"
+      ],
+      "boundary": "The package advertises interactive read and write capability, while this component's default data path is event search. Account connection, calendar reads, health, and any calendar mutation remain task-time states.",
+      "disposition": "retain-as-current-official-baseline-metadata-not-a-vendored-candidate",
+      "claimCeiling": "package-and-static-component-coverage-only"
+    },
+    {
+      "name": "anki-connect",
+      "domainId": "education-and-training",
+      "sourceClass": "third-party-exact-upstream-component",
+      "source": {
+        "repository": "https://github.com/intellectronica/agent-skills",
+        "defaultBranch": "main",
+        "revision": "9b0e00ad1b941165e2506545bbfddafa34cf2cb8",
+        "tree": "fb2c94b40895a69681904f7b858c182f872f414a",
+        "revisionCommittedAt": "2026-04-25T15:31:49Z",
+        "remoteMainMatchedPinnedRevisionAtReview": true
+      },
+      "component": {
+        "canonicalPath": "skills/anki-connect/SKILL.md",
+        "generatedPluginPath": "plugins/anki-connect/skills/SKILL.md",
+        "canonicalAndGeneratedBytesEqual": true,
+        "bytes": 9850,
+        "sha256": "72bf9f15538f7c7ba5f5a8acb478b710a7d8064df9c0f0faeb0775d93231ee13",
+        "pluginManifestPath": "plugins/anki-connect/.claude-plugin/plugin.json",
+        "pluginManifestBytes": 573,
+        "pluginManifestSha256": "50e7dc8057338c59e746779581b6dba5da4c5a10b65f7c753e6ac497f3291168"
+      },
+      "licenseReview": {
+        "rootLicensePath": "LICENSE.txt",
+        "rootLicenseDeclared": "CC0-1.0",
+        "rootLicenseBytes": 6709,
+        "rootLicenseSha256": "8086d35fe85c31edba067005aa982a702faef484f2c77cd0b58c926975eba2a9",
+        "pluginManifestDeclared": "MIT",
+        "consistent": false,
+        "decision": "hold-until-upstream-license-scope-or-generation-metadata-is-reconciled"
+      },
+      "increment": "Deck, note, card, practice, feedback, and review-state operations are relevant to learning workflows, but this is an Anki-specific operational wrapper rather than broad teaching or curriculum coverage.",
+      "dependencies": [
+        "locally running Anki",
+        "AnkiConnect server on loopback port 8765",
+        "curl and jq or an equivalent HTTP and JSON client",
+        "user confirmation for the component's enumerated note, card, deck, and model mutations"
+      ],
+      "riskAndAuthorityGaps": [
+        "Launching Anki changes local application state.",
+        "The component can mutate decks, notes, cards, models, media, profiles, imports, exports, and review state.",
+        "sync is externally consequential but is not included in the component's blanket confirmation-required list.",
+        "The upstream root license and generated plugin license metadata disagree."
+      ],
+      "currentComparatorClasses": [
+        "native tutoring, practice, and feedback reasoning",
+        "current document, spreadsheet, and presentation capabilities",
+        "manual Anki workflows when a real task and local data boundary are bound"
+      ],
+      "disposition": "review-only-hold-license-runtime-account-data-and-mutation-boundaries",
+      "claimCeiling": "exact-source-static-review-only"
+    },
+    {
+      "name": "define-security-policy",
+      "domainId": "security-privacy-and-compliance",
+      "sourceClass": "openai-maintained-current-plugin-metadata",
+      "package": {
+        "name": "codex-security",
+        "version": "0.1.17",
+        "repository": "https://github.com/openai/openai/tree/master/chatgpt/oai-maintained-plugins/plugins/codex-security",
+        "license": "Proprietary",
+        "manifestPathWithinPackage": ".codex-plugin/plugin.json",
+        "manifestBytes": 1582,
+        "manifestSha256": "0e769f583d064b8d159d3b47a6c1b3fc7a54863e056f73276de21886585b7c55"
+      },
+      "component": {
+        "pathWithinPackage": "skills/define-security-policy/SKILL.md",
+        "bytes": 6131,
+        "sha256": "286f549d7d5b017e13e38031494723b5870949e3f82ac85b6a9c32d4718433bf",
+        "guidancePathWithinPackage": "references/security-guidance.md",
+        "guidanceBytes": 963,
+        "guidanceSha256": "c1fd937f0e8547b86d649325a5676e847a16aedc5009b17b57ace2a4a5d35895",
+        "resolverPathWithinPackage": "scripts/resolve_security_md.py",
+        "resolverBytes": 5533,
+        "resolverSha256": "35b7817d3e219731a147d3e8511a5981cafcad2ccfbf70141568096917f27e81"
+      },
+      "increment": "Repository and component threat boundaries, invariants, reportability, exclusions, and accepted-risk review directly cover security-policy documentation and human-review boundaries.",
+      "dependencies": [
+        "a bound repository or component",
+        "Python standard library resolver",
+        "owner judgment for exposure, exclusion, severity, and accepted-risk decisions",
+        "explicit approval before SECURITY.md writes"
+      ],
+      "staticSurface": "The resolver inventories or composes repository-local SECURITY.md files, prunes Git metadata and directory links, caps policy reads at 1 MiB, and writes only to stdout unless an explicit output path is supplied.",
+      "currentComparatorClasses": [
+        "native threat and policy reasoning",
+        "current OpenAI-maintained Codex Security package",
+        "repository-owned security guidance and accountable owner review"
+      ],
+      "boundary": "Local package presence and static inspection do not prove plugin health, automatic Skill loading, repository coverage, policy correctness, write authority, or behavior.",
+      "disposition": "retain-as-current-official-baseline-metadata-not-a-vendored-candidate",
+      "claimCeiling": "package-and-static-component-coverage-only"
+    }
+  ],
+  "decision": {
+    "screenedDomainIds": [
+      "daily-life-and-personal-productivity",
+      "education-and-training",
+      "security-privacy-and-compliance"
+    ],
+    "screenedCandidateCount": 3,
+    "currentOfficialBaselineMetadataCount": 2,
+    "externalReviewOnlyHoldCount": 1,
+    "newPayloadRetainedInRepository": false,
+    "newCandidateAdmitted": false,
+    "newCandidateInstalled": false,
+    "managerTransactionPrepared": false,
+    "residualGapInferred": false,
+    "selfAuthoredWorkEligible": false,
+    "nextPortfolioAction": "Select another bounded cohort or mechanism-only contract check from current demand and source authorities; do not reopen this three-domain screen unless a source, package, license, host, or demand signal materially changes."
+  },
+  "cleanup": {
+    "repositoryTmpAbsentBeforeAndAfter": true,
+    "isolatedExternalReviewRootCreated": true,
+    "isolatedExternalReviewRootOriginalPathAbsentAfterReview": true,
+    "isolatedExternalReviewRootSentToRecycleBin": true,
+    "thirdPartyBodyExecuted": false,
+    "pluginOrSkillInvoked": false,
+    "accountConnectedOrRead": false,
+    "liveCapabilityRootMutated": false,
+    "ccSwitchRecoveryArtifactsRetained": true
+  },
+  "claimBoundary": {
+    "currentPluginPresenceProvesHealth": false,
+    "currentPluginPresenceProvesAccountConnection": false,
+    "staticReviewProvesInstructionDelivery": false,
+    "staticReviewProvesBehavior": false,
+    "staticReviewProvesValue": false,
+    "staticReviewProvesPortability": false,
+    "domainRepresentativeProvesDomainCompleteness": false,
+    "licenseMetadataProvesDistributionRights": false,
+    "portfolioProgressProvesCandidateNeed": false,
+    "residualGapProved": false,
+    "productionReadinessProved": false
+  }
+}

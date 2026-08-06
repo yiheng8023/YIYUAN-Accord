@@ -1,6 +1,12 @@
+import copy
 import json
 from pathlib import Path
 import unittest
+
+from scripts.validate_portfolio_tasktime_projection_contract import (
+    MUTATION_CASE_IDS,
+    validate_contract,
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -17,6 +23,37 @@ def read(path: str) -> str:
 
 
 class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.authority = load_json("registry/skill-portfolio-current-authority.json")
+        self.projection = load_json(
+            "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
+        )
+        self.acceptance = load_json("registry/program-acceptance-map.json")
+        self.texts = {
+            "plan_text": read("docs/strategy/RESEARCH-AND-POC-PLAN.md"),
+            "goal_prompt_text": read("docs/operations/CURRENT-GOAL-MODE-PROMPT.md"),
+            "readme_text": read("README.md"),
+            "readme_zh_text": read("README.zh-CN.md"),
+        }
+
+    def validate(
+        self,
+        *,
+        authority: dict | None = None,
+        projection: dict | None = None,
+        acceptance: dict | None = None,
+        texts: dict[str, str] | None = None,
+    ) -> None:
+        validate_contract(
+            self.authority if authority is None else authority,
+            self.projection if projection is None else projection,
+            self.acceptance if acceptance is None else acceptance,
+            **(self.texts if texts is None else texts),
+        )
+
+    def test_focused_validator_accepts_current_projection(self) -> None:
+        self.validate()
+
     def test_projection_binds_one_authority_to_three_distinct_surfaces(self) -> None:
         authority = load_json("registry/skill-portfolio-current-authority.json")
         projection = load_json(
@@ -105,6 +142,112 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
             boundary["directInstallerSafeUse"],
             "isolated-inactive-acquisition-only-unless-separately-admitted",
         )
+
+    def test_failure_injection_matrix_fails_closed(self) -> None:
+        mutations = []
+
+        authority = copy.deepcopy(self.authority)
+        authority["id"] = "wrong-authority"
+        mutations.append(("authority-id-drift", authority, None, None, None))
+
+        projection_mutations = {
+            "curation-real-task-global-stop": (
+                ("schedulerLanes", "portfolioCuration", "requiresRealTask"),
+                True,
+            ),
+            "curation-installation-authority-promotion": (
+                (
+                    "schedulerLanes",
+                    "portfolioCuration",
+                    "installationOrActivationAuthorized",
+                ),
+                True,
+            ),
+            "curation-stop-rule-removal": (
+                ("schedulerLanes", "portfolioCuration", "stopRuleRequired"),
+                False,
+            ),
+            "mechanism-real-task-global-stop": (
+                ("schedulerLanes", "mechanismValidation", "requiresRealTask"),
+                True,
+            ),
+            "mechanism-claim-promotion": (
+                ("schedulerLanes", "mechanismValidation", "claimBoundary"),
+                "behavior-value-production",
+            ),
+            "task-time-real-task-removal": (
+                ("schedulerLanes", "taskTimeBehaviorAndValue", "requiresRealTask"),
+                False,
+            ),
+            "task-time-current-gap-removal": (
+                (
+                    "schedulerLanes",
+                    "taskTimeBehaviorAndValue",
+                    "requiresCurrentCapabilityGap",
+                ),
+                False,
+            ),
+            "task-time-activation-authority-removal": (
+                (
+                    "schedulerLanes",
+                    "taskTimeBehaviorAndValue",
+                    "requiresSeparateActivationAuthority",
+                ),
+                False,
+            ),
+            "user-invented-task-burden-promotion": (
+                ("burdenBoundary", "doNotRequireUserToInventTasks"),
+                False,
+            ),
+            "direct-installer-manager-authority-promotion": (
+                (
+                    "ccSwitchFreshnessBoundary",
+                    "directUpstreamInstallerPreservesManagerAuthority",
+                ),
+                True,
+            ),
+            "residual-gap-authoring-gate-removal": (
+                (
+                    "schedulerLanes",
+                    "repositoryAuthoredGapFill",
+                    "requiresResidualGapEvidence",
+                ),
+                False,
+            ),
+            "broad-claim-promotion": (
+                ("claimBoundary", "projectionConsistencyProvesBehavior"),
+                True,
+            ),
+        }
+        for case_id, (path, value) in projection_mutations.items():
+            projection = copy.deepcopy(self.projection)
+            target = projection
+            for key in path[:-1]:
+                target = target[key]
+            target[path[-1]] = value
+            mutations.append((case_id, None, projection, None, None))
+
+        acceptance = copy.deepcopy(self.acceptance)
+        criterion = next(
+            item
+            for item in acceptance["acceptanceCriteria"]
+            if item["id"] == "acceptance.sequence-integrity"
+        )
+        criterion["assessment"] = "partial"
+        mutations.append(
+            ("acceptance-verification-downgrade", None, None, acceptance, None)
+        )
+
+        self.assertEqual([item[0] for item in mutations], MUTATION_CASE_IDS)
+        for case_id, authority, projection, acceptance, texts in mutations:
+            with self.subTest(case_id=case_id):
+                with self.assertRaises(RuntimeError):
+                    self.validate(
+                        authority=authority,
+                        projection=projection,
+                        acceptance=acceptance,
+                        texts=texts,
+                    )
 
 
 if __name__ == "__main__":

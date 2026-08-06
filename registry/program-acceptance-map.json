@@ -188,7 +188,8 @@
       ],
       "evidenceIds": [
         "evidence.program-plan",
-        "evidence.domain-coverage"
+        "evidence.domain-coverage",
+        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06"
       ]
     },
     {
@@ -814,7 +815,8 @@
         "evidence.cc-switch-handoff-real-canary-readonly-preview-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
         "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
-        "evidence.portfolio-tasktime-projection-contract-2026-08-06"
+        "evidence.portfolio-tasktime-projection-contract-2026-08-06",
+        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06"
       ]
     },
     {
@@ -981,7 +983,8 @@
         "evidence.round03-public-discovery-snapshot",
         "evidence.round03-alternative-comparison-batch-01",
         "evidence.public-skill-source-discovery-preflight-2026-07-18",
-        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30"
+        "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
+        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06"
       ]
     },
     {
@@ -1194,10 +1197,10 @@
     },
     {
       "id": "verification.sequence-integrity",
-      "method": "Run deterministic validation of stable operating-lane order, candidate-origin gates, initiative prerequisites, all machine sequence gates, and the shared semantic identity and scheduler invariants across the research plan, acceptance map, and goal-mode prompt.",
-      "command": "python -B scripts/verify.py",
-      "expectedResult": "Downstream decisions fail closed when demand, baseline, clustering, alternatives, residual gap, admission, release, repetition, calibration, or closeout evidence is missing; portfolio curation does not stall for an invented real task, while task-time behavior and value claims cannot bypass that gate.",
-      "evidenceRequirement": "Current program and portfolio authorities, projection contract, completeness audit, verifier, and mutation tests for forbidden skips and projection drift."
+      "method": "Run the focused pure projection validator plus top-level deterministic validation of stable operating-lane order, candidate-origin gates, initiative prerequisites, all machine sequence gates, and the shared semantic identity and scheduler invariants across the research plan, acceptance map, and goal-mode prompt. Inject one mutation at a time into the authority, curation, mechanism, task-time, burden, manager, residual-gap, acceptance, and claim gates.",
+      "command": "python -B scripts/validate_portfolio_tasktime_projection_contract.py && python -B scripts/verify.py",
+      "expectedResult": "The current projection passes without a model or capability call. All fourteen forbidden mutations fail closed. Downstream decisions fail closed when demand, baseline, clustering, alternatives, residual gap, admission, release, repetition, calibration, or closeout evidence is missing; portfolio curation does not stall for an invented real task, while task-time behavior and value claims cannot bypass that gate.",
+      "evidenceRequirement": "Current program and portfolio authorities, projection contract with the exact mutation-case ledger, focused pure validator and tests, completeness audit, and top-level verifier."
     },
     {
       "id": "verification.repository-governance",
@@ -1440,10 +1443,21 @@
     {
       "id": "evidence.portfolio-tasktime-projection-contract-2026-08-06",
       "path": "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
-      "kind": "deterministic-plan-acceptance-goal-mode-projection-and-manager-freshness-boundary",
+      "kind": "deterministic-plan-acceptance-goal-mode-projection-manager-freshness-and-fourteen-case-failure-injection-boundary",
       "asOf": "2026-08-06",
       "supports": [
         "acceptance.sequence-integrity",
+        "acceptance.cc-switch-source-preserving-skill-pool"
+      ]
+    },
+    {
+      "id": "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06",
+      "path": "registry/skill-portfolio-three-domain-current-capability-screen-2026-08-06.json",
+      "kind": "bounded-three-domain-current-official-and-exact-upstream-static-screen-with-zero-activation",
+      "asOf": "2026-08-06",
+      "supports": [
+        "acceptance.multi-domain-coverage",
+        "acceptance.discovery-reuse-before-authoring",
         "acceptance.cc-switch-source-preserving-skill-pool"
       ]
     },

@@ -4869,3 +4869,51 @@ security, portability, value, residual gap, or production readiness, and it
 authorizes no installation, enablement, consumer/manager mutation, model run,
 self-authored gap fill, or hard standard. Governed event:
 `registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json`.
+
+## 2026-08-06 three-domain current-capability screen checkpoint
+
+The next bounded portfolio cohort screened exactly one representative for each
+domain absent from the preceding seventeen-candidate mapping. It treated that
+absence as a coverage-planning signal rather than a residual gap and stopped
+after static classification.
+
+Two representatives are current OpenAI-maintained package metadata:
+`google-calendar-daily-brief` for daily-life and personal productivity, and
+`define-security-policy` for security, privacy, and compliance. Neither body
+was vendored. Their account, connector, repository, write, health, loading,
+and behavior states remain unproved.
+
+The education-and-training representative, `anki-connect`, was frozen at exact
+upstream revision `9b0e00ad1b941165e2506545bbfddafa34cf2cb8`. Its canonical
+and generated Skill bodies are byte-equal, but the repository root declares
+CC0 while the generated plugin manifest declares MIT. It also crosses local
+Anki launch, loopback API, learning-data mutation, import/export, profile,
+media, and sync boundaries. It remains review-only; no installation,
+enablement, account/data access, or execution is authorized.
+
+The isolated source clone was sent to the Windows Recycle Bin after exact
+hashes were frozen. Repository `.tmp` stayed absent. The previously retained
+CC Switch recovery roots were not changed and still require separate cleanup
+authority. Governed evidence:
+`registry/skill-portfolio-three-domain-current-capability-screen-2026-08-06.json`.
+This checkpoint proves static package/source coverage only, not health,
+instruction delivery, behavior, value, portability, domain completeness,
+residual-gap need, or production readiness.
+
+## 2026-08-06 portfolio/task-time failure-injection checkpoint
+
+The dated semantic projection now binds a pure zero-model validator and an
+exact fourteen-case mutation ledger. The matrix rejects authority drift;
+global real-task stops in the curation or mechanism lanes; curation install or
+activation promotion; stop-rule removal; mechanism claim promotion; removal
+of the task-time real-task, current-gap, or separate-activation gates; transfer
+of task invention to the user; direct-installer promotion to manager
+authority; residual-gap authoring bypass; broad-claim promotion; and acceptance
+downgrade.
+
+`scripts/verify.py` now calls the focused validator and no longer carries a
+weaker duplicate subset. The mechanism reads repository text and JSON only; it
+runs no model, Skill, Plugin, App, MCP, Hook, account, installer, CC operation,
+or consumer mutation. Passing the matrix proves fail-closed projection
+consistency only, not live routing, instruction delivery, behavior, value,
+portability, or production readiness.

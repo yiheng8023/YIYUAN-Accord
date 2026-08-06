@@ -34,6 +34,9 @@ from contracts import (
     validate_sources_lock_document,
 )
 from simulate_routing import run_scenarios
+from validate_portfolio_tasktime_projection_contract import (
+    validate_repository_contract as validate_portfolio_tasktime_projection_contract,
+)
 from simulate_cc_switch_inactive_install_transaction import (
     run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
 )
@@ -1369,6 +1372,9 @@ REQUIRED_FILES = (
     "tests/test_skill_portfolio_bound_cohort_reconciliation.py",
     "registry/skill-portfolio-candidate-demand-mapping-2026-08-03.json",
     "tests/test_skill_portfolio_candidate_demand_mapping.py",
+    "registry/skill-portfolio-three-domain-current-capability-screen-2026-08-06.json",
+    "docs/strategy/SKILL-PORTFOLIO-THREE-DOMAIN-CURRENT-CAPABILITY-SCREEN-2026-08-06.md",
+    "tests/test_skill_portfolio_three_domain_current_capability_screen.py",
     "policies/intake.md", "policies/portability.md", "policies/security.md",
     "policies/overlap-resolution.md", "policies/lifecycle.md",
     "scripts/discover_github_skill_sources.py",
@@ -1605,6 +1611,7 @@ REQUIRED_FILES = (
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
     "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
+    "scripts/validate_portfolio_tasktime_projection_contract.py",
     "tests/test_portfolio_tasktime_projection_contract.py",
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
@@ -1803,76 +1810,44 @@ def verify() -> None:
     if missing:
         raise RuntimeError("Missing required files: " + ", ".join(missing))
 
+    validate_portfolio_tasktime_projection_contract(ROOT)
     portfolio_authority = load("registry/skill-portfolio-current-authority.json")
-    projection_contract = load(
-        "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
-    )
     projection_id = "portfolio-tasktime-projection-v1"
-    marker = f"semantic-projection: {projection_id}"
-    if (
-        projection_contract.get("schema") != 1
-        or projection_contract.get("id") != projection_id
-        or projection_contract.get("semanticAuthorityId")
-        != portfolio_authority.get("id")
-        or projection_contract.get("projectionMarker") != marker
-    ):
-        raise RuntimeError("Portfolio/task-time projection authority drifted.")
 
-    authority_modes = portfolio_authority.get("operatingModes", {})
-    lanes = projection_contract.get("schedulerLanes", {})
-    curation = lanes.get("portfolioCuration", {})
-    mechanism = lanes.get("mechanismValidation", {})
-    task_time = lanes.get("taskTimeBehaviorAndValue", {})
-    if (
-        authority_modes.get("portfolioCuration", {}).get("requiresOneEndUserTask")
-        is not False
-        or curation.get("requiresRealTask") is not False
-        or mechanism.get("requiresRealTask") is not False
-        or authority_modes.get("taskTimeActivation", {}).get(
-            "requiresBoundTaskAndGap"
-        )
-        is not True
-        or task_time.get("requiresRealTask") is not True
-        or task_time.get("requiresCurrentCapabilityGap") is not True
-    ):
-        raise RuntimeError("Portfolio/task-time scheduler separation drifted.")
-
-    projection_paths = projection_contract.get("projections", {})
-    expected_projection_paths = {
-        "plan": "docs/strategy/RESEARCH-AND-POC-PLAN.md",
-        "acceptance": "registry/program-acceptance-map.json",
-        "goalModePrompt": "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
-    }
-    if projection_paths != expected_projection_paths:
-        raise RuntimeError("Portfolio/task-time projection paths drifted.")
-    for key in ("plan", "goalModePrompt"):
-        path = ROOT / projection_paths[key]
-        if marker not in path.read_text(encoding="utf-8"):
-            raise RuntimeError(f"Projection marker missing from {path.name}.")
-
-    acceptance_projection = load(projection_paths["acceptance"])
-    acceptance_criteria = {
-        item.get("id"): item
-        for item in acceptance_projection.get("acceptanceCriteria", [])
-        if isinstance(item, dict)
-    }
-    projection_criterion = acceptance_criteria.get(
-        "acceptance.sequence-integrity", {}
+    three_domain_screen = load(
+        "registry/skill-portfolio-three-domain-current-capability-screen-2026-08-06.json"
     )
+    screened_candidates = three_domain_screen.get("candidates", [])
+    screened_domains = [
+        item.get("domainId")
+        for item in screened_candidates
+        if isinstance(item, dict)
+    ]
+    screen_decision = three_domain_screen.get("decision", {})
     if (
-        projection_criterion.get("semanticProjectionId") != projection_id
-        or projection_criterion.get("assessment") != "verified"
+        three_domain_screen.get("semanticAuthority", {}).get("id")
+        != portfolio_authority.get("id")
+        or three_domain_screen.get("semanticAuthority", {}).get("projectionId")
+        != projection_id
+        or screened_domains
+        != [
+            "daily-life-and-personal-productivity",
+            "education-and-training",
+            "security-privacy-and-compliance",
+        ]
+        or screen_decision.get("currentOfficialBaselineMetadataCount") != 2
+        or screen_decision.get("externalReviewOnlyHoldCount") != 1
+        or screen_decision.get("newPayloadRetainedInRepository") is not False
+        or screen_decision.get("newCandidateAdmitted") is not False
+        or screen_decision.get("newCandidateInstalled") is not False
+        or screen_decision.get("residualGapInferred") is not False
+        or not three_domain_screen.get("claimBoundary")
+        or not all(
+            value is False
+            for value in three_domain_screen.get("claimBoundary", {}).values()
+        )
     ):
-        raise RuntimeError("Acceptance projection identity drifted.")
-
-    freshness = projection_contract.get("ccSwitchFreshnessBoundary", {})
-    if (
-        freshness.get("skillsShMayAddUpstreamRepositoryToCc") is not True
-        or freshness.get("ccRefreshAndUpdatePreserveManagerAuthority") is not True
-        or freshness.get("directUpstreamInstallerPreservesManagerAuthority")
-        is not False
-    ):
-        raise RuntimeError("CC Switch freshness/manager boundary drifted.")
+        raise RuntimeError("Three-domain current-capability screen drifted.")
 
     manager_reference = load(
         "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json"

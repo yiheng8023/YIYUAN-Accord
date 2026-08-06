@@ -2804,3 +2804,55 @@ installation, activation, model run, repository-authored residual-gap solution,
 or hard standard is authorized or proved. The exact evidence and dispositions
 are in
 `registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json`.
+
+### 2026-08-06 three-domain current-capability screen
+
+The portfolio/task-time scheduler reopened bounded portfolio progression
+without weakening the real-task gate for behavior and value. This bounded
+cohort used the three portfolio domains absent from the preceding seventeen-
+candidate mapping as a coverage objective, not as residual-gap evidence. It
+selected exactly one representative per domain and stopped.
+
+Daily-life and personal productivity maps to the current OpenAI-maintained
+`google-calendar-daily-brief` package component. Security, privacy, and
+compliance maps to the current OpenAI-maintained `define-security-policy`
+package component. Both remain runtime-owned metadata rather than vendored
+candidates. Calendar connection and data access, plugin health, repository
+scope, policy correctness, and writes remain task-time states.
+
+Education and training maps provisionally to exact upstream `anki-connect` at
+revision `9b0e00ad1b941165e2506545bbfddafa34cf2cb8`. Static review found a
+root-CC0 versus generated-plugin-MIT license declaration conflict plus local
+Anki, loopback HTTP, learning-data mutation, media, profile, import/export, and
+sync boundaries. It therefore remains review-only and is not eligible for
+manager installation or task-time activation.
+
+No third-party payload was retained, no account or private data was read, and
+no Skill, plugin, model, installer, or third-party script ran. The isolated
+clone was sent to the Windows Recycle Bin after its exact digests were frozen.
+This screen proves dated static coverage and a subtractive disposition only;
+it proves no health, instruction delivery, behavior, value, portability,
+domain completeness, residual gap, or production readiness. Evidence:
+`registry/skill-portfolio-three-domain-current-capability-screen-2026-08-06.json`.
+
+### 2026-08-06 portfolio/task-time failure-injection follow-up
+
+The semantic projection now has a dedicated pure validator instead of relying
+only on positive assertions embedded in the repository-wide verifier. It reads
+the current authority, projection contract, acceptance map, plan, goal-mode
+prompt, and bilingual entry surfaces without dispatching a model or invoking a
+capability.
+
+Fourteen one-field mutations fail closed: authority identity drift; curation
+real-task global stop, installation promotion, and stop-rule removal;
+mechanism real-task global stop and behavior-claim promotion; removal of the
+task-time real-task, current-gap, or separate-activation gates; transfer of
+task invention to the user; promotion of an author's direct installer to CC
+manager authority; removal of residual-gap authoring evidence; broad-claim
+promotion; and acceptance-verification downgrade.
+
+This proves projection consistency and fail-closed mechanism behavior only.
+It does not prove implicit Skill loading, live capability health, task-time
+instruction delivery, candidate behavior or value, portability, or production
+readiness. The top-level verifier now reuses the focused validator rather than
+maintaining a weaker duplicate subset.
