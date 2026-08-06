@@ -18,15 +18,19 @@ decisions, and bounded authorization.
   The inherited 19-Skill/40-file release is deprecated transition evidence,
   not a current install, update, routing, or product source.
 - **Current inactive pool:** 17 reviewed exact-upstream candidates. Sixteen
-  dependency-complete candidates are managed by CC Switch v3.19.1 with every
+  dependency-complete candidates are managed by CC Switch v3.19.2 with every
   host flag off and zero consumer projections after an ordinary restart.
   `customer-research` remains review-only and is not installed.
-- **Current gate:** bind one real task and first establish a healthy
-  native/runtime/official baseline. Only a demonstrated task-specific gap can
-  open a reversible one-candidate, one-host comparison.
+- **Current gate:** portfolio curation does not require a real task and may
+  continue in bounded, exact-upstream, inactive cohorts. A naturally occurring
+  real task and a demonstrated current-path gap are required only before
+  task-time activation or behavior, value, portability, and production claims.
 - **Manager boundary:** CC Switch is a replaceable operational adapter where
   suitable, not the portable product contract. PR 6086 and its fork are an
   optional upstream contribution, not a Harness dependency.
+
+The detailed current scheduler is the
+[goal-mode execution projection](docs/operations/CURRENT-GOAL-MODE-PROMPT.md).
 
 ## What problem this project addresses
 

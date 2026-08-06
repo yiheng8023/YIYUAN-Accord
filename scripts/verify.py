@@ -1603,6 +1603,9 @@ REQUIRED_FILES = (
     "audits/mcp-multi-connection-subscription-preflight-0.145.0-2026-07-27/run-03/report.json",
     "docs/mcp-task-lifecycle-evidence-contract-2026-07-23.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+    "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
+    "tests/test_portfolio_tasktime_projection_contract.py",
     "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
     "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md",
     "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
@@ -1796,6 +1799,77 @@ def verify() -> None:
     missing = [path for path in REQUIRED_FILES if not (ROOT / path).is_file()]
     if missing:
         raise RuntimeError("Missing required files: " + ", ".join(missing))
+
+    portfolio_authority = load("registry/skill-portfolio-current-authority.json")
+    projection_contract = load(
+        "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
+    )
+    projection_id = "portfolio-tasktime-projection-v1"
+    marker = f"semantic-projection: {projection_id}"
+    if (
+        projection_contract.get("schema") != 1
+        or projection_contract.get("id") != projection_id
+        or projection_contract.get("semanticAuthorityId")
+        != portfolio_authority.get("id")
+        or projection_contract.get("projectionMarker") != marker
+    ):
+        raise RuntimeError("Portfolio/task-time projection authority drifted.")
+
+    authority_modes = portfolio_authority.get("operatingModes", {})
+    lanes = projection_contract.get("schedulerLanes", {})
+    curation = lanes.get("portfolioCuration", {})
+    mechanism = lanes.get("mechanismValidation", {})
+    task_time = lanes.get("taskTimeBehaviorAndValue", {})
+    if (
+        authority_modes.get("portfolioCuration", {}).get("requiresOneEndUserTask")
+        is not False
+        or curation.get("requiresRealTask") is not False
+        or mechanism.get("requiresRealTask") is not False
+        or authority_modes.get("taskTimeActivation", {}).get(
+            "requiresBoundTaskAndGap"
+        )
+        is not True
+        or task_time.get("requiresRealTask") is not True
+        or task_time.get("requiresCurrentCapabilityGap") is not True
+    ):
+        raise RuntimeError("Portfolio/task-time scheduler separation drifted.")
+
+    projection_paths = projection_contract.get("projections", {})
+    expected_projection_paths = {
+        "plan": "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+        "acceptance": "registry/program-acceptance-map.json",
+        "goalModePrompt": "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+    }
+    if projection_paths != expected_projection_paths:
+        raise RuntimeError("Portfolio/task-time projection paths drifted.")
+    for key in ("plan", "goalModePrompt"):
+        path = ROOT / projection_paths[key]
+        if marker not in path.read_text(encoding="utf-8"):
+            raise RuntimeError(f"Projection marker missing from {path.name}.")
+
+    acceptance_projection = load(projection_paths["acceptance"])
+    acceptance_criteria = {
+        item.get("id"): item
+        for item in acceptance_projection.get("acceptanceCriteria", [])
+        if isinstance(item, dict)
+    }
+    projection_criterion = acceptance_criteria.get(
+        "acceptance.sequence-integrity", {}
+    )
+    if (
+        projection_criterion.get("semanticProjectionId") != projection_id
+        or projection_criterion.get("assessment") != "verified"
+    ):
+        raise RuntimeError("Acceptance projection identity drifted.")
+
+    freshness = projection_contract.get("ccSwitchFreshnessBoundary", {})
+    if (
+        freshness.get("skillsShMayAddUpstreamRepositoryToCc") is not True
+        or freshness.get("ccRefreshAndUpdatePreserveManagerAuthority") is not True
+        or freshness.get("directUpstreamInstallerPreservesManagerAuthority")
+        is not False
+    ):
+        raise RuntimeError("CC Switch freshness/manager boundary drifted.")
 
     skills_doc = load("registry/skills.json")
     capabilities_doc = load("registry/capabilities.json")

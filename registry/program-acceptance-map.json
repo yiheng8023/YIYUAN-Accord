@@ -479,7 +479,8 @@
     },
     {
       "id": "acceptance.sequence-integrity",
-      "statement": "Machine-readable prerequisites prevent gap claims, repository authoring, release, consumer projection, standard extraction, ASSETS admission claims, and next-round activation from skipping their upstream evidence gates.",
+      "semanticProjectionId": "portfolio-tasktime-projection-v1",
+      "statement": "Machine-readable prerequisites prevent gap claims, repository authoring, release, consumer projection, standard extraction, ASSETS admission claims, and next-round activation from skipping their upstream evidence gates. The main research plan, acceptance map, and goal-mode prompt remain deterministic projections of the dated portfolio authority: bounded inactive curation and mechanism validation do not require invented user work, while task-time behavior and value claims retain their real-task and separate-authority gates.",
       "assessment": "verified",
       "verificationIds": [
         "verification.sequence-integrity"
@@ -492,7 +493,8 @@
         "evidence.round02-stage-closeout-acceptance",
         "evidence.round03-rebaseline",
         "evidence.round03-demand-coordinate-source-contract",
-        "evidence.round03-rebaseline-acceptance"
+        "evidence.round03-rebaseline-acceptance",
+        "evidence.portfolio-tasktime-projection-contract-2026-08-06"
       ]
     },
     {
@@ -807,7 +809,8 @@
         "evidence.cc-switch-disposable-source-update-and-recovery-review-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-readonly-preview-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
-        "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27"
+        "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
+        "evidence.portfolio-tasktime-projection-contract-2026-08-06"
       ]
     },
     {
@@ -1187,10 +1190,10 @@
     },
     {
       "id": "verification.sequence-integrity",
-      "method": "Run deterministic validation of stable operating-lane order, candidate-origin gates, initiative prerequisites, and all machine sequence gates.",
+      "method": "Run deterministic validation of stable operating-lane order, candidate-origin gates, initiative prerequisites, all machine sequence gates, and the shared semantic identity and scheduler invariants across the research plan, acceptance map, and goal-mode prompt.",
       "command": "python -B scripts/verify.py",
-      "expectedResult": "Downstream decisions fail closed when demand, baseline, clustering, alternatives, residual gap, admission, release, repetition, calibration, or closeout evidence is missing.",
-      "evidenceRequirement": "Current program authority, completeness audit, verifier, and mutation tests for forbidden skips."
+      "expectedResult": "Downstream decisions fail closed when demand, baseline, clustering, alternatives, residual gap, admission, release, repetition, calibration, or closeout evidence is missing; portfolio curation does not stall for an invented real task, while task-time behavior and value claims cannot bypass that gate.",
+      "evidenceRequirement": "Current program and portfolio authorities, projection contract, completeness audit, verifier, and mutation tests for forbidden skips and projection drift."
     },
     {
       "id": "verification.repository-governance",
@@ -1428,6 +1431,16 @@
         "acceptance.custom-manager-retirement-reconciliation",
         "acceptance.native-task-orchestration-boundary",
         "acceptance.final-program-cleanup-gate"
+      ]
+    },
+    {
+      "id": "evidence.portfolio-tasktime-projection-contract-2026-08-06",
+      "path": "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
+      "kind": "deterministic-plan-acceptance-goal-mode-projection-and-manager-freshness-boundary",
+      "asOf": "2026-08-06",
+      "supports": [
+        "acceptance.sequence-integrity",
+        "acceptance.cc-switch-source-preserving-skill-pool"
       ]
     },
     {

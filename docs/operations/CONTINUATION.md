@@ -4802,3 +4802,42 @@ This closes only exact manager installation, recoverability, projection, and
 no-model listing-path evidence. Loader invocation, instruction delivery,
 behavior, value, cross-host exposure, live rollback, and model dispatch remain
 unproved and unauthorized.
+
+## 2026-08-06 portfolio/task-time semantic projection checkpoint
+
+The dated current Skill portfolio authority already separated portfolio
+curation from task-time activation, but current entry and continuation surfaces
+had drifted into treating one real task as the whole program's unique next
+action. That global scheduler interpretation is superseded. Historical real-task
+gates remain valid only for the behavior, value, portability, and production
+claims they bound at those checkpoints.
+
+The current scheduler now has three explicit projections bound by
+`semantic-projection: portfolio-tasktime-projection-v1`: the research plan is
+the procedural projection, the program acceptance map is the verification
+projection, and `docs/operations/CURRENT-GOAL-MODE-PROMPT.md` is the compact
+execution projection. Deterministic tests and `scripts/verify.py` fail if their
+authority identity or central lane semantics diverge.
+
+Bounded portfolio curation and mechanism-only validation do not require the
+user to invent a real task. They may continue through exact-revision inactive
+acquisition, static review, dependency and overlap comparison, synthetic
+fixtures, zero-model probes, and failure injection under explicit cohort and
+stop rules. A naturally occurring real task, demonstrated current-path gap,
+and separate authority remain mandatory before task-time activation or claims
+about instruction delivery, behavior, value, portability, or production.
+
+CC Switch v3.19.2 officially integrates `skills.sh` as a discovery surface that
+adds an upstream repository to CC's repository list. CC refresh, content-hash
+update detection, SSOT, database, backup, enablement, and consumer projection
+then remain the managed lifecycle. This is compatible with CC as the current
+replaceable operational manager. It is distinct from an author's direct
+installer such as Matt v1.2.2's `npx skills@latest add mattpocock/skills`, which
+writes ordinary files outside that lifecycle by default. A direct installer is
+therefore limited to isolated inactive acquisition unless a separately reviewed
+adapter reconciles the exact result into CC and verifies every managed state.
+
+No Skill, Plugin, App, MCP, Hook, account, manager, consumer root, or model state
+changed in this checkpoint. The next portfolio action is a bounded inactive
+cohort selected from the existing demand and source inventory; real-task
+behavior sampling proceeds independently when a natural task becomes available.

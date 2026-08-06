@@ -2,13 +2,25 @@
 
 ## Current decision gate
 
-Bind one decision-relevant real task and its exact comparison artifacts, then
-compare the governed Harness path with a lightweight or ad-hoc path. Measure
-outcome quality, user orchestration burden, lifecycle and resource cost,
-recovery, evidence cost, and net benefit. No new governance layer, adapter
-framework, Skill, Hook, or hard standard follows unless that comparison leaves
-a reproducible residual gap after native, official, reviewed external, and
-composed alternatives.
+<!-- semantic-projection: portfolio-tasktime-projection-v1 -->
+
+The current scheduler has separate evidence lanes. Portfolio curation does not
+require one decision-relevant real task: continue bounded discovery,
+exact-revision inactive acquisition, static and deterministic review,
+dependency and overlap comparison, rejection, and admission-record preparation
+when the curation contract and stop rule are explicit. Mechanism validation may
+use synthetic fixtures, zero-model probes, failure injection, and static checks,
+but those results remain mechanism-only.
+
+Bind one decision-relevant real task and its exact comparison artifacts only
+before task-time activation or claims about instruction delivery, behavior,
+value, portability, or production. At that gate, compare the governed Harness
+path with a lightweight or ad-hoc path and measure outcome quality, user
+orchestration burden, lifecycle and resource cost, recovery, evidence cost, and
+net benefit. The user must not be required to invent work so portfolio curation
+can progress. No new governance layer, adapter framework, Skill, Hook, or hard
+standard follows unless a reproducible residual gap remains after native,
+official, reviewed external, and composed alternatives.
 
 Skill supply now uses a separate portfolio curation mode. It may build a broad
 but bounded inactive candidate pool without binding every candidate to one
