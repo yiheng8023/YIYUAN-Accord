@@ -1,7 +1,7 @@
 # Program final-closeout readiness reconciliation
 
 Date: 2026-07-28
-Last reconciled: 2026-08-06
+Last reconciled: 2026-08-07
 Status: audited; cannot close
 
 Machine-readable authority:
@@ -35,9 +35,12 @@ upgrade those assessments or prove final program completion.
    database, physical, projection, loader, backup/restore, and cross-device
    layers.
 4. Standard lifecycle: the standard-candidate package now has one bounded
-   AI-era research contract and deterministic negative tests, but remains
-   partial because repeated cross-host value, CALIBRATION review, ASSETS
-   admission, and bounded graph-scoped revalidation remain open.
+   AI-era research contract and deterministic negative tests. A synthetic
+   graph-scoped planner now proves affected-node closure, bounded ordering,
+   fixture binding, and fail-closed mechanism behavior. Both criteria remain
+   partial because a real standard, independent review, repeated cross-host
+   value, CALIBRATION review, ASSETS or project-owner admission, and authorized
+   migration execution remain open.
 5. Runtime, Hook, and orchestration: dynamic MCP lifecycle, Hook value, and
    native task orchestration lack task-bound or cross-host proof.
 6. Final cleanup: the inventory is governed, but exact disposition, separate

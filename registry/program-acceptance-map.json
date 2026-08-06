@@ -680,7 +680,8 @@
       ],
       "evidenceIds": [
         "evidence.program-plan",
-        "evidence.production-capability-manager-design"
+        "evidence.production-capability-manager-design",
+        "evidence.standard-revalidation-cascade-poc-2026-08-07"
       ]
     },
     {
@@ -2817,6 +2818,15 @@
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.ai-independent-hard-standard-boundary"
+      ]
+    },
+    {
+      "id": "evidence.standard-revalidation-cascade-poc-2026-08-07",
+      "path": "registry/standard-revalidation-cascade-poc-2026-08-07.json",
+      "kind": "pure-zero-model-synthetic-affected-graph-cascade-planner-and-twenty-one-case-failure-injection-no-real-standard-admission-migration-execution-or-cross-repository-authority",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.standard-revalidation-cascade"
       ]
     }
   ]

@@ -5030,3 +5030,25 @@ no domain-value, compliance, adoption, cross-host, or production evidence. The
 canonical map is now 46 verified, 15 partial, and zero planned criteria, so
 final program closeout remains unavailable. Evidence:
 `registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json`.
+
+## 2026-08-07 standard revalidation cascade synthetic PoC checkpoint
+
+The standard-lifecycle lane now has a deterministic pure-zero-model planner
+for one declared-synthetic accepted standard and dependency graph. It computes
+only the downstream affected closure, excludes unrelated nodes, waits for all
+affected predecessors, emits bounded batches, and preserves per-node debt,
+migration, verification, rollback, and target-revision bindings. Twenty-one
+single-boundary mutations reject synthetic-boundary drift, incomplete accepted
+standard identity or container shapes, invalid direct nodes, universal rewrite,
+cross-repository mutation, invalid batch limits, malformed edge containers,
+unknown edge endpoints or kinds, unknown node kinds, duplicate node identities,
+missing authority or revision identity, incomplete migration plans, and affected
+cycles.
+
+This advances mechanism evidence only. The planner always returns
+`executionAuthorized: false`; it neither represents nor admits a real standard,
+executes a migration, writes another repository, deprecates a projection, nor
+authorizes deletion or release. `acceptance.standard-revalidation-cascade`
+therefore remains `partial`, and the canonical map remains 46 verified, 15
+partial, and zero planned. Evidence:
+`registry/standard-revalidation-cascade-poc-2026-08-07.json`.

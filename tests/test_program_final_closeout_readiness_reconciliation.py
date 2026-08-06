@@ -32,6 +32,12 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
             self.document["sourceBindings"]["aiIndependentHardStandardBoundaryGate"],
         )
 
+    def test_reconciliation_binds_standard_revalidation_cascade_poc(self) -> None:
+        self.assertEqual(
+            "registry/standard-revalidation-cascade-poc-2026-08-07.json",
+            self.document["sourceBindings"]["standardRevalidationCascadePoc"],
+        )
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61

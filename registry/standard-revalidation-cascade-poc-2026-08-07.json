@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "id": "standard-revalidation-cascade-poc-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-synthetic-poc-mechanism-only",
+  "documentation": "docs/strategy/STANDARD-REVALIDATION-CASCADE-POC-2026-08-07.md",
+  "sourceBindings": {
+    "programAcceptanceMap": "registry/program-acceptance-map.json",
+    "historicalDesign": "docs/superpowers/specs/2026-07-15-production-capability-manager-design.md",
+    "layeredReconciliation": "registry/layered-reliability-projection-reconciliation-2026-07-18.json"
+  },
+  "publicSeam": {
+    "planner": "scripts/plan_standard_revalidation_cascade.py",
+    "test": "tests/test_standard_revalidation_cascade_poc.py",
+    "mode": "pure-zero-model-no-mutation"
+  },
+  "failureInjectionCaseIds": [
+    "synthetic-boundary",
+    "standard-shape",
+    "graph-shape",
+    "planning-shape",
+    "edges-shape",
+    "direct-node-shape",
+    "standard-status",
+    "standard-receipt",
+    "standard-evidence",
+    "direct-node",
+    "rewrite-all",
+    "cross-repository",
+    "batch-bound",
+    "edge-target",
+    "edge-kind",
+    "node-kind",
+    "authority",
+    "identity",
+    "migration",
+    "duplicate-node",
+    "cycle"
+  ],
+  "syntheticFixture": {
+    "request": {
+      "id": "synthetic-standard-revalidation-cascade",
+      "declaredSynthetic": true,
+      "realStandardRepresented": false,
+      "standard": {
+        "id": "synthetic-standard",
+        "version": "1.0.0-synthetic",
+        "status": "accepted",
+        "ownerAdmissionReceiptId": "synthetic-owner-admission",
+        "restartBaselineId": "synthetic-restart-baseline-v1",
+        "evidenceIds": ["synthetic-standard-evidence"]
+      },
+      "graph": {
+        "nodes": [
+          {
+            "id": "source-a",
+            "kind": "governed-source",
+            "authorityOwnerId": "owner-source-a",
+            "repositoryId": "synthetic-repo-a",
+            "currentRevision": "source-a-r1",
+            "targetRevision": "source-a-r2",
+            "historicalDebtIds": ["debt-source-a"],
+            "migrationFixtureId": "fixture-migrate-source-a",
+            "verificationFixtureId": "fixture-verify-source-a",
+            "rollbackPlanId": "rollback-source-a"
+          },
+          {
+            "id": "projection-a",
+            "kind": "projection",
+            "authorityOwnerId": "owner-projection-a",
+            "repositoryId": "synthetic-repo-a",
+            "currentRevision": "projection-a-r1",
+            "targetRevision": "projection-a-r2",
+            "historicalDebtIds": ["debt-projection-a"],
+            "migrationFixtureId": "fixture-migrate-projection-a",
+            "verificationFixtureId": "fixture-verify-projection-a",
+            "rollbackPlanId": "rollback-projection-a"
+          },
+          {
+            "id": "consumer-a",
+            "kind": "consumer",
+            "authorityOwnerId": "owner-consumer-a",
+            "repositoryId": "synthetic-repo-b",
+            "currentRevision": "consumer-a-r1",
+            "targetRevision": "consumer-a-r2",
+            "historicalDebtIds": ["debt-consumer-a"],
+            "migrationFixtureId": "fixture-migrate-consumer-a",
+            "verificationFixtureId": "fixture-verify-consumer-a",
+            "rollbackPlanId": "rollback-consumer-a"
+          },
+          {
+            "id": "unrelated",
+            "kind": "governed-source",
+            "authorityOwnerId": "owner-unrelated",
+            "repositoryId": "synthetic-repo-c",
+            "currentRevision": "unrelated-r1"
+          }
+        ],
+        "edges": [
+          {"from": "source-a", "to": "projection-a", "kind": "feeds"},
+          {"from": "projection-a", "to": "consumer-a", "kind": "feeds"}
+        ]
+      },
+      "directlyAffectedNodeIds": ["source-a"],
+      "planning": {
+        "maxBatchSize": 2,
+        "rewriteAll": false,
+        "crossRepositoryMutationAuthorized": false
+      }
+    },
+    "expectedPlan": {
+      "decision": "plan-ready",
+      "blockers": [],
+      "affectedNodeIds": ["source-a", "projection-a", "consumer-a"],
+      "unaffectedNodeIds": ["unrelated"],
+      "batches": [
+        {"index": 1, "nodeIds": ["source-a"]},
+        {"index": 2, "nodeIds": ["projection-a"]},
+        {"index": 3, "nodeIds": ["consumer-a"]}
+      ],
+      "nodePlans": [
+        {
+          "nodeId": "source-a",
+          "fromRevision": "source-a-r1",
+          "targetRevision": "source-a-r2",
+          "historicalDebtIds": ["debt-source-a"],
+          "migrationFixtureId": "fixture-migrate-source-a",
+          "verificationFixtureId": "fixture-verify-source-a",
+          "rollbackPlanId": "rollback-source-a"
+        },
+        {
+          "nodeId": "projection-a",
+          "fromRevision": "projection-a-r1",
+          "targetRevision": "projection-a-r2",
+          "historicalDebtIds": ["debt-projection-a"],
+          "migrationFixtureId": "fixture-migrate-projection-a",
+          "verificationFixtureId": "fixture-verify-projection-a",
+          "rollbackPlanId": "rollback-projection-a"
+        },
+        {
+          "nodeId": "consumer-a",
+          "fromRevision": "consumer-a-r1",
+          "targetRevision": "consumer-a-r2",
+          "historicalDebtIds": ["debt-consumer-a"],
+          "migrationFixtureId": "fixture-migrate-consumer-a",
+          "verificationFixtureId": "fixture-verify-consumer-a",
+          "rollbackPlanId": "rollback-consumer-a"
+        }
+      ],
+      "restartBaselineId": "synthetic-restart-baseline-v1",
+      "oldProjectionDeprecation": "after-all-affected-verification",
+      "executionAuthorized": false,
+      "claimBoundary": "synthetic-planner-mechanism-only"
+    }
+  },
+  "claimBoundary": {
+    "provesGraphScopedPlannerMechanism": true,
+    "provesRealStandardAdmission": false,
+    "provesEvidenceTruth": false,
+    "provesMigrationExecution": false,
+    "provesCrossRepositoryAuthority": false,
+    "provesOperationalValue": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "standardAdmissionAuthorized": false,
+    "crossRepositoryMutationAuthorized": false,
+    "migrationExecutionAuthorized": false,
+    "projectionDeprecationAuthorized": false,
+    "deletionAuthorized": false,
+    "releaseAuthorized": false
+  }
+}

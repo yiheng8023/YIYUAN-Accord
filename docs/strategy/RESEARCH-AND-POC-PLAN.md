@@ -2966,3 +2966,21 @@ promote a hard floor, prove domain value or compliance, mutate a Skill or Hook,
 dispatch a model, or authorize cross-repository admission. The canonical
 acceptance inventory becomes 46 verified, 15 partial, and zero planned; final
 program closeout remains unavailable.
+
+### 2026-08-07 standard revalidation cascade synthetic PoC
+
+The standard-lifecycle lane now has a deterministic pure-zero-model planner
+for one declared-synthetic accepted standard and dependency graph. It computes
+only the downstream affected closure, excludes unrelated nodes, waits for all
+affected predecessors, emits bounded batches, and preserves per-node debt,
+migration, verification, rollback, and target-revision bindings. Twenty-one
+single-boundary mutations fail closed across the synthetic and accepted-standard
+boundaries and container shapes, affected scope, universal rewrite,
+cross-repository mutation, batching, edge and node identity or kinds, owner and
+revision identity, migration completeness, and affected cycles.
+
+This is mechanism evidence only. It does not represent or admit a real
+standard, prove evidence truth or operational value, execute a migration,
+write another repository, deprecate a projection, or authorize deletion or
+release. `acceptance.standard-revalidation-cascade` remains `partial`; the
+canonical inventory remains 46 verified, 15 partial, and zero planned.

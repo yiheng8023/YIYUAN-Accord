@@ -43,6 +43,9 @@ from evaluate_repository_authored_gap_fill_candidate import (
 from evaluate_ai_independent_hard_standard_candidate import (
     validate_repository_gate as validate_ai_independent_hard_standard_boundary_gate,
 )
+from plan_standard_revalidation_cascade import (
+    validate_repository_poc as validate_standard_revalidation_cascade_poc,
+)
 from simulate_cc_switch_inactive_install_transaction import (
     run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
 )
@@ -1627,6 +1630,10 @@ REQUIRED_FILES = (
     "docs/strategy/AI-INDEPENDENT-HARD-STANDARD-BOUNDARY-GATE-2026-08-07.md",
     "scripts/evaluate_ai_independent_hard_standard_candidate.py",
     "tests/test_ai_independent_hard_standard_boundary_gate.py",
+    "registry/standard-revalidation-cascade-poc-2026-08-07.json",
+    "docs/strategy/STANDARD-REVALIDATION-CASCADE-POC-2026-08-07.md",
+    "scripts/plan_standard_revalidation_cascade.py",
+    "tests/test_standard_revalidation_cascade_poc.py",
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "tests/test_skill_portfolio_system_manager_reference_cohort.py",
@@ -1830,6 +1837,7 @@ def verify() -> None:
     validate_portfolio_tasktime_projection_contract(ROOT)
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
+    validate_standard_revalidation_cascade_poc(ROOT)
     portfolio_authority = load("registry/skill-portfolio-current-authority.json")
     projection_id = "portfolio-tasktime-projection-v1"
 

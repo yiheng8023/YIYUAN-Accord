@@ -12,7 +12,8 @@
     "loaderHookObservabilityAdmission": "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
     "cleanupDebtPreview": "registry/closeout-cleanup-debt-preview-2026-07-24.json",
     "repositoryAuthoredGapFillGate": "registry/repository-authored-gap-fill-gate-2026-08-06.json",
-    "aiIndependentHardStandardBoundaryGate": "registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json"
+    "aiIndependentHardStandardBoundaryGate": "registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json",
+    "standardRevalidationCascadePoc": "registry/standard-revalidation-cascade-poc-2026-08-07.json"
   },
   "acceptanceSnapshot": {
     "totalCriteria": 61,
@@ -131,8 +132,8 @@
     {
       "id": "standard-lifecycle",
       "openCriteriaCount": 2,
-      "currentBoundary": "The reusable standard-candidate package now has one bounded AI-era research contract and deterministic negative tests, but repeated cross-host value, CALIBRATION review, ASSETS admission, and the graph-scoped revalidation cascade remain open.",
-      "nextEvidenceClass": "repeated source-bound candidate evidence across task or host boundaries plus a bounded affected-node revalidation proof without big-bang migration"
+      "currentBoundary": "The reusable standard-candidate package has one bounded AI-era research contract and deterministic negative tests. A synthetic graph-scoped planner now proves affected-node closure, bounded ordering, fixture binding, and fail-closed mechanism behavior, but it does not prove a real standard, independent review, repeated cross-host value, CALIBRATION review, ASSETS or project-owner admission, or authorized migration execution.",
+      "nextEvidenceClass": "independently reviewed source-bound real candidate evidence across task or host boundaries plus owner-admitted and separately authorized bounded affected-node migration and verification evidence"
     },
     {
       "id": "runtime-hook-and-orchestration",
