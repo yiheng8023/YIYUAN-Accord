@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "id": "claude-consumer-skill-projection-snapshot-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-read-only-cc-switch-projection-partial",
+  "documentation": "docs/strategy/CLAUDE-CONSUMER-SKILL-PROJECTION-SNAPSHOT-2026-08-07.md",
+  "sourceBindings": {
+    "currentPortfolioAuthority": "registry/skill-portfolio-current-authority.json",
+    "codexConsumerSnapshot": "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json"
+  },
+  "claudeSkillRoot": {
+    "path": "C:/Users/15521/.claude/skills",
+    "entryCount": 44,
+    "symbolicLinkCount": 43,
+    "materializedDirectoryCount": 1,
+    "nameSetMatchesCommonRoot": true,
+    "readOnlyObservation": true
+  },
+  "projectionBuckets": {
+    "sourceBackedSymlinks": [
+      "ask-matt", "code-review", "codebase-design", "diagnosing-bugs",
+      "domain-modeling", "grill-me", "grill-with-docs", "grilling",
+      "handoff", "implement", "improve-codebase-architecture", "prototype",
+      "research", "resolving-merge-conflicts", "setup-matt-pocock-skills",
+      "tdd", "teach", "to-questionnaire", "to-spec", "to-tickets",
+      "triage", "wait-what", "wayfinder", "writing-for-agents"
+    ],
+    "localSymlinks": [
+      "capability-router", "caveman", "closure-contract",
+      "design-an-interface", "disciplined-coding", "doc", "edit-article",
+      "intent-contract", "obsidian-vault", "pdf", "playwright", "qa",
+      "request-refactor-plan", "security-ownership-map", "setup-pre-commit",
+      "writing-beats", "writing-fragments", "writing-shape", "zoom-out"
+    ],
+    "localMaterialized": ["kimi-webbridge"]
+  },
+  "databaseReconciliation": {
+    "path": "C:/Users/15521/.cc-switch/cc-switch.db",
+    "openMode": "sqlite-uri-mode-ro",
+    "skillRowCount": 61,
+    "enabledClaudeFlagCount": 44,
+    "enabledCodexFlagCount": 44,
+    "enabledBothFlagCount": 44,
+    "matchedClaudeRootEntryCount": 44,
+    "sourceBackedCount": 24,
+    "localCount": 20,
+    "sourceRevision": "mattpocock/skills@v1.2.2",
+    "enabledFlagsProveLoaderOrBehavior": false
+  },
+  "crossConsumerDifference": {
+    "controlContractNames": [
+      "capability-router", "closure-contract", "intent-contract"
+    ],
+    "controlContractsUseCcSwitchLinksOnClaude": true,
+    "controlContractsUseConsumerRepositoryMaterializedTreesOnCommonAndCodexRoots": true,
+    "hostProjectionByteParityRequired": false,
+    "differenceProvesLoaderOrValue": false
+  },
+  "pluginBoundary": {
+    "path": "C:/Users/15521/.claude/plugins",
+    "rootExistenceObserved": true,
+    "pluginSkillRootsInventoried": false,
+    "pluginPayloadsOrSettingsRead": false,
+    "pluginStateProved": false
+  },
+  "claimBoundary": {
+    "provesDatedPhysicalProjectionSnapshot": true,
+    "provesCrossConsumerProjectionDifference": true,
+    "provesDatabaseFlagReconciliation": true,
+    "provesInstructionDiscovery": false,
+    "provesLoaderPrecedence": false,
+    "provesEnablement": false,
+    "provesInvocation": false,
+    "provesInstructionDelivery": false,
+    "provesBehavior": false,
+    "provesPluginMapping": false,
+    "provesBackupRestore": false,
+    "provesCrossDeviceParity": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "ccSwitchDatabaseWriteAuthorized": false,
+    "skillBodyWriteAuthorized": false,
+    "projectionMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "pluginReadOrWriteAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "sourceRegistrationAuthorized": false,
+    "backupOrRestoreAuthorized": false,
+    "deletionAuthorized": false,
+    "releaseAuthorized": false
+  }
+}

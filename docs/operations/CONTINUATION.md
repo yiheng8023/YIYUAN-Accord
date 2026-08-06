@@ -5072,3 +5072,21 @@ backup/restore, non-Codex consumer state, or cross-device parity. No external
 state was written. The three supported criteria and the canonical 46/15/0
 program inventory remain unchanged. Evidence:
 `registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json`.
+
+## 2026-08-07 Claude consumer Skill projection read-only checkpoint
+
+The former conceptual-only Claude consumer state now has one bounded physical
+projection snapshot. `C:/Users/15521/.claude/skills` contains the same 44 names
+as the common root: 43 CC Switch links and one materialized `kimi-webbridge`
+tree. The same 44 database rows carry both Claude and Codex flags; 24 bind
+`mattpocock/skills@v1.2.2` and 20 retain local identities. The three control
+contracts use CC Switch links on Claude while the common and Codex-specific
+roots retain consumer-repository materialized trees.
+
+This proves one dated projection-shape difference only. The Claude Plugin root
+was observed to exist but its managed Skill roots, payloads, settings, and
+behavior were not inventoried. No loader, invocation, delivery, behavior,
+backup/restore, cross-device, value, or production claim follows, and no
+external state changed. The supported criteria and the 46/15/0 program
+inventory remain unchanged. Evidence:
+`registry/claude-consumer-skill-projection-snapshot-2026-08-07.json`.

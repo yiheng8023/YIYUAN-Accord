@@ -3001,3 +3001,19 @@ prove loader precedence, live enablement, invocation, instruction delivery,
 behavior, backup/restore, non-Codex consumer state, cross-device parity, or
 production readiness. No external state was written, and all three supported
 acceptance criteria remain `partial`.
+
+### 2026-08-07 Claude consumer Skill projection read-only snapshot
+
+The local Claude projection now has one dated read-only physical snapshot.
+Its Skill root contains the same 44 names as the common root: 43 CC Switch
+links and one materialized `kimi-webbridge` tree. The same 44 database rows
+carry both Claude and Codex flags; 24 bind `mattpocock/skills@v1.2.2` and 20
+retain local identities. The three control contracts use CC Switch links on
+Claude while the common and Codex-specific roots retain consumer-repository
+materialized trees.
+
+The Claude Plugin root was observed to exist but its managed Skill roots,
+payloads, settings, enablement, and behavior were not inventoried. This slice
+therefore proves neither a complete Claude mapping nor loader, invocation,
+delivery, behavior, backup/restore, cross-device, value, or production claims.
+No external state changed and all supported criteria remain `partial`.

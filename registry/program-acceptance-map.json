@@ -604,7 +604,8 @@
         "evidence.cc-switch-disposable-source-update-and-recovery-review-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-readonly-preview-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
-        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07"
+        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
+        "evidence.claude-consumer-skill-projection-snapshot-2026-08-07"
       ]
     },
     {
@@ -823,7 +824,8 @@
         "evidence.portfolio-tasktime-projection-contract-2026-08-06",
         "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06",
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
-        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07"
+        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
+        "evidence.claude-consumer-skill-projection-snapshot-2026-08-07"
       ]
     },
     {
@@ -958,7 +960,8 @@
         "evidence.cc-switch-handoff-real-canary-readonly-preview-2026-07-18",
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
         "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
-        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07"
+        "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
+        "evidence.claude-consumer-skill-projection-snapshot-2026-08-07"
       ]
     },
     {
@@ -2836,6 +2839,17 @@
       "id": "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
       "path": "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
       "kind": "dated-read-only-codex-common-and-specific-skill-root-cc-switch-row-source-revision-and-materialized-tree-identity-snapshot-no-loader-behavior-backup-restore-or-mutation-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.consumer-mapping-evidence",
+        "acceptance.cc-switch-source-preserving-skill-pool",
+        "acceptance.foreign-managed-capability-coexistence"
+      ]
+    },
+    {
+      "id": "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
+      "path": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json",
+      "kind": "dated-read-only-claude-cc-switch-skill-projection-database-flag-and-cross-consumer-shape-snapshot-no-loader-plugin-behavior-backup-restore-or-mutation-proof",
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.consumer-mapping-evidence",
