@@ -606,7 +606,8 @@
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
         "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
         "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
-        "evidence.claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07"
+        "evidence.claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07",
+        "evidence.claude-plugin-skill-root-readonly-inventory-2026-08-07"
       ]
     },
     {
@@ -2862,6 +2863,15 @@
       "id": "evidence.claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07",
       "path": "registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json",
       "kind": "fail-closed-synthetic-readonly-plugin-skill-root-inventory-preflight-awaiting-explicit-user-authorization-no-live-read-execution-network-write-or-behavior-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.consumer-mapping-evidence"
+      ]
+    },
+    {
+      "id": "evidence.claude-plugin-skill-root-readonly-inventory-2026-08-07",
+      "path": "registry/claude-plugin-skill-root-readonly-inventory-2026-08-07.json",
+      "kind": "authorized-field-bound-readonly-claude-plugin-marketplace-cache-and-skill-root-locator-inventory-install-enablement-loader-invocation-body-behavior-value-and-production-unknown",
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.consumer-mapping-evidence"

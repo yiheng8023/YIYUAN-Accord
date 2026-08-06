@@ -3032,3 +3032,22 @@ eligible fixture is not authorization and cannot execute an inventory. This
 preflight proves no live Plugin or Skill identity, enablement, loader behavior,
 invocation, value, or production readiness. The consumer criterion and the
 46/15/0 program inventory remain unchanged.
+
+### 2026-08-07 Claude Plugin Skill-root authorized read-only inventory
+
+After a separate explicit owner grant, the bounded inventory read one registered
+Claude marketplace, 257 catalog metadata entries, 17 local cached `skills`
+roots, four manifest-declared remote entries containing 17 Skill locators, and
+zero reparse points. The marketplace cache revision is
+`f9cb226d81172f53a1787cc3ba90dc9ab51aa169`. Only the preflight allowlist was
+read; settings, prompts, credentials, account/session data, payload bodies,
+Skill bodies, and runtime logs remained outside the data boundary. The probe
+used no network, executed no Plugin, changed no configuration, and wrote no
+external state.
+
+This fills one Plugin-root metadata gap without promoting cache presence to
+installation or enablement and without claiming complete inventory, loader
+precedence, invocation, instruction delivery, behavior, value, cross-host
+parity, or production readiness. `acceptance.consumer-mapping-evidence` remains
+`partial`; the canonical inventory remains 46 verified, 15 partial, and zero
+planned.

@@ -1,0 +1,363 @@
+{
+  "schema": 1,
+  "id": "claude-plugin-skill-root-readonly-inventory-2026-08-07",
+  "asOf": "2026-08-07",
+  "status": "verified-readonly-field-bound-inventory-partial",
+  "documentation": "docs/strategy/CLAUDE-PLUGIN-SKILL-ROOT-READONLY-INVENTORY-2026-08-07.md",
+  "validator": "scripts/validate_claude_plugin_skill_root_readonly_inventory.py",
+  "tests": "tests/test_claude_plugin_skill_root_readonly_inventory.py",
+  "sourceBindings": {
+    "preflight": "registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json",
+    "claudeConsumerProjectionSnapshot": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json",
+    "targetRoot": "C:/Users/15521/.claude/plugins"
+  },
+  "authorizationEvidence": {
+    "kind": "explicit-user-readonly-grant-in-current-task",
+    "observedDate": "2026-08-07",
+    "scope": "execute-the-checked-in-readonly-preflight-contract-only",
+    "durableTranscriptClaim": false
+  },
+  "inventoryScope": {
+    "allowedPathClasses": [
+      "plugin-marketplace-manifests",
+      "plugin-version-metadata",
+      "plugin-skill-root-locators",
+      "filesystem-link-metadata"
+    ],
+    "allowedFields": [
+      "plugin-id",
+      "plugin-name",
+      "plugin-version",
+      "marketplace-id",
+      "source-locator",
+      "revision-or-digest",
+      "skill-root-relative-path",
+      "link-target",
+      "cache-or-install-state"
+    ],
+    "forbiddenContentClasses": [
+      "credentials",
+      "account-data",
+      "session-data",
+      "prompt-content",
+      "settings-content",
+      "plugin-payload-body",
+      "skill-body",
+      "runtime-logs"
+    ]
+  },
+  "authorityBoundary": {
+    "readOnlyInventoryAuthorized": true,
+    "pluginExecutionAuthorized": false,
+    "externalWriteAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "accountOrSessionAccessAuthorized": false,
+    "contentBodyReadAuthorized": false,
+    "networkAccessAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "deletionAuthorized": false,
+    "releaseAuthorized": false
+  },
+  "executionBoundary": {
+    "filesystemMetadataRead": true,
+    "allowlistedManifestMetadataRead": true,
+    "networkUsed": false,
+    "pluginExecuted": false,
+    "configurationMutated": false,
+    "accountOrSessionAccessed": false,
+    "credentialsRead": false,
+    "promptOrSettingsRead": false,
+    "pluginPayloadBodyRead": false,
+    "skillBodyRead": false,
+    "runtimeLogsRead": false,
+    "externalStateWritten": false
+  },
+  "observations": {
+    "registeredMarketplaceCount": 1,
+    "catalogPluginMetadataCount": 257,
+    "localSkillRootCount": 17,
+    "manifestDeclaredRemoteSkillEntryCount": 4,
+    "manifestDeclaredRemoteSkillLocatorCount": 17,
+    "filesystemReparsePointCount": 0,
+    "pathEscapeObserved": false,
+    "marketplaceRevisionOrDigest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+    "installState": "unknown-not-read-from-settings",
+    "enablementState": "unknown-not-read-from-settings"
+  },
+  "inventoryItems": [
+    {
+      "plugin-id": "claude-plugins-official:discord",
+      "plugin-name": "discord",
+      "plugin-version": "0.0.4",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./external_plugins/discord",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./external_plugins/discord/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:imessage",
+      "plugin-name": "imessage",
+      "plugin-version": "0.1.0",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./external_plugins/imessage",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./external_plugins/imessage/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:telegram",
+      "plugin-name": "telegram",
+      "plugin-version": "0.0.6",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./external_plugins/telegram",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./external_plugins/telegram/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:claude-code-setup",
+      "plugin-name": "claude-code-setup",
+      "plugin-version": "1.0.0",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/claude-code-setup",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/claude-code-setup/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:claude-md-management",
+      "plugin-name": "claude-md-management",
+      "plugin-version": "1.0.0",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/claude-md-management",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/claude-md-management/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:cwc-makers",
+      "plugin-name": "cwc-makers",
+      "plugin-version": "1.0.0",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/cwc-makers",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/cwc-makers/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:example-plugin",
+      "plugin-name": "example-plugin",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/example-plugin",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/example-plugin/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:frontend-design",
+      "plugin-name": "frontend-design",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/frontend-design",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/frontend-design/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:hookify",
+      "plugin-name": "hookify",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/hookify",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/hookify/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:math-olympiad",
+      "plugin-name": "math-olympiad",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/math-olympiad",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/math-olympiad/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:mcp-server-dev",
+      "plugin-name": "mcp-server-dev",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/mcp-server-dev",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/mcp-server-dev/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:playground",
+      "plugin-name": "playground",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/playground",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/playground/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:plugin-dev",
+      "plugin-name": "plugin-dev",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/plugin-dev",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/plugin-dev/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:project-artifact",
+      "plugin-name": "project-artifact",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/project-artifact",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/project-artifact/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:receipts",
+      "plugin-name": "receipts",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/receipts",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/receipts/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:session-report",
+      "plugin-name": "session-report",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/session-report",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/session-report/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:skill-creator",
+      "plugin-name": "skill-creator",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "./plugins/skill-creator",
+      "revision-or-digest": "f9cb226d81172f53a1787cc3ba90dc9ab51aa169",
+      "skill-root-relative-path": "./plugins/skill-creator/skills",
+      "link-target": null,
+      "cache-or-install-state": "marketplace-cache-root-present-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:amd-skills",
+      "plugin-name": "amd-skills",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "git-subdir:https://github.com/amd/skills.git#7ef8dd99ffd6d82208f1a0ae211a782ec2edee82:skills",
+      "revision-or-digest": "7ef8dd99ffd6d82208f1a0ae211a782ec2edee82",
+      "skill-root-relative-path": [
+        "./local-ai-use",
+        "./local-ai-app-integration",
+        "./serving-llms-on-instinct",
+        "./tracelens-analysis-orchestrator"
+      ],
+      "link-target": null,
+      "cache-or-install-state": "catalog-metadata-only-payload-not-read-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:box",
+      "plugin-name": "box",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "url:https://github.com/box/box-for-ai.git#172a8273f5d532c13ef6a3057e50c30e5368a2aa",
+      "revision-or-digest": "172a8273f5d532c13ef6a3057e50c30e5368a2aa",
+      "skill-root-relative-path": [
+        "./skills/box",
+        "./skills/box-legal-workflows",
+        "./skills/box-legal-workflows-contract",
+        "./skills/box-legal-workflows-intake",
+        "./skills/box-legal-workflows-ma"
+      ],
+      "link-target": null,
+      "cache-or-install-state": "catalog-metadata-only-payload-not-read-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:learn-with-coursera",
+      "plugin-name": "learn-with-coursera",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "git-subdir:https://github.com/coursera/skills.git#ac28fd6ebf8584e3ee196159bd6d4514fa07de0f:skills",
+      "revision-or-digest": "ac28fd6ebf8584e3ee196159bd6d4514fa07de0f",
+      "skill-root-relative-path": [
+        "./learn-with-coursera"
+      ],
+      "link-target": null,
+      "cache-or-install-state": "catalog-metadata-only-payload-not-read-install-and-enablement-unknown"
+    },
+    {
+      "plugin-id": "claude-plugins-official:netsuite-suitecloud",
+      "plugin-name": "netsuite-suitecloud",
+      "plugin-version": "unknown",
+      "marketplace-id": "claude-plugins-official",
+      "source-locator": "git-subdir:https://github.com/oracle/netsuite-suitecloud-sdk.git#b3ff2a960eb4e2f39d645ba10789d7d583fbf051:packages/agent-skills",
+      "revision-or-digest": "b3ff2a960eb4e2f39d645ba10789d7d583fbf051",
+      "skill-root-relative-path": [
+        "./netsuite-ai-connector-instructions",
+        "./netsuite-sdf-roles-and-permissions",
+        "./netsuite-uif-spa-reference",
+        "./netsuite-owasp-secure-coding",
+        "./netsuite-sdf-project-documentation",
+        "./netsuite-suitescript-records-reference",
+        "./netsuite-suitescript-upgrade"
+      ],
+      "link-target": null,
+      "cache-or-install-state": "catalog-metadata-only-payload-not-read-install-and-enablement-unknown"
+    }
+  ],
+  "claimBoundary": {
+    "provesDatedFilesystemAndManifestMetadataInventory": true,
+    "provesMarketplaceCachePresence": true,
+    "provesCompleteClaudePluginInventory": false,
+    "provesInstallation": false,
+    "provesEnablement": false,
+    "provesLoaderPrecedence": false,
+    "provesInvocation": false,
+    "provesInstructionDelivery": false,
+    "provesBehavior": false,
+    "provesValue": false,
+    "provesCrossHostParity": false,
+    "provesProductionReadiness": false
+  },
+  "acceptanceBoundary": {
+    "criterionId": "acceptance.consumer-mapping-evidence",
+    "assessment": "partial",
+    "programInventory": "46-verified-15-partial-0-planned"
+  },
+  "nextGate": "bind-a-real-loader-or-task-bound-invocation-question-with-separate-settings-or-runtime-observability-authority-before-reading-settings-or-executing-any-plugin"
+}

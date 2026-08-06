@@ -5108,3 +5108,22 @@ authorization and the evaluator always returns
 `acceptance.consumer-mapping-evidence` remains `partial`; the 46/15/0 program
 inventory is unchanged. Evidence:
 `registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json`.
+
+## 2026-08-07 Claude Plugin Skill-root authorized read-only checkpoint
+
+The owner then explicitly authorized only the preflight-bound read. The live
+read stayed under `C:/Users/15521/.claude/plugins` and used filesystem metadata,
+marketplace manifests, version fields, Skill-root locators, and link metadata.
+It observed one registered marketplace, 257 cached catalog metadata entries,
+17 local marketplace `skills` roots, four manifest-declared remote entries with
+17 locators, marketplace revision
+`f9cb226d81172f53a1787cc3ba90dc9ab51aa169`, and zero reparse points.
+
+Settings, prompts, credentials, account/session data, Plugin and Skill bodies,
+and runtime logs were not read. No network, Plugin execution, configuration
+mutation, or external write occurred. Local cache roots do not prove install or
+enablement, and remote locators do not prove fetched payloads. Loader precedence,
+task-bound invocation and delivery, behavior, value, backup/restore, other
+consumers, cross-host parity, and production readiness remain open. The consumer
+criterion stays `partial`, and the program inventory stays 46/15/0. Evidence:
+`registry/claude-plugin-skill-root-readonly-inventory-2026-08-07.json`.
