@@ -38,6 +38,12 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
             self.document["sourceBindings"]["standardRevalidationCascadePoc"],
         )
 
+    def test_reconciliation_binds_codex_consumer_skill_mapping_snapshot(self) -> None:
+        self.assertEqual(
+            "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
+            self.document["sourceBindings"]["codexConsumerSkillMappingSnapshot"],
+        )
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61

@@ -30,10 +30,12 @@ upgrade those assessments or prove final program completion.
    now fails closed, but native/runtime and reviewed alternatives are not
    exhausted with attributable live evidence, so neither a residual gap nor a
    repository-authored payload need is justified.
-3. Consumer and source governance: projection, consumer mapping, CC Switch
-   source preservation, and foreign-managed coexistence remain split across
-   database, physical, projection, loader, backup/restore, and cross-device
-   layers.
+3. Consumer and source governance: a dated read-only Codex snapshot now
+   reconciles the common and Codex-specific physical roots, 44 CC Switch rows,
+   24 exact `v1.2.2` source-backed projections, 20 local identities, and four
+   materialized tree identities. Decision-ready burden, loader precedence,
+   task-bound invocation and delivery, backup/restore, non-Codex consumers,
+   and cross-device layers remain unproved.
 4. Standard lifecycle: the standard-candidate package now has one bounded
    AI-era research contract and deterministic negative tests. A synthetic
    graph-scoped planner now proves affected-node closure, bounded ordering,

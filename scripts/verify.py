@@ -46,6 +46,9 @@ from evaluate_ai_independent_hard_standard_candidate import (
 from plan_standard_revalidation_cascade import (
     validate_repository_poc as validate_standard_revalidation_cascade_poc,
 )
+from validate_codex_consumer_skill_mapping_snapshot import (
+    validate_repository_snapshot as validate_codex_consumer_skill_mapping_snapshot,
+)
 from simulate_cc_switch_inactive_install_transaction import (
     run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
 )
@@ -1634,6 +1637,10 @@ REQUIRED_FILES = (
     "docs/strategy/STANDARD-REVALIDATION-CASCADE-POC-2026-08-07.md",
     "scripts/plan_standard_revalidation_cascade.py",
     "tests/test_standard_revalidation_cascade_poc.py",
+    "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
+    "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
+    "scripts/validate_codex_consumer_skill_mapping_snapshot.py",
+    "tests/test_codex_consumer_skill_mapping_snapshot.py",
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "tests/test_skill_portfolio_system_manager_reference_cohort.py",
@@ -1838,6 +1845,7 @@ def verify() -> None:
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)
+    validate_codex_consumer_skill_mapping_snapshot(ROOT)
     portfolio_authority = load("registry/skill-portfolio-current-authority.json")
     projection_id = "portfolio-tasktime-projection-v1"
 

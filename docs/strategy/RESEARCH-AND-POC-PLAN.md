@@ -2984,3 +2984,20 @@ standard, prove evidence truth or operational value, execute a migration,
 write another repository, deprecate a projection, or authorize deletion or
 release. `acceptance.standard-revalidation-cascade` remains `partial`; the
 canonical inventory remains 46 verified, 15 partial, and zero planned.
+
+### 2026-08-07 Codex consumer Skill mapping read-only snapshot
+
+A dated read-only local reconciliation now binds the common and Codex-specific
+Skill roots to non-secret CC Switch `skills` row metadata. The common root has
+44 entries: 40 CC Switch symlinks and four materialized directories. All 44
+match `enabled_codex=1` rows; 24 symlinks bind exact
+`mattpocock/skills@v1.2.2` source metadata and 20 entries retain local
+identities. Three materialized control-contract trees match current
+`codex-user-config` HEAD, while `kimi-webbridge` matches the CC Switch stored
+tree.
+
+This refreshes physical, source, and tree-identity evidence only. It does not
+prove loader precedence, live enablement, invocation, instruction delivery,
+behavior, backup/restore, non-Codex consumer state, cross-device parity, or
+production readiness. No external state was written, and all three supported
+acceptance criteria remain `partial`.

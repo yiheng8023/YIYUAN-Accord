@@ -5052,3 +5052,23 @@ authorizes deletion or release. `acceptance.standard-revalidation-cascade`
 therefore remains `partial`, and the canonical map remains 46 verified, 15
 partial, and zero planned. Evidence:
 `registry/standard-revalidation-cascade-poc-2026-08-07.json`.
+
+## 2026-08-07 Codex consumer Skill mapping read-only checkpoint
+
+The dated local Codex mapping now binds both physical roots and the CC Switch
+`skills` table without mutation. The common root contains 44 entries: 40 CC
+Switch symlinks and four materialized directories. All 44 match
+`enabled_codex=1` rows; 24 symlinks bind exact
+`mattpocock/skills@v1.2.2` source metadata and 20 entries retain local
+identities. The Codex-specific root has 43 matching user-projection names plus
+two runtime-owned directories; `doc` appears only in the common root. Three
+materialized control-contract trees match current `codex-user-config` HEAD and
+`kimi-webbridge` matches the CC Switch stored tree.
+
+This supersedes the July physical counts and zero-source-backed observation as
+current evidence, without rewriting that historical record. It proves no
+loader precedence, live enablement, invocation, instruction delivery, behavior,
+backup/restore, non-Codex consumer state, or cross-device parity. No external
+state was written. The three supported criteria and the canonical 46/15/0
+program inventory remain unchanged. Evidence:
+`registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json`.

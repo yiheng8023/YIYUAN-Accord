@@ -1,0 +1,165 @@
+{
+  "schema": 1,
+  "id": "codex-consumer-skill-mapping-snapshot-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-read-only-physical-mapping-partial",
+  "documentation": "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
+  "sourceBindings": {
+    "currentPortfolioAuthority": "registry/skill-portfolio-current-authority.json",
+    "predecessorMapping": "registry/consumer-mapping-evidence-gap-reconciliation-2026-07-18.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json"
+  },
+  "commonRoot": {
+    "path": "C:/Users/15521/.agents/skills",
+    "entryCount": 44,
+    "symbolicLinkCount": 40,
+    "materializedDirectoryCount": 4,
+    "readOnlyObservation": true
+  },
+  "codexSpecificRoot": {
+    "path": "C:/Users/15521/.codex/skills",
+    "allEntryCount": 45,
+    "userProjectionEntryCount": 43,
+    "intersectionWithCommonRootCount": 43,
+    "commonRootOnlyNames": ["doc"],
+    "codexUserOnlyNames": [],
+    "runtimeOwnedNames": [".system", "codex-primary-runtime"],
+    "readOnlyObservation": true
+  },
+  "projectionBuckets": {
+    "sourceBackedSymlinks": [
+      "ask-matt",
+      "code-review",
+      "codebase-design",
+      "diagnosing-bugs",
+      "domain-modeling",
+      "grill-me",
+      "grill-with-docs",
+      "grilling",
+      "handoff",
+      "implement",
+      "improve-codebase-architecture",
+      "prototype",
+      "research",
+      "resolving-merge-conflicts",
+      "setup-matt-pocock-skills",
+      "tdd",
+      "teach",
+      "to-questionnaire",
+      "to-spec",
+      "to-tickets",
+      "triage",
+      "wait-what",
+      "wayfinder",
+      "writing-for-agents"
+    ],
+    "localSymlinks": [
+      "caveman",
+      "design-an-interface",
+      "disciplined-coding",
+      "doc",
+      "edit-article",
+      "obsidian-vault",
+      "pdf",
+      "playwright",
+      "qa",
+      "request-refactor-plan",
+      "security-ownership-map",
+      "setup-pre-commit",
+      "writing-beats",
+      "writing-fragments",
+      "writing-shape",
+      "zoom-out"
+    ],
+    "sourceBackedMaterialized": [],
+    "localMaterialized": [
+      "capability-router",
+      "closure-contract",
+      "intent-contract",
+      "kimi-webbridge"
+    ]
+  },
+  "databaseReconciliation": {
+    "path": "C:/Users/15521/.cc-switch/cc-switch.db",
+    "openMode": "sqlite-uri-mode-ro",
+    "queriedTable": "skills",
+    "queriedColumns": [
+      "id",
+      "name",
+      "directory",
+      "repo_owner",
+      "repo_name",
+      "repo_branch",
+      "enabled_codex",
+      "content_hash",
+      "updated_at"
+    ],
+    "skillRowCount": 61,
+    "enabledCodexFlagCount": 44,
+    "matchedCommonRootEntryCount": 44,
+    "missingCommonRootRowCount": 0,
+    "sourceBackedCommonRootCount": 24,
+    "localCommonRootCount": 20,
+    "sourceOwner": "mattpocock",
+    "sourceRepository": "skills",
+    "sourceRevision": "v1.2.2",
+    "enabledFlagProvesLoaderOrBehavior": false
+  },
+  "materializedOwnership": {
+    "consumerRepositoryExactTreeNames": [
+      "capability-router",
+      "closure-contract",
+      "intent-contract"
+    ],
+    "consumerRepositoryHead": "fff0041bf074996b63a4f178741ccbc1bf0d6657",
+    "consumerRepositoryDirtyPathsExcluded": [".tmp/"],
+    "consumerRepositoryTreesDifferFromCcSwitchStoredCopies": true,
+    "ccSwitchExactTreeNames": ["kimi-webbridge"],
+    "commonAndCodexTreeDigestsMatch": true,
+    "treeDigests": {
+      "capability-router": {
+        "sha256": "0b8353d560cc9db5d4e6597c7cf9bb1167068081aa612e078848dd90b5a138be",
+        "fileCount": 2
+      },
+      "closure-contract": {
+        "sha256": "e8f49bc07384c8cadaba5514311ee10ab5f08a16a9ab48ee95058d8ed885e0f6",
+        "fileCount": 1
+      },
+      "intent-contract": {
+        "sha256": "51a50d52c2dd8daf8e7636e977de96ba04876792a2a1e0bef047f4fc12b6cb34",
+        "fileCount": 2
+      },
+      "kimi-webbridge": {
+        "sha256": "7b6432f344d01dafc1f0fa717fff87efdf95d19092d468e7bc7415cfb08ea23e",
+        "fileCount": 2
+      }
+    }
+  },
+  "claimBoundary": {
+    "provesDatedPhysicalRootSnapshot": true,
+    "provesDatabaseRowReconciliation": true,
+    "provesSourceRevisionForTwentyFourRows": true,
+    "provesMaterializedTreeIdentity": true,
+    "provesInstructionDiscovery": false,
+    "provesLoaderPrecedence": false,
+    "provesEnablement": false,
+    "provesInvocation": false,
+    "provesInstructionDelivery": false,
+    "provesBehavior": false,
+    "provesBackupRestore": false,
+    "provesCrossDeviceOrCrossHostParity": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "ccSwitchDatabaseWriteAuthorized": false,
+    "skillBodyWriteAuthorized": false,
+    "projectionMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "sourceRegistrationAuthorized": false,
+    "backupOrRestoreAuthorized": false,
+    "deletionAuthorized": false,
+    "releaseAuthorized": false
+  }
+}
