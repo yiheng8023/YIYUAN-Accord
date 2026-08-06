@@ -37,6 +37,9 @@ from simulate_routing import run_scenarios
 from validate_portfolio_tasktime_projection_contract import (
     validate_repository_contract as validate_portfolio_tasktime_projection_contract,
 )
+from evaluate_repository_authored_gap_fill_candidate import (
+    validate_repository_gate as validate_repository_authored_gap_fill_gate,
+)
 from simulate_cc_switch_inactive_install_transaction import (
     run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
 )
@@ -1613,6 +1616,10 @@ REQUIRED_FILES = (
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
     "scripts/validate_portfolio_tasktime_projection_contract.py",
     "tests/test_portfolio_tasktime_projection_contract.py",
+    "registry/repository-authored-gap-fill-gate-2026-08-06.json",
+    "docs/strategy/REPOSITORY-AUTHORED-GAP-FILL-GATE-2026-08-06.md",
+    "scripts/evaluate_repository_authored_gap_fill_candidate.py",
+    "tests/test_repository_authored_gap_fill_gate.py",
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "tests/test_skill_portfolio_system_manager_reference_cohort.py",
@@ -1814,6 +1821,7 @@ def verify() -> None:
         raise RuntimeError("Missing required files: " + ", ".join(missing))
 
     validate_portfolio_tasktime_projection_contract(ROOT)
+    validate_repository_authored_gap_fill_gate(ROOT)
     portfolio_authority = load("registry/skill-portfolio-current-authority.json")
     projection_id = "portfolio-tasktime-projection-v1"
 
@@ -9543,7 +9551,12 @@ def validate_program_acceptance_map(
             "acceptance.repository-authored-gap-fill-gate",
             {},
         ).get("assessment")
-        != "planned"
+        != "verified"
+        or "evidence.repository-authored-gap-fill-gate-2026-08-06"
+        not in criteria.get(
+            "acceptance.repository-authored-gap-fill-gate",
+            {},
+        ).get("evidenceIds", [])
         or any(
             self_authored_tdd_audit_evidence_id
             not in criteria.get(criterion_id, {}).get("evidenceIds", [])

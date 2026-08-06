@@ -20,6 +20,12 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
     def test_current_reconciliation_is_valid(self) -> None:
         validate_reconciliation(self.document, root=ROOT)
 
+    def test_reconciliation_binds_repository_authored_gap_fill_gate(self) -> None:
+        self.assertEqual(
+            "registry/repository-authored-gap-fill-gate-2026-08-06.json",
+            self.document["sourceBindings"]["repositoryAuthoredGapFillGate"],
+        )
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61

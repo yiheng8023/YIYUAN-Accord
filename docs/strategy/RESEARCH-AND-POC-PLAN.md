@@ -2907,6 +2907,26 @@ The correction keeps synthetic Windows homes lexical inside the two pure
 classification seams and binds the affected audit event to the LF bytes
 declared by `.gitattributes` and stored in Git. It does not alter the original
 probe payload or canonical report identity. The focused Windows and WSL tests,
-the top-level verifier, and all 2,646 Windows tests pass after the repair. A
-fresh exact-SHA matrix remains required; no capability, manager, consumer,
-account, model, or acceptance claim is promoted by this portability repair.
+the top-level verifier, and all 2,646 Windows tests pass after the repair.
+Successor exact SHA `b7d5f147d284225f596a7f68f1585d590b930d68` then passed
+every Windows, macOS, and Ubuntu workflow step. No capability, manager,
+consumer, account, model, or acceptance claim is promoted by this portability
+repair.
+
+### 2026-08-06 repository-authored gap-fill gate
+
+The current mechanism lane now validates a future repository-authored Skill or
+Hook candidate through a pure structured seam. A complete declared-synthetic
+fixture requires a reproduced residual gap; evidenced exhaustion of native,
+official, task-bound targeted discovery, reviewed external, composition,
+non-Skill Harness, project-standard, and human-control routes; design and
+license ownership; security, portability, overlap, tests; and owner approval.
+It forbids incumbent exemptions for current self-authored carriers and remains
+non-executable even when structurally eligible.
+
+Nineteen one-field mutations fail closed. This is sufficient to move only
+`acceptance.repository-authored-gap-fill-gate` from `planned` to `verified`.
+No real gap, candidate need, execution, behavior, value, portability, or
+production result follows. The remaining 16 program criteria are partial and
+retain their own evidence gates. Evidence and claim limits are in
+`registry/repository-authored-gap-fill-gate-2026-08-06.json`.

@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "id": "repository-authored-gap-fill-gate-v1",
+  "asOf": "2026-08-06",
+  "status": "verified-synthetic-gate-mechanism-only",
+  "purpose": "Prove that a repository-authored Skill or Hook candidate fails closed until every residual-gap and admission prerequisite is evidenced, without creating or executing a real candidate.",
+  "documentation": "docs/strategy/REPOSITORY-AUTHORED-GAP-FILL-GATE-2026-08-06.md",
+  "sourceBindings": {
+    "programPlan": "registry/curation-program-plan.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json",
+    "portfolioAuthority": "registry/skill-portfolio-current-authority.json",
+    "semanticProjection": "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
+  },
+  "publicSeam": {
+    "evaluator": "scripts/evaluate_repository_authored_gap_fill_candidate.py",
+    "test": "tests/test_repository_authored_gap_fill_gate.py",
+    "input": "one structured candidate record",
+    "output": "decision, ordered blockers, executionAuthorized, and claimBoundary",
+    "mode": "pure-zero-model-no-capability-execution"
+  },
+  "gateOrder": [
+    "repository-authored-origin",
+    "incumbent-disposition-impartiality",
+    "reproduced-residual-gap",
+    "alternative-exhaustion",
+    "design-provenance",
+    "license-ownership",
+    "security-review",
+    "portability-review",
+    "overlap-review",
+    "tests",
+    "owner-approval"
+  ],
+  "syntheticFixture": {
+    "declaredSynthetic": true,
+    "realTaskOrCandidateRepresented": false,
+    "candidate": {
+      "id": "synthetic-gap-fill-candidate",
+      "originClass": "repository-authored-gap-fill-candidate",
+      "incumbentExemptionRequested": false,
+      "residualGap": {
+        "status": "supported",
+        "demandCoordinateId": "synthetic-demand-coordinate",
+        "reproductionEvidenceIds": [
+          "synthetic-reproduction-evidence"
+        ]
+      },
+      "alternatives": {
+        "native-runtime": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-native-runtime-evidence"]
+        },
+        "official-runtime": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-official-runtime-evidence"]
+        },
+        "task-bound-targeted-discovery": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-task-bound-targeted-discovery-evidence"]
+        },
+        "reviewed-maintained-external": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-reviewed-maintained-external-evidence"]
+        },
+        "composition": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-composition-evidence"]
+        },
+        "non-skill-harness": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-non-skill-harness-evidence"]
+        },
+        "project-standard": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-project-standard-evidence"]
+        },
+        "human-control": {
+          "status": "exhausted-with-evidence",
+          "evidenceIds": ["synthetic-human-control-evidence"]
+        }
+      },
+      "designProvenance": {
+        "repositoryOwned": true,
+        "rationale": "synthetic validator fixture only",
+        "evidenceIds": ["synthetic-design-evidence"]
+      },
+      "licenseOwnership": {
+        "confirmed": true,
+        "licenseId": "LicenseRef-Synthetic"
+      },
+      "reviews": {
+        "security": {
+          "status": "passed",
+          "evidenceIds": ["synthetic-security-evidence"]
+        },
+        "portability": {
+          "status": "passed",
+          "evidenceIds": ["synthetic-portability-evidence"]
+        },
+        "overlap": {
+          "status": "passed",
+          "evidenceIds": ["synthetic-overlap-evidence"]
+        }
+      },
+      "tests": {
+        "status": "passed",
+        "evidenceIds": ["synthetic-test-evidence"]
+      },
+      "ownerApproval": {
+        "status": "approved",
+        "receiptId": "synthetic-owner-approval"
+      }
+    },
+    "expectedDecision": {
+      "decision": "mechanism-eligible",
+      "blockers": [],
+      "executionAuthorized": false,
+      "claimBoundary": "synthetic-gate-mechanism-only"
+    }
+  },
+  "failureInjectionCaseIds": [
+    "wrong-origin-class",
+    "incumbent-exemption",
+    "residual-gap-status",
+    "residual-gap-evidence",
+    "alternative-native-runtime",
+    "alternative-official-runtime",
+    "alternative-task-bound-targeted-discovery",
+    "alternative-reviewed-maintained-external",
+    "alternative-composition",
+    "alternative-non-skill-harness",
+    "alternative-project-standard",
+    "alternative-human-control",
+    "design-provenance",
+    "license-ownership",
+    "security-review",
+    "portability-review",
+    "overlap-review",
+    "tests",
+    "owner-approval"
+  ],
+  "claimBoundary": {
+    "provesFailClosedGateMechanism": true,
+    "provesRealResidualGap": false,
+    "provesCandidateNeed": false,
+    "provesCandidateBehavior": false,
+    "provesCandidateValue": false,
+    "provesPortability": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "realCandidateCreationAuthorized": false,
+    "skillOrHookExecutionAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "managerOrConsumerMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "acceptanceOutsideThisGateAuthorized": false
+  }
+}

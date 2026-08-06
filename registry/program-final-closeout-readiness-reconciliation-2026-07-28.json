@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "program-final-closeout-readiness-reconciliation-2026-07-28",
   "date": "2026-07-28",
-  "lastReconciledDate": "2026-07-31",
+  "lastReconciledDate": "2026-08-06",
   "status": "current-program-closeout-audited-cannot-close",
   "purpose": "Reconcile every non-verified program acceptance criterion against current evidence so a local green verifier, one host-observability decision, or one completed PoC cannot be mistaken for final program closeout.",
   "sourceBindings": {
@@ -10,13 +10,14 @@
     "threeLaneReconciliation": "registry/harness-three-lane-program-acceptance-reconciliation-2026-07-27.json",
     "controlChainSubtractiveReconciliation": "registry/human-ai-collaboration-self-authored-control-chain-subtractive-closeout-reconciliation-2026-07-28.json",
     "loaderHookObservabilityAdmission": "registry/human-ai-collaboration-self-authored-control-chain-loader-hook-observability-admission-2026-07-28.json",
-    "cleanupDebtPreview": "registry/closeout-cleanup-debt-preview-2026-07-24.json"
+    "cleanupDebtPreview": "registry/closeout-cleanup-debt-preview-2026-07-24.json",
+    "repositoryAuthoredGapFillGate": "registry/repository-authored-gap-fill-gate-2026-08-06.json"
   },
   "acceptanceSnapshot": {
     "totalCriteria": 61,
-    "verified": 44,
+    "verified": 45,
     "partial": 16,
-    "planned": 1,
+    "planned": 0,
     "other": 0,
     "allCriteriaVerified": false
   },
@@ -49,11 +50,6 @@
     {
       "id": "acceptance.residual-gap-proof",
       "assessment": "partial",
-      "cluster": "residual-gap-and-authoring"
-    },
-    {
-      "id": "acceptance.repository-authored-gap-fill-gate",
-      "assessment": "planned",
       "cluster": "residual-gap-and-authoring"
     },
     {
@@ -126,8 +122,8 @@
     },
     {
       "id": "residual-gap-and-authoring",
-      "openCriteriaCount": 3,
-      "currentBoundary": "Native/runtime and reviewed alternatives have not been exhausted with admissible self-authored live attribution, so no residual gap or repository-authored payload need is proved.",
+      "openCriteriaCount": 2,
+      "currentBoundary": "The synthetic repository-authored admission gate now fails closed, but native/runtime and reviewed alternatives have not been exhausted with admissible live attribution, so no residual gap or repository-authored payload need is proved.",
       "nextEvidenceClass": "exact candidate admission and attributable comparison before any authoring or portfolio preference"
     },
     {
@@ -158,6 +154,7 @@
   "currentEvidenceProgress": {
     "mattDependencyCompleteNoModelExposure": "covered",
     "selfAuthoredStaticSubtractiveAudit": "covered-with-limits",
+    "repositoryAuthoredGapFillGate": "verified-synthetic-mechanism-only",
     "currentHostLoaderHookObservability": "negative-admission-recorded",
     "weakModelFactorial": "not-admitted",
     "portfolioMutation": "not-authorized",
@@ -167,12 +164,12 @@
     {
       "premise": "Choosing the loader attribution boundary is the only remaining closeout decision.",
       "result": "falsified",
-      "evidence": "Seventeen criteria across six clusters remain non-verified."
+      "evidence": "Sixteen criteria across six clusters remain non-verified."
     },
     {
       "premise": "A passing top-level verifier proves final program completion.",
       "result": "falsified",
-      "evidence": "The verifier validates the current contract while the canonical acceptance map still contains sixteen partial and one planned criterion."
+      "evidence": "The verifier validates the current contract while the canonical acceptance map still contains sixteen partial criteria."
     },
     {
       "premise": "Static overlap can justify Skill retirement or external replacement.",

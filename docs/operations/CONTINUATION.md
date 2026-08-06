@@ -4966,7 +4966,26 @@ are unchanged.
 
 The original failing WSL path cases now pass, the focused 13-test Windows and
 WSL modules pass, the top-level verifier passes, and the complete Windows suite
-passes 2,646 tests. A new exact-SHA remote matrix is still required. These
-results repair cross-platform verification only; they do not promote the
-discovery cohort into behavior, value, portability, residual-gap, or production
-evidence.
+passes 2,646 tests. Successor exact SHA
+`b7d5f147d284225f596a7f68f1585d590b930d68` then passed every workflow step on
+Windows, macOS, and Ubuntu in run `31116670745`. These results repair
+cross-platform verification only; they do not promote the discovery cohort
+into behavior, value, portability, residual-gap, or production evidence.
+
+## 2026-08-06 repository-authored gap-fill gate checkpoint
+
+The only previously `planned` program criterion now has a deterministic,
+pure-zero-model admission seam. One declared-synthetic complete fixture is
+mechanism-eligible but remains non-executable. Nineteen single-field mutations
+cover origin, incumbent exemption, residual-gap status and evidence, eight
+alternative route classes, design provenance, license ownership, security,
+portability, overlap, tests, and owner approval; all fail closed with specific
+blockers.
+
+This advances only `acceptance.repository-authored-gap-fill-gate` to
+`verified`. It does not advance the still-`partial` residual-gap proof and does
+not create or authorize a real Skill, Hook, task, candidate, installation,
+enablement, manager or consumer mutation, model dispatch, behavior, value,
+portability, or production claim. The canonical map is now 45 verified, 16
+partial, and zero planned criteria. Evidence:
+`registry/repository-authored-gap-fill-gate-2026-08-06.json`.

@@ -398,14 +398,15 @@
     {
       "id": "acceptance.repository-authored-gap-fill-gate",
       "statement": "A repository-authored Skill or Hook remains a non-executable candidate until a human-AI collaboration or software-lifecycle residual gap is reproduced after native, official, runtime, and reviewed source-pool alternatives; alternative comparison, design provenance, license ownership, security, portability, overlap, tests, and owner approval are required, and the current three Skills, AGENTS carriers, and Hooks are not exempt from replacement, relocation, composition, or retirement review.",
-      "assessment": "planned",
+      "assessment": "verified",
       "verificationIds": [
         "verification.repository-authored-gap-fill"
       ],
       "evidenceIds": [
         "evidence.program-plan",
         "evidence.verify-script",
-        "evidence.human-ai-collaboration-tdd-current-self-authored-treatment-gap-audit-2026-07-27"
+        "evidence.human-ai-collaboration-tdd-current-self-authored-treatment-gap-audit-2026-07-27",
+        "evidence.repository-authored-gap-fill-gate-2026-08-06"
       ]
     },
     {
@@ -2797,6 +2798,15 @@
         "acceptance.cc-switch-source-preserving-skill-pool",
         "acceptance.broad-capability-ecosystem-boundary",
         "acceptance.discovery-reuse-before-authoring"
+      ]
+    },
+    {
+      "id": "evidence.repository-authored-gap-fill-gate-2026-08-06",
+      "path": "registry/repository-authored-gap-fill-gate-2026-08-06.json",
+      "kind": "pure-zero-model-synthetic-repository-authored-candidate-admission-gate-and-nineteen-case-failure-injection-no-real-gap-candidate-execution-or-value-proof",
+      "asOf": "2026-08-06",
+      "supports": [
+        "acceptance.repository-authored-gap-fill-gate"
       ]
     }
   ]

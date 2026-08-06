@@ -1,7 +1,7 @@
 # Program final-closeout readiness reconciliation
 
 Date: 2026-07-28
-Last reconciled: 2026-07-31
+Last reconciled: 2026-08-06
 Status: audited; cannot close
 
 Machine-readable authority:
@@ -11,11 +11,11 @@ Machine-readable authority:
 
 The canonical program map contains 61 acceptance criteria:
 
-- 44 verified;
+- 45 verified;
 - 16 partial;
-- 1 planned.
+- 0 planned.
 
-Seventeen criteria remain open across eight objectives. A passing verifier
+Sixteen criteria remain open across eight objectives. A passing verifier
 proves that the map and its current contracts are internally valid; it does not
 upgrade those assessments or prove final program completion.
 
@@ -25,9 +25,10 @@ upgrade those assessments or prove final program completion.
    full software lifecycle, end-to-end process fidelity, and AI-independent
    hard-standard boundary still need broader live, domain, longitudinal, or
    cross-host validation.
-2. Residual gap and authoring: native/runtime and reviewed alternatives are not
-   exhausted with attributable self-authored evidence, so neither a residual
-   gap nor more repository-authored payloads are justified.
+2. Residual gap and authoring: the synthetic repository-authored admission gate
+   now fails closed, but native/runtime and reviewed alternatives are not
+   exhausted with attributable live evidence, so neither a residual gap nor a
+   repository-authored payload need is justified.
 3. Consumer and source governance: projection, consumer mapping, CC Switch
    source preservation, and foreign-managed coexistence remain split across
    database, physical, projection, loader, backup/restore, and cross-device
