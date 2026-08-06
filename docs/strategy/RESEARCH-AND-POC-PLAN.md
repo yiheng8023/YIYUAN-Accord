@@ -3017,3 +3017,18 @@ payloads, settings, enablement, and behavior were not inventoried. This slice
 therefore proves neither a complete Claude mapping nor loader, invocation,
 delivery, behavior, backup/restore, cross-device, value, or production claims.
 No external state changed and all supported criteria remain `partial`.
+
+### 2026-08-07 Claude Plugin Skill-root inventory preflight
+
+The next consumer-mapping data boundary now has a pure fail-closed preflight.
+It permits a future authorized read only for Plugin marketplace manifests,
+version metadata, Skill-root locators, and filesystem-link metadata. It forbids
+credentials, account/session data, prompt/settings content, Plugin or Skill
+bodies, runtime logs, network access, Plugin execution, configuration mutation,
+and external writes. Thirteen boundary mutations fail closed.
+
+The current record remains `await-explicit-user-authorization`; a synthetic
+eligible fixture is not authorization and cannot execute an inventory. This
+preflight proves no live Plugin or Skill identity, enablement, loader behavior,
+invocation, value, or production readiness. The consumer criterion and the
+46/15/0 program inventory remain unchanged.

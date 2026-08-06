@@ -34,9 +34,11 @@ upgrade those assessments or prove final program completion.
    now reconcile the common and host-specific physical projections, 44 CC
    Switch rows, 24 exact `v1.2.2` source-backed entries, 20 local identities,
    materialized tree identity, and one cross-consumer projection-shape
-   difference. Decision-ready burden, loader precedence, task-bound invocation
-   and delivery, Plugin-managed roots, backup/restore, other consumers, and
-   cross-device layers remain unproved.
+   difference. A fail-closed Claude Plugin Skill-root inventory preflight now
+   binds the next data boundary, but explicit read authorization is absent.
+   Decision-ready burden, loader precedence, task-bound invocation and delivery,
+   Plugin-managed roots, backup/restore, other consumers, and cross-device
+   layers remain unproved.
 4. Standard lifecycle: the standard-candidate package now has one bounded
    AI-era research contract and deterministic negative tests. A synthetic
    graph-scoped planner now proves affected-node closure, bounded ordering,

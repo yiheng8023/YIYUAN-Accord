@@ -15,7 +15,8 @@
     "aiIndependentHardStandardBoundaryGate": "registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json",
     "standardRevalidationCascadePoc": "registry/standard-revalidation-cascade-poc-2026-08-07.json",
     "codexConsumerSkillMappingSnapshot": "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
-    "claudeConsumerSkillProjectionSnapshot": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json"
+    "claudeConsumerSkillProjectionSnapshot": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json",
+    "claudePluginSkillRootInventoryPreflight": "registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json"
   },
   "acceptanceSnapshot": {
     "totalCriteria": 61,
@@ -128,7 +129,7 @@
     {
       "id": "consumer-and-source-governance",
       "openCriteriaCount": 4,
-      "currentBoundary": "Dated read-only Codex and Claude snapshots now reconcile the common and host-specific physical projections, 44 CC Switch rows, 24 exact v1.2.2 source-backed entries, 20 local identities, materialized tree identity, and one cross-consumer projection-shape difference. Decision-ready burden, loader precedence, task-bound invocation and delivery, Plugin-managed roots, backup/restore, other consumers, and cross-device layers remain unproved.",
+      "currentBoundary": "Dated read-only Codex and Claude snapshots reconcile the common and host-specific physical projections, 44 CC Switch rows, 24 exact v1.2.2 source-backed entries, 20 local identities, materialized tree identity, and one cross-consumer projection-shape difference. A fail-closed Claude Plugin Skill-root inventory preflight now binds the next data boundary, but explicit read authorization is absent; loader precedence, task-bound invocation and delivery, Plugin-managed roots, backup/restore, other consumers, and cross-device layers remain unproved.",
       "nextEvidenceClass": "read-only per-consumer authority reconciliation plus separately authorized supported recovery or convergence canaries"
     },
     {

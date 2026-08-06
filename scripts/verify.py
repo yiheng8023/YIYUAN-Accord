@@ -52,6 +52,9 @@ from validate_codex_consumer_skill_mapping_snapshot import (
 from validate_claude_consumer_skill_projection_snapshot import (
     validate_repository_snapshot as validate_claude_consumer_skill_projection_snapshot,
 )
+from evaluate_claude_plugin_skill_root_readonly_preflight import (
+    validate_repository_preflight as validate_claude_plugin_skill_root_readonly_preflight,
+)
 from simulate_cc_switch_inactive_install_transaction import (
     run_failure_matrix as run_cc_switch_inactive_install_failure_matrix,
 )
@@ -1648,6 +1651,10 @@ REQUIRED_FILES = (
     "docs/strategy/CLAUDE-CONSUMER-SKILL-PROJECTION-SNAPSHOT-2026-08-07.md",
     "scripts/validate_claude_consumer_skill_projection_snapshot.py",
     "tests/test_claude_consumer_skill_projection_snapshot.py",
+    "registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json",
+    "docs/strategy/CLAUDE-PLUGIN-SKILL-ROOT-READONLY-INVENTORY-PREFLIGHT-2026-08-07.md",
+    "scripts/evaluate_claude_plugin_skill_root_readonly_preflight.py",
+    "tests/test_claude_plugin_skill_root_readonly_preflight.py",
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "tests/test_skill_portfolio_system_manager_reference_cohort.py",
@@ -1854,6 +1861,7 @@ def verify() -> None:
     validate_standard_revalidation_cascade_poc(ROOT)
     validate_codex_consumer_skill_mapping_snapshot(ROOT)
     validate_claude_consumer_skill_projection_snapshot(ROOT)
+    validate_claude_plugin_skill_root_readonly_preflight(ROOT)
     portfolio_authority = load("registry/skill-portfolio-current-authority.json")
     projection_id = "portfolio-tasktime-projection-v1"
 

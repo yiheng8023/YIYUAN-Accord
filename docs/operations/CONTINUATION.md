@@ -5090,3 +5090,21 @@ backup/restore, cross-device, value, or production claim follows, and no
 external state changed. The supported criteria and the 46/15/0 program
 inventory remain unchanged. Evidence:
 `registry/claude-consumer-skill-projection-snapshot-2026-08-07.json`.
+
+## 2026-08-07 Claude Plugin Skill-root inventory preflight checkpoint
+
+The next consumer-mapping data boundary now has a pure fail-closed preflight.
+It limits any future authorized read to Plugin marketplace manifests, version
+metadata, Skill-root locators, and filesystem-link metadata under the Claude
+Plugin root. Credentials, account/session data, prompt/settings content,
+Plugin or Skill bodies, runtime logs, network access, execution, configuration
+mutation, and external writes are forbidden. Thirteen single-boundary mutations
+fail closed.
+
+The current decision remains `await-explicit-user-authorization`, with
+`readOnlyInventoryAuthorized: false`. The synthetic eligible fixture is not
+authorization and the evaluator always returns
+`inventoryExecutionAuthorized: false`. No live Plugin inventory occurred and
+`acceptance.consumer-mapping-evidence` remains `partial`; the 46/15/0 program
+inventory is unchanged. Evidence:
+`registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json`.

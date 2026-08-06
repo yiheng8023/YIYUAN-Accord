@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "id": "claude-plugin-skill-root-readonly-inventory-preflight-v1",
+  "asOf": "2026-08-07",
+  "status": "blocked-awaiting-explicit-readonly-authorization",
+  "documentation": "docs/strategy/CLAUDE-PLUGIN-SKILL-ROOT-READONLY-INVENTORY-PREFLIGHT-2026-08-07.md",
+  "sourceBindings": {
+    "claudeConsumerProjectionSnapshot": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json"
+  },
+  "failureInjectionCaseIds": [
+    "synthetic-boundary", "use-case", "target-host", "target-root",
+    "allowed-path-classes", "allowed-fields", "forbidden-content", "network",
+    "plugin-execution", "external-write", "configuration-mutation",
+    "verification-surface", "stop-rules"
+  ],
+  "syntheticFixture": {
+    "request": {
+      "declaredSynthetic": true,
+      "realAuthorizationRepresented": false,
+      "task": {
+        "useCase": "consumer-mapping-evidence-gap",
+        "targetHost": "claude-code-local",
+        "targetRoot": "C:/Users/15521/.claude/plugins"
+      },
+      "dataBoundary": {
+        "allowedPathClasses": [
+          "plugin-marketplace-manifests",
+          "plugin-version-metadata",
+          "plugin-skill-root-locators",
+          "filesystem-link-metadata"
+        ],
+        "allowedFields": [
+          "plugin-id", "plugin-name", "plugin-version", "marketplace-id",
+          "source-locator", "revision-or-digest", "skill-root-relative-path",
+          "link-target", "cache-or-install-state"
+        ],
+        "forbiddenContentClasses": [
+          "credentials", "account-data", "session-data", "prompt-content",
+          "settings-content", "plugin-payload-body", "skill-body", "runtime-logs"
+        ],
+        "networkAccessAllowed": false
+      },
+      "authority": {
+        "syntheticReadOnlyBoundaryAcknowledged": true,
+        "pluginExecutionAuthorized": false,
+        "externalWriteAuthorized": false,
+        "configurationMutationAuthorized": false,
+        "accountOrSessionAccessAuthorized": false,
+        "contentBodyReadAuthorized": false
+      },
+      "verification": {
+        "outputPath": "registry/claude-plugin-skill-root-readonly-inventory-YYYY-MM-DD.json",
+        "validatorPath": "scripts/validate_claude_plugin_skill_root_readonly_inventory.py",
+        "acceptanceAssessmentMustRemain": "partial",
+        "evidenceTruthMustBeFieldBound": true
+      },
+      "stopRules": [
+        "stop-on-path-escape-outside-claude-plugin-root",
+        "stop-if-identity-requires-plugin-execution",
+        "stop-if-identity-requires-network-refresh",
+        "stop-before-credential-account-session-prompt-settings-or-log-content",
+        "record-unknown-without-substitution-when-source-or-revision-is-absent"
+      ]
+    }
+  },
+  "currentDecision": {
+    "readOnlyInventoryAuthorized": false,
+    "decision": "await-explicit-user-authorization",
+    "eligibleSyntheticFixtureIsNotAuthorization": true
+  },
+  "claimBoundary": {
+    "provesPreflightMechanism": true,
+    "provesLiveInventory": false,
+    "provesPluginOrSkillIdentity": false,
+    "provesEnablement": false,
+    "provesLoaderPrecedence": false,
+    "provesInvocation": false,
+    "provesBehavior": false,
+    "provesValue": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "readOnlyInventoryAuthorized": false,
+    "pluginExecutionAuthorized": false,
+    "externalWriteAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "accountOrSessionAccessAuthorized": false,
+    "contentBodyReadAuthorized": false,
+    "networkAccessAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "deletionAuthorized": false,
+    "releaseAuthorized": false
+  }
+}
