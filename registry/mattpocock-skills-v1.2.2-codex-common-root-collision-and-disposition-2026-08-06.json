@@ -15,7 +15,7 @@
   },
   "probe": {
     "report": "audits/mattpocock-skills/8b36d4fb2635b3c21998dcd8144439c9e5ba7302/codex-common-root-collision-probe-2026-08-06/REPORT.json",
-    "reportFileSha256": "0de716249084c3fffa9b98e4af882bbfe05071c22e215aa62d29e74689d0614d",
+    "reportFileSha256": "b841cd5afcc35e5abc34bca4bd72dfc3915ab7eff0cb264e331813da054c0f07",
     "reportSha256": "f8bb36d0275334b87c33fce4b8bca1666ab56e98d8d9de9ed2367db961b65228",
     "host": "Codex Desktop app-server 0.146.0",
     "sentMethods": [

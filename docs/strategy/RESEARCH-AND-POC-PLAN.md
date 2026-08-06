@@ -2893,3 +2893,20 @@ authority, fallback, cleanup, and verification contract. No Skill, Plugin,
 App, MCP, Hook, account, manager, consumer root, model, or candidate lifecycle
 state changed. Evidence:
 `registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json`.
+
+### 2026-08-06 discovery-index exact-SHA cross-platform correction
+
+The first remote run for exact SHA `36ecbf7...` was mixed rather than green.
+Ubuntu and Windows failed before repository execution because the provider
+could not resolve the pinned Action download and returned `Service
+Unavailable`. macOS executed the full suite and found three POSIX failures in
+Windows-path collision fixtures plus one LF-versus-CRLF report-byte hash
+failure.
+
+The correction keeps synthetic Windows homes lexical inside the two pure
+classification seams and binds the affected audit event to the LF bytes
+declared by `.gitattributes` and stored in Git. It does not alter the original
+probe payload or canonical report identity. The focused Windows and WSL tests,
+the top-level verifier, and all 2,646 Windows tests pass after the repair. A
+fresh exact-SHA matrix remains required; no capability, manager, consumer,
+account, model, or acceptance claim is promoted by this portability repair.

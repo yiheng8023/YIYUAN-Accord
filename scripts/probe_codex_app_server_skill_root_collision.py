@@ -170,7 +170,11 @@ def classify_collision_rows(
     *,
     home: Path,
 ) -> list[dict[str, Any]]:
-    home = home.expanduser().resolve(strict=False)
+    # Keep caller-supplied Windows paths lexical when this pure classifier is
+    # exercised on a POSIX host.  ``Path.resolve`` would otherwise reinterpret
+    # ``C:/...`` beneath the current POSIX directory and make identical paths
+    # compare unequal.  Live probes already pass an absolute native home.
+    home = home.expanduser()
     results: list[dict[str, Any]] = []
     for name in names:
         common = _normalized(home / ".agents" / "skills" / name / "SKILL.md")
@@ -223,7 +227,9 @@ def summarize_expected_cohort(
 ) -> dict[str, Any]:
     """Check one manager cohort on the no-model ``skills/list`` surface."""
 
-    home = home.expanduser().resolve(strict=False)
+    # This is a pure comparison seam and must preserve the path flavour in the
+    # supplied inventory rather than resolving it through the test host.
+    home = home.expanduser()
     expected = tuple(dict.fromkeys(expected_names))
     disabled = set(disabled_names)
     absent = tuple(dict.fromkeys(absent_names))

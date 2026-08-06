@@ -4945,3 +4945,28 @@ dated source identity and bounded static classification only, not child
 quality, health, behavior, value, security, portability, residual gap, or
 production readiness. Governed evidence:
 `registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json`.
+
+## 2026-08-06 discovery-index exact-SHA cross-platform correction
+
+The first remote matrix for discovery-index commit
+`36ecbf7b74a98cba9882eddeb2f256ea0c706211` did not provide a three-host
+green result. Ubuntu and Windows stopped during runner setup with GitHub
+`Service Unavailable` and `Failed to resolve action download info` annotations;
+they executed no repository test step. macOS reached the complete 2,646-test
+suite and exposed four real failures.
+
+Three failures came from pure collision-classification helpers resolving
+synthetic `C:/...` inputs through the POSIX host filesystem before lexical
+comparison. The helpers now preserve the caller's path flavour; live probes
+already supply an absolute native home. The fourth failure exposed a report
+file hash frozen from a stale CRLF Windows working tree even though the
+repository declares JSON as LF and stores an LF blob. The event now binds the
+repository LF bytes; the report's semantic content and internal canonical hash
+are unchanged.
+
+The original failing WSL path cases now pass, the focused 13-test Windows and
+WSL modules pass, the top-level verifier passes, and the complete Windows suite
+passes 2,646 tests. A new exact-SHA remote matrix is still required. These
+results repair cross-platform verification only; they do not promote the
+discovery cohort into behavior, value, portability, residual-gap, or production
+evidence.
