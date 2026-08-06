@@ -2930,3 +2930,39 @@ No real gap, candidate need, execution, behavior, value, portability, or
 production result follows. The remaining 16 program criteria are partial and
 retain their own evidence gates. Evidence and claim limits are in
 `registry/repository-authored-gap-fill-gate-2026-08-06.json`.
+
+### 2026-08-07 provider-neutral exact-SHA adjudication
+
+Exact SHA `91b28a9bbf8abbd559653a0bf52a710d886e9491` is aligned across local
+`main`, its upstream, and `origin/main`. Its Windows GitHub Actions job passed
+all repository steps. macOS first stopped during hosted setup with GitHub
+`Service Unavailable`; a failed-job rerun left macOS and Ubuntu without hosted
+runners until the provider cancelled both. GitHub reported an Actions
+`major_outage` during the attempts.
+
+This records successful Windows remote exact-SHA evidence and unavailable
+external infrastructure for the other two jobs. It does not claim a green
+three-host matrix, a macOS result for this delta, or a code failure. The
+already-green `b7d5f147...` matrix remains a preceding cross-host baseline.
+Consistent with the repository's provider-neutral verification model, the
+unavailable external evidence remains explicit but does not freeze unrelated
+Harness mechanism work. No paid Actions dependency, new CI provider, account
+change, or broader runtime authority follows.
+
+### 2026-08-07 AI-independent hard-standard boundary gate
+
+The existing gate statement is now backed by a pure Python evaluator and CLI,
+a declared-synthetic positive fixture, and twenty fail-closed mutations. The
+counterfactual removes AI, model, Skill, Hook, and Agent behavior while
+requiring the obligation, accountable non-AI owner, allowed execution surface,
+allowed proof surface, and their references to survive. A structurally complete
+record must also bind non-empty evidence IDs for its obligation, accountable
+owner, execution surface, proof surface, and counterfactual. It can become
+boundary-eligible only; separate governed admission remains required and the
+evaluator always returns `admissionAuthorized: false`.
+
+This verifies the boundary mechanism only. It does not supply a real candidate,
+promote a hard floor, prove domain value or compliance, mutate a Skill or Hook,
+dispatch a model, or authorize cross-repository admission. The canonical
+acceptance inventory becomes 46 verified, 15 partial, and zero planned; final
+program closeout remains unavailable.

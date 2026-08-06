@@ -111,12 +111,15 @@ EXPECTED_ACCEPTANCE = {
     "acceptance.solution-neutral-collaboration-rebaseline": "partial",
     "acceptance.software-engineering-lifecycle-specialization": "partial",
     "acceptance.end-to-end-process-fidelity": "partial",
-    "acceptance.ai-independent-hard-standard-boundary": "partial",
+    "acceptance.ai-independent-hard-standard-boundary": "verified",
 }
 EVIDENCE_ID = "evidence.human-ai-collaboration-coverage-rebaseline"
 EVIDENCE_PATH = "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json"
 MATRIX_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01"
+)
+AI_INDEPENDENT_HARD_STANDARD_GATE_EVIDENCE_ID = (
+    "evidence.ai-independent-hard-standard-boundary-gate-2026-08-07"
 )
 RELEASE_CHANGE_PROTOCOL_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-release-change-zero-model-"
@@ -504,6 +507,7 @@ def validate_rebaseline(
                 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
+                AI_INDEPENDENT_HARD_STANDARD_GATE_EVIDENCE_ID,
             ]
         if acceptance_id == "acceptance.end-to-end-process-fidelity":
             expected_evidence_ids += [

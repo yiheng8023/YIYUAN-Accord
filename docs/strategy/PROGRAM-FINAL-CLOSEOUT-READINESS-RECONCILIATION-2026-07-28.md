@@ -11,20 +11,21 @@ Machine-readable authority:
 
 The canonical program map contains 61 acceptance criteria:
 
-- 45 verified;
-- 16 partial;
+- 46 verified;
+- 15 partial;
 - 0 planned.
 
-Sixteen criteria remain open across eight objectives. A passing verifier
+Fifteen criteria remain open across eight objectives. A passing verifier
 proves that the map and its current contracts are internally valid; it does not
 upgrade those assessments or prove final program completion.
 
 ## Six remaining evidence clusters
 
 1. Semantic and lifecycle evidence: the open-world collaboration framework,
-   full software lifecycle, end-to-end process fidelity, and AI-independent
-   hard-standard boundary still need broader live, domain, longitudinal, or
-   cross-host validation.
+   full software lifecycle, and end-to-end process fidelity still need broader
+   live, domain, longitudinal, or cross-host validation. The AI-independent
+   hard-standard boundary now has a verified fail-closed mechanism; this does
+   not admit or validate a real hard standard.
 2. Residual gap and authoring: the synthetic repository-authored admission gate
    now fails closed, but native/runtime and reviewed alternatives are not
    exhausted with attributable live evidence, so neither a residual gap nor a

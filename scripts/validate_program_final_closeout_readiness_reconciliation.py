@@ -64,11 +64,11 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         for row in document.get("openCriteria", [])
     }
     _require(
-        observed_open == expected_open and len(observed_open) == 16,
+        observed_open == expected_open and len(observed_open) == 15,
         "Program open-criteria reconciliation drifted",
     )
     valid_clusters = {
-        "semantic-and-lifecycle-evidence": 4,
+        "semantic-and-lifecycle-evidence": 3,
         "residual-gap-and-authoring": 2,
         "consumer-and-source-governance": 4,
         "standard-lifecycle": 2,

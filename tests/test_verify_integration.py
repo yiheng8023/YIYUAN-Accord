@@ -4618,7 +4618,7 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             criteria["acceptance.ai-independent-hard-standard-boundary"][
                 "assessment"
             ],
-            "partial",
+            "verified",
         )
 
     def test_residual_gap_proof_stays_partial_and_non_vacuous(self) -> None:

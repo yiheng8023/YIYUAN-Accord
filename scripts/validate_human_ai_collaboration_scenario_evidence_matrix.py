@@ -31,6 +31,9 @@ REBASELINE_PATH = "registry/human-ai-collaboration-coverage-rebaseline-2026-07-2
 MATRIX_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01"
 )
+AI_INDEPENDENT_HARD_STANDARD_GATE_EVIDENCE_ID = (
+    "evidence.ai-independent-hard-standard-boundary-gate-2026-08-07"
+)
 REBASELINE_EVIDENCE_ID = "evidence.human-ai-collaboration-coverage-rebaseline"
 RELEASE_CHANGE_PROTOCOL_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-release-change-zero-model-"
@@ -947,7 +950,12 @@ def validate_matrix(
     criteria = _index(acceptance.get("acceptanceCriteria"), "id", "Acceptance criteria")
     for acceptance_id in ACCEPTANCE_IDS:
         item = criteria.get(acceptance_id)
-        _require(item is not None and item.get("assessment") == "partial", f"Scenario matrix acceptance state drifted: {acceptance_id}")
+        expected_assessment = (
+            "verified"
+            if acceptance_id == "acceptance.ai-independent-hard-standard-boundary"
+            else "partial"
+        )
+        _require(item is not None and item.get("assessment") == expected_assessment, f"Scenario matrix acceptance state drifted: {acceptance_id}")
         expected_evidence_ids = [REBASELINE_EVIDENCE_ID, MATRIX_EVIDENCE_ID]
         if acceptance_id == "acceptance.solution-neutral-collaboration-rebaseline":
             expected_evidence_ids += [
@@ -977,6 +985,7 @@ def validate_matrix(
                 AI_ERA_ENGINEERING_REVALIDATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
+                AI_INDEPENDENT_HARD_STANDARD_GATE_EVIDENCE_ID,
             ]
         if acceptance_id == "acceptance.end-to-end-process-fidelity":
             expected_evidence_ids += [

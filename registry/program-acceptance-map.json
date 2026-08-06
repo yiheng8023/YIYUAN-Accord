@@ -293,7 +293,7 @@
     {
       "id": "acceptance.ai-independent-hard-standard-boundary",
       "statement": "Future hard-standard candidates must remain valid and testable without AI or Skills; Skills may assist compliance but cannot be the sole mandatory execution or proof surface.",
-      "assessment": "partial",
+      "assessment": "verified",
       "verificationIds": [
         "verification.ai-independent-hard-standard-boundary"
       ],
@@ -302,7 +302,8 @@
         "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01",
         "evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
-        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"
+        "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
+        "evidence.ai-independent-hard-standard-boundary-gate-2026-08-07"
       ]
     },
     {
@@ -2807,6 +2808,15 @@
       "asOf": "2026-08-06",
       "supports": [
         "acceptance.repository-authored-gap-fill-gate"
+      ]
+    },
+    {
+      "id": "evidence.ai-independent-hard-standard-boundary-gate-2026-08-07",
+      "path": "registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json",
+      "kind": "pure-zero-model-synthetic-ai-independent-hard-standard-boundary-gate-and-twenty-case-failure-injection-no-real-standard-admission-behavior-or-value-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.ai-independent-hard-standard-boundary"
       ]
     }
   ]

@@ -4989,3 +4989,44 @@ enablement, manager or consumer mutation, model dispatch, behavior, value,
 portability, or production claim. The canonical map is now 45 verified, 16
 partial, and zero planned criteria. Evidence:
 `registry/repository-authored-gap-fill-gate-2026-08-06.json`.
+
+## 2026-08-07 provider-neutral exact-SHA adjudication
+
+Repository-authored gate commit
+`91b28a9bbf8abbd559653a0bf52a710d886e9491` is present on `main`, its configured
+upstream, and `origin/main` with ahead/behind `0/0`. GitHub Actions run
+`31119448147` completed every Windows workflow step successfully. The first
+macOS attempt failed during hosted setup with `Service Unavailable` and
+`Failed to resolve action download info`; the failed-job rerun left both macOS
+and Ubuntu unassigned until GitHub cancelled them because no hosted runner
+acquired either job. GitHub's official component status reported an Actions
+`major_outage` during both events.
+
+Treat this as Windows remote exact-SHA evidence plus the already recorded
+Windows and WSL local evidence, not as a three-host green matrix and not as a
+code-red result. The earlier `b7d5f147...` three-host green run remains the
+nearest cross-host baseline, but it does not prove the `91b28a9...` delta on a
+live macOS host. External CI availability is therefore a retained verification
+gap, not the sole Harness mainline progress lock. No paid Actions dependency,
+replacement CI provider, account mutation, installation, or new trust boundary
+is authorized by this adjudication.
+
+## 2026-08-07 AI-independent hard-standard boundary gate checkpoint
+
+The future-hard-standard boundary now has a deterministic, pure-zero-model
+public seam. A declared-synthetic complete fixture is boundary-eligible while
+`admissionAuthorized` remains false. Twenty single-field mutations cover the
+candidate class, obligation statement, AI and Skill independence, accountable
+owner type and non-AI status, execution and proof carrier classes, the complete
+AI/model/Skill/Hook/Agent-behavior counterfactual, retained obligation and
+owner, surviving execution and proof references, obligation, owner, execution,
+proof, and counterfactual evidence links, and separate non-admitted governance;
+every mutation fails closed with a specific blocker.
+
+This advances only
+`acceptance.ai-independent-hard-standard-boundary` to `verified`. It does not
+create, select, admit, promote, or validate a real hard standard and provides
+no domain-value, compliance, adoption, cross-host, or production evidence. The
+canonical map is now 46 verified, 15 partial, and zero planned criteria, so
+final program closeout remains unavailable. Evidence:
+`registry/ai-independent-hard-standard-boundary-gate-2026-08-07.json`.

@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "id": "ai-independent-hard-standard-boundary-gate-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-synthetic-gate-mechanism-only",
+  "documentation": "docs/strategy/AI-INDEPENDENT-HARD-STANDARD-BOUNDARY-GATE-2026-08-07.md",
+  "sourceBindings": {
+    "programAcceptanceMap": "registry/program-acceptance-map.json",
+    "coverageRebaseline": "registry/human-ai-collaboration-coverage-rebaseline-2026-07-24.json"
+  },
+  "publicSeam": {
+    "evaluator": "scripts/evaluate_ai_independent_hard_standard_candidate.py",
+    "test": "tests/test_ai_independent_hard_standard_boundary_gate.py",
+    "mode": "pure-zero-model-no-capability-execution"
+  },
+  "failureInjectionCaseIds": [
+    "wrong-candidate-class",
+    "obligation-statement",
+    "obligation-without-ai",
+    "obligation-without-skills",
+    "obligation-evidence",
+    "owner-type",
+    "owner-non-ai",
+    "owner-evidence",
+    "execution-skill-only",
+    "execution-evidence",
+    "proof-skill-only",
+    "proof-evidence",
+    "ablation-removal",
+    "ablation-obligation",
+    "ablation-owner",
+    "ablation-execution-reference",
+    "ablation-proof-reference",
+    "ablation-evidence",
+    "separate-admission",
+    "current-admitted"
+  ],
+  "syntheticFixture": {
+    "declaredSynthetic": true,
+    "realStandardRepresented": false,
+    "candidate": {
+      "id": "synthetic-hard-standard-candidate",
+      "candidateClass": "future-hard-standard-candidate",
+      "obligation": {
+        "statement": "Synthetic bounded obligation for evaluator testing only.",
+        "validWithoutAI": true,
+        "validWithoutSkills": true,
+        "evidenceIds": ["synthetic-obligation-evidence"]
+      },
+      "accountableOwner": {
+        "authorityId": "synthetic-human-or-governed-authority",
+        "authorityType": "governed-organization-role",
+        "nonAI": true,
+        "evidenceIds": ["synthetic-owner-evidence"]
+      },
+      "executionSurfaces": [
+        {
+          "id": "synthetic-deterministic-execution",
+          "kind": "deterministic-cli",
+          "availableWithoutAIOrSkills": true,
+          "evidenceIds": ["synthetic-execution-evidence"]
+        }
+      ],
+      "proofSurfaces": [
+        {
+          "id": "synthetic-deterministic-proof",
+          "kind": "deterministic-validator",
+          "availableWithoutAIOrSkills": true,
+          "evidenceIds": ["synthetic-proof-evidence"]
+        }
+      ],
+      "counterfactualAblation": {
+        "removedCapabilities": ["AI", "model", "Skill", "Hook", "Agent behavior"],
+        "obligationPreserved": true,
+        "ownerPreserved": true,
+        "executionSurfaceIds": ["synthetic-deterministic-execution"],
+        "proofSurfaceIds": ["synthetic-deterministic-proof"],
+        "evidenceIds": ["synthetic-counterfactual-evidence"]
+      },
+      "admission": {
+        "separateGovernedAdmissionRequired": true,
+        "currentStatus": "not-admitted"
+      }
+    },
+    "expectedDecision": {
+      "decision": "boundary-eligible",
+      "blockers": [],
+      "admissionAuthorized": false,
+      "claimBoundary": "synthetic-gate-mechanism-only"
+    }
+  },
+  "claimBoundary": {
+    "provesFailClosedGateMechanism": true,
+    "provesRealStandardNeed": false,
+    "provesEvidenceTruth": false,
+    "provesStandardValue": false,
+    "provesAdoptionOrCompliance": false,
+    "provesCrossHostBehavior": false,
+    "provesProductionReadiness": false
+  },
+  "authorityBoundary": {
+    "hardStandardAdmissionAuthorized": false,
+    "skillOrHookMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "externalCapabilityMutationAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "releaseAuthorized": false
+  }
+}
