@@ -1616,6 +1616,9 @@ REQUIRED_FILES = (
     "docs/strategy/SKILL-PORTFOLIO-SYSTEM-MANAGER-REFERENCE-COHORT-2026-08-06.md",
     "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "tests/test_skill_portfolio_system_manager_reference_cohort.py",
+    "docs/strategy/SKILL-PORTFOLIO-DISCOVERY-INDEX-REFERENCE-COHORT-2026-08-06.md",
+    "registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json",
+    "tests/test_skill_portfolio_discovery_index_reference_cohort.py",
     "docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md",
     "docs/strategy/SKILL-PORTFOLIO-REBASELINE-AND-CLOSEOUT-GATES.md",
     "docs/strategy/SKILL-ECOSYSTEM-OVERLAP-AND-ABLATION-MATRIX-2026-07-23.md",
@@ -1909,6 +1912,93 @@ def verify() -> None:
         or current_manager_reference.get("directAdoptionAuthorized") is not False
     ):
         raise RuntimeError("Current portfolio authority lost the manager reference cohort.")
+
+    discovery_index_reference = load(
+        "registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json"
+    )
+    discovery_index_sources = {
+        item.get("id"): item
+        for item in discovery_index_reference.get("sources", [])
+        if isinstance(item, dict)
+    }
+    expected_discovery_index_revisions = {
+        "github:ComposioHQ/awesome-claude-skills": (
+            "be2a406907dbc61b73e6827ded415c96139d13a2"
+        ),
+        "github:github/awesome-copilot": (
+            "a7fdcd50062528c9ba5e3ecb662e2c5dc53355f8"
+        ),
+        "github:alirezarezvani/claude-skills": (
+            "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc"
+        ),
+        "github:VoltAgent/awesome-agent-skills": (
+            "5241ad954d2880330d9f3a7df086f8d943c4c988"
+        ),
+        "github:sickn33/agentic-awesome-skills": (
+            "fb4655797cd8450878d7c870a81321fa5106feda"
+        ),
+        "github:helloianneo/awesome-claude-code-skills": (
+            "37cf1a830b904f9fd2b995455f3b00fdae17bdc0"
+        ),
+    }
+    if (
+        discovery_index_reference.get("schema") != 1
+        or discovery_index_reference.get("semanticProjectionId") != projection_id
+        or set(discovery_index_sources) != set(expected_discovery_index_revisions)
+        or any(
+            discovery_index_sources[source_id].get("revision") != revision
+            for source_id, revision in expected_discovery_index_revisions.items()
+        )
+    ):
+        raise RuntimeError("Discovery-index reference cohort identity drifted.")
+    discovery_index_decision = discovery_index_reference.get(
+        "portfolioDecision", {}
+    )
+    discovery_index_authority = discovery_index_reference.get(
+        "authorityBoundary", {}
+    )
+    discovery_index_claims = discovery_index_reference.get("claimBoundary", {})
+    if (
+        discovery_index_decision.get("revisionsChangedCount") != 3
+        or discovery_index_decision.get("childSourceFollowupsOpened") != 0
+        or discovery_index_decision.get("ordinarySkillCandidateAdded") is not False
+        or discovery_index_decision.get("currentSeventeenCandidatePoolChanged")
+        is not False
+        or discovery_index_decision.get("managerReplacementSelected") is not False
+        or discovery_index_decision.get("repositoryAuthoredImplementationJustified")
+        is not False
+        or discovery_index_authority.get("childSourceExpansionAuthorized")
+        is not False
+        or discovery_index_authority.get("installAuthorized") is not False
+        or discovery_index_authority.get("executeAuthorized") is not False
+        or discovery_index_authority.get("managerMutationAuthorized") is not False
+        or discovery_index_claims.get("provesChildSourceIdentityOrQuality")
+        is not False
+        or discovery_index_claims.get("provesCandidateSuitability") is not False
+        or discovery_index_claims.get("provesRuntimeBehavior") is not False
+        or discovery_index_claims.get("provesCrossHostPortability") is not False
+        or discovery_index_claims.get("provesUserValue") is not False
+        or discovery_index_claims.get("provesResidualGap") is not False
+    ):
+        raise RuntimeError("Discovery-index reference cohort crossed its boundary.")
+
+    current_discovery_index_reference = portfolio_authority.get(
+        "currentDiscoveryIndexReferenceCohort", {}
+    )
+    if (
+        current_discovery_index_reference.get("event")
+        != "registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json"
+        or current_discovery_index_reference.get("sourceCount") != 6
+        or current_discovery_index_reference.get("revisionChangedCount") != 3
+        or current_discovery_index_reference.get("childSourceFollowupOpened")
+        is not False
+        or current_discovery_index_reference.get("candidatePoolChanged") is not False
+        or current_discovery_index_reference.get("managerReplacementSelected")
+        is not False
+    ):
+        raise RuntimeError(
+            "Current portfolio authority lost the discovery-index cohort."
+        )
 
     skills_doc = load("registry/skills.json")
     capabilities_doc = load("registry/capabilities.json")

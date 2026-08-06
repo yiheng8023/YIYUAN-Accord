@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "id": "skill-portfolio-discovery-index-reference-cohort-2026-08-06",
+  "asOf": "2026-08-06",
+  "status": "six-source-exact-revision-discovery-reference-review-complete",
+  "purpose": "Recheck the six discovery-index-only sources already present in the bounded 22-source inventory, bind their current default-branch revisions and selected Git objects, and preserve them as lead or mechanism references without bulk payload review, candidate promotion, installation, or execution.",
+  "predecessor": "registry/skill-portfolio-inactive-source-candidate-pool-2026-08-02.json",
+  "semanticAuthority": "registry/skill-portfolio-current-authority.json",
+  "semanticProjectionId": "portfolio-tasktime-projection-v1",
+  "cohortContract": {
+    "coverageObjective": "Determine whether the six pre-existing discovery indexes expose a specific incremental demand or mechanism gap that warrants child-source review, while preventing source popularity, catalog size, bundled installers, or control-plane claims from becoming candidate or manager authority.",
+    "sourceBoundary": [
+      "github:ComposioHQ/awesome-claude-skills",
+      "github:github/awesome-copilot",
+      "github:alirezarezvani/claude-skills",
+      "github:VoltAgent/awesome-agent-skills",
+      "github:sickn33/agentic-awesome-skills",
+      "github:helloianneo/awesome-claude-code-skills"
+    ],
+    "accountAndDataBoundary": "Public GitHub pages and Git objects only; no account connection, private repository access, credential use, service call, candidate runtime, or child-source acquisition.",
+    "inactiveIsolation": "Blob-filtered no-checkout clones were created under one operating-system temporary root outside every Agent Skill, Plugin, App, MCP, Hook, manager, and consumer discovery root.",
+    "reviewCriteria": [
+      "exact-default-branch-revision",
+      "selected-git-object-identity",
+      "index-versus-bundled-payload-boundary",
+      "license-and-child-license-boundary",
+      "direct-install-and-live-root-mutation-surface",
+      "account-service-mcp-plugin-and-control-plane-boundary",
+      "overlap-with-current-demand-and-source-inventory",
+      "independent-child-source-review-requirement"
+    ],
+    "allowedActions": [
+      "git-ls-remote",
+      "partial-clone-without-checkout",
+      "git-object-and-tree-inspection",
+      "static-entry-and-license-review",
+      "record-reference-disposition"
+    ],
+    "blockedActions": [
+      "child-source-expansion",
+      "whole-catalog-itemization",
+      "dependency-installation",
+      "third-party-script-execution",
+      "skill-plugin-mcp-or-manager-installation",
+      "skill-or-plugin-enablement",
+      "manager-or-consumer-mutation",
+      "account-or-private-data-access",
+      "model-dispatch",
+      "candidate-promotion",
+      "repository-authored-gap-fill"
+    ],
+    "stopRule": "Stop after exactly the six pre-existing discovery-index-only sources have a current default-branch revision, selected entry or license object identities, drift classification, and an index or mechanism-only disposition. Do not follow child links or add a candidate unless a separate demand-linked gap reopens targeted discovery."
+  },
+  "acquisitionObservation": {
+    "method": "official-github-page-observation-plus-git-ls-remote-and-partial-clone-filter-blob-none-no-checkout",
+    "temporaryAcquisitionRootRetained": false,
+    "temporaryAcquisitionRootSentToRecycleBinAfterReview": true,
+    "upstreamBodyVendoredIntoHarness": false,
+    "thirdPartyCodeExecuted": false,
+    "dependenciesInstalled": false,
+    "childSourcesAcquired": false,
+    "liveStateMutated": false,
+    "limitations": [
+      "The observation binds named default-branch revisions and selected Git objects on 2026-08-06; it does not prove future branch state or source health.",
+      "Tree counts and endpoint diffs are inventory evidence, not semantic review of every Skill, plugin, script, child repository, or generated projection.",
+      "Repository ownership, popularity, README claims, catalog inclusion, or an install command does not prove independent child provenance, instruction delivery, behavior, value, portability, security, or manager suitability.",
+      "The temporary root was sent to the Windows Recycle Bin after exact-path verification; recoverable Recycle Bin contents were not enumerated or permanently deleted."
+    ]
+  },
+  "sources": [
+    {
+      "id": "github:ComposioHQ/awesome-claude-skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "observedRef": "refs/heads/master",
+      "priorInventoryRevision": "be2a406907dbc61b73e6827ded415c96139d13a2",
+      "revision": "be2a406907dbc61b73e6827ded415c96139d13a2",
+      "treeOid": "070545c75ce600c2f6e66ee84e78124887accc6f",
+      "commitTime": "2026-07-24T13:18:01+05:30",
+      "revisionChangedFromPriorInventory": false,
+      "licenseDisposition": "README declares Apache-2.0, no root license file was present, and the README says individual Skills may carry different licenses",
+      "tree": {
+        "fileCount": 1142,
+        "skillMdCount": 864,
+        "agentsMdCount": 0,
+        "hookLikePathCount": 0,
+        "executableLikePathCount": 65
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "d28b9c3515147fba1242461eb2c11155ffca5bbf", "size": 40668},
+        {"path": "CONTRIBUTING.md", "type": "blob", "oid": "ba457e5345706efe10750f53179c10a8d19332da", "size": 4368},
+        {"path": "connect-apps-plugin/.claude-plugin/plugin.json", "type": "blob", "oid": "2055b1500dea4e7614b70765f3453902fc602971", "size": 274},
+        {"path": "connect-apps/SKILL.md", "type": "blob", "oid": "094c77d410fbe5809dc82a92b7aab4cdd3a4b432", "size": 2231}
+      ],
+      "staticFindings": [
+        "The repository mixes a large lead index with bundled Skills and a plugin that connects external applications through an MCP gateway.",
+        "The entry documentation crosses API-key, authentication, external-service, account-data, plugin-installation, and real-action boundaries.",
+        "The source-level Apache declaration does not close the per-Skill license and child-source review boundary."
+      ],
+      "disposition": "integration-index-and-bundled-payload-reference-only",
+      "futureRecheckTrigger": "A naturally occurring integration task exposes a specific current-capability gap and binds one exact child or bundled item, account and data scope, service authority, fallback, and verification surface."
+    },
+    {
+      "id": "github:github/awesome-copilot",
+      "url": "https://github.com/github/awesome-copilot",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "336af71f1b7d2e6e15a8a986ba79ca031a40549b",
+      "revision": "a7fdcd50062528c9ba5e3ecb662e2c5dc53355f8",
+      "treeOid": "a777a349d33f76c0b5ac1c738dc07fbc3b56ce1d",
+      "commitTime": "2026-08-06T22:29:31+10:00",
+      "revisionChangedFromPriorInventory": true,
+      "endpointDiffFromPriorInventory": {
+        "changedPathCount": 326,
+        "changedSkillMdPathCount": 7,
+        "currentSkillMdCount": 417,
+        "priorSkillMdCount": 411,
+        "pluginMetadataChangedPathCount": 103,
+        "insertions": 16706,
+        "deletions": 1802
+      },
+      "licenseDisposition": "MIT root license",
+      "tree": {
+        "fileCount": 2630,
+        "skillMdCount": 417,
+        "agentsMdCount": 2,
+        "hookLikePathCount": 30,
+        "executableLikePathCount": 258
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "9c735c9f86680ae92254a434c793649bdc49b056", "size": 90301},
+        {"path": "LICENSE", "type": "blob", "oid": "89bc5e962c9944cdb050887062afdaaf89be504a", "size": 1059},
+        {"path": "SECURITY.md", "type": "blob", "oid": "5c35ea7f9b1936ed74dffc6af722fb2c391e5e92", "size": 1693},
+        {"path": ".github/plugin/marketplace.json", "type": "blob", "oid": "eb1734fe0eb1d0e51d2c3eac88c2859aca1bbdda", "size": 63171},
+        {"path": "package.json", "type": "blob", "oid": "b50e8346523f5d00321b73099bd9b54daae1c992", "size": 1879}
+      ],
+      "staticFindings": [
+        "The GitHub-owned repository explicitly describes its agents, instructions, Skills, Hooks, workflows, and plugins as community-created contributions for GitHub Copilot.",
+        "The current revision materially changed plugin metadata and added or changed Skill paths, so the August 2 inventory is stale for counts and exact identity.",
+        "Its marketplace installation path and Copilot-specific carrier remain separate from CC Switch management and from current Codex or Claude behavior evidence."
+      ],
+      "disposition": "official-community-index-and-copilot-payload-reference-only",
+      "futureRecheckTrigger": "A GitHub Copilot-specific task or portability comparison needs one exact item and separately binds community provenance, host support, installation, account, repository-write, and behavior boundaries."
+    },
+    {
+      "id": "github:alirezarezvani/claude-skills",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      "revision": "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      "treeOid": "1d8b29b126be14feed568463fd1d92a9f95d3c06",
+      "commitTime": "2026-07-17T15:02:50+02:00",
+      "revisionChangedFromPriorInventory": false,
+      "licenseDisposition": "MIT root license; nested and generated projections still require item-specific dependency and provenance review",
+      "tree": {
+        "fileCount": 4721,
+        "skillMdCount": 798,
+        "agentsMdCount": 0,
+        "hookLikePathCount": 13,
+        "executableLikePathCount": 692
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "7af908d9d17dba8300a4fce322369bdffd3b02dc", "size": 22774},
+        {"path": "LICENSE", "type": "blob", "oid": "c3e30bcc287d6a1ebdb4ab29c10d344fd1053639", "size": 1072},
+        {"path": "SECURITY.md", "type": "blob", "oid": "f42caf486e855bc5229eaefc01675894b25a00b3", "size": 7040},
+        {"path": "INSTALLATION.md", "type": "blob", "oid": "2e994bc5349cece6793094704220b7ea8a4abad2", "size": 30616},
+        {"path": ".claude-plugin/marketplace.json", "type": "blob", "oid": "cb9b55c949b1128784da6cc98d02904d6e126eaf", "size": 81671},
+        {"path": "pyproject.toml", "type": "blob", "oid": "f8bd2693992d67ba221ae8fb059e31686154316a", "size": 133}
+      ],
+      "staticFindings": [
+        "The repository is a large multi-domain, multi-host payload catalog with generated host projections, hundreds of scripts, plugins, Hooks, MCP configuration, and direct installers.",
+        "Advertised cross-host support and projection counts are source claims, not host exposure, invocation, behavior, or portability evidence.",
+        "Direct npx, curl, clone, and install-script routes do not preserve the current CC Switch SSOT, database, backup, enablement, update, or consumer-projection lifecycle."
+      ],
+      "disposition": "large-mixed-multihost-catalog-reference-only",
+      "futureRecheckTrigger": "A mapped demand gap names one exact canonical item and warrants item-level source, generated-projection, dependency, security, manager-import, and host-behavior review."
+    },
+    {
+      "id": "github:VoltAgent/awesome-agent-skills",
+      "url": "https://github.com/VoltAgent/awesome-agent-skills",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "6c82fb77e5bf84de77d1074b2d98d65d75ea730e",
+      "revision": "5241ad954d2880330d9f3a7df086f8d943c4c988",
+      "treeOid": "6e959a068bc27a1f175e7b260bccd4cfccd9a9ec",
+      "commitTime": "2026-08-03T22:34:54+03:00",
+      "revisionChangedFromPriorInventory": true,
+      "endpointDiffFromPriorInventory": {
+        "changedPathCount": 1,
+        "changedSkillMdPathCount": 0,
+        "currentSkillMdCount": 0,
+        "priorSkillMdCount": 0,
+        "insertions": 6,
+        "deletions": 0
+      },
+      "licenseDisposition": "MIT root license",
+      "tree": {
+        "fileCount": 4,
+        "skillMdCount": 0,
+        "agentsMdCount": 0,
+        "hookLikePathCount": 0,
+        "executableLikePathCount": 0
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "1829aad1b90015ca59a387e98c1a1502468003a0", "size": 241706},
+        {"path": "LICENSE", "type": "blob", "oid": "a0d0a9bbe350d5c6f22a61ca408364e1c36c964d", "size": 1066}
+      ],
+      "staticFindings": [
+        "The repository remains a README-based lead index with no local SKILL.md payloads.",
+        "The current drift is limited to six README insertions, so it does not supply a new local payload or manager mechanism.",
+        "Official-team and community labels remain discovery metadata; every linked child source requires independent exact identity, license, dependency, account, and behavior review."
+      ],
+      "disposition": "child-source-lead-index-only",
+      "futureRecheckTrigger": "A specific demand-linked gap selects one child source after current native, official runtime, managed, and composed routes are rechecked."
+    },
+    {
+      "id": "github:sickn33/agentic-awesome-skills",
+      "url": "https://github.com/sickn33/agentic-awesome-skills",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "07da49560037490a199d304e9f3a5c6ae1862f57",
+      "revision": "fb4655797cd8450878d7c870a81321fa5106feda",
+      "treeOid": "276599df47974f3667dc1989b56d9ceeafc8ccba",
+      "commitTime": "2026-08-05T07:21:20Z",
+      "revisionChangedFromPriorInventory": true,
+      "endpointDiffFromPriorInventory": {
+        "changedPathCount": 274,
+        "changedSkillMdPathCount": 29,
+        "currentSkillMdCount": 6323,
+        "priorSkillMdCount": 6314,
+        "pluginMetadataChangedPathCount": 120,
+        "insertions": 6434,
+        "deletions": 1089
+      },
+      "licenseDisposition": "MIT for original code and tooling; CC BY 4.0 for original non-code content; third-party notices and exceptions remain item-specific",
+      "tree": {
+        "fileCount": 20647,
+        "skillMdCount": 6323,
+        "agentsMdCount": 24,
+        "hookLikePathCount": 6,
+        "executableLikePathCount": 3014
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "c503442c88c7884e2d3c9743e831b953cb6e08b6", "size": 86708},
+        {"path": "LICENSE", "type": "blob", "oid": "dc38cfd7ab732a67b0f14997cfa8c9ec740a1889", "size": 1073},
+        {"path": "LICENSE-CONTENT", "type": "blob", "oid": "e9f6e9443d4a5e17375377208e3ed77dea428825", "size": 652},
+        {"path": "SECURITY.md", "type": "blob", "oid": "bc385bfc68668f63081233dcd24180387e21069d", "size": 770},
+        {"path": "package.json", "type": "blob", "oid": "aea3d951a741ab590dd2e4500b15a0395b862b5e", "size": 7351},
+        {"path": ".claude-plugin/plugin.json", "type": "blob", "oid": "d6175c8efd8301df7b3a62fb570f8aed048b926a", "size": 566},
+        {"path": ".claude-plugin/marketplace.json", "type": "blob", "oid": "c620b59c02e4f7134da75d9bfd2402f77feae7b6", "size": 41860},
+        {"path": "docs/users/aas-core.md", "type": "blob", "oid": "04d1ea3b479c6b6231c6cdabd1e8fe22ce716cc7", "size": 14869}
+      ],
+      "staticFindings": [
+        "The repository now presents a local read-only MCP and CLI planning layer, full catalog, plugins, bundles, Workbench, direct installers, generated compatibility projections, and experimental apply or recovery paths as one external control-plane ecosystem.",
+        "The current revision materially changed catalog, plugin metadata, executable code, and Skill paths; count growth is not demand coverage, independent source review, suitability, or value evidence.",
+        "Its catalog, selection, planning, and evidence mechanisms are eligible only as exact future comparators; bulk acquisition, direct installation, MCP activation, or manager substitution remains outside this cohort."
+      ],
+      "disposition": "aggregate-and-external-control-plane-reference-only",
+      "futureRecheckTrigger": "A bounded mechanism gate needs an exact comparator for catalog search, selection evidence, immutable planning, or recovery and separately binds MCP, CLI, filesystem, manager, license, and execution authority."
+    },
+    {
+      "id": "github:helloianneo/awesome-claude-code-skills",
+      "url": "https://github.com/helloianneo/awesome-claude-code-skills",
+      "observedRef": "refs/heads/main",
+      "priorInventoryRevision": "37cf1a830b904f9fd2b995455f3b00fdae17bdc0",
+      "revision": "37cf1a830b904f9fd2b995455f3b00fdae17bdc0",
+      "treeOid": "d0ad59f1ffe5ed4beb1ea695c76cb6d81a9e53e6",
+      "commitTime": "2026-04-13T23:47:05+08:00",
+      "revisionChangedFromPriorInventory": false,
+      "licenseDisposition": "MIT root license",
+      "tree": {
+        "fileCount": 2,
+        "skillMdCount": 0,
+        "agentsMdCount": 0,
+        "hookLikePathCount": 0,
+        "executableLikePathCount": 0
+      },
+      "gitObjects": [
+        {"path": "README.md", "type": "blob", "oid": "4ae18bec2ffff9b38734be2441e4ad3ea004a7d2", "size": 14431},
+        {"path": "LICENSE", "type": "blob", "oid": "1303b193a9193439f9a99cb8ed6520736b9d5fd8", "size": 1069}
+      ],
+      "staticFindings": [
+        "The source remains a curated README list with rankings and copy-ready direct install commands but no local Skill payloads.",
+        "Preference labels and concise descriptions are lead metadata, not independent quality, source identity, dependency, security, instruction-delivery, behavior, or value evidence.",
+        "Direct installer commands do not preserve CC Switch lifecycle authority."
+      ],
+      "disposition": "curated-lead-index-only",
+      "futureRecheckTrigger": "A mapped demand gap names one child source and the child is independently reviewed at an exact revision before any manager or task-time state transition."
+    }
+  ],
+  "portfolioDecision": {
+    "allSixExistingDiscoveryIndexSourcesRechecked": true,
+    "revisionsChangedCount": 3,
+    "revisionsUnchangedCount": 3,
+    "childSourceFollowupsOpened": 0,
+    "ordinarySkillCandidateAdded": false,
+    "currentSeventeenCandidatePoolChanged": false,
+    "managerReplacementSelected": false,
+    "repositoryAuthoredImplementationJustified": false,
+    "hardStandardPromotionJustified": false,
+    "disposition": "retain-as-demand-triggered-lead-or-mechanism-references",
+    "nextAction": "Return to current demand and source authorities. Reopen exactly one child or mechanism only after a specific mapped gap or material source or host change is bound; otherwise select another bounded mechanism-only gate without expanding candidate names."
+  },
+  "authorityBoundary": {
+    "sourceDiscoveryAuthorized": true,
+    "exactInactiveAcquisitionAuthorized": true,
+    "staticReviewAuthorized": true,
+    "childSourceExpansionAuthorized": false,
+    "installAuthorized": false,
+    "enableAuthorized": false,
+    "executeAuthorized": false,
+    "managerMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "pluginAppMcpHookMutationAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "directAdoptionAuthorized": false
+  },
+  "claimBoundary": {
+    "provesSixExactDefaultBranchRevisions": true,
+    "provesSelectedGitObjectIdentities": true,
+    "provesBoundedStaticIndexAndMechanismClassification": true,
+    "provesChildSourceIdentityOrQuality": false,
+    "provesCandidateSuitability": false,
+    "provesRuntimeBehavior": false,
+    "provesSecurity": false,
+    "provesCrossHostPortability": false,
+    "provesUserValue": false,
+    "provesManagerSuitability": false,
+    "provesResidualGap": false,
+    "authorizesInstallationActivationOrExecution": false
+  }
+}

@@ -391,7 +391,8 @@
         "evidence.human-ai-collaboration-access-comms-capability-baseline-2026-07-31",
         "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
         "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01",
-        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06"
+        "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06",
+        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -816,7 +817,8 @@
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
         "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
         "evidence.portfolio-tasktime-projection-contract-2026-08-06",
-        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06"
+        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06",
+        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -964,7 +966,8 @@
         "evidence.program-plan",
         "evidence.custom-manager-retirement-reconciliation",
         "evidence.production-capability-manager-design",
-        "evidence.production-capability-manager-external-ecosystem-and-stack-review"
+        "evidence.production-capability-manager-external-ecosystem-and-stack-review",
+        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -984,7 +987,8 @@
         "evidence.round03-alternative-comparison-batch-01",
         "evidence.public-skill-source-discovery-preflight-2026-07-18",
         "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
-        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06"
+        "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06",
+        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06"
       ]
     },
     {
@@ -2781,6 +2785,18 @@
         "acceptance.capability-survey-result-package",
         "acceptance.cross-agent-claim-limits",
         "acceptance.residual-gap-proof"
+      ]
+    },
+    {
+      "id": "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
+      "path": "registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json",
+      "kind": "six-source-exact-revision-discovery-index-and-external-control-plane-static-reference-cohort-no-child-expansion-install-execution-manager-substitution-or-residual-gap-promotion",
+      "asOf": "2026-08-06",
+      "supports": [
+        "acceptance.residual-gap-proof",
+        "acceptance.cc-switch-source-preserving-skill-pool",
+        "acceptance.broad-capability-ecosystem-boundary",
+        "acceptance.discovery-reuse-before-authoring"
       ]
     }
   ]

@@ -104,6 +104,29 @@
     "crossHostPortabilityProved": false,
     "userValueProved": false
   },
+  "currentDiscoveryIndexReferenceCohort": {
+    "event": "registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json",
+    "sourceCount": 6,
+    "sourceIds": [
+      "github:ComposioHQ/awesome-claude-skills",
+      "github:github/awesome-copilot",
+      "github:alirezarezvani/claude-skills",
+      "github:VoltAgent/awesome-agent-skills",
+      "github:sickn33/agentic-awesome-skills",
+      "github:helloianneo/awesome-claude-code-skills"
+    ],
+    "exactDefaultBranchRevisionsObserved": true,
+    "revisionChangedCount": 3,
+    "revisionUnchangedCount": 3,
+    "staticIndexAndMechanismReviewComplete": true,
+    "childSourceFollowupOpened": false,
+    "candidatePoolChanged": false,
+    "managerReplacementSelected": false,
+    "directAdoptionAuthorized": false,
+    "runtimeBehaviorProved": false,
+    "crossHostPortabilityProved": false,
+    "userValueProved": false
+  },
   "legacyAdaptedRelease": {
     "manifest": "release-manifest.json",
     "skillRegistry": "registry/skills.json",

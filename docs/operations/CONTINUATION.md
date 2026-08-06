@@ -4917,3 +4917,31 @@ runs no model, Skill, Plugin, App, MCP, Hook, account, installer, CC operation,
 or consumer mutation. Passing the matrix proves fail-closed projection
 consistency only, not live routing, instruction delivery, behavior, value,
 portability, or production readiness.
+
+## 2026-08-06 discovery-index reference cohort checkpoint
+
+The next bounded portfolio slice rechecked the six existing
+`discovery-index-only` sources from the 22-source inventory and stopped without
+following child links. Three default-branch revisions were unchanged. GitHub
+Awesome Copilot advanced to `a7fdcd50062528c9ba5e3ecb662e2c5dc53355f8`,
+AAS advanced to `fb4655797cd8450878d7c870a81321fa5106feda`, and
+VoltAgent advanced to `5241ad954d2880330d9f3a7df086f8d943c4c988`.
+Only VoltAgent's change was README-only; the other two included material
+payload, plugin, workflow, catalog, or executable drift.
+
+The dispositions remain subtractive. Composio is an integration index and
+bundled external-service payload reference; Awesome Copilot is an official-org
+community and Copilot-specific reference; Alireza is a large mixed multi-host
+catalog; VoltAgent and Helloianneo are lead indexes; and AAS is an aggregate
+plus external catalog/control-plane reference. None becomes a candidate,
+manager, trusted child-source proxy, or direct installation route. The current
+17-candidate pool is unchanged and no child review opened because no specific
+mapped demand gap justified one.
+
+Partial no-checkout clones used one exact temporary operating-system root.
+After review, that root was sent to the Windows Recycle Bin; no upstream body
+was vendored and no third-party dependency or code ran. The checkpoint proves
+dated source identity and bounded static classification only, not child
+quality, health, behavior, value, security, portability, residual gap, or
+production readiness. Governed evidence:
+`registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json`.

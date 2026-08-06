@@ -2856,3 +2856,40 @@ It does not prove implicit Skill loading, live capability health, task-time
 instruction delivery, candidate behavior or value, portability, or production
 readiness. The top-level verifier now reuses the focused validator rather than
 maintaining a weaker duplicate subset.
+
+### 2026-08-06 discovery-index reference cohort follow-up
+
+The next bounded portfolio cohort rechecked exactly the six
+`discovery-index-only` sources already present in the August 2 22-source
+inventory. It did not expand the source universe, follow child links, itemize
+the catalogs, or use popularity, catalog size, rankings, or install commands as
+candidate evidence.
+
+Current default-branch identity changed for three sources. GitHub's
+`awesome-copilot` moved to `a7fdcd50062528c9ba5e3ecb662e2c5dc53355f8`
+with material Skill, plugin, workflow, executable, and learning-content drift.
+`sickn33/agentic-awesome-skills` moved to
+`fb4655797cd8450878d7c870a81321fa5106feda` with material catalog, plugin,
+code, and Skill-projection drift. `VoltAgent/awesome-agent-skills` moved to
+`5241ad954d2880330d9f3a7df086f8d943c4c988` through a six-line README-only
+change and still contains no local `SKILL.md` payload. The Composio,
+Alireza Rezvani, and Helloianneo revisions were unchanged.
+
+All six remain lead or mechanism references. Composio crosses external
+service, account, API-key, MCP, plugin, and per-item license boundaries;
+Awesome Copilot is a GitHub-owned community contribution surface with a
+Copilot-specific marketplace; Alireza's source is a large multi-host catalog
+with generated projections and direct installers; VoltAgent and Helloianneo
+are README lead indexes; and AAS is an external catalog, MCP, CLI, plugin,
+Workbench, installer, and planning control plane. None becomes an ordinary
+candidate, trusted child-source proxy, CC manager path, or repository-owned
+gap solution.
+
+No child follow-up opened because current demand and capability evidence does
+not expose a specific uncovered cell requiring one. Targeted discovery may
+reopen for one exact child or mechanism only after a mapped gap or material
+source or host change binds its own source, license, dependency, data,
+authority, fallback, cleanup, and verification contract. No Skill, Plugin,
+App, MCP, Hook, account, manager, consumer root, model, or candidate lifecycle
+state changed. Evidence:
+`registry/skill-portfolio-discovery-index-reference-cohort-2026-08-06.json`.

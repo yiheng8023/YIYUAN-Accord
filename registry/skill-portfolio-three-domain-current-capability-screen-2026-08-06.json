@@ -38,9 +38,9 @@
     },
     {
       "path": "registry/skill-portfolio-current-authority.json",
-      "bytes": 7971,
-      "sha256": "0eb1afb5ee2309a9397cf2167cfc97ce2bc56d00a9b8adc5d15c9c7b2b767cd0",
-      "role": "current-portfolio-and-task-time-policy-authority-after-manager-reference-cohort-integration"
+      "bytes": 8864,
+      "sha256": "66a58ad0e4f6f93fa7f5c03cf676d6371f5cf0f159a9086ff4824e7e92746310",
+      "role": "current-portfolio-and-task-time-policy-authority-after-discovery-index-reference-cohort-integration"
     }
   ],
   "cohortContract": {
