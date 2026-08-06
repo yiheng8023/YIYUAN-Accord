@@ -74,29 +74,28 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         ):
             self.assertFalse(state[field])
 
-    def test_current_matt_suite_is_bound_as_a_mixed_revision_observation(self) -> None:
+    def test_current_matt_suite_is_bound_to_exact_recoverable_v122_update(self) -> None:
         state = self.policy["currentObservedMattSuiteState"]
         event = load(state["event"])
-        live = event["liveManager"]
 
-        self.assertEqual(state["sourceRowCount"], 22)
-        self.assertEqual(state["enabledCountByHost"], live["enabledCountByHost"])
-        self.assertFalse(state["singleExactRevisionExplainsLivePayload"])
+        self.assertEqual(state["sourceRowCount"], 25)
+        self.assertEqual(
+            state["enabledCountByHost"],
+            event["verification"]["postRestartEnabledCountByHost"],
+        )
+        self.assertTrue(state["singleExactRevisionExplainsLivePayload"])
         self.assertEqual(state["upstreamReleaseTag"], "v1.2.2")
         self.assertEqual(state["currentPromotedCount"], 25)
         self.assertEqual(state["currentRecursiveSkillCount"], 35)
         self.assertEqual(
             state["payloadClassificationCounts"],
             {
-                "bothPriorAndRelease": 12,
-                "priorOnly": 2,
-                "releaseOnly": 6,
-                "neither": 2,
+                "exactRelease": 25,
                 "missing": 0,
             },
         )
-        self.assertEqual(state["currentPromotedNamesMissingFromManager"], 4)
-        self.assertTrue(state["removedUpstreamNameRetainedByManager"])
+        self.assertEqual(state["currentPromotedNamesMissingFromManager"], 0)
+        self.assertFalse(state["removedUpstreamNameRetainedByManager"])
         reconciliation = load(state["commonRootReconciliationEvent"])
         self.assertEqual(state["directSameNameCommonRootDirectoryCount"], 0)
         self.assertFalse(state["directSameNameCommonRootOwnershipProved"])
@@ -113,7 +112,7 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         )
         self.assertEqual(
             state["currentManagerSymlinkCanonicalDeduplicationObservedCount"],
-            21,
+            24,
         )
         self.assertTrue(state["singleCcManagedListingPathAcrossReconciledNamesProved"])
         self.assertTrue(
@@ -127,14 +126,24 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         self.assertFalse(state["automaticRefreshAuthorized"])
         self.assertTrue(state["atomicCohortPreviewRequired"])
         self.assertTrue(state["atomicCohortPreviewBuilt"])
-        self.assertFalse(state["atomicCohortExecutionAuthorized"])
+        self.assertTrue(state["atomicCohortExecutionAuthorized"])
+        self.assertTrue(state["recoverableAdapterCohortUpdateExecuted"])
+        self.assertTrue(state["wholeCohortRecoverable"])
+        self.assertFalse(
+            state["wholeCohortCrossFilesystemDatabaseAtomicCommitProved"]
+        )
+        self.assertFalse(state["liveRollbackExecuted"])
         self.assertFalse(state["releasedManagerAtomicCohortUpdateProved"])
-        self.assertFalse(state["singleManagerRevisionClosureAcrossConsumersProved"])
-        self.assertFalse(event["transition"]["perItemBestEffortRefreshSuitable"])
-        self.assertFalse(event["decision"]["executionAuthorized"])
-        self.assertFalse(event["claimBoundary"]["loaderExposureProved"])
-        self.assertFalse(event["claimBoundary"]["behaviorProved"])
-        self.assertFalse(event["claimBoundary"]["valueProved"])
+        self.assertTrue(state["singleManagerRevisionClosureAcrossConsumersProved"])
+        self.assertEqual(
+            state["singleManagerRevisionClosureScope"],
+            "exact-payload-projection-and-no-model-listing-path-only",
+        )
+        self.assertEqual(state["managerVersionAfterOrdinaryRestart"], "3.19.2")
+        self.assertTrue(state["managerAutoUpdateObservedDuringOrdinaryRestart"])
+        self.assertFalse(event["claimBoundary"]["skillLoaderInvocationProved"])
+        self.assertFalse(event["claimBoundary"]["skillBehaviorProved"])
+        self.assertFalse(event["claimBoundary"]["skillValueProved"])
 
     def test_portfolio_curation_and_task_activation_are_separate_modes(self) -> None:
         modes = self.policy["operatingModes"]

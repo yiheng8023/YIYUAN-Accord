@@ -213,6 +213,82 @@ def classify_collision_rows(
     return results
 
 
+def summarize_expected_cohort(
+    skills: list[dict[str, Any]],
+    *,
+    expected_names: Iterable[str],
+    disabled_names: Iterable[str] = (),
+    absent_names: Iterable[str] = (),
+    home: Path,
+) -> dict[str, Any]:
+    """Check one manager cohort on the no-model ``skills/list`` surface."""
+
+    home = home.expanduser().resolve(strict=False)
+    expected = tuple(dict.fromkeys(expected_names))
+    disabled = set(disabled_names)
+    absent = tuple(dict.fromkeys(absent_names))
+    rows_by_name: dict[str, list[dict[str, Any]]] = {}
+    for row in skills:
+        rows_by_name.setdefault(str(row.get("name", "")), []).append(row)
+
+    failures: list[str] = []
+    observed: list[dict[str, Any]] = []
+    for name in expected:
+        rows = rows_by_name.get(name, [])
+        canonical = _normalized(
+            home / ".cc-switch" / "skills" / name / "SKILL.md"
+        )
+        paths = [_normalized(str(row.get("path", ""))) for row in rows]
+        expected_enabled = name not in disabled
+        row_enabled = [row.get("enabled") is True for row in rows]
+        listed_once = len(rows) == 1
+        canonical_path = listed_once and paths == [canonical]
+        enablement_match = listed_once and row_enabled == [expected_enabled]
+        if not listed_once:
+            failures.append(f"expected-name-not-listed-once:{name}")
+        if not canonical_path:
+            failures.append(f"noncanonical-path:{name}")
+        if not enablement_match:
+            failures.append(f"enablement-mismatch:{name}")
+        observed.append(
+            {
+                "name": name,
+                "listedRowCount": len(rows),
+                "paths": paths,
+                "expectedEnabled": expected_enabled,
+                "observedEnabled": [row.get("enabled") for row in rows],
+                "canonicalCcRoot": canonical_path,
+            }
+        )
+
+    absent_rows: dict[str, int] = {}
+    for name in absent:
+        count = len(rows_by_name.get(name, []))
+        absent_rows[name] = count
+        if count:
+            failures.append(f"absent-name-listed:{name}")
+
+    return {
+        "expectedNames": list(expected),
+        "disabledNames": sorted(disabled),
+        "absentNames": list(absent),
+        "observedRows": observed,
+        "absentNameRowCounts": absent_rows,
+        "allExpectedNamesListedOnce": all(
+            row["listedRowCount"] == 1 for row in observed
+        ),
+        "allPathsCanonicalCcRoot": all(
+            row["canonicalCcRoot"] for row in observed
+        ),
+        "enablementMatches": all(
+            row["observedEnabled"] == [row["expectedEnabled"]]
+            for row in observed
+        ),
+        "allAbsentNamesMissing": all(count == 0 for count in absent_rows.values()),
+        "failures": failures,
+    }
+
+
 class RecordingSession(AppServerSession):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -281,6 +357,9 @@ def validate_report(report: dict[str, Any]) -> list[str]:
         if claims.get(key) is not False:
             failures.append("hard-fail-claim-boundary")
             break
+    cohort = report.get("cohortExposure")
+    if cohort is not None and cohort.get("failures"):
+        failures.append("hard-fail-cohort-exposure")
     return failures
 
 
@@ -291,6 +370,9 @@ def run_probe(
     timeout_seconds: float,
     names: Iterable[str] = DEFAULT_NAMES,
     home: Path | None = None,
+    expected_names: Iterable[str] | None = None,
+    disabled_names: Iterable[str] = (),
+    absent_names: Iterable[str] = (),
 ) -> dict[str, Any]:
     cwd = cwd.resolve()
     home = (home or Path.home()).expanduser().resolve(strict=False)
@@ -353,6 +435,14 @@ def run_probe(
             "provesCrossHostPortability": False,
         },
     }
+    if expected_names is not None:
+        report["cohortExposure"] = summarize_expected_cohort(
+            skills,
+            expected_names=expected_names,
+            disabled_names=disabled_names,
+            absent_names=absent_names,
+            home=home,
+        )
     report["failures"] = validate_report(report)
     report["status"] = "pass" if not report["failures"] else "fail"
     report["reportSha256"] = canonical_sha256(report)

@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "id": "mattpocock-skills-v1.2.2-cc-manager-cohort-update-event-2026-08-06",
+  "date": "2026-08-06",
+  "status": "applied-recoverable-no-model-exposure-pass",
+  "inputs": [
+    "registry/mattpocock-skills-v1.2.2-manifest-update-preview-2026-08-06.json",
+    "registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json",
+    "registry/matt-common-root-reconciliation-event-2026-08-06.json",
+    "scripts/update_matt_cc_manager_cohort.py",
+    "tests/test_update_matt_cc_manager_cohort.py"
+  ],
+  "source": {
+    "repository": "https://github.com/mattpocock/skills",
+    "releaseTag": "v1.2.2",
+    "annotatedTagObject": "8651af486bb7c9e695ab1c6f44bd9a79fabb9999",
+    "releaseCommit": "8b36d4fb2635b3c21998dcd8144439c9e5ba7302",
+    "promotedSkillCount": 25,
+    "exactRevisionFetchedBeforeAnyWrite": true,
+    "allSelectedBlobsFetchedAndVerifiedBeforeAnyWrite": true,
+    "thirdPartyPayloadBodiesRewritten": false,
+    "thirdPartyScriptsExecuted": 0
+  },
+  "authority": {
+    "userAuthorizedManagerUpdate": true,
+    "authorizedCohort": "exact-v1.2.2-promoted-25",
+    "wizardDefaultDisabledRequired": true,
+    "modelDispatchAuthorized": false,
+    "ccSwitchDowngradeAuthorized": false
+  },
+  "managerRuntime": {
+    "versionBeforeOrdinaryRestart": "3.19.1",
+    "versionAfterOrdinaryRestart": "3.19.2",
+    "autoUpdateObservedDuringOrdinaryRestart": true,
+    "manualManagerUpgradePerformedByHarness": false,
+    "currentExecutable": "C:/Users/15521/AppData/Local/Programs/CC Switch/cc-switch.exe",
+    "currentExecutableSha256": "f712ddd95e080eb6a353ffa434904de5e786cbf11c96201a72af73ffa6116612",
+    "currentFileVersion": "3.19.2",
+    "currentProductVersion": "3.19.2",
+    "latestOfficialRelease": "https://github.com/farion1231/cc-switch/releases/tag/v3.19.2",
+    "releasedCrossFilesystemDatabaseAtomicCohortUpdateProved": false
+  },
+  "transaction": {
+    "root": "C:/Users/15521/.cc-switch/skill-backups/aah-matt-v122-manager-20260806T103427Z",
+    "journalSha256": "d94c5aa89165f7f109ed30b26e491a4bee7b1c449f10a9f6417f1c69ceaa5816",
+    "status": "committed",
+    "managerQuiescenceEnforced": true,
+    "sourceRowCountBefore": 22,
+    "sourceRowCountAfter": 25,
+    "targetNames": [
+      "ask-matt",
+      "code-review",
+      "codebase-design",
+      "diagnosing-bugs",
+      "domain-modeling",
+      "grill-me",
+      "grill-with-docs",
+      "grilling",
+      "handoff",
+      "implement",
+      "improve-codebase-architecture",
+      "prototype",
+      "research",
+      "resolving-merge-conflicts",
+      "setup-matt-pocock-skills",
+      "tdd",
+      "teach",
+      "to-questionnaire",
+      "to-spec",
+      "to-tickets",
+      "triage",
+      "wait-what",
+      "wayfinder",
+      "wizard",
+      "writing-for-agents"
+    ],
+    "removedNames": [
+      "writing-great-skills"
+    ],
+    "exactReleaseDirectoryCount": 25,
+    "unrelatedSsotEntryCountCompared": 278,
+    "unrelatedSsotEntriesStable": true,
+    "enabledProjectionCountByRoot": {
+      "agents": 24,
+      "claude": 24,
+      "codex": 24
+    },
+    "wizardProjectionPresent": false,
+    "wizardEnabledByHost": {
+      "claude": false,
+      "codex": false,
+      "gemini": false,
+      "opencode": false,
+      "hermes": false,
+      "grokbuild": false
+    },
+    "rawDatabaseCopied": false,
+    "sqliteRowsCommittedInOneTransaction": true,
+    "ssotRootSwappedByTwoRenames": true,
+    "crossFilesystemDatabaseAtomicCommitProved": false,
+    "transientPartialStateImpossibleProved": false,
+    "wholeCohortRecoverable": true,
+    "rollbackMechanismUnitTested": true,
+    "liveRollbackExecuted": false,
+    "recoveryArtifactsRetained": true
+  },
+  "verification": {
+    "transactionUnitTestCount": 8,
+    "transactionUnitTestsPassed": true,
+    "databaseIntegrity": "ok",
+    "allTwentyFiveDirectoriesExactReleaseTrees": true,
+    "ordinaryRestartPersistenceObserved": true,
+    "postRestartRowCount": 25,
+    "postRestartReleaseBranches": [
+      "v1.2.2"
+    ],
+    "postRestartEnabledCountByHost": {
+      "claude": 24,
+      "codex": 24,
+      "gemini": 0,
+      "opencode": 0,
+      "hermes": 0,
+      "grokbuild": 0
+    },
+    "noModelReport": "audits/mattpocock-skills/8b36d4fb2635b3c21998dcd8144439c9e5ba7302/cc-switch-v1.2.2-manager-cohort-no-model-exposure-2026-08-06/REPORT.json",
+    "noModelReportFileSha256": "8ef97a04f6914bc7b1fd2cefceab4077000c2b82a0a01de545837eb2a62cd1e9",
+    "noModelReportSha256": "8a41db58a1162e113691183a743f3e7097651e874f83acb26c3ba56d8e22f0bd",
+    "codexHost": "Codex Desktop app-server 0.146.1",
+    "sentMethods": [
+      "initialize",
+      "initialized",
+      "skills/list"
+    ],
+    "threadStartCount": 0,
+    "turnStartCount": 0,
+    "modelRequestCount": 0,
+    "listedEnabledMattCount": 24,
+    "allListedMattPathsCanonicalCcRoot": true,
+    "wizardOmittedBecauseDisabledOnObservedHost": true,
+    "retiredNameOmitted": true,
+    "allObservedSurfacesStableWithManagerQuiesced": true,
+    "runningManagerDiagnosticAttemptAdmitted": false,
+    "runningManagerDiagnosticDrift": "cc-switch-database-background-write"
+  },
+  "decision": {
+    "managerCohortUpdateExecuted": true,
+    "singleExactRevisionExplainsManagerPayload": true,
+    "singleCcManagedPathAcrossThreeConsumerRootsProved": true,
+    "wizardAmbientEnablementAllowed": false,
+    "managerMayRemainOnAutomaticallyInstalledVersion3192": true,
+    "recoveryCleanupAuthorized": false,
+    "liveModelTrialAuthorized": false,
+    "nextGate": "retain the recovery transaction and use the exact v1.2.2 manager state only as installed and no-model exposure evidence; any behavior, value, cross-host, or cleanup claim remains a separate gate"
+  },
+  "claimBoundary": {
+    "managerInstallationProved": true,
+    "exactReleasePayloadIdentityProved": true,
+    "consumerListingPathIdentityProved": true,
+    "disabledWizardOmissionObservedOnCodex01461": true,
+    "skillLoaderInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "skillBehaviorProved": false,
+    "skillValueProved": false,
+    "crossHostExposureProved": false,
+    "crossFilesystemDatabaseAtomicCommitProved": false,
+    "liveRollbackProved": false,
+    "modelDispatched": false
+  }
+}

@@ -8,6 +8,7 @@ from scripts.probe_codex_app_server_skill_root_collision import (
     build_readonly_inventory_command,
     classify_collision_rows,
     observe_tree,
+    summarize_expected_cohort,
     validate_report,
     write_report,
 )
@@ -118,6 +119,32 @@ class CodexAppServerSkillRootCollisionProbeTests(unittest.TestCase):
         report["requestBoundary"]["threadStartCount"] = 1
         self.assertIn("hard-fail-thread-created", validate_report(report))
 
+    def test_report_rejects_expected_cohort_failure(self) -> None:
+        report = {
+            "requestBoundary": {
+                "sentMethods": ["initialize", "initialized", "skills/list"],
+                "threadStartCount": 0,
+                "turnStartCount": 0,
+                "modelRequestCount": 0,
+            },
+            "mutationBoundary": {
+                "allObservedSurfacesStable": True,
+                "globalConfigWritten": False,
+                "managerWritten": False,
+                "consumerRootsWritten": False,
+            },
+            "claimBoundary": {
+                "provesListingPathIdentity": True,
+                "provesInstructionDeliveryPrecedence": False,
+                "provesSkillLoaderInvocation": False,
+                "provesSkillBehavior": False,
+                "provesManagerUpdateSafety": False,
+            },
+            "cohortExposure": {"failures": ["enablement-mismatch:wizard"]},
+        }
+
+        self.assertIn("hard-fail-cohort-exposure", validate_report(report))
+
     def test_report_writer_uses_repository_lf_line_endings(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             output = Path(raw) / "REPORT.json"
@@ -127,6 +154,56 @@ class CodexAppServerSkillRootCollisionProbeTests(unittest.TestCase):
             payload = output.read_bytes()
         self.assertTrue(payload.endswith(b"\n"))
         self.assertNotIn(b"\r\n", payload)
+
+    def test_expected_cohort_requires_one_canonical_row_and_disabled_wizard(self) -> None:
+        home = Path("C:/Users/fixture")
+        rows = [
+            skill("alpha", home / ".cc-switch" / "skills" / "alpha" / "SKILL.md"),
+            skill(
+                "wizard",
+                home / ".cc-switch" / "skills" / "wizard" / "SKILL.md",
+                enabled=False,
+            ),
+        ]
+
+        result = summarize_expected_cohort(
+            rows,
+            expected_names=("alpha", "wizard"),
+            disabled_names=("wizard",),
+            absent_names=("retired",),
+            home=home,
+        )
+
+        self.assertTrue(result["allExpectedNamesListedOnce"])
+        self.assertTrue(result["allPathsCanonicalCcRoot"])
+        self.assertTrue(result["enablementMatches"])
+        self.assertTrue(result["allAbsentNamesMissing"])
+        self.assertEqual([], result["failures"])
+
+    def test_expected_cohort_rejects_duplicates_wrong_enablement_and_retired_name(self) -> None:
+        home = Path("C:/Users/fixture")
+        rows = [
+            skill("alpha", home / ".cc-switch" / "skills" / "alpha" / "SKILL.md"),
+            skill("alpha", home / ".agents" / "skills" / "alpha" / "SKILL.md"),
+            skill("wizard", home / ".cc-switch" / "skills" / "wizard" / "SKILL.md"),
+            skill("retired", home / ".cc-switch" / "skills" / "retired" / "SKILL.md"),
+        ]
+
+        result = summarize_expected_cohort(
+            rows,
+            expected_names=("alpha", "wizard"),
+            disabled_names=("wizard",),
+            absent_names=("retired",),
+            home=home,
+        )
+
+        self.assertFalse(result["allExpectedNamesListedOnce"])
+        self.assertFalse(result["allPathsCanonicalCcRoot"])
+        self.assertFalse(result["enablementMatches"])
+        self.assertFalse(result["allAbsentNamesMissing"])
+        self.assertIn("expected-name-not-listed-once:alpha", result["failures"])
+        self.assertIn("enablement-mismatch:wizard", result["failures"])
+        self.assertIn("absent-name-listed:retired", result["failures"])
 
 
 if __name__ == "__main__":

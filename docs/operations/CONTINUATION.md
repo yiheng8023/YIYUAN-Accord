@@ -4758,3 +4758,47 @@ peeled to `8b36d4fb2635b3c21998dcd8144439c9e5ba7302`. The CC manager still conta
 the hybrid 22-row Matt cohort, including `writing-great-skills`; `wizard` is
 absent and disabled. Therefore no v1.2.2 manager installation or atomic manager
 update is claimed, and that separate gate remains held.
+
+## 2026-08-06 Matt v1.2.2 recoverable CC manager cohort checkpoint
+
+The user separately authorized the exact promoted Matt v1.2.2 manager cohort.
+A dedicated adapter first fetched annotated tag object
+`8651af486bb7c9e695ab1c6f44bd9a79fabb9999`, required it to peel to commit
+`8b36d4fb2635b3c21998dcd8144439c9e5ba7302`, and materialized all selected
+Git blobs before any live write. Eight transaction tests cover successful
+commit, three injected failure positions, explicit rollback, tag binding,
+manager quiescence, and CC content-hash compatibility.
+
+With CC Switch quiesced, the recoverable cohort replaced the hybrid 22 rows
+with all 25 promoted exact-release trees, removed the retired
+`writing-great-skills`, and projected the 24 enabled names through the common,
+Claude, and Codex roots. `wizard` is installed in the manager SSOT but remains
+disabled for all six manager hosts and has no consumer projection. The other
+278 SSOT manifest entries remained exact. No third-party script ran and no raw
+database copy was made.
+
+This was a journaled, recoverable whole-cohort transaction, not a
+cross-filesystem/database atomic commit. The SSOT swap used two renames, the
+Matt rows used one SQLite transaction, and consumer projections were rebuilt
+afterward. Transient partial state was therefore possible. Rollback is tested
+and the original transaction root remains under
+`C:/Users/15521/.cc-switch/skill-backups/`, but live rollback was not needed or
+executed. Cleanup of that recovery evidence is not authorized.
+
+An ordinary CC Switch restart also caused the application to update itself
+from 3.19.1 to 3.19.2. The Harness did not manually install that update or
+authorize a downgrade. Under the resulting version, a fresh Codex Desktop
+0.146.1 app-server probe ran with CC Switch quiesced, Plugins disabled, and the
+process-local MCP table empty. It sent only `initialize`, `initialized`, and
+`skills/list`; zero threads, turns, or model requests were created. All 24
+enabled Matt names appeared exactly once at their canonical CC paths.
+`wizard` and the retired name were absent. The host observation shows that a
+disabled user Skill is omitted from this listing surface; the separate manager
+database evidence proves its disabled state.
+
+The governed event is
+`registry/mattpocock-skills-v1.2.2-cc-manager-cohort-update-event-2026-08-06.json`.
+This closes only exact manager installation, recoverability, projection, and
+no-model listing-path evidence. Loader invocation, instruction delivery,
+behavior, value, cross-host exposure, live rollback, and model dispatch remain
+unproved and unauthorized.
