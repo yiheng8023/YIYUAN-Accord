@@ -22,6 +22,18 @@ can progress. No new governance layer, adapter framework, Skill, Hook, or hard
 standard follows unless a reproducible residual gap remains after native,
 official, reviewed external, and composed alternatives.
 
+Agent Plugins 1.0.0 now supplies the external packaging-interoperability floor
+for the portable Agent Skills plus MCP-server subset. The exact specification
+repository calls it `Published`; the separate deployed documentation remains
+stale at `Working Draft`, and no Git tag was observed on 2026-08-07. Treat its
+exact revision and schemas as a dated source snapshot, not mutable ambient
+truth. Stop any competing generic plugin-package authoring. The next bounded
+PoC is an offline field and failure-boundary mapping to capability-source and
+CC Switch consumer-projection contracts; no installation, enablement, live
+client conformance claim, consumer migration, or acceptance advancement
+follows from the research. See
+`registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json`.
+
 Skill supply now uses a separate portfolio curation mode. It may build a broad
 but bounded inactive candidate pool without binding every candidate to one
 end-user task when coverage objectives, sources, isolation, review/admission

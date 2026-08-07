@@ -5194,3 +5194,32 @@ new trust and side-effect authority for candidate acquisition, installation,
 safe adapter or upstream implementation, model dispatch, and a real task. Stop
 before that boundary and request separate owner direction. Evidence:
 `registry/process-loss-longhorizon-harness-execution-preflight-2026-08-07.json`.
+
+## 2026-08-07 Agent Plugins 1.0.0 strategic rebaseline checkpoint
+
+The user-supplied OCR-like news excerpt was checked against primary sources.
+Agent Plugins 1.0.0 is real and defines a vendor-neutral portable directory
+format with root `plugin.json`, Agent Skills in `skills/`, and MCP servers in
+`mcp.json`. Its initial Technical Steering Committee lists individual
+representatives affiliated with Amazon, Cursor, Microsoft, OpenAI, and Vercel.
+The official client data lists VS Code, Cursor, GitHub Copilot, ChatGPT & Codex,
+and Kiro with component- and transport-specific support; the other brands
+embedded in the excerpt are not thereby verified as participants or clients.
+
+Release wording remains qualified: exact specification revision
+`bd383552095128f6effe895b9257cfd580a6d179` labels 1.0.0 `Published` and binds a
+2026-07-24 publication commit, while exact documentation revision
+`e139c26382e8dacfde2f61675e413286054e5be6` still labels it `Working Draft` and
+no Git tag or GitHub Release was observed. The Harness therefore adopts the
+standard as the current external packaging-interoperability floor and stops
+competing generic package-schema authoring, while binding exact revisions or
+schema digests.
+
+This changes package conformance and consumer-projection strategy only. CC
+Switch retains operational source, install/update, enablement, rollback, and
+projection authority. Intent, routing, process-loss receipts, context and
+resource lifecycle, host permissions, behavior, value, verification,
+acceptance, and closure remain Harness or host concerns. No plugin was
+installed, enabled, executed, or migrated; no model ran; and the canonical
+46/15/0 acceptance inventory is unchanged. Evidence:
+`registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json`.

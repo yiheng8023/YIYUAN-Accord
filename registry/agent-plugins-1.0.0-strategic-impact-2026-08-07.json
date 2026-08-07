@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "id": "agent-plugins-1.0.0-strategic-impact-v1",
+  "asOf": "2026-08-07",
+  "status": "primary-source-verified-strategic-rebaseline-no-runtime-adoption",
+  "documentation": "docs/research/agent-plugins-1.0.0-strategic-impact-2026-08-07.md",
+  "taskContract": {
+    "goal": "Verify the supplied Agent Plugins 1.0.0 news claims and determine whether the standard changes Agent Autonomy Harness strategy.",
+    "sourceBoundary": "User-supplied OCR-like excerpt plus public primary sources from the specification project, its documentation project, OpenAI, GitHub, and Microsoft; no third-party commentary is claim authority.",
+    "accountAndDataBoundary": "Anonymous public documents and Git metadata only; no account connection, private data, credential use, package installation, or consumer inspection.",
+    "authorityBoundary": "Read-only research and repository-owned strategy/evidence recording only; no install, enablement, execution, migration, consumer mutation, publication, or release.",
+    "verificationSurface": "Exact source revisions and Git blobs, normative component and failure boundaries, public governance roster, documented client matrix, release-status conflict, explicit Harness affected and retained layers, and offline fail-closed validation."
+  },
+  "userSource": {
+    "kind": "user-pasted-ocr-like-news-excerpt",
+    "originalPublisherOrPostLocatorProvided": false,
+    "role": "claim discovery source only",
+    "attributionVerified": false
+  },
+  "sourceSnapshot": {
+    "specificationRepository": {
+      "id": "github:agentplugins/agent-plugins-spec",
+      "url": "https://github.com/agentplugins/agent-plugins-spec",
+      "observedRef": "refs/heads/main",
+      "revision": "bd383552095128f6effe895b9257cfd580a6d179",
+      "headMatchedRevisionAtReview": true,
+      "tagsObserved": [],
+      "githubReleasesObserved": [],
+      "specificationVersion": "1.0.0",
+      "repositoryStatusLabel": "Published",
+      "publicationCommit": {
+        "revision": "1fc1b6270e3cc492ec2d24ad7a34277c6d53b9c1",
+        "committedAt": "2026-07-24T15:20:57Z",
+        "subject": "Publish Agent Plugins Specification 1.0.0"
+      },
+      "selectedGitObjects": [
+        {"path": "README.md", "oid": "23cbb482afd9cd0ad5b30a18a2454c98b7b262bd", "size": 1384},
+        {"path": "spec/1.0.0.md", "oid": "c95263bd61fc16608390006bc461e964ce21cd12", "size": 42751},
+        {"path": "schemas/1.0.0/plugin.schema.json", "oid": "8fed0e1fe45d0464aee880d3fbab228b71ecfc1e", "size": 1805},
+        {"path": "schemas/1.0.0/mcp.schema.json", "oid": "a9139a4259b932c60b5351c8d9da6a5c60c97646", "size": 3408},
+        {"path": "GOVERNANCE.md", "oid": "15446ab2fea8bd54acfe47a548eedae0a0d0e754", "size": 6324},
+        {"path": "MAINTAINERS.md", "oid": "5c138016d2bc039d82eae2cf802b973faa5af681", "size": 419},
+        {"path": "FUTURE_CONSIDERATIONS.md", "oid": "e7589b0ab0cf6e68a672bc3f54a6fbabf2c0fb4e", "size": 3175},
+        {"path": "LICENSE.md", "oid": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "size": 754}
+      ]
+    },
+    "documentationRepository": {
+      "id": "github:agentplugins/agent-plugins-site",
+      "url": "https://github.com/agentplugins/agent-plugins-site",
+      "observedRef": "refs/heads/main",
+      "revision": "e139c26382e8dacfde2f61675e413286054e5be6",
+      "headMatchedRevisionAtReview": true,
+      "deployedSpecificationStatusLabel": "Working Draft",
+      "statusConflictWithSpecificationRepository": true,
+      "compatibleClientDataPath": "lib/compatible-clients.ts"
+    },
+    "governance": {
+      "model": "open-vendor-neutral-community-governed",
+      "roleHolderType": "individuals",
+      "noVendorReservedSeats": true,
+      "noSingleVendorCoreMaintainerMajority": true,
+      "initialTechnicalSteeringCommittee": [
+        {"name": "Clare Liguori", "affiliation": "Amazon"},
+        {"name": "Roshan Sadanani", "affiliation": "Cursor"},
+        {"name": "Harald Kirschner", "affiliation": "Microsoft"},
+        {"name": "Gav Verma", "affiliation": "OpenAI"},
+        {"name": "Jonathan Hefner", "affiliation": "Vercel", "leadCoreMaintainer": true}
+      ],
+      "documentationLicense": "CC-BY-4.0",
+      "codeLicense": "Apache-2.0"
+    },
+    "portableContract": {
+      "manifest": "plugin.json",
+      "componentTypes": ["agent-skills", "mcp-servers"],
+      "skillsLocation": "skills/",
+      "mcpLocation": "mcp.json",
+      "clientExtensionConvention": "reverse-domain namespace",
+      "supportsIncrementalClientConformance": true,
+      "isolatesIndependentComponentFailures": true,
+      "fatalRootManifestViolationsRejectPlugin": true,
+      "packageContainmentIsSubprocessSandbox": false
+    },
+    "officialCompatibleClients": [
+      {"name": "VS Code", "skills": true, "mcpTransports": ["stdio", "streamable-http", "sse"]},
+      {"name": "Cursor", "skills": true, "mcpTransports": ["stdio", "streamable-http", "sse"]},
+      {"name": "GitHub Copilot", "skills": true, "mcpTransports": ["stdio", "streamable-http", "sse"]},
+      {"name": "ChatGPT & Codex", "skills": true, "mcpTransports": ["stdio", "streamable-http"]},
+      {"name": "Kiro", "skills": true, "mcpTransports": ["stdio", "streamable-http", "sse"]}
+    ],
+    "openAiProductTerminology": {
+      "source": "https://help.openai.com/en/articles/20001256-plugins-in-codex",
+      "documentedPluginContents": ["skills", "apps", "app-templates"],
+      "identicalToAgentPluginsV1PortableComponentSet": false
+    },
+    "retrievalMethod": "Official web documents, exact raw Git objects, public Git refs, and public GitHub commit metadata; no clone, package download, installation, or code execution.",
+    "rawThirdPartyBodyRetained": false,
+    "thirdPartyCodeExecuted": false,
+    "dependenciesInstalled": false,
+    "liveExternalStateMutated": false
+  },
+  "claimAdjudication": [
+    {"id": "standard-exists", "verdict": "verified"},
+    {"id": "multi-vendor-participation", "verdict": "verified-with-governance-qualification"},
+    {"id": "skills-and-mcp-portable-package", "verdict": "verified"},
+    {"id": "independent-component-failure-isolation", "verdict": "verified-with-fatal-manifest-boundary"},
+    {"id": "compatible-clients-exist", "verdict": "verified-as-documented-incremental-support"},
+    {"id": "unqualified-final-ga-release", "verdict": "not-safe-due-upstream-status-conflict-and-no-tag"},
+    {"id": "all-excerpt-brands-are-participants-or-clients", "verdict": "unsupported"}
+  ],
+  "strategicDecision": {
+    "impact": "high-packaging-layer-not-whole-product",
+    "decision": "adopt-agent-plugins-as-current-external-packaging-interoperability-floor",
+    "duplicateAuthoringDecision": "do-not-self-author-competing-generic-plugin-manifest-or-skills-mcp-package-format-without-residual-gap-proof",
+    "affectedHarnessLayers": [
+      "capability-source-metadata",
+      "package-conformance",
+      "consumer-projection-mapping",
+      "host-extension-boundaries"
+    ],
+    "retainedHarnessAuthority": [
+      "intent-and-task-contract",
+      "capability-routing-and-rerouting",
+      "source-review-and-admission",
+      "installation-enablement-update-and-rollback",
+      "host-owned-authorization-and-sandboxing",
+      "context-thread-worktree-and-resource-lifecycle",
+      "process-loss-receipts-and-human-gates",
+      "verification-acceptance-and-closure"
+    ],
+    "ccSwitchDisposition": "retains-operational-manager-authority; may later ingest-or-emit-the-portable-format only through a separately verified mapping",
+    "directHarnessReplacement": false,
+    "runtimeAdoptionAuthorized": false,
+    "nextGate": "offline-exact-field-and-failure-boundary-mapping-to-capability-source-and-cc-switch-consumer-projection-contracts"
+  },
+  "acceptanceBoundary": {
+    "verifiedCriteria": 46,
+    "partialCriteria": 15,
+    "plannedCriteria": 0,
+    "criteriaAdvancedByThisResearch": []
+  },
+  "authorityBoundary": {
+    "publicSourceResearchAuthorized": true,
+    "repositoryEvidenceWriteAuthorized": true,
+    "installAuthorized": false,
+    "enableAuthorized": false,
+    "executeAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "migrationAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false
+  },
+  "claimBoundary": {
+    "provesExactSpecificationRevisionAndSelectedObjects": true,
+    "provesNormativePackageContract": true,
+    "provesPublishedAndWorkingDraftStatusConflict": true,
+    "provesDocumentedCompatibleClientMatrix": true,
+    "provesLiveClientConformance": false,
+    "provesInstallationOrEnablement": false,
+    "provesInvocationOrInstructionDelivery": false,
+    "provesRuntimeBehavior": false,
+    "provesCrossHostParity": false,
+    "provesSecurityOrSandboxing": false,
+    "provesOperationalValue": false,
+    "provesProductionReadiness": false
+  }
+}

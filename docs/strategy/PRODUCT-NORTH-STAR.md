@@ -126,6 +126,27 @@ hard-standard promotion, broad-population validity, and Skill necessity.
 5. **Consumer projections** — user configuration and operational distribution,
    including CC Switch where it is the suitable manager.
 
+### External plugin packaging baseline
+
+As of 2026-08-07, Agent Plugins 1.0.0 is the current upstream-published
+interoperability baseline for packaging Agent Skills and MCP servers. The
+Harness must not author a competing generic `plugin.json`, Skill discovery
+layout, or portable MCP package schema before an exact comparison proves a
+residual gap. Package conformance remains distinct from source admission,
+installation, enablement, exposure, invocation, instruction delivery,
+behavior, value, security, lifecycle, portability, and production readiness.
+
+The upstream specification repository labels 1.0.0 `Published`, while the
+separate documentation deployment still labels it `Working Draft` and no Git
+tag was observed at the dated review. Future use therefore binds an exact
+revision or immutable schema digest rather than mutable `main`. CC Switch
+retains operational source, transaction, rollback, and consumer-projection
+authority; reverse-domain client extensions and Harness adapters retain
+host-specific behavior. The packaging standard does not replace the portable
+decision core, runtime lifecycle plane, host authorization, process-fidelity
+evidence, or accountable acceptance. See the dated
+[primary-source review](../research/agent-plugins-1.0.0-strategic-impact-2026-08-07.md).
+
 The capability universe is dynamic. A current inventory is only a dated
 snapshot of what the host can see, not proof that the best suitable capability
 is already installed or loaded. `capability-router` must distinguish two
