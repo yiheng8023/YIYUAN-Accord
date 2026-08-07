@@ -5223,3 +5223,30 @@ acceptance, and closure remain Harness or host concerns. No plugin was
 installed, enabled, executed, or migrated; no model ran; and the canonical
 46/15/0 acceptance inventory is unchanged. Evidence:
 `registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json`.
+
+## 2026-08-07 LongHorizon-Harness exact-source static-review checkpoint
+
+The owner separately authorized one exact acquisition/static-review/cleanup
+transaction. Revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58` was acquired
+anonymously into a new disposable operating-system temporary root outside
+repositories, projects, capability roots, and user configuration. The initial
+fetch timed out after pack download without refs; the target object existed,
+full Git fsck passed, and a clean detached checkout was recovered. This is
+acquisition recovery only, not candidate crash-resume evidence.
+
+The exact checkout had 1,367 tracked paths, no gitlinks or symlinks, and a
+39-path core package beside 1,317 evaluation paths and separate rights/media
+surfaces. Static review confirms default host permission bypass, post-hoc
+auditor mutation detection without implemented restore, a greater-than-4-MiB
+content-hash gap, no prior-process resume command, POSIX-shaped Windows gaps,
+arbitrary-workspace transaction gaps, plugin lifecycle conflicts with CC
+Switch/host authority, and no independent core test suite.
+
+No dependency or candidate code ran; no model, account, configuration, CC
+Switch, consumer, or adapter state changed. The exact directory was sent to the
+Windows Recycle Bin, its original path no longer exists, and a matching
+recoverable Recycle Bin entry was verified. No other path was removed. Direct
+adoption remains blocked, equivalent coordinator authoring remains stopped,
+and a safe-adapter or upstream-change design requires a new owner decision.
+The 46/15/0 acceptance inventory is unchanged. Evidence:
+`registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.

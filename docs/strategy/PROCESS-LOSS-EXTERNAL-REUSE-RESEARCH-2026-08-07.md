@@ -262,3 +262,75 @@ data-boundary expansion, or work against a non-disposable workspace remains a
 new authorization gate. No real Claude task is required to preserve this
 candidate finding; a future real task is only needed if and when live behavioral
 value is evaluated.
+
+## Authorized exact-source acquisition and deeper static review
+
+After the preflight, the owner separately authorized one exact transaction:
+acquire revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58` anonymously
+into a new operating-system temporary directory outside repositories, projects,
+capability roots, and user configuration; perform static review only; record
+evidence; then send that exact directory to the Windows Recycle Bin.
+
+The first depth-one fetch timed out after downloading its pack and before
+creating a ref. The target commit object was present, a full Git object check
+passed, and a clean detached checkout was recovered from that verified object.
+This is acquisition-workflow recovery, not evidence that the candidate can
+resume a crashed manager process.
+
+The checkout matched the frozen commit and tree, contained 1,367 tracked paths,
+and had no gitlinks or symlinks. The repository occupied 211,769,067 bytes
+including Git objects. Its 39-path `src` package is small and the built sdist is
+core-scoped, but the repository also carries 1,317 evaluation paths, separate
+OSWorld and WeaveBench license/notice boundaries, and a 70,969,154-byte
+promotional video. Core reuse must therefore not import the evaluation and
+media surface by accident.
+
+### Refined blocker findings
+
+The exact checkout strengthens the earlier adoption blockers:
+
+1. Claude always receives `--dangerously-skip-permissions`; Codex defaults to
+   `--dangerously-bypass-approvals-and-sandbox` without an explicit sandbox.
+2. The Claude auditor denies direct write tools but retains Bash and computer
+   MCP access. It compares pre/post workspace snapshots after execution.
+   `verifier_workspace_restore_on_mutation` defaults true, yet
+   `verifier_workspace_restored` is always initialized false and no restoration
+   implementation was found. This is fail-closed reporting, not preventive
+   read-only enforcement or rollback.
+3. Files over 4 MiB are not content-hashed by the snapshotter; mode, size, and
+   mtime remain, but a content-level mutation can escape that oracle.
+4. Persisted round artifacts are inspectable, but the CLI exposes no resume or
+   recovery command for an interrupted prior manager process.
+5. Command construction and process control are POSIX-shaped: `shlex` quoting,
+   shell environment prefixes, `start_new_session`, `killpg`, Unix signals, and
+   Linux screenshot commands. Windows behavior remains unproved.
+6. A caller may point `--workspace` at an arbitrary existing path; the source
+   supplies no protected-root exclusions, transaction journal, or implemented
+   rollback.
+7. Community computer-use packages are installed globally from unpinned npm
+   names and may execute consent or OS-permission activation. The Codex-owned
+   computer-use plugin delegates to Codex's persistent plugin registry. This
+   cannot replace CC Switch and host-owned lifecycle authority without a
+   separately governed adapter.
+8. The root repository has no independent core-package test suite. Its release
+   workflow builds and publishes but does not run core tests. Evaluation-subtree
+   tests are not a substitute.
+
+The source remains a high-value coordinator reference, and equivalent local
+authoring remains stopped. Direct adoption stays blocked. A safe adapter or
+upstream-change design would require a new owner decision; installation,
+execution, model dispatch, account/configuration changes, CC Switch changes,
+consumer mutation, and a real task were not authorized or performed.
+
+## Cleanup receipt
+
+The exact temporary directory was sent to the Windows Recycle Bin. Its original
+path no longer exists, and the Recycle Bin contains a matching item whose
+deleted-from location is the operating-system temp root. The operation is
+recoverable by the user from the Recycle Bin. No other path was removed.
+
+The public record retains only transaction id
+`longhorizon-exact-source-2f46ee51636042b0843133510a7d629d` and normalized-path
+SHA-256 `090e746768a20f4273ed6925e5a0b0740246cc7b7b6bb8a33ac400758d3e3aa8`,
+not the user-local absolute path. Governed evidence:
+`registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.

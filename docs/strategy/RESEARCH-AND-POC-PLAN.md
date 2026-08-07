@@ -3126,3 +3126,25 @@ transition would cross new acquisition, installation, adapter, model, and real
 task boundaries, so the mainline must pause there for separate owner authority.
 No real Claude task was required for this synthetic gate. Evidence:
 `registry/process-loss-longhorizon-harness-execution-preflight-2026-08-07.json`.
+
+### 2026-08-07 LongHorizon-Harness authorized exact-source static review
+
+The owner then authorized only exact-SHA anonymous acquisition into one new
+disposable operating-system temporary directory, static review, evidence
+recording, and recoverable cleanup. The exact checkout matched revision
+`b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58` and its frozen tree; Git object
+integrity passed, the worktree was clean, and no dependency or candidate code
+ran. The temporary directory was sent to the Windows Recycle Bin and its
+original path no longer exists.
+
+Deeper source review confirms that the current implementation is not safe for
+direct Harness adoption: default host permission bypass remains; auditor
+mutation handling is post-hoc and has no implemented restore; files over 4 MiB
+are not content-hashed; no cross-process resume command exists; command and
+process control are POSIX-shaped; arbitrary workspaces lack a transaction
+rollback; plugin setup crosses global npm or Codex registry boundaries; and no
+independent core-package test suite is present. The coordinator remains a
+high-value reuse reference and equivalent self-authoring stays stopped, but a
+safe adapter or upstream change now requires a separate owner decision. The
+46/15/0 acceptance inventory is unchanged. Evidence:
+`registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.

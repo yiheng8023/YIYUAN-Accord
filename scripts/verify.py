@@ -58,6 +58,9 @@ from validate_process_loss_longhorizon_harness_interface_gap_mapping import (
 from evaluate_process_loss_longhorizon_harness_execution_preflight import (
     validate_repository_preflight as validate_process_loss_longhorizon_harness_execution_preflight,
 )
+from validate_process_loss_longhorizon_harness_exact_source_static_review import (
+    validate_repository_review as validate_process_loss_longhorizon_harness_exact_source_static_review,
+)
 from validate_codex_consumer_skill_mapping_snapshot import (
     validate_repository_snapshot as validate_codex_consumer_skill_mapping_snapshot,
 )
@@ -1674,6 +1677,9 @@ REQUIRED_FILES = (
     "docs/strategy/PROCESS-LOSS-LONGHORIZON-HARNESS-EXECUTION-PREFLIGHT-2026-08-07.md",
     "scripts/evaluate_process_loss_longhorizon_harness_execution_preflight.py",
     "tests/test_process_loss_longhorizon_harness_execution_preflight.py",
+    "registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json",
+    "scripts/validate_process_loss_longhorizon_harness_exact_source_static_review.py",
+    "tests/test_process_loss_longhorizon_harness_exact_source_static_review.py",
     "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
     "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
     "scripts/validate_codex_consumer_skill_mapping_snapshot.py",
@@ -1898,6 +1904,7 @@ def verify() -> None:
     validate_process_loss_longhorizon_harness_static_reuse_assessment(ROOT)
     validate_process_loss_longhorizon_harness_interface_gap_mapping(ROOT)
     validate_process_loss_longhorizon_harness_execution_preflight(ROOT)
+    validate_process_loss_longhorizon_harness_exact_source_static_review(ROOT)
     validate_codex_consumer_skill_mapping_snapshot(ROOT)
     validate_claude_consumer_skill_projection_snapshot(ROOT)
     validate_claude_plugin_skill_root_readonly_preflight(ROOT)
