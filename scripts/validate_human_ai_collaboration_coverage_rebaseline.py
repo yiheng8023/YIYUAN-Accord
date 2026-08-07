@@ -127,6 +127,9 @@ LONGHORIZON_STATIC_REUSE_ASSESSMENT_EVIDENCE_ID = (
 LONGHORIZON_INTERFACE_GAP_MAPPING_EVIDENCE_ID = (
     "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07"
 )
+LONGHORIZON_EXECUTION_PREFLIGHT_EVIDENCE_ID = (
+    "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07"
+)
 RELEASE_CHANGE_PROTOCOL_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-release-change-zero-model-"
     "protocol-2026-07-27"
@@ -592,6 +595,7 @@ def validate_rebaseline(
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
                 LONGHORIZON_STATIC_REUSE_ASSESSMENT_EVIDENCE_ID,
                 LONGHORIZON_INTERFACE_GAP_MAPPING_EVIDENCE_ID,
+                LONGHORIZON_EXECUTION_PREFLIGHT_EVIDENCE_ID,
             ]
         _require(
             item.get("evidenceIds") == expected_evidence_ids,

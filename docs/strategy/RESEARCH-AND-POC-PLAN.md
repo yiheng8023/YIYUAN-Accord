@@ -3095,3 +3095,22 @@ disposable workspace isolation, mutation and rollback, route receipts, and
 crash-resume expectations. No real Claude task is required for that preflight.
 Evidence:
 `registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json`.
+
+### 2026-08-07 LongHorizon-Harness execution preflight
+
+The future-comparison boundary now has a pure zero-model fail-closed evaluator.
+One declared-synthetic request fixes the candidate revision, a newly created
+operating-system temporary workspace, excluded user and capability roots,
+preventive role permissions, parent-derived route and artifact receipts,
+transaction journaling and rollback, and distinct process-crash resume evidence.
+Twenty-five single-boundary mutations all block while execution, installation,
+and model dispatch stay false.
+
+This validates only the preflight mechanism. It does not acquire or execute the
+candidate, implement a safe adapter, prove live permissions, build a disposable
+workspace, perform rollback, resume a crash, reproduce behavior or value, or
+advance acceptance. The canonical inventory remains 46/15/0. The next state
+transition would cross new acquisition, installation, adapter, model, and real
+task boundaries, so the mainline must pause there for separate owner authority.
+No real Claude task was required for this synthetic gate. Evidence:
+`registry/process-loss-longhorizon-harness-execution-preflight-2026-08-07.json`.

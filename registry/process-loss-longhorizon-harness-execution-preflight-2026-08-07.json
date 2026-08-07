@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "id": "process-loss-longhorizon-harness-execution-preflight-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-synthetic-fail-closed-preflight-no-live-execution",
+  "documentation": "docs/strategy/PROCESS-LOSS-LONGHORIZON-HARNESS-EXECUTION-PREFLIGHT-2026-08-07.md",
+  "sourceBindings": {
+    "staticAssessment": "registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json",
+    "interfaceGapMapping": "registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json",
+    "dispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
+    "processProtocolV2Amendment": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json"
+  },
+  "failureInjectionCaseIds": [
+    "synthetic-boundary",
+    "candidate-revision",
+    "workspace-class",
+    "existing-workspace",
+    "resolved-workspace",
+    "workspace-exclusions",
+    "reparse-escape",
+    "pre-state-snapshot",
+    "post-state-snapshot",
+    "native-approval-bypass",
+    "native-sandbox-bypass",
+    "dangerous-flags",
+    "manager-profile",
+    "executor-profile",
+    "auditor-profile",
+    "effective-route-receipts",
+    "parent-derived-hashes",
+    "transaction-journal",
+    "outside-workspace-mutation",
+    "rollback-proof",
+    "recovery-separation",
+    "crash-resume-evidence",
+    "external-access",
+    "verification-surface",
+    "stop-rules"
+  ],
+  "syntheticFixture": {
+    "request": {
+      "declaredSynthetic": true,
+      "realExecutionAuthorityRepresented": false,
+      "candidate": {
+        "id": "github:AMAP-ML/LongHorizon-Harness",
+        "revision": "b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58",
+        "interfaceMappingId": "process-loss-longhorizon-harness-interface-gap-mapping-v1"
+      },
+      "workspace": {
+        "rootClass": "newly-created-os-temp-disposable-root",
+        "existingUserWorkspaceAllowed": false,
+        "resolvedAbsolutePathRequired": true,
+        "excludedRootClasses": [
+          "harness-repository",
+          "user-project-workspace",
+          "agent-skill-root",
+          "plugin-app-mcp-hook-root",
+          "consumer-configuration-root",
+          "credential-session-or-cache-root"
+        ],
+        "reparseOrSymlinkEscapeAllowed": false,
+        "preStateSnapshotRequired": true,
+        "postStateSnapshotRequired": true
+      },
+      "hostPermission": {
+        "nativeApprovalBypassAllowed": false,
+        "nativeSandboxBypassAllowed": false,
+        "dangerousFlagFragmentsAllowed": [],
+        "manager": {
+          "filesystemMode": "read-contract-and-receipts-only",
+          "processExecutionAllowed": false,
+          "networkAccessAllowed": false,
+          "workspaceWriteAllowed": false
+        },
+        "executor": {
+          "filesystemMode": "write-disposable-workspace-only",
+          "processExecutionAllowed": true,
+          "networkAccessAllowed": false,
+          "outsideWorkspaceWriteAllowed": false
+        },
+        "auditor": {
+          "filesystemMode": "preventive-readonly-disposable-workspace",
+          "processExecutionAllowed": false,
+          "networkAccessAllowed": false,
+          "workspaceWriteAllowed": false,
+          "postHocMutationDetectionIsSufficient": false
+        }
+      },
+      "receipts": {
+        "threadAndTurnIdentityRequired": true,
+        "effectiveHostRouteRequired": true,
+        "requestedRouteIsEffectiveRouteEvidence": false,
+        "inputArtifactHashParentComputed": true,
+        "outputArtifactHashParentComputed": true,
+        "stageContractHashParentComputed": true,
+        "unknownReceiptFieldsFailClosed": true
+      },
+      "mutationAndRollback": {
+        "transactionJournalRequired": true,
+        "outsideWorkspaceMutationDisposition": "halt-and-fail",
+        "restoreOnDetectedMutationRequired": true,
+        "preAndPostDigestRequired": true,
+        "rollbackReceiptRequired": true,
+        "rollbackFailureDisposition": "halt-preserve-evidence-and-require-human"
+      },
+      "recovery": {
+        "withinProcessRepairSeparatedFromCrashResume": true,
+        "processCrashResumeClaimRequiresReloadedState": true,
+        "resumeSourceRunIdRequired": true,
+        "resumeCheckpointDigestRequired": true,
+        "replayOrContinuationReceiptRequired": true,
+        "unknownResumeStateDisposition": "blocked-no-substitution"
+      },
+      "externalBoundary": {
+        "networkAccessAllowed": false,
+        "thirdPartyAcquisitionAllowed": false,
+        "installationAllowed": false,
+        "modelDispatchAllowed": false,
+        "accountConnectionAllowed": false,
+        "consumerMutationAllowed": false
+      },
+      "verification": {
+        "resultPath": "registry/process-loss-longhorizon-harness-live-comparison-YYYY-MM-DD.json",
+        "acceptanceAssessmentMustRemain": "partial",
+        "syntheticEligibilityIsExecutionAuthority": false,
+        "behaviorValueAndPortabilityClaimsRequireLiveEvidence": true
+      },
+      "stopRules": [
+        "stop-on-native-approval-or-sandbox-bypass",
+        "stop-on-dangerous-command-flag",
+        "stop-on-workspace-identity-or-boundary-ambiguity",
+        "stop-on-reparse-or-symlink-escape",
+        "stop-on-missing-parent-derived-route-or-artifact-receipt",
+        "stop-on-auditor-write-capability",
+        "stop-on-outside-workspace-mutation",
+        "stop-on-missing-or-failed-rollback-proof",
+        "stop-on-crash-resume-overclaim",
+        "stop-before-acquisition-install-model-account-or-consumer-boundary"
+      ]
+    }
+  },
+  "currentDecision": {
+    "syntheticPreflightMechanismPassed": true,
+    "liveComparisonAuthorized": false,
+    "candidateAcquisitionAuthorized": false,
+    "installationAuthorized": false,
+    "adapterImplementationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "realTaskBound": false,
+    "nextGate": "Pause before candidate acquisition, installation, adapter implementation, model dispatch, or any live task comparison. A later live path requires separate owner authorization after a safe host-specific adapter or upstream route, disposable workspace implementation, rollback implementation, and a real task are bound."
+  },
+  "claimBoundary": {
+    "provesSyntheticPreflightMechanism": true,
+    "provesLivePermissionEnforcement": false,
+    "provesDisposableWorkspaceImplementation": false,
+    "provesRollbackImplementation": false,
+    "provesEffectiveRouteReceipts": false,
+    "provesCrashResume": false,
+    "provesRuntimeBehavior": false,
+    "provesIndependentValue": false,
+    "provesCrossHostPortability": false,
+    "provesResidualGap": false,
+    "provesProductionReadiness": false,
+    "advancesProcessFidelityAcceptance": false
+  },
+  "authorityBoundary": {
+    "repositoryLocalSyntheticPreflightAuthorized": true,
+    "networkAccessAuthorized": false,
+    "thirdPartyAcquisitionAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "adapterImplementationAuthorized": false,
+    "executionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "externalWriteAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false
+  }
+}

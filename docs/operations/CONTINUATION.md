@@ -5173,3 +5173,24 @@ execution preflight for host permissions, disposable workspace identity,
 mutation and rollback, exact route receipts, and crash-resume expectations.
 No real Claude task is required. Evidence:
 `registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json`.
+
+## 2026-08-07 LongHorizon-Harness execution preflight checkpoint
+
+A pure zero-model evaluator now binds the minimum future-comparison floor:
+exact candidate revision; a newly created disposable operating-system root
+outside repositories, user projects, capability roots, configuration, and
+sensitive state; preventive Manager/Executor/Auditor permission profiles;
+parent-derived route and artifact receipts; transaction journal, mutation
+halt, rollback receipt; and distinct crash-resume evidence. Twenty-five
+single-boundary mutations fail closed.
+
+The synthetic positive fixture never authorizes execution, installation, or
+model dispatch. No candidate code was acquired or run, no adapter was built,
+and no consumer or account state changed. This proves no live permission
+enforcement, workspace isolation, rollback, route receipt, crash recovery,
+behavior, value, portability, residual gap, or production readiness; the
+46/15/0 acceptance inventory remains unchanged. The next step would require
+new trust and side-effect authority for candidate acquisition, installation,
+safe adapter or upstream implementation, model dispatch, and a real task. Stop
+before that boundary and request separate owner direction. Evidence:
+`registry/process-loss-longhorizon-harness-execution-preflight-2026-08-07.json`.
