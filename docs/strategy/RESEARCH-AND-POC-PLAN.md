@@ -3073,3 +3073,25 @@ residual-gap criteria and the already-verified reuse-before-authoring rule.
 No real Claude task is required until a separately authorized live behavior
 comparison is ready. Evidence:
 `registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json`.
+
+### 2026-08-07 LongHorizon-Harness interface gap mapping
+
+The frozen source is now mapped to the current process-fidelity protocol at
+twelve interfaces. Four surfaces are present direct references: Manager route,
+fresh-context Executor, persistent round evidence, and the completion guard.
+Five are partial and would require a separately authorized thin adapter: typed
+task state and contract, independent audit evidence, accountable human gates,
+failure repair and resume, and the backend adapter seam. Three remain
+Harness-owned because the frozen source does not satisfy them: parent-derived
+raw receipts, cumulative process-loss accounting, and host-owned permission
+enforcement.
+
+This mapping stops duplicate coordinator authoring but does not authorize code
+reuse, adapter implementation, acquisition, installation, execution, model
+dispatch, or direct adoption. It advances no acceptance state and keeps
+46 verified, 15 partial, and zero planned criteria. The next bounded gate is a
+pure zero-model fail-closed execution preflight covering host permissions,
+disposable workspace isolation, mutation and rollback, route receipts, and
+crash-resume expectations. No real Claude task is required for that preflight.
+Evidence:
+`registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json`.

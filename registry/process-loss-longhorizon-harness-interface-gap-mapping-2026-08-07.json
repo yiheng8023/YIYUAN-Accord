@@ -1,0 +1,194 @@
+{
+  "schema": 1,
+  "id": "process-loss-longhorizon-harness-interface-gap-mapping-v1",
+  "asOf": "2026-08-07",
+  "status": "verified-zero-model-interface-gap-mapping-no-execution",
+  "documentation": "docs/strategy/PROCESS-LOSS-LONGHORIZON-HARNESS-INTERFACE-GAP-MAPPING-2026-08-07.md",
+  "sourceBindings": {
+    "externalAssessment": "registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json",
+    "baseProcessProtocol": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-2026-07-27.json",
+    "processProtocolV2Amendment": "registry/human-ai-collaboration-process-fidelity-chained-transform-trial-protocol-v2-amendment-2026-07-27.json",
+    "cumulativeLossContract": "registry/human-ai-collaboration-process-fidelity-cumulative-loss-accounting-contract-2026-07-27.json",
+    "receiverDeltaLedger": "registry/context-handoff-receiver-delta-ledger-evidence-2026-07-27.json",
+    "dispatchGateContract": "registry/human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27.json",
+    "programAcceptanceMap": "registry/program-acceptance-map.json"
+  },
+  "mappingContract": {
+    "question": "Which exact LongHorizon-Harness interfaces can be reused as references, which require a thin Harness-owned adapter, and which end-to-end process-fidelity obligations remain exclusively Harness-owned?",
+    "mode": "repository-local-zero-model-static-mapping",
+    "externalAccessUsed": false,
+    "thirdPartyCodeAcquired": false,
+    "thirdPartyCodeExecuted": false,
+    "modelCallCount": 0,
+    "hostConfigurationChanged": false,
+    "consumerWorkspaceAccessed": false,
+    "mappingVocabulary": {
+      "present": "The reviewed source exposes the named operational surface, without implying accepted behavior or value.",
+      "partial": "The surface exists but does not satisfy one or more Harness evidence, authority, identity, or lifecycle invariants.",
+      "absent": "No sufficient implementation surface was found in the frozen source for the Harness requirement.",
+      "direct-reference": "Retain the source pattern as a comparison or design reference; this does not authorize code import.",
+      "thin-adapter-required": "A future separately authorized adapter would have to translate or harden the surface without moving Harness authority into the external runtime.",
+      "harness-retained": "The requirement remains owned and verified by Agent Autonomy Harness and cannot be delegated to this candidate."
+    }
+  },
+  "interfaceRows": [
+    {
+      "interfaceId": "task-state-and-next-contract",
+      "longHorizonSurface": "Manager persists task_state.txt and task_contract.txt and supplies them to later rounds.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["frozen-source-identity", "visible-invariant-ids", "authority-and-acceptance-separation", "provenance-and-uncertainty"],
+      "coverage": "partial",
+      "disposition": "thin-adapter-required",
+      "gap": "The persisted control artifacts are natural language and do not natively carry the typed source, invariant, provenance, authority, uncertainty, and acceptance fields required by the Harness protocol."
+    },
+    {
+      "interfaceId": "manager-route",
+      "longHorizonSurface": "Manager selects execute, done, blocked, or ask and emits one bounded next contract.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["bounded-next-action", "explicit-stop-or-human-route", "no-unaudited-terminal-advance"],
+      "coverage": "present",
+      "disposition": "direct-reference",
+      "gap": "Route presence is static mechanism evidence only; route quality and policy adherence remain unproved."
+    },
+    {
+      "interfaceId": "fresh-context-executor",
+      "longHorizonSurface": "Executor receives the current bounded contract and selected audit context without the full prior trajectory.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["fresh-invocation-per-hop", "bounded-material-input", "no-shared-conversation-state"],
+      "coverage": "present",
+      "disposition": "direct-reference",
+      "gap": "Fresh-context construction is not parent-captured proof of the effective host thread, route, raw input, or raw output identity."
+    },
+    {
+      "interfaceId": "independent-audit-report",
+      "longHorizonSurface": "A separate Auditor inspects the environment and returns a report used by the next Manager round.",
+      "sourcePaths": ["src/lh_harness/manager.py", "src/lh_harness/adapters/claude_permissions.py", "src/lh_harness/adapters/codex.py"],
+      "harnessRequirements": ["independent-review", "parent-recomputed-delta", "hard-readonly-enforcement", "evidence-linked-verdict"],
+      "coverage": "partial",
+      "disposition": "thin-adapter-required",
+      "gap": "The report is useful, but hard read-only enforcement, parent recomputation, raw evidence identity, and equivalent Codex role isolation are not established."
+    },
+    {
+      "interfaceId": "persistent-round-evidence",
+      "longHorizonSurface": "Run directories retain task state, contracts, audit reports, events, trajectories, rounds, and final reports.",
+      "sourcePaths": ["src/lh_harness/manager.py", "src/lh_harness/cli.py"],
+      "harnessRequirements": ["persist-before-downstream-materialization", "append-only-lineage", "inspectable-stage-artifacts"],
+      "coverage": "present",
+      "disposition": "direct-reference",
+      "gap": "Persistence alone does not provide parent-computed hashes, immutable artifact substitution checks, or crash-consistent replay."
+    },
+    {
+      "interfaceId": "completion-guard",
+      "longHorizonSurface": "A done route is rejected unless the latest auditor report is complete, clean, and aligned.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["no-unaudited-completion", "fail-closed-terminal-route", "repair-signal-on-rejection"],
+      "coverage": "present",
+      "disposition": "direct-reference",
+      "gap": "The guard depends on the integrity and semantics of a natural-language audit report and does not itself prove human acceptance or release readiness."
+    },
+    {
+      "interfaceId": "human-ask-and-blocked-gates",
+      "longHorizonSurface": "Ask, blocked, and maximum-round outcomes can stop the loop for human intervention.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["human-intervention-gate", "consequential-decision-retention", "terminal-to-human-accountable-review"],
+      "coverage": "partial",
+      "disposition": "thin-adapter-required",
+      "gap": "The stop surface exists, but it does not encode accountable human acceptance, decision identity, supersession, or terminal-to-human review evidence."
+    },
+    {
+      "interfaceId": "parent-derived-raw-receipts",
+      "longHorizonSurface": "No sufficient parent-owned raw input/output hash and effective host-route receipt contract was found in the frozen source.",
+      "sourcePaths": ["src/lh_harness/manager.py", "src/lh_harness/adapters/claude_code.py", "src/lh_harness/adapters/codex.py"],
+      "harnessRequirements": ["parent-computed-input-hash", "parent-computed-output-hash", "effective-thread-and-route-receipt", "artifact-substitution-rejection"],
+      "coverage": "absent",
+      "disposition": "harness-retained",
+      "gap": "Harness dispatch and receipt authority cannot be inferred from trajectories, event logs, adapter output, or agent self-report."
+    },
+    {
+      "interfaceId": "cumulative-process-loss-ledger",
+      "longHorizonSurface": "No new, carried, recovered, reintroduced, unique, peak, or budget-breach loss ledger was found in the frozen source.",
+      "sourcePaths": ["src/lh_harness/manager.py"],
+      "harnessRequirements": ["per-hop-invariant-delta", "new-carried-recovered-sets", "cumulative-unique-loss", "peak-active-loss", "terminal-correctness-separated-from-process-loss"],
+      "coverage": "absent",
+      "disposition": "harness-retained",
+      "gap": "Task progress and audit status are not a substitute for explicit semantic and authority loss accounting."
+    },
+    {
+      "interfaceId": "failure-repair-and-resume",
+      "longHorizonSurface": "Audit failure and execution gaps can be repaired in later rounds and run artifacts persist for inspection.",
+      "sourcePaths": ["src/lh_harness/manager.py", "src/lh_harness/cli.py"],
+      "harnessRequirements": ["source-backed-recovery-gate", "trigger-receipt", "recovery-distance", "process-crash-resume", "cross-host-replay-boundary"],
+      "coverage": "partial",
+      "disposition": "thin-adapter-required",
+      "gap": "Within-run repair is present, but conditional source unsealing, trigger identity, cross-process resume, crash-consistent replay, and cross-host recovery were not found."
+    },
+    {
+      "interfaceId": "host-owned-permission-enforcement",
+      "longHorizonSurface": "The reviewed Claude and Codex commands bypass native permission, approval, or sandbox controls by default.",
+      "sourcePaths": ["src/lh_harness/adapters/claude_code.py", "src/lh_harness/adapters/claude_permissions.py", "src/lh_harness/adapters/codex.py"],
+      "harnessRequirements": ["host-native-authorization", "least-privilege-role-boundary", "preventive-readonly-auditor", "bounded-workspace"],
+      "coverage": "absent",
+      "disposition": "harness-retained",
+      "gap": "The default execution route conflicts with the Harness authority floor and must be replaced by a fail-closed host-owned profile before any execution comparison."
+    },
+    {
+      "interfaceId": "backend-adapter-seam",
+      "longHorizonSurface": "Thin Claude Code and Codex adapters preserve the backend agent loop.",
+      "sourcePaths": ["src/lh_harness/adapters/claude_code.py", "src/lh_harness/adapters/codex.py"],
+      "harnessRequirements": ["backend-neutral-interface", "exact-route-observation", "role-specific-authority", "no-silent-fallback"],
+      "coverage": "partial",
+      "disposition": "thin-adapter-required",
+      "gap": "The seam is reusable as a design reference, but exact effective route receipts, role-specific Codex authority, and safe default execution are not established."
+    }
+  ],
+  "mappingSummary": {
+    "interfaceCount": 12,
+    "coverageCounts": {"present": 4, "partial": 5, "absent": 3},
+    "dispositionCounts": {"direct-reference": 4, "thin-adapter-required": 5, "harness-retained": 3},
+    "directReferenceInterfaceIds": ["manager-route", "fresh-context-executor", "persistent-round-evidence", "completion-guard"],
+    "thinAdapterInterfaceIds": ["task-state-and-next-contract", "independent-audit-report", "human-ask-and-blocked-gates", "failure-repair-and-resume", "backend-adapter-seam"],
+    "harnessRetainedInterfaceIds": ["parent-derived-raw-receipts", "cumulative-process-loss-ledger", "host-owned-permission-enforcement"],
+    "additionalHarnessRetainedScope": ["human-to-source-binding", "persistent-semantic-and-consequential-authority-continuity", "terminal-to-human-acceptance", "software-lifecycle-and-general-scenario-coverage", "rollback-cleanup-and-release-governance"],
+    "directCodeReuseAuthorized": false,
+    "interfaceCompatibilityProved": false,
+    "operationalCoordinatorReplacementProved": false
+  },
+  "decision": {
+    "mappingCompleteForFrozenRevision": true,
+    "stopSelfAuthoringEquivalentCoordinator": true,
+    "directAdoptionSupported": false,
+    "thinAdapterImplementationAuthorized": false,
+    "upstreamContributionAuthorized": false,
+    "liveComparisonAuthorized": false,
+    "realClaudeTaskRequiredAtThisGate": false,
+    "nextGate": "Specify and failure-test a pure zero-model fail-closed execution preflight for host-owned permissions, disposable workspace isolation, mutation detection and rollback, exact route receipts, and crash-resume expectations; do not acquire or execute LongHorizon-Harness."
+  },
+  "authorityBoundary": {
+    "repositoryLocalMappingAuthorized": true,
+    "thirdPartyAcquisitionAuthorized": false,
+    "installAuthorized": false,
+    "enableAuthorized": false,
+    "executeAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "adapterImplementationAuthorized": false,
+    "upstreamWriteAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false
+  },
+  "claimBoundary": {
+    "provesFrozenSourceToProtocolMapping": true,
+    "provesStaticReuseAndGapClassification": true,
+    "provesInterfaceCompatibility": false,
+    "provesSafeExecution": false,
+    "provesRuntimeBehavior": false,
+    "provesIndependentValue": false,
+    "provesCrossHostPortability": false,
+    "provesCrashRecovery": false,
+    "provesResidualGap": false,
+    "provesProductionReadiness": false,
+    "advancesProcessFidelityAcceptance": false,
+    "authorizesInstallationExecutionOrAdoption": false
+  }
+}

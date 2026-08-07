@@ -288,7 +288,8 @@
         "evidence.human-ai-collaboration-semantic-authority-live-dispatch-gate-preflight-2026-08-01",
         "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31",
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
-        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07"
       ]
     },
     {
@@ -395,7 +396,8 @@
         "evidence.human-ai-collaboration-learning-noru-independent-review-readiness-2026-08-01",
         "evidence.skill-portfolio-system-manager-reference-cohort-2026-08-06",
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
-        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07"
       ]
     },
     {
@@ -1002,7 +1004,8 @@
         "evidence.runtime-capability-and-agent-lifecycle-ecosystem-research-2026-07-30",
         "evidence.skill-portfolio-three-domain-current-capability-screen-2026-08-06",
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
-        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07"
       ]
     },
     {
@@ -2844,6 +2847,17 @@
       "id": "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
       "path": "registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json",
       "kind": "exact-revision-public-source-and-git-object-static-operational-coordinator-reuse-assessment-no-acquisition-install-execution-model-dispatch-adoption-behavior-value-or-residual-gap-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity",
+        "acceptance.residual-gap-proof",
+        "acceptance.discovery-reuse-before-authoring"
+      ]
+    },
+    {
+      "id": "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07",
+      "path": "registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json",
+      "kind": "zero-model-frozen-source-to-process-fidelity-interface-coverage-and-gap-mapping-no-acquisition-adapter-implementation-install-execution-model-dispatch-behavior-value-or-residual-gap-proof",
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.end-to-end-process-fidelity",

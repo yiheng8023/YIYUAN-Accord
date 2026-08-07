@@ -5151,3 +5151,25 @@ falsified, while installation, enablement, model dispatch, consumer mutation,
 and direct adoption remain unauthorized. No real Claude task is required for
 this static gate. The 46/15/0 acceptance inventory remains unchanged. Evidence:
 `registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json`.
+
+## 2026-08-07 LongHorizon-Harness interface gap mapping checkpoint
+
+The static candidate now has a twelve-interface zero-model mapping against the
+Harness process-fidelity protocol. Manager routing, fresh-context execution,
+persistent round evidence, and the completion guard are present as design
+references. Task state and contract, independent audit, accountable human
+gates, repair and resume, and the backend seam are partial and would require a
+thin adapter. Parent-derived raw receipts, cumulative loss accounting, and
+host-owned permission enforcement remain Harness-owned.
+
+The mapping closes only the frozen-revision interface-classification gate. It
+does not prove compatibility, safe execution, behavior, value, cross-host
+portability, crash recovery, residual gap, or production readiness. It neither
+acquired nor executed the external project, and it does not authorize an
+adapter, installation, model dispatch, consumer mutation, upstream write, or
+direct adoption. The stop-authoring rule remains active; the 46/15/0 acceptance
+inventory is unchanged. The next safe gate is a pure zero-model fail-closed
+execution preflight for host permissions, disposable workspace identity,
+mutation and rollback, exact route receipts, and crash-resume expectations.
+No real Claude task is required. Evidence:
+`registry/process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07.json`.
