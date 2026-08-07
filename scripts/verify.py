@@ -46,6 +46,9 @@ from evaluate_ai_independent_hard_standard_candidate import (
 from plan_standard_revalidation_cascade import (
     validate_repository_poc as validate_standard_revalidation_cascade_poc,
 )
+from validate_process_loss_longhorizon_harness_static_reuse_assessment import (
+    validate_repository_assessment as validate_process_loss_longhorizon_harness_static_reuse_assessment,
+)
 from validate_codex_consumer_skill_mapping_snapshot import (
     validate_repository_snapshot as validate_codex_consumer_skill_mapping_snapshot,
 )
@@ -1646,6 +1649,10 @@ REQUIRED_FILES = (
     "docs/strategy/STANDARD-REVALIDATION-CASCADE-POC-2026-08-07.md",
     "scripts/plan_standard_revalidation_cascade.py",
     "tests/test_standard_revalidation_cascade_poc.py",
+    "registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json",
+    "docs/strategy/PROCESS-LOSS-EXTERNAL-REUSE-RESEARCH-2026-08-07.md",
+    "scripts/validate_process_loss_longhorizon_harness_static_reuse_assessment.py",
+    "tests/test_process_loss_longhorizon_harness_static_reuse_assessment.py",
     "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
     "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
     "scripts/validate_codex_consumer_skill_mapping_snapshot.py",
@@ -1866,6 +1873,7 @@ def verify() -> None:
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)
+    validate_process_loss_longhorizon_harness_static_reuse_assessment(ROOT)
     validate_codex_consumer_skill_mapping_snapshot(ROOT)
     validate_claude_consumer_skill_projection_snapshot(ROOT)
     validate_claude_plugin_skill_root_readonly_preflight(ROOT)

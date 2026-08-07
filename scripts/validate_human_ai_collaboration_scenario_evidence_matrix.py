@@ -75,6 +75,9 @@ MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID = (
     "evidence.multidimensional-software-engineering-source-snapshot-"
     "2026-07-31"
 )
+LONGHORIZON_STATIC_REUSE_ASSESSMENT_EVIDENCE_ID = (
+    "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07"
+)
 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
 )
@@ -1062,6 +1065,7 @@ def validate_matrix(
                 SEMANTIC_LIVE_DISPATCH_GATE_PREFLIGHT_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_EVALUATION_EVIDENCE_ID,
                 MULTIDIMENSIONAL_ENGINEERING_SOURCE_SNAPSHOT_EVIDENCE_ID,
+                LONGHORIZON_STATIC_REUSE_ASSESSMENT_EVIDENCE_ID,
             ]
         _require(
             item.get("evidenceIds") == expected_evidence_ids,

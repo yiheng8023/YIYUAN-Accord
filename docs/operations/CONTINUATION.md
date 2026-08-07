@@ -5127,3 +5127,27 @@ task-bound invocation and delivery, behavior, value, backup/restore, other
 consumers, cross-host parity, and production readiness remain open. The consumer
 criterion stays `partial`, and the program inventory stays 46/15/0. Evidence:
 `registry/claude-plugin-skill-root-readonly-inventory-2026-08-07.json`.
+
+## 2026-08-07 LongHorizon-Harness process-loss reuse checkpoint
+
+The user-bound external post was traced to arXiv:2608.01964v1 and the public
+MIT-licensed `AMAP-ML/LongHorizon-Harness` repository. The governed snapshot
+binds exact revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58`, its tree,
+and nine selected source objects without cloning, installing, executing, or
+dispatching a model. Source inspection confirms an implemented
+Manage-Execute-Audit loop, persisted task-state and contract artifacts,
+fresh-context execution, completion gating, explicit human routes, and thin
+backend adapters.
+
+This is a high-value reuse reference for the operational coordinator gap, not
+an adoption or behavior result and not a replacement for Harness-owned
+requirements, semantic and authority continuity, cumulative process-loss,
+human acceptance, lifecycle, rollback, or cleanup governance. Default Claude
+and Codex routes bypass native permission or sandbox controls; hard read-only
+auditing, process-crash resume, Windows maturity, and a core test-running CI
+surface are not proved. Author benchmarks remain unreplicated. The stop-authoring
+decision now forbids an equivalent local coordinator until this candidate is
+falsified, while installation, enablement, model dispatch, consumer mutation,
+and direct adoption remain unauthorized. No real Claude task is required for
+this static gate. The 46/15/0 acceptance inventory remains unchanged. Evidence:
+`registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json`.

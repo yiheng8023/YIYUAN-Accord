@@ -3051,3 +3051,25 @@ precedence, invocation, instruction delivery, behavior, value, cross-host
 parity, or production readiness. `acceptance.consumer-mapping-evidence` remains
 `partial`; the canonical inventory remains 46 verified, 15 partial, and zero
 planned.
+
+### 2026-08-07 LongHorizon-Harness process-loss reuse assessment
+
+A user-bound X post led to the paper and public MIT-licensed
+`AMAP-ML/LongHorizon-Harness` repository. The static review freezes exact
+revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58`, its tree, and nine selected
+Git objects. The Manage-Execute-Audit loop, persisted task state and contract,
+fresh-context Executor, completion guard, human routes, and thin adapter seam
+are present in source and are relevant to the missing operational coordinator.
+
+The reuse decision is subtractive: do not self-author an equivalent
+long-horizon coordinator before this candidate is mapped and falsified against
+explicit residual gaps. It is not adopted or installed. The reviewed adapters
+bypass host approval or sandbox controls by default, hard read-only auditor
+enforcement is not proved, no cross-process resume path was found, and the
+project's Windows and core-test surfaces remain early. Author-reported
+benchmarks were not independently reproduced. The current evidence advances
+no acceptance status; it is bound to the still-partial process-fidelity and
+residual-gap criteria and the already-verified reuse-before-authoring rule.
+No real Claude task is required until a separately authorized live behavior
+comparison is ready. Evidence:
+`registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json`.
