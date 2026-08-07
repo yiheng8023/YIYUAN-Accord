@@ -47,6 +47,22 @@ used only in an isolated inactive acquisition root unless a separately reviewed
 adapter imports the exact result into CC and verifies SSOT, database, enablement,
 backup, update, and consumer projections.
 
+## Current Matt Skills freshness boundary
+
+- Govern the new upstream candidate by exact release
+  `v1.2.3@6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`, not mutable `main`.
+- Preserve the security redaction improvement in `diagnosing-bugs`, the
+  host-neutral subagent wording in three engineering Skills, and the removal of
+  invented wizard time estimates as static source improvements only.
+- The dated live observation found all 25 CC Switch payloads already matching
+  `v1.2.3`, while all source rows named mutable `main`; the refresh trigger or
+  actor is unproved. Do not blindly refresh or rewrite payloads.
+- Keep `wizard` disabled. Any exact-tag metadata reconciliation is a separate,
+  recoverable CC Switch transaction requiring owner authority. No behavior,
+  value, loader, instruction-delivery, cross-host, or rollback claim follows.
+- Verify this boundary against
+  `registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`.
+
 ## Execution discipline
 
 - Start from live branch, status, HEAD, upstream, ahead/behind, and dirty-file

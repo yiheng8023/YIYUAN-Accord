@@ -5271,3 +5271,32 @@ unchanged. The next gate requires separate owner authority for either an
 upstream proposal package or a pure zero-model adapter-contract PoC against a
 fake candidate. Evidence:
 `registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.
+
+## 2026-08-07 Matt v1.2.3 upstream and live-drift checkpoint
+
+The user reported another Matt update. First-party refs confirm formal release
+`v1.2.3` at `6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`; current mutable `main` is
+`84fdeffd12f2ee307994d1eb6feb48173b6e0502`, two commits ahead with only one
+non-payload documentation line changed. The release keeps 25 promoted and 35
+recursive Skills. Five promoted payloads change: `diagnosing-bugs` adds secret
+redaction; `code-review`, `codebase-design`, and
+`improve-codebase-architecture` remove Claude-specific subagent names; and
+`wizard` removes false-precision minute estimates while retaining credential
+and external-write surfaces.
+
+The exact read-only preview then found that the live manager had already been
+refreshed before this review: 20 payloads match both `v1.2.2` and `v1.2.3`, the
+five changed payloads match only `v1.2.3`, all 25 source rows now name mutable
+`main`, and all 72 observed common/Claude/Codex consumer entries are CC Switch
+symlinks. `wizard` remains disabled. The actor or trigger is unattributed; the
+Harness performed no CC Switch or consumer write. Do not run a blind refresh
+or scatter per-Skill updates. The next state-changing gate is separate owner
+authority for a recoverable metadata-only reconciliation to exact `v1.2.3`
+after rechecking payload identity. This advances no acceptance state and proves
+no loader, instruction delivery, behavior, value, cross-host portability,
+rollback, or production readiness. Evidence:
+`registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`.
+
+The exact-source Git-only temporary root used by the preview was sent to the
+Windows Recycle Bin after the report was bound; its original path no longer
+exists and cleanup remains recoverable.

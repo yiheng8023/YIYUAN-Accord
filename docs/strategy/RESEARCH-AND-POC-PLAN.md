@@ -3168,3 +3168,26 @@ required for this design. A later upstream proposal package or pure zero-model
 adapter-contract PoC against a fake candidate requires another owner gate.
 Evidence:
 `registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.
+
+### 2026-08-07 Matt Pocock Skills v1.2.3 upstream and live-drift review
+
+The new formal release is frozen at annotated tag `v1.2.3`, peeled to
+`6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`. Relative to the previously
+governed `v1.2.2`, it retains the same 25 promoted and 35 recursively visible
+Skills while changing five promoted payloads. `diagnosing-bugs` adds explicit
+secret redaction, three engineering flows remove Claude-specific subagent tool
+names, and `wizard` removes invented minute estimates without reducing its
+credential or external-write surfaces. Mutable `main` is two commits ahead but
+changes only one non-payload documentation line.
+
+A read-only exact-release preview found all 25 live CC Switch payloads already
+matching `v1.2.3`: 20 are byte-identical across both releases and five match
+only `v1.2.3`. All 72 observed consumer entries across the common, Claude, and
+Codex roots are manager symlinks, while the 25 database rows name mutable
+`main`; the update trigger or actor is not proved. This is content identity plus
+source-metadata drift, not authority for a blind refresh. Keep `wizard`
+disabled and hold any metadata-only exact-tag reconciliation for a separate
+recoverable owner-authorized transaction. No behavior, value, loader,
+instruction-delivery, cross-host, rollback, or production claim follows, and
+the 46/15/0 acceptance inventory is unchanged. Evidence:
+`registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`.

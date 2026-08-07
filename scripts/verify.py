@@ -64,6 +64,9 @@ from validate_process_loss_longhorizon_harness_exact_source_static_review import
 from validate_process_loss_longhorizon_safe_adapter_upstream_design import (
     validate_repository_design as validate_process_loss_longhorizon_safe_adapter_upstream_design,
 )
+from validate_mattpocock_skills_v123_upstream_and_live_drift_review import (
+    validate_repository_review as validate_mattpocock_skills_v123_upstream_and_live_drift_review,
+)
 from validate_codex_consumer_skill_mapping_snapshot import (
     validate_repository_snapshot as validate_codex_consumer_skill_mapping_snapshot,
 )
@@ -1687,6 +1690,11 @@ REQUIRED_FILES = (
     "docs/strategy/PROCESS-LOSS-LONGHORIZON-SAFE-ADAPTER-UPSTREAM-DESIGN-2026-08-07.md",
     "scripts/validate_process_loss_longhorizon_safe_adapter_upstream_design.py",
     "tests/test_process_loss_longhorizon_safe_adapter_upstream_design.py",
+    "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
+    "docs/strategy/MATTPOCOCK-SKILLS-V1.2.3-UPSTREAM-DELTA-2026-08-07.md",
+    "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/manifest-update-preview-2026-08-07/REPORT.json",
+    "scripts/validate_mattpocock_skills_v123_upstream_and_live_drift_review.py",
+    "tests/test_mattpocock_skills_v123_upstream_and_live_drift_review.py",
     "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
     "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
     "scripts/validate_codex_consumer_skill_mapping_snapshot.py",
@@ -1913,6 +1921,7 @@ def verify() -> None:
     validate_process_loss_longhorizon_harness_execution_preflight(ROOT)
     validate_process_loss_longhorizon_harness_exact_source_static_review(ROOT)
     validate_process_loss_longhorizon_safe_adapter_upstream_design(ROOT)
+    validate_mattpocock_skills_v123_upstream_and_live_drift_review(ROOT)
     validate_codex_consumer_skill_mapping_snapshot(ROOT)
     validate_claude_consumer_skill_projection_snapshot(ROOT)
     validate_claude_plugin_skill_root_readonly_preflight(ROOT)
