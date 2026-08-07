@@ -40,7 +40,7 @@ end-user task when coverage objectives, sources, isolation, review/admission
 criteria, authority, verification, cleanup, and a stop rule are explicit.
 Third-party payloads remain exact upstream. The current 17-candidate pool keeps
 `customer-research` review-only; the other 16 exact-revision candidates are now
-managed by released CC Switch v3.19.1 with every host flag off and zero
+managed by released CC Switch v3.19.2 with every host flag off and zero
 consumer projections after an ordinary restart. A later user-selected Codex
 and Claude enablement was observed and then, after its attribution and ambient
 selection costs were made explicit, restored through the manager under the
@@ -3148,3 +3148,23 @@ high-value reuse reference and equivalent self-authoring stays stopped, but a
 safe adapter or upstream change now requires a separate owner decision. The
 46/15/0 acceptance inventory is unchanged. Evidence:
 `registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.
+
+### 2026-08-07 LongHorizon safe-adapter and upstream-change design
+
+After separate owner authorization, the next gate remains static and
+non-executing. The chosen strategy is upstream-first: candidate-wide fixes for
+safe permission defaults, cross-process resume, portable process control,
+complete mutation evidence, and core release tests belong upstream. A future
+Harness adapter may own only host policy translation, disposable workspace and
+rollback transactions, parent-derived route receipts, cumulative process-loss
+accounting, capability-lifecycle separation, and recovery validation.
+
+The adapter is not a second Manage-Execute-Audit coordinator. Direct adoption
+remains blocked and equivalent coordinator authoring remains stopped. No issue,
+pull request, adapter implementation, candidate acquisition or execution,
+installation, model dispatch, configuration or consumer mutation, behavior or
+value claim, or acceptance advancement follows. No real Claude task is
+required for this design. A later upstream proposal package or pure zero-model
+adapter-contract PoC against a fake candidate requires another owner gate.
+Evidence:
+`registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.

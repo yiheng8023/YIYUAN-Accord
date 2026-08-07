@@ -143,6 +143,22 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
             "isolated-inactive-acquisition-only-unless-separately-admitted",
         )
 
+    def test_cc_switch_release_binding_is_projected_consistently(self) -> None:
+        release = self.projection["sourceBindings"]["ccSwitch"]["release"]
+        self.assertEqual("v3.19.2", release)
+        for path in (
+            "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+            "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+            "README.md",
+            "README.zh-CN.md",
+        ):
+            self.assertIn(release, read(path))
+
+        texts = copy.deepcopy(self.texts)
+        texts["plan_text"] = texts["plan_text"].replace(release, "v0.0.0", 1)
+        with self.assertRaisesRegex(RuntimeError, "plan CC Switch release projection"):
+            self.validate(texts=texts)
+
     def test_failure_injection_matrix_fails_closed(self) -> None:
         mutations = []
 

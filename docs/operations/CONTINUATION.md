@@ -5250,3 +5250,24 @@ adoption remains blocked, equivalent coordinator authoring remains stopped,
 and a safe-adapter or upstream-change design requires a new owner decision.
 The 46/15/0 acceptance inventory is unchanged. Evidence:
 `registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.
+
+## 2026-08-07 LongHorizon safe-adapter/upstream-change design checkpoint
+
+The owner separately authorized the design gate only. The resulting decision
+is upstream-first: safe host-permission defaults, cross-process resume,
+portable process control, complete mutation evidence, and independent core
+tests are candidate-wide upstream concerns. A future Harness adapter is limited
+to host policy translation, disposable workspace transaction and rollback,
+parent-derived route receipts, cumulative process-loss accounting,
+capability-lifecycle separation, and recovery validation.
+
+The design does not implement a second coordinator and preserves the stop on
+equivalent Manage-Execute-Audit authoring. It makes no upstream write, acquires
+or runs no candidate code, installs nothing, dispatches no model, changes no
+account/configuration/CC Switch/consumer state, and proves no behavior, value,
+residual gap, portability, or production readiness. No real Claude task was
+required. Direct adoption remains blocked and the 46/15/0 inventory is
+unchanged. The next gate requires separate owner authority for either an
+upstream proposal package or a pure zero-model adapter-contract PoC against a
+fake candidate. Evidence:
+`registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.

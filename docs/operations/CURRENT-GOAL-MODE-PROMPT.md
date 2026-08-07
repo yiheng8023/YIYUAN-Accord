@@ -34,7 +34,8 @@ authorization.
 ## Manager and freshness boundary
 
 CC Switch is the current replaceable operational manager where suitable, not a
-portable product dependency. Its `skills.sh` discovery surface may add an
+portable product dependency. The dated source binding is v3.19.2. Its
+`skills.sh` discovery surface may add an
 author's repository to the CC repository list; CC refresh, hash comparison,
 update, backup, enablement, and projection then remain the managed lifecycle.
 Check the exact upstream repository and revision independently because catalog
@@ -59,3 +60,19 @@ backup, update, and consumer projections.
 - Verify the plan, acceptance map, and this prompt against
   `registry/portfolio-tasktime-projection-contract-2026-08-06.json` before
   claiming alignment.
+
+## Current LongHorizon boundary
+
+- Treat exact revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58` as a
+  high-value external coordinator reference, not as an adopted runtime.
+- Keep direct adoption blocked and equivalent Manage-Execute-Audit coordinator
+  authoring stopped.
+- Prefer candidate-wide safety, recovery, portability, integrity, and core-test
+  corrections upstream. Limit any future Harness adapter to retained host,
+  transaction, receipt, process-loss, lifecycle, and recovery boundaries.
+- No real Claude task is required for this design gate. An upstream write,
+  adapter-contract PoC, candidate execution, installation, model dispatch, or
+  behavior/value comparison is a separate gate; only the last comparison
+  requires a naturally occurring real task.
+- Verify this boundary against
+  `registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.

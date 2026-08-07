@@ -105,6 +105,17 @@ class LongHorizonExactSourceStaticReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "acceptance non-promotion"):
             validate_record(record, acceptance=acceptance, root=ROOT)
 
+    def test_acceptance_evidence_registration_is_required(self) -> None:
+        record = load_record()
+        acceptance = copy.deepcopy(load_acceptance())
+        acceptance["evidence"] = [
+            item
+            for item in acceptance["evidence"]
+            if item["path"] != RECORD_PATH.as_posix()
+        ]
+        with self.assertRaisesRegex(RuntimeError, "acceptance evidence registration"):
+            validate_record(record, acceptance=acceptance, root=ROOT)
+
 
 if __name__ == "__main__":
     unittest.main()

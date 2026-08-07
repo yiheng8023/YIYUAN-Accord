@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "id": "process-loss-longhorizon-safe-adapter-upstream-design-v1",
+  "asOf": "2026-08-07",
+  "status": "owner-authorized-design-complete-no-implementation-or-upstream-write",
+  "documentation": "docs/strategy/PROCESS-LOSS-LONGHORIZON-SAFE-ADAPTER-UPSTREAM-DESIGN-2026-08-07.md",
+  "sourceBindings": {
+    "exactSourceReview": "registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json",
+    "revision": "b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58",
+    "treeOid": "cf5470d1242e6a092c91a709efeff68c61d36681"
+  },
+  "decision": {
+    "strategy": "upstream-first-with-thin-harness-adapter-only-for-retained-authority",
+    "directAdoption": "blocked",
+    "equivalentCoordinatorAuthoring": "stopped",
+    "adapterImplementation": "not-authorized",
+    "upstreamWrite": "not-authorized"
+  },
+  "upstreamChangeCandidates": [
+    {
+      "id": "safe-host-permission-defaults",
+      "scope": "Make permission-bypass flags explicit opt-in inputs and preserve host-owned approval and sandbox defaults.",
+      "reason": "This is a candidate-wide safety correction rather than Harness-specific policy."
+    },
+    {
+      "id": "cross-process-resume-command",
+      "scope": "Add an explicit resume or replay entry point with versioned persisted-state validation.",
+      "reason": "Crash recovery is a general long-horizon coordinator obligation."
+    },
+    {
+      "id": "portable-process-control",
+      "scope": "Replace POSIX-only quoting, process groups, signals, and screenshot assumptions with tested platform abstractions.",
+      "reason": "Platform correctness belongs in the candidate core."
+    },
+    {
+      "id": "complete-mutation-evidence",
+      "scope": "Hash large files or mark them explicitly unverifiable instead of treating size and mtime as content evidence.",
+      "reason": "The mutation oracle must fail closed for every supported file class."
+    },
+    {
+      "id": "independent-core-tests-and-release-gate",
+      "scope": "Add core-package tests and require them before package publication.",
+      "reason": "Release confidence cannot be delegated to evaluation subtrees."
+    }
+  ],
+  "thinAdapterResponsibilities": [
+    {
+      "id": "host-execution-policy-port",
+      "responsibility": "Translate Harness role policy into host-native approval and sandbox settings without bypass flags."
+    },
+    {
+      "id": "disposable-workspace-transaction-port",
+      "responsibility": "Create an excluded disposable root, journal mutations, halt on boundary drift, and produce rollback receipts."
+    },
+    {
+      "id": "parent-derived-route-receipt-port",
+      "responsibility": "Record actual role, model, reasoning, command, artifact, and termination receipts from the parent-observed route."
+    },
+    {
+      "id": "cumulative-process-loss-port",
+      "responsibility": "Compute per-hop new, carried, recovered, unique, peak, and budget-breach loss independently of terminal correctness."
+    },
+    {
+      "id": "capability-lifecycle-port",
+      "responsibility": "Keep Plugin, MCP, and Skill install or activation under CC Switch or host authority and outside candidate defaults."
+    },
+    {
+      "id": "recovery-validation-port",
+      "responsibility": "Validate state identity, workspace identity, journal state, and replay safety before any future resume."
+    }
+  ],
+  "forbiddenAdapterResponsibilities": [
+    "reimplement-manage-execute-audit-loop",
+    "silently-fork-upstream-core",
+    "replace-host-permission-system",
+    "become-skill-or-plugin-manager",
+    "self-authorize-installation-or-model-dispatch",
+    "convert-static-evidence-into-behavior-or-value-claims"
+  ],
+  "phaseGates": [
+    {
+      "id": "design",
+      "status": "complete",
+      "requiresRealTask": false,
+      "allowedNow": true
+    },
+    {
+      "id": "upstream-proposal",
+      "status": "not-authorized",
+      "requiresRealTask": false,
+      "allowedNow": false
+    },
+    {
+      "id": "pure-adapter-contract-poc-with-fake-candidate",
+      "status": "not-authorized",
+      "requiresRealTask": false,
+      "allowedNow": false
+    },
+    {
+      "id": "isolated-candidate-execution",
+      "status": "not-authorized",
+      "requiresRealTask": false,
+      "allowedNow": false
+    },
+    {
+      "id": "behavior-and-value-comparison",
+      "status": "blocked-pending-natural-real-task-and-separate-authority",
+      "requiresRealTask": true,
+      "allowedNow": false
+    }
+  ],
+  "adoptionStopConditions": [
+    "host-permission-bypass-cannot-be-disabled",
+    "disposable-root-or-protected-root-exclusion-cannot-be-proved",
+    "mutation-journal-or-rollback-receipt-is-missing",
+    "parent-derived-route-receipts-cannot-be-observed",
+    "cross-process-resume-cannot-fail-closed",
+    "candidate-core-tests-do-not-cover-the-integrated-path"
+  ],
+  "acceptanceBoundary": {
+    "verifiedCriteria": 46,
+    "partialCriteria": 15,
+    "plannedCriteria": 0,
+    "criteriaAdvancedByThisDesign": []
+  },
+  "authorityBoundary": {
+    "designAuthorized": true,
+    "adapterImplementationAuthorized": false,
+    "upstreamIssueOrPullRequestAuthorized": false,
+    "candidateAcquisitionAuthorized": false,
+    "installAuthorized": false,
+    "executeAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "configurationMutationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false
+  },
+  "claimBoundary": {
+    "provesDesignClassification": true,
+    "provesAdapterImplementation": false,
+    "provesUpstreamAcceptance": false,
+    "provesCandidateExecution": false,
+    "provesPermissionSafety": false,
+    "provesRollback": false,
+    "provesCrashResume": false,
+    "provesWindowsPortability": false,
+    "provesBehavior": false,
+    "provesValue": false,
+    "provesResidualGap": false,
+    "provesProductionReadiness": false
+  },
+  "nextGate": "separate owner authority for either an upstream proposal package or a pure zero-model adapter-contract PoC against a fake candidate; neither route authorizes candidate execution or model dispatch"
+}

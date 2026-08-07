@@ -17,6 +17,12 @@ DOCUMENTATION_PATH = Path(
     "docs/strategy/PROCESS-LOSS-EXTERNAL-REUSE-RESEARCH-2026-08-07.md"
 )
 ACCEPTANCE_PATH = Path("registry/program-acceptance-map.json")
+EVIDENCE_ID = "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07"
+SUPPORTS = {
+    "acceptance.end-to-end-process-fidelity",
+    "acceptance.residual-gap-proof",
+    "acceptance.discovery-reuse-before-authoring",
+}
 REVISION = "b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58"
 TREE_OID = "cf5470d1242e6a092c91a709efeff68c61d36681"
 PATH_HASH = "090e746768a20f4273ed6925e5a0b0740246cc7b7b6bb8a33ac400758d3e3aa8"
@@ -231,6 +237,19 @@ def validate_record(
             and boundary.get("plannedCriteria") == 0
             and boundary.get("criteriaAdvancedByThisReview") == [],
             "LongHorizon exact-source acceptance non-promotion drifted",
+        )
+        evidence = [
+            item
+            for item in acceptance.get("evidence", [])
+            if isinstance(item, dict) and item.get("id") == EVIDENCE_ID
+        ]
+        _require(
+            len(evidence) == 1
+            and evidence[0].get("path") == RECORD_PATH.as_posix()
+            and set(evidence[0].get("supports", [])) == SUPPORTS
+            and "no-execution" in evidence[0].get("kind", "")
+            and "no-behavior-value-or-residual-gap-proof" in evidence[0].get("kind", ""),
+            "LongHorizon exact-source acceptance evidence registration drifted",
         )
 
     document = (root / DOCUMENTATION_PATH).read_text(encoding="utf-8")

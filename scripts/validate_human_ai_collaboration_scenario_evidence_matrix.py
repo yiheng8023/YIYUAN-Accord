@@ -84,6 +84,12 @@ LONGHORIZON_INTERFACE_GAP_MAPPING_EVIDENCE_ID = (
 LONGHORIZON_EXECUTION_PREFLIGHT_EVIDENCE_ID = (
     "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07"
 )
+LONGHORIZON_EXACT_SOURCE_REVIEW_EVIDENCE_ID = (
+    "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07"
+)
+LONGHORIZON_SAFE_ADAPTER_DESIGN_EVIDENCE_ID = (
+    "evidence.process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07"
+)
 LEARNING_CAPABILITY_BASELINE_EVIDENCE_ID = (
     "evidence.human-ai-collaboration-learning-capability-baseline-2026-07-31"
 )
@@ -1074,6 +1080,8 @@ def validate_matrix(
                 LONGHORIZON_STATIC_REUSE_ASSESSMENT_EVIDENCE_ID,
                 LONGHORIZON_INTERFACE_GAP_MAPPING_EVIDENCE_ID,
                 LONGHORIZON_EXECUTION_PREFLIGHT_EVIDENCE_ID,
+                LONGHORIZON_EXACT_SOURCE_REVIEW_EVIDENCE_ID,
+                LONGHORIZON_SAFE_ADAPTER_DESIGN_EVIDENCE_ID,
             ]
         _require(
             item.get("evidenceIds") == expected_evidence_ids,

@@ -271,6 +271,15 @@ def validate_contract(
         and "真实任务" in normalized_readme_zh,
         "Chinese README global-stop wording drifted",
     )
+    cc_release = projection.get("sourceBindings", {}).get("ccSwitch", {}).get("release")
+    _require(cc_release == "v3.19.2", "CC Switch release binding drifted")
+    for label, text in (
+        ("plan", plan_text),
+        ("goal prompt", goal_prompt_text),
+        ("README", readme_text),
+        ("Chinese README", readme_zh_text),
+    ):
+        _require(cc_release in text, f"{label} CC Switch release projection drifted")
 
 
 def validate_repository_contract(root: Path = ROOT) -> None:

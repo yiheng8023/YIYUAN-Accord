@@ -290,7 +290,9 @@
         "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31",
         "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
         "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07",
-        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07",
+        "evidence.process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07"
       ]
     },
     {
@@ -399,7 +401,9 @@
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
         "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
         "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07",
-        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07",
+        "evidence.process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07"
       ]
     },
     {
@@ -1008,7 +1012,9 @@
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
         "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07",
         "evidence.process-loss-longhorizon-harness-interface-gap-mapping-2026-08-07",
-        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07"
+        "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07",
+        "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07",
+        "evidence.process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07"
       ]
     },
     {
@@ -2872,6 +2878,28 @@
       "id": "evidence.process-loss-longhorizon-harness-execution-preflight-2026-08-07",
       "path": "registry/process-loss-longhorizon-harness-execution-preflight-2026-08-07.json",
       "kind": "pure-zero-model-synthetic-fail-closed-candidate-execution-preflight-and-twenty-five-case-failure-injection-no-acquisition-install-adapter-execution-model-dispatch-behavior-value-portability-or-residual-gap-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity",
+        "acceptance.residual-gap-proof",
+        "acceptance.discovery-reuse-before-authoring"
+      ]
+    },
+    {
+      "id": "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07",
+      "path": "registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json",
+      "kind": "owner-authorized-exact-revision-acquisition-integrity-static-review-and-recoverable-temp-cleanup-no-execution-install-adapter-or-model-dispatch-no-behavior-value-or-residual-gap-proof",
+      "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.end-to-end-process-fidelity",
+        "acceptance.residual-gap-proof",
+        "acceptance.discovery-reuse-before-authoring"
+      ]
+    },
+    {
+      "id": "evidence.process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07",
+      "path": "registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json",
+      "kind": "owner-authorized-exact-source-bound-upstream-first-and-thin-adapter-responsibility-design-no-implementation-or-upstream-write-no-candidate-execution-or-model-dispatch-no-behavior-value-or-residual-gap-proof",
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.end-to-end-process-fidelity",

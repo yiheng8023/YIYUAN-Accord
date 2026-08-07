@@ -334,3 +334,20 @@ The public record retains only transaction id
 SHA-256 `090e746768a20f4273ed6925e5a0b0740246cc7b7b6bb8a33ac400758d3e3aa8`,
 not the user-local absolute path. Governed evidence:
 `registry/process-loss-longhorizon-harness-exact-source-static-review-2026-08-07.json`.
+
+## Authorized safe-adapter and upstream-change design
+
+The owner subsequently authorized the design decision only. Candidate-wide
+corrections for permission defaults, resume, platform abstraction, mutation
+integrity, and core release tests are upstream-first. The only prospective
+Harness adapter responsibilities are host policy translation, disposable
+workspace transactions and rollback receipts, parent-derived route receipts,
+cumulative process-loss accounting, capability-lifecycle separation, and
+recovery validation.
+
+This does not authorize an upstream issue or pull request, adapter
+implementation, candidate acquisition or execution, installation, model
+dispatch, configuration or consumer mutation, or behavior/value claims. Direct
+adoption remains blocked and equivalent coordinator authoring remains stopped.
+No real Claude task is required for the design gate. Governed evidence:
+`registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.
