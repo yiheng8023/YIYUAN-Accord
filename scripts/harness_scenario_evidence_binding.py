@@ -162,7 +162,7 @@ def _validate_binding_shape(binding: object) -> dict[str, Any]:
         or not normalized["sourcePath"]
         or mode not in BINDING_MODES
         or not isinstance(normalized["identityPointers"], list)
-        or not all(isinstance(pointer, str) and pointer.startswith("/") for pointer in normalized["identityPointers"])
+        or not all(isinstance(pointer, str) for pointer in normalized["identityPointers"])
         or len(normalized["identityPointers"]) != len(set(normalized["identityPointers"]))
         or not isinstance(identity_present, bool)
         or not isinstance(normalized["bindingEvidenceCeiling"], str)

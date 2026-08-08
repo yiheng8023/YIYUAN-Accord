@@ -64,6 +64,20 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
             validate_binding_registry(ROOT, mutated, self.coverage)
         self.assertEqual("binding-source-path-drift", raised.exception.code)
 
+    def test_malformed_pointer_reaches_pointer_syntax_error(self) -> None:
+        row = next(
+            item
+            for item in self.coverage["document"]["scenarioCoverage"]
+            if item["scenarioId"] == "GEN-CREATIVE-01"
+        )
+        mutated = copy.deepcopy(self.registry)
+        mutated["bindings"][0]["identityPointers"] = [
+            "scenarioBinding/scenarioId"
+        ]
+        with self.assertRaises(DecisionPacketError) as raised:
+            resolve_scenario_evidence_binding(ROOT, mutated, row)
+        self.assertEqual("binding-pointer-invalid", raised.exception.code)
+
     def test_declared_collection_surface_excludes_historical_identity(self) -> None:
         row = next(
             item
