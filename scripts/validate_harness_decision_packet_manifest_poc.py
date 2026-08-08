@@ -23,6 +23,7 @@ try:
         DecisionPacketError,
         canonical_sha256,
         load_source_evidence_record,
+        strict_json_equal,
     )
     from .harness_decision_packet_manifest import (
         BatchBindingError,
@@ -37,6 +38,7 @@ except ImportError:  # Direct script execution.
         DecisionPacketError,
         canonical_sha256,
         load_source_evidence_record,
+        strict_json_equal,
     )
     from harness_decision_packet_manifest import (
         BatchBindingError,
@@ -490,16 +492,22 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
     }
     _require(set(record) == expected_fields, "Manifest PoC evidence fields drifted")
     _require(
-        record["schema"] == 1
-        and record["id"]
-        == "harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09"
-        and record["date"] == "2026-08-09"
-        and record["status"]
-        == "verified-zero-model-thirteen-scenario-binding-and-atomic-manifest-mechanism-only"
-        and record["scenarioCount"] == 13
-        and record["bindingCounts"]
-        == {"scenarioRecord": 11, "documentLevelSupport": 2}
-        and record["selectedRoute"] is None,
+        strict_json_equal(record["schema"], 1)
+        and strict_json_equal(
+            record["id"],
+            "harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09",
+        )
+        and strict_json_equal(record["date"], "2026-08-09")
+        and strict_json_equal(
+            record["status"],
+            "verified-zero-model-thirteen-scenario-binding-and-atomic-manifest-mechanism-only",
+        )
+        and strict_json_equal(record["scenarioCount"], 13)
+        and strict_json_equal(
+            record["bindingCounts"],
+            {"scenarioRecord": 11, "documentLevelSupport": 2},
+        )
+        and strict_json_equal(record["selectedRoute"], None),
         "Manifest PoC evidence identity or scenario boundary drifted",
     )
 
@@ -510,12 +518,21 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
         "manifestFixture": _file_binding(root, EXPECTED_MANIFEST_PATH),
     }
     _require(
-        all(record[key] == value for key, value in expected_file_bindings.items()),
+        all(
+            strict_json_equal(record[key], value)
+            for key, value in expected_file_bindings.items()
+        ),
         "Manifest PoC exact file binding drifted",
     )
     _require(
-        record["schemas"] == [_file_binding(root, path) for path in SCHEMA_PATHS]
-        and record["scripts"] == [_file_binding(root, path) for path in SCRIPT_PATHS],
+        strict_json_equal(
+            record["schemas"],
+            [_file_binding(root, path) for path in SCHEMA_PATHS],
+        )
+        and strict_json_equal(
+            record["scripts"],
+            [_file_binding(root, path) for path in SCRIPT_PATHS],
+        ),
         "Manifest PoC schema or script binding drifted",
     )
 
@@ -528,15 +545,21 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
         "Checked manifest is not a byte-stable current rebuild",
     )
     _require(
-        record["manifestSha256"] == manifest["manifestSha256"]
-        and record["authorityBindings"] == manifest["authorityBinding"]
-        and record["executionCounters"] == manifest["executionCounters"],
+        strict_json_equal(record["manifestSha256"], manifest["manifestSha256"])
+        and strict_json_equal(
+            record["authorityBindings"], manifest["authorityBinding"]
+        )
+        and strict_json_equal(
+            record["executionCounters"], manifest["executionCounters"]
+        ),
         "Manifest PoC manifest or authority projection drifted",
     )
     binding_registry = load_source_evidence_record(root, BINDING_REGISTRY_PATH)
     _require(
-        record["bindingRegistry"]
-        == {key: binding_registry[key] for key in ("path", "id", "sha256")},
+        strict_json_equal(
+            record["bindingRegistry"],
+            {key: binding_registry[key] for key in ("path", "id", "sha256")},
+        ),
         "Manifest PoC binding-registry identity drifted",
     )
     for entry in manifest["entries"]:
@@ -544,51 +567,72 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
             root, build_canonical_probe_request(entry["scenarioId"])
         )
         _require(
-            packet["packetSha256"] == entry["packetSha256"],
+            strict_json_equal(packet["packetSha256"], entry["packetSha256"]),
             f"Manifest packet digest is not independently reproducible: {entry['scenarioId']}",
         )
     _require(
-        all(entry["selectedRoute"] is None for entry in manifest["entries"])
-        and all(value == 0 for value in manifest["executionCounters"].values())
-        and not any(manifest["authorizationGates"].values())
-        and not any(manifest["claimBoundary"].values()),
+        all(
+            strict_json_equal(entry["selectedRoute"], None)
+            for entry in manifest["entries"]
+        )
+        and all(
+            strict_json_equal(value, 0)
+            for value in manifest["executionCounters"].values()
+        )
+        and all(
+            strict_json_equal(value, False)
+            for value in manifest["authorizationGates"].values()
+        )
+        and all(
+            strict_json_equal(value, False)
+            for value in manifest["claimBoundary"].values()
+        ),
         "Manifest execution, route, authorization, or claim boundary was promoted",
     )
 
     mutation_results = run_failure_matrix(root)
     _require(
-        record["mutationResults"] == mutation_results
-        and [item["caseId"] for item in mutation_results] == MUTATION_CASE_IDS
-        and all(item["status"] == "rejected" for item in mutation_results),
+        strict_json_equal(record["mutationResults"], mutation_results)
+        and strict_json_equal(
+            [item["caseId"] for item in mutation_results], MUTATION_CASE_IDS
+        )
+        and all(
+            strict_json_equal(item["status"], "rejected")
+            for item in mutation_results
+        ),
         "Manifest PoC failure matrix did not fail closed",
     )
     _require(
-        record["claimBoundary"]
-        == {
-            "naturalLanguageInterpretationProved": False,
-            "taskTimeSelectionProved": False,
-            "behaviorProved": False,
-            "valueProved": False,
-            "crossHostPortabilityProved": False,
-            "productionReadinessProved": False,
-            "releaseEligibilityProved": False,
-            "residualGapProved": False,
-        }
-        and record["authorityBoundary"]
-        == {
-            "installAuthorized": False,
-            "enablementAuthorized": False,
-            "accountConnectionAuthorized": False,
-            "modelDispatchAuthorized": False,
-            "candidateExecutionAuthorized": False,
-            "pluginExecutionAuthorized": False,
-            "managerMutationAuthorized": False,
-            "consumerMutationAuthorized": False,
-            "publicationAuthorized": False,
-            "releaseAuthorized": False,
-            "acceptancePromotionAuthorized": False,
-            "goalCloseoutAuthorized": False,
-        },
+        strict_json_equal(
+            record["claimBoundary"],
+            {
+                "naturalLanguageInterpretationProved": False,
+                "taskTimeSelectionProved": False,
+                "behaviorProved": False,
+                "valueProved": False,
+                "crossHostPortabilityProved": False,
+                "productionReadinessProved": False,
+                "releaseEligibilityProved": False,
+                "residualGapProved": False,
+            },
+        )
+        and strict_json_equal(
+            record["authorityBoundary"],
+            {
+                "installAuthorized": False,
+                "enablementAuthorized": False,
+                "accountConnectionAuthorized": False,
+                "modelDispatchAuthorized": False,
+                "candidateExecutionAuthorized": False,
+                "pluginExecutionAuthorized": False,
+                "managerMutationAuthorized": False,
+                "consumerMutationAuthorized": False,
+                "publicationAuthorized": False,
+                "releaseAuthorized": False,
+                "acceptancePromotionAuthorized": False,
+                "goalCloseoutAuthorized": False,
+            },
+        ),
         "Manifest PoC claim or lifecycle authority was promoted",
     )
 
@@ -604,7 +648,7 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
         for state in ("verified", "partial", "planned")
     }
     _require(
-        criterion["assessment"] == "partial"
+        strict_json_equal(criterion["assessment"], "partial")
         and "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09"
         not in criterion["evidenceIds"]
         and not any(
@@ -612,25 +656,34 @@ def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
             == "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09"
             for item in acceptance["evidence"]
         )
-        and record["acceptanceAssessment"] == "partial"
-        and record["acceptanceInventory"] == inventory
-        and inventory == {"verified": 46, "partial": 15, "planned": 0},
+        and strict_json_equal(record["acceptanceAssessment"], "partial")
+        and strict_json_equal(record["acceptanceInventory"], inventory)
+        and strict_json_equal(
+            inventory, {"verified": 46, "partial": 15, "planned": 0}
+        ),
         "Manifest PoC acceptance boundary or 46/15/0 inventory drifted",
     )
     _require(
-        _file_sha256(root, ACCEPTANCE_PATH)
-        == "c9d0fb437fb3eae93ffd144a2e3ee418dca90d96e5a266b61d7c7ec3efa6079f"
-        and _file_sha256(
-            root, Path("tests/fixtures/harness-decision-packet-gen-research-01.json")
+        strict_json_equal(
+            _file_sha256(root, ACCEPTANCE_PATH),
+            "c9d0fb437fb3eae93ffd144a2e3ee418dca90d96e5a266b61d7c7ec3efa6079f",
         )
-        == "58410f9576fbbc2f006135d97184d29a9996b1eb11abeaf07988a3a5acf4fc22"
-        and record["acceptanceRegistration"]
-        == {
-            "registered": False,
-            "evidenceId": "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09",
-            "reason": "deferred-frozen-v1-acceptance-authority-requires-versioned-migration",
-            "futureMigrationAuthorized": False,
-        },
+        and strict_json_equal(
+            _file_sha256(
+                root,
+                Path("tests/fixtures/harness-decision-packet-gen-research-01.json"),
+            ),
+            "58410f9576fbbc2f006135d97184d29a9996b1eb11abeaf07988a3a5acf4fc22",
+        )
+        and strict_json_equal(
+            record["acceptanceRegistration"],
+            {
+                "registered": False,
+                "evidenceId": "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09",
+                "reason": "deferred-frozen-v1-acceptance-authority-requires-versioned-migration",
+                "futureMigrationAuthorized": False,
+            },
+        ),
         "Frozen acceptance-map, packet-v1 fixture, or non-registration boundary drifted",
     )
     return record

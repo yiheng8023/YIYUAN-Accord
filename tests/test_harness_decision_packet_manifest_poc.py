@@ -1,3 +1,4 @@
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -19,6 +20,54 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class HarnessDecisionPacketManifestPocTests(unittest.TestCase):
+    def current_isolated_record(self) -> dict[str, object]:
+        record = json.loads((ROOT / manifest_poc.EVIDENCE_PATH).read_bytes())
+        for key in ("design", "plan", "documentation", "manifestFixture"):
+            binding = record[key]
+            binding["sha256"] = hashlib.sha256(
+                (ROOT / binding["path"]).read_bytes()
+            ).hexdigest()
+        for collection in ("schemas", "scripts"):
+            for binding in record[collection]:
+                binding["sha256"] = hashlib.sha256(
+                    (ROOT / binding["path"]).read_bytes()
+                ).hexdigest()
+        return record
+
+    def assert_isolated_record_mutation_rejected(
+        self,
+        path: tuple[str, ...],
+        replacement: object,
+        message: str,
+    ) -> None:
+        record = self.current_isolated_record()
+        expected_matrix = copy.deepcopy(record["mutationResults"])
+        target = record
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = replacement
+        original_load = manifest_poc._load_object
+
+        def load_with_isolated_record(
+            root: Path,
+            relative: Path,
+        ) -> dict[str, object]:
+            if relative == manifest_poc.EVIDENCE_PATH:
+                return copy.deepcopy(record)
+            return original_load(root, relative)
+
+        with patch.object(
+            manifest_poc,
+            "_load_object",
+            side_effect=load_with_isolated_record,
+        ), patch.object(
+            manifest_poc,
+            "run_failure_matrix",
+            return_value=expected_matrix,
+        ):
+            with self.assertRaisesRegex(RuntimeError, message):
+                validate_repository_record(ROOT)
+
     def test_direct_validator_cli_replays_repository_record(self) -> None:
         result = subprocess.run(
             [
@@ -74,6 +123,75 @@ class HarnessDecisionPacketManifestPocTests(unittest.TestCase):
             record["status"],
         )
         self.assertTrue((ROOT / EXPECTED_MANIFEST_PATH).is_file())
+
+    def test_repository_record_rejects_json_type_aliases(self) -> None:
+        identity_error = "Manifest PoC evidence identity or scenario boundary drifted"
+        projection_error = "Manifest PoC manifest or authority projection drifted"
+        claim_error = "Manifest PoC claim or lifecycle authority was promoted"
+        acceptance_error = "Manifest PoC acceptance boundary or 46/15/0 inventory drifted"
+        frozen_error = (
+            "Frozen acceptance-map, packet-v1 fixture, or non-registration boundary drifted"
+        )
+        cases = (
+            ("schema-bool", ("schema",), True, identity_error),
+            ("schema-float", ("schema",), 1.0, identity_error),
+            ("scenario-count-float", ("scenarioCount",), 13.0, identity_error),
+            (
+                "binding-count-float",
+                ("bindingCounts", "scenarioRecord"),
+                11.0,
+                identity_error,
+            ),
+            (
+                "counter-bool",
+                ("executionCounters", "modelRequestCount"),
+                False,
+                projection_error,
+            ),
+            (
+                "counter-float",
+                ("executionCounters", "pluginExecutionCount"),
+                0.0,
+                projection_error,
+            ),
+            (
+                "claim-number",
+                ("claimBoundary", "behaviorProved"),
+                0,
+                claim_error,
+            ),
+            (
+                "authority-number",
+                ("authorityBoundary", "releaseAuthorized"),
+                0,
+                claim_error,
+            ),
+            (
+                "inventory-bool",
+                ("acceptanceInventory", "planned"),
+                False,
+                acceptance_error,
+            ),
+            (
+                "inventory-float",
+                ("acceptanceInventory", "verified"),
+                46.0,
+                acceptance_error,
+            ),
+            (
+                "registration-number",
+                ("acceptanceRegistration", "futureMigrationAuthorized"),
+                0,
+                frozen_error,
+            ),
+        )
+        for name, path, replacement, message in cases:
+            with self.subTest(name=name):
+                self.assert_isolated_record_mutation_rejected(
+                    path,
+                    replacement,
+                    message,
+                )
 
     def test_acceptance_remains_frozen_and_evidence_is_not_registered(self) -> None:
         acceptance_bytes = (
