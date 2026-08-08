@@ -1,11 +1,16 @@
 import json
 from pathlib import Path
+import shutil
+import tempfile
 import unittest
 
 from scripts.harness_decision_packet import (
     DecisionPacketError,
     canonical_sha256,
+    load_authority_bundle,
     validate_decision_request,
+    validate_authority_bundle,
+    validate_bound_source_digests,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -83,6 +88,63 @@ class HarnessDecisionPacketContractTests(unittest.TestCase):
                 with self.assertRaises(DecisionPacketError) as raised:
                     validate_decision_request(request)
                 self.assertEqual(expected_code, raised.exception.code)
+
+
+class HarnessDecisionPacketAuthorityTests(HarnessDecisionPacketContractTests):
+    def test_current_gen_research_authority_reopens_original_evidence(self) -> None:
+        request = self.load_request()
+        bundle = load_authority_bundle(ROOT, request)
+        validate_authority_bundle(bundle, request)
+        self.assertEqual("GEN-RESEARCH-01", bundle["scenario"]["scenarioId"])
+        self.assertEqual(
+            [
+                "registry/human-ai-collaboration-scenario-evidence-matrix-"
+                "batch-01-2026-07-24.json"
+            ],
+            [item["path"] for item in bundle["sourceEvidence"]],
+        )
+        self.assertFalse(
+            bundle["semanticAuthority"]["document"]["legacyAdaptedRelease"]
+            ["routingProjectionCurrentAuthority"]
+        )
+
+    def test_unknown_scenario_fails_closed(self) -> None:
+        request = self.load_request()
+        request["scenarioId"] = "GEN-UNKNOWN-01"
+        with self.assertRaises(DecisionPacketError) as raised:
+            load_authority_bundle(ROOT, request)
+        self.assertEqual("unknown-scenario", raised.exception.code)
+
+    def test_expected_authority_id_must_match(self) -> None:
+        request = self.load_request()
+        request["expectedSemanticAuthorityId"] = "stale-authority"
+        with self.assertRaises(DecisionPacketError) as raised:
+            load_authority_bundle(ROOT, request)
+        self.assertEqual("semantic-authority-id-mismatch", raised.exception.code)
+
+    def test_bound_original_evidence_digest_drift_is_rejected(self) -> None:
+        request = self.load_request()
+        bundle = load_authority_bundle(ROOT, request)
+        records = [
+            bundle["semanticAuthority"],
+            bundle["coverage"],
+            bundle["scheduler"],
+            bundle["acceptance"],
+            *bundle["sourceEvidence"],
+        ]
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            for record in records:
+                source = ROOT / record["path"]
+                destination = temporary_root / record["path"]
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, destination)
+            evidence_path = temporary_root / bundle["sourceEvidence"][0]["path"]
+            evidence_path.write_bytes(evidence_path.read_bytes() + b"\n")
+
+            with self.assertRaises(DecisionPacketError) as raised:
+                validate_bound_source_digests(temporary_root, bundle)
+            self.assertEqual("evidence-source-digest-drift", raised.exception.code)
 
     def test_invalid_scalar_fields_are_rejected(self) -> None:
         invalid_cases = (
