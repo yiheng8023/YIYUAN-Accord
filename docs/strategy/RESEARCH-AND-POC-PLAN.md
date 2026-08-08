@@ -3230,3 +3230,19 @@ across supported consumers, disabled-consumer reconciliation, and cross-device
 convergence. No model, external candidate, CC Switch, consumer, account, or
 cleanup state changed. Evidence:
 `registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.
+
+### 2026-08-08 disabled-consumer root read-only inventory
+
+A privacy-minimized local probe checked the CC Switch roots for Gemini,
+GrokBuild, OpenCode, and Hermes without reading settings, account data, Skill
+bodies, or non-Matt identities. All four Matt enablement counts were zero, all
+four governed roots were absent, and no Matt projection was present. The
+database hash and aggregate root observations were stable before and after;
+all write, execution, manager-invocation, model, and account-read counters are
+zero.
+
+This closes only the dated root-presence and Matt-projection observation. It
+does not prove that any disabled host is installed, configured, healthy, able
+to load or restore Skills, or convergent across devices. No missing root was
+created and the 46/15/0 acceptance inventory is unchanged. Evidence:
+`registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json`.

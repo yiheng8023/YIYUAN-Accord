@@ -102,6 +102,28 @@
     "behaviorProved": false,
     "valueProved": false
   },
+  "currentDisabledConsumerProjectionObservation": {
+    "event": "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+    "managerVersion": "3.19.2",
+    "hosts": [
+      "gemini",
+      "grokbuild",
+      "opencode",
+      "hermes"
+    ],
+    "allRootsAbsent": true,
+    "allMattFlagsDisabled": true,
+    "mattProjectionCount": 0,
+    "privacyMinimized": true,
+    "databaseAndRootsReadOnly": true,
+    "hostInstallationProved": false,
+    "loaderInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "backupRestoreProved": false,
+    "crossDeviceConvergenceProved": false,
+    "behaviorProved": false,
+    "valueProved": false
+  },
   "currentSystemManagerReferenceCohort": {
     "event": "registry/skill-portfolio-system-manager-reference-cohort-2026-08-06.json",
     "sourceCount": 3,

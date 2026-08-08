@@ -37,10 +37,12 @@ upgrade those assessments or prove final program completion.
    CC Switch 3.19.2 restart, 24 enabled entries per common/Claude/Codex root,
    72 manager symlinks, zero direct same-name directories, unchanged payload,
    projection, and enablement surfaces, and a retained recovery journal. The
-   field-bound Claude Plugin inventory remains separately governed. Loader
-   precedence, task-bound invocation and delivery, live rollback, supported
-   recovery across consumers, other disabled consumers, and cross-device
-   convergence remain unproved.
+   privacy-minimized disabled-consumer observation also records zero Matt flags
+   and zero projections for Gemini, GrokBuild, OpenCode, and Hermes; all four
+   governed roots were absent. The field-bound Claude Plugin inventory remains
+   separately governed. Host installation or health, loader precedence,
+   task-bound invocation and delivery, live rollback, supported recovery across
+   consumers, and cross-device convergence remain unproved.
 4. Standard lifecycle: the standard-candidate package now has one bounded
    AI-era research contract and deterministic negative tests. A synthetic
    graph-scoped planner now proves affected-node closure, bounded ordering,

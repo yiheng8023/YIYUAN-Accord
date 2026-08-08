@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "id": "cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08",
+  "asOf": "2026-08-08",
+  "status": "four-disabled-consumer-roots-readonly-observed-absent-zero-matt-projections",
+  "documentation": "docs/strategy/CC-SWITCH-DISABLED-CONSUMER-ROOT-READONLY-INVENTORY-2026-08-08.md",
+  "inputs": [
+    "registry/cc-switch-exact-upstream-sixteen-sequential-inactive-install-event-2026-08-04.json",
+    "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
+    "scripts/build_cc_switch_disabled_consumer_inventory.py"
+  ],
+  "observation": {
+    "observedAt": "2026-08-08T17:03:07+08:00",
+    "manager": "CC Switch 3.19.2",
+    "managerProcessRunning": true,
+    "databaseReadOnly": true,
+    "databaseMattRowCount": 25,
+    "databaseSha256UnchangedDuringObservation": true,
+    "observationStable": true,
+    "enabledMattByHost": {
+      "gemini": 0,
+      "grokbuild": 0,
+      "opencode": 0,
+      "hermes": 0
+    },
+    "roots": [
+      {
+        "host": "gemini",
+        "path": "~/.gemini/skills",
+        "exists": false,
+        "topLevelEntryCount": 0,
+        "mattEntryCount": 0
+      },
+      {
+        "host": "grokbuild",
+        "path": "~/.grok/skills",
+        "exists": false,
+        "topLevelEntryCount": 0,
+        "mattEntryCount": 0
+      },
+      {
+        "host": "opencode",
+        "path": "~/.config/opencode/skills",
+        "exists": false,
+        "topLevelEntryCount": 0,
+        "mattEntryCount": 0
+      },
+      {
+        "host": "hermes",
+        "path": "~/.hermes/skills",
+        "exists": false,
+        "topLevelEntryCount": 0,
+        "mattEntryCount": 0
+      }
+    ],
+    "allDisabledRootsFreeOfMattProjections": true
+  },
+  "privacyBoundary": {
+    "nonMattNamesReadForIdentity": false,
+    "nonMattNamesDisclosed": false,
+    "skillBodiesRead": false,
+    "settingsRead": false,
+    "accountDataRead": false
+  },
+  "report": {
+    "path": "audits/cc-switch-disabled-consumer-roots-2026-08-08/REPORT.json",
+    "fileSha256": "fbc1be0cee8afa90efc370b651e1f3d2ceb149bc771a15bb34ad30738273c7da",
+    "status": "read-only-disabled-consumer-roots-clear"
+  },
+  "authorityBoundary": {
+    "readOnlyLocalRootAndDatabaseObservationAuthorized": true,
+    "repositoryEvidenceWriteAuthorized": true,
+    "settingsReadAuthorized": false,
+    "accountDataReadAuthorized": false,
+    "hostInstallationAuthorized": false,
+    "enablementAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "backupOrRestoreAuthorized": false,
+    "thirdPartyExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "cleanupAuthorized": false
+  },
+  "acceptanceBoundary": {
+    "verifiedCriteria": 46,
+    "partialCriteria": 15,
+    "plannedCriteria": 0,
+    "criteriaAdvanced": [],
+    "supportsWithoutAssessmentUpgrade": [
+      "acceptance.consumer-mapping-evidence",
+      "acceptance.cc-switch-source-preserving-skill-pool",
+      "acceptance.foreign-managed-capability-coexistence"
+    ]
+  },
+  "decision": {
+    "disabledConsumerCurrentRootObservationRecorded": true,
+    "absenceDoesNotProveHostInstallationOrLoaderBehavior": true,
+    "absenceDoesNotAuthorizeRootCreationOrEnablement": true,
+    "nextGate": "a named host/task gap and separate authority for loader, recovery, cross-device, or activation evidence; do not create absent roots merely to test them"
+  },
+  "executionCounters": {
+    "databaseWrites": 0,
+    "consumerWrites": 0,
+    "managerInvocations": 0,
+    "thirdPartyScripts": 0,
+    "modelCalls": 0,
+    "accountReads": 0
+  },
+  "claimBoundary": {
+    "disabledFlagsAtObservationProved": true,
+    "rootPresenceAtObservationProved": true,
+    "mattProjectionAbsenceAtObservationProved": true,
+    "hostInstalledProved": false,
+    "hostLoaderInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "backupRestoreProved": false,
+    "crossDeviceConvergenceProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "productionReadinessProved": false
+  }
+}

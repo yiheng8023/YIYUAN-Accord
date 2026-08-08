@@ -187,6 +187,33 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         self.assertTrue(activation["requiresBoundTaskAndGap"])
         self.assertEqual(activation["defaultState"], "minimal-task-scoped")
 
+    def test_disabled_consumer_projection_observation_stays_read_only_and_bounded(self) -> None:
+        state = self.policy["currentDisabledConsumerProjectionObservation"]
+        event = load(state["event"])
+
+        self.assertEqual(
+            state["hosts"], ["gemini", "grokbuild", "opencode", "hermes"]
+        )
+        self.assertTrue(state["allRootsAbsent"])
+        self.assertTrue(state["allMattFlagsDisabled"])
+        self.assertEqual(0, state["mattProjectionCount"])
+        self.assertTrue(state["privacyMinimized"])
+        self.assertTrue(state["databaseAndRootsReadOnly"])
+        for field in (
+            "hostInstallationProved",
+            "loaderInvocationProved",
+            "instructionDeliveryProved",
+            "backupRestoreProved",
+            "crossDeviceConvergenceProved",
+            "behaviorProved",
+            "valueProved",
+        ):
+            self.assertFalse(state[field])
+        self.assertEqual(
+            "four-disabled-consumer-roots-readonly-observed-absent-zero-matt-projections",
+            event["status"],
+        )
+
     def test_decision_surfaces_state_the_new_boundary(self) -> None:
         surfaces = {
             "AGENTS.md": ("portfolio curation", "exact upstream"),

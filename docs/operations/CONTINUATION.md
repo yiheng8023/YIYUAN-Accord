@@ -5344,3 +5344,19 @@ or production readiness. The refresh performs no model call, capability or
 account mutation, CC Switch write, cleanup, acceptance upgrade, or goal-status
 mutation. Evidence:
 `registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.
+
+## 2026-08-08 disabled-consumer root observation checkpoint
+
+The next safe consumer/source slice used a new privacy-minimized read-only
+probe. It opened the CC Switch database with SQLite read-only/query-only mode,
+counted only the public Matt cohort names, disclosed no non-Matt identities,
+and did not read Skill bodies, settings, or account data. Gemini, GrokBuild,
+OpenCode, and Hermes each had zero enabled Matt rows; their governed Skill
+roots were absent and contained zero Matt projections. Database and aggregate
+root observations were stable before and after.
+
+This is one dated local absence observation, not proof that those hosts are
+installed, configured, healthy, loader-capable, recoverable, or convergent
+across devices. No root, host, account, CC Switch, consumer, or model state was
+changed. The acceptance inventory remains 46/15/0. Evidence:
+`registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json`.

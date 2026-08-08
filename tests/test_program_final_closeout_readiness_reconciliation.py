@@ -78,6 +78,18 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "consumer/source"):
             validate_reconciliation(document, root=ROOT)
 
+    def test_reconciliation_binds_disabled_consumer_root_observation(self) -> None:
+        self.assertEqual(
+            "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+            self.document["sourceBindings"]["disabledConsumerRootInventory"],
+        )
+        self.assertEqual(
+            "covered-readonly-single-observation",
+            self.document["currentEvidenceProgress"][
+                "disabledConsumerRootPresenceAndMattProjectionAbsence"
+            ],
+        )
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61

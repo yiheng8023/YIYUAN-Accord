@@ -619,7 +619,8 @@
         "evidence.claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07",
         "evidence.claude-plugin-skill-root-readonly-inventory-2026-08-07",
         "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
-        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08"
+        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08",
+        "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"
       ]
     },
     {
@@ -841,7 +842,8 @@
         "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
         "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
         "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
-        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08"
+        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08",
+        "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"
       ]
     },
     {
@@ -977,7 +979,8 @@
         "evidence.cc-switch-handoff-real-canary-execution-2026-07-18",
         "evidence.skill-runtime-and-cc-count-drift-snapshot-2026-07-27",
         "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
-        "evidence.claude-consumer-skill-projection-snapshot-2026-08-07"
+        "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
+        "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"
       ]
     },
     {
@@ -2940,6 +2943,17 @@
       "supports": [
         "acceptance.cc-switch-source-preserving-skill-pool",
         "acceptance.consumer-mapping-evidence"
+      ]
+    },
+    {
+      "id": "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08",
+      "path": "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+      "kind": "privacy-minimized-read-only-gemini-grokbuild-opencode-hermes-root-presence-and-zero-matt-projection-inventory-no-host-install-loader-delivery-recovery-behavior-or-value-proof",
+      "asOf": "2026-08-08",
+      "supports": [
+        "acceptance.consumer-mapping-evidence",
+        "acceptance.cc-switch-source-preserving-skill-pool",
+        "acceptance.foreign-managed-capability-coexistence"
       ]
     },
     {

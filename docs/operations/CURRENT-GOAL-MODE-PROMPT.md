@@ -89,8 +89,10 @@ backup, update, and consumer projections.
   exact pin cannot close the program.
 - The current closeout audit includes the restart-persistent metadata-only
   `v1.2.3` reconciliation. Consumer/source governance still lacks loader and
-  task-delivery evidence, live recovery across supported consumers, disabled-
-  consumer reconciliation, and cross-device convergence.
+  task-delivery evidence, live recovery across supported consumers, and cross-
+  device convergence. A privacy-minimized observation found all four disabled
+  consumer roots absent with zero Matt flags and projections; this does not
+  prove those hosts are installed or healthy.
 - Final cleanup remains separately authorized. Do not delete, archive,
   uninstall, retire, or mark the goal complete from inventory evidence alone.
 - Verify this boundary against

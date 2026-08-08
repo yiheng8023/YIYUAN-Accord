@@ -42,6 +42,11 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         == "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json",
         "Program closeout Matt v1.2.3 exact-pin binding drifted",
     )
+    _require(
+        sources.get("disabledConsumerRootInventory")
+        == "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+        "Program closeout disabled-consumer binding drifted",
+    )
     program = json.loads((root / PROGRAM_MAP_PATH).read_text(encoding="utf-8"))
     criteria = program.get("acceptanceCriteria", [])
     counts = Counter(row.get("assessment") for row in criteria)
@@ -107,7 +112,8 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
     _require(
         "25 exact v1.2.3 payloads" in consumer_boundary
         and "72 manager symlinks" in consumer_boundary
-        and "other disabled consumers" in consumer_boundary
+        and "Gemini, GrokBuild, OpenCode, and Hermes" in consumer_boundary
+        and "all four governed roots were absent" in consumer_boundary
         and "behavior, or value" in consumer_boundary,
         "Program closeout consumer/source claim boundary drifted",
     )
@@ -152,7 +158,9 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
     progress = document.get("currentEvidenceProgress", {})
     _require(
         progress.get("mattV123ExactSourceMetadataPin")
-        == "covered-restart-persistent-metadata-only",
+        == "covered-restart-persistent-metadata-only"
+        and progress.get("disabledConsumerRootPresenceAndMattProjectionAbsence")
+        == "covered-readonly-single-observation",
         "Program closeout current evidence progress drifted",
     )
     documentation = document.get("documentation")

@@ -70,6 +70,9 @@ from validate_mattpocock_skills_v123_upstream_and_live_drift_review import (
 from validate_mattpocock_skills_v123_exact_pin_reconciliation import (
     validate_repository_reconciliation as validate_mattpocock_skills_v123_exact_pin_reconciliation,
 )
+from validate_cc_switch_disabled_consumer_root_inventory import (
+    validate_repository_inventory as validate_cc_switch_disabled_consumer_root_inventory,
+)
 from validate_codex_consumer_skill_mapping_snapshot import (
     validate_repository_snapshot as validate_codex_consumer_skill_mapping_snapshot,
 )
@@ -1705,6 +1708,13 @@ REQUIRED_FILES = (
     "scripts/validate_mattpocock_skills_v123_exact_pin_reconciliation.py",
     "tests/test_reconcile_matt_cc_manager_exact_pin.py",
     "tests/test_mattpocock_skills_v123_exact_pin_reconciliation.py",
+    "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+    "docs/strategy/CC-SWITCH-DISABLED-CONSUMER-ROOT-READONLY-INVENTORY-2026-08-08.md",
+    "audits/cc-switch-disabled-consumer-roots-2026-08-08/REPORT.json",
+    "scripts/build_cc_switch_disabled_consumer_inventory.py",
+    "scripts/validate_cc_switch_disabled_consumer_root_inventory.py",
+    "tests/test_build_cc_switch_disabled_consumer_inventory.py",
+    "tests/test_cc_switch_disabled_consumer_root_inventory.py",
     "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
     "docs/strategy/CODEX-CONSUMER-SKILL-MAPPING-SNAPSHOT-2026-08-07.md",
     "scripts/validate_codex_consumer_skill_mapping_snapshot.py",
@@ -1933,6 +1943,7 @@ def verify() -> None:
     validate_process_loss_longhorizon_safe_adapter_upstream_design(ROOT)
     validate_mattpocock_skills_v123_upstream_and_live_drift_review(ROOT)
     validate_mattpocock_skills_v123_exact_pin_reconciliation(ROOT)
+    validate_cc_switch_disabled_consumer_root_inventory(ROOT)
     validate_codex_consumer_skill_mapping_snapshot(ROOT)
     validate_claude_consumer_skill_projection_snapshot(ROOT)
     validate_claude_plugin_skill_root_readonly_preflight(ROOT)
