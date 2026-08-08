@@ -1081,3 +1081,28 @@ git commit -m "feat: verify thirteen-scenario decision manifests"
 ```
 
 After the task review and final whole-slice review are clean, the controller runs `git push origin main` and `python -B scripts/verify.py`. Finally require `HEAD == origin/main`, ahead/behind `0/0`, a clean worktree, and a passing post-push verifier. Report this mechanism slice as verified only within its zero-model claim ceiling; do not mark the overall Harness program or goal complete.
+
+---
+
+## Final whole-slice review resolution: exact JSON and JSON Pointer conformance
+
+The final review found four cross-layer strictness gaps that must close before
+push:
+
+1. request, packet-v2 binding, authorization, and projection validation must
+   use JSON-type-strict comparison so Python boolean/number equality cannot
+   satisfy a different JSON Schema type;
+2. the binding registry runtime validator must enforce the schema's exact
+   integer schema value, non-empty/status constraints, and date shape;
+3. JSON Pointer resolution must reject invalid `~` escapes and array indices
+   with leading zeroes while preserving the existing non-root boundary and
+   typed `binding-pointer-invalid` error; and
+4. the repository PoC evidence validator must use type-strict checks for its
+   schema, counts, counters, boundaries, and other exact record projections.
+
+Add focused adversarial tests for each reviewed example. Keep strict JSON
+comparison in a shared low-level packet helper when it avoids divergent
+implementations, but do not weaken schema shape, typed errors, authority
+binding, or claim ceilings. After the Task 1 and Task 2 repairs, regenerate the
+plan-bound Task 4 record/document digests, rerun focused/full/verifier checks,
+and return the complete range to final review before push.
