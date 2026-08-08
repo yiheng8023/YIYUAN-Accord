@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "requestId": "fixture.gen-research-01",
+  "scenarioId": "GEN-RESEARCH-01",
+  "evidenceLane": "portfolio-curation",
+  "expectedSemanticAuthorityId": "skill-portfolio-current-authority-v1",
+  "observedAvailability": null,
+  "taskBinding": null,
+  "currentCapabilityGap": null,
+  "activationAuthority": null
+}

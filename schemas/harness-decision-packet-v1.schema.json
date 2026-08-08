@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yiyuan.example/schemas/harness-decision-packet-v1.schema.json",
+  "title": "Harness Decision Packet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "packetId",
+    "authorityBinding",
+    "request",
+    "sourceEvidence",
+    "routeCoverage",
+    "fallbackOrder",
+    "decisionState",
+    "selectedRoute",
+    "authorizationGates",
+    "claimBoundary",
+    "recheckTriggers",
+    "projectionBoundary",
+    "packetSha256"
+  ],
+  "properties": {
+    "schema": { "const": 1 },
+    "packetId": { "type": "string", "minLength": 1 },
+    "authorityBinding": { "type": "object" },
+    "request": { "$ref": "harness-decision-request-v1.schema.json" },
+    "sourceEvidence": { "type": "object" },
+    "routeCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["N", "O", "E", "C", "H", "R"],
+      "properties": {
+        "N": { "$ref": "#/$defs/routeCoverage" },
+        "O": { "$ref": "#/$defs/routeCoverage" },
+        "E": { "$ref": "#/$defs/routeCoverage" },
+        "C": { "$ref": "#/$defs/routeCoverage" },
+        "H": { "$ref": "#/$defs/routeCoverage" },
+        "R": { "$ref": "#/$defs/routeCoverage" }
+      }
+    },
+    "fallbackOrder": {
+      "type": "array",
+      "items": { "enum": ["N", "O", "E", "C", "H", "R"] },
+      "uniqueItems": true
+    },
+    "decisionState": { "type": "string", "minLength": 1 },
+    "selectedRoute": {
+      "anyOf": [
+        { "type": "null" },
+        { "enum": ["N", "O", "E", "C", "H", "R"] }
+      ]
+    },
+    "authorizationGates": { "type": "object" },
+    "claimBoundary": { "type": "object" },
+    "recheckTriggers": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "projectionBoundary": { "type": "object" },
+    "packetSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "routeCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "candidateIds", "evidenceCeiling"],
+      "properties": {
+        "state": { "type": "string", "minLength": 1 },
+        "candidateIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "evidenceCeiling": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
