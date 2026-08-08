@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "id": "addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08",
+  "asOf": "2026-08-08",
+  "status": "retained-practitioner-weak-reference-no-promotion",
+  "documentation": "docs/research/addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08.md",
+  "userSuppliedLocator": {
+    "url": "https://x.com/i/status/2085536770758996033",
+    "role": "secondary Chinese practitioner-post rendering with an original-source link",
+    "acceptedAsOriginalSource": false
+  },
+  "originalSource": {
+    "author": "Addy Osmani",
+    "title": "My LLM coding workflow going into 2026",
+    "url": "https://addyosmani.com/blog/ai-coding-workflow/",
+    "publishedAt": "2026-01-04",
+    "sourceKind": "PRACTITIONER-REFERENCE",
+    "directness": "D1-indirect",
+    "empiricalStrength": "ES0",
+    "normativeAuthority": "NA0",
+    "applicability": "bounded-analogy",
+    "verificationState": "claim-checked",
+    "adoptionState": "held",
+    "publiclyReadable": true,
+    "declaredOpenLicenseObservedOnPage": false,
+    "bodyRedistributionAuthorized": false
+  },
+  "boundedReading": {
+    "practitionerThesis": "When AI accelerates code generation, clear specifications, bounded decomposition, relevant context, testing, review, version control, and accountable human oversight remain important and may become more important in the author's workflow.",
+    "candidateInvariantHypotheses": [
+      "intent and requirement clarity",
+      "bounded decomposition",
+      "independent verification and review",
+      "accountable human or governed ownership",
+      "traceability and reversibility"
+    ],
+    "adaptivePracticeExamples": [
+      "spec.md and plan.md artifacts",
+      "small implementation chunks",
+      "frequent granular commits",
+      "branches or worktrees for isolation",
+      "project rule files",
+      "second-model review",
+      "MCP-assisted runtime inspection",
+      "CI/CD feedback loops"
+    ],
+    "processLossRelevance": "The source reinforces attention to alignment and intermediate feedback, but it does not define or measure per-hop semantic loss, authority loss, cumulative process loss, recovery, or downstream impact.",
+    "classificationBoundary": "The listed invariants are hypotheses and the workflow items are adaptive examples; neither set is admitted as a standard or mandatory Harness workflow."
+  },
+  "strategyImpact": {
+    "disposition": "weak-reference-only",
+    "reinforcesExistingDirection": true,
+    "readmeChangeRequired": false,
+    "programOrderChangeRequired": false,
+    "acceptanceChangeRequired": false,
+    "goalModePromptChangeRequired": false,
+    "newStandardCandidateCreated": false,
+    "hardStandardPromotionEligible": false,
+    "githubActionsRequired": false,
+    "verificationCarrierBoundary": "CI/CD is one adaptive feedback carrier. Local deterministic checks and host-native verification remain valid primary surfaces; GitHub Actions is neither required nor sufficient as sole acceptance authority."
+  },
+  "claimBoundary": {
+    "provesUniversalProductivity": false,
+    "provesUniversalQuality": false,
+    "provesCrossHostBehavior": false,
+    "provesProcessLossReduction": false,
+    "provesStandardCandidateMaturity": false,
+    "provesHardStandardNeed": false,
+    "provesAcceptanceEligibility": false,
+    "provesProductionReadiness": false
+  },
+  "acceptanceBoundary": {
+    "programAcceptanceEvidenceIdCreated": false,
+    "acceptanceAssessmentChanged": false,
+    "canonicalInventoryExpected": {
+      "verified": 46,
+      "partial": 15,
+      "planned": 0
+    }
+  },
+  "authorityBoundary": {
+    "sourceBodyVendoringAuthorized": false,
+    "acceptanceMutationAuthorized": false,
+    "hardStandardAdmissionAuthorized": false,
+    "skillOrHookMutationAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "externalCapabilityMutationAuthorized": false,
+    "crossRepositoryWriteAuthorized": false,
+    "releaseAuthorized": false
+  }
+}

@@ -49,6 +49,9 @@ from plan_standard_revalidation_cascade import (
 from validate_agent_plugins_1_0_0_strategic_impact import (
     validate_repository_record as validate_agent_plugins_1_0_0_strategic_impact,
 )
+from validate_addy_osmani_ai_assisted_engineering_weak_reference import (
+    validate_repository_record as validate_addy_osmani_ai_assisted_engineering_weak_reference,
+)
 from validate_process_loss_longhorizon_harness_static_reuse_assessment import (
     validate_repository_assessment as validate_process_loss_longhorizon_harness_static_reuse_assessment,
 )
@@ -1677,6 +1680,10 @@ REQUIRED_FILES = (
     "docs/research/agent-plugins-1.0.0-strategic-impact-2026-08-07.md",
     "scripts/validate_agent_plugins_1_0_0_strategic_impact.py",
     "tests/test_agent_plugins_1_0_0_strategic_impact.py",
+    "registry/addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08.json",
+    "docs/research/addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08.md",
+    "scripts/validate_addy_osmani_ai_assisted_engineering_weak_reference.py",
+    "tests/test_addy_osmani_ai_assisted_engineering_weak_reference.py",
     "registry/process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07.json",
     "docs/strategy/PROCESS-LOSS-EXTERNAL-REUSE-RESEARCH-2026-08-07.md",
     "scripts/validate_process_loss_longhorizon_harness_static_reuse_assessment.py",
@@ -1936,6 +1943,7 @@ def verify() -> None:
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)
     validate_agent_plugins_1_0_0_strategic_impact(ROOT)
+    validate_addy_osmani_ai_assisted_engineering_weak_reference(ROOT)
     validate_process_loss_longhorizon_harness_static_reuse_assessment(ROOT)
     validate_process_loss_longhorizon_harness_interface_gap_mapping(ROOT)
     validate_process_loss_longhorizon_harness_execution_preflight(ROOT)

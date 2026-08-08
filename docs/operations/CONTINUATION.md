@@ -5360,3 +5360,25 @@ installed, configured, healthy, loader-capable, recoverable, or convergent
 across devices. No root, host, account, CC Switch, consumer, or model state was
 changed. The acceptance inventory remains 46/15/0. Evidence:
 `registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json`.
+
+## 2026-08-08 Addy Osmani AI-assisted engineering weak-reference checkpoint
+
+The user-supplied X post was traced to Addy Osmani's 2026-01-04 article,
+`My LLM coding workflow going into 2026`. The original is retained only as a
+`PRACTITIONER-REFERENCE` with `ES0`, `NA0`, bounded-analogy applicability, and
+held adoption state. It reinforces the existing attention to intent clarity,
+bounded decomposition, verification, accountable ownership, traceability, and
+reversibility, but supplies no controlled, repeated, cross-host, lifecycle-wide,
+or process-loss measurement evidence.
+
+The article's concrete choices remain adaptive examples rather than a mandatory
+workflow. CI/CD is one feedback carrier; GitHub Actions is neither required nor
+sufficient as sole acceptance authority, and local deterministic plus
+host-native verification remain valid primary surfaces. The publicly readable
+article had no declared open license observed, so its body was not copied or
+vendored.
+
+No README, program-order, acceptance, or goal-mode prompt change was required.
+No program evidence ID or standard candidate was created, and the 46/15/0
+inventory is unchanged. Evidence:
+`registry/addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08.json`.
