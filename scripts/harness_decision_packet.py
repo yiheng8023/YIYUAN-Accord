@@ -325,12 +325,14 @@ def _find_scenario(items: object, key: str, scenario_id: str) -> dict[str, Any] 
     return None
 
 
-def load_authority_bundle(root: Path, request: object) -> dict[str, Any]:
-    """Load the current semantic, coverage, projection, and source authority."""
+def load_current_authority_bundle(root: Path, request: object) -> dict[str, Any]:
+    """Load the current authority records and requested coverage scenario."""
 
     validate_decision_request(request)
     assert isinstance(request, dict)
-    semantic = _authority_record(root, SEMANTIC_AUTHORITY_PATH, missing_code="semantic-authority-missing")
+    semantic = _authority_record(
+        root, SEMANTIC_AUTHORITY_PATH, missing_code="semantic-authority-missing"
+    )
     if semantic["id"] != request["expectedSemanticAuthorityId"]:
         raise DecisionPacketError(
             "semantic-authority-id-mismatch",
@@ -339,17 +341,41 @@ def load_authority_bundle(root: Path, request: object) -> dict[str, Any]:
     coverage = _authority_record(root, COVERAGE_PATH, missing_code="coverage-authority-missing")
     scheduler = _authority_record(root, SCHEDULER_PATH, missing_code="scheduler-authority-missing")
     acceptance = _authority_record(root, ACCEPTANCE_PATH, missing_code="acceptance-authority-missing")
-
-    scenario = _find_scenario(
-        coverage["document"].get("scenarioCoverage"),
-        "scenarioId",
-        request["scenarioId"],
-    )
+    scenario = _find_scenario(coverage["document"].get("scenarioCoverage"), "scenarioId", request["scenarioId"])
     if scenario is None:
         raise DecisionPacketError(
             "unknown-scenario",
             "Scenario is not present in the current coverage authority.",
         )
+    return {
+        "semanticAuthority": semantic,
+        "coverage": coverage,
+        "scheduler": scheduler,
+        "acceptance": acceptance,
+        "scenario": scenario,
+    }
+
+
+def load_source_evidence_record(root: Path, relative: str | Path) -> dict[str, Any]:
+    """Load one original evidence document with byte-bound source metadata."""
+
+    path = Path(relative)
+    document = _load_json(root, path, "evidence-source-missing")
+    return {
+        "path": path.as_posix(),
+        "id": document.get("id"),
+        "sha256": _source_sha256(root, path, "evidence-source-missing"),
+        "status": document.get("status"),
+        "document": document,
+    }
+
+
+def load_authority_bundle(root: Path, request: object) -> dict[str, Any]:
+    """Load the current semantic, coverage, projection, and source authority."""
+
+    bundle = load_current_authority_bundle(root, request)
+    assert isinstance(request, dict)
+    scenario = bundle["scenario"]
 
     source_evidence: list[dict[str, Any]] = []
     source_paths = scenario.get("evidenceSourcePaths")
@@ -370,24 +396,9 @@ def load_authority_bundle(root: Path, request: object) -> dict[str, Any]:
                 "Scenario is absent from its bound original evidence source.",
                 path=str(value),
             )
-        source_evidence.append(
-            {
-                "path": relative.as_posix(),
-                "id": document.get("id"),
-                "sha256": _source_sha256(root, relative, "evidence-source-missing"),
-                "status": document.get("status"),
-                "document": document,
-            }
-        )
+        source_evidence.append(load_source_evidence_record(root, relative))
 
-    bundle = {
-        "semanticAuthority": semantic,
-        "coverage": coverage,
-        "scheduler": scheduler,
-        "acceptance": acceptance,
-        "scenario": scenario,
-        "sourceEvidence": source_evidence,
-    }
+    bundle["sourceEvidence"] = source_evidence
     validate_authority_bundle(bundle, request)
     return bundle
 

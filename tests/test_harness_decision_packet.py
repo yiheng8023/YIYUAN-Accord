@@ -170,6 +170,11 @@ class HarnessDecisionPacketAuthorityTests(HarnessDecisionPacketContractTests):
 
 
 class HarnessDecisionPacketBuildTests(HarnessDecisionPacketContractTests):
+    def test_v1_fixture_bytes_remain_exact_after_shared_helper_refactor(self) -> None:
+        expected = (ROOT / "tests/fixtures/harness-decision-packet-gen-research-01.json").read_bytes()
+        actual = serialize_decision_packet(build_decision_packet(ROOT, self.load_request()))
+        self.assertEqual(expected, actual)
+
     def assert_packet_mutation_rejected(
         self,
         mutate,
