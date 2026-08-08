@@ -1106,3 +1106,18 @@ implementations, but do not weaken schema shape, typed errors, authority
 binding, or claim ceilings. After the Task 1 and Task 2 repairs, regenerate the
 plan-bound Task 4 record/document digests, rerun focused/full/verifier checks,
 and return the complete range to final review before push.
+
+### Final review round 2: stable validation before Python operations
+
+All user/source JSON values must be type-guarded before set/dictionary
+membership, hashing, counting, or other operations that can raise native
+`TypeError`. Public CLIs must convert such invalid request/binding values into
+their stable `DecisionPacketError` envelope and exit 2, never a traceback.
+
+JSON array indices that pass ASCII syntax may be arbitrarily long. Check bounds
+by length/lexicographic comparison (or an equivalently bounded method) before
+any integer conversion, so Python's large-integer digit limit cannot leak a
+native `ValueError`. Direct resolution and completeness traversal must retain
+typed `binding-pointer-invalid`/`binding-pointer-unresolved` behavior. Add
+adversarial unhashable membership and 4301-digit index tests, then refresh the
+Task 4 evidence bindings and repeat the review/verification sequence.
