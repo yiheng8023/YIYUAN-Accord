@@ -164,7 +164,8 @@ The version-one request is structured and solution-neutral:
   "expectedSemanticAuthorityId": "skill-portfolio-current-authority-v1",
   "observedAvailability": null,
   "taskBinding": null,
-  "activationAuthority": false
+  "currentCapabilityGap": null,
+  "activationAuthority": null
 }
 ```
 
@@ -174,6 +175,14 @@ Rules:
 - `task-time` is a valid lane, but it cannot yield an executable route without
   a bound task, current capability gap, dated live availability, and separate
   activation authority.
+- A non-null `taskBinding` identifies the task, goal, target, and verification
+  surface. A non-null `currentCapabilityGap` identifies the required
+  capability, observed limitation, and evidence paths. A non-null
+  `observedAvailability` identifies the host, observation time, route classes,
+  and evidence paths.
+- A non-null `activationAuthority` binds an independently authorized evidence
+  path and explicit scope. A boolean or self-asserted request flag is invalid;
+  request data cannot grant its own authority.
 - The request cannot name a preferred Skill or candidate as the answer.
 - Availability must be an explicit dated observation supplied by the caller;
   a catalog, installed directory, or static registry is not live availability.
