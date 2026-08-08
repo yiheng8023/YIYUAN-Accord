@@ -3288,3 +3288,27 @@ residual repository-authored gap. The decision-ready consumer-projection
 criterion therefore remains partial and the canonical inventory remains
 46 verified / 15 partial / 0 planned. Evidence:
 `registry/harness-decision-packet-core-poc-2026-08-08.json`.
+
+### 2026-08-09 Harness thirteen-scenario decision-manifest PoC checkpoint
+
+All thirteen current coverage scenarios now reproduce through the zero-model
+packet-v2 binding path and one atomic digest-only manifest. Eleven retain exact
+scenario-record identity. `SE-ARCH-DESIGN-01` and `SE-VERIFY-SECURE-01` remain
+document-level support under aggregate source identity `SE-E2E-THIN-01`.
+Seventeen bounded mutations fail closed, every selected route remains null,
+all execution counters remain zero, and every authorization and claim gate
+remains false.
+
+This is deterministic repository-mechanism evidence only. It proves no
+natural-language or task-time selection, instruction delivery, candidate or
+Plugin behavior, value, cross-host portability, production readiness, release
+eligibility, or residual gap. The decision-ready consumer-projection criterion
+remains partial and the canonical inventory remains 46 verified / 15 partial /
+0 planned. The new evidence is not registered in the frozen v1 acceptance map
+in this slice because that would invalidate the immutable packet-v1 acceptance
+binding. A future appendable authority requires a separately designed,
+versioned migration; none is authorized here. Task-time, live-host, Plugin,
+candidate, behavior/value, and release transitions remain behind the existing
+natural-task and authorization gates.
+Evidence:
+`registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`.

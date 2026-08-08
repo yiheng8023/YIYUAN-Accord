@@ -780,7 +780,7 @@ After the task's specification and quality review is clean, the controller runs 
 
 ---
 
-### Task 4: Bind repository evidence, acceptance, goal mode, and continuation
+### Task 4: Bind repository evidence, acceptance posture, goal mode, and continuation
 
 **Files:**
 - Create: `tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json`
@@ -788,11 +788,11 @@ After the task's specification and quality review is clean, the controller runs 
 - Create: `tests/test_harness_decision_packet_manifest_poc.py`
 - Create: `registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`
 - Create: `docs/strategy/HARNESS-DECISION-PACKET-THIRTEEN-SCENARIO-MANIFEST-POC-2026-08-09.md`
-- Modify: `registry/program-acceptance-map.json`
 - Modify: `docs/strategy/RESEARCH-AND-POC-PLAN.md`
 - Modify: `docs/operations/CURRENT-GOAL-MODE-PROMPT.md`
 - Modify: `docs/operations/CONTINUATION.md`
 - Modify: `scripts/verify.py`
+- Modify: `tests/test_verify_integration.py`
 
 **Interfaces:**
 - Consumes: canonical manifest bytes and all focused validators.
@@ -967,9 +967,25 @@ Use these additional exact top-level fields in the record:
 
 Bind `design` to `docs/superpowers/specs/2026-08-08-harness-decision-packet-thirteen-scenario-manifest-design.md` and `plan` to `docs/superpowers/plans/2026-08-09-harness-decision-packet-thirteen-scenario-manifest.md`. `schemas` and `scripts` are exact path/SHA-256 arrays. `authorityBindings` contains semantic, coverage, scheduler, acceptance, and binding-registry public bindings. `mutationResults` equals `run_failure_matrix(root)`. Every execution counter is zero; every claim and lifecycle authorization value is false. The Markdown result must state exactly what the local mechanism proves and list every natural-language, task-time, behavior, value, cross-host, production, release, and residual-gap non-claim.
 
-- [ ] **Step 6: Update acceptance without promotion**
+- [ ] **Step 6: Preserve the acceptance posture without mutating its frozen v1 authority**
 
-Append to `registry/program-acceptance-map.json` evidence:
+Do not modify `registry/program-acceptance-map.json` in this slice. Live
+regression proved that its raw digest is part of the frozen packet-v1 fixture
+and the 2026-08-08 core PoC authority binding. Appending the new evidence would
+make the existing immutable v1 packet cease to represent current authority,
+while refreshing that historical fixture/evidence or allowing historical
+acceptance bindings would violate stronger compatibility and authority gates.
+
+Keep the new evidence as an independently governed registry record, checked
+fixture, documentation surface, and required local-verifier input. It is not
+registered as acceptance-map evidence in this slice. Require the existing
+criterion to remain `partial`, the inventory to remain 46 verified / 15 partial
+/ 0 planned, and the acceptance-map bytes to remain unchanged. A future change
+to make the acceptance authority appendable must use a separately designed,
+versioned binding/migration; it must not silently refresh historical packet
+evidence or promote a stale authority binding.
+
+The deferred evidence entry that must not be appended in this slice is:
 
 ```json
 {
@@ -981,7 +997,10 @@ Append to `registry/program-acceptance-map.json` evidence:
 }
 ```
 
-Append that evidence ID to the existing partial criterion. Do not change the statement, verification method, assessment, any other criterion, or the 46/15/0 counts.
+Do not append that evidence ID to the existing criterion. Record this
+non-registration boundary in the machine evidence, human-readable result,
+goal-mode prompt, and continuation so repository-verified mechanism evidence is
+not confused with acceptance-map admission.
 
 - [ ] **Step 7: Update plan, goal-mode prompt, and continuation**
 
@@ -1009,6 +1028,16 @@ from validate_harness_decision_packet_manifest_poc import (
 ```
 
 Add every new schema, registry, script, fixture, evidence, documentation, the approved design spec, and this plan file to `REQUIRED_FILES`. Call `validate_harness_decision_packet_manifest_poc(ROOT)` immediately after the v1 core validator.
+
+The production verifier must execute the focused validator on every real
+`verify()` call. In `tests/test_verify_integration.py`, unrelated mutation
+helpers that repeatedly invoke the whole verifier may patch only this expensive
+Task 4 validator to a side-effect-free stub; add one dedicated integration
+regression proving an ordinary `verify()` call invokes the real Task 4 runner
+exactly once. Keep the dedicated validator CLI and repository-record/failure-
+matrix tests as independent full replays. This test-only isolation prevents the
+17-case matrix from being multiplied across hundreds of unrelated verifier
+mutation cases without adding a production cache or skip path.
 
 - [ ] **Step 9: Run focused verification**
 

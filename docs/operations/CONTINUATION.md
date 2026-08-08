@@ -5471,3 +5471,33 @@ program inventory remains 46 verified / 15 partial / 0 planned and all loader,
 task-delivery, recovery, cross-device, behavior, value, live-plugin, and release
 gaps remain open. Evidence:
 `registry/harness-decision-packet-core-poc-2026-08-08.json`.
+
+## 2026-08-09 Harness thirteen-scenario decision-manifest PoC checkpoint
+
+The repository now reproduces packet-v2 values for all thirteen scenarios in
+the current coverage authority and validates one atomic digest-only manifest.
+Eleven bindings retain exact scenario-record identity. `SE-ARCH-DESIGN-01` and
+`SE-VERIFY-SECURE-01` remain document-level support under aggregate source
+identity `SE-E2E-THIN-01`; they were not promoted into atomic scenario
+evidence. Seventeen independent mutation and atomic-output cases reject with
+their expected codes. Every `selectedRoute` remains `null`, all execution
+counters remain zero, and all authorization and claim gates remain false.
+
+This is local deterministic mechanism evidence only. It proves no natural-
+language or task-time selection, instruction delivery, candidate or Plugin
+behavior, value, cross-host portability, production readiness, release
+eligibility, or repository-authored residual gap. The distribution posture
+remains `plugin-compatible + manager-agnostic + release-not-eligible`; CC
+Switch and host-native managers retain their existing lifecycle authority.
+`acceptance.decision-ready-consumer-projection` remains partial and the
+canonical inventory remains 46 verified / 15 partial / 0 planned.
+
+The new evidence is independently governed and is not registered in the
+frozen v1 acceptance map in this slice. The acceptance-map bytes and packet-v1
+fixture remain exact. Any appendable acceptance authority needs a separate,
+versioned binding and migration; no such migration is authorized here.
+
+The next task-time, live-host, Plugin, candidate, behavior/value, and release
+transitions remain behind their existing natural-task and separate
+authorization gates. Evidence:
+`registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`.

@@ -96,20 +96,30 @@ backup, update, and consumer projections.
 
 ## Current decision-packet mechanism boundary
 
-- A structured `GEN-RESEARCH-01` request may be evaluated through the
-  repository-owned decision-packet core. The deterministic packet retains all
-  six route classes, source digests, evidence ceilings, explicit unknowns,
-  governed fallback order, authorization gates, and false claim limits.
-- The current reviewed fixture rejects all fourteen bounded mutations and
-  keeps `selectedRoute` null. Use it as Agent/Harness-readable mechanism
-  evidence, not as a natural-language interpreter or live scheduler.
+- All thirteen current coverage scenarios now have zero-model packet-v2
+  binding. Eleven have exact scenario-record identity; `SE-ARCH-DESIGN-01` and
+  `SE-VERIFY-SECURE-01` remain document-level support under `SE-E2E-THIN-01`.
+  The atomic manifest stores digests, not packet bodies, and no route is
+  selected. This is deterministic mechanism evidence only; acceptance remains
+  partial and 46 verified / 15 partial / 0 planned remains unchanged.
+- The checked replay rejects seventeen bounded failures, retains every
+  `selectedRoute` as `null`, keeps all execution counters at zero, and leaves
+  every authorization and claim gate false.
+- This evidence is independently governed and is not registered in the frozen
+  v1 acceptance map in this slice. The v1 core still rejects all fourteen
+  bounded mutations and keeps `selectedRoute` null. A future appendable
+  acceptance authority requires a separate versioned migration; none is
+  authorized here.
 - It invokes no model, candidate, Plugin, manager, account, or consumer and
   authorizes no install, enablement, dispatch, publication, release, or
-  lifecycle mutation. It proves no instruction delivery, behavior, value,
-  portability, production readiness, release eligibility, or residual gap.
-- The decision-ready consumer-projection criterion remains `partial`; the
-  canonical acceptance inventory remains 46 verified / 15 partial / 0
-  planned. Verify the boundary against
+  lifecycle mutation. It proves no natural-language or task-time selection,
+  instruction delivery, behavior, value, cross-host portability, production
+  readiness, release eligibility, or residual gap.
+- The next task-time, live-host, Plugin, candidate, behavior/value, and release
+  transitions remain behind their existing natural-task and authorization
+  gates. Verify the boundary against
+  `registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`
+  and the frozen v1 core against
   `registry/harness-decision-packet-core-poc-2026-08-08.json`.
 
 ## Execution discipline

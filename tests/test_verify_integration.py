@@ -38,8 +38,12 @@ class SourceSelectionIntegrationTests(unittest.TestCase):
             return original_load(path)
 
         with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with self.assertRaises(ValueError):
-                verify_script.verify()
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
+            ):
+                with self.assertRaises(ValueError):
+                    verify_script.verify()
 
     def test_rejects_selection_with_wrong_source(self) -> None:
         selection = {**self.selection, "source": "github:example/other"}
@@ -67,6 +71,32 @@ class SourceSelectionIntegrationTests(unittest.TestCase):
 
 
 class StructuralValidationIntegrationTests(unittest.TestCase):
+    def test_unrelated_verifier_mutation_helper_skips_task4_matrix(self) -> None:
+        path = "registry/program-acceptance-map.json"
+        document = verify_script.load(path)
+        document["objectives"][0]["acceptanceIds"] = ["acceptance.missing"]
+
+        with patch.object(
+            verify_script,
+            "validate_harness_decision_packet_manifest_poc",
+        ) as task4_validator:
+            self.assert_verify_runtime_error(
+                path,
+                document,
+                "unknown acceptance id",
+            )
+
+        task4_validator.assert_not_called()
+
+    def test_normal_verify_invokes_task4_validator_once(self) -> None:
+        with patch.object(
+            verify_script,
+            "validate_harness_decision_packet_manifest_poc",
+        ) as task4_validator:
+            verify_script.verify()
+
+        task4_validator.assert_called_once_with(verify_script.ROOT)
+
     def test_tdd_successor_contract_is_integrated_into_narrative_surfaces(
         self,
     ) -> None:
@@ -418,11 +448,15 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             "load",
             side_effect=load_with_mutation,
         ):
-            with self.assertRaisesRegex(
-                RuntimeError,
-                "Reload-release claim boundary drifted",
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
             ):
-                verify_script.verify()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Reload-release claim boundary drifted",
+                ):
+                    verify_script.verify()
 
     def test_verify_invokes_thread_unsubscribe_attribution_validator(
         self,
@@ -445,11 +479,15 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             "load",
             side_effect=load_with_mutation,
         ):
-            with self.assertRaisesRegex(
-                RuntimeError,
-                "Thread-unsubscribe claim boundary drifted",
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
             ):
-                verify_script.verify()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Thread-unsubscribe claim boundary drifted",
+                ):
+                    verify_script.verify()
 
     def test_codex_isolated_mcp_status_probe_rejects_reload_overclaim(self) -> None:
         document = verify_script.load(
@@ -3729,8 +3767,12 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             return original_load(candidate)
 
         with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with self.assertRaises(ContractError) as raised:
-                verify_script.verify()
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
+            ):
+                with self.assertRaises(ContractError) as raised:
+                    verify_script.verify()
         self.assertEqual(raised.exception.pointer, pointer)
 
     def assert_verify_runtime_error(
@@ -3747,8 +3789,12 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             return original_load(candidate)
 
         with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with self.assertRaisesRegex(RuntimeError, message):
-                verify_script.verify()
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
+            ):
+                with self.assertRaisesRegex(RuntimeError, message):
+                    verify_script.verify()
 
     def test_rejects_program_objective_with_unknown_acceptance_reference(self) -> None:
         path = "registry/program-acceptance-map.json"
@@ -4778,8 +4824,15 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             return content
 
         with patch.object(Path, "read_text", read_text_without_parent_authority):
-            with self.assertRaisesRegex(RuntimeError, "parent task owns experiment design"):
-                verify_script.verify()
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "parent task owns experiment design",
+                ):
+                    verify_script.verify()
 
     def test_program_records_owner_acceptance_and_activates_capability_survey(self) -> None:
         program = verify_script.load("registry/curation-program-plan.json")
@@ -4920,8 +4973,12 @@ class ReferenceValidationIntegrationTests(unittest.TestCase):
             return original_load(candidate)
 
         with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with self.assertRaises(ContractError) as raised:
-                verify_script.verify()
+            with patch.object(
+                verify_script,
+                "validate_harness_decision_packet_manifest_poc",
+            ):
+                with self.assertRaises(ContractError) as raised:
+                    verify_script.verify()
 
         self.assertEqual(raised.exception.document, path)
         self.assertEqual(raised.exception.pointer, "/capabilities/0/canonicalOwner")
