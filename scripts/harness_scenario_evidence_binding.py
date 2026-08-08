@@ -105,7 +105,7 @@ def resolve_json_pointer(document: object, pointer: str) -> object:
     for raw in pointer[1:].split("/"):
         token = _decode_json_pointer_token(raw)
         if isinstance(current, list):
-            if not token.isdigit() or (len(token) > 1 and token.startswith("0")):
+            if not _is_json_array_index(token):
                 raise DecisionPacketError(
                     "binding-pointer-invalid", "Binding pointer has an invalid array index."
                 )
@@ -139,6 +139,10 @@ def _decode_json_pointer_token(raw: str) -> str:
         decoded.append("~" if raw[index + 1] == "0" else "/")
         index += 2
     return "".join(decoded)
+
+
+def _is_json_array_index(token: str) -> bool:
+    return token == "0" or re.fullmatch(r"[1-9][0-9]*", token) is not None
 
 
 def _require_dict(value: object, code: str, message: str) -> dict[str, Any]:
@@ -316,7 +320,7 @@ def _declared_surface_identity_pointers(
         for index, raw in enumerate(raw_tokens):
             token = _decode_json_pointer_token(raw)
             if isinstance(current, list):
-                if not token.isdigit() or (len(token) > 1 and token.startswith("0")):
+                if not _is_json_array_index(token):
                     raise DecisionPacketError(
                         "binding-pointer-invalid", "Binding pointer has an invalid array index."
                     )
@@ -346,8 +350,7 @@ def _declared_surface_identity_pointers(
                 token = _decode_json_pointer_token(raw)
                 if isinstance(current, list):
                     if (
-                        not token.isdigit()
-                        or (len(token) > 1 and token.startswith("0"))
+                        not _is_json_array_index(token)
                         or int(token) >= len(current)
                     ):
                         resolved = False

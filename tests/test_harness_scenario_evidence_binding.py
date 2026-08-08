@@ -126,7 +126,13 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
         self.assertEqual("dictionary key", resolve_json_pointer(document, "/00"))
         self.assertEqual("zero", resolve_json_pointer(document, "/items/0"))
 
-        for pointer, target in (("/a~2b", document), ("/a~", document), ("/items/00", document)):
+        for pointer, target in (
+            ("/a~2b", document),
+            ("/a~", document),
+            ("/items/00", document),
+            ("/items/١", document),
+            ("/items/²", document),
+        ):
             with self.subTest(pointer=pointer):
                 with self.assertRaises(DecisionPacketError) as raised:
                     resolve_json_pointer(target, pointer)
