@@ -31,7 +31,7 @@
   },
   "documentation": {
     "path": "docs/strategy/HARNESS-DECISION-PACKET-THIRTEEN-SCENARIO-MANIFEST-POC-2026-08-09.md",
-    "sha256": "1acf1589754b9f2d21c220a2e048b486a380f59dd5836bbdb56017a3724e4710"
+    "sha256": "b74dbc73c1b00573fdf64cf80ee611e4951388a78aad60e6dd2af6694b43cc9c"
   },
   "manifestFixture": {
     "path": "tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json",
@@ -79,7 +79,7 @@
     },
     {
       "path": "scripts/validate_harness_decision_packet_manifest_poc.py",
-      "sha256": "f83fe551ee21e4529ceb15dddd3aa53c2ed4dfbdff7d4a49d8b258153706ec34"
+      "sha256": "1242b64a86bd1941d0ce75dd21b9965fdc883ca38f8bce7c03be728b9ed01bc6"
     }
   ],
   "authorityBindings": {

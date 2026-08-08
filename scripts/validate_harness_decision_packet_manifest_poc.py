@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 from typing import Any, Callable
@@ -369,13 +370,40 @@ def run_failure_matrix(root: Path) -> list[dict[str, str]]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             temporary_root = Path(temporary_directory)
             output = temporary_root / "manifest.json"
-            output.write_bytes(b"known-good\n")
-            try:
-                build_decision_packet_manifest(temporary_root / "missing-root")
-            except BatchBindingError:
-                if output.read_bytes() != b"known-good\n":
-                    raise RuntimeError("Failed build changed the existing output target")
-                raise
+            sentinel = b"known-good\n"
+            output.write_bytes(sentinel)
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-B",
+                    str(root / "scripts/build_harness_decision_packet_manifest.py"),
+                    "--root",
+                    str(temporary_root / "missing-root"),
+                    "--output",
+                    str(output),
+                ],
+                cwd=root,
+                check=False,
+                capture_output=True,
+            )
+            _require(result.returncode == 2, "Failed manifest CLI did not exit 2")
+            _require(result.stdout == b"", "Failed manifest CLI wrote to stdout")
+            error = json.loads(result.stderr)
+            _require(
+                type(error) is dict
+                and error.get("code") == "batch-binding-failed"
+                and type(error.get("issues")) is list,
+                "Failed manifest CLI did not return batch-binding-failed",
+            )
+            _require(
+                output.read_bytes() == sentinel,
+                "Failed manifest CLI changed the existing output target",
+            )
+            _require(
+                not list(output.parent.glob(f".{output.name}.*.tmp")),
+                "Failed manifest CLI left sibling temporary output",
+            )
+            raise BatchBindingError(error["issues"])
 
     actions: dict[str, Callable[[], None]] = {
         "binding-scenario-missing": mutate_binding_scenario_missing,

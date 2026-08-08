@@ -1,5 +1,5 @@
 from copy import deepcopy
-from contextlib import redirect_stderr
+from contextlib import contextmanager, redirect_stderr
 from io import StringIO
 from pathlib import Path
 import sys
@@ -25,6 +25,15 @@ from build_skill_source_lineage_collision_index import (  # noqa: E402
 SELECTION_DOCUMENT = "sources/addyosmani-agent-skills/selection.json"
 
 
+@contextmanager
+def without_task4_manifest_poc_replay():
+    with patch.object(
+        verify_script,
+        "validate_harness_decision_packet_manifest_poc",
+    ) as task4_validator:
+        yield task4_validator
+
+
 class SourceSelectionIntegrationTests(unittest.TestCase):
     def setUp(self) -> None:
         self.selection = verify_script.load(SELECTION_DOCUMENT)
@@ -37,13 +46,13 @@ class SourceSelectionIntegrationTests(unittest.TestCase):
                 return deepcopy(selection)
             return original_load(path)
 
-        with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
-            ):
-                with self.assertRaises(ValueError):
-                    verify_script.verify()
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaises(ValueError):
+                verify_script.verify()
 
     def test_rejects_selection_with_wrong_source(self) -> None:
         selection = {**self.selection, "source": "github:example/other"}
@@ -447,16 +456,12 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             verify_script,
             "load",
             side_effect=load_with_mutation,
-        ):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Reload-release claim boundary drifted",
             ):
-                with self.assertRaisesRegex(
-                    RuntimeError,
-                    "Reload-release claim boundary drifted",
-                ):
-                    verify_script.verify()
+                verify_script.verify()
 
     def test_verify_invokes_thread_unsubscribe_attribution_validator(
         self,
@@ -478,16 +483,12 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             verify_script,
             "load",
             side_effect=load_with_mutation,
-        ):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Thread-unsubscribe claim boundary drifted",
             ):
-                with self.assertRaisesRegex(
-                    RuntimeError,
-                    "Thread-unsubscribe claim boundary drifted",
-                ):
-                    verify_script.verify()
+                verify_script.verify()
 
     def test_codex_isolated_mcp_status_probe_rejects_reload_overclaim(self) -> None:
         document = verify_script.load(
@@ -3766,13 +3767,13 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
                 return deepcopy(mutation)
             return original_load(candidate)
 
-        with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
-            ):
-                with self.assertRaises(ContractError) as raised:
-                    verify_script.verify()
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaises(ContractError) as raised:
+                verify_script.verify()
         self.assertEqual(raised.exception.pointer, pointer)
 
     def assert_verify_runtime_error(
@@ -3788,13 +3789,13 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
                 return deepcopy(mutation)
             return original_load(candidate)
 
-        with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
-            ):
-                with self.assertRaisesRegex(RuntimeError, message):
-                    verify_script.verify()
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaisesRegex(RuntimeError, message):
+                verify_script.verify()
 
     def test_rejects_program_objective_with_unknown_acceptance_reference(self) -> None:
         path = "registry/program-acceptance-map.json"
@@ -4823,16 +4824,16 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
                 )
             return content
 
-        with patch.object(Path, "read_text", read_text_without_parent_authority):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
+        with patch.object(
+            Path,
+            "read_text",
+            read_text_without_parent_authority,
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "parent task owns experiment design",
             ):
-                with self.assertRaisesRegex(
-                    RuntimeError,
-                    "parent task owns experiment design",
-                ):
-                    verify_script.verify()
+                verify_script.verify()
 
     def test_program_records_owner_acceptance_and_activates_capability_survey(self) -> None:
         program = verify_script.load("registry/curation-program-plan.json")
@@ -4972,13 +4973,13 @@ class ReferenceValidationIntegrationTests(unittest.TestCase):
                 return deepcopy(document)
             return original_load(candidate)
 
-        with patch.object(verify_script, "load", side_effect=load_with_mutation):
-            with patch.object(
-                verify_script,
-                "validate_harness_decision_packet_manifest_poc",
-            ):
-                with self.assertRaises(ContractError) as raised:
-                    verify_script.verify()
+        with patch.object(
+            verify_script,
+            "load",
+            side_effect=load_with_mutation,
+        ), without_task4_manifest_poc_replay():
+            with self.assertRaises(ContractError) as raised:
+                verify_script.verify()
 
         self.assertEqual(raised.exception.document, path)
         self.assertEqual(raised.exception.pointer, "/capabilities/0/canonicalOwner")

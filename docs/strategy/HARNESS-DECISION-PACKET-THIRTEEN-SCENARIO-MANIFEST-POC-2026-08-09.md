@@ -15,6 +15,10 @@ Seventeen independent failure cases reject scenario-set, source-path, pointer,
 identity, aggregate, authority, source, entry-order, manifest-digest, and
 atomic-output violations with their expected stable error codes. A failed
 batch produces no manifest and preserves an existing output target.
+The atomic-output case exercises the public manifest CLI with an explicit
+existing `--output` and a deliberately failing `--root`; it requires exit 2,
+the typed `batch-binding-failed` envelope, byte-identical sentinel contents,
+and no sibling temporary-file residue.
 
 This proves only the local, deterministic, zero-model mechanism for binding
 the current thirteen scenarios, rebuilding their packet-v2 digests, and

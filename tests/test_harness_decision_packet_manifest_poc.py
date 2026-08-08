@@ -4,6 +4,9 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
+
+import scripts.validate_harness_decision_packet_manifest_poc as manifest_poc
 
 from scripts.validate_harness_decision_packet_manifest_poc import (
     EXPECTED_MANIFEST_PATH,
@@ -35,9 +38,34 @@ class HarnessDecisionPacketManifestPocTests(unittest.TestCase):
         )
 
     def test_all_manifest_mutations_fail_closed(self) -> None:
-        results = run_failure_matrix(ROOT)
+        with patch.object(
+            manifest_poc.subprocess,
+            "run",
+            wraps=subprocess.run,
+        ) as run_subprocess:
+            results = run_failure_matrix(ROOT)
+
         self.assertEqual(MUTATION_CASE_IDS, [item["caseId"] for item in results])
         self.assertTrue(all(item["status"] == "rejected" for item in results))
+        cli_calls = [
+            call
+            for call in run_subprocess.call_args_list
+            if "build_harness_decision_packet_manifest.py"
+            in str(call.args[0][2])
+        ]
+        self.assertEqual(1, len(cli_calls))
+        command = cli_calls[0].args[0]
+        self.assertEqual(sys.executable, command[0])
+        self.assertEqual("-B", command[1])
+        self.assertIn("--root", command)
+        self.assertIn("--output", command)
+        failing_root = Path(command[command.index("--root") + 1])
+        output = Path(command[command.index("--output") + 1])
+        self.assertEqual("missing-root", failing_root.name)
+        self.assertEqual("manifest.json", output.name)
+        self.assertEqual(failing_root.parent, output.parent)
+        self.assertFalse(cli_calls[0].kwargs["check"])
+        self.assertTrue(cli_calls[0].kwargs["capture_output"])
 
     def test_repository_record_replays_canonical_manifest(self) -> None:
         record = validate_repository_record(ROOT)
