@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -172,8 +173,17 @@ class HarnessDecisionPacketAuthorityTests(HarnessDecisionPacketContractTests):
 class HarnessDecisionPacketBuildTests(HarnessDecisionPacketContractTests):
     def test_v1_fixture_bytes_remain_exact_after_shared_helper_refactor(self) -> None:
         expected = (ROOT / "tests/fixtures/harness-decision-packet-gen-research-01.json").read_bytes()
-        actual = serialize_decision_packet(build_decision_packet(ROOT, self.load_request()))
+        packet = build_decision_packet(ROOT, self.load_request())
+        actual = serialize_decision_packet(packet)
         self.assertEqual(expected, actual)
+        self.assertEqual(
+            "e8d096897ffc351ac8b5e5fb054e204c0d18aedea45e23e99faba55ee646df2a",
+            packet["packetSha256"],
+        )
+        self.assertEqual(
+            "58410f9576fbbc2f006135d97184d29a9996b1eb11abeaf07988a3a5acf4fc22",
+            hashlib.sha256(actual).hexdigest(),
+        )
 
     def assert_packet_mutation_rejected(
         self,

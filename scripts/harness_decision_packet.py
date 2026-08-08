@@ -608,22 +608,21 @@ def _packet_route_coverage(scenario: dict[str, Any]) -> dict[str, dict[str, Any]
     }
 
 
-def build_decision_packet(root: Path, request: object) -> dict[str, Any]:
-    """Build a deterministic, source-bound decision packet without selecting a route."""
+def build_decision_packet_from_bundle(
+    root: Path,
+    request: dict[str, Any],
+    bundle: dict[str, Any],
+    *,
+    schema: int,
+    packet_id_prefix: str,
+    extra_fields: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build one canonical decision projection from an already validated bundle."""
 
-    bundle = load_authority_bundle(root, request)
     validate_bound_source_digests(root, bundle)
-    assert isinstance(request, dict)
-    coverage_document = bundle["coverage"]["document"]
-    claim_boundary = copy.deepcopy(coverage_document["claimBoundary"])
-    if not isinstance(claim_boundary, dict) or any(value is not False for value in claim_boundary.values()):
-        raise DecisionPacketError(
-            "claim-boundary-promotion",
-            "Current coverage authority does not preserve false claim ceilings.",
-        )
     packet: dict[str, Any] = {
-        "schema": 1,
-        "packetId": f"harness-decision-packet-v1:{request['requestId']}",
+        "schema": schema,
+        "packetId": f"{packet_id_prefix}:{request['requestId']}",
         "authorityBinding": {
             "semanticAuthority": _public_binding(bundle["semanticAuthority"]),
             "coverage": _public_binding(bundle["coverage"]),
@@ -637,11 +636,29 @@ def build_decision_packet(root: Path, request: object) -> dict[str, Any]:
         "decisionState": _decision_state(request),
         "selectedRoute": None,
         "authorizationGates": copy.deepcopy(AUTHORIZATION_GATES),
-        "claimBoundary": claim_boundary,
-        "recheckTriggers": copy.deepcopy(coverage_document["recheckTriggers"]),
+        "claimBoundary": copy.deepcopy(bundle["coverage"]["document"]["claimBoundary"]),
+        "recheckTriggers": copy.deepcopy(
+            bundle["coverage"]["document"]["recheckTriggers"]
+        ),
         "projectionBoundary": copy.deepcopy(PROJECTION_BOUNDARY),
     }
+    packet.update(copy.deepcopy(extra_fields or {}))
     packet["packetSha256"] = canonical_sha256(packet)
+    return packet
+
+
+def build_decision_packet(root: Path, request: object) -> dict[str, Any]:
+    """Build a deterministic, source-bound decision packet without selecting a route."""
+
+    bundle = load_authority_bundle(root, request)
+    assert isinstance(request, dict)
+    packet = build_decision_packet_from_bundle(
+        root,
+        request,
+        bundle,
+        schema=1,
+        packet_id_prefix="harness-decision-packet-v1",
+    )
     validate_decision_packet(root, packet)
     return packet
 
@@ -663,22 +680,33 @@ def _raise_route_drift(route: str, expected: dict[str, Any], actual: object) -> 
     )
 
 
-def validate_decision_packet(root: Path, packet: object) -> None:
-    """Independently reopen and compare every authority-bound packet field."""
+def validate_decision_packet_projection(
+    root: Path,
+    bundle: dict[str, Any],
+    packet: object,
+    *,
+    packet_fields: set[str],
+    schema: int,
+    packet_id_prefix: str,
+) -> None:
+    """Compare every common packet field with an independently loaded bundle."""
 
-    if not isinstance(packet, dict) or set(packet) != PACKET_FIELDS:
+    if not isinstance(packet, dict) or set(packet) != packet_fields:
         raise DecisionPacketError(
-            "invalid-packet-shape", "Decision packet must contain exactly the v1 fields."
+            "invalid-packet-shape",
+            f"Decision packet must contain exactly the v{schema} fields.",
         )
     request = packet.get("request")
     validate_decision_request(request)
     assert isinstance(request, dict)
-    bundle = load_authority_bundle(root, request)
+    validate_authority_bundle(bundle, request)
     validate_bound_source_digests(root, bundle)
 
-    if packet.get("schema") != 1:
-        raise DecisionPacketError("invalid-packet-shape", "Packet schema must be 1.")
-    if packet.get("packetId") != f"harness-decision-packet-v1:{request['requestId']}":
+    if packet.get("schema") != schema:
+        raise DecisionPacketError(
+            "invalid-packet-shape", f"Packet schema must be {schema}."
+        )
+    if packet.get("packetId") != f"{packet_id_prefix}:{request['requestId']}":
         raise DecisionPacketError("invalid-packet-shape", "Packet ID does not match the request.")
 
     expected_bindings = {
@@ -735,16 +763,19 @@ def validate_decision_packet(root: Path, packet: object) -> None:
         raise DecisionPacketError("fallback-order-drift", "Packet fallback order is not current.")
     selected_route = packet.get("selectedRoute")
     if selected_route is not None:
+        version_label = {1: "one", 2: "two"}.get(schema, str(schema))
         if request["evidenceLane"] == "portfolio-curation":
             raise DecisionPacketError(
                 "portfolio-selected-route", "Portfolio curation may not select an execution route."
             )
         if request["evidenceLane"] == "task-time":
             raise DecisionPacketError(
-                "task-time-route-selection", "Version one may not select a task-time route."
+                "task-time-route-selection",
+                f"Version {version_label} may not select a task-time route.",
             )
         raise DecisionPacketError(
-            "historical-authority-promotion", "Version one may not select a mechanism route."
+            "historical-authority-promotion",
+            f"Version {version_label} may not select a mechanism route.",
         )
     if packet.get("decisionState") != _decision_state(request):
         raise DecisionPacketError(
@@ -793,6 +824,26 @@ def validate_decision_packet(root: Path, packet: object) -> None:
     body = {key: value for key, value in packet.items() if key != "packetSha256"}
     if packet.get("packetSha256") != canonical_sha256(body):
         raise DecisionPacketError("packet-digest-mismatch", "Packet digest is invalid.")
+
+
+def validate_decision_packet(root: Path, packet: object) -> None:
+    """Independently reopen and compare every authority-bound v1 packet field."""
+
+    if not isinstance(packet, dict) or set(packet) != PACKET_FIELDS:
+        raise DecisionPacketError(
+            "invalid-packet-shape", "Decision packet must contain exactly the v1 fields."
+        )
+    request = packet.get("request")
+    validate_decision_request(request)
+    bundle = load_authority_bundle(root, request)
+    validate_decision_packet_projection(
+        root,
+        bundle,
+        packet,
+        packet_fields=PACKET_FIELDS,
+        schema=1,
+        packet_id_prefix="harness-decision-packet-v1",
+    )
 
 
 def serialize_decision_packet(packet: object) -> bytes:
