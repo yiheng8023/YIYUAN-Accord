@@ -28,6 +28,10 @@ decisions, and bounded authorization.
 - **Manager boundary:** CC Switch is a replaceable operational adapter where
   suitable, not the portable product contract. PR 6086 and its fork are an
   optional upstream contribution, not a Harness dependency.
+- **Current Matt provenance:** the 25 managed payloads match exact release
+  `v1.2.3@6acc160e`, and CC Switch source metadata is pinned to that tag after
+  a recoverable metadata-only transaction. This does not prove invocation,
+  behavior, value, portability, or production readiness.
 
 The detailed current scheduler is the
 [goal-mode execution projection](docs/operations/CURRENT-GOAL-MODE-PROMPT.md).

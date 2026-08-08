@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "id": "mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-v1",
+  "asOf": "2026-08-08",
+  "status": "exact-v1.2.3-source-metadata-pin-reconciled-payloads-and-projections-unchanged-restart-persistent",
+  "documentation": "docs/strategy/MATTPOCOCK-SKILLS-V1.2.3-EXACT-PIN-RECONCILIATION-2026-08-08.md",
+  "inputs": [
+    "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
+    "scripts/reconcile_matt_cc_manager_exact_pin.py",
+    "tests/test_reconcile_matt_cc_manager_exact_pin.py"
+  ],
+  "source": {
+    "repository": "https://github.com/mattpocock/skills",
+    "releaseTag": "v1.2.3",
+    "annotatedTagObject": "835450ef244ab7335f75d95b83e7d979eae22a6d",
+    "releaseCommit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+    "observedMainRevision": "84fdeffd12f2ee307994d1eb6feb48173b6e0502",
+    "tagObjectPeelsToReleaseCommit": true,
+    "observedMainEqualsReleaseCommit": false,
+    "freshRemoteRefCheckPerformed": true,
+    "thirdPartyCodeExecuted": false
+  },
+  "authorization": {
+    "ownerAuthorizedExactPinAlignment": true,
+    "ccSwitchSourceMetadataMutationAuthorized": true,
+    "managerQuiesceAndRestartAuthorizedAsTransactionMechanics": true,
+    "repositoryEvidenceWriteAuthorized": true,
+    "temporaryExactSourceAcquisitionAndRecoverableCleanupAuthorized": true,
+    "payloadRewriteAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "enablementMutationAuthorized": false,
+    "installationAuthorized": false,
+    "thirdPartyExecutionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "broaderConfigurationMutationAuthorized": false
+  },
+  "transaction": {
+    "manager": "CC Switch 3.19.2",
+    "journalPath": "C:/Users/15521/.cc-switch/skill-backups/aah-matt-v123-exact-pin-20260808T161214/journal.json",
+    "journalSha256": "227dbbbc14b942c2ecacdf468ed9d2c7d5d49eab5212b1d7b820ef4d70f0d953",
+    "journalStatus": "committed",
+    "committedAt": "2026-08-08T16:12:24+08:00",
+    "sourceRowCount": 25,
+    "beforeRowsSha256": "d0e211f120ce3b1a79653c4f4734d23c4b2fec992ff4b735d0f52e3c0380ef9f",
+    "targetRowsSha256": "9f0d77f12a32c963e0b9f70af403b72724189f6d68ae64ab612fc089c6281f92",
+    "afterRowsSha256": "9f0d77f12a32c963e0b9f70af403b72724189f6d68ae64ab612fc089c6281f92",
+    "changedColumns": [
+      "repo_branch",
+      "readme_url",
+      "updated_at"
+    ],
+    "beforeRepoBranch": "main",
+    "afterRepoBranch": "v1.2.3",
+    "afterExactTagReadmeUrlCount": 25,
+    "managerContentHashTreatment": "opaque-manager-owned-preserved-unchanged",
+    "payloadsWritten": false,
+    "projectionsWritten": false,
+    "enabledFlagsWritten": false,
+    "rawDatabaseCopied": false,
+    "thirdPartyScriptExecutions": 0,
+    "modelCalls": 0
+  },
+  "recovery": {
+    "journalContainsExactBeforeAndTargetRows": true,
+    "repositoryOwnedRollbackEntry": "scripts/reconcile_matt_cc_manager_exact_pin.py:rollback_exact_pin",
+    "failureAfterDatabaseCommitRollbackTested": true,
+    "explicitSyntheticRollbackTested": true,
+    "liveRollbackExecuted": false,
+    "rollbackRemainsSeparatelyControlled": true
+  },
+  "postRestartVerification": {
+    "managerRestarted": true,
+    "managerVersion": "3.19.2",
+    "sourceRowCount": 25,
+    "databaseRepoBranches": [
+      "v1.2.3"
+    ],
+    "exactTagReadmeUrlCount": 25,
+    "enabledCountByHost": {
+      "claude": 24,
+      "codex": 24,
+      "gemini": 0,
+      "opencode": 0,
+      "hermes": 0,
+      "grokbuild": 0
+    },
+    "wizardEnabled": false,
+    "allTwentyFivePayloadsMatchV123": true,
+    "bothV122AndV123PayloadCount": 20,
+    "v123OnlyPayloadCount": 5,
+    "consumerRootCount": 3,
+    "consumerSymlinkCount": 72,
+    "consumerDirectDirectoryCount": 0,
+    "singleManagerPayloadRevisionClosureProved": true,
+    "ssotSnapshotBefore": "22c09224bd8614b72eaca269fc42ffa9fe39025b61617cd9ddbd08221f410e5d",
+    "ssotSnapshotAfter": "22c09224bd8614b72eaca269fc42ffa9fe39025b61617cd9ddbd08221f410e5d"
+  },
+  "report": {
+    "path": "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json",
+    "observedAt": "2026-08-08T16:15:07+08:00",
+    "fileSha256": "4c14bb6dd49a63640440b182256d8d02ebeafebfca9ba5cbe57c8b8352659f1a",
+    "reportSha256": "4828bd928838f7f1e6debc2d7bcd745c863862801304368e402a6365c7358b92",
+    "sourceProjectionSha256": "f7ab9b9cabe59a128a1dcebb7778c809315b2203eacee76da99fa4dfe257f93d",
+    "status": "preview-only-zero-live-mutation"
+  },
+  "temporaryAcquisition": {
+    "path": "C:/Users/15521/AppData/Local/Temp/aah-matt-v123-pin-1a1054c3f3304facaa7ccea6203ed684",
+    "newOperatingSystemTemporaryRoot": true,
+    "containedOnlyGitObjectDatabaseAndGeneratedReadOnlyReports": true,
+    "dependencyOrThirdPartyCodeExecuted": false,
+    "cleanup": "sent-to-windows-recycle-bin",
+    "originalPathExistsAfterCleanup": false,
+    "recycleBinMatchingNameCount": 1,
+    "cleanupRecoverable": true
+  },
+  "acceptanceBoundary": {
+    "verifiedCriteria": 46,
+    "partialCriteria": 15,
+    "plannedCriteria": 0,
+    "criteriaAdvanced": [],
+    "supportsWithoutAssessmentUpgrade": [
+      "acceptance.cc-switch-source-preserving-skill-pool",
+      "acceptance.consumer-mapping-evidence"
+    ]
+  },
+  "decision": {
+    "currentExactReleaseAuthority": "v1.2.3@6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+    "mutableMainNoLongerLiveSourceMetadata": true,
+    "payloadRewriteRequired": false,
+    "wizardMustRemainDisabled": true,
+    "currentPortfolioAuthorityMustReferenceThisEvent": true,
+    "behaviorOrValueTrialRequiredForThisProvenanceRepair": false,
+    "nextGate": "return to the repository scheduler; require a naturally occurring task and demonstrated current-path gap only before task-time activation, instruction-delivery, behavior, value, portability, or production claims"
+  },
+  "claimBoundary": {
+    "exactReleaseIdentityProved": true,
+    "metadataOnlyPinCommitted": true,
+    "metadataPinPersistenceAfterOrdinaryRestartProved": true,
+    "payloadBytesUnchangedByTransactionProved": true,
+    "consumerProjectionsUnchangedByTransactionProved": true,
+    "enabledStateUnchangedByTransactionProved": true,
+    "recoveryJournalAvailable": true,
+    "failureInjectionRollbackProved": true,
+    "liveRollbackExecuted": false,
+    "updateTriggerOrActorProved": false,
+    "loaderInvocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "crossHostPortabilityProved": false,
+    "productionReadinessProved": false
+  }
+}

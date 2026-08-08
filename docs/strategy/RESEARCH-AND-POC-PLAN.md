@@ -3191,3 +3191,27 @@ recoverable owner-authorized transaction. No behavior, value, loader,
 instruction-delivery, cross-host, rollback, or production claim follows, and
 the 46/15/0 acceptance inventory is unchanged. Evidence:
 `registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`.
+
+### 2026-08-08 Matt Pocock Skills v1.2.3 exact-pin reconciliation
+
+After explicit owner authorization, a dedicated metadata-only CC Switch
+transaction freshly revalidated the annotated `v1.2.3` tag at
+`6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`, all 25 live payload trees, and
+all three consumer roots. It then changed only `repo_branch`, `readme_url`,
+and `updated_at` across the 25 Matt rows. Mutable `main` is retained only as
+the historical drift finding; the current rows now bind exact tag `v1.2.3`.
+
+The transaction preserved every payload byte, consumer symlink, enabled flag,
+installation timestamp, and manager-owned opaque `content_hash`. After an
+ordinary CC Switch 3.19.2 restart, all 25 exact URLs persisted, the enabled
+matrix remained Claude 24 / Codex 24 / all others 0, `wizard` remained
+disabled, and the 72 common/Claude/Codex entries remained manager symlinks.
+The exact before/target rows remain in a recovery journal; failure injection
+and synthetic explicit rollback pass, while no live rollback was needed.
+
+This provenance repair advances no acceptance state: the inventory remains
+46/15/0. It proves no loader invocation, instruction delivery, behavior,
+value, cross-host portability, or production readiness. The exact-source
+temporary root was moved to the Windows Recycle Bin after the portable report
+was bound. Evidence:
+`registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json`.

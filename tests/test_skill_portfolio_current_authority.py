@@ -55,7 +55,7 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         event_path = ROOT / state["event"]
         event = json.loads(event_path.read_text(encoding="utf-8"))
 
-        self.assertEqual(self.policy["asOf"], "2026-08-06")
+        self.assertEqual(self.policy["asOf"], "2026-08-08")
         self.assertEqual(state["reviewedCandidateCount"], 17)
         self.assertEqual(state["managerInstalledDependencyCompleteCandidateCount"], 16)
         self.assertEqual(state["reviewOnlyCandidates"], ["customer-research"])
@@ -74,17 +74,31 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
         ):
             self.assertFalse(state[field])
 
-    def test_current_matt_suite_is_bound_to_exact_recoverable_v122_update(self) -> None:
+    def test_current_matt_suite_is_bound_to_exact_recoverable_v123_pin(self) -> None:
         state = self.policy["currentObservedMattSuiteState"]
         event = load(state["event"])
 
         self.assertEqual(state["sourceRowCount"], 25)
         self.assertEqual(
             state["enabledCountByHost"],
-            event["verification"]["postRestartEnabledCountByHost"],
+            event["postRestartVerification"]["enabledCountByHost"],
         )
         self.assertTrue(state["singleExactRevisionExplainsLivePayload"])
-        self.assertEqual(state["upstreamReleaseTag"], "v1.2.2")
+        self.assertEqual(state["upstreamReleaseTag"], "v1.2.3")
+        self.assertEqual(
+            state["upstreamReleaseCommit"],
+            "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+        )
+        self.assertTrue(state["databaseSourceMetadataPinnedToExactRelease"])
+        self.assertTrue(state["metadataOnlyExactPinReconciliationExecuted"])
+        self.assertTrue(state["metadataOnlyExactPinReconciliationRecoverable"])
+        self.assertEqual(
+            state["metadataOnlyChangedColumns"],
+            ["repo_branch", "readme_url", "updated_at"],
+        )
+        self.assertFalse(state["payloadBytesWrittenByExactPin"])
+        self.assertFalse(state["consumerProjectionsWrittenByExactPin"])
+        self.assertFalse(state["enabledFlagsWrittenByExactPin"])
         self.assertEqual(state["currentPromotedCount"], 25)
         self.assertEqual(state["currentRecursiveSkillCount"], 35)
         self.assertEqual(
@@ -133,6 +147,8 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
             state["wholeCohortCrossFilesystemDatabaseAtomicCommitProved"]
         )
         self.assertFalse(state["liveRollbackExecuted"])
+        self.assertTrue(state["failureInjectionRollbackProved"])
+        self.assertTrue(state["explicitSyntheticRollbackProved"])
         self.assertFalse(state["releasedManagerAtomicCohortUpdateProved"])
         self.assertTrue(state["singleManagerRevisionClosureAcrossConsumersProved"])
         self.assertEqual(
@@ -140,10 +156,11 @@ class SkillPortfolioCurrentAuthorityTests(unittest.TestCase):
             "exact-payload-projection-and-no-model-listing-path-only",
         )
         self.assertEqual(state["managerVersionAfterOrdinaryRestart"], "3.19.2")
+        self.assertTrue(state["exactPinPersistenceAfterOrdinaryRestartProved"])
         self.assertTrue(state["managerAutoUpdateObservedDuringOrdinaryRestart"])
-        self.assertFalse(event["claimBoundary"]["skillLoaderInvocationProved"])
-        self.assertFalse(event["claimBoundary"]["skillBehaviorProved"])
-        self.assertFalse(event["claimBoundary"]["skillValueProved"])
+        self.assertFalse(event["claimBoundary"]["loaderInvocationProved"])
+        self.assertFalse(event["claimBoundary"]["behaviorProved"])
+        self.assertFalse(event["claimBoundary"]["valueProved"])
 
     def test_portfolio_curation_and_task_activation_are_separate_modes(self) -> None:
         modes = self.policy["operatingModes"]

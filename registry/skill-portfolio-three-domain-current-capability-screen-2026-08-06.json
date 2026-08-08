@@ -3,7 +3,7 @@
   "id": "skill-portfolio-three-domain-current-capability-screen-2026-08-06",
   "date": "2026-08-06",
   "observedAt": "2026-08-06T20:30:25.9510862+08:00",
-  "integratedAndAuthorityRevalidatedAt": "2026-08-06T21:08:15.1276466+08:00",
+  "integratedAndAuthorityRevalidatedAt": "2026-08-08T16:37:11.8051806+08:00",
   "status": "three-domain-static-screen-two-current-official-baselines-one-external-review-only-hold",
   "purpose": "Screen one smallest representative for each portfolio domain not mapped by the preceding seventeen-candidate cohort, preferring current official capability metadata before an exact-upstream external component, without installation, connection, activation, execution, or behavior claims.",
   "semanticAuthority": {
@@ -38,9 +38,9 @@
     },
     {
       "path": "registry/skill-portfolio-current-authority.json",
-      "bytes": 8864,
-      "sha256": "66a58ad0e4f6f93fa7f5c03cf676d6371f5cf0f159a9086ff4824e7e92746310",
-      "role": "current-portfolio-and-task-time-policy-authority-after-discovery-index-reference-cohort-integration"
+      "bytes": 9670,
+      "sha256": "ab38e4a4e2961c6570344ff8e0151a48c55ab313694b8b452d451ab896189148",
+      "role": "current-portfolio-and-task-time-policy-authority-after-v1.2.3-exact-pin-reconciliation"
     }
   ],
   "cohortContract": {

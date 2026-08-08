@@ -56,12 +56,17 @@ backup, update, and consumer projections.
   invented wizard time estimates as static source improvements only.
 - The dated live observation found all 25 CC Switch payloads already matching
   `v1.2.3`, while all source rows named mutable `main`; the refresh trigger or
-  actor is unproved. Do not blindly refresh or rewrite payloads.
-- Keep `wizard` disabled. Any exact-tag metadata reconciliation is a separate,
-  recoverable CC Switch transaction requiring owner authority. No behavior,
-  value, loader, instruction-delivery, cross-host, or rollback claim follows.
-- Verify this boundary against
-  `registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`.
+  actor remains unproved. The owner-authorized reconciliation subsequently
+  replaced only `repo_branch`, `readme_url`, and `updated_at`; all 25 source
+  rows now name exact tag `v1.2.3` after an ordinary restart.
+- Keep `wizard` disabled. Do not blindly refresh or rewrite payloads: the pin
+  transaction preserved payload bytes, consumer links, enabled flags, and the
+  manager-owned opaque `content_hash`. A recovery journal remains local.
+- No behavior, value, loader, instruction-delivery, cross-host, live-rollback,
+  or production claim follows. Verify the historical mutable `main` finding
+  against `registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json`
+  and the current exact-pin state against
+  `registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json`.
 
 ## Execution discipline
 

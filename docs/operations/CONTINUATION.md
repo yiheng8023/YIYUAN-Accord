@@ -5300,3 +5300,29 @@ rollback, or production readiness. Evidence:
 The exact-source Git-only temporary root used by the preview was sent to the
 Windows Recycle Bin after the report was bound; its original path no longer
 exists and cleanup remains recoverable.
+
+## 2026-08-08 Matt v1.2.3 exact-pin reconciliation checkpoint
+
+The owner explicitly authorized exact pin alignment. Live branch/status/HEAD,
+the upstream annotated tag, all 25 payload trees, and the 72 consumer symlinks
+were rechecked first. A new repository-owned metadata transaction then stopped
+CC Switch 3.19.2 and changed only `repo_branch`, `readme_url`, and `updated_at`
+for the 25 `mattpocock/skills` rows. The committed journal is
+`C:/Users/15521/.cc-switch/skill-backups/aah-matt-v123-exact-pin-20260808T161214/journal.json`.
+
+CC Switch restarted normally and the exact `v1.2.3` metadata persisted. All
+payload, projection, enablement, installation, and opaque manager
+`content_hash` fields were preserved; `wizard` remains disabled. The post-
+restart report still shows 20 payloads shared by v1.2.2/v1.2.3, five v1.2.3-
+only payloads, 72 symlinks, zero direct consumer directories, and zero model or
+third-party execution. The exact-source temporary Git root was moved to the
+Windows Recycle Bin and one recoverable same-name entry was verified.
+
+Repository evidence is
+`registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json`.
+The 46/15/0 acceptance inventory is unchanged. This is provenance and
+transaction evidence only: no loader, instruction delivery, behavior, value,
+cross-host portability, live rollback, or production claim follows. Return to
+the current scheduler; do not request an invented Claude task. Stop only at a
+new trust, activation, account, model-dispatch, publish, delete, or other
+authority boundary.

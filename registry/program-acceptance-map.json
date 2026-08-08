@@ -618,7 +618,8 @@
         "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
         "evidence.claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07",
         "evidence.claude-plugin-skill-root-readonly-inventory-2026-08-07",
-        "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07"
+        "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
+        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08"
       ]
     },
     {
@@ -839,7 +840,8 @@
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
         "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07",
         "evidence.claude-consumer-skill-projection-snapshot-2026-08-07",
-        "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07"
+        "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
+        "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08"
       ]
     },
     {
@@ -2925,6 +2927,16 @@
       "path": "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
       "kind": "exact-release-static-delta-and-read-only-live-manager-payload-identity-with-mutable-main-metadata-drift-no-behavior-value-or-update-trigger-proof",
       "asOf": "2026-08-07",
+      "supports": [
+        "acceptance.cc-switch-source-preserving-skill-pool",
+        "acceptance.consumer-mapping-evidence"
+      ]
+    },
+    {
+      "id": "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08",
+      "path": "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
+      "kind": "owner-authorized-recoverable-metadata-only-exact-v1.2.3-source-pin-with-unchanged-payload-projection-enablement-and-restart-persistence-no-loader-behavior-value-portability-or-production-proof",
+      "asOf": "2026-08-08",
       "supports": [
         "acceptance.cc-switch-source-preserving-skill-pool",
         "acceptance.consumer-mapping-evidence"

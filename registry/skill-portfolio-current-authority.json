@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "skill-portfolio-current-authority-v1",
-  "asOf": "2026-08-06",
+  "asOf": "2026-08-08",
   "status": "current-policy-authority",
   "activeRelease": null,
   "activeAdaptedThirdPartyPayloadReleaseCount": 0,
@@ -30,14 +30,15 @@
     "valueProved": false
   },
   "currentObservedMattSuiteState": {
-    "event": "registry/mattpocock-skills-v1.2.2-cc-manager-cohort-update-event-2026-08-06.json",
-    "predecessor": "registry/mattpocock-skills-upstream-drift-and-live-hybrid-observation-2026-08-06.json",
-    "manifestPreview": "registry/mattpocock-skills-v1.2.2-manifest-update-preview-2026-08-06.json",
+    "event": "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
+    "predecessor": "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
+    "priorManagerCohortUpdate": "registry/mattpocock-skills-v1.2.2-cc-manager-cohort-update-event-2026-08-06.json",
+    "postRestartReport": "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json",
     "scriptAndCommonRootAdjudication": "registry/mattpocock-skills-v1.2.2-script-and-common-root-adjudication-2026-08-06.json",
     "commonRootCollisionDisposition": "registry/mattpocock-skills-v1.2.2-codex-common-root-collision-and-disposition-2026-08-06.json",
     "commonRootReconciliationEvent": "registry/matt-common-root-reconciliation-event-2026-08-06.json",
-    "upstreamReleaseTag": "v1.2.2",
-    "upstreamReleaseCommit": "8b36d4fb2635b3c21998dcd8144439c9e5ba7302",
+    "upstreamReleaseTag": "v1.2.3",
+    "upstreamReleaseCommit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
     "currentPromotedCount": 25,
     "currentRecursiveSkillCount": 35,
     "sourceRowCount": 25,
@@ -50,6 +51,18 @@
       "grokbuild": 0
     },
     "singleExactRevisionExplainsLivePayload": true,
+    "databaseSourceMetadataPinnedToExactRelease": true,
+    "metadataOnlyExactPinReconciliationExecuted": true,
+    "metadataOnlyExactPinReconciliationRecoverable": true,
+    "metadataOnlyChangedColumns": [
+      "repo_branch",
+      "readme_url",
+      "updated_at"
+    ],
+    "managerContentHashTreatment": "opaque-manager-owned-preserved-unchanged",
+    "payloadBytesWrittenByExactPin": false,
+    "consumerProjectionsWrittenByExactPin": false,
+    "enabledFlagsWrittenByExactPin": false,
     "payloadClassificationCounts": {
       "exactRelease": 25,
       "missing": 0
@@ -77,10 +90,13 @@
     "wholeCohortRecoverable": true,
     "wholeCohortCrossFilesystemDatabaseAtomicCommitProved": false,
     "liveRollbackExecuted": false,
+    "failureInjectionRollbackProved": true,
+    "explicitSyntheticRollbackProved": true,
     "releasedManagerAtomicCohortUpdateProved": false,
     "singleManagerRevisionClosureAcrossConsumersProved": true,
     "singleManagerRevisionClosureScope": "exact-payload-projection-and-no-model-listing-path-only",
     "managerVersionAfterOrdinaryRestart": "3.19.2",
+    "exactPinPersistenceAfterOrdinaryRestartProved": true,
     "managerAutoUpdateObservedDuringOrdinaryRestart": true,
     "invocationProved": false,
     "behaviorProved": false,
