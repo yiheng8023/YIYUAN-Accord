@@ -77,6 +77,7 @@ EXECUTION_COUNTERS = {
     "enablementCount": 0,
     "publicationCount": 0,
 }
+HEX_DIGITS = frozenset("0123456789abcdef")
 
 
 class BatchBindingError(DecisionPacketError):
@@ -111,6 +112,62 @@ def build_canonical_probe_request(scenario_id: str) -> dict[str, object]:
 
 def _public_binding(record: dict[str, Any]) -> dict[str, Any]:
     return {key: record[key] for key in ("path", "id", "sha256")}
+
+
+def _strict_json_equal(actual: object, expected: object) -> bool:
+    """Compare JSON values without Python's bool/int or int/float aliases."""
+
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return set(actual) == set(expected) and all(
+            _strict_json_equal(actual[key], value)
+            for key, value in expected.items()
+        )
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(
+            _strict_json_equal(actual_item, expected_item)
+            for actual_item, expected_item in zip(actual, expected, strict=True)
+        )
+    return actual == expected
+
+
+def _is_nonempty_string(value: object) -> bool:
+    return type(value) is str and bool(value)
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        type(value) is str
+        and len(value) == 64
+        and set(value).issubset(HEX_DIGITS)
+    )
+
+
+def _is_source_binding(value: object) -> bool:
+    return (
+        type(value) is dict
+        and set(value) == {"path", "id", "sha256"}
+        and _is_nonempty_string(value["path"])
+        and _is_nonempty_string(value["id"])
+        and _is_sha256(value["sha256"])
+    )
+
+
+def _is_manifest_entry(value: object) -> bool:
+    return (
+        type(value) is dict
+        and set(value) == MANIFEST_ENTRY_FIELDS
+        and _is_nonempty_string(value["scenarioId"])
+        and type(value["bindingMode"]) is str
+        and value["bindingMode"] in {"scenario-record", "document-level-support"}
+        and _is_nonempty_string(value["sourcePath"])
+        and _is_sha256(value["sourceSha256"])
+        and _is_sha256(value["packetSha256"])
+        and _is_nonempty_string(value["decisionState"])
+        and value["selectedRoute"] is None
+        and _is_nonempty_string(value["bindingEvidenceCeiling"])
+    )
 
 
 def _issue(
@@ -264,26 +321,46 @@ def _raise_manifest_issue(
 def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
     """Independently rebuild and compare the complete manifest projection."""
 
-    if not isinstance(manifest, dict) or set(manifest) != MANIFEST_FIELDS:
+    if type(manifest) is not dict or set(manifest) != MANIFEST_FIELDS:
         _raise_manifest_issue(
             "invalid-manifest-shape",
             "Manifest must contain exactly its v1 fields.",
         )
     assert isinstance(manifest, dict)
-    entries = manifest.get("entries")
-    if not isinstance(entries, list) or not all(
-        isinstance(entry, dict) and set(entry) == MANIFEST_ENTRY_FIELDS
-        for entry in entries
+    if not (
+        type(manifest["schema"]) is int
+        and _is_nonempty_string(manifest["id"])
+        and type(manifest["packetSchema"]) is int
+        and type(manifest["atomic"]) is bool
+        and type(manifest["scenarioCount"]) is int
+        and type(manifest["entries"]) is list
+        and type(manifest["executionCounters"]) is dict
+        and type(manifest["authorizationGates"]) is dict
+        and type(manifest["claimBoundary"]) is dict
+        and type(manifest["projectionBoundary"]) is dict
+        and _is_sha256(manifest["manifestSha256"])
     ):
         _raise_manifest_issue(
             "invalid-manifest-shape",
-            "Manifest entries must contain exactly their v1 fields.",
+            "Manifest fields must use their exact JSON schema types.",
         )
-    bindings = manifest.get("authorityBinding")
-    if not isinstance(bindings, dict) or set(bindings) != AUTHORITY_BINDING_FIELDS:
+    entries = manifest.get("entries")
+    if not isinstance(entries, list) or not all(
+        _is_manifest_entry(entry) for entry in entries
+    ):
         _raise_manifest_issue(
             "invalid-manifest-shape",
-            "Manifest authority bindings must contain exactly the current sources.",
+            "Manifest entries must contain exactly their typed v1 fields.",
+        )
+    bindings = manifest.get("authorityBinding")
+    if (
+        type(bindings) is not dict
+        or set(bindings) != AUTHORITY_BINDING_FIELDS
+        or not all(_is_source_binding(value) for value in bindings.values())
+    ):
+        _raise_manifest_issue(
+            "invalid-manifest-shape",
+            "Manifest authority bindings must contain exactly the typed current sources.",
         )
 
     assert isinstance(bindings, dict)
@@ -314,7 +391,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
 
     expected = _build_manifest_projection(root)
     for field in ("schema", "id", "packetSchema", "atomic", "scenarioCount"):
-        if manifest.get(field) != expected[field]:
+        if not _strict_json_equal(manifest.get(field), expected[field]):
             _raise_manifest_issue(
                 "invalid-manifest-shape",
                 f"Manifest {field} differs from the v1 contract.",
@@ -328,7 +405,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
         "acceptance",
         "bindingRegistry",
     ):
-        if bindings.get(name) != expected_bindings[name]:
+        if not _strict_json_equal(bindings.get(name), expected_bindings[name]):
             code = (
                 "binding-registry-digest-drift"
                 if name == "bindingRegistry"
@@ -355,7 +432,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
             "Manifest entries do not preserve current coverage order.",
         )
     for actual, expected_entry in zip(entries, expected_entries, strict=True):
-        if actual == expected_entry:
+        if _strict_json_equal(actual, expected_entry):
             continue
         scenario_id = expected_entry["scenarioId"]
         if actual.get("sourceSha256") != expected_entry["sourceSha256"]:
@@ -384,22 +461,28 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
             path=expected_entry["sourcePath"],
         )
 
-    if manifest.get("executionCounters") != EXECUTION_COUNTERS:
+    if not _strict_json_equal(
+        manifest.get("executionCounters"), EXECUTION_COUNTERS
+    ):
         _raise_manifest_issue(
             "execution-counter-promotion",
             "Manifest execution counters must remain exactly zero.",
         )
-    if manifest.get("authorizationGates") != AUTHORIZATION_GATES:
+    if not _strict_json_equal(
+        manifest.get("authorizationGates"), AUTHORIZATION_GATES
+    ):
         _raise_manifest_issue(
             "authorization-gate-promotion",
             "Manifest authorization gates must remain exactly false.",
         )
-    if manifest.get("claimBoundary") != expected["claimBoundary"]:
+    if not _strict_json_equal(
+        manifest.get("claimBoundary"), expected["claimBoundary"]
+    ):
         _raise_manifest_issue(
             "claim-boundary-promotion",
             "Manifest claim boundary differs from current coverage authority.",
         )
-    if manifest.get("projectionBoundary") != PROJECTION_BOUNDARY:
+    if not _strict_json_equal(manifest.get("projectionBoundary"), PROJECTION_BOUNDARY):
         _raise_manifest_issue(
             "projection-boundary-drift",
             "Manifest projection boundary differs from the packet contract.",

@@ -35,6 +35,7 @@ SOURCE_MUTATION_EXPECTATIONS = {
     "test_unresolved_pointer_is_rejected": "binding-pointer-unresolved",
     "test_wrong_identity_is_rejected": "binding-scenario-identity-mismatch",
     "test_missing_second_ops_pointer_is_rejected": "binding-scenario-identity-mismatch",
+    "test_undeclared_binding_mode_is_rejected": "binding-mode-invalid",
     "test_document_level_mode_promotion_is_rejected": "document-level-identity-promotion",
     "test_aggregate_identity_drift_is_rejected": "binding-aggregate-identity-drift",
     "test_document_level_identity_appearance_is_rejected": "document-level-identity-promotion",
@@ -109,10 +110,16 @@ class HarnessDecisionPacketManifestTests(unittest.TestCase):
         mutated["manifestSha256"] = canonical_sha256(
             {key: value for key, value in mutated.items() if key != "manifestSha256"}
         )
-        with self.assertRaises(BatchBindingError) as raised:
+        try:
             validate_decision_packet_manifest(ROOT, mutated)
+        except BatchBindingError as error:
+            raised = error
+        except Exception as error:
+            self.fail(f"Manifest validation leaked {type(error).__name__}: {error}")
+        else:
+            self.fail("Manifest mutation was accepted.")
         self.assertIn(
-            expected_code, [item["code"] for item in raised.exception.issues]
+            expected_code, [item["code"] for item in raised.issues]
         )
 
     def test_canonical_request_is_zero_model_and_unbound(self) -> None:
@@ -243,6 +250,79 @@ class HarnessDecisionPacketManifestTests(unittest.TestCase):
             [item["code"] for item in raised.exception.issues],
         )
 
+    def test_top_level_constants_require_exact_json_types(self) -> None:
+        cases = (
+            ("schema", True),
+            ("packetSchema", 2.0),
+            ("atomic", 1),
+            ("scenarioCount", 13.0),
+        )
+        for field, replacement in cases:
+            with self.subTest(field=field, replacement=replacement):
+                self.assert_manifest_issue(
+                    lambda value, field=field, replacement=replacement: value.__setitem__(
+                        field, replacement
+                    ),
+                    "invalid-manifest-shape",
+                )
+
+    def test_nested_constants_require_exact_json_types(self) -> None:
+        cases = (
+            (
+                lambda value: value["executionCounters"].__setitem__(
+                    "modelRequestCount", False
+                ),
+                "execution-counter-promotion",
+            ),
+            (
+                lambda value: value["authorizationGates"].__setitem__(
+                    "install", 0
+                ),
+                "authorization-gate-promotion",
+            ),
+            (
+                lambda value: value["claimBoundary"].__setitem__(
+                    "candidateCausationProved", 0
+                ),
+                "claim-boundary-promotion",
+            ),
+            (
+                lambda value: value["projectionBoundary"].__setitem__(
+                    "derivedProjectionNotAuthority", 1
+                ),
+                "projection-boundary-drift",
+            ),
+            (
+                lambda value: value["projectionBoundary"].__setitem__(
+                    "pluginReleaseEligible", 0
+                ),
+                "projection-boundary-drift",
+            ),
+        )
+        for mutate, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                self.assert_manifest_issue(mutate, expected_code)
+
+    def test_manifest_entry_values_require_schema_types_before_set_logic(self) -> None:
+        cases = (
+            ("scenarioId", []),
+            ("bindingMode", 1),
+            ("sourcePath", []),
+            ("sourceSha256", False),
+            ("packetSha256", False),
+            ("decisionState", []),
+            ("selectedRoute", False),
+            ("bindingEvidenceCeiling", []),
+        )
+        for field, replacement in cases:
+            with self.subTest(field=field, replacement=replacement):
+                self.assert_manifest_issue(
+                    lambda value, field=field, replacement=replacement: value[
+                        "entries"
+                    ][0].__setitem__(field, replacement),
+                    "invalid-manifest-shape",
+                )
+
     def test_registry_missing_scenario_is_rejected(self) -> None:
         def mutate(root: Path) -> None:
             self.rewrite_json(
@@ -357,6 +437,18 @@ class HarnessDecisionPacketManifestTests(unittest.TestCase):
         self.assert_source_build_issue(
             lambda root: self.rewrite_json(
                 root, AUTHORITY_PATHS[4], remove_pointer
+            ),
+            SOURCE_MUTATION_EXPECTATIONS[self._testMethodName],
+        )
+
+    def test_undeclared_binding_mode_is_rejected(self) -> None:
+        self.assert_source_build_issue(
+            lambda root: self.rewrite_json(
+                root,
+                AUTHORITY_PATHS[4],
+                lambda value: value["bindings"][0].__setitem__(
+                    "bindingMode", "undeclared-mode"
+                ),
             ),
             SOURCE_MUTATION_EXPECTATIONS[self._testMethodName],
         )
