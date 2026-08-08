@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -12,6 +13,14 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 ROUTE_CLASSES = ("N", "O", "E", "C", "H", "R")
+ROUTE_NAMES = {
+    "N": "native",
+    "O": "official-or-runtime-owned",
+    "E": "reviewed-external",
+    "C": "composition",
+    "H": "accountable-human-control",
+    "R": "residual-or-repository-authored",
+}
 EVIDENCE_LANES = {"portfolio-curation", "mechanism-validation", "task-time"}
 SEMANTIC_AUTHORITY_PATH = Path("registry/skill-portfolio-current-authority.json")
 COVERAGE_PATH = Path(
@@ -30,6 +39,39 @@ REQUEST_FIELDS = {
     "taskBinding",
     "currentCapabilityGap",
     "activationAuthority",
+}
+PACKET_FIELDS = {
+    "schema",
+    "packetId",
+    "authorityBinding",
+    "request",
+    "sourceEvidence",
+    "routeCoverage",
+    "fallbackOrder",
+    "decisionState",
+    "selectedRoute",
+    "authorizationGates",
+    "claimBoundary",
+    "recheckTriggers",
+    "projectionBoundary",
+    "packetSha256",
+}
+AUTHORIZATION_GATES = {
+    "install": False,
+    "enable": False,
+    "connectAccount": False,
+    "executeCandidate": False,
+    "dispatchModel": False,
+    "publish": False,
+    "release": False,
+    "mutateCcSwitch": False,
+    "mutateConsumer": False,
+}
+PROJECTION_BOUNDARY = {
+    "derivedProjectionNotAuthority": True,
+    "legacyRoutingIsCurrentAuthority": False,
+    "portableCoreDependsOnCcSwitch": False,
+    "pluginReleaseEligible": False,
 }
 SCENARIO_ID_PATTERN = re.compile(r"^[A-Z][A-Z0-9-]*$")
 
@@ -501,3 +543,248 @@ def validate_bound_source_digests(root: Path, bundle: object) -> None:
                 "Bound source digest no longer matches current repository bytes.",
                 path=path,
             )
+
+
+def _public_binding(record: dict[str, Any]) -> dict[str, Any]:
+    return {key: record[key] for key in ("path", "id", "sha256")}
+
+
+def _decision_state(request: dict[str, Any]) -> str:
+    lane = request["evidenceLane"]
+    if lane == "portfolio-curation":
+        return "coverage-packet-only"
+    if lane == "mechanism-validation":
+        return "mechanism-evidence-only"
+    if request["taskBinding"] is None:
+        return "needs-task-binding"
+    if request["currentCapabilityGap"] is None:
+        return "needs-current-capability-gap"
+    if request["observedAvailability"] is None:
+        return "needs-live-availability"
+    if request["activationAuthority"] is None:
+        return "needs-activation-authority"
+    return "needs-human-judgment"
+
+
+def _packet_source_evidence(bundle: dict[str, Any]) -> list[dict[str, Any]]:
+    evidence_ceiling = bundle["scenario"]["inheritedEvidenceState"]
+    result: list[dict[str, Any]] = []
+    for record in bundle["sourceEvidence"]:
+        result.append(
+            {
+                "path": record["path"],
+                "id": record["id"],
+                "sha256": record["sha256"],
+                "status": record["status"],
+                "evidenceCeiling": evidence_ceiling,
+                "historicalAuthorityBoundary": copy.deepcopy(
+                    record["document"].get("authorityBoundary", {})
+                ),
+            }
+        )
+    return result
+
+
+def _packet_route_coverage(scenario: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {
+        route: {
+            "name": ROUTE_NAMES[route],
+            "state": scenario["routeCoverage"][route]["state"],
+            "candidateIds": copy.deepcopy(scenario["routeCoverage"][route]["candidateIds"]),
+            "evidenceCeiling": scenario["routeCoverage"][route]["evidenceCeiling"],
+        }
+        for route in ROUTE_CLASSES
+    }
+
+
+def build_decision_packet(root: Path, request: object) -> dict[str, Any]:
+    """Build a deterministic, source-bound decision packet without selecting a route."""
+
+    bundle = load_authority_bundle(root, request)
+    validate_bound_source_digests(root, bundle)
+    assert isinstance(request, dict)
+    coverage_document = bundle["coverage"]["document"]
+    claim_boundary = copy.deepcopy(coverage_document["claimBoundary"])
+    if not isinstance(claim_boundary, dict) or any(value is not False for value in claim_boundary.values()):
+        raise DecisionPacketError(
+            "claim-boundary-promotion",
+            "Current coverage authority does not preserve false claim ceilings.",
+        )
+    packet: dict[str, Any] = {
+        "schema": 1,
+        "packetId": f"harness-decision-packet-v1:{request['requestId']}",
+        "authorityBinding": {
+            "semanticAuthority": _public_binding(bundle["semanticAuthority"]),
+            "coverage": _public_binding(bundle["coverage"]),
+            "scheduler": _public_binding(bundle["scheduler"]),
+            "acceptance": _public_binding(bundle["acceptance"]),
+        },
+        "request": copy.deepcopy(request),
+        "sourceEvidence": _packet_source_evidence(bundle),
+        "routeCoverage": _packet_route_coverage(bundle["scenario"]),
+        "fallbackOrder": copy.deepcopy(bundle["scenario"]["fallbackOrder"]),
+        "decisionState": _decision_state(request),
+        "selectedRoute": None,
+        "authorizationGates": copy.deepcopy(AUTHORIZATION_GATES),
+        "claimBoundary": claim_boundary,
+        "recheckTriggers": copy.deepcopy(coverage_document["recheckTriggers"]),
+        "projectionBoundary": copy.deepcopy(PROJECTION_BOUNDARY),
+    }
+    packet["packetSha256"] = canonical_sha256(packet)
+    validate_decision_packet(root, packet)
+    return packet
+
+
+def _raise_route_drift(route: str, expected: dict[str, Any], actual: object) -> None:
+    if route in {"O", "E"} and expected.get("state") == "unassessed":
+        raise DecisionPacketError(
+            "unassessed-route-promotion",
+            f"Unassessed route {route} cannot be promoted by a derived packet.",
+        )
+    if route == "R" and expected.get("state") == "not-eligible-no-residual-gap":
+        raise DecisionPacketError(
+            "residual-gap-promotion",
+            "Residual route cannot be promoted without a proved residual gap.",
+        )
+    raise DecisionPacketError(
+        "historical-authority-promotion",
+        f"Route {route} differs from current coverage authority.",
+    )
+
+
+def validate_decision_packet(root: Path, packet: object) -> None:
+    """Independently reopen and compare every authority-bound packet field."""
+
+    if not isinstance(packet, dict) or set(packet) != PACKET_FIELDS:
+        raise DecisionPacketError(
+            "invalid-packet-shape", "Decision packet must contain exactly the v1 fields."
+        )
+    request = packet.get("request")
+    validate_decision_request(request)
+    assert isinstance(request, dict)
+    bundle = load_authority_bundle(root, request)
+    validate_bound_source_digests(root, bundle)
+
+    if packet.get("schema") != 1:
+        raise DecisionPacketError("invalid-packet-shape", "Packet schema must be 1.")
+    if packet.get("packetId") != f"harness-decision-packet-v1:{request['requestId']}":
+        raise DecisionPacketError("invalid-packet-shape", "Packet ID does not match the request.")
+
+    expected_bindings = {
+        "semanticAuthority": _public_binding(bundle["semanticAuthority"]),
+        "coverage": _public_binding(bundle["coverage"]),
+        "scheduler": _public_binding(bundle["scheduler"]),
+        "acceptance": _public_binding(bundle["acceptance"]),
+    }
+    bindings = packet.get("authorityBinding")
+    if not isinstance(bindings, dict) or set(bindings) != set(expected_bindings):
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Authority binding set is not current."
+        )
+    semantic_binding = bindings.get("semanticAuthority")
+    if not isinstance(semantic_binding, dict) or semantic_binding.get("id") != expected_bindings[
+        "semanticAuthority"
+    ]["id"]:
+        raise DecisionPacketError(
+            "semantic-authority-id-mismatch", "Packet semantic authority ID is not current."
+        )
+    for key, expected in expected_bindings.items():
+        if bindings.get(key) != expected:
+            raise DecisionPacketError(
+                "historical-authority-promotion", f"Packet {key} binding is not current."
+            )
+
+    expected_sources = _packet_source_evidence(bundle)
+    actual_sources = packet.get("sourceEvidence")
+    if not isinstance(actual_sources, list) or len(actual_sources) != len(expected_sources):
+        raise DecisionPacketError("evidence-source-missing", "Packet source evidence set is incomplete.")
+    for expected, actual in zip(expected_sources, actual_sources, strict=True):
+        if not isinstance(actual, dict) or actual.get("path") != expected["path"]:
+            raise DecisionPacketError("evidence-source-missing", "Packet source evidence path drifted.")
+        if actual.get("sha256") != expected["sha256"]:
+            raise DecisionPacketError(
+                "evidence-source-digest-drift", "Packet source evidence digest drifted."
+            )
+        if actual != expected:
+            raise DecisionPacketError(
+                "historical-authority-promotion", "Packet source evidence metadata drifted."
+            )
+
+    expected_routes = _packet_route_coverage(bundle["scenario"])
+    actual_routes = packet.get("routeCoverage")
+    if not isinstance(actual_routes, dict) or set(actual_routes) != set(ROUTE_CLASSES):
+        raise DecisionPacketError(
+            "route-class-coverage-incomplete", "Packet must preserve exactly six route classes."
+        )
+    for route in ROUTE_CLASSES:
+        if actual_routes[route] != expected_routes[route]:
+            _raise_route_drift(route, expected_routes[route], actual_routes[route])
+
+    if packet.get("fallbackOrder") != bundle["scenario"]["fallbackOrder"]:
+        raise DecisionPacketError("fallback-order-drift", "Packet fallback order is not current.")
+    selected_route = packet.get("selectedRoute")
+    if selected_route is not None:
+        if request["evidenceLane"] == "portfolio-curation":
+            raise DecisionPacketError(
+                "portfolio-selected-route", "Portfolio curation may not select an execution route."
+            )
+        if request["evidenceLane"] == "task-time":
+            raise DecisionPacketError(
+                "task-time-route-selection", "Version one may not select a task-time route."
+            )
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Version one may not select a mechanism route."
+        )
+    if packet.get("decisionState") != _decision_state(request):
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Packet decision state is not derived from the request."
+        )
+
+    expected_claims = bundle["coverage"]["document"]["claimBoundary"]
+    claims = packet.get("claimBoundary")
+    if not isinstance(claims, dict) or set(claims) != set(expected_claims) or any(
+        value is not False for value in claims.values()
+    ):
+        raise DecisionPacketError(
+            "claim-boundary-promotion", "Packet cannot promote evidence or value claims."
+        )
+    if claims != expected_claims:
+        raise DecisionPacketError(
+            "claim-boundary-promotion", "Packet claim boundary differs from current authority."
+        )
+    gates = packet.get("authorizationGates")
+    if gates != AUTHORIZATION_GATES:
+        raise DecisionPacketError(
+            "authorization-gate-promotion", "Packet cannot authorize lifecycle side effects."
+        )
+    if packet.get("recheckTriggers") != bundle["coverage"]["document"]["recheckTriggers"]:
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Packet recheck triggers are not current."
+        )
+    projection = packet.get("projectionBoundary")
+    if not isinstance(projection, dict):
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Packet projection boundary is missing."
+        )
+    if projection.get("legacyRoutingIsCurrentAuthority") is not False:
+        raise DecisionPacketError(
+            "deprecated-routing-authority-promotion", "Deprecated routing cannot regain authority."
+        )
+    if projection.get("portableCoreDependsOnCcSwitch") is not False:
+        raise DecisionPacketError(
+            "portable-core-dependency-promotion", "Portable core cannot depend on CC Switch."
+        )
+    if projection != PROJECTION_BOUNDARY:
+        raise DecisionPacketError(
+            "historical-authority-promotion", "Packet projection boundary is not current."
+        )
+
+    body = {key: value for key, value in packet.items() if key != "packetSha256"}
+    if packet.get("packetSha256") != canonical_sha256(body):
+        raise DecisionPacketError("packet-digest-mismatch", "Packet digest is invalid.")
+
+
+def serialize_decision_packet(packet: object) -> bytes:
+    """Validate-independent callers receive canonical JSON plus one newline."""
+
+    return canonical_json_bytes(packet) + b"\n"
