@@ -5326,3 +5326,21 @@ cross-host portability, live rollback, or production claim follows. Return to
 the current scheduler; do not request an invented Claude task. Stop only at a
 new trust, activation, account, model-dispatch, publish, delete, or other
 authority boundary.
+
+## 2026-08-08 program closeout-readiness refresh checkpoint
+
+After the exact pin, the program-level closeout audit was stale in one
+material place: its consumer/source cluster still described Matt as 24 exact
+`v1.2.2` source-backed entries. The record, documentation, goal-mode prompt,
+plan, validator, and tests now bind the 2026-08-08 metadata-only `v1.2.3`
+transaction and post-restart report while retaining the 2026-08-07 Codex and
+Claude snapshots as historical evidence.
+
+The canonical inventory remains 46 verified / 15 partial / 0 planned across
+six clusters. Exact source provenance and 72 manager symlinks do not prove
+loader precedence, task delivery, live recovery for supported consumers,
+disabled-consumer reconciliation, cross-device convergence, behavior, value,
+or production readiness. The refresh performs no model call, capability or
+account mutation, CC Switch write, cleanup, acceptance upgrade, or goal-status
+mutation. Evidence:
+`registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.

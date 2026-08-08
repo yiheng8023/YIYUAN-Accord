@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "program-final-closeout-readiness-reconciliation-2026-07-28",
   "date": "2026-07-28",
-  "lastReconciledDate": "2026-08-07",
+  "lastReconciledDate": "2026-08-08",
   "status": "current-program-closeout-audited-cannot-close",
   "purpose": "Reconcile every non-verified program acceptance criterion against current evidence so a local green verifier, one host-observability decision, or one completed PoC cannot be mistaken for final program closeout.",
   "sourceBindings": {
@@ -17,7 +17,10 @@
     "codexConsumerSkillMappingSnapshot": "registry/codex-consumer-skill-mapping-snapshot-2026-08-07.json",
     "claudeConsumerSkillProjectionSnapshot": "registry/claude-consumer-skill-projection-snapshot-2026-08-07.json",
     "claudePluginSkillRootInventoryPreflight": "registry/claude-plugin-skill-root-readonly-inventory-preflight-2026-08-07.json",
-    "claudePluginSkillRootInventory": "registry/claude-plugin-skill-root-readonly-inventory-2026-08-07.json"
+    "claudePluginSkillRootInventory": "registry/claude-plugin-skill-root-readonly-inventory-2026-08-07.json",
+    "mattV123UpstreamAndLiveDriftReview": "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
+    "mattV123ExactPinReconciliation": "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
+    "mattV123ExactPinPostRestartReport": "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json"
   },
   "acceptanceSnapshot": {
     "totalCriteria": 61,
@@ -130,7 +133,7 @@
     {
       "id": "consumer-and-source-governance",
       "openCriteriaCount": 4,
-      "currentBoundary": "Dated read-only Codex and Claude snapshots reconcile the common and host-specific physical projections, 44 CC Switch rows, 24 exact v1.2.2 source-backed entries, 20 local identities, materialized tree identity, and one cross-consumer projection-shape difference. The separately authorized field-bound Claude Plugin inventory records one registered marketplace, 257 catalog metadata entries, 17 local cached Skill roots, four remote manifest entries with 17 locators, and no reparse point. Cache presence does not prove installation or enablement; settings were not read, and loader precedence, task-bound invocation and delivery, backup/restore, other consumers, and cross-device layers remain unproved.",
+      "currentBoundary": "The 2026-08-07 dated Codex and Claude snapshots remain historical evidence for the common and host-specific physical roots. The 2026-08-08 owner-authorized Matt reconciliation freshly proves 25 exact v1.2.3 payloads, 25 source rows pinned to the exact tag after an ordinary CC Switch 3.19.2 restart, 24 enabled projections per common/Claude/Codex root, 72 manager symlinks, zero direct same-name directories, unchanged payload/projection/enablement surfaces, and a retained recovery journal. The separately authorized field-bound Claude Plugin inventory records one registered marketplace, 257 catalog metadata entries, 17 local cached Skill roots, four remote manifest entries with 17 locators, and no reparse point. None of this proves loader precedence, task-bound invocation or delivery, live rollback, supported recovery across consumers, other disabled consumers, cross-device convergence, behavior, or value.",
       "nextEvidenceClass": "read-only per-consumer authority reconciliation plus separately authorized supported recovery or convergence canaries"
     },
     {
@@ -154,6 +157,7 @@
   ],
   "currentEvidenceProgress": {
     "mattDependencyCompleteNoModelExposure": "covered",
+    "mattV123ExactSourceMetadataPin": "covered-restart-persistent-metadata-only",
     "selfAuthoredStaticSubtractiveAudit": "covered-with-limits",
     "repositoryAuthoredGapFillGate": "verified-synthetic-mechanism-only",
     "currentHostLoaderHookObservability": "negative-admission-recorded",

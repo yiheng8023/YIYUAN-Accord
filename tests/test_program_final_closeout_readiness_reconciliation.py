@@ -56,6 +56,28 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
             self.document["sourceBindings"]["claudePluginSkillRootInventoryPreflight"],
         )
 
+    def test_reconciliation_binds_matt_v123_exact_pin_without_closing_program(self) -> None:
+        self.assertEqual(
+            "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
+            self.document["sourceBindings"]["mattV123ExactPinReconciliation"],
+        )
+        self.assertEqual(
+            "covered-restart-persistent-metadata-only",
+            self.document["currentEvidenceProgress"]["mattV123ExactSourceMetadataPin"],
+        )
+        self.assertFalse(self.document["closeoutDecision"]["goalComplete"])
+
+    def test_rejects_stale_matt_v122_consumer_boundary(self) -> None:
+        document = copy.deepcopy(self.document)
+        cluster = next(
+            row
+            for row in document["gateClusters"]
+            if row["id"] == "consumer-and-source-governance"
+        )
+        cluster["currentBoundary"] = "24 exact v1.2.2 source-backed entries"
+        with self.assertRaisesRegex(RuntimeError, "consumer/source"):
+            validate_reconciliation(document, root=ROOT)
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61

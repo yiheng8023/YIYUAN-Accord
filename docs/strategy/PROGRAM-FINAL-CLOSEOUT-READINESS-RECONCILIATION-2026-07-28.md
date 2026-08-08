@@ -1,7 +1,7 @@
 # Program final-closeout readiness reconciliation
 
 Date: 2026-07-28
-Last reconciled: 2026-08-07
+Last reconciled: 2026-08-08
 Status: audited; cannot close
 
 Machine-readable authority:
@@ -30,15 +30,17 @@ upgrade those assessments or prove final program completion.
    now fails closed, but native/runtime and reviewed alternatives are not
    exhausted with attributable live evidence, so neither a residual gap nor a
    repository-authored payload need is justified.
-3. Consumer and source governance: dated read-only Codex and Claude snapshots
-   now reconcile the common and host-specific physical projections, 44 CC
-   Switch rows, 24 exact `v1.2.2` source-backed entries, 20 local identities,
-   materialized tree identity, and one cross-consumer projection-shape
-   difference. A fail-closed Claude Plugin Skill-root inventory preflight now
-   binds the next data boundary, but explicit read authorization is absent.
-   Decision-ready burden, loader precedence, task-bound invocation and delivery,
-   Plugin-managed roots, backup/restore, other consumers, and cross-device
-   layers remain unproved.
+3. Consumer and source governance: the dated 2026-08-07 Codex and Claude
+   snapshots remain historical evidence for the common and host-specific
+   physical roots. The 2026-08-08 Matt reconciliation freshly proves 25 exact
+   `v1.2.3` payloads, 25 source rows pinned to the exact tag after an ordinary
+   CC Switch 3.19.2 restart, 24 enabled entries per common/Claude/Codex root,
+   72 manager symlinks, zero direct same-name directories, unchanged payload,
+   projection, and enablement surfaces, and a retained recovery journal. The
+   field-bound Claude Plugin inventory remains separately governed. Loader
+   precedence, task-bound invocation and delivery, live rollback, supported
+   recovery across consumers, other disabled consumers, and cross-device
+   convergence remain unproved.
 4. Standard lifecycle: the standard-candidate package now has one bounded
    AI-era research contract and deterministic negative tests. A synthetic
    graph-scoped planner now proves affected-node closure, bounded ordering,

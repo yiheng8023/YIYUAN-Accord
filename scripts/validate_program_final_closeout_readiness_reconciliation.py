@@ -24,7 +24,8 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
     _require(
         document.get("schema") == 1
         and document.get("status")
-        == "current-program-closeout-audited-cannot-close",
+        == "current-program-closeout-audited-cannot-close"
+        and document.get("lastReconciledDate") == "2026-08-08",
         "Program closeout reconciliation identity drifted",
     )
     sources = document.get("sourceBindings", {})
@@ -33,6 +34,13 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         == str(PROGRAM_MAP_PATH).replace("\\", "/")
         and all((root / path).is_file() for path in sources.values()),
         "Program closeout source binding drifted",
+    )
+    _require(
+        sources.get("mattV123ExactPinReconciliation")
+        == "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json"
+        and sources.get("mattV123ExactPinPostRestartReport")
+        == "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json",
+        "Program closeout Matt v1.2.3 exact-pin binding drifted",
     )
     program = json.loads((root / PROGRAM_MAP_PATH).read_text(encoding="utf-8"))
     criteria = program.get("acceptanceCriteria", [])
@@ -90,6 +98,19 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         gate_clusters == valid_clusters,
         "Program closeout gate-cluster coverage drifted",
     )
+    consumer_cluster = next(
+        row
+        for row in document.get("gateClusters", [])
+        if row.get("id") == "consumer-and-source-governance"
+    )
+    consumer_boundary = consumer_cluster.get("currentBoundary", "")
+    _require(
+        "25 exact v1.2.3 payloads" in consumer_boundary
+        and "72 manager symlinks" in consumer_boundary
+        and "other disabled consumers" in consumer_boundary
+        and "behavior, or value" in consumer_boundary,
+        "Program closeout consumer/source claim boundary drifted",
+    )
     open_ids = set(expected_open)
     expected_open_objectives = {
         row["id"]
@@ -127,6 +148,12 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
     _require(
         authority and all(value is False for value in authority.values()),
         "Program closeout authority expanded",
+    )
+    progress = document.get("currentEvidenceProgress", {})
+    _require(
+        progress.get("mattV123ExactSourceMetadataPin")
+        == "covered-restart-persistent-metadata-only",
+        "Program closeout current evidence progress drifted",
     )
     documentation = document.get("documentation")
     _require(

@@ -82,6 +82,20 @@ backup, update, and consumer projections.
   `registry/portfolio-tasktime-projection-contract-2026-08-06.json` before
   claiming alignment.
 
+## Current program-closeout boundary
+
+- The canonical acceptance inventory remains 46 verified / 15 partial / 0
+  planned across six open evidence clusters. A green verifier or the Matt
+  exact pin cannot close the program.
+- The current closeout audit includes the restart-persistent metadata-only
+  `v1.2.3` reconciliation. Consumer/source governance still lacks loader and
+  task-delivery evidence, live recovery across supported consumers, disabled-
+  consumer reconciliation, and cross-device convergence.
+- Final cleanup remains separately authorized. Do not delete, archive,
+  uninstall, retire, or mark the goal complete from inventory evidence alone.
+- Verify this boundary against
+  `registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.
+
 ## Current LongHorizon boundary
 
 - Treat exact revision `b49ebf9654c1ee75eaf56dfe9eec1745fddcfa58` as a
