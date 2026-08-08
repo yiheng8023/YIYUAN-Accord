@@ -1,0 +1,342 @@
+{
+  "schema": 1,
+  "id": "offline-plugin-projection-poc-2026-08-08",
+  "asOf": "2026-08-08",
+  "status": "offline-preview-verified-release-not-eligible",
+  "documentation": "docs/strategy/OFFLINE-PLUGIN-PROJECTION-POC-2026-08-08.md",
+  "taskContract": {
+    "goal": "Prove a deterministic, zero-model, offline mapping from one canonical repository metadata object to portable Agent Plugins and OpenAI plugin preview fields while preserving lifecycle ownership and failing closed.",
+    "mode": "pure-offline-non-installable-projection-preview",
+    "authorityBoundary": "Repository-owned fixtures, projector, tests, documents, and verification only; no plugin files, install, enable, host loading, account connection, model dispatch, CC Switch mutation, consumer mutation, publication, release, or universal manager implementation.",
+    "verificationSurface": "Literal preview replay, literal structured rejection replay, repository tests, and the top-level local verifier."
+  },
+  "sourceBindings": {
+    "productDecision": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+    "portableSpecification": "https://agent-plugins.org/specification",
+    "openAiPackaging": "https://developers.openai.com/plugins/build/plugins",
+    "liveDocumentationRecheckedAt": "2026-08-08"
+  },
+  "fieldMapping": {
+    "portableAgentPlugins": {
+      "manifest": "plugin.json",
+      "skills": "skills/",
+      "mcp": "mcp.json"
+    },
+    "openAi": {
+      "manifest": ".codex-plugin/plugin.json",
+      "skills": "./skills/",
+      "mcpServers": "./.mcp.json"
+    }
+  },
+  "canonicalFixture": {
+    "schema": 1,
+    "id": "synthetic-harness-plugin-fixture",
+    "name": "harness-projection-fixture",
+    "version": "0.0.0-poc",
+    "description": "Synthetic metadata for offline projection testing.",
+    "author": {
+      "name": "Agent Autonomy Harness"
+    },
+    "repository": "https://github.com/yiheng8023/agent-autonomy-harness",
+    "license": "MIT",
+    "portableCoreDependsOnCcSwitch": false,
+    "releaseEligible": false,
+    "components": [
+      {
+        "id": "fixture-skill",
+        "kind": "skill",
+        "sourceClass": "repository-owned-synthetic-fixture",
+        "lifecycleAuthority": "fixture-only-no-runtime",
+        "fixtureOnly": true
+      },
+      {
+        "id": "fixture-mcp-server",
+        "kind": "mcp-server",
+        "sourceClass": "repository-owned-synthetic-fixture",
+        "lifecycleAuthority": "fixture-only-no-runtime",
+        "fixtureOnly": true
+      }
+    ]
+  },
+  "expectedPreview": {
+    "schema": 1,
+    "status": "preview-only-not-installable",
+    "canonicalSourceId": "synthetic-harness-plugin-fixture",
+    "portableAgentPlugins": {
+      "manifestPath": "plugin.json",
+      "manifest": {
+        "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+        "name": "harness-projection-fixture",
+        "version": "0.0.0-poc",
+        "description": "Synthetic metadata for offline projection testing.",
+        "author": {
+          "name": "Agent Autonomy Harness"
+        },
+        "repository": "https://github.com/yiheng8023/agent-autonomy-harness",
+        "license": "MIT"
+      },
+      "fixedComponentLocations": {
+        "skills": "skills/",
+        "mcp": "mcp.json"
+      }
+    },
+    "openAi": {
+      "manifestPath": ".codex-plugin/plugin.json",
+      "manifest": {
+        "name": "harness-projection-fixture",
+        "version": "0.0.0-poc",
+        "description": "Synthetic metadata for offline projection testing.",
+        "author": {
+          "name": "Agent Autonomy Harness"
+        },
+        "repository": "https://github.com/yiheng8023/agent-autonomy-harness",
+        "license": "MIT",
+        "skills": "./skills/",
+        "mcpServers": "./.mcp.json"
+      }
+    },
+    "ownership": [
+      {
+        "componentId": "fixture-skill",
+        "sourceClass": "repository-owned-synthetic-fixture",
+        "lifecycleAuthority": "fixture-only-no-runtime",
+        "packagedByPreview": true,
+        "runtimeAuthorityAssigned": false
+      },
+      {
+        "componentId": "fixture-mcp-server",
+        "sourceClass": "repository-owned-synthetic-fixture",
+        "lifecycleAuthority": "fixture-only-no-runtime",
+        "packagedByPreview": true,
+        "runtimeAuthorityAssigned": false
+      }
+    ],
+    "claimBoundary": {
+      "createsPluginFiles": false,
+      "provesInstallability": false,
+      "provesHostConformance": false,
+      "provesRuntimeBehavior": false,
+      "provesReleaseReadiness": false
+    }
+  },
+  "failureCases": [
+    {
+      "id": "cc-managed-third-party-bundling",
+      "source": {
+        "schema": 1,
+        "id": "forbidden-cc-payload",
+        "name": "forbidden-cc-payload",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": false,
+        "releaseEligible": false,
+        "components": [
+          {
+            "id": "third-party-skill",
+            "kind": "skill",
+            "sourceClass": "third-party-exact-upstream",
+            "lifecycleAuthority": "cc-switch",
+            "fixtureOnly": false
+          }
+        ]
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "cc-managed-third-party-bundling",
+        "componentId": "third-party-skill",
+        "message": "CC Switch-managed third-party payloads cannot enter a Harness plugin projection."
+      }
+    },
+    {
+      "id": "dual-lifecycle-authority",
+      "source": {
+        "schema": 1,
+        "id": "dual-authority-fixture",
+        "name": "dual-authority-fixture",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": false,
+        "releaseEligible": false,
+        "components": [
+          {
+            "id": "shared-skill",
+            "kind": "skill",
+            "sourceClass": "repository-owned-synthetic-fixture",
+            "lifecycleAuthority": "fixture-only-no-runtime",
+            "fixtureOnly": true
+          },
+          {
+            "id": "shared-skill",
+            "kind": "skill",
+            "sourceClass": "official-runtime-owned",
+            "lifecycleAuthority": "openai-plugin-runtime",
+            "fixtureOnly": false
+          }
+        ]
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "dual-lifecycle-authority",
+        "componentId": "shared-skill",
+        "message": "One component cannot be projected with multiple lifecycle authorities."
+      }
+    },
+    {
+      "id": "portable-core-manager-dependency",
+      "source": {
+        "schema": 1,
+        "id": "manager-dependent-fixture",
+        "name": "manager-dependent-fixture",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": true,
+        "releaseEligible": false,
+        "components": []
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "portable-core-manager-dependency",
+        "message": "The portable Harness core cannot depend on CC Switch."
+      }
+    },
+    {
+      "id": "release-eligibility-promotion",
+      "source": {
+        "schema": 1,
+        "id": "release-eligible-fixture",
+        "name": "release-eligible-fixture",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": false,
+        "releaseEligible": true,
+        "components": []
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "release-eligibility-promotion",
+        "message": "An offline projection preview cannot declare plugin release eligibility."
+      }
+    },
+    {
+      "id": "unsupported-component-kind",
+      "source": {
+        "schema": 1,
+        "id": "unsupported-component-fixture",
+        "name": "unsupported-component-fixture",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": false,
+        "releaseEligible": false,
+        "components": [
+          {
+            "id": "fixture-hook",
+            "kind": "hook",
+            "sourceClass": "repository-owned-synthetic-fixture",
+            "lifecycleAuthority": "fixture-only-no-runtime",
+            "fixtureOnly": true
+          }
+        ]
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "unsupported-component-kind",
+        "componentId": "fixture-hook",
+        "message": "The offline projection PoC supports only skill and mcp-server components."
+      }
+    },
+    {
+      "id": "runtime-owned-component-bundling",
+      "source": {
+        "schema": 1,
+        "id": "runtime-owned-fixture",
+        "name": "runtime-owned-fixture",
+        "version": "0.0.0-poc",
+        "description": "Must fail before projection.",
+        "author": {"name": "Fixture"},
+        "repository": "https://example.invalid/fixture",
+        "license": "MIT",
+        "portableCoreDependsOnCcSwitch": false,
+        "releaseEligible": false,
+        "components": [
+          {
+            "id": "runtime-skill",
+            "kind": "skill",
+            "sourceClass": "official-runtime-owned",
+            "lifecycleAuthority": "openai-plugin-runtime",
+            "fixtureOnly": false
+          }
+        ]
+      },
+      "expectedRejection": {
+        "status": "rejected",
+        "code": "runtime-owned-component-bundling",
+        "componentId": "runtime-skill",
+        "message": "Official runtime-owned components must remain owned by their runtime."
+      }
+    }
+  ],
+  "ownershipPolicy": {
+    "oneLifecycleAuthorityPerComponent": true,
+    "ccManagedThirdPartyPayloadMayBeBundled": false,
+    "portableCoreDependsOnCcSwitch": false,
+    "runtimeAuthorityAssignedByPreview": false
+  },
+  "mechanism": {
+    "projectorAndValidator": "scripts/project_offline_plugin_projection.py",
+    "tests": "tests/test_offline_plugin_projection_poc.py",
+    "writesPluginFiles": false,
+    "loadsHostRuntime": false,
+    "usesModel": false
+  },
+  "acceptanceBoundary": {
+    "canonicalInventoryBefore": {"verified": 46, "partial": 15, "planned": 0},
+    "canonicalInventoryAfter": {"verified": 46, "partial": 15, "planned": 0},
+    "criteriaAdvanced": [],
+    "criteriaStrengthened": [
+      "acceptance.sequence-integrity",
+      "acceptance.consumer-mapping-evidence",
+      "acceptance.broad-capability-ecosystem-boundary"
+    ]
+  },
+  "authorityBoundary": {
+    "pluginCreationAuthorized": false,
+    "installationAuthorized": false,
+    "enablementAuthorized": false,
+    "hostExecutionAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "ccSwitchMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "thirdPartyVendoringAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false,
+    "universalManagerImplementationAuthorized": false
+  },
+  "claimBoundary": {
+    "provesPluginExists": false,
+    "provesPluginInstallability": false,
+    "provesHostConformance": false,
+    "provesInvocationOrInstructionDelivery": false,
+    "provesRuntimeBehavior": false,
+    "provesTaskValue": false,
+    "provesCrossHostPortability": false,
+    "provesProductionReadiness": false,
+    "provesReleaseReadiness": false,
+    "provesCcSwitchReplacementNeed": false
+  }
+}

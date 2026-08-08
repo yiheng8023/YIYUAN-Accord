@@ -513,7 +513,8 @@
         "evidence.round03-demand-coordinate-source-contract",
         "evidence.round03-rebaseline-acceptance",
         "evidence.portfolio-tasktime-projection-contract-2026-08-06",
-        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08",
+        "evidence.offline-plugin-projection-poc-2026-08-08"
       ]
     },
     {
@@ -622,7 +623,8 @@
         "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
         "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08",
         "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08",
-        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08",
+        "evidence.offline-plugin-projection-poc-2026-08-08"
       ]
     },
     {
@@ -998,7 +1000,8 @@
         "evidence.production-capability-manager-design",
         "evidence.production-capability-manager-external-ecosystem-and-stack-review",
         "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
-        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08",
+        "evidence.offline-plugin-projection-poc-2026-08-08"
       ]
     },
     {
@@ -1494,6 +1497,17 @@
       "id": "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08",
       "path": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
       "kind": "owner-accepted-plugin-compatible-manager-agnostic-release-not-eligible-product-distribution-and-single-lifecycle-authority-decision",
+      "asOf": "2026-08-08",
+      "supports": [
+        "acceptance.sequence-integrity",
+        "acceptance.consumer-mapping-evidence",
+        "acceptance.broad-capability-ecosystem-boundary"
+      ]
+    },
+    {
+      "id": "evidence.offline-plugin-projection-poc-2026-08-08",
+      "path": "registry/offline-plugin-projection-poc-2026-08-08.json",
+      "kind": "deterministic-zero-model-dual-format-field-lifecycle-ownership-and-fail-closed-preview-only-plugin-projection-poc",
       "asOf": "2026-08-08",
       "supports": [
         "acceptance.sequence-integrity",

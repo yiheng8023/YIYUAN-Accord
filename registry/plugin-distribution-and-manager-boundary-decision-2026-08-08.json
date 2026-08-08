@@ -90,7 +90,10 @@
       "vendor-third-party-payloads",
       "dispatch-model-or-connect-account",
       "implement-universal-manager"
-    ]
+    ],
+    "fulfilledBy": "registry/offline-plugin-projection-poc-2026-08-08.json",
+    "resultStatus": "offline-preview-verified-release-not-eligible",
+    "subsequentGate": "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation"
   },
   "acceptanceBoundary": {
     "canonicalInventoryBefore": {"verified": 46, "partial": 15, "planned": 0},

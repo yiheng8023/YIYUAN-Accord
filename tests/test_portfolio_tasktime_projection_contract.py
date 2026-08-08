@@ -176,6 +176,18 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
         self.assertFalse(boundary["ccManagedThirdPartyPayloadMayBeBundled"])
         self.assertFalse(boundary["releaseEligibleNow"])
         self.assertEqual(
+            "registry/offline-plugin-projection-poc-2026-08-08.json",
+            boundary["offlineProjectionPoc"],
+        )
+        self.assertEqual(
+            "offline-preview-verified-release-not-eligible",
+            boundary["offlineProjectionPocStatus"],
+        )
+        self.assertEqual(
+            "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation",
+            boundary["nextGate"],
+        )
+        self.assertEqual(
             decision["currentPosture"],
             "plugin-compatible-manager-agnostic-release-not-eligible",
         )

@@ -74,12 +74,15 @@
     "ccManagedThirdPartyPayloadMayBeBundled": false,
     "hostNativePluginManagerOwnsHostPluginLifecycle": true,
     "releaseEligibleNow": false,
-    "nextGate": "offline-plugin-field-failure-and-ownership-mapping-poc",
+    "offlineProjectionPoc": "registry/offline-plugin-projection-poc-2026-08-08.json",
+    "offlineProjectionPocStatus": "offline-preview-verified-release-not-eligible",
+    "nextGate": "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation",
     "installationEnablementPublicationAuthorized": false
   },
   "sourceBindings": {
     "pluginDistributionDecision": {
       "record": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+      "offlineProjectionPoc": "registry/offline-plugin-projection-poc-2026-08-08.json",
       "agentPluginsBaseline": "registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json",
       "openAiPluginPackaging": "https://developers.openai.com/plugins/build/plugins",
       "vercelCodingAgentPlugin": "https://vercel.com/changelog/introducing-vercel-plugin-for-coding-agents"

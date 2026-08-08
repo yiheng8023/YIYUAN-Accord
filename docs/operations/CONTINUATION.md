@@ -5408,3 +5408,31 @@ plugin was created, installed, enabled, executed, or published; no CC Switch,
 consumer, account, model, or acceptance state changed. The canonical inventory
 remains 46/15/0. Evidence:
 `registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`.
+
+## 2026-08-08 offline plugin projection PoC checkpoint
+
+The owner-authorized next mechanism slice now maps one canonical synthetic
+repository metadata object to two literal, non-installable previews. The Agent
+Plugins preview uses root `plugin.json`, fixed `skills/`, and fixed `mcp.json`;
+the OpenAI preview uses `.codex-plugin/plugin.json` with `skills` and
+`mcpServers` paths. Current official documentation was rechecked before fixing
+those fields. No OpenAI host extension was generalized into the portable
+standard.
+
+The zero-model projector records component source class and lifecycle owner
+without assigning runtime authority. It rejects CC Switch-managed third-party
+bundling, two lifecycle authorities for one component, a portable-core CC
+Switch dependency, offline release-eligibility promotion, and unsupported
+component kinds. The canonical record replays both the expected preview and
+all six structured failures.
+
+This closes only the offline field/failure/ownership mapping gate. No plugin
+files were created; nothing was installed, enabled, loaded by a host, executed,
+published, or released; and no CC Switch, consumer, account, or model state
+changed. The posture remains `plugin-compatible + manager-agnostic +
+release-not-eligible`, and the acceptance inventory remains 46 verified / 15
+partial / 0 planned with no criterion promotion. The plugin lane now waits for
+an admitted repository-owned residual-gap component plus a naturally occurring
+real task and separate live-validation authority. Continue other bounded
+curation and mechanism work instead of inventing user work. Evidence:
+`registry/offline-plugin-projection-poc-2026-08-08.json`.

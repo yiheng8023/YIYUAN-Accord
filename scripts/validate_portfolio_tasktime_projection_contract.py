@@ -14,6 +14,7 @@ PROJECTION_PATH = "registry/portfolio-tasktime-projection-contract-2026-08-06.js
 PLUGIN_DECISION_PATH = (
     "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json"
 )
+PLUGIN_POC_PATH = "registry/offline-plugin-projection-poc-2026-08-08.json"
 ACCEPTANCE_PATH = "registry/program-acceptance-map.json"
 PLAN_PATH = "docs/strategy/RESEARCH-AND-POC-PLAN.md"
 GOAL_PROMPT_PATH = "docs/operations/CURRENT-GOAL-MODE-PROMPT.md"
@@ -251,6 +252,16 @@ def validate_contract(
     _require(
         authority_plugin.get("decision") == PLUGIN_DECISION_PATH
         and projection_plugin.get("decisionRecord") == PLUGIN_DECISION_PATH
+        and authority_plugin.get("offlineProjectionPoc") == PLUGIN_POC_PATH
+        and projection_plugin.get("offlineProjectionPoc") == PLUGIN_POC_PATH
+        and authority_plugin.get("offlineProjectionPocStatus")
+        == "offline-preview-verified-release-not-eligible"
+        and projection_plugin.get("offlineProjectionPocStatus")
+        == "offline-preview-verified-release-not-eligible"
+        and authority_plugin.get("nextGate")
+        == "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation"
+        and projection_plugin.get("nextGate")
+        == "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation"
         and projection_plugin.get("releaseEligibleNow") is False
         and projection_plugin.get("installationEnablementPublicationAuthorized")
         is False

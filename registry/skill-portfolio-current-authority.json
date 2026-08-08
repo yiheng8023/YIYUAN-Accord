@@ -273,7 +273,10 @@
     "ccManagedThirdPartyPayloadMayBeBundled": false,
     "hostNativePluginManagerOwnsHostPluginLifecycle": true,
     "selfAuthoredUniversalManagerAuthorized": false,
-    "releaseEligibleNow": false
+    "releaseEligibleNow": false,
+    "offlineProjectionPoc": "registry/offline-plugin-projection-poc-2026-08-08.json",
+    "offlineProjectionPocStatus": "offline-preview-verified-release-not-eligible",
+    "nextGate": "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation"
   },
   "selfAuthoredBoundary": {
     "residualGapRequired": true,

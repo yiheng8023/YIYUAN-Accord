@@ -49,6 +49,9 @@ from plan_standard_revalidation_cascade import (
 from validate_agent_plugins_1_0_0_strategic_impact import (
     validate_repository_record as validate_agent_plugins_1_0_0_strategic_impact,
 )
+from project_offline_plugin_projection import (
+    validate_repository_record as validate_offline_plugin_projection_poc,
+)
 from validate_addy_osmani_ai_assisted_engineering_weak_reference import (
     validate_repository_record as validate_addy_osmani_ai_assisted_engineering_weak_reference,
 )
@@ -1664,6 +1667,10 @@ REQUIRED_FILES = (
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
     "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
     "docs/strategy/PLUGIN-DISTRIBUTION-AND-MANAGER-BOUNDARY-2026-08-08.md",
+    "registry/offline-plugin-projection-poc-2026-08-08.json",
+    "docs/strategy/OFFLINE-PLUGIN-PROJECTION-POC-2026-08-08.md",
+    "scripts/project_offline_plugin_projection.py",
+    "tests/test_offline_plugin_projection_poc.py",
     "scripts/validate_portfolio_tasktime_projection_contract.py",
     "tests/test_portfolio_tasktime_projection_contract.py",
     "registry/repository-authored-gap-fill-gate-2026-08-06.json",
@@ -1945,6 +1952,7 @@ def verify() -> None:
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)
     validate_agent_plugins_1_0_0_strategic_impact(ROOT)
+    validate_offline_plugin_projection_poc(ROOT)
     validate_addy_osmani_ai_assisted_engineering_weak_reference(ROOT)
     validate_process_loss_longhorizon_harness_static_reuse_assessment(ROOT)
     validate_process_loss_longhorizon_harness_interface_gap_mapping(ROOT)

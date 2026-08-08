@@ -60,13 +60,18 @@ backup, update, and consumer projections.
 - Do not bundle a CC Switch-managed third-party payload into a Harness plugin,
   and do not implement a universal manager merely to make plugin packaging
   convenient.
-- The next safe slice is offline field, failure, and ownership mapping from one
-  canonical source to portable Agent Plugins and OpenAI projections using
-  synthetic or repository-owned non-release fixtures. Installation,
-  enablement, live host execution, publication, and release remain separate
-  gates.
+- The offline field, failure, and ownership mapping PoC is complete as a pure,
+  zero-model replay over synthetic metadata. It emits two non-installable
+  previews or a structured rejection; it creates no plugin files and proves no
+  host conformance, behavior, value, portability, or release readiness.
+- The plugin lane now waits for an admitted repository-owned residual-gap
+  component plus a naturally occurring real task before separately authorized
+  live-plugin validation. Continue other bounded curation and mechanism work;
+  do not ask the user to invent a task. Installation, enablement, live host
+  execution, publication, and release remain separate gates.
 - Verify this boundary against
-  `registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`.
+  `registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`
+  and `registry/offline-plugin-projection-poc-2026-08-08.json`.
 
 ## Current Matt Skills freshness boundary
 

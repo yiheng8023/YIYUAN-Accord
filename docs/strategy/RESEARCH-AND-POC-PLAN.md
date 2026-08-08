@@ -36,14 +36,21 @@ lifecycle; one component must never have both authorities. The portable core
 does not depend on CC Switch, and no repository-authored universal manager is
 required or authorized.
 
-The next bounded PoC is an offline field, failure-boundary, and ownership
-mapping from one canonical repository source to Agent Plugins 1.0.0 and OpenAI
-package projections. It uses synthetic or repository-owned non-release
-fixtures and fails closed on CC-managed third-party payload bundling, dual
-lifecycle authority, manager-dependency promotion, and release-eligibility
-promotion. No installation, enablement, live client conformance claim,
-consumer migration, publication, or acceptance advancement follows. See
-`registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`
+The bounded offline field, failure-boundary, and ownership PoC is now
+deterministically replayable from one canonical synthetic repository source.
+It maps the Skill and MCP subset to Agent Plugins 1.0.0 fixed locations and
+OpenAI manifest path fields, and fails closed on CC-managed third-party payload
+bundling, dual lifecycle authority, manager dependency, runtime-owned copying,
+unsupported component kind, and release-eligibility promotion. This closes
+only the offline mapping mechanism gate. No plugin files, installation,
+enablement, live client conformance, behavior, value, consumer migration,
+publication, or acceptance advancement follows. The plugin lane now waits for
+at least one admitted
+repository-owned residual-gap component plus a naturally occurring real task
+before any separately authorized live-plugin validation; the scheduler may
+continue other bounded curation and mechanism work meanwhile. See
+`registry/offline-plugin-projection-poc-2026-08-08.json`,
+`registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`,
 and `registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json`.
 
 Skill supply now uses a separate portfolio curation mode. It may build a broad

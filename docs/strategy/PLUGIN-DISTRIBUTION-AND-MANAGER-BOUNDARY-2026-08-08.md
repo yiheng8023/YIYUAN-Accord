@@ -50,11 +50,13 @@ self-authored residual-gap component, no plugin-specific task-value evidence,
 no dual-format conformance PoC, no claimed-host lifecycle receipts, and no
 plugin release closure or publication authority.
 
-The next bounded PoC is offline and zero-model: map one canonical repository
-metadata source to Agent Plugins 1.0.0 and OpenAI package fields, define the
-component ownership matrix, and fail closed on third-party payload bundling,
-dual lifecycle authority, CC Switch dependency promotion, or release-readiness
-promotion. Synthetic or repository-owned non-release fixtures are sufficient.
+That bounded offline PoC is now complete: one canonical synthetic repository
+metadata source maps to Agent Plugins 1.0.0 and OpenAI preview fields, the
+component ownership matrix is explicit, and six failure classes reject
+deterministically. This is field/failure/ownership evidence, not dual-host
+conformance. The next plugin gate requires an admitted repository-owned
+residual-gap component plus a naturally occurring real task before any
+separately authorized live-plugin validation.
 
 This decision creates no plugin, performs no installation or enablement,
 changes no CC Switch or consumer state, dispatches no model, and advances no
