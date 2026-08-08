@@ -105,15 +105,7 @@ def resolve_json_pointer(document: object, pointer: str) -> object:
     for raw in pointer[1:].split("/"):
         token = _decode_json_pointer_token(raw)
         if isinstance(current, list):
-            if not _is_json_array_index(token):
-                raise DecisionPacketError(
-                    "binding-pointer-invalid", "Binding pointer has an invalid array index."
-                )
-            if int(token) >= len(current):
-                raise DecisionPacketError(
-                    "binding-pointer-unresolved", "Binding pointer does not resolve."
-                )
-            current = current[int(token)]
+            current = current[_resolve_array_index(token, len(current))]
         elif isinstance(current, dict) and token in current:
             current = current[token]
         else:
@@ -143,6 +135,21 @@ def _decode_json_pointer_token(raw: str) -> str:
 
 def _is_json_array_index(token: str) -> bool:
     return token == "0" or re.fullmatch(r"[1-9][0-9]*", token) is not None
+
+
+def _resolve_array_index(token: str, length: int) -> int:
+    if not _is_json_array_index(token):
+        raise DecisionPacketError(
+            "binding-pointer-invalid", "Binding pointer has an invalid array index."
+        )
+    length_text = str(length)
+    if len(token) > len(length_text) or (
+        len(token) == len(length_text) and token >= length_text
+    ):
+        raise DecisionPacketError(
+            "binding-pointer-unresolved", "Binding pointer does not resolve."
+        )
+    return int(token)
 
 
 def _require_dict(value: object, code: str, message: str) -> dict[str, Any]:
@@ -204,6 +211,7 @@ def _validate_binding_shape(binding: object) -> dict[str, Any]:
         or not normalized["scenarioId"]
         or not isinstance(normalized["sourcePath"], str)
         or not normalized["sourcePath"]
+        or not isinstance(mode, str)
         or mode not in BINDING_MODES
         or not isinstance(normalized["identityPointers"], list)
         or not all(isinstance(pointer, str) for pointer in normalized["identityPointers"])
@@ -320,14 +328,7 @@ def _declared_surface_identity_pointers(
         for index, raw in enumerate(raw_tokens):
             token = _decode_json_pointer_token(raw)
             if isinstance(current, list):
-                if not _is_json_array_index(token):
-                    raise DecisionPacketError(
-                        "binding-pointer-invalid", "Binding pointer has an invalid array index."
-                    )
-                if int(token) >= len(current):
-                    raise DecisionPacketError(
-                        "binding-pointer-unresolved", "Binding pointer does not resolve."
-                    )
+                _resolve_array_index(token, len(current))
                 index_position = index
                 collection = current
                 break
@@ -349,13 +350,7 @@ def _declared_surface_identity_pointers(
             for raw in suffix:
                 token = _decode_json_pointer_token(raw)
                 if isinstance(current, list):
-                    if (
-                        not _is_json_array_index(token)
-                        or int(token) >= len(current)
-                    ):
-                        resolved = False
-                        break
-                    current = current[int(token)]
+                    current = current[_resolve_array_index(token, len(current))]
                 elif isinstance(current, dict) and token in current:
                     current = current[token]
                 else:

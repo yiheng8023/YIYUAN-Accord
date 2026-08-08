@@ -170,3 +170,47 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
             [{"pointer": "/groups/00/scenarioId", "value": scenario_id}],
             normalized["resolvedIdentityValues"],
         )
+
+    def test_unhashable_binding_mode_fails_with_the_stable_mode_error(self) -> None:
+        for value in ([], {}):
+            with self.subTest(value=value):
+                mutated = copy.deepcopy(self.registry)
+                mutated["bindings"][0]["bindingMode"] = value
+                with self.assertRaises(DecisionPacketError) as raised:
+                    validate_binding_registry(ROOT, mutated, self.coverage)
+                self.assertEqual("binding-mode-invalid", raised.exception.code)
+
+    def test_oversized_ascii_array_index_is_bounded_in_direct_and_complete_paths(self) -> None:
+        oversized_index = "9" * 4301
+        with self.assertRaises(DecisionPacketError) as raised:
+            resolve_json_pointer({"items": ["zero"]}, f"/items/{oversized_index}")
+        self.assertEqual("binding-pointer-unresolved", raised.exception.code)
+
+        scenario_id = "GEN-OVERSIZED-INDEX-01"
+        registry = copy.deepcopy(self.registry)
+        binding = registry["bindings"][0]
+        binding["scenarioId"] = scenario_id
+        binding["sourcePath"] = "registry/oversized-index.json"
+        binding["identityPointers"] = [
+            f"/groups/0/children/{oversized_index}/scenarioId"
+        ]
+        scenario = {
+            "scenarioId": scenario_id,
+            "evidenceSourcePaths": [binding["sourcePath"]],
+        }
+        document = {
+            "id": "oversized-index-source",
+            "status": "test-only",
+            "groups": [
+                {"children": {oversized_index: {"scenarioId": scenario_id}}},
+                {"children": [{"scenarioId": "GEN-OTHER-01"}]},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            source_path = temporary_root / binding["sourcePath"]
+            source_path.parent.mkdir(parents=True)
+            source_path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaises(DecisionPacketError) as raised:
+                resolve_scenario_evidence_binding(temporary_root, registry, scenario)
+        self.assertEqual("binding-pointer-unresolved", raised.exception.code)
