@@ -444,7 +444,8 @@
       "evidenceIds": [
         "evidence.program-plan",
         "evidence.harness-model",
-        "evidence.decision-ready-consumer-projection-evaluation"
+        "evidence.decision-ready-consumer-projection-evaluation",
+        "evidence.harness-decision-packet-core-poc-2026-08-08"
       ]
     },
     {
@@ -3011,6 +3012,15 @@
       "asOf": "2026-08-07",
       "supports": [
         "acceptance.consumer-mapping-evidence"
+      ]
+    },
+    {
+      "id": "evidence.harness-decision-packet-core-poc-2026-08-08",
+      "path": "registry/harness-decision-packet-core-poc-2026-08-08.json",
+      "kind": "pure-zero-model-source-bound-six-route-agent-consumable-decision-packet-and-fourteen-case-failure-injection-no-live-selection-behavior-value-portability-production-or-residual-gap-proof",
+      "asOf": "2026-08-08",
+      "supports": [
+        "acceptance.decision-ready-consumer-projection"
       ]
     }
   ]

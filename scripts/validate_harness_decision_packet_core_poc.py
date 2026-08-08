@@ -10,13 +10,33 @@ import shutil
 import tempfile
 from typing import Callable
 
-from scripts.harness_decision_packet import (
-    DecisionPacketError,
-    build_decision_packet,
-    canonical_sha256,
-    load_authority_bundle,
-    validate_decision_packet,
+try:
+    from .harness_decision_packet import (
+        DecisionPacketError,
+        build_decision_packet,
+        canonical_sha256,
+        load_authority_bundle,
+        serialize_decision_packet,
+        validate_decision_packet,
+    )
+except ImportError:  # Direct script execution.
+    from harness_decision_packet import (
+        DecisionPacketError,
+        build_decision_packet,
+        canonical_sha256,
+        load_authority_bundle,
+        serialize_decision_packet,
+        validate_decision_packet,
+    )
+
+
+ROOT = Path(__file__).resolve().parent.parent
+EVIDENCE_PATH = Path("registry/harness-decision-packet-core-poc-2026-08-08.json")
+EXPECTED_PACKET_PATH = Path("tests/fixtures/harness-decision-packet-gen-research-01.json")
+DOCUMENTATION_PATH = Path(
+    "docs/strategy/HARNESS-DECISION-PACKET-CORE-POC-2026-08-08.md"
 )
+REQUEST_PATH = Path("tests/fixtures/harness-decision-request-gen-research-01.json")
 
 
 MUTATION_CASE_IDS = [
@@ -221,3 +241,270 @@ def run_failure_matrix(root: Path) -> list[dict[str, str]]:
                 }
             )
     return results
+
+
+def _require(condition: bool, message: str) -> None:
+    if not condition:
+        raise RuntimeError(message)
+
+
+def _load_object(root: Path, relative: Path) -> dict[str, object]:
+    value = json.loads((root / relative).read_text(encoding="utf-8"))
+    _require(isinstance(value, dict), f"Expected JSON object at {relative.as_posix()}")
+    return value
+
+
+def validate_repository_record(root: Path = ROOT) -> dict[str, object]:
+    """Replay the checked packet, failures, projections, and narrow evidence limits."""
+
+    record = _load_object(root, EVIDENCE_PATH)
+    _require(
+        record.get("schema") == 1
+        and record.get("id") == "harness-decision-packet-core-poc-2026-08-08"
+        and record.get("date") == "2026-08-08"
+        and record.get("status")
+        == "verified-zero-model-source-bound-decision-packet-mechanism-only"
+        and record.get("design")
+        == "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md"
+        and record.get("documentation") == DOCUMENTATION_PATH.as_posix()
+        and record.get("requestFixture") == REQUEST_PATH.as_posix()
+        and record.get("expectedPacketFixture") == EXPECTED_PACKET_PATH.as_posix(),
+        "Decision-packet evidence identity or path binding drifted",
+    )
+    for relative in (
+        Path(record["design"]),
+        DOCUMENTATION_PATH,
+        REQUEST_PATH,
+        EXPECTED_PACKET_PATH,
+    ):
+        _require((root / relative).is_file(), f"Decision-packet bound file missing: {relative}")
+
+    request = _load_object(root, REQUEST_PATH)
+    expected_packet = _load_object(root, EXPECTED_PACKET_PATH)
+    rebuilt = build_decision_packet(root, request)
+    validate_decision_packet(root, expected_packet)
+    _require(
+        serialize_decision_packet(rebuilt)
+        == (root / EXPECTED_PACKET_PATH).read_bytes(),
+        "Decision-packet fixture is not a byte-stable rebuild",
+    )
+    _require(
+        expected_packet.get("packetSha256") == record.get("packetSha256"),
+        "Decision-packet evidence digest drifted",
+    )
+
+    authority_bindings = record.get("authorityBindings", {})
+    expected_bindings = expected_packet.get("authorityBinding", {})
+    _require(
+        all(
+            authority_bindings.get(key) == expected_bindings.get(key)
+            for key in ("semanticAuthority", "coverage", "scheduler", "acceptance")
+        ),
+        "Decision-packet current authority bindings drifted",
+    )
+    source_evidence = expected_packet.get("sourceEvidence", [])
+    _require(
+        len(source_evidence) == 1
+        and authority_bindings.get("originalEvidence")
+        == {
+            key: source_evidence[0][key]
+            for key in ("path", "id", "sha256")
+        },
+        "Decision-packet original evidence binding drifted",
+    )
+    scenario = record.get("scenario", {})
+    packet_routes = expected_packet.get("routeCoverage", {})
+    _require(
+        scenario.get("id") == "GEN-RESEARCH-01"
+        and scenario.get("fallbackOrder") == ["N", "C", "H"]
+        and scenario.get("selectedRoute") is None
+        and scenario.get("routeStates")
+        == {route: packet_routes[route]["state"] for route in ("N", "O", "E", "C", "H", "R")},
+        "Decision-packet route-state evidence drifted",
+    )
+
+    failure_results = run_failure_matrix(root)
+    _require(
+        [item["caseId"] for item in failure_results] == MUTATION_CASE_IDS
+        and all(item["status"] == "rejected" for item in failure_results),
+        "Decision-packet failure matrix did not fail closed",
+    )
+    _require(
+        record.get("mutationResults")
+        == [
+            {"caseId": case_id, "expectedErrorCode": EXPECTED_ERROR_CODES[case_id]}
+            for case_id in MUTATION_CASE_IDS
+        ],
+        "Decision-packet recorded failure inventory drifted",
+    )
+    counters = record.get("executionCounters", {})
+    _require(
+        set(counters)
+        == {
+            "models",
+            "candidates",
+            "plugins",
+            "managers",
+            "accounts",
+            "consumers",
+            "installs",
+            "enablements",
+            "publications",
+        }
+        and all(value == 0 for value in counters.values()),
+        "Decision-packet execution counters were promoted",
+    )
+    claims = record.get("claimBoundary", {})
+    _require(
+        set(claims)
+        == {
+            "naturalLanguageInterpretationProved",
+            "invocationProved",
+            "instructionDeliveryProved",
+            "behaviorProved",
+            "valueProved",
+            "portabilityProved",
+            "productionProved",
+            "releaseEligibilityProved",
+            "residualGapProved",
+        }
+        and all(value is False for value in claims.values()),
+        "Decision-packet claim boundary was promoted",
+    )
+    authority_boundary = record.get("authorityBoundary", {})
+    _require(
+        authority_boundary and all(value is False for value in authority_boundary.values()),
+        "Decision-packet side-effect authority was promoted",
+    )
+
+    acceptance = _load_object(root, Path("registry/program-acceptance-map.json"))
+    criteria = acceptance.get("acceptanceCriteria", [])
+    criterion = next(
+        item
+        for item in criteria
+        if item.get("id") == "acceptance.decision-ready-consumer-projection"
+    )
+    assessments = [item.get("assessment") for item in criteria]
+    _require(
+        criterion.get("assessment") == "partial"
+        and "evidence.harness-decision-packet-core-poc-2026-08-08"
+        in criterion.get("evidenceIds", [])
+        and record.get("acceptance")
+        == {
+            "id": "acceptance.decision-ready-consumer-projection",
+            "assessment": "partial",
+            "inventory": {
+                "verified": assessments.count("verified"),
+                "partial": assessments.count("partial"),
+                "planned": assessments.count("planned"),
+            },
+        }
+        and assessments.count("verified") == 46
+        and assessments.count("partial") == 15
+        and assessments.count("planned") == 0,
+        "Decision-packet acceptance boundary or 46/15/0 inventory drifted",
+    )
+
+    authority = _load_object(root, Path("registry/skill-portfolio-current-authority.json"))
+    projection = _load_object(
+        root, Path("registry/portfolio-tasktime-projection-contract-2026-08-06.json")
+    )
+    expected_core_binding = {
+        "design": "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+        "evidence": EVIDENCE_PATH.as_posix(),
+        "status": "verified-zero-model-source-bound-decision-packet-mechanism-only",
+        "primaryConsumer": "agent-or-harness",
+        "naturalLanguageInterpretationProved": False,
+        "liveRouteSelectionProved": False,
+        "behaviorOrValueProved": False,
+        "portableCoreDependsOnPluginOrManager": False,
+    }
+    _require(
+        authority.get("decisionPacketCore") == expected_core_binding
+        and projection.get("sourceBindings", {}).get("decisionPacketCore")
+        == expected_core_binding,
+        "Decision-packet current semantic projection binding drifted",
+    )
+    closeout = _load_object(
+        root,
+        Path("registry/program-final-closeout-readiness-reconciliation-2026-07-28.json"),
+    )
+    closeout_core = closeout.get("decisionPacketCore", {})
+    _require(
+        closeout.get("sourceBindings", {}).get("harnessDecisionPacketCorePoc")
+        == EVIDENCE_PATH.as_posix()
+        and closeout.get("acceptanceSnapshot")
+        == {
+            "totalCriteria": 61,
+            "verified": 46,
+            "partial": 15,
+            "planned": 0,
+            "other": 0,
+            "allCriteriaVerified": False,
+        }
+        and closeout.get("closeoutDecision", {}).get("goalComplete") is False
+        and closeout_core.get("selectedRoute") is None
+        and closeout_core.get("mutationCasesRejected") == 14
+        and all(value == 0 for value in closeout_core.get("executionCounters", {}).values())
+        and all(value is False for value in closeout_core.get("claimBoundary", {}).values()),
+        "Decision-packet closeout projection drifted or overclaimed",
+    )
+
+    human_markers = {
+        "README.md": [
+            "GEN-RESEARCH-01",
+            "14 injected promotions fail closed",
+            "selectedRoute` stays",
+            "not execution or value proof",
+        ],
+        "README.zh-CN.md": [
+            "GEN-RESEARCH-01",
+            "14 项注入式越权全部 fail closed",
+            "selectedRoute` 保持",
+            "不是执行或价值证明",
+        ],
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md": [
+            "Harness decision-packet core PoC",
+            "Fourteen mutations",
+            "selected route remains null",
+            "46 verified / 15 partial / 0 planned",
+        ],
+        "docs/operations/CURRENT-GOAL-MODE-PROMPT.md": [
+            "Current decision-packet mechanism boundary",
+            "all fourteen bounded mutations",
+            "selectedRoute` null",
+            "46 verified / 15 partial / 0",
+        ],
+        "docs/operations/CONTINUATION.md": [
+            "Harness decision-packet core PoC checkpoint",
+            "Fourteen independent mutations fail closed",
+            "selectedRoute: null",
+            "46 verified / 15 partial / 0 planned",
+        ],
+        DOCUMENTATION_PATH.as_posix(): [
+            "Fourteen independent mutations fail closed",
+            "selectedRoute` remains `null",
+            "pure, zero-model mechanism evidence",
+            "46 verified / 15 partial / 0",
+        ],
+    }
+    for relative, markers in human_markers.items():
+        normalized = " ".join((root / relative).read_text(encoding="utf-8").split())
+        _require(
+            all(marker in normalized for marker in markers),
+            f"Decision-packet human projection drifted: {relative}",
+        )
+    return record
+
+
+def main() -> int:
+    record = validate_repository_record(ROOT)
+    print(
+        "Harness decision-packet core PoC verified: "
+        f"{len(record['mutationResults'])} fail-closed mutations."
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

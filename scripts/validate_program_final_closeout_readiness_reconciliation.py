@@ -52,6 +52,11 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         == "registry/offline-plugin-projection-poc-2026-08-08.json",
         "Program closeout offline-plugin PoC binding drifted",
     )
+    _require(
+        sources.get("harnessDecisionPacketCorePoc")
+        == "registry/harness-decision-packet-core-poc-2026-08-08.json",
+        "Program closeout decision-packet PoC binding drifted",
+    )
     program = json.loads((root / PROGRAM_MAP_PATH).read_text(encoding="utf-8"))
     criteria = program.get("acceptanceCriteria", [])
     counts = Counter(row.get("assessment") for row in criteria)
@@ -120,9 +125,64 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         and "Gemini, GrokBuild, OpenCode, and Hermes" in consumer_boundary
         and "all four governed roots were absent" in consumer_boundary
         and "six fail-closed classes" in consumer_boundary
+        and "fourteen mutations fail closed" in consumer_boundary
+        and "selectedRoute remains null" in consumer_boundary
         and "plugin installability or host conformance" in consumer_boundary
-        and "behavior, or value" in consumer_boundary,
+        and "behavior, value, portability, production" in consumer_boundary,
         "Program closeout consumer/source claim boundary drifted",
+    )
+    decision_packet = document.get("decisionPacketCore", {})
+    decision_packet_claims = decision_packet.get("claimBoundary", {})
+    decision_packet_counters = decision_packet.get("executionCounters", {})
+    _require(
+        decision_packet.get("status")
+        == "verified-zero-model-source-bound-decision-packet-mechanism-only"
+        and decision_packet.get("scenarioId") == "GEN-RESEARCH-01"
+        and decision_packet.get("requestFixture")
+        == "tests/fixtures/harness-decision-request-gen-research-01.json"
+        and decision_packet.get("expectedPacketFixture")
+        == "tests/fixtures/harness-decision-packet-gen-research-01.json"
+        and decision_packet.get("routeClassCount") == 6
+        and all(
+            decision_packet.get(key) is True
+            for key in (
+                "sourceDigestsBound",
+                "evidenceCeilingsRetained",
+                "unknownsRetained",
+                "fallbackRetained",
+                "authorizationGatesAllFalse",
+                "claimLimitsAllFalse",
+            )
+        )
+        and decision_packet.get("mutationCasesRejected") == 14
+        and decision_packet.get("selectedRoute") is None
+        and set(decision_packet_counters)
+        == {
+            "models",
+            "candidates",
+            "plugins",
+            "managers",
+            "accounts",
+            "consumers",
+            "installs",
+            "enablements",
+            "publications",
+        }
+        and all(value == 0 for value in decision_packet_counters.values())
+        and set(decision_packet_claims)
+        == {
+            "naturalLanguageInterpretationProved",
+            "invocationProved",
+            "instructionDeliveryProved",
+            "behaviorProved",
+            "valueProved",
+            "portabilityProved",
+            "productionProved",
+            "releaseEligibilityProved",
+            "residualGapProved",
+        }
+        and all(value is False for value in decision_packet_claims.values()),
+        "Program decision-packet mechanism boundary drifted or overclaimed",
     )
     open_ids = set(expected_open)
     expected_open_objectives = {
@@ -169,7 +229,9 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         and progress.get("disabledConsumerRootPresenceAndMattProjectionAbsence")
         == "covered-readonly-single-observation"
         and progress.get("offlinePluginProjectionMapping")
-        == "covered-field-failure-and-ownership-mechanism-only",
+        == "covered-field-failure-and-ownership-mechanism-only"
+        and progress.get("harnessDecisionPacketCore")
+        == "covered-source-bound-six-route-fourteen-failure-mechanism-only-selected-route-null",
         "Program closeout current evidence progress drifted",
     )
     documentation = document.get("documentation")

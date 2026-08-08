@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "id": "harness-decision-packet-core-poc-2026-08-08",
+  "date": "2026-08-08",
+  "status": "verified-zero-model-source-bound-decision-packet-mechanism-only",
+  "design": "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+  "documentation": "docs/strategy/HARNESS-DECISION-PACKET-CORE-POC-2026-08-08.md",
+  "requestFixture": "tests/fixtures/harness-decision-request-gen-research-01.json",
+  "expectedPacketFixture": "tests/fixtures/harness-decision-packet-gen-research-01.json",
+  "authorityBindings": {
+    "semanticAuthority": {
+      "path": "registry/skill-portfolio-current-authority.json",
+      "id": "skill-portfolio-current-authority-v1",
+      "sha256": "4a5142baad160ceebb646803d31fd7647c364c4eef9acd45163ecada36bb91ea"
+    },
+    "coverage": {
+      "path": "registry/human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01.json",
+      "id": "human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01",
+      "sha256": "d962097402f55c3bc878df0a6ce192ee35086eceef4ea97c4c8d258a971bdf65"
+    },
+    "scheduler": {
+      "path": "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
+      "id": "portfolio-tasktime-projection-v1",
+      "sha256": "dce3435883657a5a7731a37fcde52a67b610ed8510682a8c8b9c9733a6689531"
+    },
+    "acceptance": {
+      "path": "registry/program-acceptance-map.json",
+      "id": "curation-program-acceptance-map-v1",
+      "sha256": "c9d0fb437fb3eae93ffd144a2e3ee418dca90d96e5a266b61d7c7ec3efa6079f"
+    },
+    "originalEvidence": {
+      "path": "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json",
+      "id": "human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24",
+      "sha256": "5e0a91a0bcc2d32f56aeebce2d7ece63fc9c8386fddaf423f864496cd4c29cb9"
+    }
+  },
+  "scenario": {
+    "id": "GEN-RESEARCH-01",
+    "fallbackOrder": ["N", "C", "H"],
+    "selectedRoute": null,
+    "routeStates": {
+      "N": "represented-bounded-synthetic-association",
+      "O": "unassessed",
+      "E": "unassessed",
+      "C": "mechanism-calibrated-no-candidate-value",
+      "H": "required-human-control-unexecuted",
+      "R": "not-eligible-no-residual-gap"
+    }
+  },
+  "packetSha256": "e8d096897ffc351ac8b5e5fb054e204c0d18aedea45e23e99faba55ee646df2a",
+  "mutationResults": [
+    {"caseId": "unknown-scenario", "expectedErrorCode": "unknown-scenario"},
+    {"caseId": "semantic-authority-id-drift", "expectedErrorCode": "semantic-authority-id-mismatch"},
+    {"caseId": "original-evidence-missing", "expectedErrorCode": "evidence-source-missing"},
+    {"caseId": "original-evidence-digest-drift", "expectedErrorCode": "evidence-source-digest-drift"},
+    {"caseId": "route-class-removed", "expectedErrorCode": "route-class-coverage-incomplete"},
+    {"caseId": "unassessed-route-promoted", "expectedErrorCode": "unassessed-route-promotion"},
+    {"caseId": "residual-route-promoted", "expectedErrorCode": "residual-gap-promotion"},
+    {"caseId": "portfolio-selected-route", "expectedErrorCode": "portfolio-selected-route"},
+    {"caseId": "claim-boundary-promoted", "expectedErrorCode": "claim-boundary-promotion"},
+    {"caseId": "fallback-order-drift", "expectedErrorCode": "fallback-order-drift"},
+    {"caseId": "deprecated-routing-restored", "expectedErrorCode": "deprecated-routing-authority-promotion"},
+    {"caseId": "task-time-route-selected", "expectedErrorCode": "task-time-route-selection"},
+    {"caseId": "historical-authority-overrides-current", "expectedErrorCode": "historical-authority-promotion"},
+    {"caseId": "portable-core-dependency-promoted", "expectedErrorCode": "portable-core-dependency-promotion"}
+  ],
+  "executionCounters": {
+    "models": 0,
+    "candidates": 0,
+    "plugins": 0,
+    "managers": 0,
+    "accounts": 0,
+    "consumers": 0,
+    "installs": 0,
+    "enablements": 0,
+    "publications": 0
+  },
+  "acceptance": {
+    "id": "acceptance.decision-ready-consumer-projection",
+    "assessment": "partial",
+    "inventory": {
+      "verified": 46,
+      "partial": 15,
+      "planned": 0
+    }
+  },
+  "claimBoundary": {
+    "naturalLanguageInterpretationProved": false,
+    "invocationProved": false,
+    "instructionDeliveryProved": false,
+    "behaviorProved": false,
+    "valueProved": false,
+    "portabilityProved": false,
+    "productionProved": false,
+    "releaseEligibilityProved": false,
+    "residualGapProved": false
+  },
+  "authorityBoundary": {
+    "installAuthorized": false,
+    "enablementAuthorized": false,
+    "accountConnectionAuthorized": false,
+    "modelDispatchAuthorized": false,
+    "candidateExecutionAuthorized": false,
+    "managerMutationAuthorized": false,
+    "consumerMutationAuthorized": false,
+    "publicationAuthorized": false,
+    "releaseAuthorized": false,
+    "acceptancePromotionAuthorized": false,
+    "goalCloseoutAuthorized": false
+  }
+}

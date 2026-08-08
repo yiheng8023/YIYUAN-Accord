@@ -278,6 +278,16 @@
     "offlineProjectionPocStatus": "offline-preview-verified-release-not-eligible",
     "nextGate": "admitted-repository-owned-component-plus-natural-real-task-before-live-plugin-validation"
   },
+  "decisionPacketCore": {
+    "design": "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+    "evidence": "registry/harness-decision-packet-core-poc-2026-08-08.json",
+    "status": "verified-zero-model-source-bound-decision-packet-mechanism-only",
+    "primaryConsumer": "agent-or-harness",
+    "naturalLanguageInterpretationProved": false,
+    "liveRouteSelectionProved": false,
+    "behaviorOrValueProved": false,
+    "portableCoreDependsOnPluginOrManager": false
+  },
   "selfAuthoredBoundary": {
     "residualGapRequired": true,
     "currentPriority": "not-before-candidate-and-composition-reuse"

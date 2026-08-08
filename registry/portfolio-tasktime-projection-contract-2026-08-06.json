@@ -100,6 +100,16 @@
       "peeledCommit": "8b36d4fb2635b3c21998dcd8144439c9e5ba7302",
       "readme": "https://github.com/mattpocock/skills/blob/v1.2.2/README.md",
       "directCommand": "npx skills@latest add mattpocock/skills"
+    },
+    "decisionPacketCore": {
+      "design": "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+      "evidence": "registry/harness-decision-packet-core-poc-2026-08-08.json",
+      "status": "verified-zero-model-source-bound-decision-packet-mechanism-only",
+      "primaryConsumer": "agent-or-harness",
+      "naturalLanguageInterpretationProved": false,
+      "liveRouteSelectionProved": false,
+      "behaviorOrValueProved": false,
+      "portableCoreDependsOnPluginOrManager": false
     }
   },
   "deterministicValidation": {
@@ -124,6 +134,7 @@
       "plugin-release-eligibility-promotion",
       "residual-gap-authoring-gate-removal",
       "broad-claim-promotion",
+      "decision-packet-core-boundary-removal",
       "acceptance-verification-downgrade"
     ],
     "claimBoundary": "projection-consistency-and-fail-closed-mechanism-only"

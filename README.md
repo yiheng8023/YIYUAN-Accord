@@ -37,9 +37,28 @@ decisions, and bounded authorization.
   `v1.2.3@6acc160e`, and CC Switch source metadata is pinned to that tag after
   a recoverable metadata-only transaction. This does not prove invocation,
   behavior, value, portability, or production readiness.
+- **Decision-packet mechanism:** one structured `GEN-RESEARCH-01` request now
+  builds a deterministic, source-bound six-route packet. It retains unknowns,
+  evidence ceilings, fallback order, authorization gates, and false claim
+  ceilings; all 14 injected promotions fail closed and `selectedRoute` stays
+  `null`. This is zero-model mechanism evidence, not execution or value proof.
 
 The detailed current scheduler is the
 [goal-mode execution projection](docs/operations/CURRENT-GOAL-MODE-PROMPT.md).
+
+## Decision-packet mechanism
+
+Run the repository-owned, non-executing example:
+
+```powershell
+python -B scripts/build_harness_decision_packet.py tests/fixtures/harness-decision-request-gen-research-01.json
+```
+
+The command prints canonical JSON to stdout. It does not invoke a model or
+candidate, select a route, install or enable anything, connect an account,
+mutate a manager or consumer, publish, or release. A passing packet proves only
+the bounded source-binding and fail-closed mechanism described by its evidence
+ceilings.
 
 ## What problem this project addresses
 

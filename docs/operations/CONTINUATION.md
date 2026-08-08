@@ -5452,3 +5452,22 @@ remains 46 verified / 15 partial / 0 planned across six open clusters; no goal,
 acceptance, cleanup, install, enablement, account, model, CC Switch, consumer,
 publication, or release state changed. Evidence:
 `registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.
+
+## 2026-08-08 Harness decision-packet core PoC checkpoint
+
+The first Agent/Harness carrier slice now builds one canonical packet from the
+structured `GEN-RESEARCH-01` request. It reopens current semantic, coverage,
+scheduler, acceptance, and original scenario evidence; binds their source
+digests; preserves all six route classes, evidence ceilings, explicit unknowns,
+the governed N/C/H fallback, all-false authorization gates, and all-false claim
+limits. The checked packet keeps `selectedRoute: null`. Fourteen independent
+mutations fail closed with their expected typed errors.
+
+This is mechanism completion only. No model, candidate, Plugin, manager,
+account, consumer, install, enablement, publication, release, behavior, value,
+portability, production, or residual-gap evidence follows. The
+`acceptance.decision-ready-consumer-projection` criterion remains partial; the
+program inventory remains 46 verified / 15 partial / 0 planned and all loader,
+task-delivery, recovery, cross-device, behavior, value, live-plugin, and release
+gaps remain open. Evidence:
+`registry/harness-decision-packet-core-poc-2026-08-08.json`.

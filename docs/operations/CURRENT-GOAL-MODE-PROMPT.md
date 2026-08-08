@@ -94,6 +94,24 @@ backup, update, and consumer projections.
   and the current exact-pin state against
   `registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json`.
 
+## Current decision-packet mechanism boundary
+
+- A structured `GEN-RESEARCH-01` request may be evaluated through the
+  repository-owned decision-packet core. The deterministic packet retains all
+  six route classes, source digests, evidence ceilings, explicit unknowns,
+  governed fallback order, authorization gates, and false claim limits.
+- The current reviewed fixture rejects all fourteen bounded mutations and
+  keeps `selectedRoute` null. Use it as Agent/Harness-readable mechanism
+  evidence, not as a natural-language interpreter or live scheduler.
+- It invokes no model, candidate, Plugin, manager, account, or consumer and
+  authorizes no install, enablement, dispatch, publication, release, or
+  lifecycle mutation. It proves no instruction delivery, behavior, value,
+  portability, production readiness, release eligibility, or residual gap.
+- The decision-ready consumer-projection criterion remains `partial`; the
+  canonical acceptance inventory remains 46 verified / 15 partial / 0
+  planned. Verify the boundary against
+  `registry/harness-decision-packet-core-poc-2026-08-08.json`.
+
 ## Execution discipline
 
 - Start from live branch, status, HEAD, upstream, ahead/behind, and dirty-file

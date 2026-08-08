@@ -103,6 +103,17 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
         )
         self.assertFalse(self.document["closeoutDecision"]["goalComplete"])
 
+    def test_reconciliation_binds_decision_packet_without_closing_program(self) -> None:
+        self.assertEqual(
+            "registry/harness-decision-packet-core-poc-2026-08-08.json",
+            self.document["sourceBindings"]["harnessDecisionPacketCorePoc"],
+        )
+        self.assertEqual(
+            "covered-source-bound-six-route-fourteen-failure-mechanism-only-selected-route-null",
+            self.document["currentEvidenceProgress"]["harnessDecisionPacketCore"],
+        )
+        self.assertFalse(self.document["closeoutDecision"]["goalComplete"])
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61
@@ -121,6 +132,18 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
             "exactLoaderDecisionAloneCanCloseProgram"
         ] = True
         with self.assertRaisesRegex(RuntimeError, "overclaimed"):
+            validate_reconciliation(document, root=ROOT)
+
+    def test_rejects_decision_packet_route_selection(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["decisionPacketCore"]["selectedRoute"] = "N"
+        with self.assertRaisesRegex(RuntimeError, "decision-packet"):
+            validate_reconciliation(document, root=ROOT)
+
+    def test_rejects_decision_packet_claim_promotion(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["decisionPacketCore"]["claimBoundary"]["behaviorProved"] = True
+        with self.assertRaisesRegex(RuntimeError, "decision-packet"):
             validate_reconciliation(document, root=ROOT)
 
     def test_rejects_goal_status_authority(self) -> None:

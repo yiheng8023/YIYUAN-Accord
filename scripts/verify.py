@@ -37,6 +37,9 @@ from simulate_routing import run_scenarios
 from validate_portfolio_tasktime_projection_contract import (
     validate_repository_contract as validate_portfolio_tasktime_projection_contract,
 )
+from validate_harness_decision_packet_core_poc import (
+    validate_repository_record as validate_harness_decision_packet_core_poc,
+)
 from evaluate_repository_authored_gap_fill_candidate import (
     validate_repository_gate as validate_repository_authored_gap_fill_gate,
 )
@@ -1664,6 +1667,19 @@ REQUIRED_FILES = (
     "docs/mcp-task-lifecycle-evidence-contract-2026-07-23.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
     "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+    "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+    "docs/superpowers/plans/2026-08-08-harness-decision-packet-core.md",
+    "docs/strategy/HARNESS-DECISION-PACKET-CORE-POC-2026-08-08.md",
+    "schemas/harness-decision-request-v1.schema.json",
+    "schemas/harness-decision-packet-v1.schema.json",
+    "scripts/harness_decision_packet.py",
+    "scripts/build_harness_decision_packet.py",
+    "scripts/validate_harness_decision_packet_core_poc.py",
+    "tests/test_harness_decision_packet.py",
+    "tests/test_harness_decision_packet_core_poc.py",
+    "tests/fixtures/harness-decision-request-gen-research-01.json",
+    "tests/fixtures/harness-decision-packet-gen-research-01.json",
+    "registry/harness-decision-packet-core-poc-2026-08-08.json",
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
     "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
     "docs/strategy/PLUGIN-DISTRIBUTION-AND-MANAGER-BOUNDARY-2026-08-08.md",
@@ -1948,6 +1964,7 @@ def verify() -> None:
         raise RuntimeError("Missing required files: " + ", ".join(missing))
 
     validate_portfolio_tasktime_projection_contract(ROOT)
+    validate_harness_decision_packet_core_poc(ROOT)
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)

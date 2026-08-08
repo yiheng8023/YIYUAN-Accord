@@ -28,8 +28,24 @@
 - **当前 Matt 来源：**25 个受管 payload 匹配精确发布
   `v1.2.3@6acc160e`，CC Switch 来源元数据已通过可恢复、仅元数据事务 pin 到该 tag。
   这不证明调用、行为、价值、可移植性或生产就绪。
+- **决策包机制：**一个结构化 `GEN-RESEARCH-01` 请求现在可生成确定性、绑定来源的
+  六路决策包。它保留未知项、证据上限、回退顺序、授权闸门和全为 false 的主张上限；
+  14 项注入式越权全部 fail closed，且 `selectedRoute` 保持 `null`。这只是零模型机制
+  证据，不是执行或价值证明。
 
 详细的当前调度规则见[目标模式执行投影](docs/operations/CURRENT-GOAL-MODE-PROMPT.md)。
+
+## 决策包机制
+
+运行仓库自有且不执行候选能力的示例：
+
+```powershell
+python -B scripts/build_harness_decision_packet.py tests/fixtures/harness-decision-request-gen-research-01.json
+```
+
+该命令只向 stdout 输出规范 JSON。它不调用模型或候选、不选择路线、不安装或启用任何
+能力、不连接账号、不修改管理器或消费者，也不发布或释放。决策包通过只证明其证据上限
+内的来源绑定与 fail-closed 机制。
 
 ## 本项目解决什么问题
 

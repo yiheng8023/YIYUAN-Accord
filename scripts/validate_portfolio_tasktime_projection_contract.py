@@ -42,6 +42,7 @@ MUTATION_CASE_IDS = [
     "plugin-release-eligibility-promotion",
     "residual-gap-authoring-gate-removal",
     "broad-claim-promotion",
+    "decision-packet-core-boundary-removal",
     "acceptance-verification-downgrade",
 ]
 
@@ -90,6 +91,22 @@ def validate_contract(
             "goalModePrompt": GOAL_PROMPT_PATH,
         },
         "projection path binding drifted",
+    )
+    decision_packet_core = {
+        "design": "docs/superpowers/specs/2026-08-08-harness-decision-packet-core-design.md",
+        "evidence": "registry/harness-decision-packet-core-poc-2026-08-08.json",
+        "status": "verified-zero-model-source-bound-decision-packet-mechanism-only",
+        "primaryConsumer": "agent-or-harness",
+        "naturalLanguageInterpretationProved": False,
+        "liveRouteSelectionProved": False,
+        "behaviorOrValueProved": False,
+        "portableCoreDependsOnPluginOrManager": False,
+    }
+    _require(
+        authority.get("decisionPacketCore") == decision_packet_core
+        and projection.get("sourceBindings", {}).get("decisionPacketCore")
+        == decision_packet_core,
+        "decision-packet core authority/projection binding drifted",
     )
 
     authority_modes = authority.get("operatingModes", {})

@@ -3267,3 +3267,24 @@ does not prove that any disabled host is installed, configured, healthy, able
 to load or restore Skills, or convergent across devices. No missing root was
 created and the 46/15/0 acceptance inventory is unchanged. Evidence:
 `registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json`.
+
+### 2026-08-08 Harness decision-packet core PoC
+
+The first Agent/Harness consumer slice now accepts one structured
+`GEN-RESEARCH-01` request and emits a deterministic source-bound packet. The
+packet retains N/O/E/C/H/R, current authority and original-source digests,
+evidence ceilings, explicit unassessed states, the governed N/C/H fallback,
+all-false authorization gates, and all-false claim limits. Its selected route
+remains null. Fourteen mutations covering unknown or historical authority,
+missing or drifted evidence, route removal or promotion, illegal selection,
+claim and fallback promotion, deprecated routing, and portable-core CC Switch
+dependency all fail closed with exact error codes.
+
+This is a pure zero-model mechanism slice. It executed no model, candidate,
+Plugin, manager, account, consumer, install, enablement, or publication. It
+does not prove natural-language interpretation, invocation, instruction
+delivery, behavior, value, portability, production, release eligibility, or a
+residual repository-authored gap. The decision-ready consumer-projection
+criterion therefore remains partial and the canonical inventory remains
+46 verified / 15 partial / 0 planned. Evidence:
+`registry/harness-decision-packet-core-poc-2026-08-08.json`.

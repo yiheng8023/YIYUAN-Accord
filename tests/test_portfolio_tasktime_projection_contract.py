@@ -297,6 +297,19 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
             target[path[-1]] = value
             mutations.append((case_id, None, projection, None, None, None))
 
+        projection = copy.deepcopy(self.projection)
+        del projection["sourceBindings"]["decisionPacketCore"]
+        mutations.append(
+            (
+                "decision-packet-core-boundary-removal",
+                None,
+                projection,
+                None,
+                None,
+                None,
+            )
+        )
+
         acceptance = copy.deepcopy(self.acceptance)
         criterion = next(
             item
