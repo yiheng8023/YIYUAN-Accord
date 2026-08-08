@@ -5422,9 +5422,10 @@ standard.
 The zero-model projector records component source class and lifecycle owner
 without assigning runtime authority. It rejects CC Switch-managed third-party
 bundling, two lifecycle authorities for one component, a portable-core CC
-Switch dependency, offline release-eligibility promotion, and unsupported
-component kinds. The canonical record replays both the expected preview and
-all six structured failures.
+Switch dependency, offline release-eligibility promotion, official
+runtime-owned component copying, and unsupported component kinds. The
+canonical record replays both the expected preview and all six structured
+failures.
 
 This closes only the offline field/failure/ownership mapping gate. No plugin
 files were created; nothing was installed, enabled, loaded by a host, executed,

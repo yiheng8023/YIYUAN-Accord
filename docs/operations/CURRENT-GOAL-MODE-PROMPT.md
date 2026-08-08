@@ -117,9 +117,9 @@ backup, update, and consumer projections.
   `v1.2.3` reconciliation and the offline plugin field/failure/ownership PoC.
   Consumer/source governance still lacks plugin installability/conformance,
   loader and task-delivery evidence, live recovery across supported consumers,
-  and cross-device convergence. A privacy-minimized observation found all four disabled
-  consumer roots absent with zero Matt flags and projections; this does not
-  prove those hosts are installed or healthy.
+  and cross-device convergence. A privacy-minimized observation found all four
+  disabled consumer roots absent with zero Matt flags and projections; this
+  does not prove those hosts are installed or healthy.
 - Final cleanup remains separately authorized. Do not delete, archive,
   uninstall, retire, or mark the goal complete from inventory evidence alone.
 - Verify this boundary against
