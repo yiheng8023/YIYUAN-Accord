@@ -3235,16 +3235,18 @@ temporary root was moved to the Windows Recycle Bin after the portable report
 was bound. Evidence:
 `registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json`.
 
-### 2026-08-08 final-closeout readiness refresh after exact pin
+### 2026-08-08 final-closeout readiness refresh after exact pin and plugin PoC
 
 The program-level closeout audit now binds the restart-persistent Matt
-`v1.2.3` exact-pin event and post-restart report. The prior Codex and Claude
-snapshots remain dated historical evidence rather than current `v1.2.2`
-authority. This refresh changes no acceptance assessment: 46 criteria remain
+`v1.2.3` exact-pin event, its post-restart report, and the offline plugin
+field/failure/ownership PoC. The prior Codex and Claude snapshots remain dated
+historical evidence rather than current `v1.2.2` authority. This refresh
+changes no acceptance assessment: 46 criteria remain
 verified and 15 remain partial across six clusters.
 
-The consumer/source cluster now distinguishes exact payload and source-pin
-evidence from still-open loader precedence, task-bound delivery, live recovery
+The consumer/source cluster now distinguishes exact payload, source-pin, and
+offline plugin mapping evidence from still-open installability, host
+conformance, loader precedence, task-bound delivery, live recovery
 across supported consumers, disabled-consumer reconciliation, and cross-device
 convergence. No model, external candidate, CC Switch, consumer, account, or
 cleanup state changed. Evidence:

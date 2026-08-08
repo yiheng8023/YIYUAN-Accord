@@ -5436,3 +5436,18 @@ an admitted repository-owned residual-gap component plus a naturally occurring
 real task and separate live-validation authority. Continue other bounded
 curation and mechanism work instead of inventing user work. Evidence:
 `registry/offline-plugin-projection-poc-2026-08-08.json`.
+
+## 2026-08-08 program closeout refresh after offline plugin PoC
+
+The program-level closeout authority now binds the offline plugin projection
+PoC alongside the exact-pin and consumer-root evidence. The consumer/source
+cluster distinguishes deterministic dual-format field mapping, lifecycle
+ownership receipts, and six synthetic fail-closed classes from still-open
+plugin installability, host conformance, loader delivery, recovery,
+cross-device, behavior, value, and release evidence.
+
+This is a current-evidence reconciliation only. The acceptance inventory
+remains 46 verified / 15 partial / 0 planned across six open clusters; no goal,
+acceptance, cleanup, install, enablement, account, model, CC Switch, consumer,
+publication, or release state changed. Evidence:
+`registry/program-final-closeout-readiness-reconciliation-2026-07-28.json`.

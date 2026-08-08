@@ -47,6 +47,11 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         == "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
         "Program closeout disabled-consumer binding drifted",
     )
+    _require(
+        sources.get("offlinePluginProjectionPoc")
+        == "registry/offline-plugin-projection-poc-2026-08-08.json",
+        "Program closeout offline-plugin PoC binding drifted",
+    )
     program = json.loads((root / PROGRAM_MAP_PATH).read_text(encoding="utf-8"))
     criteria = program.get("acceptanceCriteria", [])
     counts = Counter(row.get("assessment") for row in criteria)
@@ -114,6 +119,8 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         and "72 manager symlinks" in consumer_boundary
         and "Gemini, GrokBuild, OpenCode, and Hermes" in consumer_boundary
         and "all four governed roots were absent" in consumer_boundary
+        and "six fail-closed classes" in consumer_boundary
+        and "plugin installability or host conformance" in consumer_boundary
         and "behavior, or value" in consumer_boundary,
         "Program closeout consumer/source claim boundary drifted",
     )
@@ -160,7 +167,9 @@ def validate_reconciliation(document: dict, *, root: Path = ROOT) -> None:
         progress.get("mattV123ExactSourceMetadataPin")
         == "covered-restart-persistent-metadata-only"
         and progress.get("disabledConsumerRootPresenceAndMattProjectionAbsence")
-        == "covered-readonly-single-observation",
+        == "covered-readonly-single-observation"
+        and progress.get("offlinePluginProjectionMapping")
+        == "covered-field-failure-and-ownership-mechanism-only",
         "Program closeout current evidence progress drifted",
     )
     documentation = document.get("documentation")

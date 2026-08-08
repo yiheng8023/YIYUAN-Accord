@@ -40,7 +40,10 @@ upgrade those assessments or prove final program completion.
    privacy-minimized disabled-consumer observation also records zero Matt flags
    and zero projections for Gemini, GrokBuild, OpenCode, and Hermes; all four
    governed roots were absent. The field-bound Claude Plugin inventory remains
-   separately governed. Host installation or health, loader precedence,
+   separately governed. A pure offline projection PoC additionally fixes the
+   Agent Plugins/OpenAI field mapping, lifecycle ownership receipts, and six
+   synthetic fail-closed classes. Host installation or health, plugin
+   installability or host conformance, loader precedence,
    task-bound invocation and delivery, live rollback, supported recovery across
    consumers, and cross-device convergence remain unproved.
 4. Standard lifecycle: the standard-candidate package now has one bounded
@@ -66,7 +69,9 @@ Likewise:
 - a green top-level verifier is not final acceptance;
 - static Skill overlap is not retirement authority;
 - cleanup inventory conformance is not cleanup authorization;
-- one completed no-model exposure is not live value or cross-host evidence.
+- one completed no-model exposure is not live value or cross-host evidence;
+- one offline plugin projection replay is not installability, conformance,
+  behavior, value, or release evidence.
 
 The program must advance each open cluster against its own acceptance surface.
 No acceptance upgrade, model dispatch, Skill or portfolio mutation, CC Switch

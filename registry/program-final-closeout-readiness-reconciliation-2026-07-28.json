@@ -21,7 +21,8 @@
     "mattV123UpstreamAndLiveDriftReview": "registry/mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07.json",
     "mattV123ExactPinReconciliation": "registry/mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08.json",
     "mattV123ExactPinPostRestartReport": "audits/mattpocock-skills/6acc160e4e0cd062dbbbd7a1b26ae92855edf07e/exact-pin-reconciliation-2026-08-08/POST-RESTART-REPORT.json",
-    "disabledConsumerRootInventory": "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json"
+    "disabledConsumerRootInventory": "registry/cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08.json",
+    "offlinePluginProjectionPoc": "registry/offline-plugin-projection-poc-2026-08-08.json"
   },
   "acceptanceSnapshot": {
     "totalCriteria": 61,
@@ -134,7 +135,7 @@
     {
       "id": "consumer-and-source-governance",
       "openCriteriaCount": 4,
-      "currentBoundary": "The 2026-08-07 dated Codex and Claude snapshots remain historical evidence for the common and host-specific physical roots. The 2026-08-08 owner-authorized Matt reconciliation freshly proves 25 exact v1.2.3 payloads, 25 source rows pinned to the exact tag after an ordinary CC Switch 3.19.2 restart, 24 enabled projections per common/Claude/Codex root, 72 manager symlinks, zero direct same-name directories, unchanged payload/projection/enablement surfaces, and a retained recovery journal. A privacy-minimized read-only observation additionally proves zero Matt enablement and zero projections for Gemini, GrokBuild, OpenCode, and Hermes; all four governed roots were absent at that observation. The separately authorized field-bound Claude Plugin inventory records one registered marketplace, 257 catalog metadata entries, 17 local cached Skill roots, four remote manifest entries with 17 locators, and no reparse point. None of this proves those disabled hosts are installed or healthy, loader precedence, task-bound invocation or delivery, live rollback, supported recovery across consumers, cross-device convergence, behavior, or value.",
+      "currentBoundary": "The 2026-08-07 dated Codex and Claude snapshots remain historical evidence for the common and host-specific physical roots. The 2026-08-08 owner-authorized Matt reconciliation freshly proves 25 exact v1.2.3 payloads, 25 source rows pinned to the exact tag after an ordinary CC Switch 3.19.2 restart, 24 enabled projections per common/Claude/Codex root, 72 manager symlinks, zero direct same-name directories, unchanged payload/projection/enablement surfaces, and a retained recovery journal. A privacy-minimized read-only observation additionally proves zero Matt enablement and zero projections for Gemini, GrokBuild, OpenCode, and Hermes; all four governed roots were absent at that observation. The separately authorized field-bound Claude Plugin inventory records one registered marketplace, 257 catalog metadata entries, 17 local cached Skill roots, four remote manifest entries with 17 locators, and no reparse point. A pure offline plugin PoC now proves deterministic Agent Plugins/OpenAI field mapping, lifecycle ownership receipts, and six fail-closed classes for synthetic metadata only. None of this proves those disabled hosts are installed or healthy, plugin installability or host conformance, loader precedence, task-bound invocation or delivery, live rollback, supported recovery across consumers, cross-device convergence, behavior, or value.",
       "nextEvidenceClass": "a named host or task gap with loader observability, or separately authorized supported recovery or cross-device convergence canaries"
     },
     {
@@ -160,6 +161,7 @@
     "mattDependencyCompleteNoModelExposure": "covered",
     "mattV123ExactSourceMetadataPin": "covered-restart-persistent-metadata-only",
     "disabledConsumerRootPresenceAndMattProjectionAbsence": "covered-readonly-single-observation",
+    "offlinePluginProjectionMapping": "covered-field-failure-and-ownership-mechanism-only",
     "selfAuthoredStaticSubtractiveAudit": "covered-with-limits",
     "repositoryAuthoredGapFillGate": "verified-synthetic-mechanism-only",
     "currentHostLoaderHookObservability": "negative-admission-recorded",

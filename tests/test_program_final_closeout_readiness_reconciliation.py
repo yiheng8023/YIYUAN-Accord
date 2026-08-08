@@ -90,6 +90,19 @@ class ProgramFinalCloseoutReadinessReconciliationTests(unittest.TestCase):
             ],
         )
 
+    def test_reconciliation_binds_offline_plugin_poc_without_closing_program(self) -> None:
+        self.assertEqual(
+            "registry/offline-plugin-projection-poc-2026-08-08.json",
+            self.document["sourceBindings"]["offlinePluginProjectionPoc"],
+        )
+        self.assertEqual(
+            "covered-field-failure-and-ownership-mechanism-only",
+            self.document["currentEvidenceProgress"][
+                "offlinePluginProjectionMapping"
+            ],
+        )
+        self.assertFalse(self.document["closeoutDecision"]["goalComplete"])
+
     def test_rejects_acceptance_count_upgrade(self) -> None:
         document = copy.deepcopy(self.document)
         document["acceptanceSnapshot"]["verified"] = 61
