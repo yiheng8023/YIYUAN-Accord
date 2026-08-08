@@ -28,6 +28,9 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
         self.projection = load_json(
             "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
         )
+        self.plugin_decision = load_json(
+            "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json"
+        )
         self.acceptance = load_json("registry/program-acceptance-map.json")
         self.texts = {
             "plan_text": read("docs/strategy/RESEARCH-AND-POC-PLAN.md"),
@@ -41,12 +44,14 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
         *,
         authority: dict | None = None,
         projection: dict | None = None,
+        plugin_decision: dict | None = None,
         acceptance: dict | None = None,
         texts: dict[str, str] | None = None,
     ) -> None:
         validate_contract(
             self.authority if authority is None else authority,
             self.projection if projection is None else projection,
+            self.plugin_decision if plugin_decision is None else plugin_decision,
             self.acceptance if acceptance is None else acceptance,
             **(self.texts if texts is None else texts),
         )
@@ -159,12 +164,30 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "plan CC Switch release projection"):
             self.validate(texts=texts)
 
+    def test_plugin_is_a_manager_agnostic_non_release_consumer_projection(self) -> None:
+        boundary = self.projection["pluginDistributionBoundary"]
+        decision = self.plugin_decision["decision"]
+
+        self.assertFalse(boundary["wholeRepositoryBecomesPlugin"])
+        self.assertTrue(boundary["pluginCompatibilityRequired"])
+        self.assertTrue(boundary["pluginIsConsumerProjection"])
+        self.assertFalse(boundary["portableCoreDependsOnCcSwitch"])
+        self.assertTrue(boundary["oneLifecycleAuthorityPerComponent"])
+        self.assertFalse(boundary["ccManagedThirdPartyPayloadMayBeBundled"])
+        self.assertFalse(boundary["releaseEligibleNow"])
+        self.assertEqual(
+            decision["currentPosture"],
+            "plugin-compatible-manager-agnostic-release-not-eligible",
+        )
+
     def test_failure_injection_matrix_fails_closed(self) -> None:
         mutations = []
 
         authority = copy.deepcopy(self.authority)
         authority["id"] = "wrong-authority"
-        mutations.append(("authority-id-drift", authority, None, None, None))
+        mutations.append(
+            ("authority-id-drift", authority, None, None, None, None)
+        )
 
         projection_mutations = {
             "curation-real-task-global-stop": (
@@ -222,6 +245,25 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
                 ),
                 True,
             ),
+            "plugin-whole-product-promotion": (
+                ("pluginDistributionBoundary", "wholeRepositoryBecomesPlugin"),
+                True,
+            ),
+            "plugin-cc-switch-dependency-promotion": (
+                ("pluginDistributionBoundary", "portableCoreDependsOnCcSwitch"),
+                True,
+            ),
+            "plugin-third-party-bundling-promotion": (
+                (
+                    "pluginDistributionBoundary",
+                    "ccManagedThirdPartyPayloadMayBeBundled",
+                ),
+                True,
+            ),
+            "plugin-release-eligibility-promotion": (
+                ("pluginDistributionBoundary", "releaseEligibleNow"),
+                True,
+            ),
             "residual-gap-authoring-gate-removal": (
                 (
                     "schedulerLanes",
@@ -241,7 +283,7 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
             for key in path[:-1]:
                 target = target[key]
             target[path[-1]] = value
-            mutations.append((case_id, None, projection, None, None))
+            mutations.append((case_id, None, projection, None, None, None))
 
         acceptance = copy.deepcopy(self.acceptance)
         criterion = next(
@@ -251,16 +293,31 @@ class PortfolioTasktimeProjectionContractTests(unittest.TestCase):
         )
         criterion["assessment"] = "partial"
         mutations.append(
-            ("acceptance-verification-downgrade", None, None, acceptance, None)
+            (
+                "acceptance-verification-downgrade",
+                None,
+                None,
+                None,
+                acceptance,
+                None,
+            )
         )
 
         self.assertEqual([item[0] for item in mutations], MUTATION_CASE_IDS)
-        for case_id, authority, projection, acceptance, texts in mutations:
+        for (
+            case_id,
+            authority,
+            projection,
+            plugin_decision,
+            acceptance,
+            texts,
+        ) in mutations:
             with self.subTest(case_id=case_id):
                 with self.assertRaises(RuntimeError):
                     self.validate(
                         authority=authority,
                         projection=projection,
+                        plugin_decision=plugin_decision,
                         acceptance=acceptance,
                         texts=texts,
                     )

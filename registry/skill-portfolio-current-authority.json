@@ -260,6 +260,21 @@
     "portableProductDependency": false,
     "defaultReviewedPoolState": "inactive-until-separately-authorized"
   },
+  "pluginDistributionBoundary": {
+    "decision": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+    "productIdentity": "standalone-agent-neutral-harness-with-generated-plugin-consumer-projections",
+    "pluginCompatibilityRequired": true,
+    "wholeRepositoryBecomesPlugin": false,
+    "pluginIsConsumerProjection": true,
+    "currentPosture": "plugin-compatible-manager-agnostic-release-not-eligible",
+    "managerImplementationRequiredForPackaging": false,
+    "portableCoreDependsOnCcSwitch": false,
+    "oneLifecycleAuthorityPerComponent": true,
+    "ccManagedThirdPartyPayloadMayBeBundled": false,
+    "hostNativePluginManagerOwnsHostPluginLifecycle": true,
+    "selfAuthoredUniversalManagerAuthorized": false,
+    "releaseEligibleNow": false
+  },
   "selfAuthoredBoundary": {
     "residualGapRequired": true,
     "currentPriority": "not-before-candidate-and-composition-reuse"

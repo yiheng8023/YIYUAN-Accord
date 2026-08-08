@@ -147,6 +147,26 @@ decision core, runtime lifecycle plane, host authorization, process-fidelity
 evidence, or accountable acceptance. See the dated
 [primary-source review](../research/agent-plugins-1.0.0-strategic-impact-2026-08-07.md).
 
+The owner-accepted distribution posture is now
+`plugin-compatible + manager-agnostic + release-not-eligible`. The Harness
+remains an independent Agent-neutral product authority; Agent Plugins, OpenAI,
+Vercel, and future host packages are generated consumer projections from one
+canonical repository source rather than alternate product authorities. Their
+manifests and lifecycle behavior may legitimately differ. A plugin must not
+bundle a CC Switch-managed third-party payload, make CC Switch a portable-core
+dependency, or create two installation/update/enablement owners for one
+component.
+
+The absence of a repository-authored universal manager is not a packaging gap.
+CC Switch and host-native plugin managers remain replaceable operational
+adapters within their owned scopes. Repository work is limited to a narrow
+Manager Adapter contract, ownership mapping, deterministic projection, and
+fail-closed verification unless a separately evidenced operational-management
+gap survives reuse analysis. No plugin is currently release-eligible because
+there is no admitted repository-owned residual-gap component or plugin-specific
+task-value and lifecycle evidence. See the
+[plugin distribution decision](PLUGIN-DISTRIBUTION-AND-MANAGER-BOUNDARY-2026-08-08.md).
+
 The capability universe is dynamic. A current inventory is only a dated
 snapshot of what the host can see, not proof that the best suitable capability
 is already installed or loaded. `capability-router` must distinguish two

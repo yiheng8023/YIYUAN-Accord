@@ -28,6 +28,11 @@ decisions, and bounded authorization.
 - **Manager boundary:** CC Switch is a replaceable operational adapter where
   suitable, not the portable product contract. PR 6086 and its fork are an
   optional upstream contribution, not a Harness dependency.
+- **Plugin posture:** the Harness remains an independent Agent-neutral product
+  and may emit generated plugin consumer projections. It is currently
+  `plugin-compatible + manager-agnostic + release-not-eligible`; a plugin
+  must not bundle CC Switch-managed third-party payloads or create a second
+  lifecycle authority.
 - **Current Matt provenance:** the 25 managed payloads match exact release
   `v1.2.3@6acc160e`, and CC Switch source metadata is pinned to that tag after
   a recoverable metadata-only transaction. This does not prove invocation,
@@ -68,7 +73,9 @@ The Harness keeps five layers distinct:
    licenses, security, dependencies, overlap, maintenance, permissions, and
    admission decisions across capability types.
 5. **Consumer projections** — separately governed installation and runtime
-   distribution, including CC Switch where appropriate.
+   distribution, including CC Switch and host-native plugin managers where
+   appropriate. A plugin is one projection of the product, not the product
+   authority or a universal capability manager.
 
 Native host authorization and permission enforcement remain authoritative.
 The Harness may reduce unnecessary prompts, but it does not bypass or recreate

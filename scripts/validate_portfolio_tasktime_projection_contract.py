@@ -11,6 +11,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 AUTHORITY_PATH = "registry/skill-portfolio-current-authority.json"
 PROJECTION_PATH = "registry/portfolio-tasktime-projection-contract-2026-08-06.json"
+PLUGIN_DECISION_PATH = (
+    "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json"
+)
 ACCEPTANCE_PATH = "registry/program-acceptance-map.json"
 PLAN_PATH = "docs/strategy/RESEARCH-AND-POC-PLAN.md"
 GOAL_PROMPT_PATH = "docs/operations/CURRENT-GOAL-MODE-PROMPT.md"
@@ -32,6 +35,10 @@ MUTATION_CASE_IDS = [
     "task-time-activation-authority-removal",
     "user-invented-task-burden-promotion",
     "direct-installer-manager-authority-promotion",
+    "plugin-whole-product-promotion",
+    "plugin-cc-switch-dependency-promotion",
+    "plugin-third-party-bundling-promotion",
+    "plugin-release-eligibility-promotion",
     "residual-gap-authoring-gate-removal",
     "broad-claim-promotion",
     "acceptance-verification-downgrade",
@@ -50,6 +57,7 @@ def _set(value: Any) -> set[Any]:
 def validate_contract(
     authority: dict[str, Any],
     projection: dict[str, Any],
+    plugin_decision: dict[str, Any],
     acceptance: dict[str, Any],
     *,
     plan_text: str,
@@ -210,6 +218,47 @@ def validate_contract(
         == "inactive-until-separately-authorized",
         "replaceable manager boundary drifted",
     )
+    authority_plugin = authority.get("pluginDistributionBoundary", {})
+    projection_plugin = projection.get("pluginDistributionBoundary", {})
+    decision = plugin_decision.get("decision", {})
+    release = plugin_decision.get("releaseEligibility", {})
+    expected_plugin_boundary = {
+        "wholeRepositoryBecomesPlugin": False,
+        "pluginCompatibilityRequired": True,
+        "pluginIsConsumerProjection": True,
+        "managerImplementationRequiredForPackaging": False,
+        "portableCoreDependsOnCcSwitch": False,
+        "oneLifecycleAuthorityPerComponent": True,
+        "ccManagedThirdPartyPayloadMayBeBundled": False,
+        "hostNativePluginManagerOwnsHostPluginLifecycle": True,
+    }
+    _require(
+        plugin_decision.get("schema") == 1
+        and plugin_decision.get("id")
+        == "plugin-distribution-and-manager-boundary-decision-2026-08-08"
+        and plugin_decision.get("status")
+        == "owner-accepted-plugin-compatible-manager-agnostic-release-not-eligible"
+        and release.get("eligibleNow") is False,
+        "plugin distribution decision identity or release boundary drifted",
+    )
+    for key, value in expected_plugin_boundary.items():
+        _require(
+            authority_plugin.get(key) == value
+            and projection_plugin.get(key) == value
+            and decision.get(key) == value,
+            f"plugin distribution boundary drifted: {key}",
+        )
+    _require(
+        authority_plugin.get("decision") == PLUGIN_DECISION_PATH
+        and projection_plugin.get("decisionRecord") == PLUGIN_DECISION_PATH
+        and projection_plugin.get("releaseEligibleNow") is False
+        and projection_plugin.get("installationEnablementPublicationAuthorized")
+        is False
+        and authority_plugin.get("releaseEligibleNow") is False
+        and decision.get("currentPosture")
+        == "plugin-compatible-manager-agnostic-release-not-eligible",
+        "plugin projection authority or current posture drifted",
+    )
 
     claim = projection.get("claimBoundary", {})
     _require(
@@ -249,6 +298,11 @@ def validate_contract(
         in sequence.get("evidenceIds", []),
         "acceptance projection verification drifted",
     )
+    _require(
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
+        in sequence.get("evidenceIds", []),
+        "acceptance plugin distribution evidence binding drifted",
+    )
     for label, text in (("plan", plan_text), ("goal prompt", goal_prompt_text)):
         _require(MARKER in text, f"{label} projection marker drifted")
     normalized_plan = " ".join(plan_text.split()).lower()
@@ -265,10 +319,19 @@ def validate_contract(
             and "real task" in text,
             f"{label} global-stop wording drifted",
         )
+        _require(
+            "plugin-compatible" in text
+            and "manager-agnostic" in text
+            and "release-not-eligible" in text,
+            f"{label} plugin distribution posture drifted",
+        )
     normalized_readme_zh = "".join(readme_zh_text.split())
     _require(
         "组合策展不要求" in normalized_readme_zh
-        and "真实任务" in normalized_readme_zh,
+        and "真实任务" in normalized_readme_zh
+        and "兼容插件" in normalized_readme_zh
+        and "管理器无关" in normalized_readme_zh
+        and "不具备发布资格" in normalized_readme_zh,
         "Chinese README global-stop wording drifted",
     )
     cc_release = projection.get("sourceBindings", {}).get("ccSwitch", {}).get("release")
@@ -286,6 +349,7 @@ def validate_repository_contract(root: Path = ROOT) -> None:
     validate_contract(
         json.loads((root / AUTHORITY_PATH).read_text(encoding="utf-8")),
         json.loads((root / PROJECTION_PATH).read_text(encoding="utf-8")),
+        json.loads((root / PLUGIN_DECISION_PATH).read_text(encoding="utf-8")),
         json.loads((root / ACCEPTANCE_PATH).read_text(encoding="utf-8")),
         plan_text=(root / PLAN_PATH).read_text(encoding="utf-8"),
         goal_prompt_text=(root / GOAL_PROMPT_PATH).read_text(encoding="utf-8"),

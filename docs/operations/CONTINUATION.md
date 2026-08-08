@@ -5382,3 +5382,29 @@ No README, program-order, acceptance, or goal-mode prompt change was required.
 No program evidence ID or standard candidate was created, and the 46/15/0
 inventory is unchanged. Evidence:
 `registry/addy-osmani-ai-assisted-engineering-weak-reference-2026-08-08.json`.
+
+## 2026-08-08 plugin distribution and manager-boundary checkpoint
+
+The owner accepted the strategic distinction between product authority,
+packaging, and lifecycle management. Agent Autonomy Harness remains an
+independent Agent-neutral product; Agent Plugins, OpenAI, Vercel, and future
+packages are generated consumer projections. The current posture is
+`plugin-compatible + manager-agnostic + release-not-eligible`.
+
+CC Switch remains the replaceable operational manager for shared third-party
+Skills where suitable, while each host-native plugin manager owns its host's
+plugin lifecycle. The portable core does not depend on CC Switch. One component
+has one lifecycle authority, so a Harness plugin must not bundle a CC-managed
+third-party payload or create a second install/update/enablement path. The lack
+of a repository-authored universal manager is not a packaging blocker and does
+not authorize building one.
+
+The north star, plan, acceptance semantics, goal-mode prompt, README surfaces,
+semantic authority, projection contract, validator, and tests now carry this
+boundary. The next safe gate is offline field, failure, and ownership mapping
+from one canonical repository source to portable Agent Plugins and OpenAI
+projections using synthetic or repository-owned non-release fixtures. No live
+plugin was created, installed, enabled, executed, or published; no CC Switch,
+consumer, account, model, or acceptance state changed. The canonical inventory
+remains 46/15/0. Evidence:
+`registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`.

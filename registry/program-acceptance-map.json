@@ -498,7 +498,7 @@
     {
       "id": "acceptance.sequence-integrity",
       "semanticProjectionId": "portfolio-tasktime-projection-v1",
-      "statement": "Machine-readable prerequisites prevent gap claims, repository authoring, release, consumer projection, standard extraction, ASSETS admission claims, and next-round activation from skipping their upstream evidence gates. The main research plan, acceptance map, and goal-mode prompt remain deterministic projections of the dated portfolio authority: bounded inactive curation and mechanism validation do not require invented user work, while task-time behavior and value claims retain their real-task and separate-authority gates.",
+      "statement": "Machine-readable prerequisites prevent gap claims, repository authoring, release, consumer projection, standard extraction, ASSETS admission claims, and next-round activation from skipping their upstream evidence gates. The main research plan, acceptance map, and goal-mode prompt remain deterministic projections of the dated portfolio authority: bounded inactive curation and mechanism validation do not require invented user work, while task-time behavior and value claims retain their real-task and separate-authority gates. Plugin compatibility remains a generated consumer-projection concern and cannot promote the whole repository, duplicate a component lifecycle authority, create a CC Switch dependency, or bypass plugin release gates.",
       "assessment": "verified",
       "verificationIds": [
         "verification.sequence-integrity"
@@ -512,7 +512,8 @@
         "evidence.round03-rebaseline",
         "evidence.round03-demand-coordinate-source-contract",
         "evidence.round03-rebaseline-acceptance",
-        "evidence.portfolio-tasktime-projection-contract-2026-08-06"
+        "evidence.portfolio-tasktime-projection-contract-2026-08-06",
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
       ]
     },
     {
@@ -600,7 +601,7 @@
     },
     {
       "id": "acceptance.consumer-mapping-evidence",
-      "statement": "Every supported consumer Agent has dated evidence for instruction discovery, every observed Skill root and authority class, ownership, precedence, source-update identity, projection, verification, backup, and restore behavior; listing, installation, enablement, exposure, task-bound invocation, instruction delivery, and behavior remain distinct evidence states. Official/runtime/plugin caches and project-local, ecosystem-private, or user-added roots remain foreign-scoped rather than being flattened into the CC Switch SSOT.",
+      "statement": "Every supported consumer Agent has dated evidence for instruction discovery, every observed Skill root and authority class, ownership, precedence, source-update identity, projection, verification, backup, and restore behavior; listing, installation, enablement, exposure, task-bound invocation, instruction delivery, and behavior remain distinct evidence states. Official/runtime/plugin caches and project-local, ecosystem-private, or user-added roots remain foreign-scoped rather than being flattened into the CC Switch SSOT. Every claimed plugin format has an explicit mapping from one canonical repository source, and every packaged component has exactly one lifecycle authority; CC Switch-managed third-party payloads are not duplicated into Harness plugins.",
       "assessment": "partial",
       "verificationIds": [
         "verification.consumer-mapping-inventory"
@@ -620,7 +621,8 @@
         "evidence.claude-plugin-skill-root-readonly-inventory-2026-08-07",
         "evidence.mattpocock-skills-v1.2.3-upstream-and-live-drift-review-2026-08-07",
         "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08",
-        "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"
+        "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08",
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
       ]
     },
     {
@@ -985,7 +987,7 @@
     },
     {
       "id": "acceptance.broad-capability-ecosystem-boundary",
-      "statement": "The program distinguishes the narrow native capability, instructions or Rules, Skills or Recipes, Hooks, and verification chain from the broad ecosystem of native tools, MCP servers, Plugins, Apps or Connectors, external accounts and data, CLIs, scripts, APIs, services, project mechanisms, tests, CI, hard standards, and accountable human authority; Skills-first does not become Skills-only.",
+      "statement": "The program distinguishes the narrow native capability, instructions or Rules, Skills or Recipes, Hooks, and verification chain from the broad ecosystem of native tools, MCP servers, Plugins, Apps or Connectors, external accounts and data, CLIs, scripts, APIs, services, project mechanisms, tests, CI, hard standards, and accountable human authority; Skills-first does not become Skills-only. A plugin is a host or portable consumer projection rather than the whole Harness, its product authority, or an implicit universal manager.",
       "assessment": "verified",
       "verificationIds": [
         "verification.broad-capability-ecosystem-boundary"
@@ -995,7 +997,8 @@
         "evidence.custom-manager-retirement-reconciliation",
         "evidence.production-capability-manager-design",
         "evidence.production-capability-manager-external-ecosystem-and-stack-review",
-        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06"
+        "evidence.skill-portfolio-discovery-index-reference-cohort-2026-08-06",
+        "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08"
       ]
     },
     {
@@ -1480,11 +1483,22 @@
     {
       "id": "evidence.portfolio-tasktime-projection-contract-2026-08-06",
       "path": "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
-      "kind": "deterministic-plan-acceptance-goal-mode-projection-manager-freshness-and-fourteen-case-failure-injection-boundary",
+      "kind": "deterministic-plan-acceptance-goal-mode-projection-manager-plugin-distribution-and-eighteen-case-failure-injection-boundary",
       "asOf": "2026-08-06",
       "supports": [
         "acceptance.sequence-integrity",
         "acceptance.cc-switch-source-preserving-skill-pool"
+      ]
+    },
+    {
+      "id": "evidence.plugin-distribution-and-manager-boundary-decision-2026-08-08",
+      "path": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+      "kind": "owner-accepted-plugin-compatible-manager-agnostic-release-not-eligible-product-distribution-and-single-lifecycle-authority-decision",
+      "asOf": "2026-08-08",
+      "supports": [
+        "acceptance.sequence-integrity",
+        "acceptance.consumer-mapping-evidence",
+        "acceptance.broad-capability-ecosystem-boundary"
       ]
     },
     {

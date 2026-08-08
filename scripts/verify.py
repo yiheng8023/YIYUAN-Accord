@@ -1662,6 +1662,8 @@ REQUIRED_FILES = (
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
     "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "registry/portfolio-tasktime-projection-contract-2026-08-06.json",
+    "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+    "docs/strategy/PLUGIN-DISTRIBUTION-AND-MANAGER-BOUNDARY-2026-08-08.md",
     "scripts/validate_portfolio_tasktime_projection_contract.py",
     "tests/test_portfolio_tasktime_projection_contract.py",
     "registry/repository-authored-gap-fill-gate-2026-08-06.json",

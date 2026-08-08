@@ -47,6 +47,27 @@ used only in an isolated inactive acquisition root unless a separately reviewed
 adapter imports the exact result into CC and verifies SSOT, database, enablement,
 backup, update, and consumer projections.
 
+## Plugin distribution boundary
+
+- Keep the Harness as an independent Agent-neutral product authority. Treat
+  Agent Plugins, OpenAI, Vercel, and future packages as generated consumer
+  projections, not as the product body or a new global scheduler.
+- Maintain the current posture:
+  `plugin-compatible + manager-agnostic + release-not-eligible`.
+- Do not make the portable core depend on CC Switch. CC Switch owns the shared
+  third-party Skill lifecycle where selected; a host-native plugin manager owns
+  its host plugin lifecycle. Require one lifecycle authority per component.
+- Do not bundle a CC Switch-managed third-party payload into a Harness plugin,
+  and do not implement a universal manager merely to make plugin packaging
+  convenient.
+- The next safe slice is offline field, failure, and ownership mapping from one
+  canonical source to portable Agent Plugins and OpenAI projections using
+  synthetic or repository-owned non-release fixtures. Installation,
+  enablement, live host execution, publication, and release remain separate
+  gates.
+- Verify this boundary against
+  `registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json`.
+
 ## Current Matt Skills freshness boundary
 
 - Govern the new upstream candidate by exact release

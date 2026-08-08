@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "portfolio-tasktime-projection-v1",
-  "asOf": "2026-08-06",
+  "asOf": "2026-08-08",
   "semanticAuthorityId": "skill-portfolio-current-authority-v1",
   "semanticAuthorityPath": "registry/skill-portfolio-current-authority.json",
   "projectionMarker": "semantic-projection: portfolio-tasktime-projection-v1",
@@ -63,7 +63,27 @@
     "directInstallerSafeUse": "isolated-inactive-acquisition-only-unless-separately-admitted",
     "reason": "A direct installer can bypass CC Switch SSOT, database state, backup, update, enablement, and consumer projection records."
   },
+  "pluginDistributionBoundary": {
+    "decisionRecord": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+    "wholeRepositoryBecomesPlugin": false,
+    "pluginCompatibilityRequired": true,
+    "pluginIsConsumerProjection": true,
+    "managerImplementationRequiredForPackaging": false,
+    "portableCoreDependsOnCcSwitch": false,
+    "oneLifecycleAuthorityPerComponent": true,
+    "ccManagedThirdPartyPayloadMayBeBundled": false,
+    "hostNativePluginManagerOwnsHostPluginLifecycle": true,
+    "releaseEligibleNow": false,
+    "nextGate": "offline-plugin-field-failure-and-ownership-mapping-poc",
+    "installationEnablementPublicationAuthorized": false
+  },
   "sourceBindings": {
+    "pluginDistributionDecision": {
+      "record": "registry/plugin-distribution-and-manager-boundary-decision-2026-08-08.json",
+      "agentPluginsBaseline": "registry/agent-plugins-1.0.0-strategic-impact-2026-08-07.json",
+      "openAiPluginPackaging": "https://developers.openai.com/plugins/build/plugins",
+      "vercelCodingAgentPlugin": "https://vercel.com/changelog/introducing-vercel-plugin-for-coding-agents"
+    },
     "ccSwitch": {
       "release": "v3.19.2",
       "annotatedTagObject": "f6882b69f0a30968dcc6dbb1153b6b12b50e6b1a",
@@ -95,6 +115,10 @@
       "task-time-activation-authority-removal",
       "user-invented-task-burden-promotion",
       "direct-installer-manager-authority-promotion",
+      "plugin-whole-product-promotion",
+      "plugin-cc-switch-dependency-promotion",
+      "plugin-third-party-bundling-promotion",
+      "plugin-release-eligibility-promotion",
       "residual-gap-authoring-gate-removal",
       "broad-claim-promotion",
       "acceptance-verification-downgrade"
