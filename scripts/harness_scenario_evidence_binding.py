@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
+import re
 from typing import Any
 
 from scripts.harness_decision_packet import DecisionPacketError, load_source_evidence_record
@@ -101,9 +103,13 @@ def resolve_json_pointer(document: object, pointer: str) -> object:
         raise DecisionPacketError("binding-pointer-invalid", "Binding pointer must be a non-root JSON Pointer.")
     current = document
     for raw in pointer[1:].split("/"):
-        token = raw.replace("~1", "/").replace("~0", "~")
+        token = _decode_json_pointer_token(raw)
         if isinstance(current, list):
-            if not token.isdigit() or int(token) >= len(current):
+            if not token.isdigit() or (len(token) > 1 and token.startswith("0")):
+                raise DecisionPacketError(
+                    "binding-pointer-invalid", "Binding pointer has an invalid array index."
+                )
+            if int(token) >= len(current):
                 raise DecisionPacketError(
                     "binding-pointer-unresolved", "Binding pointer does not resolve."
                 )
@@ -115,6 +121,24 @@ def resolve_json_pointer(document: object, pointer: str) -> object:
                 "binding-pointer-unresolved", "Binding pointer does not resolve."
             )
     return current
+
+
+def _decode_json_pointer_token(raw: str) -> str:
+    decoded: list[str] = []
+    index = 0
+    while index < len(raw):
+        character = raw[index]
+        if character != "~":
+            decoded.append(character)
+            index += 1
+            continue
+        if index + 1 >= len(raw) or raw[index + 1] not in {"0", "1"}:
+            raise DecisionPacketError(
+                "binding-pointer-invalid", "Binding pointer contains an invalid escape."
+            )
+        decoded.append("~" if raw[index + 1] == "0" else "/")
+        index += 2
+    return "".join(decoded)
 
 
 def _require_dict(value: object, code: str, message: str) -> dict[str, Any]:
@@ -130,16 +154,32 @@ def _require_registry(registry: object) -> dict[str, Any]:
             "binding-registry-invalid", "Binding registry must contain exactly its v1 fields."
         )
     if (
-        normalized["schema"] != 1
+        not _is_exact_integer(normalized["schema"], 1)
+        or not isinstance(normalized["id"], str)
         or normalized["id"] != "harness-scenario-evidence-bindings-v1"
-        or not isinstance(normalized["date"], str)
+        or not _is_registry_date(normalized["date"])
         or not isinstance(normalized["status"], str)
+        or not normalized["status"]
         or not isinstance(normalized["bindings"], list)
     ):
         raise DecisionPacketError("binding-registry-invalid", "Binding registry has invalid v1 fields.")
     for binding in normalized["bindings"]:
         _validate_binding_shape(binding)
     return normalized
+
+
+def _is_exact_integer(value: object, expected: int) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value == expected
+
+
+def _is_registry_date(value: object) -> bool:
+    if not isinstance(value, str) or re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) is None:
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
 
 
 def _validate_binding_shape(binding: object) -> dict[str, Any]:
@@ -288,9 +328,13 @@ def _declared_surface_identity_pointers(
             current = item
             resolved = True
             for raw in suffix:
-                token = raw.replace("~1", "/").replace("~0", "~")
+                token = _decode_json_pointer_token(raw)
                 if isinstance(current, list):
-                    if not token.isdigit() or int(token) >= len(current):
+                    if (
+                        not token.isdigit()
+                        or (len(token) > 1 and token.startswith("0"))
+                        or int(token) >= len(current)
+                    ):
                         resolved = False
                         break
                     current = current[int(token)]

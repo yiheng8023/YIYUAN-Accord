@@ -7,6 +7,7 @@ from scripts.harness_decision_packet import DecisionPacketError, load_current_au
 from scripts.harness_scenario_evidence_binding import (
     BINDING_REGISTRY_PATH,
     load_binding_registry,
+    resolve_json_pointer,
     resolve_scenario_evidence_binding,
     validate_binding_registry,
 )
@@ -101,3 +102,31 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
         with self.assertRaises(DecisionPacketError) as raised:
             resolve_scenario_evidence_binding(ROOT, mutated, row)
         self.assertEqual("binding-scenario-identity-mismatch", raised.exception.code)
+
+    def test_registry_runtime_validation_matches_schema_scalar_constraints(self) -> None:
+        cases = (
+            ("schema", True),
+            ("status", ""),
+            ("status", False),
+            ("date", "2026/08/09"),
+            ("date", "2026-13-40"),
+        )
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
+                mutated = copy.deepcopy(self.registry)
+                mutated[field] = value
+                with self.assertRaises(DecisionPacketError) as raised:
+                    validate_binding_registry(ROOT, mutated, self.coverage)
+                self.assertEqual("binding-registry-invalid", raised.exception.code)
+
+    def test_json_pointer_syntax_is_strict_without_changing_valid_resolution(self) -> None:
+        document = {"a/b": {"~": "escaped"}, "00": "dictionary key", "items": ["zero"]}
+        self.assertEqual("escaped", resolve_json_pointer(document, "/a~1b/~0"))
+        self.assertEqual("dictionary key", resolve_json_pointer(document, "/00"))
+        self.assertEqual("zero", resolve_json_pointer(document, "/items/0"))
+
+        for pointer, target in (("/a~2b", document), ("/a~", document), ("/items/00", document)):
+            with self.subTest(pointer=pointer):
+                with self.assertRaises(DecisionPacketError) as raised:
+                    resolve_json_pointer(target, pointer)
+                self.assertEqual("binding-pointer-invalid", raised.exception.code)
