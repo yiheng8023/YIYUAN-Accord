@@ -170,6 +170,20 @@ class HarnessDecisionPacketAuthorityTests(HarnessDecisionPacketContractTests):
 
 
 class HarnessDecisionPacketBuildTests(HarnessDecisionPacketContractTests):
+    def assert_packet_mutation_rejected(
+        self,
+        mutate,
+        expected_code: str,
+    ) -> None:
+        packet = build_decision_packet(ROOT, self.load_request())
+        mutated = copy.deepcopy(packet)
+        mutate(mutated)
+        body = {key: value for key, value in mutated.items() if key != "packetSha256"}
+        mutated["packetSha256"] = canonical_sha256(body)
+        with self.assertRaises(DecisionPacketError) as raised:
+            validate_decision_packet(ROOT, mutated)
+        self.assertEqual(expected_code, raised.exception.code)
+
     def test_gen_research_packet_preserves_all_evidence_states(self) -> None:
         packet = build_decision_packet(ROOT, self.load_request())
         validate_decision_packet(ROOT, packet)
@@ -258,6 +272,52 @@ class HarnessDecisionPacketBuildTests(HarnessDecisionPacketContractTests):
         with self.assertRaises(DecisionPacketError) as raised:
             validate_decision_packet(ROOT, mutated)
         self.assertEqual("packet-digest-mismatch", raised.exception.code)
+
+    def test_unassessed_route_promotion_is_rejected(self) -> None:
+        self.assert_packet_mutation_rejected(
+            lambda packet: packet["routeCoverage"]["O"].__setitem__(
+                "state", "represented-source-static"
+            ),
+            "unassessed-route-promotion",
+        )
+
+    def test_residual_route_promotion_is_rejected(self) -> None:
+        self.assert_packet_mutation_rejected(
+            lambda packet: packet["routeCoverage"]["R"].__setitem__(
+                "state", "represented-residual-gap"
+            ),
+            "residual-gap-promotion",
+        )
+
+    def test_behavior_claim_promotion_is_rejected(self) -> None:
+        self.assert_packet_mutation_rejected(
+            lambda packet: packet["claimBoundary"].__setitem__(
+                "candidateCausationProved", True
+            ),
+            "claim-boundary-promotion",
+        )
+
+    def test_deprecated_routing_authority_promotion_is_rejected(self) -> None:
+        request = self.load_request()
+        bundle = load_authority_bundle(ROOT, request)
+        mutated = copy.deepcopy(bundle)
+        mutated["semanticAuthority"]["document"]["legacyAdaptedRelease"][
+            "routingProjectionCurrentAuthority"
+        ] = True
+        with self.assertRaises(DecisionPacketError) as raised:
+            validate_authority_bundle(mutated, request)
+        self.assertEqual("deprecated-routing-authority-promotion", raised.exception.code)
+
+    def test_portable_core_cc_switch_dependency_is_rejected(self) -> None:
+        request = self.load_request()
+        bundle = load_authority_bundle(ROOT, request)
+        mutated = copy.deepcopy(bundle)
+        mutated["semanticAuthority"]["document"]["managerBoundary"][
+            "portableProductDependency"
+        ] = True
+        with self.assertRaises(DecisionPacketError) as raised:
+            validate_authority_bundle(mutated, request)
+        self.assertEqual("portable-core-dependency-promotion", raised.exception.code)
 
     def test_cli_emits_canonical_packet_without_repository_writes(self) -> None:
         before = subprocess.run(
