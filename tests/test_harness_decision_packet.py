@@ -14,6 +14,7 @@ from scripts.harness_decision_packet import (
     canonical_sha256,
     load_authority_bundle,
     serialize_decision_packet,
+    strict_json_equal,
     validate_decision_request,
     validate_authority_bundle,
     validate_bound_source_digests,
@@ -32,6 +33,19 @@ class HarnessDecisionPacketContractTests(unittest.TestCase):
         request = self.load_request()
         validate_decision_request(request)
         self.assertEqual(64, len(canonical_sha256(request)))
+
+    def test_strict_json_equal_requires_types_keys_and_list_order(self) -> None:
+        self.assertTrue(
+            strict_json_equal(
+                {"items": [1, True, {"enabled": False}]},
+                {"items": [1, True, {"enabled": False}]},
+            )
+        )
+        self.assertFalse(strict_json_equal(True, 1))
+        self.assertFalse(strict_json_equal(1, 1.0))
+        self.assertFalse(strict_json_equal({"enabled": False}, {"enabled": 0}))
+        self.assertFalse(strict_json_equal({1: "value"}, {True: "value"}))
+        self.assertFalse(strict_json_equal(["N", "C", "H"], ["C", "N", "H"]))
 
     def test_boolean_activation_authority_is_rejected(self) -> None:
         request = self.load_request()
@@ -99,6 +113,8 @@ class HarnessDecisionPacketContractTests(unittest.TestCase):
     def test_invalid_scalar_fields_are_rejected(self) -> None:
         invalid_cases = (
             ("schema", 2, "invalid-request-schema"),
+            ("schema", True, "invalid-request-schema"),
+            ("schema", 1.0, "invalid-request-schema"),
             ("requestId", "", "invalid-request-id"),
             ("scenarioId", "lowercase", "invalid-scenario-id"),
             ("evidenceLane", "production", "invalid-evidence-lane"),
@@ -198,6 +214,31 @@ class HarnessDecisionPacketBuildTests(HarnessDecisionPacketContractTests):
         with self.assertRaises(DecisionPacketError) as raised:
             validate_decision_packet(ROOT, mutated)
         self.assertEqual(expected_code, raised.exception.code)
+
+    def test_packet_schema_requires_exact_integer(self) -> None:
+        self.assert_packet_mutation_rejected(
+            lambda packet: packet.__setitem__("schema", True),
+            "invalid-packet-shape",
+        )
+
+    def test_v1_exact_projections_reject_json_type_aliases(self) -> None:
+        cases = (
+            (
+                "authorization-gate",
+                lambda packet: packet["authorizationGates"].__setitem__("install", 0),
+                "authorization-gate-promotion",
+            ),
+            (
+                "projection-boundary",
+                lambda packet: packet["projectionBoundary"].__setitem__(
+                    "derivedProjectionNotAuthority", 1
+                ),
+                "historical-authority-promotion",
+            ),
+        )
+        for name, mutate, expected_code in cases:
+            with self.subTest(name=name):
+                self.assert_packet_mutation_rejected(mutate, expected_code)
 
     def test_gen_research_packet_preserves_all_evidence_states(self) -> None:
         packet = build_decision_packet(ROOT, self.load_request())

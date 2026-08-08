@@ -69,6 +69,18 @@ EXPECTED_BINDING_MODE_RULES = {
 
 
 class HarnessDecisionPacketV2Tests(unittest.TestCase):
+    def assert_resealed_mutation_rejected(
+        self,
+        packet: dict[str, Any],
+        expected_code: str,
+    ) -> None:
+        packet["packetSha256"] = canonical_sha256(
+            {key: value for key, value in packet.items() if key != "packetSha256"}
+        )
+        with self.assertRaises(DecisionPacketError) as raised:
+            validate_decision_packet_v2(ROOT, packet)
+        self.assertEqual(expected_code, raised.exception.code)
+
     def load_v2_schema(self) -> dict[str, Any]:
         return json.loads(
             (ROOT / "schemas/harness-decision-packet-v2.schema.json").read_text(
@@ -222,6 +234,37 @@ class HarnessDecisionPacketV2Tests(unittest.TestCase):
         with self.assertRaises(DecisionPacketError) as raised:
             validate_decision_packet_v2(ROOT, mutated)
         self.assertEqual("document-level-identity-promotion", raised.exception.code)
+
+    def test_scenario_identity_integer_alias_is_rejected_after_resealing(self) -> None:
+        packet = build_decision_packet_v2(ROOT, request_for("GEN-CREATIVE-01"))
+        packet["scenarioEvidenceBinding"]["scenarioIdentityPresentInSource"] = 1
+        self.assert_resealed_mutation_rejected(
+            packet, "historical-authority-promotion"
+        )
+
+    def test_authorization_gate_integer_alias_is_rejected_after_resealing(self) -> None:
+        packet = build_decision_packet_v2(ROOT, request_for("GEN-LEARNING-01"))
+        packet["authorizationGates"]["install"] = 0
+        self.assert_resealed_mutation_rejected(
+            packet, "authorization-gate-promotion"
+        )
+
+    def test_projection_boolean_integer_alias_is_rejected_after_resealing(self) -> None:
+        packet = build_decision_packet_v2(ROOT, request_for("GEN-LEARNING-01"))
+        packet["projectionBoundary"]["derivedProjectionNotAuthority"] = 1
+        self.assert_resealed_mutation_rejected(
+            packet, "historical-authority-promotion"
+        )
+
+    def test_request_schema_boolean_alias_is_rejected_after_resealing(self) -> None:
+        packet = build_decision_packet_v2(ROOT, request_for("GEN-LEARNING-01"))
+        packet["request"]["schema"] = True
+        self.assert_resealed_mutation_rejected(packet, "invalid-request-schema")
+
+    def test_packet_schema_requires_exact_integer(self) -> None:
+        packet = build_decision_packet_v2(ROOT, request_for("GEN-LEARNING-01"))
+        packet["schema"] = 2.0
+        self.assert_resealed_mutation_rejected(packet, "invalid-packet-shape")
 
     def test_registry_binding_drift_is_rejected_after_resealing(self) -> None:
         packet = build_decision_packet_v2(ROOT, request_for("GEN-LEARNING-01"))

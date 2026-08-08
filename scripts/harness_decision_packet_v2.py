@@ -14,6 +14,7 @@ from scripts.harness_decision_packet import (
     canonical_sha256,
     load_current_authority_bundle,
     load_source_evidence_record,
+    strict_json_equal,
     validate_authority_bundle,
     validate_decision_packet_projection,
     validate_decision_request,
@@ -117,29 +118,35 @@ def validate_decision_packet_v2(root: Path, packet: object) -> None:
     actual_binding = packet.get("scenarioEvidenceBinding")
     if isinstance(actual_binding, dict):
         document_level_promoted = (
-            expected_binding["bindingMode"] == "document-level-support"
+            strict_json_equal(
+                expected_binding["bindingMode"], "document-level-support"
+            )
             and (
-                actual_binding.get("bindingMode") != "document-level-support"
+                not strict_json_equal(
+                    actual_binding.get("bindingMode"), "document-level-support"
+                )
                 or actual_binding.get("scenarioIdentityPresentInSource") is not False
             )
         )
         invalid_absent_identity_mode = (
             actual_binding.get("scenarioIdentityPresentInSource") is False
-            and actual_binding.get("bindingMode") != "document-level-support"
+            and not strict_json_equal(
+                actual_binding.get("bindingMode"), "document-level-support"
+            )
         )
         if document_level_promoted or invalid_absent_identity_mode:
             raise DecisionPacketError(
                 "document-level-identity-promotion",
                 "Document-level support cannot be promoted to an independent scenario identity.",
             )
-    if actual_binding != expected_binding:
+    if not strict_json_equal(actual_binding, expected_binding):
         raise DecisionPacketError(
             "historical-authority-promotion",
             "Packet scenario evidence binding differs from the governed source projection.",
         )
 
     body = {key: value for key, value in packet.items() if key != "packetSha256"}
-    if packet.get("packetSha256") != canonical_sha256(body):
+    if not strict_json_equal(packet.get("packetSha256"), canonical_sha256(body)):
         raise DecisionPacketError("packet-digest-mismatch", "Packet digest is invalid.")
 
 

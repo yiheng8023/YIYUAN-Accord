@@ -112,6 +112,40 @@ def canonical_sha256(value: object) -> str:
     return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
 
 
+def strict_json_equal(actual: object, expected: object) -> bool:
+    """Compare JSON values with exact types, object keys, and list order."""
+
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(actual, dict):
+        assert isinstance(expected, dict)
+        if len(actual) != len(expected):
+            return False
+        actual_items = list(actual.items())
+        matched_indices: set[int] = set()
+        for expected_key, expected_value in expected.items():
+            matches = [
+                (index, actual_value)
+                for index, (actual_key, actual_value) in enumerate(actual_items)
+                if index not in matched_indices
+                and strict_json_equal(actual_key, expected_key)
+            ]
+            if len(matches) != 1:
+                return False
+            index, actual_value = matches[0]
+            matched_indices.add(index)
+            if not strict_json_equal(actual_value, expected_value):
+                return False
+        return True
+    if isinstance(actual, list):
+        assert isinstance(expected, list)
+        return len(actual) == len(expected) and all(
+            strict_json_equal(actual_item, expected_item)
+            for actual_item, expected_item in zip(actual, expected, strict=True)
+        )
+    return actual == expected
+
+
 def _is_nonempty_string(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
@@ -165,7 +199,7 @@ def validate_decision_request(request: object) -> None:
             "invalid-activation-authority",
             "Activation authority must be null or an evidence-backed object.",
         )
-    if request["schema"] != 1:
+    if not strict_json_equal(request["schema"], 1):
         raise DecisionPacketError("invalid-request-schema", "Request schema must be 1.")
     if not _is_nonempty_string(request["requestId"]):
         raise DecisionPacketError("invalid-request-id", "Request ID must be non-empty.")
@@ -320,7 +354,7 @@ def _find_scenario(items: object, key: str, scenario_id: str) -> dict[str, Any] 
     if not isinstance(items, list):
         return None
     for item in items:
-        if isinstance(item, dict) and item.get(key) == scenario_id:
+        if isinstance(item, dict) and strict_json_equal(item.get(key), scenario_id):
             return item
     return None
 
@@ -333,7 +367,9 @@ def load_current_authority_bundle(root: Path, request: object) -> dict[str, Any]
     semantic = _authority_record(
         root, SEMANTIC_AUTHORITY_PATH, missing_code="semantic-authority-missing"
     )
-    if semantic["id"] != request["expectedSemanticAuthorityId"]:
+    if not strict_json_equal(
+        semantic["id"], request["expectedSemanticAuthorityId"]
+    ):
         raise DecisionPacketError(
             "semantic-authority-id-mismatch",
             "Expected semantic authority does not match the current authority.",
@@ -437,23 +473,28 @@ def validate_authority_bundle(bundle: object, request: object) -> None:
         "scheduler": "portfolio-tasktime-projection-v1",
         "acceptance": "curation-program-acceptance-map-v1",
     }
-    if semantic.get("id") != expected_ids["semantic"] or semantic.get("id") != request[
-        "expectedSemanticAuthorityId"
-    ]:
+    if not strict_json_equal(
+        semantic.get("id"), expected_ids["semantic"]
+    ) or not strict_json_equal(
+        semantic.get("id"), request["expectedSemanticAuthorityId"]
+    ):
         raise DecisionPacketError(
             "semantic-authority-id-mismatch", "Semantic authority ID is not current."
         )
     for record, key in ((coverage, "coverage"), (scheduler, "scheduler"), (acceptance, "acceptance")):
-        if record.get("id") != expected_ids[key]:
+        if not strict_json_equal(record.get("id"), expected_ids[key]):
             raise DecisionPacketError("authority-bundle-invalid", f"{key} authority ID is not current.")
-    if semantic_document.get("status") != "current-policy-authority":
+    if not strict_json_equal(
+        semantic_document.get("status"), "current-policy-authority"
+    ):
         raise DecisionPacketError("historical-authority-promotion", "Semantic authority is not current.")
     coverage_document = _require_dict(
         coverage.get("document"), "authority-bundle-invalid", "Coverage document is invalid."
     )
-    if coverage_document.get("status") != (
+    if not strict_json_equal(
+        coverage_document.get("status"),
         "zero-model-current-coverage-mapped-overlap-conflict-fallback-and-"
-        "unassessed-cells-no-evidence-promotion"
+        "unassessed-cells-no-evidence-promotion",
     ):
         raise DecisionPacketError("historical-authority-promotion", "Coverage authority is not current.")
 
@@ -491,7 +532,10 @@ def validate_authority_bundle(bundle: object, request: object) -> None:
             "portable-core-dependency-promotion",
             "Portable core may not depend on CC Switch.",
         )
-    if plugin.get("currentPosture") != "plugin-compatible-manager-agnostic-release-not-eligible":
+    if not strict_json_equal(
+        plugin.get("currentPosture"),
+        "plugin-compatible-manager-agnostic-release-not-eligible",
+    ):
         raise DecisionPacketError("authority-bundle-invalid", "Plugin posture is not current.")
     if plugin.get("releaseEligibleNow") is not False or scheduler_plugin.get(
         "releaseEligibleNow"
@@ -501,7 +545,7 @@ def validate_authority_bundle(bundle: object, request: object) -> None:
     scenario = _require_dict(
         bundle.get("scenario"), "authority-bundle-invalid", "Scenario binding is missing."
     )
-    if scenario.get("scenarioId") != request["scenarioId"]:
+    if not strict_json_equal(scenario.get("scenarioId"), request["scenarioId"]):
         raise DecisionPacketError("unknown-scenario", "Scenario binding does not match the request.")
     route_coverage = scenario.get("routeCoverage")
     if not isinstance(route_coverage, dict) or set(route_coverage) != set(ROUTE_CLASSES):
@@ -514,7 +558,7 @@ def validate_authority_bundle(bundle: object, request: object) -> None:
         raise DecisionPacketError("evidence-source-missing", "Original evidence binding is missing.")
     expected_paths = scenario.get("evidenceSourcePaths")
     actual_paths = [item.get("path") for item in source_evidence if isinstance(item, dict)]
-    if actual_paths != expected_paths:
+    if not strict_json_equal(actual_paths, expected_paths):
         raise DecisionPacketError("evidence-source-missing", "Original evidence paths do not match.")
     for item in source_evidence:
         record = _require_dict(
@@ -548,7 +592,7 @@ def validate_bound_source_digests(root: Path, bundle: object) -> None:
         if not _is_nonempty_string(path):
             raise DecisionPacketError("unsafe-source-path", "Bound source path is invalid.")
         current = _source_sha256(root, path, missing_code)
-        if current != record.get("sha256"):
+        if not strict_json_equal(current, record.get("sha256")):
             raise DecisionPacketError(
                 drift_code,
                 "Bound source digest no longer matches current repository bytes.",
@@ -702,11 +746,13 @@ def validate_decision_packet_projection(
     validate_authority_bundle(bundle, request)
     validate_bound_source_digests(root, bundle)
 
-    if packet.get("schema") != schema:
+    if not strict_json_equal(packet.get("schema"), schema):
         raise DecisionPacketError(
             "invalid-packet-shape", f"Packet schema must be {schema}."
         )
-    if packet.get("packetId") != f"{packet_id_prefix}:{request['requestId']}":
+    if not strict_json_equal(
+        packet.get("packetId"), f"{packet_id_prefix}:{request['requestId']}"
+    ):
         raise DecisionPacketError("invalid-packet-shape", "Packet ID does not match the request.")
 
     expected_bindings = {
@@ -721,14 +767,14 @@ def validate_decision_packet_projection(
             "historical-authority-promotion", "Authority binding set is not current."
         )
     semantic_binding = bindings.get("semanticAuthority")
-    if not isinstance(semantic_binding, dict) or semantic_binding.get("id") != expected_bindings[
-        "semanticAuthority"
-    ]["id"]:
+    if not isinstance(semantic_binding, dict) or not strict_json_equal(
+        semantic_binding.get("id"), expected_bindings["semanticAuthority"]["id"]
+    ):
         raise DecisionPacketError(
             "semantic-authority-id-mismatch", "Packet semantic authority ID is not current."
         )
     for key, expected in expected_bindings.items():
-        if bindings.get(key) != expected:
+        if not strict_json_equal(bindings.get(key), expected):
             raise DecisionPacketError(
                 "historical-authority-promotion", f"Packet {key} binding is not current."
             )
@@ -738,13 +784,15 @@ def validate_decision_packet_projection(
     if not isinstance(actual_sources, list) or len(actual_sources) != len(expected_sources):
         raise DecisionPacketError("evidence-source-missing", "Packet source evidence set is incomplete.")
     for expected, actual in zip(expected_sources, actual_sources, strict=True):
-        if not isinstance(actual, dict) or actual.get("path") != expected["path"]:
+        if not isinstance(actual, dict) or not strict_json_equal(
+            actual.get("path"), expected["path"]
+        ):
             raise DecisionPacketError("evidence-source-missing", "Packet source evidence path drifted.")
-        if actual.get("sha256") != expected["sha256"]:
+        if not strict_json_equal(actual.get("sha256"), expected["sha256"]):
             raise DecisionPacketError(
                 "evidence-source-digest-drift", "Packet source evidence digest drifted."
             )
-        if actual != expected:
+        if not strict_json_equal(actual, expected):
             raise DecisionPacketError(
                 "historical-authority-promotion", "Packet source evidence metadata drifted."
             )
@@ -756,10 +804,12 @@ def validate_decision_packet_projection(
             "route-class-coverage-incomplete", "Packet must preserve exactly six route classes."
         )
     for route in ROUTE_CLASSES:
-        if actual_routes[route] != expected_routes[route]:
+        if not strict_json_equal(actual_routes[route], expected_routes[route]):
             _raise_route_drift(route, expected_routes[route], actual_routes[route])
 
-    if packet.get("fallbackOrder") != bundle["scenario"]["fallbackOrder"]:
+    if not strict_json_equal(
+        packet.get("fallbackOrder"), bundle["scenario"]["fallbackOrder"]
+    ):
         raise DecisionPacketError("fallback-order-drift", "Packet fallback order is not current.")
     selected_route = packet.get("selectedRoute")
     if selected_route is not None:
@@ -777,7 +827,7 @@ def validate_decision_packet_projection(
             "historical-authority-promotion",
             f"Version {version_label} may not select a mechanism route.",
         )
-    if packet.get("decisionState") != _decision_state(request):
+    if not strict_json_equal(packet.get("decisionState"), _decision_state(request)):
         raise DecisionPacketError(
             "historical-authority-promotion", "Packet decision state is not derived from the request."
         )
@@ -790,16 +840,18 @@ def validate_decision_packet_projection(
         raise DecisionPacketError(
             "claim-boundary-promotion", "Packet cannot promote evidence or value claims."
         )
-    if claims != expected_claims:
+    if not strict_json_equal(claims, expected_claims):
         raise DecisionPacketError(
             "claim-boundary-promotion", "Packet claim boundary differs from current authority."
         )
     gates = packet.get("authorizationGates")
-    if gates != AUTHORIZATION_GATES:
+    if not strict_json_equal(gates, AUTHORIZATION_GATES):
         raise DecisionPacketError(
             "authorization-gate-promotion", "Packet cannot authorize lifecycle side effects."
         )
-    if packet.get("recheckTriggers") != bundle["coverage"]["document"]["recheckTriggers"]:
+    if not strict_json_equal(
+        packet.get("recheckTriggers"), bundle["coverage"]["document"]["recheckTriggers"]
+    ):
         raise DecisionPacketError(
             "historical-authority-promotion", "Packet recheck triggers are not current."
         )
@@ -816,13 +868,13 @@ def validate_decision_packet_projection(
         raise DecisionPacketError(
             "portable-core-dependency-promotion", "Portable core cannot depend on CC Switch."
         )
-    if projection != PROJECTION_BOUNDARY:
+    if not strict_json_equal(projection, PROJECTION_BOUNDARY):
         raise DecisionPacketError(
             "historical-authority-promotion", "Packet projection boundary is not current."
         )
 
     body = {key: value for key, value in packet.items() if key != "packetSha256"}
-    if packet.get("packetSha256") != canonical_sha256(body):
+    if not strict_json_equal(packet.get("packetSha256"), canonical_sha256(body)):
         raise DecisionPacketError("packet-digest-mismatch", "Packet digest is invalid.")
 
 
