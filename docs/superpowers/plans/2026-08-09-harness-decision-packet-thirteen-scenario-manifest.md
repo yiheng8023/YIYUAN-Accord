@@ -27,6 +27,7 @@
 - Use canonical JSON with `ensure_ascii=False`, `sort_keys=True`, and `separators=(",", ":")`; compute each digest over the object body without its digest field.
 - Use `apply_patch` for repository writes. CLI output tests may use operating-system temporary directories outside the repository.
 - Run focused tests first, then the complete local unittest suite and `python -B scripts/verify.py`. GitHub Actions is optional corroboration, never the primary or sole acceptance surface.
+- Under Subagent-Driven Development, an implementer commits but does not push. The controller pushes only after the task's specification and quality review is clean. A missing-module or missing-symbol runner error is interface preflight, not sufficient TDD RED evidence; before implementation, add or rerun a behavior test that reaches the declared interface and fails by assertion for the expected unimplemented behavior.
 - README currently makes no single-scenario decision-packet claim, so this plan does not change README. Recheck that fact before the documentation commit.
 
 ---
@@ -291,16 +292,15 @@ python -B -m unittest tests.test_harness_scenario_evidence_binding tests.test_ha
 
 Expected: all tests PASS and the checked v1 fixture remains byte-identical.
 
-- [ ] **Step 7: Commit and push the binding layer**
+- [ ] **Step 7: Commit the binding layer for review**
 
 ```powershell
 git add -- schemas/harness-scenario-evidence-binding-registry-v1.schema.json registry/harness-scenario-evidence-bindings-v1.json scripts/harness_scenario_evidence_binding.py scripts/harness_decision_packet.py tests/test_harness_scenario_evidence_binding.py tests/test_harness_decision_packet.py
 git diff --cached --check
 git commit -m "feat: bind all harness decision scenarios"
-git push origin main
 ```
 
-Verify `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 2.
+After the task's specification and quality review is clean, the controller runs `git push origin main`, verifies `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 2.
 
 ---
 
@@ -529,16 +529,15 @@ python -B -m unittest tests.test_harness_decision_packet tests.test_harness_scen
 
 Expected: all tests PASS; packet v1 fixture bytes and digest are unchanged.
 
-- [ ] **Step 8: Commit and push packet v2**
+- [ ] **Step 8: Commit packet v2 for review**
 
 ```powershell
 git add -- schemas/harness-decision-packet-v2.schema.json scripts/harness_decision_packet.py scripts/harness_decision_packet_v2.py scripts/build_harness_decision_packet_v2.py tests/test_harness_decision_packet.py tests/test_harness_decision_packet_v2.py
 git diff --cached --check
 git commit -m "feat: add harness decision packet v2"
-git push origin main
 ```
 
-Verify `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 3.
+After the task's specification and quality review is clean, the controller runs `git push origin main`, verifies `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 3.
 
 ---
 
@@ -769,16 +768,15 @@ python -B -m unittest tests.test_harness_decision_packet tests.test_harness_scen
 
 Expected: all tests PASS with no repository writes from stdout-only CLIs.
 
-- [ ] **Step 8: Commit and push the atomic manifest mechanism**
+- [ ] **Step 8: Commit the atomic manifest mechanism for review**
 
 ```powershell
 git add -- schemas/harness-decision-packet-manifest-v1.schema.json scripts/harness_decision_packet_manifest.py scripts/build_harness_decision_packet_manifest.py tests/test_harness_decision_packet_manifest.py
 git diff --cached --check
 git commit -m "feat: build atomic harness decision manifests"
-git push origin main
 ```
 
-Verify `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 4.
+After the task's specification and quality review is clean, the controller runs `git push origin main`, verifies `HEAD == origin/main`, ahead/behind `0/0`, and a clean worktree before Task 4.
 
 ---
 
@@ -1045,14 +1043,12 @@ git diff -- registry/program-acceptance-map.json docs/strategy/RESEARCH-AND-POC-
 
 Require `main`, expected upstream `origin/main`, no unrelated dirty files, no criterion promotion, no count change, no live-task/behavior/value/production/release claim, and only the planned slice in the diff.
 
-- [ ] **Step 12: Commit, push, and perform post-push verification**
+- [ ] **Step 12: Commit the evidence and integration slice for review**
 
 ```powershell
 git add -- tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json scripts/validate_harness_decision_packet_manifest_poc.py tests/test_harness_decision_packet_manifest_poc.py registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json docs/strategy/HARNESS-DECISION-PACKET-THIRTEEN-SCENARIO-MANIFEST-POC-2026-08-09.md registry/program-acceptance-map.json docs/strategy/RESEARCH-AND-POC-PLAN.md docs/operations/CURRENT-GOAL-MODE-PROMPT.md docs/operations/CONTINUATION.md scripts/verify.py
 git diff --cached --check
 git commit -m "feat: verify thirteen-scenario decision manifests"
-git push origin main
-python -B scripts/verify.py
 ```
 
-Finally require `HEAD == origin/main`, ahead/behind `0/0`, a clean worktree, and a passing post-push verifier. Report this mechanism slice as verified only within its zero-model claim ceiling; do not mark the overall Harness program or goal complete.
+After the task review and final whole-slice review are clean, the controller runs `git push origin main` and `python -B scripts/verify.py`. Finally require `HEAD == origin/main`, ahead/behind `0/0`, a clean worktree, and a passing post-push verifier. Report this mechanism slice as verified only within its zero-model claim ceiling; do not mark the overall Harness program or goal complete.
