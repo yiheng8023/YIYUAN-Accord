@@ -210,7 +210,8 @@ def validate_decision_request(request: object) -> None:
             "invalid-scenario-id",
             "Scenario ID must use upper-case letters, digits, and hyphens.",
         )
-    if request["evidenceLane"] not in EVIDENCE_LANES:
+    evidence_lane = request["evidenceLane"]
+    if not isinstance(evidence_lane, str) or evidence_lane not in EVIDENCE_LANES:
         raise DecisionPacketError(
             "invalid-evidence-lane",
             "Evidence lane is not recognized by the v1 contract.",

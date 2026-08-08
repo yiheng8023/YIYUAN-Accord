@@ -291,6 +291,19 @@ class HarnessDecisionPacketV2Tests(unittest.TestCase):
             serialize_decision_packet_v2(build_decision_packet_v2(ROOT, request)),
         )
 
+    def test_v2_build_rejects_unhashable_evidence_lane_with_stable_error(self) -> None:
+        for value in ([], {}):
+            with self.subTest(value=value):
+                request = request_for("GEN-LEARNING-01")
+                request["evidenceLane"] = value
+                try:
+                    build_decision_packet_v2(ROOT, request)
+                except Exception as exc:
+                    self.assertIsInstance(exc, DecisionPacketError)
+                    self.assertEqual("invalid-evidence-lane", exc.code)
+                else:
+                    self.fail("V2 build accepted an unhashable evidence lane.")
+
     def test_cli_emits_canonical_v2_packet_without_repository_writes(self) -> None:
         before = subprocess.run(
             ["git", "status", "--short"], cwd=ROOT, check=True, capture_output=True
@@ -341,3 +354,37 @@ class HarnessDecisionPacketV2Tests(unittest.TestCase):
         self.assertEqual(2, result.returncode)
         self.assertEqual(b"", result.stdout)
         self.assertEqual("request-read-failed", json.loads(result.stderr)["code"])
+
+    def test_cli_unhashable_evidence_lane_is_machine_readable(self) -> None:
+        for name, value in (("array", []), ("object", {})):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary_directory:
+                request = request_for("GEN-LEARNING-01")
+                request["evidenceLane"] = value
+                request_path = Path(temporary_directory) / "invalid.json"
+                request_path.write_text(
+                    json.dumps(request, ensure_ascii=False), encoding="utf-8"
+                )
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        "scripts/build_harness_decision_packet_v2.py",
+                        str(request_path),
+                    ],
+                    cwd=ROOT,
+                    check=False,
+                    capture_output=True,
+                )
+
+                self.assertEqual(2, result.returncode)
+                self.assertEqual(b"", result.stdout)
+                self.assertNotIn(b"Traceback", result.stderr)
+                self.assertEqual(1, len(result.stderr.splitlines()))
+                self.assertEqual(
+                    {
+                        "status": "error",
+                        "code": "invalid-evidence-lane",
+                        "message": "Evidence lane is not recognized by the v1 contract.",
+                    },
+                    json.loads(result.stderr),
+                )

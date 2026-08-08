@@ -128,6 +128,19 @@ class HarnessDecisionPacketContractTests(unittest.TestCase):
                     validate_decision_request(request)
                 self.assertEqual(expected_code, raised.exception.code)
 
+    def test_unhashable_evidence_lane_has_stable_validation_error(self) -> None:
+        for value in ([], {}):
+            with self.subTest(value=value):
+                request = self.load_request()
+                request["evidenceLane"] = value
+                try:
+                    validate_decision_request(request)
+                except Exception as exc:
+                    self.assertIsInstance(exc, DecisionPacketError)
+                    self.assertEqual("invalid-evidence-lane", exc.code)
+                else:
+                    self.fail("Unhashable evidence lane was accepted.")
+
 
 class HarnessDecisionPacketAuthorityTests(HarnessDecisionPacketContractTests):
     def test_current_gen_research_authority_reopens_original_evidence(self) -> None:
