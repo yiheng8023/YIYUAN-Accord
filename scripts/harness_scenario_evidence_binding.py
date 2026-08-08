@@ -310,19 +310,34 @@ def _declared_surface_identity_pointers(
     matches: list[str] = []
     for pointer in declared_pointers:
         raw_tokens = pointer[1:].split("/")
-        index_position = next(
-            (index for index, token in enumerate(raw_tokens) if token.isdigit()), None
-        )
+        current = document
+        index_position: int | None = None
+        collection: list[object] | None = None
+        for index, raw in enumerate(raw_tokens):
+            token = _decode_json_pointer_token(raw)
+            if isinstance(current, list):
+                if not token.isdigit() or (len(token) > 1 and token.startswith("0")):
+                    raise DecisionPacketError(
+                        "binding-pointer-invalid", "Binding pointer has an invalid array index."
+                    )
+                if int(token) >= len(current):
+                    raise DecisionPacketError(
+                        "binding-pointer-unresolved", "Binding pointer does not resolve."
+                    )
+                index_position = index
+                collection = current
+                break
+            if isinstance(current, dict) and token in current:
+                current = current[token]
+                continue
+            raise DecisionPacketError(
+                "binding-pointer-unresolved", "Binding pointer does not resolve."
+            )
         if index_position is None:
             if resolve_json_pointer(document, pointer) == scenario_id:
                 matches.append(pointer)
             continue
-        collection_pointer = "/" + "/".join(raw_tokens[:index_position])
-        collection = resolve_json_pointer(document, collection_pointer)
-        if not isinstance(collection, list):
-            raise DecisionPacketError(
-                "binding-pointer-unresolved", "Binding pointer collection does not resolve to a list."
-            )
+        assert collection is not None
         suffix = raw_tokens[index_position + 1 :]
         for index, item in enumerate(collection):
             current = item

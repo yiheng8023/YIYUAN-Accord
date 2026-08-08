@@ -1,6 +1,7 @@
 import copy
 import json
 from pathlib import Path
+import tempfile
 import unittest
 
 from scripts.harness_decision_packet import DecisionPacketError, load_current_authority_bundle
@@ -130,3 +131,36 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
                 with self.assertRaises(DecisionPacketError) as raised:
                     resolve_json_pointer(target, pointer)
                 self.assertEqual("binding-pointer-invalid", raised.exception.code)
+
+    def test_numeric_dictionary_key_stays_an_exact_identity_surface(self) -> None:
+        scenario_id = "GEN-NUMERIC-01"
+        registry = copy.deepcopy(self.registry)
+        binding = registry["bindings"][0]
+        binding["scenarioId"] = scenario_id
+        binding["sourcePath"] = "registry/numeric-dictionary-key.json"
+        binding["identityPointers"] = ["/groups/00/scenarioId"]
+        scenario = {
+            "scenarioId": scenario_id,
+            "evidenceSourcePaths": [binding["sourcePath"]],
+        }
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            source_path = temporary_root / binding["sourcePath"]
+            source_path.parent.mkdir(parents=True)
+            source_path.write_text(
+                json.dumps(
+                    {
+                        "id": "numeric-dictionary-key-source",
+                        "status": "test-only",
+                        "groups": {"00": {"scenarioId": scenario_id}},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            normalized, _ = resolve_scenario_evidence_binding(
+                temporary_root, registry, scenario
+            )
+        self.assertEqual(
+            [{"pointer": "/groups/00/scenarioId", "value": scenario_id}],
+            normalized["resolvedIdentityValues"],
+        )
