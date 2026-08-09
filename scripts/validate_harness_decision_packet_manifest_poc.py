@@ -84,6 +84,7 @@ SCHEMA_PATHS = (
     Path("schemas/harness-decision-packet-manifest-v1.schema.json"),
 )
 SCRIPT_PATHS = (
+    Path("scripts/harness_decision_packet.py"),
     Path("scripts/harness_scenario_evidence_binding.py"),
     Path("scripts/harness_decision_packet_v2.py"),
     Path("scripts/build_harness_decision_packet_v2.py"),

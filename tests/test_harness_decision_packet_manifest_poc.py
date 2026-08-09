@@ -124,6 +124,32 @@ class HarnessDecisionPacketManifestPocTests(unittest.TestCase):
         )
         self.assertTrue((ROOT / EXPECTED_MANIFEST_PATH).is_file())
 
+    def test_repository_record_rejects_shared_packet_dependency_drift(self) -> None:
+        record = self.current_isolated_record()
+        expected_matrix = copy.deepcopy(record["mutationResults"])
+        shared_packet_path = Path("scripts/harness_decision_packet.py")
+        original_file_sha256 = manifest_poc._file_sha256
+
+        def drift_shared_packet(root: Path, relative: Path) -> str:
+            if relative == shared_packet_path:
+                return "0" * 64
+            return original_file_sha256(root, relative)
+
+        with patch.object(
+            manifest_poc,
+            "_file_sha256",
+            side_effect=drift_shared_packet,
+        ), patch.object(
+            manifest_poc,
+            "run_failure_matrix",
+            return_value=expected_matrix,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Manifest PoC schema or script binding drifted",
+            ):
+                validate_repository_record(ROOT)
+
     def test_repository_record_rejects_json_type_aliases(self) -> None:
         identity_error = "Manifest PoC evidence identity or scenario boundary drifted"
         projection_error = "Manifest PoC manifest or authority projection drifted"

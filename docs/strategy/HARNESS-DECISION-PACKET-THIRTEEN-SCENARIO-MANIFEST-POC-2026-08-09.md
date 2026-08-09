@@ -28,6 +28,18 @@ counters, all-false claim and authority boundaries, mutation results, and the
 bound plan/schema/script/source path and digest projections. The machine record
 binds those current files by exact SHA-256.
 
+Exact script evidence inventory:
+
+| Path | SHA-256 |
+| --- | --- |
+| `scripts/harness_decision_packet.py` | `416b2ff7bbe46577e257a0e3ade51107c7ddff081ad96ac3d703577725c7abd5` |
+| `scripts/harness_scenario_evidence_binding.py` | `c7970873974c6bbbe591fa4bf06913b09c0353ef08272b95da78aa22979ff8ad` |
+| `scripts/harness_decision_packet_v2.py` | `dff854f6261e59ded136fc5055b4d3d805b34c0d4dfb0aab4fa1ca68a68135c9` |
+| `scripts/build_harness_decision_packet_v2.py` | `519a95619aa33cbc83e6d081d72dd566366fb206891e2bf33ec9bcb26a4d673c` |
+| `scripts/harness_decision_packet_manifest.py` | `56894ba35703fc38709c7bcbaede33d89e2b26e34c8a6c1644d7b21a10d29dbe` |
+| `scripts/build_harness_decision_packet_manifest.py` | `c659ec1e45c1e104dc1dd587bf54fbe5dde01e3450d363c4422c1a122dac31c8` |
+| `scripts/validate_harness_decision_packet_manifest_poc.py` | `9cab151ec0fb8350efe051d8a782f64096cc60ebca00bfb8645bff417a69afe7` |
+
 This proves only the local, deterministic, zero-model mechanism for binding
 the current thirteen scenarios, rebuilding their packet-v2 digests, and
 emitting or rejecting one all-or-nothing summary manifest.
