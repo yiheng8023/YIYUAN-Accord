@@ -27,7 +27,7 @@
   },
   "plan": {
     "path": "docs/superpowers/plans/2026-08-09-harness-decision-packet-thirteen-scenario-manifest.md",
-    "sha256": "665d3b7e6f18ebbfb3ffd871508354df7beeed5d888c8f0a8fb446d66d829766"
+    "sha256": "ab268c1e0b8d645082bd9a023f15f545437a9fa6cab456ce9879e191975456e0"
   },
   "documentation": {
     "path": "docs/strategy/HARNESS-DECISION-PACKET-THIRTEEN-SCENARIO-MANIFEST-POC-2026-08-09.md",
@@ -59,7 +59,7 @@
   "scripts": [
     {
       "path": "scripts/harness_scenario_evidence_binding.py",
-      "sha256": "7845f884acdfe4da891adce5380ed657870e22fa07a39a2effd12499ffe93384"
+      "sha256": "c7970873974c6bbbe591fa4bf06913b09c0353ef08272b95da78aa22979ff8ad"
     },
     {
       "path": "scripts/harness_decision_packet_v2.py",
