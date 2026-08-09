@@ -21,6 +21,7 @@ from scripts.harness_decision_packet import (
     canonical_sha256,
     load_current_authority_bundle,
     load_source_evidence_record,
+    strict_json_equal,
 )
 from scripts.harness_decision_packet_v2 import (
     build_decision_packet_v2,
@@ -112,24 +113,6 @@ def build_canonical_probe_request(scenario_id: str) -> dict[str, object]:
 
 def _public_binding(record: dict[str, Any]) -> dict[str, Any]:
     return {key: record[key] for key in ("path", "id", "sha256")}
-
-
-def _strict_json_equal(actual: object, expected: object) -> bool:
-    """Compare JSON values without Python's bool/int or int/float aliases."""
-
-    if type(actual) is not type(expected):
-        return False
-    if isinstance(expected, dict):
-        return set(actual) == set(expected) and all(
-            _strict_json_equal(actual[key], value)
-            for key, value in expected.items()
-        )
-    if isinstance(expected, list):
-        return len(actual) == len(expected) and all(
-            _strict_json_equal(actual_item, expected_item)
-            for actual_item, expected_item in zip(actual, expected, strict=True)
-        )
-    return actual == expected
 
 
 def _is_nonempty_string(value: object) -> bool:
@@ -391,7 +374,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
 
     expected = _build_manifest_projection(root)
     for field in ("schema", "id", "packetSchema", "atomic", "scenarioCount"):
-        if not _strict_json_equal(manifest.get(field), expected[field]):
+        if not strict_json_equal(manifest.get(field), expected[field]):
             _raise_manifest_issue(
                 "invalid-manifest-shape",
                 f"Manifest {field} differs from the v1 contract.",
@@ -405,7 +388,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
         "acceptance",
         "bindingRegistry",
     ):
-        if not _strict_json_equal(bindings.get(name), expected_bindings[name]):
+        if not strict_json_equal(bindings.get(name), expected_bindings[name]):
             code = (
                 "binding-registry-digest-drift"
                 if name == "bindingRegistry"
@@ -432,7 +415,7 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
             "Manifest entries do not preserve current coverage order.",
         )
     for actual, expected_entry in zip(entries, expected_entries, strict=True):
-        if _strict_json_equal(actual, expected_entry):
+        if strict_json_equal(actual, expected_entry):
             continue
         scenario_id = expected_entry["scenarioId"]
         if actual.get("sourceSha256") != expected_entry["sourceSha256"]:
@@ -461,28 +444,28 @@ def validate_decision_packet_manifest(root: Path, manifest: object) -> None:
             path=expected_entry["sourcePath"],
         )
 
-    if not _strict_json_equal(
+    if not strict_json_equal(
         manifest.get("executionCounters"), EXECUTION_COUNTERS
     ):
         _raise_manifest_issue(
             "execution-counter-promotion",
             "Manifest execution counters must remain exactly zero.",
         )
-    if not _strict_json_equal(
+    if not strict_json_equal(
         manifest.get("authorizationGates"), AUTHORIZATION_GATES
     ):
         _raise_manifest_issue(
             "authorization-gate-promotion",
             "Manifest authorization gates must remain exactly false.",
         )
-    if not _strict_json_equal(
+    if not strict_json_equal(
         manifest.get("claimBoundary"), expected["claimBoundary"]
     ):
         _raise_manifest_issue(
             "claim-boundary-promotion",
             "Manifest claim boundary differs from current coverage authority.",
         )
-    if not _strict_json_equal(manifest.get("projectionBoundary"), PROJECTION_BOUNDARY):
+    if not strict_json_equal(manifest.get("projectionBoundary"), PROJECTION_BOUNDARY):
         _raise_manifest_issue(
             "projection-boundary-drift",
             "Manifest projection boundary differs from the packet contract.",

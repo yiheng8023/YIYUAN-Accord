@@ -8,6 +8,8 @@ import tempfile
 from typing import Any, Callable
 import unittest
 
+import scripts.harness_decision_packet as decision_packet_module
+import scripts.harness_decision_packet_manifest as manifest_module
 from scripts.harness_decision_packet import canonical_sha256
 from scripts.harness_decision_packet_manifest import (
     BatchBindingError,
@@ -135,6 +137,19 @@ class HarnessDecisionPacketManifestTests(unittest.TestCase):
             "activationAuthority",
         ):
             self.assertIsNone(request[field])
+
+    def test_manifest_uses_shared_strict_json_equal_without_private_duplicate(
+        self,
+    ) -> None:
+        self.assertIs(
+            decision_packet_module.strict_json_equal,
+            getattr(manifest_module, "strict_json_equal", None),
+        )
+        self.assertNotIn("_strict_json_equal", vars(manifest_module))
+        self.assert_manifest_issue(
+            lambda value: value.__setitem__("atomic", 1),
+            "invalid-manifest-shape",
+        )
 
     def test_manifest_contains_all_scenarios_in_current_order(self) -> None:
         manifest = build_decision_packet_manifest(ROOT)
