@@ -1121,3 +1121,17 @@ native `ValueError`. Direct resolution and completeness traversal must retain
 typed `binding-pointer-invalid`/`binding-pointer-unresolved` behavior. Add
 adversarial unhashable membership and 4301-digit index tests, then refresh the
 Task 4 evidence bindings and repeat the review/verification sequence.
+
+### Final review round 3: sibling-local completeness and one strict comparator
+
+During collection-local identity completeness enumeration, a sibling that
+cannot resolve the otherwise valid suffix is a non-match, not a failure of the
+declared binding. Catch only sibling-local `binding-pointer-unresolved` and
+continue scanning; keep malformed suffix syntax and all other typed failures
+fail-closed. Cover nested lists where one sibling has an empty/missing nested
+collection through helper, public binding, and batch-facing regressions.
+
+Use the packet layer's shared `strict_json_equal` in the manifest validator too;
+remove the duplicate private comparator so request, packet, manifest, and
+evidence records cannot drift in JSON type/key semantics. Refresh the Task 4
+script bindings again and repeat focused/full/verifier/final review before push.
