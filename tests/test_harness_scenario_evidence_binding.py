@@ -7,6 +7,7 @@ import unittest
 from scripts.harness_decision_packet import DecisionPacketError, load_current_authority_bundle
 from scripts.harness_scenario_evidence_binding import (
     BINDING_REGISTRY_PATH,
+    _declared_surface_identity_pointers,
     load_binding_registry,
     resolve_json_pointer,
     resolve_scenario_evidence_binding,
@@ -186,6 +187,15 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
             resolve_json_pointer({"items": ["zero"]}, f"/items/{oversized_index}")
         self.assertEqual("binding-pointer-unresolved", raised.exception.code)
 
+        self.assertEqual(
+            [],
+            _declared_surface_identity_pointers(
+                {"groups": [{"children": []}]},
+                [f"/groups/0/children/{oversized_index}/scenarioId"],
+                "GEN-OVERSIZED-INDEX-01",
+            ),
+        )
+
         scenario_id = "GEN-OVERSIZED-INDEX-01"
         registry = copy.deepcopy(self.registry)
         binding = registry["bindings"][0]
@@ -211,6 +221,70 @@ class HarnessScenarioEvidenceBindingTests(unittest.TestCase):
             source_path = temporary_root / binding["sourcePath"]
             source_path.parent.mkdir(parents=True)
             source_path.write_text(json.dumps(document), encoding="utf-8")
-            with self.assertRaises(DecisionPacketError) as raised:
-                resolve_scenario_evidence_binding(temporary_root, registry, scenario)
-        self.assertEqual("binding-pointer-unresolved", raised.exception.code)
+            normalized, _ = resolve_scenario_evidence_binding(
+                temporary_root, registry, scenario
+            )
+        self.assertEqual(
+            [{"pointer": binding["identityPointers"][0], "value": scenario_id}],
+            normalized["resolvedIdentityValues"],
+        )
+
+    def test_collection_helper_ignores_an_unresolved_sibling_suffix(self) -> None:
+        scenario_id = "GEN-SIBLING-LOCAL-01"
+        pointer = "/groups/0/children/0/scenarioId"
+        document = {
+            "groups": [
+                {"children": [{"scenarioId": scenario_id}]},
+                {"children": []},
+            ]
+        }
+        self.assertEqual(
+            [pointer],
+            _declared_surface_identity_pointers(document, [pointer], scenario_id),
+        )
+
+    def test_collection_helper_propagates_invalid_sibling_suffix(self) -> None:
+        scenario_id = "GEN-SIBLING-INVALID-01"
+        pointer = "/groups/0/children/00/scenarioId"
+        document = {
+            "groups": [
+                {"children": {"00": {"scenarioId": scenario_id}}},
+                {"children": []},
+            ]
+        }
+        with self.assertRaises(DecisionPacketError) as raised:
+            _declared_surface_identity_pointers(document, [pointer], scenario_id)
+        self.assertEqual("binding-pointer-invalid", raised.exception.code)
+
+    def test_scenario_record_ignores_an_unresolved_sibling_suffix(self) -> None:
+        scenario_id = "GEN-SIBLING-LOCAL-01"
+        pointer = "/groups/0/children/0/scenarioId"
+        registry = copy.deepcopy(self.registry)
+        binding = registry["bindings"][0]
+        binding["scenarioId"] = scenario_id
+        binding["sourcePath"] = "registry/sibling-local.json"
+        binding["identityPointers"] = [pointer]
+        scenario = {
+            "scenarioId": scenario_id,
+            "evidenceSourcePaths": [binding["sourcePath"]],
+        }
+        document = {
+            "id": "sibling-local-source",
+            "status": "test-only",
+            "groups": [
+                {"children": [{"scenarioId": scenario_id}]},
+                {"children": []},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            source_path = temporary_root / binding["sourcePath"]
+            source_path.parent.mkdir(parents=True)
+            source_path.write_text(json.dumps(document), encoding="utf-8")
+            normalized, _ = resolve_scenario_evidence_binding(
+                temporary_root, registry, scenario
+            )
+        self.assertEqual(
+            [{"pointer": pointer, "value": scenario_id}],
+            normalized["resolvedIdentityValues"],
+        )

@@ -412,6 +412,33 @@ class HarnessDecisionPacketManifestTests(unittest.TestCase):
             SOURCE_MUTATION_EXPECTATIONS[self._testMethodName],
         )
 
+    def test_manifest_builder_ignores_an_unresolved_sibling_suffix(self) -> None:
+        source_path = "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json"
+        pointer = "/groups/0/children/0/scenarioId"
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            self.copy_bound_sources(temporary_root)
+            self.rewrite_json(
+                temporary_root,
+                AUTHORITY_PATHS[4],
+                lambda value: value["bindings"][0].__setitem__(
+                    "identityPointers", [pointer]
+                ),
+            )
+            self.rewrite_json(
+                temporary_root,
+                source_path,
+                lambda value: value.__setitem__(
+                    "groups",
+                    [
+                        {"children": [{"scenarioId": "GEN-CREATIVE-01"}]},
+                        {"children": []},
+                    ],
+                ),
+            )
+            manifest = build_decision_packet_manifest(temporary_root)
+        self.assertEqual(13, manifest["scenarioCount"])
+
     def test_wrong_identity_is_rejected(self) -> None:
         relative = "registry/human-ai-collaboration-creative-capability-baseline-2026-07-31.json"
         self.assert_source_build_issue(

@@ -347,15 +347,20 @@ def _declared_surface_identity_pointers(
         for index, item in enumerate(collection):
             current = item
             resolved = True
-            for raw in suffix:
-                token = _decode_json_pointer_token(raw)
-                if isinstance(current, list):
-                    current = current[_resolve_array_index(token, len(current))]
-                elif isinstance(current, dict) and token in current:
-                    current = current[token]
-                else:
-                    resolved = False
-                    break
+            try:
+                for raw in suffix:
+                    token = _decode_json_pointer_token(raw)
+                    if isinstance(current, list):
+                        current = current[_resolve_array_index(token, len(current))]
+                    elif isinstance(current, dict) and token in current:
+                        current = current[token]
+                    else:
+                        resolved = False
+                        break
+            except DecisionPacketError as error:
+                if error.code != "binding-pointer-unresolved":
+                    raise
+                continue
             if resolved and current == scenario_id:
                 candidate = "/" + "/".join(
                     [*raw_tokens[:index_position], str(index), *suffix]
