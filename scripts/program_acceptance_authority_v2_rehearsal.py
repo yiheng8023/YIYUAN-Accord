@@ -101,6 +101,13 @@ REQUIRED_FAILURE_CASES: tuple[tuple[str, str], ...] = (
     ("atomic-directory-target", "acceptance-atomic-output-preserved"),
     ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete"),
     ("protected-output-root", "acceptance-activation-not-authorized"),
+    ("inventory-duplicate-row", "migration-inventory-incomplete"),
+    ("inventory-extra-row", "migration-inventory-incomplete"),
+    ("inventory-reordered-rows", "migration-inventory-incomplete"),
+    ("inventory-bool-line", "migration-consumer-class-invalid"),
+    ("inventory-float-line", "migration-consumer-class-invalid"),
+    ("selector-absolute", "acceptance-selector-target-invalid"),
+    ("cli-protected-output", "acceptance-activation-not-authorized"),
 )
 _RECORD_DIGEST_PATHS = (
     Path("schemas/program-acceptance-authority-v2.schema.json"),
@@ -517,6 +524,18 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             elif case == "neutral-path":
                 row = rows[0]
                 row["classification"] = "C-version-neutral-component"
+            elif case == "duplicate-row":
+                rows.append(copy.deepcopy(rows[0]))
+            elif case == "extra-row":
+                extra = copy.deepcopy(rows[0])
+                extra["line"] = 999999
+                rows.append(extra)
+            elif case == "reordered-rows":
+                rows.reverse()
+            elif case == "bool-line":
+                rows[0]["line"] = True
+            elif case == "float-line":
+                rows[0]["line"] = 1.0
             validate_migration_inventory(repo_root, inventory)
         return invoke
 
@@ -632,6 +651,22 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             target.mkdir()
             replace_selector_atomically(target, b"candidate\n")
 
+    def cli_protected_output() -> str:
+        completed = subprocess.run(
+            ["python", "-B", "scripts/build_program_acceptance_authority_v2_rehearsal.py", "--root", str(repo_root), "--output-root", str(repo_root / PRODUCTION_AUTHORITY_ROOT)],
+            cwd=repo_root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 2 or completed.stdout:
+            return "accepted"
+        try:
+            envelope = json.loads(completed.stderr)
+        except json.JSONDecodeError:
+            return "accepted"
+        return envelope.get("code") if isinstance(envelope, dict) and type(envelope.get("code")) is str else "accepted"
+
     def cleanup_fault() -> None:
         with tempfile.TemporaryDirectory(prefix="acceptance-cleanup-matrix-") as directory:
             output = Path(directory) / "rehearsal"
@@ -684,16 +719,23 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("atomic-directory-target", "acceptance-atomic-output-preserved", atomic_directory_target),
         ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete", cleanup_fault),
         ("protected-output-root", "acceptance-activation-not-authorized", lambda: run_rehearsal(repo_root, repo_root / PRODUCTION_AUTHORITY_ROOT)),
+        ("inventory-duplicate-row", "migration-inventory-incomplete", inventory_mutation("duplicate-row")),
+        ("inventory-extra-row", "migration-inventory-incomplete", inventory_mutation("extra-row")),
+        ("inventory-reordered-rows", "migration-inventory-incomplete", inventory_mutation("reordered-rows")),
+        ("inventory-bool-line", "migration-consumer-class-invalid", inventory_mutation("bool-line")),
+        ("inventory-float-line", "migration-consumer-class-invalid", inventory_mutation("float-line")),
+        ("selector-absolute", "acceptance-selector-target-invalid", lambda: resolve_current_authority(repo_root, str((repo_root / "current.json").resolve()))),
+        ("cli-protected-output", "acceptance-activation-not-authorized", cli_protected_output),
     )
     if tuple((case_id, expected) for case_id, expected, _ in cases) != REQUIRED_FAILURE_CASES:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Failure matrix implementation drifted from its required authority.")
     for case_id, expected, invoke in cases:
         try:
-            invoke()
+            returned = invoke()
         except AcceptanceAuthorityError as error:
             observed = error.code
         else:
-            observed = "accepted"
+            observed = returned if type(returned) is str else "accepted"
         results.append({"caseId": case_id, "expectedCode": expected, "observedCode": observed, "status": "rejected" if observed == expected else "failed"})
     return results
 
