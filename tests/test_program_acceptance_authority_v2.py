@@ -10,6 +10,7 @@ from scripts.program_acceptance_authority_v2 import (
     AcceptanceAuthorityError,
     TARGET_CRITERION_ID,
     MANIFEST_EVIDENCE_ID,
+    _validate_evidence_registration_delta,
     assessment_inventory,
     binding_for_bytes,
     build_candidate_program_plan_v2,
@@ -659,7 +660,7 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                     before["evidence"][0].__setitem__("kind", True),
                     after["evidence"][0].__setitem__("kind", 1),
                 ),
-                "acceptance-evidence-source-drift",
+                "acceptance-evidence-registration-overreach",
             ),
             (
                 lambda before, after: (
@@ -695,6 +696,58 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                         predecessor=before,
                         program_plan_binding=g1["programPlanBinding"],
                     )
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_evidence_registration_delta_classifies_manifest_and_unrelated_drift(self) -> None:
+        """Manifest identity must not relabel unrelated evidence changes as source drift."""
+
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+        cases = (
+            (
+                lambda document: document.__setitem__(
+                    "evidence",
+                    [
+                        row
+                        for row in document["evidence"]
+                        if row["id"] != MANIFEST_EVIDENCE_ID
+                    ],
+                ),
+                "acceptance-evidence-source-missing",
+            ),
+            (
+                lambda document: next(
+                    row
+                    for row in document["evidence"]
+                    if row["id"] == MANIFEST_EVIDENCE_ID
+                ).__setitem__("kind", "drifted-manifest-kind"),
+                "acceptance-evidence-source-drift",
+            ),
+            (
+                lambda document: document["evidence"][0].__setitem__(
+                    "kind", "unrelated-evidence-change"
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+            (
+                lambda document: document["evidence"].__setitem__(
+                    slice(None), list(reversed(document["evidence"]))
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+            (
+                lambda document: document["evidence"].append(
+                    copy.deepcopy(document["evidence"][0])
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+        )
+        for mutate, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                after = copy.deepcopy(g2)
+                mutate(after)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    _validate_evidence_registration_delta(g1, after)
                 self.assertEqual(expected_code, raised.exception.code)
 
     def test_candidate_plan_rejects_boolean_schema_alias(self) -> None:

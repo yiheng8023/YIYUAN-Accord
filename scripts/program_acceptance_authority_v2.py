@@ -278,11 +278,28 @@ def _validate_evidence_registration_delta(
     if not strict_json_equal(
         after_evidence, [*before_evidence, MANIFEST_EVIDENCE_ROW]
     ):
-        manifest_rows = [
-            row for row in after_evidence if isinstance(row, dict) and row.get("id") == MANIFEST_EVIDENCE_ID
-        ]
-        code = "acceptance-evidence-source-missing" if not manifest_rows else "acceptance-evidence-source-drift"
-        raise AcceptanceAuthorityError(code, "The manifest evidence row is not exact.")
+        manifest_row = next(
+            (
+                row
+                for row in after_evidence
+                if isinstance(row, dict) and row.get("id") == MANIFEST_EVIDENCE_ID
+            ),
+            None,
+        )
+        if manifest_row is None:
+            raise AcceptanceAuthorityError(
+                "acceptance-evidence-source-missing",
+                "Evidence registration is missing the manifest evidence row.",
+            )
+        if not strict_json_equal(manifest_row, MANIFEST_EVIDENCE_ROW):
+            raise AcceptanceAuthorityError(
+                "acceptance-evidence-source-drift",
+                "The manifest evidence row is not exact.",
+            )
+        raise AcceptanceAuthorityError(
+            "acceptance-evidence-registration-overreach",
+            "Evidence registration changed unrelated evidence state.",
+        )
     if not isinstance(before_criteria, list) or not isinstance(after_criteria, list):
         raise AcceptanceAuthorityError(
             "acceptance-evidence-registration-overreach",
