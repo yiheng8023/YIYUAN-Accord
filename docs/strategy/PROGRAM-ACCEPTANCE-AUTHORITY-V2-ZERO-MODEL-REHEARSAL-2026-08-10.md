@@ -33,7 +33,7 @@ The runnable entry point performs this sequence with zero model, candidate,
 Plugin, install, enablement, account, manager, consumer, publication, release,
 and production-activation counters. A failed selector replacement preserves an
 existing sentinel byte-for-byte. The repository record uses canonical compact
-JSON bytes and independently replays its ordered 85-case, 32-code public failure matrix;
+JSON bytes and independently replays its ordered 87-case, 32-code public failure matrix;
 the matrix includes isolated real-source missing and digest-drift overlays.
 
 ## Not registered or activated

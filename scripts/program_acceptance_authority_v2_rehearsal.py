@@ -154,6 +154,8 @@ REQUIRED_FAILURE_CASES: tuple[tuple[str, str], ...] = (
     ("evidence-unrelated-evidence", "acceptance-evidence-link-asymmetric"),
     ("reciprocal-link-missing", "acceptance-evidence-link-asymmetric"),
     ("reciprocal-link-extra", "acceptance-evidence-link-asymmetric"),
+    ("program-plan-byte-fork", "acceptance-selector-target-invalid"),
+    ("staged-root-cleanup-fault", "acceptance-rehearsal-cleanup-incomplete"),
 )
 REQUIRED_TYPED_CODES: tuple[str, ...] = (
     "legacy-authority-drift", "legacy-program-plan-drift", "legacy-packet-fixture-drift", "legacy-manifest-fixture-drift",
@@ -918,6 +920,17 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             if os.path.lexists(output):
                 shutil.rmtree(output)
 
+    def staged_root_cleanup_fault() -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-stage-cleanup-") as directory:
+            output = Path(directory) / "rehearsal"; bundle = build_rehearsal_bundle(repo_root)
+            bundle["curation-program-plan-v2.json"] += b"\n"; original = shutil.rmtree; once = False
+            def fault(path: object, *args: object, **kwargs: object) -> None:
+                nonlocal once
+                if Path(path).name.startswith(".rehearsal.stage-") and not once:
+                    once = True; raise OSError("denied")
+                original(path, *args, **kwargs)
+            with mock.patch("scripts.program_acceptance_authority_v2_rehearsal.shutil.rmtree", side_effect=fault): write_rehearsal_bundle(output, bundle)
+
     cases: tuple[tuple[str, str, object], ...] = (
         ("legacy-authority-drift", "legacy-authority-drift", legacy_mutation("acceptance")),
         ("legacy-program-plan-drift", "legacy-program-plan-drift", legacy_mutation("programPlan")),
@@ -954,6 +967,7 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("reciprocal-link-missing", "acceptance-evidence-link-asymmetric", snapshot_mutation("link")),
         ("evidence-link-wrong", "acceptance-evidence-link-asymmetric", snapshot_mutation("link-wrong")),
         ("reciprocal-link-extra", "acceptance-evidence-link-asymmetric", snapshot_mutation("link-wrong")),
+        ("program-plan-byte-fork", "acceptance-selector-target-invalid", lambda: candidate_byte_fork(Path("curation-program-plan-v2.json"))),
         ("assessment-promotion", "acceptance-assessment-promotion-forbidden", snapshot_mutation("assessment")),
         ("assessment-bool-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-bool")),
         ("assessment-float-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-float")),
@@ -993,6 +1007,7 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("selector-parent-escape", "acceptance-selector-target-invalid", selector_parent_escape),
         ("selector-symlink-escape", "acceptance-selector-target-invalid", selector_symlink_escape),
         ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete", cleanup_fault),
+        ("staged-root-cleanup-fault", "acceptance-rehearsal-cleanup-incomplete", staged_root_cleanup_fault),
         ("protected-output-root", "acceptance-activation-not-authorized", lambda: run_rehearsal(repo_root, repo_root / PRODUCTION_AUTHORITY_ROOT)),
         ("inventory-duplicate-row", "migration-inventory-incomplete", inventory_mutation("duplicate-row")),
         ("inventory-extra-row", "migration-inventory-incomplete", inventory_mutation("extra-row")),
