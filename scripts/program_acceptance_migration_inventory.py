@@ -159,6 +159,8 @@ def _inventory_path(root: Path, path: Path) -> Path:
             "migration-inventory-incomplete", "Migration inventory root and path must be paths."
         )
     try:
+        if "\0" in str(root) or "\0" in str(path):
+            raise ValueError("embedded null character")
         if path.is_absolute():
             raise AcceptanceAuthorityError(
                 "migration-inventory-incomplete", "Migration inventory path must be relative."
@@ -181,7 +183,7 @@ def load_migration_inventory(
         document_path = _inventory_path(root, path)
         data = document_path.read_bytes()
         document = json.loads(data)
-    except (OSError, UnicodeError, ValueError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory cannot be loaded."
         ) from error

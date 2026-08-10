@@ -275,6 +275,31 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
                 self.assertIsInstance(raised.exception, AcceptanceAuthorityError)
                 self.assertEqual("migration-inventory-incomplete", raised.exception.code)
 
+    def test_public_loader_preserves_unexpected_read_value_errors(self) -> None:
+        """A programming ValueError from the read boundary must not be normalized as input."""
+
+        with mock.patch.object(Path, "read_bytes", side_effect=ValueError("bug")):
+            with self.assertRaises(ValueError) as raised:
+                load_migration_inventory(ROOT)
+        self.assertEqual("bug", str(raised.exception))
+
+    def test_public_loader_types_expected_read_and_json_failures(self) -> None:
+        """Missing files, I/O faults, and malformed JSON retain the stable public code."""
+
+        def assert_incomplete(root: Path, path: Path) -> None:
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                load_migration_inventory(root, path)
+            self.assertEqual("migration-inventory-incomplete", raised.exception.code)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = Path("inventory.json")
+            assert_incomplete(root, path)
+            (root / path).write_bytes(b"{")
+            assert_incomplete(root, path)
+            with mock.patch.object(Path, "read_bytes", side_effect=OSError("read fault")):
+                assert_incomplete(root, path)
+
     def test_public_validator_types_non_object_inventory_roots(self) -> None:
         """Non-object roots must reject before set or key operations can leak TypeError."""
 
