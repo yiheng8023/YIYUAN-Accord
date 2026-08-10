@@ -12,13 +12,35 @@ from scripts.program_acceptance_authority_v2 import AcceptanceAuthorityError
 from scripts.program_acceptance_authority_v2_rehearsal import (
     RECORD_PATH,
     REQUIRED_FAILURE_CASES,
+    REQUIRED_TYPED_CODES,
+    build_rehearsal_bundle,
     replace_selector_atomically,
     run_rehearsal,
     validate_repository_record,
+    write_rehearsal_bundle,
 )
 
 
 ROOT = Path(__file__).resolve().parent.parent
+_BATCH_ONE_EXPECTED_CASES = (
+    ("inventory-duplicate-row", "migration-inventory-incomplete"),
+    ("inventory-extra-row", "migration-inventory-incomplete"),
+    ("inventory-reordered-rows", "migration-inventory-incomplete"),
+    ("inventory-bool-line", "migration-consumer-class-invalid"),
+    ("inventory-float-line", "migration-consumer-class-invalid"),
+    ("selector-absolute", "acceptance-selector-target-invalid"),
+    ("selector-parent-escape", "acceptance-selector-target-invalid"),
+    ("selector-symlink-escape", "acceptance-selector-target-invalid"),
+    ("selector-snapshot-digest", "acceptance-selector-target-invalid"),
+    ("selector-receipt-digest", "acceptance-transition-receipt-invalid"),
+    ("selector-plan-digest", "acceptance-selector-target-invalid"),
+    ("selector-mode", "acceptance-selector-target-invalid"),
+    ("selector-activation-bool", "acceptance-activation-not-authorized"),
+    ("selector-counter-float", "acceptance-side-effect-counter-nonzero"),
+    ("atomic-sentinel-preserved", "acceptance-atomic-output-preserved"),
+    ("cli-protected-output", "acceptance-activation-not-authorized"),
+    ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete"),
+)
 
 
 class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
@@ -122,3 +144,42 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             REQUIRED_FAILURE_CASES,
             tuple((row["caseId"], row["expectedCode"]) for row in record["failureMatrix"]),
         )
+        unique_codes: list[str] = []
+        for row in record["failureMatrix"]:
+            if row["expectedCode"] not in unique_codes:
+                unique_codes.append(row["expectedCode"])
+        self.assertEqual(REQUIRED_TYPED_CODES, tuple(unique_codes))
+        self.assertEqual(
+            {
+                "g000001": {"criteriaCount": 61, "assessmentInventory": {"verified": 46, "partial": 15, "planned": 0}},
+                "g000002": {"criteriaCount": 61, "assessmentInventory": {"verified": 46, "partial": 15, "planned": 0}},
+            },
+            record["generationProjections"],
+        )
+        self.assertEqual("partial", record["targetCriterion"])
+        actual_cases = {row["caseId"]: row["expectedCode"] for row in record["failureMatrix"]}
+        self.assertEqual(dict(_BATCH_ONE_EXPECTED_CASES), {case_id: actual_cases[case_id] for case_id, _ in _BATCH_ONE_EXPECTED_CASES})
+
+    def test_public_writer_types_stage_cleanup_fault_and_removes_stage(self) -> None:
+        """A failed stage cleanup must not leak OSError or leave a sibling stage root."""
+
+        with tempfile.TemporaryDirectory() as parent:
+            parent_path = Path(parent)
+            output = parent_path / "rehearsal"
+            bundle = build_rehearsal_bundle(ROOT)
+            bundle["curation-program-plan-v2.json"] += b"\n"
+            original_rmtree = shutil.rmtree
+            failed_once = False
+
+            def fail_once(path: object, *args: object, **kwargs: object) -> None:
+                nonlocal failed_once
+                if Path(path).name.startswith(".rehearsal.stage-") and not failed_once:
+                    failed_once = True
+                    raise OSError("stage cleanup denied")
+                original_rmtree(path, *args, **kwargs)
+
+            with mock.patch("scripts.program_acceptance_authority_v2_rehearsal.shutil.rmtree", side_effect=fail_once):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    write_rehearsal_bundle(output, bundle)
+            self.assertEqual("acceptance-rehearsal-cleanup-incomplete", raised.exception.code)
+            self.assertEqual([], list(parent_path.glob(".rehearsal.stage-*")))

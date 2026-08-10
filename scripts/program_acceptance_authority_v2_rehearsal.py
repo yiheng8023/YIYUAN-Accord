@@ -108,7 +108,68 @@ REQUIRED_FAILURE_CASES: tuple[tuple[str, str], ...] = (
     ("inventory-float-line", "migration-consumer-class-invalid"),
     ("selector-absolute", "acceptance-selector-target-invalid"),
     ("cli-protected-output", "acceptance-activation-not-authorized"),
+    ("authority-schema-alias", "acceptance-authority-schema-invalid"),
+    ("authority-generation-alias", "acceptance-authority-generation-invalid"),
+    ("authority-predecessor-path", "acceptance-authority-predecessor-mismatch"),
+    ("authority-predecessor-digest", "acceptance-authority-predecessor-mismatch"),
+    ("program-plan-id", "acceptance-program-plan-binding-drift"),
+    ("program-plan-path", "acceptance-program-plan-binding-drift"),
+    ("structural-objective", "acceptance-structural-migration-overreach"),
+    ("structural-criterion", "acceptance-structural-migration-overreach"),
+    ("structural-verification", "acceptance-structural-migration-overreach"),
+    ("receipt-from-binding", "acceptance-transition-receipt-invalid"),
+    ("receipt-to-binding", "acceptance-transition-receipt-invalid"),
+    ("receipt-generation-step", "acceptance-transition-chain-broken"),
+    ("inventory-stale-line", "migration-inventory-incomplete"),
+    ("inventory-raw-id", "migration-consumer-class-invalid"),
+    ("inventory-raw-path-outside-host", "migration-consumer-class-invalid"),
+    ("atomic-sentinel-preserved", "acceptance-atomic-output-preserved"),
+    ("selector-snapshot-digest", "acceptance-selector-target-invalid"),
+    ("selector-receipt-digest", "acceptance-transition-receipt-invalid"),
+    ("selector-plan-digest", "acceptance-selector-target-invalid"),
+    ("selector-mode", "acceptance-selector-target-invalid"),
+    ("selector-activation-bool", "acceptance-activation-not-authorized"),
+    ("selector-counter-float", "acceptance-side-effect-counter-nonzero"),
+    ("selector-parent-escape", "acceptance-selector-target-invalid"),
+    ("selector-symlink-escape", "acceptance-selector-target-invalid"),
+    ("selector-plan-path-rewrite", "acceptance-selector-target-invalid"),
+    ("snapshot-byte-fork", "acceptance-transition-chain-broken"),
+    ("receipt-byte-fork", "acceptance-transition-receipt-invalid"),
+    ("rollback-other-series", "acceptance-rollback-target-not-ancestor"),
+    ("rollback-rewritten-same-generation", "acceptance-rollback-target-not-ancestor"),
+    ("duplicate-introducing-receipt", "acceptance-transition-chain-broken"),
+    ("structural-preexisting-evidence", "acceptance-evidence-link-asymmetric"),
+    ("receipt-delta", "acceptance-transition-receipt-invalid"),
+    ("evidence-manifest-row-missing", "acceptance-evidence-source-missing"),
+    ("evidence-manifest-row-wrong", "acceptance-evidence-source-drift"),
+    ("evidence-manifest-row-extra", "acceptance-evidence-link-asymmetric"),
+    ("evidence-link-wrong", "acceptance-evidence-link-asymmetric"),
+    ("assessment-bool-alias", "acceptance-inventory-count-drift"),
+    ("assessment-float-alias", "acceptance-inventory-count-drift"),
+    ("evidence-criterion-count", "acceptance-structural-migration-overreach"),
+    ("assessment-int-alias", "acceptance-inventory-count-drift"),
+    ("evidence-unrelated-objective", "acceptance-evidence-registration-overreach"),
+    ("evidence-unrelated-verification", "acceptance-structural-migration-overreach"),
+    ("evidence-unrelated-criterion", "acceptance-evidence-registration-overreach"),
+    ("evidence-unrelated-evidence", "acceptance-evidence-link-asymmetric"),
+    ("reciprocal-link-missing", "acceptance-evidence-link-asymmetric"),
+    ("reciprocal-link-extra", "acceptance-evidence-link-asymmetric"),
 )
+REQUIRED_TYPED_CODES: tuple[str, ...] = (
+    "legacy-authority-drift", "legacy-program-plan-drift", "legacy-packet-fixture-drift", "legacy-manifest-fixture-drift",
+    "migration-inventory-incomplete", "migration-consumer-class-invalid", "acceptance-authority-schema-invalid",
+    "acceptance-authority-series-invalid", "acceptance-authority-generation-invalid", "acceptance-authority-predecessor-mismatch",
+    "acceptance-program-plan-binding-drift", "acceptance-selector-target-invalid", "acceptance-transition-receipt-invalid",
+    "acceptance-transition-chain-broken", "acceptance-transition-type-mismatch", "acceptance-structural-migration-overreach",
+    "acceptance-evidence-registration-overreach", "acceptance-assessment-promotion-forbidden", "acceptance-inventory-count-drift",
+    "acceptance-evidence-link-asymmetric", "acceptance-evidence-id-duplicate", "acceptance-evidence-source-missing",
+    "acceptance-evidence-source-drift", "acceptance-historical-consumer-repointed", "acceptance-current-consumer-legacy-bypass",
+    "acceptance-neutral-consumer-path-owned", "acceptance-rollback-receipt-invalid", "acceptance-rollback-target-not-ancestor",
+    "acceptance-atomic-output-preserved", "acceptance-rehearsal-cleanup-incomplete", "acceptance-activation-not-authorized",
+    "acceptance-side-effect-counter-nonzero",
+)
+_CODE_ORDER = {code: index for index, code in enumerate(REQUIRED_TYPED_CODES)}
+REQUIRED_FAILURE_CASES = tuple(sorted(REQUIRED_FAILURE_CASES, key=lambda item: (_CODE_ORDER[item[1]], item[0])))
 _RECORD_DIGEST_PATHS = (
     Path("schemas/program-acceptance-authority-v2.schema.json"),
     Path("schemas/program-acceptance-current-selector-v1.schema.json"),
@@ -353,6 +414,30 @@ def _validate_staged_authority(repo_root: Path, stage: Path, bundle: dict[str, b
             holder.cleanup()
 
 
+def _cleanup_stage(stage: Path) -> None:
+    """Retry only the exact lexical stage directory and fail closed on any residue."""
+
+    if not os.path.lexists(stage):
+        return
+    _directory_identity(stage)
+    first_error: OSError | None = None
+    try:
+        shutil.rmtree(stage)
+    except OSError as error:
+        first_error = error
+        if not os.path.lexists(stage):
+            return
+        _directory_identity(stage)
+        try:
+            shutil.rmtree(stage)
+        except OSError as error:
+            raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Staged rehearsal root could not be removed.") from error
+    if os.path.lexists(stage):
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Staged rehearsal root still exists.")
+    if first_error is not None:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Staged rehearsal cleanup required a retry.") from first_error
+
+
 def _write_rehearsal_bundle(repo_root: Path, output_root: Path, bundle: dict[str, bytes]) -> None:
     """Stage/fsync immutable candidate bytes and publish the disposable directory once."""
 
@@ -368,12 +453,10 @@ def _write_rehearsal_bundle(repo_root: Path, output_root: Path, bundle: dict[str
         _validate_staged_authority(repo_root, stage, bundle)
         os.replace(stage, resolved_output)
     except AcceptanceAuthorityError:
-        if os.path.lexists(stage):
-            shutil.rmtree(stage)
+        _cleanup_stage(stage)
         raise
     except OSError as error:
-        if os.path.lexists(stage):
-            shutil.rmtree(stage)
+        _cleanup_stage(stage)
         raise AcceptanceAuthorityError("acceptance-rehearsal-output-write-failed", "Rehearsal output could not be written.") from error
 
 
@@ -536,6 +619,12 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
                 rows[0]["line"] = True
             elif case == "float-line":
                 rows[0]["line"] = 1.0
+            elif case == "stale-line":
+                rows[0]["lineSha256"] = "0" * 64
+            elif case == "raw-id":
+                rows[0]["purpose"] = LEGACY_ACCEPTANCE_SEARCH_PATTERNS["legacy-acceptance-id"]
+            elif case == "raw-path-outside-host":
+                rows[0]["purpose"] = LEGACY_ACCEPTANCE_SEARCH_PATTERNS["legacy-acceptance-path"]
             validate_migration_inventory(repo_root, inventory)
         return invoke
 
@@ -577,17 +666,47 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         def invoke() -> None:
             legacy, g1, g2 = snapshots()
             plan = copy.deepcopy(g1["programPlanBinding"])
-            if case == "series":
+            if case == "schema":
+                g1["authoritySchema"] = True
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "generation":
+                g1["generation"] = True
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "series":
                 g1["authoritySeriesId"] = "wrong"
                 validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
             elif case == "predecessor":
                 g1["predecessorBinding"]["id"] = "wrong"
                 validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "predecessor-path":
+                g1["predecessorBinding"]["path"] = "wrong.json"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "predecessor-digest":
+                g1["predecessorBinding"]["sha256"] = "0" * 64
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
             elif case == "plan":
                 g1["programPlanBinding"]["sha256"] = "0" * 64
                 validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "plan-id":
+                g1["programPlanBinding"]["id"] = "wrong"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "plan-path":
+                g1["programPlanBinding"]["path"] = "wrong.json"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
             elif case == "structural":
                 g1["acceptanceCriteria"][0]["statement"] = "rewritten"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "structural-objective":
+                g1["objectives"][0]["id"] = "objective.rewritten"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "structural-criterion":
+                g1["acceptanceCriteria"][0]["id"] = "acceptance.rewritten"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "structural-verification":
+                g1["verifications"][0]["id"] = "verification.rewritten"
+                validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
+            elif case == "structural-evidence":
+                g1["evidence"][0]["id"] = "evidence.rewritten"
                 validate_authority_snapshot(g1, predecessor=legacy, program_plan_binding=plan)
             elif case == "inventory":
                 g1["acceptanceCriteria"][0]["assessment"] = "planned"
@@ -596,15 +715,49 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
                 g2["evidence"] = [row for row in g2["evidence"] if row["id"] != "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09"]
                 next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["evidenceIds"].remove("evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09")
                 validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "manifest-wrong":
+                next(row for row in g2["evidence"] if row["id"] == "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09")["path"] = "wrong.json"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "manifest-extra":
+                g2["evidence"].append(copy.deepcopy(g2["evidence"][-1]))
+                g2["evidence"][-1]["id"] = "evidence.extra-record"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
             elif case == "source-drift":
                 next(row for row in g2["evidence"] if row["id"] == "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09")["kind"] = "drift"
                 validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
             elif case == "link":
                 next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["evidenceIds"].remove("evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09")
                 validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "link-wrong":
+                next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["evidenceIds"].append("evidence.wrong")
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
             elif case == "assessment":
                 next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["assessment"] = "verified"
                 next(row for row in g2["acceptanceCriteria"] if row["assessment"] == "verified")["assessment"] = "partial"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "assessment-bool":
+                next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["assessment"] = True
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "assessment-float":
+                next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["assessment"] = 1.0
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "assessment-int":
+                next(row for row in g2["acceptanceCriteria"] if row["id"] == "acceptance.decision-ready-consumer-projection")["assessment"] = 1
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "criterion-count":
+                g2["acceptanceCriteria"].pop()
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "unrelated-objective":
+                g2["objectives"][0]["id"] = "objective.unrelated"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "unrelated-verification":
+                g2["verifications"][0]["id"] = "verification.unrelated"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "unrelated-criterion":
+                g2["acceptanceCriteria"][0]["statement"] = "unrelated"
+                validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
+            elif case == "unrelated-evidence":
+                g2["evidence"][0]["id"] = "evidence.unrelated"
                 validate_authority_snapshot(g2, predecessor=g1, program_plan_binding=plan)
             elif case == "duplicate":
                 g2["evidence"].append(copy.deepcopy(g2["evidence"][-1]))
@@ -628,6 +781,14 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
                 receipt["fromSnapshotBinding"]["sha256"] = "0" * 64
             elif case == "type":
                 receipt["transactionType"] = "unknown"
+            elif case == "from":
+                receipt["fromSnapshotBinding"]["id"] = "wrong"
+            elif case == "to":
+                receipt["toSnapshotBinding"]["id"] = "wrong"
+            elif case == "generation-step":
+                receipt["toSnapshotBinding"]["generation"] = 9
+            elif case == "delta":
+                receipt["delta"]["evidenceAdded"] = ["rewritten"]
             validate_transition_receipt(receipt, from_document=g1, to_document=g2)
         return invoke
 
@@ -639,6 +800,15 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             g2_binding = _binding(2, g2, Path("snapshots/v2/g000002.json"), canonical_file_bytes(g2))
             if case == "target":
                 build_rollback_receipt(from_snapshot_binding=g2_binding, to_snapshot_binding=g2_binding, active_program_plan_binding=plan, ancestor_bindings=[g1_binding])
+            elif case == "other-series":
+                other = copy.deepcopy(g1_binding)
+                other["id"] = "other-series:g000001"
+                build_rollback_receipt(from_snapshot_binding=g2_binding, to_snapshot_binding=other, active_program_plan_binding=plan, ancestor_bindings=[g1_binding])
+            elif case == "rewritten":
+                rewritten = copy.deepcopy(g1)
+                rewritten["acceptanceCriteria"][0]["statement"] = "rewritten"
+                rewritten_binding = _binding(2, rewritten, Path("snapshots/v2/g000001.json"), canonical_file_bytes(rewritten))
+                build_rollback_receipt(from_snapshot_binding=g2_binding, to_snapshot_binding=rewritten_binding, active_program_plan_binding=plan, ancestor_bindings=[g1_binding])
             else:
                 receipt = _read_json(repo_root / FIXTURE_ROOT / "transitions/g000002-to-g000001-rollback.json")
                 receipt["delta"]["evidenceAdded"] = ["bad"]
@@ -650,6 +820,68 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             target = Path(directory) / "current.json"
             target.mkdir()
             replace_selector_atomically(target, b"candidate\n")
+
+    def selector_mutation(field: str) -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-selector-matrix-") as directory:
+            output = Path(directory) / "rehearsal"
+            _write_rehearsal_bundle(repo_root, output, build_rehearsal_bundle(repo_root))
+            selector = _read_json(output / "selectors/current-g000002.json")
+            if field == "snapshot": selector["activeSnapshotBinding"]["sha256"] = "0" * 64
+            elif field == "receipt": selector["activeTransitionBinding"]["sha256"] = "0" * 64
+            elif field == "plan": selector["programPlanBinding"]["sha256"] = "0" * 64
+            elif field == "plan-path": selector["programPlanBinding"]["path"] = "rewritten-plan.json"
+            elif field == "mode": selector["selectionMode"] = "live"
+            elif field == "activation": selector["activationAuthorized"] = True
+            else: selector["executionCounters"]["modelRequestCount"] = 1.0
+            holder, overlay = _overlay_with_legacy(repo_root, output, canonical_file_bytes(selector))
+            try: resolve_current_authority(overlay, REHEARSAL_SELECTOR_PATH.as_posix())
+            finally: holder.cleanup()
+
+    def selector_parent_escape() -> None:
+        resolve_current_authority(repo_root, "../current.json")
+
+    def selector_symlink_escape() -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-selector-link-") as directory:
+            root = Path(directory) / "root"
+            root.mkdir()
+            external = Path(directory) / "external.json"
+            external.write_bytes(b"{}")
+            os.symlink(external, root / "current.json")
+            resolve_current_authority(root, "current.json")
+
+    def candidate_byte_fork(relative: Path) -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-fork-matrix-") as directory:
+            output = Path(directory) / "rehearsal"
+            bundle = build_rehearsal_bundle(repo_root)
+            _write_rehearsal_bundle(repo_root, output, bundle)
+            target = output / relative
+            target.write_bytes(target.read_bytes() + b"\n")
+            holder, overlay = _overlay_with_legacy(repo_root, output, bundle["selectors/current-g000002.json"])
+            try: resolve_current_authority(overlay, REHEARSAL_SELECTOR_PATH.as_posix())
+            finally: holder.cleanup()
+
+    def duplicate_introducing_receipt() -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-duplicate-receipt-") as directory:
+            output = Path(directory) / "rehearsal"; bundle = build_rehearsal_bundle(repo_root)
+            _write_rehearsal_bundle(repo_root, output, bundle)
+            duplicate = output / "transitions/alternate-introducer.json"
+            shutil.copyfile(output / "transitions/g000001-to-g000002.json", duplicate)
+            holder, overlay = _overlay_with_legacy(repo_root, output, bundle["selectors/current-g000002.json"])
+            shutil.copyfile(duplicate, overlay / "transitions/alternate-introducer.json")
+            try: resolve_current_authority(overlay, REHEARSAL_SELECTOR_PATH.as_posix())
+            finally: holder.cleanup()
+
+    def atomic_sentinel_preserved() -> None:
+        with tempfile.TemporaryDirectory(prefix="acceptance-atomic-sentinel-") as directory:
+            target = Path(directory) / "current.json"
+            sentinel = b"sentinel-selector-bytes\n"
+            target.write_bytes(sentinel)
+            with mock.patch("os.replace", side_effect=OSError("replace denied")):
+                try:
+                    replace_selector_atomically(target, b"candidate-selector-bytes\n")
+                finally:
+                    if target.read_bytes() != sentinel or list(Path(directory).glob(".current.json.*.tmp")):
+                        raise RuntimeError("atomic sentinel preservation failed")
 
     def cli_protected_output() -> str:
         completed = subprocess.run(
@@ -697,26 +929,69 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("inventory-current-bypass", "acceptance-current-consumer-legacy-bypass", inventory_mutation("current-bypass")),
         ("inventory-neutral-path", "acceptance-neutral-consumer-path-owned", inventory_mutation("neutral-path")),
         ("authority-schema-bool", "acceptance-authority-schema-invalid", lambda: binding_for_bytes(authority_schema=True, authority_id="x", generation=None, path="x", data=b"x")),
+        ("authority-schema-alias", "acceptance-authority-schema-invalid", snapshot_mutation("schema")),
         ("authority-generation-bool", "acceptance-authority-generation-invalid", lambda: binding_for_bytes(authority_schema=2, authority_id="x", generation=True, path="x", data=b"x")),
+        ("authority-generation-alias", "acceptance-authority-generation-invalid", snapshot_mutation("generation")),
         ("authority-series", "acceptance-authority-series-invalid", snapshot_mutation("series")),
         ("authority-predecessor", "acceptance-authority-predecessor-mismatch", snapshot_mutation("predecessor")),
+        ("authority-predecessor-path", "acceptance-authority-predecessor-mismatch", snapshot_mutation("predecessor-path")),
+        ("authority-predecessor-digest", "acceptance-authority-predecessor-mismatch", snapshot_mutation("predecessor-digest")),
         ("program-plan-binding", "acceptance-program-plan-binding-drift", snapshot_mutation("plan")),
+        ("program-plan-id", "acceptance-program-plan-binding-drift", snapshot_mutation("plan-id")),
+        ("program-plan-path", "acceptance-program-plan-binding-drift", snapshot_mutation("plan-path")),
         ("structural-overreach", "acceptance-structural-migration-overreach", snapshot_mutation("structural")),
+        ("structural-objective", "acceptance-structural-migration-overreach", snapshot_mutation("structural-objective")),
+        ("structural-criterion", "acceptance-structural-migration-overreach", snapshot_mutation("structural-criterion")),
+        ("structural-verification", "acceptance-structural-migration-overreach", snapshot_mutation("structural-verification")),
+        ("structural-preexisting-evidence", "acceptance-evidence-link-asymmetric", snapshot_mutation("structural-evidence")),
         ("inventory-count", "acceptance-inventory-count-drift", snapshot_mutation("inventory")),
         ("evidence-source-missing", "acceptance-evidence-source-missing", manifest_source_mutation("missing")),
         ("evidence-source-drift", "acceptance-evidence-source-drift", manifest_source_mutation("drift")),
+        ("evidence-manifest-row-missing", "acceptance-evidence-source-missing", snapshot_mutation("missing")),
+        ("evidence-manifest-row-wrong", "acceptance-evidence-source-drift", snapshot_mutation("manifest-wrong")),
+        ("evidence-manifest-row-extra", "acceptance-evidence-link-asymmetric", snapshot_mutation("manifest-extra")),
         ("evidence-link-asymmetric", "acceptance-evidence-link-asymmetric", snapshot_mutation("link")),
+        ("reciprocal-link-missing", "acceptance-evidence-link-asymmetric", snapshot_mutation("link")),
+        ("evidence-link-wrong", "acceptance-evidence-link-asymmetric", snapshot_mutation("link-wrong")),
+        ("reciprocal-link-extra", "acceptance-evidence-link-asymmetric", snapshot_mutation("link-wrong")),
         ("assessment-promotion", "acceptance-assessment-promotion-forbidden", snapshot_mutation("assessment")),
+        ("assessment-bool-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-bool")),
+        ("assessment-float-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-float")),
+        ("assessment-int-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-int")),
+        ("evidence-criterion-count", "acceptance-structural-migration-overreach", snapshot_mutation("criterion-count")),
+        ("evidence-unrelated-objective", "acceptance-evidence-registration-overreach", snapshot_mutation("unrelated-objective")),
+        ("evidence-unrelated-verification", "acceptance-structural-migration-overreach", snapshot_mutation("unrelated-verification")),
+        ("evidence-unrelated-criterion", "acceptance-evidence-registration-overreach", snapshot_mutation("unrelated-criterion")),
+        ("evidence-unrelated-evidence", "acceptance-evidence-link-asymmetric", snapshot_mutation("unrelated-evidence")),
         ("evidence-id-duplicate", "acceptance-evidence-id-duplicate", snapshot_mutation("duplicate")),
         ("evidence-registration-overreach", "acceptance-evidence-registration-overreach", snapshot_mutation("overreach")),
         ("selector-escape", "acceptance-selector-target-invalid", lambda: resolve_current_authority(repo_root, "../current.json")),
         ("receipt-invalid", "acceptance-transition-receipt-invalid", receipt_mutation("invalid")),
         ("receipt-chain", "acceptance-transition-chain-broken", receipt_mutation("chain")),
+        ("receipt-from-binding", "acceptance-transition-receipt-invalid", receipt_mutation("from")),
+        ("receipt-to-binding", "acceptance-transition-receipt-invalid", receipt_mutation("to")),
+        ("receipt-generation-step", "acceptance-transition-chain-broken", receipt_mutation("generation-step")),
+        ("receipt-delta", "acceptance-transition-receipt-invalid", receipt_mutation("delta")),
         ("receipt-type", "acceptance-transition-type-mismatch", receipt_mutation("type")),
         ("receipt-side-effect-counter", "acceptance-side-effect-counter-nonzero", nonzero_receipt),
         ("rollback-invalid", "acceptance-rollback-receipt-invalid", rollback_mutation("invalid")),
         ("rollback-target", "acceptance-rollback-target-not-ancestor", rollback_mutation("target")),
+        ("rollback-other-series", "acceptance-rollback-target-not-ancestor", rollback_mutation("other-series")),
+        ("rollback-rewritten-same-generation", "acceptance-rollback-target-not-ancestor", rollback_mutation("rewritten")),
         ("atomic-directory-target", "acceptance-atomic-output-preserved", atomic_directory_target),
+        ("atomic-sentinel-preserved", "acceptance-atomic-output-preserved", atomic_sentinel_preserved),
+        ("selector-snapshot-digest", "acceptance-selector-target-invalid", lambda: selector_mutation("snapshot")),
+        ("selector-receipt-digest", "acceptance-transition-receipt-invalid", lambda: selector_mutation("receipt")),
+        ("selector-plan-digest", "acceptance-selector-target-invalid", lambda: selector_mutation("plan")),
+        ("selector-plan-path-rewrite", "acceptance-selector-target-invalid", lambda: selector_mutation("plan-path")),
+        ("snapshot-byte-fork", "acceptance-transition-chain-broken", lambda: candidate_byte_fork(Path("snapshots/v2/g000001.json"))),
+        ("receipt-byte-fork", "acceptance-transition-receipt-invalid", lambda: candidate_byte_fork(Path("transitions/g000001-to-g000002.json"))),
+        ("duplicate-introducing-receipt", "acceptance-transition-chain-broken", duplicate_introducing_receipt),
+        ("selector-mode", "acceptance-selector-target-invalid", lambda: selector_mutation("mode")),
+        ("selector-activation-bool", "acceptance-activation-not-authorized", lambda: selector_mutation("activation")),
+        ("selector-counter-float", "acceptance-side-effect-counter-nonzero", lambda: selector_mutation("counter")),
+        ("selector-parent-escape", "acceptance-selector-target-invalid", selector_parent_escape),
+        ("selector-symlink-escape", "acceptance-selector-target-invalid", selector_symlink_escape),
         ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete", cleanup_fault),
         ("protected-output-root", "acceptance-activation-not-authorized", lambda: run_rehearsal(repo_root, repo_root / PRODUCTION_AUTHORITY_ROOT)),
         ("inventory-duplicate-row", "migration-inventory-incomplete", inventory_mutation("duplicate-row")),
@@ -724,9 +999,13 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("inventory-reordered-rows", "migration-inventory-incomplete", inventory_mutation("reordered-rows")),
         ("inventory-bool-line", "migration-consumer-class-invalid", inventory_mutation("bool-line")),
         ("inventory-float-line", "migration-consumer-class-invalid", inventory_mutation("float-line")),
+        ("inventory-stale-line", "migration-inventory-incomplete", inventory_mutation("stale-line")),
+        ("inventory-raw-id", "migration-consumer-class-invalid", inventory_mutation("raw-id")),
+        ("inventory-raw-path-outside-host", "migration-consumer-class-invalid", inventory_mutation("raw-path-outside-host")),
         ("selector-absolute", "acceptance-selector-target-invalid", lambda: resolve_current_authority(repo_root, str((repo_root / "current.json").resolve()))),
         ("cli-protected-output", "acceptance-activation-not-authorized", cli_protected_output),
     )
+    cases = tuple(sorted(cases, key=lambda item: (_CODE_ORDER[item[1]], item[0])))
     if tuple((case_id, expected) for case_id, expected, _ in cases) != REQUIRED_FAILURE_CASES:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Failure matrix implementation drifted from its required authority.")
     for case_id, expected, invoke in cases:
@@ -817,7 +1096,7 @@ def validate_repository_record(root: Path) -> dict[str, object]:
         "schema", "id", "date", "status", "fileDigests", "legacyLockDigests",
         "fixtureDigests", "migrationInventory", "acceptanceInventory", "targetCriterion",
         "acceptanceRegistration", "liveMigrationAuthorized", "executionCounters",
-        "claimBoundary", "failureMatrix", "manifestEvidenceSource",
+        "claimBoundary", "failureMatrix", "manifestEvidenceSource", "generationProjections",
     }:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record shape is invalid.")
     if raw != canonical_file_bytes(record):
@@ -850,7 +1129,22 @@ def validate_repository_record(root: Path) -> dict[str, object]:
     expected_inventory = copy.deepcopy(inventory["baselineObservation"])
     if not _is_exact_observation(record.get("migrationInventory"), expected_inventory):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record inventory binding drifted.")
-    actual_acceptance = assessment_inventory(fixture_g2)
+    fixture_g1 = _read_json(root / FIXTURE_ROOT / "snapshots/v2/g000001.json")
+    expected_projections = {
+        "g000001": {"criteriaCount": len(fixture_g1["acceptanceCriteria"]), "assessmentInventory": assessment_inventory(fixture_g1)},
+        "g000002": {"criteriaCount": len(fixture_g2["acceptanceCriteria"]), "assessmentInventory": assessment_inventory(fixture_g2)},
+    }
+    projections = record.get("generationProjections")
+    if not isinstance(projections, dict) or set(projections) != set(expected_projections) or any(
+        not isinstance(projections[key], dict)
+        or set(projections[key]) != {"criteriaCount", "assessmentInventory"}
+        or type(projections[key]["criteriaCount"]) is not int
+        or not _is_exact_int_map(projections[key]["assessmentInventory"], expected_projections[key]["assessmentInventory"])
+        or not strict_json_equal(projections[key], expected_projections[key])
+        for key in expected_projections
+    ):
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record generation projections drifted.")
+    actual_acceptance = expected_projections["g000002"]["assessmentInventory"]
     actual_target = next((row for row in fixture_g2["acceptanceCriteria"] if row.get("id") == "acceptance.decision-ready-consumer-projection"), None)
     if not isinstance(actual_target, dict) or actual_target.get("assessment") != "partial":
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Fixture target criterion cannot be independently recomputed.")
@@ -858,6 +1152,11 @@ def validate_repository_record(root: Path) -> dict[str, object]:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record boundaries drifted.")
     matrix = run_failure_matrix(root)
     expected_matrix_authority = tuple({"caseId": case_id, "expectedCode": code} for case_id, code in REQUIRED_FAILURE_CASES)
-    if tuple({"caseId": row.get("caseId"), "expectedCode": row.get("expectedCode")} for row in matrix) != expected_matrix_authority or not strict_json_equal(record.get("failureMatrix"), matrix) or not all(_is_matrix_row(row) for row in matrix):
+    seen_codes: list[str] = []
+    for row in matrix:
+        code = row.get("expectedCode")
+        if type(code) is str and code not in seen_codes:
+            seen_codes.append(code)
+    if tuple({"caseId": row.get("caseId"), "expectedCode": row.get("expectedCode")} for row in matrix) != expected_matrix_authority or tuple(seen_codes) != REQUIRED_TYPED_CODES or not strict_json_equal(record.get("failureMatrix"), matrix) or not all(_is_matrix_row(row) for row in matrix):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record failure matrix drifted.")
     return copy.deepcopy(record)
