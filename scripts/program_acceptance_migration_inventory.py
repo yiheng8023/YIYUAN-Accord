@@ -41,6 +41,44 @@ CANDIDATE_BINDINGS = {
     "migration-metadata",
     "not-applicable",
 }
+CLASS_POLICY = {
+    "A-immutable-historical": (
+        "legacy-v1",
+        "preserve-legacy-v1",
+        "preserve",
+        "no-repoint",
+        "retain",
+        False,
+        "acceptance-historical-consumer-repointed",
+    ),
+    "B-current-authority-consumer": (
+        "legacy-v1",
+        "rehearsal-selector",
+        "selector",
+        "separate-authority",
+        "receipt",
+        True,
+        "acceptance-current-consumer-legacy-bypass",
+    ),
+    "C-version-neutral-component": (
+        "explicit-input",
+        "explicit-input",
+        "validate-input",
+        "not-applicable",
+        "not-applicable",
+        False,
+        "acceptance-neutral-consumer-path-owned",
+    ),
+    "D-migration-governance-and-regression": (
+        "migration-metadata",
+        "migration-metadata",
+        "zero-model",
+        "separate-authority",
+        "receipt",
+        True,
+        "migration-consumer-class-invalid",
+    ),
+}
 OCCURRENCE_FIELDS = (
     "path",
     "line",
@@ -58,6 +96,7 @@ OCCURRENCE_FIELDS = (
 )
 IDENTITY_FIELDS = ("path", "line", "patternId", "lineSha256")
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 
 
 def discover_acceptance_reference_occurrences(root: Path) -> list[dict[str, object]]:
@@ -117,7 +156,9 @@ def load_migration_inventory(
     """Load the reviewed record without making it a source of truth by itself."""
 
     try:
-        document = json.loads(_inventory_path(root, path).read_text(encoding="utf-8"))
+        document_path = _inventory_path(root, path)
+        data = document_path.read_bytes()
+        document = json.loads(data)
     except (OSError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory cannot be loaded."
@@ -125,6 +166,10 @@ def load_migration_inventory(
     if not isinstance(document, dict):
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory must be an object."
+        )
+    if not strict_json_equal(data, migration_inventory_wire_bytes(document)):
+        raise AcceptanceAuthorityError(
+            "migration-inventory-incomplete", "Migration inventory wire bytes are noncanonical."
         )
     return document
 
@@ -194,52 +239,27 @@ def _validate_row_governance(row: dict[str, object]) -> None:
             )
         )
         or type(row["separateAuthorizationRequired"]) is not bool
+        or type(row["classification"]) is not str
         or row["classification"] not in CLASSIFICATIONS
-        or row["currentBinding"] not in CURRENT_BINDINGS
-        or row["candidateBinding"] not in CANDIDATE_BINDINGS
+        or not _require_nonempty_string(row["currentBinding"])
+        or not _require_nonempty_string(row["candidateBinding"])
     ):
         raise AcceptanceAuthorityError(
             "migration-consumer-class-invalid", "Migration occurrence governance is invalid."
         )
 
     classification = row["classification"]
-    if classification == "A-immutable-historical":
-        if row["candidateBinding"] != "preserve-legacy-v1":
-            raise AcceptanceAuthorityError(
-                "acceptance-historical-consumer-repointed",
-                "Historical consumers must preserve their legacy-v1 binding.",
-            )
-    elif classification == "B-current-authority-consumer":
-        actions = " ".join(
-            row[field]
-            for field in ("rehearsalAction", "liveMigrationAction", "rollbackAction")
-        ).lower()
-        if row["candidateBinding"] != "rehearsal-selector" or (
-            "activate" in actions and "legacy-v1" in actions
-        ):
-            raise AcceptanceAuthorityError(
-                "acceptance-current-consumer-legacy-bypass",
-                "Current consumers cannot bypass the candidate selector with legacy-v1.",
-            )
-    elif classification == "C-version-neutral-component":
-        if (
-            row["currentBinding"] != "explicit-input"
-            or row["candidateBinding"] != "explicit-input"
-        ):
-            raise AcceptanceAuthorityError(
-                "acceptance-neutral-consumer-path-owned",
-                "Version-neutral consumers must receive bindings explicitly.",
-            )
-    else:
-        actions = " ".join(
-            row[field]
-            for field in ("purpose", "rehearsalAction", "liveMigrationAction", "rollbackAction")
-        ).lower()
-        if "live activation" in actions:
-            raise AcceptanceAuthorityError(
-                "migration-consumer-class-invalid",
-                "Migration governance cannot claim live activation.",
-            )
+    expected = CLASS_POLICY[classification]
+    actual = (
+        row["currentBinding"],
+        row["candidateBinding"],
+        row["rehearsalAction"],
+        row["liveMigrationAction"],
+        row["rollbackAction"],
+        row["separateAuthorizationRequired"],
+    )
+    if not strict_json_equal(actual, expected[:-1]):
+        raise AcceptanceAuthorityError(expected[-1], "Migration occurrence class policy drifted.")
 
 
 def validate_migration_inventory(root: Path, inventory: dict[str, object]) -> None:
@@ -263,7 +283,8 @@ def validate_migration_inventory(root: Path, inventory: dict[str, object]) -> No
         type(inventory["schema"]) is not int
         or inventory["schema"] != 1
         or not _require_nonempty_string(inventory["id"])
-        or not _require_nonempty_string(inventory["date"])
+        or type(inventory["date"]) is not str
+        or not _DATE_RE.fullmatch(inventory["date"])
         or not _require_nonempty_string(inventory["status"])
         or not strict_json_equal(inventory["sourcePatternIds"], SOURCE_PATTERN_IDS)
         or not isinstance(inventory["occurrences"], list)

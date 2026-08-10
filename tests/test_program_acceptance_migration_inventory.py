@@ -226,3 +226,157 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
             / "registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json"
         ).read_bytes()
         self.assertEqual(expected, migration_inventory_wire_bytes(inventory))
+
+    def test_public_loader_rejects_noncanonical_wire_bytes(self) -> None:
+        """Appending a byte or changing the narrow escape must not survive public loading."""
+
+        source = (
+            ROOT
+            / "registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json"
+        ).read_bytes()
+        decoded = json.loads(source)
+        reordered = {key: decoded[key] for key in reversed(decoded)}
+        legacy_path = LEGACY_ACCEPTANCE_SEARCH_PATTERNS["legacy-acceptance-path"]
+        escaped_path = legacy_path.replace("/", "\\/").encode("utf-8")
+        unescaped_path = legacy_path.encode("utf-8")
+        cases = (
+            source + b"\n",
+            source.replace(escaped_path, unescaped_path),
+            json.dumps(reordered, separators=(",", ":")).encode("utf-8") + b"\n",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = Path("inventory.json")
+            for payload in cases:
+                (root / path).write_bytes(payload)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    load_migration_inventory(root, path)
+                self.assertEqual("migration-inventory-incomplete", raised.exception.code)
+
+    def test_exact_class_policy_matrix_rejects_each_tuple_member_drift(self) -> None:
+        """Every class binding, action, and authorization member is a fixed policy tuple."""
+
+        inventory = load_migration_inventory(ROOT)
+        valid_tuples = {
+            "A-immutable-historical": (
+                "legacy-v1",
+                "preserve-legacy-v1",
+                "preserve",
+                "no-repoint",
+                "retain",
+                False,
+                "acceptance-historical-consumer-repointed",
+            ),
+            "B-current-authority-consumer": (
+                "legacy-v1",
+                "rehearsal-selector",
+                "selector",
+                "separate-authority",
+                "receipt",
+                True,
+                "acceptance-current-consumer-legacy-bypass",
+            ),
+            "C-version-neutral-component": (
+                "explicit-input",
+                "explicit-input",
+                "validate-input",
+                "not-applicable",
+                "not-applicable",
+                False,
+                "acceptance-neutral-consumer-path-owned",
+            ),
+            "D-migration-governance-and-regression": (
+                "migration-metadata",
+                "migration-metadata",
+                "zero-model",
+                "separate-authority",
+                "receipt",
+                True,
+                "migration-consumer-class-invalid",
+            ),
+        }
+        fields = (
+            "currentBinding",
+            "candidateBinding",
+            "rehearsalAction",
+            "liveMigrationAction",
+            "rollbackAction",
+            "separateAuthorizationRequired",
+        )
+
+        def validate_semantics(mutated: dict[str, object], expected_code: str) -> None:
+            rows = mutated["occurrences"]
+            assert isinstance(rows, list)
+            projection = [
+                {key: row[key] for key in ("path", "line", "patternId", "lineSha256")}
+                for row in rows
+                if isinstance(row, dict)
+            ]
+            with mock.patch.object(
+                migration_inventory,
+                "discover_acceptance_reference_occurrences",
+                return_value=projection,
+            ):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_migration_inventory(ROOT, mutated)
+            self.assertEqual(expected_code, raised.exception.code)
+
+        for classification, (*policy, error_code) in valid_tuples.items():
+            candidate = copy.deepcopy(inventory)
+            row = next(
+                row for row in candidate["occurrences"] if row["classification"] != "C-version-neutral-component"
+            )
+            row["classification"] = classification
+            for field, value in zip(fields, policy, strict=True):
+                row[field] = value
+            rows = candidate["occurrences"]
+            assert isinstance(rows, list)
+            projection = [
+                {key: item[key] for key in ("path", "line", "patternId", "lineSha256")}
+                for item in rows
+            ]
+            with self.subTest(classification=classification, valid=True), mock.patch.object(
+                migration_inventory,
+                "discover_acceptance_reference_occurrences",
+                return_value=projection,
+            ):
+                validate_migration_inventory(ROOT, candidate)
+
+            for field, expected_value in zip(fields, policy, strict=True):
+                mutated = copy.deepcopy(candidate)
+                changed = next(
+                    item
+                    for item in mutated["occurrences"]
+                    if item["path"] == row["path"]
+                    and item["line"] == row["line"]
+                    and item["patternId"] == row["patternId"]
+                )
+                changed[field] = (
+                    "wrong-policy" if type(expected_value) is str else not expected_value
+                )
+                with self.subTest(classification=classification, field=field):
+                    validate_semantics(mutated, error_code)
+
+    def test_runtime_date_requires_exact_yyyy_mm_dd(self) -> None:
+        """A loosely formatted calendar string must not satisfy the inventory contract."""
+
+        inventory = load_migration_inventory(ROOT)
+        inventory["date"] = "2026-8-10"
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            validate_migration_inventory(ROOT, inventory)
+        self.assertEqual("migration-consumer-class-invalid", raised.exception.code)
+
+    def test_packet_builder_coupled_current_posture_occurrences_are_both_class_b(self) -> None:
+        """The current packet path and acceptance identity must transition together."""
+
+        inventory = load_migration_inventory(ROOT)
+        rows = [
+            row
+            for row in inventory["occurrences"]
+            if row["path"] == "scripts/harness_decision_packet.py"
+        ]
+        self.assertEqual(2, len(rows))
+        self.assertEqual(
+            {"B-current-authority-consumer"},
+            {row["classification"] for row in rows},
+        )
