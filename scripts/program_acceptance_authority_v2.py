@@ -1078,13 +1078,21 @@ def _validate_selector(selector: object) -> dict[str, object]:
 
 
 def _validate_program_plan_document(
+    root: Path,
     document: dict[str, object],
     binding: dict[str, object],
     authority_binding: dict[str, object],
 ) -> None:
     if binding["authoritySchema"] == 1:
+        locks = validate_legacy_locks(root)
+        expected_binding = {
+            **locks["programPlan"],
+            "authoritySchema": 1,
+            "generation": None,
+        }
         if (
-            document.get("id") != "curation-program-plan-v1"
+            not strict_json_equal(binding, expected_binding)
+            or document.get("id") != "curation-program-plan-v1"
             or document.get("acceptanceMap") != authority_binding["path"]
         ):
             raise AcceptanceAuthorityError(
@@ -1092,12 +1100,20 @@ def _validate_program_plan_document(
                 "Historical program plan does not bind the supplied authority path.",
             )
         return
+    locks = validate_legacy_locks(root)
+    legacy_binding = {
+        **locks["programPlan"],
+        "authoritySchema": 1,
+        "generation": None,
+    }
+    legacy_plan = _load_bound_document(
+        root, legacy_binding, code="acceptance-program-plan-binding-drift"
+    )
+    expected_candidate = build_candidate_program_plan_v2(legacy_plan)
     if (
         binding["authoritySchema"] != 2
         or binding["generation"] != 1
-        or document.get("id") != "curation-program-plan-v2"
-        or document.get("acceptanceAuthoritySelector")
-        != "program-acceptance-authority/current.json"
+        or not strict_json_equal(document, expected_candidate)
     ):
         raise AcceptanceAuthorityError(
             "acceptance-program-plan-binding-drift",
@@ -1141,7 +1157,34 @@ def _load_introducing_receipt(
         path=relative,
         data=data,
     )
-    return _load_bound_document(root, binding, code="acceptance-transition-chain-broken")
+    receipt = _load_bound_document(root, binding, code="acceptance-transition-chain-broken")
+    _reject_duplicate_introducing_receipts(root, relative, to_binding)
+    return receipt
+
+
+def _reject_duplicate_introducing_receipts(
+    root: Path, canonical_relative: str, to_binding: dict[str, object]
+) -> None:
+    transitions = _safe_relative_path(root, "transitions", code="acceptance-transition-chain-broken")
+    canonical_path = _safe_relative_path(
+        root, canonical_relative, code="acceptance-transition-chain-broken"
+    )
+    for candidate in transitions.glob("*.json"):
+        if candidate.resolve() == canonical_path:
+            continue
+        try:
+            alternate = json.loads(candidate.read_bytes())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            isinstance(alternate, dict)
+            and alternate.get("transactionType") != "rollback"
+            and strict_json_equal(alternate.get("toSnapshotBinding"), to_binding)
+        ):
+            raise AcceptanceAuthorityError(
+                "acceptance-transition-chain-broken",
+                "Authority target has more than one introducing receipt.",
+            )
 
 
 def _require_exact_rollback_ancestor(
@@ -1231,8 +1274,14 @@ def _validate_receipt_ancestry(
         root, from_plan_binding, code="acceptance-program-plan-binding-drift"
     )
     to_plan = _load_bound_document(root, to_plan_binding, code="acceptance-program-plan-binding-drift")
-    _validate_program_plan_document(from_plan, from_plan_binding, from_binding)
-    _validate_program_plan_document(to_plan, to_plan_binding, to_binding)
+    _validate_program_plan_document(root, from_plan, from_plan_binding, from_binding)
+    _validate_program_plan_document(root, to_plan, to_plan_binding, to_binding)
+    if from_binding["authoritySchema"] == 2 and not strict_json_equal(
+        from_document.get("programPlanBinding"), from_plan_binding
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-program-plan-binding-drift", "Receipt plan does not match source snapshot."
+        )
     if to_binding["authoritySchema"] == 2 and not strict_json_equal(
         to_document.get("programPlanBinding"), to_plan_binding
     ):
@@ -1268,7 +1317,7 @@ def resolve_historical_authority(
             plan = _load_bound_document(
                 root, plan_binding, code="acceptance-program-plan-binding-drift"
             )
-            _validate_program_plan_document(plan, plan_binding, normalized)
+            _validate_program_plan_document(root, plan, plan_binding, normalized)
     else:
         if frozen_program_plan_binding is None:
             raise AcceptanceAuthorityError(
@@ -1279,7 +1328,7 @@ def resolve_historical_authority(
             frozen_program_plan_binding, code="acceptance-program-plan-binding-drift"
         )
         plan = _load_bound_document(root, plan_binding, code="acceptance-program-plan-binding-drift")
-        _validate_program_plan_document(plan, plan_binding, normalized)
+        _validate_program_plan_document(root, plan, plan_binding, normalized)
         document = _validate_snapshot_chain(root, normalized, plan_binding)
     return {"authority": document, "binding": copy.deepcopy(normalized)}
 
@@ -1299,7 +1348,7 @@ def resolve_current_authority(root: Path, selector_path: str) -> dict[str, objec
     transition_binding = selector["activeTransitionBinding"]
     plan_binding = selector["programPlanBinding"]
     plan = _load_bound_document(root, plan_binding, code="acceptance-selector-target-invalid")
-    _validate_program_plan_document(plan, plan_binding, snapshot_binding)
+    _validate_program_plan_document(root, plan, plan_binding, snapshot_binding)
     snapshot = _load_bound_document(root, snapshot_binding, code="acceptance-selector-target-invalid")
     receipt = _load_bound_document(root, transition_binding, code="acceptance-transition-receipt-invalid")
     if not strict_json_equal(receipt.get("toSnapshotBinding"), snapshot_binding):
@@ -1309,6 +1358,10 @@ def resolve_current_authority(root: Path, selector_path: str) -> dict[str, objec
     if not strict_json_equal(receipt.get("toProgramPlanBinding"), plan_binding):
         raise AcceptanceAuthorityError(
             "acceptance-selector-target-invalid", "Selector receipt plan binding drifted."
+        )
+    if receipt.get("transactionType") != "rollback":
+        _reject_duplicate_introducing_receipts(
+            root, transition_binding["path"], snapshot_binding
         )
     _validate_receipt_ancestry(root, receipt)
     _validate_snapshot_chain(root, snapshot_binding, plan_binding)

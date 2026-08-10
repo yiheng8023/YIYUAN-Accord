@@ -1049,6 +1049,168 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
                 )
         self.assertEqual("acceptance-rollback-receipt-invalid", raised.exception.code)
 
+    def test_current_chain_cross_binds_receipt_source_plan_to_source_snapshot(self) -> None:
+        """A receipt cannot swap its source plan for a byte-distinct alternate copy."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, selector = self._write_candidate_tree(candidate_root)
+            alternate_plan = candidate_root / "curation-program-plan-alternate.json"
+            alternate_plan.write_text(
+                json.dumps(self.plan, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            alternate_binding = binding_for_bytes(
+                authority_schema=2,
+                authority_id=self.plan["id"],
+                generation=1,
+                path="curation-program-plan-alternate.json",
+                data=alternate_plan.read_bytes(),
+            )
+            receipt_path = candidate_root / "transitions/g000001-to-g000002.json"
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            receipt["fromProgramPlanBinding"] = alternate_binding
+            receipt_path.write_bytes(canonical_file_bytes(receipt))
+            selector["activeTransitionBinding"] = binding_for_bytes(
+                authority_schema=1,
+                authority_id=receipt["id"],
+                generation=None,
+                path="transitions/g000001-to-g000002.json",
+                data=receipt_path.read_bytes(),
+            )
+            (candidate_root / "selectors/current-g000002.json").write_bytes(
+                canonical_file_bytes(selector)
+            )
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+        self.assertEqual("acceptance-program-plan-binding-drift", raised.exception.code)
+
+    def test_current_mode_rejects_sha_consistent_unauthorized_candidate_plan_projection(self) -> None:
+        """A fully bound candidate plan must still be the exact frozen-v1 projection."""
+
+        altered_plan = copy.deepcopy(self.plan)
+        altered_plan["purpose"] = "unauthorized rehearsal plan rewrite"
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            self._write_candidate_tree(candidate_root)
+            plan_path = candidate_root / "curation-program-plan-v2.json"
+            plan_path.write_bytes(canonical_file_bytes(altered_plan))
+            plan_binding = binding_for_bytes(
+                authority_schema=2,
+                authority_id=altered_plan["id"],
+                generation=1,
+                path="curation-program-plan-v2.json",
+                data=plan_path.read_bytes(),
+            )
+            g1 = build_structural_snapshot_v2(
+                self.legacy,
+                predecessor_binding=self.legacy_binding,
+                program_plan_binding=plan_binding,
+            )
+            g2 = build_evidence_snapshot_v2(g1)
+            g1_path = candidate_root / "snapshots/v2/g000001.json"
+            g2_path = candidate_root / "snapshots/v2/g000002.json"
+            g1_path.write_bytes(canonical_file_bytes(g1))
+            g2_path.write_bytes(canonical_file_bytes(g2))
+            g1_binding = binding_for_bytes(
+                authority_schema=2,
+                authority_id=g1["id"],
+                generation=1,
+                path="snapshots/v2/g000001.json",
+                data=g1_path.read_bytes(),
+            )
+            g2_binding = binding_for_bytes(
+                authority_schema=2,
+                authority_id=g2["id"],
+                generation=2,
+                path="snapshots/v2/g000002.json",
+                data=g2_path.read_bytes(),
+            )
+            structural = build_transition_receipt(
+                "structural-migration",
+                from_snapshot_binding=self.legacy_binding,
+                to_snapshot_binding=g1_binding,
+                from_program_plan_binding=self.legacy_plan_binding,
+                to_program_plan_binding=plan_binding,
+                from_document=self.legacy,
+                to_document=g1,
+            )
+            evidence = build_transition_receipt(
+                "evidence-registration",
+                from_snapshot_binding=g1_binding,
+                to_snapshot_binding=g2_binding,
+                from_program_plan_binding=plan_binding,
+                to_program_plan_binding=plan_binding,
+                from_document=g1,
+                to_document=g2,
+            )
+            (candidate_root / "transitions/g000000-to-g000001.json").write_bytes(
+                canonical_file_bytes(structural)
+            )
+            evidence_path = candidate_root / "transitions/g000001-to-g000002.json"
+            evidence_path.write_bytes(canonical_file_bytes(evidence))
+            selector = build_selector(
+                snapshot_binding=g2_binding,
+                transition_binding=binding_for_bytes(
+                    authority_schema=1,
+                    authority_id=evidence["id"],
+                    generation=None,
+                    path="transitions/g000001-to-g000002.json",
+                    data=evidence_path.read_bytes(),
+                ),
+                program_plan_binding=plan_binding,
+            )
+            (candidate_root / "selectors/current-g000002.json").write_bytes(
+                canonical_file_bytes(selector)
+            )
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+        self.assertEqual("acceptance-program-plan-binding-drift", raised.exception.code)
+
+    def test_historical_v1_rejects_a_reformatted_alternate_program_plan_copy(self) -> None:
+        """Historical v1 accepts only the exact frozen plan binding, not an equivalent copy."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            self._write_candidate_tree(candidate_root)
+            alternate = candidate_root / "registry/curation-program-plan-alternate.json"
+            alternate.write_text(
+                json.dumps(
+                    json.loads((ROOT / "registry/curation-program-plan.json").read_text(encoding="utf-8")),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            alternate_binding = binding_for_bytes(
+                authority_schema=1,
+                authority_id=self.legacy_plan_binding["id"],
+                generation=None,
+                path="registry/curation-program-plan-alternate.json",
+                data=alternate.read_bytes(),
+            )
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_historical_authority(
+                    candidate_root,
+                    self.legacy_binding,
+                    frozen_program_plan_binding=alternate_binding,
+                )
+        self.assertEqual("acceptance-program-plan-binding-drift", raised.exception.code)
+
+    def test_current_mode_rejects_a_second_introducing_receipt_for_the_same_target(self) -> None:
+        """A canonical receipt does not permit another valid receipt to introduce its target."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            self._write_candidate_tree(candidate_root)
+            evidence = (candidate_root / "transitions/g000001-to-g000002.json").read_bytes()
+            (candidate_root / "transitions/duplicate-g000002.json").write_bytes(evidence)
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+        self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
+
     def test_checked_receipt_and_selector_fixtures_replay_from_locked_sources(self) -> None:
         """Changing a receipt builder or checked canonical byte stream must fail this replay."""
 
