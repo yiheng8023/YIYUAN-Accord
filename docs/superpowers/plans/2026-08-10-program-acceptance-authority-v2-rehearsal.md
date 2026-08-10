@@ -33,7 +33,10 @@
 - Do not install, enable, invoke, connect an account, dispatch a model, mutate CC Switch or a consumer, publish, release, delete user data, promote acceptance, or mark the Harness complete.
 - Run focused tests first, then the direct validator, the complete unittest suite serially, and `python -B scripts/verify.py`. GitHub Actions is optional corroboration, never the primary or sole acceptance surface.
 - Each implementation task commits but does not push. Push requires a later controller decision after specification and quality review.
-- A missing module or symbol is interface preflight, not sufficient TDD RED. Each task's first behavioral run must reach a callable interface and fail by assertion or the task's declared typed `acceptance-authority-not-implemented` error.
+- A missing module or symbol is interface preflight, not sufficient TDD RED. After that preflight, add only the smallest callable stub needed to reach the real behavior assertion; the stub returns a deterministic wrong value or shape so the test reports `FAIL`, not `ERROR`. A typed `acceptance-authority-not-implemented` exception is setup scaffolding, not behavioral RED, and must not be recorded as TDD evidence.
+- The migration inventory stores symbolic `patternId` values and symbolic binding-policy tokens, never either raw search literal. Exact literal values live only in the discovery module's constant map. This prevents the inventory from discovering itself while still classifying every real tracked occurrence.
+- Task 4 establishes the first exact inventory for its settled tracked tree. Tasks 5 and 6 must refresh and re-review the inventory after their own tracked files settle. The final accepted inventory is derived from the final Task 6 tracked tree, not frozen at the Task 4 count.
+- Any machine record that binds the inventory digest must contain neither raw search literal. It uses symbolic legacy-lock names plus exact digests, so refreshing the inventory and then its dependent evidence record converges without a line-identity or digest cycle.
 
 ---
 
@@ -100,9 +103,9 @@ README and README.zh-CN remain unchanged because the rehearsal adds no active pu
 - Consumes: repository root `Path` and exact legacy files.
 - Produces: `AcceptanceAuthorityError`, `file_sha256(root, relative) -> str`, `canonical_file_bytes(value) -> bytes`, `binding_for_bytes(*, authority_schema, authority_id, generation, path, data) -> dict[str, object]`, and `validate_legacy_locks(root, *, expected=None) -> dict[str, dict[str, object]]`.
 
-- [ ] **Step 1: Add a callable skeleton and failing behavioral tests**
+- [ ] **Step 1: Add failing behavioral tests, then the smallest callable RED stub**
 
-Create `scripts/program_acceptance_authority_v2.py` with the public interface present but deliberately not implemented:
+Create the tests first. Run them once and treat the missing module/symbol only as interface preflight. Then create `scripts/program_acceptance_authority_v2.py` with the public interface present and a temporary deterministic wrong result:
 
 ```python
 from __future__ import annotations
@@ -124,10 +127,10 @@ def validate_legacy_locks(
     *,
     expected: Mapping[str, str] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    raise AcceptanceAuthorityError(
-        "acceptance-authority-not-implemented",
-        "Legacy lock validation has not been implemented.",
-    )
+    return {
+        name: {"sha256": ""}
+        for name in ("acceptance", "programPlan", "packetFixture", "manifestFixture")
+    }
 ```
 
 Create `tests/test_program_acceptance_authority_v2.py` with:
@@ -171,7 +174,7 @@ class ProgramAcceptanceAuthorityLegacyTests(unittest.TestCase):
         self.assertEqual("legacy-authority-drift", raised.exception.code)
 ```
 
-Both calls must raise `acceptance-authority-not-implemented`, proving the callable path was reached.
+The stub is not the implementation. It exists only so both tests reach their real assertions: the exact-lock assertion sees wrong digests, and the drift test sees that no typed error was raised.
 
 - [ ] **Step 2: Run the focused RED**
 
@@ -179,7 +182,7 @@ Both calls must raise `acceptance-authority-not-implemented`, proving the callab
 python -B -m unittest tests.test_program_acceptance_authority_v2.ProgramAcceptanceAuthorityLegacyTests -v
 ```
 
-Expected: both tests ERROR with typed code `acceptance-authority-not-implemented`; no import or loader error.
+Expected: both tests `FAIL` by assertion for the two expected behavioral gaps; no import, loader, key, or uncaught application error. Record this run as the Task 1 RED, then replace the stub with the minimal lock implementation.
 
 - [ ] **Step 3: Implement byte locks, canonical bytes, and strict bindings**
 
@@ -267,7 +270,7 @@ Inventory v1 required fields:
 
 ```json
 [
-  "schema", "id", "date", "status", "sourcePatterns",
+  "schema", "id", "date", "status", "sourcePatternIds",
   "baselineObservation", "occurrences", "claimBoundary"
 ]
 ```
@@ -351,7 +354,7 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
         self.assertEqual({"verified": 46, "partial": 15, "planned": 0}, assessment_inventory(g2))
 ```
 
-Public builders initially raise `acceptance-authority-not-implemented` so the tests reach the declared interface.
+After the missing-symbol preflight, add temporary public stubs that return valid-enough deterministic wrong shapes: candidate plan `{"schema": 0}`, g000001/g000002 objects with `generation: 0`, an empty criteria/evidence list where required, and one constant business projection for both documents. They exist only to make the real generation assertions fail without `KeyError`, `TypeError`, or an uncaught application exception.
 
 - [ ] **Step 2: Run the snapshot RED**
 
@@ -359,7 +362,7 @@ Public builders initially raise `acceptance-authority-not-implemented` so the te
 python -B -m unittest tests.test_program_acceptance_authority_v2.ProgramAcceptanceAuthoritySnapshotTests -v
 ```
 
-Expected: ERROR with typed code `acceptance-authority-not-implemented`.
+Expected: both tests `FAIL` on the requested generation assertions. No test may be recorded as RED while it still errors from a missing symbol or malformed stub.
 
 - [ ] **Step 3: Implement the candidate plan and snapshot builders**
 
@@ -513,6 +516,7 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
             from_document=self.legacy,
             to_document=self.g1,
         )
+        self.assertEqual("structural-migration", structural["transactionType"])
         self.assertEqual([], structural["delta"]["evidenceAdded"])
         self.assertEqual([], structural["delta"]["assessmentsChanged"])
 
@@ -529,15 +533,15 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
         self.assertEqual([], evidence["delta"]["assessmentsChanged"])
 ```
 
-Also create a temporary candidate tree, resolve v1 explicitly in historical mode, resolve g000002 through a rehearsal selector in current mode, and assert both return their own bindings.
+Also create a temporary candidate tree, resolve v1 explicitly in historical mode, resolve g000002 through a rehearsal selector in current mode, and assert both return their own bindings. After the missing-symbol preflight, add a temporary `build_transition_receipt` stub returning `{"transactionType":"red-stub","delta":{"evidenceAdded":[],"assessmentsChanged":[]}}`. Do not add the real transition logic yet.
 
 - [ ] **Step 2: Run the receipt/resolver RED**
 
 ```powershell
-python -B -m unittest tests.test_program_acceptance_authority_v2.ProgramAcceptanceAuthorityTransitionTests -v
+python -B -m unittest tests.test_program_acceptance_authority_v2.ProgramAcceptanceAuthorityTransitionTests.test_structural_and_evidence_receipts_have_disjoint_deltas -v
 ```
 
-Expected: ERROR with `acceptance-authority-not-implemented` from a reached public builder.
+Expected: `FAIL` on the literal transaction-type assertion, with no missing-symbol or uncaught application error. After the real receipt logic is GREEN, run the complete transition class so the historical/current resolver and rollback behaviors are also covered.
 
 - [ ] **Step 3: Implement exact receipt deltas and invariant projections**
 
@@ -624,18 +628,18 @@ git commit -m "feat: validate acceptance transitions and rollback"
 - Create: `registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json`
 
 **Interfaces:**
-- Consumes: Git tracked-file list and the two exact literals `registry/program-acceptance-map.json` and `curation-program-acceptance-map-v1`.
+- Consumes: Git tracked-file list and a module-owned constant map from symbolic IDs `legacy-acceptance-path` and `legacy-acceptance-id` to the two exact search literals.
 - Produces: `discover_acceptance_reference_occurrences(root) -> list[dict[str, object]]`, `load_migration_inventory(root, path=MIGRATION_INVENTORY_PATH) -> dict[str, object]`, and `validate_migration_inventory(root, inventory) -> None`.
 
-- [ ] **Step 1: Add a callable skeleton and failing exact-set tests**
+- [ ] **Step 1: Add callable stubs and failing discovery/exact-set tests**
 
-The discovery function uses `git -C <root> ls-files -z`, reads UTF-8 text files, and emits one row per literal occurrence:
+The discovery function uses `git -C <root> ls-files -z`, reads UTF-8 text files, and emits one row per literal occurrence. It maps the matched raw value immediately to its symbolic ID and never emits the raw value:
 
 ```python
 {
     "path": relative.as_posix(),
     "line": line_number,
-    "literal": matched_literal,
+    "patternId": matched_pattern_id,
     "lineSha256": hashlib.sha256(line.encode("utf-8")).hexdigest(),
 }
 ```
@@ -649,7 +653,7 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
         validate_migration_inventory(ROOT, inventory)
         discovered = discover_acceptance_reference_occurrences(ROOT)
         projected = [
-            {key: row[key] for key in ("path", "line", "literal", "lineSha256")}
+            {key: row[key] for key in ("path", "line", "patternId", "lineSha256")}
             for row in inventory["occurrences"]
         ]
         self.assertEqual(discovered, projected)
@@ -662,15 +666,16 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
         self.assertEqual("migration-inventory-incomplete", raised.exception.code)
 ```
 
-The initial skeleton raises `acceptance-authority-not-implemented` from `validate_migration_inventory`.
+First add a discovery behavior test asserting the result is non-empty and every identity has exactly `path`, `line`, `patternId`, and `lineSha256`. After missing-symbol preflight, a temporary discovery stub returns `[]`, so this assertion is the first real RED. Implement discovery minimally and make that test GREEN. Then use temporary `load_migration_inventory`/`validate_migration_inventory` stubs that project an empty occurrence list so the exact-set test reaches `self.assertEqual(discovered, projected)` and fails by assertion before the reviewed registry file exists.
 
 - [ ] **Step 2: Run the inventory RED**
 
 ```powershell
-python -B -m unittest tests.test_program_acceptance_migration_inventory -v
+python -B -m unittest tests.test_program_acceptance_migration_inventory.ProgramAcceptanceMigrationInventoryTests.test_discovery_finds_live_tracked_occurrences_with_symbolic_pattern_ids -v
+python -B -m unittest tests.test_program_acceptance_migration_inventory.ProgramAcceptanceMigrationInventoryTests.test_inventory_covers_the_fresh_live_occurrence_set_exactly_once -v
 ```
 
-Expected: ERROR with typed `acceptance-authority-not-implemented` after discovery succeeds.
+Expected: the discovery test first `FAIL`s on the empty stub, then becomes GREEN after minimal discovery implementation; the exact-set test then `FAIL`s because the temporary inventory projection is empty. Neither RED may be an import, file-not-found, key, or uncaught application error.
 
 - [ ] **Step 3: Implement exact occurrence discovery and strict inventory validation**
 
@@ -683,6 +688,8 @@ Each governed occurrence adds these fields to the discovery identity:
   "verificationSurface", "separateAuthorizationRequired"
 ]
 ```
+
+`sourcePatternIds` is exactly `["legacy-acceptance-path", "legacy-acceptance-id"]`. `currentBinding` and `candidateBinding` use schema enums such as `legacy-v1`, `candidate-selector`, `explicit-input`, `migration-metadata`, `preserve-legacy-v1`, `rehearsal-selector`, and `not-applicable`; action prose may refer only to the symbolic pattern IDs. Runtime validation rejects an inventory whose canonical bytes contain either raw search literal.
 
 Classification is one of:
 
@@ -708,7 +715,7 @@ python -B -m unittest tests.test_program_acceptance_migration_inventory -v
 python -B -c "from pathlib import Path; from scripts.program_acceptance_migration_inventory import load_migration_inventory, validate_migration_inventory; p=load_migration_inventory(Path('.')); validate_migration_inventory(Path('.'), p); print(len(p['occurrences']))"
 ```
 
-Expected: PASS and a current occurrence count derived from the final tracked tree. Do not hard-code the earlier 103-, 104-, or 105-file observations as the acceptance count.
+Expected: PASS and a current occurrence count derived from the settled Task 4 tracked tree. Do not hard-code the earlier 103-, 104-, or 105-file observations as the acceptance count. This is the first reviewed inventory version; Tasks 5 and 6 refresh it after their tracked additions.
 
 - [ ] **Step 5: Add adversarial classification tests**
 
@@ -742,6 +749,7 @@ git commit -m "feat: govern acceptance authority migration references"
 - Create: `tests/test_program_acceptance_authority_v2_rehearsal.py`
 - Create: `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`
 - Create: `docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md`
+- Modify: `registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json`
 
 **Interfaces:**
 - Consumes: Tasks 1-4 builders, validators, fixtures, and migration inventory.
@@ -769,7 +777,7 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
         self.assertEqual("acceptance-activation-not-authorized", raised.exception.code)
 ```
 
-The skeleton reaches `run_rehearsal` and raises `acceptance-authority-not-implemented`.
+After missing-symbol preflight, the temporary `run_rehearsal` stub returns a valid-enough wrong result with `status: red-stub`, generations `0`, and a zero acceptance inventory, while leaving the requested output absent. The real tests therefore reach their assertions without an uncaught exception.
 
 - [ ] **Step 2: Run the rehearsal RED**
 
@@ -777,7 +785,7 @@ The skeleton reaches `run_rehearsal` and raises `acceptance-authority-not-implem
 python -B -m unittest tests.test_program_acceptance_authority_v2_rehearsal.ProgramAcceptanceAuthorityRehearsalTests -v
 ```
 
-Expected: ERROR with typed `acceptance-authority-not-implemented`.
+Expected: both tests `FAIL` by assertion: the successful rehearsal has the wrong status, and the protected repository path did not raise the required typed error. No import, key, cleanup, or uncaught application error is acceptable RED evidence.
 
 - [ ] **Step 3: Implement pure bundle construction and checked-fixture replay**
 
@@ -880,6 +888,8 @@ The record binds:
 
 `validate_repository_record` independently rebuilds and validates the candidate bundle and matrix. It must not trust summary counts stored in the record.
 
+The machine record uses symbolic legacy-lock names plus digests and must not contain either raw inventory search literal. After every Task 5 tracked file exists, refresh the migration inventory from the settled tracked tree, review every new row, then refresh the evidence record's inventory/file digests. Re-run discovery and inventory validation after the evidence refresh and require the occurrence identities to remain unchanged; this proves the dependent-record update did not reopen the inventory.
+
 - [ ] **Step 8: Write the human-readable result and run Task 5 GREEN**
 
 The Markdown states the exact mechanism proved, immutable v1 boundaries, g0/g1/g2 sequence, rollback behavior, local verification, non-registration, and every unproved claim. It does not call the candidate selector current or the migration complete.
@@ -894,7 +904,7 @@ Expected: all focused tests PASS; the direct validator reports every matrix case
 - [ ] **Step 9: Commit Task 5**
 
 ```powershell
-git add scripts/program_acceptance_authority_v2_rehearsal.py scripts/build_program_acceptance_authority_v2_rehearsal.py scripts/validate_program_acceptance_authority_v2_rehearsal.py tests/test_program_acceptance_authority_v2_rehearsal.py registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md
+git add scripts/program_acceptance_authority_v2_rehearsal.py scripts/build_program_acceptance_authority_v2_rehearsal.py scripts/validate_program_acceptance_authority_v2_rehearsal.py tests/test_program_acceptance_authority_v2_rehearsal.py registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md
 git commit -m "feat: rehearse versioned acceptance authority migration"
 ```
 
@@ -908,6 +918,7 @@ git commit -m "feat: rehearse versioned acceptance authority migration"
 - Modify: `docs/strategy/RESEARCH-AND-POC-PLAN.md`
 - Modify: `docs/operations/CURRENT-GOAL-MODE-PROMPT.md`
 - Modify: `docs/operations/CONTINUATION.md`
+- Modify: `registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json`
 
 **Interfaces:**
 - Consumes: `validate_repository_record(root) -> dict[str, object]` from Task 5.
@@ -969,9 +980,9 @@ Append a 2026-08-10 subsection to `docs/strategy/RESEARCH-AND-POC-PLAN.md` stati
 
 Update `CURRENT-GOAL-MODE-PROMPT.md` only in the current decision-packet/acceptance boundary. Append the corresponding latest checkpoint to `CONTINUATION.md`. Do not rewrite older checkpoint text.
 
-- [ ] **Step 5: Refresh evidence digests after documentation is final**
+- [ ] **Step 5: Refresh the final inventory, then dependent evidence digests**
 
-Recompute every file binding in `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json` after the documentation and verifier changes settle. The record may not bind itself. Run its focused validator again and confirm no digest mismatch.
+After the verifier, tests, and documentation settle, regenerate the migration inventory from the final tracked tree and review every added or shifted row. Then recompute every file binding in `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`. The record may not bind itself and must still contain neither raw inventory search literal. Run discovery and inventory validation once more after the evidence refresh; require the exact occurrence identities and inventory bytes to remain unchanged, then run the focused record validator and confirm no digest mismatch.
 
 - [ ] **Step 6: Run focused integration and direct validator**
 
@@ -1004,7 +1015,7 @@ Also rerun `validate_legacy_locks(ROOT)` and assert no `registry/program-accepta
 - [ ] **Step 9: Commit Task 6**
 
 ```powershell
-git add scripts/verify.py tests/test_verify_integration.py docs/strategy/RESEARCH-AND-POC-PLAN.md docs/operations/CURRENT-GOAL-MODE-PROMPT.md docs/operations/CONTINUATION.md registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json
+git add scripts/verify.py tests/test_verify_integration.py docs/strategy/RESEARCH-AND-POC-PLAN.md docs/operations/CURRENT-GOAL-MODE-PROMPT.md docs/operations/CONTINUATION.md registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json
 git commit -m "docs: govern acceptance authority rehearsal evidence"
 ```
 
