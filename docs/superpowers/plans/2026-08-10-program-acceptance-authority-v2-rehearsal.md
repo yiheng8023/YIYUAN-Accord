@@ -101,7 +101,7 @@ README and README.zh-CN remain unchanged because the rehearsal adds no active pu
 
 **Interfaces:**
 - Consumes: repository root `Path` and exact legacy files.
-- Produces: `AcceptanceAuthorityError`, `file_sha256(root, relative) -> str`, `canonical_file_bytes(value) -> bytes`, `binding_for_bytes(*, authority_schema, authority_id, generation, path, data) -> dict[str, object]`, and `validate_legacy_locks(root, *, expected=None) -> dict[str, dict[str, object]]`.
+- Produces: `AcceptanceAuthorityError`, `file_sha256(root, relative) -> str`, `canonical_file_bytes(value) -> bytes`, `binding_for_bytes(*, authority_schema, authority_id, generation, path, data) -> dict[str, object]`, and `validate_legacy_locks(root) -> dict[str, dict[str, object]]`.
 
 - [ ] **Step 1: Add failing behavioral tests, then the smallest callable RED stub**
 
@@ -111,7 +111,6 @@ Create the tests first. Run them once and treat the missing module/symbol only a
 from __future__ import annotations
 
 from pathlib import Path
-from collections.abc import Mapping
 from typing import Any
 
 
@@ -124,8 +123,6 @@ class AcceptanceAuthorityError(ValueError):
 
 def validate_legacy_locks(
     root: Path,
-    *,
-    expected: Mapping[str, str] | None = None,
 ) -> dict[str, dict[str, Any]]:
     return {
         name: {"sha256": ""}
@@ -138,6 +135,8 @@ Create `tests/test_program_acceptance_authority_v2.py` with:
 ```python
 import json
 from pathlib import Path
+import shutil
+import tempfile
 import unittest
 
 from scripts.program_acceptance_authority_v2 import (
@@ -169,12 +168,25 @@ class ProgramAcceptanceAuthorityLegacyTests(unittest.TestCase):
         )
 
     def test_legacy_lock_drift_has_a_typed_code(self) -> None:
-        with self.assertRaises(AcceptanceAuthorityError) as raised:
-            validate_legacy_locks(ROOT, expected={"acceptance": "0" * 64})
+        with tempfile.TemporaryDirectory() as directory:
+            copied_root = Path(directory)
+            for relative in (
+                Path("registry/program-acceptance-map.json"),
+                Path("registry/curation-program-plan.json"),
+                Path("tests/fixtures/harness-decision-packet-gen-research-01.json"),
+                Path("tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json"),
+            ):
+                destination = copied_root / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, destination)
+            acceptance = copied_root / "registry/program-acceptance-map.json"
+            acceptance.write_bytes(acceptance.read_bytes() + b" ")
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                validate_legacy_locks(copied_root)
         self.assertEqual("legacy-authority-drift", raised.exception.code)
 ```
 
-The stub is not the implementation. It exists only so both tests reach their real assertions: the exact-lock assertion sees wrong digests, and the drift test sees that no typed error was raised.
+The stub is not the implementation. It exists only so both tests reach their real assertions: the exact-lock assertion sees wrong digests, and the copied-root drift test sees that no typed error was raised. The immutable digests are never caller-overridable; drift tests mutate only an isolated temporary copy of all four locked files.
 
 - [ ] **Step 2: Run the focused RED**
 
