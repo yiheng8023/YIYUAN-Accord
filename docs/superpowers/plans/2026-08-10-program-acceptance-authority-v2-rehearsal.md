@@ -649,7 +649,7 @@ git commit -m "feat: validate acceptance transitions and rollback"
 
 - [ ] **Step 1: Add callable stubs and failing discovery/exact-set tests**
 
-The discovery function uses `git -C <root> ls-files -z`, reads UTF-8 text files, and emits one row per literal occurrence. It maps the matched raw value immediately to its symbolic ID and never emits the raw value:
+The discovery function uses `git -C <root> ls-files -z`, reads UTF-8 text files, and emits one row per literal occurrence. It maps the matched content value immediately to its symbolic ID and never emits that matched value as content. The independent `path` field remains the exact tracked host locator from `relative.as_posix()` even when that locator is byte-equal to the legacy-path search literal:
 
 ```python
 {
@@ -705,7 +705,7 @@ Each governed occurrence adds these fields to the discovery identity:
 ]
 ```
 
-`sourcePatternIds` is exactly `["legacy-acceptance-path", "legacy-acceptance-id"]`. `currentBinding` and `candidateBinding` use schema enums such as `legacy-v1`, `candidate-selector`, `explicit-input`, `migration-metadata`, `preserve-legacy-v1`, `rehearsal-selector`, and `not-applicable`; action prose may refer only to the symbolic pattern IDs. Runtime validation rejects an inventory whose canonical bytes contain either raw search literal.
+`sourcePatternIds` is exactly `["legacy-acceptance-path", "legacy-acceptance-id"]`. `currentBinding` and `candidateBinding` use schema enums such as `legacy-v1`, `candidate-selector`, `explicit-input`, `migration-metadata`, `preserve-legacy-v1`, `rehearsal-selector`, and `not-applicable`; action prose may refer only to the symbolic pattern IDs. Runtime validation rejects either raw search literal everywhere except the occurrence identity field `occurrences[*].path`, where the raw legacy-path literal is permitted only when it is the exact tracked host locator for that occurrence. The raw legacy ID is never permitted outside the module-owned search constant. Tests must prove that moving the allowed path literal into any governance field, action prose, or non-path identity fails closed.
 
 Classification is one of:
 
