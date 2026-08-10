@@ -13,6 +13,7 @@ from scripts.program_acceptance_authority_v2_rehearsal import (
     RECORD_PATH,
     REQUIRED_FAILURE_CASES,
     REQUIRED_TYPED_CODES,
+    _read_json,
     build_rehearsal_bundle,
     replace_selector_atomically,
     run_rehearsal,
@@ -96,9 +97,58 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             ):
                 with self.assertRaises(AcceptanceAuthorityError) as raised:
                     replace_selector_atomically(selector, b"candidate-selector-bytes\n")
+            self.assertEqual("acceptance-rehearsal-cleanup-incomplete", raised.exception.code)
+            self.assertIsInstance(raised.exception.__cause__, AcceptanceAuthorityError)
+            self.assertEqual("acceptance-atomic-output-preserved", raised.exception.__cause__.code)
+            self.assertEqual("replace denied", str(raised.exception.__cause__.__cause__))
+            self.assertEqual(sentinel, selector.read_bytes())
+
+    def test_atomic_selector_retries_recoverable_cleanup_without_residue(self) -> None:
+        """A transient cleanup fault is retried while the original replace rejection survives."""
+
+        with tempfile.TemporaryDirectory() as parent:
+            selector = Path(parent) / "current.json"
+            sentinel = b"sentinel-selector-bytes\n"
+            selector.write_bytes(sentinel)
+            original_unlink = Path.unlink
+            calls = 0
+
+            def fail_once(path: Path, *args: object, **kwargs: object) -> None:
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    raise OSError("cleanup denied once")
+                original_unlink(path, *args, **kwargs)
+
+            with (
+                mock.patch("os.replace", side_effect=OSError("replace denied")),
+                mock.patch.object(Path, "unlink", autospec=True, side_effect=fail_once),
+            ):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    replace_selector_atomically(selector, b"candidate-selector-bytes\n")
             self.assertEqual("acceptance-atomic-output-preserved", raised.exception.code)
-            self.assertIsInstance(raised.exception.__cause__, OSError)
             self.assertEqual("replace denied", str(raised.exception.__cause__))
+            self.assertEqual(2, calls)
+            self.assertEqual(sentinel, selector.read_bytes())
+            self.assertEqual([], list(Path(parent).glob(".current.json.*.tmp")))
+
+    def test_atomic_selector_surfaces_unrecoverable_cleanup_after_primary_fault(self) -> None:
+        """Persistent residue is explicitly typed and chains the original atomic failure."""
+
+        with tempfile.TemporaryDirectory() as parent:
+            selector = Path(parent) / "current.json"
+            sentinel = b"sentinel-selector-bytes\n"
+            selector.write_bytes(sentinel)
+            with (
+                mock.patch("os.replace", side_effect=OSError("replace denied")),
+                mock.patch.object(Path, "unlink", autospec=True, side_effect=OSError("cleanup denied")) as unlink,
+            ):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    replace_selector_atomically(selector, b"candidate-selector-bytes\n")
+            self.assertEqual("acceptance-rehearsal-cleanup-incomplete", raised.exception.code)
+            self.assertIsInstance(raised.exception.__cause__, AcceptanceAuthorityError)
+            self.assertEqual("acceptance-atomic-output-preserved", raised.exception.__cause__.code)
+            self.assertEqual(2, unlink.call_count)
             self.assertEqual(sentinel, selector.read_bytes())
 
     def test_builder_cli_emits_one_clean_zero_counter_result(self) -> None:
@@ -196,6 +246,42 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             )
         self.assertEqual(2, completed.returncode)
         self.assertEqual("acceptance-rehearsal-record-invalid", __import__("json").loads(completed.stderr)["code"])
+
+    def test_record_loader_propagates_injected_unicode_read_fault(self) -> None:
+        """Only decoding actual bytes is normalized; a read implementation fault is not hidden."""
+
+        original_read_bytes = Path.read_bytes
+        record_path = ROOT / RECORD_PATH
+
+        def injected(path: Path) -> bytes:
+            if path == record_path:
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+            return original_read_bytes(path)
+
+        with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+            with self.assertRaises(UnicodeDecodeError):
+                validate_repository_record(ROOT)
+
+    def test_bundle_loader_separates_utf8_decoding_from_read_faults(self) -> None:
+        """Bundle-source decoding is typed, while injected read faults retain their original cause."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "source.json"
+            path.write_bytes(b"\xff")
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                _read_json(path)
+            self.assertEqual("acceptance-rehearsal-bundle-invalid", raised.exception.code)
+
+            original_read_bytes = Path.read_bytes
+
+            def injected(candidate: Path) -> bytes:
+                if candidate == path:
+                    raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+                return original_read_bytes(candidate)
+
+            with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+                with self.assertRaises(UnicodeDecodeError):
+                    _read_json(path)
 
     def test_public_writer_types_stage_cleanup_fault_and_removes_stage(self) -> None:
         """A failed stage cleanup must not leak OSError or leave a sibling stage root."""

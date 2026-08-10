@@ -144,10 +144,10 @@ REQUIRED_FAILURE_CASES: tuple[tuple[str, str], ...] = (
     ("evidence-manifest-row-wrong", "acceptance-evidence-source-drift"),
     ("evidence-manifest-row-extra", "acceptance-evidence-link-asymmetric"),
     ("evidence-link-wrong", "acceptance-evidence-link-asymmetric"),
-    ("assessment-bool-alias", "acceptance-inventory-count-drift"),
-    ("assessment-float-alias", "acceptance-inventory-count-drift"),
+    ("assessment-bool-alias", "acceptance-authority-schema-invalid"),
+    ("assessment-float-alias", "acceptance-authority-schema-invalid"),
     ("evidence-criterion-count", "acceptance-structural-migration-overreach"),
-    ("assessment-int-alias", "acceptance-inventory-count-drift"),
+    ("assessment-int-alias", "acceptance-authority-schema-invalid"),
     ("evidence-unrelated-objective", "acceptance-evidence-registration-overreach"),
     ("evidence-unrelated-verification", "acceptance-structural-migration-overreach"),
     ("evidence-unrelated-criterion", "acceptance-evidence-registration-overreach"),
@@ -197,8 +197,14 @@ _RECORD_DIGEST_PATHS = (
 
 def _read_json(path: Path) -> dict[str, object]:
     try:
-        value = json.loads(path.read_bytes())
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        data = path.read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError(
+            "acceptance-rehearsal-bundle-invalid", "Rehearsal source cannot be read."
+        ) from error
+    try:
+        value = json.loads(data)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "acceptance-rehearsal-bundle-invalid", "Rehearsal source cannot be read."
         ) from error
@@ -351,7 +357,7 @@ def replace_selector_atomically(path: Path, data: bytes) -> None:
     """Replace only a rehearsal selector, preserving an existing target on failure."""
 
     temporary_name: str | None = None
-    primary_error: OSError | None = None
+    primary_error: AcceptanceAuthorityError | None = None
     try:
         with tempfile.NamedTemporaryFile(
             dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
@@ -363,22 +369,34 @@ def replace_selector_atomically(path: Path, data: bytes) -> None:
         try:
             os.replace(temporary_name, path)
         except OSError as error:
-            primary_error = error
-            raise AcceptanceAuthorityError(
+            primary_error = AcceptanceAuthorityError(
                 "acceptance-atomic-output-preserved", "Atomic selector replacement failed; prior output was preserved.",
                 path=path.as_posix(),
-            ) from error
-        temporary_name = None
+            )
+            primary_error.__cause__ = error
+        else:
+            temporary_name = None
     finally:
         if temporary_name is not None:
-            try:
-                Path(temporary_name).unlink(missing_ok=True)
-            except OSError as error:
-                if primary_error is None:
-                    raise AcceptanceAuthorityError(
-                        "acceptance-atomic-output-preserved", "Atomic selector temporary cleanup failed; prior output was preserved.",
-                        path=path.as_posix(),
-                    ) from error
+            cleanup_error: OSError | None = None
+            for _ in range(2):
+                try:
+                    Path(temporary_name).unlink(missing_ok=True)
+                except OSError as error:
+                    cleanup_error = error
+                else:
+                    temporary_name = None
+                    break
+            if temporary_name is not None:
+                cleanup = AcceptanceAuthorityError(
+                    "acceptance-rehearsal-cleanup-incomplete", "Atomic selector temporary cleanup could not be completed.",
+                    path=path.as_posix(),
+                )
+                if primary_error is not None:
+                    raise cleanup from primary_error
+                raise cleanup from cleanup_error
+    if primary_error is not None:
+        raise primary_error
 
 
 def _validate_bundle_bytes(repo_root: Path, root: Path, bundle: dict[str, bytes]) -> None:
@@ -979,9 +997,9 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("reciprocal-link-extra", "acceptance-evidence-link-asymmetric", snapshot_mutation("link-wrong")),
         ("program-plan-byte-fork", "acceptance-selector-target-invalid", lambda: candidate_byte_fork(Path("curation-program-plan-v2.json"))),
         ("assessment-promotion", "acceptance-assessment-promotion-forbidden", snapshot_mutation("assessment")),
-        ("assessment-bool-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-bool")),
-        ("assessment-float-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-float")),
-        ("assessment-int-alias", "acceptance-inventory-count-drift", snapshot_mutation("assessment-int")),
+        ("assessment-bool-alias", "acceptance-authority-schema-invalid", snapshot_mutation("assessment-bool")),
+        ("assessment-float-alias", "acceptance-authority-schema-invalid", snapshot_mutation("assessment-float")),
+        ("assessment-int-alias", "acceptance-authority-schema-invalid", snapshot_mutation("assessment-int")),
         ("evidence-criterion-count", "acceptance-structural-migration-overreach", snapshot_mutation("criterion-count")),
         ("evidence-unrelated-objective", "acceptance-evidence-registration-overreach", snapshot_mutation("unrelated-objective")),
         ("evidence-unrelated-verification", "acceptance-structural-migration-overreach", snapshot_mutation("unrelated-verification")),
@@ -1114,8 +1132,11 @@ def validate_repository_record(root: Path) -> dict[str, object]:
     root = root.resolve()
     try:
         raw = (root / RECORD_PATH).read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record cannot be read.") from error
+    try:
         record = json.loads(raw)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record cannot be read.") from error
     if not isinstance(record, dict) or set(record) != {
         "schema", "id", "date", "status", "fileDigests", "legacyLockDigests",

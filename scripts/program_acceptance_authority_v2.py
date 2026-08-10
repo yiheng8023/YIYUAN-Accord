@@ -589,6 +589,7 @@ def validate_authority_snapshot(
         raise AcceptanceAuthorityError(
             "acceptance-program-plan-binding-drift", "Authority program-plan binding drifted."
         )
+    _validate_snapshot_nested_schema(snapshot)
     _validate_snapshot_relationships(snapshot)
     if len(snapshot["acceptanceCriteria"]) != 61 or assessment_inventory(snapshot) != {
         "verified": 46,
@@ -648,7 +649,6 @@ def validate_authority_snapshot(
                 )
         elif generation == 2:
             _validate_evidence_registration_delta(predecessor, snapshot)
-    _validate_snapshot_nested_schema(snapshot)
 
 
 class AcceptanceAuthorityError(ValueError):
@@ -755,7 +755,7 @@ def build_transition_receipt(
 ) -> dict[str, object]:
     """Build one immutable, rehearsal-only receipt for an allowed transition."""
 
-    if transaction_type not in {"structural-migration", "evidence-registration"}:
+    if type(transaction_type) is not str or transaction_type not in {"structural-migration", "evidence-registration"}:
         raise AcceptanceAuthorityError(
             "acceptance-transition-type-mismatch",
             "This builder accepts only forward rehearsal transaction types.",
@@ -1093,8 +1093,11 @@ def _load_bound_document(root: Path, binding: object, *, code: str) -> dict[str,
     path = _safe_relative_path(root, normalized["path"], code=code)
     try:
         data = path.read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError(code, "Bound authority document cannot be read.") from error
+    try:
         document = json.loads(data)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(code, "Bound authority document cannot be read.") from error
     if (
         not isinstance(document, dict)
@@ -1419,8 +1422,14 @@ def resolve_current_authority(root: Path, selector_path: str) -> dict[str, objec
 
     path = _safe_relative_path(root, selector_path, code="acceptance-selector-target-invalid")
     try:
-        selector = json.loads(path.read_bytes())
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        selector_bytes = path.read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Selector cannot be read."
+        ) from error
+    try:
+        selector = json.loads(selector_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "acceptance-selector-target-invalid", "Selector cannot be read."
         ) from error

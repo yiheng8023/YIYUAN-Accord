@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest import mock
 
 from scripts.program_acceptance_authority_v2 import (
     AcceptanceAuthorityError,
@@ -557,6 +558,21 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
         self.assertEqual([MANIFEST_EVIDENCE_ID], evidence["delta"]["evidenceAdded"])
         self.assertEqual([], evidence["delta"]["assessmentsChanged"])
 
+    def test_transition_receipt_builder_types_transaction_type_before_membership(self) -> None:
+        """Public builders reject unhashable transaction types with the stable boundary."""
+
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            build_transition_receipt(
+                [],
+                from_snapshot_binding=self.legacy_binding,
+                to_snapshot_binding=self.g1_binding,
+                from_program_plan_binding=self.legacy_plan_binding,
+                to_program_plan_binding=self.candidate_plan_binding,
+                from_document=self.legacy,
+                to_document=self.g1,
+            )
+        self.assertEqual("acceptance-transition-type-mismatch", raised.exception.code)
+
     def _write_candidate_tree(self, root: Path) -> tuple[dict[str, object], dict[str, object]]:
         for relative in (
             Path("registry/program-acceptance-map.json"),
@@ -761,6 +777,46 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
             with self.assertRaises(AcceptanceAuthorityError) as raised:
                 resolve_current_authority(candidate_root, "selectors/current-g000002.json")
         self.assertEqual("acceptance-selector-target-invalid", raised.exception.code)
+
+    def test_current_mode_types_invalid_utf8_bound_snapshot_and_receipt(self) -> None:
+        """Each authority document loader types malformed on-disk UTF-8 at its own boundary."""
+
+        cases = (
+            (Path("snapshots/v2/g000002.json"), "acceptance-selector-target-invalid"),
+            (Path("transitions/g000001-to-g000002.json"), "acceptance-transition-receipt-invalid"),
+        )
+        for relative, expected_code in cases:
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as directory:
+                candidate_root = Path(directory)
+                self._write_candidate_tree(candidate_root)
+                (candidate_root / relative).write_bytes(b"\xff")
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_current_mode_propagates_injected_unicode_read_faults(self) -> None:
+        """Implementation read faults are distinct from decoding malformed authority bytes."""
+
+        cases = (
+            Path("selectors/current-g000002.json"),
+            Path("snapshots/v2/g000002.json"),
+            Path("transitions/g000001-to-g000002.json"),
+        )
+        for relative in cases:
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as directory:
+                candidate_root = Path(directory)
+                self._write_candidate_tree(candidate_root)
+                target = candidate_root / relative
+                original_read_bytes = Path.read_bytes
+
+                def injected(path: Path) -> bytes:
+                    if path == target:
+                        raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+                    return original_read_bytes(path)
+
+                with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+                    with self.assertRaises(UnicodeDecodeError):
+                        resolve_current_authority(candidate_root, "selectors/current-g000002.json")
 
     def test_current_mode_rejects_independently_valid_unreceipted_generation(self) -> None:
         """A valid future snapshot cannot become current without a valid introducing receipt."""
@@ -1432,6 +1488,18 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                     validate_authority_snapshot(mutated)
                 self.assertEqual("acceptance-authority-schema-invalid", raised.exception.code)
 
+    def test_snapshot_validator_types_evidence_supports_before_relationship_lookup(self) -> None:
+        """Nested support aliases fail as schema errors before relationship consumers use them."""
+
+        g1 = self.build_g1()
+        for value in (True, 1, 1.0):
+            with self.subTest(value=value):
+                mutated = copy.deepcopy(g1)
+                mutated["evidence"][0]["supports"] = [value]
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(mutated)
+                self.assertEqual("acceptance-authority-schema-invalid", raised.exception.code)
+
         for mutate, expected_code in (
             (
                 lambda snapshot: snapshot.__setitem__(
@@ -1522,14 +1590,14 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                     before["objectives"][0].__setitem__("nonGoals", [True]),
                     after["objectives"][0].__setitem__("nonGoals", [1]),
                 ),
-                "acceptance-evidence-registration-overreach",
+                "acceptance-authority-schema-invalid",
             ),
             (
                 lambda before, after: (
                     before["evidence"][0].__setitem__("kind", True),
                     after["evidence"][0].__setitem__("kind", 1),
                 ),
-                "acceptance-evidence-registration-overreach",
+                "acceptance-authority-schema-invalid",
             ),
             (
                 lambda before, after: (
@@ -1544,7 +1612,7 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                         if row["id"] == auxiliary_criterion["id"]
                     ).__setitem__("currentApplicability", True),
                 ),
-                "acceptance-evidence-registration-overreach",
+                "acceptance-authority-schema-invalid",
             ),
         )
         for mutate, expected_code in cases:
@@ -1680,7 +1748,7 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
             (asymmetric, "acceptance-evidence-link-asymmetric"),
             (duplicate, "acceptance-evidence-id-duplicate"),
             *(
-                (inventory_alias, "acceptance-inventory-count-drift")
+                (inventory_alias, "acceptance-authority-schema-invalid")
                 for inventory_alias in inventory_aliases
             ),
         )
