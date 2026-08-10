@@ -116,7 +116,7 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             verify_script,
             "validate_program_acceptance_authority_v2_rehearsal",
             return_value={},
-            create=True,
+            # Do not create a missing production verifier alias in this test.
         ) as validator:
             verify_script.verify()
 
