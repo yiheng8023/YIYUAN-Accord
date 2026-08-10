@@ -1,4 +1,5 @@
 import json
+import copy
 from pathlib import Path
 import unittest
 
@@ -66,6 +67,73 @@ REQUIRED_FIELDS = {
         "claimBoundary",
     },
 }
+NESTED_RECORD_FIELDS = {
+    "authority": {
+        "binding": ("authoritySchema", "id", "generation", "path", "sha256"),
+        "objective": ("id", "acceptanceIds"),
+        "graduationSubgate": ("id", "requiredEvidence", "promotionBoundary", "status"),
+        "basicAcceptanceCriterion": ("id", "statement", "assessment", "verificationIds", "evidenceIds"),
+        "currentApplicabilityAcceptanceCriterion": ("id", "statement", "assessment", "verificationIds", "evidenceIds", "currentApplicability"),
+        "semanticProjectionAcceptanceCriterion": ("id", "statement", "assessment", "verificationIds", "evidenceIds", "semanticProjectionId"),
+        "graduationSubgatesAcceptanceCriterion": ("id", "statement", "assessment", "verificationIds", "evidenceIds", "graduationSubgates"),
+        "verificationWithoutCommand": ("id", "method", "evidenceRequirement", "expectedResult"),
+        "verificationWithCommand": ("id", "method", "command", "evidenceRequirement", "expectedResult"),
+        "evidence": ("id", "path", "kind", "asOf", "supports"),
+    },
+    "selector": {
+        "binding": ("authoritySchema", "id", "generation", "path", "sha256"),
+        "zeroExecutionCounters": ("modelRequestCount", "candidateExecutionCount", "pluginExecutionCount", "installCount", "enableCount", "accountConnectionCount", "managerMutationCount", "consumerMutationCount", "publicationCount", "releaseCount", "productionActivationCount"),
+    },
+    "receipt": {
+        "binding": ("authoritySchema", "id", "generation", "path", "sha256"),
+        "criterionEvidenceLink": ("criterionId", "evidenceId"),
+        "assessmentChange": ("criterionId", "fromAssessment", "toAssessment"),
+        "delta": ("evidenceAdded", "evidenceRemoved", "criterionEvidenceLinksAdded", "criterionEvidenceLinksRemoved", "assessmentsChanged", "selectorTargetGeneration"),
+        "invariants": ("authoritySeriesPreserved", "generationStepValid", "immutableHistoryPreserved", "programPlanBindingsValid", "acceptanceInventory"),
+        "acceptanceInventory": ("verified", "partial", "planned"),
+        "authorizationBoundary": ("rehearsalAuthorized", "liveMigrationAuthorized", "assessmentTransitionAuthorized", "productionActivationAuthorized"),
+        "zeroExecutionCounters": ("modelRequestCount", "candidateExecutionCount", "pluginExecutionCount", "installCount", "enableCount", "accountConnectionCount", "managerMutationCount", "consumerMutationCount", "publicationCount", "releaseCount", "productionActivationCount"),
+        "claimBoundary": ("provesBehavior", "provesValue", "provesCrossHostPortability", "provesProductionReadiness", "provesReleaseEligibility", "provesOverallHarnessCompletion"),
+    },
+    "inventory": {
+        "baselineObservation": ("trackedReferenceCount", "occurrenceCount", "referenceSetSha256"),
+        "occurrence": ("path", "line", "patternId", "lineSha256", "purpose", "classification", "currentBinding", "candidateBinding", "rehearsalAction", "liveMigrationAction", "rollbackAction", "verificationSurface", "separateAuthorizationRequired"),
+        "claimBoundary": ("provesLiveMigration", "provesCurrentSelectorActivation", "provesBehavior", "provesValue", "provesCrossHostPortability", "provesProductionReadiness", "provesReleaseEligibility", "provesOverallHarnessCompletion"),
+    },
+}
+REQUIRED_LOCAL_REFERENCE_EDGES = {
+    "authority": {
+        ("properties", "predecessorBinding"): "#/$defs/binding",
+        ("properties", "programPlanBinding"): "#/$defs/binding",
+        ("properties", "assessmentVocabulary"): "#/$defs/assessmentVocabulary",
+        ("properties", "objectives", "items"): "#/$defs/objective",
+        ("properties", "acceptanceCriteria", "items"): "#/$defs/acceptanceCriterion",
+        ("properties", "verifications", "items"): "#/$defs/verification",
+        ("properties", "evidence", "items"): "#/$defs/evidence",
+    },
+    "selector": {
+        ("properties", "activeSnapshotBinding"): "#/$defs/binding",
+        ("properties", "activeTransitionBinding"): "#/$defs/binding",
+        ("properties", "programPlanBinding"): "#/$defs/binding",
+        ("properties", "executionCounters"): "#/$defs/zeroExecutionCounters",
+    },
+    "receipt": {
+        ("properties", "fromSnapshotBinding"): "#/$defs/binding",
+        ("properties", "toSnapshotBinding"): "#/$defs/binding",
+        ("properties", "fromProgramPlanBinding"): "#/$defs/binding",
+        ("properties", "toProgramPlanBinding"): "#/$defs/binding",
+        ("properties", "delta"): "#/$defs/delta",
+        ("properties", "invariants"): "#/$defs/invariants",
+        ("properties", "authorizationBoundary"): "#/$defs/authorizationBoundary",
+        ("properties", "executionCounters"): "#/$defs/zeroExecutionCounters",
+        ("properties", "claimBoundary"): "#/$defs/claimBoundary",
+    },
+    "inventory": {
+        ("properties", "baselineObservation"): "#/$defs/baselineObservation",
+        ("properties", "occurrences", "items"): "#/$defs/occurrence",
+        ("properties", "claimBoundary"): "#/$defs/claimBoundary",
+    },
+}
 
 
 def resolve_schema_reference(
@@ -105,6 +173,52 @@ def schema_references(value: object) -> list[str]:
         for nested in value:
             references.extend(schema_references(nested))
     return references
+
+
+def schema_value_at(document: dict[str, object], path: tuple[str, ...]) -> object:
+    value: object = document
+    for part in path:
+        if not isinstance(value, dict):
+            raise AssertionError(f"Schema path is not an object: {'.'.join(path)}")
+        value = value[part]
+    return value
+
+
+def assert_schema_declaration_contract(schemas: dict[str, dict[str, object]]) -> None:
+    for schema_name, expected_records in NESTED_RECORD_FIELDS.items():
+        definitions = schemas[schema_name]["$defs"]
+        for record_name, expected_fields in expected_records.items():
+            record = definitions[record_name]
+            if record.get("type") != "object":
+                raise AssertionError(f"{schema_name}.{record_name} is not an object record")
+            if set(record.get("properties", ())) != set(expected_fields):
+                raise AssertionError(f"{schema_name}.{record_name} property set drifted")
+            if set(record.get("required", ())) != set(expected_fields):
+                raise AssertionError(f"{schema_name}.{record_name} required set drifted")
+            if record.get("additionalProperties") is not False:
+                raise AssertionError(f"{schema_name}.{record_name} is not closed")
+
+    for schema_name, expected_edges in REQUIRED_LOCAL_REFERENCE_EDGES.items():
+        schema = schemas[schema_name]
+        for path, expected_reference in expected_edges.items():
+            value = schema_value_at(schema, path)
+            if not isinstance(value, dict) or value.get("$ref") != expected_reference:
+                raise AssertionError(f"{schema_name}.{'.'.join(path)} reference drifted")
+
+    for schema_name in ("authority", "selector", "receipt"):
+        branches = schemas[schema_name]["$defs"]["binding"].get("allOf")
+        if not isinstance(branches, list) or len(branches) != 2:
+            raise AssertionError(f"{schema_name}.binding generation branches drifted")
+        v1 = branches[0]
+        v2 = branches[1]
+        if v1.get("if", {}).get("properties", {}).get("authoritySchema", {}).get("const") != 1:
+            raise AssertionError(f"{schema_name}.binding v1 branch drifted")
+        if v1.get("then", {}).get("properties", {}).get("generation") != {"type": "null"}:
+            raise AssertionError(f"{schema_name}.binding v1 generation contract drifted")
+        if v2.get("if", {}).get("properties", {}).get("authoritySchema", {}).get("const") != 2:
+            raise AssertionError(f"{schema_name}.binding v2 branch drifted")
+        if v2.get("then", {}).get("properties", {}).get("generation") != {"type": "integer", "minimum": 1}:
+            raise AssertionError(f"{schema_name}.binding v2 generation contract drifted")
 
 
 class ProgramAcceptanceAuthorityLegacyTests(unittest.TestCase):
@@ -152,6 +266,7 @@ class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):
         """Removing a nested record's field contract must fail this test."""
 
         schemas = self.load_schemas()
+        assert_schema_declaration_contract(schemas)
         for schema_name, schema in schemas.items():
             for record in strict_object_records(schema):
                 with self.subTest(schema=schema_name, record=record.get("title")):
@@ -211,6 +326,26 @@ class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):
             self.assertEqual("null", branches[0]["then"]["properties"]["generation"]["type"])
             self.assertEqual(2, branches[1]["if"]["properties"]["authoritySchema"]["const"])
             self.assertEqual("integer", branches[1]["then"]["properties"]["generation"]["type"])
+
+    def test_literal_contract_rejects_required_reference_and_minimum_mutations(self) -> None:
+        """Weakening a required field, reference edge, or v2 minimum must fail this test."""
+
+        for mutate in (
+            lambda schemas: schemas["authority"]["$defs"]["objective"]["required"].remove(
+                "acceptanceIds"
+            ),
+            lambda schemas: schemas["authority"]["properties"].__setitem__(
+                "predecessorBinding", copy.deepcopy(schemas["authority"]["$defs"]["binding"])
+            ),
+            lambda schemas: schemas["receipt"]["$defs"]["binding"]["allOf"][1]["then"][
+                "properties"
+            ]["generation"].pop("minimum"),
+        ):
+            with self.subTest(mutation=mutate):
+                schemas = copy.deepcopy(self.load_schemas())
+                mutate(schemas)
+                with self.assertRaises(AssertionError):
+                    assert_schema_declaration_contract(schemas)
 
 
 class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
