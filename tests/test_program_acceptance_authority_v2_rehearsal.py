@@ -5,11 +5,16 @@ import unittest
 from pathlib import Path
 from unittest import mock
 import subprocess
+import os
+import shutil
 
 from scripts.program_acceptance_authority_v2 import AcceptanceAuthorityError
 from scripts.program_acceptance_authority_v2_rehearsal import (
+    RECORD_PATH,
+    REQUIRED_FAILURE_CASES,
     replace_selector_atomically,
     run_rehearsal,
+    validate_repository_record,
 )
 
 
@@ -77,3 +82,43 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
         result = __import__("json").loads(completed.stdout)
         self.assertEqual("verified-zero-model-versioning-and-migration-rehearsal-only", result["status"])
         self.assertTrue(all(value == 0 for value in result["executionCounters"].values()))
+
+    def test_cleanup_refuses_a_timing_swapped_external_symlink(self) -> None:
+        """A swap before cleanup must fail closed without descending into an external sentinel."""
+
+        with tempfile.TemporaryDirectory() as parent:
+            parent_path = Path(parent)
+            output = parent_path / "rehearsal"
+            external = parent_path / "external"
+            external.mkdir()
+            sentinel = external / "sentinel.txt"
+            sentinel.write_bytes(b"external-sentinel\n")
+            original_replace = os.replace
+
+            def swap_before_cleanup(source: object, destination: object) -> None:
+                if Path(source) == output:
+                    parking = parent_path / "parking"
+                    original_replace(output, parking)
+                    os.symlink(external, output, target_is_directory=True)
+                original_replace(source, destination)
+
+            with mock.patch("os.replace", side_effect=swap_before_cleanup):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    run_rehearsal(ROOT, output)
+            self.assertEqual("acceptance-rehearsal-cleanup-incomplete", raised.exception.code)
+            self.assertEqual(b"external-sentinel\n", sentinel.read_bytes())
+            if (parent_path / "parking").exists():
+                shutil.rmtree(parent_path / "parking")
+
+    def test_repository_record_is_canonical_and_replays_the_required_matrix(self) -> None:
+        """The tracked evidence record is a wire-checked replay, not a trusted summary."""
+
+        record = validate_repository_record(ROOT)
+        self.assertEqual(
+            (ROOT / RECORD_PATH).read_bytes(),
+            __import__("scripts.program_acceptance_authority_v2", fromlist=["canonical_file_bytes"]).canonical_file_bytes(record),
+        )
+        self.assertEqual(
+            REQUIRED_FAILURE_CASES,
+            tuple((row["caseId"], row["expectedCode"]) for row in record["failureMatrix"]),
+        )

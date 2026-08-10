@@ -7,6 +7,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import uuid
 from unittest import mock
 from pathlib import Path
 
@@ -29,6 +30,7 @@ from scripts.program_acceptance_authority_v2 import (
     validate_transition_receipt,
     validate_authority_snapshot,
     validate_legacy_locks,
+    LEGACY_LOCKS,
 )
 from scripts.program_acceptance_migration_inventory import (
     LEGACY_ACCEPTANCE_SEARCH_PATTERNS,
@@ -53,6 +55,8 @@ _BUNDLE_PATHS = (
     Path("selectors/current-g000001-rollback.json"),
 )
 _STATUS = "verified-zero-model-versioning-and-migration-rehearsal-only"
+MANIFEST_EVIDENCE_SOURCE_PATH = Path("registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json")
+MANIFEST_EVIDENCE_SOURCE_SHA256 = "b7a00f43b37d47d1d620292e7f5e28ee438821c145079507ec12b011ed638be1"
 _ZERO_CLAIMS = {
     "provesBehavior": False,
     "provesValue": False,
@@ -62,6 +66,42 @@ _ZERO_CLAIMS = {
     "provesResidualGap": False,
     "provesOverallCloseout": False,
 }
+# This is deliberately separate from the executable matrix below: the record
+# validates this ordered authority rather than accepting a self-reported list.
+REQUIRED_FAILURE_CASES: tuple[tuple[str, str], ...] = (
+    ("legacy-authority-drift", "legacy-authority-drift"),
+    ("legacy-program-plan-drift", "legacy-program-plan-drift"),
+    ("legacy-packet-fixture-drift", "legacy-packet-fixture-drift"),
+    ("legacy-manifest-fixture-drift", "legacy-manifest-fixture-drift"),
+    ("inventory-missing", "migration-inventory-incomplete"),
+    ("inventory-invalid-class", "migration-consumer-class-invalid"),
+    ("inventory-historical-repoint", "acceptance-historical-consumer-repointed"),
+    ("inventory-current-bypass", "acceptance-current-consumer-legacy-bypass"),
+    ("inventory-neutral-path", "acceptance-neutral-consumer-path-owned"),
+    ("authority-schema-bool", "acceptance-authority-schema-invalid"),
+    ("authority-generation-bool", "acceptance-authority-generation-invalid"),
+    ("authority-series", "acceptance-authority-series-invalid"),
+    ("authority-predecessor", "acceptance-authority-predecessor-mismatch"),
+    ("program-plan-binding", "acceptance-program-plan-binding-drift"),
+    ("structural-overreach", "acceptance-structural-migration-overreach"),
+    ("inventory-count", "acceptance-inventory-count-drift"),
+    ("evidence-source-missing", "acceptance-evidence-source-missing"),
+    ("evidence-source-drift", "acceptance-evidence-source-drift"),
+    ("evidence-link-asymmetric", "acceptance-evidence-link-asymmetric"),
+    ("assessment-promotion", "acceptance-assessment-promotion-forbidden"),
+    ("evidence-id-duplicate", "acceptance-evidence-id-duplicate"),
+    ("evidence-registration-overreach", "acceptance-evidence-registration-overreach"),
+    ("selector-escape", "acceptance-selector-target-invalid"),
+    ("receipt-invalid", "acceptance-transition-receipt-invalid"),
+    ("receipt-chain", "acceptance-transition-chain-broken"),
+    ("receipt-type", "acceptance-transition-type-mismatch"),
+    ("receipt-side-effect-counter", "acceptance-side-effect-counter-nonzero"),
+    ("rollback-invalid", "acceptance-rollback-receipt-invalid"),
+    ("rollback-target", "acceptance-rollback-target-not-ancestor"),
+    ("atomic-directory-target", "acceptance-atomic-output-preserved"),
+    ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete"),
+    ("protected-output-root", "acceptance-activation-not-authorized"),
+)
 _RECORD_DIGEST_PATHS = (
     Path("schemas/program-acceptance-authority-v2.schema.json"),
     Path("schemas/program-acceptance-current-selector-v1.schema.json"),
@@ -79,6 +119,7 @@ _RECORD_DIGEST_PATHS = (
     Path("docs/superpowers/plans/2026-08-10-program-acceptance-authority-v2-rehearsal.md"),
     Path("docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md"),
     MIGRATION_INVENTORY_PATH,
+    MANIFEST_EVIDENCE_SOURCE_PATH,
     *tuple(FIXTURE_ROOT / relative for relative in _BUNDLE_PATHS),
 )
 
@@ -95,6 +136,21 @@ def _read_json(path: Path) -> dict[str, object]:
             "acceptance-rehearsal-bundle-invalid", "Rehearsal source must be an object."
         )
     return value
+
+
+def _validate_manifest_evidence_source(repo_root: Path, g2: dict[str, object]) -> None:
+    try:
+        data = (repo_root / MANIFEST_EVIDENCE_SOURCE_PATH).read_bytes()
+        source = json.loads(data)
+    except (OSError, json.JSONDecodeError) as error:
+        raise AcceptanceAuthorityError("acceptance-evidence-source-missing", "Registered manifest evidence source cannot be reopened.") from error
+    if not isinstance(source, dict) or hashlib.sha256(data).hexdigest() != MANIFEST_EVIDENCE_SOURCE_SHA256:
+        raise AcceptanceAuthorityError("acceptance-evidence-source-drift", "Registered manifest evidence source digest drifted.")
+    row = next((item for item in g2.get("evidence", []) if isinstance(item, dict) and item.get("id") == "evidence.harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09"), None)
+    if row is None:
+        raise AcceptanceAuthorityError("acceptance-evidence-source-missing", "Candidate g000002 omits manifest evidence.")
+    if row.get("path") != MANIFEST_EVIDENCE_SOURCE_PATH.as_posix() or source.get("id") != "harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09":
+        raise AcceptanceAuthorityError("acceptance-evidence-source-drift", "Candidate evidence row does not bind the reopened source.")
 
 
 def _binding(schema: int, document: dict[str, object], path: Path, data: bytes) -> dict[str, object]:
@@ -253,11 +309,47 @@ def _validate_bundle_bytes(repo_root: Path, root: Path, bundle: dict[str, bytes]
         _fixture_bytes(repo_root, relative, path.read_bytes())
 
 
-def write_rehearsal_bundle(output_root: Path, bundle: dict[str, bytes]) -> None:
+def _overlay_with_legacy(repo_root: Path, candidate_root: Path, selector_bytes: bytes) -> tuple[tempfile.TemporaryDirectory[str], Path]:
+    """Build an isolated resolver root from one candidate directory and frozen v1 files."""
+
+    holder = tempfile.TemporaryDirectory(prefix="acceptance-authority-v2-overlay-")
+    overlay = Path(holder.name)
+    for relative in _BUNDLE_PATHS:
+        source = candidate_root / relative
+        target = overlay / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+    for relative, *_ in LEGACY_LOCKS.values():
+        target = overlay / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(repo_root / relative, target)
+    selector = overlay / REHEARSAL_SELECTOR_PATH
+    selector.parent.mkdir(parents=True, exist_ok=True)
+    _write_fsynced(selector, selector_bytes)
+    return holder, overlay
+
+
+def _validate_staged_authority(repo_root: Path, stage: Path, bundle: dict[str, bytes]) -> None:
+    """Resolve both selectors before publication; bytes alone are not acceptance evidence."""
+
+    _validate_bundle_bytes(repo_root, stage, bundle)
+    for selector_name, expected_generation in (
+        ("selectors/current-g000002.json", 2),
+        ("selectors/current-g000001-rollback.json", 1),
+    ):
+        holder, overlay = _overlay_with_legacy(repo_root, stage, bundle[selector_name])
+        try:
+            resolved = resolve_current_authority(overlay, REHEARSAL_SELECTOR_PATH.as_posix())
+            if resolved["binding"].get("generation") != expected_generation:
+                raise AcceptanceAuthorityError("acceptance-rehearsal-bundle-invalid", "Staged selector resolved an unexpected generation.")
+        finally:
+            holder.cleanup()
+
+
+def _write_rehearsal_bundle(repo_root: Path, output_root: Path, bundle: dict[str, bytes]) -> None:
     """Stage/fsync immutable candidate bytes and publish the disposable directory once."""
 
-    repo_root = Path.cwd().resolve()
-    _, resolved_output = _assert_disposable_output(repo_root, output_root)
+    repo_root, resolved_output = _assert_disposable_output(repo_root, output_root)
     if set(bundle) != {path.as_posix() for path in _BUNDLE_PATHS}:
         raise AcceptanceAuthorityError("acceptance-rehearsal-bundle-invalid", "Rehearsal bundle shape is invalid.")
     stage = Path(tempfile.mkdtemp(prefix=f".{resolved_output.name}.stage-", dir=resolved_output.parent))
@@ -266,41 +358,50 @@ def write_rehearsal_bundle(output_root: Path, bundle: dict[str, bytes]) -> None:
             target = stage / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             _write_fsynced(target, bundle[relative.as_posix()])
-        _validate_bundle_bytes(repo_root, stage, bundle)
+        _validate_staged_authority(repo_root, stage, bundle)
         os.replace(stage, resolved_output)
     except AcceptanceAuthorityError:
-        shutil.rmtree(stage, ignore_errors=True)
+        if os.path.lexists(stage):
+            shutil.rmtree(stage)
         raise
     except OSError as error:
-        shutil.rmtree(stage, ignore_errors=True)
+        if os.path.lexists(stage):
+            shutil.rmtree(stage)
         raise AcceptanceAuthorityError("acceptance-rehearsal-output-write-failed", "Rehearsal output could not be written.") from error
 
 
-def _overlay_with_legacy(repo_root: Path, output_root: Path, selector_bytes: bytes) -> tuple[tempfile.TemporaryDirectory[str], Path]:
-    holder = tempfile.TemporaryDirectory(prefix="acceptance-authority-v2-overlay-")
-    overlay = Path(holder.name)
-    for relative in _BUNDLE_PATHS:
-        source = output_root / relative
-        target = overlay / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, target)
-    for relative in (entry[0] for entry in __import__("scripts.program_acceptance_authority_v2", fromlist=["LEGACY_LOCKS"]).LEGACY_LOCKS.values()):
-        target = overlay / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(repo_root / relative, target)
-    selector = overlay / REHEARSAL_SELECTOR_PATH
-    selector.parent.mkdir(parents=True, exist_ok=True)
-    selector.write_bytes(selector_bytes)
-    return holder, overlay
+def write_rehearsal_bundle(output_root: Path, bundle: dict[str, bytes]) -> None:
+    """Public convenience entrypoint bound to this module's repository root."""
+
+    _write_rehearsal_bundle(Path(__file__).resolve().parent.parent, output_root, bundle)
 
 
-def _cleanup_disposable(repo_root: Path, output_root: Path) -> None:
-    _, resolved = _assert_cleanup_target(repo_root, output_root)
+def _directory_identity(path: Path) -> tuple[int, int, int]:
     try:
-        shutil.rmtree(resolved)
+        status = path.lstat()
+    except OSError as error:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable output identity cannot be read.") from error
+    if not path.is_dir() or path.is_symlink():
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable output is not a real directory.")
+    return (status.st_dev, status.st_ino, status.st_mode)
+
+
+def _cleanup_disposable(repo_root: Path, output_root: Path, identity: tuple[int, int, int]) -> None:
+    _, resolved = _assert_cleanup_target(repo_root, output_root)
+    if not os.path.lexists(output_root):
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable lexical output disappeared before cleanup.")
+    quarantine = output_root.parent / f".{output_root.name}.cleanup-{uuid.uuid4().hex}"
+    try:
+        os.replace(output_root, quarantine)
+    except OSError as error:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable output cannot be quarantined for cleanup.") from error
+    try:
+        if _directory_identity(quarantine) != identity:
+            raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable output identity changed before cleanup.")
+        shutil.rmtree(quarantine)
     except OSError as error:
         raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable rehearsal root could not be removed.") from error
-    if resolved.exists():
+    if os.path.lexists(quarantine) or os.path.lexists(output_root):
         raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Disposable rehearsal root still exists.")
 
 
@@ -320,10 +421,25 @@ def run_rehearsal(repo_root: Path, output_root: Path) -> dict[str, object]:
     """Perform a zero-model candidate build, g2 selection, g1 rollback, and exact cleanup."""
 
     repo_root, output_root = _assert_disposable_output(repo_root, output_root)
-    legacy_before = {name: file_sha256(repo_root, value[0]) for name, value in __import__("scripts.program_acceptance_authority_v2", fromlist=["LEGACY_LOCKS"]).LEGACY_LOCKS.items()}
+    expected_g2 = _read_json(repo_root / FIXTURE_ROOT / "snapshots/v2/g000002.json")
+    _validate_manifest_evidence_source(repo_root, expected_g2)
+    inventory = load_migration_inventory(repo_root)
+    validate_migration_inventory(repo_root, inventory)
+    locks = validate_legacy_locks(repo_root)
+    legacy_binding = {**locks["acceptance"], "authoritySchema": 1, "generation": None}
+    legacy_plan_binding = {**locks["programPlan"], "authoritySchema": 1, "generation": None}
+    resolve_historical_authority(
+        repo_root, legacy_binding, frozen_program_plan_binding=legacy_plan_binding
+    )
+    legacy_before = {name: file_sha256(repo_root, value[0]) for name, value in LEGACY_LOCKS.items()}
     tracked_before = subprocess.run(["git", "-C", str(repo_root), "status", "--porcelain=v1"], check=True, capture_output=True).stdout
     bundle = build_rehearsal_bundle(repo_root)
-    write_rehearsal_bundle(output_root, bundle)
+    expected_acceptance = assessment_inventory(expected_g2)
+    expected_target = next((row for row in expected_g2["acceptanceCriteria"] if row.get("id") == "acceptance.decision-ready-consumer-projection"), None)
+    if not isinstance(expected_target, dict) or type(expected_target.get("assessment")) is not str:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-bundle-invalid", "Candidate target criterion cannot be recomputed.")
+    _write_rehearsal_bundle(repo_root, output_root, bundle)
+    output_identity = _directory_identity(output_root)
     try:
         g2_selector = bundle["selectors/current-g000002.json"]
         holder, overlay = _overlay_with_legacy(repo_root, output_root, g2_selector)
@@ -337,15 +453,17 @@ def run_rehearsal(repo_root: Path, output_root: Path) -> dict[str, object]:
         holder, overlay = _overlay_with_legacy(repo_root, output_root, selector_path.read_bytes())
         try:
             current_g1 = resolve_current_authority(overlay, REHEARSAL_SELECTOR_PATH.as_posix())
-            historical = resolve_historical_authority(overlay, current_g1["binding"], frozen_program_plan_binding=current_g1["selector"]["programPlanBinding"])
+            resolved_g2 = current_g2["authority"]
         finally:
             holder.cleanup()
-        if current_g2["binding"]["generation"] != 2 or current_g1["binding"]["generation"] != 1 or historical["binding"]["generation"] != 1:
+        acceptance = assessment_inventory(resolved_g2)
+        target = next((row for row in resolved_g2["acceptanceCriteria"] if row.get("id") == "acceptance.decision-ready-consumer-projection"), None)
+        if current_g2["binding"]["generation"] != 2 or current_g1["binding"]["generation"] != 1 or not strict_json_equal(acceptance, expected_acceptance) or not isinstance(target, dict) or target.get("assessment") != expected_target["assessment"]:
             raise AcceptanceAuthorityError("acceptance-rehearsal-bundle-invalid", "Rehearsal resolution generations drifted.")
     finally:
-        if output_root.exists():
-            _cleanup_disposable(repo_root, output_root)
-    legacy_after = {name: file_sha256(repo_root, value[0]) for name, value in __import__("scripts.program_acceptance_authority_v2", fromlist=["LEGACY_LOCKS"]).LEGACY_LOCKS.items()}
+        if os.path.lexists(output_root):
+            _cleanup_disposable(repo_root, output_root, output_identity)
+    legacy_after = {name: file_sha256(repo_root, value[0]) for name, value in LEGACY_LOCKS.items()}
     tracked_after = subprocess.run(["git", "-C", str(repo_root), "status", "--porcelain=v1"], check=True, capture_output=True).stdout
     if not strict_json_equal(legacy_before, legacy_after) or not strict_json_equal(tracked_before, tracked_after):
         raise AcceptanceAuthorityError("acceptance-rehearsal-cleanup-incomplete", "Rehearsal changed protected repository state.")
@@ -353,7 +471,7 @@ def run_rehearsal(repo_root: Path, output_root: Path) -> dict[str, object]:
         "status": _STATUS,
         "highestGeneration": 2,
         "rollbackGeneration": 1,
-        "acceptanceInventory": {"verified": 46, "partial": 15, "planned": 0},
+        "acceptanceInventory": acceptance,
         "executionCounters": copy.deepcopy(ZERO_EXECUTION_COUNTERS),
         "claimBoundary": copy.deepcopy(_ZERO_CLAIMS),
     }
@@ -402,6 +520,26 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             validate_migration_inventory(repo_root, inventory)
         return invoke
 
+    def manifest_source_mutation(case: str) -> object:
+        """Mutate the real evidence source in an isolated Git overlay, then call run_rehearsal."""
+
+        def invoke() -> None:
+            with tempfile.TemporaryDirectory(prefix="acceptance-evidence-source-matrix-") as directory:
+                clone = Path(directory) / "repository"
+                subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(repo_root), str(clone)], check=True, capture_output=True)
+                source = clone / MANIFEST_EVIDENCE_SOURCE_PATH
+                if case == "missing":
+                    source.unlink()
+                    # The inventory deliberately enumerates Git-tracked files.
+                    # Remove only this overlay entry from its temporary index so
+                    # that the public run can reach its bound source gate.
+                    subprocess.run(["git", "-C", str(clone), "update-index", "--force-remove", MANIFEST_EVIDENCE_SOURCE_PATH.as_posix()], check=True, capture_output=True)
+                else:
+                    source.write_bytes(source.read_bytes() + b"\n")
+                with tempfile.TemporaryDirectory(prefix="acceptance-evidence-output-") as output_parent:
+                    run_rehearsal(clone, Path(output_parent) / "rehearsal")
+        return invoke
+
     def nonzero_receipt() -> None:
         receipt = _read_json(repo_root / FIXTURE_ROOT / "transitions/g000001-to-g000002.json")
         g1 = _read_json(repo_root / FIXTURE_ROOT / "snapshots/v2/g000001.json")
@@ -411,7 +549,7 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
 
     def snapshots() -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
         return (
-            _read_json(repo_root / "registry/program-acceptance-map.json"),
+            _read_json(repo_root / LEGACY_LOCKS["acceptance"][0]),
             _read_json(repo_root / FIXTURE_ROOT / "snapshots/v2/g000001.json"),
             _read_json(repo_root / FIXTURE_ROOT / "snapshots/v2/g000002.json"),
         )
@@ -497,12 +635,20 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
     def cleanup_fault() -> None:
         with tempfile.TemporaryDirectory(prefix="acceptance-cleanup-matrix-") as directory:
             output = Path(directory) / "rehearsal"
+            original_rmtree = shutil.rmtree
+
+            def fail_only_rehearsal_target(path: object, *args: object, **kwargs: object) -> None:
+                candidate = Path(path)
+                if candidate.parent == output.parent and candidate.name.startswith(f".{output.name}.cleanup-"):
+                    raise OSError("cleanup denied")
+                original_rmtree(path, *args, **kwargs)
+
             with mock.patch(
                 "scripts.program_acceptance_authority_v2_rehearsal.shutil.rmtree",
-                side_effect=OSError("cleanup denied"),
+                side_effect=fail_only_rehearsal_target,
             ):
                 run_rehearsal(repo_root, output)
-            if output.exists():
+            if os.path.lexists(output):
                 shutil.rmtree(output)
 
     cases: tuple[tuple[str, str, object], ...] = (
@@ -522,8 +668,8 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("program-plan-binding", "acceptance-program-plan-binding-drift", snapshot_mutation("plan")),
         ("structural-overreach", "acceptance-structural-migration-overreach", snapshot_mutation("structural")),
         ("inventory-count", "acceptance-inventory-count-drift", snapshot_mutation("inventory")),
-        ("evidence-source-missing", "acceptance-evidence-source-missing", snapshot_mutation("missing")),
-        ("evidence-source-drift", "acceptance-evidence-source-drift", snapshot_mutation("source-drift")),
+        ("evidence-source-missing", "acceptance-evidence-source-missing", manifest_source_mutation("missing")),
+        ("evidence-source-drift", "acceptance-evidence-source-drift", manifest_source_mutation("drift")),
         ("evidence-link-asymmetric", "acceptance-evidence-link-asymmetric", snapshot_mutation("link")),
         ("assessment-promotion", "acceptance-assessment-promotion-forbidden", snapshot_mutation("assessment")),
         ("evidence-id-duplicate", "acceptance-evidence-id-duplicate", snapshot_mutation("duplicate")),
@@ -539,6 +685,8 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
         ("cleanup-fault", "acceptance-rehearsal-cleanup-incomplete", cleanup_fault),
         ("protected-output-root", "acceptance-activation-not-authorized", lambda: run_rehearsal(repo_root, repo_root / PRODUCTION_AUTHORITY_ROOT)),
     )
+    if tuple((case_id, expected) for case_id, expected, _ in cases) != REQUIRED_FAILURE_CASES:
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Failure matrix implementation drifted from its required authority.")
     for case_id, expected, invoke in cases:
         try:
             invoke()
@@ -548,6 +696,70 @@ def run_failure_matrix(repo_root: Path) -> list[dict[str, str]]:
             observed = "accepted"
         results.append({"caseId": case_id, "expectedCode": expected, "observedCode": observed, "status": "rejected" if observed == expected else "failed"})
     return results
+
+
+def _is_exact_digest_map(value: object, expected: dict[str, str]) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == set(expected)
+        and all(type(key) is str and type(item) is str and len(item) == 64 and item == expected[key] for key, item in value.items())
+    )
+
+
+def _is_manifest_evidence_binding(value: object, expected: dict[str, str]) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == {"path", "sha256"}
+        and type(value["path"]) is str
+        and type(value["sha256"]) is str
+        and value == expected
+    )
+
+
+def _is_exact_int_map(value: object, expected: dict[str, int]) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == set(expected)
+        and all(type(key) is str and type(item) is int and item == expected[key] for key, item in value.items())
+    )
+
+
+def _is_exact_bool_map(value: object, expected: dict[str, bool]) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == set(expected)
+        and all(type(key) is str and type(item) is bool and item is expected[key] for key, item in value.items())
+    )
+
+
+def _is_exact_bool_string_map(value: object, expected: dict[str, object]) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == set(expected)
+        and type(value.get("registered")) is bool
+        and value == expected
+    )
+
+
+def _is_exact_observation(value: object, expected: dict[str, object]) -> bool:
+    if not isinstance(value, dict) or set(value) != {"occurrenceCount", "trackedReferenceCount", "referenceSetSha256"}:
+        return False
+    return (
+        type(value["occurrenceCount"]) is int
+        and type(value["trackedReferenceCount"]) is int
+        and type(value["referenceSetSha256"]) is str
+        and strict_json_equal(value, expected)
+    )
+
+
+def _is_matrix_row(row: object) -> bool:
+    return (
+        isinstance(row, dict)
+        and set(row) == {"caseId", "expectedCode", "observedCode", "status"}
+        and all(type(row[name]) is str for name in row)
+        and row["status"] == "rejected"
+        and row["expectedCode"] == row["observedCode"]
+    )
 
 
 def validate_repository_record(root: Path) -> dict[str, object]:
@@ -563,32 +775,47 @@ def validate_repository_record(root: Path) -> dict[str, object]:
         "schema", "id", "date", "status", "fileDigests", "legacyLockDigests",
         "fixtureDigests", "migrationInventory", "acceptanceInventory", "targetCriterion",
         "acceptanceRegistration", "liveMigrationAuthorized", "executionCounters",
-        "claimBoundary", "failureMatrix",
+        "claimBoundary", "failureMatrix", "manifestEvidenceSource",
     }:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record shape is invalid.")
-    if record.get("schema") != 1 or record.get("id") != "program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10" or record.get("date") != "2026-08-10" or record.get("status") != _STATUS:
+    if raw != canonical_file_bytes(record):
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record must use canonical compact JSON wire bytes.")
+    if type(record.get("schema")) is not int or record.get("schema") != 1 or type(record.get("id")) is not str or record.get("id") != "program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10" or type(record.get("date")) is not str or record.get("date") != "2026-08-10" or type(record.get("status")) is not str or record.get("status") != _STATUS:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record identity is invalid.")
     payload = canonical_file_bytes(record)
     if any(literal.encode("utf-8") in payload for literal in LEGACY_ACCEPTANCE_SEARCH_PATTERNS.values()):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record retains a raw inventory literal.")
     expected_file_digests = {path.as_posix(): file_sha256(root, path) for path in _RECORD_DIGEST_PATHS}
-    if not strict_json_equal(record.get("fileDigests"), expected_file_digests):
+    if not _is_exact_digest_map(record.get("fileDigests"), expected_file_digests):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record file digests drifted.")
     locks = validate_legacy_locks(root)
-    if not strict_json_equal(record.get("legacyLockDigests"), {name: value["sha256"] for name, value in locks.items()}):
+    if not _is_exact_digest_map(record.get("legacyLockDigests"), {name: value["sha256"] for name, value in locks.items()}):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record legacy locks drifted.")
     bundle = build_rehearsal_bundle(root)
+    fixture_g2 = _read_json(root / FIXTURE_ROOT / "snapshots/v2/g000002.json")
+    _validate_manifest_evidence_source(root, fixture_g2)
+    expected_evidence_source = {
+        "path": MANIFEST_EVIDENCE_SOURCE_PATH.as_posix(),
+        "sha256": MANIFEST_EVIDENCE_SOURCE_SHA256,
+    }
+    if not _is_manifest_evidence_binding(record.get("manifestEvidenceSource"), expected_evidence_source):
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record manifest evidence source binding drifted.")
     fixture_digests = {path: hashlib.sha256(data).hexdigest() for path, data in bundle.items()}
-    if not strict_json_equal(record.get("fixtureDigests"), fixture_digests):
+    if not _is_exact_digest_map(record.get("fixtureDigests"), fixture_digests):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record fixture digests drifted.")
     inventory = load_migration_inventory(root)
     validate_migration_inventory(root, inventory)
     expected_inventory = copy.deepcopy(inventory["baselineObservation"])
-    if not strict_json_equal(record.get("migrationInventory"), expected_inventory):
+    if not _is_exact_observation(record.get("migrationInventory"), expected_inventory):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record inventory binding drifted.")
-    if not strict_json_equal(record.get("acceptanceInventory"), {"verified": 46, "partial": 15, "planned": 0}) or record.get("targetCriterion") != "partial" or not strict_json_equal(record.get("acceptanceRegistration"), {"registered": False, "reason": "frozen-v1-authority-live-v2-migration-not-authorized"}) or record.get("liveMigrationAuthorized") is not False or not strict_json_equal(record.get("executionCounters"), ZERO_EXECUTION_COUNTERS) or not strict_json_equal(record.get("claimBoundary"), _ZERO_CLAIMS):
+    actual_acceptance = assessment_inventory(fixture_g2)
+    actual_target = next((row for row in fixture_g2["acceptanceCriteria"] if row.get("id") == "acceptance.decision-ready-consumer-projection"), None)
+    if not isinstance(actual_target, dict) or actual_target.get("assessment") != "partial":
+        raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Fixture target criterion cannot be independently recomputed.")
+    if not _is_exact_int_map(record.get("acceptanceInventory"), actual_acceptance) or record.get("targetCriterion") != actual_target["assessment"] or not _is_exact_bool_string_map(record.get("acceptanceRegistration"), {"registered": False, "reason": "frozen-v1-authority-live-v2-migration-not-authorized"}) or type(record.get("liveMigrationAuthorized")) is not bool or record.get("liveMigrationAuthorized") is not False or not _is_exact_int_map(record.get("executionCounters"), ZERO_EXECUTION_COUNTERS) or not _is_exact_bool_map(record.get("claimBoundary"), _ZERO_CLAIMS):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record boundaries drifted.")
     matrix = run_failure_matrix(root)
-    if not strict_json_equal(record.get("failureMatrix"), matrix) or not all(row["status"] == "rejected" and row["expectedCode"] == row["observedCode"] for row in matrix):
+    expected_matrix_authority = tuple({"caseId": case_id, "expectedCode": code} for case_id, code in REQUIRED_FAILURE_CASES)
+    if tuple({"caseId": row.get("caseId"), "expectedCode": row.get("expectedCode")} for row in matrix) != expected_matrix_authority or not strict_json_equal(record.get("failureMatrix"), matrix) or not all(_is_matrix_row(row) for row in matrix):
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record failure matrix drifted.")
     return copy.deepcopy(record)

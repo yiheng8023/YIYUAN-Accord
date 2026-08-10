@@ -13,6 +13,13 @@ The original v1 authority, v1 plan, and two locked packet fixtures are reopened
 by SHA-256 before and after the rehearsal. They are not rewritten, registered,
 repointed, or selected as a new live authority.
 
+The registered thirteen-scenario manifest evidence source is also reopened from
+the bound repository root and checked against its exact SHA-256 and the g000002
+evidence row. Candidate bytes are staged, fsynced, and resolved through both
+selectors before their directory is published. Cleanup first renames the exact
+lexical output into a same-parent quarantine, binds its lstat identity, and
+refuses a swapped symlink or junction rather than following it.
+
 ## Sequence proved locally
 
 ```text
@@ -25,7 +32,9 @@ g000000 frozen v1 input -> g000001 structural candidate -> g000002 evidence-only
 The runnable entry point performs this sequence with zero model, candidate,
 Plugin, install, enablement, account, manager, consumer, publication, release,
 and production-activation counters. A failed selector replacement preserves an
-existing sentinel byte-for-byte.
+existing sentinel byte-for-byte. The repository record uses canonical compact
+JSON bytes and independently replays its ordered 32-code public failure matrix;
+the matrix includes isolated real-source missing and digest-drift overlays.
 
 ## Not registered or activated
 
