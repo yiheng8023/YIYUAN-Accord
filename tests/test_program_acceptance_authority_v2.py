@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 import unittest
 
-from scripts.harness_decision_packet import strict_json_equal
 from scripts.program_acceptance_authority_v2 import (
     AcceptanceAuthorityError,
     binding_for_bytes,
@@ -69,17 +68,6 @@ REQUIRED_FIELDS = {
 }
 
 
-def schema_accepts_scalar(schema: dict[str, object], value: object) -> bool:
-    expected_type = schema.get("type")
-    if expected_type == "integer" and type(value) is not int:
-        return False
-    if expected_type == "boolean" and type(value) is not bool:
-        return False
-    if "const" in schema and not strict_json_equal(value, schema["const"]):
-        return False
-    return True
-
-
 def resolve_schema_reference(
     root_schema: dict[str, object], schema: dict[str, object]
 ) -> dict[str, object]:
@@ -90,6 +78,33 @@ def resolve_schema_reference(
     if not isinstance(reference, str) or not reference.startswith(prefix):
         raise AssertionError(f"Unexpected schema reference: {reference!r}")
     return root_schema["$defs"][reference.removeprefix(prefix)]
+
+
+def strict_object_records(value: object) -> list[dict[str, object]]:
+    records: list[dict[str, object]] = []
+    if isinstance(value, dict):
+        if value.get("type") == "object":
+            records.append(value)
+        for nested in value.values():
+            records.extend(strict_object_records(nested))
+    elif isinstance(value, list):
+        for nested in value:
+            records.extend(strict_object_records(nested))
+    return records
+
+
+def schema_references(value: object) -> list[str]:
+    references: list[str] = []
+    if isinstance(value, dict):
+        reference = value.get("$ref")
+        if isinstance(reference, str):
+            references.append(reference)
+        for nested in value.values():
+            references.extend(schema_references(nested))
+    elif isinstance(value, list):
+        for nested in value:
+            references.extend(schema_references(nested))
+    return references
 
 
 class ProgramAcceptanceAuthorityLegacyTests(unittest.TestCase):
@@ -133,36 +148,69 @@ class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):
                 self.assertFalse(schema["additionalProperties"])
                 self.assertEqual(REQUIRED_FIELDS[name], set(schema["required"]))
 
-    def test_schema_scalars_reject_boolean_and_float_aliases(self) -> None:
+    def test_schema_owned_object_records_declare_closed_field_sets(self) -> None:
+        """Removing a nested record's field contract must fail this test."""
+
         schemas = self.load_schemas()
-        for name, schema in schemas.items():
-            with self.subTest(schema=name, field="schema"):
-                property_schema = schema["properties"]["schema"]
-                values = (True, 1, 1.0) if name == "authority" else (True, 1.0)
-                for value in values:
-                    self.assertFalse(schema_accepts_scalar(property_schema, value))
+        for schema_name, schema in schemas.items():
+            for record in strict_object_records(schema):
+                with self.subTest(schema=schema_name, record=record.get("title")):
+                    self.assertIn("properties", record)
+                    self.assertIn("required", record)
+                    self.assertFalse(record.get("additionalProperties", True))
+
+    def test_schema_metadata_targets_bound_records_and_scalar_contracts(self) -> None:
+        """Replacing a bound record, counter, or scalar contract must fail this test."""
+
+        schemas = self.load_schemas()
+        for schema_name, schema in schemas.items():
+            with self.subTest(schema=schema_name, field="schema"):
+                scalar = schema["properties"]["schema"]
+                self.assertEqual("integer", scalar["type"])
+                self.assertEqual(2 if schema_name == "authority" else 1, scalar["const"])
 
         authority = schemas["authority"]
-        generation = authority["properties"]["generation"]
-        self.assertTrue(schema_accepts_scalar(generation, 1))
-        for value in (True, 1.0):
-            self.assertFalse(schema_accepts_scalar(generation, value))
+        self.assertEqual("integer", authority["properties"]["generation"]["type"])
+        for property_name in ("predecessorBinding", "programPlanBinding"):
+            binding = resolve_schema_reference(
+                authority, authority["properties"][property_name]
+            )
+            self.assertEqual(
+                {"authoritySchema", "id", "generation", "path", "sha256"},
+                set(binding["required"]),
+            )
 
         selector = schemas["selector"]
         activation = selector["properties"]["activationAuthorized"]
-        for value in (True, 1, 1.0):
-            self.assertFalse(schema_accepts_scalar(activation, value))
-
+        self.assertEqual("boolean", activation["type"])
+        self.assertIs(False, activation["const"])
         for schema_name in ("selector", "receipt"):
             counters = resolve_schema_reference(
                 schemas[schema_name],
                 schemas[schema_name]["properties"]["executionCounters"],
             )
-            for counter_name, counter_schema in counters["properties"].items():
-                with self.subTest(schema=schema_name, counter=counter_name):
-                    self.assertTrue(schema_accepts_scalar(counter_schema, 0))
-                    for value in (True, 1, 1.0):
-                        self.assertFalse(schema_accepts_scalar(counter_schema, value))
+            for counter_schema in counters["properties"].values():
+                self.assertEqual("integer", counter_schema["type"])
+                self.assertEqual(0, counter_schema["const"])
+
+    def test_binding_references_declare_the_v1_v2_generation_conditions(self) -> None:
+        """Dropping a binding reference or generation condition must fail this test."""
+
+        schemas = self.load_schemas()
+        for schema_name, schema in schemas.items():
+            for reference in schema_references(schema):
+                with self.subTest(schema=schema_name, reference=reference):
+                    self.assertTrue(reference.startswith("#/$defs/"))
+                    self.assertIn(reference.removeprefix("#/$defs/"), schema["$defs"])
+
+        for schema_name in ("authority", "selector", "receipt"):
+            binding = schemas[schema_name]["$defs"]["binding"]
+            branches = binding["allOf"]
+            self.assertEqual(2, len(branches))
+            self.assertEqual(1, branches[0]["if"]["properties"]["authoritySchema"]["const"])
+            self.assertEqual("null", branches[0]["then"]["properties"]["generation"]["type"])
+            self.assertEqual(2, branches[1]["if"]["properties"]["authoritySchema"]["const"])
+            self.assertEqual("integer", branches[1]["then"]["properties"]["generation"]["type"])
 
 
 class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
@@ -180,3 +228,22 @@ class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
                 self.assertEqual(
                     "acceptance-authority-generation-invalid", raised.exception.code
                 )
+
+    def test_binding_rejects_boolean_and_float_numeric_aliases(self) -> None:
+        """Weakening exact runtime numeric checks must fail this test."""
+
+        for authority_schema, generation, expected_code in (
+            (True, None, "acceptance-authority-schema-invalid"),
+            (2, True, "acceptance-authority-generation-invalid"),
+            (2, 1.0, "acceptance-authority-generation-invalid"),
+        ):
+            with self.subTest(authority_schema=authority_schema, generation=generation):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    binding_for_bytes(
+                        authority_schema=authority_schema,
+                        authority_id="bound-authority",
+                        generation=generation,
+                        path="bound.json",
+                        data=b"bound bytes",
+                    )
+                self.assertEqual(expected_code, raised.exception.code)

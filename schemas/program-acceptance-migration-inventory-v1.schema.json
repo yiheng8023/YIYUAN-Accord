@@ -2,16 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema",
-    "id",
-    "date",
-    "status",
-    "sourcePatternIds",
-    "baselineObservation",
-    "occurrences",
-    "claimBoundary"
-  ],
+  "required": ["schema", "id", "date", "status", "sourcePatternIds", "baselineObservation", "occurrences", "claimBoundary"],
   "properties": {
     "schema": { "type": "integer", "const": 1 },
     "id": { "type": "string", "minLength": 1 },
@@ -24,58 +15,55 @@
       "uniqueItems": true,
       "items": { "type": "string", "enum": ["legacy-acceptance-path", "legacy-acceptance-id"] }
     },
-    "baselineObservation": { "type": "object" },
-    "occurrences": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "path",
-          "line",
-          "patternId",
-          "lineSha256",
-          "purpose",
-          "classification",
-          "currentBinding",
-          "candidateBinding",
-          "rehearsalAction",
-          "liveMigrationAction",
-          "rollbackAction",
-          "verificationSurface",
-          "separateAuthorizationRequired"
-        ],
-        "properties": {
-          "path": { "type": "string", "minLength": 1 },
-          "line": { "type": "integer", "minimum": 1 },
-          "patternId": { "type": "string", "enum": ["legacy-acceptance-path", "legacy-acceptance-id"] },
-          "lineSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-          "purpose": { "type": "string", "minLength": 1 },
-          "classification": {
-            "type": "string",
-            "enum": [
-              "A-immutable-historical",
-              "B-current-authority-consumer",
-              "C-version-neutral-component",
-              "D-migration-governance-and-regression"
-            ]
-          },
-          "currentBinding": {
-            "type": "string",
-            "enum": ["legacy-v1", "candidate-selector", "explicit-input", "migration-metadata", "not-applicable"]
-          },
-          "candidateBinding": {
-            "type": "string",
-            "enum": ["preserve-legacy-v1", "rehearsal-selector", "explicit-input", "migration-metadata", "not-applicable"]
-          },
-          "rehearsalAction": { "type": "string", "minLength": 1 },
-          "liveMigrationAction": { "type": "string", "minLength": 1 },
-          "rollbackAction": { "type": "string", "minLength": 1 },
-          "verificationSurface": { "type": "string", "minLength": 1 },
-          "separateAuthorizationRequired": { "type": "boolean" }
-        }
+    "baselineObservation": { "$ref": "#/$defs/baselineObservation" },
+    "occurrences": { "type": "array", "items": { "$ref": "#/$defs/occurrence" } },
+    "claimBoundary": { "$ref": "#/$defs/claimBoundary" }
+  },
+  "$defs": {
+    "baselineObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trackedReferenceCount", "occurrenceCount", "referenceSetSha256"],
+      "properties": {
+        "trackedReferenceCount": { "type": "integer", "minimum": 0 },
+        "occurrenceCount": { "type": "integer", "minimum": 0 },
+        "referenceSetSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },
-    "claimBoundary": { "type": "object" }
+    "occurrence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "line", "patternId", "lineSha256", "purpose", "classification", "currentBinding", "candidateBinding", "rehearsalAction", "liveMigrationAction", "rollbackAction", "verificationSurface", "separateAuthorizationRequired"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "patternId": { "type": "string", "enum": ["legacy-acceptance-path", "legacy-acceptance-id"] },
+        "lineSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "classification": { "type": "string", "enum": ["A-immutable-historical", "B-current-authority-consumer", "C-version-neutral-component", "D-migration-governance-and-regression"] },
+        "currentBinding": { "type": "string", "enum": ["legacy-v1", "candidate-selector", "explicit-input", "migration-metadata", "not-applicable"] },
+        "candidateBinding": { "type": "string", "enum": ["preserve-legacy-v1", "rehearsal-selector", "explicit-input", "migration-metadata", "not-applicable"] },
+        "rehearsalAction": { "type": "string", "minLength": 1 },
+        "liveMigrationAction": { "type": "string", "minLength": 1 },
+        "rollbackAction": { "type": "string", "minLength": 1 },
+        "verificationSurface": { "type": "string", "minLength": 1 },
+        "separateAuthorizationRequired": { "type": "boolean" }
+      }
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provesLiveMigration", "provesCurrentSelectorActivation", "provesBehavior", "provesValue", "provesCrossHostPortability", "provesProductionReadiness", "provesReleaseEligibility", "provesOverallHarnessCompletion"],
+      "properties": {
+        "provesLiveMigration": { "type": "boolean", "const": false },
+        "provesCurrentSelectorActivation": { "type": "boolean", "const": false },
+        "provesBehavior": { "type": "boolean", "const": false },
+        "provesValue": { "type": "boolean", "const": false },
+        "provesCrossHostPortability": { "type": "boolean", "const": false },
+        "provesProductionReadiness": { "type": "boolean", "const": false },
+        "provesReleaseEligibility": { "type": "boolean", "const": false },
+        "provesOverallHarnessCompletion": { "type": "boolean", "const": false }
+      }
+    }
   }
 }
