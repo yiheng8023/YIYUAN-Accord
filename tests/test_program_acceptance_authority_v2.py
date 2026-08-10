@@ -15,9 +15,15 @@ from scripts.program_acceptance_authority_v2 import (
     binding_for_bytes,
     build_candidate_program_plan_v2,
     build_evidence_snapshot_v2,
+    build_rollback_receipt,
+    build_selector,
     build_structural_snapshot_v2,
+    build_transition_receipt,
     canonical_file_bytes,
     authority_business_projection,
+    resolve_current_authority,
+    resolve_historical_authority,
+    validate_transition_receipt,
     validate_legacy_locks,
     validate_authority_snapshot,
 )
@@ -476,6 +482,405 @@ class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
                         data=b"bound bytes",
                     )
                 self.assertEqual(expected_code, raised.exception.code)
+
+
+class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.legacy = json.loads(
+            (ROOT / "registry/program-acceptance-map.json").read_text(encoding="utf-8")
+        )
+        self.g1_path = FIXTURE_ROOT / "snapshots/v2/g000001.json"
+        self.g2_path = FIXTURE_ROOT / "snapshots/v2/g000002.json"
+        self.plan_path = FIXTURE_ROOT / "curation-program-plan-v2.json"
+        self.g1 = json.loads(self.g1_path.read_text(encoding="utf-8"))
+        self.g2 = json.loads(self.g2_path.read_text(encoding="utf-8"))
+        self.plan = json.loads(self.plan_path.read_text(encoding="utf-8"))
+        locks = validate_legacy_locks(ROOT)
+        self.legacy_binding = {
+            **locks["acceptance"],
+            "authoritySchema": 1,
+            "generation": None,
+        }
+        self.legacy_plan_binding = {
+            **locks["programPlan"],
+            "authoritySchema": 1,
+            "generation": None,
+        }
+        self.candidate_plan_binding = binding_for_bytes(
+            authority_schema=2,
+            authority_id=self.plan["id"],
+            generation=1,
+            path="curation-program-plan-v2.json",
+            data=self.plan_path.read_bytes(),
+        )
+        self.g1_binding = binding_for_bytes(
+            authority_schema=2,
+            authority_id=self.g1["id"],
+            generation=1,
+            path="snapshots/v2/g000001.json",
+            data=self.g1_path.read_bytes(),
+        )
+        self.g2_binding = binding_for_bytes(
+            authority_schema=2,
+            authority_id=self.g2["id"],
+            generation=2,
+            path="snapshots/v2/g000002.json",
+            data=self.g2_path.read_bytes(),
+        )
+
+    def test_structural_and_evidence_receipts_have_disjoint_deltas(self) -> None:
+        """A receipt must expose only the business delta its transaction permits."""
+
+        structural = build_transition_receipt(
+            "structural-migration",
+            from_snapshot_binding=self.legacy_binding,
+            to_snapshot_binding=self.g1_binding,
+            from_program_plan_binding=self.legacy_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.legacy,
+            to_document=self.g1,
+        )
+        self.assertEqual("structural-migration", structural["transactionType"])
+        self.assertEqual([], structural["delta"]["evidenceAdded"])
+        self.assertEqual([], structural["delta"]["assessmentsChanged"])
+
+        evidence = build_transition_receipt(
+            "evidence-registration",
+            from_snapshot_binding=self.g1_binding,
+            to_snapshot_binding=self.g2_binding,
+            from_program_plan_binding=self.candidate_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.g1,
+            to_document=self.g2,
+        )
+        self.assertEqual([MANIFEST_EVIDENCE_ID], evidence["delta"]["evidenceAdded"])
+        self.assertEqual([], evidence["delta"]["assessmentsChanged"])
+
+    def _write_candidate_tree(self, root: Path) -> tuple[dict[str, object], dict[str, object]]:
+        for relative in (
+            Path("registry/program-acceptance-map.json"),
+            Path("registry/curation-program-plan.json"),
+            Path("tests/fixtures/harness-decision-packet-gen-research-01.json"),
+            Path("tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json"),
+        ):
+            destination = root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / relative, destination)
+        for relative, source in (
+            (Path("snapshots/v2/g000001.json"), self.g1),
+            (Path("snapshots/v2/g000002.json"), self.g2),
+            (Path("curation-program-plan-v2.json"), self.plan),
+        ):
+            destination = root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(canonical_file_bytes(source))
+        structural = build_transition_receipt(
+            "structural-migration",
+            from_snapshot_binding=self.legacy_binding,
+            to_snapshot_binding=self.g1_binding,
+            from_program_plan_binding=self.legacy_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.legacy,
+            to_document=self.g1,
+        )
+        evidence = build_transition_receipt(
+            "evidence-registration",
+            from_snapshot_binding=self.g1_binding,
+            to_snapshot_binding=self.g2_binding,
+            from_program_plan_binding=self.candidate_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.g1,
+            to_document=self.g2,
+        )
+        for relative, receipt in (
+            (Path("transitions/g000000-to-g000001.json"), structural),
+            (Path("transitions/g000001-to-g000002.json"), evidence),
+        ):
+            destination = root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(canonical_file_bytes(receipt))
+        evidence_binding = binding_for_bytes(
+            authority_schema=1,
+            authority_id=evidence["id"],
+            generation=None,
+            path="transitions/g000001-to-g000002.json",
+            data=canonical_file_bytes(evidence),
+        )
+        selector = build_selector(
+            snapshot_binding=self.g2_binding,
+            transition_binding=evidence_binding,
+            program_plan_binding=self.candidate_plan_binding,
+        )
+        selector_path = root / "selectors/current-g000002.json"
+        selector_path.parent.mkdir(parents=True, exist_ok=True)
+        selector_path.write_bytes(canonical_file_bytes(selector))
+        return evidence, selector
+
+    def test_historical_and_current_resolution_use_their_own_bound_artifacts(self) -> None:
+        """Current selection must not repoint an explicit historical v1 binding."""
+
+        historical = resolve_historical_authority(ROOT, self.legacy_binding)
+        self.assertEqual(self.legacy_binding, historical["binding"])
+        self.assertEqual(self.legacy["id"], historical["authority"]["id"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, selector = self._write_candidate_tree(candidate_root)
+            current = resolve_current_authority(
+                candidate_root, "selectors/current-g000002.json"
+            )
+        self.assertEqual(self.g2_binding, current["binding"])
+        self.assertEqual(selector, current["selector"])
+
+    def test_current_resolution_rejects_unauthorized_selector_and_broken_chain(self) -> None:
+        """Removing the receipt chain or enabling activation must fail closed."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, selector = self._write_candidate_tree(candidate_root)
+            selector_path = candidate_root / "selectors/current-g000002.json"
+
+            selector["activationAuthorized"] = True
+            selector_path.write_bytes(canonical_file_bytes(selector))
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+            self.assertEqual("acceptance-activation-not-authorized", raised.exception.code)
+
+            selector["activationAuthorized"] = False
+            selector_path.write_bytes(canonical_file_bytes(selector))
+            (candidate_root / "transitions/g000000-to-g000001.json").unlink()
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+            self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
+
+    def test_rollback_receipt_targets_an_ancestor_without_mutating_snapshots(self) -> None:
+        """Rollback must only move selection to a known older immutable generation."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, _ = self._write_candidate_tree(candidate_root)
+            rollback = build_rollback_receipt(
+                from_snapshot_binding=self.g2_binding,
+                to_snapshot_binding=self.g1_binding,
+                active_program_plan_binding=self.candidate_plan_binding,
+                ancestor_bindings=[self.g1_binding],
+            )
+            rollback_path = candidate_root / "transitions/g000002-to-g000001-rollback.json"
+            rollback_path.write_bytes(canonical_file_bytes(rollback))
+            rollback_binding = binding_for_bytes(
+                authority_schema=1,
+                authority_id=rollback["id"],
+                generation=None,
+                path="transitions/g000002-to-g000001-rollback.json",
+                data=rollback_path.read_bytes(),
+            )
+            selector = build_selector(
+                snapshot_binding=self.g1_binding,
+                transition_binding=rollback_binding,
+                program_plan_binding=self.candidate_plan_binding,
+            )
+            selector_path = candidate_root / "selectors/current-g000001-rollback.json"
+            selector_path.write_bytes(canonical_file_bytes(selector))
+            current = resolve_current_authority(
+                candidate_root, "selectors/current-g000001-rollback.json"
+            )
+        self.assertEqual(self.g1_binding, current["binding"])
+
+    def test_transition_and_selector_reject_json_type_aliases(self) -> None:
+        """Bool and float aliases cannot pass receipt, selector, counter, or delta checks."""
+
+        receipt = build_transition_receipt(
+            "evidence-registration",
+            from_snapshot_binding=self.g1_binding,
+            to_snapshot_binding=self.g2_binding,
+            from_program_plan_binding=self.candidate_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.g1,
+            to_document=self.g2,
+        )
+        for mutate, code in (
+            (
+                lambda value: value["executionCounters"].__setitem__(
+                    "modelRequestCount", False
+                ),
+                "acceptance-side-effect-counter-nonzero",
+            ),
+            (
+                lambda value: value["delta"].__setitem__("selectorTargetGeneration", 1.0),
+                "acceptance-transition-receipt-invalid",
+            ),
+        ):
+            with self.subTest(code=code):
+                mutated = copy.deepcopy(receipt)
+                mutate(mutated)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_transition_receipt(
+                        mutated, from_document=self.g1, to_document=self.g2
+                    )
+                self.assertEqual(code, raised.exception.code)
+
+    def test_receipt_type_and_rollback_boundaries_reject_masquerades(self) -> None:
+        """Unknown receipt types and non-ancestor rollback targets must never resolve."""
+
+        receipt = build_transition_receipt(
+            "structural-migration",
+            from_snapshot_binding=self.legacy_binding,
+            to_snapshot_binding=self.g1_binding,
+            from_program_plan_binding=self.legacy_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.legacy,
+            to_document=self.g1,
+        )
+        receipt["transactionType"] = "assessment-transition"
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            validate_transition_receipt(receipt, from_document=self.legacy, to_document=self.g1)
+        self.assertEqual("acceptance-transition-type-mismatch", raised.exception.code)
+
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            build_rollback_receipt(
+                from_snapshot_binding=self.g1_binding,
+                to_snapshot_binding=self.g2_binding,
+                active_program_plan_binding=self.candidate_plan_binding,
+                ancestor_bindings=[self.g2_binding],
+            )
+        self.assertEqual("acceptance-rollback-target-not-ancestor", raised.exception.code)
+
+    def test_current_mode_rejects_independently_valid_unreceipted_generation(self) -> None:
+        """A valid future snapshot cannot become current without a valid introducing receipt."""
+
+        g3 = copy.deepcopy(self.g2)
+        g3["id"] = "curation-program-acceptance-authority-v2-g000003"
+        g3["generation"] = 3
+        g3["predecessorBinding"] = binding_for_bytes(
+            authority_schema=2,
+            authority_id=self.g2["id"],
+            generation=2,
+            path="snapshots/v2/g000002.json",
+            data=self.g2_path.read_bytes(),
+        )
+        validate_authority_snapshot(
+            g3, predecessor=self.g2, program_plan_binding=self.candidate_plan_binding
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, _ = self._write_candidate_tree(candidate_root)
+            g3_path = candidate_root / "snapshots/v2/g000003.json"
+            g3_path.write_bytes(canonical_file_bytes(g3))
+            g3_binding = binding_for_bytes(
+                authority_schema=2,
+                authority_id=g3["id"],
+                generation=3,
+                path="snapshots/v2/g000003.json",
+                data=g3_path.read_bytes(),
+            )
+            forged = build_transition_receipt(
+                "evidence-registration",
+                from_snapshot_binding=self.g1_binding,
+                to_snapshot_binding=self.g2_binding,
+                from_program_plan_binding=self.candidate_plan_binding,
+                to_program_plan_binding=self.candidate_plan_binding,
+                from_document=self.g1,
+                to_document=self.g2,
+            )
+            forged["toSnapshotBinding"] = g3_binding
+            forged_path = candidate_root / "transitions/g000002-to-g000003.json"
+            forged_path.write_bytes(canonical_file_bytes(forged))
+            forged_binding = binding_for_bytes(
+                authority_schema=1,
+                authority_id=forged["id"],
+                generation=None,
+                path="transitions/g000002-to-g000003.json",
+                data=forged_path.read_bytes(),
+            )
+            selector = build_selector(
+                snapshot_binding=g3_binding,
+                transition_binding=forged_binding,
+                program_plan_binding=self.candidate_plan_binding,
+            )
+            (candidate_root / "selectors/current-g000003.json").write_bytes(
+                canonical_file_bytes(selector)
+            )
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000003.json")
+        self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
+
+    def test_current_mode_rejects_root_escape_and_selector_counter_aliases(self) -> None:
+        """Selector target paths and counter aliases are checked before candidate resolution."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            _, selector = self._write_candidate_tree(candidate_root)
+            selector_path = candidate_root / "selectors/current-g000002.json"
+            selector["executionCounters"]["modelRequestCount"] = False
+            selector_path.write_bytes(canonical_file_bytes(selector))
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+            self.assertEqual("acceptance-side-effect-counter-nonzero", raised.exception.code)
+
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "../selectors/current-g000002.json")
+            self.assertEqual("acceptance-selector-target-invalid", raised.exception.code)
+
+    def test_checked_receipt_and_selector_fixtures_replay_from_locked_sources(self) -> None:
+        """Changing a receipt builder or checked canonical byte stream must fail this replay."""
+
+        structural = build_transition_receipt(
+            "structural-migration",
+            from_snapshot_binding=self.legacy_binding,
+            to_snapshot_binding=self.g1_binding,
+            from_program_plan_binding=self.legacy_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.legacy,
+            to_document=self.g1,
+        )
+        evidence = build_transition_receipt(
+            "evidence-registration",
+            from_snapshot_binding=self.g1_binding,
+            to_snapshot_binding=self.g2_binding,
+            from_program_plan_binding=self.candidate_plan_binding,
+            to_program_plan_binding=self.candidate_plan_binding,
+            from_document=self.g1,
+            to_document=self.g2,
+        )
+        rollback = build_rollback_receipt(
+            from_snapshot_binding=self.g2_binding,
+            to_snapshot_binding=self.g1_binding,
+            active_program_plan_binding=self.candidate_plan_binding,
+            ancestor_bindings=[self.g1_binding],
+        )
+        evidence_binding = binding_for_bytes(
+            authority_schema=1,
+            authority_id=evidence["id"],
+            generation=None,
+            path="transitions/g000001-to-g000002.json",
+            data=canonical_file_bytes(evidence),
+        )
+        rollback_binding = binding_for_bytes(
+            authority_schema=1,
+            authority_id=rollback["id"],
+            generation=None,
+            path="transitions/g000002-to-g000001-rollback.json",
+            data=canonical_file_bytes(rollback),
+        )
+        expected = {
+            FIXTURE_ROOT / "transitions/g000000-to-g000001.json": structural,
+            FIXTURE_ROOT / "transitions/g000001-to-g000002.json": evidence,
+            FIXTURE_ROOT / "transitions/g000002-to-g000001-rollback.json": rollback,
+            FIXTURE_ROOT / "selectors/current-g000002.json": build_selector(
+                snapshot_binding=self.g2_binding,
+                transition_binding=evidence_binding,
+                program_plan_binding=self.candidate_plan_binding,
+            ),
+            FIXTURE_ROOT / "selectors/current-g000001-rollback.json": build_selector(
+                snapshot_binding=self.g1_binding,
+                transition_binding=rollback_binding,
+                program_plan_binding=self.candidate_plan_binding,
+            ),
+        }
+        for path, document in expected.items():
+            with self.subTest(path=path):
+                self.assertEqual(canonical_file_bytes(document), path.read_bytes())
 
 
 class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):

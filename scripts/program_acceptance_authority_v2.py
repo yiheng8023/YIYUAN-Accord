@@ -80,6 +80,33 @@ _BUSINESS_FIELDS = (
 )
 _ASSESSMENTS = {"planned", "partial", "verified", "stale", "blocked", "not-applicable"}
 _SHA256 = re.compile(r"[0-9a-f]{64}")
+ZERO_EXECUTION_COUNTERS = {
+    "modelRequestCount": 0,
+    "candidateExecutionCount": 0,
+    "pluginExecutionCount": 0,
+    "installCount": 0,
+    "enableCount": 0,
+    "accountConnectionCount": 0,
+    "managerMutationCount": 0,
+    "consumerMutationCount": 0,
+    "publicationCount": 0,
+    "releaseCount": 0,
+    "productionActivationCount": 0,
+}
+_REHEARSAL_AUTHORIZATION = {
+    "rehearsalAuthorized": True,
+    "liveMigrationAuthorized": False,
+    "assessmentTransitionAuthorized": False,
+    "productionActivationAuthorized": False,
+}
+_ZERO_CLAIM_BOUNDARY = {
+    "provesBehavior": False,
+    "provesValue": False,
+    "provesCrossHostPortability": False,
+    "provesProductionReadiness": False,
+    "provesReleaseEligibility": False,
+    "provesOverallHarnessCompletion": False,
+}
 
 
 def authority_business_projection(document: dict[str, object]) -> dict[str, object]:
@@ -641,3 +668,535 @@ def validate_legacy_locks(
             "sha256": actual_sha256,
         }
     return locks
+
+
+def build_transition_receipt(
+    transaction_type: str,
+    *,
+    from_snapshot_binding: dict[str, object],
+    to_snapshot_binding: dict[str, object],
+    from_program_plan_binding: dict[str, object],
+    to_program_plan_binding: dict[str, object],
+    from_document: dict[str, object],
+    to_document: dict[str, object],
+) -> dict[str, object]:
+    """Build one immutable, rehearsal-only receipt for an allowed transition."""
+
+    if transaction_type not in {"structural-migration", "evidence-registration"}:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-type-mismatch",
+            "This builder accepts only forward rehearsal transaction types.",
+        )
+    delta = _receipt_delta(transaction_type, from_document, to_document)
+    receipt = {
+        "schema": 1,
+        "id": _receipt_id(transaction_type, from_snapshot_binding, to_snapshot_binding),
+        "authoritySeriesId": AUTHORITY_SERIES_ID,
+        "transactionType": transaction_type,
+        "fromSnapshotBinding": copy.deepcopy(from_snapshot_binding),
+        "toSnapshotBinding": copy.deepcopy(to_snapshot_binding),
+        "fromProgramPlanBinding": copy.deepcopy(from_program_plan_binding),
+        "toProgramPlanBinding": copy.deepcopy(to_program_plan_binding),
+        "delta": delta,
+        "invariants": _receipt_invariants(to_document),
+        "authorizationBoundary": copy.deepcopy(_REHEARSAL_AUTHORIZATION),
+        "executionCounters": copy.deepcopy(ZERO_EXECUTION_COUNTERS),
+        "claimBoundary": copy.deepcopy(_ZERO_CLAIM_BOUNDARY),
+    }
+    validate_transition_receipt(receipt, from_document=from_document, to_document=to_document)
+    return receipt
+
+
+def _receipt_id(
+    transaction_type: str,
+    from_snapshot_binding: dict[str, object],
+    to_snapshot_binding: dict[str, object],
+) -> str:
+    from_generation = from_snapshot_binding.get("generation")
+    from_label = "g000000" if from_generation is None else f"g{from_generation:06d}"
+    to_generation = to_snapshot_binding.get("generation")
+    if type(to_generation) is not int:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid",
+            "Transition receipt target requires a numeric generation.",
+        )
+    return f"{AUTHORITY_SERIES_ID}-{from_label}-to-g{to_generation:06d}-{transaction_type}"
+
+
+def _receipt_invariants(document: dict[str, object]) -> dict[str, object]:
+    return {
+        "authoritySeriesPreserved": True,
+        "generationStepValid": True,
+        "immutableHistoryPreserved": True,
+        "programPlanBindingsValid": True,
+        "acceptanceInventory": assessment_inventory(document),
+    }
+
+
+def _empty_receipt_delta(*, selector_target_generation: int | None = None) -> dict[str, object]:
+    return {
+        "evidenceAdded": [],
+        "evidenceRemoved": [],
+        "criterionEvidenceLinksAdded": [],
+        "criterionEvidenceLinksRemoved": [],
+        "assessmentsChanged": [],
+        "selectorTargetGeneration": selector_target_generation,
+    }
+
+
+def _receipt_delta(
+    transaction_type: str, from_document: dict[str, object], to_document: dict[str, object]
+) -> dict[str, object]:
+    if transaction_type == "structural-migration":
+        if not strict_json_equal(
+            authority_business_projection(from_document), authority_business_projection(to_document)
+        ):
+            raise AcceptanceAuthorityError(
+                "acceptance-structural-migration-overreach",
+                "Structural migration must have an empty business delta.",
+            )
+        return _empty_receipt_delta()
+
+    _validate_evidence_registration_delta(from_document, to_document)
+    return {
+        "evidenceAdded": [MANIFEST_EVIDENCE_ID],
+        "evidenceRemoved": [],
+        "criterionEvidenceLinksAdded": [
+            {"criterionId": TARGET_CRITERION_ID, "evidenceId": MANIFEST_EVIDENCE_ID}
+        ],
+        "criterionEvidenceLinksRemoved": [],
+        "assessmentsChanged": [],
+        "selectorTargetGeneration": None,
+    }
+
+
+def _require_exact_zero_counters(counters: object) -> None:
+    if not strict_json_equal(counters, ZERO_EXECUTION_COUNTERS):
+        raise AcceptanceAuthorityError(
+            "acceptance-side-effect-counter-nonzero",
+            "Rehearsal execution counters must be exact JSON zeroes.",
+        )
+
+
+def _require_rehearsal_boundaries(receipt: dict[str, object]) -> None:
+    if not strict_json_equal(receipt.get("authorizationBoundary"), _REHEARSAL_AUTHORIZATION):
+        raise AcceptanceAuthorityError(
+            "acceptance-activation-not-authorized",
+            "Transition receipt exceeds the rehearsal authorization boundary.",
+        )
+    if not strict_json_equal(receipt.get("claimBoundary"), _ZERO_CLAIM_BOUNDARY):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid",
+            "Transition receipt claim boundary is invalid.",
+        )
+    _require_exact_zero_counters(receipt.get("executionCounters"))
+
+
+def validate_transition_receipt(
+    receipt: dict[str, object],
+    *,
+    from_document: dict[str, object],
+    to_document: dict[str, object],
+) -> None:
+    """Validate a receipt against the two real authority documents it binds."""
+
+    required_fields = {
+        "schema", "id", "authoritySeriesId", "transactionType", "fromSnapshotBinding",
+        "toSnapshotBinding", "fromProgramPlanBinding", "toProgramPlanBinding", "delta",
+        "invariants", "authorizationBoundary", "executionCounters", "claimBoundary",
+    }
+    if (
+        not isinstance(receipt, dict)
+        or set(receipt) != required_fields
+        or type(receipt.get("schema")) is not int
+        or receipt["schema"] != 1
+        or type(receipt.get("id")) is not str
+        or not receipt["id"]
+        or receipt.get("authoritySeriesId") != AUTHORITY_SERIES_ID
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid", "Transition receipt shape is invalid."
+        )
+    transaction_type = receipt.get("transactionType")
+    if transaction_type not in {"structural-migration", "evidence-registration", "rollback"}:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-type-mismatch", "Transition type is not recognized."
+        )
+    from_binding = _require_binding(
+        receipt.get("fromSnapshotBinding"), code="acceptance-transition-receipt-invalid"
+    )
+    to_binding = _require_binding(
+        receipt.get("toSnapshotBinding"), code="acceptance-transition-receipt-invalid"
+    )
+    _require_binding(receipt.get("fromProgramPlanBinding"), code="acceptance-transition-receipt-invalid")
+    _require_binding(receipt.get("toProgramPlanBinding"), code="acceptance-transition-receipt-invalid")
+    if (
+        from_binding.get("id") != from_document.get("id")
+        or to_binding.get("id") != to_document.get("id")
+        or from_binding.get("authoritySchema") != from_document.get("schema")
+        or to_binding.get("authoritySchema") != to_document.get("schema")
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid", "Receipt bindings do not name their documents."
+        )
+    _require_rehearsal_boundaries(receipt)
+    expected_invariants = _receipt_invariants(to_document)
+    if not strict_json_equal(receipt.get("invariants"), expected_invariants):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid", "Receipt invariants are invalid."
+        )
+    if transaction_type == "rollback":
+        _validate_rollback_receipt(receipt, from_document, to_document)
+        return
+    from_generation = from_binding.get("generation")
+    to_generation = to_binding.get("generation")
+    expected_from = None if transaction_type == "structural-migration" else 1
+    if (
+        type(to_generation) is not int
+        or to_generation < 1
+        or from_generation != expected_from
+        or to_generation != (1 if transaction_type == "structural-migration" else 2)
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-chain-broken", "Receipt generation step is invalid."
+        )
+    expected_delta = _receipt_delta(transaction_type, from_document, to_document)
+    if not strict_json_equal(receipt.get("delta"), expected_delta):
+        if transaction_type == "evidence-registration" and isinstance(receipt.get("delta"), dict):
+            changes = receipt["delta"].get("assessmentsChanged")
+            if changes not in ([], None):
+                raise AcceptanceAuthorityError(
+                    "acceptance-assessment-promotion-forbidden",
+                    "Evidence registration may not claim assessment transition.",
+                )
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-receipt-invalid", "Receipt delta is not exact."
+        )
+
+
+def _validate_rollback_receipt(
+    receipt: dict[str, object], from_document: dict[str, object], to_document: dict[str, object]
+) -> None:
+    from_generation = receipt["fromSnapshotBinding"]["generation"]
+    to_generation = receipt["toSnapshotBinding"]["generation"]
+    if (
+        type(from_generation) is not int
+        or type(to_generation) is not int
+        or to_generation >= from_generation
+        or from_document.get("authoritySeriesId") != AUTHORITY_SERIES_ID
+        or to_document.get("authoritySeriesId") != AUTHORITY_SERIES_ID
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-rollback-target-not-ancestor", "Rollback target is not an earlier authority state."
+        )
+    if not strict_json_equal(
+        receipt.get("delta"), _empty_receipt_delta(selector_target_generation=to_generation)
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-rollback-receipt-invalid", "Rollback may only move the selector."
+        )
+
+
+def build_rollback_receipt(
+    *,
+    from_snapshot_binding: dict[str, object],
+    to_snapshot_binding: dict[str, object],
+    active_program_plan_binding: dict[str, object],
+    ancestor_bindings: list[dict[str, object]],
+) -> dict[str, object]:
+    """Build a selector-only rollback receipt to one explicit immutable ancestor."""
+
+    from_binding = _require_binding(
+        from_snapshot_binding, code="acceptance-rollback-receipt-invalid"
+    )
+    to_binding = _require_binding(to_snapshot_binding, code="acceptance-rollback-receipt-invalid")
+    plan_binding = _require_binding(
+        active_program_plan_binding, code="acceptance-rollback-receipt-invalid"
+    )
+    if (
+        from_binding["authoritySchema"] != 2
+        or to_binding["authoritySchema"] != 2
+        or plan_binding["authoritySchema"] != 2
+        or not isinstance(ancestor_bindings, list)
+        or not any(strict_json_equal(to_binding, candidate) for candidate in ancestor_bindings)
+        or type(from_binding["generation"]) is not int
+        or type(to_binding["generation"]) is not int
+        or to_binding["generation"] >= from_binding["generation"]
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-rollback-target-not-ancestor", "Rollback target is not a declared ancestor."
+        )
+    return {
+        "schema": 1,
+        "id": _receipt_id("rollback", from_binding, to_binding),
+        "authoritySeriesId": AUTHORITY_SERIES_ID,
+        "transactionType": "rollback",
+        "fromSnapshotBinding": copy.deepcopy(from_binding),
+        "toSnapshotBinding": copy.deepcopy(to_binding),
+        "fromProgramPlanBinding": copy.deepcopy(plan_binding),
+        "toProgramPlanBinding": copy.deepcopy(plan_binding),
+        "delta": _empty_receipt_delta(selector_target_generation=to_binding["generation"]),
+        "invariants": {
+            "authoritySeriesPreserved": True,
+            "generationStepValid": True,
+            "immutableHistoryPreserved": True,
+            "programPlanBindingsValid": True,
+            "acceptanceInventory": {"verified": 46, "partial": 15, "planned": 0},
+        },
+        "authorizationBoundary": copy.deepcopy(_REHEARSAL_AUTHORIZATION),
+        "executionCounters": copy.deepcopy(ZERO_EXECUTION_COUNTERS),
+        "claimBoundary": copy.deepcopy(_ZERO_CLAIM_BOUNDARY),
+    }
+
+
+def build_selector(
+    *,
+    snapshot_binding: dict[str, object],
+    transition_binding: dict[str, object],
+    program_plan_binding: dict[str, object],
+) -> dict[str, object]:
+    """Build a non-activating selector for an already validated candidate tree."""
+
+    snapshot = _require_binding(snapshot_binding, code="acceptance-selector-target-invalid")
+    transition = _require_binding(transition_binding, code="acceptance-selector-target-invalid")
+    plan = _require_binding(program_plan_binding, code="acceptance-selector-target-invalid")
+    if (
+        snapshot["authoritySchema"] != 2
+        or transition["authoritySchema"] != 1
+        or transition["generation"] is not None
+        or plan["authoritySchema"] != 2
+        or plan["generation"] != 1
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Selector bindings have invalid authority roles."
+        )
+    return {
+        "schema": 1,
+        "id": "curation-program-acceptance-current-selector-v1",
+        "authoritySeriesId": AUTHORITY_SERIES_ID,
+        "selectionMode": "rehearsal-candidate",
+        "activeSnapshotBinding": copy.deepcopy(snapshot),
+        "activeTransitionBinding": copy.deepcopy(transition),
+        "programPlanBinding": copy.deepcopy(plan),
+        "activationAuthorized": False,
+        "executionCounters": copy.deepcopy(ZERO_EXECUTION_COUNTERS),
+    }
+
+
+def _safe_relative_path(root: Path, value: object, *, code: str) -> Path:
+    if type(value) is not str or not value:
+        raise AcceptanceAuthorityError(code, "Authority path must be a non-empty relative string.")
+    candidate = Path(value)
+    if candidate.is_absolute() or any(part == ".." for part in candidate.parts):
+        raise AcceptanceAuthorityError(code, "Authority path escapes the supplied root.", path=value)
+    resolved_root = root.resolve()
+    resolved = (resolved_root / candidate).resolve()
+    try:
+        resolved.relative_to(resolved_root)
+    except ValueError as error:
+        raise AcceptanceAuthorityError(code, "Authority path escapes the supplied root.", path=value) from error
+    return resolved
+
+
+def _load_bound_document(root: Path, binding: object, *, code: str) -> dict[str, object]:
+    normalized = _require_binding(binding, code=code)
+    path = _safe_relative_path(root, normalized["path"], code=code)
+    try:
+        data = path.read_bytes()
+        document = json.loads(data)
+    except (OSError, json.JSONDecodeError) as error:
+        raise AcceptanceAuthorityError(code, "Bound authority document cannot be read.") from error
+    if (
+        not isinstance(document, dict)
+        or not strict_json_equal(hashlib.sha256(data).hexdigest(), normalized["sha256"])
+        or document.get("id") != normalized["id"]
+        or type(document.get("schema")) is not int
+        or document["schema"] != normalized["authoritySchema"]
+    ):
+        raise AcceptanceAuthorityError(code, "Bound authority document drifted.", path=normalized["path"])
+    if normalized["authoritySchema"] == 2 and "generation" in document:
+        if not strict_json_equal(document["generation"], normalized["generation"]):
+            raise AcceptanceAuthorityError(code, "Bound authority generation drifted.", path=normalized["path"])
+    return document
+
+
+def _validate_selector(selector: object) -> dict[str, object]:
+    required = {
+        "schema", "id", "authoritySeriesId", "selectionMode", "activeSnapshotBinding",
+        "activeTransitionBinding", "programPlanBinding", "activationAuthorized", "executionCounters",
+    }
+    if (
+        not isinstance(selector, dict)
+        or set(selector) != required
+        or type(selector.get("schema")) is not int
+        or selector["schema"] != 1
+        or selector.get("id") != "curation-program-acceptance-current-selector-v1"
+        or selector.get("authoritySeriesId") != AUTHORITY_SERIES_ID
+        or selector.get("selectionMode") != "rehearsal-candidate"
+    ):
+        raise AcceptanceAuthorityError("acceptance-selector-target-invalid", "Selector shape is invalid.")
+    if type(selector.get("activationAuthorized")) is not bool or selector["activationAuthorized"]:
+        raise AcceptanceAuthorityError(
+            "acceptance-activation-not-authorized", "Selector activation is not authorized."
+        )
+    _require_exact_zero_counters(selector.get("executionCounters"))
+    snapshot = _require_binding(
+        selector.get("activeSnapshotBinding"), code="acceptance-selector-target-invalid"
+    )
+    transition = _require_binding(
+        selector.get("activeTransitionBinding"), code="acceptance-selector-target-invalid"
+    )
+    plan = _require_binding(selector.get("programPlanBinding"), code="acceptance-selector-target-invalid")
+    if (
+        snapshot["authoritySchema"] != 2
+        or transition["authoritySchema"] != 1
+        or transition["generation"] is not None
+        or plan["authoritySchema"] != 2
+        or plan["generation"] != 1
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Selector target binding roles are invalid."
+        )
+    return selector
+
+
+def _find_introducing_receipt(root: Path, target_binding: dict[str, object]) -> dict[str, object]:
+    transitions = _safe_relative_path(root, "transitions", code="acceptance-transition-chain-broken")
+    candidates: list[dict[str, object]] = []
+    if transitions.is_dir():
+        for path in transitions.glob("*.json"):
+            try:
+                document = json.loads(path.read_bytes())
+            except (OSError, json.JSONDecodeError):
+                continue
+            if (
+                isinstance(document, dict)
+                and document.get("transactionType") != "rollback"
+                and strict_json_equal(document.get("toSnapshotBinding"), target_binding)
+            ):
+                candidates.append(document)
+    if len(candidates) != 1:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-chain-broken", "Authority chain has no unique introducing receipt."
+        )
+    return candidates[0]
+
+
+def _validate_snapshot_chain(
+    root: Path,
+    binding: dict[str, object],
+    program_plan_binding: dict[str, object],
+    seen: set[str] | None = None,
+) -> dict[str, object]:
+    seen = set() if seen is None else seen
+    token = binding["sha256"]
+    if token in seen:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-chain-broken", "Authority predecessor chain contains a cycle."
+        )
+    seen.add(token)
+    document = _load_bound_document(root, binding, code="acceptance-transition-chain-broken")
+    if binding["authoritySchema"] == 1:
+        locks = validate_legacy_locks(root)
+        expected = {**locks["acceptance"], "authoritySchema": 1, "generation": None}
+        if not strict_json_equal(binding, expected):
+            raise AcceptanceAuthorityError(
+                "acceptance-transition-chain-broken", "Historical authority binding drifted."
+            )
+        return document
+    predecessor_binding = _require_binding(
+        document.get("predecessorBinding"), code="acceptance-transition-chain-broken"
+    )
+    predecessor = _validate_snapshot_chain(root, predecessor_binding, program_plan_binding, seen)
+    validate_authority_snapshot(
+        document, predecessor=predecessor, program_plan_binding=program_plan_binding
+    )
+    return document
+
+
+def _validate_receipt_ancestry(
+    root: Path, receipt: dict[str, object], seen: set[str] | None = None
+) -> None:
+    seen = set() if seen is None else seen
+    token = receipt.get("id")
+    if type(token) is not str or token in seen:
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-chain-broken", "Receipt chain contains a cycle."
+        )
+    seen.add(token)
+    from_binding = _require_binding(
+        receipt.get("fromSnapshotBinding"), code="acceptance-transition-chain-broken"
+    )
+    to_binding = _require_binding(
+        receipt.get("toSnapshotBinding"), code="acceptance-transition-chain-broken"
+    )
+    from_document = _load_bound_document(root, from_binding, code="acceptance-transition-chain-broken")
+    to_document = _load_bound_document(root, to_binding, code="acceptance-transition-chain-broken")
+    validate_transition_receipt(receipt, from_document=from_document, to_document=to_document)
+    if from_binding["authoritySchema"] == 2:
+        prior = _find_introducing_receipt(root, from_binding)
+        _validate_receipt_ancestry(root, prior, seen)
+
+
+def resolve_historical_authority(
+    root: Path,
+    binding: dict[str, object],
+    *,
+    frozen_program_plan_binding: dict[str, object] | None = None,
+) -> dict[str, object]:
+    """Resolve exactly one explicitly bound authority without consulting a selector."""
+
+    normalized = _require_binding(binding, code="acceptance-selector-target-invalid")
+    if normalized["authoritySchema"] == 1:
+        document = _validate_snapshot_chain(root, normalized, normalized)
+    else:
+        if frozen_program_plan_binding is None:
+            raise AcceptanceAuthorityError(
+                "acceptance-program-plan-binding-drift",
+                "Versioned historical authority requires its frozen program-plan binding.",
+            )
+        document = _validate_snapshot_chain(root, normalized, frozen_program_plan_binding)
+    return {"authority": document, "binding": copy.deepcopy(normalized)}
+
+
+def resolve_current_authority(root: Path, selector_path: str) -> dict[str, object]:
+    """Resolve a candidate current authority only through its selector and receipt chain."""
+
+    path = _safe_relative_path(root, selector_path, code="acceptance-selector-target-invalid")
+    try:
+        selector = json.loads(path.read_bytes())
+    except (OSError, json.JSONDecodeError) as error:
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Selector cannot be read."
+        ) from error
+    selector = _validate_selector(selector)
+    snapshot_binding = selector["activeSnapshotBinding"]
+    transition_binding = selector["activeTransitionBinding"]
+    plan_binding = selector["programPlanBinding"]
+    plan = _load_bound_document(root, plan_binding, code="acceptance-selector-target-invalid")
+    if (
+        plan.get("id") != "curation-program-plan-v2"
+        or plan.get("acceptanceAuthoritySelector") != "program-acceptance-authority/current.json"
+    ):
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Candidate program-plan relationship is invalid."
+        )
+    snapshot = _load_bound_document(root, snapshot_binding, code="acceptance-selector-target-invalid")
+    receipt = _load_bound_document(root, transition_binding, code="acceptance-transition-receipt-invalid")
+    if not strict_json_equal(receipt.get("toSnapshotBinding"), snapshot_binding):
+        raise AcceptanceAuthorityError(
+            "acceptance-transition-chain-broken", "Selector receipt does not introduce its snapshot."
+        )
+    if not strict_json_equal(receipt.get("toProgramPlanBinding"), plan_binding):
+        raise AcceptanceAuthorityError(
+            "acceptance-selector-target-invalid", "Selector receipt plan binding drifted."
+        )
+    _validate_receipt_ancestry(root, receipt)
+    _validate_snapshot_chain(root, snapshot_binding, plan_binding)
+    return {
+        "authority": snapshot,
+        "binding": copy.deepcopy(snapshot_binding),
+        "selector": copy.deepcopy(selector),
+        "receipt": receipt,
+        "programPlan": plan,
+    }
