@@ -234,7 +234,9 @@ def assert_schema_declaration_contract(schemas: dict[str, dict[str, object]]) ->
         for path, expected_reference in expected_edges.items():
             value = schema_value_at(schema, path)
             if not isinstance(value, dict) or value.get("$ref") != expected_reference:
-                raise AssertionError(f"{schema_name}.{'.'.join(path)} reference drifted")
+                raise AssertionError(
+                    f"{schema_name}.{'.'.join(map(str, path))} reference drifted"
+                )
 
     for schema_name in ("authority", "selector", "receipt"):
         branches = schemas[schema_name]["$defs"]["binding"].get("allOf")
@@ -380,6 +382,27 @@ class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):
                 mutate(schemas)
                 with self.assertRaises(AssertionError):
                     assert_schema_declaration_contract(schemas)
+
+    def test_reference_drift_at_array_index_raises_readable_assertion(self) -> None:
+        """A reference drift at oneOf[0] must fail as a contract assertion."""
+
+        schemas = copy.deepcopy(self.load_schemas())
+        schemas["authority"]["$defs"]["acceptanceCriterion"]["oneOf"][0]["$ref"] = (
+            "#/$defs/driftedAcceptanceCriterion"
+        )
+
+        try:
+            assert_schema_declaration_contract(schemas)
+        except Exception as error:
+            raised = error
+        else:
+            self.fail("reference drift did not raise")
+
+        self.assertIsInstance(raised, AssertionError)
+        self.assertEqual(
+            "authority.$defs.acceptanceCriterion.oneOf.0 reference drifted",
+            str(raised),
+        )
 
 
 class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
