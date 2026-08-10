@@ -1,6 +1,9 @@
 import json
 import copy
+import hashlib
 from pathlib import Path
+import shutil
+import tempfile
 import unittest
 
 from scripts.program_acceptance_authority_v2 import (
@@ -274,10 +277,33 @@ class ProgramAcceptanceAuthorityLegacyTests(unittest.TestCase):
             locks["manifestFixture"]["sha256"],
         )
 
-    def test_legacy_lock_drift_has_a_typed_code(self) -> None:
-        with self.assertRaises(AcceptanceAuthorityError) as raised:
-            validate_legacy_locks(ROOT, expected={"acceptance": "0" * 64})
-        self.assertEqual("legacy-authority-drift", raised.exception.code)
+    def test_legacy_lock_drift_cannot_be_overridden(self) -> None:
+        """Adding a digest override must not bypass the immutable legacy lock."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            copied_root = Path(directory)
+            for relative in (
+                Path("registry/program-acceptance-map.json"),
+                Path("registry/curation-program-plan.json"),
+                Path("tests/fixtures/harness-decision-packet-gen-research-01.json"),
+                Path("tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json"),
+            ):
+                destination = copied_root / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, destination)
+
+            acceptance = copied_root / "registry/program-acceptance-map.json"
+            acceptance.write_bytes(acceptance.read_bytes() + b" ")
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                validate_legacy_locks(copied_root)
+            self.assertEqual("legacy-authority-drift", raised.exception.code)
+
+            drifted_digest = hashlib.sha256(acceptance.read_bytes()).hexdigest()
+            with self.assertRaises(TypeError):
+                validate_legacy_locks(
+                    copied_root,
+                    expected={"acceptance": drifted_digest},
+                )
 
 
 class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):

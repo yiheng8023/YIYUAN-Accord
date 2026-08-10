@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
 import hashlib
 import json
 from pathlib import Path
@@ -99,8 +98,6 @@ def binding_for_bytes(
 
 def validate_legacy_locks(
     root: Path,
-    *,
-    expected: Mapping[str, str] | None = None,
 ) -> dict[str, dict[str, Any]]:
     locks: dict[str, dict[str, Any]] = {}
     for name, (
@@ -110,10 +107,9 @@ def validate_legacy_locks(
         locked_sha256,
         error_code,
     ) in LEGACY_LOCKS.items():
-        expected_sha256 = expected.get(name, locked_sha256) if expected is not None else locked_sha256
         actual_sha256 = file_sha256(root, relative)
         path = relative.as_posix()
-        if not strict_json_equal(actual_sha256, expected_sha256):
+        if not strict_json_equal(actual_sha256, locked_sha256):
             raise AcceptanceAuthorityError(
                 error_code,
                 "Legacy authority bytes do not match the locked SHA-256.",
