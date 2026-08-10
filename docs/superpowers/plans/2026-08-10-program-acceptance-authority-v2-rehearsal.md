@@ -192,24 +192,28 @@ Use these exact constants and algorithms:
 LEGACY_LOCKS = {
     "acceptance": (
         Path("registry/program-acceptance-map.json"),
+        "id",
         "curation-program-acceptance-map-v1",
         "c9d0fb437fb3eae93ffd144a2e3ee418dca90d96e5a266b61d7c7ec3efa6079f",
         "legacy-authority-drift",
     ),
     "programPlan": (
         Path("registry/curation-program-plan.json"),
+        "id",
         "curation-program-plan-v1",
         "38bba19b4f4f8471ea7ebaa80765e4110fa169ff892eec3784e3316783a88bd3",
         "legacy-program-plan-drift",
     ),
     "packetFixture": (
         Path("tests/fixtures/harness-decision-packet-gen-research-01.json"),
-        "harness-decision-packet-v1:harness.core.poc.gen-research-01",
+        "packetId",
+        "harness-decision-packet-v1:fixture.gen-research-01",
         "58410f9576fbbc2f006135d97184d29a9996b1eb11abeaf07988a3a5acf4fc22",
         "legacy-packet-fixture-drift",
     ),
     "manifestFixture": (
         Path("tests/fixtures/harness-decision-packet-thirteen-scenario-manifest.json"),
+        "id",
         "harness-decision-packet-thirteen-scenario-manifest-v1",
         "ef29ec4de82091dfba3b2e0cfd49c5570cc40410b2beadfd3b5be5bc003176c3",
         "legacy-manifest-fixture-drift",
@@ -229,7 +233,7 @@ def file_sha256(root: Path, relative: Path) -> str:
     return hashlib.sha256((root / relative).read_bytes()).hexdigest()
 ```
 
-`validate_legacy_locks` loads JSON objects only after byte identity passes, validates exact IDs, and returns public bindings containing `id`, `path`, and `sha256`. `binding_for_bytes` additionally carries `authoritySchema` and `generation`; generation is `None` only for legacy v1.
+Each lock tuple is `(path, identity_field, expected_identity, sha256, typed_error_code)`. `validate_legacy_locks` loads JSON objects only after byte identity passes, validates the exact value from that lock's identity field, and normalizes the result into a public binding containing `id`, `path`, and `sha256`. The packet fixture therefore validates its real `packetId`; the other three validate root `id`. `binding_for_bytes` additionally carries `authoritySchema` and `generation`; generation is `None` only for legacy v1.
 
 - [ ] **Step 4: Add strict JSON schemas**
 
