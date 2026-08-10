@@ -14,6 +14,7 @@ from scripts.program_acceptance_authority_v2_rehearsal import (
     REQUIRED_FAILURE_CASES,
     REQUIRED_TYPED_CODES,
     _read_json,
+    _validate_manifest_evidence_source,
     build_rehearsal_bundle,
     replace_selector_atomically,
     run_rehearsal,
@@ -282,6 +283,43 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
                 with self.assertRaises(UnicodeDecodeError):
                     _read_json(path)
+
+    def test_manifest_evidence_loader_types_actual_decode_failures(self) -> None:
+        """Malformed manifest bytes remain the stable missing-evidence boundary."""
+
+        for payload in (b"\xff", b"{"):
+            with self.subTest(payload=payload), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                path = root / "registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json"
+                path.parent.mkdir(parents=True)
+                path.write_bytes(payload)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    _validate_manifest_evidence_source(root, {})
+                self.assertEqual("acceptance-evidence-source-missing", raised.exception.code)
+
+    def test_manifest_evidence_loader_propagates_injected_read_faults(self) -> None:
+        """Only decoding the actual manifest bytes is normalized by this evidence boundary."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json"
+            path.parent.mkdir(parents=True)
+            path.write_bytes(b"{}")
+            original_read_bytes = Path.read_bytes
+
+            for error in (
+                UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected"),
+                ValueError("programming fault"),
+            ):
+                with self.subTest(error=type(error).__name__):
+                    def injected(candidate: Path) -> bytes:
+                        if candidate == path:
+                            raise error
+                        return original_read_bytes(candidate)
+
+                    with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+                        with self.assertRaises(type(error)):
+                            _validate_manifest_evidence_source(root, {})
 
     def test_public_writer_types_stage_cleanup_fault_and_removes_stage(self) -> None:
         """A failed stage cleanup must not leak OSError or leave a sibling stage root."""

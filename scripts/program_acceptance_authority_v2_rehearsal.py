@@ -218,8 +218,11 @@ def _read_json(path: Path) -> dict[str, object]:
 def _validate_manifest_evidence_source(repo_root: Path, g2: dict[str, object]) -> None:
     try:
         data = (repo_root / MANIFEST_EVIDENCE_SOURCE_PATH).read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError("acceptance-evidence-source-missing", "Registered manifest evidence source cannot be reopened.") from error
+    try:
         source = json.loads(data)
-    except (OSError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError("acceptance-evidence-source-missing", "Registered manifest evidence source cannot be reopened.") from error
     if not isinstance(source, dict) or hashlib.sha256(data).hexdigest() != MANIFEST_EVIDENCE_SOURCE_SHA256:
         raise AcceptanceAuthorityError("acceptance-evidence-source-drift", "Registered manifest evidence source digest drifted.")
