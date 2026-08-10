@@ -8,11 +8,21 @@ import unittest
 
 from scripts.program_acceptance_authority_v2 import (
     AcceptanceAuthorityError,
+    TARGET_CRITERION_ID,
+    MANIFEST_EVIDENCE_ID,
+    assessment_inventory,
     binding_for_bytes,
+    build_candidate_program_plan_v2,
+    build_evidence_snapshot_v2,
+    build_structural_snapshot_v2,
+    canonical_file_bytes,
+    authority_business_projection,
     validate_legacy_locks,
+    validate_authority_snapshot,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
+FIXTURE_ROOT = ROOT / "tests/fixtures/program-acceptance-authority-v2-rehearsal"
 SCHEMA_PATHS = {
     "authority": ROOT / "schemas/program-acceptance-authority-v2.schema.json",
     "selector": ROOT / "schemas/program-acceptance-current-selector-v1.schema.json",
@@ -465,3 +475,246 @@ class ProgramAcceptanceAuthorityBindingTests(unittest.TestCase):
                         data=b"bound bytes",
                     )
                 self.assertEqual(expected_code, raised.exception.code)
+
+
+class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.legacy = json.loads(
+            (ROOT / "registry/program-acceptance-map.json").read_text(encoding="utf-8")
+        )
+        self.plan = json.loads(
+            (ROOT / "registry/curation-program-plan.json").read_text(encoding="utf-8")
+        )
+        self.locks = validate_legacy_locks(ROOT)
+
+    def build_g1(self) -> dict[str, object]:
+        candidate_plan = build_candidate_program_plan_v2(self.plan)
+        plan_binding = binding_for_bytes(
+            authority_schema=2,
+            authority_id="curation-program-plan-v2",
+            generation=1,
+            path="curation-program-plan-v2.json",
+            data=canonical_file_bytes(candidate_plan),
+        )
+        return build_structural_snapshot_v2(
+            self.legacy,
+            predecessor_binding={
+                **self.locks["acceptance"],
+                "authoritySchema": 1,
+                "generation": None,
+            },
+            program_plan_binding=plan_binding,
+        )
+
+    def test_g000001_is_business_semantics_equivalent_to_v1(self) -> None:
+        """Changing g000001 business state or generation must fail this test."""
+
+        g1 = self.build_g1()
+        self.assertEqual(
+            authority_business_projection(self.legacy), authority_business_projection(g1)
+        )
+        self.assertEqual(1, g1["generation"])
+
+    def test_candidate_plan_changes_only_the_versioned_authority_relationship(self) -> None:
+        """Changing a carried program-plan value must fail this exact structural migration test."""
+
+        candidate = build_candidate_program_plan_v2(self.plan)
+        expected = copy.deepcopy(self.plan)
+        expected["schema"] = 2
+        expected["id"] = "curation-program-plan-v2"
+        expected["acceptanceAuthoritySelector"] = "program-acceptance-authority/current.json"
+        del expected["acceptanceMap"]
+        self.assertEqual(expected, candidate)
+
+    def test_g000002_adds_only_manifest_evidence_and_reciprocal_link(self) -> None:
+        """Adding unrelated state or promoting the target criterion must fail this test."""
+
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+        self.assertEqual(2, g2["generation"])
+        self.assertEqual(len(g1["evidence"]) + 1, len(g2["evidence"]))
+        criterion = next(
+            row for row in g2["acceptanceCriteria"] if row["id"] == TARGET_CRITERION_ID
+        )
+        self.assertEqual("partial", criterion["assessment"])
+        self.assertEqual({"verified": 46, "partial": 15, "planned": 0}, assessment_inventory(g2))
+
+    def test_snapshot_validator_rejects_typed_authority_and_binding_drift(self) -> None:
+        """Weak schema, generation, predecessor, or plan binding checks must fail closed."""
+
+        g1 = self.build_g1()
+        aliases = (
+            ("schema", True, "acceptance-authority-schema-invalid"),
+            ("schema", 1, "acceptance-authority-schema-invalid"),
+            ("schema", 1.0, "acceptance-authority-schema-invalid"),
+            ("generation", True, "acceptance-authority-generation-invalid"),
+            ("generation", 1.0, "acceptance-authority-generation-invalid"),
+        )
+        for field, value, expected_code in aliases:
+            with self.subTest(field=field, value=value):
+                mutated = copy.deepcopy(g1)
+                mutated[field] = value
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(
+                        mutated,
+                        predecessor=self.legacy,
+                        program_plan_binding=g1["programPlanBinding"],
+                    )
+                self.assertEqual(expected_code, raised.exception.code)
+
+        for mutate, expected_code in (
+            (
+                lambda snapshot: snapshot.__setitem__(
+                    "authoritySeriesId", "wrong-authority-series"
+                ),
+                "acceptance-authority-series-invalid",
+            ),
+            (
+                lambda snapshot: snapshot["predecessorBinding"].__setitem__(
+                    "generation", 1
+                ),
+                "acceptance-authority-predecessor-mismatch",
+            ),
+            (
+                lambda snapshot: snapshot["programPlanBinding"].__setitem__(
+                    "sha256", "0" * 64
+                ),
+                "acceptance-program-plan-binding-drift",
+            ),
+        ):
+            with self.subTest(mutation=mutate):
+                mutated = copy.deepcopy(g1)
+                mutate(mutated)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(
+                        mutated,
+                        predecessor=self.legacy,
+                        program_plan_binding=g1["programPlanBinding"],
+                    )
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_snapshot_validator_rejects_structural_and_evidence_delta_overreach(self) -> None:
+        """Business changes outside the two named deltas must retain their typed boundary."""
+
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+        cases = (
+            (
+                g1,
+                self.legacy,
+                lambda snapshot: snapshot["acceptanceCriteria"][0].__setitem__(
+                    "statement", "drifted structural statement"
+                ),
+                "acceptance-structural-migration-overreach",
+            ),
+            (
+                g2,
+                g1,
+                lambda snapshot: snapshot["acceptanceCriteria"][0].__setitem__(
+                    "statement", "drifted evidence registration statement"
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+            (
+                g2,
+                g1,
+                lambda snapshot: snapshot["acceptanceCriteria"].append(
+                    copy.deepcopy(snapshot["acceptanceCriteria"][0])
+                ),
+                "acceptance-structural-migration-overreach",
+            ),
+        )
+        for document, predecessor, mutate, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                mutated = copy.deepcopy(document)
+                mutate(mutated)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(
+                        mutated,
+                        predecessor=predecessor,
+                        program_plan_binding=document["programPlanBinding"],
+                    )
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_snapshot_validator_rejects_inventory_and_evidence_integrity_drift(self) -> None:
+        """Inventory aliases and asymmetric or altered manifest evidence must fail closed."""
+
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+
+        promoted = copy.deepcopy(g2)
+        target = next(
+            row for row in promoted["acceptanceCriteria"] if row["id"] == TARGET_CRITERION_ID
+        )
+        target["assessment"] = "verified"
+        next(
+            row
+            for row in promoted["acceptanceCriteria"]
+            if row["assessment"] == "verified" and row["id"] != TARGET_CRITERION_ID
+        )["assessment"] = "partial"
+
+        missing = copy.deepcopy(g2)
+        missing["evidence"] = [
+            row for row in missing["evidence"] if row["id"] != MANIFEST_EVIDENCE_ID
+        ]
+        missing_target = next(
+            row for row in missing["acceptanceCriteria"] if row["id"] == TARGET_CRITERION_ID
+        )
+        missing_target["evidenceIds"].remove(MANIFEST_EVIDENCE_ID)
+
+        drifted = copy.deepcopy(g2)
+        next(
+            row for row in drifted["evidence"] if row["id"] == MANIFEST_EVIDENCE_ID
+        )["path"] = "registry/not-the-manifest.json"
+
+        asymmetric = copy.deepcopy(g2)
+        next(
+            row for row in asymmetric["acceptanceCriteria"] if row["id"] == TARGET_CRITERION_ID
+        )["evidenceIds"].remove(MANIFEST_EVIDENCE_ID)
+
+        duplicate = copy.deepcopy(g2)
+        duplicate["evidence"].append(copy.deepcopy(duplicate["evidence"][0]))
+
+        inventory_aliases = []
+        for value in (True, 1, 1.0):
+            inventory_alias = copy.deepcopy(g1)
+            inventory_alias["acceptanceCriteria"][0]["assessment"] = value
+            inventory_aliases.append(inventory_alias)
+
+        cases = (
+            (promoted, "acceptance-assessment-promotion-forbidden"),
+            (missing, "acceptance-evidence-source-missing"),
+            (drifted, "acceptance-evidence-source-drift"),
+            (asymmetric, "acceptance-evidence-link-asymmetric"),
+            (duplicate, "acceptance-evidence-id-duplicate"),
+            *(
+                (inventory_alias, "acceptance-inventory-count-drift")
+                for inventory_alias in inventory_aliases
+            ),
+        )
+        for mutated, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(
+                        mutated,
+                        predecessor=(
+                            self.legacy if mutated in inventory_aliases else g1
+                        ),
+                        program_plan_binding=g1["programPlanBinding"],
+                    )
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_checked_candidate_fixtures_replay_from_locked_v1_inputs(self) -> None:
+        """Changing a builder result or checked bytes must fail this canonical replay test."""
+
+        candidate = build_candidate_program_plan_v2(self.plan)
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+        expected = {
+            FIXTURE_ROOT / "curation-program-plan-v2.json": candidate,
+            FIXTURE_ROOT / "snapshots/v2/g000001.json": g1,
+            FIXTURE_ROOT / "snapshots/v2/g000002.json": g2,
+        }
+        for path, document in expected.items():
+            with self.subTest(path=path):
+                self.assertEqual(canonical_file_bytes(document), path.read_bytes())
