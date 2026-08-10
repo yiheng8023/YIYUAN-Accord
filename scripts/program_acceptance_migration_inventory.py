@@ -154,14 +154,18 @@ def discover_acceptance_reference_occurrences(root: Path) -> list[dict[str, obje
 
 
 def _inventory_path(root: Path, path: Path) -> Path:
-    if path.is_absolute():
+    if not isinstance(root, Path) or not isinstance(path, Path):
         raise AcceptanceAuthorityError(
-            "migration-inventory-incomplete", "Migration inventory path must be relative."
+            "migration-inventory-incomplete", "Migration inventory root and path must be paths."
         )
-    candidate = (root / path).resolve()
     try:
+        if path.is_absolute():
+            raise AcceptanceAuthorityError(
+                "migration-inventory-incomplete", "Migration inventory path must be relative."
+            )
+        candidate = (root / path).resolve()
         candidate.relative_to(root.resolve())
-    except ValueError as error:
+    except (OSError, ValueError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory path escapes root."
         ) from error
@@ -177,7 +181,7 @@ def load_migration_inventory(
         document_path = _inventory_path(root, path)
         data = document_path.read_bytes()
         document = json.loads(data)
-    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeError, ValueError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory cannot be loaded."
         ) from error
@@ -276,6 +280,10 @@ def _validate_row_governance(row: dict[str, object]) -> None:
 def validate_migration_inventory(root: Path, inventory: dict[str, object]) -> None:
     """Reject an inventory that is not an exact, symbolic, fail-closed projection."""
 
+    if not isinstance(inventory, dict):
+        raise AcceptanceAuthorityError(
+            "migration-inventory-incomplete", "Migration inventory root must be an object."
+        )
     required_fields = {
         "schema",
         "id",

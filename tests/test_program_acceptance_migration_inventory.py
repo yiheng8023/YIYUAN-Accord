@@ -265,6 +265,26 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
         self.assertIsInstance(raised.exception, AcceptanceAuthorityError)
         self.assertEqual("migration-inventory-incomplete", raised.exception.code)
 
+    def test_public_loader_types_invalid_path_values_as_incomplete_inventory(self) -> None:
+        """NUL path-like values must not expose pathlib's ValueError at the public boundary."""
+
+        for path in (Path("\0"), Path("adjacent\0")):
+            with self.subTest(path=repr(path)):
+                with self.assertRaises(Exception) as raised:
+                    load_migration_inventory(ROOT, path)
+                self.assertIsInstance(raised.exception, AcceptanceAuthorityError)
+                self.assertEqual("migration-inventory-incomplete", raised.exception.code)
+
+    def test_public_validator_types_non_object_inventory_roots(self) -> None:
+        """Non-object roots must reject before set or key operations can leak TypeError."""
+
+        for value in (None, 0, True, [], [{}], "", "adjacent", (), {"root"}):
+            with self.subTest(value=repr(value)):
+                with self.assertRaises(Exception) as raised:
+                    validate_migration_inventory(ROOT, value)
+                self.assertIsInstance(raised.exception, AcceptanceAuthorityError)
+                self.assertEqual("migration-inventory-incomplete", raised.exception.code)
+
     def test_exact_class_policy_matrix_rejects_each_tuple_member_drift(self) -> None:
         """Every governance member must match its class's complete fixed policy tuple."""
 
