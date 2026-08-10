@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "authoritySeriesId",
+    "transactionType",
+    "fromSnapshotBinding",
+    "toSnapshotBinding",
+    "fromProgramPlanBinding",
+    "toProgramPlanBinding",
+    "delta",
+    "invariants",
+    "authorizationBoundary",
+    "executionCounters",
+    "claimBoundary"
+  ],
+  "properties": {
+    "schema": { "type": "integer", "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "authoritySeriesId": { "type": "string", "const": "curation-program-acceptance-authority-v2" },
+    "transactionType": {
+      "type": "string",
+      "enum": ["structural-migration", "evidence-registration", "assessment-transition", "rollback"]
+    },
+    "fromSnapshotBinding": { "$ref": "#/$defs/binding" },
+    "toSnapshotBinding": { "$ref": "#/$defs/binding" },
+    "fromProgramPlanBinding": { "$ref": "#/$defs/binding" },
+    "toProgramPlanBinding": { "$ref": "#/$defs/binding" },
+    "delta": { "type": "object" },
+    "invariants": { "type": "object" },
+    "authorizationBoundary": { "$ref": "#/$defs/authorizationBoundary" },
+    "executionCounters": { "$ref": "#/$defs/zeroExecutionCounters" },
+    "claimBoundary": { "type": "object" }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoritySchema", "id", "generation", "path", "sha256"],
+      "properties": {
+        "authoritySchema": { "type": "integer", "enum": [1, 2] },
+        "id": { "type": "string", "minLength": 1 },
+        "generation": { "type": ["integer", "null"], "minimum": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "authoritySchema": { "const": 1 } } },
+          "then": { "properties": { "generation": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "authoritySchema": { "const": 2 } } },
+          "then": { "properties": { "generation": { "type": "integer", "minimum": 1 } } }
+        }
+      ]
+    },
+    "authorizationBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rehearsalAuthorized",
+        "liveMigrationAuthorized",
+        "assessmentTransitionAuthorized",
+        "productionActivationAuthorized"
+      ],
+      "properties": {
+        "rehearsalAuthorized": { "type": "boolean", "const": true },
+        "liveMigrationAuthorized": { "type": "boolean", "const": false },
+        "assessmentTransitionAuthorized": { "type": "boolean", "const": false },
+        "productionActivationAuthorized": { "type": "boolean", "const": false }
+      }
+    },
+    "zeroExecutionCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelRequestCount",
+        "candidateExecutionCount",
+        "pluginExecutionCount",
+        "installCount",
+        "enableCount",
+        "accountConnectionCount",
+        "managerMutationCount",
+        "consumerMutationCount",
+        "publicationCount",
+        "releaseCount",
+        "productionActivationCount"
+      ],
+      "properties": {
+        "modelRequestCount": { "type": "integer", "const": 0 },
+        "candidateExecutionCount": { "type": "integer", "const": 0 },
+        "pluginExecutionCount": { "type": "integer", "const": 0 },
+        "installCount": { "type": "integer", "const": 0 },
+        "enableCount": { "type": "integer", "const": 0 },
+        "accountConnectionCount": { "type": "integer", "const": 0 },
+        "managerMutationCount": { "type": "integer", "const": 0 },
+        "consumerMutationCount": { "type": "integer", "const": 0 },
+        "publicationCount": { "type": "integer", "const": 0 },
+        "releaseCount": { "type": "integer", "const": 0 },
+        "productionActivationCount": { "type": "integer", "const": 0 }
+      }
+    }
+  }
+}

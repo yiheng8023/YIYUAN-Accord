@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "authoritySeriesId",
+    "selectionMode",
+    "activeSnapshotBinding",
+    "activeTransitionBinding",
+    "programPlanBinding",
+    "activationAuthorized",
+    "executionCounters"
+  ],
+  "properties": {
+    "schema": { "type": "integer", "const": 1 },
+    "id": { "type": "string", "const": "curation-program-acceptance-current-selector-v1" },
+    "authoritySeriesId": { "type": "string", "const": "curation-program-acceptance-authority-v2" },
+    "selectionMode": { "type": "string", "enum": ["rehearsal-candidate"] },
+    "activeSnapshotBinding": { "$ref": "#/$defs/binding" },
+    "activeTransitionBinding": { "$ref": "#/$defs/binding" },
+    "programPlanBinding": { "$ref": "#/$defs/binding" },
+    "activationAuthorized": { "type": "boolean", "const": false },
+    "executionCounters": { "$ref": "#/$defs/zeroExecutionCounters" }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoritySchema", "id", "generation", "path", "sha256"],
+      "properties": {
+        "authoritySchema": { "type": "integer", "enum": [1, 2] },
+        "id": { "type": "string", "minLength": 1 },
+        "generation": { "type": ["integer", "null"], "minimum": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "authoritySchema": { "const": 1 } } },
+          "then": { "properties": { "generation": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "authoritySchema": { "const": 2 } } },
+          "then": { "properties": { "generation": { "type": "integer", "minimum": 1 } } }
+        }
+      ]
+    },
+    "zeroExecutionCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelRequestCount",
+        "candidateExecutionCount",
+        "pluginExecutionCount",
+        "installCount",
+        "enableCount",
+        "accountConnectionCount",
+        "managerMutationCount",
+        "consumerMutationCount",
+        "publicationCount",
+        "releaseCount",
+        "productionActivationCount"
+      ],
+      "properties": {
+        "modelRequestCount": { "type": "integer", "const": 0 },
+        "candidateExecutionCount": { "type": "integer", "const": 0 },
+        "pluginExecutionCount": { "type": "integer", "const": 0 },
+        "installCount": { "type": "integer", "const": 0 },
+        "enableCount": { "type": "integer", "const": 0 },
+        "accountConnectionCount": { "type": "integer", "const": 0 },
+        "managerMutationCount": { "type": "integer", "const": 0 },
+        "consumerMutationCount": { "type": "integer", "const": 0 },
+        "publicationCount": { "type": "integer", "const": 0 },
+        "releaseCount": { "type": "integer", "const": 0 },
+        "productionActivationCount": { "type": "integer", "const": 0 }
+      }
+    }
+  }
+}

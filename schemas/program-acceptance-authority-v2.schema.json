@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "authoritySeriesId",
+    "generation",
+    "predecessorBinding",
+    "programPlanBinding",
+    "assessmentVocabulary",
+    "objectives",
+    "acceptanceCriteria",
+    "verifications",
+    "evidence"
+  ],
+  "properties": {
+    "schema": { "type": "integer", "const": 2 },
+    "id": { "type": "string", "minLength": 1 },
+    "authoritySeriesId": { "type": "string", "const": "curation-program-acceptance-authority-v2" },
+    "generation": { "type": "integer", "minimum": 1 },
+    "predecessorBinding": { "$ref": "#/$defs/binding" },
+    "programPlanBinding": { "$ref": "#/$defs/binding" },
+    "assessmentVocabulary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["planned", "partial", "verified", "stale", "blocked", "not-applicable"]
+      }
+    },
+    "objectives": { "type": "array", "items": { "type": "object" } },
+    "acceptanceCriteria": { "type": "array", "items": { "type": "object" } },
+    "verifications": { "type": "array", "items": { "type": "object" } },
+    "evidence": { "type": "array", "items": { "type": "object" } }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoritySchema", "id", "generation", "path", "sha256"],
+      "properties": {
+        "authoritySchema": { "type": "integer", "enum": [1, 2] },
+        "id": { "type": "string", "minLength": 1 },
+        "generation": { "type": ["integer", "null"], "minimum": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "authoritySchema": { "const": 1 } } },
+          "then": { "properties": { "generation": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "authoritySchema": { "const": 2 } } },
+          "then": { "properties": { "generation": { "type": "integer", "minimum": 1 } } }
+        }
+      ]
+    }
+  }
+}
