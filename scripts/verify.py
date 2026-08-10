@@ -43,6 +43,9 @@ from validate_harness_decision_packet_core_poc import (
 from validate_harness_decision_packet_manifest_poc import (
     validate_repository_record as validate_harness_decision_packet_manifest_poc,
 )
+from validate_program_acceptance_authority_v2_rehearsal import (
+    validate_repository_record as validate_program_acceptance_authority_v2_rehearsal,
+)
 from evaluate_repository_authored_gap_fill_candidate import (
     validate_repository_gate as validate_repository_authored_gap_fill_gate,
 )
@@ -1973,6 +1976,29 @@ REQUIRED_FILES = (
     "scripts/build_cc_switch_candidate_cohort_transaction_preview.py",
     "tests/test_cc_switch_candidate_cohort_transaction_preview.py",
     "audits/cc-switch-candidate-cohort-transaction-preview-2026-08-03/REPORT.json",
+    "schemas/program-acceptance-authority-v2.schema.json",
+    "schemas/program-acceptance-current-selector-v1.schema.json",
+    "schemas/program-acceptance-transition-receipt-v1.schema.json",
+    "schemas/program-acceptance-migration-inventory-v1.schema.json",
+    "scripts/program_acceptance_authority_v2.py",
+    "scripts/program_acceptance_migration_inventory.py",
+    "scripts/program_acceptance_authority_v2_rehearsal.py",
+    "scripts/build_program_acceptance_authority_v2_rehearsal.py",
+    "scripts/validate_program_acceptance_authority_v2_rehearsal.py",
+    "tests/test_program_acceptance_authority_v2.py",
+    "tests/test_program_acceptance_migration_inventory.py",
+    "tests/test_program_acceptance_authority_v2_rehearsal.py",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/curation-program-plan-v2.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/snapshots/v2/g000001.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/snapshots/v2/g000002.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000000-to-g000001.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000001-to-g000002.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000002-to-g000001-rollback.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/selectors/current-g000002.json",
+    "tests/fixtures/program-acceptance-authority-v2-rehearsal/selectors/current-g000001-rollback.json",
+    "registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json",
+    "registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json",
+    "docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md",
 )
 
 
@@ -1988,6 +2014,7 @@ def verify() -> None:
     validate_portfolio_tasktime_projection_contract(ROOT)
     validate_harness_decision_packet_core_poc(ROOT)
     validate_harness_decision_packet_manifest_poc(ROOT)
+    validate_program_acceptance_authority_v2_rehearsal(ROOT)
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)

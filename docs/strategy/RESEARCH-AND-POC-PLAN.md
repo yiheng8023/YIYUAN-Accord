@@ -3312,3 +3312,19 @@ candidate, behavior/value, and release transitions remain behind the existing
 natural-task and authorization gates.
 Evidence:
 `registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`.
+
+### 2026-08-10 versioned acceptance-authority zero-model rehearsal
+
+The frozen v1 acceptance map and curation-program-plan bytes remained exact.
+An offline rehearsal built the g000001 structural migration and g000002
+evidence-registration snapshot, then replayed candidate selector selection and
+ancestor rollback atomically in a disposable root. The rehearsal evidence is
+not registered in the live v1 authority; the target assessment remains partial
+and the canonical inventory remains 46 verified / 15 partial / 0 planned.
+
+This is local zero-model mechanism evidence only. It proves no live migration,
+current-selector activation, behavior, value, cross-host portability,
+production readiness, release eligibility, residual gap, or program closeout.
+Any live v2 plan or selector migration requires separate user authority.
+Evidence:
+`registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`.

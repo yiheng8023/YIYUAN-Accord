@@ -30,7 +30,12 @@ def without_task4_manifest_poc_replay():
     with patch.object(
         verify_script,
         "validate_harness_decision_packet_manifest_poc",
-    ) as task4_validator:
+    ) as task4_validator, patch.object(
+        verify_script,
+        "validate_program_acceptance_authority_v2_rehearsal",
+        return_value={},
+        create=True,
+    ):
         yield task4_validator
 
 
@@ -105,6 +110,45 @@ class StructuralValidationIntegrationTests(unittest.TestCase):
             verify_script.verify()
 
         task4_validator.assert_called_once_with(verify_script.ROOT)
+
+    def test_verify_calls_acceptance_authority_v2_rehearsal_once(self) -> None:
+        with patch.object(
+            verify_script,
+            "validate_program_acceptance_authority_v2_rehearsal",
+            return_value={},
+            create=True,
+        ) as validator:
+            verify_script.verify()
+
+        validator.assert_called_once_with(verify_script.ROOT)
+
+    def test_acceptance_authority_v2_rehearsal_is_required_verifier_input(self) -> None:
+        for path in (
+            "schemas/program-acceptance-authority-v2.schema.json",
+            "schemas/program-acceptance-current-selector-v1.schema.json",
+            "schemas/program-acceptance-transition-receipt-v1.schema.json",
+            "schemas/program-acceptance-migration-inventory-v1.schema.json",
+            "scripts/program_acceptance_authority_v2.py",
+            "scripts/program_acceptance_migration_inventory.py",
+            "scripts/program_acceptance_authority_v2_rehearsal.py",
+            "scripts/build_program_acceptance_authority_v2_rehearsal.py",
+            "scripts/validate_program_acceptance_authority_v2_rehearsal.py",
+            "tests/test_program_acceptance_authority_v2.py",
+            "tests/test_program_acceptance_migration_inventory.py",
+            "tests/test_program_acceptance_authority_v2_rehearsal.py",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/curation-program-plan-v2.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/snapshots/v2/g000001.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/snapshots/v2/g000002.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000000-to-g000001.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000001-to-g000002.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/transitions/g000002-to-g000001-rollback.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/selectors/current-g000002.json",
+            "tests/fixtures/program-acceptance-authority-v2-rehearsal/selectors/current-g000001-rollback.json",
+            "registry/program-acceptance-authority-v2-migration-inventory-2026-08-10.json",
+            "registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json",
+            "docs/strategy/PROGRAM-ACCEPTANCE-AUTHORITY-V2-ZERO-MODEL-REHEARSAL-2026-08-10.md",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
 
     def test_tdd_successor_contract_is_integrated_into_narrative_surfaces(
         self,

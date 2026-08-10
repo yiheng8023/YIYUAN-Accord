@@ -5501,3 +5501,20 @@ The next task-time, live-host, Plugin, candidate, behavior/value, and release
 transitions remain behind their existing natural-task and separate
 authorization gates. Evidence:
 `registry/harness-decision-packet-thirteen-scenario-manifest-poc-2026-08-09.json`.
+
+## 2026-08-10 versioned acceptance-authority zero-model rehearsal checkpoint
+
+The immutable v1 acceptance map and curation-program-plan were reopened and
+their exact bytes retained. In a disposable local root, the rehearsal built
+g000001 as a structural migration and g000002 as evidence registration, then
+replayed atomic candidate selector replacement and ancestor rollback. The
+candidate outputs and receipts remain unregistered under live v1; no live
+selector was created. The target criterion remains partial and the canonical
+inventory remains 46 verified / 15 partial / 0 planned.
+
+This is deterministic zero-model mechanism evidence only. It establishes no
+live migration, behavior, value, task delivery, cross-host portability,
+production, release, residual-gap, assessment-promotion, or program-closeout
+claim. A live v2 plan or selector migration requires separate user authority.
+Evidence:
+`registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`.

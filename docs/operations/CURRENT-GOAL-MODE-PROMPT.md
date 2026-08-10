@@ -122,6 +122,21 @@ backup, update, and consumer projections.
   and the frozen v1 core against
   `registry/harness-decision-packet-core-poc-2026-08-08.json`.
 
+## Current acceptance-authority rehearsal boundary
+
+- The v1 acceptance map and curation-program-plan remain immutable live
+  authority. A local zero-model rehearsal independently constructed g000001
+  structural migration and g000002 evidence registration, but neither is
+  registered under v1.
+- Candidate selection and ancestor rollback are atomic only inside a disposable
+  rehearsal root. No live selector exists. The target criterion remains partial
+  and the canonical inventory remains 46 verified / 15 partial / 0 planned.
+- This proves no behavior, value, task delivery, cross-host portability,
+  production, release, residual gap, migration completion, or program closeout.
+  A live v2 plan or selector migration requires separate user authority. Verify
+  the boundary against
+  `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`.
+
 ## Execution discipline
 
 - Start from live branch, status, HEAD, upstream, ahead/behind, and dirty-file
