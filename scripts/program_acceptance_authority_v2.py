@@ -1166,12 +1166,20 @@ def _reject_duplicate_introducing_receipts(
     root: Path, canonical_relative: str, to_binding: dict[str, object]
 ) -> None:
     transitions = _safe_relative_path(root, "transitions", code="acceptance-transition-chain-broken")
-    canonical_path = _safe_relative_path(
-        root, canonical_relative, code="acceptance-transition-chain-broken"
-    )
+    lexical_root = root.resolve()
+    canonical_path = lexical_root / Path(canonical_relative)
     for candidate in transitions.glob("*.json"):
-        if candidate.resolve() == canonical_path:
+        if candidate.absolute() == canonical_path.absolute():
             continue
+        try:
+            resolved_candidate = candidate.resolve(strict=True)
+            resolved_candidate.relative_to(lexical_root)
+        except (OSError, RuntimeError, ValueError) as error:
+            raise AcceptanceAuthorityError(
+                "acceptance-transition-chain-broken",
+                "Candidate receipt child escapes or cannot resolve inside the candidate root.",
+                path=str(candidate),
+            ) from error
         try:
             alternate = json.loads(candidate.read_bytes())
         except (OSError, json.JSONDecodeError):

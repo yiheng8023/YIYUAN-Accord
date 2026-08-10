@@ -1,6 +1,7 @@
 import json
 import copy
 import hashlib
+import os
 from pathlib import Path
 import shutil
 import tempfile
@@ -1210,6 +1211,36 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
             with self.assertRaises(AcceptanceAuthorityError) as raised:
                 resolve_current_authority(candidate_root, "selectors/current-g000002.json")
         self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
+
+    def test_current_mode_confines_duplicate_receipt_symlink_children(self) -> None:
+        """External, lexical-alias, and broken receipt symlinks fail before their contents matter."""
+
+        cases = (
+            ("external", lambda root: os.symlink(root.parent / "external.json", root / "transitions/external.json")),
+            (
+                "alias",
+                lambda root: os.symlink(
+                    root / "transitions/g000001-to-g000002.json",
+                    root / "transitions/alias-g000002.json",
+                ),
+            ),
+            (
+                "broken",
+                lambda root: os.symlink(
+                    root / "transitions/missing.json", root / "transitions/broken.json"
+                ),
+            ),
+        )
+        for name, link in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                candidate_root = Path(directory)
+                self._write_candidate_tree(candidate_root)
+                if name == "external":
+                    (candidate_root.parent / "external.json").write_text("{}\n", encoding="utf-8")
+                link(candidate_root)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+                self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
 
     def test_checked_receipt_and_selector_fixtures_replay_from_locked_sources(self) -> None:
         """Changing a receipt builder or checked canonical byte stream must fail this replay."""
