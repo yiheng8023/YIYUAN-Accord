@@ -265,7 +265,7 @@ def _validate_evidence_registration_delta(
     after_evidence = after.pop("evidence")
     before_criteria = before.pop("acceptanceCriteria")
     after_criteria = after.pop("acceptanceCriteria")
-    if before != after:
+    if not strict_json_equal(before, after):
         raise AcceptanceAuthorityError(
             "acceptance-evidence-registration-overreach",
             "Evidence registration changed non-evidence business state.",
@@ -275,7 +275,9 @@ def _validate_evidence_registration_delta(
             "acceptance-evidence-registration-overreach",
             "Evidence registration requires evidence arrays.",
         )
-    if after_evidence != [*before_evidence, MANIFEST_EVIDENCE_ROW]:
+    if not strict_json_equal(
+        after_evidence, [*before_evidence, MANIFEST_EVIDENCE_ROW]
+    ):
         manifest_rows = [
             row for row in after_evidence if isinstance(row, dict) and row.get("id") == MANIFEST_EVIDENCE_ID
         ]
@@ -301,7 +303,7 @@ def _validate_evidence_registration_delta(
             "Evidence registration may not promote its target criterion.",
         )
     target["evidenceIds"] = [*target["evidenceIds"], MANIFEST_EVIDENCE_ID]
-    if after_criteria != expected_criteria:
+    if not strict_json_equal(after_criteria, expected_criteria):
         changed_target = next(
             (row for row in after_criteria if isinstance(row, dict) and row.get("id") == TARGET_CRITERION_ID),
             None,
@@ -318,7 +320,11 @@ def _validate_evidence_registration_delta(
 
 
 def build_candidate_program_plan_v2(legacy_plan: dict[str, object]) -> dict[str, object]:
-    if not isinstance(legacy_plan, dict) or legacy_plan.get("schema") != 1 or legacy_plan.get("id") != "curation-program-plan-v1":
+    if (
+        not isinstance(legacy_plan, dict)
+        or not strict_json_equal(legacy_plan.get("schema"), 1)
+        or legacy_plan.get("id") != "curation-program-plan-v1"
+    ):
         raise AcceptanceAuthorityError(
             "acceptance-structural-migration-overreach",
             "Candidate program plan must start from the frozen v1 plan shape.",

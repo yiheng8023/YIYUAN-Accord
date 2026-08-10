@@ -636,6 +636,76 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                     )
                 self.assertEqual(expected_code, raised.exception.code)
 
+    def test_evidence_registration_delta_rejects_nested_json_type_aliases(self) -> None:
+        """Using Python equality here would accept true/1 and float aliases as no-op deltas."""
+
+        g1 = self.build_g1()
+        g2 = build_evidence_snapshot_v2(g1)
+        auxiliary_criterion = next(
+            row
+            for row in g1["acceptanceCriteria"]
+            if "currentApplicability" in row
+        )
+        cases = (
+            (
+                lambda before, after: (
+                    before["objectives"][0].__setitem__("nonGoals", [True]),
+                    after["objectives"][0].__setitem__("nonGoals", [1]),
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+            (
+                lambda before, after: (
+                    before["evidence"][0].__setitem__("kind", True),
+                    after["evidence"][0].__setitem__("kind", 1),
+                ),
+                "acceptance-evidence-source-drift",
+            ),
+            (
+                lambda before, after: (
+                    next(
+                        row
+                        for row in before["acceptanceCriteria"]
+                        if row["id"] == auxiliary_criterion["id"]
+                    ).__setitem__("currentApplicability", 1.0),
+                    next(
+                        row
+                        for row in after["acceptanceCriteria"]
+                        if row["id"] == auxiliary_criterion["id"]
+                    ).__setitem__("currentApplicability", True),
+                ),
+                "acceptance-evidence-registration-overreach",
+            ),
+        )
+        for mutate, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                before = copy.deepcopy(g1)
+                after = copy.deepcopy(g2)
+                mutate(before, after)
+                after["predecessorBinding"] = binding_for_bytes(
+                    authority_schema=2,
+                    authority_id=before["id"],
+                    generation=1,
+                    path="snapshots/v2/g000001.json",
+                    data=canonical_file_bytes(before),
+                )
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(
+                        after,
+                        predecessor=before,
+                        program_plan_binding=g1["programPlanBinding"],
+                    )
+                self.assertEqual(expected_code, raised.exception.code)
+
+    def test_candidate_plan_rejects_boolean_schema_alias(self) -> None:
+        """Treating JSON true as the legacy numeric schema must fail closed."""
+
+        aliased_legacy = copy.deepcopy(self.plan)
+        aliased_legacy["schema"] = True
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            build_candidate_program_plan_v2(aliased_legacy)
+        self.assertEqual("acceptance-structural-migration-overreach", raised.exception.code)
+
     def test_snapshot_validator_rejects_inventory_and_evidence_integrity_drift(self) -> None:
         """Inventory aliases and asymmetric or altered manifest evidence must fail closed."""
 
