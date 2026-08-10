@@ -2014,7 +2014,7 @@ def verify() -> None:
     validate_portfolio_tasktime_projection_contract(ROOT)
     validate_harness_decision_packet_core_poc(ROOT)
     validate_harness_decision_packet_manifest_poc(ROOT)
-    validate_program_acceptance_authority_v2_rehearsal(ROOT)
+    validate_acceptance_authority_and_evaluation_reconciliation(ROOT)
     validate_repository_authored_gap_fill_gate(ROOT)
     validate_ai_independent_hard_standard_boundary_gate(ROOT)
     validate_standard_revalidation_cascade_poc(ROOT)
@@ -26919,6 +26919,25 @@ def main() -> int:
         return 1
     print("Agent Autonomy Harness validation passed.")
     return 0
+
+
+REQUIRED_FILES += (
+    "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+    "scripts/validate_evaluation_software_engineering_standards_coverage_reconciliation_v1.py",
+    "tests/test_evaluation_software_engineering_standards_coverage_reconciliation_v1.py",
+    "docs/strategy/EVALUATION-SOFTWARE-ENGINEERING-STANDARDS-COVERAGE-RECONCILIATION-V1-2026-08-11.md",
+    "docs/superpowers/specs/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1-design.md",
+    "docs/superpowers/plans/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1.md",
+)
+
+from validate_evaluation_software_engineering_standards_coverage_reconciliation_v1 import (
+    validate_repository_record as validate_evaluation_software_engineering_standards_coverage_reconciliation_v1,
+)
+
+
+def validate_acceptance_authority_and_evaluation_reconciliation(root: Path) -> None:
+    validate_program_acceptance_authority_v2_rehearsal(root)
+    validate_evaluation_software_engineering_standards_coverage_reconciliation_v1(root)
 
 
 if __name__ == "__main__":

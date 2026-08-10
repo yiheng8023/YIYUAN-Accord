@@ -5518,3 +5518,26 @@ production, release, residual-gap, assessment-promotion, or program-closeout
 claim. A live v2 plan or selector migration requires separate user authority.
 Evidence:
 `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`.
+
+## 2026-08-11 evaluation and software-engineering coverage reconciliation checkpoint
+
+The current fifteen partial acceptance criteria now have a deterministic,
+criterion-led sparse reconciliation across six closeout clusters, all twelve
+evaluation dimensions, all fourteen software-lifecycle slices, all thirteen
+Harness scenarios, and N/O/E/C/H/R. Each row distinguishes bounded coverage,
+overlap, conflict, unassessed coordinates, real-task needs, accountable human
+judgment, separate authority, and not-applicable states; it also binds the next
+admissible evidence class and a claim ceiling.
+
+The result justifies subtraction rather than a new capability: no evaluation
+Skill, untargeted discovery pass, hard-standard admission, or self-authored
+residual-gap solution is supported. The canonical inventory remains 46
+verified / 15 partial / 0 planned. No model, candidate, account, installation,
+enablement, manager, consumer, cleanup, publication, or release effect occurred.
+No live v2 migration or acceptance-assessment transition is authorized.
+
+On continuation, first verify Git truth and run the reconciliation validator
+plus the repository verifier. Treat the record as navigation and decision
+support, not as behavior, value, portability, production, release, residual-gap,
+or closeout proof. Evidence:
+`registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.

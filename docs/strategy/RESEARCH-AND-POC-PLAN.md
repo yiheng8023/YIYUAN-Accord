@@ -3328,3 +3328,23 @@ production readiness, release eligibility, residual gap, or program closeout.
 Any live v2 plan or selector migration requires separate user authority.
 Evidence:
 `registry/program-acceptance-authority-v2-zero-model-rehearsal-2026-08-10.json`.
+
+### 2026-08-11 evaluation and software-engineering coverage reconciliation
+
+The fifteen current partial acceptance criteria are now reconciled across all
+six closeout evidence clusters, twelve evaluation dimensions, fourteen
+software-lifecycle slices, thirteen Harness scenarios, and the six N/O/E/C/H/R
+route classes. The result is a criterion-led sparse map rather than a
+Cartesian completeness claim. It distinguishes covered, overlapping,
+conflicting, unassessed, real-task, human-judgment, separate-authorization, and
+not-applicable states and gives every partial criterion an evidence ceiling and
+next admissible evidence class.
+
+The comparison supports subtraction: no new evaluation Skill or broad
+candidate-discovery pass is justified, and every repository-authored residual
+route remains ineligible. The inventory remains 46 verified / 15 partial / 0
+planned. This is deterministic zero-model reconciliation only; it proves no
+behavior, value, cross-host portability, production, release, residual gap, or
+program closeout and authorizes no live authority migration or acceptance
+transition. Evidence:
+`registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.

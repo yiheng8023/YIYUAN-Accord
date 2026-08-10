@@ -183,3 +183,24 @@ backup, update, and consumer projections.
   requires a naturally occurring real task.
 - Verify this boundary against
   `registry/process-loss-longhorizon-safe-adapter-upstream-design-2026-08-07.json`.
+
+## Current evaluation and software-engineering reconciliation boundary
+
+- The fifteen current partial criteria are mapped criterion by criterion across
+  six closeout clusters, all twelve evaluation dimensions, all fourteen
+  software-lifecycle slices, all thirteen Harness scenarios, and N/O/E/C/H/R.
+  This is sparse decision support, not Cartesian or lifecycle completeness.
+- Preserve the distinctions among bounded coverage, overlap, conflict,
+  unassessed coordinates, real-task evidence, accountable human judgment,
+  separate authority, and not-applicable states. Do not turn human control into
+  a capability gap.
+- Prefer subtraction: do not create an evaluation Skill, reopen untargeted
+  discovery, admit a hard standard, or author a residual-gap solution from this
+  static reconciliation. Every residual route remains ineligible.
+- The inventory remains 46 verified / 15 partial / 0 planned. The record proves
+  no behavior, value, portability, production, release, residual gap, or
+  closeout and authorizes no live v2 migration, acceptance transition, model or
+  candidate dispatch, CC Switch or consumer mutation, cleanup, publication, or
+  release.
+- Verify this boundary against
+  `registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.

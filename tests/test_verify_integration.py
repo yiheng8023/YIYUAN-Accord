@@ -5028,5 +5028,34 @@ class ReferenceValidationIntegrationTests(unittest.TestCase):
         self.assertEqual(raised.exception.document, path)
         self.assertEqual(raised.exception.pointer, "/capabilities/0/canonicalOwner")
 
+
+class EvaluationStandardsReconciliationIntegrationTests(unittest.TestCase):
+    def test_verify_calls_evaluation_software_engineering_reconciliation_once(
+        self,
+    ) -> None:
+        with patch.object(
+            verify_script,
+            "validate_program_acceptance_authority_v2_rehearsal",
+            return_value={},
+        ), patch.object(
+            verify_script,
+            "validate_evaluation_software_engineering_standards_coverage_reconciliation_v1",
+            create=True,
+        ) as validator:
+            verify_script.verify()
+
+        validator.assert_called_once_with(verify_script.ROOT)
+
+    def test_reconciliation_files_are_required_verifier_inputs(self) -> None:
+        for path in (
+            "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+            "scripts/validate_evaluation_software_engineering_standards_coverage_reconciliation_v1.py",
+            "tests/test_evaluation_software_engineering_standards_coverage_reconciliation_v1.py",
+            "docs/strategy/EVALUATION-SOFTWARE-ENGINEERING-STANDARDS-COVERAGE-RECONCILIATION-V1-2026-08-11.md",
+            "docs/superpowers/specs/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1-design.md",
+            "docs/superpowers/plans/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1.md",
+        ):
+            self.assertIn(path, verify_script.REQUIRED_FILES)
+
 if __name__ == "__main__":
     unittest.main()
