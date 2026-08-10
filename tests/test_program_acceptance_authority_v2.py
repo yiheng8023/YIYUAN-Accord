@@ -110,6 +110,28 @@ REQUIRED_LOCAL_REFERENCE_EDGES = {
         ("properties", "acceptanceCriteria", "items"): "#/$defs/acceptanceCriterion",
         ("properties", "verifications", "items"): "#/$defs/verification",
         ("properties", "evidence", "items"): "#/$defs/evidence",
+        ("$defs", "assessmentVocabulary", "items"): "#/$defs/assessment",
+        ("$defs", "objective", "properties", "acceptanceIds"): "#/$defs/stringList",
+        ("$defs", "acceptanceCriterion", "oneOf", 0): "#/$defs/basicAcceptanceCriterion",
+        ("$defs", "acceptanceCriterion", "oneOf", 1): "#/$defs/currentApplicabilityAcceptanceCriterion",
+        ("$defs", "acceptanceCriterion", "oneOf", 2): "#/$defs/semanticProjectionAcceptanceCriterion",
+        ("$defs", "acceptanceCriterion", "oneOf", 3): "#/$defs/graduationSubgatesAcceptanceCriterion",
+        ("$defs", "basicAcceptanceCriterion", "properties", "assessment"): "#/$defs/assessment",
+        ("$defs", "basicAcceptanceCriterion", "properties", "verificationIds"): "#/$defs/stringList",
+        ("$defs", "basicAcceptanceCriterion", "properties", "evidenceIds"): "#/$defs/stringList",
+        ("$defs", "currentApplicabilityAcceptanceCriterion", "properties", "assessment"): "#/$defs/assessment",
+        ("$defs", "currentApplicabilityAcceptanceCriterion", "properties", "verificationIds"): "#/$defs/stringList",
+        ("$defs", "currentApplicabilityAcceptanceCriterion", "properties", "evidenceIds"): "#/$defs/stringList",
+        ("$defs", "semanticProjectionAcceptanceCriterion", "properties", "assessment"): "#/$defs/assessment",
+        ("$defs", "semanticProjectionAcceptanceCriterion", "properties", "verificationIds"): "#/$defs/stringList",
+        ("$defs", "semanticProjectionAcceptanceCriterion", "properties", "evidenceIds"): "#/$defs/stringList",
+        ("$defs", "graduationSubgatesAcceptanceCriterion", "properties", "assessment"): "#/$defs/assessment",
+        ("$defs", "graduationSubgatesAcceptanceCriterion", "properties", "verificationIds"): "#/$defs/stringList",
+        ("$defs", "graduationSubgatesAcceptanceCriterion", "properties", "evidenceIds"): "#/$defs/stringList",
+        ("$defs", "graduationSubgatesAcceptanceCriterion", "properties", "graduationSubgates", "items"): "#/$defs/graduationSubgate",
+        ("$defs", "verification", "oneOf", 0): "#/$defs/verificationWithoutCommand",
+        ("$defs", "verification", "oneOf", 1): "#/$defs/verificationWithCommand",
+        ("$defs", "evidence", "properties", "supports"): "#/$defs/stringList",
     },
     "selector": {
         ("properties", "activeSnapshotBinding"): "#/$defs/binding",
@@ -127,6 +149,12 @@ REQUIRED_LOCAL_REFERENCE_EDGES = {
         ("properties", "authorizationBoundary"): "#/$defs/authorizationBoundary",
         ("properties", "executionCounters"): "#/$defs/zeroExecutionCounters",
         ("properties", "claimBoundary"): "#/$defs/claimBoundary",
+        ("$defs", "assessmentChange", "properties", "fromAssessment"): "#/$defs/assessment",
+        ("$defs", "assessmentChange", "properties", "toAssessment"): "#/$defs/assessment",
+        ("$defs", "delta", "properties", "criterionEvidenceLinksAdded", "items"): "#/$defs/criterionEvidenceLink",
+        ("$defs", "delta", "properties", "criterionEvidenceLinksRemoved", "items"): "#/$defs/criterionEvidenceLink",
+        ("$defs", "delta", "properties", "assessmentsChanged", "items"): "#/$defs/assessmentChange",
+        ("$defs", "invariants", "properties", "acceptanceInventory"): "#/$defs/acceptanceInventory",
     },
     "inventory": {
         ("properties", "baselineObservation"): "#/$defs/baselineObservation",
@@ -175,12 +203,15 @@ def schema_references(value: object) -> list[str]:
     return references
 
 
-def schema_value_at(document: dict[str, object], path: tuple[str, ...]) -> object:
+def schema_value_at(document: dict[str, object], path: tuple[str | int, ...]) -> object:
     value: object = document
     for part in path:
-        if not isinstance(value, dict):
-            raise AssertionError(f"Schema path is not an object: {'.'.join(path)}")
-        value = value[part]
+        if isinstance(value, dict) and isinstance(part, str):
+            value = value[part]
+        elif isinstance(value, list) and type(part) is int:
+            value = value[part]
+        else:
+            raise AssertionError(f"Schema path is invalid: {'.'.join(map(str, path))}")
     return value
 
 
@@ -333,6 +364,9 @@ class ProgramAcceptanceAuthoritySchemaTests(unittest.TestCase):
         for mutate in (
             lambda schemas: schemas["authority"]["$defs"]["objective"]["required"].remove(
                 "acceptanceIds"
+            ),
+            lambda schemas: schemas["authority"]["$defs"]["objective"]["properties"].__setitem__(
+                "acceptanceIds", copy.deepcopy(schemas["authority"]["$defs"]["stringList"])
             ),
             lambda schemas: schemas["authority"]["properties"].__setitem__(
                 "predecessorBinding", copy.deepcopy(schemas["authority"]["$defs"]["binding"])
