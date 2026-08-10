@@ -1314,6 +1314,30 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
                     resolve_current_authority(candidate_root, "selectors/current-g000002.json")
                 self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
 
+    def test_duplicate_receipt_scan_types_actual_bytes_and_preserves_injected_read_faults(self) -> None:
+        """Alternate receipt children fail closed on disk corruption without swallowing implementation faults."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            self._write_candidate_tree(candidate_root)
+            alternate = candidate_root / "transitions/alternate.json"
+            alternate.write_bytes(b"\xff")
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+            self.assertEqual("acceptance-transition-chain-broken", raised.exception.code)
+
+            alternate.write_bytes(b"{}")
+            original_read_bytes = Path.read_bytes
+
+            def injected(path: Path) -> bytes:
+                if path == alternate:
+                    raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+                return original_read_bytes(path)
+
+            with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+                with self.assertRaises(UnicodeDecodeError):
+                    resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+
     def test_checked_receipt_and_selector_fixtures_replay_from_locked_sources(self) -> None:
         """Changing a receipt builder or checked canonical byte stream must fail this replay."""
 

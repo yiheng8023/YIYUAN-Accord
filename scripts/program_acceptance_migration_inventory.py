@@ -130,8 +130,9 @@ def discover_acceptance_reference_occurrences(root: Path) -> list[dict[str, obje
         if not raw_relative:
             continue
         relative = Path(raw_relative.decode("utf-8"))
+        data = (root / relative).read_bytes()
         try:
-            text = (root / relative).read_text(encoding="utf-8")
+            text = data.decode("utf-8")
         except UnicodeDecodeError:
             continue
         for line_number, line in enumerate(text.splitlines(), start=1):
@@ -182,8 +183,13 @@ def load_migration_inventory(
     try:
         document_path = _inventory_path(root, path)
         data = document_path.read_bytes()
+    except OSError as error:
+        raise AcceptanceAuthorityError(
+            "migration-inventory-incomplete", "Migration inventory cannot be loaded."
+        ) from error
+    try:
         document = json.loads(data)
-    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory cannot be loaded."
         ) from error

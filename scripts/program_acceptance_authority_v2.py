@@ -1257,9 +1257,19 @@ def _reject_duplicate_introducing_receipts(
                 path=str(candidate),
             ) from error
         try:
-            alternate = json.loads(candidate.read_bytes())
-        except (OSError, json.JSONDecodeError):
-            continue
+            data = candidate.read_bytes()
+        except OSError as error:
+            raise AcceptanceAuthorityError(
+                "acceptance-transition-chain-broken", "Candidate receipt child cannot be read.",
+                path=str(candidate),
+            ) from error
+        try:
+            alternate = json.loads(data)
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise AcceptanceAuthorityError(
+                "acceptance-transition-chain-broken", "Candidate receipt child is not valid JSON.",
+                path=str(candidate),
+            ) from error
         if (
             isinstance(alternate, dict)
             and alternate.get("transactionType") != "rollback"

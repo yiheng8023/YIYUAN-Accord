@@ -283,6 +283,43 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
                 load_migration_inventory(ROOT)
         self.assertEqual("bug", str(raised.exception))
 
+    def test_public_loader_preserves_injected_unicode_read_errors(self) -> None:
+        """Only decoding actual inventory bytes is normalized, not a read implementation failure."""
+
+        original_read_bytes = Path.read_bytes
+        target = ROOT / migration_inventory.MIGRATION_INVENTORY_PATH
+
+        def injected(path: Path) -> bytes:
+            if path == target:
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+            return original_read_bytes(path)
+
+        with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+            with self.assertRaises(UnicodeDecodeError):
+                load_migration_inventory(ROOT)
+
+    def test_discovery_skips_real_non_utf8_files_but_propagates_read_faults(self) -> None:
+        """Tracked binary bytes are skipped, whereas injected read failures stay observable."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            source = root / "source.txt"
+            source.write_bytes(b"\xff")
+            subprocess.run(["git", "-C", str(root), "add", "source.txt"], check=True)
+            self.assertEqual([], discover_acceptance_reference_occurrences(root))
+
+            original_read_bytes = Path.read_bytes
+
+            def injected(path: Path) -> bytes:
+                if path == source:
+                    raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "injected")
+                return original_read_bytes(path)
+
+            with mock.patch.object(Path, "read_bytes", autospec=True, side_effect=injected):
+                with self.assertRaises(UnicodeDecodeError):
+                    discover_acceptance_reference_occurrences(root)
+
     def test_public_loader_types_expected_read_and_json_failures(self) -> None:
         """Missing files, I/O faults, and malformed JSON retain the stable public code."""
 
