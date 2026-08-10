@@ -737,6 +737,11 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
             validate_transition_receipt(receipt, from_document=self.legacy, to_document=self.g1)
         self.assertEqual("acceptance-transition-type-mismatch", raised.exception.code)
 
+        receipt["transactionType"] = []
+        with self.assertRaises(AcceptanceAuthorityError) as raised:
+            validate_transition_receipt(receipt, from_document=self.legacy, to_document=self.g1)
+        self.assertEqual("acceptance-transition-type-mismatch", raised.exception.code)
+
         with self.assertRaises(AcceptanceAuthorityError) as raised:
             build_rollback_receipt(
                 from_snapshot_binding=self.g1_binding,
@@ -745,6 +750,17 @@ class ProgramAcceptanceAuthorityTransitionTests(unittest.TestCase):
                 ancestor_bindings=[self.g2_binding],
             )
         self.assertEqual("acceptance-rollback-target-not-ancestor", raised.exception.code)
+
+    def test_current_mode_types_an_invalid_utf8_selector(self) -> None:
+        """Selector decoding is a public typed boundary, not a raw Unicode failure."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_root = Path(directory)
+            self._write_candidate_tree(candidate_root)
+            (candidate_root / "selectors/current-g000002.json").write_bytes(b"\xff")
+            with self.assertRaises(AcceptanceAuthorityError) as raised:
+                resolve_current_authority(candidate_root, "selectors/current-g000002.json")
+        self.assertEqual("acceptance-selector-target-invalid", raised.exception.code)
 
     def test_current_mode_rejects_independently_valid_unreceipted_generation(self) -> None:
         """A valid future snapshot cannot become current without a valid introducing receipt."""
@@ -1387,6 +1403,34 @@ class ProgramAcceptanceAuthoritySnapshotTests(unittest.TestCase):
                         program_plan_binding=g1["programPlanBinding"],
                     )
                 self.assertEqual(expected_code, raised.exception.code)
+
+    def test_snapshot_validator_matches_nested_schema_shapes(self) -> None:
+        """Nested runtime validation must be as closed and typed as the declared schema."""
+
+        g1 = self.build_g1()
+        cases = (
+            (
+                lambda snapshot: snapshot["objectives"][0].__setitem__("unexpected", "drift"),
+                "objective additional property",
+            ),
+            (
+                lambda snapshot: next(
+                    row for row in snapshot["acceptanceCriteria"] if "graduationSubgates" in row
+                )["graduationSubgates"][0].__setitem__("status", ""),
+                "graduation subgate required string",
+            ),
+            (
+                lambda snapshot: snapshot["verifications"][0].__setitem__("method", 1),
+                "verification typed string",
+            ),
+        )
+        for mutate, name in cases:
+            with self.subTest(name=name):
+                mutated = copy.deepcopy(g1)
+                mutate(mutated)
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    validate_authority_snapshot(mutated)
+                self.assertEqual("acceptance-authority-schema-invalid", raised.exception.code)
 
         for mutate, expected_code in (
             (

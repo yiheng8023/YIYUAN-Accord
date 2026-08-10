@@ -182,6 +182,78 @@ def _records_by_id(
     return records
 
 
+def _is_nonempty_string(value: object) -> bool:
+    return type(value) is str and bool(value)
+
+
+def _is_string_list(value: object) -> bool:
+    return isinstance(value, list) and all(_is_nonempty_string(item) for item in value)
+
+
+def _validate_snapshot_nested_schema(document: dict[str, object]) -> None:
+    """Mirror the declared closed nested v2 schema before relationship checks."""
+
+    vocabulary = document.get("assessmentVocabulary")
+    if not isinstance(vocabulary, list) or not vocabulary or not all(
+        _is_nonempty_string(value) and value in _ASSESSMENTS for value in vocabulary
+    ):
+        raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Assessment vocabulary is invalid.")
+    objectives = document.get("objectives")
+    if not isinstance(objectives, list) or not all(
+        isinstance(row, dict)
+        and set(row) == {"id", "acceptanceIds"}
+        and _is_nonempty_string(row["id"])
+        and _is_string_list(row["acceptanceIds"])
+        for row in objectives
+    ):
+        raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Objective shape is invalid.")
+    criteria = document.get("acceptanceCriteria")
+    basic = {"id", "statement", "assessment", "verificationIds", "evidenceIds"}
+    optional = {
+        "currentApplicability": {"currentApplicability"},
+        "semanticProjectionId": {"semanticProjectionId"},
+        "graduationSubgates": {"graduationSubgates"},
+    }
+    if not isinstance(criteria, list):
+        raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Acceptance criteria must be an array.")
+    for row in criteria:
+        if not isinstance(row, dict) or not (set(row) == basic or any(set(row) == basic | fields for fields in optional.values())):
+            raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Acceptance criterion shape is invalid.")
+        if not all(_is_nonempty_string(row[field]) for field in ("id", "statement")) or type(row["assessment"]) is not str or row["assessment"] not in _ASSESSMENTS or not _is_string_list(row["verificationIds"]) or not _is_string_list(row["evidenceIds"]):
+            raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Acceptance criterion fields are invalid.")
+        if "currentApplicability" in row and not _is_nonempty_string(row["currentApplicability"]):
+            raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Current applicability is invalid.")
+        if "semanticProjectionId" in row and not _is_nonempty_string(row["semanticProjectionId"]):
+            raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Semantic projection id is invalid.")
+        if "graduationSubgates" in row:
+            gates = row["graduationSubgates"]
+            if not isinstance(gates, list) or not all(
+                isinstance(gate, dict)
+                and set(gate) == {"id", "requiredEvidence", "promotionBoundary", "status"}
+                and all(_is_nonempty_string(gate[field]) for field in gate)
+                for gate in gates
+            ):
+                raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Graduation subgate shape is invalid.")
+    verifications = document.get("verifications")
+    if not isinstance(verifications, list) or not all(
+        isinstance(row, dict)
+        and set(row) in ({"id", "method", "evidenceRequirement", "expectedResult"}, {"id", "method", "command", "evidenceRequirement", "expectedResult"})
+        and all(_is_nonempty_string(value) for value in row.values())
+        for row in verifications
+    ):
+        raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Verification shape is invalid.")
+    evidence = document.get("evidence")
+    if not isinstance(evidence, list) or not all(
+        isinstance(row, dict)
+        and set(row) == {"id", "path", "kind", "asOf", "supports"}
+        and all(_is_nonempty_string(row[field]) for field in ("id", "path", "kind"))
+        and type(row["asOf"]) is str and re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", row["asOf"]) is not None
+        and _is_string_list(row["supports"])
+        for row in evidence
+    ):
+        raise AcceptanceAuthorityError("acceptance-authority-schema-invalid", "Evidence shape is invalid.")
+
+
 def _validate_snapshot_relationships(document: dict[str, object]) -> None:
     objectives = _records_by_id(document, "objectives", code="acceptance-structural-migration-overreach")
     criteria = _records_by_id(document, "acceptanceCriteria", code="acceptance-structural-migration-overreach")
@@ -576,6 +648,7 @@ def validate_authority_snapshot(
                 )
         elif generation == 2:
             _validate_evidence_registration_delta(predecessor, snapshot)
+    _validate_snapshot_nested_schema(snapshot)
 
 
 class AcceptanceAuthorityError(ValueError):
@@ -830,7 +903,7 @@ def validate_transition_receipt(
             "acceptance-transition-receipt-invalid", "Transition receipt shape is invalid."
         )
     transaction_type = receipt.get("transactionType")
-    if transaction_type not in {"structural-migration", "evidence-registration", "rollback"}:
+    if type(transaction_type) is not str or transaction_type not in {"structural-migration", "evidence-registration", "rollback"}:
         raise AcceptanceAuthorityError(
             "acceptance-transition-type-mismatch", "Transition type is not recognized."
         )
@@ -1021,7 +1094,7 @@ def _load_bound_document(root: Path, binding: object, *, code: str) -> dict[str,
     try:
         data = path.read_bytes()
         document = json.loads(data)
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(code, "Bound authority document cannot be read.") from error
     if (
         not isinstance(document, dict)
@@ -1347,7 +1420,7 @@ def resolve_current_authority(root: Path, selector_path: str) -> dict[str, objec
     path = _safe_relative_path(root, selector_path, code="acceptance-selector-target-invalid")
     try:
         selector = json.loads(path.read_bytes())
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "acceptance-selector-target-invalid", "Selector cannot be read."
         ) from error

@@ -178,6 +178,7 @@ _RECORD_DIGEST_PATHS = (
     Path("schemas/program-acceptance-transition-receipt-v1.schema.json"),
     Path("schemas/program-acceptance-migration-inventory-v1.schema.json"),
     Path("scripts/program_acceptance_authority_v2.py"),
+    Path("scripts/harness_decision_packet.py"),
     Path("scripts/program_acceptance_migration_inventory.py"),
     Path("scripts/program_acceptance_authority_v2_rehearsal.py"),
     Path("scripts/build_program_acceptance_authority_v2_rehearsal.py"),
@@ -197,7 +198,7 @@ _RECORD_DIGEST_PATHS = (
 def _read_json(path: Path) -> dict[str, object]:
     try:
         value = json.loads(path.read_bytes())
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "acceptance-rehearsal-bundle-invalid", "Rehearsal source cannot be read."
         ) from error
@@ -350,6 +351,7 @@ def replace_selector_atomically(path: Path, data: bytes) -> None:
     """Replace only a rehearsal selector, preserving an existing target on failure."""
 
     temporary_name: str | None = None
+    primary_error: OSError | None = None
     try:
         with tempfile.NamedTemporaryFile(
             dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
@@ -361,6 +363,7 @@ def replace_selector_atomically(path: Path, data: bytes) -> None:
         try:
             os.replace(temporary_name, path)
         except OSError as error:
+            primary_error = error
             raise AcceptanceAuthorityError(
                 "acceptance-atomic-output-preserved", "Atomic selector replacement failed; prior output was preserved.",
                 path=path.as_posix(),
@@ -368,7 +371,14 @@ def replace_selector_atomically(path: Path, data: bytes) -> None:
         temporary_name = None
     finally:
         if temporary_name is not None:
-            Path(temporary_name).unlink(missing_ok=True)
+            try:
+                Path(temporary_name).unlink(missing_ok=True)
+            except OSError as error:
+                if primary_error is None:
+                    raise AcceptanceAuthorityError(
+                        "acceptance-atomic-output-preserved", "Atomic selector temporary cleanup failed; prior output was preserved.",
+                        path=path.as_posix(),
+                    ) from error
 
 
 def _validate_bundle_bytes(repo_root: Path, root: Path, bundle: dict[str, bytes]) -> None:
@@ -1105,7 +1115,7 @@ def validate_repository_record(root: Path) -> dict[str, object]:
     try:
         raw = (root / RECORD_PATH).read_bytes()
         record = json.loads(raw)
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError("acceptance-rehearsal-record-invalid", "Rehearsal record cannot be read.") from error
     if not isinstance(record, dict) or set(record) != {
         "schema", "id", "date", "status", "fileDigests", "legacyLockDigests",

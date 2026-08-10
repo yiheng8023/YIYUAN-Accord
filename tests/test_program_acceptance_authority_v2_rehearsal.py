@@ -83,6 +83,24 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             self.assertEqual(sentinel, selector.read_bytes())
             self.assertEqual([], list(Path(parent).glob(".current.json.*.tmp")))
 
+    def test_atomic_selector_double_fault_preserves_sentinel_and_original_cause(self) -> None:
+        """A failed cleanup cannot replace the primary atomic-write rejection."""
+
+        with tempfile.TemporaryDirectory() as parent:
+            selector = Path(parent) / "current.json"
+            sentinel = b"sentinel-selector-bytes\n"
+            selector.write_bytes(sentinel)
+            with (
+                mock.patch("os.replace", side_effect=OSError("replace denied")),
+                mock.patch.object(Path, "unlink", side_effect=OSError("cleanup denied")),
+            ):
+                with self.assertRaises(AcceptanceAuthorityError) as raised:
+                    replace_selector_atomically(selector, b"candidate-selector-bytes\n")
+            self.assertEqual("acceptance-atomic-output-preserved", raised.exception.code)
+            self.assertIsInstance(raised.exception.__cause__, OSError)
+            self.assertEqual("replace denied", str(raised.exception.__cause__))
+            self.assertEqual(sentinel, selector.read_bytes())
+
     def test_builder_cli_emits_one_clean_zero_counter_result(self) -> None:
         """The public subprocess entrypoint must retain the no-surviving-root contract."""
 
@@ -144,6 +162,7 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
             REQUIRED_FAILURE_CASES,
             tuple((row["caseId"], row["expectedCode"]) for row in record["failureMatrix"]),
         )
+        self.assertIn("scripts/harness_decision_packet.py", record["fileDigests"])
         unique_codes: list[str] = []
         for row in record["failureMatrix"]:
             if row["expectedCode"] not in unique_codes:
@@ -159,6 +178,24 @@ class ProgramAcceptanceAuthorityRehearsalTests(unittest.TestCase):
         self.assertEqual("partial", record["targetCriterion"])
         actual_cases = {row["caseId"]: row["expectedCode"] for row in record["failureMatrix"]}
         self.assertEqual(dict(_BATCH_ONE_EXPECTED_CASES), {case_id: actual_cases[case_id] for case_id, _ in _BATCH_ONE_EXPECTED_CASES})
+
+    def test_record_validator_cli_types_invalid_utf8(self) -> None:
+        """The standalone replay CLI must envelope malformed record bytes."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            record = root / RECORD_PATH
+            record.parent.mkdir(parents=True)
+            record.write_bytes(b"\xff")
+            completed = subprocess.run(
+                ["python", "-B", str(ROOT / "scripts/validate_program_acceptance_authority_v2_rehearsal.py")],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        self.assertEqual(2, completed.returncode)
+        self.assertEqual("acceptance-rehearsal-record-invalid", __import__("json").loads(completed.stderr)["code"])
 
     def test_public_writer_types_stage_cleanup_fault_and_removes_stage(self) -> None:
         """A failed stage cleanup must not leak OSError or leave a sibling stage root."""
