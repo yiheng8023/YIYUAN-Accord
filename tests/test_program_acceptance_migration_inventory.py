@@ -253,54 +253,76 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
                     load_migration_inventory(root, path)
                 self.assertEqual("migration-inventory-incomplete", raised.exception.code)
 
+    def test_public_loader_types_invalid_utf8_as_incomplete_inventory(self) -> None:
+        """An invalid UTF-8 inventory must not leak a decoder error across the public API."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = Path("inventory.json")
+            (root / path).write_bytes(b"\xff")
+            with self.assertRaises(Exception) as raised:
+                load_migration_inventory(root, path)
+        self.assertIsInstance(raised.exception, AcceptanceAuthorityError)
+        self.assertEqual("migration-inventory-incomplete", raised.exception.code)
+
     def test_exact_class_policy_matrix_rejects_each_tuple_member_drift(self) -> None:
-        """Every class binding, action, and authorization member is a fixed policy tuple."""
+        """Every governance member must match its class's complete fixed policy tuple."""
 
         inventory = load_migration_inventory(ROOT)
         valid_tuples = {
             "A-immutable-historical": (
+                "historical",
                 "legacy-v1",
                 "preserve-legacy-v1",
                 "preserve",
                 "no-repoint",
                 "retain",
+                "exact-set",
                 False,
                 "acceptance-historical-consumer-repointed",
             ),
             "B-current-authority-consumer": (
+                "current",
                 "legacy-v1",
                 "rehearsal-selector",
                 "selector",
                 "separate-authority",
                 "receipt",
+                "exact-set",
                 True,
                 "acceptance-current-consumer-legacy-bypass",
             ),
             "C-version-neutral-component": (
+                "version-neutral",
                 "explicit-input",
                 "explicit-input",
                 "validate-input",
                 "not-applicable",
                 "not-applicable",
+                "explicit-input",
                 False,
                 "acceptance-neutral-consumer-path-owned",
             ),
             "D-migration-governance-and-regression": (
+                "governance",
                 "migration-metadata",
                 "migration-metadata",
                 "zero-model",
                 "separate-authority",
                 "receipt",
+                "exact-set",
                 True,
                 "migration-consumer-class-invalid",
             ),
         }
         fields = (
+            "purpose",
             "currentBinding",
             "candidateBinding",
             "rehearsalAction",
             "liveMigrationAction",
             "rollbackAction",
+            "verificationSurface",
             "separateAuthorizationRequired",
         )
 
@@ -323,12 +345,16 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
 
         for classification, (*policy, error_code) in valid_tuples.items():
             candidate = copy.deepcopy(inventory)
-            row = next(
+            for existing_row in candidate["occurrences"]:
+                existing_policy = valid_tuples[existing_row["classification"]]
+                for field, value in zip(fields, existing_policy[:-1], strict=True):
+                    existing_row[field] = value
+            synthetic_row = next(
                 row for row in candidate["occurrences"] if row["classification"] != "C-version-neutral-component"
             )
-            row["classification"] = classification
+            synthetic_row["classification"] = classification
             for field, value in zip(fields, policy, strict=True):
-                row[field] = value
+                synthetic_row[field] = value
             rows = candidate["occurrences"]
             assert isinstance(rows, list)
             projection = [
@@ -347,9 +373,9 @@ class ProgramAcceptanceMigrationInventoryTests(unittest.TestCase):
                 changed = next(
                     item
                     for item in mutated["occurrences"]
-                    if item["path"] == row["path"]
-                    and item["line"] == row["line"]
-                    and item["patternId"] == row["patternId"]
+                    if item["path"] == synthetic_row["path"]
+                    and item["line"] == synthetic_row["line"]
+                    and item["patternId"] == synthetic_row["patternId"]
                 )
                 changed[field] = (
                     "wrong-policy" if type(expected_value) is str else not expected_value

@@ -43,42 +43,60 @@ CANDIDATE_BINDINGS = {
 }
 CLASS_POLICY = {
     "A-immutable-historical": (
+        "historical",
         "legacy-v1",
         "preserve-legacy-v1",
         "preserve",
         "no-repoint",
         "retain",
+        "exact-set",
         False,
         "acceptance-historical-consumer-repointed",
     ),
     "B-current-authority-consumer": (
+        "current",
         "legacy-v1",
         "rehearsal-selector",
         "selector",
         "separate-authority",
         "receipt",
+        "exact-set",
         True,
         "acceptance-current-consumer-legacy-bypass",
     ),
     "C-version-neutral-component": (
+        "version-neutral",
         "explicit-input",
         "explicit-input",
         "validate-input",
         "not-applicable",
         "not-applicable",
+        "explicit-input",
         False,
         "acceptance-neutral-consumer-path-owned",
     ),
     "D-migration-governance-and-regression": (
+        "governance",
         "migration-metadata",
         "migration-metadata",
         "zero-model",
         "separate-authority",
         "receipt",
+        "exact-set",
         True,
         "migration-consumer-class-invalid",
     ),
 }
+CLASS_POLICY_FIELDS = (
+    "purpose",
+    "currentBinding",
+    "candidateBinding",
+    "rehearsalAction",
+    "liveMigrationAction",
+    "rollbackAction",
+    "verificationSurface",
+    "separateAuthorizationRequired",
+)
 OCCURRENCE_FIELDS = (
     "path",
     "line",
@@ -159,7 +177,7 @@ def load_migration_inventory(
         document_path = _inventory_path(root, path)
         data = document_path.read_bytes()
         document = json.loads(data)
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
         raise AcceptanceAuthorityError(
             "migration-inventory-incomplete", "Migration inventory cannot be loaded."
         ) from error
@@ -250,14 +268,7 @@ def _validate_row_governance(row: dict[str, object]) -> None:
 
     classification = row["classification"]
     expected = CLASS_POLICY[classification]
-    actual = (
-        row["currentBinding"],
-        row["candidateBinding"],
-        row["rehearsalAction"],
-        row["liveMigrationAction"],
-        row["rollbackAction"],
-        row["separateAuthorizationRequired"],
-    )
+    actual = tuple(row[field] for field in CLASS_POLICY_FIELDS)
     if not strict_json_equal(actual, expected[:-1]):
         raise AcceptanceAuthorityError(expected[-1], "Migration occurrence class policy drifted.")
 
