@@ -86,22 +86,22 @@ class ProductControlCliTests(unittest.TestCase):
             capture_output=True,
             check=True,
         )
+        subprocess.run(
+            ["git", "update-ref", "refs/heads/main", origin_main],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "symbolic-ref", "HEAD", "refs/heads/main"],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
 
     def bind_o3_verified(self, target: Path) -> Path:
-        evidence_revision = product_control.O3_LIFECYCLE_EVIDENCE_REVISION
-        if isinstance(evidence_revision, str):
-            subprocess.run(
-                [
-                    "git",
-                    "update-ref",
-                    "refs/remotes/origin/main",
-                    evidence_revision,
-                ],
-                cwd=target,
-                text=True,
-                capture_output=True,
-                check=True,
-            )
         acceptance_path = target / "product" / "acceptance.json"
         acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
         criterion = next(
@@ -123,6 +123,140 @@ class ProductControlCliTests(unittest.TestCase):
             / "o3-official-lifecycle-transaction-raw-2026-08-11.json"
         )
 
+    def commit_checkout_as_origin_main(self, target: Path) -> str:
+        subprocess.run(
+            ["git", "add", "-A"],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Product Control Test",
+                "-c",
+                "user.email=product-control@example.invalid",
+                "commit",
+                "--quiet",
+                "-m",
+                "test: persist public delivery candidate",
+            ],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        subprocess.run(
+            ["git", "update-ref", "refs/remotes/origin/main", revision],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        return revision
+
+    def write_valid_public_delivery_closeout_evidence(self, target: Path) -> Path:
+        path = (
+            target
+            / "product"
+            / "evidence"
+            / "public-delivery-closeout-observation-2026-08-11.json"
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(
+                {
+                    "schema": 1,
+                    "id": "public-delivery-closeout-observation-2026-08-11",
+                    "observedAt": "2026-08-11T18:30:00+08:00",
+                    "repository": "yiheng8023/agent-autonomy-harness",
+                    "repositoryVisibility": "PUBLIC",
+                    "defaultBranch": "main",
+                    "description": "Agent-neutral autonomy, collaboration, and capability orchestration harness.",
+                    "topics": [
+                        "agent-orchestration",
+                        "ai-agents",
+                        "developer-tools",
+                        "human-ai-collaboration",
+                    ],
+                    "issuesEnabled": True,
+                    "discussionsEnabled": False,
+                    "homepage": None,
+                    "privateVulnerabilityReportingEnabled": True,
+                    "metadataOperation": "github-repository-metadata-edit",
+                    "cleanup": {
+                        "checkedPaths": [
+                            ".tmp",
+                            "harness/__pycache__",
+                        ],
+                        "observedPresentPaths": [],
+                        "operation": "Agent read-only verification after exact user cleanup",
+                    },
+                    "claimLimits": [
+                        "records one dated mutable GitHub metadata observation and two exact repository cleanup observations",
+                        "does not cryptographically attest GitHub or future metadata state",
+                        "does not prove release publication production readiness or broad user value",
+                        "does not authorize cleanup beyond the two named repository paths or a new account trust or data boundary",
+                    ],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return path
+
+    def complete_public_delivery(
+        self,
+        target: Path,
+        *,
+        mutate_evidence=None,
+        mutate_source_program=None,
+    ) -> tuple[Path, str]:
+        evidence_path = self.write_valid_public_delivery_closeout_evidence(target)
+        if mutate_evidence is not None:
+            self.mutate_json(evidence_path, mutate_evidence)
+        program_path = target / "product" / "program.json"
+        if mutate_source_program is not None:
+            self.mutate_json(program_path, mutate_source_program)
+        revision = self.commit_checkout_as_origin_main(target)
+        program = json.loads(program_path.read_text(encoding="utf-8"))
+        public_increment = next(
+            item
+            for item in program["increments"]
+            if item["id"] == "increment.public-open-source-delivery-slice"
+        )
+        public_increment["state"] = "completed"
+        public_work = public_increment["workItems"][0]
+        public_work.update(
+            {
+                "state": "completed",
+                "result": "public-delivery-persisted",
+                "resultRevision": revision,
+                "closeoutEvidence": (
+                    "product/evidence/"
+                    "public-delivery-closeout-observation-2026-08-11.json"
+                ),
+            }
+        )
+        program["status"] = "completed"
+        program["activeIncrementId"] = None
+        program_path.write_text(
+            json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return program_path, revision
+
     def mutate_json(self, path: Path, mutate) -> None:
         document = json.loads(path.read_text(encoding="utf-8"))
         mutate(document)
@@ -141,7 +275,7 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertEqual(report["release"], "v0.1")
         self.assertEqual(
             report["activeIncrement"],
-            "increment.current-official-route-evaluation-slice",
+            "increment.public-open-source-delivery-slice",
         )
         self.assertTrue(report["criterionStates"]["O4"])
         self.assertTrue(report["criterionStates"]["O3"])
@@ -248,29 +382,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             self.copy_checkout_with_history(target)
-            self.bind_o3_verified(target)
-            program_path = target / "product" / "program.json"
-            program = json.loads(program_path.read_text(encoding="utf-8"))
-            current_increment = next(
-                item
-                for item in program["increments"]
-                if item["id"]
-                == "increment.current-official-route-evaluation-slice"
-            )
-            current_increment["state"] = "completed"
-            close_work = next(
-                item
-                for item in current_increment["workItems"]
-                if item["id"]
-                == "work.close-current-official-route-evaluation-slice"
-            )
-            close_work["state"] = "completed"
-            program["status"] = "completed"
-            program["activeIncrementId"] = None
-            program_path.write_text(
-                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
-                encoding="utf-8",
-            )
+            self.complete_public_delivery(target)
 
             result = self.run_verify(target)
 
@@ -278,6 +390,315 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "accepted")
+
+    def test_completed_public_delivery_requires_its_pushed_transition(self) -> None:
+        def close_source_program(program):
+            program["status"] = "completed"
+            program["activeIncrementId"] = None
+
+        mutations = {
+            "result drifted": (
+                None,
+                lambda work: work.__setitem__("result", "looks-good"),
+            ),
+            "revision drifted": (
+                None,
+                lambda work: work.__setitem__(
+                    "resultRevision", "daa051f1495f8a68181eda59a8845b10398d45e0"
+                ),
+            ),
+            "source program closed early": (close_source_program, lambda work: None),
+        }
+        for label, (mutate_source, mutate_work) in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path, _ = self.complete_public_delivery(
+                    target,
+                    mutate_source_program=mutate_source,
+                )
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                public_increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.public-open-source-delivery-slice"
+                )
+                public_work = public_increment["workItems"][0]
+                mutate_work(public_work)
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "completed public delivery work must bind its pushed transition",
+                    json.loads(result.stdout)["errors"],
+                )
+
+    def test_public_delivery_identity_cannot_be_removed_or_duplicated(self) -> None:
+        def remove_increment(program):
+            program["increments"] = [
+                item
+                for item in program["increments"]
+                if item["id"] != "increment.public-open-source-delivery-slice"
+            ]
+
+        def duplicate_increment(program):
+            public_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.public-open-source-delivery-slice"
+            )
+            program["increments"].append(deepcopy(public_increment))
+
+        def remove_work(program):
+            public_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.public-open-source-delivery-slice"
+            )
+            public_increment["workItems"] = []
+
+        def duplicate_work(program):
+            public_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.public-open-source-delivery-slice"
+            )
+            public_increment["workItems"].append(
+                deepcopy(public_increment["workItems"][0])
+            )
+
+        def cancel_work(program):
+            public_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.public-open-source-delivery-slice"
+            )
+            public_increment["state"] = "completed"
+            public_increment["workItems"][0]["state"] = "cancelled"
+
+        def stop_increment(program):
+            public_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.public-open-source-delivery-slice"
+            )
+            public_increment["state"] = "stopped"
+            public_increment["workItems"][0]["state"] = "cancelled"
+
+        mutations = {
+            "increment removed": remove_increment,
+            "increment duplicated": duplicate_increment,
+            "work removed": remove_work,
+            "work duplicated": duplicate_work,
+            "work cancelled": cancel_work,
+            "increment stopped": stop_increment,
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                mutate(program)
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertTrue(
+                    any(
+                        message in json.loads(result.stdout)["errors"]
+                        for message in (
+                            "program must contain exactly one public delivery increment",
+                            "public delivery increment must contain exactly one public delivery work item",
+                            "public delivery increment and work must complete",
+                        )
+                    )
+                )
+
+    def test_completed_public_delivery_still_requires_current_surface(self) -> None:
+        def drift_readme(target: Path) -> None:
+            path = target / "README.md"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "Shortest path:", "Quickest path:", 1
+                ),
+                encoding="utf-8",
+            )
+
+        def remove_receipt(target: Path) -> None:
+            (
+                target
+                / "product"
+                / "evidence"
+                / "public-delivery-closeout-observation-2026-08-11.json"
+            ).unlink()
+
+        def add_residue(target: Path) -> None:
+            residue = target / ".tmp" / "unexpected-residue"
+            residue.mkdir(parents=True)
+            (residue / "marker.txt").write_text("residue\n", encoding="utf-8")
+
+        def add_bytecode_cache(target: Path) -> None:
+            cache = target / "harness" / "__pycache__"
+            cache.mkdir(parents=True)
+            (cache / "control.pyc").write_bytes(b"residue")
+
+        mutations = {
+            "surface drift": (
+                drift_readme,
+                "completed public delivery work must preserve the current public surface",
+            ),
+            "current receipt removed": (
+                remove_receipt,
+                "completed public delivery work must bind its pushed transition",
+            ),
+            "repository residue added": (
+                add_residue,
+                "completed public delivery work must bind its pushed transition",
+            ),
+            "bytecode cache added": (
+                add_bytecode_cache,
+                "completed public delivery work must bind its pushed transition",
+            ),
+        }
+        for label, (mutate, expected_error) in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                self.complete_public_delivery(target)
+                mutate(target)
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(expected_error, json.loads(result.stdout)["errors"])
+
+    def test_completed_public_delivery_rejects_closeout_observation_drift(
+        self,
+    ) -> None:
+        mutations = {
+            "topic missing": lambda evidence: evidence["topics"].pop(),
+            "cleanup residue": lambda evidence: evidence["cleanup"].__setitem__(
+                "observedPresentPaths", [".tmp"]
+            ),
+            "cleanup path missing": lambda evidence: evidence["cleanup"][
+                "checkedPaths"
+            ].pop(),
+            "cleanup path substituted": lambda evidence: evidence["cleanup"].__setitem__(
+                "checkedPaths", [".tmp", "legacy"]
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                self.complete_public_delivery(target, mutate_evidence=mutate)
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "completed public delivery work must bind its pushed transition",
+                    json.loads(result.stdout)["errors"],
+                )
+
+    def test_completed_o3_closeout_requires_its_pushed_transition(self) -> None:
+        mutations = {
+            "result drifted": lambda work: work.__setitem__(
+                "result", "looks-good"
+            ),
+            "revision drifted": lambda work: work.__setitem__(
+                "resultRevision", "0" * 40
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                o3_increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.current-official-route-evaluation-slice"
+                )
+                close_work = next(
+                    item
+                    for item in o3_increment["workItems"]
+                    if item["id"]
+                    == "work.close-current-official-route-evaluation-slice"
+                )
+                mutate(close_work)
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "completed O3 closeout work must bind its pushed acceptance transition",
+                    json.loads(result.stdout)["errors"],
+                )
+
+    def test_public_delivery_work_requires_a_progressive_minimal_surface(
+        self,
+    ) -> None:
+        def drift_readme(target: Path) -> None:
+            path = target / "README.md"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "Shortest path:", "Entry point:", 1
+                ),
+                encoding="utf-8",
+            )
+
+        def drift_ci(target: Path) -> None:
+            path = target / ".github" / "workflows" / "validate.yml"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "5fda3b95a4ea91299a34e894583c3862153e4b97",
+                    "0" * 40,
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        def add_issue_template(target: Path) -> None:
+            path = target / ".github" / "ISSUE_TEMPLATE" / "generic.md"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("---\nname: Generic\n---\n", encoding="utf-8")
+
+        mutations = {
+            "shortest path drifted": drift_readme,
+            "CI pin drifted": drift_ci,
+            "speculative issue template added": add_issue_template,
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                mutate(target)
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "public delivery work must bind the progressive minimal repository surface",
+                    json.loads(result.stdout)["errors"],
+                )
 
     def test_completed_increment_cannot_retain_open_work(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -318,7 +739,6 @@ class ProductControlCliTests(unittest.TestCase):
                 json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
             )
-
             result = self.run_verify(target)
 
         self.assertNotEqual(result.returncode, 0)
@@ -342,6 +762,18 @@ class ProductControlCliTests(unittest.TestCase):
             o3.pop("evidence")
             acceptance_path.write_text(
                 json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            program["increments"] = [
+                item
+                for item in program["increments"]
+                if item["id"]
+                != "increment.current-official-route-evaluation-slice"
+            ]
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
             )
 

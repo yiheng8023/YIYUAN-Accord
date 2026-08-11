@@ -15,8 +15,8 @@ versioned runtime.
 
 ## Reporting security issues
 
-Private vulnerability reporting is enabled for this repository. Submit
-sensitive findings through
+Last verified on 2026-08-11, private vulnerability reporting was enabled for
+this repository. Submit sensitive findings through
 <https://github.com/yiheng8023/agent-autonomy-harness/security/advisories/new>.
 Do not place secrets, exploit payloads, or restricted material in a public
 issue.
@@ -30,8 +30,9 @@ Use private vulnerability reporting for:
 - license, provenance, privacy, path traversal, permission, rollback, or cleanup
   defects with material security impact.
 
-Private reporting availability is a live GitHub setting and must be rechecked
-before making a current availability claim.
+Private reporting is a GitHub-controlled live setting. If the form is
+unavailable, do not post sensitive content publicly; open a non-sensitive issue
+asking the maintainers to provide a private contact route.
 
 Include the affected revision and artifact, impact and authority boundary, safe
 reproduction evidence, known downstream state, and any containment or cleanup

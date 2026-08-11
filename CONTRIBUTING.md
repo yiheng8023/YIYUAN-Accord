@@ -18,11 +18,11 @@ review and state-transition gates pass. Installation, enablement, account
 connection, dispatch, behavior, value, portability, acceptance, release, and
 publication are distinct states.
 
-Run the current checks:
+Use Python 3.10 or newer. Run the canonical product checks from the repository
+root:
 
 ```powershell
 python -B -m harness verify --root . --json
-python -B scripts/verify.py
 python -B -m unittest discover -s tests/product -v
 ```
 

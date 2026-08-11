@@ -2,120 +2,121 @@
 
 English | [简体中文](README.zh-CN.md)
 
+Shortest path: [verify the checkout](#start-here) · [understand the loop](#what-the-harness-does) · [choose a deeper path](#progressive-paths)
+
 Agent Autonomy Harness is an agent-neutral product for keeping a real task's
 goal, capability route, authority boundary, lifecycle, continuity, evidence,
 and cleanup coherent without making the user orchestrate every Agent, Skill,
 MCP server, Plugin, Hook, thread, worktree, or manager.
 
-The product is not a large Skills list. External capabilities are replaceable
-inputs and adapters; the Harness is the decision and lifecycle contract that
-decides when they are needed, what authority they receive, how their effects
-are observed, and when they are released.
+It is not a large Skills list. External capabilities are replaceable inputs;
+the Harness decides when one is needed, what authority it receives, how its
+effects are observed, and when the route is released.
 
-## Current product state
+## Start here
 
-- Release target: `v0.1`.
-- Product outcomes: `5/5` currently verified.
-- Mandatory guardrails: `4/4` currently pass.
-- Active causal increment: `increment.current-official-route-evaluation-slice`.
-- Completion remains `in-progress` while the program closeout work is active.
-  O3 is bound to one source-reconciled scorecard and one current-host lifecycle
-  transaction; this is not a general lifecycle or cross-host claim.
-
-The current reset is itself a user-provided real task. It exposed a genuine
-Harness failure: a predecessor research and curation program could remain
-green while product delivery, user burden, and cleanup were not the controlling
-measures. The new product-control seam rejects unmapped work, multiple active
-increments, predecessor authority in active surfaces, and guardrails counted
-as product progress.
-
-## Product contract
-
-The current machine authority is deliberately small:
-
-- [constitution](product/constitution.json) — purpose, fixed invariants,
-  adaptive surfaces, and planning method;
-- [program](product/program.json) — one active causal increment and bounded
-  future increments;
-- [acceptance](product/acceptance.json) — five outcomes plus four mandatory
-  guardrails;
-- [architecture](docs/architecture.md) — portable core, lifecycle plane, host
-  adapters, and consumer projections.
-
-Historical research, fixtures, registries, and regression tools remain
-retrievable from Git history, but they have no current product, planning,
-acceptance, runtime, or release authority. The former local ignored quarantine
-was physically removed; transient ignored bytecode caches are not authority and
-remain cleanup items whenever tooling recreates them.
-
-## Verify
-
-Run the current public product seam:
+Prerequisites: Git and Python 3.10 or newer. The current checkout is
+standard-library-only; no package installation, account, or external service is
+needed for local verification.
 
 ```powershell
+git clone https://github.com/yiheng8023/agent-autonomy-harness.git
+cd agent-autonomy-harness
 python -B -m harness verify --root . --json
-python -B scripts/verify.py
+```
+
+A valid report currently shows `5/5` outcomes and `4/4` guardrails. Completion
+remains `in-progress` while the final public-delivery increment is active. A
+green report proves repository-bound product consistency only; it is not a
+production, release, publication, broad-value, or cross-host claim.
+
+For the full deterministic product suite:
+
+```powershell
 python -B -m unittest discover -s tests/product -v
 ```
 
-A PASS means only that the current product plan, acceptance mapping, evidence
-bindings, authority boundary, and identity guard are internally consistent. O3
-and O4 each bind one bounded current-host event. They do not prove cross-host
-behavior, production readiness, release readiness, or broad user value.
+## What the Harness does
 
-## Delivery method
+For one bound task, the Harness keeps this loop explicit:
 
-The project uses a hybrid method:
+1. bind the real goal, inputs, authority, and verification surface;
+2. choose native, official, reviewed external, composed, or authored capability;
+3. preview the route before meaningful side effects;
+4. activate only inside the granted task boundary;
+5. observe the result, user intervention, and claim ceiling;
+6. project only where a host or consumer actually requires it;
+7. roll back, clean up, and leave a continuation record.
 
-1. fix the purpose, product boundary, authority floor, and release acceptance;
-2. keep exactly one short causal increment active;
-3. state the observed problem, hypothesis, falsifier, acceptance mapping, and
-   finite stop condition;
-4. implement and observe the smallest product slice;
-5. replan only when evidence changes the causal model or the increment ends.
+The current O3 evidence exercises this loop once on a source-bound current-host
+task. It does not establish universal lifecycle support.
 
-Research, ecosystem discovery, inventory growth, static review, zero-model
-fixtures, and test counts may support an outcome. They never count as an
-outcome themselves.
+## Completion standard
 
-Minimal sufficiency is measured against demand coverage, not against the
-smallest possible capability count. A bounded portfolio-curation increment may
-proactively compare and acquire exact candidates into an inactive review pool;
-live installation, activation, accounts, and consumer projection remain
-separate authority transitions.
+The release acceptance authority is the machine-readable
+[acceptance](product/acceptance.json). Product acceptance requires all five
+outcomes, all four guardrails, a completed program, no active increment, and a
+fully terminal increment/work graph. Tests, inventories, fixtures, and research
+volume may support an outcome; they never substitute for one.
 
-## Capability order
+Current evidence is intentionally bounded:
 
-For a bound need, prefer:
+- O2 binds one user-provided real task to a non-null capability route.
+- O3 binds one 60-entry non-Cartesian evaluation and one six-phase current-host
+  lifecycle receipt with explicit attestation limits.
+- O4 binds one fresh receiver to one repository state with zero material
+  restatement.
+- O5 covers named Harness cleanup targets, not unrelated host storage.
 
-1. healthy native or runtime-owned capability;
-2. suitable official capability;
-3. reviewed and maintained external implementation;
-4. composition of existing capabilities;
-5. repository-authored implementation only for an evidenced residual gap.
+## Progressive paths
 
-Installation, enablement, account connection, live dispatch, consumer
-mutation, acceptance, release, and publication remain distinct transitions.
+| If you want to… | Continue with… |
+| --- | --- |
+| check whether the checkout is coherent | the one-command [verification](#start-here) |
+| understand product boundaries and extension seams | [Architecture](docs/architecture.md) |
+| inspect purpose, work, and acceptance authority | [Constitution](product/constitution.json), [program](product/program.json), and [acceptance](product/acceptance.json) |
+| resume active repository work | [Continuation](docs/operations/CONTINUATION.md) after checking live Git truth |
+| propose a focused change | [Contributing](CONTRIBUTING.md) |
+| ask a question or report a non-sensitive problem | [Support](SUPPORT.md) |
+| report a vulnerability or sensitive finding | [Security](SECURITY.md) |
+| inspect provenance and rights | [NOTICE](NOTICE), [third-party notices](THIRD_PARTY_NOTICES.md), and [license policy](docs/license-policy.md) |
 
-## Repository map
+## Capability order and authority
 
-- `product/` — current constitution, program, acceptance, and bounded evidence;
-- `harness/` — current product-control kernel;
-- `tests/product/` — tests at the public product seam;
-- `docs/architecture.md` and `docs/strategy/` — current product design and
-  triggered research plan;
-- `docs/operations/` — compact continuation and current execution projection;
-- Git history — predecessor and later evidence remain retrievable without
-  shipping them in every current checkout. See the
-  [history boundary](docs/operations/HISTORY.md).
+For a bound need, prefer a healthy native/runtime capability, then a suitable
+official capability, then a reviewed maintained external implementation, then
+composition. Author new capability only for a reproducible residual gap.
 
-## Safety and rights
+Installation, enablement, account connection, meaningful cost, live dispatch,
+consumer mutation, acceptance, publication, and release are separate state
+transitions. Native host authorization remains authoritative.
 
-Native host authorization remains authoritative. The Harness does not bypass
-permission systems or infer new trust, cost, destructive, account, publication,
-release, or irreversible authority.
+## Product contract
 
-Repository-owned code is Apache-2.0 unless a file states otherwise. Third-party
-material retains its original rights; see [NOTICE](NOTICE),
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and
-[license policy](docs/license-policy.md).
+The active machine authority is deliberately small:
+
+- `product/constitution.json` — purpose, invariants, adaptive surfaces, and
+  planning method;
+- `product/program.json` — the one active causal increment and its finite stop;
+- `product/acceptance.json` — five outcomes and four mandatory guardrails;
+- `harness/` — the public product-control kernel;
+- `tests/product/` — mutation tests through the public CLI seam.
+
+Historical research and predecessor payloads remain retrievable from Git
+history but do not become current authority by remaining available. See the
+[history boundary](docs/operations/HISTORY.md).
+
+## Community and rights
+
+Community support is best effort. Read [Support](SUPPORT.md),
+[Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md), and
+[Security](SECURITY.md) before sharing evidence. Remove credentials, private
+memory, account state, restricted material, and sensitive logs.
+
+Repository-owned code and documentation are licensed under Apache-2.0 unless a
+file says otherwise. Third-party material retains its original rights. See
+[LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Voluntary sponsorship is described in [SPONSORING.md](SPONSORING.md); it does
+not purchase support priority, features, release authority, or technical
+influence.

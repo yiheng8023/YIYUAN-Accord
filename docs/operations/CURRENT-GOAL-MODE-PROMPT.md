@@ -2,95 +2,74 @@
 
 ## Goal
 
-Pass O3 on the already-bound real closeout task after the external cohort
-falsified the acquisition hypothesis: evaluate the current native-plus-official
-route through one attributable host event, turn the exact historical sparse
-mapping into decision-bearing evidence, and add another capability only if a
-reproducible residual gap survives comparison.
+Finish the smallest truthful public delivery surface for Agent Autonomy
+Harness v0.1, then close the program only after the repository, GitHub
+metadata, local residue, and deterministic acceptance evidence agree.
 
 ## Current causal increment
 
-`increment.current-official-route-evaluation-slice`
+`increment.public-open-source-delivery-slice`
 
-Observed problem: the exact evidence layer at `dd5fa0e` now satisfies O3, but
-an outcome-only completion calculation could call the product accepted while
-the program and closeout work remain active. The public README also reported
-the pre-O3 state. No third lifecycle attempt is allowed.
+Observed problem: O1-O5 and G1-G4 are now satisfied by bounded evidence, but
+the public repository still makes a new reader reconstruct the entry path. The
+README lacks a shortest path and progressive routes, CI relies on runner
+defaults, verification guidance is duplicated, and several community files
+retain stale or unsupported statements.
 
-Hypothesis: promote O3 only with its exact two evidence paths, synchronize the
-public state, and require a completed program plus closed increment graph before
-`completionState=accepted`.
+Hypothesis: one progressive bilingual README, one canonical from-checkout
+verification seam, a pinned minimum-Python CI surface, coherent community and
+rights guidance, and only evidenced GitHub metadata will make the repository
+self-service without creating template or dependency sprawl.
 
-Falsifier: substitute evidence passes, an active program reports accepted, a
-completed program retains an active increment or open work, public state
-contradicts the machine report, or another lifecycle run is required.
+Falsifier: the slice adds speculative files or live GitHub features, duplicates
+verification paths, invents release or production claims, leaves broken links
+or stale identity, expands trust or account boundaries, reports acceptance
+before the program graph closes, or creates new temporary residue.
 
-Stop condition: commit and push the separately reviewed O3 transition, public
-state synchronization, and active-program completion guard. Close the increment
-only from that pushed transition.
+Stop condition: the English and Chinese README surfaces expose the shortest
+clone-and-verify path, reader-specific deeper routes, the completion standard,
+and evidence limits; CI pins one supported Python floor using immutable
+official Actions; contribution, conduct, security, support, sponsorship, and
+license guidance agree; only evidenced repository topics are added; no
+speculative template or homepage is added; exact cleanup, deterministic
+verification, review, commit, and `origin/main` push all succeed.
 
 ## Current work item
 
-`work.close-current-official-route-evaluation-slice`
+`work.finish-public-open-source-delivery`
 
-The completed scorecard is
-`product/evidence/o3-sparse-scorecard-2026-08-11.json`. It retains criterion
-records by canonical hash, treats aggregate axes as membership only, and binds
-the exact attempt-2 raw receipt from pushed revision `dd5fa0e`. O3 is now
-verified, while overall completion remains `in-progress` until the program and
-increment graph close. The earlier real but
-evidence-incomplete analytical event is recorded at
-`product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
-projection is independently hashed and fail-closed; the missing raw-output hash
-and all absent lifecycle phases are mandatory limitations. Its work item is
-`cancelled` with result `evidence-incomplete`, not completed. Attempt 1 of the
-separately bounded lifecycle transaction is preserved at
-`product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json`.
-Its final raw replacement was interrupted and cannot be repaired because two
-exact timestamps were never durably retained. Attempt 2 then ran once from the
-pushed contract at
-`product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`
-and produced
-`product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json`.
-Preserve and bind that pushed receipt; do not execute attempt 2 or any third
-attempt again.
+The O3 lifecycle event and its transition are already complete and pushed at
+`daa051f1495f8a68181eda59a8845b10398d45e0`. Do not replay the event or reopen
+capability acquisition. The current work is only the public interface and
+final program-state closeout.
 
 ## Allowed work
 
-- inspect repository and exact historical Git evidence;
-- evaluate the user's already-bound coverage complaint as a real task;
-- edit the bound repository's O3 contract, evaluation, evidence, verifier, and
-  tests;
+- inspect and edit the current repository public documentation, CI, product
+  state, verifier, and tests;
+- validate local Markdown links and public repository metadata;
+- update minimal, evidence-backed GitHub discovery topics under the explicit
+  `github-repository-metadata-edit` operation;
 - use installed, already-authorized capabilities when they materially improve
-  the task;
-- validate the normalized analytical projection without treating its missing
-  raw-output hash as present;
-- verify and preserve the source-reconciled 15/6/14/12/13 non-Cartesian
-  scorecard;
-- record explicit preview, bounded activation, observation, applicable
-  projection, rollback, and cleanup states for one selected-route transaction;
-- run deterministic verification, bounded cleanup, commit, and push.
+  this bound task;
+- run deterministic verification and two-axis review;
+- remove only exact confirmed temporary residue;
+- commit and push the bounded public-delivery and final-state transitions.
 
-## Separate authority transition
+## Authority boundary
 
-The user authorized real task evaluation and evidence-backed capability
-addition. The current active transition covers task-scoped use of the exact
-already-installed OpenAI capability on this public local repository plus only
-the contract's exact temporary root and raw-evidence file writes; it does not
-grant installation, enablement, account connection, paid service use,
-third-party candidate execution, consumer projection, manager mutation,
-publication, or release. The exact task, Skill, data, verification, rollback,
-and cleanup boundaries are fixed by the active capability context and evidence
-contracts; any drift stops the transaction.
-
-Release and publication remain user-owned and are not authorized by this
-increment.
+The user authorized autonomous repository completion, routine commit and push,
+minimal GitHub public-surface preparation, and exact debt cleanup. This does not
+authorize a release tag, package publication, deployment, account/OAuth change,
+capability installation or enablement, third-party candidate execution,
+consumer projection, manager mutation, paid service use, or a new trust/data
+boundary.
 
 ## Required checks
 
 ```powershell
 git status --short --branch
 python -B -m harness verify --root . --json
-python -B scripts/verify.py
 python -B -m unittest discover -s tests/product -v
+git diff --check
 ```

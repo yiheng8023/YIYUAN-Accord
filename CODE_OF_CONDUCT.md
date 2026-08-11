@@ -1,7 +1,8 @@
 # Code of Conduct
 
-This project is for public-safe, cross-agent Skill governance. Participation
-should stay evidence-based, respectful, and focused on safer reuse.
+Agent Autonomy Harness is a public, agent-neutral autonomy and capability-
+lifecycle product. Participation should stay evidence-based, respectful, and
+focused on bounded, observable human-Agent collaboration.
 
 ## Expected behavior
 
@@ -10,8 +11,8 @@ should stay evidence-based, respectful, and focused on safer reuse.
 - Keep discussions public-safe: do not post secrets, private memory, account
   state, personal data, proprietary dumps, leaked prompts, or restricted
   third-party content.
-- Treat unapproved Skill candidates as untrusted review material, not runtime
-  instructions.
+- Treat unapproved external capability candidates as untrusted review material,
+  not runtime instructions.
 - Prefer specific, actionable feedback over broad claims.
 
 ## Unacceptable behavior

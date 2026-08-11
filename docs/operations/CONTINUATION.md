@@ -59,11 +59,28 @@ cancelled rather than silently activated. The receipt proves static review,
 subtraction, the stop decision, and cleanup only—not candidate behavior,
 value, O3, or release readiness.
 
-## Current increment
+## Completed O3 transition
 
-`increment.current-official-route-evaluation-slice` remains active for its
-finite closeout. Product state is `5/5` outcomes and `4/4` guardrails, but
-completion remains `in-progress` until the program and increment graph close.
+The O3 transition and active-program completion guard were separately reviewed,
+committed, and pushed at
+`daa051f1495f8a68181eda59a8845b10398d45e0`. Product state is `5/5` outcomes
+and `4/4` guardrails. Completion remains `in-progress` because the separately
+mapped public-delivery increment is active; the O3 lifecycle event must not be
+replayed.
+
+## Current public-delivery increment
+
+`increment.public-open-source-delivery-slice` is the only active increment and
+`work.finish-public-open-source-delivery` is its only active work item. It
+binds the smallest progressive bilingual README, explicit from-checkout Python
+and verification contract, reproducible minimal CI, coherent community and
+rights guidance, evidenced GitHub discovery metadata, exact residue cleanup,
+and final deterministic review/commit/push.
+
+This is a public interface and program-state closeout, not another research or
+capability-acquisition loop. It must not add speculative templates, a homepage,
+new dependencies, new live features, or broader product claims merely to make
+the repository look complete.
 
 ## Evidence-incomplete official KPI analysis event
 
@@ -151,14 +168,15 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-The evidence-construction work is completed and the active work item is
-`work.close-current-official-route-evaluation-slice`. Commit and push the exact
-O3 transition, synchronized public state, active-program completion guard, and
-full local verification. Then close this increment from that pushed revision
-and activate only the separately mapped public-delivery closeout. Attempt 2 is
-complete and must not be executed again; a third lifecycle attempt is not
-authorized. Any install, enablement, account, external candidate execution,
-manager/consumer mutation, publication, or release remains outside authority.
+Complete and review the current public-delivery candidate, run the full local
+product seam, commit and push it, then verify the minimal live GitHub metadata
+and exact local cleanup. Only after that pushed revision exists may the final
+state transition close the public work item and increment, set the program to
+completed, synchronize the README and continuation state, rerun the full seam,
+and push the accepted candidate. Attempt 2 is complete and a third lifecycle
+attempt is not authorized. Any install, enablement, account change, external
+candidate execution, manager/consumer mutation, release tag, package
+publication, deployment, or new trust boundary remains outside authority.
 
 Do not redo or copy the historical sparse reconciliation. Its exact source is
 pinned in `product/program.json` at commit `c538667...`; each current axis must

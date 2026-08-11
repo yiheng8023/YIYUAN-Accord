@@ -2,10 +2,9 @@
 
 This policy describes intended boundaries and is not legal advice.
 
-Repository-owned code, product-control JSON, tests, workflows, and validation
-tooling are licensed under Apache-2.0 unless a file says otherwise.
-Repository-owned documentation is intended for CC BY 4.0 unless a file says
-otherwise.
+Repository-owned code and documentation are licensed under Apache-2.0 unless a
+file says otherwise. The top-level `LICENSE` is the current grant; this policy
+does not create a second documentation license.
 
 The current product tree contains no third-party capability payload. Material
 retained in earlier Git revisions keeps its original license, provenance, and

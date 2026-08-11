@@ -119,6 +119,7 @@ BASE_AGENT_OPERATION_IDS = {
     "bounded-cleanup",
     "git-commit",
     "git-push",
+    "github-repository-metadata-edit",
 }
 PORTFOLIO_CURATION_TASK_BINDING = "agent-autonomy-harness-v0.1-closeout"
 PORTFOLIO_CURATION_INCREMENT_ID = "increment.capability-lifecycle-product-slice"
@@ -785,6 +786,227 @@ def _git_revision_is_on_origin_main(root: Path, revision: str) -> bool:
     except OSError:
         return False
     return result.returncode == 0
+
+
+def _read_repository_text(root: Path, relative: str) -> str | None:
+    local_errors: list[str] = []
+    path = _inside_root(root, relative, local_errors)
+    if path is None or local_errors or not path.is_file():
+        return None
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return None
+
+
+PUBLIC_DELIVERY_PATHS = (
+    "README.md",
+    "README.zh-CN.md",
+    ".github/workflows/validate.yml",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "SUPPORT.zh-CN.md",
+    "SPONSORING.md",
+    "SPONSORING.zh-CN.md",
+    "docs/license-policy.md",
+)
+PUBLIC_DELIVERY_CLOSEOUT_EVIDENCE_PATH = (
+    "product/evidence/public-delivery-closeout-observation-2026-08-11.json"
+)
+PUBLIC_REPOSITORY_TOPICS = {
+    "agent-orchestration",
+    "ai-agents",
+    "developer-tools",
+    "human-ai-collaboration",
+}
+PUBLIC_DELIVERY_REPOSITORY_TEMPORARY_PATHS = (
+    ".tmp",
+    "harness/__pycache__",
+)
+PUBLIC_DELIVERY_CLAIM_LIMITS = {
+    "records one dated mutable GitHub metadata observation and two exact repository cleanup observations",
+    "does not cryptographically attest GitHub or future metadata state",
+    "does not prove release publication production readiness or broad user value",
+    "does not authorize cleanup beyond the two named repository paths or a new account trust or data boundary",
+}
+
+
+def _git_text_at_revision(root: Path, revision: str, relative: str) -> str | None:
+    payload = _git_bytes_at_revision(root, revision, relative)
+    if payload is None:
+        return None
+    try:
+        return payload.decode("utf-8")
+    except UnicodeError:
+        return None
+
+
+def _git_tree_paths_at_revision(root: Path, revision: str) -> list[str] | None:
+    try:
+        result = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", "-z", revision],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    try:
+        return [
+            item.decode("utf-8")
+            for item in result.stdout.split(b"\0")
+            if item
+        ]
+    except UnicodeError:
+        return None
+
+
+def _public_delivery_documents_valid(
+    documents: dict[str, str | None],
+    tracked_issue_templates: bool,
+) -> bool:
+    if not all(
+        isinstance(value, str) and bool(value.strip())
+        for value in documents.values()
+    ):
+        return False
+    readme = documents["README.md"]
+    readme_zh = documents["README.zh-CN.md"]
+    workflow = documents[".github/workflows/validate.yml"]
+    contributing = documents["CONTRIBUTING.md"]
+    conduct = documents["CODE_OF_CONDUCT.md"]
+    canonical_verify = "python -B -m harness verify --root . --json"
+    product_tests = "python -B -m unittest discover -s tests/product -v"
+    return (
+        "Shortest path:" in readme
+        and "Python 3.10 or newer" in readme
+        and canonical_verify in readme
+        and "[acceptance](product/acceptance.json)" in readme
+        and "[Contributing](CONTRIBUTING.md)" in readme
+        and "[Security](SECURITY.md)" in readme
+        and "最短路径：" in readme_zh
+        and "Python 3.10 或更高版本" in readme_zh
+        and canonical_verify in readme_zh
+        and "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97" in workflow
+        and 'python-version: "3.10"' in workflow
+        and canonical_verify in workflow
+        and product_tests in workflow
+        and "scripts/verify.py" not in workflow
+        and canonical_verify in contributing
+        and product_tests in contributing
+        and "scripts/verify.py" not in contributing
+        and "Agent Autonomy Harness" in conduct
+        and "cross-agent Skill governance" not in conduct
+        and not tracked_issue_templates
+    )
+
+
+def _valid_public_delivery_surface(root: Path) -> bool:
+    documents = {
+        path: _read_repository_text(root, path) for path in PUBLIC_DELIVERY_PATHS
+    }
+    checkout_errors: list[str] = []
+    tracked_issue_templates = any(
+        path.relative_to(root)
+        .as_posix()
+        .casefold()
+        .startswith(".github/issue_template/")
+        for path in _checkout_files(root, checkout_errors)
+    )
+    return not checkout_errors and _public_delivery_documents_valid(
+        documents,
+        tracked_issue_templates,
+    )
+
+
+def _valid_public_delivery_surface_at_revision(
+    root: Path,
+    revision: str,
+) -> bool:
+    documents = {
+        path: _git_text_at_revision(root, revision, path)
+        for path in PUBLIC_DELIVERY_PATHS
+    }
+    tree_paths = _git_tree_paths_at_revision(root, revision)
+    if tree_paths is None:
+        return False
+    tracked_issue_templates = any(
+        path.casefold().startswith(".github/issue_template/")
+        for path in tree_paths
+    )
+    return _public_delivery_documents_valid(documents, tracked_issue_templates)
+
+
+def _valid_public_delivery_closeout_evidence(
+    root: Path,
+    revision: str,
+    work_item: dict[str, Any],
+) -> bool:
+    if work_item.get("closeoutEvidence") != PUBLIC_DELIVERY_CLOSEOUT_EVIDENCE_PATH:
+        return False
+    pinned_payload = _git_bytes_at_revision(
+        root,
+        revision,
+        PUBLIC_DELIVERY_CLOSEOUT_EVIDENCE_PATH,
+    )
+    local_errors: list[str] = []
+    current_path = _inside_root(
+        root,
+        PUBLIC_DELIVERY_CLOSEOUT_EVIDENCE_PATH,
+        local_errors,
+    )
+    if pinned_payload is None or current_path is None or local_errors:
+        return False
+    try:
+        current_evidence = json.loads(current_path.read_text(encoding="utf-8"))
+        evidence = json.loads(pinned_payload.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return False
+    if current_evidence != evidence or not isinstance(evidence, dict):
+        return False
+    cleanup = evidence.get("cleanup")
+    return (
+        evidence.get("schema") == 1
+        and evidence.get("id")
+        == "public-delivery-closeout-observation-2026-08-11"
+        and _rfc3339_datetime(evidence.get("observedAt")) is not None
+        and evidence.get("repository") == "yiheng8023/agent-autonomy-harness"
+        and evidence.get("repositoryVisibility") == "PUBLIC"
+        and evidence.get("defaultBranch") == "main"
+        and evidence.get("description")
+        == "Agent-neutral autonomy, collaboration, and capability orchestration harness."
+        and _exact_string_set(evidence.get("topics"), PUBLIC_REPOSITORY_TOPICS)
+        and evidence.get("issuesEnabled") is True
+        and evidence.get("discussionsEnabled") is False
+        and "homepage" in evidence
+        and evidence.get("homepage") is None
+        and evidence.get("privateVulnerabilityReportingEnabled") is True
+        and evidence.get("metadataOperation")
+        == "github-repository-metadata-edit"
+        and isinstance(cleanup, dict)
+        and _exact_string_set(
+            cleanup.get("checkedPaths"),
+            set(PUBLIC_DELIVERY_REPOSITORY_TEMPORARY_PATHS),
+        )
+        and cleanup.get("observedPresentPaths") == []
+        and cleanup.get("operation")
+        == "Agent read-only verification after exact user cleanup"
+        and _exact_string_set(
+            evidence.get("claimLimits"),
+            PUBLIC_DELIVERY_CLAIM_LIMITS,
+        )
+    )
+
+
+def _public_delivery_repository_residue_absent(root: Path) -> bool:
+    for relative in PUBLIC_DELIVERY_REPOSITORY_TEMPORARY_PATHS:
+        if not _path_entry_absent(root / relative):
+            return False
+    return True
 
 
 def validate_continuation_receipt(root: Path, document: dict[str, Any]) -> bool:
@@ -2250,6 +2472,135 @@ def _valid_o3_lifecycle_receipt(
     return all(valid for valid, _ in checks)
 
 
+def _valid_o3_closeout_transition(
+    root: Path,
+    work_item: dict[str, Any],
+) -> bool:
+    revision = work_item.get("resultRevision")
+    if (
+        work_item.get("result") != "o3-transition-persisted"
+        or not isinstance(revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}", revision) is None
+        or not _git_revision_is_on_origin_main(root, revision)
+    ):
+        return False
+    source_acceptance = _git_json_at_revision(
+        root,
+        revision,
+        "product/acceptance.json",
+    )
+    source_program = _git_json_at_revision(
+        root,
+        revision,
+        "product/program.json",
+    )
+    if not isinstance(source_acceptance, dict) or not isinstance(
+        source_program, dict
+    ):
+        return False
+    source_criteria = source_acceptance.get("criteria")
+    source_increments = source_program.get("increments")
+    if not isinstance(source_criteria, list) or not isinstance(
+        source_increments, list
+    ):
+        return False
+    source_o3 = next(
+        (
+            item
+            for item in source_criteria
+            if isinstance(item, dict) and item.get("id") == "O3"
+        ),
+        {},
+    )
+    source_increment = next(
+        (
+            item
+            for item in source_increments
+            if isinstance(item, dict)
+            and item.get("id")
+            == "increment.current-official-route-evaluation-slice"
+        ),
+        {},
+    )
+    source_work_items = source_increment.get("workItems")
+    source_close_work = next(
+        (
+            item
+            for item in source_work_items
+            if isinstance(item, dict)
+            and item.get("id")
+            == "work.close-current-official-route-evaluation-slice"
+        ),
+        {},
+    ) if isinstance(source_work_items, list) else {}
+    return (
+        source_o3.get("assessment") == "verified"
+        and source_o3.get("evidence") == O3_VERIFIED_EVIDENCE_PATHS
+        and source_program.get("status") == "active"
+        and source_program.get("activeIncrementId")
+        == "increment.current-official-route-evaluation-slice"
+        and source_increment.get("state") == "active"
+        and source_close_work.get("state") == "active"
+    )
+
+
+def _valid_public_delivery_transition(
+    root: Path,
+    work_item: dict[str, Any],
+) -> bool:
+    revision = work_item.get("resultRevision")
+    if (
+        work_item.get("result") != "public-delivery-persisted"
+        or not isinstance(revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}", revision) is None
+        or not _git_revision_is_on_origin_main(root, revision)
+        or not _valid_public_delivery_surface_at_revision(root, revision)
+        or not _public_delivery_repository_residue_absent(root)
+        or not _valid_public_delivery_closeout_evidence(
+            root,
+            revision,
+            work_item,
+        )
+    ):
+        return False
+    source_program = _git_json_at_revision(
+        root,
+        revision,
+        "product/program.json",
+    )
+    if not isinstance(source_program, dict):
+        return False
+    source_increments = source_program.get("increments")
+    if not isinstance(source_increments, list):
+        return False
+    source_increment = next(
+        (
+            item
+            for item in source_increments
+            if isinstance(item, dict)
+            and item.get("id") == "increment.public-open-source-delivery-slice"
+        ),
+        {},
+    )
+    source_work_items = source_increment.get("workItems")
+    source_work = next(
+        (
+            item
+            for item in source_work_items
+            if isinstance(item, dict)
+            and item.get("id") == "work.finish-public-open-source-delivery"
+        ),
+        {},
+    ) if isinstance(source_work_items, list) else {}
+    return (
+        source_program.get("status") == "active"
+        and source_program.get("activeIncrementId")
+        == "increment.public-open-source-delivery-slice"
+        and source_increment.get("state") == "active"
+        and source_work.get("state") == "active"
+    )
+
+
 def _valid_o3_sparse_scorecard_progress(
     root: Path,
     work_item: dict[str, Any],
@@ -2587,6 +2938,13 @@ def verify_product(root: Path) -> dict[str, Any]:
             else:
                 increments.append(increment)
     active_increments = [item for item in increments if item.get("state") == "active"]
+    public_delivery_increments = [
+        item
+        for item in increments
+        if item.get("id") == "increment.public-open-source-delivery-slice"
+    ]
+    if len(public_delivery_increments) != 1:
+        errors.append("program must contain exactly one public delivery increment")
     program_status = program.get("status")
     active_increment_id = program.get("activeIncrementId")
     if program_status == "active":
@@ -2625,6 +2983,11 @@ def verify_product(root: Path) -> dict[str, Any]:
             "stopped",
         }:
             errors.append(f"increment {increment_id} has an unsupported state")
+        if (
+            increment_id == "increment.public-open-source-delivery-slice"
+            and increment_state not in {"active", "completed"}
+        ):
+            errors.append("public delivery increment and work must complete")
         if increment_state == "stopped":
             if increment.get("result") != "falsified":
                 errors.append(
@@ -2655,6 +3018,18 @@ def verify_product(root: Path) -> dict[str, Any]:
         if not isinstance(raw_work_items, list):
             errors.append(f"increment {increment_id} workItems must be a list")
             continue
+        if increment_id == "increment.public-open-source-delivery-slice":
+            public_delivery_work_items = [
+                item
+                for item in raw_work_items
+                if isinstance(item, dict)
+                and item.get("id") == "work.finish-public-open-source-delivery"
+            ]
+            if len(public_delivery_work_items) != 1:
+                errors.append(
+                    "public delivery increment must contain exactly one public "
+                    "delivery work item"
+                )
         for index, work_item in enumerate(raw_work_items):
             if not isinstance(work_item, dict):
                 errors.append(f"increment {increment_id} work item {index} must be an object")
@@ -2822,6 +3197,37 @@ def verify_product(root: Path) -> dict[str, Any]:
                             "work.build-sparse-scorecard-and-close-lifecycle must "
                             "bind the exact successful lifecycle receipt"
                         )
+            if (
+                work_id == "work.close-current-official-route-evaluation-slice"
+                and work_state == "completed"
+                and not _valid_o3_closeout_transition(root, work_item)
+            ):
+                errors.append(
+                    "completed O3 closeout work must bind its pushed acceptance "
+                    "transition"
+                )
+            if work_id == "work.finish-public-open-source-delivery":
+                if work_state not in {"active", "completed"}:
+                    errors.append("public delivery increment and work must complete")
+                elif work_state == "active" and not _valid_public_delivery_surface(
+                    root
+                ):
+                    errors.append(
+                        "public delivery work must bind the progressive minimal "
+                        "repository surface"
+                    )
+                elif work_state == "completed" and not _valid_public_delivery_transition(
+                    root,
+                    work_item,
+                ):
+                    errors.append(
+                        "completed public delivery work must bind its pushed transition"
+                    )
+                if work_state == "completed" and not _valid_public_delivery_surface(root):
+                    errors.append(
+                        "completed public delivery work must preserve the current "
+                        "public surface"
+                    )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:
                 gated_operations.update(
