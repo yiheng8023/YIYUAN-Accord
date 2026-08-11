@@ -28,7 +28,12 @@
       "handoff",
       "bounded-cleanup",
       "git-commit",
-      "git-push"
+      "git-push",
+      "installed-authorized-capability-use",
+      "coverage-analysis",
+      "targeted-capability-discovery",
+      "capability-static-review",
+      "inactive-exact-acquisition"
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
@@ -69,6 +74,13 @@
           "acceptanceIds": ["O1", "G1", "G2", "G3", "G4"],
           "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
           "deliverables": ["local verification", "Git commit", "origin/main push"]
+        },
+        {
+          "id": "work.close-repository-local-cleanup-residue",
+          "state": "completed",
+          "acceptanceIds": ["O5", "G4"],
+          "operationIds": ["repository-read", "bounded-cleanup", "progress-accounting"],
+          "deliverables": ["product/evidence/project-reset-repository-local-cleanup-2026-08-11.json"]
         }
       ]
     },
@@ -97,15 +109,45 @@
       "hypothesis": "A bounded demand taxonomy, inactive reviewed cohort, and replaceable manager adapter can add decision-relevant coverage and complete preview, apply, observe, and rollback without becoming portable-core authority.",
       "falsifier": "The cohort adds no decision-relevant coverage, the slice requires dual lifecycle owners or manual state reconstruction, authority expands without approval, or rollback leaves residual projection.",
       "stopCondition": "O3 passes on the already-bound portfolio coverage problem through one separately authorized live transaction with accepted task coverage and zero residual projection.",
+      "sourceInputs": [
+        {
+          "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
+          "path": "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+          "role": "historical sparse 15-partial 6-cluster 14-lifecycle 12-dimension 13-scenario six-route baseline for audit and subtraction only; no current authority or outcome promotion"
+        }
+      ],
       "acceptanceIds": ["O3", "G1", "G2", "G4"],
       "workItems": [
+        {
+          "id": "work.bind-portfolio-curation-contract",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2", "G4"],
+          "operationIds": ["repository-read", "repository-edit", "causal-planning", "local-verification"],
+          "deliverables": ["coverage objective and demand taxonomy", "candidate and exact source boundaries", "account and data boundary", "isolated inactive exact-revision review root", "review and admission criteria", "authority and verification surfaces", "cleanup rollback and finite cohort stop rule"]
+        },
+        {
+          "id": "work.acquire-inactive-portfolio-cohort",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2", "G4"],
+          "operationIds": ["coverage-analysis", "targeted-capability-discovery", "capability-static-review", "inactive-exact-acquisition"],
+          "authorityGate": "complete-portfolio-curation-contract-required",
+          "deliverables": ["isolated inactive exact-revision review pool", "provenance license security dependency maintenance overlap portability and admission review", "finite cohort result and cleanup receipt"]
+        },
+        {
+          "id": "work.bind-capability-evaluation-and-tool-learning-transfer",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2"],
+          "operationIds": ["repository-read", "repository-edit", "causal-planning", "coverage-analysis", "installed-authorized-capability-use", "local-verification"],
+          "authorityGate": "bound-task-capability-context-required",
+          "deliverables": ["verified O2 real-task binding", "exact commit-and-path binding of the historical sparse reconciliation", "retain correct or subtract decisions for its 15 partial items and six evidence clusters", "14-slice software lifecycle coverage map", "12-dimension evaluation model", "13-scenario Harness scorecard", "covered overlap conflict unevaluated and not-applicable dispositions", "real-task separate-authorization and accountable-human-judgment distinctions", "decision-relevant comparison of native official reviewed-external composition and self-authored capability routes plus human control", "selected-route rationale", "observed user tool-learning intervention metric", "claim boundary"]
+        },
         {
           "id": "work.run-real-capability-lifecycle-slice",
           "state": "planned",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["external-capability-preview", "external-capability-mutation", "consumer-projection", "rollback"],
-          "authorityGate": "separate-live-mutation-authorization-required",
-          "deliverables": ["preview", "apply observation", "dual-host observation", "rollback and cleanup receipt"]
+          "authorityGate": "separate-live-capability-lifecycle-authorization-required",
+          "deliverables": ["smallest host-owned authority and lifecycle evidence adapter demanded by the selected real task", "regression validator that keeps O3 fail-closed on repository-authored fixtures", "preview", "apply observation", "applicable host or consumer observation", "rollback and zero-residue cleanup receipt"]
         }
       ]
     }

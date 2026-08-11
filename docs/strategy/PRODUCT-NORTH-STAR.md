@@ -12,6 +12,12 @@ and Harness should own bounded planning, capability choice, state observation,
 execution coordination, verification, continuity, cleanup, and honest
 degradation.
 
+Human input is authoritative for intent and accountable judgment, but it is not
+assumed to be an exhaustive or perfectly objective inventory of project facts.
+The Agent must inspect available truth, detect omissions, expose assumptions,
+seek counterexamples, reconcile conflicting evidence, and supplement relevant
+coverage without making the user remember or enumerate the whole system.
+
 ## Observable success
 
 On a real task, the Harness should reduce material user interventions needed
@@ -70,12 +76,31 @@ mapped acceptance criteria, and a finite stop condition. Evidence may change
 the next increment. Novel ecosystem capability, research interest, or an
 available mechanism cannot create mainline work by itself.
 
+Acceptance defines the destination; a plan is only a falsifiable causal claim
+about how to reach it. A criterion ID on a work item is necessary but cannot
+prove semantic contribution. At every decision-relevant event, compare the
+observed result with the mapped outcome and stop or replan when the hypothesis
+fails, the user must reassert already-bound direction, or work produces only
+more governance artifacts. Do not prebuild a future outcome's verifier or
+authority emulation before the corresponding real slice identifies the
+smallest adapter it actually needs. User corrections are product feedback and
+trigger re-intake, not backlog comments to process after the old plan.
+
 Portfolio curation is a legitimate product input when it has a bounded demand
 taxonomy, candidate and source boundary, inactive acquisition root, review and
 admission criteria, authority and data boundary, verification surface, and a
 finite cohort or stop rule. It need not wait for the user to invent one more
 end-user task. Curation still grants no installation, activation, account, or
 consumer-mutation authority.
+
+Already installed, authorized, healthy capabilities should be used
+proactively when they materially help a bound task. Their actual successes,
+failures, workarounds, user interventions, and cleanup costs become gap
+evidence. A demonstrated gap triggers targeted comparison and governed
+addition; it is not treated as a reason to stop work or demand that the user
+design the tool route. Task-time discovery binds that gap and uses an isolated,
+finite, cleaned review pool; portfolio discovery binds the complete curation
+contract. Neither path silently grants live mutation.
 
 ## World-class standard
 

@@ -29,10 +29,10 @@
     {
       "id": "O3",
       "class": "outcome",
-      "name": "task-scoped capability lifecycle",
-      "statement": "One naturally occurring capability need completes preview, bounded activation, observation, dual-host projection where applicable, rollback, and cleanup through one lifecycle owner.",
-      "metric": "real lifecycle transactions with complete receipts",
-      "threshold": "one accepted transaction with no residual projection and no dual authority",
+      "name": "evaluated task-scoped capability lifecycle",
+      "statement": "A source-bound capability evaluation audits the exact historical sparse reconciliation across the lifecycle, quality, and Harness-scenario axes; retains, corrects, or subtracts its mappings; distinguishes covered, overlap, conflict, unevaluated, real-task, human-judgment, and separately-authorized scope; compares decision-relevant native, official, reviewed external, composition, and self-authored capability routes while keeping accountable human control distinct; and then one selected real-task route completes preview, bounded activation, observation, applicable projection, rollback, and cleanup through one lifecycle owner and the selected host authority surface.",
+      "metric": "capability evaluation records plus real lifecycle transactions with complete receipts",
+      "threshold": "the exact historical 15-partial/6-cluster/14-lifecycle/12-dimension/13-scenario sparse baseline is bound by commit and path, every retained corrected or subtracted mapping has a rationale, the five capability route classes plus accountable human control have evidence-backed or explicit unevaluated/not-applicable dispositions without a Cartesian requirement, selected-route rationale and observed user tool-learning interventions are recorded, and one separately authorized real transaction for that selected task and route reaches preview, activation, observation, rollback, and cleanup with no residual projection or dual authority",
       "assessment": "planned"
     },
     {
@@ -52,7 +52,10 @@
       "metric": "targeted residue count after cleanup",
       "threshold": "zero matching residues in the declared roots",
       "assessment": "verified",
-      "evidence": ["product/evidence/project-reset-cleanup-observation-2026-08-11.json"]
+      "evidence": [
+        "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
+        "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json"
+      ]
     },
     {
       "id": "G1",
@@ -87,9 +90,12 @@
       "name": "bounded resource stewardship",
       "statement": "Temporary artifacts are scoped, attributable, checked, and cleaned without broad deletion.",
       "metric": "targeted cleanup evidence",
-      "threshold": "declared roots, exact pattern, zero remaining matches, and explicit claim limits",
+      "threshold": "declared absolute roots, a start-anchored finite set of relative literal target prefixes, zero remaining matches, and explicit claim limits",
       "assessment": "verified",
-      "evidence": ["product/evidence/project-reset-cleanup-observation-2026-08-11.json"]
+      "evidence": [
+        "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
+        "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json"
+      ]
     }
   ]
 }

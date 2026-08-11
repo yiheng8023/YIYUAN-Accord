@@ -29,12 +29,26 @@ passes.
 - Use `python -B -m harness verify --root . --json` and
   `python -B -m unittest discover -s tests/product -v` as the current product
   verification seam.
+- Treat user descriptions as authoritative intent and judgment, not as an
+  exhaustive fact inventory. Proactively inspect, detect omissions, disclose
+  assumptions, seek counterexamples, reconcile evidence, and supplement
+  coverage inside the bound task.
 
 ## Capability and authority boundary
 
 Prefer healthy native/runtime capability, then suitable official capability,
 then a reviewed maintained external implementation, then composition. Author
 only for an evidenced residual gap.
+
+Use already-installed, already-authorized, healthy capabilities proactively
+when they materially improve a bound task. Within a bound task or complete
+portfolio-curation contract, the Agent may perform coverage analysis, targeted
+candidate discovery, static review, and exact-revision acquisition into an
+isolated inactive `.tmp/` pool; a task-time discovery must also bind the actual
+capability gap. Planned gates are preconditions, not grants. Installation,
+enablement, accounts/OAuth, meaningful cost, execution, consumer projection,
+persistent activation, and new trust or data boundaries require a scoped user
+grant for the exact work and operations.
 
 Do not infer installation, enablement, account connection, model dispatch,
 consumer mutation, publication, release, destructive cleanup, or a new trust

@@ -14,7 +14,8 @@ This file is a compact navigation aid. Recheck live Git truth before using it.
 The predecessor corpus is absent from the current Git index and has no current
 product, planning, acceptance, runtime, or release authority. Git commit
 `c53866726834d79a68c61a5b87b4f7ce90698a2c` is the exact pre-reset provenance.
-A host-policy-blocked ignored local quarantine is residue, not authority.
+The former local ignored quarantine and old bytecode caches were subsequently
+removed and verified absent.
 
 ## Completed reset increment
 
@@ -49,6 +50,13 @@ fresh-receiver event, and record the receiver delta. Do not ask the user to
 restate facts already carried by repository truth. Do not activate O3 or any
 external capability in this slice.
 
+The present continuation is process-loss feedback, not O4 passing evidence:
+the user had to redirect work from repeated governance expansion toward debt
+removal, product delivery, proactive capability use, and Agent-owned omission
+detection. This reset changes the control contract, but it does not retroactively
+turn the conversation into a successful receiver event. The next O4 event must
+test the corrected contract and stop at the first decision-relevant result.
+
 ## Planned capability addition
 
 O3 follows O4. It starts from the already-bound complaint that subtraction was
@@ -56,3 +64,18 @@ not matched by demonstrated demand coverage. It may proactively curate a
 bounded exact-revision cohort into an inactive review pool; installation,
 enablement, accounts, execution, and consumer projection remain separate
 authority transitions.
+
+Do not redo the historical sparse 15-partial/6-cluster reconciliation. Its
+exact source is pinned in `product/program.json` at commit `c538667...`; O3
+audits, corrects, or subtracts that input, then adds only decision-relevant real
+task and lifecycle evidence.
+
+The user has approved proactive use of installed authorized capabilities plus
+coverage analysis, targeted discovery, static review, and exact-revision
+inactive acquisition under a bound task with a concrete gap or a complete
+curation contract. Acquisition remains confined to a finite temporary review
+root and does not grant installation or execution. A planned gate must become
+an exact work-scoped user grant before gated live operations can become active.
+The Agent is also responsible for omission detection and evidence-backed
+coverage supplementation; the user is not expected to provide an exhaustive
+project inventory from memory.

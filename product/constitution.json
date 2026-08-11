@@ -4,6 +4,22 @@
   "productId": "agent-autonomy-harness",
   "purpose": "Reduce the user's Agent-learning and orchestration burden by giving an Agent a bounded, observable loop for intent, capability choice, lifecycle control, continuity, verification, and cleanup while preserving human authority over goals, judgment, trust, cost, and irreversible effects.",
   "successDefinition": "A user can state a real goal and corrections while the Harness keeps the active outcome, capability route, authority boundary, lifecycle state, evidence, handoff, and cleanup coherent with fewer user orchestration interventions than an ad-hoc path.",
+  "collaborationModel": {
+    "userContributions": [
+      "goals-and-direction",
+      "domain-context",
+      "corrections",
+      "accountable-final-judgment"
+    ],
+    "agentObligations": [
+      "omission-detection",
+      "assumption-disclosure",
+      "counterexample-search",
+      "evidence-reconciliation",
+      "coverage-supplementation",
+      "bounded-autonomous-execution"
+    ]
+  },
   "fixedInvariants": [
     "product outcomes outrank artifact counts, test counts, inventory counts, and research volume",
     "one release has one explicit finite acceptance expression",
@@ -13,6 +29,7 @@
     "external capability expansion follows an evidenced gap and bounded authority",
     "portfolio sufficiency is judged by demand coverage rather than by minimizing capability count",
     "bounded inactive portfolio curation may investigate coverage without granting activation authority",
+    "future outcome validators and authority adapters are built only with the real slice that demands them",
     "historical evidence cannot become current authority by remaining on disk",
     "unsupported host behavior is reported rather than simulated"
   ],
@@ -37,6 +54,7 @@
     "replanWhen": [
       "the hypothesis is falsified",
       "new evidence changes the critical path",
+      "the user must reassert already-bound direction or the work produces only governance artifacts",
       "authority or trust boundaries change",
       "the increment reaches its stop condition"
     ]
@@ -47,6 +65,7 @@
     "product/acceptance.json",
     "product/evidence/project-reset-real-task-route-2026-08-11.json",
     "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
+    "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",

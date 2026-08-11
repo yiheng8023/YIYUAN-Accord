@@ -18,10 +18,11 @@ exact source, a causal rationale, a bounded authority and cleanup contract, and
 the current product verifier.
 
 Historical payloads are removed from the current Git index. Git history is the
-sole durable provenance authority. A local ignored `legacy/` quarantine can
-remain when host policy blocks physical deletion; its presence is reported as
-cleanup residue and gives it no product, plan, acceptance, runtime, or release
-authority.
+sole durable provenance authority. The later user-executed cleanup removed the
+local ignored `legacy/` quarantine plus the old `scripts/` and `tests/`
+bytecode caches; the Agent verified all three exact paths absent. The cleanup
+receipt preserves the Windows PowerShell compatibility error rather than
+claiming an error-free script run.
 
 The reset index retains only the bounded current product surface. It removes
 the unmapped predecessor payloads from the current index and adds one small

@@ -43,8 +43,8 @@ The current machine authority is deliberately small:
 
 Historical research, fixtures, registries, and regression tools remain
 retrievable from Git history, but they have no current product, planning,
-acceptance, runtime, or release authority. A host-policy-blocked local ignored
-quarantine does not alter that boundary.
+acceptance, runtime, or release authority. The former local ignored quarantine
+and bytecode caches were physically removed after the reset.
 
 ## Verify
 

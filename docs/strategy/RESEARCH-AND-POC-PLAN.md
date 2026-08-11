@@ -56,6 +56,70 @@ Stop after one accepted transaction or a falsifying failure. Installation or
 exposure alone cannot pass O3, and the operational manager does not become the
 portable product core.
 
+## O3 internal sequence
+
+O3 has four finite work packages, activated one at a time:
+
+1. bind the demand taxonomy, source cohort, inactive exact-revision pool,
+   admission/rejection criteria, cleanup, and stop rule;
+2. acquire only the finite reviewed cohort into a temporary `.tmp/` pool;
+   payloads leave evidence receipts, not vendored bodies;
+3. bind the software-lifecycle, evaluation-dimension, and task-scenario
+   scorecard across at least 14 lifecycle slices, 12 evaluation dimensions,
+   and 13 Harness task scenarios; audit and reuse, correct, or subtract the
+   inherited sparse reconciliation of 15 partial items and six evidence
+   clusters, including how many tool-specific choices, setup steps,
+   corrections, and recovery actions still fall back to the user;
+4. after separate live authority, run one lifecycle transaction and compare
+   observed coverage, user burden, reliability, rollback, and residual state.
+
+The second package transfers tool-learning cost toward the AI: the AI should
+learn the relevant tool surface, route and compose it, handle bounded setup and
+recovery, and explain only decisions that genuinely require human judgment.
+Success is reduced material user intervention without losing intent fidelity,
+evidence quality, control, or reversibility—not merely a successful tool call.
+
+## Evaluation and standards boundary
+
+The evaluation system is established before candidate promotion so routes can
+be compared consistently. It should cover the software lifecycle, engineering
+quality dimensions, Harness task scenarios, authority, recovery, maintenance,
+and user-orchestration burden. Native, official, reviewed external,
+composition, and authored capability routes use the same evidence-sized
+scorecard. Accountable human control remains a sixth, non-capability route and
+must not be mislabeled as a capability gap.
+
+The exact historical sparse baseline is
+`c53866726834d79a68c61a5b87b4f7ce90698a2c:registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.
+It already records the 15/6/12/14/13 inventories and six route classes. It is
+an input for audit and subtraction, not current product authority or evidence
+that O3 behavior, value, portability, or live lifecycle has passed.
+
+Each inherited item, evidence cluster, lifecycle slice, dimension, and scenario
+receives one explicit disposition: covered, overlap, conflict, or unevaluated.
+Records carry bounded evidence or an unevaluated reason and distinguish real
+task evidence, human judgment, and separate authorization. The five capability
+classes plus human control are considered consistently, but this is not a
+mandate to manufacture a full Cartesian matrix: non-applicable and unevaluated
+routes remain honest results, and only decision-relevant contenders require
+comparison. The selected route is justified by observed coverage, limitations,
+lifecycle cost, and user tool-learning interventions.
+
+These are acceptance-design requirements, not a claim that the current
+verifier already authenticates host events. O3 intentionally remains
+fail-closed. Its implementation slice must build the smallest host-owned
+authorization and lifecycle evidence adapter demanded by the selected real
+task, prove preview through cleanup on that host, and then add a regression
+validator. A planned gate, repository-authored receipt, hash, or test fixture
+cannot authorize or prove the live transaction by itself.
+
+Normative standards and repository-authored capability chains are consolidated
+after comparative use exposes residual gaps. The current three self-authored
+Skills are temporary control-chain components, not a promised final count or
+shape. Retain, merge, replace, or retire them according to evidence; author new
+components only for repeatable residual gaps that stronger existing routes do
+not cover.
+
 ## Backlog rule
 
 All earlier ecosystem surveys, static reviews, candidate pools, zero-model

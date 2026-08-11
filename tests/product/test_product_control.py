@@ -217,6 +217,65 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertIn("program increment 0 must be an object", report["errors"])
         self.assertFalse(report["criterionStates"]["O1"])
 
+    def test_unhashable_structure_fields_are_rejected_without_traceback(self) -> None:
+        cases = (
+            "criterion-id",
+            "work-state",
+            "capability-context-mode",
+            "portfolio-root",
+            "task-time-root",
+        )
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                shutil.copytree(ROOT / "product", target / "product")
+                if case == "criterion-id":
+                    path = target / "product" / "acceptance.json"
+                    document = json.loads(path.read_text(encoding="utf-8"))
+                    document["criteria"][1]["id"] = []
+                else:
+                    path = target / "product" / "program.json"
+                    document = json.loads(path.read_text(encoding="utf-8"))
+                    active_increment = next(
+                        item for item in document["increments"] if item["state"] == "active"
+                    )
+                    active_work = next(
+                        item
+                        for item in active_increment["workItems"]
+                        if item["state"] == "active"
+                    )
+                    if case == "work-state":
+                        active_work["state"] = []
+                    elif case == "capability-context-mode":
+                        active_work["operationIds"] = [
+                            "installed-authorized-capability-use"
+                        ]
+                        active_work["capabilityContext"] = {"mode": []}
+                    elif case == "portfolio-root":
+                        active_work["operationIds"] = ["inactive-exact-acquisition"]
+                        active_work["capabilityContext"] = {
+                            "mode": "portfolio-curation",
+                            "inactiveAcquisitionRoot": [],
+                        }
+                    else:
+                        active_work["operationIds"] = ["inactive-exact-acquisition"]
+                        active_work["capabilityContext"] = {
+                            "mode": "task-time",
+                            "inactiveAcquisitionRoot": [],
+                        }
+                path.write_text(
+                    json.dumps(document, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertNotIn("Traceback", result.stderr)
+            report = json.loads(result.stdout)
+            self.assertFalse(report["valid"])
+            self.assertFalse(report["criterionStates"]["O1"])
+
     def test_outcome_evidence_is_not_interchangeable(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
@@ -240,7 +299,7 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O3"])
         self.assertFalse(report["criterionStates"]["O4"])
         self.assertIn(
-            f"evidence {route_evidence} is not an accepted capability lifecycle transaction",
+            "criterion O3 verification remains fail-closed until the real-task evaluation and host lifecycle evidence validator is implemented",
             report["errors"],
         )
         self.assertIn(
@@ -270,6 +329,46 @@ class ProductControlCliTests(unittest.TestCase):
             "cleanup evidence product/evidence/project-reset-cleanup-observation-2026-08-11.json must declare resolved absolute roots",
             report["errors"],
         )
+
+    def test_cleanup_evidence_rejects_unsafe_regex_without_traceback(self) -> None:
+        cases = (
+            (
+                ".*",
+                "targetPattern must be start-anchored relative literal alternatives",
+            ),
+            (
+                "^(../escape)",
+                "targetPattern must be start-anchored relative literal alternatives",
+            ),
+            (
+                "a{999999999999999999999999999999999999}",
+                "targetPattern must compile",
+            ),
+        )
+        for pattern, expected_error in cases:
+            with self.subTest(pattern=pattern), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                shutil.copytree(ROOT / "product", target / "product")
+                relative = (
+                    "product/evidence/project-reset-cleanup-observation-2026-08-11.json"
+                )
+                evidence_path = target / relative
+                evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+                evidence["targetPattern"] = pattern
+                evidence_path.write_text(
+                    json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertNotIn("Traceback", result.stderr)
+            report = json.loads(result.stdout)
+            self.assertTrue(
+                any(expected_error in error for error in report["errors"]),
+                report["errors"],
+            )
 
     def test_release_identity_cannot_drift_between_plan_and_acceptance(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -386,6 +485,43 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_unreferenced_legacy_directory_is_not_active_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            legacy = target / "legacy"
+            legacy.mkdir()
+            (legacy / "ordinary.txt").write_text("unrelated archive\n", encoding="utf-8")
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["G3"])
+        self.assertNotIn(
+            "current checkout must not contain a repository-local legacy quarantine",
+            report["errors"],
+        )
+
+    def test_inactive_temporary_review_pool_is_not_active_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            review_pool = target / ".tmp" / "capability-review"
+            review_pool.mkdir(parents=True)
+            (review_pool / "candidate.md").write_text(
+                "agent-" + "skills-" + "curated historical candidate metadata\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["G3"])
+        self.assertNotIn(
+            "active product authority contains a forbidden predecessor identity",
+            report["errors"],
+        )
+
     def test_absolute_authority_glob_is_structurally_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
@@ -405,6 +541,78 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertIn(
             "constitution authority glob must be relative: C:/**/*.json",
+            report["errors"],
+        )
+
+    def test_broad_authority_glob_cannot_reactivate_inactive_pool(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            review_pool = target / ".tmp" / "capability-review"
+            review_pool.mkdir(parents=True)
+            (review_pool / "candidate.md").write_text(
+                "inactive candidate metadata\n", encoding="utf-8"
+            )
+            constitution_path = target / "product" / "constitution.json"
+            constitution = json.loads(constitution_path.read_text(encoding="utf-8"))
+            constitution["activeAuthorityGlobs"].append("**/*")
+            constitution_path.write_text(
+                json.dumps(constitution, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "constitution authority glob must begin with a literal root: **/*",
+            report["errors"],
+        )
+
+    def test_active_authority_glob_rejects_symlink_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary)
+            target = temporary_root / "checkout"
+            shutil.copytree(ROOT / "product", target / "product")
+            outside = temporary_root / "outside.json"
+            outside.write_text('{"outside": true}\n', encoding="utf-8")
+            link = target / "product" / "evidence" / "escape.json"
+            try:
+                link.symlink_to(outside)
+            except (NotImplementedError, OSError) as exc:
+                self.skipTest(f"symlink creation unavailable: {exc}")
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn("Traceback", result.stderr)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "active authority glob cannot include a symlink: product/evidence/escape.json",
+            report["errors"],
+        )
+
+    def test_required_authority_file_rejects_symlink_substitution(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            replacement = target / "real-readme.md"
+            replacement.write_text("replacement\n", encoding="utf-8")
+            link = target / "README.md"
+            try:
+                link.symlink_to(replacement)
+            except (NotImplementedError, OSError) as exc:
+                self.skipTest(f"symlink creation unavailable: {exc}")
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn("Traceback", result.stderr)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "authority path cannot be a symlink: README.md",
             report["errors"],
         )
 
@@ -449,6 +657,425 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
             "product/acceptance.json must retain authority id harness-product-acceptance-v0.1",
+            report["errors"],
+        )
+
+    def test_agent_cannot_drop_its_omission_detection_obligation(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            constitution_path = target / "product" / "constitution.json"
+            constitution = json.loads(constitution_path.read_text(encoding="utf-8"))
+            constitution["collaborationModel"] = {
+                "userContributions": [
+                    "goals-and-direction",
+                    "domain-context",
+                    "corrections",
+                    "accountable-final-judgment",
+                ],
+                "agentObligations": [
+                    "assumption-disclosure",
+                    "counterexample-search",
+                    "evidence-reconciliation",
+                    "coverage-supplementation",
+                    "bounded-autonomous-execution",
+                ],
+            }
+            constitution_path.write_text(
+                json.dumps(constitution, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "constitution collaborationModel must preserve user roles and agent obligations",
+            report["errors"],
+        )
+
+    def test_collaboration_model_can_add_further_responsibilities(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            constitution_path = target / "product" / "constitution.json"
+            constitution = json.loads(constitution_path.read_text(encoding="utf-8"))
+            constitution["collaborationModel"]["userContributions"].append(
+                "additional-domain-judgment"
+            )
+            constitution["collaborationModel"]["agentObligations"].append(
+                "alternative-generation"
+            )
+            constitution_path.write_text(
+                json.dumps(constitution, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertNotIn(
+            "constitution collaborationModel must preserve user roles and agent obligations",
+            report["errors"],
+        )
+
+    def test_planned_unauthorized_work_requires_an_explicit_authority_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            lifecycle_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.capability-lifecycle-product-slice"
+            )
+            live_work = next(
+                item
+                for item in lifecycle_increment["workItems"]
+                if item["id"] == "work.run-real-capability-lifecycle-slice"
+            )
+            live_work.pop("authorityGate")
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "planned work work.run-real-capability-lifecycle-slice requests unauthorized operations without an authorityGate",
+            report["errors"],
+        )
+
+    def test_unknown_authority_gate_cannot_cover_planned_operations(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            lifecycle_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.capability-lifecycle-product-slice"
+            )
+            live_work = next(
+                item
+                for item in lifecycle_increment["workItems"]
+                if item["id"] == "work.run-real-capability-lifecycle-slice"
+            )
+            live_work["authorityGate"] = "some-non-empty-text"
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "planned work work.run-real-capability-lifecycle-slice authorityGate some-non-empty-text does not cover operations: consumer-projection, external-capability-mutation, external-capability-preview, rollback",
+            report["errors"],
+        )
+
+    def test_capability_discovery_requires_an_eligible_context(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = [
+                "targeted-capability-discovery",
+                "capability-static-review",
+                "inactive-exact-acquisition",
+            ]
+            active_work["authorityGate"] = (
+                "complete-portfolio-curation-contract-required"
+            )
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            report["errors"],
+        )
+
+    def test_bound_task_context_allows_low_risk_capability_use(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = [
+                "installed-authorized-capability-use",
+                "coverage-analysis",
+            ]
+            active_work["capabilityContext"] = {
+                "mode": "task-time",
+                "taskBinding": "the active source-bound continuation task",
+                "gapOrMaterialBenefit": "reduce manual coverage reconciliation",
+                "dataBoundary": "repository-local public project data only",
+                "authorityBoundary": "no setup or account mutation",
+                "verificationSurface": "product verifier and task evidence",
+            }
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["G1"])
+        self.assertNotIn(
+            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            report["errors"],
+        )
+
+    def test_bound_task_gap_allows_targeted_inactive_discovery(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = [
+                "coverage-analysis",
+                "targeted-capability-discovery",
+                "capability-static-review",
+                "inactive-exact-acquisition",
+            ]
+            active_work["capabilityContext"] = {
+                "mode": "task-time",
+                "taskBinding": "the active source-bound task",
+                "gapOrMaterialBenefit": "current routes lack the required parser",
+                "capabilityGap": "parse the bound format without manual conversion",
+                "dataBoundary": "repository-local public fixture only",
+                "authorityBoundary": "no install enablement execution or projection",
+                "verificationSurface": "fixture parse and cleanup receipt",
+                "candidateSourceBoundary": "pinned reviewed upstream sources",
+                "inactiveAcquisitionRoot": ".tmp/task-gap-review",
+                "reviewCriteria": ["provenance", "license", "security"],
+                "cohortStopRule": "stop after five candidates or one adequate route",
+            }
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["G1"])
+        self.assertNotIn(
+            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            report["errors"],
+        )
+
+    def test_planned_live_gate_does_not_authorize_active_operations(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = [
+                "external-capability-preview",
+                "external-capability-mutation",
+                "rollback",
+            ]
+            active_work["authorityGate"] = (
+                "separate-live-capability-lifecycle-authorization-required"
+            )
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "active work requests unauthorized operations: external-capability-mutation, external-capability-preview, rollback",
+            report["errors"],
+        )
+
+    def test_complete_portfolio_context_allows_inactive_curation(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = [
+                "coverage-analysis",
+                "targeted-capability-discovery",
+                "capability-static-review",
+                "inactive-exact-acquisition",
+            ]
+            active_work["capabilityContext"] = {
+                "mode": "portfolio-curation",
+                "coverageObjective": "close evaluated lifecycle coverage gaps",
+                "demandTaxonomy": ["software lifecycle", "Harness scenarios"],
+                "candidateSourceBoundary": "pinned reviewed upstream sources",
+                "accountDataBoundary": "public metadata and repository-local evidence",
+                "inactiveAcquisitionRoot": ".tmp/capability-review",
+                "reviewCriteria": [
+                    "provenance",
+                    "license",
+                    "security",
+                    "maintenance",
+                    "overlap",
+                    "portability",
+                ],
+                "authorityBoundary": "no install enablement execution or projection",
+                "verificationSurface": "exact revisions and review receipts",
+                "cohortStopRule": "stop after ten candidates or coverage saturation",
+            }
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["G1"])
+        self.assertNotIn(
+            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            report["errors"],
+        )
+
+    def test_portfolio_context_rejects_an_active_authority_root(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            active_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            active_work = next(
+                item for item in active_increment["workItems"] if item["state"] == "active"
+            )
+            active_work["operationIds"] = ["inactive-exact-acquisition"]
+            active_work["capabilityContext"] = {
+                "mode": "portfolio-curation",
+                "coverageObjective": "close evaluated lifecycle coverage gaps",
+                "demandTaxonomy": ["software lifecycle"],
+                "candidateSourceBoundary": "pinned reviewed upstream sources",
+                "accountDataBoundary": "public metadata only",
+                "inactiveAcquisitionRoot": "product/evidence/candidates",
+                "reviewCriteria": ["provenance", "license", "security"],
+                "authorityBoundary": "no install enablement execution or projection",
+                "verificationSurface": "exact revisions and review receipts",
+                "cohortStopRule": "stop after ten candidates",
+            }
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            report["errors"],
+        )
+
+    def test_o3_verification_remains_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            acceptance_path = target / "product" / "acceptance.json"
+            acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
+            criterion = next(
+                item for item in acceptance["criteria"] if item["id"] == "O3"
+            )
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = [
+                "product/evidence/project-reset-real-task-route-2026-08-11.json"
+            ]
+            acceptance_path.write_text(
+                json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O3"])
+        self.assertIn(
+            "criterion O3 verification remains fail-closed until the real-task evaluation and host lifecycle evidence validator is implemented",
+            report["errors"],
+        )
+
+    def test_verified_criterion_cannot_use_test_fixture_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            evidence_relative = (
+                "product/evidence/project-reset-real-task-route-2026-08-11.json"
+            )
+            evidence_path = target / evidence_relative
+            evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+            evidence["testFixture"] = True
+            evidence_path.write_text(
+                json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O2"])
+        self.assertIn(
+            f"verified criterion O2 cannot use test fixture evidence {evidence_relative}",
             report["errors"],
         )
 

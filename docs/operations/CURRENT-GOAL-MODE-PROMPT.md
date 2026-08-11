@@ -28,6 +28,8 @@ commit, and push.
 
 - inspect current repository truth;
 - edit the bound repository's O4 mechanism and evidence surfaces;
+- use already-installed, already-authorized capabilities when they materially
+  improve the bounded O4 task;
 - create a bounded source packet and use an already-authorized fresh-receiver
   mechanism;
 - run local deterministic verification;

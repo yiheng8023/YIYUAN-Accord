@@ -30,6 +30,11 @@ kernel rejects disagreement among them.
 This layer prevents a research record, candidate inventory, test suite, or
 historical verifier from silently becoming the scheduler.
 
+The collaboration contract treats user descriptions as intent and judgment
+input, not as an exhaustive fact database. Omission detection, assumption
+disclosure, counterexample search, evidence reconciliation, and coverage
+supplementation belong to the Agent side of the interface.
+
 ## 2. Portable Harness core
 
 The target core exposes one conceptual transaction:
@@ -57,6 +62,20 @@ cleanup. One state never proves the next.
 Each live component has one lifecycle owner. A manager, host, or adapter may
 own operations for its scope; it does not become portable product authority.
 
+Discovery, static review, and exact acquisition into an isolated inactive pool
+are different states from installation, enablement, account connection,
+execution, consumer projection, and persistent activation. The former may run
+inside a bounded curation contract; the latter cross explicit lifecycle and
+authority gates. Inactive payload acquisition is confined to a temporary
+`.tmp/` review root with a finite stop rule and cleanup receipt. A planned gate
+describes an unmet precondition; it does not grant authority. The current
+verifier checks bounded curation contexts and refuses active live operations
+outside its allowlist. It deliberately has no JSON-only path that can promote
+O3 or manufacture a host authorization: O3 remains fail-closed until its real
+task and host lifecycle adapter are implemented and tested against the selected
+host's authority surface. Test fixtures cannot satisfy verified evidence. The
+host remains the authority and identity-enforcement surface.
+
 ## 4. Adapters
 
 Adapters translate only unavoidable host details:
@@ -83,7 +102,7 @@ guardrail with zero product outcomes is safe non-delivery, not progress.
 ## 6. Legacy boundary
 
 The predecessor evidence corpus is absent from the current Git index and may be
-consulted through an exact Git revision. A repository-local ignored `legacy/`
-quarantine may remain when host policy blocks physical deletion; it is not a
-durable provenance authority and is excluded from product authority, scanning,
-planning, acceptance, runtime, release, and the public verification seam.
+consulted through an exact Git revision. The former repository-local ignored
+quarantine was subsequently removed. Git history is the durable provenance
+surface; a future local cache or quarantine cannot acquire product, planning,
+acceptance, runtime, release, or verification authority by existing on disk.

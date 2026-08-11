@@ -11,6 +11,20 @@ COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 OUTCOME_IDS = tuple(f"O{number}" for number in range(1, 6))
 GUARDRAIL_IDS = tuple(f"G{number}" for number in range(1, 5))
 EXPECTED_CRITERION_IDS = set(OUTCOME_IDS + GUARDRAIL_IDS)
+REQUIRED_USER_CONTRIBUTION_IDS = {
+    "goals-and-direction",
+    "domain-context",
+    "corrections",
+    "accountable-final-judgment",
+}
+REQUIRED_AGENT_OBLIGATION_IDS = {
+    "omission-detection",
+    "assumption-disclosure",
+    "counterexample-search",
+    "evidence-reconciliation",
+    "coverage-supplementation",
+    "bounded-autonomous-execution",
+}
 AUTHORITY_IDS = {
     "product/constitution.json": "harness-product-constitution-v1",
     "product/program.json": "harness-product-program-v0.1",
@@ -22,6 +36,9 @@ PREDECESSOR_IDENTITY = re.compile(r"agent[-]skills[-]curated", re.IGNORECASE)
 LEGACY_AUTHORITY_PATHS = (
     re.compile(r"registry/curation[-]program[-]plan[.]json", re.IGNORECASE),
     re.compile(r"registry/program[-]acceptance[-]map[.]json", re.IGNORECASE),
+)
+BOUNDED_CLEANUP_PATTERN = re.compile(
+    r"\^\(([A-Za-z0-9._/-]+(?:\|[A-Za-z0-9._/-]+)*)\)\$?"
 )
 BOOTSTRAP_AUTHORITY_FILES = (
     "product/constitution.json",
@@ -46,7 +63,14 @@ BOOTSTRAP_AUTHORITY_FILES = (
 BOOTSTRAP_AUTHORITY_GLOBS = ("product/**/*.json", "harness/**/*.py")
 TEXT_SUFFIXES = {".json", ".md", ".py", ".yml", ".yaml"}
 TEXT_FILENAMES = {".gitignore", "LICENSE", "NOTICE"}
-SCAN_EXCLUDED_PARTS = {".git", "legacy", "__pycache__", ".pytest_cache", ".mypy_cache"}
+SCAN_EXCLUDED_PARTS = {
+    ".git",
+    ".tmp",
+    "legacy",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+}
 REQUIRED_USER_AUTHORITY_IDS = {
     "product-direction",
     "creative-judgment",
@@ -57,7 +81,7 @@ REQUIRED_USER_AUTHORITY_IDS = {
     "release",
     "irreversible-action",
 }
-ALLOWED_AGENT_OPERATION_IDS = {
+BASE_AGENT_OPERATION_IDS = {
     "repository-read",
     "repository-edit",
     "causal-planning",
@@ -68,14 +92,81 @@ ALLOWED_AGENT_OPERATION_IDS = {
     "git-commit",
     "git-push",
 }
+CAPABILITY_CONTEXT_POLICIES = {
+    "task-time": {
+        "operationIds": {
+            "installed-authorized-capability-use",
+            "coverage-analysis",
+            "targeted-capability-discovery",
+            "capability-static-review",
+            "inactive-exact-acquisition",
+        },
+        "stringFields": {
+            "taskBinding",
+            "gapOrMaterialBenefit",
+            "dataBoundary",
+            "authorityBoundary",
+            "verificationSurface",
+        },
+        "listFields": set(),
+    },
+    "portfolio-curation": {
+        "operationIds": {
+            "coverage-analysis",
+            "targeted-capability-discovery",
+            "capability-static-review",
+            "inactive-exact-acquisition",
+        },
+        "stringFields": {
+            "coverageObjective",
+            "candidateSourceBoundary",
+            "accountDataBoundary",
+            "inactiveAcquisitionRoot",
+            "authorityBoundary",
+            "verificationSurface",
+            "cohortStopRule",
+        },
+        "listFields": {"demandTaxonomy", "reviewCriteria"},
+    },
+}
+CAPABILITY_CONTEXT_OPERATION_IDS = set().union(
+    *(policy["operationIds"] for policy in CAPABILITY_CONTEXT_POLICIES.values())
+)
+ALLOWED_AGENT_OPERATION_IDS = BASE_AGENT_OPERATION_IDS | CAPABILITY_CONTEXT_OPERATION_IDS
+AUTHORITY_GATE_OPERATION_IDS = {
+    "bound-task-capability-context-required": CAPABILITY_CONTEXT_POLICIES["task-time"][
+        "operationIds"
+    ],
+    "complete-portfolio-curation-contract-required": CAPABILITY_CONTEXT_POLICIES[
+        "portfolio-curation"
+    ]["operationIds"],
+    "separate-live-capability-lifecycle-authorization-required": {
+        "external-capability-preview",
+        "external-capability-mutation",
+        "consumer-projection",
+        "rollback",
+    },
+}
 
 
 def _inside_root(root: Path, relative: str, errors: list[str]) -> Path | None:
     if not isinstance(relative, str) or not relative.strip():
         errors.append("authority path must be a non-empty string")
         return None
+    normalized = relative.replace("\\", "/")
+    if (
+        PurePosixPath(normalized).is_absolute()
+        or PureWindowsPath(relative).is_absolute()
+        or ".." in normalized.split("/")
+    ):
+        errors.append(f"authority path escapes the product root: {relative}")
+        return None
+    candidate = root / relative
+    if candidate.is_symlink():
+        errors.append(f"authority path cannot be a symlink: {relative}")
+        return None
     try:
-        path = (root / relative).resolve()
+        path = candidate.resolve()
         path.relative_to(root.resolve())
     except (OSError, ValueError):
         errors.append(f"authority path escapes the product root: {relative}")
@@ -134,6 +225,7 @@ def _active_files(root: Path, constitution: dict[str, Any], errors: list[str]) -
     for pattern in declared_globs:
         normalized = pattern.replace("\\", "/")
         parts = {part.casefold() for part in normalized.split("/")}
+        first_part = normalized.split("/", 1)[0]
         if (
             Path(pattern).is_absolute()
             or re.match(r"^[A-Za-z]:[/\\]", pattern)
@@ -143,6 +235,11 @@ def _active_files(root: Path, constitution: dict[str, Any], errors: list[str]) -
             errors.append(f"constitution authority glob must be relative: {pattern}")
         elif SCAN_EXCLUDED_PARTS.intersection(parts):
             errors.append(f"constitution cannot activate excluded authority locator: {pattern}")
+        elif not first_part or any(marker in first_part for marker in "*?[]"):
+            errors.append(
+                "constitution authority glob must begin with a literal root: "
+                f"{pattern}"
+            )
         else:
             safe_declared_globs.append(pattern)
 
@@ -164,7 +261,25 @@ def _active_files(root: Path, constitution: dict[str, Any], errors: list[str]) -
             files.add(path)
     for pattern in sorted(set(safe_declared_globs) | set(BOOTSTRAP_AUTHORITY_GLOBS)):
         try:
-            files.update(path for path in root.glob(pattern) if path.is_file())
+            for candidate in root.glob(pattern):
+                relative = candidate.relative_to(root).as_posix()
+                if candidate.is_symlink():
+                    errors.append(
+                        f"active authority glob cannot include a symlink: {relative}"
+                    )
+                    continue
+                if SCAN_EXCLUDED_PARTS.intersection(
+                    part.casefold() for part in candidate.relative_to(root).parts
+                ):
+                    errors.append(
+                        f"active authority glob expanded into an excluded locator: {relative}"
+                    )
+                    continue
+                if not candidate.is_file():
+                    continue
+                resolved = candidate.resolve()
+                resolved.relative_to(root.resolve())
+                files.add(resolved)
         except (OSError, ValueError, NotImplementedError) as exc:
             errors.append(f"cannot expand active authority glob {pattern}: {exc}")
     return sorted(files)
@@ -216,7 +331,11 @@ def _validate_identity(root: Path, active_files: list[Path], errors: list[str]) 
         errors.append("active product authority contains a forbidden predecessor identity")
     if forbidden_path:
         errors.append("current checkout contains a forbidden predecessor authority path")
-    return not forbidden_content and not forbidden_path and len(errors) == initial_error_count
+    return (
+        not forbidden_content
+        and not forbidden_path
+        and len(errors) == initial_error_count
+    )
 
 
 def _non_empty_string_list(value: Any) -> bool:
@@ -242,25 +361,56 @@ def _valid_route_evidence(document: dict[str, Any]) -> bool:
     )
 
 
-def _valid_lifecycle_evidence(document: dict[str, Any]) -> bool:
-    transaction = document.get("transaction")
-    if not isinstance(transaction, dict):
+def _valid_capability_context(
+    work_item: dict[str, Any], operation_ids: set[str]
+) -> bool:
+    conditional_operations = operation_ids & CAPABILITY_CONTEXT_OPERATION_IDS
+    if not conditional_operations:
+        return True
+    context = work_item.get("capabilityContext")
+    if not isinstance(context, dict):
         return False
-    receipts = transaction.get("phaseReceipts")
-    required_receipts = {"preview", "activation", "observation", "rollback", "cleanup"}
-    owners = transaction.get("lifecycleOwners")
-    return (
-        transaction.get("accepted") is True
-        and isinstance(receipts, dict)
-        and required_receipts.issubset(receipts)
-        and all(bool(receipts[item]) for item in required_receipts)
-        and isinstance(owners, list)
-        and len(owners) == 1
-        and isinstance(owners[0], str)
-        and bool(owners[0].strip())
-        and transaction.get("residualProjectionCount") == 0
-        and transaction.get("dualAuthority") is False
-    )
+    mode = context.get("mode")
+    if not isinstance(mode, str):
+        return False
+    policy = CAPABILITY_CONTEXT_POLICIES.get(mode)
+    if not policy or not conditional_operations.issubset(policy["operationIds"]):
+        return False
+    fields_valid = all(
+        isinstance(context.get(field), str) and bool(context[field].strip())
+        for field in policy["stringFields"]
+    ) and all(_non_empty_string_list(context.get(field)) for field in policy["listFields"])
+    if mode == "portfolio-curation":
+        root_value = context.get("inactiveAcquisitionRoot")
+        normalized_root = (
+            root_value.replace("\\", "/") if isinstance(root_value, str) else ""
+        )
+        fields_valid = fields_valid and normalized_root.startswith(".tmp/") and not any(
+            part == ".." for part in normalized_root.split("/")
+        )
+    task_gap_operations = {
+        "targeted-capability-discovery",
+        "capability-static-review",
+        "inactive-exact-acquisition",
+    }
+    if mode == "task-time" and operation_ids & task_gap_operations:
+        root_value = context.get("inactiveAcquisitionRoot")
+        normalized_root = (
+            root_value.replace("\\", "/") if isinstance(root_value, str) else ""
+        )
+        fields_valid = (
+            fields_valid
+            and isinstance(context.get("capabilityGap"), str)
+            and bool(context["capabilityGap"].strip())
+            and isinstance(context.get("candidateSourceBoundary"), str)
+            and bool(context["candidateSourceBoundary"].strip())
+            and _non_empty_string_list(context.get("reviewCriteria"))
+            and isinstance(context.get("cohortStopRule"), str)
+            and bool(context["cohortStopRule"].strip())
+            and normalized_root.startswith(".tmp/")
+            and not any(part == ".." for part in normalized_root.split("/"))
+        )
+    return fields_valid
 
 
 def _valid_continuation_evidence(document: dict[str, Any]) -> bool:
@@ -309,14 +459,35 @@ def _validate_cleanup_evidence(
     pattern = document.get("targetPattern")
     if not isinstance(pattern, str) or not pattern.strip():
         valid = False
-        errors.append(f"cleanup evidence {relative} must declare an exact targetPattern")
+        errors.append(
+            f"cleanup evidence {relative} must declare a start-anchored "
+            "relative literal-alternative targetPattern"
+        )
     else:
+        pattern_match = BOUNDED_CLEANUP_PATTERN.fullmatch(pattern)
+        alternatives = pattern_match.group(1).split("|") if pattern_match else []
+        alternatives_bounded = bool(alternatives) and all(
+            not PurePosixPath(alternative).is_absolute()
+            and not PureWindowsPath(alternative).is_absolute()
+            and all(
+                part not in {"", ".", ".."} for part in alternative.split("/")
+            )
+            for alternative in alternatives
+        )
+        if not alternatives_bounded:
+            valid = False
+            errors.append(
+                f"cleanup evidence {relative} targetPattern must be start-anchored relative literal alternatives"
+            )
         try:
             re.compile(pattern)
-        except re.error:
+        except (re.error, OverflowError, RecursionError):
             valid = False
             errors.append(f"cleanup evidence {relative} targetPattern must compile")
-    if not isinstance(document.get("operation"), str) or not document["operation"].strip():
+    if (
+        not isinstance(document.get("operation"), str)
+        or not document["operation"].strip()
+    ):
         valid = False
         errors.append(f"cleanup evidence {relative} must describe the bounded operation")
     if document.get("remainingMatches") != 0:
@@ -360,17 +531,25 @@ def _validate_evidence(
                 claim_limits_complete = False
                 verified = False
                 errors.append(f"evidence {relative} must declare non-empty claimLimits")
+            if document.get("testFixture") is True:
+                verified = False
+                errors.append(
+                    f"verified criterion {criterion_id} cannot use test fixture evidence {relative}"
+                )
             if criterion_id == "O2" and not _valid_route_evidence(document):
                 verified = False
                 errors.append(f"evidence {relative} must contain a source-bound route and authority boundary")
-            if criterion_id == "O3" and not _valid_lifecycle_evidence(document):
-                verified = False
-                errors.append(f"evidence {relative} is not an accepted capability lifecycle transaction")
             if criterion_id == "O4" and not _valid_continuation_evidence(document):
                 verified = False
                 errors.append(f"evidence {relative} is not a real continuation receipt")
             if criterion_id in {"O5", "G4"} and not _validate_cleanup_evidence(document, relative, errors):
                 verified = False
+        if criterion_id == "O3":
+            verified = False
+            errors.append(
+                "criterion O3 verification remains fail-closed until the real-task "
+                "evaluation and host lifecycle evidence validator is implemented"
+            )
         states[criterion_id] = verified
     return states, claim_limits_complete
 
@@ -419,8 +598,12 @@ def verify_product(root: Path) -> dict[str, Any]:
         for index, criterion in enumerate(raw_criteria):
             if not isinstance(criterion, dict):
                 errors.append(f"acceptance criterion {index} must be an object")
-            else:
-                criteria.append(criterion)
+                continue
+            criterion_id = criterion.get("id")
+            if not isinstance(criterion_id, str) or not criterion_id.strip():
+                errors.append(f"acceptance criterion {index} must have a non-empty string id")
+                continue
+            criteria.append(criterion)
     criterion_ids = [
         criterion.get("id")
         for criterion in criteria
@@ -453,6 +636,30 @@ def verify_product(root: Path) -> dict[str, Any]:
     if planning_model.get("maxActiveWorkItems") != 1:
         errors.append("constitution must keep maxActiveWorkItems at one")
 
+    collaboration_model = constitution.get("collaborationModel")
+    user_contributions = (
+        collaboration_model.get("userContributions")
+        if isinstance(collaboration_model, dict)
+        else None
+    )
+    agent_obligations = (
+        collaboration_model.get("agentObligations")
+        if isinstance(collaboration_model, dict)
+        else None
+    )
+    collaboration_model_valid = (
+        _non_empty_string_list(user_contributions)
+        and REQUIRED_USER_CONTRIBUTION_IDS.issubset(set(user_contributions))
+        and len(user_contributions) == len(set(user_contributions))
+        and _non_empty_string_list(agent_obligations)
+        and REQUIRED_AGENT_OBLIGATION_IDS.issubset(set(agent_obligations))
+        and len(agent_obligations) == len(set(agent_obligations))
+    )
+    if not collaboration_model_valid:
+        errors.append(
+            "constitution collaborationModel must preserve user roles and agent obligations"
+        )
+
     raw_increments = program.get("increments")
     increments: list[dict[str, Any]] = []
     if not isinstance(raw_increments, list):
@@ -474,10 +681,18 @@ def verify_product(root: Path) -> dict[str, Any]:
     active_work_items = 0
     bounded_work_operations: set[str] = set()
     bounded_work_operations_valid = True
+    bounded_capability_contexts_valid = True
     for increment in increments:
         increment_id = increment.get("id", "<missing>")
         if not isinstance(increment_id, str) or not increment_id.strip():
             errors.append("every program increment must have a non-empty id")
+        increment_state = increment.get("state")
+        if not isinstance(increment_state, str) or increment_state not in {
+            "planned",
+            "active",
+            "completed",
+        }:
+            errors.append(f"increment {increment_id} has an unsupported state")
         for field in ("observedProblem", "hypothesis", "falsifier", "stopCondition"):
             if not isinstance(increment.get(field), str) or not increment[field].strip():
                 errors.append(f"increment {increment_id} is missing {field}")
@@ -516,11 +731,64 @@ def verify_product(root: Path) -> dict[str, Any]:
                 f"work item {work_id} operationIds",
                 errors,
             )
-            if work_item.get("state") in {"active", "completed"}:
+            work_state = work_item.get("state")
+            if not isinstance(work_state, str) or work_state not in {
+                "planned",
+                "active",
+                "completed",
+            }:
+                errors.append(f"work item {work_id} has an unsupported state")
+                work_state = "<invalid>"
+            operation_id_set = set(operation_ids)
+            capability_context_valid = _valid_capability_context(
+                work_item, operation_id_set
+            )
+            gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
+            if not capability_context_valid:
+                gated_operations.update(
+                    operation_id_set & CAPABILITY_CONTEXT_OPERATION_IDS
+                )
+            if work_state == "planned" and gated_operations:
+                authority_gate = work_item.get("authorityGate")
+                if not isinstance(authority_gate, str) or not authority_gate.strip():
+                    errors.append(
+                        f"planned work {work_id} requests unauthorized operations "
+                        "without an authorityGate"
+                    )
+                else:
+                    covered_operations = AUTHORITY_GATE_OPERATION_IDS.get(
+                        authority_gate, set()
+                    )
+                    uncovered_operations = sorted(
+                        gated_operations - covered_operations
+                    )
+                    if uncovered_operations:
+                        errors.append(
+                            f"planned work {work_id} authorityGate {authority_gate} "
+                            "does not cover operations: "
+                            + ", ".join(uncovered_operations)
+                        )
+            elif work_state == "planned" and "authorityGate" in work_item:
+                authority_gate = work_item.get("authorityGate")
+                if (
+                    not isinstance(authority_gate, str)
+                    or authority_gate not in AUTHORITY_GATE_OPERATION_IDS
+                ):
+                    errors.append(
+                        f"planned work {work_id} has unknown authorityGate "
+                        f"{authority_gate}"
+                    )
+            if work_state in {"active", "completed"}:
                 if not operation_ids:
                     bounded_work_operations_valid = False
                 bounded_work_operations.update(operation_ids)
-            if work_item.get("state") == "active":
+                if not capability_context_valid:
+                    bounded_capability_contexts_valid = False
+                    errors.append(
+                        f"active or completed work {work_id} has capability operations "
+                        "without an eligible capabilityContext"
+                    )
+            if work_state == "active":
                 active_work_items += 1
     if not set(OUTCOME_IDS).issubset(mapped_criteria):
         errors.append("every product outcome must be mapped by at least one causal increment")
@@ -555,6 +823,7 @@ def verify_product(root: Path) -> dict[str, Any]:
     authority_valid = (
         authority_contract_valid
         and bounded_work_operations_valid
+        and bounded_capability_contexts_valid
         and not unauthorized_operations
     )
     if not authority_contract_valid:
