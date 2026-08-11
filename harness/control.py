@@ -2587,11 +2587,26 @@ def verify_product(root: Path) -> dict[str, Any]:
             else:
                 increments.append(increment)
     active_increments = [item for item in increments if item.get("state") == "active"]
-    if len(active_increments) != 1:
-        errors.append("program must have exactly one active causal increment")
+    program_status = program.get("status")
     active_increment_id = program.get("activeIncrementId")
-    if len(active_increments) == 1 and active_increments[0].get("id") != active_increment_id:
-        errors.append("activeIncrementId must identify the active causal increment")
+    if program_status == "active":
+        if len(active_increments) != 1:
+            errors.append("active program must have exactly one active causal increment")
+        elif active_increments[0].get("id") != active_increment_id:
+            errors.append("activeIncrementId must identify the active causal increment")
+    elif program_status == "completed":
+        if active_increments or active_increment_id is not None:
+            errors.append(
+                "completed program must have no active increment or activeIncrementId"
+            )
+        for increment in increments:
+            if increment.get("state") not in {"completed", "stopped"}:
+                errors.append(
+                    "completed program cannot retain open increment "
+                    f"{increment.get('id', '<missing>')}"
+                )
+    else:
+        errors.append("program status must be active or completed")
 
     mapped_criteria: set[str] = set()
     active_work_items = 0
@@ -2675,7 +2690,10 @@ def verify_product(root: Path) -> dict[str, Any]:
                 errors.append(
                     f"active work {work_id} must belong to the active increment"
                 )
-            if increment_state == "completed" and work_state != "completed":
+            if increment_state == "completed" and work_state not in {
+                "completed",
+                "cancelled",
+            }:
                 errors.append(
                     f"completed increment {increment_id} cannot retain open work "
                     f"{work_id}"
@@ -2926,6 +2944,9 @@ def verify_product(root: Path) -> dict[str, Any]:
         not errors
         and verified_outcomes == len(OUTCOME_IDS)
         and passed_guardrails == len(GUARDRAIL_IDS)
+        and program_status == "completed"
+        and not active_increments
+        and active_increment_id is None
     )
 
     return {

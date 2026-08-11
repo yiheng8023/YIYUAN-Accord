@@ -15,12 +15,12 @@ are observed, and when they are released.
 ## Current product state
 
 - Release target: `v0.1`.
-- Product outcomes: `4/5` currently verified.
+- Product outcomes: `5/5` currently verified.
 - Mandatory guardrails: `4/4` currently pass.
-- Active causal increment: `increment.capability-lifecycle-product-slice`.
-- Completion remains `in-progress`; O4 passed on one bounded fresh-receiver
-  event, while O3 capability lifecycle still requires evaluation and one
-  separately authorized real transaction.
+- Active causal increment: `increment.current-official-route-evaluation-slice`.
+- Completion remains `in-progress` while the program closeout work is active.
+  O3 is bound to one source-reconciled scorecard and one current-host lifecycle
+  transaction; this is not a general lifecycle or cross-host claim.
 
 The current reset is itself a user-provided real task. It exposed a genuine
 Harness failure: a predecessor research and curation program could remain
@@ -45,7 +45,8 @@ The current machine authority is deliberately small:
 Historical research, fixtures, registries, and regression tools remain
 retrievable from Git history, but they have no current product, planning,
 acceptance, runtime, or release authority. The former local ignored quarantine
-and bytecode caches were physically removed after the reset.
+was physically removed; transient ignored bytecode caches are not authority and
+remain cleanup items whenever tooling recreates them.
 
 ## Verify
 
@@ -58,10 +59,9 @@ python -B -m unittest discover -s tests/product -v
 ```
 
 A PASS means only that the current product plan, acceptance mapping, evidence
-bindings, authority boundary, and identity guard are internally consistent. O4
-evidence covers one fresh receiver and repository state only. It does not prove
-O3, cross-host behavior, production readiness, release readiness, or broad user
-value.
+bindings, authority boundary, and identity guard are internally consistent. O3
+and O4 each bind one bounded current-host event. They do not prove cross-host
+behavior, production readiness, release readiness, or broad user value.
 
 ## Delivery method
 

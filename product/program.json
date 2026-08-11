@@ -182,10 +182,10 @@
     {
       "id": "increment.current-official-route-evaluation-slice",
       "state": "active",
-      "observedProblem": "The exact attempt-2 raw receipt, completed scorecard projection, and public fail-closed validator now exist together on origin/main revision dd5fa0e, and the public seam can reproduce the successful receipt while rejecting semantic substitutes. Program state still records the evidence-construction work as active, so O3 remains false until this durable binding is reconciled and reviewed.",
-      "hypothesis": "Binding revision dd5fa0e as the lifecycle evidence revision, completing the evidence-construction work, and activating only the finite closeout work will preserve the proven event without replay and create an auditable O3 transition candidate.",
-      "falsifier": "The verifier cannot reproduce the exact raw and scorecard from dd5fa0e on origin/main, a semantic mutation or bounded residue passes, the completed work can omit the exact receipt, or the transition requires another lifecycle run. Any such result keeps O3 false and returns to validator repair.",
-      "stopCondition": "First commit and push the exact raw receipt, completed scorecard projection, and public fail-closed validator as one durable evidence layer. O3 may pass only from that pushed revision with all sparse dispositions, exact successful lifecycle semantics, and zero bounded residue. The increment closes only after the separately reviewed O3 state transition is itself committed and pushed.",
+      "observedProblem": "The exact evidence layer at dd5fa0e is now reproducible and satisfies O3, but an outcome-only completion calculation could call the product accepted while the program and closeout work remain active. The public README also still reported the pre-O3 state.",
+      "hypothesis": "Promoting O3 only with its exact two evidence paths, synchronizing the public state, and requiring program=completed plus a closed increment graph before completionState=accepted will keep plan, acceptance, and delivery state causally aligned.",
+      "falsifier": "O3 passes from any substitute evidence, an active program reports accepted, a completed program retains an active increment or open work, the public state contradicts the machine report, or the transition requires another lifecycle run.",
+      "stopCondition": "Commit and push the separately reviewed O3 transition, public state synchronization, and active-program completion guard. The increment becomes eligible to close only from that pushed transition; product acceptance still requires a completed program and closed increment graph.",
       "sourceInputs": [
         {
           "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
@@ -270,7 +270,7 @@
           "state": "active",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
-          "deliverables": ["O3 verifier mutation coverage", "full local verification", "Git commit", "origin/main push"]
+          "deliverables": ["O3 verifier mutation coverage", "active-program completion guard", "public state synchronization", "full local verification", "Git commit", "origin/main push"]
         }
       ]
     }

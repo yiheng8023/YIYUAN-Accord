@@ -11,9 +11,9 @@
       "id": "O1",
       "class": "outcome",
       "name": "finite plan-bound delivery",
-      "statement": "The release has one finite acceptance expression, one active causal increment, and every work item maps to a criterion.",
+      "statement": "The release has one finite acceptance expression; an active program has exactly one active causal increment, a completed program has none and a fully terminal increment/work graph, and every work item maps to a criterion.",
       "metric": "structural product-control validation",
-      "threshold": "zero mapping errors, exactly one active increment, at most one active work item",
+      "threshold": "zero mapping errors; exactly one active increment and at most one active work item while the program is active; zero active increments, a null activeIncrementId, and only completed, cancelled, or stopped terminal graph states when the program is completed",
       "assessment": "computed"
     },
     {
@@ -33,7 +33,11 @@
       "statement": "A source-bound capability evaluation audits the exact historical sparse reconciliation across the lifecycle, quality, and Harness-scenario axes; retains, corrects, or subtracts its mappings; distinguishes covered, overlap, conflict, unevaluated, real-task, human-judgment, and separately-authorized scope; compares decision-relevant native, official, reviewed external, composition, and self-authored capability routes while keeping accountable human control distinct; and then one selected real-task route completes preview, bounded activation, observation, applicable projection, rollback, and cleanup through one lifecycle owner and the selected host authority surface.",
       "metric": "capability evaluation records plus real lifecycle transactions with complete receipts",
       "threshold": "the exact historical 15-partial/6-cluster/14-lifecycle/12-dimension/13-scenario sparse baseline is bound by commit and path, every retained corrected or subtracted mapping has a rationale, the five capability route classes plus accountable human control have evidence-backed or explicit unevaluated/not-applicable dispositions without a Cartesian requirement, selected-route rationale and observed user tool-learning interventions are recorded, and one separately authorized real transaction for that selected task and route reaches preview, activation, observation, rollback, and cleanup with no residual projection or dual authority",
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/o3-sparse-scorecard-2026-08-11.json",
+        "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
+      ]
     },
     {
       "id": "O4",

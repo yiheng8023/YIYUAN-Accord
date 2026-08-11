@@ -144,7 +144,8 @@ class ProductControlCliTests(unittest.TestCase):
             "increment.current-official-route-evaluation-slice",
         )
         self.assertTrue(report["criterionStates"]["O4"])
-        self.assertEqual(report["outcomes"], {"total": 5, "verified": 4})
+        self.assertTrue(report["criterionStates"]["O3"])
+        self.assertEqual(report["outcomes"], {"total": 5, "verified": 5})
         self.assertEqual(report["guardrails"], {"total": 4, "passed": 4})
         self.assertEqual(report["completionState"], "in-progress")
 
@@ -206,6 +207,78 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_verified_outcomes_do_not_accept_an_active_program(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            self.bind_o3_verified(target)
+
+            result = self.run_verify(target)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        report = json.loads(result.stdout)
+        self.assertTrue(report["criterionStates"]["O3"])
+        self.assertEqual(report["outcomes"], {"total": 5, "verified": 5})
+        self.assertEqual(report["completionState"], "in-progress")
+
+    def test_completed_program_requires_a_closed_increment_graph(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            self.bind_o3_verified(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            program["status"] = "completed"
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(
+            "completed program must have no active increment or activeIncrementId",
+            json.loads(result.stdout)["errors"],
+        )
+
+    def test_completed_program_can_accept_only_after_the_graph_is_closed(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            self.bind_o3_verified(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            current_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            current_increment["state"] = "completed"
+            close_work = next(
+                item
+                for item in current_increment["workItems"]
+                if item["id"]
+                == "work.close-current-official-route-evaluation-slice"
+            )
+            close_work["state"] = "completed"
+            program["status"] = "completed"
+            program["activeIncrementId"] = None
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        report = json.loads(result.stdout)
+        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["completionState"], "accepted")
+
     def test_completed_increment_cannot_retain_open_work(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
@@ -260,6 +333,17 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             self.copy_checkout_with_history(target)
+            acceptance_path = target / "product" / "acceptance.json"
+            acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
+            o3 = next(
+                item for item in acceptance["criteria"] if item["id"] == "O3"
+            )
+            o3["assessment"] = "planned"
+            o3.pop("evidence")
+            acceptance_path.write_text(
+                json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
 
             result = self.run_verify(target)
 
@@ -2155,7 +2239,9 @@ class ProductControlCliTests(unittest.TestCase):
             result = self.run_verify(target)
 
             self.assertEqual(result.returncode, 0, result.stdout)
-            self.assertTrue(json.loads(result.stdout)["criterionStates"]["O3"])
+            report = json.loads(result.stdout)
+            self.assertTrue(report["criterionStates"]["O3"])
+            self.assertEqual(report["completionState"], "in-progress")
 
         mutations = {
             "checkpoint is counterevidence": (

@@ -12,24 +12,22 @@ reproducible residual gap survives comparison.
 
 `increment.current-official-route-evaluation-slice`
 
-Observed problem: attempt 2 completed the exact six-phase installed-official
-route, and its raw receipt, completed scorecard projection, and public validator
-now exist together at `origin/main` revision `dd5fa0e`. Program state has not
-yet reconciled that durable evidence into an O3 transition. O3 therefore
-remains false, and no third lifecycle attempt is allowed.
+Observed problem: the exact evidence layer at `dd5fa0e` now satisfies O3, but
+an outcome-only completion calculation could call the product accepted while
+the program and closeout work remain active. The public README also reported
+the pre-O3 state. No third lifecycle attempt is allowed.
 
-Hypothesis: binding `dd5fa0e` in the public verifier, completing the evidence
-construction work, and activating only the finite closeout work will create an
-auditable O3 transition candidate without rerunning the lifecycle.
+Hypothesis: promote O3 only with its exact two evidence paths, synchronize the
+public state, and require a completed program plus closed increment graph before
+`completionState=accepted`.
 
-Falsifier: the verifier admits O3 before the evidence revision is on
-`origin/main`, accepts failed/checkpoint or semantically drifted evidence,
-ignores bounded residue, or requires another lifecycle run. Any such result
-returns to validator repair, not event replay.
+Falsifier: substitute evidence passes, an active program reports accepted, a
+completed program retains an active increment or open work, public state
+contradicts the machine report, or another lifecycle run is required.
 
-Stop condition: the evidence layer is already pushed at `dd5fa0e`. O3 may pass
-only from that exact revision. Close the increment only after the separately
-reviewed O3 transition is committed and pushed.
+Stop condition: commit and push the separately reviewed O3 transition, public
+state synchronization, and active-program completion guard. Close the increment
+only from that pushed transition.
 
 ## Current work item
 
@@ -38,8 +36,9 @@ reviewed O3 transition is committed and pushed.
 The completed scorecard is
 `product/evidence/o3-sparse-scorecard-2026-08-11.json`. It retains criterion
 records by canonical hash, treats aggregate axes as membership only, and binds
-the exact attempt-2 raw receipt from pushed revision `dd5fa0e`. O3 remains
-false pending the separate acceptance-state review. The earlier real but
+the exact attempt-2 raw receipt from pushed revision `dd5fa0e`. O3 is now
+verified, while overall completion remains `in-progress` until the program and
+increment graph close. The earlier real but
 evidence-incomplete analytical event is recorded at
 `product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
 projection is independently hashed and fail-closed; the missing raw-output hash

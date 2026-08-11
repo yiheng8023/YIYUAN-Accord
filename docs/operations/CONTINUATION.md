@@ -61,9 +61,9 @@ value, O3, or release readiness.
 
 ## Current increment
 
-`increment.current-official-route-evaluation-slice` is active for O3. Product
-state is `4/5` outcomes and `4/4` guardrails; completion remains
-`in-progress`.
+`increment.current-official-route-evaluation-slice` remains active for its
+finite closeout. Product state is `5/5` outcomes and `4/4` guardrails, but
+completion remains `in-progress` until the program and increment graph close.
 
 ## Evidence-incomplete official KPI analysis event
 
@@ -106,8 +106,8 @@ survived, so reviewed-external execution and self-authored addition remain
 closed. Attempt 2 subsequently observed the exact six-phase current-host route,
 zero material user tool intervention, and bounded cleanup. The scorecard now
 binds the raw receipt. Both artifacts and the public validator were pushed
-together at revision `dd5fa0e`; O3 remains false pending its separate state
-transition review.
+together at revision `dd5fa0e`; the separately reviewed evidence now satisfies
+O3 without generalizing beyond the bounded event.
 
 ## Failed lifecycle attempt 1 and causal correction
 
@@ -151,14 +151,14 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-The evidence-construction work is completed and the active work item is now
-`work.close-current-official-route-evaluation-slice`. Bind exact revision
-`dd5fa0e`, run the public mutation seam and full local verification, and review
-the O3 state transition separately. Attempt 2 is complete and must not be
-executed again; a third lifecycle attempt is not authorized. Any install,
-enablement, account, external candidate execution, manager/consumer mutation,
-publication, release, or acceptance promotion beyond this reviewed transition
-remains outside authority.
+The evidence-construction work is completed and the active work item is
+`work.close-current-official-route-evaluation-slice`. Commit and push the exact
+O3 transition, synchronized public state, active-program completion guard, and
+full local verification. Then close this increment from that pushed revision
+and activate only the separately mapped public-delivery closeout. Attempt 2 is
+complete and must not be executed again; a third lifecycle attempt is not
+authorized. Any install, enablement, account, external candidate execution,
+manager/consumer mutation, publication, or release remains outside authority.
 
 Do not redo or copy the historical sparse reconciliation. Its exact source is
 pinned in `product/program.json` at commit `c538667...`; each current axis must
