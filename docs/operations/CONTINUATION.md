@@ -121,8 +121,10 @@ python -B -m harness verify --root . --json
 
 The active work item remains
 `work.build-sparse-scorecard-and-close-lifecycle`, but the scorecard portion is
-now source-validated. Execute one explicitly instrumented transaction for the
-selected already-installed route. Preview, bounded
+now source-validated. The pre-event contract is
+`product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`;
+execute it only from the committed and pushed revision that contains the
+contract. Preview, bounded
 task-time activation, observation, applicable projection, rollback, and cleanup
 must each have an observed, not-applicable, or failed receipt; no phase may be
 inferred from the prior analytical event. This remains inside the user's

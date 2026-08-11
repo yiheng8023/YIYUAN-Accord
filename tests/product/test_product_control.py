@@ -583,6 +583,63 @@ class ProductControlCliTests(unittest.TestCase):
                 report = json.loads(result.stdout)
                 self.assertIn(expected_error, report["errors"])
 
+    def test_active_scorecard_work_requires_the_bound_lifecycle_contract(
+        self,
+    ) -> None:
+        mutations = {
+            "contract locator removed": lambda work, contract, path: (
+                work.pop("lifecycleContractEvidence"),
+                path.unlink(),
+            ),
+            "contract phase semantics drifted": lambda work, contract, path: contract[
+                "phaseSemantics"
+            ].__setitem__("boundedActivation", "ordinary Skill use"),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.current-official-route-evaluation-slice"
+                )
+                scorecard_work = next(
+                    item
+                    for item in increment["workItems"]
+                    if item["id"]
+                    == "work.build-sparse-scorecard-and-close-lifecycle"
+                )
+                contract_path = (
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-official-lifecycle-transaction-contract-2026-08-11.json"
+                )
+                contract = json.loads(contract_path.read_text(encoding="utf-8"))
+                mutate(scorecard_work, contract, contract_path)
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+                if contract_path.exists():
+                    contract_path.write_text(
+                        json.dumps(contract, ensure_ascii=True, indent=2) + "\n",
+                        encoding="utf-8",
+                    )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "active work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact bound lifecycle transaction contract",
+                    report["errors"],
+                )
+
     def test_sparse_scorecard_is_fail_closed_at_source_and_claim_boundaries(
         self,
     ) -> None:

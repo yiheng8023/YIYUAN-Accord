@@ -53,8 +53,10 @@ projection is independently hashed and fail-closed; the missing raw-output hash
 and all absent lifecycle phases are mandatory limitations. Its work item is
 `cancelled` with result `evidence-incomplete`, not completed. Execute a
 separately bounded, explicitly instrumented lifecycle transaction on the exact
-selected already-installed route. No phase may be inferred from prior Skill use
-or zero residue.
+selected already-installed route. Its pre-event contract is
+`product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`;
+it must be committed and pushed before the fresh receiver runs. No phase may be
+inferred from prior Skill use or zero residue.
 
 ## Allowed work
 
@@ -75,14 +77,14 @@ or zero residue.
 ## Separate authority transition
 
 The user authorized real task evaluation and evidence-backed capability
-addition. The current active transition covers task-scoped, read-only use of
-the exact already-installed OpenAI capability on this public local repository;
-it does not grant
-installation, enablement, account connection, paid service use, third-party
-candidate execution, consumer projection, manager mutation, publication, or
-release. The exact task, Skill, data, verification, rollback, and cleanup
-boundaries are fixed by the active capability context and evidence contracts;
-any drift stops the transaction.
+addition. The current active transition covers task-scoped use of the exact
+already-installed OpenAI capability on this public local repository plus only
+the contract's exact temporary root and raw-evidence file writes; it does not
+grant installation, enablement, account connection, paid service use,
+third-party candidate execution, consumer projection, manager mutation,
+publication, or release. The exact task, Skill, data, verification, rollback,
+and cleanup boundaries are fixed by the active capability context and evidence
+contracts; any drift stops the transaction.
 
 Release and publication remain user-owned and are not authorized by this
 increment.

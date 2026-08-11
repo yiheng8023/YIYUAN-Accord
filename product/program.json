@@ -242,6 +242,7 @@
           "operationIds": ["repository-read", "repository-edit", "coverage-analysis", "installed-authorized-capability-use", "local-verification", "bounded-cleanup"],
           "authorityGate": "bound-task-capability-context-required",
           "progressEvidence": "product/evidence/o3-sparse-scorecard-2026-08-11.json",
+          "lifecycleContractEvidence": "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json",
           "capabilityContext": {
             "mode": "task-time",
             "taskBinding": "agent-autonomy-harness-v0.1-closeout@2df8d85f1e9a8881972d5aa6ac587f11dc37aa79",

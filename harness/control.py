@@ -199,6 +199,27 @@ O3_SPARSE_SCORECARD_SHA256 = (
 O3_SPARSE_SOURCE_SHA256 = (
     "d472ce7271d93ecda46a6013c5650280eb2048b8b7ecaeaca447339b867a6d66"
 )
+O3_LIFECYCLE_CONTRACT_PATH = (
+    "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json"
+)
+O3_LIFECYCLE_CONTRACT_ID = (
+    "o3-official-lifecycle-transaction-contract-2026-08-11"
+)
+O3_LIFECYCLE_CONTRACT_BASELINE_REVISION = (
+    "19ee6f5c2b7feb47cbe41e40f5983c13d5ec2e45"
+)
+O3_LIFECYCLE_CONTRACT_PROMPT_SHA256 = (
+    "722c223e19d5a90315b8e900c89a90e112c95c6279e4cce7bbcf080f795506e5"
+)
+O3_LIFECYCLE_CONTRACT_SHA256 = (
+    "49fc7bc17fe37f0c519fb79a4c6d40eeff9da61343657b6019c78db6cd3a53c8"
+)
+O3_LIFECYCLE_RAW_EVIDENCE_PATH = (
+    "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
+)
+O3_LIFECYCLE_TEMPORARY_ROOT = (
+    ".tmp/o3-official-lifecycle-transaction-2026-08-11"
+)
 OFFICIAL_KPI_SKILL_IDENTITIES = [
     {
         "name": "analyze-data-quality",
@@ -217,6 +238,18 @@ OFFICIAL_KPI_EVENT_CLAIM_LIMITS = {
     "The event does not prove O3, capability value, cross-host portability, production readiness, release readiness, or publication readiness.",
     "No external candidate, account, installation, enablement, manager, consumer, or persistent activation is authorized.",
 }
+O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE = (
+    "This contract authorizes one bounded fresh receiver transaction on the named public local sources and exact paths only.",
+    "Bounded activation means task-time Skill instruction loading and use in the fresh receiver; it does not prove installation, enablement, exposure, persistent activation, or model behavior.",
+    "Rollback proves cessation of the named task route plus unchanged Skill hashes and zero declared capability configuration mutation; it does not prove cryptographic context erasure.",
+    "A not-applicable projection receipt proves no projection was needed for this route, not general projection support.",
+    "The event may support O3 only together with the separately validated sparse scorecard and public fail-closed verifier.",
+    "The prompt path allowlist is a task constraint, not a host sandbox; repository checks cannot prove absence of transient or out-of-scope filesystem effects.",
+    "The event does not prove cross-host portability, production readiness, release readiness, publication readiness, broad user value, or v0.1 acceptance.",
+)
+O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS = set(
+    O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE
+)
 PORTFOLIO_CURATION_COVERAGE_OBJECTIVE = (
     "decision-relevant-closeout-demand-coverage-with-reduced-user-orchestration"
 )
@@ -533,6 +566,10 @@ def _non_empty_string_list(value: Any) -> bool:
     return isinstance(value, list) and bool(value) and all(
         isinstance(item, str) and item.strip() for item in value
     )
+
+
+def _non_empty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
 
 
 def _exact_string_set(value: Any, expected: set[str]) -> bool:
@@ -1700,6 +1737,146 @@ def _valid_o3_sparse_scorecard_source_derivation(
     )
 
 
+def _valid_o3_lifecycle_contract(
+    root: Path,
+    work_item: dict[str, Any],
+    errors: list[str],
+) -> bool:
+    if work_item.get("lifecycleContractEvidence") != O3_LIFECYCLE_CONTRACT_PATH:
+        return False
+    document = _load(root, O3_LIFECYCLE_CONTRACT_PATH, errors)
+    task_binding = document.get("taskBinding")
+    authorization = document.get("separateAuthorization")
+    capability = document.get("capabilityIdentity")
+    owner = document.get("lifecycleOwner")
+    host_surface = document.get("hostAuthoritySurface")
+    phase_semantics = document.get("phaseSemantics")
+    event_contract = document.get("eventContract")
+    expected_raw = document.get("expectedRawEvidence")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            task_binding,
+            authorization,
+            capability,
+            owner,
+            host_surface,
+            phase_semantics,
+            event_contract,
+            expected_raw,
+        )
+    ):
+        return False
+    baseline_program = _git_json_at_revision(
+        root,
+        O3_LIFECYCLE_CONTRACT_BASELINE_REVISION,
+        "product/program.json",
+    )
+    baseline_scorecard = _git_json_at_revision(
+        root,
+        O3_LIFECYCLE_CONTRACT_BASELINE_REVISION,
+        O3_SPARSE_SCORECARD_PATH,
+    )
+    if not isinstance(baseline_program, dict) or not isinstance(
+        baseline_scorecard, dict
+    ):
+        return False
+    increments = baseline_program.get("increments")
+    baseline_increment = next(
+        (
+            item
+            for item in increments
+            if isinstance(item, dict)
+            and item.get("id")
+            == "increment.current-official-route-evaluation-slice"
+        ),
+        {},
+    ) if isinstance(increments, list) else {}
+    baseline_work_items = baseline_increment.get("workItems")
+    baseline_work = next(
+        (
+            item
+            for item in baseline_work_items
+            if isinstance(item, dict)
+            and item.get("id")
+            == "work.build-sparse-scorecard-and-close-lifecycle"
+        ),
+        {},
+    ) if isinstance(baseline_work_items, list) else {}
+    try:
+        canonical = lambda value: json.dumps(
+            value,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        document_hash = hashlib.sha256(canonical(document)).hexdigest()
+        baseline_scorecard_hash = hashlib.sha256(
+            canonical(baseline_scorecard)
+        ).hexdigest()
+        prompt = event_contract.get("prompt")
+        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    except (AttributeError, TypeError, UnicodeEncodeError):
+        return False
+    claim_limits = document.get("claimLimits")
+    return (
+        document_hash == O3_LIFECYCLE_CONTRACT_SHA256
+        and document.get("id") == O3_LIFECYCLE_CONTRACT_ID
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("status") == "bound-pre-event"
+        and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
+        and task_binding.get("invented") is False
+        and task_binding.get("scorecardBaselineRevision")
+        == O3_LIFECYCLE_CONTRACT_BASELINE_REVISION
+        and _non_empty_string(task_binding.get("contractRevisionRule"))
+        and task_binding.get("scorecardPath") == O3_SPARSE_SCORECARD_PATH
+        and task_binding.get("scorecardCanonicalSha256")
+        == O3_SPARSE_SCORECARD_SHA256
+        and baseline_scorecard_hash == O3_SPARSE_SCORECARD_SHA256
+        and baseline_program.get("activeIncrementId")
+        == "increment.current-official-route-evaluation-slice"
+        and baseline_work.get("state") == "active"
+        and baseline_work.get("progressEvidence") == O3_SPARSE_SCORECARD_PATH
+        and _non_empty_string(authorization.get("source"))
+        and _non_empty_string(authorization.get("scope"))
+        and _non_empty_string(authorization.get("repositoryAttestationLimit"))
+        and capability.get("pluginId") == OFFICIAL_KPI_PLUGIN_ID
+        and capability.get("pluginVersion") == OFFICIAL_KPI_PLUGIN_VERSION
+        and capability.get("skillChain") == OFFICIAL_KPI_SKILL_IDENTITIES
+        and owner.get("id") == "/root/o3_official_lifecycle_transaction"
+        and owner.get("dualOwnerAllowed") is False
+        and host_surface.get("host") == "Codex"
+        and _non_empty_string(host_surface.get("surface"))
+        and _non_empty_string(host_surface.get("constraintAndObservation"))
+        and _non_empty_string(host_surface.get("unsupportedAttestation"))
+        and set(phase_semantics)
+        == {
+            "preview",
+            "boundedActivation",
+            "observation",
+            "applicableProjection",
+            "rollback",
+            "cleanup",
+        }
+        and all(_non_empty_string(value) for value in phase_semantics.values())
+        and event_contract.get("forkTurns") == "none"
+        and event_contract.get("freshContext") is True
+        and event_contract.get("receiverReadOnly") is False
+        and event_contract.get("allowedWritePaths")
+        == [O3_LIFECYCLE_TEMPORARY_ROOT, O3_LIFECYCLE_RAW_EVIDENCE_PATH]
+        and _non_empty_string(event_contract.get("preflightFailurePolicy"))
+        and event_contract.get("promptSha256")
+        == O3_LIFECYCLE_CONTRACT_PROMPT_SHA256
+        and prompt_hash == O3_LIFECYCLE_CONTRACT_PROMPT_SHA256
+        and expected_raw.get("path") == O3_LIFECYCLE_RAW_EVIDENCE_PATH
+        and _non_empty_string_list(document.get("verification"))
+        and _non_empty_string_list(claim_limits)
+        and set(claim_limits) == O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS
+        and len(claim_limits) == len(O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS)
+    )
+
+
 def _valid_o3_sparse_scorecard_progress(
     root: Path,
     work_item: dict[str, Any],
@@ -2206,6 +2383,16 @@ def verify_product(root: Path) -> dict[str, Any]:
                         "completed work item "
                         "work.build-sparse-scorecard-and-close-lifecycle cannot use "
                         "lifecycle-pending scorecard evidence"
+                    )
+                if not _valid_o3_lifecycle_contract(
+                    root,
+                    work_item,
+                    errors,
+                ):
+                    errors.append(
+                        f"{work_state} work item "
+                        "work.build-sparse-scorecard-and-close-lifecycle must bind "
+                        "the exact bound lifecycle transaction contract"
                     )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:
