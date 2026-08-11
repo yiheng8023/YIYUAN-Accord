@@ -4,11 +4,13 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import harness.control as product_control
 from harness.control import validate_continuation_receipt
@@ -1847,6 +1849,32 @@ class ProductControlCliTests(unittest.TestCase):
                 candidate = deepcopy(receipt)
                 mutate(candidate)
                 self.assertFalse(validate_continuation_receipt(ROOT, candidate))
+
+    def test_o4_receipt_is_portable_to_python_310_timestamp_parsing(self) -> None:
+        evidence_path = (
+            ROOT
+            / "product"
+            / "evidence"
+            / "context-continuity-fresh-receiver-2026-08-11.json"
+        )
+        receipt = json.loads(evidence_path.read_text(encoding="utf-8"))
+        runtime_datetime = product_control.datetime
+
+        class Python310Datetime:
+            @staticmethod
+            def fromisoformat(value: str):
+                fractional = re.search(r"\.(\d+)(?:Z|[+-]\d{2}:\d{2})$", value)
+                if fractional is not None and len(fractional.group(1)) > 6:
+                    raise ValueError("Python 3.10 accepts at most six fractional digits")
+                return runtime_datetime.fromisoformat(value)
+
+        with patch.object(product_control, "datetime", Python310Datetime):
+            try:
+                valid = validate_continuation_receipt(ROOT, receipt)
+            except ValueError:
+                valid = False
+
+        self.assertTrue(valid)
 
     def test_cleanup_evidence_requires_resolved_absolute_roots(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

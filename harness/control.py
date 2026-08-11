@@ -1093,7 +1093,7 @@ def validate_continuation_receipt(root: Path, document: dict[str, Any]) -> bool:
         and document.get("eventKind") == "fresh-receiver-continuation"
         and document.get("eventId") == O4_EVENT_ID
         and document.get("observedAt") == O4_OBSERVED_AT
-        and datetime.fromisoformat(O4_OBSERVED_AT).tzinfo is not None
+        and _rfc3339_datetime(O4_OBSERVED_AT) is not None
         and invocation.get("mechanism") == "Codex collaboration sub-agent task"
         and invocation.get("forkTurns") == "none"
         and invocation.get("promptSha256") == O4_PROMPT_SHA256
@@ -2191,13 +2191,18 @@ def _valid_o3_lifecycle_contract(
 
 
 def _rfc3339_datetime(value: Any) -> datetime | None:
-    if not isinstance(value, str) or re.fullmatch(
-        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})",
-        value,
-    ) is None:
+    if not isinstance(value, str):
         return None
+    match = re.fullmatch(
+        r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d+))?(Z|[+-]\d{2}:\d{2})",
+        value,
+    )
+    if match is None:
+        return None
+    base, fractional, offset = match.groups()
+    normalized = f"{base}{'.' + fractional[:6] if fractional else ''}{offset}"
     try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(normalized.replace("Z", "+00:00"))
     except ValueError:
         return None
     return parsed if parsed.tzinfo is not None and parsed.utcoffset() is not None else None
