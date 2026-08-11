@@ -65,6 +65,30 @@ value, O3, or release readiness.
 state is `4/5` outcomes and `4/4` guardrails; completion remains
 `in-progress`.
 
+## Evidence-incomplete official KPI analysis event
+
+One fresh `forkTurns: none`, read-only receiver used the exact installed OpenAI
+`analyze-data-quality` and `design-kpis` Skill identities on the pinned O3
+closeout sources. The pre/post repository state stayed at commit `2df8d85`,
+clean and 0/0 against `origin/main`; the removed review root stayed absent.
+The normalized receipt is
+`product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`.
+
+The event found that the historical data is safe as criterion-level mapping and
+derived membership only; it is unsafe as axis coverage, behavior, value, or
+route-cell evidence. It exposed seven missing human-route dispositions and an
+unreproducible historical `50/78` Cartesian-looking aggregate. No reproducible
+residual capability gap survived native-plus-official composition, so no
+capability addition is proposed.
+
+The original large receiver payload has no reliable byte-exact hash after
+context compaction. The durable normalized projection is independently hashed,
+and the verifier requires that limitation. A second normalization also found
+all six lifecycle phases absent; zero residual state is not rollback or cleanup
+proof. Consequently the analytical event work is `cancelled` with result
+`evidence-incomplete`; the bounded normalized projection remains usable as an
+input, but O3 remains false and no lifecycle claim was promoted.
+
 ## First checks in a continuation
 
 ```powershell
@@ -78,15 +102,22 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-The current official route evaluation contract is machine-bound at
-`product/evidence/o3-official-kpi-event-contract-2026-08-11.json`. Execute its
-exact prompt once through a fresh no-inheritance, read-only host event. The
-event must load the two exact installed OpenAI Skill bodies, return structured
-data-quality and KPI decisions, and leave Git and capability state unchanged.
-Only after the receipt is validated may the parent Agent use its attributable
-output plus native repository evidence to build decision-bearing
+The active work item is
+`work.build-sparse-scorecard-and-close-lifecycle`. Use the validated normalized
+event projection plus pinned Git source evidence to build decision-bearing
 15-partial/6-cluster, 14-lifecycle, 12-dimension, and 13-scenario sparse
-evaluations.
+evaluations. Correct the seven missing human-route dispositions, reject the
+unreproducible `50/78` aggregate, preserve unevaluated and claim-ceiling states,
+and do not create a Cartesian cube.
+
+After the scorecard is source-validated, execute one explicitly instrumented
+transaction for the selected already-installed route. Preview, bounded
+task-time activation, observation, applicable projection, rollback, and cleanup
+must each have an observed, not-applicable, or failed receipt; no phase may be
+inferred from the prior analytical event. This remains inside the user's
+approved task-scoped installed-capability use and repository work. Any install,
+enablement, account, external candidate execution, manager/consumer mutation,
+publication, release, or acceptance promotion remains outside authority.
 
 Do not redo or copy the historical sparse reconciliation. Its exact source is
 pinned in `product/program.json` at commit `c538667...`; each current axis must

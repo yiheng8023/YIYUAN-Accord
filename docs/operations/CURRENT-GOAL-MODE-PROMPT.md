@@ -13,9 +13,12 @@ reproducible residual gap survives comparison.
 `increment.current-official-route-evaluation-slice`
 
 Observed problem: the reviewed external cohort added no unique safe demand
-coverage and was cleaned, while the current installed official route still has
-no attributable real-task event or decision-bearing 14-lifecycle,
-12-dimension, 13-scenario scorecard.
+coverage and was cleaned. One attributable read-only official-capability event
+now exists, but its original large payload has no reliable byte-exact hash and
+its normalized phase audit found no explicit preview, bounded activation,
+lifecycle observation, applicable projection, rollback, or cleanup receipt.
+The historical 14-lifecycle, 12-dimension, and 13-scenario mapping also remains
+an unvalidated scaffold rather than a decision-bearing scorecard.
 
 Hypothesis: an Agent-selected installed official KPI capability, used through
 a fresh host event and combined with native repository evidence, can produce a
@@ -35,14 +38,18 @@ and the accepted increment is committed and pushed.
 
 ## Current work item
 
-`work.run-fresh-official-kpi-capability-event`
+`work.build-sparse-scorecard-and-close-lifecycle`
 
-The machine-bound contract is
-`product/evidence/o3-official-kpi-event-contract-2026-08-11.json`. Execute its
-exact prompt once through a fresh `forkTurns: none`, read-only receiver. The
-receiver must load the pinned installed OpenAI `analyze-data-quality` and
-`design-kpis` Skill bodies, return one structured payload, and leave repository
-and capability state unchanged.
+The real but evidence-incomplete analytical event is recorded at
+`product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
+projection is independently hashed and fail-closed; the missing raw-output hash
+and all absent lifecycle phases are mandatory limitations. Its work item is
+`cancelled` with result `evidence-incomplete`, not completed. Validate every
+historical partial and sparse axis against the pinned source, retain, correct,
+or subtract each mapping with evidence-sized dispositions, and then execute a
+separately bounded, explicitly instrumented lifecycle transaction on the
+selected already-installed route. No absent phase may be inferred from Skill
+use or zero residue.
 
 ## Allowed work
 
@@ -52,9 +59,11 @@ and capability state unchanged.
   tests;
 - use installed, already-authorized capabilities when they materially improve
   the task;
-- execute the exact bound prompt through the active work item;
-- capture the returned payload, receiver identity, prompt/output hashes, Skill
-  identity, and pre/post Git facts without upgrading them to O3 evidence;
+- validate the normalized analytical projection without treating its missing
+  raw-output hash as present;
+- build the 15/6/14/12/13 non-Cartesian scorecard from pinned source evidence;
+- record explicit preview, bounded activation, observation, applicable
+  projection, rollback, and cleanup states for one selected-route transaction;
 - run deterministic verification, bounded cleanup, commit, and push.
 
 ## Separate authority transition
@@ -65,8 +74,9 @@ the exact already-installed OpenAI capability on this public local repository;
 it does not grant
 installation, enablement, account connection, paid service use, third-party
 candidate execution, consumer projection, manager mutation, publication, or
-release. The exact task, Skill, data, host-event, verification, rollback, and
-cleanup boundaries are fixed in the event contract; any drift stops the event.
+release. The exact task, Skill, data, verification, rollback, and cleanup
+boundaries are fixed by the active capability context and evidence contracts;
+any drift stops the transaction.
 
 Release and publication remain user-owned and are not authorized by this
 increment.

@@ -396,6 +396,246 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_active_scorecard_work_requires_its_exact_capability_context(
+        self,
+    ) -> None:
+        mutations = {
+            "task revision drifted": lambda context: context.__setitem__(
+                "taskBinding", "agent-autonomy-harness-v0.1-closeout@" + "0" * 40
+            ),
+            "authority became arbitrary text": lambda context: context.__setitem__(
+                "authorityBoundary", "anything goes"
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.current-official-route-evaluation-slice"
+                )
+                scorecard_work = next(
+                    item
+                    for item in increment["workItems"]
+                    if item["id"]
+                    == "work.build-sparse-scorecard-and-close-lifecycle"
+                )
+                mutate(scorecard_work["capabilityContext"])
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact scorecard capabilityContext",
+                    report["errors"],
+                )
+
+    def test_scorecard_work_requires_the_evidence_incomplete_predecessor(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            event_work = next(
+                item
+                for item in increment["workItems"]
+                if item["id"]
+                == "work.run-fresh-official-kpi-capability-event"
+            )
+            event_work["state"] = "planned"
+            event_work.pop("resultEvidence")
+            event_work.pop("result")
+            event_work.pop("cancellationRationale")
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            (
+                target
+                / "product"
+                / "evidence"
+                / "o3-official-kpi-event-receipt-2026-08-11.json"
+            ).unlink()
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "work item work.build-sparse-scorecard-and-close-lifecycle requires a cancelled evidence-incomplete predecessor with a valid normalized event receipt",
+            report["errors"],
+        )
+
+    def test_completed_official_kpi_event_rejects_a_self_declared_receipt(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            event_work = next(
+                item
+                for item in increment["workItems"]
+                if item["id"]
+                == "work.run-fresh-official-kpi-capability-event"
+            )
+            scorecard_work = next(
+                item
+                for item in increment["workItems"]
+                if item["id"] == "work.build-sparse-scorecard-and-close-lifecycle"
+            )
+            event_work["state"] = "completed"
+            event_work["resultEvidence"] = (
+                "product/evidence/o3-official-kpi-event-receipt-2026-08-11.json"
+            )
+            scorecard_work["state"] = "active"
+            scorecard_work["capabilityContext"] = deepcopy(
+                event_work["capabilityContext"]
+            )
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            receipt_path = (
+                target
+                / "product"
+                / "evidence"
+                / "o3-official-kpi-event-receipt-2026-08-11.json"
+            )
+            receipt_path.write_text(
+                json.dumps(
+                    {"id": "self-declared-receipt", "eventOccurred": True},
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "closed work item work.run-fresh-official-kpi-capability-event must bind a valid normalized event receipt",
+            report["errors"],
+        )
+
+    def test_missing_raw_payload_hash_prevents_event_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            event_work = next(
+                item
+                for item in increment["workItems"]
+                if item["id"]
+                == "work.run-fresh-official-kpi-capability-event"
+            )
+            event_work["state"] = "completed"
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "work item work.run-fresh-official-kpi-capability-event cannot be completed while the contract-required raw payload hash is absent",
+            report["errors"],
+        )
+
+    def test_official_kpi_event_receipt_is_fail_closed_at_claim_boundaries(
+        self,
+    ) -> None:
+        mutations = {
+            "receiver revision drifted": lambda receipt: receipt[
+                "eventIdentity"
+            ].__setitem__("observedRevision", "0" * 40),
+            "normalized decision drifted": lambda receipt: receipt[
+                "normalizedProjection"
+            ]["routeDecision"].__setitem__("additionProposed", True),
+            "grain assessment is not an object": lambda receipt: receipt[
+                "normalizedProjection"
+            ].__setitem__("grainAssessment", []),
+            "raw output hash was guessed": lambda receipt: receipt[
+                "normalizedProjection"
+            ]["rawPayload"].__setitem__("sha256", "0" * 64),
+            "absent lifecycle phase was promoted": lambda receipt: receipt[
+                "lifecyclePhaseReconciliation"
+            ]["phases"].__setitem__("boundedActivation", "observed"),
+            "lifecycle owner was invented": lambda receipt: receipt[
+                "lifecyclePhaseReconciliation"
+            ].__setitem__("lifecycleOwner", "parent Agent"),
+            "post-event repository was dirty": lambda receipt: receipt[
+                "postEvent"
+            ].__setitem__("clean", False),
+            "skill identity drifted": lambda receipt: receipt[
+                "sourceSkillIdentities"
+            ][0].__setitem__("sha256", "0" * 64),
+            "claim ceiling collapsed": lambda receipt: receipt.__setitem__(
+                "claimLimits", ["looks good"]
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                receipt_path = (
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-official-kpi-event-receipt-2026-08-11.json"
+                )
+                receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+                mutate(receipt)
+                receipt_path.write_text(
+                    json.dumps(receipt, ensure_ascii=True, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "closed work item work.run-fresh-official-kpi-capability-event must bind a valid normalized event receipt",
+                    report["errors"],
+                )
+
     def test_predecessor_identity_is_rejected_from_active_product_authority(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
@@ -1159,6 +1399,7 @@ class ProductControlCliTests(unittest.TestCase):
                 for item in official_route_increment["workItems"]
                 if item["id"] == "work.build-sparse-scorecard-and-close-lifecycle"
             )
+            live_work["state"] = "planned"
             live_work["operationIds"] = [
                 "external-capability-preview",
                 "external-capability-mutation",
@@ -1198,6 +1439,7 @@ class ProductControlCliTests(unittest.TestCase):
                 for item in official_route_increment["workItems"]
                 if item["id"] == "work.build-sparse-scorecard-and-close-lifecycle"
             )
+            live_work["state"] = "planned"
             live_work["operationIds"] = [
                 "external-capability-preview",
                 "external-capability-mutation",

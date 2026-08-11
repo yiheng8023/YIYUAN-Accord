@@ -167,6 +167,25 @@ OFFICIAL_KPI_EVENT_CONTRACT_SHA256 = (
 OFFICIAL_KPI_EVENT_CONTEXT_SHA256 = (
     "609da2a916a95fc7828918995fa038fb0406703506ad568a14d35c9ff7487f73"
 )
+OFFICIAL_KPI_EVENT_RECEIPT_PATH = (
+    "product/evidence/o3-official-kpi-event-receipt-2026-08-11.json"
+)
+OFFICIAL_KPI_EVENT_RECEIPT_ID = "o3-official-kpi-event-receipt-2026-08-11"
+OFFICIAL_KPI_EVENT_RECEIPT_REVISION = (
+    "2df8d85f1e9a8881972d5aa6ac587f11dc37aa79"
+)
+OFFICIAL_KPI_EVENT_RECEIPT_SHA256 = (
+    "08cffdbedcee01400beff68efe738bb5d44ad5c7625f049a84d8fd4a6026ebb0"
+)
+OFFICIAL_KPI_EVENT_NORMALIZED_PROJECTION_SHA256 = (
+    "4fa2c0752f5581debc565c59f012abfdbbf6af9c33fdf24460c257f21c5fa106"
+)
+OFFICIAL_KPI_EVENT_LIFECYCLE_PROJECTION_SHA256 = (
+    "6cf73d4b3d71de579f57155139efa6ec30bedbac28152b8519c3b5610286efd8"
+)
+OFFICIAL_KPI_SCORECARD_CONTEXT_SHA256 = (
+    "b0cca1f837ba09e2bfbda1d364336d1f15f4e867fb6bcf6d454259aeff143f30"
+)
 OFFICIAL_KPI_SKILL_IDENTITIES = [
     {
         "name": "analyze-data-quality",
@@ -1367,6 +1386,183 @@ def _valid_official_kpi_event_contract(
     )
 
 
+
+
+def _valid_official_kpi_event_receipt(
+    root: Path,
+    work_item: dict[str, Any],
+    errors: list[str],
+) -> bool:
+    if work_item.get("resultEvidence") != OFFICIAL_KPI_EVENT_RECEIPT_PATH:
+        return False
+    document = _load(root, OFFICIAL_KPI_EVENT_RECEIPT_PATH, errors)
+    event = document.get("eventIdentity")
+    contract = document.get("contract")
+    normalized = document.get("normalizedProjection")
+    lifecycle = document.get("lifecyclePhaseReconciliation")
+    if not all(
+        isinstance(value, dict)
+        for value in (event, contract, normalized, lifecycle)
+    ):
+        return False
+    grain_assessment = normalized.get("grainAssessment")
+    raw_payload = normalized.get("rawPayload")
+    route_decision = normalized.get("routeDecision")
+    phases = lifecycle.get("phases")
+    zero_residual = lifecycle.get("zeroResidualState")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            grain_assessment,
+            raw_payload,
+            route_decision,
+            phases,
+            zero_residual,
+        )
+    ):
+        return False
+    try:
+        canonical = lambda value: json.dumps(
+            value,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        receipt_hash = hashlib.sha256(canonical(document)).hexdigest()
+        normalized_hash = hashlib.sha256(canonical(normalized)).hexdigest()
+        lifecycle_hash = hashlib.sha256(canonical(lifecycle)).hexdigest()
+    except (TypeError, ValueError, UnicodeEncodeError):
+        return False
+    source_contract = _git_json_at_revision(
+        root,
+        OFFICIAL_KPI_EVENT_RECEIPT_REVISION,
+        OFFICIAL_KPI_EVENT_CONTRACT_PATH,
+    )
+    source_program = _git_json_at_revision(
+        root,
+        OFFICIAL_KPI_EVENT_RECEIPT_REVISION,
+        "product/program.json",
+    )
+    source_contract_hash = (
+        hashlib.sha256(canonical(source_contract)).hexdigest()
+        if isinstance(source_contract, dict)
+        else None
+    )
+    source_increments = (
+        source_program.get("increments")
+        if isinstance(source_program, dict)
+        else None
+    )
+    source_increment = next(
+        (
+            item
+            for item in source_increments
+            if isinstance(item, dict)
+            and item.get("id")
+            == "increment.current-official-route-evaluation-slice"
+        ),
+        {},
+    ) if isinstance(source_increments, list) else {}
+    source_work_items = source_increment.get("workItems")
+    source_active_work_ids = [
+        item.get("id")
+        for item in source_work_items
+        if isinstance(item, dict) and item.get("state") == "active"
+    ] if isinstance(source_work_items, list) else []
+    return (
+        receipt_hash == OFFICIAL_KPI_EVENT_RECEIPT_SHA256
+        and normalized_hash == OFFICIAL_KPI_EVENT_NORMALIZED_PROJECTION_SHA256
+        and lifecycle_hash == OFFICIAL_KPI_EVENT_LIFECYCLE_PROJECTION_SHA256
+        and document.get("id") == OFFICIAL_KPI_EVENT_RECEIPT_ID
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("status") == "normalized-event-record"
+        and contract.get("path") == OFFICIAL_KPI_EVENT_CONTRACT_PATH
+        and contract.get("canonicalSha256")
+        == OFFICIAL_KPI_EVENT_CONTRACT_SHA256
+        and event.get("observedRevision")
+        == OFFICIAL_KPI_EVENT_RECEIPT_REVISION
+        and source_contract_hash == OFFICIAL_KPI_EVENT_CONTRACT_SHA256
+        and isinstance(source_program, dict)
+        and source_program.get("activeIncrementId")
+        == "increment.current-official-route-evaluation-slice"
+        and source_active_work_ids
+        == ["work.run-fresh-official-kpi-capability-event"]
+        and raw_payload.get("sha256") is None
+        and isinstance(raw_payload.get("limitation"), str)
+        and bool(raw_payload["limitation"].strip())
+        and route_decision.get("additionProposed") is False
+        and route_decision.get("reproducibleResidualGapCount") == 0
+        and set(phases.values()) == {"absent"}
+        and len(phases) == 6
+        and zero_residual.get("status") == "observed"
+        and zero_residual.get("value") is True
+        and document.get("normalizedProjectionCanonicalSha256")
+        == OFFICIAL_KPI_EVENT_NORMALIZED_PROJECTION_SHA256
+        and document.get("lifecycleProjectionCanonicalSha256")
+        == OFFICIAL_KPI_EVENT_LIFECYCLE_PROJECTION_SHA256
+        and _non_empty_string_list(document.get("claimLimits"))
+        and not (root / PORTFOLIO_CURATION_INACTIVE_ROOT).exists()
+    )
+
+def _valid_official_kpi_scorecard_context(work_item: dict[str, Any]) -> bool:
+    context = work_item.get("capabilityContext")
+    if not isinstance(context, dict):
+        return False
+    try:
+        context_hash = hashlib.sha256(
+            json.dumps(
+                context,
+                ensure_ascii=True,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+    except (TypeError, ValueError, UnicodeEncodeError):
+        return False
+    return (
+        context_hash == OFFICIAL_KPI_SCORECARD_CONTEXT_SHA256
+        and context.get("mode") == "task-time"
+        and context.get("taskBinding")
+        == f"{PORTFOLIO_CURATION_TASK_BINDING}@{OFFICIAL_KPI_EVENT_RECEIPT_REVISION}"
+        and isinstance(context.get("gapOrMaterialBenefit"), str)
+        and bool(context["gapOrMaterialBenefit"].strip())
+        and isinstance(context.get("dataBoundary"), str)
+        and bool(context["dataBoundary"].strip())
+        and isinstance(context.get("authorityBoundary"), str)
+        and bool(context["authorityBoundary"].strip())
+        and isinstance(context.get("verificationSurface"), str)
+        and bool(context["verificationSurface"].strip())
+    )
+
+
+def _valid_official_kpi_scorecard_predecessor(
+    root: Path,
+    work_items: Any,
+    errors: list[str],
+) -> bool:
+    if not isinstance(work_items, list):
+        return False
+    event_work = next(
+        (
+            item
+            for item in work_items
+            if isinstance(item, dict)
+            and item.get("id")
+            == "work.run-fresh-official-kpi-capability-event"
+        ),
+        None,
+    )
+    if not isinstance(event_work, dict):
+        return False
+    rationale = event_work.get("cancellationRationale")
+    return (
+        event_work.get("state") == "cancelled"
+        and event_work.get("result") == "evidence-incomplete"
+        and isinstance(rationale, str)
+        and bool(rationale.strip())
+        and _valid_official_kpi_event_receipt(root, event_work, errors)
+    )
 def verify_product(root: Path) -> dict[str, Any]:
     errors: list[str] = []
     constitution = _load(root, "product/constitution.json", errors)
@@ -1599,6 +1795,58 @@ def verify_product(root: Path) -> dict[str, Any]:
                 errors.append(
                     "work item work.run-fresh-official-kpi-capability-event "
                     "must bind the exact official KPI event contract"
+                )
+            if work_id == "work.run-fresh-official-kpi-capability-event":
+                receipt_valid = (
+                    _valid_official_kpi_event_receipt(root, work_item, errors)
+                    if work_state in {"completed", "cancelled"}
+                    else False
+                )
+                if work_state in {"completed", "cancelled"} and not receipt_valid:
+                    errors.append(
+                        "closed work item "
+                        "work.run-fresh-official-kpi-capability-event must bind "
+                        "a valid normalized event receipt"
+                    )
+                if work_state == "completed" and receipt_valid:
+                    errors.append(
+                        "work item work.run-fresh-official-kpi-capability-event "
+                        "cannot be completed while the contract-required raw "
+                        "payload hash is absent"
+                    )
+                cancellation_rationale = work_item.get("cancellationRationale")
+                if work_state == "cancelled" and (
+                    work_item.get("result") != "evidence-incomplete"
+                    or not isinstance(cancellation_rationale, str)
+                    or not cancellation_rationale.strip()
+                ):
+                    errors.append(
+                        "cancelled work item "
+                        "work.run-fresh-official-kpi-capability-event must record "
+                        "the evidence-incomplete result and rationale"
+                    )
+            if (
+                work_id == "work.build-sparse-scorecard-and-close-lifecycle"
+                and work_state in {"active", "completed"}
+                and not _valid_official_kpi_scorecard_context(work_item)
+            ):
+                errors.append(
+                    "work item work.build-sparse-scorecard-and-close-lifecycle "
+                    "must bind the exact scorecard capabilityContext"
+                )
+            if (
+                work_id == "work.build-sparse-scorecard-and-close-lifecycle"
+                and work_state in {"active", "completed"}
+                and not _valid_official_kpi_scorecard_predecessor(
+                    root,
+                    raw_work_items,
+                    errors,
+                )
+            ):
+                errors.append(
+                    "work item work.build-sparse-scorecard-and-close-lifecycle "
+                    "requires a cancelled evidence-incomplete predecessor with "
+                    "a valid normalized event receipt"
                 )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:

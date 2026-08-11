@@ -182,8 +182,8 @@
     {
       "id": "increment.current-official-route-evaluation-slice",
       "state": "active",
-      "observedProblem": "The external cohort added no unique safe demand coverage and falsified the prior acquisition hypothesis, while the current installed official route still lacks one attributable real-task event and a decision-bearing sparse evaluation across the historical lifecycle, quality, and Harness-scenario axes.",
-      "hypothesis": "An Agent-selected installed official KPI capability, used through a fresh host event and combined with native repository evidence, can produce a smaller decision-ready 14-lifecycle 12-dimension 13-scenario sparse scorecard with zero persistent capability state; only a reproducible remaining demand gap may justify a later capability addition.",
+      "observedProblem": "The external cohort added no unique safe demand coverage and falsified the prior acquisition hypothesis. One identity-attributable read-only official-capability analysis event occurred, but its contract-required raw payload hash is unavailable and all six lifecycle phases remain absent; the historical lifecycle, quality, and Harness-scenario mappings are still an unvalidated scaffold rather than a decision-bearing scorecard.",
+      "hypothesis": "A source-validated non-Cartesian 15/6/14/12/13 sparse scorecard plus one separately instrumented transaction on the exact already-installed official route can produce decision-ready evaluation and explicit preview-through-cleanup evidence with zero persistent capability state; only a reproducible remaining demand gap may justify a later capability addition.",
       "falsifier": "No host-owned event can attribute the official capability use, the scorecard merely repeats inventory instead of recording decisions and missing evidence, the user must select or operate the tool, a claimed gap does not survive native official external composition and human comparison, or rollback and cleanup leave persistent state.",
       "stopCondition": "O3 passes only after one source-bound host event uses the exact installed official capability on the real closeout task, every historical partial and all 14/12/13 sparse axes receive evidence-sized dispositions, the selected route lifecycle reaches cleanup with zero residual state, the public verifier rejects self-declared substitutes, and the accepted increment is committed and pushed.",
       "sourceInputs": [
@@ -212,10 +212,13 @@
         },
         {
           "id": "work.run-fresh-official-kpi-capability-event",
-          "state": "active",
+          "state": "cancelled",
           "acceptanceIds": ["O3", "G1", "G2"],
           "operationIds": ["repository-read", "coverage-analysis", "installed-authorized-capability-use", "local-verification"],
           "contractEvidence": "product/evidence/o3-official-kpi-event-contract-2026-08-11.json",
+          "resultEvidence": "product/evidence/o3-official-kpi-event-receipt-2026-08-11.json",
+          "result": "evidence-incomplete",
+          "cancellationRationale": "the real analytical event returned useful bounded findings, but its original large payload could not be reconstructed after context compaction for the contract-required byte-exact hash; only the independently hashed normalized projection remains admissible",
           "capabilityContext": {
             "mode": "task-time",
             "taskBinding": "agent-autonomy-harness-v0.1-closeout@467d6f56669258e9e3d65c4b27e6e34259d06e18",
@@ -234,10 +237,18 @@
         },
         {
           "id": "work.build-sparse-scorecard-and-close-lifecycle",
-          "state": "planned",
+          "state": "active",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "repository-edit", "coverage-analysis", "installed-authorized-capability-use", "local-verification", "bounded-cleanup"],
           "authorityGate": "bound-task-capability-context-required",
+          "capabilityContext": {
+            "mode": "task-time",
+            "taskBinding": "agent-autonomy-harness-v0.1-closeout@2df8d85f1e9a8881972d5aa6ac587f11dc37aa79",
+            "gapOrMaterialBenefit": "validate the receiver-reported 60-entry scaffold against the pinned historical input, build the smallest decision-bearing sparse scorecard, and execute only the separately bounded lifecycle evidence needed by O3",
+            "dataBoundary": "current public repository, pinned public Git history, the normalized event receipt, and the exact installed Skill identities already named by the event contract; no accounts, credentials, uploads, network expansion, paid sources, or private external data",
+            "authorityBoundary": "the parent Agent may read and edit this repository, use the already-installed authorized OpenAI Skills, run local deterministic verification, and perform exact bounded cleanup; no install, enablement, account, third-party candidate execution, manager, consumer, publication, release, or acceptance promotion",
+            "verificationSurface": "pinned historical source, exact receipt and projection hashes, 15/6/14/12/13 non-Cartesian entry validation, explicit lifecycle phase receipts and absent/not-applicable states, mutation tests, zero-residue check, deterministic verifier, commit, and push"
+          },
           "deliverables": ["15 partial decisions and six cluster summaries", "14 lifecycle-slice dispositions", "12 evaluation-dimension decisions", "13 Harness-scenario scorecards", "native official reviewed-external composition self-authored and human comparison", "preview activation observation applicable projection rollback and cleanup receipt", "tool-learning intervention metric"]
         },
         {
