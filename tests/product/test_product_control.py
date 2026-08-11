@@ -52,6 +52,7 @@ class ProductControlCliTests(unittest.TestCase):
                 ".mypy_cache",
             ),
         )
+        self.restore_public_delivery_active_fixture(target)
         subprocess.run(
             ["git", "init", "--quiet"],
             cwd=target,
@@ -101,6 +102,31 @@ class ProductControlCliTests(unittest.TestCase):
             text=True,
             capture_output=True,
             check=True,
+        )
+
+    def restore_public_delivery_active_fixture(self, target: Path) -> None:
+        """Restore the active baseline assumed by historical transition tests."""
+        program_path = target / "product" / "program.json"
+        program = json.loads(program_path.read_text(encoding="utf-8"))
+        public_increment = next(
+            item
+            for item in program["increments"]
+            if item["id"] == "increment.public-open-source-delivery-slice"
+        )
+        public_work = next(
+            item
+            for item in public_increment["workItems"]
+            if item["id"] == "work.finish-public-open-source-delivery"
+        )
+        program["status"] = "active"
+        program["activeIncrementId"] = public_increment["id"]
+        public_increment["state"] = "active"
+        public_work["state"] = "active"
+        for field in ("result", "resultRevision", "closeoutEvidence"):
+            public_work.pop(field, None)
+        program_path.write_text(
+            json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
         )
 
     def bind_o3_verified(self, target: Path) -> Path:
@@ -267,7 +293,7 @@ class ProductControlCliTests(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def test_current_repository_exposes_one_product_progress_report(self) -> None:
+    def test_current_repository_exposes_the_accepted_product_report(self) -> None:
         result = self.run_verify(ROOT)
 
         self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
@@ -275,15 +301,12 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertTrue(report["valid"])
         self.assertEqual(report["productId"], "agent-autonomy-harness")
         self.assertEqual(report["release"], "v0.1")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.public-open-source-delivery-slice",
-        )
+        self.assertIsNone(report["activeIncrement"])
         self.assertTrue(report["criterionStates"]["O4"])
         self.assertTrue(report["criterionStates"]["O3"])
         self.assertEqual(report["outcomes"], {"total": 5, "verified": 5})
         self.assertEqual(report["guardrails"], {"total": 4, "passed": 4})
-        self.assertEqual(report["completionState"], "in-progress")
+        self.assertEqual(report["completionState"], "accepted")
 
     def test_unmapped_work_is_rejected_at_the_product_seam(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -317,6 +340,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             non_active_increment = next(
@@ -1672,6 +1696,7 @@ class ProductControlCliTests(unittest.TestCase):
             with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
                 target = Path(temporary)
                 shutil.copytree(ROOT / "product", target / "product")
+                self.restore_public_delivery_active_fixture(target)
                 if case == "criterion-id":
                     path = target / "product" / "acceptance.json"
                     document = json.loads(path.read_text(encoding="utf-8"))
@@ -1985,6 +2010,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(
@@ -2010,6 +2036,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(
@@ -2374,6 +2401,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(
@@ -2409,6 +2437,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(
@@ -2447,6 +2476,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(
@@ -2492,6 +2522,7 @@ class ProductControlCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
             shutil.copytree(ROOT / "product", target / "product")
+            self.restore_public_delivery_active_fixture(target)
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
             active_increment = next(

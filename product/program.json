@@ -6,8 +6,8 @@
   "purpose": "Deliver the smallest falsifiable Harness loop on real project work, starting with recovery from this repository's own drift.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.public-open-source-delivery-slice",
+  "status": "completed",
+  "activeIncrementId": null,
   "authorityBoundary": {
     "userOwns": [
       "product-direction",
@@ -279,7 +279,7 @@
     },
     {
       "id": "increment.public-open-source-delivery-slice",
-      "state": "active",
+      "state": "completed",
       "observedProblem": "The public repository now has bounded product evidence, but its onboarding and community surface still impose unnecessary learning cost: the README lacks a shortest path and progressive reader routes, CI relies on runner-default Python, contribution verification is duplicated, Code of Conduct retains the predecessor Skill-governance identity, sponsorship links to absent QR codes, the documentation license grant is ambiguous, and GitHub discovery metadata is empty.",
       "hypothesis": "A smallest progressive public interface—one shortest path, explicit Python and verification contract, reader-specific deeper routes, truthful maturity and claim boundaries, coherent community/security/rights documents, and only evidenced GitHub metadata—will make the project self-service without adding template or dependency sprawl.",
       "falsifier": "The change adds files or live GitHub features without a demonstrated need, duplicates verification paths, invents release or production claims, changes account/trust boundaries, leaves broken links or stale product identity, obscures the current in-progress state, or creates new temporary residue.",
@@ -288,9 +288,12 @@
       "workItems": [
         {
           "id": "work.finish-public-open-source-delivery",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["O1", "G1", "G2", "G3", "G4"],
           "operationIds": ["repository-read", "repository-edit", "causal-planning", "local-verification", "progress-accounting", "bounded-cleanup", "git-commit", "git-push", "github-repository-metadata-edit"],
+          "result": "public-delivery-persisted",
+          "resultRevision": "fbe9418c755b8716fc1ed18f3814927a08a274a4",
+          "closeoutEvidence": "product/evidence/public-delivery-closeout-observation-2026-08-11.json",
           "deliverables": ["progressive bilingual README", "from-checkout Python and verification contract", "minimal reproducible CI", "coherent contribution conduct security support sponsorship and license guidance", "evidenced GitHub discovery metadata", "bounded residue cleanup", "full local verification and origin/main push"]
         }
       ]

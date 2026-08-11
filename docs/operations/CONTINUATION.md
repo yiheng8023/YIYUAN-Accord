@@ -63,24 +63,28 @@ value, O3, or release readiness.
 
 The O3 transition and active-program completion guard were separately reviewed,
 committed, and pushed at
-`daa051f1495f8a68181eda59a8845b10398d45e0`. Product state is `5/5` outcomes
-and `4/4` guardrails. Completion remains `in-progress` because the separately
-mapped public-delivery increment is active; the O3 lifecycle event must not be
-replayed.
+`daa051f1495f8a68181eda59a8845b10398d45e0`. At that revision product state was
+`5/5` outcomes and `4/4` guardrails but remained `in-progress` because the
+separately mapped public-delivery increment was active. The later public
+closeout completed that graph; the O3 lifecycle event must not be replayed.
 
-## Current public-delivery increment
+## Completed public-delivery increment
 
-`increment.public-open-source-delivery-slice` is the only active increment and
-`work.finish-public-open-source-delivery` is its only active work item. It
-binds the smallest progressive bilingual README, explicit from-checkout Python
-and verification contract, reproducible minimal CI, coherent community and
-rights guidance, evidenced GitHub discovery metadata, exact residue cleanup,
-and final deterministic review/commit/push.
+`increment.public-open-source-delivery-slice` and
+`work.finish-public-open-source-delivery` are completed. The public surface was
+first pushed at `55dc35a`; Python 3.10 RFC3339 portability was corrected at
+`9eb282c`; the deprecated checkout runtime was replaced by immutable official
+`actions/checkout` v7.0.1 at `b73e1cb`; and the live GitHub metadata plus exact
+cleanup receipt was pushed at
+`fbe9418c755b8716fc1ed18f3814927a08a274a4`.
 
-This is a public interface and program-state closeout, not another research or
-capability-acquisition loop. It must not add speculative templates, a homepage,
-new dependencies, new live features, or broader product claims merely to make
-the repository look complete.
+The receipt binds four exact repository topics, public visibility, default
+branch, Issues enabled, Discussions disabled, no homepage, private
+vulnerability reporting enabled, and absence of `.tmp` and
+`harness/__pycache__`. The user also removed the inspected empty predecessor
+and process-directory skeletons; they are not promoted into a broader cleanup
+authority. The final program graph is terminal and the repository-bound v0.1
+completion state is `accepted`.
 
 ## Evidence-incomplete official KPI analysis event
 
@@ -104,7 +108,8 @@ and the verifier requires that limitation. A second normalization also found
 all six lifecycle phases absent; zero residual state is not rollback or cleanup
 proof. Consequently the analytical event work is `cancelled` with result
 `evidence-incomplete`; the bounded normalized projection remains usable as an
-input, but O3 remains false and no lifecycle claim was promoted.
+input, but O3 remained false at that checkpoint and no lifecycle claim was
+promoted from that event alone.
 
 ## Completed source-reconciled sparse scorecard and lifecycle event
 
@@ -168,24 +173,14 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-Complete and review the current public-delivery candidate, run the full local
-product seam, commit and push it, then verify the minimal live GitHub metadata
-and exact local cleanup. Only after that pushed revision exists may the final
-state transition close the public work item and increment, set the program to
-completed, synchronize the README and continuation state, rerun the full seam,
-and push the accepted candidate. Attempt 2 is complete and a third lifecycle
-attempt is not authorized. Any install, enablement, account change, external
-candidate execution, manager/consumer mutation, release tag, package
-publication, deployment, or new trust boundary remains outside authority.
+There is no active v0.1 work item. A continuation should first verify live Git
+truth and run the public verifier; it must not reopen O3, repeat either
+lifecycle attempt, or extend the completed program merely to add more
+governance, templates, inventory, or tests. A future product change needs a new
+user-bound goal and causal increment with its own acceptance mapping.
 
-Do not redo or copy the historical sparse reconciliation. Its exact source is
-pinned in `product/program.json` at commit `c538667...`; each current axis must
-record a decision, evidence, missing evidence, and claim ceiling. A list of IDs
-or a repository-authored fixture is not behavior evidence.
-
-The user has approved task-scoped use of installed authorized capabilities and
-evidence-backed capability addition. Installation, enablement, accounts,
-third-party execution, CC Switch or consumer mutation, publication, and release
-remain separate. The Agent owns tool selection, omission detection, and
-evidence-backed coverage supplementation; the user is not expected to provide
-an exhaustive project inventory from memory.
+The historical sparse reconciliation remains pinned at `c538667...` and is not
+current authority. Installation, enablement, accounts, third-party execution,
+CC Switch or consumer mutation, release tagging, package publication,
+deployment, and new trust boundaries remain separate and unauthorized by this
+accepted repository state.

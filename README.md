@@ -25,10 +25,9 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-A valid report currently shows `5/5` outcomes and `4/4` guardrails. Completion
-remains `in-progress` while the final public-delivery increment is active. A
-green report proves repository-bound product consistency only; it is not a
-production, release, publication, broad-value, or cross-host claim.
+An accepted v0.1 checkout reports `5/5` outcomes, `4/4` guardrails, no active
+increment, and completion `accepted`. This repository-bound acceptance is not a
+production, release-publication, broad-value, or cross-host claim.
 
 For the full deterministic product suite:
 
@@ -93,11 +92,11 @@ transitions. Native host authorization remains authoritative.
 
 ## Product contract
 
-The active machine authority is deliberately small:
+The current machine authority is deliberately small:
 
 - `product/constitution.json` — purpose, invariants, adaptive surfaces, and
   planning method;
-- `product/program.json` — the one active causal increment and its finite stop;
+- `product/program.json` — the finite causal program and terminal work graph;
 - `product/acceptance.json` — five outcomes and four mandatory guardrails;
 - `harness/` — the public product-control kernel;
 - `tests/product/` — mutation tests through the public CLI seam.

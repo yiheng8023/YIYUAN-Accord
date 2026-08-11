@@ -22,9 +22,9 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-当前有效报告显示 `5/5` 项结果和 `4/4` 项护栏。最终 public-delivery 增量仍在活动，
-因此 completion 保持 `in-progress`。绿色报告只证明仓库绑定的产品一致性，不证明
-生产、发布、公开分发、广泛价值或跨宿主结论。
+accepted 的 v0.1 checkout 会报告 `5/5` 项结果、`4/4` 项护栏、无 active
+increment，且 completion 为 `accepted`。这一仓库绑定的验收不证明生产、Release
+公开分发、广泛价值或跨宿主结论。
 
 完整确定性产品测试：
 
@@ -88,7 +88,7 @@ accepted 必须同时满足五项结果、四项护栏、program 已完成、没
 当前机器权威保持精简：
 
 - `product/constitution.json`：目的、不变量、可适应表面和规划方法；
-- `product/program.json`：唯一 active 因果增量及其有限停止条件；
+- `product/program.json`：有限因果工序及全部终态 work 图；
 - `product/acceptance.json`：五项产品结果和四项强制护栏；
 - `harness/`：公开产品控制核心；
 - `tests/product/`：通过公开 CLI seam 的 mutation 测试。
