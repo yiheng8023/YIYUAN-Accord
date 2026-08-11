@@ -2,44 +2,45 @@
 
 ## Goal
 
-Pass O3 on the already-bound real portfolio-coverage problem: audit the exact
-historical sparse mapping, evaluate real task demand, add only
-decision-relevant capability coverage, and complete one separately authorized
-preview-to-cleanup lifecycle transaction without returning orchestration work
-to the user.
+Pass O3 on the already-bound real closeout task after the external cohort
+falsified the acquisition hypothesis: evaluate the current native-plus-official
+route through one attributable host event, turn the exact historical sparse
+mapping into decision-bearing evidence, and add another capability only if a
+reproducible residual gap survives comparison.
 
 ## Current causal increment
 
-`increment.capability-lifecycle-product-slice`
+`increment.current-official-route-evaluation-slice`
 
-Observed problem: capability subtraction was driven farther than demonstrated
-demand coverage, while selected external capabilities can still leave
-activation, ownership, projection, rollback, or cleanup work with the user.
+Observed problem: the reviewed external cohort added no unique safe demand
+coverage and was cleaned, while the current installed official route still has
+no attributable real-task event or decision-bearing 14-lifecycle,
+12-dimension, 13-scenario scorecard.
 
-Hypothesis: a bounded demand taxonomy, exact historical baseline audit,
-inactive reviewed cohort, and one replaceable lifecycle owner can improve real
-coverage and complete preview, observation, rollback, and cleanup without
-making external payloads product authority.
+Hypothesis: an Agent-selected installed official KPI capability, used through
+a fresh host event and combined with native repository evidence, can produce a
+smaller useful sparse scorecard with zero persistent capability state. A later
+capability addition is eligible only if this route exposes a reproducible gap.
 
-Falsifier: the cohort adds no decision-relevant coverage, evaluation requires
-invented tasks, a selected route leaves manual state reconstruction or dual
-lifecycle owners, authority expands without an exact grant, or rollback leaves
-residual projection.
+Falsifier: no host-owned event can attribute the official capability use; the
+scorecard copies inventory rather than recording decisions and missing
+evidence; the user must choose or operate the tool; a claimed gap does not
+survive route comparison; or rollback and cleanup leave persistent state.
 
-Stop condition: the exact historical baseline is reconciled against real task
-demand; route alternatives and human-control boundaries are evaluated; one
-selected route completes a separately authorized live lifecycle with zero
-residual projection; O3 passes deterministic verification; and the increment
-is committed and pushed.
+Stop condition: one source-bound host event uses the exact installed official
+capability on the real task; every historical partial and all 14/12/13 sparse
+axes receive evidence-sized dispositions; the task route completes cleanup
+with zero residue; the verifier rejects self-declared substitutes; O3 passes;
+and the accepted increment is committed and pushed.
 
 ## Current work item
 
-`work.bind-portfolio-curation-contract`
+`work.bind-current-official-route-evaluation-contract`
 
-First bind the coverage objective, demand taxonomy, exact candidate/source and
-account/data boundaries, isolated inactive review root, review/admission
-criteria, verification surface, cleanup/rollback, and finite cohort stop rule.
-Do not acquire candidates until that contract is complete and verifiable.
+Bind the exact current Skill identity, real task and user authority boundary,
+fresh host-event receipt, sparse scorecard decisions, lifecycle states, claim
+ceiling, and counterexamples. Do not execute the receiver until this contract
+is complete and verifiable.
 
 ## Allowed work
 
@@ -49,18 +50,20 @@ Do not acquire candidates until that contract is complete and verifiable.
   tests;
 - use installed, already-authorized capabilities when they materially improve
   the task;
-- after the complete curation contract passes, perform bounded targeted
-  discovery, static review, and exact-revision acquisition into the declared
-  inactive `.tmp/` root;
-- clean that bounded root, run deterministic verification, commit, and push.
+- bind and test the official-route event and scorecard evidence contract;
+- use the already-authorized installed official capability only after its work
+  item becomes active;
+- run deterministic verification, bounded cleanup, commit, and push.
 
 ## Separate authority transition
 
-Installation, enablement, account connection, third-party code execution,
-consumer projection, and live capability mutation are not implied by
-portfolio review. Before `work.run-real-capability-lifecycle-slice` becomes
-active, bind one exact selected task/route, host authority surface, data and
-cost boundary, rollback target, and live-operation grant.
+The user authorized real task evaluation and evidence-backed capability
+addition. That authorization covers task-scoped use of an already-installed
+official capability on this public local repository; it does not grant
+installation, enablement, account connection, paid service use, third-party
+candidate execution, consumer projection, manager mutation, publication, or
+release. The exact task, Skill, data, host-event, verification, rollback, and
+cleanup boundaries must still be machine-bound before invocation.
 
 Release and publication remain user-owned and are not authorized by this
 increment.

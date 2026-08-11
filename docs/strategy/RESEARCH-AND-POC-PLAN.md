@@ -32,48 +32,61 @@ claim.
 
 ### O3 — capability lifecycle product slice
 
-This is the active proof lane. Use the already-bound portfolio-coverage
-complaint: subtraction was driven
-farther than demonstrated demand coverage, while the broader ecosystem was not
-systematically converted into usable, governed options. Do not ask the user to
-invent another task before designing this slice.
+This is the active proof lane. The already-bound portfolio-coverage complaint
+served as its first falsifiable sub-lane: subtraction had been driven farther
+than demonstrated demand coverage, while the broader ecosystem had not been
+systematically converted into usable, governed options. The user was not asked
+to invent another task.
 
-When O3 becomes active, first bind a demand taxonomy, candidate and source
-boundary, account/data boundary, exact inactive acquisition root, review and
-admission criteria, verification surface, and finite cohort or stop rule. That
-contract may drive proactive discovery and exact-revision acquisition into an
-inactive review pool. Compare native, official, reviewed external,
-composition, and authored routes by coverage and lifecycle cost—not by a
-presumption that fewer capabilities are always better.
+That sub-lane bound a demand taxonomy, candidate and source boundary,
+account/data boundary, exact inactive acquisition root, review and admission
+criteria, verification surface, and finite stop rule. Six exact-source
+candidates were reviewed, the first two added zero unique demand coverage, the
+stop rule fired, and the pool was cleaned. Because this matched the increment's
+falsifier, the acquisition increment stopped instead of auto-activating its
+later work.
 
-Installation, enablement, account connection, execution, consumer projection,
-and persistent activation remain separate transitions. After separate live
-mutation authority, one selected route must capture preview, one lifecycle
-owner, bounded activation, observed projections, rollback, and zero residual
-state.
+Installation, enablement, account connection, third-party execution, consumer
+projection, and persistent activation remain separate transitions. The current
+successor evaluates an already-installed official capability without live
+mutation. If a later route needs mutation, it first requires separate authority
+and then must capture preview, one lifecycle owner, bounded activation,
+observed projections, rollback, and zero residual state.
 
-Stop after one accepted transaction or a falsifying failure. Installation or
-exposure alone cannot pass O3, and the operational manager does not become the
-portable product core.
+The successor sub-lane evaluates the current native-plus-official route through
+one fresh attributable host event and a decision-bearing sparse scorecard.
+Stop after one accepted transaction or another falsifying failure.
+Installation or exposure alone cannot pass O3, and the operational manager
+does not become the portable product core.
 
 ## O3 internal sequence
 
-O3 has four finite work packages, activated one at a time:
+The completed acquisition sub-lane used two finite work packages:
 
 1. bind the demand taxonomy, source cohort, inactive exact-revision pool,
    admission/rejection criteria, cleanup, and stop rule;
 2. acquire only the finite reviewed cohort into a temporary `.tmp/` pool;
-   payloads leave evidence receipts, not vendored bodies;
-3. bind the software-lifecycle, evaluation-dimension, and task-scenario
+   payloads leave evidence receipts, not vendored bodies.
+
+The current successor sub-lane uses four work packages, activated one at a
+time:
+
+1. bind the exact installed official route, host-event, data, authority,
+   verification, rollback, cleanup, and scorecard contract;
+2. execute one fresh no-inheritance official KPI capability event and retain
+   the host-returned payload plus before/after repository facts;
+3. build the software-lifecycle, evaluation-dimension, and task-scenario
    scorecard across at least 14 lifecycle slices, 12 evaluation dimensions,
    and 13 Harness task scenarios; audit and reuse, correct, or subtract the
    inherited sparse reconciliation of 15 partial items and six evidence
    clusters, including how many tool-specific choices, setup steps,
-   corrections, and recovery actions still fall back to the user;
-4. after separate live authority, run one lifecycle transaction and compare
-   observed coverage, user burden, reliability, rollback, and residual state.
+   corrections, and recovery actions still fall back to the user; then close
+   the observed lifecycle with zero residual state;
+4. keep O3 fail-closed until the verifier rejects self-declared substitutes,
+   deterministic verification passes, and the accepted slice is committed and
+   pushed.
 
-The third package transfers tool-learning cost toward the AI: the AI should
+The successor packages transfer tool-learning cost toward the AI: the AI should
 learn the relevant tool surface, route and compose it, handle bounded setup and
 recovery, and explain only decisions that genuinely require human judgment.
 Success is reduced material user intervention without losing intent fidelity,

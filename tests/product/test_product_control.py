@@ -35,6 +35,43 @@ class ProductControlCliTests(unittest.TestCase):
             check=False,
         )
 
+    def copy_checkout_with_history(self, target: Path) -> None:
+        shutil.copytree(
+            ROOT,
+            target,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns(
+                ".git",
+                ".tmp",
+                "legacy",
+                "__pycache__",
+                ".pytest_cache",
+                ".mypy_cache",
+            ),
+        )
+        subprocess.run(
+            ["git", "init", "--quiet"],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        common_dir = subprocess.run(
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        alternates = target / ".git" / "objects" / "info" / "alternates"
+        alternates.parent.mkdir(parents=True, exist_ok=True)
+        alternates.write_bytes(
+            (
+                str((Path(common_dir) / "objects").resolve()).replace("\\", "/")
+                + "\n"
+            ).encode("utf-8")
+        )
+
     def test_current_repository_exposes_one_product_progress_report(self) -> None:
         result = self.run_verify(ROOT)
 
@@ -45,7 +82,7 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertEqual(report["release"], "v0.1")
         self.assertEqual(
             report["activeIncrement"],
-            "increment.capability-lifecycle-product-slice",
+            "increment.current-official-route-evaluation-slice",
         )
         self.assertTrue(report["criterionStates"]["O4"])
         self.assertEqual(report["outcomes"], {"total": 5, "verified": 4})
@@ -159,6 +196,100 @@ class ProductControlCliTests(unittest.TestCase):
             "completed increment increment.context-continuity-product-slice requires verified outcome O4",
             report["errors"],
         )
+
+    def test_falsified_increment_can_stop_without_promoting_its_outcome(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+
+            result = self.run_verify(target)
+
+        self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
+        report = json.loads(result.stdout)
+        self.assertTrue(report["valid"])
+        self.assertFalse(report["criterionStates"]["O3"])
+
+    def test_falsified_increment_cannot_stop_while_review_root_remains(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            (
+                target / ".tmp" / "o3-capability-review-2026-08-11"
+            ).mkdir(parents=True)
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "stopped increment increment.capability-lifecycle-product-slice must bind valid falsifier and cleanup evidence",
+            report["errors"],
+        )
+
+    def test_falsified_increment_requires_observed_zero_coverage_stop_rule(self) -> None:
+        mutations = {
+            "stop rule did not fire": lambda evidence: evidence[
+                "stopRuleObservation"
+            ].__setitem__("stopTriggered", False),
+            "stop sequence drifted": lambda evidence: evidence[
+                "stopRuleObservation"
+            ].__setitem__("stopSequence", ["some-other-candidate"]),
+            "candidate added unique coverage": lambda evidence: evidence[
+                "candidateReviews"
+            ][0].__setitem__("uniqueDemandIds", ["SE-DISCOVERY-REQ-01"]),
+            "zero coverage metric drifted": lambda evidence: evidence[
+                "decisionMetrics"
+            ]["primary"][1].__setitem__("value", 1),
+            "program falsifier did not match": lambda evidence: evidence[
+                "incrementFalsifierObservation"
+            ].__setitem__("matchedFalsifier", "some unrelated failure"),
+            "contract revision drifted": lambda evidence: evidence[
+                "taskBinding"
+            ].__setitem__("contractRevision", "0" * 40),
+            "candidate source revision drifted": lambda evidence: evidence[
+                "sourceSnapshots"
+            ][0].__setitem__("revision", "0" * 40),
+            "candidate source id is unhashable": lambda evidence: evidence[
+                "sourceSnapshots"
+            ][0].__setitem__("id", []),
+            "cleanup target drifted": lambda evidence: evidence[
+                "cleanupObservation"
+            ].__setitem__("root", "C:/tmp/some-other-review-root"),
+            "cleanup parent is not text": lambda evidence: evidence[
+                "cleanupObservation"
+            ].__setitem__("resolvedParent", []),
+            "post-stop acquired inventory drifted": lambda evidence: evidence[
+                "stopRuleObservation"
+            ].__setitem__("alreadyAcquiredBeforeStopConclusion", []),
+            "claim ceiling collapsed": lambda evidence: evidence.__setitem__(
+                "claimLimits", ["looks good"]
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                evidence_path = (
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-portfolio-cohort-review-2026-08-11.json"
+                )
+                evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+                mutate(evidence)
+                evidence_path.write_text(
+                    json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "stopped increment increment.capability-lifecycle-product-slice must bind valid falsifier and cleanup evidence",
+                    report["errors"],
+                )
 
     def test_predecessor_identity_is_rejected_from_active_product_authority(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -912,16 +1043,23 @@ class ProductControlCliTests(unittest.TestCase):
             shutil.copytree(ROOT / "product", target / "product")
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
-            lifecycle_increment = next(
+            official_route_increment = next(
                 item
                 for item in program["increments"]
-                if item["id"] == "increment.capability-lifecycle-product-slice"
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
             )
             live_work = next(
                 item
-                for item in lifecycle_increment["workItems"]
-                if item["id"] == "work.run-real-capability-lifecycle-slice"
+                for item in official_route_increment["workItems"]
+                if item["id"] == "work.run-fresh-official-kpi-capability-event"
             )
+            live_work["operationIds"] = [
+                "external-capability-preview",
+                "external-capability-mutation",
+                "consumer-projection",
+                "rollback",
+            ]
             live_work.pop("authorityGate")
             program_path.write_text(
                 json.dumps(program, ensure_ascii=False, indent=2) + "\n",
@@ -934,7 +1072,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
-            "planned work work.run-real-capability-lifecycle-slice requests unauthorized operations without an authorityGate",
+            "planned work work.run-fresh-official-kpi-capability-event requests unauthorized operations without an authorityGate",
             report["errors"],
         )
 
@@ -944,16 +1082,23 @@ class ProductControlCliTests(unittest.TestCase):
             shutil.copytree(ROOT / "product", target / "product")
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
-            lifecycle_increment = next(
+            official_route_increment = next(
                 item
                 for item in program["increments"]
-                if item["id"] == "increment.capability-lifecycle-product-slice"
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
             )
             live_work = next(
                 item
-                for item in lifecycle_increment["workItems"]
-                if item["id"] == "work.run-real-capability-lifecycle-slice"
+                for item in official_route_increment["workItems"]
+                if item["id"] == "work.run-fresh-official-kpi-capability-event"
             )
+            live_work["operationIds"] = [
+                "external-capability-preview",
+                "external-capability-mutation",
+                "consumer-projection",
+                "rollback",
+            ]
             live_work["authorityGate"] = "some-non-empty-text"
             program_path.write_text(
                 json.dumps(program, ensure_ascii=False, indent=2) + "\n",
@@ -966,7 +1111,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
-            "planned work work.run-real-capability-lifecycle-slice authorityGate some-non-empty-text does not cover operations: consumer-projection, external-capability-mutation, external-capability-preview, rollback",
+            "planned work work.run-fresh-official-kpi-capability-event authorityGate some-non-empty-text does not cover operations: consumer-projection, external-capability-mutation, external-capability-preview, rollback",
             report["errors"],
         )
 
@@ -1128,11 +1273,15 @@ class ProductControlCliTests(unittest.TestCase):
             shutil.copytree(ROOT / "product", target / "product")
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
-            active_increment = next(
-                item for item in program["increments"] if item["state"] == "active"
+            portfolio_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.capability-lifecycle-product-slice"
             )
             active_work = next(
-                item for item in active_increment["workItems"] if item["state"] == "active"
+                item
+                for item in portfolio_increment["workItems"]
+                if item["id"] == "work.acquire-inactive-portfolio-cohort"
             )
             active_work["operationIds"] = [
                 "coverage-analysis",
@@ -1160,11 +1309,15 @@ class ProductControlCliTests(unittest.TestCase):
             shutil.copytree(ROOT / "product", target / "product")
             program_path = target / "product" / "program.json"
             program = json.loads(program_path.read_text(encoding="utf-8"))
-            active_increment = next(
-                item for item in program["increments"] if item["state"] == "active"
+            portfolio_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.capability-lifecycle-product-slice"
             )
             active_work = next(
-                item for item in active_increment["workItems"] if item["state"] == "active"
+                item
+                for item in portfolio_increment["workItems"]
+                if item["id"] == "work.acquire-inactive-portfolio-cohort"
             )
             active_work["operationIds"] = ["inactive-exact-acquisition"]
             active_work["capabilityContext"]["allowedOperations"] = [
@@ -1226,13 +1379,16 @@ class ProductControlCliTests(unittest.TestCase):
                 shutil.copytree(ROOT / "product", target / "product")
                 program_path = target / "product" / "program.json"
                 program = json.loads(program_path.read_text(encoding="utf-8"))
-                active_increment = next(
-                    item for item in program["increments"] if item["state"] == "active"
+                portfolio_increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.capability-lifecycle-product-slice"
                 )
                 active_work = next(
                     item
-                    for item in active_increment["workItems"]
-                    if item["state"] == "active"
+                    for item in portfolio_increment["workItems"]
+                    if item["id"] == "work.acquire-inactive-portfolio-cohort"
                 )
                 mutate(active_work["capabilityContext"])
                 program_path.write_text(

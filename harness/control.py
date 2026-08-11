@@ -121,6 +121,34 @@ BASE_AGENT_OPERATION_IDS = {
     "git-push",
 }
 PORTFOLIO_CURATION_TASK_BINDING = "agent-autonomy-harness-v0.1-closeout"
+PORTFOLIO_CURATION_INCREMENT_ID = "increment.capability-lifecycle-product-slice"
+PORTFOLIO_CURATION_CONTRACT_REVISION = (
+    "485bfb7919267adb27718f1116039b8011249b68"
+)
+PORTFOLIO_CURATION_EVIDENCE_PATH = (
+    "product/evidence/o3-portfolio-cohort-review-2026-08-11.json"
+)
+PORTFOLIO_CURATION_FALSIFIER = "The cohort adds no decision-relevant coverage"
+PORTFOLIO_CURATION_STOP_SOURCES = {
+    "trailofbits-differential-review": {
+        "sourceId": "trailofbits-skills",
+        "source": "https://github.com/trailofbits/skills.git",
+        "revision": "e6066e7db1fd57cb35f9a534781ceec595327feb",
+    },
+    "obra-superpowers": {
+        "sourceId": "obra-superpowers",
+        "source": "https://github.com/obra/superpowers.git",
+        "revision": "44c9b2d6e889982ac18c27d05a19fefe335194e1",
+    },
+}
+PORTFOLIO_CURATION_CLAIM_LIMITS = {
+    "The record proves a bounded exact-source static cohort review and an early-stop decision only.",
+    "It does not prove candidate behavior, value, cross-host portability, production readiness, release eligibility, or O3 acceptance.",
+    "Current route coverage is decision readiness, not a claim that every lifecycle scenario is complete.",
+    "No external candidate was installed, enabled, executed, projected, promoted, or persisted.",
+    "Cleanup proves only that the exact bounded review root was absent at the recorded post-delete repository check.",
+    "The zero-unique-coverage result triggers the current increment falsifier; it does not authorize automatic activation of its later planned work.",
+}
 PORTFOLIO_CURATION_COVERAGE_OBJECTIVE = (
     "decision-relevant-closeout-demand-coverage-with-reduced-user-orchestration"
 )
@@ -877,6 +905,210 @@ def _validate_evidence(
     return states, claim_limits_complete
 
 
+def _valid_falsified_increment_evidence(
+    root: Path,
+    increment: dict[str, Any],
+    evidence_paths: Any,
+    errors: list[str],
+) -> bool:
+    increment_id = increment.get("id", "<missing>")
+    paths = _string_list(
+        evidence_paths,
+        f"stopped increment {increment_id} stopEvidence",
+        errors,
+    )
+    if paths != [PORTFOLIO_CURATION_EVIDENCE_PATH]:
+        errors.append(
+            f"stopped increment {increment_id} must bind its exact falsifier receipt"
+        )
+        return False
+    document = _load(root, paths[0], errors)
+    task_binding = document.get("taskBinding")
+    observation = document.get("incrementFalsifierObservation")
+    cleanup = document.get("cleanupObservation")
+    stop_rule = document.get("stopRuleObservation")
+    reviews = document.get("candidateReviews")
+    source_snapshots = document.get("sourceSnapshots")
+    decision_metrics = document.get("decisionMetrics")
+    primary_metrics = (
+        decision_metrics.get("primary")
+        if isinstance(decision_metrics, dict)
+        else None
+    )
+    zero_coverage_metric = next(
+        (
+            item
+            for item in primary_metrics
+            if isinstance(item, dict)
+            and item.get("id")
+            == "first-two-external-candidate-unique-demand-coverage"
+        ),
+        {},
+    ) if isinstance(primary_metrics, list) else {}
+    valid_reviews = (
+        reviews
+        if isinstance(reviews, list)
+        and len(reviews) >= 2
+        and all(isinstance(item, dict) for item in reviews)
+        else []
+    )
+    first_two_review_ids = [item.get("id") for item in valid_reviews[:2]]
+    post_stop_review_ids = [item.get("id") for item in valid_reviews[2:]]
+    valid_sources = (
+        source_snapshots
+        if isinstance(source_snapshots, list)
+        and all(isinstance(item, dict) for item in source_snapshots)
+        else []
+    )
+    sources_by_id = {
+        item["id"]: item
+        for item in valid_sources
+        if isinstance(item.get("id"), str) and item["id"].strip()
+    }
+    source_bindings_valid = all(
+        review.get("id") == candidate_id
+        and review.get("sourceId") == expected["sourceId"]
+        and isinstance(review.get("treeObject"), str)
+        and bool(re.fullmatch(r"[0-9a-f]{40}", review["treeObject"]))
+        and isinstance(review.get("skillBlob"), str)
+        and bool(re.fullmatch(r"[0-9a-f]{40}", review["skillBlob"]))
+        and isinstance(review.get("skillSha256"), str)
+        and bool(re.fullmatch(r"[0-9a-f]{64}", review["skillSha256"]))
+        and isinstance(sources_by_id.get(expected["sourceId"]), dict)
+        and sources_by_id[expected["sourceId"]].get("source")
+        == expected["source"]
+        and sources_by_id[expected["sourceId"]].get("revision")
+        == expected["revision"]
+        for review, (candidate_id, expected) in zip(
+            valid_reviews[:2], PORTFOLIO_CURATION_STOP_SOURCES.items()
+        )
+    )
+    matched_falsifier = (
+        observation.get("matchedFalsifier")
+        if isinstance(observation, dict)
+        else None
+    )
+    program_falsifier = increment.get("falsifier")
+    source_program = _git_json_at_revision(
+        root,
+        PORTFOLIO_CURATION_CONTRACT_REVISION,
+        "product/program.json",
+    )
+    source_increments = (
+        source_program.get("increments")
+        if isinstance(source_program, dict)
+        else None
+    )
+    source_increment = next(
+        (
+            item
+            for item in source_increments
+            if isinstance(item, dict)
+            and item.get("id") == PORTFOLIO_CURATION_INCREMENT_ID
+        ),
+        {},
+    ) if isinstance(source_increments, list) else {}
+    source_work_items = source_increment.get("workItems")
+    source_acquisition_work = next(
+        (
+            item
+            for item in source_work_items
+            if isinstance(item, dict)
+            and item.get("id") == "work.acquire-inactive-portfolio-cohort"
+        ),
+        {},
+    ) if isinstance(source_work_items, list) else {}
+    source_context = source_acquisition_work.get("capabilityContext")
+    cleanup_root = cleanup.get("root") if isinstance(cleanup, dict) else None
+    cleanup_root_parts = (
+        [part for part in cleanup_root.replace("\\", "/").split("/") if part]
+        if isinstance(cleanup_root, str)
+        else []
+    )
+    resolved_parent = cleanup.get("resolvedParent") if isinstance(cleanup, dict) else None
+    normalized_resolved_parent = (
+        resolved_parent.replace("\\", "/")
+        if isinstance(resolved_parent, str)
+        else ""
+    )
+    claim_limits = document.get("claimLimits")
+    return (
+        increment_id == PORTFOLIO_CURATION_INCREMENT_ID
+        and document.get("id") == "o3-portfolio-cohort-review-2026-08-11"
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("status")
+        == "reviewed-no-live-admission-cleanup-complete"
+        and isinstance(task_binding, dict)
+        and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
+        and task_binding.get("invented") is False
+        and task_binding.get("kind") == "real repository comprehensive closeout"
+        and task_binding.get("contractRevision")
+        == PORTFOLIO_CURATION_CONTRACT_REVISION
+        and task_binding.get("contractPath") == "product/program.json"
+        and isinstance(source_program, dict)
+        and source_program.get("productId") == PRODUCT_ID
+        and source_program.get("release") == "v0.1"
+        and source_program.get("activeIncrementId")
+        == PORTFOLIO_CURATION_INCREMENT_ID
+        and source_increment.get("state") == "active"
+        and PORTFOLIO_CURATION_FALSIFIER
+        in source_increment.get("falsifier", "")
+        and source_acquisition_work.get("state") == "active"
+        and isinstance(source_context, dict)
+        and source_context.get("taskBinding") == PORTFOLIO_CURATION_TASK_BINDING
+        and source_context.get("inactiveAcquisitionRoot")
+        == PORTFOLIO_CURATION_INACTIVE_ROOT
+        and source_context.get("cohortPolicy", {}).get(
+            "stopAfterConsecutiveNoUniqueCoverage"
+        )
+        == 2
+        and isinstance(observation, dict)
+        and observation.get("incrementId") == increment_id
+        and observation.get("triggered") is True
+        and isinstance(matched_falsifier, str)
+        and matched_falsifier.rstrip(".") == PORTFOLIO_CURATION_FALSIFIER
+        and isinstance(program_falsifier, str)
+        and PORTFOLIO_CURATION_FALSIFIER in program_falsifier
+        and observation.get("hypothesisDisposition") == "falsified"
+        and observation.get("laterWorkActivationAllowed") is False
+        and isinstance(stop_rule, dict)
+        and stop_rule.get("stopTriggered") is True
+        and stop_rule.get("maxCandidates")
+        == source_context.get("cohortPolicy", {}).get("maxCandidates")
+        and stop_rule.get("acquiredCandidateCount") == len(valid_reviews)
+        and stop_rule.get("reviewedSourceRepositoryCount") == len(valid_sources)
+        and stop_rule.get("consecutiveCandidatesWithNoUniqueCoverage") == 2
+        and stop_rule.get("postStopDiscoveryCount") == 0
+        and stop_rule.get("stopSequence") == first_two_review_ids
+        and stop_rule.get("alreadyAcquiredBeforeStopConclusion")
+        == post_stop_review_ids
+        and first_two_review_ids == list(PORTFOLIO_CURATION_STOP_SOURCES)
+        and all(item.get("uniqueDemandIds") == [] for item in valid_reviews[:2])
+        and len(sources_by_id) == len(valid_sources)
+        and source_bindings_valid
+        and zero_coverage_metric.get("value") == 0
+        and zero_coverage_metric.get("denominator")
+        == len(PORTFOLIO_CURATION_DEMAND_IDS)
+        and isinstance(cleanup, dict)
+        and cleanup.get("deleteCompleted") is True
+        and cleanup.get("repositoryRecheckExists") is False
+        and cleanup.get("remaining") is False
+        and cleanup_root_parts[-2:]
+        == [".tmp", PORTFOLIO_CURATION_INACTIVE_ROOT.rsplit("/", 1)[-1]]
+        and ".." not in cleanup_root_parts
+        and normalized_resolved_parent.endswith("/.tmp")
+        and cleanup.get("actor") == "user"
+        and cleanup.get("operation")
+        == "Remove-Item -LiteralPath $target -Recurse -Force"
+        and cleanup.get("userReportedPostDeleteTestPath") is False
+        and not (root / PORTFOLIO_CURATION_INACTIVE_ROOT).exists()
+        and _non_empty_string_list(claim_limits)
+        and set(claim_limits) == PORTFOLIO_CURATION_CLAIM_LIMITS
+        and len(claim_limits) == len(PORTFOLIO_CURATION_CLAIM_LIMITS)
+    )
+
+
 def verify_product(root: Path) -> dict[str, Any]:
     errors: list[str] = []
     constitution = _load(root, "product/constitution.json", errors)
@@ -1014,8 +1246,23 @@ def verify_product(root: Path) -> dict[str, Any]:
             "planned",
             "active",
             "completed",
+            "stopped",
         }:
             errors.append(f"increment {increment_id} has an unsupported state")
+        if increment_state == "stopped":
+            if increment.get("result") != "falsified":
+                errors.append(
+                    f"stopped increment {increment_id} must record result falsified"
+                )
+            if not _valid_falsified_increment_evidence(
+                root,
+                increment,
+                increment.get("stopEvidence"),
+                errors,
+            ):
+                errors.append(
+                    f"stopped increment {increment_id} must bind valid falsifier and cleanup evidence"
+                )
         for field in ("observedProblem", "hypothesis", "falsifier", "stopCondition"):
             if not isinstance(increment.get(field), str) or not increment[field].strip():
                 errors.append(f"increment {increment_id} is missing {field}")
@@ -1059,6 +1306,7 @@ def verify_product(root: Path) -> dict[str, Any]:
                 "planned",
                 "active",
                 "completed",
+                "cancelled",
             }:
                 errors.append(f"work item {work_id} has an unsupported state")
                 work_state = "<invalid>"
@@ -1070,6 +1318,13 @@ def verify_product(root: Path) -> dict[str, Any]:
                 errors.append(
                     f"completed increment {increment_id} cannot retain open work "
                     f"{work_id}"
+                )
+            if increment_state == "stopped" and work_state not in {
+                "completed",
+                "cancelled",
+            }:
+                errors.append(
+                    f"stopped increment {increment_id} cannot retain open work {work_id}"
                 )
             operation_id_set = set(operation_ids)
             capability_context_valid = _valid_capability_context(

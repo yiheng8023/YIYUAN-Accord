@@ -1,0 +1,236 @@
+{
+  "schema": 1,
+  "id": "o3-portfolio-cohort-review-2026-08-11",
+  "productId": "agent-autonomy-harness",
+  "release": "v0.1",
+  "date": "2026-08-11",
+  "status": "reviewed-no-live-admission-cleanup-complete",
+  "taskBinding": {
+    "id": "agent-autonomy-harness-v0.1-closeout",
+    "invented": false,
+    "kind": "real repository comprehensive closeout",
+    "contractRevision": "485bfb7919267adb27718f1116039b8011249b68",
+    "contractPath": "product/program.json",
+    "historicalBaseline": {
+      "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
+      "path": "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+      "role": "sparse zero-model navigation and subtraction evidence only"
+    }
+  },
+  "decisionMetrics": {
+    "primary": [
+      {
+        "id": "decision-relevant-demand-route-coverage",
+        "value": 7,
+        "denominator": 7,
+        "meaning": "Each bound demand has at least one current native, official, or composed route suitable for the next evaluation step; this is route coverage, not behavior or value proof."
+      },
+      {
+        "id": "first-two-external-candidate-unique-demand-coverage",
+        "value": 0,
+        "denominator": 7,
+        "meaning": "The first two reviewed external candidates added no unique decision-relevant demand coverage over current routes."
+      },
+      {
+        "id": "user-tool-selection-interventions",
+        "value": 0,
+        "meaning": "The Agent selected the KPI design capability, source cohort, and review sequence without asking the user to learn or name a tool. No comparison baseline exists, so reduced burden is not yet proved."
+      }
+    ],
+    "drivers": [
+      {"id": "exact-source-candidates", "value": 6, "denominator": 6},
+      {"id": "live-admitted-external-candidates", "value": 0, "denominator": 6},
+      {"id": "reviewed-source-repositories", "value": 3, "denominator": 3}
+    ],
+    "guardrails": [
+      {"id": "account-connections", "value": 0, "threshold": 0, "passed": true},
+      {"id": "third-party-executions", "value": 0, "threshold": 0, "passed": true},
+      {"id": "install-or-enable-mutations", "value": 0, "threshold": 0, "passed": true},
+      {"id": "manager-or-consumer-mutations", "value": 0, "threshold": 0, "passed": true},
+      {"id": "inactive-review-root-remaining", "value": 0, "threshold": 0, "passed": true}
+    ]
+  },
+  "currentRouteCoverage": [
+    {"demandId": "SE-DISCOVERY-REQ-01", "adequateRoutes": ["native-runtime", "composition"]},
+    {"demandId": "SE-ARCH-DESIGN-01", "adequateRoutes": ["native-runtime", "composition"]},
+    {"demandId": "SE-IMPLEMENT-REVIEW-01", "adequateRoutes": ["native-runtime", "official", "composition"]},
+    {"demandId": "SE-VERIFY-SECURE-01", "adequateRoutes": ["native-runtime", "official", "composition"]},
+    {"demandId": "SE-RELEASE-CHANGE-01", "adequateRoutes": ["native-runtime", "official"]},
+    {"demandId": "SE-MAINT-MIGRATE-01", "adequateRoutes": ["native-runtime", "composition"]},
+    {"demandId": "SE-MGMT-PRACTICE-01", "adequateRoutes": ["native-runtime", "official", "composition", "accountable-human-control"]}
+  ],
+  "sourceSnapshots": [
+    {
+      "id": "trailofbits-skills",
+      "source": "https://github.com/trailofbits/skills.git",
+      "revision": "e6066e7db1fd57cb35f9a534781ceec595327feb",
+      "remoteMainMatchedAtReview": true,
+      "license": "CC-BY-SA-4.0",
+      "licenseSha256": "fcc8a87920214067b4f9f81aceec79d4593e70184c25fe81f0e880ab30347856"
+    },
+    {
+      "id": "obra-superpowers",
+      "source": "https://github.com/obra/superpowers.git",
+      "revision": "44c9b2d6e889982ac18c27d05a19fefe335194e1",
+      "remoteMainMatchedAtReview": true,
+      "license": "MIT",
+      "licenseSha256": "0da33ed814ee87e72db078f489c4447af72f13d9f25d9e17476f32efd77705fc"
+    },
+    {
+      "id": "github-awesome-copilot",
+      "source": "https://github.com/github/awesome-copilot.git",
+      "revision": "35b7b9b0ece5ef92fd0f4c91944f56be9ab8b675",
+      "remoteMainMatchedAtReview": true,
+      "license": "MIT",
+      "licenseSha256": "e32449d23085399adc1222f7a17408b730550258e51627c153cb108ca9955823"
+    }
+  ],
+  "candidateReviews": [
+    {
+      "sequence": 1,
+      "id": "trailofbits-differential-review",
+      "sourceId": "trailofbits-skills",
+      "path": "plugins/differential-review",
+      "treeObject": "b916974cae1b789b307dcec37119fe4c631f0f4c",
+      "skillBlob": "3755d4773d231cd13b7bfd1ecd6ad243150480bd",
+      "skillSha256": "b1a8413c1501dbdbe719ced903fe8a341e6629223749b9ccbe1535e0ab9d268f",
+      "trackedFileCount": 11,
+      "trackedBytes": 46750,
+      "uniqueDemandIds": [],
+      "disposition": "reject-live-as-is-static-reference-only",
+      "overlap": ["native git history and code tracing", "current two-axis code review", "current official security differential review"],
+      "blockingFindings": ["default baseline checkout mutates the target worktree", "mandatory report writes can escape the repository", "GitHub CLI can consume ambient credentials", "POSIX and Claude-specific host assumptions are not bounded or verified", "no candidate-level behavior tests or finding validation"]
+    },
+    {
+      "sequence": 2,
+      "id": "obra-superpowers",
+      "sourceId": "obra-superpowers",
+      "path": "skills",
+      "treeObject": "9a5bbc376a639d0ea24e2989d2f5eba754638adf",
+      "skillBlob": "8a08873ba07c1437f4f3cfd0d06c333eaf2e2715",
+      "skillSha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+      "trackedFileCount": 50,
+      "trackedBytes": 351137,
+      "uniqueDemandIds": [],
+      "disposition": "no-add-redundant-current-official-projection-retained",
+      "overlap": ["the same version 6.2.0 is already available through the current official runtime plugin", "planning TDD debugging review and delivery workflows are already callable"],
+      "blockingFindings": ["raw upstream adds no current demand coverage", "non-Codex hosts may inject a mandatory session-start bootstrap", "optional visual companion adds network telemetry local service and persistent files"]
+    },
+    {
+      "sequence": 3,
+      "id": "github-agent-governance",
+      "sourceId": "github-awesome-copilot",
+      "path": "skills/agent-governance",
+      "treeObject": "b76e562c86d4c19ecaa1b857967399ff239147a9",
+      "skillBlob": "a3c2501676c11fd8433c802b7f1c21d174ff6721",
+      "skillSha256": "efc0abaa0dff7d5567a27e1a5b9126ef70410e0a213225dab1b109f3f129db68",
+      "trackedFileCount": 1,
+      "trackedBytes": 18543,
+      "uniqueDemandIds": [],
+      "disposition": "reject-live-addition",
+      "blockingFindings": ["sibling-root path-prefix bypass", "self-reinforcing trust score is used for consequential authority", "audit trail is neither append-only nor complete", "rate limit has no request reset or concurrency control", "framework and dependency closure is absent", "no tests or evaluations"]
+    },
+    {
+      "sequence": 4,
+      "id": "github-agent-supply-chain",
+      "sourceId": "github-awesome-copilot",
+      "path": "skills/agent-supply-chain",
+      "treeObject": "7c9231a915167858a34fb12cb23727bc433d3671",
+      "skillBlob": "995c87835577fc396d31ff4447cea9d91ca61484",
+      "skillSha256": "5b678338dca40c92051ff46da592e6be13ffc2f843a2238cbf1c91368fe75fa7",
+      "trackedFileCount": 1,
+      "trackedBytes": 10732,
+      "uniqueDemandIds": [],
+      "disposition": "reject-live-addition",
+      "blockingFindings": ["file enumeration follows symlinks and can hash data outside the target", "generated timestamp prevents deterministic manifests", "the advertised signing path is not implemented", "code snippets are not a tested dependency-complete tool", "current Git object and SHA-256 evidence already covers this task more safely"]
+    },
+    {
+      "sequence": 5,
+      "id": "github-agentic-eval",
+      "sourceId": "github-awesome-copilot",
+      "path": "skills/agentic-eval",
+      "treeObject": "2322ac3a69fa63b58268525481bf684b9ddf51a3",
+      "skillBlob": "3cb14203efaf62af98065bd599600ba808f0ef31",
+      "skillSha256": "fb198a5c9b12e746d01a43c9ff3368598fdc1134bb458766f580186f31001573",
+      "trackedFileCount": 1,
+      "trackedBytes": 5940,
+      "uniqueDemandIds": [],
+      "disposition": "reject-live-addition",
+      "blockingFindings": ["undefined model and test runtimes", "self-judgment is treated as evaluation evidence", "no source authority account cost or side-effect boundary", "no parsing failure or independent validation closure", "current KPI design and deterministic tests are stronger for this task"]
+    },
+    {
+      "sequence": 6,
+      "id": "trailofbits-supply-chain-risk-auditor",
+      "sourceId": "trailofbits-skills",
+      "path": "plugins/supply-chain-risk-auditor",
+      "treeObject": "0b5bfeb0abf0722ecfc26ba868d5ffc11872b58f",
+      "skillBlob": "83affaaf2841182c5eb610338256f7f540b270aa",
+      "skillSha256": "2616110471497c8e366930dca14864754d1b2972b72231a875eb57722426f578",
+      "trackedFileCount": 20,
+      "trackedBytes": 221365,
+      "uniqueDemandIds": [],
+      "disposition": "not-applicable-to-current-task",
+      "blockingFindings": ["the current product is stdlib-only and has no supported third-party dependency manifest to audit", "execution requires Python 3.11 uv registry network requests and optionally GitHub authentication", "dependency risk is not the current decision gap"]
+    }
+  ],
+  "stopRuleObservation": {
+    "maxCandidates": 8,
+    "acquiredCandidateCount": 6,
+    "reviewedSourceRepositoryCount": 3,
+    "stopSequence": ["trailofbits-differential-review", "obra-superpowers"],
+    "consecutiveCandidatesWithNoUniqueCoverage": 2,
+    "stopTriggered": true,
+    "postStopDiscoveryCount": 0,
+    "alreadyAcquiredBeforeStopConclusion": ["github-agent-governance", "github-agent-supply-chain", "github-agentic-eval", "trailofbits-supply-chain-risk-auditor"]
+  },
+  "incrementFalsifierObservation": {
+    "incrementId": "increment.capability-lifecycle-product-slice",
+    "triggered": true,
+    "trigger": "The reviewed cohort adds no decision-relevant coverage over the current native, official, and composed routes.",
+    "matchedFalsifier": "The cohort adds no decision-relevant coverage.",
+    "hypothesisDisposition": "falsified",
+    "currentWorkDisposition": "exact review-root cleanup completed; record the stopped result and do not activate later work in this increment",
+    "laterWorkActivationAllowed": false,
+    "requiredReplan": "After cleanup, stop this increment and create a new causal increment for real-task evaluation of the current official route; do not treat the cohort review as behavior or value evidence."
+  },
+  "provisionalNextRoute": {
+    "id": "composition.native-runtime-and-current-official-capabilities",
+    "externalAdditionSelected": false,
+    "eligibleOnlyAfterCleanupAndReplan": true,
+    "rationale": "No reviewed external candidate survived the real-task uniqueness and safety threshold. After the falsified increment is cleaned and stopped, a new slice may evaluate a current installed official capability inside the real task, retain human authority, and keep external admission closed until a reproducible residual gap appears."
+  },
+  "cleanupObservation": {
+    "root": "C:/Projects/agent-autonomy-harness/.tmp/o3-capability-review-2026-08-11",
+    "resolvedParent": "C:/Projects/agent-autonomy-harness/.tmp",
+    "observedFileCount": 259,
+    "observedBytes": 2876348,
+    "deleteAttempted": true,
+    "deleteCompleted": true,
+    "actor": "user",
+    "operation": "Remove-Item -LiteralPath $target -Recurse -Force",
+    "userReportedPostDeleteTestPath": false,
+    "repositoryRecheckedAt": "2026-08-11T13:25:37.8999072+08:00",
+    "repositoryRecheckExists": false,
+    "blocker": null,
+    "remaining": false
+  },
+  "executionCounters": {
+    "candidateExecutionCount": 0,
+    "accountConnectionCount": 0,
+    "installCount": 0,
+    "enableCount": 0,
+    "managerMutationCount": 0,
+    "consumerMutationCount": 0,
+    "cleanupCount": 1,
+    "publicationCount": 0,
+    "releaseCount": 0
+  },
+  "claimLimits": [
+    "The record proves a bounded exact-source static cohort review and an early-stop decision only.",
+    "It does not prove candidate behavior, value, cross-host portability, production readiness, release eligibility, or O3 acceptance.",
+    "Current route coverage is decision readiness, not a claim that every lifecycle scenario is complete.",
+    "No external candidate was installed, enabled, executed, projected, promoted, or persisted.",
+    "Cleanup proves only that the exact bounded review root was absent at the recorded post-delete repository check.",
+    "The zero-unique-coverage result triggers the current increment falsifier; it does not authorize automatic activation of its later planned work."
+  ]
+}

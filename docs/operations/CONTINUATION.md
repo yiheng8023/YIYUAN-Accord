@@ -44,10 +44,26 @@ broad value. The receiver also found that the program's O4 stop condition was
 less explicit than the goal-mode prompt; the current authority now uses the
 stricter PASS, commit, and push boundary.
 
+## Completed O3 portfolio falsifier
+
+The finite inactive cohort reviewed six exact-source candidates from three
+repositories. The first two added zero unique demand coverage, the early-stop
+rule fired, no candidate was executed or admitted, and the exact review root
+was removed by the user and independently rechecked absent. The receipt is
+`product/evidence/o3-portfolio-cohort-review-2026-08-11.json`.
+
+That result matched the active increment's explicit falsifier. The former
+`increment.capability-lifecycle-product-slice` is therefore `stopped` with
+result `falsified`; its later planned evaluation and live-lifecycle work is
+cancelled rather than silently activated. The receipt proves static review,
+subtraction, the stop decision, and cleanup only—not candidate behavior,
+value, O3, or release readiness.
+
 ## Current increment
 
-`increment.capability-lifecycle-product-slice` is active for O3. Product state
-is `4/5` outcomes and `4/4` guardrails; completion remains `in-progress`.
+`increment.current-official-route-evaluation-slice` is active for O3. Product
+state is `4/5` outcomes and `4/4` guardrails; completion remains
+`in-progress`.
 
 ## First checks in a continuation
 
@@ -62,24 +78,20 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-Bind and verify the finite O3 portfolio-curation contract, then audit the exact
-historical sparse baseline against the already-bound complaint that subtraction was
-not matched by demonstrated demand coverage. It may proactively curate a
-bounded exact-revision cohort into an inactive review pool; installation,
-enablement, accounts, execution, and consumer projection remain separate
-authority transitions.
+Bind and verify the current official route evaluation contract. Then execute
+one fresh no-inheritance host event that loads the exact installed official KPI
+Skill on the real closeout task, and use its attributable output plus native
+repository evidence to build decision-bearing 15-partial/6-cluster,
+14-lifecycle, 12-dimension, and 13-scenario sparse evaluations.
 
-Do not redo the historical sparse 15-partial/6-cluster reconciliation. Its
-exact source is pinned in `product/program.json` at commit `c538667...`; O3
-audits, corrects, or subtracts that input, then adds only decision-relevant real
-task and lifecycle evidence.
+Do not redo or copy the historical sparse reconciliation. Its exact source is
+pinned in `product/program.json` at commit `c538667...`; each current axis must
+record a decision, evidence, missing evidence, and claim ceiling. A list of IDs
+or a repository-authored fixture is not behavior evidence.
 
-The user has approved proactive use of installed authorized capabilities plus
-coverage analysis, targeted discovery, static review, and exact-revision
-inactive acquisition under a bound task with a concrete gap or a complete
-curation contract. Acquisition remains confined to a finite temporary review
-root and does not grant installation or execution. A planned gate must become
-an exact work-scoped user grant before gated live operations can become active.
-The Agent is also responsible for omission detection and evidence-backed
-coverage supplementation; the user is not expected to provide an exhaustive
-project inventory from memory.
+The user has approved task-scoped use of installed authorized capabilities and
+evidence-backed capability addition. Installation, enablement, accounts,
+third-party execution, CC Switch or consumer mutation, publication, and release
+remain separate. The Agent owns tool selection, omission detection, and
+evidence-backed coverage supplementation; the user is not expected to provide
+an exhaustive project inventory from memory.

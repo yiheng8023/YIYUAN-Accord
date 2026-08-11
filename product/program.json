@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.capability-lifecycle-product-slice",
+  "activeIncrementId": "increment.current-official-route-evaluation-slice",
   "authorityBoundary": {
     "userOwns": [
       "product-direction",
@@ -104,11 +104,13 @@
     },
     {
       "id": "increment.capability-lifecycle-product-slice",
-      "state": "active",
+      "state": "stopped",
       "observedProblem": "The current capability portfolio has been optimized for subtraction without proving demand coverage, while any selected external capability can still leave activation, ownership, projection, rollback, or cleanup work with the user.",
       "hypothesis": "A bounded demand taxonomy, inactive reviewed cohort, and replaceable manager adapter can add decision-relevant coverage and complete preview, apply, observe, and rollback without becoming portable-core authority.",
       "falsifier": "The cohort adds no decision-relevant coverage, the slice requires dual lifecycle owners or manual state reconstruction, authority expands without approval, or rollback leaves residual projection.",
       "stopCondition": "O3 passes on the already-bound portfolio coverage problem through one separately authorized live transaction with accepted task coverage and zero residual projection.",
+      "result": "falsified",
+      "stopEvidence": ["product/evidence/o3-portfolio-cohort-review-2026-08-11.json"],
       "sourceInputs": [
         {
           "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
@@ -127,7 +129,7 @@
         },
         {
           "id": "work.acquire-inactive-portfolio-cohort",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["coverage-analysis", "targeted-capability-discovery", "capability-static-review", "inactive-exact-acquisition"],
           "authorityGate": "complete-portfolio-curation-contract-required",
@@ -161,7 +163,7 @@
         },
         {
           "id": "work.bind-capability-evaluation-and-tool-learning-transfer",
-          "state": "planned",
+          "state": "cancelled",
           "acceptanceIds": ["O3", "G1", "G2"],
           "operationIds": ["repository-read", "repository-edit", "causal-planning", "coverage-analysis", "installed-authorized-capability-use", "local-verification"],
           "authorityGate": "bound-task-capability-context-required",
@@ -169,11 +171,63 @@
         },
         {
           "id": "work.run-real-capability-lifecycle-slice",
-          "state": "planned",
+          "state": "cancelled",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["external-capability-preview", "external-capability-mutation", "consumer-projection", "rollback"],
           "authorityGate": "separate-live-capability-lifecycle-authorization-required",
           "deliverables": ["smallest host-owned authority and lifecycle evidence adapter demanded by the selected real task", "regression validator that keeps O3 fail-closed on repository-authored fixtures", "preview", "apply observation", "applicable host or consumer observation", "rollback and zero-residue cleanup receipt"]
+        }
+      ]
+    },
+    {
+      "id": "increment.current-official-route-evaluation-slice",
+      "state": "active",
+      "observedProblem": "The external cohort added no unique safe demand coverage and falsified the prior acquisition hypothesis, while the current installed official route still lacks one attributable real-task event and a decision-bearing sparse evaluation across the historical lifecycle, quality, and Harness-scenario axes.",
+      "hypothesis": "An Agent-selected installed official KPI capability, used through a fresh host event and combined with native repository evidence, can produce a smaller decision-ready 14-lifecycle 12-dimension 13-scenario sparse scorecard with zero persistent capability state; only a reproducible remaining demand gap may justify a later capability addition.",
+      "falsifier": "No host-owned event can attribute the official capability use, the scorecard merely repeats inventory instead of recording decisions and missing evidence, the user must select or operate the tool, a claimed gap does not survive native official external composition and human comparison, or rollback and cleanup leave persistent state.",
+      "stopCondition": "O3 passes only after one source-bound host event uses the exact installed official capability on the real closeout task, every historical partial and all 14/12/13 sparse axes receive evidence-sized dispositions, the selected route lifecycle reaches cleanup with zero residual state, the public verifier rejects self-declared substitutes, and the accepted increment is committed and pushed.",
+      "sourceInputs": [
+        {
+          "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
+          "path": "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+          "role": "historical sparse mapping input only"
+        },
+        {
+          "path": "product/evidence/o3-portfolio-cohort-review-2026-08-11.json",
+          "role": "completed falsifier, subtraction, provenance, and cleanup evidence"
+        }
+      ],
+      "acceptanceIds": ["O3", "G1", "G2", "G4"],
+      "workItems": [
+        {
+          "id": "work.bind-current-official-route-evaluation-contract",
+          "state": "active",
+          "acceptanceIds": ["O3", "G1", "G2"],
+          "operationIds": ["repository-read", "repository-edit", "causal-planning", "local-verification"],
+          "deliverables": ["current route and exact Skill identity", "real task data and authority boundary", "host-event receipt contract", "decision-bearing sparse scorecard contract", "claim ceiling and falsifier"]
+        },
+        {
+          "id": "work.run-fresh-official-kpi-capability-event",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2"],
+          "operationIds": ["repository-read", "coverage-analysis", "installed-authorized-capability-use", "local-verification"],
+          "authorityGate": "bound-task-capability-context-required",
+          "deliverables": ["fresh no-inheritance receiver invocation", "exact official Skill source identity", "host-returned KPI decision payload", "before and after repository state", "explicit runtime-attestation limit"]
+        },
+        {
+          "id": "work.build-sparse-scorecard-and-close-lifecycle",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2", "G4"],
+          "operationIds": ["repository-read", "repository-edit", "coverage-analysis", "installed-authorized-capability-use", "local-verification", "bounded-cleanup"],
+          "authorityGate": "bound-task-capability-context-required",
+          "deliverables": ["15 partial decisions and six cluster summaries", "14 lifecycle-slice dispositions", "12 evaluation-dimension decisions", "13 Harness-scenario scorecards", "native official reviewed-external composition self-authored and human comparison", "preview activation observation applicable projection rollback and cleanup receipt", "tool-learning intervention metric"]
+        },
+        {
+          "id": "work.close-current-official-route-evaluation-slice",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2", "G4"],
+          "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
+          "deliverables": ["O3 verifier mutation coverage", "full local verification", "Git commit", "origin/main push"]
         }
       ]
     }
