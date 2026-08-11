@@ -19,11 +19,12 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-The active increment is only the causal-authority reset. It binds the terminal
-proposition to v0.2 acceptance, freezes v0.1 as history, replaces release-event
-hard-coding with a small historical-event-neutral fail-closed kernel, repairs current
-truth, and stops. It does not run A/B tasks, mutate a capability manager,
-install or enable a capability, activate a Hook, or change a consumer.
+The causal-authority reset closed at `a5a0834`, and v0.2 is paused with no
+active increment. That reset bound the terminal proposition to v0.2
+acceptance, froze v0.1 as history, replaced release-event hard-coding with a
+small historical-event-neutral fail-closed kernel, repaired current truth, and
+stopped. It did not run A/B tasks, mutate a capability manager, install or
+enable a capability, activate a Hook, or change a consumer.
 
 After that increment is committed and pushed, the next causal increment may
 bind exactly one natural vertical dogfood task. The current planned order is:

@@ -2,80 +2,79 @@
 
 Updated: 2026-08-12
 
-This is a navigation aid. Recheck live Git truth and the three product authority
-files before acting.
+This is a navigation aid. Recheck live Git truth and the three product
+authority files before acting.
 
-## Current authority
+## Current authority and state
 
 - `product/constitution.json`
 - `product/program.json`
 - `product/acceptance.json`
-- `docs/operations/CURRENT-GOAL-MODE-PROMPT.md` for a human-readable projection
+- `docs/operations/CURRENT-GOAL-MODE-PROMPT.md` as a human-readable projection
 
-The machine program is v0.2, active, with exactly one causal increment and one
-work item: `increment.v0.2-causal-authority-reset` /
-`work.bind-v0.2-outcomes-and-neutral-kernel`.
-
-The public verifier should report:
+The machine program is v0.2 and `paused`, with `no active increment` and no
+active work item. The public verifier should report:
 
 - release `v0.2`;
 - completion `in-progress`;
-- O1-O5 false (`0/5` outcomes); the guardrail-only reset is not product progress;
+- O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- the active increment above.
+- no active increment.
 
-## Why v0.2 opened
+## What closed
 
-The user identified that the project repeatedly drifted into governance,
-cleanup, and subtraction while the visible capability portfolio and terminal
-user value barely moved. That drift is a real dogfooding failure, not a reason
-to blame the user's installed ecosystem.
+The guardrail-only causal-authority reset was committed and pushed at
+`a5a0834`. It:
 
-The accepted v0.1 contract did not require an ad-hoc baseline, repeated natural
-tasks, broad capability coexistence, a completed software-engineering
-evaluation/standard, or cross-host behavior. Its event-specific verifier and
-tests also grew to 260,917 bytes. The v0.2 reset therefore changes the
-acceptance target and removes historical event validators from current
-authority before any new experiment.
+- bound v0.2 to the terminal user-burden proposition;
+- froze v0.1 at `be498f9` as historical repository-control evidence;
+- replaced historical-event-specific current authority with a smaller
+  historical-event-neutral fail-closed control seam;
+- reconciled the README, North Star, research plan, architecture, acceptance,
+  program, and continuation surfaces;
+- left O1-O5 planned and false;
+- did not change CC Switch, Skills, Hooks, consumers, accounts, or capability
+  activation.
 
-## Historical v0.1 boundary
+The reset removed 4,844 net lines from its 13-file candidate and reduced the
+control-plus-product-test surface from 260,917 bytes at v0.1 to about 73 KB.
+These are debt and maintainability results, not product outcomes.
 
-v0.1 is preserved at
-`be498f960c9e0587d355291fb24261c91e75cd77` as an accepted repository-control
-milestone. Its O1-O5/G1-G4 evidence remains reproducible at that revision. It
-does not prove the terminal burden-transfer proposition, broad user value, an
-Agent-neutral software-engineering standard, cross-host behavior, production,
-release publication, or future capability sufficiency.
+## Why the program is paused
 
-Historical evidence in `product/evidence` and Git is inactive. Do not replay
-either O3 lifecycle attempt or restore their validators as current code.
+The next evidence-bearing increment requires a natural, non-diagnostic real
+task. No such task is invented by the repository, and the next dogfood/A-B
+increment is not automatically active merely because the reset closed.
 
-## Current stop boundary
+Historical evidence under `product/evidence` and in Git is inactive. Do not
+replay the old O3 lifecycle attempts or restore their validators as current
+code.
 
-The active reset may edit the repository, run local verification, commit, and
-push. It must not run A/B tasks, mutate CC Switch or a consumer, install or
-enable capabilities, connect accounts, execute a third-party candidate, enable
-a Hook, publish a release, deploy, or open a new trust/data boundary.
+## Next causal slice
 
-The reset reports zero product outcomes and stops only when machine authority, README, North Star, architecture,
-research plan, goal prompt, and this continuation agree; the smaller verifier
-and focused mutation suite pass; exact repository residue is absent; and the
-change is committed and pushed.
+When a natural task is bound, open exactly one outcome-bearing increment. For
+that same task, first freeze only the provisional event taxonomy, baseline
+matching, scenario/complexity/risk band, accountable acceptance fields, task
+floors, claim boundary, process-loss stop, and exact cleanup paths needed to
+evaluate it. Then run one vertical Codex reference-host O1 falsification slice.
 
-## Next planned causal slice
+The user supplies the goal, domain facts, bounded authority, corrections, and
+accountable final judgment—not Skill names, tool selection, setup, recovery,
+verification commands, cleanup commands, or push instructions. Compare only
+decision-relevant routes; do not run a full Cartesian experiment.
 
-After the reset closes, first freeze the provisional event taxonomy, baseline
-matching, task floors, and accountable acceptance fields, then bind one natural,
-non-diagnostic Codex reference-host task as a vertical falsification slice. The user supplies the goal, domain
-facts, necessary authority, and final judgment—not Skill names, tool selection,
-setup, recovery, or cleanup instructions. Compare only decision-relevant paths;
-do not run a full Cartesian experiment.
+Record task outcome, material user tool-orchestration interventions, repeated
+fact/authority requests, route changes, failure and recovery, time/call cost,
+claim limits, and residue. A repeated process-loss class stops the slice.
+Capability addition is allowed when a reproducible residual gap survives
+comparison; subtraction is not a veto.
 
-The next slice must record task outcome, material user tool-orchestration
-interventions, repeated fact/authority requests, route changes, failure and
-recovery, time/call cost, claim limits, and residue. A repeated process-loss
-class stops the slice. Capability addition is allowed when a real residual gap
-survives comparison; subtraction is not a veto.
+## Paused boundary
+
+With no active increment, do not run A/B tasks, mutate CC Switch or a consumer,
+install or enable capabilities, connect accounts, execute a third-party
+candidate, activate a Hook, incur new cost, publish, release, deploy, or open a
+new trust/data boundary.
 
 ## First checks
 

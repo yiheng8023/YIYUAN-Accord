@@ -29,10 +29,13 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-Current `main` is the active v0.2 program. It reports `0/5` outcomes, `4/4`
-guardrails, one active causal increment, and completion `in-progress`. The
-accepted v0.1 repository-control milestone remains pinned at `be498f9`; it is
-history, not proof that the terminal product proposition is complete.
+Current `main` is the paused v0.2 program. It reports `0/5` outcomes, `4/4`
+guardrails, no active causal increment, and completion `in-progress`. The
+guardrail-only authority reset was pushed at `a5a0834`; it counts as zero
+product progress. The accepted v0.1 repository-control milestone remains
+pinned at `be498f9`; it is history, not proof that the terminal product
+proposition is complete. The next increment opens only around a bound natural
+task; the repository does not invent one to keep itself busy.
 
 For the full deterministic product suite:
 
@@ -105,7 +108,7 @@ The current machine authority is deliberately small:
 
 - `product/constitution.json` — purpose, invariants, adaptive surfaces, and
   planning method;
-- `product/program.json` — the finite causal program and current active work;
+- `product/program.json` — the finite causal program and current active or paused state;
 - `product/acceptance.json` — five outcomes and four mandatory guardrails;
 - `harness/` — the public product-control kernel;
 - `tests/product/` — mutation tests through the public CLI seam.

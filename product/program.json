@@ -6,8 +6,8 @@
   "purpose": "Prove the terminal burden-transfer proposition through bounded real-task dogfooding, capability coexistence, an Agent-neutral software-engineering evaluation and standard, and thin cross-host adapters.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2-causal-authority-reset",
+  "status": "paused",
+  "activeIncrementId": null,
   "priorRelease": {
     "release": "v0.1",
     "state": "accepted-repository-control-milestone",
@@ -46,7 +46,7 @@
   "increments": [
     {
       "id": "increment.v0.2-causal-authority-reset",
-      "state": "active",
+      "state": "completed",
       "observedProblem": "v0.1 was honestly accepted as a narrow repository-control milestone, but its required strategy documents still describe O3 as open, its acceptance does not measure the terminal burden-transfer proposition, and its current verifier and tests hard-code one-off historical events at a maintenance cost larger than the reusable product core.",
       "hypothesis": "Freezing v0.1 at its accepted revision, binding v0.2 directly to measurable user-burden outcomes, and replacing event-specific current authority with a small historical-event-neutral fail-closed kernel will restore causal alignment and prevent more governance accumulation before real-task experiments.",
       "falsifier": "The new verifier can pass a verified outcome without a code-owned validator, v0.1 evidence remains current authority, current strategy still contradicts machine state, the rewrite grows the control surface, or the work begins capability mutation or experiments before the authority reset closes.",
@@ -69,7 +69,7 @@
       "workItems": [
         {
           "id": "work.bind-v0.2-outcomes-and-neutral-kernel",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["G1", "G2", "G3", "G4"],
           "operationIds": [
             "repository-read",

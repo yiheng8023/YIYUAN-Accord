@@ -74,12 +74,24 @@ class ProductControlTests(unittest.TestCase):
     def report(self) -> dict:
         return verify_product(self.root)
 
-    def active_increment(self, program: dict) -> dict:
-        return next(
-            item
-            for item in program["increments"]
-            if item["id"] == program["activeIncrementId"]
-        )
+    def activate_program(self, program: dict) -> dict:
+        increment = program["increments"][0]
+        program["status"] = "active"
+        program["activeIncrementId"] = increment["id"]
+        increment["state"] = "active"
+        increment["workItems"][0]["state"] = "active"
+        for relative in (
+            "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+            "docs/operations/CONTINUATION.md",
+        ):
+            path = self.root / relative
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "no active increment", increment["id"]
+                ),
+                encoding="utf-8",
+            )
+        return increment
 
     def mark_supporting_docs_no_active_increment(self) -> None:
         active = "increment.v0.2-causal-authority-reset"
@@ -89,7 +101,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             path = self.root / relative
             path.write_text(
-                path.read_text(encoding="utf-8").replace(active, "None"),
+                path.read_text(encoding="utf-8").replace(active, "no active increment"),
                 encoding="utf-8",
             )
 
@@ -205,6 +217,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_active_program_requires_exactly_one_active_increment(self) -> None:
         def close(value: dict) -> None:
+            self.activate_program(value)
             value["increments"][0]["state"] = "planned"
 
         self.mutate("product/program.json", close)
@@ -212,18 +225,24 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn("active program must have exactly one active increment", report["errors"])
 
+    def test_clean_active_fixture_is_valid(self) -> None:
+        self.mutate("product/program.json", self.activate_program)
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+
     def test_active_increment_id_must_match(self) -> None:
-        self.mutate(
-            "product/program.json",
-            lambda value: value.__setitem__("activeIncrementId", "increment.missing"),
-        )
+        def mismatch(value: dict) -> None:
+            self.activate_program(value)
+            value["activeIncrementId"] = "increment.missing"
+
+        self.mutate("product/program.json", mismatch)
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn("activeIncrementId must identify the active increment", report["errors"])
 
     def test_only_one_work_item_may_be_active(self) -> None:
         def duplicate_work(value: dict) -> None:
-            increment = self.active_increment(value)
+            increment = self.activate_program(value)
             other = deepcopy(increment["workItems"][0])
             other["id"] = "work.second"
             increment["workItems"].append(other)
@@ -243,17 +262,22 @@ class ProductControlTests(unittest.TestCase):
 
     def test_malformed_work_state_fails_without_traceback(self) -> None:
         def malformed(value: dict) -> None:
-            self.active_increment(value)["workItems"][0]["state"] = []
+            self.activate_program(value)["workItems"][0]["state"] = []
 
         self.mutate("product/program.json", malformed)
         completed = self.run_cli()
         self.assertNotEqual(completed.returncode, 0)
         self.assertNotIn("Traceback", completed.stderr)
-        self.assertFalse(json.loads(completed.stdout)["valid"])
+        report = json.loads(completed.stdout)
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "work item work.bind-v0.2-outcomes-and-neutral-kernel has invalid state",
+            report["errors"],
+        )
 
     def test_active_work_operations_must_stay_inside_agent_authority(self) -> None:
         def exceed(value: dict) -> None:
-            self.active_increment(value)["workItems"][0]["operationIds"].append("release")
+            self.activate_program(value)["workItems"][0]["operationIds"].append("release")
 
         self.mutate("product/program.json", exceed)
         report = self.report()
@@ -283,7 +307,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_process_loss_budget_fields_are_exact(self) -> None:
         def remove(value: dict) -> None:
-            del self.active_increment(value)["processLossBudget"][
+            del self.activate_program(value)["processLossBudget"][
                 "stopOnUnboundedResidue"
             ]
 
@@ -297,7 +321,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_same_correction_class_must_stop_before_recurrence(self) -> None:
         def loosen(value: dict) -> None:
-            self.active_increment(value)["processLossBudget"][
+            self.activate_program(value)["processLossBudget"][
                 "maxSameClassUserCorrectionBeforeStop"
             ] = 2
 
@@ -311,7 +335,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_guardrail_only_work_budget_cannot_exceed_one(self) -> None:
         def loosen(value: dict) -> None:
-            self.active_increment(value)["processLossBudget"][
+            self.activate_program(value)["processLossBudget"][
                 "maxConsecutiveOutcomeNeutralWorkItems"
             ] = 2
 
@@ -340,7 +364,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_cleanup_locator_cannot_traverse(self) -> None:
         def traverse(value: dict) -> None:
-            self.active_increment(value)["cleanupBoundary"][
+            self.activate_program(value)["cleanupBoundary"][
                 "repositoryTemporaryPaths"
             ] = ["../outside"]
 
@@ -506,10 +530,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["outcomes"]["verified"], 0)
 
     def test_paused_program_cannot_retain_active_work(self) -> None:
-        self.mutate(
-            "product/program.json",
-            lambda value: value.__setitem__("status", "paused"),
-        )
+        def invalid(value: dict) -> None:
+            self.activate_program(value)
+            value["status"] = "paused"
+
+        self.mutate("product/program.json", invalid)
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn("paused program must have no active increment", report["errors"])
@@ -517,6 +542,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_completed_program_cannot_retain_active_work(self) -> None:
         def invalid(value: dict) -> None:
+            self.activate_program(value)
             value["status"] = "completed"
             value["activeIncrementId"] = None
             value["increments"][0]["state"] = "completed"
@@ -555,7 +581,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_increment_requires_non_empty_work_graph(self) -> None:
         def empty(value: dict) -> None:
-            self.active_increment(value)["workItems"] = []
+            self.activate_program(value)["workItems"] = []
 
         self.mutate("product/program.json", empty)
         report = self.report()
@@ -568,7 +594,7 @@ class ProductControlTests(unittest.TestCase):
     def test_unknown_operation_alias_cannot_bypass_human_authority(self) -> None:
         def alias(value: dict) -> None:
             value["authorityBoundary"]["agentOwnsWithinBoundedAuthority"].append("publish")
-            self.active_increment(value)["workItems"][0]["operationIds"].append("publish")
+            self.activate_program(value)["workItems"][0]["operationIds"].append("publish")
 
         self.mutate("product/program.json", alias)
         report = self.report()

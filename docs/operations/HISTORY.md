@@ -34,3 +34,10 @@ the unmapped predecessor payloads from the current index and adds one small
 product-control kernel, one product test seam, and one five-outcome acceptance
 authority. Exact file and line counts belong in the reviewed Git diff, not in
 this long-lived boundary statement.
+
+The v0.2 causal-authority reset was committed and pushed at `a5a0834`. It
+established the current terminal-proposition contract and smaller
+historical-event-neutral control seam, but deliberately verified none of
+O1-O5. After that stop condition was reached, the program moved to `paused`
+with no active increment rather than inventing a real task or silently opening
+capability work.

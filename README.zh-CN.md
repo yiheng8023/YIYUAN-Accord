@@ -25,9 +25,11 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-当前 `main` 是 active 的 v0.2 工序，会报告 `0/5` 项结果、`4/4` 项护栏、一个
-active causal increment，completion 为 `in-progress`。accepted 的 v0.1 仓库控制
-里程碑固定在 `be498f9`；它是历史，不证明终极产品命题已经完成。
+当前 `main` 是 paused 的 v0.2 工序，会报告 `0/5` 项结果、`4/4` 项护栏、
+no active increment，completion 为 `in-progress`。仅护栏的权威重置已在
+`a5a0834` 推送，但计为零产品进展。accepted 的 v0.1 仓库控制里程碑固定在
+`be498f9`；它是历史，不证明终极产品命题已经完成。下一增量只围绕已绑定的自然
+任务开启；仓库不会为了维持忙碌而虚构任务。
 
 完整确定性产品测试：
 
@@ -91,7 +93,7 @@ accepted 必须同时满足五项结果、四项护栏、program 已完成、没
 当前机器权威保持精简：
 
 - `product/constitution.json`：目的、不变量、可适应表面和规划方法；
-- `product/program.json`：有限因果工序和当前 active work；
+- `product/program.json`：有限因果工序和当前 active 或 paused 状态；
 - `product/acceptance.json`：五项产品结果和四项强制护栏；
 - `harness/`：公开产品控制核心；
 - `tests/product/`：通过公开 CLI seam 的 mutation 测试。

@@ -50,9 +50,10 @@ authority, unsupported states, lifecycle ownership, evidence shape, outcome
 floors, fallback, recovery, cleanup, and process-loss stop rules.
 
 The current implemented slice is the v0.2 historical-event-neutral
-product-control kernel. O1-O5 are deliberately planned and false. A repository-authored JSON
-file cannot promote them: every verified outcome requires a code-owned
-validator added with the real slice that needs it.
+product-control kernel. Its guardrail-only reset is closed and the program is
+paused with no active increment. O1-O5 are deliberately planned and false. A
+repository-authored JSON file cannot promote them: every verified outcome
+requires a code-owned validator added with the real slice that needs it.
 
 ## 3. Capability and lifecycle plane
 

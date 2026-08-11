@@ -415,6 +415,9 @@ def _supporting_documents_valid(
         documents = sorted(SUPPORTING_DOCUMENTS)
     release = program.get("release")
     active_increment = program.get("activeIncrementId")
+    active_increment_marker = (
+        active_increment if isinstance(active_increment, str) else "no active increment"
+    )
     marker_map: dict[str, tuple[str, ...]] = {
         "README.md": (
             str(release),
@@ -439,12 +442,12 @@ def _supporting_documents_valid(
         ),
         "docs/operations/CURRENT-GOAL-MODE-PROMPT.md": (
             str(release),
-            str(active_increment),
+            active_increment_marker,
             "O1-O5 false",
         ),
         "docs/operations/CONTINUATION.md": (
             str(release),
-            str(active_increment),
+            active_increment_marker,
             "`0/5`",
         ),
         "docs/operations/HISTORY.md": (V01_ACCEPTED_REVISION, "product/evidence"),
@@ -753,7 +756,12 @@ def _process_loss_guardrail(
         max_neutral = 0
         increment_guardrail_only = True
         for work in work_items:
-            if not isinstance(work, dict) or work.get("state") in {"planned", "cancelled"}:
+            if not isinstance(work, dict):
+                continue
+            work_state = work.get("state")
+            if not isinstance(work_state, str):
+                continue
+            if work_state in {"planned", "cancelled"}:
                 continue
             mapped = _string_list(work.get("acceptanceIds")) or []
             if set(mapped) & OUTCOME_IDS:
