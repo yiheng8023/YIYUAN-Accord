@@ -27,7 +27,9 @@ python -B -m harness verify --root . --json
 
 当前 `main` 是 paused 的 v0.2 工序，会报告 `0/5` 项结果、`4/4` 项护栏、
 no active increment，completion 为 `in-progress`。仅护栏的权威重置已在
-`a5a0834` 推送，但计为零产品进展。accepted 的 v0.1 仓库控制里程碑固定在
+`a5a0834` 推送，但计为零产品进展。随后基于六条真实 Harness 任务完成了能力链与
+当前资产审计，建立路线增量评价和干净树基线，但没有验证 O4 或任何其他结果。
+accepted 的 v0.1 仓库控制里程碑固定在
 `be498f9`；它是历史，不证明终极产品命题已经完成。paused 只限制结果增量，不限制
 回溯反例分析、有限组合策展、机制验证或权威缺陷修复。历史失败可以触发重规划，但
 不会因此成为验收权威。下一结果增量只围绕已绑定的自然任务开启；不会要求用户为了
@@ -105,8 +107,8 @@ accepted 必须同时满足五项结果、四项护栏、program 已完成、没
 - `harness/`：公开产品控制核心；
 - `tests/product/`：通过公开 CLI seam 的 mutation 测试。
 
-历史 v0.1 证据、研究和前身 payload 可从 Git 历史或 `product/evidence` 取回，但不会
-因为可取回而成为当前权威。详见[历史边界](docs/operations/HISTORY.md)。
+历史 v0.1 证据、研究和前身 payload 可从 Git 历史取回，但不会因为可恢复而成为
+当前权威。详见[历史边界](docs/operations/HISTORY.md)。
 
 ## 社区与权利
 

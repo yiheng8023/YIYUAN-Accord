@@ -71,6 +71,11 @@ or promote evidence, acceptance, or release state. Bound user intent and
 `product/acceptance.json` win; reject or downgrade a conflicting or
 disproportionately process-heavy route.
 
+Before applying a capability route, compare whether it adds a goal, input,
+deliverable, human round trip, authority, side effect, or acceptance
+requirement. An addition needs source-bound causal necessity for the bound
+task; otherwise use the smaller native route or reject the capability route.
+
 Before repository changes, inspect branch, status, HEAD, upstream,
 ahead/behind, and dirty files. Preserve unrelated user changes. Use exact,
 bounded targets for cleanup. Local deterministic verification is the primary

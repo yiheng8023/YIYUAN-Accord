@@ -19,12 +19,13 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-The causal-authority reset closed at `a5a0834`, and v0.2 is paused with no
-active increment. That reset bound the terminal proposition to v0.2
-acceptance, froze v0.1 as history, replaced release-event hard-coding with a
-small historical-event-neutral fail-closed kernel, repaired current truth, and
-stopped. It did not run A/B tasks, mutate a capability manager, install or
-enable a capability, activate a Hook, or change a consumer.
+The causal-authority reset closed at `a5a0834`. A subsequent six-thread
+counterexample and current-asset audit established the v0.2 capability-chain
+integrity baseline, and v0.2 is paused with no active increment. These changes
+bound the terminal proposition, froze v0.1 receipts in Git history, removed
+one-off historical proxy checks and duplicate execution surfaces, and kept
+O1-O5 planned and false. They did not run A/B tasks, mutate a capability
+manager, install or enable a capability, activate a Hook, or change a consumer.
 
 This pause applies only to outcome-bearing experimentation. Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
@@ -32,11 +33,14 @@ validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
 failures are non-authoritative counterevidence and may trigger replanning.
 
-After that increment is committed and pushed, the next causal increment may
-bind exactly one natural vertical dogfood task. The current planned order is:
+After the integrity baseline is committed and pushed, the next outcome-bearing
+increment may bind exactly one natural vertical dogfood task. The current
+planned order is:
 
 1. **Freeze a provisional evaluation protocol.** Before the first event, define
-   material intervention classes, task scenario/complexity/authority-risk
+   material intervention classes, capability-added goal/input/deliverable/
+   human-round-trip/authority/side-effect/acceptance requirements, reopened
+   settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
    outcome denominator, and named accountable human acceptance. This is a
    prerequisite to O1, not a product outcome by itself.

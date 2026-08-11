@@ -13,6 +13,11 @@ Before proposing work, name:
 - authority, data, cost, external dependency, rollback, cleanup, and claim
   boundaries.
 
+For any proposed capability route, list additions to the bound goal, input,
+deliverable, human round trip, authority, side effect, and acceptance surface.
+An addition without source-bound causal necessity is a route defect, not a
+contribution prerequisite.
+
 External capabilities remain exact upstream and inactive until their own
 review and state-transition gates pass. Installation, enablement, account
 connection, dispatch, behavior, value, portability, acceptance, release, and

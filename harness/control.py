@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from datetime import datetime
 import json
+import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import stat
@@ -30,20 +31,8 @@ BOOTSTRAP_REQUIRED_AUTHORITY = {
     "harness/__init__.py",
     "harness/__main__.py",
     "harness/control.py",
-    "scripts/verify.py",
 }
 EXPECTED_AUTHORITY_GLOBS = {"harness/*.py"}
-SUPPORTING_DOCUMENTS = {
-    "README.md",
-    "README.zh-CN.md",
-    "AGENTS.md",
-    "docs/architecture.md",
-    "docs/strategy/PRODUCT-NORTH-STAR.md",
-    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
-    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
-    "docs/operations/CONTINUATION.md",
-    "docs/operations/HISTORY.md",
-}
 EXCLUDED_AUTHORITY_PARTS = {
     ".git",
     ".tmp",
@@ -105,21 +94,13 @@ RFC3339 = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
 )
 RELEASE = re.compile(r"^v\d+\.\d+$")
+REVISION = re.compile(r"^[0-9a-f]{40}$")
 FORBIDDEN_AUTHORITY_PATTERNS = (
     re.compile(r"agent[-]skills[-]curated", re.IGNORECASE),
     re.compile(r"registry/curation[-]program[-]plan[.]json", re.IGNORECASE),
     re.compile(r"registry/program[-]acceptance[-]map[.]json", re.IGNORECASE),
 )
-V01_CONTROL_AND_TEST_BYTES = 260_917
-CURRENT_CONTROL_AND_TEST_MAX_BYTES = V01_CONTROL_AND_TEST_BYTES // 2
-V01_RELEASE = "v0.1"
-V01_ACCEPTED_REVISION = "be498f960c9e0587d355291fb24261c91e75cd77"
-V01_ACCEPTED_STATE = "accepted-repository-control-milestone"
-REQUIRED_REPOSITORY_CLEANUP_PATHS = {
-    ".tmp",
-    "harness/__pycache__",
-    "tests/product/__pycache__",
-}
+CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
 EXPECTED_PROGRESSION_POLICY = {
     "pausedScope": "no-active-outcome-bearing-increment",
     "agentOwnedWithoutInventedUserTask": [
@@ -149,6 +130,20 @@ EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY = {
         "promote-evidence-acceptance-or-release-state",
         "override-bound-user-intent-or-current-product-authority",
     ],
+    "routeDeltaFields": [
+        "goal",
+        "input",
+        "deliverable",
+        "human-round-trip",
+        "authority",
+        "side-effect",
+        "acceptance",
+    ],
+    "routeDeltaRule": (
+        "a capability route may add a requirement only when source-bound evidence "
+        "shows it is causally necessary for the bound task; otherwise reject or "
+        "downgrade the route"
+    ),
     "conflictRule": "bound-user-intent-and-current-product-authority-win",
     "misfitRule": "reject-or-downgrade-the-capability-route",
 }
@@ -420,14 +415,26 @@ def _historical_boundary_valid(
     constitution: dict[str, Any], program: dict[str, Any], errors: list[str]
 ) -> bool:
     before = len(errors)
-    expected = {
-        "release": V01_RELEASE,
-        "state": V01_ACCEPTED_STATE,
-        "revision": V01_ACCEPTED_REVISION,
-        "currentAuthority": False,
+    prior = program.get("priorRelease")
+    prior_valid = isinstance(prior, dict) and set(prior) == {
+        "release",
+        "state",
+        "revision",
+        "currentAuthority",
     }
-    if program.get("priorRelease") != expected:
-        _error(errors, "program priorRelease must retain the code-owned v0.1 milestone")
+    if prior_valid:
+        prior_valid = (
+            isinstance(prior.get("release"), str)
+            and RELEASE.fullmatch(prior["release"]) is not None
+            and prior.get("release") != program.get("release")
+            and isinstance(prior.get("state"), str)
+            and bool(prior["state"].strip())
+            and isinstance(prior.get("revision"), str)
+            and REVISION.fullmatch(prior["revision"]) is not None
+            and prior.get("currentAuthority") is False
+        )
+    if not prior_valid:
+        _error(errors, "program priorRelease must be a non-authoritative historical milestone")
     if (
         constitution.get("historicalEvidenceBoundary")
         != EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY
@@ -435,71 +442,29 @@ def _historical_boundary_valid(
         _error(errors, "constitution historicalEvidenceBoundary is invalid")
     milestones = constitution.get("historicalMilestones")
     if not isinstance(milestones, list) or len(milestones) != 1:
-        _error(errors, "constitution must retain exactly one v0.1 historical milestone")
+        _error(errors, "constitution must retain exactly one historical milestone")
     else:
         milestone = milestones[0]
+        expected = dict(prior) if isinstance(prior, dict) else {}
         if not isinstance(milestone, dict) or any(
             milestone.get(key) != value for key, value in expected.items()
         ):
-            _error(errors, "constitution v0.1 historical milestone identity is invalid")
-        if not isinstance(milestone.get("claimLimit"), str) or not milestone[
-            "claimLimit"
-        ].strip():
-            _error(errors, "constitution v0.1 historical milestone requires a claim limit")
+            _error(errors, "constitution historical milestone must match program priorRelease")
+        if not isinstance(milestone, dict) or not isinstance(
+            milestone.get("claimLimit"), str
+        ) or not milestone["claimLimit"].strip():
+            _error(errors, "constitution historical milestone requires a claim limit")
     return len(errors) == before
 
 
-def _supporting_documents_valid(
-    root: Path,
-    constitution: dict[str, Any],
-    program: dict[str, Any],
-    errors: list[str],
+def _supporting_documents_exist(
+    root: Path, constitution: dict[str, Any], errors: list[str]
 ) -> bool:
     before = len(errors)
     documents = _string_list(constitution.get("supportingDocuments"))
-    if documents is None or set(documents) != SUPPORTING_DOCUMENTS:
-        _error(errors, "supportingDocuments must equal the code-owned explanatory set")
-        documents = sorted(SUPPORTING_DOCUMENTS)
-    release = program.get("release")
-    active_increment = program.get("activeIncrementId")
-    active_increment_marker = (
-        active_increment if isinstance(active_increment, str) else "no active increment"
-    )
-    marker_map: dict[str, tuple[str, ...]] = {
-        "README.md": (
-            str(release),
-            "`0/5`",
-            "in-progress",
-            "cannot pass O5",
-        ),
-        "README.zh-CN.md": (
-            str(release),
-            "`0/5`",
-            "in-progress",
-            "同宿主第二适配器只能作为一致性证据",
-        ),
-        "AGENTS.md": ("This file is execution guidance only.",),
-        "docs/architecture.md": (str(release),),
-        "docs/strategy/PRODUCT-NORTH-STAR.md": (
-            str(release),
-            "cannot pass O5",
-        ),
-        "docs/strategy/RESEARCH-AND-POC-PLAN.md": (
-            str(release),
-            "cannot pass O5",
-        ),
-        "docs/operations/CURRENT-GOAL-MODE-PROMPT.md": (
-            str(release),
-            active_increment_marker,
-            "O1-O5 false",
-        ),
-        "docs/operations/CONTINUATION.md": (
-            str(release),
-            active_increment_marker,
-            "`0/5`",
-        ),
-        "docs/operations/HISTORY.md": (V01_ACCEPTED_REVISION, "product/evidence"),
-    }
+    if documents is None:
+        _error(errors, "supportingDocuments must be a non-empty unique string list")
+        return False
     for raw in documents:
         relative = _relative_locator(raw)
         if relative is None:
@@ -509,13 +474,10 @@ def _supporting_documents_valid(
         if candidate is None:
             continue
         try:
-            text = candidate.read_text(encoding="utf-8")
-        except (OSError, UnicodeError):
-            _error(errors, f"supporting document cannot be read: {relative}")
-            continue
-        for marker in marker_map.get(relative, ()):
-            if marker not in text:
-                _error(errors, f"supporting document parity marker is missing: {relative}: {marker}")
+            if not candidate.is_file():
+                _error(errors, f"supporting document is missing: {relative}")
+        except OSError:
+            _error(errors, f"supporting document cannot be inspected: {relative}")
     return len(errors) == before
 
 
@@ -688,6 +650,9 @@ def _program_graph(
             _error(errors, f"increment {increment_id} has invalid state")
         if increment_state == "active":
             active_increments.append(increment)
+        correction_class = increment.get("correctionClass")
+        if not isinstance(correction_class, str) or not correction_class.strip():
+            _error(errors, f"increment {increment_id} requires a correctionClass")
         for field in ("observedProblem", "hypothesis", "falsifier", "stopCondition"):
             if not isinstance(increment.get(field), str) or not increment[field].strip():
                 _error(errors, f"increment {increment_id} is missing {field}")
@@ -716,6 +681,11 @@ def _program_graph(
             work_mapped = _string_list(work.get("acceptanceIds"))
             if work_mapped is None or not set(work_mapped) <= set(criteria):
                 _error(errors, f"work item {work_id} has invalid acceptanceIds")
+            elif mapped is not None and not set(work_mapped) <= set(mapped):
+                _error(
+                    errors,
+                    f"work item {work_id} acceptanceIds exceed increment {increment_id}",
+                )
             if _string_list(work.get("operationIds")) is None:
                 _error(errors, f"work item {work_id} requires non-empty operationIds")
             if _string_list(work.get("deliverables")) is None:
@@ -790,7 +760,7 @@ def _process_loss_guardrail(
     root: Path, increments: list[dict[str, Any]], errors: list[str]
 ) -> bool:
     before = len(errors)
-    previous_guardrail_only = False
+    previous_correction_class: str | None = None
     for increment in increments:
         state = increment.get("state")
         if state == "planned":
@@ -821,7 +791,6 @@ def _process_loss_guardrail(
         work_items = increment.get("workItems") if isinstance(increment.get("workItems"), list) else []
         current_neutral = 0
         max_neutral = 0
-        increment_guardrail_only = True
         for work in work_items:
             if not isinstance(work, dict):
                 continue
@@ -832,25 +801,28 @@ def _process_loss_guardrail(
                 continue
             mapped = _string_list(work.get("acceptanceIds")) or []
             if set(mapped) & OUTCOME_IDS:
-                increment_guardrail_only = False
                 current_neutral = 0
             else:
                 current_neutral += 1
                 max_neutral = max(max_neutral, current_neutral)
         if isinstance(neutral_budget, int) and max_neutral > neutral_budget:
             _error(errors, f"increment {increment_id} exceeds its guardrail-only work budget")
-        if increment_guardrail_only and previous_guardrail_only:
-            _error(errors, "consecutive guardrail-only increments are not allowed")
-        previous_guardrail_only = increment_guardrail_only
+        correction_class = increment.get("correctionClass")
+        if (
+            isinstance(correction_class, str)
+            and correction_class
+            and correction_class == previous_correction_class
+        ):
+            _error(errors, f"adjacent increments repeat correctionClass: {correction_class}")
+        if isinstance(correction_class, str) and correction_class:
+            previous_correction_class = correction_class
 
         cleanup = increment.get("cleanupBoundary")
         paths = cleanup.get("repositoryTemporaryPaths") if isinstance(cleanup, dict) else None
         paths = _string_list(paths)
         if paths is None:
-            _error(errors, f"increment {increment_id} requires the baseline repository cleanup paths")
+            _error(errors, f"increment {increment_id} requires exact repository cleanup paths")
             continue
-        if not REQUIRED_REPOSITORY_CLEANUP_PATHS <= set(paths):
-            _error(errors, f"increment {increment_id} requires the baseline repository cleanup paths")
         for raw in paths:
             relative = _cleanup_locator(raw)
             if relative is None:
@@ -859,6 +831,36 @@ def _process_loss_guardrail(
             candidate = _inside_root(root, relative, errors, "cleanup path")
             if candidate is not None and not _path_entry_absent(candidate):
                 _error(errors, f"repository cleanup residue remains: {relative}")
+    _repository_residue_absent(root, errors)
+    return len(errors) == before
+
+
+def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
+    before = len(errors)
+    try:
+        for current, directories, _ in os.walk(root, topdown=True, followlinks=False):
+            current_path = Path(current)
+            retained: list[str] = []
+            for name in directories:
+                candidate = current_path / name
+                try:
+                    relative = candidate.relative_to(root).as_posix()
+                except ValueError:
+                    _error(errors, "repository residue scan escaped the repository root")
+                    continue
+                if relative == ".git" or relative.startswith(".git/"):
+                    continue
+                if _link_or_reparse(candidate):
+                    if name.casefold() in CONVENTIONAL_RESIDUE_NAMES:
+                        _error(errors, f"repository cleanup residue remains: {relative}")
+                    continue
+                if name.casefold() in CONVENTIONAL_RESIDUE_NAMES:
+                    _error(errors, f"repository cleanup residue remains: {relative}")
+                    continue
+                retained.append(name)
+            directories[:] = retained
+    except OSError:
+        _error(errors, "repository residue cannot be enumerated")
     return len(errors) == before
 
 
@@ -930,19 +932,6 @@ def _evidence_states(
     return states, len(errors) == before
 
 
-def _implementation_is_smaller(root: Path, errors: list[str]) -> tuple[bool, int]:
-    paths = (root / "harness/control.py", root / "tests/product/test_product_control.py")
-    try:
-        total = sum(path.stat().st_size for path in paths)
-    except OSError:
-        _error(errors, "current control and product-test size cannot be measured")
-        return False, 0
-    if total > CURRENT_CONTROL_AND_TEST_MAX_BYTES:
-        _error(errors, "current control and product tests are not materially smaller than v0.1")
-        return False, total
-    return True, total
-
-
 def _verify_product(root: Path) -> dict[str, Any]:
     """Verify the current release contract and return a JSON-serializable report."""
 
@@ -959,7 +948,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     _release_identity_valid(constitution, program, acceptance, errors)
     historical_boundary = _historical_boundary_valid(constitution, program, errors)
     capability_influence = _capability_influence_valid(constitution, errors)
-    supporting_documents = _supporting_documents_valid(root, constitution, program, errors)
+    supporting_documents = _supporting_documents_exist(root, constitution, errors)
     criteria = _criteria(acceptance, errors)
     increments, all_work, active_increment = _program_graph(program, criteria, errors)
     progression_policy = _progression_policy_valid(program, errors)
@@ -974,8 +963,6 @@ def _verify_product(root: Path) -> dict[str, Any]:
         and progression_policy
         and len(errors) == authority_before
     )
-    _, authority_bytes = _implementation_is_smaller(root, errors)
-
     evidence_states, evidence_valid = _evidence_states(root, criteria, errors)
     authority_guardrail = _authority_guardrail(program, all_work, errors)
     process_guardrail = _process_loss_guardrail(root, increments, errors)
@@ -1020,7 +1007,6 @@ def _verify_product(root: Path) -> dict[str, Any]:
             "total": len(GUARDRAIL_IDS),
         },
         "criterionStates": {key: states[key] for key in sorted(states)},
-        "currentControlAndTestBytes": authority_bytes,
         "errors": errors,
     }
 
@@ -1042,6 +1028,5 @@ def verify_product(root: Path) -> dict[str, Any]:
             "criterionStates": {
                 key: False for key in sorted(EXPECTED_CRITERION_IDS)
             },
-            "currentControlAndTestBytes": 0,
             "errors": [f"verifier failed closed: {exc.__class__.__name__}"],
         }

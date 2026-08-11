@@ -27,12 +27,11 @@ verifies their identity, mapping, authority, evidence-admission, and
 process-loss invariants. The verifier derives release identities instead of
 hard-coding one release.
 
-Historical release evidence remains in Git and `product/evidence`, but it is
-not scanned as current authority. It remains usable as retrospective
-counterevidence and may trigger replanning. The accepted v0.1 verifier and
-event-specific validators remain reproducible at revision `be498f9`; carrying
-their one-off logic into every later release would turn evidence history into
-product debt.
+Historical release evidence remains in Git, but it is not scanned as current
+authority. It remains usable as retrospective counterevidence and may trigger
+replanning. The accepted v0.1 verifier and event-specific validators remain
+reproducible at revision `be498f9`; carrying their one-off logic or raw receipts
+in every later current tree would turn evidence history into product debt.
 
 Supporting strategy, README, architecture, and continuation documents explain
 the current contract but do not override the three machine-authority files.
@@ -52,8 +51,9 @@ authority, unsupported states, lifecycle ownership, evidence shape, outcome
 floors, fallback, recovery, cleanup, and process-loss stop rules.
 
 The current implemented slice is the v0.2 historical-event-neutral
-product-control kernel. Its guardrail-only reset is closed and the program is
-paused with no active increment. O1-O5 are deliberately planned and false. A
+product-control kernel plus the capability-chain and current-asset integrity
+baseline. Both increments are closed and the program is paused with no active
+increment. O1-O5 are deliberately planned and false. A
 repository-authored JSON file cannot promote them: every verified outcome
 requires a code-owned validator added with the real slice that needs it.
 The pause limits outcome-bearing experimentation, not bounded retrospective
@@ -81,6 +81,12 @@ self-authored Skills are replaceable host projections, and the peripheral
 ecosystem is a replaceable input. The current machine product authority and
 bound user intent outrank them; conflicting or disproportionate routes are
 rejected or downgraded.
+
+Route selection is monotonic with respect to the bound task: compare additions
+to goal, input, deliverable, human round trip, authority, side effect, and
+acceptance. A capability may add one only when source-bound evidence shows it
+is causally necessary for the result; completing the capability's preferred
+workflow is not an independent outcome.
 
 ## 4. Host and manager adapters
 

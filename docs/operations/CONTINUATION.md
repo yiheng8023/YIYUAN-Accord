@@ -10,7 +10,6 @@ authority files before acting.
 - `product/constitution.json`
 - `product/program.json`
 - `product/acceptance.json`
-- `docs/operations/CURRENT-GOAL-MODE-PROMPT.md` as a human-readable projection
 
 The machine program is v0.2 and `paused`, with `no active increment` and no
 active work item. The public verifier should report:
@@ -36,9 +35,14 @@ The guardrail-only causal-authority reset was committed and pushed at
 - did not change CC Switch, Skills, Hooks, consumers, accounts, or capability
   activation.
 
-The reset removed 4,844 net lines from its 13-file candidate and reduced the
-control-plus-product-test surface from 260,917 bytes at v0.1 to about 73 KB.
-These are debt and maintainability results, not product outcomes.
+The later capability-chain and asset-integrity baseline used six real Harness
+threads as counterevidence. It bound capability-added goal, input, deliverable,
+human-round-trip, authority, side-effect, and acceptance requirements as an O4
+evaluation surface; removed raw v0.1 receipts from the current tree; retired a
+duplicate goal-mode prompt and verifier wrapper; removed one-time predecessor
+byte proxies and marker-only document parity; and closed mapping and residue
+blind spots. These are evaluation and debt results, not verified O1-O5
+outcomes. No consumer, Skill, Hook, account, or capability activation changed.
 
 ## Why the program is paused
 
@@ -51,10 +55,9 @@ closed.
 The pause is not a whole-program stop. The Agent may continue bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair without claiming O1-O5 progress.
-Historical evidence under `product/evidence` and in Git is inactive as product
-or acceptance authority, but remains valid counterevidence and replanning
-input. Do not replay the old O3 lifecycle attempts or restore their validators
-as current code.
+Historical evidence in Git is inactive as product or acceptance authority, but
+remains valid counterevidence and replanning input. Do not replay the old O3
+lifecycle attempts or restore their validators as current code.
 
 ## Next causal slice
 
@@ -70,8 +73,9 @@ verification commands, cleanup commands, or push instructions. Compare only
 decision-relevant routes; do not run a full Cartesian experiment.
 
 Record task outcome, material user tool-orchestration interventions, repeated
-fact/authority requests, route changes, failure and recovery, time/call cost,
-claim limits, and residue. A repeated process-loss class stops the slice.
+fact/authority requests, reopened settled decisions, unrequested artifacts,
+capability-added requirements, route changes, failure and recovery, time/call
+cost, claim limits, and residue. A repeated process-loss class stops the slice.
 Capability addition is allowed when a reproducible residual gap survives
 comparison; subtraction is not a veto.
 

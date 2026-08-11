@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from .control import verify_product
 
@@ -25,7 +26,7 @@ def main() -> int:
             f"({report['outcomes']['verified']}/{report['outcomes']['total']} outcomes)"
         )
         for error in report["errors"]:
-            print(f"ERROR: {error}")
+            print(f"ERROR: {error}", file=sys.stderr)
     return 0 if report["valid"] else 1
 
 

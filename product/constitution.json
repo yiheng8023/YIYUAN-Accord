@@ -34,6 +34,16 @@
       "promote-evidence-acceptance-or-release-state",
       "override-bound-user-intent-or-current-product-authority"
     ],
+    "routeDeltaFields": [
+      "goal",
+      "input",
+      "deliverable",
+      "human-round-trip",
+      "authority",
+      "side-effect",
+      "acceptance"
+    ],
+    "routeDeltaRule": "a capability route may add a requirement only when source-bound evidence shows it is causally necessary for the bound task; otherwise reject or downgrade the route",
     "conflictRule": "bound-user-intent-and-current-product-authority-win",
     "misfitRule": "reject-or-downgrade-the-capability-route"
   },
@@ -65,6 +75,7 @@
       "observed problem",
       "causal hypothesis",
       "falsifier",
+      "correction class",
       "mapped acceptance criteria",
       "finite stop condition",
       "process-loss budget",
@@ -86,8 +97,7 @@
     "product/acceptance.json",
     "harness/__init__.py",
     "harness/__main__.py",
-    "harness/control.py",
-    "scripts/verify.py"
+    "harness/control.py"
   ],
   "activeAuthorityGlobs": [
     "harness/*.py"
@@ -99,7 +109,6 @@
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
-    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "docs/operations/CONTINUATION.md",
     "docs/operations/HISTORY.md"
   ],
@@ -115,7 +124,8 @@
   "bootstrapGuards": [
     "code-owned authority identity and path validation",
     "active authority cannot include evidence archives, temporary roots, legacy roots, or symlinks",
-    "verified outcomes require a code-owned evidence validator"
+    "verified outcomes require a code-owned evidence validator",
+    "conventional repository residue is detected outside declared cleanup paths"
   ],
   "historicalEvidenceBoundary": {
     "role": "non-authoritative evidence and retrospective counterevidence",

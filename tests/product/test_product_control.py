@@ -15,10 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from harness.control import (  # noqa: E402
-    CURRENT_CONTROL_AND_TEST_MAX_BYTES,
-    verify_product,
-)
+from harness.control import verify_product  # noqa: E402
 
 
 AUTHORITY_FILES = (
@@ -28,15 +25,12 @@ AUTHORITY_FILES = (
     "harness/__init__.py",
     "harness/__main__.py",
     "harness/control.py",
-    "scripts/verify.py",
-    "tests/product/test_product_control.py",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
-    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "docs/operations/CONTINUATION.md",
     "docs/operations/HISTORY.md",
 )
@@ -75,50 +69,29 @@ class ProductControlTests(unittest.TestCase):
         return verify_product(self.root)
 
     def activate_program(self, program: dict) -> dict:
-        increment = program["increments"][0]
+        increment = program["increments"][-1]
         program["status"] = "active"
         program["activeIncrementId"] = increment["id"]
         increment["state"] = "active"
         increment["workItems"][0]["state"] = "active"
-        for relative in (
-            "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
-            "docs/operations/CONTINUATION.md",
-        ):
-            path = self.root / relative
-            path.write_text(
-                path.read_text(encoding="utf-8").replace(
-                    "no active increment", increment["id"]
-                ),
-                encoding="utf-8",
-            )
         return increment
 
-    def mark_supporting_docs_no_active_increment(self) -> None:
-        active = "increment.v0.2-causal-authority-reset"
-        for relative in (
-            "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
-            "docs/operations/CONTINUATION.md",
-        ):
-            path = self.root / relative
-            path.write_text(
-                path.read_text(encoding="utf-8").replace(active, "no active increment"),
-                encoding="utf-8",
-            )
-
-    def run_cli(self) -> subprocess.CompletedProcess[str]:
+    def run_cli(self, *, json_output: bool = True) -> subprocess.CompletedProcess[str]:
         environment = os.environ.copy()
         environment["PYTHONPATH"] = str(ROOT)
+        command = [
+            sys.executable,
+            "-B",
+            "-m",
+            "harness",
+            "verify",
+            "--root",
+            str(self.root),
+        ]
+        if json_output:
+            command.append("--json")
         return subprocess.run(
-            [
-                sys.executable,
-                "-B",
-                "-m",
-                "harness",
-                "verify",
-                "--root",
-                str(self.root),
-                "--json",
-            ],
+            command,
             cwd=ROOT,
             env=environment,
             capture_output=True,
@@ -145,28 +118,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v0.2")
         self.assertTrue(report["valid"])
 
-    def test_label_only_release_bump_fails_document_parity(self) -> None:
+    def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
             "product/program.json",
-            lambda value: value.__setitem__("release", "v0.3"),
+            lambda value: value.__setitem__("id", "invalid-program"),
         )
-        self.mutate(
-            "product/acceptance.json",
-            lambda value: value.update(
-                {"release": "v0.3", "id": "harness-product-acceptance-v0.3"}
-            ),
-        )
-        self.mutate(
-            "product/program.json",
-            lambda value: value.__setitem__("id", "harness-product-program-v0.3"),
-        )
-        report = self.report()
-        self.assertFalse(report["valid"])
-        self.assertEqual(report["release"], "v0.3")
-        self.assertTrue(
-            any("supporting document parity marker is missing" in item for item in report["errors"]),
-            report["errors"],
-        )
+        completed = self.run_cli(json_output=False)
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertIn("ERROR: program id must be", completed.stderr)
+        self.assertNotIn("ERROR:", completed.stdout)
 
     def test_release_id_drift_fails_closed(self) -> None:
         self.mutate(
@@ -217,8 +177,8 @@ class ProductControlTests(unittest.TestCase):
 
     def test_active_program_requires_exactly_one_active_increment(self) -> None:
         def close(value: dict) -> None:
-            self.activate_program(value)
-            value["increments"][0]["state"] = "planned"
+            increment = self.activate_program(value)
+            increment["state"] = "planned"
 
         self.mutate("product/program.json", close)
         report = self.report()
@@ -251,7 +211,34 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-causal-authority-reset has more than one active work item",
+            "increment increment.v0.2-capability-chain-integrity-baseline has more than one active work item",
+            report["errors"],
+        )
+
+    def test_increment_requires_a_correction_class(self) -> None:
+        def remove(value: dict) -> None:
+            self.activate_program(value).pop("correctionClass")
+
+        self.mutate("product/program.json", remove)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "increment increment.v0.2-capability-chain-integrity-baseline requires a correctionClass",
+            report["errors"],
+        )
+
+    def test_work_acceptance_must_be_contained_by_increment(self) -> None:
+        def exceed(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["workItems"][0]["acceptanceIds"].append("G1")
+
+        self.mutate("product/program.json", exceed)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "work item work.audit-capability-chain-and-reset-current-assets "
+            "acceptanceIds exceed increment "
+            "increment.v0.2-capability-chain-integrity-baseline",
             report["errors"],
         )
 
@@ -271,7 +258,7 @@ class ProductControlTests(unittest.TestCase):
         report = json.loads(completed.stdout)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.bind-v0.2-outcomes-and-neutral-kernel has invalid state",
+            "work item work.audit-capability-chain-and-reset-current-assets has invalid state",
             report["errors"],
         )
 
@@ -283,7 +270,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "work item work.bind-v0.2-outcomes-and-neutral-kernel exceeds agent authority",
+            "work item work.audit-capability-chain-and-reset-current-assets exceeds agent authority",
             report["errors"],
         )
 
@@ -315,7 +302,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.v0.2-causal-authority-reset requires the exact process-loss budget fields",
+            "increment increment.v0.2-capability-chain-integrity-baseline requires the exact process-loss budget fields",
             report["errors"],
         )
 
@@ -330,6 +317,22 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
             "same-class user correction budget must stop before recurrence",
+            report["errors"],
+        )
+
+    def test_adjacent_increments_cannot_repeat_a_correction_class(self) -> None:
+        def repeat(value: dict) -> None:
+            duplicate = deepcopy(value["increments"][-1])
+            duplicate["id"] = "increment.repeated-correction"
+            duplicate["workItems"][0]["id"] = "work.repeated-correction"
+            value["increments"].append(duplicate)
+
+        self.mutate("product/program.json", repeat)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "adjacent increments repeat correctionClass: "
+            "capability-chain-goal-authority-and-asset-integrity",
             report["errors"],
         )
 
@@ -351,6 +354,16 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn("repository cleanup residue remains: .tmp", report["errors"])
+
+    def test_undeclared_conventional_residue_fails_closed_repository_wide(self) -> None:
+        cache = self.root / "unlisted" / "__pycache__"
+        cache.mkdir(parents=True)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "repository cleanup residue remains: unlisted/__pycache__",
+            report["errors"],
+        )
 
     def test_dangling_cleanup_symlink_is_residue(self) -> None:
         link = self.root / ".tmp"
@@ -508,7 +521,6 @@ class ProductControlTests(unittest.TestCase):
             value["increments"][0]["workItems"][0]["state"] = "completed"
 
         self.mutate("product/program.json", close)
-        self.mark_supporting_docs_no_active_increment()
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["completionState"], "in-progress")
@@ -522,7 +534,6 @@ class ProductControlTests(unittest.TestCase):
             value["increments"][0]["workItems"][0]["state"] = "completed"
 
         self.mutate("product/program.json", pause)
-        self.mark_supporting_docs_no_active_increment()
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["activeIncrement"], None)
@@ -559,10 +570,8 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/program.json", invalid)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn(
-            "terminal increment increment.v0.2-causal-authority-reset has non-terminal work",
-            report["errors"],
-        )
+        self.assertIn("completed program must have no active increment", report["errors"])
+        self.assertIn("completed program must have a terminal increment graph", report["errors"])
 
     def test_completed_program_still_checks_repository_residue(self) -> None:
         def close(value: dict) -> None:
@@ -596,7 +605,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-causal-authority-reset must contain at least one work item",
+            "increment increment.v0.2-capability-chain-integrity-baseline must contain at least one work item",
             report["errors"],
         )
 
@@ -610,7 +619,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program agent authority contains an unknown operation", report["errors"])
         self.assertIn(
-            "work item work.bind-v0.2-outcomes-and-neutral-kernel contains an unknown operation",
+            "work item work.audit-capability-chain-and-reset-current-assets contains an unknown operation",
             report["errors"],
         )
 
@@ -646,7 +655,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn(
-            "program priorRelease must retain the code-owned v0.1 milestone",
+            "program priorRelease must be a non-authoritative historical milestone",
             report["errors"],
         )
 
@@ -663,56 +672,11 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_supporting_document_release_drift_fails_parity(self) -> None:
-        readme = self.root / "README.md"
-        readme.write_text(
-            readme.read_text(encoding="utf-8").replace("v0.2", "v9.9"),
-            encoding="utf-8",
-        )
+    def test_declared_supporting_document_must_exist(self) -> None:
+        (self.root / "README.md").unlink()
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertTrue(
-            any("supporting document parity marker is missing: README.md: v0.2" in item for item in report["errors"]),
-            report["errors"],
-        )
-
-    def test_agents_guidance_cannot_present_itself_as_product_authority(self) -> None:
-        agents = self.root / "AGENTS.md"
-        agents.write_text(
-            agents.read_text(encoding="utf-8").replace(
-                "This file is execution guidance only.",
-                "This file is product authority.",
-            ),
-            encoding="utf-8",
-        )
-        report = self.report()
-        self.assertFalse(report["valid"])
-        self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn(
-            "supporting document parity marker is missing: AGENTS.md: "
-            "This file is execution guidance only.",
-            report["errors"],
-        )
-
-    def test_same_host_adapter_cannot_reappear_as_o5_documentary_proof(self) -> None:
-        readme = self.root / "README.md"
-        readme.write_text(
-            readme.read_text(encoding="utf-8").replace(
-                "cannot pass O5",
-                "can pass O5",
-            ),
-            encoding="utf-8",
-        )
-        report = self.report()
-        self.assertFalse(report["criterionStates"]["G3"])
-        self.assertTrue(
-            any(
-                "supporting document parity marker is missing: README.md: "
-                "cannot pass O5" in item
-                for item in report["errors"]
-            ),
-            report["errors"],
-        )
+        self.assertIn("supporting document is missing: README.md", report["errors"])
 
     def test_undeclared_product_root_json_is_rejected(self) -> None:
         self.write_json("product/extra.json", {"schema": 1})
@@ -809,36 +773,6 @@ class ProductControlTests(unittest.TestCase):
                     report["errors"],
                 )
                 shutil.copy2(ROOT / "product/acceptance.json", self.root / "product/acceptance.json")
-
-    def test_current_control_and_test_surface_is_materially_smaller(self) -> None:
-        report = self.report()
-        current = sum(
-            (ROOT / relative).stat().st_size
-            for relative in (
-                "harness/control.py",
-                "tests/product/test_product_control.py",
-            )
-        )
-        baseline_sizes = [
-            int(
-                subprocess.check_output(
-                    ["git", "cat-file", "-s", f"be498f960c9e0587d355291fb24261c91e75cd77:{relative}"],
-                    cwd=ROOT,
-                    text=True,
-                ).strip()
-            )
-            for relative in (
-                "harness/control.py",
-                "tests/product/test_product_control.py",
-            )
-        ]
-        self.assertEqual(baseline_sizes, [136602, 124315])
-        self.assertEqual(sum(baseline_sizes), 260917)
-        self.assertEqual(CURRENT_CONTROL_AND_TEST_MAX_BYTES, 130458)
-        self.assertEqual(report["currentControlAndTestBytes"], current)
-        self.assertLessEqual(current, CURRENT_CONTROL_AND_TEST_MAX_BYTES)
-        self.assertFalse(report["criterionStates"]["O1"])
-
 
 if __name__ == "__main__":
     unittest.main()

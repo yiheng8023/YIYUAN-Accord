@@ -32,7 +32,9 @@ python -B -m harness verify --root . --json
 Current `main` is the paused v0.2 program. It reports `0/5` outcomes, `4/4`
 guardrails, no active causal increment, and completion `in-progress`. The
 guardrail-only authority reset was pushed at `a5a0834`; it counts as zero
-product progress. The accepted v0.1 repository-control milestone remains
+product progress. A later six-thread capability-chain and current-asset audit
+established the route-delta evaluation and clean-tree baseline without
+verifying O4 or any other outcome. The accepted v0.1 repository-control milestone remains
 pinned at `be498f9`; it is history, not proof that the terminal product
 proposition is complete. The pause applies to an outcome-bearing increment,
 not to retrospective counterexample analysis, bounded portfolio curation,
@@ -125,8 +127,8 @@ The current machine authority is deliberately small:
 - `tests/product/` — mutation tests through the public CLI seam.
 
 Historical v0.1 evidence, research, and predecessor payloads remain retrievable
-from Git history or `product/evidence`, but do not become current authority by
-remaining available. See the [history boundary](docs/operations/HISTORY.md).
+from Git history, but do not become current authority by remaining
+recoverable. See the [history boundary](docs/operations/HISTORY.md).
 
 ## Community and rights
 

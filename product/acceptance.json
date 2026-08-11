@@ -39,8 +39,8 @@
       "class": "outcome",
       "name": "Agent-neutral software-engineering evaluation and standard",
       "statement": "The product owns an Agent-neutral evaluation system and minimum software-engineering collaboration standard grounded in repeated real behavior, not in one host projection or membership inventory.",
-      "metric": "accepted evaluation specification, standard, calibrated scorecards, and human review",
-      "threshold": "the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios are used as sampling and risk coordinates rather than coverage claims; real tasks measure result quality, user interventions, route errors, recovery, time and call cost, residue, human judgment, and continuity; a named accountable human accepts or rejects the evaluation, minimum standard, and claim boundary before host-specific projections are promoted",
+      "metric": "accepted evaluation specification, route-delta and outcome scorecards, calibrated minimum standard, and human review",
+      "threshold": "the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios are used as sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, user interventions, route errors, recovery, time and call cost, residue, human judgment, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome; a named accountable human accepts or rejects the evaluation, minimum standard, and claim boundary before host-specific projections are promoted",
       "assessment": "planned"
     },
     {
@@ -85,7 +85,7 @@
       "name": "bounded process and resource loss",
       "statement": "Every causal increment pre-registers a bounded process-loss contract and exact cleanup paths before work; actual loss is measured by the real-task outcome receipts rather than inferred from the budget declaration.",
       "metric": "increment process-loss contract, outcome mapping, and live residue check",
-      "threshold": "the same correction class is budgeted to stop before recurrence; at most one explicit guardrail-only reset work item may precede outcome work and two such items cannot be consecutive; each increment declares a finite material-intervention budget and exact cleanup paths; declared paths for active, completed, or stopped increments are absent at verification",
+      "threshold": "the same correction class is budgeted to stop before recurrence and adjacent non-planned increments cannot repeat one correction class; non-outcome work remains explicit and counts as zero product progress; every work acceptance mapping is a subset of its increment mapping; each increment declares a finite material-intervention budget and exact cleanup paths; declared paths and conventional repository-wide temporary residue are absent at verification",
       "assessment": "computed"
     }
   ]

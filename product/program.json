@@ -64,6 +64,7 @@
     {
       "id": "increment.v0.2-causal-authority-reset",
       "state": "completed",
+      "correctionClass": "product-authority-causal-reset",
       "observedProblem": "v0.1 was honestly accepted as a narrow repository-control milestone, but its required strategy documents still describe O3 as open, its acceptance does not measure the terminal burden-transfer proposition, and its current verifier and tests hard-code one-off historical events at a maintenance cost larger than the reusable product core.",
       "hypothesis": "Freezing v0.1 at its accepted revision, binding v0.2 directly to measurable user-burden outcomes, and replacing event-specific current authority with a small historical-event-neutral fail-closed kernel will restore causal alignment and prevent more governance accumulation before real-task experiments.",
       "falsifier": "The new verifier can pass a verified outcome without a code-owned validator, v0.1 evidence remains current authority, current strategy still contradicts machine state, the rewrite grows the control surface, or the work begins capability mutation or experiments before the authority reset closes.",
@@ -105,6 +106,59 @@
             "current authority truth repair",
             "bounded residue check",
             "Git commit and origin/main push"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2-capability-chain-integrity-baseline",
+      "state": "completed",
+      "correctionClass": "capability-chain-goal-authority-and-asset-integrity",
+      "observedProblem": "Across six real Harness collaboration threads, capability guidance repeatedly reopened settled decisions, added workflow deliverables and user round trips, and allowed process artifacts to substitute for the bound result. A current-tree audit then found inactive raw receipts, a duplicate goal-mode prompt, a redundant verifier wrapper, one-time historical proxy checks, marker-only documentation parity, a work-to-increment mapping gap, and ignored residue outside the declared cleanup paths while the verifier still passed.",
+      "hypothesis": "Making capability-added requirements an explicit O4 evaluation surface, retiring duplicate and inactive current-tree assets, deriving historical boundaries from the current contract rather than hard-coded predecessor events, enforcing work-to-increment acceptance containment, and detecting conventional residue repository-wide will establish a smaller truthful baseline without claiming runtime behavior or O1-O5 acceptance.",
+      "falsifier": "The verifier still accepts a work acceptance ID outside its increment, depends on a historical Git object or byte-ratio proxy, reports valid with an undeclared repository __pycache__ or .tmp directory, treats document markers as semantic parity, or the current tree retains the retired prompt, wrapper, or raw historical receipt corpus; any O1-O5 criterion becomes verified from this repair alone.",
+      "stopCondition": "The current tree retains one continuation surface and one public verifier entry point; v0.1 receipts are recoverable from Git but absent from current product/evidence; route-delta evaluation fields are bound in current authority; SECURITY names v0.2; work mappings are contained by increment mappings; conventional repository residue fails closed; no active increment remains; O1-O5 stay planned and false; deterministic verification passes; exact cleanup targets are absent; the change is committed and pushed.",
+      "acceptanceIds": ["O4", "G2", "G3", "G4"],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 0,
+        "maxMaterialUserToolOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "scripts/verify.py",
+          "scripts/__pycache__",
+          "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+          "docs/decisions",
+          "docs/research",
+          "docs/superpowers"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.audit-capability-chain-and-reset-current-assets",
+          "state": "completed",
+          "acceptanceIds": ["O4", "G2", "G3", "G4"],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "capability-chain route-delta evaluation boundary grounded in six-thread counterevidence",
+            "current asset retain-repair-demote-retire disposition",
+            "historical-event-neutral current verifier without predecessor byte proxies",
+            "work-to-increment acceptance containment and repository-wide residue checks",
+            "single continuation and verifier entry points",
+            "clean v0.2 restart baseline with zero verified outcomes"
           ]
         }
       ]

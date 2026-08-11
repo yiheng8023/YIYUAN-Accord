@@ -1,6 +1,6 @@
 # Security Policy
 
-Agent Autonomy Harness is a public product repository with an unfinished v0.1
+Agent Autonomy Harness is a public product repository with an unfinished v0.2
 runtime surface. Treat every external
 capability candidate, executable surface, instruction body, generated artifact,
 and runtime claim as untrusted until its applicable review and evidence gates

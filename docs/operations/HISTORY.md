@@ -17,13 +17,12 @@ or passed its historical verifier. Reuse requires a current acceptance gap, an
 exact source, a causal rationale, a bounded authority and cleanup contract, and
 the current product verifier.
 
-The unmapped predecessor payload corpus was removed from the current Git index.
-Git history is its durable provenance authority. A small bounded set of v0.1
-release receipts remains tracked under `product/evidence`; those files are
-inactive historical evidence, not current product, planning, acceptance,
-runtime, or release authority. The accepted v0.1 machine state and its
-event-specific verifier remain reproducible at
-`be498f960c9e0587d355291fb24261c91e75cd77`.
+The predecessor payload corpus and v0.1 receipt files were removed from the
+current Git index. Git history is their durable provenance authority. This
+keeps raw prompts, machine-local paths, lifecycle incidents, and one-off
+scorecards out of the current public tree without rewriting their history. The
+accepted v0.1 machine state and its event-specific verifier remain reproducible
+at `be498f960c9e0587d355291fb24261c91e75cd77`.
 
 The later user-executed cleanup removed the local ignored `legacy/` quarantine
 plus old bytecode caches; exact receipts preserve encountered PowerShell

@@ -97,6 +97,11 @@ authority emulation before the corresponding real slice identifies the
 smallest adapter it actually needs. User corrections are product feedback and
 trigger re-intake, not backlog comments to process after the old plan.
 
+Capability choice is evaluated by its delta to the already-bound task. New
+goal, input, deliverable, human-round-trip, authority, side-effect, or
+acceptance requirements need source-bound causal necessity. Otherwise the
+route is downgraded or rejected, even if its own workflow is internally sound.
+
 Portfolio curation is a legitimate product input when it has a bounded demand
 taxonomy, candidate and source boundary, inactive acquisition root, review and
 admission criteria, authority and data boundary, verification surface, and a
