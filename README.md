@@ -4,14 +4,18 @@ English | [简体中文](README.zh-CN.md)
 
 Shortest path: [verify the checkout](#start-here) · [understand the loop](#what-the-harness-does) · [choose a deeper path](#progressive-paths)
 
-Agent Autonomy Harness is an agent-neutral product for keeping a real task's
+Agent Autonomy Harness is an agent-neutral product being built to keep a real task's
 goal, capability route, authority boundary, lifecycle, continuity, evidence,
 and cleanup coherent without making the user orchestrate every Agent, Skill,
 MCP server, Plugin, Hook, thread, worktree, or manager.
 
 It is not a large Skills list. External capabilities are replaceable inputs;
-the Harness decides when one is needed, what authority it receives, how its
+the product contract requires the Harness to decide when one is needed, what authority it receives, how its
 effects are observed, and when the route is released.
+
+The current implementation verifies that contract and its causal program.
+Task execution, behavior evaluation, and cross-host adapters remain planned
+v0.2 outcomes rather than current runtime claims.
 
 ## Start here
 
@@ -25,9 +29,10 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-An accepted v0.1 checkout reports `5/5` outcomes, `4/4` guardrails, no active
-increment, and completion `accepted`. This repository-bound acceptance is not a
-production, release-publication, broad-value, or cross-host claim.
+Current `main` is the active v0.2 program. It reports `0/5` outcomes, `4/4`
+guardrails, one active causal increment, and completion `in-progress`. The
+accepted v0.1 repository-control milestone remains pinned at `be498f9`; it is
+history, not proof that the terminal product proposition is complete.
 
 For the full deterministic product suite:
 
@@ -47,25 +52,29 @@ For one bound task, the Harness keeps this loop explicit:
 6. project only where a host or consumer actually requires it;
 7. roll back, clean up, and leave a continuation record.
 
-The current O3 evidence exercises this loop once on a source-bound current-host
-task. It does not establish universal lifecycle support.
+The historical v0.1 O3 evidence exercised this loop once on a source-bound
+current-host task. v0.2 now tests whether the loop actually reduces user
+tool-learning and orchestration burden across repeated natural tasks.
 
 ## Completion standard
 
-The release acceptance authority is the machine-readable
-[acceptance](product/acceptance.json). Product acceptance requires all five
-outcomes, all four guardrails, a completed program, no active increment, and a
-fully terminal increment/work graph. Tests, inventories, fixtures, and research
-volume may support an outcome; they never substitute for one.
+The machine-readable [acceptance](product/acceptance.json) is the current
+release target. Product acceptance requires all five outcomes, all four
+guardrails, a completed program, no active increment, and a terminal work
+graph. Tests, inventories, fixtures, memberships, and research volume may
+support an outcome; they never substitute for one.
 
-Current evidence is intentionally bounded:
+Current v0.2 outcomes are:
 
-- O2 binds one user-provided real task to a non-null capability route.
-- O3 binds one 60-entry non-Cartesian evaluation and one six-phase current-host
-  lifecycle receipt with explicit attestation limits.
-- O4 binds one fresh receiver to one repository state with zero material
-  restatement.
-- O5 covers named Harness cleanup targets, not unrelated host storage.
+- O1 — one natural real task completes the autonomous closed loop with zero
+  user tool-orchestration intervention under a pre-registered protocol;
+- O2 — lower user tool-orchestration burden across repeated real tasks;
+- O3 — broad-portfolio coexistence and evidence-backed capability decisions;
+- O4 — an accepted Agent-neutral software-engineering evaluation and minimum
+  standard;
+- O5 — portable closed-loop delivery through Codex and a distinct second Agent
+  host or runtime through its own thin adapter. A same-host second adapter is
+  conformance evidence only and cannot pass O5.
 
 ## Progressive paths
 
@@ -96,14 +105,14 @@ The current machine authority is deliberately small:
 
 - `product/constitution.json` — purpose, invariants, adaptive surfaces, and
   planning method;
-- `product/program.json` — the finite causal program and terminal work graph;
+- `product/program.json` — the finite causal program and current active work;
 - `product/acceptance.json` — five outcomes and four mandatory guardrails;
 - `harness/` — the public product-control kernel;
 - `tests/product/` — mutation tests through the public CLI seam.
 
-Historical research and predecessor payloads remain retrievable from Git
-history but do not become current authority by remaining available. See the
-[history boundary](docs/operations/HISTORY.md).
+Historical v0.1 evidence, research, and predecessor payloads remain retrievable
+from Git history or `product/evidence`, but do not become current authority by
+remaining available. See the [history boundary](docs/operations/HISTORY.md).
 
 ## Community and rights
 

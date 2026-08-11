@@ -2,44 +2,59 @@
 
 ## Goal
 
-Preserve the accepted Agent Autonomy Harness v0.1 product contract and require
-any future product work to start from a newly bound causal increment rather
-than extending the closed program by inertia.
+Open v0.2 by binding the terminal burden-transfer proposition to measurable
+acceptance and replacing v0.1 event-specific current authority with a small
+historical-event-neutral, fail-closed product-control seam.
 
 ## Current causal increment
 
-None. `product/program.json` is completed and every increment and work item is
-terminal. The accepted report has no `activeIncrement`.
+`increment.v0.2-causal-authority-reset`
+
+Observed problem: v0.1 is an honest but narrow repository-control milestone;
+its acceptance does not prove reduced user tool-learning burden, the required
+strategy text still describes O3 as open, and the current verifier/test surface
+hard-codes historical one-off events at greater cost than the reusable core.
+
+Hypothesis: freeze v0.1 at `be498f9`, make v0.2 measure the terminal
+proposition, and keep only historical-event-neutral structural, authority, evidence, and
+process-loss checks as current code.
+
+Falsifier: self-declared evidence can pass, historical evidence stays current
+authority, strategy still contradicts machine state, the control surface grows,
+or capability experiments/mutations start before this reset closes.
 
 ## Current work item
 
-None. The public-delivery evidence was pushed at
-`fbe9418c755b8716fc1ed18f3814927a08a274a4`; the final state transition closes
-`work.finish-public-open-source-delivery` and
-`increment.public-open-source-delivery-slice` without reopening O3 or replaying
-its lifecycle event.
+`work.bind-v0.2-outcomes-and-neutral-kernel`
 
-## Closed v0.1 boundary
+It maps only to G1-G4 and counts as zero product progress. Its allowed operations are repository read/edit,
+causal planning, local verification, progress accounting, commit, and push.
 
-The progressive bilingual README, standard-library verification path,
-minimum-Python three-platform CI, coherent public guidance, four exact GitHub
-topics, private vulnerability reporting, exact local cleanup, and bounded
-closeout receipt agree. Acceptance remains limited to the repository-bound
-O1-O5 and G1-G4 evidence; it is not a release publication, deployment,
-production, cross-host, or broad-value claim.
+## Process-loss budget
 
-No further implementation work is authorized by this completed program. A new
-change must first bind an observed problem, hypothesis, falsifier, finite stop,
-authority boundary, and acceptance mapping in a new causal increment.
+- stop before the same user-correction class recurs;
+- allow exactly one explicit guardrail-only reset work item and count it as
+  zero product progress;
+- require zero material user tool-orchestration interventions in this reset;
+- stop on authority/irreversible incident or unbounded residue;
+- require `.tmp`, `harness/__pycache__`, and `tests/product/__pycache__` absent.
 
-## Authority boundary
+## Closed boundaries
 
-The completed v0.1 work authorized repository completion, routine commit and
-push, minimal GitHub public-surface preparation, and exact debt cleanup. It did
-not authorize a release tag, package publication, deployment, account/OAuth
-change, capability installation or enablement, third-party candidate
-execution, consumer projection, manager mutation, paid service use, or a new
-trust/data boundary. Those boundaries remain closed after acceptance.
+This increment does not authorize CC Switch or consumer mutation, capability
+installation or enablement, account/OAuth connection, third-party execution,
+Hook activation, paid service use, release tagging, package publication,
+deployment, or a new trust/data boundary.
+
+## Stop condition
+
+The public verifier reports v0.2 `in-progress`, O1-O5 false, and G1-G4 true;
+current explanatory documents agree; the historical-event-neutral control plus
+product tests are materially smaller than the v0.1 baseline; local verification
+passes; declared residue is absent; and the change is committed and pushed.
+
+The next dogfood/A-B increment is not automatically active. It must be bound
+after this stop condition is reached.
 
 ## Required checks
 

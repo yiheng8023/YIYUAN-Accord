@@ -48,21 +48,32 @@ bound demand taxonomy; it is not a bias toward the smallest portfolio. A
 material coverage gap creates an obligation to compare and, when justified,
 add a governed capability.
 
-## v0.1 acceptance
+## Release acceptance
 
-`v0.1` is accepted only when all five outcomes pass:
+`v0.1` is an accepted, repository-bound control milestone at Git revision
+`be498f960c9e0587d355291fb24261c91e75cd77`. It proved one finite program, one
+route, one bounded current-host lifecycle event, one fresh continuation, and
+bounded cleanup. It did not prove this North Star, broad user value, a
+software-engineering standard, cross-host behavior, production, or release
+publication.
 
-- O1 — finite plan-bound delivery;
-- O2 — a real task produces a non-null bounded capability route;
-- O3 — a real task-scoped capability completes preview, activation,
-  observation, rollback, and cleanup through one lifecycle owner;
-- O4 — a fresh continuation preserves the task contract without material user
-  reconstruction;
-- O5 — cleanup is part of bounded delivery.
+Current `v0.2` acceptance directly measures the missing product outcomes:
 
-The four guardrails—human authority, evidence-sized claims, independent current
-authority, and resource stewardship—are mandatory but do not count as product
-progress.
+- O1 — one natural real task completes the autonomous closed loop with zero
+  user tool-orchestration intervention under a pre-registered protocol;
+- O2 — lower user tool-orchestration burden across repeated natural tasks;
+- O3 — broad-portfolio coexistence plus real marginal-value capability
+  decisions, including an evidence-based disposition for the three provisional
+  self-authored control roles;
+- O4 — an accepted Agent-neutral software-engineering evaluation and minimum
+  standard grounded in real behavior;
+- O5 — the common closed loop works through the Codex reference adapter and a
+  distinct second Agent host or runtime through its own thin adapter; a
+  same-host second adapter is conformance evidence only and cannot pass O5.
+
+The four guardrails—human authority, zero-trust claims, lean independent
+authority, and bounded process/resource loss—are mandatory but do not count as
+product progress.
 
 ## Planning philosophy
 

@@ -4,12 +4,15 @@
 
 最短路径：[验证当前 checkout](#从这里开始) · [理解闭环](#harness-做什么) · [选择深入路径](#渐进式路径)
 
-Agent Autonomy Harness 是一个 Agent 中立产品：它在真实任务中保持目标、能力路线、
+Agent Autonomy Harness 是一个正在构建的 Agent 中立产品：它的目标是在真实任务中保持目标、能力路线、
 授权边界、生命周期、连续性、证据和清理的一致性，而不是让用户亲自编排每个 Agent、
 Skill、MCP、Plugin、Hook、线程、工作树和管理器。
 
-它不是“大而全的 Skills 列表”。外围能力是可替换输入；Harness 负责判断何时需要、
+它不是“大而全的 Skills 列表”。外围能力是可替换输入；产品契约要求 Harness 判断何时需要、
 授予什么边界、怎样观察效果，以及何时释放路线。
+
+当前实现验证这份契约及其因果工序；任务执行、行为评价和跨宿主适配仍是 v0.2 的
+planned 结果，不是当前运行时能力声明。
 
 ## 从这里开始
 
@@ -22,9 +25,9 @@ cd agent-autonomy-harness
 python -B -m harness verify --root . --json
 ```
 
-accepted 的 v0.1 checkout 会报告 `5/5` 项结果、`4/4` 项护栏、无 active
-increment，且 completion 为 `accepted`。这一仓库绑定的验收不证明生产、Release
-公开分发、广泛价值或跨宿主结论。
+当前 `main` 是 active 的 v0.2 工序，会报告 `0/5` 项结果、`4/4` 项护栏、一个
+active causal increment，completion 为 `in-progress`。accepted 的 v0.1 仓库控制
+里程碑固定在 `be498f9`；它是历史，不证明终极产品命题已经完成。
 
 完整确定性产品测试：
 
@@ -44,23 +47,23 @@ python -B -m unittest discover -s tests/product -v
 6. 仅在宿主或消费者确实需要时投影；
 7. 回滚、清理，并留下可接续记录。
 
-当前 O3 证据只在一个来源绑定的当前宿主任务上运行过一次该闭环，不代表通用生命周期
-支持。
+历史 v0.1 的 O3 证据只在一个来源绑定的当前宿主任务上运行过一次该闭环。v0.2 现在
+直接检验这套闭环能否在重复自然任务中降低用户的工具学习和编排负担。
 
 ## 验收标准
 
 机器可读的版本验收权威是 [product/acceptance.json](product/acceptance.json)。产品
 accepted 必须同时满足五项结果、四项护栏、program 已完成、没有 active increment，
-并且 increment/work 图全部进入终态。测试数、库存、fixture 和研究量可以支持结果，
+并且 work 图全部进入终态。测试数、库存、fixture、membership 和研究量可以支持结果，
 但不能替代结果。
 
-当前证据边界：
+当前 v0.2 结果是：
 
-- O2 把一个用户提供的真实任务绑定到非空能力路线；
-- O3 绑定一份 60 项非笛卡尔评价和一次六相位当前宿主生命周期收据，并保留明确的
-  attestation 限制；
-- O4 把一个 fresh receiver 绑定到一个仓库状态，物质性复述为零；
-- O5 只覆盖命名的 Harness 清理目标，不覆盖无关宿主存储。
+- O1：在预注册评价协议下，一个自然真实任务以零用户工具编排干预完成自主闭环；
+- O2：在重复真实任务中降低用户工具编排干预；
+- O3：广泛能力组合可并存，并形成基于真实边际价值的能力决策；
+- O4：形成已接受的 Agent 中立软工评价体系和最低标准；
+- O5：通过 Codex 与不同的第二 Agent 宿主或运行时（使用其自身薄适配器）完成可移植闭环；同宿主第二适配器只能作为一致性证据，不能通过 O5。
 
 ## 渐进式路径
 
@@ -88,13 +91,13 @@ accepted 必须同时满足五项结果、四项护栏、program 已完成、没
 当前机器权威保持精简：
 
 - `product/constitution.json`：目的、不变量、可适应表面和规划方法；
-- `product/program.json`：有限因果工序及全部终态 work 图；
+- `product/program.json`：有限因果工序和当前 active work；
 - `product/acceptance.json`：五项产品结果和四项强制护栏；
 - `harness/`：公开产品控制核心；
 - `tests/product/`：通过公开 CLI seam 的 mutation 测试。
 
-历史研究和前身 payload 可从 Git 历史取回，但不会因为可取回而成为当前权威。详见
-[历史边界](docs/operations/HISTORY.md)。
+历史 v0.1 证据、研究和前身 payload 可从 Git 历史或 `product/evidence` 取回，但不会
+因为可取回而成为当前权威。详见[历史边界](docs/operations/HISTORY.md)。
 
 ## 社区与权利
 

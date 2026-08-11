@@ -2,22 +2,24 @@
   "schema": 1,
   "id": "harness-product-constitution-v1",
   "productId": "agent-autonomy-harness",
-  "purpose": "Reduce the user's Agent-learning and orchestration burden by giving an Agent a bounded, observable loop for intent, capability choice, lifecycle control, continuity, verification, and cleanup while preserving human authority over goals, judgment, trust, cost, and irreversible effects.",
-  "successDefinition": "A user can state a real goal and corrections while the Harness keeps the active outcome, capability route, authority boundary, lifecycle state, evidence, handoff, and cleanup coherent with fewer user orchestration interventions than an ad-hoc path.",
+  "purpose": "Transfer Agent-tool learning, capability selection, bounded setup, recovery, verification, and cleanup burden from the user to the Agent while preserving human authority over goals, domain judgment, trust, cost, and irreversible effects.",
+  "successDefinition": "Across repeated real tasks, a user can provide ideas, domain facts, bounded authorization, corrections, and accountable final judgment without learning or orchestrating the underlying Agent capability ecosystem, and receives accepted outcomes with fewer material tool-orchestration interventions than an ad-hoc path.",
   "collaborationModel": {
     "userContributions": [
-      "goals-and-direction",
-      "domain-context",
+      "ideas-and-goals",
+      "domain-facts-and-judgment",
+      "bounded-authorization",
       "corrections",
       "accountable-final-judgment"
     ],
     "agentObligations": [
-      "omission-detection",
-      "assumption-disclosure",
-      "counterexample-search",
-      "evidence-reconciliation",
-      "coverage-supplementation",
-      "bounded-autonomous-execution"
+      "intent-and-omission-detection",
+      "capability-learning-and-selection",
+      "bounded-setup-and-execution",
+      "failure-recovery",
+      "verification-and-claim-control",
+      "cleanup-and-continuity",
+      "process-loss-detection-and-replanning"
     ]
   },
   "fixedInvariants": [
@@ -25,23 +27,23 @@
     "one release has one explicit finite acceptance expression",
     "guardrails constrain delivery but never count as product progress",
     "every active work item maps to at least one release criterion",
-    "only one causal increment may be active",
-    "external capability expansion follows an evidenced gap and bounded authority",
-    "portfolio sufficiency is judged by demand coverage rather than by minimizing capability count",
-    "bounded inactive portfolio curation may investigate coverage without granting activation authority",
-    "future outcome validators and authority adapters are built only with the real slice that demands them",
-    "historical evidence cannot become current authority by remaining on disk",
+    "only one causal increment and at most one work item may be active",
+    "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
+    "task-time capability exposure is minimal even when the managed portfolio is broad",
+    "native and already-authorized capability is evaluated before expansion, but subtraction is not a veto on evidenced addition",
+    "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
+    "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
     "unsupported host behavior is reported rather than simulated"
   ],
   "adaptiveSurfaces": [
-    "module shape",
+    "module and Skill shape",
     "host-adapter sequence",
     "native, official, reviewed external, composed, or authored capability choice",
     "experiment design",
     "delivery order inside the active causal increment"
   ],
   "planningModel": {
-    "method": "fixed-product-acceptance-with-adaptive-causal-increments",
+    "method": "fixed-release-acceptance-with-adaptive-causal-increments",
     "maxActiveIncrements": 1,
     "maxActiveWorkItems": 1,
     "incrementRequires": [
@@ -49,13 +51,17 @@
       "causal hypothesis",
       "falsifier",
       "mapped acceptance criteria",
-      "finite stop condition"
+      "finite stop condition",
+      "process-loss budget",
+      "cleanup boundary"
     ],
     "replanWhen": [
       "the hypothesis is falsified",
       "new evidence changes the critical path",
-      "the user must reassert already-bound direction or the work produces only governance artifacts",
-      "authority or trust boundaries change",
+      "the user must reassert already-bound direction",
+      "the same process-loss class recurs",
+      "a phase produces no direct outcome movement",
+      "authority, trust, cost, or data boundaries change",
       "the increment reaches its stop condition"
     ]
   },
@@ -63,35 +69,41 @@
     "product/constitution.json",
     "product/program.json",
     "product/acceptance.json",
-    "product/evidence/project-reset-real-task-route-2026-08-11.json",
-    "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
-    "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json",
+    "harness/__init__.py",
+    "harness/__main__.py",
+    "harness/control.py",
+    "scripts/verify.py"
+  ],
+  "activeAuthorityGlobs": [
+    "harness/*.py"
+  ],
+  "supportingDocuments": [
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
-    "NOTICE",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
     "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
     "docs/operations/CONTINUATION.md",
-    "docs/operations/HISTORY.md",
-    ".github/workflows/validate.yml",
-    "scripts/verify.py",
-    "harness/__init__.py",
-    "harness/__main__.py",
-    "harness/control.py"
+    "docs/operations/HISTORY.md"
   ],
-  "activeAuthorityGlobs": [
-    "product/**/*.json",
-    "harness/**/*.py"
+  "historicalMilestones": [
+    {
+      "release": "v0.1",
+      "state": "accepted-repository-control-milestone",
+      "revision": "be498f960c9e0587d355291fb24261c91e75cd77",
+      "currentAuthority": false,
+      "claimLimit": "repository-bound control evidence only; not terminal proposition, broad user value, software-engineering standard, cross-host, production, or publication proof"
+    }
   ],
   "bootstrapGuards": [
-    "code-owned predecessor identity rejection",
-    "code-owned predecessor plan and acceptance path rejection"
+    "code-owned authority identity and path validation",
+    "active authority cannot include evidence archives, temporary roots, legacy roots, or symlinks",
+    "verified outcomes require a code-owned evidence validator"
   ],
-  "legacyEvidenceBoundary": {
-    "role": "inactive historical evidence reachable through repository history or explicitly legacy files",
+  "historicalEvidenceBoundary": {
+    "role": "inactive evidence reachable through Git history or product/evidence",
     "productAuthority": false,
     "planningAuthority": false,
     "acceptanceAuthority": false,

@@ -17,12 +17,17 @@ or passed its historical verifier. Reuse requires a current acceptance gap, an
 exact source, a causal rationale, a bounded authority and cleanup contract, and
 the current product verifier.
 
-Historical payloads are removed from the current Git index. Git history is the
-sole durable provenance authority. The later user-executed cleanup removed the
-local ignored `legacy/` quarantine plus the old `scripts/` and `tests/`
-bytecode caches; the Agent verified all three exact paths absent. The cleanup
-receipt preserves the Windows PowerShell compatibility error rather than
-claiming an error-free script run.
+The unmapped predecessor payload corpus was removed from the current Git index.
+Git history is its durable provenance authority. A small bounded set of v0.1
+release receipts remains tracked under `product/evidence`; those files are
+inactive historical evidence, not current product, planning, acceptance,
+runtime, or release authority. The accepted v0.1 machine state and its
+event-specific verifier remain reproducible at
+`be498f960c9e0587d355291fb24261c91e75cd77`.
+
+The later user-executed cleanup removed the local ignored `legacy/` quarantine
+plus old bytecode caches; exact receipts preserve encountered PowerShell
+compatibility errors rather than claiming an error-free script run.
 
 The reset index retains only the bounded current product surface. It removes
 the unmapped predecessor payloads from the current index and adds one small

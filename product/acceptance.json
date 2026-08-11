@@ -1,108 +1,92 @@
 {
   "schema": 1,
-  "id": "harness-product-acceptance-v0.1",
+  "id": "harness-product-acceptance-v0.2",
   "productId": "agent-autonomy-harness",
-  "release": "v0.1",
+  "release": "v0.2",
   "program": "product/program.json",
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "progressRule": "Only outcome criteria O1-O5 count as product progress. Guardrails are mandatory constraints and never increase that count.",
+  "progressRule": "Only accepted real-task outcomes O1-O5 count as progress. Documents, tests, inventories, fixtures, memberships, and research volume are supporting evidence only.",
   "criteria": [
     {
       "id": "O1",
       "class": "outcome",
-      "name": "finite plan-bound delivery",
-      "statement": "The release has one finite acceptance expression; an active program has exactly one active causal increment, a completed program has none and a fully terminal increment/work graph, and every work item maps to a criterion.",
-      "metric": "structural product-control validation",
-      "threshold": "zero mapping errors; exactly one active increment and at most one active work item while the program is active; zero active increments, a null activeIncrementId, and only completed, cancelled, or stopped terminal graph states when the program is completed",
-      "assessment": "computed"
+      "name": "one natural-task autonomous closed loop",
+      "statement": "On one pre-registered natural real task, the user supplies the goal, domain facts, bounded authority, and accountable final judgment while the Agent selects and learns the route, executes, recovers, verifies, and cleans up without user tool orchestration.",
+      "metric": "accepted task receipt under the provisional evaluation protocol",
+      "threshold": "one non-diagnostic real task has zero material user tool-selection, setup, invocation, recovery, verification-command, cleanup, or push interventions; zero repeated already-bound fact or authority requests; a named accountable human accepts or rejects the result and claim boundary; task-specific quality, safety, evidence, and residue floors pass",
+      "assessment": "planned"
     },
     {
       "id": "O2",
       "class": "outcome",
-      "name": "real task produces a route",
-      "statement": "A user-provided real task produces a non-null capability route with explicit authority and claim boundaries.",
-      "metric": "source-bound real-task route records",
-      "threshold": "at least one current record with a non-null selectedRoute",
-      "assessment": "verified",
-      "evidence": ["product/evidence/project-reset-real-task-route-2026-08-11.json"]
+      "name": "real-task tool-learning burden transfer",
+      "statement": "Across repeated natural real tasks, the user supplies goals, domain facts, bounded authority, corrections, and final judgment while the Agent selects, learns, executes, recovers, verifies, and cleans up the capability route.",
+      "metric": "material user tool-orchestration interventions per accepted outcome compared with a source-bound ad-hoc baseline",
+      "threshold": "before execution, each task declares its scenario class, complexity band, authority-risk band, event taxonomy, matched or historical baseline rule, task-quality floor, evidence floor, cleanup floor, and named human acceptor; at least three accepted tasks from three materially different scenario classes each have zero material user tool-orchestration interventions and zero repeated already-bound fact or authority requests; total material interventions per accepted outcome are strictly lower than the source-bound ad-hoc baseline and no task regresses below a declared floor",
+      "assessment": "planned"
     },
     {
       "id": "O3",
       "class": "outcome",
-      "name": "evaluated task-scoped capability lifecycle",
-      "statement": "A source-bound capability evaluation audits the exact historical sparse reconciliation across the lifecycle, quality, and Harness-scenario axes; retains, corrects, or subtracts its mappings; distinguishes covered, overlap, conflict, unevaluated, real-task, human-judgment, and separately-authorized scope; compares decision-relevant native, official, reviewed external, composition, and self-authored capability routes while keeping accountable human control distinct; and then one selected real-task route completes preview, bounded activation, observation, applicable projection, rollback, and cleanup through one lifecycle owner and the selected host authority surface.",
-      "metric": "capability evaluation records plus real lifecycle transactions with complete receipts",
-      "threshold": "the exact historical 15-partial/6-cluster/14-lifecycle/12-dimension/13-scenario sparse baseline is bound by commit and path, every retained corrected or subtracted mapping has a rationale, the five capability route classes plus accountable human control have evidence-backed or explicit unevaluated/not-applicable dispositions without a Cartesian requirement, selected-route rationale and observed user tool-learning interventions are recorded, and one separately authorized real transaction for that selected task and route reaches preview, activation, observation, rollback, and cleanup with no residual projection or dual authority",
-      "assessment": "verified",
-      "evidence": [
-        "product/evidence/o3-sparse-scorecard-2026-08-11.json",
-        "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
-      ]
+      "name": "capability coexistence and marginal-value arbitration",
+      "statement": "A broad user-controlled portfolio can coexist with minimal task exposure, and relevant native, official, maintained external, composition, and self-authored routes are compared by real marginal value rather than capability count.",
+      "metric": "real-task route decisions, exposure deltas, lifecycle receipts, and retain-replace-retire outcomes",
+      "threshold": "natural tasks produce at least one evidence-backed route decision, where retaining the existing route with no addition is valid; only a reproducible residual gap may trigger reversible external live evaluation; candidates admitted by the bound cohort receive a retention or expiry rule without inventorying the user's whole ecosystem; the three current self-authored control roles each receive a retain, merge, replace, or retire decision; the current advisory recall Hook stays off unless recall A/B proves net benefit, while any other Hook role requires its own use case, authority, side-effect, and acceptance contract",
+      "assessment": "planned"
     },
     {
       "id": "O4",
       "class": "outcome",
-      "name": "fresh continuation preserves the task contract",
-      "statement": "A fresh task resumes from repository truth without requiring the user to restate a material goal, authority boundary, causal rationale, or open work item.",
-      "metric": "receiver delta on a real continuation",
-      "threshold": "zero material user-restatement items and an explicit receiver claim boundary",
-      "assessment": "verified",
-      "evidence": [
-        "product/evidence/context-continuity-fresh-receiver-2026-08-11.json"
-      ]
+      "name": "Agent-neutral software-engineering evaluation and standard",
+      "statement": "The product owns an Agent-neutral evaluation system and minimum software-engineering collaboration standard grounded in repeated real behavior, not in one host projection or membership inventory.",
+      "metric": "accepted evaluation specification, standard, calibrated scorecards, and human review",
+      "threshold": "the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios are used as sampling and risk coordinates rather than coverage claims; real tasks measure result quality, user interventions, route errors, recovery, time and call cost, residue, human judgment, and continuity; a named accountable human accepts or rejects the evaluation, minimum standard, and claim boundary before host-specific projections are promoted",
+      "assessment": "planned"
     },
     {
       "id": "O5",
       "class": "outcome",
-      "name": "cleanup is part of delivery",
-      "statement": "The bounded task closes without matching Harness temporary residues and reports any unrelated or policy-blocked remainder honestly.",
-      "metric": "targeted residue count after cleanup",
-      "threshold": "zero matching residues in the declared roots",
-      "assessment": "verified",
-      "evidence": [
-        "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
-        "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json"
-      ]
+      "name": "portable closed-loop delivery",
+      "statement": "The same Agent-neutral intent, authority, route, lifecycle, evidence, recovery, and cleanup semantics deliver accepted outcomes through thin host adapters.",
+      "metric": "cross-host real-task receipts and adapter deltas",
+      "threshold": "at least one accepted real task on the Codex reference host and one accepted real task on a distinct second Agent host or runtime, with common core semantics, explicit unsupported states, bounded authority, and zero task residue; a second adapter on the same host is conformance evidence only and cannot pass O5; Codex-specific configuration is never treated as cross-Agent authority",
+      "assessment": "planned"
     },
     {
       "id": "G1",
       "class": "guardrail",
       "name": "human authority preserved",
       "statement": "The product never infers new trust, account, cost, publication, release, destructive, or irreversible authority.",
-      "metric": "declared authority boundary",
-      "threshold": "all active work remains inside the program authority boundary",
+      "metric": "declared authority and operation boundary",
+      "threshold": "all active work operations are inside the program authority boundary and none overlap the human-only set",
       "assessment": "computed"
     },
     {
       "id": "G2",
       "class": "guardrail",
-      "name": "claim scope matches evidence",
-      "statement": "Inventory, exposure, fixtures, local tests, and zero-model checks are not promoted into behavior, value, portability, production, or release claims.",
-      "metric": "evidence claim-limit completeness",
-      "threshold": "every verified evidence record declares non-empty claimLimits",
+      "name": "zero-trust claims and evidence",
+      "statement": "Current state, capability effectiveness, outcome, and acceptance claims require source-bound evidence and a code-owned validator; inventory, exposure, tests, fixtures, and self-declaration cannot promote themselves.",
+      "metric": "evidence identity, validator, authority, result, and claim-limit validation",
+      "threshold": "every verified criterion passes a current code-owned validator and declares non-empty claim limits",
       "assessment": "computed"
     },
     {
       "id": "G3",
       "class": "guardrail",
-      "name": "independent current authority",
-      "statement": "No active product authority depends on a predecessor identity, predecessor plan, or predecessor acceptance map.",
-      "metric": "active-authority identity and path scan",
-      "threshold": "zero forbidden matches",
+      "name": "independent lean current authority",
+      "statement": "Only the current machine contract and historical-event-neutral kernel hold product authority; history, memory, consumer configuration, routing projections, temporary payloads, and predecessor identities remain non-authoritative.",
+      "metric": "code-owned current-authority file, locator, identity, and symlink scan",
+      "threshold": "all bootstrap authority files are present, active locators stay inside the repository and outside excluded roots, no active authority symlink exists, and zero forbidden identity or authority-path matches occur",
       "assessment": "computed"
     },
     {
       "id": "G4",
       "class": "guardrail",
-      "name": "bounded resource stewardship",
-      "statement": "Temporary artifacts are scoped, attributable, checked, and cleaned without broad deletion.",
-      "metric": "targeted cleanup evidence",
-      "threshold": "declared absolute roots, a start-anchored finite set of relative literal target prefixes, zero remaining matches, and explicit claim limits",
-      "assessment": "verified",
-      "evidence": [
-        "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
-        "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json"
-      ]
+      "name": "bounded process and resource loss",
+      "statement": "Every causal increment pre-registers a bounded process-loss contract and exact cleanup paths before work; actual loss is measured by the real-task outcome receipts rather than inferred from the budget declaration.",
+      "metric": "increment process-loss contract, outcome mapping, and live residue check",
+      "threshold": "the same correction class is budgeted to stop before recurrence; at most one explicit guardrail-only reset work item may precede outcome work and two such items cannot be consecutive; each increment declares a finite material-intervention budget and exact cleanup paths; declared paths for active, completed, or stopped increments are absent at verification",
+      "assessment": "computed"
     }
   ]
 }

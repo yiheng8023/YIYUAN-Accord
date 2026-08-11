@@ -1,6 +1,6 @@
 # Research And Proof Plan
 
-Research is a support lane, not the mainline scheduler.
+Research is a support lane. It does not schedule the product.
 
 ## Entry rule
 
@@ -14,132 +14,91 @@ increment names:
 5. a falsifier and finite stop rule;
 6. the authority, data, cost, cleanup, and claim boundary.
 
-Available tools, ecosystem novelty, inventory drift, an interesting paper, a
-green fixture, or a previously open question is not sufficient entry evidence.
+Available tools, ecosystem novelty, inventory drift, a green fixture, or an
+interesting paper is not sufficient entry evidence.
 
-## Current v0.1 proof lanes
+## Current v0.2 sequence
 
-Only O3 remains unverified.
+The active increment is only the causal-authority reset. It binds the terminal
+proposition to v0.2 acceptance, freezes v0.1 as history, replaces release-event
+hard-coding with a small historical-event-neutral fail-closed kernel, repairs current
+truth, and stops. It does not run A/B tasks, mutate a capability manager,
+install or enable a capability, activate a Hook, or change a consumer.
 
-### O4 — continuity product slice
+After that increment is committed and pushed, the next causal increment may
+bind exactly one natural vertical dogfood task. The current planned order is:
 
-Completed on one naturally occurring fresh-receiver event bound to source
-revision `64a0f26fd32ad0b378e3dd836ee6f894a22234ec`. The receiver recovered the
-material task contract with zero user-restatement items and reported one
-non-material stop-condition wording delta. The evidence is bounded to that
-receiver and repository state; it is not a cross-host or future-continuity
-claim.
+1. **Freeze a provisional evaluation protocol.** Before the first event, define
+   material intervention classes, task scenario/complexity/authority-risk
+   bands, baseline matching, per-task quality/evidence/cleanup floors, the
+   outcome denominator, and named accountable human acceptance. This is a
+   prerequisite to O1, not a product outcome by itself.
+2. **Reference-host ablation.** Compare a minimal native/official path, a path
+   with suitable maintained software-engineering Skills, the three provisional
+   self-authored roles, Superpowers as a separate variable, and the current
+   combined path. Do not run a full Cartesian experiment. Start with one
+   decision-bearing task and stop on a falsifier.
+3. **Capability coexistence and controlled addition.** Keep managed portfolio
+   breadth distinct from task exposure. Evaluate an already-disabled or
+   discoverable candidate only for a bound demand, use reversible task-scoped
+   activation where authorized, and end in a retain, replace, or retire
+   decision. Subtraction controls cost; it does not veto evidenced addition.
+4. **Evaluation and minimum standard.** Calibrate and complete the Agent-neutral
+   software-engineering evaluation and collaboration standard from repeated
+   real behavior. Measure outcome quality, user interventions, route errors,
+   recovery, time and call cost, residue, human judgment, and continuity.
+5. **Cross-host proof.** Keep Codex as the reference host, then exercise the
+   same portable semantics on a distinct second Agent host or runtime through
+   its own thin adapter. A same-host second adapter is conformance evidence
+   only and cannot pass O5.
 
-### O3 — capability lifecycle product slice
+Each item becomes active only through a new observed problem, hypothesis,
+falsifier, stop condition, authority boundary, and acceptance mapping. The
+sequence is direction, not preauthorization.
 
-This is the active proof lane. The already-bound portfolio-coverage complaint
-served as its first falsifiable sub-lane: subtraction had been driven farther
-than demonstrated demand coverage, while the broader ecosystem had not been
-systematically converted into usable, governed options. The user was not asked
-to invent another task.
+## Baseline and evaluation boundary
 
-That sub-lane bound a demand taxonomy, candidate and source boundary,
-account/data boundary, exact inactive acquisition root, review and admission
-criteria, verification surface, and finite stop rule. Six exact-source
-candidates were reviewed, the first two added zero unique demand coverage, the
-stop rule fired, and the pool was cleaned. Because this matched the increment's
-falsifier, the acquisition increment stopped instead of auto-activating its
-later work.
+The project's repeated drift is valid dogfooding counterevidence. User
+corrections that reassert bound direction, select a tool, request recovery,
+request cleanup or push, or correct false completion count as process loss.
+Necessary domain judgment and new trust decisions remain accountable human
+control and are not mislabeled as capability failure.
 
-Installation, enablement, account connection, third-party execution, consumer
-projection, and persistent activation remain separate transitions. The current
-successor evaluates an already-installed official capability without live
-mutation. If a later route needs mutation, it first requires separate authority
-and then must capture preview, one lifecycle owner, bounded activation,
-observed projections, rollback, and zero residual state.
+The historical 15/6/14/12/13 mapping and v0.1 O3 event are inputs only. They do
+not prove full lifecycle coverage, an evaluation standard, user value,
+portability, production, or release. Use the axes to sample risk and compare
+decision-relevant routes; never manufacture a complete Cartesian matrix.
 
-The successor sub-lane evaluates the current native-plus-official route through
-one fresh attributable host event and a decision-bearing sparse scorecard.
-Stop after one accepted transaction or another falsifying failure.
-Installation or exposure alone cannot pass O3, and the operational manager
-does not become the portable product core.
+For the burden-transfer result, compare prospective real-task receipts with a
+source-bound historical or matched ad-hoc baseline. No baseline means no claim
+of reduction. At least three materially different accepted tasks are required
+before O2 can pass.
 
-## O3 internal sequence
+## Capability boundary
 
-The completed acquisition sub-lane used two finite work packages:
+Prefer healthy native/runtime capability, then suitable official capability,
+then maintained reviewed external implementation, then composition. Author
+only for a repeatable residual gap. This ordering is a comparison default, not
+an installed-only rule and not a reason to avoid real additions.
 
-1. bind the demand taxonomy, source cohort, inactive exact-revision pool,
-   admission/rejection criteria, cleanup, and stop rule;
-2. acquire only the finite reviewed cohort into a temporary `.tmp/` pool;
-   payloads leave evidence receipts, not vendored bodies.
+Portfolio curation may use a finite inactive review pool under a complete
+curation contract. Task-time discovery additionally binds the concrete task
+gap. Installation, enablement, account connection, paid service use, live
+execution, consumer projection, persistent activation, and Hook enablement are
+separate state transitions.
 
-The current successor sub-lane uses four work packages, activated one at a
-time:
+The three current self-authored control Skills are provisional. Their
+functional roles may survive while their packaging is simplified, merged,
+replaced, or retired. Hook stays off unless repeated natural-task evidence
+isolates a recall gap and a reversible A/B proves net benefit.
 
-1. bind the exact installed official route, host-event, data, authority,
-   verification, rollback, cleanup, and scorecard contract;
-2. execute one fresh no-inheritance official KPI capability event and retain
-   the host-returned payload plus before/after repository facts;
-3. build the software-lifecycle, evaluation-dimension, and task-scenario
-   scorecard across at least 14 lifecycle slices, 12 evaluation dimensions,
-   and 13 Harness task scenarios; audit and reuse, correct, or subtract the
-   inherited sparse reconciliation of 15 partial items and six evidence
-   clusters, including how many tool-specific choices, setup steps,
-   corrections, and recovery actions still fall back to the user; then close
-   the observed lifecycle with zero residual state;
-4. keep O3 fail-closed until the verifier rejects self-declared substitutes,
-   deterministic verification passes, and the accepted slice is committed and
-   pushed.
+## Stop and cleanup rules
 
-The successor packages transfer tool-learning cost toward the AI: the AI should
-learn the relevant tool surface, route and compose it, handle bounded setup and
-recovery, and explain only decisions that genuinely require human judgment.
-Success is reduced material user intervention without losing intent fidelity,
-evidence quality, control, or reversibility—not merely a successful tool call.
-
-## Evaluation and standards boundary
-
-The evaluation system is established before candidate promotion so routes can
-be compared consistently. It should cover the software lifecycle, engineering
-quality dimensions, Harness task scenarios, authority, recovery, maintenance,
-and user-orchestration burden. Native, official, reviewed external,
-composition, and authored capability routes use the same evidence-sized
-scorecard. Accountable human control remains a sixth, non-capability route and
-must not be mislabeled as a capability gap.
-
-The exact historical sparse baseline is
-`c53866726834d79a68c61a5b87b4f7ce90698a2c:registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.
-It already records the 15/6/12/14/13 inventories and six route classes. It is
-an input for audit and subtraction, not current product authority or evidence
-that O3 behavior, value, portability, or live lifecycle has passed.
-
-Each inherited item, evidence cluster, lifecycle slice, dimension, and scenario
-receives one explicit disposition: covered, overlap, conflict, or unevaluated.
-Records carry bounded evidence or an unevaluated reason and distinguish real
-task evidence, human judgment, and separate authorization. The five capability
-classes plus human control are considered consistently, but this is not a
-mandate to manufacture a full Cartesian matrix: non-applicable and unevaluated
-routes remain honest results, and only decision-relevant contenders require
-comparison. The selected route is justified by observed coverage, limitations,
-lifecycle cost, and user tool-learning interventions.
-
-These are acceptance-design requirements, not a claim that the current
-verifier already authenticates host events. O3 intentionally remains
-fail-closed. Its implementation slice must build the smallest host-owned
-authorization and lifecycle evidence adapter demanded by the selected real
-task, prove preview through cleanup on that host, and then add a regression
-validator. A planned gate, repository-authored receipt, hash, or test fixture
-cannot authorize or prove the live transaction by itself.
-
-Normative standards and repository-authored capability chains are consolidated
-after comparative use exposes residual gaps. The current three self-authored
-Skills are temporary control-chain components, not a promised final count or
-shape. Retain, merge, replace, or retire them according to evidence; author new
-components only for repeatable residual gaps that stronger existing routes do
-not cover.
-
-## Backlog rule
-
-All earlier ecosystem surveys, static reviews, candidate pools, zero-model
-protocols, acceptance rehearsals, evaluation matrices, and host probes are an
-inactive evidence corpus. Reuse an exact item only when an active criterion
-requires it. Do not periodically refresh or extend the corpus without a new
-decision-relevant trigger.
+Stop the active slice when its hypothesis is falsified, the same user
+correction class recurs, one work item produces no direct outcome movement,
+the authority boundary changes, or residue cannot be bounded. Preserve failed
+events as counterevidence; do not rerun until green. Delete only exact,
+attributable temporary targets and verify their absence.
 
 ## Claim ladder
 
