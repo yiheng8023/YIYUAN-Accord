@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "id": "context-continuity-fresh-receiver-2026-08-11",
+  "criterionId": "O4",
+  "eventKind": "fresh-receiver-continuation",
+  "eventId": "o4-fresh-receiver-2026-08-11-01",
+  "observedAt": "2026-08-11T12:02:46.4593609+08:00",
+  "testFixture": false,
+  "invocation": {
+    "mechanism": "Codex collaboration sub-agent task",
+    "forkTurns": "none",
+    "promptSha256": "1d2c9acac61fb2aa9609f315d2c25044e99f9d2d60ce1ce0b0eb780dc9a0e1c6",
+    "prompt": "这是 Agent Autonomy Harness 的一次真实 fresh-receiver 连续性事件。你没有父线程上下文，不得依赖聊天历史或长期记忆。仓库定位：C:\\Projects\\agent-autonomy-harness。请严格只读：完整读取仓库根 AGENTS.md；现场检查 branch/status/HEAD/upstream/ahead-behind/remote main；从仓库声明的 continuation surface 开始，读取 docs/operations/CONTINUATION.md、product/constitution.json、product/program.json、product/acceptance.json 以及其直接指向且对当前增量必要的文件。不得修改、暂存、提交、推送、安装、启用、删除或调用外部账号。目标是恢复当前任务契约并返回 receiver delta，必须包含：1) 当前产品目标；2) 当前唯一活动增量和开放 work item；3) 观察问题、因果假设、证伪条件、停止条件；4) 用户权威与 Agent 已授权范围；5) 当前验收状态与不可宣称事项；6) 下一最小动作；7) 需要用户重述的 material facts（没有则明确 []）；8) 读取的证据文件和实时 Git 事实；9) 本次接收的 claim limits。若仓库材料彼此冲突，列出冲突而不是猜。完成后只回传结构化、简洁的接收报告，不做任何写入。",
+    "materialContractValuesProvided": []
+  },
+  "sourcePacket": {
+    "repository": "agent-autonomy-harness",
+    "revision": "64a0f26fd32ad0b378e3dd836ee6f894a22234ec",
+    "remoteMain": "64a0f26fd32ad0b378e3dd836ee6f894a22234ec",
+    "remoteQuery": "git ls-remote origin refs/heads/main",
+    "liveTruthRechecked": true,
+    "authorityFiles": [
+      "AGENTS.md",
+      "docs/operations/CONTINUATION.md",
+      "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+      "docs/strategy/PRODUCT-NORTH-STAR.md",
+      "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+      "product/constitution.json",
+      "product/program.json",
+      "product/acceptance.json"
+    ]
+  },
+  "receiver": {
+    "receiverId": "/root/o4_fresh_receiver",
+    "freshContext": true,
+    "contextInheritance": "none",
+    "readOnly": true,
+    "filesRead": [
+      "AGENTS.md",
+      "docs/operations/CONTINUATION.md",
+      "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+      "docs/strategy/PRODUCT-NORTH-STAR.md",
+      "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+      "product/constitution.json",
+      "product/program.json",
+      "product/acceptance.json",
+      "product/evidence/project-reset-real-task-route-2026-08-11.json",
+      "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
+      "product/evidence/project-reset-repository-local-cleanup-2026-08-11.json",
+      "harness/control.py",
+      "harness/__main__.py",
+      "scripts/verify.py"
+    ],
+    "liveGitFacts": {
+      "branch": "main",
+      "head": "64a0f26fd32ad0b378e3dd836ee6f894a22234ec",
+      "upstream": "origin/main",
+      "originMain": "64a0f26fd32ad0b378e3dd836ee6f894a22234ec",
+      "ahead": 0,
+      "behind": 0,
+      "clean": true,
+      "remoteFreshnessLimit": "receiver observed the cached origin/main ref; the source-packet recorder separately confirmed the same revision with git ls-remote"
+    }
+  },
+  "continuation": {
+    "realEvent": true,
+    "receiverDelta": {
+      "materialRestatementItems": 0,
+      "materialRestatements": [],
+      "conflicts": [],
+      "nonMaterialDeltas": [
+        "product/program.json stopped at the receiver delta and claim boundary while the current goal-mode prompt additionally required deterministic PASS, commit, and push; the receiver used the stricter boundary without user reconstruction"
+      ],
+      "recoveredContract": {
+        "productGoal": "Reduce the user's Agent-learning and orchestration burden by giving an Agent a bounded, observable loop for intent, capability choice, lifecycle control, continuity, verification, and cleanup while preserving human authority over goals, judgment, trust, cost, and irreversible effects.",
+        "activeIncrementId": "increment.context-continuity-product-slice",
+        "openWorkItemIds": [
+          "work.run-real-continuity-slice"
+        ],
+        "causalRationale": {
+          "observedProblem": "Long collaboration chains can lose the active goal, authority boundary, open work, and causal rationale.",
+          "hypothesis": "A repository-anchored handoff and fresh-task receiver check can preserve the bounded task contract with less user reconstruction.",
+          "falsifier": "A fresh receiver needs the user to restate a material goal, authority, or open-work fact already carried by the Harness.",
+          "stopCondition": "O4 passes on a fresh real continuation event with a receiver delta and explicit claim boundary."
+        },
+        "additionalOperationalBoundary": "The source revision's goal-mode prompt additionally required deterministic PASS, commit, and push; the receiver applied that stricter boundary.",
+        "authorityBoundary": {
+          "userOwns": [
+            "product-direction",
+            "creative-judgment",
+            "new-trust",
+            "new-account",
+            "new-cost",
+            "publication",
+            "release",
+            "irreversible-action"
+          ],
+          "agentOwnsWithinBoundedAuthority": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "handoff",
+            "bounded-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "coverage-analysis",
+            "targeted-capability-discovery",
+            "capability-static-review",
+            "inactive-exact-acquisition"
+          ]
+        },
+        "acceptanceState": {
+          "verifiedOutcomes": 3,
+          "totalOutcomes": 5,
+          "passedGuardrails": 4,
+          "totalGuardrails": 4,
+          "completionState": "in-progress"
+        },
+        "nextAction": "Record and validate this O4 receipt, align the stricter stop condition, then activate the bounded O3 capability-lifecycle increment."
+      }
+    },
+    "receiverClaimBoundary": [
+      "proves one fresh read-only receiver recovered the material task contract from the repository without user restatement",
+      "does not prove continuity across other hosts, models, providers, repositories, or future events",
+      "does not prove O3, v0.1 acceptance, production readiness, release readiness, or broad user value"
+    ]
+  },
+  "cleanupReceipt": {
+    "roots": [
+      "C:/Projects/agent-autonomy-harness",
+      "C:/tmp",
+      "C:/Users/15521/AppData/Local/Temp"
+    ],
+    "targetPattern": "^(agent-autonomy|aah-|mcp-|cc-switch|codex-app-server|tdd-|process-fidelity|acceptance-authority-v2-overlay-)",
+    "operation": "the receiver was read-only; the recorder checked repository ignored state and direct-child matching temporary paths after the event",
+    "remainingMatches": 0,
+    "remainingIgnoredRepositoryPaths": 0
+  },
+  "claimLimits": [
+    "records one actual Codex sub-agent receiver event with no inherited conversation turns",
+    "the repository verifier checks receipt structure and source binding but does not cryptographically attest the external conversation runtime",
+    "remote main was checked by the recorder rather than by the read-only receiver",
+    "cleanup covers repository ignored state and direct child matches of the declared bounded pattern only",
+    "does not authorize capability installation, enablement, account connection, consumer mutation, release, or publication"
+  ]
+}

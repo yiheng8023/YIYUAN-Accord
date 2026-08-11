@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -7,6 +9,8 @@ import subprocess
 import sys
 import tempfile
 import unittest
+
+from harness.control import validate_continuation_receipt
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -43,6 +47,7 @@ class ProductControlCliTests(unittest.TestCase):
             report["activeIncrement"],
             "increment.context-continuity-product-slice",
         )
+        self.assertFalse(report["criterionStates"]["O4"])
         self.assertEqual(report["outcomes"], {"total": 5, "verified": 3})
         self.assertEqual(report["guardrails"], {"total": 4, "passed": 4})
         self.assertEqual(report["completionState"], "in-progress")
@@ -306,6 +311,106 @@ class ProductControlCliTests(unittest.TestCase):
             f"evidence {route_evidence} is not a real continuation receipt",
             report["errors"],
         )
+
+    def test_o4_rejects_an_unbound_self_declared_continuation_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            evidence_relative = "product/evidence/unbound-continuation.json"
+            evidence_path = target / evidence_relative
+            evidence_path.write_text(
+                json.dumps(
+                    {
+                        "schema": 1,
+                        "id": "unbound-continuation",
+                        "continuation": {
+                            "realEvent": True,
+                            "receiverDelta": {"materialRestatementItems": 0},
+                            "receiverClaimBoundary": "claims one continuation only",
+                        },
+                        "claimLimits": ["claims one continuation only"],
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            acceptance_path = target / "product" / "acceptance.json"
+            acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
+            for criterion in acceptance["criteria"]:
+                if criterion["id"] == "O4":
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = [evidence_relative]
+            acceptance_path.write_text(
+                json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O4"])
+        self.assertIn(
+            f"evidence {evidence_relative} is not a real continuation receipt",
+            report["errors"],
+        )
+
+    def test_o4_receipt_is_bound_to_the_observed_source_and_invocation(self) -> None:
+        evidence_path = (
+            ROOT
+            / "product"
+            / "evidence"
+            / "context-continuity-fresh-receiver-2026-08-11.json"
+        )
+        receipt = json.loads(evidence_path.read_text(encoding="utf-8"))
+
+        self.assertTrue(validate_continuation_receipt(ROOT, receipt))
+
+        def forge_revision(candidate: dict[str, object]) -> None:
+            zero_revision = "0" * 40
+            candidate["sourcePacket"]["revision"] = zero_revision
+            candidate["sourcePacket"]["remoteMain"] = zero_revision
+            candidate["receiver"]["liveGitFacts"]["head"] = zero_revision
+            candidate["receiver"]["liveGitFacts"]["originMain"] = zero_revision
+
+        def forge_prompt(candidate: dict[str, object]) -> None:
+            prompt = "the material contract was provided out of band"
+            candidate["invocation"]["prompt"] = prompt
+            candidate["invocation"]["promptSha256"] = hashlib.sha256(
+                prompt.encode("utf-8")
+            ).hexdigest()
+
+        def forge_receiver(candidate: dict[str, object]) -> None:
+            candidate["receiver"]["receiverId"] = "/root/forged_receiver"
+
+        def forge_recovered_goal(candidate: dict[str, object]) -> None:
+            candidate["continuation"]["receiverDelta"]["recoveredContract"][
+                "productGoal"
+            ] = "a materially different goal"
+
+        def broaden_claim(candidate: dict[str, object]) -> None:
+            candidate["continuation"]["receiverClaimBoundary"].append(
+                "proves cross-host production readiness"
+            )
+
+        def remove_cleanup(candidate: dict[str, object]) -> None:
+            candidate.pop("cleanupReceipt")
+
+        mutations = {
+            "revision": forge_revision,
+            "prompt": forge_prompt,
+            "receiver": forge_receiver,
+            "recovered goal": forge_recovered_goal,
+            "claim boundary": broaden_claim,
+            "cleanup receipt": remove_cleanup,
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                candidate = deepcopy(receipt)
+                mutate(candidate)
+                self.assertFalse(validate_continuation_receipt(ROOT, candidate))
 
     def test_cleanup_evidence_requires_resolved_absolute_roots(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -815,7 +920,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
 
@@ -853,7 +958,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertTrue(report["criterionStates"]["G1"])
         self.assertNotIn(
-            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
 
@@ -898,7 +1003,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertTrue(report["criterionStates"]["G1"])
         self.assertNotIn(
-            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
 
@@ -983,7 +1088,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertTrue(report["criterionStates"]["G1"])
         self.assertNotIn(
-            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
 
@@ -1022,7 +1127,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "active or completed work work.run-real-continuity-slice has capability operations without an eligible capabilityContext",
+            f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
 

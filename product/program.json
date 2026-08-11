@@ -90,7 +90,7 @@
       "observedProblem": "Long collaboration chains can lose the active goal, authority boundary, open work, and causal rationale.",
       "hypothesis": "A repository-anchored handoff and fresh-task receiver check can preserve the bounded task contract with less user reconstruction.",
       "falsifier": "A fresh receiver needs the user to restate a material goal, authority, or open-work fact already carried by the Harness.",
-      "stopCondition": "O4 passes on a fresh real continuation event with a receiver delta and explicit claim boundary.",
+      "stopCondition": "O4 passes on a fresh real continuation event with a receiver delta, explicit claim boundary, deterministic verification, commit, and push.",
       "acceptanceIds": ["O4", "G1", "G2", "G4"],
       "workItems": [
         {

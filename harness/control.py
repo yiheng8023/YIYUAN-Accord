@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from datetime import datetime
+import hashlib
 import json
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
+import subprocess
 from typing import Any
 
 
@@ -61,6 +64,31 @@ BOOTSTRAP_AUTHORITY_FILES = (
     "harness/control.py",
 )
 BOOTSTRAP_AUTHORITY_GLOBS = ("product/**/*.json", "harness/**/*.py")
+O4_SOURCE_FILES = {
+    "AGENTS.md",
+    "docs/operations/CONTINUATION.md",
+    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+    "product/constitution.json",
+    "product/program.json",
+    "product/acceptance.json",
+}
+O4_EVENT_ID = "o4-fresh-receiver-2026-08-11-01"
+O4_OBSERVED_AT = "2026-08-11T12:02:46.4593609+08:00"
+O4_SOURCE_REVISION = "64a0f26fd32ad0b378e3dd836ee6f894a22234ec"
+O4_RECEIVER_ID = "/root/o4_fresh_receiver"
+O4_PROMPT_SHA256 = "1d2c9acac61fb2aa9609f315d2c25044e99f9d2d60ce1ce0b0eb780dc9a0e1c6"
+O4_RECEIVER_CLAIM_BOUNDARY = {
+    "proves one fresh read-only receiver recovered the material task contract from the repository without user restatement",
+    "does not prove continuity across other hosts, models, providers, repositories, or future events",
+    "does not prove O3, v0.1 acceptance, production readiness, release readiness, or broad user value",
+}
+O4_CLAIM_LIMITS = {
+    "records one actual Codex sub-agent receiver event with no inherited conversation turns",
+    "the repository verifier checks receipt structure and source binding but does not cryptographically attest the external conversation runtime",
+    "remote main was checked by the recorder rather than by the read-only receiver",
+    "cleanup covers repository ignored state and direct child matches of the declared bounded pattern only",
+    "does not authorize capability installation, enablement, account connection, consumer mutation, release, or publication",
+}
 TEXT_SUFFIXES = {".json", ".md", ".py", ".yml", ".yaml"}
 TEXT_FILENAMES = {".gitignore", "LICENSE", "NOTICE"}
 SCAN_EXCLUDED_PARTS = {
@@ -413,21 +441,168 @@ def _valid_capability_context(
     return fields_valid
 
 
-def _valid_continuation_evidence(document: dict[str, Any]) -> bool:
+def _git_json_at_revision(
+    root: Path, revision: str, relative: str
+) -> dict[str, Any] | None:
+    try:
+        result = subprocess.run(
+            ["git", "show", f"{revision}:{relative}"],
+            cwd=root,
+            text=True,
+            encoding="utf-8",
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    try:
+        document = json.loads(result.stdout)
+    except (json.JSONDecodeError, TypeError):
+        return None
+    return document if isinstance(document, dict) else None
+
+
+def validate_continuation_receipt(root: Path, document: dict[str, Any]) -> bool:
+    invocation = document.get("invocation")
+    source_packet = document.get("sourcePacket")
+    receiver = document.get("receiver")
     continuation = document.get("continuation")
-    if not isinstance(continuation, dict):
+    cleanup_receipt = document.get("cleanupReceipt")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            invocation,
+            source_packet,
+            receiver,
+            continuation,
+            cleanup_receipt,
+        )
+    ):
         return False
+    prompt = invocation.get("prompt")
+    if not isinstance(prompt, str):
+        return False
+    prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    revision = source_packet.get("revision")
+    source_files = source_packet.get("authorityFiles")
+    files_read = receiver.get("filesRead")
+    live_git = receiver.get("liveGitFacts")
     receiver_delta = continuation.get("receiverDelta")
     claim_boundary = continuation.get("receiverClaimBoundary")
+    if not all(isinstance(value, dict) for value in (live_git, receiver_delta)):
+        return False
+    recovered = receiver_delta.get("recoveredContract")
+    if not isinstance(recovered, dict):
+        return False
+    rationale = recovered.get("causalRationale")
+    authority = recovered.get("authorityBoundary")
+    acceptance_state = recovered.get("acceptanceState")
+    if not all(
+        isinstance(value, dict)
+        for value in (rationale, authority, acceptance_state)
+    ):
+        return False
+    constitution_at_source = _git_json_at_revision(
+        root, O4_SOURCE_REVISION, "product/constitution.json"
+    )
+    program_at_source = _git_json_at_revision(
+        root, O4_SOURCE_REVISION, "product/program.json"
+    )
+    acceptance_at_source = _git_json_at_revision(
+        root, O4_SOURCE_REVISION, "product/acceptance.json"
+    )
+    if not all(
+        isinstance(value, dict)
+        for value in (constitution_at_source, program_at_source, acceptance_at_source)
+    ):
+        return False
+    source_increments = program_at_source.get("increments")
+    if not isinstance(source_increments, list):
+        return False
+    active_increments = [
+        item
+        for item in source_increments
+        if isinstance(item, dict) and item.get("state") == "active"
+    ]
+    if len(active_increments) != 1:
+        return False
+    source_increment = active_increments[0]
+    source_work_items = source_increment.get("workItems")
+    if not isinstance(source_work_items, list):
+        return False
+    source_open_work_ids = [
+        item.get("id")
+        for item in source_work_items
+        if isinstance(item, dict) and item.get("state") == "active"
+    ]
+    source_rationale = {
+        field: source_increment.get(field)
+        for field in ("observedProblem", "hypothesis", "falsifier", "stopCondition")
+    }
+    source_authority = program_at_source.get("authorityBoundary")
+    claim_limits = document.get("claimLimits")
     return (
-        continuation.get("realEvent") is True
-        and isinstance(receiver_delta, dict)
+        document.get("criterionId") == "O4"
+        and document.get("eventKind") == "fresh-receiver-continuation"
+        and document.get("eventId") == O4_EVENT_ID
+        and document.get("observedAt") == O4_OBSERVED_AT
+        and datetime.fromisoformat(O4_OBSERVED_AT).tzinfo is not None
+        and invocation.get("mechanism") == "Codex collaboration sub-agent task"
+        and invocation.get("forkTurns") == "none"
+        and invocation.get("promptSha256") == O4_PROMPT_SHA256
+        and prompt_sha256 == O4_PROMPT_SHA256
+        and invocation.get("materialContractValuesProvided") == []
+        and source_packet.get("repository") == PRODUCT_ID
+        and revision == O4_SOURCE_REVISION
+        and source_packet.get("remoteMain") == O4_SOURCE_REVISION
+        and source_packet.get("remoteQuery") == "git ls-remote origin refs/heads/main"
+        and source_packet.get("liveTruthRechecked") is True
+        and _non_empty_string_list(source_files)
+        and O4_SOURCE_FILES.issubset(source_files)
+        and isinstance(receiver.get("receiverId"), str)
+        and bool(receiver["receiverId"].strip())
+        and receiver.get("receiverId") == O4_RECEIVER_ID
+        and receiver.get("freshContext") is True
+        and receiver.get("contextInheritance") == "none"
+        and receiver.get("readOnly") is True
+        and _non_empty_string_list(files_read)
+        and O4_SOURCE_FILES.issubset(files_read)
+        and live_git.get("head") == O4_SOURCE_REVISION
+        and live_git.get("originMain") == O4_SOURCE_REVISION
+        and live_git.get("branch") == "main"
+        and live_git.get("upstream") == "origin/main"
+        and live_git.get("ahead") == 0
+        and live_git.get("behind") == 0
+        and live_git.get("clean") is True
+        and isinstance(live_git.get("remoteFreshnessLimit"), str)
+        and bool(live_git["remoteFreshnessLimit"].strip())
+        and continuation.get("realEvent") is True
         and receiver_delta.get("materialRestatementItems") == 0
-        and (
-            isinstance(claim_boundary, str)
-            and bool(claim_boundary.strip())
-            or _non_empty_string_list(claim_boundary)
-        )
+        and receiver_delta.get("materialRestatements") == []
+        and receiver_delta.get("conflicts") == []
+        and recovered.get("productGoal") == constitution_at_source.get("purpose")
+        and recovered.get("activeIncrementId")
+        == program_at_source.get("activeIncrementId")
+        and recovered.get("openWorkItemIds") == source_open_work_ids
+        and rationale == source_rationale
+        and authority == source_authority
+        and acceptance_state.get("verifiedOutcomes") == 3
+        and acceptance_state.get("totalOutcomes") == 5
+        and acceptance_state.get("passedGuardrails") == 4
+        and acceptance_state.get("totalGuardrails") == 4
+        and acceptance_state.get("completionState") == "in-progress"
+        and isinstance(recovered.get("nextAction"), str)
+        and bool(recovered["nextAction"].strip())
+        and _non_empty_string_list(claim_boundary)
+        and set(claim_boundary) == O4_RECEIVER_CLAIM_BOUNDARY
+        and len(claim_boundary) == len(O4_RECEIVER_CLAIM_BOUNDARY)
+        and _non_empty_string_list(claim_limits)
+        and set(claim_limits) == O4_CLAIM_LIMITS
+        and len(claim_limits) == len(O4_CLAIM_LIMITS)
+        and isinstance(acceptance_at_source.get("criteria"), list)
+        and cleanup_receipt.get("remainingIgnoredRepositoryPaths") == 0
     )
 
 
@@ -539,9 +714,24 @@ def _validate_evidence(
             if criterion_id == "O2" and not _valid_route_evidence(document):
                 verified = False
                 errors.append(f"evidence {relative} must contain a source-bound route and authority boundary")
-            if criterion_id == "O4" and not _valid_continuation_evidence(document):
-                verified = False
-                errors.append(f"evidence {relative} is not a real continuation receipt")
+            if criterion_id == "O4":
+                if not validate_continuation_receipt(root, document):
+                    verified = False
+                    errors.append(
+                        f"evidence {relative} is not a real continuation receipt"
+                    )
+                cleanup_receipt = document.get("cleanupReceipt")
+                if not isinstance(cleanup_receipt, dict):
+                    verified = False
+                    errors.append(
+                        f"evidence {relative} must contain a cleanup receipt"
+                    )
+                elif not _validate_cleanup_evidence(
+                    cleanup_receipt,
+                    f"{relative} cleanupReceipt",
+                    errors,
+                ):
+                    verified = False
             if criterion_id in {"O5", "G4"} and not _validate_cleanup_evidence(document, relative, errors):
                 verified = False
         if criterion_id == "O3":
