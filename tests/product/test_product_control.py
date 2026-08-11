@@ -73,6 +73,36 @@ class ProductControlCliTests(unittest.TestCase):
             ).encode("utf-8")
         )
 
+    def bind_o3_verified(self, target: Path) -> Path:
+        acceptance_path = target / "product" / "acceptance.json"
+        acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
+        criterion = next(
+            item for item in acceptance["criteria"] if item["id"] == "O3"
+        )
+        criterion["assessment"] = "verified"
+        criterion["evidence"] = [
+            "product/evidence/o3-sparse-scorecard-2026-08-11.json",
+            "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
+        ]
+        acceptance_path.write_text(
+            json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return (
+            target
+            / "product"
+            / "evidence"
+            / "o3-official-lifecycle-transaction-raw-2026-08-11.json"
+        )
+
+    def mutate_json(self, path: Path, mutate) -> None:
+        document = json.loads(path.read_text(encoding="utf-8"))
+        mutate(document)
+        path.write_text(
+            json.dumps(document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
     def test_current_repository_exposes_one_product_progress_report(self) -> None:
         result = self.run_verify(ROOT)
 
@@ -531,13 +561,21 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_scorecard_work_cannot_complete_with_pending_or_missing_evidence(
+    def test_scorecard_work_cannot_complete_with_drifted_or_missing_evidence(
         self,
     ) -> None:
         mutations = {
-            "lifecycle remains pending": (
-                lambda work, target: None,
-                "completed work item work.build-sparse-scorecard-and-close-lifecycle cannot use lifecycle-pending scorecard evidence",
+            "lifecycle completion drifted": (
+                lambda work, target: self.mutate_json(
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-sparse-scorecard-2026-08-11.json",
+                    lambda scorecard: scorecard["lifecycleTransaction"].__setitem__(
+                        "status", "pending-instrumented-transaction"
+                    ),
+                ),
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
             ),
             "progress evidence removed": (
                 lambda work, target: (
@@ -667,9 +705,9 @@ class ProductControlCliTests(unittest.TestCase):
             "capability addition invented": lambda scorecard: scorecard[
                 "routeDecision"
             ].__setitem__("additionProposed", True),
-            "lifecycle phase promoted": lambda scorecard: scorecard[
+            "lifecycle phase demoted": lambda scorecard: scorecard[
                 "lifecycleTransaction"
-            ]["phases"].__setitem__("boundedActivation", "observed"),
+            ]["phases"].__setitem__("boundedActivation", "pending"),
             "claim ceiling collapsed": lambda scorecard: scorecard.__setitem__(
                 "claimLimits", ["looks good"]
             ),
@@ -1146,7 +1184,7 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O3"])
         self.assertFalse(report["criterionStates"]["O4"])
         self.assertIn(
-            "criterion O3 verification remains fail-closed until the real-task evaluation and host lifecycle evidence validator is implemented",
+            "criterion O3 must bind the exact scorecard and successful lifecycle receipt",
             report["errors"],
         )
         self.assertIn(
@@ -2062,9 +2100,159 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["O3"])
         self.assertIn(
-            "criterion O3 verification remains fail-closed until the real-task evaluation and host lifecycle evidence validator is implemented",
+            "criterion O3 must bind the exact scorecard and successful lifecycle receipt",
             report["errors"],
         )
+
+    def test_o3_requires_pushed_evidence_and_rejects_semantic_substitutes(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            self.bind_o3_verified(target)
+
+            result = self.run_verify(target)
+
+            self.assertNotEqual(result.returncode, 0)
+            report = json.loads(result.stdout)
+            self.assertFalse(report["criterionStates"]["O3"])
+            self.assertIn(
+                "O3 lifecycle evidence is not bound to an origin/main revision",
+                report["errors"],
+            )
+
+        mutations = {
+            "checkpoint is counterevidence": (
+                lambda receipt: receipt.__setitem__("status", "transaction-checkpoint"),
+                "O3 lifecycle receipt contract or success identity is invalid",
+            ),
+            "failed receipt is counterevidence": (
+                lambda receipt: receipt.__setitem__(
+                    "status", "transaction-failed-with-evidence"
+                ),
+                "O3 lifecycle receipt contract or success identity is invalid",
+            ),
+            "attempt drifted": (
+                lambda receipt: receipt.__setitem__("attempt", 1),
+                "O3 lifecycle receipt contract or success identity is invalid",
+            ),
+            "observed revision drifted": (
+                lambda receipt: receipt["contract"].__setitem__(
+                    "observedRevision", "0" * 40
+                ),
+                "O3 lifecycle receipt source bindings are invalid",
+            ),
+            "owner drifted": (
+                lambda receipt: receipt["lifecycleOwner"].__setitem__(
+                    "id", "/root/self-declared"
+                ),
+                "O3 lifecycle receipt owner or host boundary is invalid",
+            ),
+            "host attestation limit collapsed": (
+                lambda receipt: receipt["hostAuthoritySurface"].__setitem__(
+                    "attestationLimit", "host sandbox proved"
+                ),
+                "O3 lifecycle receipt owner or host boundary is invalid",
+            ),
+            "Skill hash drifted": (
+                lambda receipt: receipt["capabilityIdentity"][0].__setitem__(
+                    "sha256After", "0" * 64
+                ),
+                "O3 lifecycle receipt capability identity is invalid",
+            ),
+            "phase order reversed": (
+                lambda receipt: receipt["phases"]["cleanup"].__setitem__(
+                    "observedAt", "2026-08-11T17:01:00+08:00"
+                ),
+                "O3 lifecycle receipt phase time order is invalid",
+            ),
+            "KPI reversed": (
+                lambda receipt: receipt["kpiObservation"].__setitem__(
+                    "noCapabilityAdditionSupported", False
+                ),
+                "O3 lifecycle receipt KPI observation is invalid",
+            ),
+            "unexpected Git delta": (
+                lambda receipt: receipt["repositoryState"][
+                    "postPorcelainV1Uall"
+                ].append("?? unrelated.txt"),
+                "O3 lifecycle receipt repository delta is invalid",
+            ),
+            "user recovery invented": (
+                lambda receipt: receipt["userIntervention"].__setitem__(
+                    "recovery", 1
+                ),
+                "O3 lifecycle receipt user intervention is invalid",
+            ),
+            "manager mutation invented": (
+                lambda receipt: receipt["mutations"][
+                    "observedManagerMutations"
+                ].append("manager-state"),
+                "O3 lifecycle receipt mutation set is invalid",
+            ),
+            "claim limit removed": (
+                lambda receipt: receipt["claimLimits"].pop(),
+                "O3 lifecycle receipt claim limits are invalid",
+            ),
+        }
+        for label, (mutate, semantic_error) in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                raw_path = self.bind_o3_verified(target)
+                receipt = json.loads(raw_path.read_text(encoding="utf-8"))
+                mutate(receipt)
+                raw_path.write_text(
+                    json.dumps(receipt, ensure_ascii=True, separators=(",", ":"))
+                    + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertFalse(report["criterionStates"]["O3"])
+                self.assertIn(semantic_error, report["errors"])
+                self.assertIn(
+                    "criterion O3 must bind the exact scorecard and successful lifecycle receipt",
+                    report["errors"],
+                )
+
+    def test_o3_rejects_actual_and_dangling_lifecycle_temp_residue(self) -> None:
+        residue_cases = ("directory", "dangling-symlink")
+        for residue in residue_cases:
+            with self.subTest(residue=residue), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                self.bind_o3_verified(target)
+                temp_root = (
+                    target
+                    / ".tmp"
+                    / "o3-official-lifecycle-transaction-2026-08-11"
+                )
+                temp_root.parent.mkdir(parents=True, exist_ok=True)
+                if residue == "directory":
+                    temp_root.mkdir()
+                else:
+                    try:
+                        temp_root.symlink_to(
+                            temp_root.parent / "missing-target",
+                            target_is_directory=True,
+                        )
+                    except OSError as error:
+                        self.skipTest(f"directory symlink unavailable: {error}")
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertFalse(report["criterionStates"]["O3"])
+                self.assertIn(
+                    "criterion O3 must bind the exact scorecard and successful lifecycle receipt",
+                    report["errors"],
+                )
 
     def test_verified_criterion_cannot_use_test_fixture_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

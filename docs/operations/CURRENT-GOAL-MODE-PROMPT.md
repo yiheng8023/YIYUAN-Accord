@@ -12,46 +12,36 @@ reproducible residual gap survives comparison.
 
 `increment.current-official-route-evaluation-slice`
 
-Observed problem: the reviewed external cohort added no unique safe demand
-coverage and was cleaned. One attributable read-only official-capability event
-now exists, but its original large payload has no reliable byte-exact hash and
-its normalized phase audit found no explicit preview, bounded activation,
-lifecycle observation, applicable projection, rollback, or cleanup receipt.
-A source-validated non-Cartesian scorecard now covers all 15/6/14/12/13
-entries, corrects seven human-judgment omissions, and subtracts the
-unreproducible `50/78` aggregate. Lifecycle attempt 1 reported all six phases
-and cleanup, but the host response stream disconnected after a minimal raw
-initializer and before final replacement. Two exact early phase timestamps
-were not durably retained, so that attempt is counterevidence rather than an
-admissible transaction receipt.
+Observed problem: attempt 2 completed the exact six-phase installed-official
+route with durable timestamps, zero material user tool intervention, no
+capability addition, and absent bounded temporary residue. The raw receipt,
+completed scorecard projection, and public validator are not yet bound to one
+pushed evidence revision. O3 therefore remains false, and no third lifecycle
+attempt is allowed.
 
-Hypothesis: one final fresh attempt on the exact already-installed official
-route can add admissible preview-through-cleanup evidence if each phase fact is
-durably checkpointed immediately instead of deferred until final response
-delivery, with zero persistent capability state and zero material user tool
-intervention. A later capability addition is eligible only if this route
-exposes a reproducible gap.
+Hypothesis: persisting those exact three surfaces together on `origin/main`
+will create the smallest durable evidence layer from which O3 can be reviewed
+without rerunning the lifecycle or accepting a repository-authored substitute.
 
-Falsifier: the second fresh attempt cannot durably retain phase facts; no
-host-owned event can attribute the official capability use; the user must
-choose or operate the tool; the KPI reverses the no-addition decision; or
-rollback and cleanup leave persistent state. A second interrupted or incomplete
-attempt stops automatic retries.
+Falsifier: the verifier admits O3 before the evidence revision is on
+`origin/main`, accepts failed/checkpoint or semantically drifted evidence,
+ignores bounded residue, or requires another lifecycle run. Any such result
+returns to validator repair, not event replay.
 
-Stop condition: one source-bound host event uses the exact installed official
-capability on the real task; every historical partial and all 14/12/13 sparse
-axes receive evidence-sized dispositions; the task route completes cleanup
-with zero residue; the verifier rejects self-declared substitutes; O3 passes;
-and the accepted increment is committed and pushed.
+Stop condition: first commit and push the raw receipt, completed scorecard, and
+public fail-closed validator. O3 may pass only from that pushed revision. Close
+the increment only after the separately reviewed O3 transition is committed
+and pushed.
 
 ## Current work item
 
 `work.build-sparse-scorecard-and-close-lifecycle`
 
-The validated scorecard is
+The completed scorecard is
 `product/evidence/o3-sparse-scorecard-2026-08-11.json`. It retains criterion
-records by canonical hash, treats aggregate axes as membership only, and keeps
-O3 false while lifecycle evidence is pending. The earlier real but
+records by canonical hash, treats aggregate axes as membership only, and binds
+the exact attempt-2 raw receipt while O3 remains false pending durable Git
+evidence. The earlier real but
 evidence-incomplete analytical event is recorded at
 `product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
 projection is independently hashed and fail-closed; the missing raw-output hash
@@ -60,12 +50,13 @@ and all absent lifecycle phases are mandatory limitations. Its work item is
 separately bounded lifecycle transaction is preserved at
 `product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json`.
 Its final raw replacement was interrupted and cannot be repaired because two
-exact timestamps were never durably retained. The attempt-2 pre-event contract
-is
-`product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`;
-it must be committed and pushed before the fresh receiver runs, checkpoint
-after every phase, and run only once. No phase may be inferred from prior Skill
-use, receiver forensics, or zero residue.
+exact timestamps were never durably retained. Attempt 2 then ran once from the
+pushed contract at
+`product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`
+and produced
+`product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json`.
+Validate and persist that receipt; do not execute attempt 2 or any third attempt
+again.
 
 ## Allowed work
 

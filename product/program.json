@@ -182,10 +182,10 @@
     {
       "id": "increment.current-official-route-evaluation-slice",
       "state": "active",
-      "observedProblem": "The external cohort added no unique safe demand coverage, and the source-validated 15/6/14/12/13 scorecard proposes no capability addition. Lifecycle attempt 1 reported all six phases and cleanup, but a host response-stream disconnect occurred after a minimal raw initializer and before final replacement; two exact early timestamps were not durably retained, so the attempt is counterevidence rather than an admissible receipt.",
-      "hypothesis": "One final fresh attempt on the exact already-installed official route can produce admissible preview-through-cleanup evidence if every phase fact is durably checkpointed immediately instead of deferred until final response delivery, while preserving zero persistent capability state and zero material user tool intervention.",
-      "falsifier": "The second fresh attempt cannot durably retain phase facts, no host-owned event can attribute official capability use, the user must select or operate the tool, the KPI reverses the no-addition decision, or rollback and cleanup leave persistent state. A second interrupted or incomplete attempt stops automatic retries.",
-      "stopCondition": "O3 passes only after one source-bound host event uses the exact installed official capability on the real closeout task, every historical partial and all 14/12/13 sparse axes receive evidence-sized dispositions, the selected route lifecycle reaches cleanup with zero residual state, the public verifier rejects self-declared substitutes, and the accepted increment is committed and pushed.",
+      "observedProblem": "Lifecycle attempt 2 completed all six source-bound phases with exact timestamps, no capability addition, zero material user tool intervention, and absent bounded temporary residue. Its raw receipt, completed scorecard projection, and public fail-closed validator are not yet bound to a pushed evidence revision, so O3 must remain false and the lifecycle must not be rerun.",
+      "hypothesis": "Persisting the exact attempt-2 raw receipt, completed scorecard projection, and semantic validator together on origin/main will create the smallest durable evidence layer from which O3 can be reviewed without another lifecycle execution or a self-declared acceptance-only promotion.",
+      "falsifier": "The public verifier admits O3 before the exact raw and scorecard exist on origin/main, accepts a failed or checkpoint receipt, ignores semantic drift or bounded residue, or requires another lifecycle attempt. Any such result keeps O3 false and returns to validator repair rather than rerunning the event.",
+      "stopCondition": "First commit and push the exact raw receipt, completed scorecard projection, and public fail-closed validator as one durable evidence layer. O3 may pass only from that pushed revision with all sparse dispositions, exact successful lifecycle semantics, and zero bounded residue. The increment closes only after the separately reviewed O3 state transition is itself committed and pushed.",
       "sourceInputs": [
         {
           "revision": "c53866726834d79a68c61a5b87b4f7ce90698a2c",
@@ -203,6 +203,10 @@
         {
           "path": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
           "role": "preserved failed attempt, raw initializer hash, post-disconnect receiver forensics, missing exact fields, zero-residue observation, and causal checkpoint correction"
+        },
+        {
+          "path": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
+          "role": "completed attempt-2 raw lifecycle receipt awaiting exact origin/main evidence-revision binding; no third execution is allowed"
         }
       ],
       "acceptanceIds": ["O3", "G1", "G2", "G4"],
@@ -248,6 +252,7 @@
           "progressEvidence": "product/evidence/o3-sparse-scorecard-2026-08-11.json",
           "lifecycleContractEvidence": "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json",
           "lifecycleAttemptEvidence": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
+          "lifecycleResultEvidence": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
           "capabilityContext": {
             "mode": "task-time",
             "taskBinding": "agent-autonomy-harness-v0.1-closeout@2df8d85f1e9a8881972d5aa6ac587f11dc37aa79",

@@ -194,6 +194,9 @@ O3_SPARSE_SCORECARD_BASELINE_REVISION = (
     "b9d0ec68ab3bf65652c8a6048186f7e1fb7d59ca"
 )
 O3_SPARSE_SCORECARD_SHA256 = (
+    "960eb6b861e087bf43686e726aa005540190f2e136ca1a8fd1ba185db353a5e6"
+)
+O3_SPARSE_SCORECARD_EVENT_BASELINE_SHA256 = (
     "9724f31e62f0f48397d7e4fbf4c0173b300bcbd56d6bf8b2f630e8ce26470ecd"
 )
 O3_SPARSE_SOURCE_SHA256 = (
@@ -223,6 +226,13 @@ O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256 = (
 O3_LIFECYCLE_RAW_EVIDENCE_PATH = (
     "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
 )
+O3_LIFECYCLE_RAW_EVIDENCE_SHA256 = (
+    "7116ea3791119db8c5321c2456d3b24e2da0c242c53621cd7491071e1deb2235"
+)
+O3_LIFECYCLE_OBSERVED_REVISION = (
+    "2fdac84f534117acd60e32a1cf457f04e68b5faf"
+)
+O3_LIFECYCLE_EVIDENCE_REVISION: str | None = None
 O3_LIFECYCLE_TEMPORARY_ROOT = (
     ".tmp/o3-official-lifecycle-transaction-2026-08-11"
 )
@@ -257,6 +267,10 @@ O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE = (
 O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS = set(
     O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE
 )
+O3_VERIFIED_EVIDENCE_PATHS = [
+    O3_SPARSE_SCORECARD_PATH,
+    O3_LIFECYCLE_RAW_EVIDENCE_PATH,
+]
 PORTFOLIO_CURATION_COVERAGE_OBJECTIVE = (
     "decision-relevant-closeout-demand-coverage-with-reduced-user-orchestration"
 )
@@ -737,6 +751,40 @@ def _git_json_at_revision(
     return document if isinstance(document, dict) else None
 
 
+def _git_bytes_at_revision(
+    root: Path, revision: str, relative: str
+) -> bytes | None:
+    try:
+        result = subprocess.run(
+            ["git", "show", f"{revision}:{relative}"],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    return result.stdout if result.returncode == 0 else None
+
+
+def _git_revision_is_on_origin_main(root: Path, revision: str) -> bool:
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "merge-base",
+                "--is-ancestor",
+                revision,
+                "refs/remotes/origin/main",
+            ],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return False
+    return result.returncode == 0
+
+
 def validate_continuation_receipt(root: Path, document: dict[str, Any]) -> bool:
     invocation = document.get("invocation")
     source_packet = document.get("sourcePacket")
@@ -1008,11 +1056,16 @@ def _validate_evidence(
             if criterion_id in {"O5", "G4"} and not _validate_cleanup_evidence(document, relative, errors):
                 verified = False
         if criterion_id == "O3":
-            verified = False
-            errors.append(
-                "criterion O3 verification remains fail-closed until the real-task "
-                "evaluation and host lifecycle evidence validator is implemented"
+            raw_receipt = _load(root, O3_LIFECYCLE_RAW_EVIDENCE_PATH, errors)
+            verified = (
+                evidence_paths == O3_VERIFIED_EVIDENCE_PATHS
+                and _valid_o3_lifecycle_receipt(root, raw_receipt, errors)
             )
+            if not verified:
+                errors.append(
+                    "criterion O3 must bind the exact scorecard and successful "
+                    "lifecycle receipt"
+                )
         states[criterion_id] = verified
     return states, claim_limits_complete
 
@@ -1849,14 +1902,14 @@ def _valid_o3_lifecycle_contract(
         and _non_empty_string(task_binding.get("contractRevisionRule"))
         and task_binding.get("scorecardPath") == O3_SPARSE_SCORECARD_PATH
         and task_binding.get("scorecardCanonicalSha256")
-        == O3_SPARSE_SCORECARD_SHA256
+        == O3_SPARSE_SCORECARD_EVENT_BASELINE_SHA256
         and task_binding.get("priorAttemptEvidence")
         == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_PATH
         and task_binding.get("priorAttemptCanonicalSha256")
         == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256
         and prior_attempt_hash == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256
         and prior_attempt.get("status") == "failed-evidence-persistence-incomplete"
-        and baseline_scorecard_hash == O3_SPARSE_SCORECARD_SHA256
+        and baseline_scorecard_hash == O3_SPARSE_SCORECARD_EVENT_BASELINE_SHA256
         and baseline_program.get("activeIncrementId")
         == "increment.current-official-route-evaluation-slice"
         and baseline_work.get("state") == "active"
@@ -1911,6 +1964,288 @@ def _valid_o3_lifecycle_contract(
         and set(claim_limits) == O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS
         and len(claim_limits) == len(O3_LIFECYCLE_CONTRACT_CLAIM_LIMITS)
     )
+
+
+def _rfc3339_datetime(value: Any) -> datetime | None:
+    if not isinstance(value, str) or re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})",
+        value,
+    ) is None:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo is not None and parsed.utcoffset() is not None else None
+
+
+def _path_entry_absent(path: Path) -> bool:
+    try:
+        path.lstat()
+    except FileNotFoundError:
+        return True
+    except OSError:
+        return False
+    return False
+
+
+def _valid_o3_lifecycle_receipt(
+    root: Path,
+    document: Any,
+    errors: list[str],
+) -> bool:
+    local_errors: list[str] = []
+    raw_path = _inside_root(root, O3_LIFECYCLE_RAW_EVIDENCE_PATH, local_errors)
+    if not isinstance(document, dict) or raw_path is None or not raw_path.is_file():
+        errors.append("O3 lifecycle receipt structure or locator is invalid")
+        return False
+    try:
+        raw_bytes = raw_path.read_bytes()
+        canonical = lambda value: json.dumps(
+            value,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        raw_hash = hashlib.sha256(raw_bytes).hexdigest()
+    except (OSError, TypeError, UnicodeEncodeError):
+        errors.append("O3 lifecycle receipt bytes cannot be read")
+        return False
+    if local_errors:
+        errors.extend(local_errors)
+        return False
+    raw_identity_valid = raw_hash == O3_LIFECYCLE_RAW_EVIDENCE_SHA256
+
+    contract_receipt = document.get("contract")
+    owner = document.get("lifecycleOwner")
+    host_surface = document.get("hostAuthoritySurface")
+    capabilities = document.get("capabilityIdentity")
+    phases = document.get("phases")
+    kpi = document.get("kpiObservation")
+    repository = document.get("repositoryState")
+    intervention = document.get("userIntervention")
+    mutations = document.get("mutations")
+    time = document.get("time")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            contract_receipt,
+            owner,
+            host_surface,
+            phases,
+            kpi,
+            repository,
+            intervention,
+            mutations,
+            time,
+        )
+    ) or not isinstance(capabilities, list):
+        errors.append("O3 lifecycle receipt top-level structure is invalid")
+        return False
+
+    observed_revision = contract_receipt.get("observedRevision")
+    source_contract = _git_json_at_revision(
+        root,
+        observed_revision,
+        O3_LIFECYCLE_CONTRACT_PATH,
+    ) if isinstance(observed_revision, str) else None
+    current_contract = _load(root, O3_LIFECYCLE_CONTRACT_PATH, local_errors)
+    scorecard = _git_json_at_revision(
+        root,
+        observed_revision,
+        O3_SPARSE_SCORECARD_PATH,
+    ) if isinstance(observed_revision, str) else None
+    if not all(
+        isinstance(value, dict)
+        for value in (source_contract, current_contract, scorecard)
+    ) or local_errors:
+        errors.append("O3 lifecycle receipt source bindings are invalid")
+        return False
+    try:
+        source_contract_hash = hashlib.sha256(canonical(source_contract)).hexdigest()
+        current_contract_hash = hashlib.sha256(canonical(current_contract)).hexdigest()
+        scorecard_hash = hashlib.sha256(canonical(scorecard)).hexdigest()
+    except (TypeError, UnicodeEncodeError):
+        errors.append("O3 lifecycle receipt source identity cannot be calculated")
+        return False
+    evidence_revision = O3_LIFECYCLE_EVIDENCE_REVISION
+    durable_raw = (
+        _git_bytes_at_revision(root, evidence_revision, O3_LIFECYCLE_RAW_EVIDENCE_PATH)
+        if isinstance(evidence_revision, str)
+        else None
+    )
+    durable_scorecard = (
+        _git_json_at_revision(root, evidence_revision, O3_SPARSE_SCORECARD_PATH)
+        if isinstance(evidence_revision, str)
+        else None
+    )
+    try:
+        durable_evidence_valid = (
+            isinstance(evidence_revision, str)
+            and hashlib.sha256(durable_raw).hexdigest()
+            == O3_LIFECYCLE_RAW_EVIDENCE_SHA256
+            and isinstance(durable_scorecard, dict)
+            and hashlib.sha256(canonical(durable_scorecard)).hexdigest()
+            == O3_SPARSE_SCORECARD_SHA256
+            and _git_revision_is_on_origin_main(root, evidence_revision)
+        )
+    except (TypeError, UnicodeEncodeError):
+        durable_evidence_valid = False
+    schema = source_contract.get("expectedRawEvidence")
+    source_host = source_contract.get("hostAuthoritySurface")
+    source_claims = source_contract.get("claimLimits")
+    if not isinstance(schema, dict) or not isinstance(source_host, dict):
+        errors.append("O3 lifecycle receipt contract schema is invalid")
+        return False
+
+    started_at = _rfc3339_datetime(time.get("startedAt"))
+    ended_at = _rfc3339_datetime(time.get("endedAt"))
+    phase_order = schema.get("phaseOrder")
+    success_states = schema.get("successPhaseStates")
+    phase_operations = schema.get("requiredPhaseOperations")
+    if not (
+        isinstance(phase_order, list)
+        and isinstance(success_states, dict)
+        and isinstance(phase_operations, dict)
+        and started_at is not None
+        and ended_at is not None
+        and started_at < ended_at
+        and list(phases) == phase_order
+    ):
+        errors.append("O3 lifecycle receipt phase envelope is invalid")
+        return False
+    phase_times: list[datetime] = []
+    for phase_name in phase_order:
+        phase = phases.get(phase_name)
+        if not isinstance(phase, dict):
+            errors.append("O3 lifecycle receipt phase structure is invalid")
+            return False
+        observed_at = _rfc3339_datetime(phase.get("observedAt"))
+        if (
+            phase.get("status") != success_states.get(phase_name)
+            or phase.get("operation") != phase_operations.get(phase_name)
+            or observed_at is None
+            or not started_at <= observed_at <= ended_at
+            or not all(
+                _non_empty_string(phase.get(field))
+                for field in ("result", "authority", "claimCeiling")
+            )
+            or not isinstance(phase.get("evidence"), dict)
+            or not phase["evidence"]
+        ):
+            errors.append("O3 lifecycle receipt phase semantics are invalid")
+            return False
+        phase_times.append(observed_at)
+    if any(left >= right for left, right in zip(phase_times, phase_times[1:])):
+        errors.append("O3 lifecycle receipt phase time order is invalid")
+        return False
+
+    expected_capabilities = [
+        {
+            "name": item["name"],
+            "relativePath": item["relativePath"],
+            "sha256Before": item["sha256"],
+            "sha256After": item["sha256"],
+        }
+        for item in OFFICIAL_KPI_SKILL_IDENTITIES
+    ]
+    expected_kpi = schema.get("successKpiObservation")
+    metric = kpi.get("metric")
+    expected_repository = schema.get("successRepositoryState")
+    contract_valid = (
+        source_contract_hash == O3_LIFECYCLE_CONTRACT_SHA256
+        and current_contract_hash == O3_LIFECYCLE_CONTRACT_SHA256
+        and scorecard_hash == O3_SPARSE_SCORECARD_EVENT_BASELINE_SHA256
+        and document.get("schema") == 1
+        and document.get("id")
+        == "o3-official-lifecycle-transaction-raw-2026-08-11"
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("attempt") == 2
+        and document.get("status") == schema.get("successReceiptStatus")
+        and set(document) == set(schema.get("requiredTopLevelKeys", []))
+        and contract_receipt.get("path") == O3_LIFECYCLE_CONTRACT_PATH
+        and observed_revision == O3_LIFECYCLE_OBSERVED_REVISION
+        and contract_receipt.get("canonicalSha256")
+        == O3_LIFECYCLE_CONTRACT_SHA256
+        and contract_receipt.get("promptSha256")
+        == O3_LIFECYCLE_CONTRACT_PROMPT_SHA256
+        and contract_receipt.get("scorecardBaselineRevision")
+        == O3_LIFECYCLE_CONTRACT_BASELINE_REVISION
+        and contract_receipt.get("attempt") == 2
+        and contract_receipt.get("priorAttemptCanonicalSha256")
+        == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256
+    )
+    owner_and_host_valid = (
+        owner
+        == {
+            "id": "/root/o3_official_lifecycle_transaction_attempt_2",
+            "singleOwner": True,
+        }
+        and host_surface
+        == {
+            "host": source_host.get("host"),
+            "surface": source_host.get("surface"),
+            "constraint": source_host.get("constraintAndObservation"),
+            "attestationLimit": source_host.get("unsupportedAttestation"),
+        }
+    )
+    capability_valid = capabilities == expected_capabilities
+    kpi_valid = (
+        isinstance(expected_kpi, dict)
+        and kpi.get("scorecardEntryCount") == expected_kpi.get("scorecardEntryCount")
+        and kpi.get("nonCartesian") is expected_kpi.get("nonCartesian")
+        and kpi.get("noCapabilityAdditionSupported")
+        is expected_kpi.get("noCapabilityAdditionSupported")
+        and kpi.get("routeDecision") == expected_kpi.get("routeDecision")
+        and isinstance(metric, dict)
+        and metric.get("id") == expected_kpi.get("metricId")
+        and set(metric) == set(schema.get("requiredMetricFields", []))
+        and all(_non_empty_string(value) for value in metric.values())
+    )
+    repository_valid = (
+        isinstance(expected_repository, dict)
+        and all(
+            repository.get(field) == observed_revision
+            for field in (
+                "observedHeadBefore",
+                "observedHeadAfter",
+                "originMainBefore",
+                "originMainAfter",
+            )
+        )
+        and all(
+            repository.get(field) == value
+            for field, value in expected_repository.items()
+        )
+    )
+    intervention_valid = intervention == schema.get("successUserInterventionValues")
+    mutations_valid = mutations == schema.get("successMutations")
+    claims_valid = (
+        document.get("claimLimits") == source_claims
+        and document.get("claimLimits") == list(O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE)
+    )
+    residue_absent = _path_entry_absent(root / O3_LIFECYCLE_TEMPORARY_ROOT)
+    checks = (
+        (contract_valid, "O3 lifecycle receipt contract or success identity is invalid"),
+        (owner_and_host_valid, "O3 lifecycle receipt owner or host boundary is invalid"),
+        (capability_valid, "O3 lifecycle receipt capability identity is invalid"),
+        (kpi_valid, "O3 lifecycle receipt KPI observation is invalid"),
+        (repository_valid, "O3 lifecycle receipt repository delta is invalid"),
+        (intervention_valid, "O3 lifecycle receipt user intervention is invalid"),
+        (mutations_valid, "O3 lifecycle receipt mutation set is invalid"),
+        (claims_valid, "O3 lifecycle receipt claim limits are invalid"),
+        (residue_absent, "O3 lifecycle receipt temporary residue remains"),
+        (raw_identity_valid, "O3 lifecycle receipt whole-file identity is invalid"),
+        (
+            durable_evidence_valid,
+            "O3 lifecycle evidence is not bound to an origin/main revision",
+        ),
+    )
+    for valid, message in checks:
+        if not valid:
+            errors.append(message)
+    return all(valid for valid, _ in checks)
 
 
 def _valid_o3_sparse_scorecard_progress(
@@ -2056,6 +2391,7 @@ def _valid_o3_sparse_scorecard_progress(
     ] if isinstance(baseline_work, list) else []
     aggregate_decisions = document.get("aggregateDecisions")
     lifecycle_phases = lifecycle.get("phases")
+    lifecycle_receipt = source_bindings.get("lifecycleTransactionReceipt")
     aggregate_decision = (
         aggregate_decisions[0]
         if isinstance(aggregate_decisions, list)
@@ -2074,7 +2410,8 @@ def _valid_o3_sparse_scorecard_progress(
         and document.get("id") == O3_SPARSE_SCORECARD_ID
         and document.get("productId") == PRODUCT_ID
         and document.get("release") == "v0.1"
-        and document.get("status") == "scorecard-complete-lifecycle-pending"
+        and document.get("status")
+        == "scorecard-and-lifecycle-complete-with-runtime-attestation-limit"
         and document.get("nonCartesian") is True
         and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
         and task_binding.get("invented") is False
@@ -2107,11 +2444,28 @@ def _valid_o3_sparse_scorecard_progress(
         and route_decision.get("selected") == "composition"
         and route_decision.get("reproducibleResidualGapCount") == 0
         and route_decision.get("additionProposed") is False
-        and lifecycle.get("status") == "pending-instrumented-transaction"
-        and isinstance(lifecycle_phases, dict)
-        and set(lifecycle_phases.values()) == {"pending"}
-        and len(lifecycle_phases) == 6
-        and lifecycle.get("evidence") is None
+        and lifecycle.get("status")
+        == "completed-instrumented-transaction-with-runtime-attestation-limit"
+        and lifecycle.get("lifecycleOwner")
+        == "/root/o3_official_lifecycle_transaction_attempt_2"
+        and lifecycle.get("hostAuthoritySurface")
+        == "fresh sub-agent context plus repository and exact temporary-root filesystem operations"
+        and lifecycle_phases
+        == {
+            "preview": "observed",
+            "boundedActivation": "observed",
+            "observation": "observed",
+            "applicableProjection": "not-applicable",
+            "rollback": "observed",
+            "cleanup": "observed",
+        }
+        and lifecycle_receipt
+        == {
+            "path": O3_LIFECYCLE_RAW_EVIDENCE_PATH,
+            "byteSha256": O3_LIFECYCLE_RAW_EVIDENCE_SHA256,
+            "observedRevision": O3_LIFECYCLE_OBSERVED_REVISION,
+        }
+        and lifecycle.get("evidence") == lifecycle_receipt
         and _non_empty_string_list(document.get("claimLimits"))
     )
 def verify_product(root: Path) -> dict[str, Any]:
@@ -2413,12 +2767,6 @@ def verify_product(root: Path) -> dict[str, Any]:
                         f"{work_state} work item "
                         "work.build-sparse-scorecard-and-close-lifecycle must bind "
                         "valid source-reconciled scorecard progress evidence"
-                    )
-                elif work_state == "completed":
-                    errors.append(
-                        "completed work item "
-                        "work.build-sparse-scorecard-and-close-lifecycle cannot use "
-                        "lifecycle-pending scorecard evidence"
                     )
                 if not _valid_o3_lifecycle_contract(
                     root,
