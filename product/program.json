@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.context-continuity-product-slice",
+  "activeIncrementId": "increment.capability-lifecycle-product-slice",
   "authorityBoundary": {
     "userOwns": [
       "product-direction",
@@ -86,7 +86,7 @@
     },
     {
       "id": "increment.context-continuity-product-slice",
-      "state": "active",
+      "state": "completed",
       "observedProblem": "Long collaboration chains can lose the active goal, authority boundary, open work, and causal rationale.",
       "hypothesis": "A repository-anchored handoff and fresh-task receiver check can preserve the bounded task contract with less user reconstruction.",
       "falsifier": "A fresh receiver needs the user to restate a material goal, authority, or open-work fact already carried by the Harness.",
@@ -95,7 +95,7 @@
       "workItems": [
         {
           "id": "work.run-real-continuity-slice",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["O4", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "repository-edit", "local-verification", "handoff", "bounded-cleanup"],
           "deliverables": ["one source-bound handoff", "one fresh receiver delta", "cleanup receipt"]
@@ -104,7 +104,7 @@
     },
     {
       "id": "increment.capability-lifecycle-product-slice",
-      "state": "planned",
+      "state": "active",
       "observedProblem": "The current capability portfolio has been optimized for subtraction without proving demand coverage, while any selected external capability can still leave activation, ownership, projection, rollback, or cleanup work with the user.",
       "hypothesis": "A bounded demand taxonomy, inactive reviewed cohort, and replaceable manager adapter can add decision-relevant coverage and complete preview, apply, observe, and rollback without becoming portable-core authority.",
       "falsifier": "The cohort adds no decision-relevant coverage, the slice requires dual lifecycle owners or manual state reconstruction, authority expands without approval, or rollback leaves residual projection.",
@@ -120,7 +120,7 @@
       "workItems": [
         {
           "id": "work.bind-portfolio-curation-contract",
-          "state": "planned",
+          "state": "active",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "repository-edit", "causal-planning", "local-verification"],
           "deliverables": ["coverage objective and demand taxonomy", "candidate and exact source boundaries", "account and data boundary", "isolated inactive exact-revision review root", "review and admission criteria", "authority and verification surfaces", "cleanup rollback and finite cohort stop rule"]

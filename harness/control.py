@@ -929,6 +929,15 @@ def verify_product(root: Path) -> dict[str, Any]:
             }:
                 errors.append(f"work item {work_id} has an unsupported state")
                 work_state = "<invalid>"
+            if work_state == "active" and increment_state != "active":
+                errors.append(
+                    f"active work {work_id} must belong to the active increment"
+                )
+            if increment_state == "completed" and work_state != "completed":
+                errors.append(
+                    f"completed increment {increment_id} cannot retain open work "
+                    f"{work_id}"
+                )
             operation_id_set = set(operation_ids)
             capability_context_valid = _valid_capability_context(
                 work_item, operation_id_set
@@ -1030,6 +1039,24 @@ def verify_product(root: Path) -> dict[str, Any]:
     evidence_states["G1"] = authority_valid
     evidence_states["G2"] = claim_limits_complete
     evidence_states["G3"] = identity_valid
+
+    completed_outcomes_valid = True
+    for increment in increments:
+        if increment.get("state") != "completed":
+            continue
+        increment_id = increment.get("id", "<missing>")
+        acceptance_ids = increment.get("acceptanceIds")
+        if not isinstance(acceptance_ids, list):
+            continue
+        for criterion_id in acceptance_ids:
+            if criterion_id in OUTCOME_IDS and not evidence_states.get(criterion_id):
+                completed_outcomes_valid = False
+                errors.append(
+                    f"completed increment {increment_id} requires verified outcome "
+                    f"{criterion_id}"
+                )
+    if not completed_outcomes_valid:
+        evidence_states["O1"] = False
 
     verified_outcomes = sum(bool(evidence_states.get(item)) for item in OUTCOME_IDS)
     passed_guardrails = sum(bool(evidence_states.get(item)) for item in GUARDRAIL_IDS)

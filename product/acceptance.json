@@ -42,7 +42,10 @@
       "statement": "A fresh task resumes from repository truth without requiring the user to restate a material goal, authority boundary, causal rationale, or open work item.",
       "metric": "receiver delta on a real continuation",
       "threshold": "zero material user-restatement items and an explicit receiver claim boundary",
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/context-continuity-fresh-receiver-2026-08-11.json"
+      ]
     },
     {
       "id": "O5",

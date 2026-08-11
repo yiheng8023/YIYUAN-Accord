@@ -15,11 +15,12 @@ are observed, and when they are released.
 ## Current product state
 
 - Release target: `v0.1`.
-- Product outcomes: `3/5` currently verified.
+- Product outcomes: `4/5` currently verified.
 - Mandatory guardrails: `4/4` currently pass.
-- Active causal increment: `increment.context-continuity-product-slice`.
-- Completion remains `in-progress`; O3 capability lifecycle and O4 fresh
-  continuation still require real product slices.
+- Active causal increment: `increment.capability-lifecycle-product-slice`.
+- Completion remains `in-progress`; O4 passed on one bounded fresh-receiver
+  event, while O3 capability lifecycle still requires evaluation and one
+  separately authorized real transaction.
 
 The current reset is itself a user-provided real task. It exposed a genuine
 Harness failure: a predecessor research and curation program could remain
@@ -57,9 +58,10 @@ python -B -m unittest discover -s tests/product -v
 ```
 
 A PASS means only that the current product plan, acceptance mapping, evidence
-bindings, authority boundary, and identity guard are internally consistent. It
-does not prove O3, O4, cross-host behavior, production readiness, release
-readiness, or broad user value.
+bindings, authority boundary, and identity guard are internally consistent. O4
+evidence covers one fresh receiver and repository state only. It does not prove
+O3, cross-host behavior, production readiness, release readiness, or broad user
+value.
 
 ## Delivery method
 

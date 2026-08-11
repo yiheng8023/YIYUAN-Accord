@@ -45,10 +45,10 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertEqual(report["release"], "v0.1")
         self.assertEqual(
             report["activeIncrement"],
-            "increment.context-continuity-product-slice",
+            "increment.capability-lifecycle-product-slice",
         )
-        self.assertFalse(report["criterionStates"]["O4"])
-        self.assertEqual(report["outcomes"], {"total": 5, "verified": 3})
+        self.assertTrue(report["criterionStates"]["O4"])
+        self.assertEqual(report["outcomes"], {"total": 5, "verified": 4})
         self.assertEqual(report["guardrails"], {"total": 4, "passed": 4})
         self.assertEqual(report["completionState"], "in-progress")
 
@@ -77,6 +77,86 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertIn(
             "work item work.unmapped must map to at least one acceptance criterion",
+            report["errors"],
+        )
+
+    def test_active_work_must_belong_to_the_active_increment(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            non_active_increment = next(
+                item
+                for item in program["increments"]
+                if item["id"] == "increment.context-continuity-product-slice"
+            )
+            non_active_increment["workItems"][0]["state"] = "active"
+            current_increment = next(
+                item for item in program["increments"] if item["state"] == "active"
+            )
+            current_increment["workItems"][0]["state"] = "planned"
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "active work work.run-real-continuity-slice must belong to the active increment",
+            report["errors"],
+        )
+
+    def test_completed_increment_cannot_retain_open_work(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            completed_increment = next(
+                item for item in program["increments"] if item["state"] == "completed"
+            )
+            completed_increment["workItems"][0]["state"] = "planned"
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "completed increment increment.product-control-reset cannot retain open work work.bind-product-constitution",
+            report["errors"],
+        )
+
+    def test_completed_increment_requires_its_outcomes_to_be_verified(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            shutil.copytree(ROOT / "product", target / "product")
+            acceptance_path = target / "product" / "acceptance.json"
+            acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
+            o4 = next(
+                item for item in acceptance["criteria"] if item["id"] == "O4"
+            )
+            o4["assessment"] = "planned"
+            o4.pop("evidence")
+            acceptance_path.write_text(
+                json.dumps(acceptance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "completed increment increment.context-continuity-product-slice requires verified outcome O4",
             report["errors"],
         )
 

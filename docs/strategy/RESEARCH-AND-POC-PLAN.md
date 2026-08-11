@@ -19,21 +19,21 @@ green fixture, or a previously open question is not sufficient entry evidence.
 
 ## Current v0.1 proof lanes
 
-Only two unverified product outcomes remain:
+Only O3 remains unverified.
 
 ### O4 — continuity product slice
 
-Use a naturally occurring continuation. Freeze repository truth, the active
-goal, authority boundary, causal rationale, completed evidence, open work, and
-cleanup state. A fresh receiver records material deltas and whether the user
-had to reconstruct information the Harness should have carried.
-
-Stop after one decision-relevant event. Static handoff shape and zero-model
-fixtures may prepare the mechanism but cannot pass O4.
+Completed on one naturally occurring fresh-receiver event bound to source
+revision `64a0f26fd32ad0b378e3dd836ee6f894a22234ec`. The receiver recovered the
+material task contract with zero user-restatement items and reported one
+non-material stop-condition wording delta. The evidence is bounded to that
+receiver and repository state; it is not a cross-host or future-continuity
+claim.
 
 ### O3 — capability lifecycle product slice
 
-Use the already-bound portfolio-coverage complaint: subtraction was driven
+This is the active proof lane. Use the already-bound portfolio-coverage
+complaint: subtraction was driven
 farther than demonstrated demand coverage, while the broader ecosystem was not
 systematically converted into usable, governed options. Do not ask the user to
 invent another task before designing this slice.
@@ -73,7 +73,7 @@ O3 has four finite work packages, activated one at a time:
 4. after separate live authority, run one lifecycle transaction and compare
    observed coverage, user burden, reliability, rollback, and residual state.
 
-The second package transfers tool-learning cost toward the AI: the AI should
+The third package transfers tool-learning cost toward the AI: the AI should
 learn the relevant tool surface, route and compose it, handle bounded setup and
 recovery, and explain only decisions that genuinely require human judgment.
 Success is reduced material user intervention without losing intent fidelity,

@@ -27,10 +27,27 @@ were zero, 18 product tests passed, and the commit was pushed to `origin/main`.
 Those facts prove the reset only. They do not prove O3, O4, v0.1 acceptance,
 cross-host behavior, production readiness, release readiness, or broad value.
 
+## Completed O4 event
+
+One real fresh receiver with no inherited conversation turns resumed from
+repository truth at source revision
+`64a0f26fd32ad0b378e3dd836ee6f894a22234ec`. It recovered the product goal,
+active increment and work item, causal contract, authority boundary,
+acceptance state, and next action with zero material user-restatement items.
+The bound receipt and validator were committed and pushed in `ce78747`; the
+receipt is
+`product/evidence/context-continuity-fresh-receiver-2026-08-11.json`.
+
+The event proves only this receiver and repository state. It does not prove
+cross-host continuity, future receiver behavior, O3, release readiness, or
+broad value. The receiver also found that the program's O4 stop condition was
+less explicit than the goal-mode prompt; the current authority now uses the
+stricter PASS, commit, and push boundary.
+
 ## Current increment
 
-`increment.context-continuity-product-slice` is active for O4. Product state
-remains `3/5` outcomes and `4/4` guardrails; completion is `in-progress`.
+`increment.capability-lifecycle-product-slice` is active for O3. Product state
+is `4/5` outcomes and `4/4` guardrails; completion remains `in-progress`.
 
 ## First checks in a continuation
 
@@ -45,21 +62,8 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-Build the smallest repository-anchored O4 source packet, run one authorized
-fresh-receiver event, and record the receiver delta. Do not ask the user to
-restate facts already carried by repository truth. Do not activate O3 or any
-external capability in this slice.
-
-The present continuation is process-loss feedback, not O4 passing evidence:
-the user had to redirect work from repeated governance expansion toward debt
-removal, product delivery, proactive capability use, and Agent-owned omission
-detection. This reset changes the control contract, but it does not retroactively
-turn the conversation into a successful receiver event. The next O4 event must
-test the corrected contract and stop at the first decision-relevant result.
-
-## Planned capability addition
-
-O3 follows O4. It starts from the already-bound complaint that subtraction was
+Bind and verify the finite O3 portfolio-curation contract, then audit the exact
+historical sparse baseline against the already-bound complaint that subtraction was
 not matched by demonstrated demand coverage. It may proactively curate a
 bounded exact-revision cohort into an inactive review pool; installation,
 enablement, accounts, execution, and consumer projection remain separate

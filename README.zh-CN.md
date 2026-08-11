@@ -12,10 +12,11 @@ Skill、MCP、Plugin、Hook、线程、工作树和管理器。
 ## 当前产品状态
 
 - 版本目标：`v0.1`；
-- 产品结果：已验证 `3/5`；
+- 产品结果：已验证 `4/5`；
 - 强制护栏：通过 `4/4`；
-- 当前唯一因果增量：`increment.context-continuity-product-slice`；
-- 总体仍为 `in-progress`：O3 能力生命周期和 O4 新任务连续性尚需真实产品切片。
+- 当前唯一因果增量：`increment.capability-lifecycle-product-slice`；
+- 总体仍为 `in-progress`：O4 已由一次有边界的 fresh-receiver 事件通过；
+  O3 仍需完成真实评价和一次另行授权的生命周期交易。
 
 本次主线重置本身就是用户提供的真实任务。它暴露了真实 Harness 缺陷：旧的研究与
 策展程序可以持续全绿，而产品交付、用户负担和清理并不控制下一步。新的产品控制
@@ -41,8 +42,9 @@ python -B scripts/verify.py
 python -B -m unittest discover -s tests/product -v
 ```
 
-PASS 只证明当前计划、验收映射、证据绑定、授权边界和身份门禁内部一致；它不证明
-O3、O4、跨宿主行为、生产就绪、发布就绪或广泛用户价值。
+PASS 只证明当前计划、验收映射、证据绑定、授权边界和身份门禁内部一致；O4 证据
+仅覆盖一个 fresh receiver 和当时的仓库状态。它不证明 O3、跨宿主行为、生产就绪、
+发布就绪或广泛用户价值。
 
 ## 实施方法
 
