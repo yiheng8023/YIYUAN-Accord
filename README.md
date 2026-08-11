@@ -2,231 +2,118 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An agent-neutral research harness for autonomy, human-Agent collaboration,
-capability orchestration, lifecycle control, and evidence-bound engineering.
+Agent Autonomy Harness is an agent-neutral product for keeping a real task's
+goal, capability route, authority boundary, lifecycle, continuity, evidence,
+and cleanup coherent without making the user orchestrate every Agent, Skill,
+MCP server, Plugin, Hook, thread, worktree, or manager.
 
-The north star is to move Agent mechanics out of the user's head while
-preserving human control over goals, creative judgment, consequential
-decisions, and bounded authorization.
+The product is not a large Skills list. External capabilities are replaceable
+inputs and adapters; the Harness is the decision and lifecycle contract that
+decides when they are needed, what authority they receive, how their effects
+are observed, and when they are released.
 
-## Decision card
+## Current product state
 
-- **Repository posture:** public research and falsifiable proof. There is no
-  host-neutral production runtime, broad candidate-value result, or proved
-  residual self-authored gap.
-- **Current Skill authority:** active adapted third-party payload release: `0`.
-  The inherited 19-Skill/40-file release is deprecated transition evidence,
-  not a current install, update, routing, or product source.
-- **Current inactive pool:** 17 reviewed exact-upstream candidates. Sixteen
-  dependency-complete candidates are managed by CC Switch v3.19.2 with every
-  host flag off and zero consumer projections after an ordinary restart.
-  `customer-research` remains review-only and is not installed.
-- **Current gate:** portfolio curation does not require a real task and may
-  continue in bounded, exact-upstream, inactive cohorts. A naturally occurring
-  real task and a demonstrated current-path gap are required only before
-  task-time activation or behavior, value, portability, and production claims.
-- **Manager boundary:** CC Switch is a replaceable operational adapter where
-  suitable, not the portable product contract. PR 6086 and its fork are an
-  optional upstream contribution, not a Harness dependency.
-- **Plugin posture:** the Harness remains an independent Agent-neutral product
-  and may emit generated plugin consumer projections. It is currently
-  `plugin-compatible + manager-agnostic + release-not-eligible`; a plugin
-  must not bundle CC Switch-managed third-party payloads or create a second
-  lifecycle authority.
-- **Current Matt provenance:** the 25 managed payloads match exact release
-  `v1.2.3@6acc160e`, and CC Switch source metadata is pinned to that tag after
-  a recoverable metadata-only transaction. This does not prove invocation,
-  behavior, value, portability, or production readiness.
-- **Decision-packet mechanism:** one structured `GEN-RESEARCH-01` request now
-  builds a deterministic, source-bound six-route packet. It retains unknowns,
-  evidence ceilings, fallback order, authorization gates, and false claim
-  ceilings; all 14 injected promotions fail closed and `selectedRoute` stays
-  `null`. This is zero-model mechanism evidence, not execution or value proof.
+- Release target: `v0.1`.
+- Product outcomes: `3/5` currently verified.
+- Mandatory guardrails: `4/4` currently pass.
+- Active causal increment: `increment.product-control-reset`.
+- Completion remains `in-progress`; O3 capability lifecycle and O4 fresh
+  continuation still require real product slices.
 
-The detailed current scheduler is the
-[goal-mode execution projection](docs/operations/CURRENT-GOAL-MODE-PROMPT.md).
+The current reset is itself a user-provided real task. It exposed a genuine
+Harness failure: a predecessor research and curation program could remain
+green while product delivery, user burden, and cleanup were not the controlling
+measures. The new product-control seam rejects unmapped work, multiple active
+increments, predecessor authority in active surfaces, and guardrails counted
+as product progress.
 
-## Decision-packet mechanism
+## Product contract
 
-Run the repository-owned, non-executing example:
+The current machine authority is deliberately small:
+
+- [constitution](product/constitution.json) — purpose, fixed invariants,
+  adaptive surfaces, and planning method;
+- [program](product/program.json) — one active causal increment and bounded
+  future increments;
+- [acceptance](product/acceptance.json) — five outcomes plus four mandatory
+  guardrails;
+- [architecture](docs/architecture.md) — portable core, lifecycle plane, host
+  adapters, and consumer projections.
+
+Historical research, fixtures, registries, and regression tools remain
+retrievable from Git history, but they have no current product, planning,
+acceptance, runtime, or release authority. A host-policy-blocked local ignored
+quarantine does not alter that boundary.
+
+## Verify
+
+Run the current public product seam:
 
 ```powershell
-python -B scripts/build_harness_decision_packet.py tests/fixtures/harness-decision-request-gen-research-01.json
+python -B -m harness verify --root . --json
+python -B scripts/verify.py
+python -B -m unittest discover -s tests/product -v
 ```
 
-The command prints canonical JSON to stdout. It does not invoke a model or
-candidate, select a route, install or enable anything, connect an account,
-mutate a manager or consumer, publish, or release. A passing packet proves only
-the bounded source-binding and fail-closed mechanism described by its evidence
-ceilings.
+A PASS means only that the current product plan, acceptance mapping, evidence
+bindings, authority boundary, and identity guard are internally consistent. It
+does not prove O3, O4, cross-host behavior, production readiness, release
+readiness, or broad user value.
 
-## What problem this project addresses
+## Delivery method
 
-Agent ecosystems expose native features, Skills, MCP servers, Plugins, Apps,
-Hooks, repositories, threads, worktrees, and permission surfaces. Users should
-not need to learn and manually orchestrate all of them for ordinary work.
+The project uses a hybrid method:
 
-The target experience is a bounded autonomous loop:
+1. fix the purpose, product boundary, authority floor, and release acceptance;
+2. keep exactly one short causal increment active;
+3. state the observed problem, hypothesis, falsifier, acceptance mapping, and
+   finite stop condition;
+4. implement and observe the smallest product slice;
+5. replan only when evidence changes the causal model or the increment ends.
 
-1. interpret the real task and authority boundary;
-2. observe current host and collaboration state;
-3. choose the smallest sufficient capability path;
-4. activate only what the task needs;
-5. verify effects, release idle resources, and surface cleanup debt;
-6. preserve repository-anchored continuity when the collaboration moves.
+Research, ecosystem discovery, inventory growth, static review, zero-model
+fixtures, and test counts may support an outcome. They never count as an
+outcome themselves.
 
-This is not a promise that every host currently exposes the required control
-surfaces. Missing telemetry or actuation remains an explicit research result.
+Minimal sufficiency is measured against demand coverage, not against the
+smallest possible capability count. A bounded portfolio-curation increment may
+proactively compare and acquire exact candidates into an inactive review pool;
+live installation, activation, accounts, and consumer projection remain
+separate authority transitions.
 
-## Product boundaries
+## Capability order
 
-The Harness keeps five layers distinct:
-
-1. **Portable decision core** — intent, routing, context lifecycle, task
-   topology, verification, handoff, and closure contracts.
-2. **Runtime lifecycle plane** — observed state, desired state, ownership,
-   leases, release, recovery, and cleanup evidence.
-3. **Host adapters** — Codex, Claude Code, Kimi, and future host-specific
-   events, Hooks, APIs, commands, and degradation paths.
-4. **Capability ecosystem governance** — source discovery, exact revisions,
-   licenses, security, dependencies, overlap, maintenance, permissions, and
-   admission decisions across capability types.
-5. **Consumer projections** — separately governed installation and runtime
-   distribution, including CC Switch and host-native plugin managers where
-   appropriate. A plugin is one projection of the product, not the product
-   authority or a universal capability manager.
-
-Native host authorization and permission enforcement remain authoritative.
-The Harness may reduce unnecessary prompts, but it does not bypass or recreate
-the host permission system.
-
-## Capability governance
-
-Use this order unless evidence proves a better bounded route:
+For a bound need, prefer:
 
 1. healthy native or runtime-owned capability;
 2. suitable official capability;
 3. reviewed and maintained external implementation;
 4. composition of existing capabilities;
-5. self-authored implementation only for a reproducible residual gap.
+5. repository-authored implementation only for an evidenced residual gap.
 
-Three ownership classes remain separate:
-
-- Official, runtime-owned, or built-in capabilities remain environment-owned
-  dated baselines and are not vendored here.
-- Third-party candidates remain exact upstream. This repository stores review,
-  provenance, compatibility, routing, and lifecycle evidence, not a rewritten
-  current payload release.
-- A repository-authored Skill or other implementation may enter a future
-  release only after residual-gap proof and ordinary admission. The valid
-  admitted count may remain zero.
-
-Listing, acquisition, installation, enablement, exposure, invocation,
-instruction delivery, behavior, value, and portability are separate evidence
-states. One does not prove the next.
-
-## Current research lanes
-
-The first three proof lanes are:
-
-1. context lifecycle -> repository-anchored handoff -> continuation;
-2. task topology -> branch/worktree judgment -> bounded execution and cleanup;
-3. task-scoped MCP lifecycle -> release -> failure recovery.
-
-The project also evaluates cross-Agent semantic continuity, process loss,
-resource-pressure attribution, and multidimensional software-engineering
-quality. Current synthetic or zero-model results do not prove live-domain,
-cross-host, production, or broad-population value.
-
-## Start here
-
-- [Product north star](docs/strategy/PRODUCT-NORTH-STAR.md)
-- [Architecture](docs/architecture.md)
-- [Research and PoC plan](docs/strategy/RESEARCH-AND-POC-PLAN.md)
-- [Scenario and evidence matrix](docs/strategy/POC-SCENARIO-EVIDENCE-MATRIX.md)
-- [Latest continuation](docs/operations/CONTINUATION.md)
-- [Open-source readiness](docs/operations/OPEN-SOURCE-READINESS.md)
-- [Current Skill portfolio authority](registry/skill-portfolio-current-authority.json)
-- [Program acceptance map](registry/program-acceptance-map.json)
+Installation, enablement, account connection, live dispatch, consumer
+mutation, acceptance, release, and publication remain distinct transitions.
 
 ## Repository map
 
-- `docs/strategy/` — current product, research, evaluation, and proof plans;
-- `registry/` — governed policy, evidence, topology, admission, and event data;
-- `audits/` — bounded source and runtime evidence;
-- `sources/` — source pins, licenses, selections, and provenance;
-- `policies/` and `schemas/` — machine-checkable governance contracts;
-- `scripts/` and `tests/` — builders, validators, simulations, and tests;
-- `generated/` — derived projections, never independent authority;
-- `skills/` and `release-manifest.json` — deprecated adapted third-party
-  transition evidence, retained for history and deterministic verification.
+- `product/` — current constitution, program, acceptance, and bounded evidence;
+- `harness/` — current product-control kernel;
+- `tests/product/` — tests at the public product seam;
+- `docs/architecture.md` and `docs/strategy/` — current product design and
+  triggered research plan;
+- `docs/operations/` — compact continuation and current execution projection;
+- Git history — predecessor and later evidence remain retrievable without
+  shipping them in every current checkout. See the
+  [history boundary](docs/operations/HISTORY.md).
 
-## Verification
+## Safety and rights
 
-Run the bounded repository checks:
+Native host authorization remains authoritative. The Harness does not bypass
+permission systems or infer new trust, cost, destructive, account, publication,
+release, or irreversible authority.
 
-```bash
-python -B scripts/verify_bootstrap.py
-python -B scripts/verify.py
-```
-
-For the complete local test surface:
-
-```bash
-python -B -m unittest discover -s tests -v
-```
-
-A green verifier proves only the checks it actually covers. It does not prove
-current live host state, candidate value, release readiness, or user acceptance.
-Hosted CI is optional corroboration, not a paid acceptance dependency.
-
-## Contributing and support
-
-- [Contributing](CONTRIBUTING.md)
-- [Security policy](SECURITY.md)
-- [Code of conduct](CODE_OF_CONDUCT.md)
-- [Support](SUPPORT.md)
-
-Candidate suggestions, source corrections, security findings, host evidence,
-counterexamples, and deterministic verification improvements are welcome.
-Contribution does not imply admission, installation, activation, release, or
-support priority.
-
-## Open-source and safety posture
-
-The repository is public under a layered rights model:
-
-- repository-owned code and governance machinery: Apache-2.0;
-- repository-owned documentation and public governance text: see
-  [license policy](docs/license-policy.md);
-- third-party material: governed by its original license and the boundaries in
-  [NOTICE](NOTICE), the [license policy](docs/license-policy.md), and the
-  [historical adapted-payload notices](THIRD_PARTY_NOTICES.md).
-
-Do not publish credentials, private memory, account state, proprietary inputs,
-restricted source bodies, or unsanitized consumer configuration. Runtime
-installation, account connection, external writes, and trust-boundary changes
-remain separately authorized operations.
-
-Public visibility is not open-source closure. The current gates and dated
-limitations are recorded in
-[Open-source readiness](docs/operations/OPEN-SOURCE-READINESS.md).
-
-## Legacy evidence
-
-This repository was bootstrapped on 2026-07-18 from the complete Git history of
-`agent-skills-curated`. That literal name, historical `skill.curated.*` IDs,
-old approval events, and deprecated manifest identities remain valid historical
-evidence. They are not the current product identity or routing authority.
-
-The current boundary is recorded in
-[`registry/skill-portfolio-current-authority.json`](registry/skill-portfolio-current-authority.json).
-Migration history remains available in
-[`docs/legacy-curated-skill-source-migration-review-2026-07-18.md`](docs/legacy-curated-skill-source-migration-review-2026-07-18.md)
-and Git history.
-
-## Sponsoring
-
-Sponsorship is optional and does not purchase support priority, admission,
-release decisions, governance exceptions, feature commitments, or technical
-influence. See [Sponsoring](SPONSORING.md).
+Repository-owned code is Apache-2.0 unless a file states otherwise. Third-party
+material retains its original rights; see [NOTICE](NOTICE),
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and
+[license policy](docs/license-policy.md).

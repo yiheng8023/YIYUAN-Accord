@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "project-reset-cleanup-observation-2026-08-11",
+  "observedDate": "2026-08-11",
+  "roots": ["C:/tmp", "C:/Users/15521/AppData/Local/Temp"],
+  "targetPattern": "^(agent-autonomy|aah-|mcp-|cc-switch|codex-app-server|tdd-|process-fidelity|acceptance-authority-v2-overlay-)",
+  "operation": "user-executed exact-child deletion after parent-boundary checks, followed by Agent read-only verification",
+  "remainingMatches": 0,
+  "observedSystemDriveFreeGiB": 542.17,
+  "claimLimits": [
+    "covers only direct child paths matching the declared pattern in the declared roots",
+    "does not claim that all system temporary files were removed",
+    "does not claim that unrelated applications have no cache or resource debt",
+    "does not claim that the repository-local ignored legacy quarantine was physically deleted",
+    "does not authorize future broad or recursive cleanup outside an exact bounded target"
+  ]
+}

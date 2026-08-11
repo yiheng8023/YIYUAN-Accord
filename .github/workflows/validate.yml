@@ -1,4 +1,4 @@
-name: validate
+name: validate-product
 
 on:
   push:
@@ -21,13 +21,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Test governance contracts
-        run: python -m unittest discover -s tests -v
-      - name: Check release manifest projection
-        run: python scripts/build_release_manifest.py --check
-      - name: Check generated topology projections
-        run: python scripts/build_topology.py --check
-      - name: Simulate routing policy
-        run: python scripts/simulate_routing.py --all
-      - name: Verify Harness contracts
-        run: python scripts/verify.py
+      - name: Test current product seam
+        run: python -B -m unittest discover -s tests/product -v
+      - name: Verify current product control
+        run: python -B scripts/verify.py

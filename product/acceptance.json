@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "id": "harness-product-acceptance-v0.1",
+  "productId": "agent-autonomy-harness",
+  "release": "v0.1",
+  "program": "product/program.json",
+  "completionExpression": "O1 && O2 && O3 && O4 && O5",
+  "progressRule": "Only outcome criteria O1-O5 count as product progress. Guardrails are mandatory constraints and never increase that count.",
+  "criteria": [
+    {
+      "id": "O1",
+      "class": "outcome",
+      "name": "finite plan-bound delivery",
+      "statement": "The release has one finite acceptance expression, one active causal increment, and every work item maps to a criterion.",
+      "metric": "structural product-control validation",
+      "threshold": "zero mapping errors, exactly one active increment, at most one active work item",
+      "assessment": "computed"
+    },
+    {
+      "id": "O2",
+      "class": "outcome",
+      "name": "real task produces a route",
+      "statement": "A user-provided real task produces a non-null capability route with explicit authority and claim boundaries.",
+      "metric": "source-bound real-task route records",
+      "threshold": "at least one current record with a non-null selectedRoute",
+      "assessment": "verified",
+      "evidence": ["product/evidence/project-reset-real-task-route-2026-08-11.json"]
+    },
+    {
+      "id": "O3",
+      "class": "outcome",
+      "name": "task-scoped capability lifecycle",
+      "statement": "One naturally occurring capability need completes preview, bounded activation, observation, dual-host projection where applicable, rollback, and cleanup through one lifecycle owner.",
+      "metric": "real lifecycle transactions with complete receipts",
+      "threshold": "one accepted transaction with no residual projection and no dual authority",
+      "assessment": "planned"
+    },
+    {
+      "id": "O4",
+      "class": "outcome",
+      "name": "fresh continuation preserves the task contract",
+      "statement": "A fresh task resumes from repository truth without requiring the user to restate a material goal, authority boundary, causal rationale, or open work item.",
+      "metric": "receiver delta on a real continuation",
+      "threshold": "zero material user-restatement items and an explicit receiver claim boundary",
+      "assessment": "planned"
+    },
+    {
+      "id": "O5",
+      "class": "outcome",
+      "name": "cleanup is part of delivery",
+      "statement": "The bounded task closes without matching Harness temporary residues and reports any unrelated or policy-blocked remainder honestly.",
+      "metric": "targeted residue count after cleanup",
+      "threshold": "zero matching residues in the declared roots",
+      "assessment": "verified",
+      "evidence": ["product/evidence/project-reset-cleanup-observation-2026-08-11.json"]
+    },
+    {
+      "id": "G1",
+      "class": "guardrail",
+      "name": "human authority preserved",
+      "statement": "The product never infers new trust, account, cost, publication, release, destructive, or irreversible authority.",
+      "metric": "declared authority boundary",
+      "threshold": "all active work remains inside the program authority boundary",
+      "assessment": "computed"
+    },
+    {
+      "id": "G2",
+      "class": "guardrail",
+      "name": "claim scope matches evidence",
+      "statement": "Inventory, exposure, fixtures, local tests, and zero-model checks are not promoted into behavior, value, portability, production, or release claims.",
+      "metric": "evidence claim-limit completeness",
+      "threshold": "every verified evidence record declares non-empty claimLimits",
+      "assessment": "computed"
+    },
+    {
+      "id": "G3",
+      "class": "guardrail",
+      "name": "independent current authority",
+      "statement": "No active product authority depends on a predecessor identity, predecessor plan, or predecessor acceptance map.",
+      "metric": "active-authority identity and path scan",
+      "threshold": "zero forbidden matches",
+      "assessment": "computed"
+    },
+    {
+      "id": "G4",
+      "class": "guardrail",
+      "name": "bounded resource stewardship",
+      "statement": "Temporary artifacts are scoped, attributable, checked, and cleaned without broad deletion.",
+      "metric": "targeted cleanup evidence",
+      "threshold": "declared roots, exact pattern, zero remaining matches, and explicit claim limits",
+      "assessment": "verified",
+      "evidence": ["product/evidence/project-reset-cleanup-observation-2026-08-11.json"]
+    }
+  ]
+}

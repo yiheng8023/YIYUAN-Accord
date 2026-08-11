@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "harness-product-constitution-v1",
+  "productId": "agent-autonomy-harness",
+  "purpose": "Reduce the user's Agent-learning and orchestration burden by giving an Agent a bounded, observable loop for intent, capability choice, lifecycle control, continuity, verification, and cleanup while preserving human authority over goals, judgment, trust, cost, and irreversible effects.",
+  "successDefinition": "A user can state a real goal and corrections while the Harness keeps the active outcome, capability route, authority boundary, lifecycle state, evidence, handoff, and cleanup coherent with fewer user orchestration interventions than an ad-hoc path.",
+  "fixedInvariants": [
+    "product outcomes outrank artifact counts, test counts, inventory counts, and research volume",
+    "one release has one explicit finite acceptance expression",
+    "guardrails constrain delivery but never count as product progress",
+    "every active work item maps to at least one release criterion",
+    "only one causal increment may be active",
+    "external capability expansion follows an evidenced gap and bounded authority",
+    "portfolio sufficiency is judged by demand coverage rather than by minimizing capability count",
+    "bounded inactive portfolio curation may investigate coverage without granting activation authority",
+    "historical evidence cannot become current authority by remaining on disk",
+    "unsupported host behavior is reported rather than simulated"
+  ],
+  "adaptiveSurfaces": [
+    "module shape",
+    "host-adapter sequence",
+    "native, official, reviewed external, composed, or authored capability choice",
+    "experiment design",
+    "delivery order inside the active causal increment"
+  ],
+  "planningModel": {
+    "method": "fixed-product-acceptance-with-adaptive-causal-increments",
+    "maxActiveIncrements": 1,
+    "maxActiveWorkItems": 1,
+    "incrementRequires": [
+      "observed problem",
+      "causal hypothesis",
+      "falsifier",
+      "mapped acceptance criteria",
+      "finite stop condition"
+    ],
+    "replanWhen": [
+      "the hypothesis is falsified",
+      "new evidence changes the critical path",
+      "authority or trust boundaries change",
+      "the increment reaches its stop condition"
+    ]
+  },
+  "requiredAuthorityFiles": [
+    "product/constitution.json",
+    "product/program.json",
+    "product/acceptance.json",
+    "product/evidence/project-reset-real-task-route-2026-08-11.json",
+    "product/evidence/project-reset-cleanup-observation-2026-08-11.json",
+    "README.md",
+    "README.zh-CN.md",
+    "AGENTS.md",
+    "NOTICE",
+    "docs/architecture.md",
+    "docs/strategy/PRODUCT-NORTH-STAR.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "docs/operations/CURRENT-GOAL-MODE-PROMPT.md",
+    "docs/operations/CONTINUATION.md",
+    "docs/operations/HISTORY.md",
+    ".github/workflows/validate.yml",
+    "scripts/verify.py",
+    "harness/__init__.py",
+    "harness/__main__.py",
+    "harness/control.py"
+  ],
+  "activeAuthorityGlobs": [
+    "product/**/*.json",
+    "harness/**/*.py"
+  ],
+  "bootstrapGuards": [
+    "code-owned predecessor identity rejection",
+    "code-owned predecessor plan and acceptance path rejection"
+  ],
+  "legacyEvidenceBoundary": {
+    "role": "inactive historical evidence reachable through repository history or explicitly legacy files",
+    "productAuthority": false,
+    "planningAuthority": false,
+    "acceptanceAuthority": false,
+    "runtimeAuthority": false,
+    "releaseAuthority": false
+  }
+}

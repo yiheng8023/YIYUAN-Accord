@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "id": "harness-product-program-v0.1",
+  "productId": "agent-autonomy-harness",
+  "release": "v0.1",
+  "purpose": "Deliver the smallest falsifiable Harness loop on real project work, starting with recovery from this repository's own drift.",
+  "constitution": "product/constitution.json",
+  "acceptance": "product/acceptance.json",
+  "status": "active",
+  "activeIncrementId": "increment.product-control-reset",
+  "authorityBoundary": {
+    "userOwns": [
+      "product-direction",
+      "creative-judgment",
+      "new-trust",
+      "new-account",
+      "new-cost",
+      "publication",
+      "release",
+      "irreversible-action"
+    ],
+    "agentOwnsWithinBoundedAuthority": [
+      "repository-read",
+      "repository-edit",
+      "causal-planning",
+      "local-verification",
+      "progress-accounting",
+      "handoff",
+      "bounded-cleanup",
+      "git-commit",
+      "git-push"
+    ]
+  },
+  "completionExpression": "O1 && O2 && O3 && O4 && O5",
+  "increments": [
+    {
+      "id": "increment.product-control-reset",
+      "state": "active",
+      "observedProblem": "The current machine plan predates the Harness identity, mixes research and governance evidence with product outcomes, and can remain green while the user receives no product increment.",
+      "hypothesis": "Replacing that authority with one finite product acceptance map and enforcing plan-to-acceptance mapping will stop artifact growth from masquerading as product progress.",
+      "falsifier": "The new verifier passes while an active work item is unmapped, a predecessor authority drives an active surface, or guardrails increase the product progress count.",
+      "stopCondition": "The current product authority is independent, the real reset task has a non-null route, targeted cleanup is recorded, the public verifier passes, and the change is committed and pushed.",
+      "acceptanceIds": ["O1", "O2", "O5", "G1", "G2", "G3", "G4"],
+      "workItems": [
+        {
+          "id": "work.bind-product-constitution",
+          "state": "completed",
+          "acceptanceIds": ["O1", "G1", "G2"],
+          "operationIds": ["repository-read", "repository-edit", "causal-planning", "local-verification"],
+          "deliverables": ["product/constitution.json", "product/acceptance.json", "product/program.json"]
+        },
+        {
+          "id": "work.cut-over-active-authority",
+          "state": "completed",
+          "acceptanceIds": ["O1", "O2", "G3"],
+          "operationIds": ["repository-read", "repository-edit", "local-verification"],
+          "deliverables": ["harness/control.py", "scripts/verify.py", "tests/product/test_product_control.py"]
+        },
+        {
+          "id": "work.bind-cleanup-observation",
+          "state": "completed",
+          "acceptanceIds": ["O5", "G4"],
+          "operationIds": ["repository-read", "bounded-cleanup", "progress-accounting"],
+          "deliverables": ["product/evidence/project-reset-cleanup-observation-2026-08-11.json"]
+        },
+        {
+          "id": "work.close-reset-increment",
+          "state": "active",
+          "acceptanceIds": ["O1", "G1", "G2", "G3", "G4"],
+          "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
+          "deliverables": ["local verification", "Git commit", "origin/main push"]
+        }
+      ]
+    },
+    {
+      "id": "increment.context-continuity-product-slice",
+      "state": "planned",
+      "observedProblem": "Long collaboration chains can lose the active goal, authority boundary, open work, and causal rationale.",
+      "hypothesis": "A repository-anchored handoff and fresh-task receiver check can preserve the bounded task contract with less user reconstruction.",
+      "falsifier": "A fresh receiver needs the user to restate a material goal, authority, or open-work fact already carried by the Harness.",
+      "stopCondition": "O4 passes on a fresh real continuation event with a receiver delta and explicit claim boundary.",
+      "acceptanceIds": ["O4", "G1", "G2", "G4"],
+      "workItems": [
+        {
+          "id": "work.run-real-continuity-slice",
+          "state": "planned",
+          "acceptanceIds": ["O4", "G1", "G2", "G4"],
+          "operationIds": ["repository-read", "repository-edit", "local-verification", "handoff", "bounded-cleanup"],
+          "deliverables": ["one source-bound handoff", "one fresh receiver delta", "cleanup receipt"]
+        }
+      ]
+    },
+    {
+      "id": "increment.capability-lifecycle-product-slice",
+      "state": "planned",
+      "observedProblem": "The current capability portfolio has been optimized for subtraction without proving demand coverage, while any selected external capability can still leave activation, ownership, projection, rollback, or cleanup work with the user.",
+      "hypothesis": "A bounded demand taxonomy, inactive reviewed cohort, and replaceable manager adapter can add decision-relevant coverage and complete preview, apply, observe, and rollback without becoming portable-core authority.",
+      "falsifier": "The cohort adds no decision-relevant coverage, the slice requires dual lifecycle owners or manual state reconstruction, authority expands without approval, or rollback leaves residual projection.",
+      "stopCondition": "O3 passes on the already-bound portfolio coverage problem through one separately authorized live transaction with accepted task coverage and zero residual projection.",
+      "acceptanceIds": ["O3", "G1", "G2", "G4"],
+      "workItems": [
+        {
+          "id": "work.run-real-capability-lifecycle-slice",
+          "state": "planned",
+          "acceptanceIds": ["O3", "G1", "G2", "G4"],
+          "operationIds": ["external-capability-preview", "external-capability-mutation", "consumer-projection", "rollback"],
+          "authorityGate": "separate-live-mutation-authorization-required",
+          "deliverables": ["preview", "apply observation", "dual-host observation", "rollback and cleanup receipt"]
+        }
+      ]
+    }
+  ]
+}

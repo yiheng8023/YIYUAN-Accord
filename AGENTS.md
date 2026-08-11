@@ -1,63 +1,48 @@
 # Agent Autonomy Harness Repository Guidance
 
 This repository is the product authority for an agent-neutral autonomy,
-collaboration, and capability-orchestration harness.
+collaboration, and capability-lifecycle harness.
 
-The north star is to reduce the user's Agent learning and orchestration burden
-while preserving human control over goals, creative judgment, consequential
-decisions, and bounded authorization.
+## Current authority
 
-Current phase: external landscape research, host-capability verification, and
-small falsifiable proofs of concept. Do not claim that dynamic MCP lifecycle
-control, context telemetry, automatic thread creation, or equivalent behavior
-exists on a host until that host has been tested.
+Start from `product/constitution.json`, `product/program.json`, and
+`product/acceptance.json`. They are the current purpose, work, and acceptance
+authority. `docs/operations/CONTINUATION.md` is only a navigation aid; verify
+live Git truth before relying on it.
 
-Use this priority order:
+Historical registries, research records, fixtures, payloads, scripts, and tests
+are inactive evidence unless the active causal increment binds them. They do
+not become current authority because a file remains on disk or an old verifier
+passes.
 
-1. healthy native or runtime-owned capability;
-2. suitable official capability;
-3. reviewed and maintained external implementation;
-4. composition of existing capabilities;
-5. self-authored implementation only for an evidenced residual gap.
+## Delivery discipline
 
-Keep portable decision contracts, host-specific adapters, capability-source
-governance, and consumer projections distinct. Treat AGENTS/rules, Skills,
-Hooks, MCPs, Plugins, Apps, and native Agent capabilities as one broad chain
-with different authority and lifecycle costs. Do not keep every external
-capability permanently active.
+- Keep exactly one causal increment and at most one work item active.
+- Every work item must map to at least one product outcome or mandatory
+  guardrail.
+- Product progress counts only O1-O5. Guardrails, artifacts, inventory,
+  exposure, fixtures, and test counts do not count as outcomes.
+- State the observed problem, hypothesis, falsifier, and finite stop condition
+  before adding work.
+- Replan when evidence falsifies the hypothesis, changes the critical path, or
+  closes the increment. Do not accumulate speculative future work.
+- Use `python -B -m harness verify --root . --json` and
+  `python -B -m unittest discover -s tests/product -v` as the current product
+  verification seam.
 
-Preserve three distinct governance classes. An official, runtime-owned, or
-built-in Skill remains dated external capability metadata and must not be
-vendored. A third-party candidate remains exact upstream and must not enter an
-execution path before license/provenance, security, dependency, maintenance,
-portability, overlap, and validation review plus separate manager/consumer
-authority; its body does not enter the current repository release. Only an
-admitted repository-authored residual-gap Skill may enter a future active
-release inventory. Consumer integration remains separately governed and this
-repository does not write to `codex-user-config`.
+## Capability and authority boundary
 
-The inherited 19 adapted third-party payloads are deprecated transition
-evidence, not current installation or update authority. Preserve third-party
-payload identity and bytes exact upstream by default; put portability,
-compatibility, routing, composition, and host differences in metadata, Recipes,
-adapters, or repository-owned wrappers. Portfolio curation is distinct from
-task-time activation: a bounded coverage/source/isolation/review/authority/
-verification/stop-rule contract may drive broad inactive-pool discovery and
-review without one end-user task, while installation, enablement, execution,
-and persistent activation remain separately governed.
+Prefer healthy native/runtime capability, then suitable official capability,
+then a reviewed maintained external implementation, then composition. Author
+only for an evidenced residual gap.
 
-Context governance concerns the effective lifetime of a collaboration, not a
-single universal token percentage. Support transparent counters, opaque hosts,
-automatic compression, heuristic fallback, and repository-anchored handoff.
+Do not infer installation, enablement, account connection, model dispatch,
+consumer mutation, publication, release, destructive cleanup, or a new trust
+boundary. Preserve native host authorization. Keep portable contracts,
+host-specific adapters, operational managers, and consumer projections
+separate.
 
-Use native host authorization and permission enforcement surfaces as the
-boundary, including approval dialogs, permission rules, or an equivalent
-host-owned mechanism. Plan and batch operations to avoid unnecessary prompts,
-but do not bypass or reproduce the host permission system.
-
-Before repository changes, inspect branch, status, HEAD, upstream, and relevant
-dirty files. Preserve inherited evidence and user changes. Do not delete the
-old repository or other workspaces without separate explicit authorization.
-
-Start continuation work from `docs/operations/CONTINUATION.md`, then verify live
-repository truth instead of treating the handoff as current fact.
+Before repository changes, inspect branch, status, HEAD, upstream,
+ahead/behind, and dirty files. Preserve unrelated user changes. Use exact,
+bounded targets for cleanup. Local deterministic verification is the primary
+evidence surface; hosted CI is corroboration only.

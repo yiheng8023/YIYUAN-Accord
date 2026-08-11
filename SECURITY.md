@@ -1,16 +1,17 @@
 # Security Policy
 
-Agent Autonomy Harness is a public research repository. Treat every external
+Agent Autonomy Harness is a public product repository with an unfinished v0.1
+runtime surface. Treat every external
 capability candidate, executable surface, instruction body, generated artifact,
 and runtime claim as untrusted until its applicable review and evidence gates
 close.
 
 ## Supported surface
 
-The current default branch is the maintained repository surface. Historical
-manifests, deprecated adapted payloads, drafts, audits, candidates, and dated
-observations are evidence, not supported production releases. The project does
-not currently claim a production-ready versioned runtime.
+The current default branch and product-control seam are the maintained
+repository surface. Earlier Git revisions are inactive evidence, not supported
+production releases. The project does not currently claim a production-ready
+versioned runtime.
 
 ## Reporting security issues
 

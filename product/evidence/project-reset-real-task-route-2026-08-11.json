@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "project-reset-real-task-route-2026-08-11",
+  "observedDate": "2026-08-11",
+  "task": {
+    "kind": "user-provided-real-project-task",
+    "summary": "Audit why Agent Autonomy Harness drifted, purge remaining debt, reset its plan and acceptance model, and remove predecessor authority coupling.",
+    "invented": false
+  },
+  "selectedRoute": {
+    "id": "route.native-repository-control-with-bounded-design-and-tdd",
+    "capabilities": [
+      "native repository inspection and editing",
+      "codebase-design seam analysis",
+      "test-first product-control verifier"
+    ],
+    "externalCapabilityActivation": false,
+    "reason": "The task is a local repository design and implementation problem; current native tools and already-installed guidance are sufficient for this increment."
+  },
+  "authority": {
+    "allowed": ["read repository truth", "edit the bound repository", "run local deterministic verification", "commit and push the resulting mainline increment"],
+    "notGranted": ["install or enable external capabilities", "mutate CC Switch or consumer configuration", "publish a release", "rewrite Git history", "delete unrelated workspaces"]
+  },
+  "claimLimits": [
+    "proves a non-null route for this real repository task only",
+    "does not prove Harness behavior on another task or host",
+    "does not prove user-value improvement until the resulting workflow is compared and accepted",
+    "does not authorize the planned live capability-lifecycle slice"
+  ]
+}
