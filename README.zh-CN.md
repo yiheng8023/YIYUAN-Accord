@@ -14,7 +14,7 @@ Skill、MCP、Plugin、Hook、线程、工作树和管理器。
 - 版本目标：`v0.1`；
 - 产品结果：已验证 `3/5`；
 - 强制护栏：通过 `4/4`；
-- 当前唯一因果增量：`increment.product-control-reset`；
+- 当前唯一因果增量：`increment.context-continuity-product-slice`；
 - 总体仍为 `in-progress`：O3 能力生命周期和 O4 新任务连续性尚需真实产品切片。
 
 本次主线重置本身就是用户提供的真实任务。它暴露了真实 Harness 缺陷：旧的研究与

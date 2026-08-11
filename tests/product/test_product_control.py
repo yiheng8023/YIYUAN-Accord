@@ -39,7 +39,10 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertTrue(report["valid"])
         self.assertEqual(report["productId"], "agent-autonomy-harness")
         self.assertEqual(report["release"], "v0.1")
-        self.assertEqual(report["activeIncrement"], "increment.product-control-reset")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.context-continuity-product-slice",
+        )
         self.assertEqual(report["outcomes"], {"total": 5, "verified": 3})
         self.assertEqual(report["guardrails"], {"total": 4, "passed": 4})
         self.assertEqual(report["completionState"], "in-progress")

@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.product-control-reset",
+  "activeIncrementId": "increment.context-continuity-product-slice",
   "authorityBoundary": {
     "userOwns": [
       "product-direction",
@@ -35,7 +35,7 @@
   "increments": [
     {
       "id": "increment.product-control-reset",
-      "state": "active",
+      "state": "completed",
       "observedProblem": "The current machine plan predates the Harness identity, mixes research and governance evidence with product outcomes, and can remain green while the user receives no product increment.",
       "hypothesis": "Replacing that authority with one finite product acceptance map and enforcing plan-to-acceptance mapping will stop artifact growth from masquerading as product progress.",
       "falsifier": "The new verifier passes while an active work item is unmapped, a predecessor authority drives an active surface, or guardrails increase the product progress count.",
@@ -65,7 +65,7 @@
         },
         {
           "id": "work.close-reset-increment",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["O1", "G1", "G2", "G3", "G4"],
           "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
           "deliverables": ["local verification", "Git commit", "origin/main push"]
@@ -74,7 +74,7 @@
     },
     {
       "id": "increment.context-continuity-product-slice",
-      "state": "planned",
+      "state": "active",
       "observedProblem": "Long collaboration chains can lose the active goal, authority boundary, open work, and causal rationale.",
       "hypothesis": "A repository-anchored handoff and fresh-task receiver check can preserve the bounded task contract with less user reconstruction.",
       "falsifier": "A fresh receiver needs the user to restate a material goal, authority, or open-work fact already carried by the Harness.",
@@ -83,7 +83,7 @@
       "workItems": [
         {
           "id": "work.run-real-continuity-slice",
-          "state": "planned",
+          "state": "active",
           "acceptanceIds": ["O4", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "repository-edit", "local-verification", "handoff", "bounded-cleanup"],
           "deliverables": ["one source-bound handoff", "one fresh receiver delta", "cleanup receipt"]

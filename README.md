@@ -17,7 +17,7 @@ are observed, and when they are released.
 - Release target: `v0.1`.
 - Product outcomes: `3/5` currently verified.
 - Mandatory guardrails: `4/4` currently pass.
-- Active causal increment: `increment.product-control-reset`.
+- Active causal increment: `increment.context-continuity-product-slice`.
 - Completion remains `in-progress`; O3 capability lifecycle and O4 fresh
   continuation still require real product slices.
 

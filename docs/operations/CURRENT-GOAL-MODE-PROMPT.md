@@ -2,46 +2,46 @@
 
 ## Goal
 
-Reset Agent Autonomy Harness onto a finite product-delivery mainline and remove
-all predecessor authority from current identity, planning, acceptance,
-verification, and execution.
+Pass O4 on one real continuation event: preserve the current task contract so
+a fresh receiver does not require the user to reconstruct material goal,
+authority, causal-rationale, open-work, evidence, or cleanup facts.
 
 ## Current causal increment
 
-`increment.product-control-reset`
+`increment.context-continuity-product-slice`
 
-Observed problem: the inherited machine program can remain green while
-research and evidence grow without a product increment.
+Observed problem: long collaboration chains lose active goal, authority,
+causal rationale, open work, evidence limits, and cleanup state, forcing the
+user to repeat context or correct drift.
 
-Hypothesis: one product constitution, one five-outcome acceptance expression,
-one active causal increment, and a public drift verifier will prevent artifact
-growth from masquerading as delivery.
+Hypothesis: a repository-anchored source packet plus a fresh receiver delta can
+preserve those facts without promoting the packet over live repository truth.
 
-Falsifier: the verifier passes with unmapped work, more than one active
-increment, predecessor authority in an active surface, or guardrails counted
-as product progress.
+Falsifier: the receiver needs the user to restate one material carried fact,
+or treats the packet as current fact without rechecking the repository.
 
-Stop condition: current authority is independent; O1, O2, and O5 plus G1-G4
-pass; deterministic tests pass; the change is committed and pushed.
+Stop condition: one real continuation event records zero material user
+restatement items, an explicit receiver claim boundary, deterministic PASS,
+commit, and push.
 
 ## Allowed work
 
 - inspect current repository truth;
-- edit the bound repository's current product surfaces;
-- move predecessor machinery behind an inactive legacy boundary;
+- edit the bound repository's O4 mechanism and evidence surfaces;
+- create a bounded source packet and use an already-authorized fresh-receiver
+  mechanism;
 - run local deterministic verification;
 - commit and push this bounded mainline increment.
 
 ## Not authorized by this increment
 
-- capability installation or enablement;
+- capability installation, enablement, or portfolio activation;
 - account connection or model dispatch;
 - CC Switch or consumer mutation;
-- live acceptance-authority migration;
 - release or publication;
 - Git-history rewriting;
 - unrelated workspace deletion;
-- starting O3 or O4 before this increment reaches its stop condition.
+- claiming O3 or v0.1 acceptance.
 
 ## Required checks
 
