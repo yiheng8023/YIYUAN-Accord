@@ -990,6 +990,7 @@ class ProductControlCliTests(unittest.TestCase):
             active_work["authorityGate"] = (
                 "complete-portfolio-curation-contract-required"
             )
+            active_work.pop("capabilityContext", None)
             program_path.write_text(
                 json.dumps(program, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
@@ -1139,25 +1140,6 @@ class ProductControlCliTests(unittest.TestCase):
                 "capability-static-review",
                 "inactive-exact-acquisition",
             ]
-            active_work["capabilityContext"] = {
-                "mode": "portfolio-curation",
-                "coverageObjective": "close evaluated lifecycle coverage gaps",
-                "demandTaxonomy": ["software lifecycle", "Harness scenarios"],
-                "candidateSourceBoundary": "pinned reviewed upstream sources",
-                "accountDataBoundary": "public metadata and repository-local evidence",
-                "inactiveAcquisitionRoot": ".tmp/capability-review",
-                "reviewCriteria": [
-                    "provenance",
-                    "license",
-                    "security",
-                    "maintenance",
-                    "overlap",
-                    "portability",
-                ],
-                "authorityBoundary": "no install enablement execution or projection",
-                "verificationSurface": "exact revisions and review receipts",
-                "cohortStopRule": "stop after ten candidates or coverage saturation",
-            }
             program_path.write_text(
                 json.dumps(program, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
@@ -1185,18 +1167,12 @@ class ProductControlCliTests(unittest.TestCase):
                 item for item in active_increment["workItems"] if item["state"] == "active"
             )
             active_work["operationIds"] = ["inactive-exact-acquisition"]
-            active_work["capabilityContext"] = {
-                "mode": "portfolio-curation",
-                "coverageObjective": "close evaluated lifecycle coverage gaps",
-                "demandTaxonomy": ["software lifecycle"],
-                "candidateSourceBoundary": "pinned reviewed upstream sources",
-                "accountDataBoundary": "public metadata only",
-                "inactiveAcquisitionRoot": "product/evidence/candidates",
-                "reviewCriteria": ["provenance", "license", "security"],
-                "authorityBoundary": "no install enablement execution or projection",
-                "verificationSurface": "exact revisions and review receipts",
-                "cohortStopRule": "stop after ten candidates",
-            }
+            active_work["capabilityContext"]["allowedOperations"] = [
+                "inactive-exact-acquisition"
+            ]
+            active_work["capabilityContext"]["inactiveAcquisitionRoot"] = (
+                "product/evidence/candidates"
+            )
             program_path.write_text(
                 json.dumps(program, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
@@ -1210,6 +1186,68 @@ class ProductControlCliTests(unittest.TestCase):
             f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
             report["errors"],
         )
+
+    def test_portfolio_context_rejects_semantic_boundary_conflicts(self) -> None:
+        mutations = {
+            "wrong task": lambda context: context.__setitem__(
+                "taskBinding", "some-other-task"
+            ),
+            "wrong objective": lambda context: context.__setitem__(
+                "coverageObjectiveId", "grow-the-capability-count"
+            ),
+            "private data": lambda context: context["accountDataPolicy"].__setitem__(
+                "privateDataAllowed", True
+            ),
+            "missing denied operation": lambda context: context.__setitem__(
+                "deniedOperations", ["publication"]
+            ),
+            "unbounded cohort": lambda context: context["cohortPolicy"].__setitem__(
+                "maxCandidates", 999
+            ),
+            "no cleanup": lambda context: context["cohortPolicy"].__setitem__(
+                "cleanupRequired", False
+            ),
+            "shared temporary root": lambda context: context.__setitem__(
+                "inactiveAcquisitionRoot", ".tmp/"
+            ),
+            "missing review criterion": lambda context: context.__setitem__(
+                "reviewCriteria", ["license-and-redistribution"]
+            ),
+            "missing verification requirement": lambda context: context.__setitem__(
+                "verificationRequirements", ["static-review-receipt"]
+            ),
+            "conflicting free prose": lambda context: context.__setitem__(
+                "authorityBoundary", "allow all private account execution"
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                shutil.copytree(ROOT / "product", target / "product")
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                active_increment = next(
+                    item for item in program["increments"] if item["state"] == "active"
+                )
+                active_work = next(
+                    item
+                    for item in active_increment["workItems"]
+                    if item["state"] == "active"
+                )
+                mutate(active_work["capabilityContext"])
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                report = json.loads(result.stdout)
+                self.assertFalse(report["criterionStates"]["G1"])
+                self.assertIn(
+                    f"active or completed work {active_work['id']} has capability operations without an eligible capabilityContext",
+                    report["errors"],
+                )
 
     def test_o3_verification_remains_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

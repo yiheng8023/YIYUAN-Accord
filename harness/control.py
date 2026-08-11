@@ -120,6 +120,86 @@ BASE_AGENT_OPERATION_IDS = {
     "git-commit",
     "git-push",
 }
+PORTFOLIO_CURATION_TASK_BINDING = "agent-autonomy-harness-v0.1-closeout"
+PORTFOLIO_CURATION_COVERAGE_OBJECTIVE = (
+    "decision-relevant-closeout-demand-coverage-with-reduced-user-orchestration"
+)
+PORTFOLIO_CURATION_INACTIVE_ROOT = ".tmp/o3-capability-review-2026-08-11"
+PORTFOLIO_CURATION_DEMAND_IDS = {
+    "SE-DISCOVERY-REQ-01",
+    "SE-ARCH-DESIGN-01",
+    "SE-IMPLEMENT-REVIEW-01",
+    "SE-VERIFY-SECURE-01",
+    "SE-RELEASE-CHANGE-01",
+    "SE-MAINT-MIGRATE-01",
+    "SE-MGMT-PRACTICE-01",
+}
+PORTFOLIO_CURATION_SOURCE_CLASSES = {
+    "visible-native-or-runtime",
+    "installed-official-or-curated-metadata",
+    "public-first-party-documentation",
+    "public-first-party-repository",
+    "already-reviewed-upstream",
+}
+PORTFOLIO_CURATION_ALLOWED_OPERATIONS = {
+    "coverage-analysis",
+    "targeted-capability-discovery",
+    "capability-static-review",
+    "inactive-exact-acquisition",
+}
+PORTFOLIO_CURATION_DENIED_OPERATIONS = {
+    "account-connection",
+    "acceptance-promotion",
+    "consumer-projection",
+    "enablement",
+    "external-capability-mutation",
+    "external-capability-preview",
+    "installation",
+    "manager-mutation",
+    "persistent-activation",
+    "publication",
+    "release",
+    "third-party-execution",
+}
+PORTFOLIO_CURATION_REVIEW_CRITERIA = {
+    "activation-projection-rollback-cleanup-cost",
+    "dependencies-and-host-compatibility",
+    "exact-source-and-immutable-revision",
+    "license-and-redistribution",
+    "maintenance-and-upstream-ownership",
+    "native-and-official-overlap",
+    "security-and-supply-chain",
+    "task-demand-coverage-delta",
+    "verification-and-claim-ceiling",
+}
+PORTFOLIO_CURATION_VERIFICATION_REQUIREMENTS = {
+    "demand-coverage-delta",
+    "deterministic-product-verifier",
+    "exact-root-deletion-receipt",
+    "exact-source-url",
+    "immutable-revision",
+    "license-hash",
+    "product-tests",
+    "repository-hash",
+    "route-rationale",
+    "static-review-receipt",
+}
+PORTFOLIO_CURATION_CONTEXT_KEYS = {
+    "accountDataPolicy",
+    "allowedOperations",
+    "candidateSourceClasses",
+    "cohortPolicy",
+    "coverageObjectiveId",
+    "demandIds",
+    "deniedOperations",
+    "inactiveAcquisitionRoot",
+    "mode",
+    "requiresExactSource",
+    "requiresImmutableRevision",
+    "reviewCriteria",
+    "taskBinding",
+    "verificationRequirements",
+}
 CAPABILITY_CONTEXT_POLICIES = {
     "task-time": {
         "operationIds": {
@@ -139,22 +219,9 @@ CAPABILITY_CONTEXT_POLICIES = {
         "listFields": set(),
     },
     "portfolio-curation": {
-        "operationIds": {
-            "coverage-analysis",
-            "targeted-capability-discovery",
-            "capability-static-review",
-            "inactive-exact-acquisition",
-        },
-        "stringFields": {
-            "coverageObjective",
-            "candidateSourceBoundary",
-            "accountDataBoundary",
-            "inactiveAcquisitionRoot",
-            "authorityBoundary",
-            "verificationSurface",
-            "cohortStopRule",
-        },
-        "listFields": {"demandTaxonomy", "reviewCriteria"},
+        "operationIds": PORTFOLIO_CURATION_ALLOWED_OPERATIONS,
+        "stringFields": {"inactiveAcquisitionRoot"},
+        "listFields": set(),
     },
 }
 CAPABILITY_CONTEXT_OPERATION_IDS = set().union(
@@ -372,6 +439,14 @@ def _non_empty_string_list(value: Any) -> bool:
     )
 
 
+def _exact_string_set(value: Any, expected: set[str]) -> bool:
+    return (
+        _non_empty_string_list(value)
+        and len(value) == len(set(value))
+        and set(value) == expected
+    )
+
+
 def _valid_route_evidence(document: dict[str, Any]) -> bool:
     task = document.get("task")
     route = document.get("selectedRoute")
@@ -413,8 +488,66 @@ def _valid_capability_context(
         normalized_root = (
             root_value.replace("\\", "/") if isinstance(root_value, str) else ""
         )
-        fields_valid = fields_valid and normalized_root.startswith(".tmp/") and not any(
-            part == ".." for part in normalized_root.split("/")
+        account_data_policy = context.get("accountDataPolicy")
+        cohort_policy = context.get("cohortPolicy")
+        fields_valid = (
+            fields_valid
+            and set(context) == PORTFOLIO_CURATION_CONTEXT_KEYS
+            and context.get("taskBinding") == PORTFOLIO_CURATION_TASK_BINDING
+            and context.get("coverageObjectiveId")
+            == PORTFOLIO_CURATION_COVERAGE_OBJECTIVE
+            and _exact_string_set(
+                context.get("demandIds"), PORTFOLIO_CURATION_DEMAND_IDS
+            )
+            and _exact_string_set(
+                context.get("candidateSourceClasses"),
+                PORTFOLIO_CURATION_SOURCE_CLASSES,
+            )
+            and context.get("requiresExactSource") is True
+            and context.get("requiresImmutableRevision") is True
+            and _exact_string_set(
+                context.get("allowedOperations"),
+                conditional_operations,
+            )
+            and _exact_string_set(
+                context.get("deniedOperations"),
+                PORTFOLIO_CURATION_DENIED_OPERATIONS,
+            )
+            and _exact_string_set(
+                context.get("reviewCriteria"),
+                PORTFOLIO_CURATION_REVIEW_CRITERIA,
+            )
+            and _exact_string_set(
+                context.get("verificationRequirements"),
+                PORTFOLIO_CURATION_VERIFICATION_REQUIREMENTS,
+            )
+            and isinstance(account_data_policy, dict)
+            and account_data_policy
+            == {
+                "publicOnly": True,
+                "accountConnectionAllowed": False,
+                "privateDataAllowed": False,
+                "credentialUseAllowed": False,
+                "uploadAllowed": False,
+                "paidServiceAllowed": False,
+            }
+            and isinstance(cohort_policy, dict)
+            and isinstance(cohort_policy.get("maxCandidates"), int)
+            and not isinstance(cohort_policy.get("maxCandidates"), bool)
+            and 1 <= cohort_policy["maxCandidates"] <= 8
+            and isinstance(
+                cohort_policy.get("stopAfterConsecutiveNoUniqueCoverage"), int
+            )
+            and not isinstance(
+                cohort_policy.get("stopAfterConsecutiveNoUniqueCoverage"), bool
+            )
+            and 1
+            <= cohort_policy["stopAfterConsecutiveNoUniqueCoverage"]
+            <= cohort_policy["maxCandidates"]
+            and cohort_policy.get("earlyStopWhenDemandCovered") is True
+            and cohort_policy.get("rejectOnBoundaryFailure") is True
+            and cohort_policy.get("cleanupRequired") is True
+            and normalized_root == PORTFOLIO_CURATION_INACTIVE_ROOT
         )
     task_gap_operations = {
         "targeted-capability-discovery",
