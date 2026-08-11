@@ -2,8 +2,8 @@
   "schema": 1,
   "id": "evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11",
   "date": "2026-08-11",
-  "status": "verified-sparse-zero-model-coverage-reconciliation-no-acceptance-promotion",
-  "purpose": "Reconcile the current fifteen partial acceptance criteria across the current closeout clusters, evaluation dimensions, software lifecycle slices, Harness scenarios, and six route classes without inventing evidence, forcing a Cartesian coverage claim, promoting acceptance, or authorizing execution.",
+  "status": "verified-sparse-zero-model-coverage-reconciliation-role-bound-no-acceptance-promotion",
+  "purpose": "Reconcile the current fifteen partial acceptance criteria across the current closeout clusters, evaluation dimensions, software lifecycle slices, Harness scenarios, and six route classes with role-aware evidence precision, without inventing evidence, forcing a Cartesian coverage claim, promoting acceptance, or authorizing execution.",
   "sourceBindings": {
     "programAcceptanceMap": {
       "id": "curation-program-acceptance-map-v1",
@@ -131,7 +131,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-human-judgment"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01"],
+        "boundaryBasisIds": ["evidence.human-ai-collaboration-coverage-rebaseline"],
+        "nextEvidenceBasisIds": ["evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"]
+      },
+      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"],
       "nextEvidenceClass": "revise or subtract provisional coordinates only when scenario comparisons expose a concrete mismatch",
       "claimCeiling": "source-bound mother-framework and mapping evidence only; no complete or universal collaboration ontology"
     },
@@ -144,7 +149,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-real-task", "needs-human-judgment", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31", "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"],
+        "boundaryBasisIds": ["evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31", "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"],
+        "nextEvidenceBasisIds": ["evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27"]
+      },
+      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31", "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31", "evidence.human-ai-collaboration-tdd-noncomparative-dispatch-successor-contract-v2-2026-07-27"],
       "nextEvidenceClass": "one naturally occurring source-backed vertical thin slice with accountable review across the lifecycle",
       "claimCeiling": "coordinate and mechanism coverage only; no live lifecycle completeness"
     },
@@ -157,7 +167,12 @@
       "coordinatePosture": "cross-cut",
       "dispositions": ["covered", "unassessed", "needs-real-task", "needs-human-judgment", "needs-separate-authorization", "not-applicable"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.human-ai-collaboration-process-fidelity-cumulative-loss-accounting-poc-2026-07-27", "evidence.human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-2026-07-27"],
+        "boundaryBasisIds": ["evidence.human-ai-collaboration-process-fidelity-v2-protocol-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-2026-07-27", "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07"],
+        "nextEvidenceBasisIds": ["evidence.human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-2026-07-27", "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07"]
+      },
+      "evidenceIds": ["evidence.human-ai-collaboration-coverage-rebaseline", "evidence.human-ai-collaboration-scenario-evidence-matrix-batch-01", "evidence.human-ai-collaboration-process-fidelity-cumulative-loss-accounting-poc-2026-07-27", "evidence.human-ai-collaboration-software-lifecycle-thin-slice-zero-model-calibration-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-v2-protocol-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-raw-event-trace-eligibility-2026-07-27", "evidence.process-loss-longhorizon-harness-static-reuse-assessment-2026-08-07", "evidence.human-ai-collaboration-process-fidelity-chained-transform-dispatch-gate-contract-2026-07-27", "evidence.human-ai-collaboration-process-fidelity-chained-transform-dispatch-ledger-contract-2026-07-27", "evidence.process-loss-longhorizon-harness-exact-source-static-review-2026-08-07"],
       "nextEvidenceClass": "frozen real cross-boundary cohort with raw hop receipts cumulative loss and accountable terminal review",
       "claimCeiling": "zero-model and transport mechanisms only; no accepted end-to-end live cohort"
     },
@@ -170,7 +185,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "unassessed", "needs-real-task"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "not-applicable", "C": "not-applicable", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.round03-native-runtime-baseline"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.round03-native-runtime-baseline"],
+        "boundaryBasisIds": ["evidence.native-runtime-baseline-evidence-gap-reconciliation-2026-07-18"],
+        "nextEvidenceBasisIds": ["evidence.native-runtime-baseline-evidence-gap-reconciliation-2026-07-18"]
+      },
+      "evidenceIds": ["evidence.round03-native-runtime-baseline", "evidence.native-runtime-baseline-evidence-gap-reconciliation-2026-07-18"],
       "nextEvidenceClass": "dated task-bound native and official health snapshots only where a real gap becomes decision-relevant",
       "claimCeiling": "dated inventory and bounded host evidence; no ecosystem completeness"
     },
@@ -183,7 +203,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-real-task", "needs-human-judgment", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.round03-alternative-comparison-batch-01"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.round03-alternative-comparison-batch-01", "evidence.round03-evidence-protocol-batch-01"],
+        "boundaryBasisIds": ["evidence.residual-gap-proof-evidence-gap-reconciliation-2026-07-18", "evidence.skill-ecosystem-current-evidence-reconciliation-2026-07-27"],
+        "nextEvidenceBasisIds": ["evidence.round03-evidence-protocol-batch-01", "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"]
+      },
+      "evidenceIds": ["evidence.round03-alternative-comparison-batch-01", "evidence.round03-evidence-protocol-batch-01", "evidence.residual-gap-proof-evidence-gap-reconciliation-2026-07-18", "evidence.skill-ecosystem-current-evidence-reconciliation-2026-07-27", "evidence.human-ai-collaboration-current-candidate-capability-coverage-reconciliation-2026-08-01"],
       "nextEvidenceClass": "attributable real-task comparison after current native official external composition and human paths are bound",
       "claimCeiling": "gap-admission mechanism only; no actual residual gap or self-authored need"
     },
@@ -196,7 +221,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-real-task", "needs-human-judgment", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.harness-decision-packet-core-poc-2026-08-08"],
+        "boundaryBasisIds": ["evidence.decision-ready-consumer-projection-evaluation"],
+        "nextEvidenceBasisIds": ["evidence.decision-ready-consumer-projection-evaluation", "evidence.harness-decision-packet-core-poc-2026-08-08"]
+      },
+      "evidenceIds": ["evidence.harness-decision-packet-core-poc-2026-08-08", "evidence.decision-ready-consumer-projection-evaluation"],
       "nextEvidenceClass": "task-bound interpretation delivery and route-attribution evidence on a named consumer",
       "claimCeiling": "deterministic packet projection only; selected route remains null"
     },
@@ -209,7 +239,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "conflict", "unassessed", "needs-real-task", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.readme"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07", "evidence.offline-plugin-projection-poc-2026-08-08"],
+        "boundaryBasisIds": ["evidence.consumer-mapping-evidence-gap-reconciliation-2026-07-18"],
+        "nextEvidenceBasisIds": ["evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"]
+      },
+      "evidenceIds": ["evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07", "evidence.offline-plugin-projection-poc-2026-08-08", "evidence.consumer-mapping-evidence-gap-reconciliation-2026-07-18", "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"],
       "nextEvidenceClass": "named consumer loader delivery recovery or cross-device canary under separate authority",
       "claimCeiling": "dated physical and metadata mappings only; no loader behavior value or convergence"
     },
@@ -222,7 +257,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-human-judgment", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31", "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31", "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31"],
+        "boundaryBasisIds": ["evidence.multidimensional-software-engineering-independent-review-readiness-2026-07-31"],
+        "nextEvidenceBasisIds": ["evidence.multidimensional-software-engineering-independent-review-readiness-2026-07-31"]
+      },
+      "evidenceIds": ["evidence.ai-era-classical-software-engineering-principles-revalidation-2026-07-31", "evidence.multidimensional-software-engineering-evaluation-contract-2026-07-31", "evidence.multidimensional-software-engineering-source-snapshot-2026-07-31", "evidence.multidimensional-software-engineering-independent-review-readiness-2026-07-31"],
       "nextEvidenceClass": "independent review of a revised real standard candidate with counterevidence affected-subject scope and owner authority",
       "claimCeiling": "provisional evaluation and candidate-package contract only; no hard-floor admission"
     },
@@ -235,7 +275,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "unassessed", "needs-real-task", "needs-human-judgment", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "unassessed", "E": "unassessed", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.standard-revalidation-cascade-poc-2026-08-07"],
+        "boundaryBasisIds": ["evidence.standard-revalidation-cascade-poc-2026-08-07"],
+        "nextEvidenceBasisIds": ["evidence.standard-revalidation-cascade-poc-2026-08-07"]
+      },
+      "evidenceIds": ["evidence.standard-revalidation-cascade-poc-2026-08-07"],
       "nextEvidenceClass": "owner-admitted real standard and separately authorized bounded affected-node migration",
       "claimCeiling": "synthetic graph planning only; no real standard or migration"
     },
@@ -248,7 +293,12 @@
       "coordinatePosture": "cross-cut",
       "dispositions": ["covered", "needs-human-judgment", "needs-separate-authorization", "not-applicable"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "not-applicable", "E": "not-applicable", "C": "not-applicable", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.closeout-cleanup-debt-preview-2026-07-24", "evidence.closeout-cleanup-execution-2026-07-30"],
+        "boundaryBasisIds": ["evidence.closeout-cleanup-debt-preview-2026-07-24"],
+        "nextEvidenceBasisIds": ["evidence.closeout-cleanup-debt-preview-2026-07-24"]
+      },
+      "evidenceIds": ["evidence.closeout-cleanup-debt-preview-2026-07-24", "evidence.closeout-cleanup-execution-2026-07-30"],
       "nextEvidenceClass": "exact-target disposition and separate cleanup authority followed by re-verification",
       "claimCeiling": "inventory and cleanup-governance mechanism only; no cleanup authority or final closeout"
     },
@@ -261,7 +311,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "conflict", "unassessed", "needs-real-task", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.dynamic-runtime-control-gap-review-2026-07-18", "evidence.mcp-app-server-0.146.0-reload-release-version-change-2026-08-02", "evidence.codex-desktop-resource-observability-preflight-2026-07-31", "evidence.codex-desktop-official-control-surface-access-preflight-2026-07-31"],
+        "boundaryBasisIds": ["evidence.dynamic-runtime-control-gap-review-2026-07-18"],
+        "nextEvidenceBasisIds": ["evidence.mcp-app-server-multi-connection-subscription-preflight-2026-07-27"]
+      },
+      "evidenceIds": ["evidence.dynamic-runtime-control-gap-review-2026-07-18", "evidence.mcp-app-server-0.146.0-reload-release-version-change-2026-08-02", "evidence.codex-desktop-resource-observability-preflight-2026-07-31", "evidence.codex-desktop-official-control-surface-access-preflight-2026-07-31", "evidence.mcp-app-server-multi-connection-subscription-preflight-2026-07-27"],
       "nextEvidenceClass": "named current-host task-bound lifecycle observation after native and reviewed runtime comparison",
       "claimCeiling": "single-host and synthetic mechanism evidence only; no universal dynamic control"
     },
@@ -274,7 +329,12 @@
       "coordinatePosture": "cross-cut",
       "dispositions": ["covered", "overlap", "conflict", "unassessed", "needs-real-task", "needs-separate-authorization", "not-applicable"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.cc-switch-source-preserving-skill-pool-strategy", "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07", "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08"],
+        "boundaryBasisIds": ["evidence.portfolio-tasktime-projection-contract-2026-08-06"],
+        "nextEvidenceBasisIds": ["evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"]
+      },
+      "evidenceIds": ["evidence.cc-switch-source-preserving-skill-pool-strategy", "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07", "evidence.mattpocock-skills-v1.2.3-exact-pin-reconciliation-event-2026-08-08", "evidence.portfolio-tasktime-projection-contract-2026-08-06", "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"],
       "nextEvidenceClass": "task-bound source health exposure recovery or convergence evidence only when a named consumer gap exists",
       "claimCeiling": "source and inactive-lifecycle governance evidence only; no candidate behavior value or manager universality"
     },
@@ -287,7 +347,12 @@
       "coordinatePosture": "cross-cut",
       "dispositions": ["covered", "conflict", "unassessed", "needs-real-task", "needs-separate-authorization", "not-applicable"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.user-sovereignty-and-foreign-coexistence-reconciliation-2026-07-18", "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07"],
+        "boundaryBasisIds": ["evidence.cc-switch-live-source-ownership-reconciliation-2026-07-18"],
+        "nextEvidenceBasisIds": ["evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"]
+      },
+      "evidenceIds": ["evidence.user-sovereignty-and-foreign-coexistence-reconciliation-2026-07-18", "evidence.codex-consumer-skill-mapping-snapshot-2026-08-07", "evidence.claude-consumer-skill-projection-snapshot-2026-08-07", "evidence.cc-switch-live-source-ownership-reconciliation-2026-07-18", "evidence.cc-switch-disabled-consumer-root-readonly-inventory-2026-08-08"],
       "nextEvidenceClass": "named manager or consumer transition with foreign sentinel preservation and reversible authority",
       "claimCeiling": "dated coexistence and non-interference evidence only; no adoption retirement or root mutation"
     },
@@ -300,7 +365,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "unassessed", "needs-real-task", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.round03-native-runtime-baseline", "evidence.dynamic-runtime-control-gap-review-2026-07-18"],
+        "boundaryBasisIds": ["evidence.custom-manager-retirement-reconciliation"],
+        "nextEvidenceBasisIds": ["evidence.dynamic-runtime-control-gap-review-2026-07-18"]
+      },
+      "evidenceIds": ["evidence.round03-native-runtime-baseline", "evidence.dynamic-runtime-control-gap-review-2026-07-18", "evidence.custom-manager-retirement-reconciliation"],
       "nextEvidenceClass": "task-bound host-consumption and attribution evidence before retention retirement or promotion",
       "claimCeiling": "static and zero-model Hook-chain evidence only; no invocation causation or value"
     },
@@ -313,7 +383,12 @@
       "coordinatePosture": "mapped",
       "dispositions": ["covered", "overlap", "conflict", "unassessed", "needs-real-task", "needs-separate-authorization"],
       "routeComparison": {"N": "represented-bounded-evidence", "O": "represented-bounded-evidence", "E": "represented-bounded-evidence", "C": "represented-bounded-evidence", "H": "needs-human-judgment", "R": "not-eligible-no-residual-gap"},
-      "evidenceIds": ["evidence.program-plan"],
+      "evidenceRoleBindings": {
+        "coordinateBasisIds": ["evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27"],
+        "boundaryBasisIds": ["evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27"],
+        "nextEvidenceBasisIds": ["evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27"]
+      },
+      "evidenceIds": ["evidence.harness-three-lane-program-acceptance-reconciliation-2026-07-27"],
       "nextEvidenceClass": "named orchestration task with parent-owned reconciliation exact route evidence and isolated side effects",
       "claimCeiling": "bounded topology and parent-control evidence only; no automatic truth acceptance or cross-host behavior"
     }

@@ -30,6 +30,12 @@ SOURCE_PATHS = {
         "registry/human-ai-collaboration-scenario-evidence-matrix-batch-01-2026-07-24.json"
     ),
 }
+EVIDENCE_ROLE_KEYS = (
+    "coordinateBasisIds",
+    "boundaryBasisIds",
+    "nextEvidenceBasisIds",
+)
+GENERIC_EVIDENCE_IDS = {"evidence.program-plan", "evidence.readme"}
 ROUTE_IDS = ["N", "O", "E", "C", "H", "R"]
 DISPOSITIONS = {
     "covered",
@@ -120,6 +126,15 @@ def _require_exact_string_list(value: object, *, field: str) -> list[str]:
     return value
 
 
+def _stable_role_union(roles: dict[str, list[str]]) -> list[str]:
+    result: list[str] = []
+    for role in EVIDENCE_ROLE_KEYS:
+        for evidence_id in roles[role]:
+            if evidence_id not in result:
+                result.append(evidence_id)
+    return result
+
+
 def _require_exact_inventory(
     inventory: dict[str, object],
     *,
@@ -165,7 +180,7 @@ def validate_reconciliation(
         != "evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11"
         or document.get("date") != "2026-08-11"
         or document.get("status")
-        != "verified-sparse-zero-model-coverage-reconciliation-no-acceptance-promotion"
+        != "verified-sparse-zero-model-coverage-reconciliation-role-bound-no-acceptance-promotion"
     ):
         raise RuntimeError("reconciliation identity drifted")
 
@@ -295,13 +310,39 @@ def validate_reconciliation(
             raise RuntimeError("route state vocabulary drifted")
         if route.get("R") != "not-eligible-no-residual-gap":
             raise RuntimeError("residual route overclaimed")
+        criterion_evidence = criteria[criterion_id].get("evidenceIds", [])
+        roles = row.get("evidenceRoleBindings")
+        if not isinstance(roles, dict) or tuple(roles) != EVIDENCE_ROLE_KEYS:
+            raise RuntimeError("evidence role binding drifted")
+        typed_roles: dict[str, list[str]] = {}
+        for role_name in EVIDENCE_ROLE_KEYS:
+            role_ids = roles.get(role_name)
+            if (
+                not isinstance(role_ids, list)
+                or not role_ids
+                or any(not isinstance(item, str) or not item for item in role_ids)
+                or len(role_ids) != len(set(role_ids))
+            ):
+                raise RuntimeError("evidence role binding drifted")
+            if not set(role_ids).issubset(evidence_ids) or not set(
+                role_ids
+            ).issubset(set(criterion_evidence)):
+                raise RuntimeError("unknown evidence identity")
+            positions = [criterion_evidence.index(value) for value in role_ids]
+            if positions != sorted(positions):
+                raise RuntimeError("evidence role order drifted")
+            typed_roles[role_name] = role_ids
+        if not set(typed_roles["coordinateBasisIds"]) - GENERIC_EVIDENCE_IDS:
+            raise RuntimeError("coordinate evidence is generic-only")
         row_evidence = _require_exact_string_list(
             row.get("evidenceIds"), field="evidenceIds"
         )
         if not set(row_evidence).issubset(evidence_ids) or not set(
             row_evidence
-        ).issubset(set(criteria[criterion_id].get("evidenceIds", []))):
+        ).issubset(set(criterion_evidence)):
             raise RuntimeError("unknown evidence identity")
+        if row_evidence != _stable_role_union(typed_roles):
+            raise RuntimeError("evidence projection drifted")
         if not isinstance(row.get("nextEvidenceClass"), str) or not row[
             "nextEvidenceClass"
         ]:

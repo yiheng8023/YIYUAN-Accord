@@ -74,3 +74,18 @@ planned. The frozen v1 authority and packet fixtures are not changed. No live
 v2 selector or authority migration, acceptance-assessment transition, model or
 candidate dispatch, CC Switch or consumer mutation, cleanup, commit, push,
 publication, or release is authorized by this reconciliation.
+
+## Evidence-role precision checkpoint
+
+Each of the fifteen sparse rows now separates three evidence roles:
+coordinate basis, claim-boundary basis, and next-evidence basis. The former
+nine generic-only anchors have been replaced with criterion-owned specific
+evidence, so no coordinate basis is supported only by the program plan or
+README. The existing flat `evidenceIds` field remains a deterministic
+first-seen union of the three roles for compatibility.
+
+This is an evidence-binding precision correction only. The fifteen criterion
+coordinates, six clusters, dispositions, route comparisons, claim ceilings,
+next-evidence text, and 46 verified / 15 partial / 0 planned inventory remain
+unchanged. The correction does not promote acceptance or prove behavior,
+value, portability, production, release, residual-gap, or closeout outcomes.

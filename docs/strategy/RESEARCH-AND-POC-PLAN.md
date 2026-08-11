@@ -3348,3 +3348,19 @@ behavior, value, cross-host portability, production, release, residual gap, or
 program closeout and authorizes no live authority migration or acceptance
 transition. Evidence:
 `registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.
+
+### 2026-08-11 evidence-binding precision reconciliation
+
+The fifteen sparse reconciliation rows now bind criterion-owned evidence by
+coordinate, boundary, and next-evidence role. This removes all nine
+generic-only coordinate anchors while preserving a stable flat evidence union
+for existing consumers. The role checks fail closed on missing or extra roles,
+empty or duplicate lists, cross-criterion evidence, authority-order drift,
+generic-only coordinates, and flat-projection drift.
+
+No coordinate, disposition, route, claim ceiling, next-evidence class, or
+acceptance assessment changed; the inventory remains 46 verified / 15 partial
+/ 0 planned. This is deterministic evidence precision, not task execution or
+behavior/value/portability/production/release proof, and it grants no live v2,
+consumer, manager, cleanup, publication, commit, or push authority. Evidence:
+`registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.

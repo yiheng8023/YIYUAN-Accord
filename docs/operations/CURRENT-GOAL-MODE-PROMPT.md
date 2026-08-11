@@ -204,3 +204,22 @@ backup, update, and consumer projections.
   release.
 - Verify this boundary against
   `registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.
+
+## Current evidence-binding precision boundary
+
+- Every one of the fifteen reconciliation rows must retain exact ordered
+  coordinate, boundary, and next-evidence role bindings owned by its current
+  acceptance criterion.
+- A coordinate role must contain specific evidence; program-plan or README
+  evidence alone is insufficient. The flat evidence list is compatibility
+  output and must equal the stable first-seen role union.
+- Keep the fifteen coordinates, six clusters, twelve dimensions, fourteen
+  lifecycle slices, thirteen scenarios, dispositions, routes, claim ceilings,
+  next-evidence text, and 46 verified / 15 partial / 0 planned inventory
+  unchanged.
+- Treat this as zero-model evidence precision only. It authorizes no live
+  authority migration, acceptance transition, dispatch, consumer or manager
+  mutation, cleanup, publication, commit, push, or release, and proves no
+  behavior, value, portability, production, residual gap, or closeout.
+- Verify this boundary with the focused reconciliation validator and the
+  repository verifier.

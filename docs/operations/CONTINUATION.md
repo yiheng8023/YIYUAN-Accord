@@ -5541,3 +5541,24 @@ plus the repository verifier. Treat the record as navigation and decision
 support, not as behavior, value, portability, production, release, residual-gap,
 or closeout proof. Evidence:
 `registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json`.
+
+## 2026-08-11 evidence-binding precision reconciliation checkpoint
+
+The fifteen sparse reconciliation rows now distinguish coordinate-basis,
+boundary-basis, and next-evidence-basis IDs. All nine formerly generic-only
+coordinate anchors have been replaced by criterion-owned specific evidence;
+the flat evidence list remains the stable first-seen union for compatibility.
+The validator now rejects role-shape, ownership, order, generic-only, and
+projection drift.
+
+The change is deliberately narrower than a new evaluation or acceptance
+result. All fifteen coordinates and their dispositions, routes, claim ceilings,
+and next-evidence text remain fixed, as does the 46 verified / 15 partial / 0
+planned inventory. Frozen v1 inputs remain outside this change, and no live v2
+selector or authority transition occurred.
+
+On continuation, verify Git truth, run the focused validator, then run the
+repository verifier. Do not interpret this role binding as behavior, value,
+cross-host portability, production, release, residual-gap, or closeout proof;
+dispatch, consumer/manager mutation, cleanup, acceptance promotion, commit,
+push, publication, and release remain separately gated.

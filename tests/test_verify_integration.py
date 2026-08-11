@@ -5054,6 +5054,8 @@ class EvaluationStandardsReconciliationIntegrationTests(unittest.TestCase):
             "docs/strategy/EVALUATION-SOFTWARE-ENGINEERING-STANDARDS-COVERAGE-RECONCILIATION-V1-2026-08-11.md",
             "docs/superpowers/specs/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1-design.md",
             "docs/superpowers/plans/2026-08-11-evaluation-software-engineering-standards-coverage-reconciliation-v1.md",
+            "docs/superpowers/specs/2026-08-11-evidence-binding-precision-reconciliation-v1-design.md",
+            "docs/superpowers/plans/2026-08-11-evidence-binding-precision-reconciliation-v1.md",
         ):
             self.assertIn(path, verify_script.REQUIRED_FILES)
 

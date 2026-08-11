@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import unittest
 from pathlib import Path
@@ -44,6 +45,101 @@ class EvaluationSoftwareEngineeringStandardsCoverageReconciliationV1Tests(
             ["N", "O", "E", "C", "H", "R"],
             [row["id"] for row in self.document["routeClasses"]],
         )
+
+    def test_repository_record_has_precise_role_bindings_without_coordinate_drift(
+        self,
+    ) -> None:
+        generic_ids = {"evidence.program-plan", "evidence.readme"}
+        projection = []
+        for row in self.document["criterionReconciliations"]:
+            roles = row["evidenceRoleBindings"]
+            self.assertEqual(
+                {
+                    "coordinateBasisIds",
+                    "boundaryBasisIds",
+                    "nextEvidenceBasisIds",
+                },
+                set(roles),
+            )
+            self.assertTrue(set(roles["coordinateBasisIds"]) - generic_ids)
+            projection.append(
+                {
+                    key: value
+                    for key, value in row.items()
+                    if key not in {"evidenceIds", "evidenceRoleBindings"}
+                }
+            )
+
+        encoded = json.dumps(
+            projection,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        self.assertEqual(
+            "5f9ccfaf9572ae99b2f9f63ffb4394be8c9b148309d5b772f40f18eba905f9b6",
+            hashlib.sha256(encoded).hexdigest(),
+        )
+
+    def test_missing_evidence_role_bindings_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["criterionReconciliations"][0].pop("evidenceRoleBindings")
+        self.assert_rejected(document, "evidence role binding drifted")
+
+    def test_unknown_evidence_role_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["criterionReconciliations"][0]["evidenceRoleBindings"][
+            "inventedBasisIds"
+        ] = ["evidence.human-ai-collaboration-coverage-rebaseline"]
+        self.assert_rejected(document, "evidence role binding drifted")
+
+    def test_empty_evidence_role_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["criterionReconciliations"][0]["evidenceRoleBindings"][
+            "boundaryBasisIds"
+        ] = []
+        self.assert_rejected(document, "evidence role binding drifted")
+
+    def test_duplicate_role_evidence_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        role = document["criterionReconciliations"][0]["evidenceRoleBindings"][
+            "coordinateBasisIds"
+        ]
+        role.append(role[0])
+        self.assert_rejected(document, "evidence role binding drifted")
+
+    def test_cross_criterion_role_evidence_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["criterionReconciliations"][0]["evidenceRoleBindings"][
+            "coordinateBasisIds"
+        ] = ["evidence.round03-native-runtime-baseline"]
+        self.assert_rejected(document, "unknown evidence identity")
+
+    def test_role_evidence_authority_order_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        role = document["criterionReconciliations"][0]["evidenceRoleBindings"][
+            "coordinateBasisIds"
+        ]
+        role.reverse()
+        self.assert_rejected(document, "evidence role order drifted")
+
+    def test_generic_only_coordinate_basis_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        row = next(
+            row
+            for row in document["criterionReconciliations"]
+            if row["criterionId"]
+            == "acceptance.decision-ready-consumer-projection"
+        )
+        row["evidenceRoleBindings"]["coordinateBasisIds"] = [
+            "evidence.program-plan"
+        ]
+        self.assert_rejected(document, "coordinate evidence is generic-only")
+
+    def test_flat_evidence_projection_drift_fails_closed(self) -> None:
+        document = copy.deepcopy(self.document)
+        document["criterionReconciliations"][0]["evidenceIds"].pop()
+        self.assert_rejected(document, "evidence projection drifted")
 
     def test_missing_partial_criterion_fails_closed(self) -> None:
         document = copy.deepcopy(self.document)
