@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "public-delivery-closeout-observation-2026-08-11",
+  "observedAt": "2026-08-11T20:58:52+08:00",
+  "repository": "yiheng8023/agent-autonomy-harness",
+  "repositoryVisibility": "PUBLIC",
+  "defaultBranch": "main",
+  "description": "Agent-neutral autonomy, collaboration, and capability orchestration harness.",
+  "topics": [
+    "agent-orchestration",
+    "ai-agents",
+    "developer-tools",
+    "human-ai-collaboration"
+  ],
+  "issuesEnabled": true,
+  "discussionsEnabled": false,
+  "homepage": null,
+  "privateVulnerabilityReportingEnabled": true,
+  "metadataOperation": "github-repository-metadata-edit",
+  "cleanup": {
+    "checkedPaths": [
+      ".tmp",
+      "harness/__pycache__"
+    ],
+    "observedPresentPaths": [],
+    "operation": "Agent read-only verification after exact user cleanup"
+  },
+  "claimLimits": [
+    "records one dated mutable GitHub metadata observation and two exact repository cleanup observations",
+    "does not cryptographically attest GitHub or future metadata state",
+    "does not prove release publication production readiness or broad user value",
+    "does not authorize cleanup beyond the two named repository paths or a new account trust or data boundary"
+  ]
+}
