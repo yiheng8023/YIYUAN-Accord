@@ -186,6 +186,19 @@ OFFICIAL_KPI_EVENT_LIFECYCLE_PROJECTION_SHA256 = (
 OFFICIAL_KPI_SCORECARD_CONTEXT_SHA256 = (
     "b0cca1f837ba09e2bfbda1d364336d1f15f4e867fb6bcf6d454259aeff143f30"
 )
+O3_SPARSE_SCORECARD_PATH = (
+    "product/evidence/o3-sparse-scorecard-2026-08-11.json"
+)
+O3_SPARSE_SCORECARD_ID = "o3-sparse-scorecard-2026-08-11"
+O3_SPARSE_SCORECARD_BASELINE_REVISION = (
+    "b9d0ec68ab3bf65652c8a6048186f7e1fb7d59ca"
+)
+O3_SPARSE_SCORECARD_SHA256 = (
+    "9724f31e62f0f48397d7e4fbf4c0173b300bcbd56d6bf8b2f630e8ce26470ecd"
+)
+O3_SPARSE_SOURCE_SHA256 = (
+    "d472ce7271d93ecda46a6013c5650280eb2048b8b7ecaeaca447339b867a6d66"
+)
 OFFICIAL_KPI_SKILL_IDENTITIES = [
     {
         "name": "analyze-data-quality",
@@ -1563,6 +1576,331 @@ def _valid_official_kpi_scorecard_predecessor(
         and bool(rationale.strip())
         and _valid_official_kpi_event_receipt(root, event_work, errors)
     )
+
+
+def _contains_explicit_route_cell_record(value: Any) -> bool:
+    if isinstance(value, dict):
+        if isinstance(value.get("scenarioId"), str) and any(
+            isinstance(value.get(key), str)
+            for key in ("routeId", "routeClassId")
+        ):
+            return True
+        return any(
+            _contains_explicit_route_cell_record(item)
+            for item in value.values()
+        )
+    if isinstance(value, list):
+        return any(_contains_explicit_route_cell_record(item) for item in value)
+    return False
+
+
+def _valid_o3_sparse_scorecard_source_derivation(
+    source: dict[str, Any],
+    partial_entries: list[dict[str, Any]],
+    aggregate_decision: dict[str, Any],
+) -> bool:
+    source_criteria = source.get("criterionReconciliations")
+    inventory = source.get("inputInventory")
+    route_classes = source.get("routeClasses")
+    coverage_summary = source.get("candidateCoverageSummary")
+    if not (
+        isinstance(source_criteria, list)
+        and all(isinstance(item, dict) for item in source_criteria)
+        and isinstance(inventory, dict)
+        and isinstance(route_classes, list)
+        and all(isinstance(item, dict) for item in route_classes)
+        and isinstance(coverage_summary, dict)
+        and isinstance(aggregate_decision, dict)
+    ):
+        return False
+    source_ids = [item.get("criterionId") for item in source_criteria]
+    actual_ids = [item.get("id") for item in partial_entries]
+    if (
+        len(source_ids) != 15
+        or not all(isinstance(item, str) for item in source_ids)
+        or len(set(source_ids)) != len(source_ids)
+        or actual_ids != source_ids
+    ):
+        return False
+    expected_corrections: list[str] = []
+    actual_corrections: list[str] = []
+    for source_item, actual_item in zip(source_criteria, partial_entries):
+        dispositions = source_item.get("dispositions")
+        route_comparison = source_item.get("routeComparison")
+        if not (
+            isinstance(dispositions, list)
+            and all(isinstance(item, str) for item in dispositions)
+            and isinstance(route_comparison, dict)
+            and isinstance(route_comparison.get("H"), str)
+        ):
+            return False
+        omitted_human_judgment = (
+            route_comparison.get("H") == "needs-human-judgment"
+            and "needs-human-judgment" not in dispositions
+        )
+        expected_disposition = (
+            "retain-with-human-judgment-correction-and-claim-narrowing"
+            if omitted_human_judgment
+            else "retain-with-claim-narrowing"
+        )
+        if omitted_human_judgment:
+            expected_corrections.append(source_item["criterionId"])
+        if (
+            actual_item.get("disposition")
+            == "retain-with-human-judgment-correction-and-claim-narrowing"
+        ):
+            actual_corrections.append(actual_item["id"])
+        if not (
+            actual_item.get("routeComparison") == route_comparison
+            and actual_item.get("humanJudgment") == route_comparison.get("H")
+            and actual_item.get("disposition") == expected_disposition
+        ):
+            return False
+    scenario_ids = inventory.get("scenarioIds")
+    route_ids = [item.get("id") for item in route_classes]
+    if not (
+        isinstance(scenario_ids, list)
+        and all(isinstance(item, str) for item in scenario_ids)
+        and len(scenario_ids) == 13
+        and len(set(scenario_ids)) == len(scenario_ids)
+        and len(route_ids) == 6
+        and all(isinstance(item, str) for item in route_ids)
+        and len(set(route_ids)) == len(route_ids)
+    ):
+        return False
+    route_cell_count = coverage_summary.get("routeCellCount")
+    mapped_count = coverage_summary.get("mappedRouteCellCount")
+    unassessed_count = coverage_summary.get("unassessedRouteCellCount")
+    residual_ineligible_count = coverage_summary.get(
+        "residualIneligibleCellCount"
+    )
+    return (
+        expected_corrections == actual_corrections
+        and len(expected_corrections) == 7
+        and coverage_summary.get("scenarioCount") == len(scenario_ids)
+        and route_cell_count == len(scenario_ids) * len(route_ids) == 78
+        and mapped_count == 50
+        and all(
+            isinstance(item, int)
+            for item in (mapped_count, unassessed_count, residual_ineligible_count)
+        )
+        and mapped_count + unassessed_count + residual_ineligible_count
+        == route_cell_count
+        and not _contains_explicit_route_cell_record(source)
+        and aggregate_decision.get("sourceField")
+        == "candidateCoverageSummary"
+        and aggregate_decision.get("reportedMappedRouteCells") == mapped_count
+        and aggregate_decision.get("reportedRouteCells") == route_cell_count
+        and aggregate_decision.get("disposition")
+        == "subtract-unreproducible-cartesian-aggregate"
+        and aggregate_decision.get("missingEvidence")
+        == ["explicit-sparse-route-cell-records"]
+        and aggregate_decision.get("claimCeiling")
+        == "No route-cell coverage percentage is retained."
+    )
+
+
+def _valid_o3_sparse_scorecard_progress(
+    root: Path,
+    work_item: dict[str, Any],
+    errors: list[str],
+) -> bool:
+    if work_item.get("progressEvidence") != O3_SPARSE_SCORECARD_PATH:
+        return False
+    document = _load(root, O3_SPARSE_SCORECARD_PATH, errors)
+    entries = document.get("entries")
+    counts = document.get("entryCounts")
+    task_binding = document.get("taskBinding")
+    source_bindings = document.get("sourceBindings")
+    lifecycle = document.get("lifecycleTransaction")
+    route_decision = document.get("routeDecision")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            entries,
+            counts,
+            task_binding,
+            source_bindings,
+            lifecycle,
+            route_decision,
+        )
+    ):
+        return False
+    source = _git_json_at_revision(
+        root,
+        "c53866726834d79a68c61a5b87b4f7ce90698a2c",
+        "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+    )
+    baseline_program = _git_json_at_revision(
+        root,
+        O3_SPARSE_SCORECARD_BASELINE_REVISION,
+        "product/program.json",
+    )
+    if not isinstance(source, dict) or not isinstance(baseline_program, dict):
+        return False
+    source_criteria = source.get("criterionReconciliations")
+    inventory = source.get("inputInventory")
+    if not isinstance(source_criteria, list) or not isinstance(inventory, dict):
+        return False
+    categories = {
+        "partialCriteria": entries.get("partialCriteria"),
+        "evidenceClusters": entries.get("evidenceClusters"),
+        "lifecycleSlices": entries.get("lifecycleSlices"),
+        "evaluationDimensions": entries.get("evaluationDimensions"),
+        "harnessScenarios": entries.get("harnessScenarios"),
+    }
+    if not all(
+        isinstance(items, list)
+        and all(isinstance(item, dict) for item in items)
+        for items in categories.values()
+    ):
+        return False
+    required_entry_fields = {
+        "disposition",
+        "evidence",
+        "missingEvidence",
+        "claimCeiling",
+        "routeComparison",
+        "humanJudgment",
+        "separateAuthorization",
+    }
+    all_entries = [item for items in categories.values() for item in items]
+    if not all(required_entry_fields.issubset(item) for item in all_entries):
+        return False
+    try:
+        canonical = lambda value: json.dumps(
+            value,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        document_hash = hashlib.sha256(canonical(document)).hexdigest()
+        source_hash = hashlib.sha256(canonical(source)).hexdigest()
+        expected_criterion_hashes = {
+            item["criterionId"]: hashlib.sha256(canonical(item)).hexdigest()
+            for item in source_criteria
+            if isinstance(item, dict)
+            and isinstance(item.get("criterionId"), str)
+        }
+        actual_criterion_hashes = {
+            item["id"]: item.get("evidence", {}).get(
+                "historicalRecordCanonicalSha256"
+            )
+            for item in categories["partialCriteria"]
+            if isinstance(item.get("id"), str)
+            and isinstance(item.get("evidence"), dict)
+        }
+    except (KeyError, TypeError, ValueError, UnicodeEncodeError):
+        return False
+    axis_specs = {
+        "evidenceClusters": ("clusterIds", "clusterId"),
+        "lifecycleSlices": ("lifecycleSliceIds", "lifecycleSliceIds"),
+        "evaluationDimensions": ("evaluationDimensionIds", "dimensionIds"),
+        "harnessScenarios": ("scenarioIds", "scenarioIds"),
+    }
+    axis_members_valid = True
+    for category, (inventory_key, source_key) in axis_specs.items():
+        expected_ids = inventory.get(inventory_key)
+        actual_items = categories[category]
+        if (
+            not isinstance(expected_ids, list)
+            or not all(isinstance(item, str) for item in expected_ids)
+            or [item.get("id") for item in actual_items] != expected_ids
+        ):
+            axis_members_valid = False
+            continue
+        for axis_item in actual_items:
+            axis_id = axis_item.get("id")
+            expected_members = [
+                criterion.get("criterionId")
+                for criterion in source_criteria
+                if isinstance(criterion, dict)
+                and (
+                    criterion.get(source_key) == axis_id
+                    if source_key == "clusterId"
+                    else isinstance(criterion.get(source_key), list)
+                    and axis_id in criterion[source_key]
+                )
+            ]
+            if axis_item.get("memberCriterionIds") != expected_members:
+                axis_members_valid = False
+    baseline_increments = baseline_program.get("increments")
+    baseline_increment = next(
+        (
+            item
+            for item in baseline_increments
+            if isinstance(item, dict)
+            and item.get("id")
+            == "increment.current-official-route-evaluation-slice"
+        ),
+        {},
+    ) if isinstance(baseline_increments, list) else {}
+    baseline_work = baseline_increment.get("workItems")
+    baseline_active_work = [
+        item.get("id")
+        for item in baseline_work
+        if isinstance(item, dict) and item.get("state") == "active"
+    ] if isinstance(baseline_work, list) else []
+    aggregate_decisions = document.get("aggregateDecisions")
+    lifecycle_phases = lifecycle.get("phases")
+    aggregate_decision = (
+        aggregate_decisions[0]
+        if isinstance(aggregate_decisions, list)
+        and len(aggregate_decisions) == 1
+        and isinstance(aggregate_decisions[0], dict)
+        else {}
+    )
+    source_derivation_valid = _valid_o3_sparse_scorecard_source_derivation(
+        source,
+        categories["partialCriteria"],
+        aggregate_decision,
+    )
+    return (
+        document_hash == O3_SPARSE_SCORECARD_SHA256
+        and source_hash == O3_SPARSE_SOURCE_SHA256
+        and document.get("id") == O3_SPARSE_SCORECARD_ID
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("status") == "scorecard-complete-lifecycle-pending"
+        and document.get("nonCartesian") is True
+        and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
+        and task_binding.get("invented") is False
+        and task_binding.get("sourceRevision")
+        == O3_SPARSE_SCORECARD_BASELINE_REVISION
+        and baseline_program.get("activeIncrementId")
+        == "increment.current-official-route-evaluation-slice"
+        and baseline_active_work
+        == ["work.build-sparse-scorecard-and-close-lifecycle"]
+        and expected_criterion_hashes == actual_criterion_hashes
+        and len(expected_criterion_hashes) == 15
+        and axis_members_valid
+        and counts
+        == {
+            "partialCriteria": 15,
+            "evidenceClusters": 6,
+            "lifecycleSlices": 14,
+            "evaluationDimensions": 12,
+            "harnessScenarios": 13,
+            "total": 60,
+        }
+        and len(all_entries) == 60
+        and source_derivation_valid
+        and isinstance(aggregate_decisions, list)
+        and len(aggregate_decisions) == 1
+        and aggregate_decisions[0].get("disposition")
+        == "subtract-unreproducible-cartesian-aggregate"
+        and aggregate_decisions[0].get("reportedMappedRouteCells") == 50
+        and aggregate_decisions[0].get("reportedRouteCells") == 78
+        and route_decision.get("selected") == "composition"
+        and route_decision.get("reproducibleResidualGapCount") == 0
+        and route_decision.get("additionProposed") is False
+        and lifecycle.get("status") == "pending-instrumented-transaction"
+        and isinstance(lifecycle_phases, dict)
+        and set(lifecycle_phases.values()) == {"pending"}
+        and len(lifecycle_phases) == 6
+        and lifecycle.get("evidence") is None
+        and _non_empty_string_list(document.get("claimLimits"))
+    )
 def verify_product(root: Path) -> dict[str, Any]:
     errors: list[str] = []
     constitution = _load(root, "product/constitution.json", errors)
@@ -1848,6 +2186,27 @@ def verify_product(root: Path) -> dict[str, Any]:
                     "requires a cancelled evidence-incomplete predecessor with "
                     "a valid normalized event receipt"
                 )
+            if (
+                work_id == "work.build-sparse-scorecard-and-close-lifecycle"
+                and work_state in {"active", "completed"}
+            ):
+                scorecard_progress_valid = _valid_o3_sparse_scorecard_progress(
+                    root,
+                    work_item,
+                    errors,
+                )
+                if not scorecard_progress_valid:
+                    errors.append(
+                        f"{work_state} work item "
+                        "work.build-sparse-scorecard-and-close-lifecycle must bind "
+                        "valid source-reconciled scorecard progress evidence"
+                    )
+                elif work_state == "completed":
+                    errors.append(
+                        "completed work item "
+                        "work.build-sparse-scorecard-and-close-lifecycle cannot use "
+                        "lifecycle-pending scorecard evidence"
+                    )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:
                 gated_operations.update(

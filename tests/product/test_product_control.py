@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 
+import harness.control as product_control
 from harness.control import validate_continuation_receipt
 
 
@@ -483,6 +484,228 @@ class ProductControlCliTests(unittest.TestCase):
             "work item work.build-sparse-scorecard-and-close-lifecycle requires a cancelled evidence-incomplete predecessor with a valid normalized event receipt",
             report["errors"],
         )
+
+    def test_active_scorecard_work_rejects_self_declared_progress_evidence(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            scorecard_work = next(
+                item
+                for item in increment["workItems"]
+                if item["id"]
+                == "work.build-sparse-scorecard-and-close-lifecycle"
+            )
+            scorecard_work["progressEvidence"] = (
+                "product/evidence/o3-sparse-scorecard-2026-08-11.json"
+            )
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            (
+                target
+                / "product"
+                / "evidence"
+                / "o3-sparse-scorecard-2026-08-11.json"
+            ).write_text(
+                json.dumps({"id": "self-declared-scorecard"}, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "active work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+            report["errors"],
+        )
+
+    def test_scorecard_work_cannot_complete_with_pending_or_missing_evidence(
+        self,
+    ) -> None:
+        mutations = {
+            "lifecycle remains pending": (
+                lambda work, target: None,
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle cannot use lifecycle-pending scorecard evidence",
+            ),
+            "progress evidence removed": (
+                lambda work, target: (
+                    work.pop("progressEvidence"),
+                    (
+                        target
+                        / "product"
+                        / "evidence"
+                        / "o3-sparse-scorecard-2026-08-11.json"
+                    ).unlink(),
+                ),
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+            ),
+        }
+        for label, (mutate, expected_error) in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                program_path = target / "product" / "program.json"
+                program = json.loads(program_path.read_text(encoding="utf-8"))
+                increment = next(
+                    item
+                    for item in program["increments"]
+                    if item["id"]
+                    == "increment.current-official-route-evaluation-slice"
+                )
+                scorecard_work = next(
+                    item
+                    for item in increment["workItems"]
+                    if item["id"]
+                    == "work.build-sparse-scorecard-and-close-lifecycle"
+                )
+                scorecard_work["state"] = "completed"
+                mutate(scorecard_work, target)
+                program_path.write_text(
+                    json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(expected_error, report["errors"])
+
+    def test_sparse_scorecard_is_fail_closed_at_source_and_claim_boundaries(
+        self,
+    ) -> None:
+        mutations = {
+            "criterion source hash drifted": lambda scorecard: scorecard[
+                "entries"
+            ]["partialCriteria"][0]["evidence"].__setitem__(
+                "historicalRecordCanonicalSha256", "0" * 64
+            ),
+            "derived membership drifted": lambda scorecard: scorecard[
+                "entries"
+            ]["lifecycleSlices"][0]["memberCriterionIds"].pop(),
+            "required disposition removed": lambda scorecard: scorecard[
+                "entries"
+            ]["evaluationDimensions"][0].pop("disposition"),
+            "cartesian aggregate retained": lambda scorecard: scorecard[
+                "aggregateDecisions"
+            ][0].__setitem__("disposition", "retain"),
+            "capability addition invented": lambda scorecard: scorecard[
+                "routeDecision"
+            ].__setitem__("additionProposed", True),
+            "lifecycle phase promoted": lambda scorecard: scorecard[
+                "lifecycleTransaction"
+            ]["phases"].__setitem__("boundedActivation", "observed"),
+            "claim ceiling collapsed": lambda scorecard: scorecard.__setitem__(
+                "claimLimits", ["looks good"]
+            ),
+            "entry container malformed": lambda scorecard: scorecard[
+                "entries"
+            ].__setitem__("harnessScenarios", []),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                scorecard_path = (
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-sparse-scorecard-2026-08-11.json"
+                )
+                scorecard = json.loads(scorecard_path.read_text(encoding="utf-8"))
+                mutate(scorecard)
+                scorecard_path.write_text(
+                    json.dumps(scorecard, ensure_ascii=True, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "active work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+                    report["errors"],
+                )
+
+    def test_sparse_scorecard_semantics_are_derived_from_the_historical_source(
+        self,
+    ) -> None:
+        source = json.loads(
+            subprocess.run(
+                [
+                    "git",
+                    "show",
+                    "c53866726834d79a68c61a5b87b4f7ce90698a2c:registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json",
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=True,
+            ).stdout
+        )
+        scorecard = json.loads(
+            (
+                ROOT
+                / "product"
+                / "evidence"
+                / "o3-sparse-scorecard-2026-08-11.json"
+            ).read_text(encoding="utf-8")
+        )
+        partial_entries = scorecard["entries"]["partialCriteria"]
+        aggregate_decision = scorecard["aggregateDecisions"][0]
+
+        self.assertTrue(
+            product_control._valid_o3_sparse_scorecard_source_derivation(
+                source,
+                partial_entries,
+                aggregate_decision,
+            )
+        )
+
+        mutations = {
+            "human-judgment omission set drifted": lambda src, entries, decision: src[
+                "criterionReconciliations"
+            ][0]["dispositions"].remove("needs-human-judgment"),
+            "correction disposition removed": lambda src, entries, decision: entries[
+                3
+            ].__setitem__("disposition", "retain-with-claim-narrowing"),
+            "mapped count drifted": lambda src, entries, decision: src[
+                "candidateCoverageSummary"
+            ].__setitem__("mappedRouteCellCount", 49),
+            "cartesian total drifted": lambda src, entries, decision: src[
+                "candidateCoverageSummary"
+            ].__setitem__("routeCellCount", 77),
+            "explicit route cell appeared": lambda src, entries, decision: src.__setitem__(
+                "routeCellRecords",
+                [{"scenarioId": "GEN-CREATIVE-01", "routeClassId": "N"}],
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                mutated_source = deepcopy(source)
+                mutated_entries = deepcopy(partial_entries)
+                mutated_decision = deepcopy(aggregate_decision)
+                mutate(mutated_source, mutated_entries, mutated_decision)
+                self.assertFalse(
+                    product_control._valid_o3_sparse_scorecard_source_derivation(
+                        mutated_source,
+                        mutated_entries,
+                        mutated_decision,
+                    )
+                )
 
     def test_completed_official_kpi_event_rejects_a_self_declared_receipt(
         self,

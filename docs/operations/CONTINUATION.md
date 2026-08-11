@@ -89,6 +89,23 @@ proof. Consequently the analytical event work is `cancelled` with result
 `evidence-incomplete`; the bounded normalized projection remains usable as an
 input, but O3 remains false and no lifecycle claim was promoted.
 
+## Completed source-reconciled sparse scorecard
+
+`product/evidence/o3-sparse-scorecard-2026-08-11.json` contains 60
+non-Cartesian decision entries: 15 criterion records, six evidence-cluster
+memberships, 14 lifecycle-slice memberships, 12 evaluation-dimension
+memberships, and 13 Harness-scenario memberships. Each criterion record is
+bound to the canonical hash of its exact historical source record; every
+aggregate member list is re-derived by the verifier from commit `c538667`.
+
+The scorecard corrects the seven criteria whose H route required human judgment
+but whose disposition list omitted it. It also subtracts the unreproducible
+historical `50/78` route-cell aggregate because no sparse cell records exist and
+78 is the rejected 13-by-six Cartesian product. No residual capability gap
+survived, so reviewed-external execution and self-authored addition remain
+closed. This proves source-reconciled analytical completeness only; all six
+lifecycle phases remain pending and O3 is false.
+
 ## First checks in a continuation
 
 ```powershell
@@ -102,16 +119,10 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-The active work item is
-`work.build-sparse-scorecard-and-close-lifecycle`. Use the validated normalized
-event projection plus pinned Git source evidence to build decision-bearing
-15-partial/6-cluster, 14-lifecycle, 12-dimension, and 13-scenario sparse
-evaluations. Correct the seven missing human-route dispositions, reject the
-unreproducible `50/78` aggregate, preserve unevaluated and claim-ceiling states,
-and do not create a Cartesian cube.
-
-After the scorecard is source-validated, execute one explicitly instrumented
-transaction for the selected already-installed route. Preview, bounded
+The active work item remains
+`work.build-sparse-scorecard-and-close-lifecycle`, but the scorecard portion is
+now source-validated. Execute one explicitly instrumented transaction for the
+selected already-installed route. Preview, bounded
 task-time activation, observation, applicable projection, rollback, and cleanup
 must each have an observed, not-applicable, or failed receipt; no phase may be
 inferred from the prior analytical event. This remains inside the user's

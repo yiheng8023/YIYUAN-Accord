@@ -17,13 +17,16 @@ coverage and was cleaned. One attributable read-only official-capability event
 now exists, but its original large payload has no reliable byte-exact hash and
 its normalized phase audit found no explicit preview, bounded activation,
 lifecycle observation, applicable projection, rollback, or cleanup receipt.
-The historical 14-lifecycle, 12-dimension, and 13-scenario mapping also remains
-an unvalidated scaffold rather than a decision-bearing scorecard.
+A source-validated non-Cartesian scorecard now covers all 15/6/14/12/13
+entries, corrects seven human-judgment omissions, and subtracts the
+unreproducible `50/78` aggregate. All six selected-route lifecycle phases still
+lack an instrumented transaction receipt.
 
-Hypothesis: an Agent-selected installed official KPI capability, used through
-a fresh host event and combined with native repository evidence, can produce a
-smaller useful sparse scorecard with zero persistent capability state. A later
-capability addition is eligible only if this route exposes a reproducible gap.
+Hypothesis: one separately instrumented transaction on the exact
+already-installed official route can add explicit preview-through-cleanup
+evidence to the validated sparse scorecard with zero persistent capability
+state and zero material user tool intervention. A later capability addition is
+eligible only if this route exposes a reproducible gap.
 
 Falsifier: no host-owned event can attribute the official capability use; the
 scorecard copies inventory rather than recording decisions and missing
@@ -40,16 +43,18 @@ and the accepted increment is committed and pushed.
 
 `work.build-sparse-scorecard-and-close-lifecycle`
 
-The real but evidence-incomplete analytical event is recorded at
+The validated scorecard is
+`product/evidence/o3-sparse-scorecard-2026-08-11.json`. It retains criterion
+records by canonical hash, treats aggregate axes as membership only, and keeps
+O3 false while lifecycle evidence is pending. The earlier real but
+evidence-incomplete analytical event is recorded at
 `product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
 projection is independently hashed and fail-closed; the missing raw-output hash
 and all absent lifecycle phases are mandatory limitations. Its work item is
-`cancelled` with result `evidence-incomplete`, not completed. Validate every
-historical partial and sparse axis against the pinned source, retain, correct,
-or subtract each mapping with evidence-sized dispositions, and then execute a
-separately bounded, explicitly instrumented lifecycle transaction on the
-selected already-installed route. No absent phase may be inferred from Skill
-use or zero residue.
+`cancelled` with result `evidence-incomplete`, not completed. Execute a
+separately bounded, explicitly instrumented lifecycle transaction on the exact
+selected already-installed route. No phase may be inferred from prior Skill use
+or zero residue.
 
 ## Allowed work
 
@@ -61,7 +66,8 @@ use or zero residue.
   the task;
 - validate the normalized analytical projection without treating its missing
   raw-output hash as present;
-- build the 15/6/14/12/13 non-Cartesian scorecard from pinned source evidence;
+- verify and preserve the source-reconciled 15/6/14/12/13 non-Cartesian
+  scorecard;
 - record explicit preview, bounded activation, observation, applicable
   projection, rollback, and cleanup states for one selected-route transaction;
 - run deterministic verification, bounded cleanup, commit, and push.
