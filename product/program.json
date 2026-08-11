@@ -8,6 +8,23 @@
   "acceptance": "product/acceptance.json",
   "status": "paused",
   "activeIncrementId": null,
+  "progressionPolicy": {
+    "pausedScope": "no-active-outcome-bearing-increment",
+    "agentOwnedWithoutInventedUserTask": [
+      "retrospective-counterexample-analysis",
+      "bounded-portfolio-curation",
+      "mechanism-only-validation",
+      "authority-defect-repair"
+    ],
+    "naturalTaskRequiredFor": [
+      "outcome-verification",
+      "task-time-capability-activation",
+      "behavior-or-value-claim"
+    ],
+    "historicalFailureRole": "counterevidence-and-replanning-input-only",
+    "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
+    "userMustNotInventTasks": true
+  },
   "priorRelease": {
     "release": "v0.1",
     "state": "accepted-repository-control-milestone",

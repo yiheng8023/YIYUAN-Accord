@@ -34,8 +34,12 @@ guardrails, no active causal increment, and completion `in-progress`. The
 guardrail-only authority reset was pushed at `a5a0834`; it counts as zero
 product progress. The accepted v0.1 repository-control milestone remains
 pinned at `be498f9`; it is history, not proof that the terminal product
-proposition is complete. The next increment opens only around a bound natural
-task; the repository does not invent one to keep itself busy.
+proposition is complete. The pause applies to an outcome-bearing increment,
+not to retrospective counterexample analysis, bounded portfolio curation,
+mechanism-only validation, or authority-defect repair. Historical failures may
+trigger replanning without becoming acceptance authority. The next outcome
+increment opens only around a bound natural task; the user is not asked to
+invent one to keep the repository busy.
 
 For the full deterministic product suite:
 
@@ -101,6 +105,13 @@ composition. Author new capability only for a reproducible residual gap.
 Installation, enablement, account connection, meaningful cost, live dispatch,
 consumer mutation, acceptance, publication, and release are separate state
 transitions. Native host authorization remains authoritative.
+
+`AGENTS.md` is execution guidance, Skills and Hooks are advisory execution
+inputs, self-authored Skills are replaceable host projections, and the
+peripheral ecosystem is a replaceable capability input. None can set product
+direction, create causal work without an observed problem, expand authority,
+or promote evidence and acceptance. Bound user intent and the current product
+authority win; a conflicting or process-heavy route is rejected or downgraded.
 
 ## Product contract
 

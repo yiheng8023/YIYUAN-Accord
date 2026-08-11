@@ -13,7 +13,8 @@ live Git truth before relying on it.
 Historical registries, research records, fixtures, payloads, scripts, and tests
 are inactive evidence unless the active causal increment binds them. They do
 not become current authority because a file remains on disk or an old verifier
-passes.
+passes. Historical failures remain non-authoritative counterevidence and may
+trigger replanning; lack of acceptance authority does not erase observed loss.
 
 ## Delivery discipline
 
@@ -33,6 +34,11 @@ passes.
   exhaustive fact inventory. Proactively inspect, detect omissions, disclose
   assumptions, seek counterexamples, reconcile evidence, and supplement
   coverage inside the bound task.
+- A paused product program blocks outcome-bearing experimentation, not bounded
+  retrospective counterexample analysis, portfolio curation, mechanism-only
+  validation, or authority-defect repair. These lanes require an observed
+  problem and finite stop, count as zero O1-O5 progress, and must not require
+  the user to invent work.
 
 ## Capability and authority boundary
 
@@ -55,6 +61,15 @@ consumer mutation, publication, release, destructive cleanup, or a new trust
 boundary. Preserve native host authorization. Keep portable contracts,
 host-specific adapters, operational managers, and consumer projections
 separate.
+
+This file is execution guidance only. Skills and Hooks are advisory execution
+inputs, self-authored Skills are replaceable host projections, and the
+peripheral ecosystem is replaceable capability input. None can set product
+direction, create causal work without an observed problem, expand authority,
+or promote evidence, acceptance, or release state. Bound user intent and
+`product/constitution.json`, `product/program.json`, and
+`product/acceptance.json` win; reject or downgrade a conflicting or
+disproportionately process-heavy route.
 
 Before repository changes, inspect branch, status, HEAD, upstream,
 ahead/behind, and dirty files. Preserve unrelated user changes. Use exact,

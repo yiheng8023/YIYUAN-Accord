@@ -28,9 +28,11 @@ process-loss invariants. The verifier derives release identities instead of
 hard-coding one release.
 
 Historical release evidence remains in Git and `product/evidence`, but it is
-not scanned as current authority. The accepted v0.1 verifier and event-specific
-validators remain reproducible at revision `be498f9`; carrying their one-off
-logic into every later release would turn evidence history into product debt.
+not scanned as current authority. It remains usable as retrospective
+counterevidence and may trigger replanning. The accepted v0.1 verifier and
+event-specific validators remain reproducible at revision `be498f9`; carrying
+their one-off logic into every later release would turn evidence history into
+product debt.
 
 Supporting strategy, README, architecture, and continuation documents explain
 the current contract but do not override the three machine-authority files.
@@ -54,6 +56,8 @@ product-control kernel. Its guardrail-only reset is closed and the program is
 paused with no active increment. O1-O5 are deliberately planned and false. A
 repository-authored JSON file cannot promote them: every verified outcome
 requires a code-owned validator added with the real slice that needs it.
+The pause limits outcome-bearing experimentation, not bounded retrospective
+analysis, portfolio curation, mechanism validation, or authority-defect repair.
 
 ## 3. Capability and lifecycle plane
 
@@ -71,6 +75,12 @@ Healthy installed and authorized capabilities may be used proactively for a
 bound task. Installation, enablement, account connection, new data or trust,
 meaningful cost, consumer mutation, publication, and release remain separate
 authority transitions.
+
+`AGENTS.md` remains execution guidance. Skills and Hooks are advisory inputs,
+self-authored Skills are replaceable host projections, and the peripheral
+ecosystem is a replaceable input. The current machine product authority and
+bound user intent outrank them; conflicting or disproportionate routes are
+rejected or downgraded.
 
 ## 4. Host and manager adapters
 

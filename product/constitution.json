@@ -22,6 +22,21 @@
       "process-loss-detection-and-replanning"
     ]
   },
+  "capabilityInfluenceBoundary": {
+    "agentsMd": "execution-guidance-only",
+    "skillsAndHooks": "advisory-execution-input-only",
+    "selfAuthoredSkills": "replaceable-host-projections",
+    "peripheralEcosystem": "replaceable-capability-input",
+    "cannot": [
+      "set-product-direction",
+      "create-causal-work-without-observed-problem",
+      "expand-authority-trust-data-cost-or-side-effects",
+      "promote-evidence-acceptance-or-release-state",
+      "override-bound-user-intent-or-current-product-authority"
+    ],
+    "conflictRule": "bound-user-intent-and-current-product-authority-win",
+    "misfitRule": "reject-or-downgrade-the-capability-route"
+  },
   "fixedInvariants": [
     "product outcomes outrank artifact counts, test counts, inventory counts, and research volume",
     "one release has one explicit finite acceptance expression",
@@ -103,11 +118,13 @@
     "verified outcomes require a code-owned evidence validator"
   ],
   "historicalEvidenceBoundary": {
-    "role": "inactive evidence reachable through Git history or product/evidence",
+    "role": "non-authoritative evidence and retrospective counterevidence",
     "productAuthority": false,
     "planningAuthority": false,
     "acceptanceAuthority": false,
     "runtimeAuthority": false,
-    "releaseAuthority": false
+    "releaseAuthority": false,
+    "counterevidenceInput": true,
+    "mayTriggerReplanning": true
   }
 }

@@ -120,6 +120,48 @@ REQUIRED_REPOSITORY_CLEANUP_PATHS = {
     "harness/__pycache__",
     "tests/product/__pycache__",
 }
+EXPECTED_PROGRESSION_POLICY = {
+    "pausedScope": "no-active-outcome-bearing-increment",
+    "agentOwnedWithoutInventedUserTask": [
+        "retrospective-counterexample-analysis",
+        "bounded-portfolio-curation",
+        "mechanism-only-validation",
+        "authority-defect-repair",
+    ],
+    "naturalTaskRequiredFor": [
+        "outcome-verification",
+        "task-time-capability-activation",
+        "behavior-or-value-claim",
+    ],
+    "historicalFailureRole": "counterevidence-and-replanning-input-only",
+    "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
+    "userMustNotInventTasks": True,
+}
+EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY = {
+    "agentsMd": "execution-guidance-only",
+    "skillsAndHooks": "advisory-execution-input-only",
+    "selfAuthoredSkills": "replaceable-host-projections",
+    "peripheralEcosystem": "replaceable-capability-input",
+    "cannot": [
+        "set-product-direction",
+        "create-causal-work-without-observed-problem",
+        "expand-authority-trust-data-cost-or-side-effects",
+        "promote-evidence-acceptance-or-release-state",
+        "override-bound-user-intent-or-current-product-authority",
+    ],
+    "conflictRule": "bound-user-intent-and-current-product-authority-win",
+    "misfitRule": "reject-or-downgrade-the-capability-route",
+}
+EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY = {
+    "role": "non-authoritative evidence and retrospective counterevidence",
+    "productAuthority": False,
+    "planningAuthority": False,
+    "acceptanceAuthority": False,
+    "runtimeAuthority": False,
+    "releaseAuthority": False,
+    "counterevidenceInput": True,
+    "mayTriggerReplanning": True,
+}
 
 
 EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
@@ -386,6 +428,11 @@ def _historical_boundary_valid(
     }
     if program.get("priorRelease") != expected:
         _error(errors, "program priorRelease must retain the code-owned v0.1 milestone")
+    if (
+        constitution.get("historicalEvidenceBoundary")
+        != EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY
+    ):
+        _error(errors, "constitution historicalEvidenceBoundary is invalid")
     milestones = constitution.get("historicalMilestones")
     if not isinstance(milestones, list) or len(milestones) != 1:
         _error(errors, "constitution must retain exactly one v0.1 historical milestone")
@@ -431,6 +478,7 @@ def _supporting_documents_valid(
             "in-progress",
             "同宿主第二适配器只能作为一致性证据",
         ),
+        "AGENTS.md": ("This file is execution guidance only.",),
         "docs/architecture.md": (str(release),),
         "docs/strategy/PRODUCT-NORTH-STAR.md": (
             str(release),
@@ -540,6 +588,18 @@ def _release_identity_valid(
             _error(errors, "constitution incrementRequires are invalid")
         if _string_list(planning.get("replanWhen")) is None:
             _error(errors, "constitution replanWhen is invalid")
+    return len(errors) == before
+
+
+def _capability_influence_valid(
+    constitution: dict[str, Any], errors: list[str]
+) -> bool:
+    before = len(errors)
+    if (
+        constitution.get("capabilityInfluenceBoundary")
+        != EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY
+    ):
+        _error(errors, "constitution capabilityInfluenceBoundary is invalid")
     return len(errors) == before
 
 
@@ -685,6 +745,13 @@ def _program_graph(
         _error(errors, f"{program_state} program must have a terminal increment graph")
     active = active_increments[0] if len(active_increments) == 1 else None
     return increments, all_work, active
+
+
+def _progression_policy_valid(program: dict[str, Any], errors: list[str]) -> bool:
+    before = len(errors)
+    if program.get("progressionPolicy") != EXPECTED_PROGRESSION_POLICY:
+        _error(errors, "program progressionPolicy is invalid")
+    return len(errors) == before
 
 
 def _authority_guardrail(
@@ -891,16 +958,20 @@ def _verify_product(root: Path) -> dict[str, Any]:
 
     _release_identity_valid(constitution, program, acceptance, errors)
     historical_boundary = _historical_boundary_valid(constitution, program, errors)
+    capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_valid(root, constitution, program, errors)
     criteria = _criteria(acceptance, errors)
     increments, all_work, active_increment = _program_graph(program, criteria, errors)
+    progression_policy = _progression_policy_valid(program, errors)
     authority_before = len(errors)
     authority_files = _authority_files(root, constitution, errors)
     authority_identity = _authority_identity_valid(authority_files, errors)
     authority_identity = (
         authority_identity
         and historical_boundary
+        and capability_influence
         and supporting_documents
+        and progression_policy
         and len(errors) == authority_before
     )
     _, authority_bytes = _implementation_is_smaller(root, errors)

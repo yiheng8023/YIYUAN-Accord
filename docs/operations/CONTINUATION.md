@@ -42,13 +42,19 @@ These are debt and maintainability results, not product outcomes.
 
 ## Why the program is paused
 
-The next evidence-bearing increment requires a natural, non-diagnostic real
-task. No such task is invented by the repository, and the next dogfood/A-B
-increment is not automatically active merely because the reset closed.
+The next positive outcome-bearing increment requires a natural,
+non-diagnostic real task. No such task is invented by the repository or
+requested from the user merely to keep the program active, and the next
+dogfood/A-B increment is not automatically active merely because the reset
+closed.
 
-Historical evidence under `product/evidence` and in Git is inactive. Do not
-replay the old O3 lifecycle attempts or restore their validators as current
-code.
+The pause is not a whole-program stop. The Agent may continue bounded
+retrospective counterexample analysis, portfolio curation, mechanism-only
+validation, and authority-defect repair without claiming O1-O5 progress.
+Historical evidence under `product/evidence` and in Git is inactive as product
+or acceptance authority, but remains valid counterevidence and replanning
+input. Do not replay the old O3 lifecycle attempts or restore their validators
+as current code.
 
 ## Next causal slice
 
@@ -68,6 +74,12 @@ fact/authority requests, route changes, failure and recovery, time/call cost,
 claim limits, and residue. A repeated process-loss class stops the slice.
 Capability addition is allowed when a reproducible residual gap survives
 comparison; subtraction is not a veto.
+
+Do not reopen a settled handoff decision without new counterevidence. Treat
+`AGENTS.md` as execution guidance, Skills and Hooks as advisory inputs,
+self-authored Skills as replaceable host projections, and the peripheral
+ecosystem as replaceable capability input. None may create product direction,
+causal work, authority, evidence promotion, acceptance, or release state.
 
 ## Paused boundary
 

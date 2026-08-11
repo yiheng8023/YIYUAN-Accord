@@ -26,6 +26,12 @@ small historical-event-neutral fail-closed kernel, repaired current truth, and
 stopped. It did not run A/B tasks, mutate a capability manager, install or
 enable a capability, activate a Hook, or change a consumer.
 
+This pause applies only to outcome-bearing experimentation. Bounded
+retrospective counterexample analysis, portfolio curation, mechanism-only
+validation, and authority-defect repair remain Agent-owned lanes that do not
+require an invented user task and count as zero O1-O5 progress. Historical
+failures are non-authoritative counterevidence and may trigger replanning.
+
 After that increment is committed and pushed, the next causal increment may
 bind exactly one natural vertical dogfood task. The current planned order is:
 
@@ -92,6 +98,12 @@ The three current self-authored control Skills are provisional. Their
 functional roles may survive while their packaging is simplified, merged,
 replaced, or retired. Hook stays off unless repeated natural-task evidence
 isolates a recall gap and a reversible A/B proves net benefit.
+
+`AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
+capabilities never set product direction or acceptance. If their prescribed
+workflow conflicts with bound user intent, current product authority, or the
+active causal need, reject or downgrade that route rather than creating work
+to satisfy the capability.
 
 ## Stop and cleanup rules
 

@@ -529,6 +529,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"]["verified"], 0)
 
+    def test_paused_program_cannot_erase_agent_owned_non_outcome_progression(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value.pop("progressionPolicy", None),
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn("program progressionPolicy is invalid", report["errors"])
+
     def test_paused_program_cannot_retain_active_work(self) -> None:
         def invalid(value: dict) -> None:
             self.activate_program(value)
@@ -616,6 +625,19 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program userOwns omits a mandatory human authority", report["errors"])
 
+    def test_capability_guidance_cannot_become_product_authority(self) -> None:
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value.pop("capabilityInfluenceBoundary", None),
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "constitution capabilityInfluenceBoundary is invalid",
+            report["errors"],
+        )
+
     def test_historical_milestone_cannot_become_current_authority(self) -> None:
         self.mutate(
             "product/program.json",
@@ -625,6 +647,19 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn(
             "program priorRelease must retain the code-owned v0.1 milestone",
+            report["errors"],
+        )
+
+    def test_historical_failure_remains_non_authoritative_counterevidence(self) -> None:
+        def erase_counterevidence(value: dict) -> None:
+            value["historicalEvidenceBoundary"]["counterevidenceInput"] = False
+
+        self.mutate("product/constitution.json", erase_counterevidence)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "constitution historicalEvidenceBoundary is invalid",
             report["errors"],
         )
 
@@ -638,6 +673,24 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertTrue(
             any("supporting document parity marker is missing: README.md: v0.2" in item for item in report["errors"]),
+            report["errors"],
+        )
+
+    def test_agents_guidance_cannot_present_itself_as_product_authority(self) -> None:
+        agents = self.root / "AGENTS.md"
+        agents.write_text(
+            agents.read_text(encoding="utf-8").replace(
+                "This file is execution guidance only.",
+                "This file is product authority.",
+            ),
+            encoding="utf-8",
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "supporting document parity marker is missing: AGENTS.md: "
+            "This file is execution guidance only.",
             report["errors"],
         )
 
