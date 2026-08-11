@@ -78,11 +78,15 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-Bind and verify the current official route evaluation contract. Then execute
-one fresh no-inheritance host event that loads the exact installed official KPI
-Skill on the real closeout task, and use its attributable output plus native
-repository evidence to build decision-bearing 15-partial/6-cluster,
-14-lifecycle, 12-dimension, and 13-scenario sparse evaluations.
+The current official route evaluation contract is machine-bound at
+`product/evidence/o3-official-kpi-event-contract-2026-08-11.json`. Execute its
+exact prompt once through a fresh no-inheritance, read-only host event. The
+event must load the two exact installed OpenAI Skill bodies, return structured
+data-quality and KPI decisions, and leave Git and capability state unchanged.
+Only after the receipt is validated may the parent Agent use its attributable
+output plus native repository evidence to build decision-bearing
+15-partial/6-cluster, 14-lifecycle, 12-dimension, and 13-scenario sparse
+evaluations.
 
 Do not redo or copy the historical sparse reconciliation. Its exact source is
 pinned in `product/program.json` at commit `c538667...`; each current axis must

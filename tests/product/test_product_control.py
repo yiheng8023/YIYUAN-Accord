@@ -291,6 +291,111 @@ class ProductControlCliTests(unittest.TestCase):
                     report["errors"],
                 )
 
+    def test_official_kpi_event_requires_its_exact_machine_bound_contract(self) -> None:
+        mutations = {
+            "plugin version drifted": lambda contract: contract[
+                "capabilityIdentity"
+            ].__setitem__("pluginVersion", "some-other-version"),
+            "skill hash drifted": lambda contract: contract[
+                "capabilityIdentity"
+            ]["skillChain"][0].__setitem__("sha256", "0" * 64),
+            "unpaired surrogate": lambda contract: contract[
+                "capabilityIdentity"
+            ].__setitem__("pluginName", "\ud800"),
+            "unpaired surrogate in prompt": lambda contract: contract[
+                "eventContract"
+            ].__setitem__("prompt", "\ud800"),
+            "prompt changed without rebind": lambda contract: contract[
+                "eventContract"
+            ].__setitem__("prompt", contract["eventContract"]["prompt"] + " changed"),
+            "fresh context disabled": lambda contract: contract[
+                "eventContract"
+            ].__setitem__("forkTurns", "all"),
+            "private source added": lambda contract: contract[
+                "dataBoundary"
+            ]["allowed"].append("private account data"),
+            "receiver write added": lambda contract: contract[
+                "authorityBoundary"
+            ]["allowed"].append("write repository files"),
+            "scorecard count drifted": lambda contract: contract[
+                "scorecardContract"
+            ].__setitem__("harnessScenarios", 12),
+            "KPI target drifted": lambda contract: contract[
+                "measurementFramework"
+            ]["primary"][1].__setitem__("target", 999),
+            "verification removed": lambda contract: contract.__setitem__(
+                "verification", []
+            ),
+            "receiver mutation allowed": lambda contract: contract[
+                "cleanup"
+            ].__setitem__("persistentStateAllowed", True),
+            "dirty post-event state allowed": lambda contract: contract[
+                "cleanup"
+            ].__setitem__("requiredPostEventState", "dirty Git status is allowed"),
+            "claim ceiling collapsed": lambda contract: contract.__setitem__(
+                "claimLimits", ["looks good"]
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
+                target = Path(temporary)
+                self.copy_checkout_with_history(target)
+                contract_path = (
+                    target
+                    / "product"
+                    / "evidence"
+                    / "o3-official-kpi-event-contract-2026-08-11.json"
+                )
+                contract = json.loads(contract_path.read_text(encoding="utf-8"))
+                mutate(contract)
+                contract_path.write_text(
+                    json.dumps(contract, ensure_ascii=True, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+                result = self.run_verify(target)
+
+                self.assertNotEqual(result.returncode, 0)
+                report = json.loads(result.stdout)
+                self.assertIn(
+                    "work item work.run-fresh-official-kpi-capability-event must bind the exact official KPI event contract",
+                    report["errors"],
+                )
+
+    def test_official_kpi_event_work_context_cannot_expand_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)
+            self.copy_checkout_with_history(target)
+            program_path = target / "product" / "program.json"
+            program = json.loads(program_path.read_text(encoding="utf-8"))
+            increment = next(
+                item
+                for item in program["increments"]
+                if item["id"]
+                == "increment.current-official-route-evaluation-slice"
+            )
+            work_item = next(
+                item
+                for item in increment["workItems"]
+                if item["id"] == "work.run-fresh-official-kpi-capability-event"
+            )
+            work_item["capabilityContext"]["authorityBoundary"] = (
+                "allow repository writes, installs, accounts, and publication"
+            )
+            program_path.write_text(
+                json.dumps(program, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_verify(target)
+
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn(
+            "work item work.run-fresh-official-kpi-capability-event must bind the exact official KPI event contract",
+            report["errors"],
+        )
+
     def test_predecessor_identity_is_rejected_from_active_product_authority(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary)
@@ -1052,7 +1157,7 @@ class ProductControlCliTests(unittest.TestCase):
             live_work = next(
                 item
                 for item in official_route_increment["workItems"]
-                if item["id"] == "work.run-fresh-official-kpi-capability-event"
+                if item["id"] == "work.build-sparse-scorecard-and-close-lifecycle"
             )
             live_work["operationIds"] = [
                 "external-capability-preview",
@@ -1072,7 +1177,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
-            "planned work work.run-fresh-official-kpi-capability-event requests unauthorized operations without an authorityGate",
+            "planned work work.build-sparse-scorecard-and-close-lifecycle requests unauthorized operations without an authorityGate",
             report["errors"],
         )
 
@@ -1091,7 +1196,7 @@ class ProductControlCliTests(unittest.TestCase):
             live_work = next(
                 item
                 for item in official_route_increment["workItems"]
-                if item["id"] == "work.run-fresh-official-kpi-capability-event"
+                if item["id"] == "work.build-sparse-scorecard-and-close-lifecycle"
             )
             live_work["operationIds"] = [
                 "external-capability-preview",
@@ -1111,7 +1216,7 @@ class ProductControlCliTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
-            "planned work work.run-fresh-official-kpi-capability-event authorityGate some-non-empty-text does not cover operations: consumer-projection, external-capability-mutation, external-capability-preview, rollback",
+            "planned work work.build-sparse-scorecard-and-close-lifecycle authorityGate some-non-empty-text does not cover operations: consumer-projection, external-capability-mutation, external-capability-preview, rollback",
             report["errors"],
         )
 

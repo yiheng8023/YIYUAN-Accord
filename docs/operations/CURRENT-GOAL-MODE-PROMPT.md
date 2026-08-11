@@ -35,12 +35,14 @@ and the accepted increment is committed and pushed.
 
 ## Current work item
 
-`work.bind-current-official-route-evaluation-contract`
+`work.run-fresh-official-kpi-capability-event`
 
-Bind the exact current Skill identity, real task and user authority boundary,
-fresh host-event receipt, sparse scorecard decisions, lifecycle states, claim
-ceiling, and counterexamples. Do not execute the receiver until this contract
-is complete and verifiable.
+The machine-bound contract is
+`product/evidence/o3-official-kpi-event-contract-2026-08-11.json`. Execute its
+exact prompt once through a fresh `forkTurns: none`, read-only receiver. The
+receiver must load the pinned installed OpenAI `analyze-data-quality` and
+`design-kpis` Skill bodies, return one structured payload, and leave repository
+and capability state unchanged.
 
 ## Allowed work
 
@@ -50,20 +52,21 @@ is complete and verifiable.
   tests;
 - use installed, already-authorized capabilities when they materially improve
   the task;
-- bind and test the official-route event and scorecard evidence contract;
-- use the already-authorized installed official capability only after its work
-  item becomes active;
+- execute the exact bound prompt through the active work item;
+- capture the returned payload, receiver identity, prompt/output hashes, Skill
+  identity, and pre/post Git facts without upgrading them to O3 evidence;
 - run deterministic verification, bounded cleanup, commit, and push.
 
 ## Separate authority transition
 
 The user authorized real task evaluation and evidence-backed capability
-addition. That authorization covers task-scoped use of an already-installed
-official capability on this public local repository; it does not grant
+addition. The current active transition covers task-scoped, read-only use of
+the exact already-installed OpenAI capability on this public local repository;
+it does not grant
 installation, enablement, account connection, paid service use, third-party
 candidate execution, consumer projection, manager mutation, publication, or
 release. The exact task, Skill, data, host-event, verification, rollback, and
-cleanup boundaries must still be machine-bound before invocation.
+cleanup boundaries are fixed in the event contract; any drift stops the event.
 
 Release and publication remain user-owned and are not authorized by this
 increment.

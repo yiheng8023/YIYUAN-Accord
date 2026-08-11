@@ -149,6 +149,42 @@ PORTFOLIO_CURATION_CLAIM_LIMITS = {
     "Cleanup proves only that the exact bounded review root was absent at the recorded post-delete repository check.",
     "The zero-unique-coverage result triggers the current increment falsifier; it does not authorize automatic activation of its later planned work.",
 }
+OFFICIAL_KPI_EVENT_CONTRACT_PATH = (
+    "product/evidence/o3-official-kpi-event-contract-2026-08-11.json"
+)
+OFFICIAL_KPI_EVENT_CONTRACT_ID = "o3-official-kpi-event-contract-2026-08-11"
+OFFICIAL_KPI_EVENT_BASELINE_REVISION = (
+    "467d6f56669258e9e3d65c4b27e6e34259d06e18"
+)
+OFFICIAL_KPI_PLUGIN_ID = "Plugin_fc9843a6fb34819195d6c7802398a8a7"
+OFFICIAL_KPI_PLUGIN_VERSION = "0.2.8-13ceeea1f599"
+OFFICIAL_KPI_EVENT_PROMPT_SHA256 = (
+    "47fd4365927888f6193ea6910bff9decf3aaba7b853bb2228d0fb7625d289718"
+)
+OFFICIAL_KPI_EVENT_CONTRACT_SHA256 = (
+    "3c3ecc0dd9a93e4e270cb4561b8e19dd7fd7e0ebdcd3113c01a146abe8277abc"
+)
+OFFICIAL_KPI_EVENT_CONTEXT_SHA256 = (
+    "609da2a916a95fc7828918995fa038fb0406703506ad568a14d35c9ff7487f73"
+)
+OFFICIAL_KPI_SKILL_IDENTITIES = [
+    {
+        "name": "analyze-data-quality",
+        "relativePath": "skills/analyze-data-quality/SKILL.md",
+        "sha256": "9a3c994f87da0c7a8c5ce37bbf08a59fc6f5b4f368475d3d7438f622b753d5f0",
+    },
+    {
+        "name": "design-kpis",
+        "relativePath": "skills/design-kpis/SKILL.md",
+        "sha256": "fcefdecacd1d64f847fbb7c45e93a6bd49c679dff66b8966ebc74c4dc39b8f21",
+    },
+]
+OFFICIAL_KPI_EVENT_CLAIM_LIMITS = {
+    "This contract authorizes one read-only fresh receiver event on named public local sources only.",
+    "The installed Skill metadata and event output may support analytical method attribution, not universal host behavior.",
+    "The event does not prove O3, capability value, cross-host portability, production readiness, release readiness, or publication readiness.",
+    "No external candidate, account, installation, enablement, manager, consumer, or persistent activation is authorized.",
+}
 PORTFOLIO_CURATION_COVERAGE_OBJECTIVE = (
     "decision-relevant-closeout-demand-coverage-with-reduced-user-orchestration"
 )
@@ -1109,6 +1145,228 @@ def _valid_falsified_increment_evidence(
     )
 
 
+def _valid_official_kpi_event_contract(
+    root: Path,
+    work_item: dict[str, Any],
+    errors: list[str],
+) -> bool:
+    if work_item.get("contractEvidence") != OFFICIAL_KPI_EVENT_CONTRACT_PATH:
+        return False
+    document = _load(root, OFFICIAL_KPI_EVENT_CONTRACT_PATH, errors)
+    task_binding = document.get("taskBinding")
+    capability = document.get("capabilityIdentity")
+    route = document.get("route")
+    data_boundary = document.get("dataBoundary")
+    authority = document.get("authorityBoundary")
+    event = document.get("eventContract")
+    scorecard = document.get("scorecardContract")
+    measurement = document.get("measurementFramework")
+    cleanup = document.get("cleanup")
+    context = work_item.get("capabilityContext")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            task_binding,
+            capability,
+            route,
+            data_boundary,
+            authority,
+            event,
+            scorecard,
+            measurement,
+            cleanup,
+            context,
+        )
+    ):
+        return False
+    prompt = event.get("prompt")
+    prompt_hash = None
+    if isinstance(prompt, str):
+        try:
+            prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+        except UnicodeEncodeError:
+            pass
+    contract_hash = hashlib.sha256(
+        json.dumps(
+            document,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    context_hash = hashlib.sha256(
+        json.dumps(
+            context,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    historical = task_binding.get("historicalBaseline")
+    source_program = _git_json_at_revision(
+        root,
+        OFFICIAL_KPI_EVENT_BASELINE_REVISION,
+        "product/program.json",
+    )
+    source_increments = (
+        source_program.get("increments")
+        if isinstance(source_program, dict)
+        else None
+    )
+    source_increment = next(
+        (
+            item
+            for item in source_increments
+            if isinstance(item, dict)
+            and item.get("id")
+            == "increment.current-official-route-evaluation-slice"
+        ),
+        {},
+    ) if isinstance(source_increments, list) else {}
+    source_work_items = source_increment.get("workItems")
+    source_active_work_ids = [
+        item.get("id")
+        for item in source_work_items
+        if isinstance(item, dict) and item.get("state") == "active"
+    ] if isinstance(source_work_items, list) else []
+    primary = measurement.get("primary")
+    drivers = measurement.get("drivers")
+    guardrails = measurement.get("guardrails")
+    primary_ids = [
+        item.get("id") for item in primary if isinstance(item, dict)
+    ] if isinstance(primary, list) else []
+    driver_ids = [
+        item.get("id") for item in drivers if isinstance(item, dict)
+    ] if isinstance(drivers, list) else []
+    guardrail_ids = [
+        item.get("id") for item in guardrails if isinstance(item, dict)
+    ] if isinstance(guardrails, list) else []
+    claim_limits = document.get("claimLimits")
+    return (
+        contract_hash == OFFICIAL_KPI_EVENT_CONTRACT_SHA256
+        and context_hash == OFFICIAL_KPI_EVENT_CONTEXT_SHA256
+        and document.get("id") == OFFICIAL_KPI_EVENT_CONTRACT_ID
+        and document.get("productId") == PRODUCT_ID
+        and document.get("release") == "v0.1"
+        and document.get("status") == "bound-pre-event"
+        and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
+        and task_binding.get("invented") is False
+        and task_binding.get("kind") == "real repository comprehensive closeout"
+        and task_binding.get("baselineRevision")
+        == OFFICIAL_KPI_EVENT_BASELINE_REVISION
+        and isinstance(historical, dict)
+        and historical.get("revision")
+        == "c53866726834d79a68c61a5b87b4f7ce90698a2c"
+        and historical.get("path")
+        == "registry/evaluation-software-engineering-standards-coverage-reconciliation-v1-2026-08-11.json"
+        and isinstance(task_binding.get("decision"), str)
+        and bool(task_binding["decision"].strip())
+        and isinstance(source_program, dict)
+        and source_program.get("activeIncrementId")
+        == "increment.current-official-route-evaluation-slice"
+        and source_increment.get("state") == "active"
+        and source_active_work_ids
+        == ["work.bind-current-official-route-evaluation-contract"]
+        and capability.get("class") == "installed-openai-plugin-skill"
+        and capability.get("pluginId") == OFFICIAL_KPI_PLUGIN_ID
+        and capability.get("pluginName") == "data-analytics"
+        and capability.get("pluginVersion") == OFFICIAL_KPI_PLUGIN_VERSION
+        and capability.get("developerName") == "OpenAI"
+        and capability.get("license") == "Proprietary"
+        and capability.get("packageLocator")
+        == "openai-curated-remote/data-analytics/0.2.8-13ceeea1f599"
+        and capability.get("skillChain") == OFFICIAL_KPI_SKILL_IDENTITIES
+        and capability.get("payloadPolicy")
+        == "load installed exact Skill bodies for this event; do not vendor or rewrite them"
+        and route.get("shape") == "sequence"
+        and route.get("steps")
+        == [
+            "native-repository-source-binding",
+            "installed-openai-analyze-data-quality",
+            "installed-openai-design-kpis",
+            "native-evidence-reconciliation-and-deterministic-verification",
+        ]
+        and _exact_string_set(
+            data_boundary.get("denied"),
+            {
+                "private files outside the named repository and Skill locators",
+                "credentials or account data",
+                "network source expansion",
+                "uploads",
+                "paid services",
+            },
+        )
+        and _exact_string_set(
+            authority.get("denied"),
+            {
+                "repository writes by the receiver",
+                "installation or enablement",
+                "account connection",
+                "third-party candidate execution",
+                "manager or consumer mutation",
+                "publication",
+                "release",
+                "acceptance promotion",
+            },
+        )
+        and event.get("mechanism") == "Codex collaboration sub-agent task"
+        and event.get("forkTurns") == "none"
+        and event.get("freshContext") is True
+        and event.get("receiverReadOnly") is True
+        and event.get("outputFormat") == "one JSON object and no Markdown"
+        and prompt_hash == OFFICIAL_KPI_EVENT_PROMPT_SHA256
+        and event.get("promptSha256") == OFFICIAL_KPI_EVENT_PROMPT_SHA256
+        and scorecard.get("nonCartesian") is True
+        and scorecard.get("historicalPartials") == 15
+        and scorecard.get("evidenceClusters") == 6
+        and scorecard.get("lifecycleSlices") == 14
+        and scorecard.get("evaluationDimensions") == 12
+        and scorecard.get("harnessScenarios") == 13
+        and scorecard.get("routeClasses") == 6
+        and _exact_string_set(
+            scorecard.get("requiredEntryFields"),
+            {
+                "disposition",
+                "evidence",
+                "missingEvidence",
+                "claimCeiling",
+                "routeComparison",
+                "humanJudgment",
+                "separateAuthorization",
+            },
+        )
+        and primary_ids
+        == [
+            "decision-bearing-sparse-entry-coverage",
+            "material-user-tool-interventions",
+            "reproducible-residual-gap-count",
+        ]
+        and driver_ids
+        == ["source-attribution-coverage", "route-comparison-coverage"]
+        and guardrail_ids
+        == [
+            "unsupported-behavior-or-value-claims",
+            "persistent-capability-or-repository-mutations-by-receiver",
+        ]
+        and cleanup.get("persistentStateAllowed") is False
+        and cleanup.get("temporaryRoot") is None
+        and context.get("mode") == "task-time"
+        and context.get("taskBinding")
+        == f"{PORTFOLIO_CURATION_TASK_BINDING}@{OFFICIAL_KPI_EVENT_BASELINE_REVISION}"
+        and context.get("pluginId") == OFFICIAL_KPI_PLUGIN_ID
+        and context.get("pluginVersion") == OFFICIAL_KPI_PLUGIN_VERSION
+        and context.get("skillNames")
+        == ["analyze-data-quality", "design-kpis"]
+        and context.get("eventPromptSha256")
+        == OFFICIAL_KPI_EVENT_PROMPT_SHA256
+        and context.get("receiverForkTurns") == "none"
+        and context.get("receiverReadOnly") is True
+        and _non_empty_string_list(claim_limits)
+        and set(claim_limits) == OFFICIAL_KPI_EVENT_CLAIM_LIMITS
+        and len(claim_limits) == len(OFFICIAL_KPI_EVENT_CLAIM_LIMITS)
+    )
+
+
 def verify_product(root: Path) -> dict[str, Any]:
     errors: list[str] = []
     constitution = _load(root, "product/constitution.json", errors)
@@ -1330,6 +1588,18 @@ def verify_product(root: Path) -> dict[str, Any]:
             capability_context_valid = _valid_capability_context(
                 work_item, operation_id_set
             )
+            if (
+                work_id == "work.run-fresh-official-kpi-capability-event"
+                and not _valid_official_kpi_event_contract(
+                    root,
+                    work_item,
+                    errors,
+                )
+            ):
+                errors.append(
+                    "work item work.run-fresh-official-kpi-capability-event "
+                    "must bind the exact official KPI event contract"
+                )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:
                 gated_operations.update(
