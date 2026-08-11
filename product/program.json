@@ -182,9 +182,9 @@
     {
       "id": "increment.current-official-route-evaluation-slice",
       "state": "active",
-      "observedProblem": "The external cohort added no unique safe demand coverage and falsified the prior acquisition hypothesis. One identity-attributable read-only analysis event remained evidence-incomplete because its raw payload hash is unavailable. A source-validated non-Cartesian 15/6/14/12/13 scorecard now corrects the seven human-judgment omissions, subtracts the unreproducible 50/78 aggregate, and proposes no capability addition; all six selected-route lifecycle phases still lack an instrumented transaction receipt.",
-      "hypothesis": "One separately instrumented transaction on the exact already-installed official route can add explicit preview-through-cleanup evidence to the validated scorecard with zero persistent capability state and zero material user tool intervention, without external or self-authored capability addition.",
-      "falsifier": "No host-owned event can attribute the official capability use, the scorecard merely repeats inventory instead of recording decisions and missing evidence, the user must select or operate the tool, a claimed gap does not survive native official external composition and human comparison, or rollback and cleanup leave persistent state.",
+      "observedProblem": "The external cohort added no unique safe demand coverage, and the source-validated 15/6/14/12/13 scorecard proposes no capability addition. Lifecycle attempt 1 reported all six phases and cleanup, but a host response-stream disconnect occurred after a minimal raw initializer and before final replacement; two exact early timestamps were not durably retained, so the attempt is counterevidence rather than an admissible receipt.",
+      "hypothesis": "One final fresh attempt on the exact already-installed official route can produce admissible preview-through-cleanup evidence if every phase fact is durably checkpointed immediately instead of deferred until final response delivery, while preserving zero persistent capability state and zero material user tool intervention.",
+      "falsifier": "The second fresh attempt cannot durably retain phase facts, no host-owned event can attribute official capability use, the user must select or operate the tool, the KPI reverses the no-addition decision, or rollback and cleanup leave persistent state. A second interrupted or incomplete attempt stops automatic retries.",
       "stopCondition": "O3 passes only after one source-bound host event uses the exact installed official capability on the real closeout task, every historical partial and all 14/12/13 sparse axes receive evidence-sized dispositions, the selected route lifecycle reaches cleanup with zero residual state, the public verifier rejects self-declared substitutes, and the accepted increment is committed and pushed.",
       "sourceInputs": [
         {
@@ -199,6 +199,10 @@
         {
           "path": "product/evidence/o3-official-kpi-event-contract-2026-08-11.json",
           "role": "machine-bound installed OpenAI Skill identity, fresh read-only event, scorecard, authority, verification, and cleanup contract"
+        },
+        {
+          "path": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
+          "role": "preserved failed attempt, raw initializer hash, post-disconnect receiver forensics, missing exact fields, zero-residue observation, and causal checkpoint correction"
         }
       ],
       "acceptanceIds": ["O3", "G1", "G2", "G4"],
@@ -243,6 +247,7 @@
           "authorityGate": "bound-task-capability-context-required",
           "progressEvidence": "product/evidence/o3-sparse-scorecard-2026-08-11.json",
           "lifecycleContractEvidence": "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json",
+          "lifecycleAttemptEvidence": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
           "capabilityContext": {
             "mode": "task-time",
             "taskBinding": "agent-autonomy-harness-v0.1-closeout@2df8d85f1e9a8881972d5aa6ac587f11dc37aa79",

@@ -106,6 +106,22 @@ survived, so reviewed-external execution and self-authored addition remain
 closed. This proves source-reconciled analytical completeness only; all six
 lifecycle phases remain pending and O3 is false.
 
+## Failed lifecycle attempt 1 and causal correction
+
+The first pushed lifecycle contract ran in one fresh receiver at revision
+`cfe9ce2b65591bea59c397e0df706dbbbb8751b6`. The receiver later reported that
+all six phases and exact cleanup ran, but the host response stream disconnected
+after a minimal raw initializer and before the final replacement. The durable
+file retained `startedAt` but not the exact `preview` and `boundedActivation`
+timestamps. Those values were not reconstructed.
+
+`product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json`
+preserves the initializer SHA, disconnect, same-receiver no-write forensics,
+missing fields, and zero-residue observation. The attempt is failed
+counterevidence and does not advance O3. The smallest causal correction is a
+final attempt that durably checkpoints immediately after every phase; a second
+interruption or incomplete receipt stops automatic retries.
+
 ## First checks in a continuation
 
 ```powershell
@@ -121,13 +137,13 @@ python -B -m harness verify --root . --json
 
 The active work item remains
 `work.build-sparse-scorecard-and-close-lifecycle`, but the scorecard portion is
-now source-validated. The pre-event contract is
+now source-validated. The attempt-2 pre-event contract is
 `product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`;
 execute it only from the committed and pushed revision that contains the
-contract. Preview, bounded
-task-time activation, observation, applicable projection, rollback, and cleanup
-must each have an observed, not-applicable, or failed receipt; no phase may be
-inferred from the prior analytical event. This remains inside the user's
+contract. Preview, bounded task-time activation, observation, applicable
+projection, rollback, and cleanup must each complete a durable checkpoint
+before the receiver continues. No phase may be inferred from the prior
+analytical event or attempt-1 forensics. This remains inside the user's
 approved task-scoped installed-capability use and repository work. Any install,
 enablement, account, external candidate execution, manager/consumer mutation,
 publication, release, or acceptance promotion remains outside authority.

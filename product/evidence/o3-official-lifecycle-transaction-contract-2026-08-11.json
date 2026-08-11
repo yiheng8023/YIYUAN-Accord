@@ -1,17 +1,20 @@
 {
   "schema": 1,
-  "id": "o3-official-lifecycle-transaction-contract-2026-08-11",
+  "id": "o3-official-lifecycle-transaction-contract-attempt-2-2026-08-11",
   "productId": "agent-autonomy-harness",
   "release": "v0.1",
   "status": "bound-pre-event",
   "taskBinding": {
     "id": "agent-autonomy-harness-v0.1-closeout",
     "invented": false,
+    "attempt": 2,
     "kind": "real repository comprehensive closeout",
     "scorecardBaselineRevision": "19ee6f5c2b7feb47cbe41e40f5983c13d5ec2e45",
     "contractRevisionRule": "the receiver must observe a pushed HEAD that contains this exact contract; the later verifier binds that observed revision and the contract canonical hash without making the contract self-reference its future commit",
     "scorecardPath": "product/evidence/o3-sparse-scorecard-2026-08-11.json",
     "scorecardCanonicalSha256": "9724f31e62f0f48397d7e4fbf4c0173b300bcbd56d6bf8b2f630e8ce26470ecd",
+    "priorAttemptEvidence": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
+    "priorAttemptCanonicalSha256": "a39263ad9ff898c95e30b0563de028719e30100407b56c1cb48138fe6cb8cfb2",
     "decision": "Can the exact already-installed official route complete one bounded preview-through-cleanup task-time transaction for the validated scorecard without capability addition, persistent projection, or material user tool intervention?"
   },
   "separateAuthorization": {
@@ -41,7 +44,7 @@
     "payloadPolicy": "load exact installed bodies into one fresh receiver context only; do not vendor, rewrite, install, enable, or persist them"
   },
   "lifecycleOwner": {
-    "id": "/root/o3_official_lifecycle_transaction",
+    "id": "/root/o3_official_lifecycle_transaction_attempt_2",
     "class": "one fresh Codex sub-agent receiver",
     "dualOwnerAllowed": false
   },
@@ -68,10 +71,39 @@
       ".tmp/o3-official-lifecycle-transaction-2026-08-11",
       "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
     ],
-    "outputFormat": "one compact JSON object identical to the raw evidence file and no Markdown",
+    "outputFormat": "after successful preflight, one compact final JSON object identical to the raw evidence file and no Markdown; a preflight refusal is parent-only JSON and writes no file",
     "preflightFailurePolicy": "A failed preflight precedes the lifecycle phases: return one compact refusal JSON to the parent only, write no file, preserve the refusal as counterevidence, and do not rerun without causal review.",
-    "prompt": "You are /root/o3_official_lifecycle_transaction, the single lifecycle owner for one real Agent Autonomy Harness O3 task-time transaction. Work only in C:/Projects/agent-autonomy-harness with forkTurns none. Do not spawn sub-agents. First read product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json from the current pushed HEAD and obey it exactly; report the observed revision so the parent verifier can prove that revision contains the exact contract. Treat 19ee6f5c2b7feb47cbe41e40f5983c13d5ec2e45 only as the scorecard source baseline. Before any write record strict RFC3339 startedAt and require git status --porcelain=v1 -uall to return no lines, the exact temporary child .tmp/o3-official-lifecycle-transaction-2026-08-11 to be absent, and product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json to be absent; otherwise stop without writing. Verify main, origin/main, 0/0, the validated scorecard canonical hash, and both named installed OpenAI Skill SHA-256 values. Read both exact SKILL.md bodies completely. Preview the bounded route, then load and apply analyze-data-quality followed by design-kpis only to this narrow checkpoint: confirm the scorecard's 60 decision entries remain non-Cartesian, determine whether its current source evidence supports the no-capability-addition decision, and define one decision KPI with its caveat. For observation, create only the exact temporary child, write one compact marker JSON, and record its SHA-256. Record applicableProjection as not-applicable when no manager or consumer projection is required or authorized. Roll back task-time route use by ceasing the Skill-guided analysis, re-hashing both Skill bodies, and observing named mutation surfaces; do not claim cryptographic context erasure or a host path sandbox. Attempt exact cleanup and record the actual result. Write one initial compact JSON object to product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json and finalize the same file after recording actual post git status. Populate every nested field from expectedRawEvidence, use strictly increasing phase timestamps in phaseOrder, and return byte-for-byte the same final JSON with no Markdown or extra text. If any phase fails, user intervention occurs, KPI reverses, or unexpected mutation or residue appears, emit a structurally valid transaction-failed-with-evidence receipt with the actual counters, deltas, failed or not-run phases, and evidence; never force the successPhaseStates or success values. Only a genuinely successful transaction may use transaction-observed-with-runtime-attestation-limit and the declared success predicates. The path allowlist is a task constraint, not host enforcement; report that limitation. Do not intentionally modify any other path and do not claim complete absence of transient out-of-scope effects, behavior, value, cross-host portability, production, release, publication, overall O3, or v0.1 acceptance.",
-    "promptSha256": "722c223e19d5a90315b8e900c89a90e112c95c6279e4cce7bbcf080f795506e5"
+    "checkpointProtocol": {
+      "status": "transaction-checkpoint",
+      "writeAfterPhases": [
+        "preview",
+        "boundedActivation",
+        "observation",
+        "applicableProjection",
+        "rollback",
+        "cleanup"
+      ],
+      "requiredKeys": [
+        "schema",
+        "id",
+        "productId",
+        "release",
+        "attempt",
+        "status",
+        "time",
+        "contract",
+        "completedPhases",
+        "phaseFacts",
+        "pendingPhases",
+        "lastCheckpointAt",
+        "claimLimits"
+      ],
+      "durabilityRule": "Complete one raw-path checkpoint tool write immediately after preview and after every later phase; retain every exact observed timestamp and fact already known, and never defer the preview or bounded-activation timestamps until finalization.",
+      "recoveryRule": "A checkpoint is counterevidence, never O3 evidence; after interruption the same lifecycle owner may finalize a failure receipt only from durable checkpoint facts and must not invent or rerun a phase.",
+      "maxFreshAttempts": 2
+    },
+    "prompt": "You are /root/o3_official_lifecycle_transaction_attempt_2, the single lifecycle owner for attempt 2 of one real Agent Autonomy Harness O3 task-time transaction. Work only in C:/Projects/agent-autonomy-harness with forkTurns none and do not spawn sub-agents. Read the pushed lifecycle contract completely and obey it exactly. Before any write require a clean main at origin/main 0/0, the exact contract and scorecard hashes, both installed OpenAI Skill hashes, the attempt-1 incident hash, and absence of the exact raw path and temporary child; on failure return only the parent-only refusal and write nothing. Execute phaseOrder once. Immediately after preview and after every later phase, complete one durable raw-path transaction-checkpoint tool write that follows checkpointProtocol and retains all exact timestamps and facts already observed; never defer preview or boundedActivation facts. Read both exact SKILL.md bodies completely, then apply analyze-data-quality followed by design-kpis only to confirm the 60 non-Cartesian scorecard entries, the no-capability-addition decision, and one decision KPI with its caveat. Create and hash only the exact temporary marker for observation. Record projection not-applicable when no manager or consumer projection is authorized. Roll back by ceasing the route, re-hashing both Skill bodies, and observing named mutation surfaces without claiming context erasure or a host sandbox. Clean the exact temporary root. After exact post-Git observation, replace the checkpoint with one final expectedRawEvidence receipt and return byte-for-byte the same compact JSON with no Markdown. A phase failure, intervention, reversed KPI, unexpected mutation, residue, or runtime interruption must remain counterevidence and must never be forced into success values. Modify no other path and claim no cross-host, production, release, publication, overall O3, or v0.1 acceptance.",
+    "promptSha256": "c03c607324905794fbc231f3bc424c7ad310e7f0c47a3946795a6d8be9cfe7d9"
   },
   "expectedRawEvidence": {
     "path": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
@@ -80,6 +112,7 @@
       "id",
       "productId",
       "release",
+      "attempt",
       "status",
       "time",
       "contract",
@@ -105,7 +138,9 @@
       "observedRevision",
       "canonicalSha256",
       "promptSha256",
-      "scorecardBaselineRevision"
+      "scorecardBaselineRevision",
+      "attempt",
+      "priorAttemptCanonicalSha256"
     ],
     "requiredLifecycleOwnerFields": ["id", "singleOwner"],
     "requiredHostAuthoritySurfaceFields": [
@@ -251,6 +286,7 @@
     "contract canonical hash and prompt hash",
     "pushed baseline revision and fresh forkTurns-none receiver identity",
     "exact scorecard and installed Skill hashes",
+    "attempt-1 incident hash and durable per-phase checkpoint sequence",
     "phase-specific receipts and compact KPI observation",
     "raw event evidence whole-file hash",
     "exact temporary-root absence and Git before and after facts",
@@ -258,6 +294,7 @@
   ],
   "claimLimits": [
     "This contract authorizes one bounded fresh receiver transaction on the named public local sources and exact paths only.",
+    "Attempt 1 remains failed counterevidence; attempt 2 checkpoints preserve interruption facts but never satisfy O3 or replace the final receipt.",
     "Bounded activation means task-time Skill instruction loading and use in the fresh receiver; it does not prove installation, enablement, exposure, persistent activation, or model behavior.",
     "Rollback proves cessation of the named task route plus unchanged Skill hashes and zero declared capability configuration mutation; it does not prove cryptographic context erasure.",
     "A not-applicable projection receipt proves no projection was needed for this route, not general projection support.",

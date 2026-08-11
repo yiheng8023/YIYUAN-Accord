@@ -19,19 +19,24 @@ its normalized phase audit found no explicit preview, bounded activation,
 lifecycle observation, applicable projection, rollback, or cleanup receipt.
 A source-validated non-Cartesian scorecard now covers all 15/6/14/12/13
 entries, corrects seven human-judgment omissions, and subtracts the
-unreproducible `50/78` aggregate. All six selected-route lifecycle phases still
-lack an instrumented transaction receipt.
+unreproducible `50/78` aggregate. Lifecycle attempt 1 reported all six phases
+and cleanup, but the host response stream disconnected after a minimal raw
+initializer and before final replacement. Two exact early phase timestamps
+were not durably retained, so that attempt is counterevidence rather than an
+admissible transaction receipt.
 
-Hypothesis: one separately instrumented transaction on the exact
-already-installed official route can add explicit preview-through-cleanup
-evidence to the validated sparse scorecard with zero persistent capability
-state and zero material user tool intervention. A later capability addition is
-eligible only if this route exposes a reproducible gap.
+Hypothesis: one final fresh attempt on the exact already-installed official
+route can add admissible preview-through-cleanup evidence if each phase fact is
+durably checkpointed immediately instead of deferred until final response
+delivery, with zero persistent capability state and zero material user tool
+intervention. A later capability addition is eligible only if this route
+exposes a reproducible gap.
 
-Falsifier: no host-owned event can attribute the official capability use; the
-scorecard copies inventory rather than recording decisions and missing
-evidence; the user must choose or operate the tool; a claimed gap does not
-survive route comparison; or rollback and cleanup leave persistent state.
+Falsifier: the second fresh attempt cannot durably retain phase facts; no
+host-owned event can attribute the official capability use; the user must
+choose or operate the tool; the KPI reverses the no-addition decision; or
+rollback and cleanup leave persistent state. A second interrupted or incomplete
+attempt stops automatic retries.
 
 Stop condition: one source-bound host event uses the exact installed official
 capability on the real task; every historical partial and all 14/12/13 sparse
@@ -51,12 +56,16 @@ evidence-incomplete analytical event is recorded at
 `product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
 projection is independently hashed and fail-closed; the missing raw-output hash
 and all absent lifecycle phases are mandatory limitations. Its work item is
-`cancelled` with result `evidence-incomplete`, not completed. Execute a
-separately bounded, explicitly instrumented lifecycle transaction on the exact
-selected already-installed route. Its pre-event contract is
+`cancelled` with result `evidence-incomplete`, not completed. Attempt 1 of the
+separately bounded lifecycle transaction is preserved at
+`product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json`.
+Its final raw replacement was interrupted and cannot be repaired because two
+exact timestamps were never durably retained. The attempt-2 pre-event contract
+is
 `product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`;
-it must be committed and pushed before the fresh receiver runs. No phase may be
-inferred from prior Skill use or zero residue.
+it must be committed and pushed before the fresh receiver runs, checkpoint
+after every phase, and run only once. No phase may be inferred from prior Skill
+use, receiver forensics, or zero residue.
 
 ## Allowed work
 

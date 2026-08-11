@@ -203,16 +203,22 @@ O3_LIFECYCLE_CONTRACT_PATH = (
     "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json"
 )
 O3_LIFECYCLE_CONTRACT_ID = (
-    "o3-official-lifecycle-transaction-contract-2026-08-11"
+    "o3-official-lifecycle-transaction-contract-attempt-2-2026-08-11"
 )
 O3_LIFECYCLE_CONTRACT_BASELINE_REVISION = (
     "19ee6f5c2b7feb47cbe41e40f5983c13d5ec2e45"
 )
 O3_LIFECYCLE_CONTRACT_PROMPT_SHA256 = (
-    "722c223e19d5a90315b8e900c89a90e112c95c6279e4cce7bbcf080f795506e5"
+    "c03c607324905794fbc231f3bc424c7ad310e7f0c47a3946795a6d8be9cfe7d9"
 )
 O3_LIFECYCLE_CONTRACT_SHA256 = (
-    "49fc7bc17fe37f0c519fb79a4c6d40eeff9da61343657b6019c78db6cd3a53c8"
+    "27e7ebcfe9bc510210884e64414be7320de33adc2fd232e5924081ebbc34f160"
+)
+O3_LIFECYCLE_ATTEMPT_1_INCIDENT_PATH = (
+    "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json"
+)
+O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256 = (
+    "a39263ad9ff898c95e30b0563de028719e30100407b56c1cb48138fe6cb8cfb2"
 )
 O3_LIFECYCLE_RAW_EVIDENCE_PATH = (
     "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
@@ -240,6 +246,7 @@ OFFICIAL_KPI_EVENT_CLAIM_LIMITS = {
 }
 O3_LIFECYCLE_CLAIM_LIMIT_SEQUENCE = (
     "This contract authorizes one bounded fresh receiver transaction on the named public local sources and exact paths only.",
+    "Attempt 1 remains failed counterevidence; attempt 2 checkpoints preserve interruption facts but never satisfy O3 or replace the final receipt.",
     "Bounded activation means task-time Skill instruction loading and use in the fresh receiver; it does not prove installation, enablement, exposure, persistent activation, or model behavior.",
     "Rollback proves cessation of the named task route plus unchanged Skill hashes and zero declared capability configuration mutation; it does not prove cryptographic context erasure.",
     "A not-applicable projection receipt proves no projection was needed for this route, not general projection support.",
@@ -1742,9 +1749,14 @@ def _valid_o3_lifecycle_contract(
     work_item: dict[str, Any],
     errors: list[str],
 ) -> bool:
-    if work_item.get("lifecycleContractEvidence") != O3_LIFECYCLE_CONTRACT_PATH:
+    if (
+        work_item.get("lifecycleContractEvidence") != O3_LIFECYCLE_CONTRACT_PATH
+        or work_item.get("lifecycleAttemptEvidence")
+        != O3_LIFECYCLE_ATTEMPT_1_INCIDENT_PATH
+    ):
         return False
     document = _load(root, O3_LIFECYCLE_CONTRACT_PATH, errors)
+    prior_attempt = _load(root, O3_LIFECYCLE_ATTEMPT_1_INCIDENT_PATH, errors)
     task_binding = document.get("taskBinding")
     authorization = document.get("separateAuthorization")
     capability = document.get("capabilityIdentity")
@@ -1752,6 +1764,7 @@ def _valid_o3_lifecycle_contract(
     host_surface = document.get("hostAuthoritySurface")
     phase_semantics = document.get("phaseSemantics")
     event_contract = document.get("eventContract")
+    checkpoint = event_contract.get("checkpointProtocol") if isinstance(event_contract, dict) else None
     expected_raw = document.get("expectedRawEvidence")
     if not all(
         isinstance(value, dict)
@@ -1763,7 +1776,9 @@ def _valid_o3_lifecycle_contract(
             host_surface,
             phase_semantics,
             event_contract,
+            checkpoint,
             expected_raw,
+            prior_attempt,
         )
     ):
         return False
@@ -1811,6 +1826,7 @@ def _valid_o3_lifecycle_contract(
             separators=(",", ":"),
         ).encode("utf-8")
         document_hash = hashlib.sha256(canonical(document)).hexdigest()
+        prior_attempt_hash = hashlib.sha256(canonical(prior_attempt)).hexdigest()
         baseline_scorecard_hash = hashlib.sha256(
             canonical(baseline_scorecard)
         ).hexdigest()
@@ -1827,12 +1843,19 @@ def _valid_o3_lifecycle_contract(
         and document.get("status") == "bound-pre-event"
         and task_binding.get("id") == PORTFOLIO_CURATION_TASK_BINDING
         and task_binding.get("invented") is False
+        and task_binding.get("attempt") == 2
         and task_binding.get("scorecardBaselineRevision")
         == O3_LIFECYCLE_CONTRACT_BASELINE_REVISION
         and _non_empty_string(task_binding.get("contractRevisionRule"))
         and task_binding.get("scorecardPath") == O3_SPARSE_SCORECARD_PATH
         and task_binding.get("scorecardCanonicalSha256")
         == O3_SPARSE_SCORECARD_SHA256
+        and task_binding.get("priorAttemptEvidence")
+        == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_PATH
+        and task_binding.get("priorAttemptCanonicalSha256")
+        == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256
+        and prior_attempt_hash == O3_LIFECYCLE_ATTEMPT_1_INCIDENT_SHA256
+        and prior_attempt.get("status") == "failed-evidence-persistence-incomplete"
         and baseline_scorecard_hash == O3_SPARSE_SCORECARD_SHA256
         and baseline_program.get("activeIncrementId")
         == "increment.current-official-route-evaluation-slice"
@@ -1844,7 +1867,7 @@ def _valid_o3_lifecycle_contract(
         and capability.get("pluginId") == OFFICIAL_KPI_PLUGIN_ID
         and capability.get("pluginVersion") == OFFICIAL_KPI_PLUGIN_VERSION
         and capability.get("skillChain") == OFFICIAL_KPI_SKILL_IDENTITIES
-        and owner.get("id") == "/root/o3_official_lifecycle_transaction"
+        and owner.get("id") == "/root/o3_official_lifecycle_transaction_attempt_2"
         and owner.get("dualOwnerAllowed") is False
         and host_surface.get("host") == "Codex"
         and _non_empty_string(host_surface.get("surface"))
@@ -1866,6 +1889,19 @@ def _valid_o3_lifecycle_contract(
         and event_contract.get("allowedWritePaths")
         == [O3_LIFECYCLE_TEMPORARY_ROOT, O3_LIFECYCLE_RAW_EVIDENCE_PATH]
         and _non_empty_string(event_contract.get("preflightFailurePolicy"))
+        and checkpoint.get("status") == "transaction-checkpoint"
+        and checkpoint.get("writeAfterPhases")
+        == [
+            "preview",
+            "boundedActivation",
+            "observation",
+            "applicableProjection",
+            "rollback",
+            "cleanup",
+        ]
+        and checkpoint.get("maxFreshAttempts") == 2
+        and _non_empty_string(checkpoint.get("durabilityRule"))
+        and _non_empty_string(checkpoint.get("recoveryRule"))
         and event_contract.get("promptSha256")
         == O3_LIFECYCLE_CONTRACT_PROMPT_SHA256
         and prompt_hash == O3_LIFECYCLE_CONTRACT_PROMPT_SHA256

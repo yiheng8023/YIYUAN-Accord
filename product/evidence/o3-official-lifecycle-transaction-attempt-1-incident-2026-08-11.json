@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "id": "o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11",
+  "productId": "agent-autonomy-harness",
+  "release": "v0.1",
+  "status": "failed-evidence-persistence-incomplete",
+  "taskBinding": {
+    "id": "agent-autonomy-harness-v0.1-closeout",
+    "invented": false,
+    "attempt": 1
+  },
+  "contract": {
+    "path": "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json",
+    "observedRevision": "cfe9ce2b65591bea59c397e0df706dbbbb8751b6",
+    "canonicalSha256": "49fc7bc17fe37f0c519fb79a4c6d40eeff9da61343657b6019c78db6cd3a53c8",
+    "promptSha256": "722c223e19d5a90315b8e900c89a90e112c95c6279e4cce7bbcf080f795506e5"
+  },
+  "lifecycleOwner": {
+    "id": "/root/o3_official_lifecycle_transaction",
+    "singleOwner": true,
+    "forkTurns": "none"
+  },
+  "failure": {
+    "class": "host-response-stream-disconnected",
+    "reportedError": "stream disconnected before completion: error sending request for url (https://chatgpt.com/backend-api/codex/responses)",
+    "occurrence": "after the raw initializer and post-Git observation, before the final raw replacement",
+    "retryRule": "do not rerun without preserving this counterevidence and correcting the missing durable phase-checkpoint cause"
+  },
+  "durablePartialRaw": {
+    "originalPath": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
+    "sha256": "2e29ac35cf084d10f0d76822ee0bc9d4945bf8add6f3ad840a758e168684380d",
+    "document": {
+      "schema": 1,
+      "id": "o3-official-lifecycle-transaction-raw-2026-08-11",
+      "status": "initializing-after-cleanup",
+      "time": {
+        "startedAt": "2026-08-11T16:27:44+08:00"
+      }
+    }
+  },
+  "receiverForensics": {
+    "source": "same lifecycle owner in a no-write follow-up after the disconnect",
+    "completedPhaseReports": [
+      "preview",
+      "boundedActivation",
+      "observation",
+      "applicableProjection:not-applicable",
+      "rollback",
+      "cleanup"
+    ],
+    "skillChainReportedLoadedAndUsed": [
+      "analyze-data-quality",
+      "design-kpis"
+    ],
+    "temporaryMarkerSha256": "dc6443c00489e7681e9ad99878ea0489fdb730f757c9a349ca80862a4f40aeda",
+    "skillHashesReportedUnchangedAfterRollback": true,
+    "observedHeadAfter": "cfe9ce2b65591bea59c397e0df706dbbbb8751b6",
+    "originMainAfter": "cfe9ce2b65591bea59c397e0df706dbbbb8751b6",
+    "aheadBehindAfter": [0, 0],
+    "postPorcelainV1Uall": [
+      "?? product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json"
+    ],
+    "temporaryRootAbsentAfter": true,
+    "attestationLimit": "These facts are receiver-reported after the transport failure and are not a complete contract-shaped raw receipt."
+  },
+  "unavailableRequiredFields": [
+    "phases.preview.observedAt",
+    "phases.boundedActivation.observedAt"
+  ],
+  "assessment": {
+    "lifecycleAccepted": false,
+    "o3Promoted": false,
+    "causalFinding": "The event deferred durable phase facts until final receipt replacement, so a transport interruption could erase exact early timestamps even after cleanup succeeded.",
+    "smallestCorrection": "Complete one durable raw-path checkpoint tool write before route use and after every phase, then derive the final receipt from those retained observed facts; this does not prove filesystem replacement atomicity or eliminate the phase-to-write window."
+  },
+  "claimLimits": [
+    "This record preserves one failed evidence-persistence attempt and does not validate the missing raw receipt.",
+    "Receiver forensics after a stream disconnect cannot replace the missing exact early phase timestamps.",
+    "The report does not prove host sandboxing, cryptographic context erasure, cross-host behavior, production, release, publication, O3, or v0.1 acceptance."
+  ]
+}

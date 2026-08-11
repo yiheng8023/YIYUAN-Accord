@@ -591,9 +591,15 @@ class ProductControlCliTests(unittest.TestCase):
                 work.pop("lifecycleContractEvidence"),
                 path.unlink(),
             ),
+            "prior attempt evidence removed": lambda work, contract, path: work.pop(
+                "lifecycleAttemptEvidence"
+            ),
             "contract phase semantics drifted": lambda work, contract, path: contract[
                 "phaseSemantics"
             ].__setitem__("boundedActivation", "ordinary Skill use"),
+            "durable checkpoint protocol removed": lambda work, contract, path: contract[
+                "eventContract"
+            ].pop("checkpointProtocol"),
         }
         for label, mutate in mutations.items():
             with self.subTest(label=label), tempfile.TemporaryDirectory() as temporary:
