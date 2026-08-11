@@ -72,8 +72,36 @@ class ProductControlCliTests(unittest.TestCase):
                 + "\n"
             ).encode("utf-8")
         )
+        origin_main = subprocess.run(
+            ["git", "rev-parse", "refs/remotes/origin/main"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        subprocess.run(
+            ["git", "update-ref", "refs/remotes/origin/main", origin_main],
+            cwd=target,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
 
     def bind_o3_verified(self, target: Path) -> Path:
+        evidence_revision = product_control.O3_LIFECYCLE_EVIDENCE_REVISION
+        if isinstance(evidence_revision, str):
+            subprocess.run(
+                [
+                    "git",
+                    "update-ref",
+                    "refs/remotes/origin/main",
+                    evidence_revision,
+                ],
+                cwd=target,
+                text=True,
+                capture_output=True,
+                check=True,
+            )
         acceptance_path = target / "product" / "acceptance.json"
         acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
         criterion = next(
@@ -515,7 +543,7 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_active_scorecard_work_rejects_self_declared_progress_evidence(
+    def test_completed_scorecard_work_rejects_self_declared_progress_evidence(
         self,
     ) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -557,7 +585,7 @@ class ProductControlCliTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         report = json.loads(result.stdout)
         self.assertIn(
-            "active work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+            "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
             report["errors"],
         )
 
@@ -588,6 +616,18 @@ class ProductControlCliTests(unittest.TestCase):
                     ).unlink(),
                 ),
                 "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+            ),
+            "lifecycle result evidence removed": (
+                lambda work, target: work.pop("lifecycleResultEvidence"),
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact successful lifecycle receipt",
+            ),
+            "result state drifted": (
+                lambda work, target: work.__setitem__("result", "looks-good"),
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact successful lifecycle receipt",
+            ),
+            "result revision drifted": (
+                lambda work, target: work.__setitem__("resultRevision", "0" * 40),
+                "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact successful lifecycle receipt",
             ),
         }
         for label, (mutate, expected_error) in mutations.items():
@@ -621,7 +661,7 @@ class ProductControlCliTests(unittest.TestCase):
                 report = json.loads(result.stdout)
                 self.assertIn(expected_error, report["errors"])
 
-    def test_active_scorecard_work_requires_the_bound_lifecycle_contract(
+    def test_completed_scorecard_work_requires_the_bound_lifecycle_contract(
         self,
     ) -> None:
         mutations = {
@@ -680,7 +720,7 @@ class ProductControlCliTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 report = json.loads(result.stdout)
                 self.assertIn(
-                    "active work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact bound lifecycle transaction contract",
+                    "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind the exact bound lifecycle transaction contract",
                     report["errors"],
                 )
 
@@ -737,7 +777,7 @@ class ProductControlCliTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 report = json.loads(result.stdout)
                 self.assertIn(
-                    "active work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
+                    "completed work item work.build-sparse-scorecard-and-close-lifecycle must bind valid source-reconciled scorecard progress evidence",
                     report["errors"],
                 )
 
@@ -2104,7 +2144,7 @@ class ProductControlCliTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_o3_requires_pushed_evidence_and_rejects_semantic_substitutes(
+    def test_o3_accepts_only_pushed_evidence_and_rejects_semantic_substitutes(
         self,
     ) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -2114,13 +2154,8 @@ class ProductControlCliTests(unittest.TestCase):
 
             result = self.run_verify(target)
 
-            self.assertNotEqual(result.returncode, 0)
-            report = json.loads(result.stdout)
-            self.assertFalse(report["criterionStates"]["O3"])
-            self.assertIn(
-                "O3 lifecycle evidence is not bound to an origin/main revision",
-                report["errors"],
-            )
+            self.assertEqual(result.returncode, 0, result.stdout)
+            self.assertTrue(json.loads(result.stdout)["criterionStates"]["O3"])
 
         mutations = {
             "checkpoint is counterevidence": (

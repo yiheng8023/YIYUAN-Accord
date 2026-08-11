@@ -232,7 +232,9 @@ O3_LIFECYCLE_RAW_EVIDENCE_SHA256 = (
 O3_LIFECYCLE_OBSERVED_REVISION = (
     "2fdac84f534117acd60e32a1cf457f04e68b5faf"
 )
-O3_LIFECYCLE_EVIDENCE_REVISION: str | None = None
+O3_LIFECYCLE_EVIDENCE_REVISION: str | None = (
+    "dd5fa0e145b19be8b353cbfcf2d9843ee9b7a294"
+)
 O3_LIFECYCLE_TEMPORARY_ROOT = (
     ".tmp/o3-official-lifecycle-transaction-2026-08-11"
 )
@@ -2778,6 +2780,30 @@ def verify_product(root: Path) -> dict[str, Any]:
                         "work.build-sparse-scorecard-and-close-lifecycle must bind "
                         "the exact bound lifecycle transaction contract"
                     )
+                if work_state == "completed":
+                    lifecycle_receipt = _load(
+                        root,
+                        O3_LIFECYCLE_RAW_EVIDENCE_PATH,
+                        errors,
+                    )
+                    if (
+                        work_item.get("lifecycleResultEvidence")
+                        != O3_LIFECYCLE_RAW_EVIDENCE_PATH
+                        or work_item.get("result")
+                        != "durable-evidence-layer-persisted"
+                        or work_item.get("resultRevision")
+                        != O3_LIFECYCLE_EVIDENCE_REVISION
+                        or not _valid_o3_lifecycle_receipt(
+                            root,
+                            lifecycle_receipt,
+                            errors,
+                        )
+                    ):
+                        errors.append(
+                            "completed work item "
+                            "work.build-sparse-scorecard-and-close-lifecycle must "
+                            "bind the exact successful lifecycle receipt"
+                        )
             gated_operations = operation_id_set - ALLOWED_AGENT_OPERATION_IDS
             if not capability_context_valid:
                 gated_operations.update(

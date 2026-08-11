@@ -182,9 +182,9 @@
     {
       "id": "increment.current-official-route-evaluation-slice",
       "state": "active",
-      "observedProblem": "Lifecycle attempt 2 completed all six source-bound phases with exact timestamps, no capability addition, zero material user tool intervention, and absent bounded temporary residue. Its raw receipt, completed scorecard projection, and public fail-closed validator are not yet bound to a pushed evidence revision, so O3 must remain false and the lifecycle must not be rerun.",
-      "hypothesis": "Persisting the exact attempt-2 raw receipt, completed scorecard projection, and semantic validator together on origin/main will create the smallest durable evidence layer from which O3 can be reviewed without another lifecycle execution or a self-declared acceptance-only promotion.",
-      "falsifier": "The public verifier admits O3 before the exact raw and scorecard exist on origin/main, accepts a failed or checkpoint receipt, ignores semantic drift or bounded residue, or requires another lifecycle attempt. Any such result keeps O3 false and returns to validator repair rather than rerunning the event.",
+      "observedProblem": "The exact attempt-2 raw receipt, completed scorecard projection, and public fail-closed validator now exist together on origin/main revision dd5fa0e, and the public seam can reproduce the successful receipt while rejecting semantic substitutes. Program state still records the evidence-construction work as active, so O3 remains false until this durable binding is reconciled and reviewed.",
+      "hypothesis": "Binding revision dd5fa0e as the lifecycle evidence revision, completing the evidence-construction work, and activating only the finite closeout work will preserve the proven event without replay and create an auditable O3 transition candidate.",
+      "falsifier": "The verifier cannot reproduce the exact raw and scorecard from dd5fa0e on origin/main, a semantic mutation or bounded residue passes, the completed work can omit the exact receipt, or the transition requires another lifecycle run. Any such result keeps O3 false and returns to validator repair.",
       "stopCondition": "First commit and push the exact raw receipt, completed scorecard projection, and public fail-closed validator as one durable evidence layer. O3 may pass only from that pushed revision with all sparse dispositions, exact successful lifecycle semantics, and zero bounded residue. The increment closes only after the separately reviewed O3 state transition is itself committed and pushed.",
       "sourceInputs": [
         {
@@ -206,7 +206,7 @@
         },
         {
           "path": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
-          "role": "completed attempt-2 raw lifecycle receipt awaiting exact origin/main evidence-revision binding; no third execution is allowed"
+          "role": "completed attempt-2 raw lifecycle receipt persisted with scorecard and validator at origin/main revision dd5fa0e; no third execution is allowed"
         }
       ],
       "acceptanceIds": ["O3", "G1", "G2", "G4"],
@@ -245,7 +245,7 @@
         },
         {
           "id": "work.build-sparse-scorecard-and-close-lifecycle",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "repository-edit", "coverage-analysis", "installed-authorized-capability-use", "local-verification", "bounded-cleanup"],
           "authorityGate": "bound-task-capability-context-required",
@@ -253,6 +253,8 @@
           "lifecycleContractEvidence": "product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json",
           "lifecycleAttemptEvidence": "product/evidence/o3-official-lifecycle-transaction-attempt-1-incident-2026-08-11.json",
           "lifecycleResultEvidence": "product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json",
+          "result": "durable-evidence-layer-persisted",
+          "resultRevision": "dd5fa0e145b19be8b353cbfcf2d9843ee9b7a294",
           "capabilityContext": {
             "mode": "task-time",
             "taskBinding": "agent-autonomy-harness-v0.1-closeout@2df8d85f1e9a8881972d5aa6ac587f11dc37aa79",
@@ -265,7 +267,7 @@
         },
         {
           "id": "work.close-current-official-route-evaluation-slice",
-          "state": "planned",
+          "state": "active",
           "acceptanceIds": ["O3", "G1", "G2", "G4"],
           "operationIds": ["repository-read", "local-verification", "progress-accounting", "git-commit", "git-push"],
           "deliverables": ["O3 verifier mutation coverage", "full local verification", "Git commit", "origin/main push"]

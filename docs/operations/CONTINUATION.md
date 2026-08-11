@@ -105,8 +105,9 @@ historical `50/78` route-cell aggregate because no sparse cell records exist and
 survived, so reviewed-external execution and self-authored addition remain
 closed. Attempt 2 subsequently observed the exact six-phase current-host route,
 zero material user tool intervention, and bounded cleanup. The scorecard now
-binds the raw receipt, but O3 remains false until both artifacts and the public
-validator are bound to a pushed evidence revision.
+binds the raw receipt. Both artifacts and the public validator were pushed
+together at revision `dd5fa0e`; O3 remains false pending its separate state
+transition review.
 
 ## Failed lifecycle attempt 1 and causal correction
 
@@ -123,7 +124,7 @@ missing fields, and zero-residue observation. The attempt is failed
 counterevidence and does not advance O3. Its causal checkpoint correction was
 applied once in attempt 2; do not replay either attempt.
 
-## Completed lifecycle attempt 2 awaiting durable evidence binding
+## Completed lifecycle attempt 2 and durable evidence binding
 
 Attempt 2 ran once from pushed revision
 `2fdac84f534117acd60e32a1cf457f04e68b5faf` and produced
@@ -133,7 +134,9 @@ not-applicable projection, rollback, and cleanup. It reports unchanged exact
 Skill hashes, the composition/no-addition decision, zero material user tool
 intervention, and absence of the exact temporary root. These are bounded
 current-host facts with explicit runtime-attestation limits, not cross-host,
-production, release, publication, broad-value, O3, or v0.1 proof.
+production, release, publication, broad-value, O3, or v0.1 proof. The raw
+receipt, completed scorecard, public validator, and mutation tests were pushed
+together at `dd5fa0e145b19be8b353cbfcf2d9843ee9b7a294`.
 
 ## First checks in a continuation
 
@@ -148,15 +151,14 @@ python -B -m harness verify --root . --json
 
 ## Next bounded action
 
-The active work item remains
-`work.build-sparse-scorecard-and-close-lifecycle`. Commit and push the exact raw
-receipt, completed scorecard projection, public semantic validator, and
-mutation tests as one evidence layer. Then bind that revision and review the O3
-state transition separately. Attempt 2 is complete and must not be executed
-again; a third lifecycle attempt is not authorized. Any install, enablement,
-account, external candidate execution, manager/consumer mutation, publication,
-release, or acceptance promotion beyond this reviewed transition remains
-outside authority.
+The evidence-construction work is completed and the active work item is now
+`work.close-current-official-route-evaluation-slice`. Bind exact revision
+`dd5fa0e`, run the public mutation seam and full local verification, and review
+the O3 state transition separately. Attempt 2 is complete and must not be
+executed again; a third lifecycle attempt is not authorized. Any install,
+enablement, account, external candidate execution, manager/consumer mutation,
+publication, release, or acceptance promotion beyond this reviewed transition
+remains outside authority.
 
 Do not redo or copy the historical sparse reconciliation. Its exact source is
 pinned in `product/program.json` at commit `c538667...`; each current axis must

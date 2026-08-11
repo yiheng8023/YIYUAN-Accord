@@ -13,35 +13,33 @@ reproducible residual gap survives comparison.
 `increment.current-official-route-evaluation-slice`
 
 Observed problem: attempt 2 completed the exact six-phase installed-official
-route with durable timestamps, zero material user tool intervention, no
-capability addition, and absent bounded temporary residue. The raw receipt,
-completed scorecard projection, and public validator are not yet bound to one
-pushed evidence revision. O3 therefore remains false, and no third lifecycle
-attempt is allowed.
+route, and its raw receipt, completed scorecard projection, and public validator
+now exist together at `origin/main` revision `dd5fa0e`. Program state has not
+yet reconciled that durable evidence into an O3 transition. O3 therefore
+remains false, and no third lifecycle attempt is allowed.
 
-Hypothesis: persisting those exact three surfaces together on `origin/main`
-will create the smallest durable evidence layer from which O3 can be reviewed
-without rerunning the lifecycle or accepting a repository-authored substitute.
+Hypothesis: binding `dd5fa0e` in the public verifier, completing the evidence
+construction work, and activating only the finite closeout work will create an
+auditable O3 transition candidate without rerunning the lifecycle.
 
 Falsifier: the verifier admits O3 before the evidence revision is on
 `origin/main`, accepts failed/checkpoint or semantically drifted evidence,
 ignores bounded residue, or requires another lifecycle run. Any such result
 returns to validator repair, not event replay.
 
-Stop condition: first commit and push the raw receipt, completed scorecard, and
-public fail-closed validator. O3 may pass only from that pushed revision. Close
-the increment only after the separately reviewed O3 transition is committed
-and pushed.
+Stop condition: the evidence layer is already pushed at `dd5fa0e`. O3 may pass
+only from that exact revision. Close the increment only after the separately
+reviewed O3 transition is committed and pushed.
 
 ## Current work item
 
-`work.build-sparse-scorecard-and-close-lifecycle`
+`work.close-current-official-route-evaluation-slice`
 
 The completed scorecard is
 `product/evidence/o3-sparse-scorecard-2026-08-11.json`. It retains criterion
 records by canonical hash, treats aggregate axes as membership only, and binds
-the exact attempt-2 raw receipt while O3 remains false pending durable Git
-evidence. The earlier real but
+the exact attempt-2 raw receipt from pushed revision `dd5fa0e`. O3 remains
+false pending the separate acceptance-state review. The earlier real but
 evidence-incomplete analytical event is recorded at
 `product/evidence/o3-official-kpi-event-receipt-2026-08-11.json`. Its normalized
 projection is independently hashed and fail-closed; the missing raw-output hash
@@ -55,8 +53,8 @@ pushed contract at
 `product/evidence/o3-official-lifecycle-transaction-contract-2026-08-11.json`
 and produced
 `product/evidence/o3-official-lifecycle-transaction-raw-2026-08-11.json`.
-Validate and persist that receipt; do not execute attempt 2 or any third attempt
-again.
+Preserve and bind that pushed receipt; do not execute attempt 2 or any third
+attempt again.
 
 ## Allowed work
 
