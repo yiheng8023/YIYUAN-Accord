@@ -818,6 +818,9 @@ class ProductControlTests(unittest.TestCase):
             "invalid decision time": lambda value: value["authority"].__setitem__(
                 "decidedAt", "today"
             ),
+            "decision precedes observation": lambda value: value["authority"].__setitem__(
+                "decidedAt", "2026-08-12T02:59:59+08:00"
+            ),
             "unaccepted result": lambda value: value["result"].__setitem__(
                 "accepted", False
             ),
@@ -911,6 +914,35 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G2"])
         self.assertIn(
             "criterion O1 evidence shape is invalid: product/evidence/bound.json",
+            report["errors"],
+        )
+
+    def test_distinct_evidence_files_cannot_reuse_one_identity(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        first = self.evidence_document(criterion_ids=["O1"])
+        second = deepcopy(first)
+        self.write_json("product/evidence/first.json", first)
+        self.write_json("product/evidence/second.json", second)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = [
+                "product/evidence/first.json",
+                "product/evidence/second.json",
+            ]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {"test-validator": validator},
+        ):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertFalse(report["criterionStates"]["G2"])
+        self.assertIn(
+            "duplicate evidence id typed-o2: product/evidence/second.json",
             report["errors"],
         )
 

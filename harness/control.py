@@ -297,9 +297,9 @@ def _path_entry_absent(path: Path) -> bool:
     return False
 
 
-def _rfc3339(value: Any) -> bool:
+def _rfc3339_datetime(value: Any) -> datetime | None:
     if not isinstance(value, str) or RFC3339.fullmatch(value) is None:
-        return False
+        return None
     normalized = value[:-1] + "+00:00" if value.endswith("Z") else value
     head, separator, offset = normalized.rpartition("+")
     if not separator:
@@ -312,12 +312,9 @@ def _rfc3339(value: Any) -> bool:
         head = prefix + "." + fraction[:6]
     normalized = head + ("+" + offset if separator else offset)
     try:
-        datetime.fromisoformat(normalized)
+        return datetime.fromisoformat(normalized)
     except ValueError:
-        return False
-    return True
-
-
+        return None
 def _authority_files(
     root: Path, constitution: dict[str, Any], errors: list[str]
 ) -> list[tuple[str, Path]]:
@@ -963,6 +960,7 @@ def _evidence_states(
 ) -> tuple[dict[str, bool], bool, dict[str, set[str]]]:
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
     validated_work_outcomes: dict[str, set[str]] = {}
+    evidence_id_locators: dict[str, str] = {}
     before = len(errors)
     for criterion_id in sorted(OUTCOME_IDS):
         criterion = criteria.get(criterion_id, {})
@@ -996,12 +994,29 @@ def _evidence_states(
             increment_id = document.get("incrementId")
             work_id = document.get("workItemId")
             work_binding = work_bindings.get(work_id) if _nonempty_text(work_id) else None
+            evidence_id = document.get("id")
+            observed_at = _rfc3339_datetime(document.get("observedAt"))
+            decided_at = (
+                _rfc3339_datetime(authority.get("decidedAt"))
+                if isinstance(authority, dict)
+                else None
+            )
+            prior_locator = (
+                evidence_id_locators.get(evidence_id)
+                if _nonempty_text(evidence_id)
+                else None
+            )
+            if prior_locator is not None and prior_locator != relative:
+                _error(errors, f"duplicate evidence id {evidence_id}: {relative}")
+            elif _nonempty_text(evidence_id):
+                evidence_id_locators[evidence_id] = relative
             shape_valid = (
                 document.get("schema") == 1
-                and _nonempty_text(document.get("id"))
+                and _nonempty_text(evidence_id)
+                and (prior_locator is None or prior_locator == relative)
                 and criterion_ids is not None
                 and criterion_id in criterion_ids
-                and _rfc3339(document.get("observedAt"))
+                and observed_at is not None
                 and _nonempty_text(increment_id)
                 and _nonempty_text(work_id)
                 and work_binding is not None
@@ -1025,7 +1040,8 @@ def _evidence_states(
                 and authority.get("kind") == "named-accountable-human"
                 and _nonempty_text(authority.get("name"))
                 and authority.get("decision") == "accepted"
-                and _rfc3339(authority.get("decidedAt"))
+                and decided_at is not None
+                and decided_at >= observed_at
                 and isinstance(result, dict)
                 and result.get("accepted") is True
                 and _string_list(document.get("claimLimits")) is not None
