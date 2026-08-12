@@ -204,7 +204,7 @@
       "name": "human authority preserved",
       "statement": "The product never infers new trust, account, cost, publication, release, destructive, or irreversible authority.",
       "metric": "declared authority and operation boundary",
-      "threshold": "all active, completed, and stopped work operations are inside the program authority boundary and none overlap the human-only set; stopping work cannot erase an attempted authority violation; cancelled work is defined as never active or executed, so its declared operations are not treated as attempted authority",
+      "threshold": "the program authority boundary contains exactly its code-owned user and Agent fields; all active, completed, and stopped work operations are inside that boundary and none overlap the human-only set; stopping work cannot erase an attempted authority violation; cancelled work is defined as never active or executed, so its declared operations are not treated as attempted authority",
       "assessment": "computed"
     },
     {

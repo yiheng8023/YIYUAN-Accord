@@ -108,6 +108,10 @@ authority claim cannot coexist with a green verifier outside the code-owned
 document schema; task-specific increment, work, and evidence validation remain
 separate bounded surfaces.
 
+The program authority boundary likewise accepts only its code-owned `userOwns`
+and `agentOwnsWithinBoundedAuthority` fields. A differently named permission
+flag cannot piggyback on the current machine contract while G1 remains green.
+
 G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.

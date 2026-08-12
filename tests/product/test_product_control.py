@@ -623,6 +623,20 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_authority_boundary_rejects_undeclared_fields(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value["authorityBoundary"].__setitem__(
+                "agentMayPublishWithoutHumanAuthority", True
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "program authorityBoundary fields must match the code-owned schema",
+            report["errors"],
+        )
+
     def test_human_authority_cannot_be_removed(self) -> None:
         def remove(value: dict) -> None:
             value["authorityBoundary"]["userOwns"].remove("new-trust")

@@ -126,6 +126,10 @@ REQUIRED_USER_AUTHORITY = {
     "accountable-outcome-acceptance",
     "destructive-or-irreversible-action",
 }
+AUTHORITY_BOUNDARY_FIELDS = {
+    "userOwns",
+    "agentOwnsWithinBoundedAuthority",
+}
 HUMAN_ONLY_OPERATIONS = {
     "account-connection",
     "destructive-action",
@@ -967,6 +971,11 @@ def _authority_guardrail(
     if not isinstance(boundary, dict):
         _error(errors, "program authorityBoundary must be an object")
         return False
+    if set(boundary) != AUTHORITY_BOUNDARY_FIELDS:
+        _error(
+            errors,
+            "program authorityBoundary fields must match the code-owned schema",
+        )
     user = _string_list(boundary.get("userOwns"))
     agent = _string_list(boundary.get("agentOwnsWithinBoundedAuthority"))
     if user is None or not REQUIRED_USER_AUTHORITY <= set(user):
