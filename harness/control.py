@@ -24,6 +24,27 @@ PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
 CURRENT_RELEASE = "v0.2"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
+EXPECTED_PRODUCT_PURPOSE = (
+    "Transfer Agent-tool learning, capability selection, bounded setup, recovery, "
+    "verification, and cleanup burden from the user to the Agent while preserving "
+    "human authority over goals, domain judgment, trust, cost, and irreversible effects."
+)
+EXPECTED_SUCCESS_DEFINITION = (
+    "Across repeated real tasks, a user can provide ideas, domain facts, bounded "
+    "authorization, corrections, and accountable final judgment without learning or "
+    "orchestrating the underlying Agent capability ecosystem, and receives accepted "
+    "outcomes with fewer material tool-orchestration interventions than an ad-hoc path."
+)
+EXPECTED_PROGRAM_PURPOSE = (
+    "Prove the terminal burden-transfer proposition through bounded real-task "
+    "dogfooding, capability coexistence, an Agent-neutral software-engineering "
+    "evaluation and standard, and thin cross-host adapters."
+)
+EXPECTED_PROGRESS_RULE = (
+    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
+    "G1-G4 passing count as progress. Documents, tests, inventories, fixtures, "
+    "memberships, and research volume are supporting evidence only."
+)
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
 EXPECTED_CRITERION_IDS = OUTCOME_IDS | GUARDRAIL_IDS
@@ -111,7 +132,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "8d97ea709ae5c17227012412360cf42552d722b9d16d3b5cca141e29b7c64700"
+    "ebba4dcfe4f8f6f3aa1a58cd6e845dc94b726fe21aad3b6bf6ac63b323e77ced"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -808,22 +829,14 @@ def _release_identity_valid(
         (acceptance.get("program") == "product/program.json", "acceptance program path is invalid"),
         (program.get("completionExpression") == COMPLETION_EXPRESSION, "program completionExpression is invalid"),
         (acceptance.get("completionExpression") == COMPLETION_EXPRESSION, "acceptance completionExpression is invalid"),
+        (constitution.get("purpose") == EXPECTED_PRODUCT_PURPOSE, "constitution purpose is invalid"),
         (
-            isinstance(constitution.get("purpose"), str) and bool(constitution["purpose"].strip()),
-            "constitution purpose is invalid",
-        ),
-        (
-            isinstance(constitution.get("successDefinition"), str)
-            and bool(constitution["successDefinition"].strip()),
+            constitution.get("successDefinition") == EXPECTED_SUCCESS_DEFINITION,
             "constitution successDefinition is invalid",
         ),
+        (program.get("purpose") == EXPECTED_PROGRAM_PURPOSE, "program purpose is invalid"),
         (
-            isinstance(program.get("purpose"), str) and bool(program["purpose"].strip()),
-            "program purpose is invalid",
-        ),
-        (
-            isinstance(acceptance.get("progressRule"), str)
-            and bool(acceptance["progressRule"].strip()),
+            acceptance.get("progressRule") == EXPECTED_PROGRESS_RULE,
             "acceptance progressRule is invalid",
         ),
     )

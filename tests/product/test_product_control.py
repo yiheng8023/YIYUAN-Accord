@@ -453,6 +453,36 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn("program completionExpression is invalid", report["errors"])
 
+    def test_product_purpose_and_progress_semantics_cannot_self_downgrade(self) -> None:
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value.update(
+                {
+                    "purpose": "Maximize plans, inventories, and process artifacts.",
+                    "successDefinition": "Success means all local tests are green.",
+                }
+            ),
+        )
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__(
+                "purpose", "Produce governance files without real outcomes."
+            ),
+        )
+        self.mutate(
+            "product/acceptance.json",
+            lambda value: value.__setitem__(
+                "progressRule", "Every passing test counts as product progress."
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("constitution purpose is invalid", report["errors"])
+        self.assertIn("constitution successDefinition is invalid", report["errors"])
+        self.assertIn("program purpose is invalid", report["errors"])
+        self.assertIn("acceptance progressRule is invalid", report["errors"])
+
     def test_criteria_must_be_exact_and_unique(self) -> None:
         def duplicate(value: dict) -> None:
             value["criteria"].append(deepcopy(value["criteria"][0]))
