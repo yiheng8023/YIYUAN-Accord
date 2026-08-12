@@ -116,8 +116,9 @@ surface; the retired verifier wrapper is absent and no replacement is needed.
 It also moved CLI root resolution inside the fail-closed verifier seam, made
 cleanup and authority enumeration errors explicit, rejected ambiguous JSON and
 non-literal schema versions, and aligned invalid acceptance declarations with
-G2. The current local public seam reports 80/80 product tests passing while
-remaining at `0/5` outcomes and `4/4` guardrails.
+G2. The current local public seam reports 82/82 product tests passing on the
+minimum supported CPython 3.10.20 as well as the default local interpreter,
+while remaining at `0/5` outcomes and `4/4` guardrails.
 
 One state meaning remains intentionally undecided: the current contract does
 not say whether a `cancelled` work item proves it never became current or may
