@@ -2,15 +2,18 @@
 
 ## Purpose
 
-Reduce the user's Agent-learning and orchestration burden while preserving
-human control over goals, creative and consequential judgment, trust, cost,
-publication, release, and irreversible effects.
+Provide an open, Agent-neutral, demand-driven human-Agent capability control
+plane that reduces the user's Agent and capability learning and orchestration
+burden while preserving human control over goals, creative and consequential
+judgment, trust, cost, publication, release, and irreversible effects.
 
 The user should normally provide ideas, goals, corrections, domain judgment,
-and the smallest decisions that genuinely require human authority. The Agent
-and Harness should own bounded planning, capability choice, state observation,
-execution coordination, verification, continuity, cleanup, and honest
-degradation.
+bounded authorization, and the smallest decisions that genuinely require
+human authority. The Agent and Harness should own capability observation, gap
+detection, source-bounded discovery when needed, selection, task-scoped
+dispatch and release, bounded execution, verification, continuity, cleanup,
+and honest degradation. The user should not need to know a capability name,
+product, discovery channel, or invocation syntax to enter a task.
 
 Human input is authoritative for intent and accountable judgment, but it is not
 assumed to be an exhaustive or perfectly objective inventory of project facts.
@@ -20,20 +23,24 @@ coverage without making the user remember or enumerate the whole system.
 
 ## Observable success
 
-On a real task, the Harness should reduce material user interventions needed
-to reconstruct context, select and manage capabilities, recover from drift,
-verify completion, and clean resources, without reducing intent fidelity,
-evidence quality, reversibility, or human control.
+On repeated real tasks entered at the goal level, the Harness should reduce
+material user interventions needed to reconstruct context, discover, select,
+and manage capabilities, recover from drift, verify completion, and clean
+resources, without reducing intent fidelity, evidence quality, reversibility,
+or human control.
 
 Code volume, document count, test count, candidate count, inventory exposure,
 research breadth, and green fixtures are not substitutes for that result.
 
 ## Fixed product boundary
 
-The product consists of:
+The durable product form consists of a collaboration methodology, an open
+standard, and an executable reference implementation. Its portable core
+consists of:
 
-1. a portable decision core for intent, routing, rerouting, verification,
-   closure, and handoff;
+1. a portable decision core for goal-level demand, authority, capability
+   observation, gap assessment, routing, rerouting, verification, closure, and
+   handoff;
 2. a lifecycle plane for desired state, ownership, observation, actuation,
    rollback, release, and cleanup;
 3. thin host and manager adapters;
@@ -41,12 +48,13 @@ The product consists of:
 5. generated or consumer-owned projections that never replace product
    authority.
 
-Skills, MCP servers, Plugins, Apps, Hooks, repositories, managers, and native
-Agent functions are capability inputs. The Harness is not any one of them and
-does not optimize for their count. Minimal sufficiency is evaluated against a
-bound demand taxonomy; it is not a bias toward the smallest portfolio. A
-material coverage gap creates an obligation to compare and, when justified,
-add a governed capability.
+Skills, MCP servers, Plugins, Apps, Hooks, repositories, catalogs, discovery
+channels, managers, and native Agent functions are capability inputs. The
+Harness is not any one of them and does not optimize for their count. No fixed
+catalog, provider, channel, host, or manager is product authority. Minimal
+sufficiency is evaluated against bound demand; it is not a bias toward the
+smallest portfolio. A material coverage gap creates an obligation to discover,
+compare and, when justified, add a governed capability.
 
 ## Release acceptance
 
@@ -59,14 +67,16 @@ publication.
 
 Current `v0.2` acceptance directly measures the missing product outcomes:
 
-- O1 — one natural real task completes the autonomous closed loop with zero
-  user tool-orchestration intervention under a pre-registered protocol;
-- O2 — lower user tool-orchestration burden across repeated natural tasks;
-- O3 — broad-portfolio coexistence plus real marginal-value capability
-  decisions, including an evidence-based disposition for the three provisional
-  self-authored control roles;
-- O4 — an accepted Agent-neutral software-engineering evaluation and minimum
-  standard grounded in real behavior;
+- O1 — one goal-level natural real task completes the demand-to-capability
+  closed loop with zero user capability-orchestration intervention under a
+  pre-registered protocol;
+- O2 — lower user capability-orchestration burden across repeated goal-level
+  natural tasks;
+- O3 — adaptive discovery and real marginal-value lifecycle decisions keep a
+  broad and changing capability ecosystem outside the user's cognitive path;
+- O4 — an accepted Agent-neutral human-Agent collaboration methodology and
+  core minimum standard, with software engineering as the first calibrated
+  profile rather than the product boundary;
 - O5 — the common closed loop works through the Codex reference adapter and a
   distinct second Agent host or runtime through its own thin adapter; a
   same-host second adapter is conformance evidence only and cannot pass O5.
@@ -84,8 +94,8 @@ increment at a time.
 
 Every increment states an observed problem, a causal hypothesis, a falsifier,
 mapped acceptance criteria, and a finite stop condition. Evidence may change
-the next increment. Novel ecosystem capability, research interest, or an
-available mechanism cannot create mainline work by itself.
+the next increment. Novel ecosystem capability, research interest, a fixed
+catalog entry, or an available mechanism cannot create mainline work by itself.
 
 The current program is not an append-only history ledger. Once an
 outcome-neutral increment closes, its exact state remains in Git and leaves the
@@ -102,7 +112,9 @@ authority emulation before the corresponding real slice identifies the
 smallest adapter it actually needs. User corrections are product feedback and
 trigger re-intake, not backlog comments to process after the old plan.
 
-Capability choice is evaluated by its delta to the already-bound task. New
+Capability choice is evaluated by its delta to the already-bound task. Begin
+with available-capability observation and gap assessment; discovery is a
+finite adaptive action only when the current view is insufficient. New
 goal, input, deliverable, human-round-trip, authority, side-effect, or
 acceptance requirements need source-bound causal necessity. Otherwise the
 route is downgraded or rejected, even if its own workflow is internally sound.
@@ -127,6 +139,7 @@ contract. Neither path silently grants live mutation.
 
 World-class quality here means causal integrity, a small deep interface,
 honest evidence, recoverability, measurable user value, and the ability to
-evolve without losing product identity. It does not mean maximum scope,
-maximum governance, maximum automation, or permanent activation of the
-largest ecosystem.
+adapt across evolving Agents and ecosystems without transferring that entropy
+to the user. It does not mean maximum scope, maximum governance, maximum
+automation, a universal runtime, or permanent activation of the largest
+ecosystem.

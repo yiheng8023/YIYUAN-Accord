@@ -1,7 +1,8 @@
 # Agent Autonomy Harness Repository Guidance
 
-This repository is the product authority for an agent-neutral autonomy,
-collaboration, and capability-lifecycle harness.
+This repository is the product authority for an open, Agent-neutral,
+demand-driven human-Agent capability control plane. Its durable product target
+is a methodology, an open standard, and an executable reference implementation.
 
 ## Current authority
 
@@ -46,6 +47,12 @@ Prefer healthy native/runtime capability, then suitable official capability,
 then a reviewed maintained external implementation, then composition. Author
 only for an evidenced residual gap.
 
+Goal-level demand is the normal entry. The Agent owns observation of available
+capability, gap detection, source-bounded discovery when needed, route
+selection, task-scoped dispatch and release, verification, and cleanup. Do not
+require the user to know or name a capability, product, discovery channel, or
+invocation syntax unless it is an explicit user preference or task boundary.
+
 Use already-installed, already-authorized, healthy capabilities proactively
 when they materially improve a bound task. Within a bound task or complete
 portfolio-curation contract, the Agent may perform coverage analysis, targeted
@@ -70,6 +77,10 @@ or promote evidence, acceptance, or release state. Bound user intent and
 `product/constitution.json`, `product/program.json`, and
 `product/acceptance.json` win; reject or downgrade a conflicting or
 disproportionately process-heavy route.
+
+Capability catalogs and discovery channels are adaptive sources, not product
+authority. Do not turn one catalog, provider, host, manager, or current
+installation into the portable core or a standing user-learning requirement.
 
 Before applying a capability route, compare whether it adds a goal, input,
 deliverable, human round trip, authority, side effect, or acceptance

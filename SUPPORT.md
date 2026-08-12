@@ -2,10 +2,11 @@
 
 Community support is best effort.
 
-This repository accepts questions and reports about Harness documentation,
+This repository accepts questions and reports about the Harness methodology,
+open-standard target, reference control implementation, documentation,
 governance contracts, source and license evidence, deterministic verification,
-host observations, capability overlap, lifecycle behavior, portability,
-cleanup, and public reproducibility.
+host observations, demand-driven capability discovery and routing, lifecycle
+behavior, portability, cleanup, and public reproducibility.
 
 Before opening an issue:
 

@@ -4,14 +4,21 @@ English | [简体中文](README.zh-CN.md)
 
 Shortest path: [verify the checkout](#start-here) · [understand the loop](#what-the-harness-does) · [choose a deeper path](#progressive-paths)
 
-Agent Autonomy Harness is an agent-neutral product being built to keep a real task's
-goal, capability route, authority boundary, lifecycle, continuity, evidence,
-and cleanup coherent without making the user orchestrate every Agent, Skill,
-MCP server, Plugin, Hook, thread, worktree, or manager.
+Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
+capability control plane. It is being built to keep a real task's goal,
+capability route, authority boundary, lifecycle, continuity, evidence, and
+cleanup coherent without making the user orchestrate every Agent, Skill, MCP
+server, Plugin, Hook, thread, worktree, catalog, or manager.
 
-It is not a large Skills list. External capabilities are replaceable inputs;
-the product contract requires the Harness to decide when one is needed, what authority it receives, how its
-effects are observed, and when the route is released.
+It is not a large Skills list, fixed capability catalog, or universal runtime.
+External capabilities and discovery channels are replaceable inputs; the
+product contract requires the Harness to observe what is available, detect a
+real gap, discover only when needed, select and dispatch the smallest
+sufficient route, and release it when the need ends.
+
+The durable target is a collaboration methodology, an open standard, and an
+executable reference implementation. Codex is the first reference slice, not
+a dependency of the portable core.
 
 The current implementation verifies that contract and its causal program.
 Task execution, behavior evaluation, and cross-host adapters remain planned
@@ -58,15 +65,16 @@ python -B -m unittest discover -s tests/product -v
 
 ## What the Harness does
 
-For one bound task, the Harness keeps this loop explicit:
+For one goal-level bound task, the Harness keeps this loop explicit:
 
-1. bind the real goal, inputs, authority, and verification surface;
-2. choose native, official, reviewed external, composed, or authored capability;
-3. preview the route before meaningful side effects;
-4. activate only inside the granted task boundary;
-5. observe the result, user intervention, and claim ceiling;
-6. project only where a host or consumer actually requires it;
-7. roll back, clean up, and leave a continuation record.
+1. bind the real goal, inputs, authority, and verification surface without
+   requiring a user-specified capability route;
+2. observe available healthy and authorized capability, then assess the gap;
+3. discover through a source-bound adaptive channel only when the gap requires it;
+4. select and preview the smallest sufficient route before meaningful side effects;
+5. dispatch only inside the granted task boundary;
+6. observe, recover, and verify the result, user intervention, and claim ceiling;
+7. release task-scoped exposure, clean up, and leave a continuation record.
 
 The historical v0.1 O3 evidence exercised this loop once on a source-bound
 current-host task. v0.2 now tests whether the loop actually reduces user
@@ -82,12 +90,16 @@ support an outcome; they never substitute for one.
 
 Current v0.2 outcomes are:
 
-- O1 — one natural real task completes the autonomous closed loop with zero
-  user tool-orchestration intervention under a pre-registered protocol;
-- O2 — lower user tool-orchestration burden across repeated real tasks;
-- O3 — broad-portfolio coexistence and evidence-backed capability decisions;
-- O4 — an accepted Agent-neutral software-engineering evaluation and minimum
-  standard;
+- O1 — one goal-level natural real task completes the demand-to-capability
+  closed loop with zero user capability-orchestration intervention under a
+  pre-registered protocol;
+- O2 — lower user capability-orchestration burden across repeated goal-level
+  real tasks;
+- O3 — adaptive discovery and evidence-backed lifecycle decisions keep a broad
+  and changing ecosystem outside the user's cognitive path;
+- O4 — an accepted Agent-neutral human-Agent collaboration methodology and
+  core minimum standard, with software engineering as the first reference
+  profile;
 - O5 — portable closed-loop delivery through Codex and a distinct second Agent
   host or runtime through its own thin adapter. A same-host second adapter is
   conformance evidence only and cannot pass O5.
@@ -107,13 +119,17 @@ Current v0.2 outcomes are:
 
 ## Capability order and authority
 
-For a bound need, prefer a healthy native/runtime capability, then a suitable
-official capability, then a reviewed maintained external implementation, then
-composition. Author new capability only for a reproducible residual gap.
+For a bound need, first observe healthy and already-authorized capability. If
+it is insufficient, prefer a suitable native/runtime or official route, then a
+reviewed maintained external implementation, then composition. Author new
+capability only for a reproducible residual gap.
 
 Capability scope follows demand rather than catalog size. End task-scoped
 exposure when the need ends; retaining a candidate inactive is distinct from
 persistent activation, which requires separate evidence and authority.
+The user does not need to name a capability, product, discovery channel, or
+invocation syntax. Catalogs, providers, and discovery channels remain adaptive
+sources rather than product authority.
 
 Installation, enablement, account connection, meaningful cost, live dispatch,
 consumer mutation, acceptance, publication, and release are separate state

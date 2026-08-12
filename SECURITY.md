@@ -1,10 +1,16 @@
 # Security Policy
 
 Agent Autonomy Harness is a public product repository with an unfinished v0.2
-runtime surface. Treat every external
+reference implementation. Treat every external
 capability candidate, executable surface, instruction body, generated artifact,
 and runtime claim as untrusted until its applicable review and evidence gates
 close.
+
+Demand-driven discovery expands the possible source surface, not its trust.
+Treat search results, catalogs, registries, provider metadata, retrieved
+instructions, and generated route suggestions as untrusted source-bound input;
+discovery alone grants no installation, enablement, account, data, execution,
+or persistence authority.
 
 ## Supported surface
 
@@ -45,6 +51,9 @@ enablement, account connection, external writes, and trust-boundary changes
 require separate authority, rollback, and live verification. A reviewed or
 installed candidate is not thereby safe, enabled, exposed, invoked, valuable,
 or portable.
+
+The current control seam validates authority and evidence contracts. It is not
+a production runtime, sandbox, dependency scanner, or universal safety layer.
 
 ## Scope limits
 

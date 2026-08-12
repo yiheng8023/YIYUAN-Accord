@@ -25,6 +25,12 @@ deliverable, human round trip, authority, side effect, and acceptance surface.
 An addition without source-bound causal necessity is a route defect, not a
 contribution prerequisite.
 
+Start capability proposals from goal-level demand and evidence about available
+healthy routes. State the residual gap before naming a candidate or discovery
+channel. A contribution must not require users to know or select a capability,
+product, provider, catalog, channel, or invocation syntax, and must not make
+one of those adaptive sources part of the portable product core.
+
 External capabilities remain exact upstream and inactive until their own
 review and state-transition gates pass. Installation, enablement, account
 connection, dispatch, behavior, value, portability, acceptance, release, and

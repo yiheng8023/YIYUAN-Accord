@@ -36,8 +36,9 @@ validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
 failures are non-authoritative counterevidence and may trigger replanning.
 
-When a natural task is bound, the next outcome-bearing increment may bind
-exactly one vertical dogfood task. The current planned order is:
+When a natural goal-level task is bound, the next outcome-bearing increment
+may bind exactly one vertical Codex reference slice. The current planned order
+is:
 
 1. **Freeze a provisional evaluation protocol.** Before the first event, define
    material intervention classes, capability-added goal/input/deliverable/
@@ -46,24 +47,27 @@ exactly one vertical dogfood task. The current planned order is:
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
    outcome denominator, and named accountable human acceptance. This is a
    prerequisite to O1, not a product outcome by itself.
-2. **Reference-host ablation.** Compare a minimal native/official path, a path
-   with suitable maintained software-engineering Skills, the three provisional
-   self-authored roles, Superpowers as a separate variable, and the current
-   combined path. Do not run a full Cartesian experiment. Start with one
-   decision-bearing task and stop on a falsifier.
-3. **Capability coexistence and controlled addition.** Keep managed portfolio
-   breadth distinct from task exposure. Evaluate an already-disabled or
-   discoverable candidate only for a bound demand, use reversible task-scoped
-   activation where authorized, end task exposure when the need ends, and then
-   retain inactive, justify persistent activation, replace, or retire. Dynamic
-   lifecycle control—not capability count—is the principle.
-4. **Evaluation and minimum standard.** Calibrate and complete the Agent-neutral
-   software-engineering evaluation and collaboration standard from repeated
-   real behavior. Measure outcome and communication quality, intent-mode and
-   decision-completeness errors, user capability-learning burden, unnecessary
-   design/process/artifact load, route errors, recovery, time and call cost,
-   resource lifecycle, residue, context/handoff transparency, human judgment,
-   and continuity.
+2. **Codex reference control-plane slice.** Enter through the user's goal rather
+   than a named tool route. Record available-capability observation, gap
+   assessment, optional discovery, smallest-sufficient route selection,
+   task-scoped dispatch, recovery, verification, release, and cleanup. Compare
+   only routes that can change the decision; do not run a catalog-shaped or
+   Cartesian experiment.
+3. **Adaptive discovery and lifecycle proof.** Require both a no-gap case that
+   retains the healthy route without discovery or addition and a reproducible-
+   gap case that performs finite source-bound discovery through a channel not
+   embedded as portable-core authority. Keep ecosystem breadth outside user
+   cognition and standing context; end task exposure when the need ends, then
+   retain inactive, justify persistent activation, merge, replace, retire, or
+   expire each admitted route.
+4. **Methodology and open minimum standard.** Calibrate the Agent-neutral
+   collaboration method and portable core standard from repeated real
+   behavior. Use software engineering as the first reference profile, not as
+   the product boundary. Measure outcome and communication quality,
+   intent-mode and decision-completeness errors, user capability-learning
+   burden, unnecessary design/process/artifact load, route errors, recovery,
+   time and call cost, resource lifecycle, residue, context/handoff
+   transparency, human judgment, and continuity.
 5. **Cross-host proof.** Keep Codex as the reference host, then exercise the
    same portable semantics on a distinct second Agent host or runtime through
    its own thin adapter. A same-host second adapter is conformance evidence
@@ -95,10 +99,14 @@ before O2 can pass.
 
 Prefer healthy native/runtime capability, then suitable official capability,
 then maintained reviewed external implementation, then composition. Author
-only for a repeatable residual gap. This ordering is a comparison default, not
-an installed-only rule and not a reason to avoid real additions.
+only for a repeatable residual gap. Start with source-bound observation of
+what is already healthy and authorized; discover only when that view cannot
+satisfy the bound demand. This ordering is a comparison default, not an
+installed-only rule and not a reason to avoid real additions.
 
-Portfolio curation may use a finite inactive review pool under a complete
+Catalogs, providers, search surfaces, and discovery channels are adaptive
+source inputs, not product authority or a user prerequisite. Portfolio
+curation may use a finite inactive review pool under a complete
 curation contract. Task-time discovery additionally binds the concrete task
 gap. Installation, enablement, account connection, paid service use, live
 execution, consumer projection, persistent activation, and Hook enablement are

@@ -25,20 +25,26 @@ CONSTITUTION_ID = "harness-product-constitution-v1"
 CURRENT_RELEASE = "v0.2"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
-    "Transfer Agent-tool learning, capability selection, bounded setup, recovery, "
-    "verification, and cleanup burden from the user to the Agent while preserving "
-    "human authority over goals, domain judgment, trust, cost, and irreversible effects."
+    "Provide an open, Agent-neutral, demand-driven human-Agent capability control "
+    "plane that transfers capability observation, discovery, selection, bounded setup "
+    "and task-scoped dispatch, recovery, verification, and release burden from the user "
+    "to the Agent while preserving human authority over goals, domain judgment, trust, "
+    "cost, and irreversible effects."
 )
 EXPECTED_SUCCESS_DEFINITION = (
-    "Across repeated real tasks, a user can provide ideas, domain facts, bounded "
-    "authorization, corrections, and accountable final judgment without learning or "
-    "orchestrating the underlying Agent capability ecosystem, and receives accepted "
-    "outcomes with fewer material tool-orchestration interventions than an ad-hoc path."
+    "Across repeated real tasks entered at the goal level, a user can provide ideas, "
+    "domain facts, bounded authorization, corrections, and accountable final judgment "
+    "without needing to know, select, invoke, or manage the underlying Agent or "
+    "capability ecosystem; the Agent observes available capability, discovers beyond "
+    "its current view only for an evidenced gap, dispatches the smallest sufficient "
+    "route, and returns accepted outcomes with fewer material orchestration interventions "
+    "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the terminal burden-transfer proposition through bounded real-task "
-    "dogfooding, capability coexistence, an Agent-neutral software-engineering "
-    "evaluation and standard, and thin cross-host adapters."
+    "Prove the open Agent-neutral demand-driven human-Agent capability control plane "
+    "through goal-level natural-task dogfooding, dynamic capability discovery and "
+    "lifecycle arbitration, an accepted collaboration methodology and open standard, "
+    "and thin cross-host reference adapters."
 )
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
@@ -66,6 +72,7 @@ AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
                 "productId",
                 "purpose",
                 "successDefinition",
+                "productForm",
                 "collaborationModel",
                 "capabilityInfluenceBoundary",
                 "fixedInvariants",
@@ -132,7 +139,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "32f1bbe645679dec67be36dc75398dd157e4df9aa277a1bfaf08ded3fba0e2db"
+    "9ce8d8adce4e1b5a0c6b0afc4db7886cde383736301253da288babfd4c721f9c"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -195,7 +202,7 @@ OPERATION_EFFECTS = {
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
     "maxConsecutiveOutcomeNeutralWorkItems",
-    "maxMaterialUserToolOrchestrationInterventions",
+    "maxMaterialUserCapabilityOrchestrationInterventions",
     "stopOnAuthorityOrIrreversibleIncident",
     "stopOnUnboundedResidue",
 }
@@ -266,13 +273,25 @@ EXPECTED_COLLABORATION_MODEL = {
     ],
     "agentObligations": [
         "intent-and-omission-detection",
-        "capability-learning-and-selection",
+        "available-capability-observation-and-gap-detection",
+        "source-bounded-targeted-capability-discovery",
+        "capability-selection-and-task-scoped-dispatch",
         "bounded-setup-and-execution",
         "failure-recovery",
         "verification-and-claim-control",
-        "cleanup-and-continuity",
+        "task-exposure-release-cleanup-and-continuity",
         "process-loss-detection-and-replanning",
     ],
+}
+EXPECTED_PRODUCT_FORM = {
+    "identity": "open-agent-neutral-demand-driven-human-agent-capability-control-plane",
+    "durableOutputs": [
+        "methodology",
+        "open-standard",
+        "executable-reference-implementation",
+    ],
+    "portableCore": "demand-authority-capability-lifecycle-evidence-and-acceptance-semantics",
+    "referenceDelivery": "codex-first-reference-slice-then-distinct-host-portability-proof",
 }
 EXPECTED_FIXED_INVARIANTS = frozenset(
     {
@@ -281,12 +300,25 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "guardrails constrain delivery but never count as product progress",
         "every active work item maps to at least one release criterion",
         "only one causal increment and at most one work item may be active",
+        "goal-level demand is the default entry; the user need not name a capability, product, discovery channel, or invocation syntax",
+        "the portable core is not a capability catalog, capability manager, universal runtime, or host projection",
+        "capability discovery sources and query strategies are adaptive inputs and no fixed channel can become product authority",
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
-        "task-time capability exposure is minimal even when the managed portfolio is broad",
+        "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
         "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",
+    }
+)
+EXPECTED_ADAPTIVE_SURFACES = frozenset(
+    {
+        "module and Skill shape",
+        "capability discovery source and query strategy",
+        "host and manager adapter sequence",
+        "native, official, reviewed external, composed, or authored capability choice",
+        "experiment design",
+        "delivery order inside the active causal increment",
     }
 )
 EXPECTED_BOOTSTRAP_GUARDS = frozenset(
@@ -310,7 +342,7 @@ FORBIDDEN_AUTHORITY_PATTERNS = (
 CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
 O1_VALIDATOR_KIND = "o1-natural-task-receipt"
 O1_INTERVENTION_TAXONOMY = {
-    "tool-selection",
+    "capability-route-selection",
     "setup",
     "invocation",
     "recovery",
@@ -320,13 +352,18 @@ O1_INTERVENTION_TAXONOMY = {
 }
 O1_FLOOR_CATEGORIES = {"quality", "safety", "evidence", "residue"}
 O1_ROUTE_ORDER = (
+    "capability-observation",
+    "gap-assessment",
+    "capability-discovery",
     "route-selection",
-    "capability-learning",
+    "task-scoped-dispatch",
     "execution",
     "recovery",
     "verification",
+    "route-release",
     "cleanup",
 )
+O1_OPTIONAL_ROUTE_STAGES = {"capability-discovery", "recovery"}
 EXPECTED_PROGRESSION_POLICY = {
     "pausedScope": "no-active-outcome-bearing-increment",
     "agentOwnedWithoutInventedUserTask": [
@@ -349,11 +386,14 @@ EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY = {
     "skillsAndHooks": "advisory-execution-input-only",
     "selfAuthoredSkills": "replaceable-host-projections",
     "peripheralEcosystem": "replaceable-capability-input",
+    "capabilityCatalogsAndDiscoveryChannels": "adaptive-source-input-only",
     "cannot": [
         "set-product-direction",
         "create-causal-work-without-observed-problem",
         "expand-authority-trust-data-cost-or-side-effects",
         "promote-evidence-acceptance-or-release-state",
+        "require-user-capability-product-channel-or-invocation-selection",
+        "make-a-fixed-catalog-or-discovery-channel-product-authority",
         "override-bound-user-intent-or-current-product-authority",
     ],
     "routeDeltaFields": [
@@ -429,6 +469,7 @@ def _validate_o1_natural_task_receipt(
         "registeredAt",
         "taskIdentity",
         "nonDiagnosticPurpose",
+        "demandEntry",
         "goalAndBoundedAuthority",
         "namedHumanAcceptor",
         "qualitySafetyEvidenceAndResidueFloors",
@@ -451,6 +492,16 @@ def _validate_o1_natural_task_receipt(
         or purpose.get("harnessEvaluationPrimary") is not False
     ):
         return reject("O1 task must declare a non-diagnostic primary purpose")
+
+    demand_entry = pre_registration.get("demandEntry")
+    if (
+        not exact_object(demand_entry, {"mode", "userSpecifiedCapabilityRoute"})
+        or demand_entry.get("mode") != "goal-level"
+        or demand_entry.get("userSpecifiedCapabilityRoute") is not False
+    ):
+        return reject(
+            "O1 task must enter as goal-level demand without a user-specified capability route"
+        )
 
     goal_authority = pre_registration.get("goalAndBoundedAuthority")
     if not exact_object(
@@ -499,9 +550,9 @@ def _validate_o1_natural_task_receipt(
     measures = receipt.get("measures")
     expected_measure_fields = {
         "humanOutcomeDecision",
-        "materialUserToolOrchestrationInterventions",
+        "materialUserCapabilityOrchestrationInterventions",
         "repeatedAlreadyBoundRequests",
-        "routeRecoveryVerificationAndCleanupEvents",
+        "capabilityLifecycleEvents",
         "taskFloorResults",
         "residueAndClaimLimits",
     }
@@ -511,7 +562,10 @@ def _validate_o1_natural_task_receipt(
         return reject("O1 human outcome decision must be accepted")
 
     for field, label in (
-        ("materialUserToolOrchestrationInterventions", "tool orchestration interventions"),
+        (
+            "materialUserCapabilityOrchestrationInterventions",
+            "capability orchestration interventions",
+        ),
         ("repeatedAlreadyBoundRequests", "repeated already-bound requests"),
     ):
         value = measures.get(field)
@@ -523,9 +577,11 @@ def _validate_o1_natural_task_receipt(
         ):
             return reject(f"O1 {label} must be exactly zero")
 
-    route_events = measures.get("routeRecoveryVerificationAndCleanupEvents")
+    route_events = measures.get("capabilityLifecycleEvents")
     if not isinstance(route_events, list) or len(route_events) != len(O1_ROUTE_ORDER):
-        return reject("O1 route lifecycle events must cover all required stages in order")
+        return reject(
+            "O1 capability lifecycle events must cover all required stages in order"
+        )
     prior_time = registered_at
     for expected_stage, event in zip(O1_ROUTE_ORDER, route_events):
         source = event.get("source") if isinstance(event, dict) else None
@@ -534,11 +590,12 @@ def _validate_o1_natural_task_receipt(
             if isinstance(event, dict)
             else None
         )
-        allowed_status = (
-            {"completed", "not-needed"}
-            if expected_stage == "recovery"
-            else {"completed"}
-        )
+        if expected_stage == "gap-assessment":
+            allowed_status = {"no-residual-gap", "residual-gap"}
+        elif expected_stage in O1_OPTIONAL_ROUTE_STAGES:
+            allowed_status = {"completed", "not-needed"}
+        else:
+            allowed_status = {"completed"}
         if (
             not exact_object(event, {"stage", "status", "occurredAt", "source"})
             or event.get("stage") != expected_stage
@@ -547,8 +604,13 @@ def _validate_o1_natural_task_receipt(
             or not prior_time <= occurred_at <= observed_at
             or not source_reference(source)
         ):
-            return reject("O1 route lifecycle events are invalid")
+            return reject("O1 capability lifecycle events are invalid")
         prior_time = occurred_at
+
+    gap_status = route_events[1]["status"]
+    discovery_status = route_events[2]["status"]
+    if (gap_status == "residual-gap") != (discovery_status == "completed"):
+        return reject("O1 capability discovery must match the recorded residual gap")
 
     floor_results = measures.get("taskFloorResults")
     if not isinstance(floor_results, list) or len(floor_results) != len(floor_index):
@@ -1055,13 +1117,19 @@ def _release_identity_valid(
         constitution.get("collaborationModel"), EXPECTED_COLLABORATION_MODEL
     ):
         _error(errors, "constitution collaborationModel is invalid")
+    if not _same_typed_value(constitution.get("productForm"), EXPECTED_PRODUCT_FORM):
+        _error(errors, "constitution productForm is invalid")
     fixed_invariants = _string_list(constitution.get("fixedInvariants"))
     if (
         fixed_invariants is None
         or set(fixed_invariants) != EXPECTED_FIXED_INVARIANTS
     ):
         _error(errors, "constitution fixedInvariants are invalid")
-    if _string_list(constitution.get("adaptiveSurfaces")) is None:
+    adaptive_surfaces = _string_list(constitution.get("adaptiveSurfaces"))
+    if (
+        adaptive_surfaces is None
+        or set(adaptive_surfaces) != EXPECTED_ADAPTIVE_SURFACES
+    ):
         _error(errors, "constitution adaptiveSurfaces are invalid")
     bootstrap_guards = _string_list(constitution.get("bootstrapGuards"))
     if (
@@ -1402,7 +1470,7 @@ def _process_loss_guardrail(
         integer_fields = (
             "maxSameClassUserCorrectionBeforeStop",
             "maxConsecutiveOutcomeNeutralWorkItems",
-            "maxMaterialUserToolOrchestrationInterventions",
+            "maxMaterialUserCapabilityOrchestrationInterventions",
         )
         for field in integer_fields:
             value = budget.get(field)

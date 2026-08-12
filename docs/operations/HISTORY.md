@@ -40,3 +40,15 @@ historical-event-neutral control seam, but deliberately verified none of
 O1-O5. After that stop condition was reached, the program moved to `paused`
 with no active increment rather than inventing a real task or silently opening
 capability work.
+
+A later outcome-neutral authority repair made the product form explicit: an
+open, Agent-neutral, demand-driven human-Agent capability control plane whose
+durable outputs are a methodology, open standard, and executable reference
+implementation. It bound goal-level demand, Agent-owned capability
+observation, gap detection, adaptive source-bound discovery, task-scoped
+dispatch and release, and Codex-first reference delivery without making Codex,
+a fixed catalog, a provider, or a manager part of the portable core. It also
+generalized O4 from a software-engineering-only standard to the human-Agent
+collaboration core with software engineering as the first reference profile.
+This repaired authority and validation semantics but counted as zero O1-O5
+progress; the program returned to `paused` with an empty current graph.

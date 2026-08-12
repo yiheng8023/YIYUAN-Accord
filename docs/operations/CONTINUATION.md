@@ -1,6 +1,6 @@
 # Continuation
 
-Updated: 2026-08-12
+Updated: 2026-08-13
 
 This file is a navigation aid, not product authority or a history ledger.
 Recheck live Git truth and the machine contract before acting. Closed changes
@@ -49,16 +49,19 @@ and use the existing acceptance operationalization rather than creating a
 parallel workflow.
 
 The user supplies the goal, domain facts, bounded authorization, corrections,
-and accountable final judgment. The Agent owns route learning and selection,
-bounded execution, recovery, verification, cleanup, and progress accounting.
-Do not transfer Skill names, tool selection, setup, invocation, verification
+and accountable final judgment. The Agent owns available-capability
+observation, gap detection, source-bounded discovery when needed, route
+selection, task-scoped dispatch and release, bounded execution, recovery,
+verification, cleanup, and progress accounting. Do not transfer capability or
+product names, discovery channels, invocation syntax, setup, verification
 commands, cleanup commands, or push orchestration to the user.
 
-Compare only decision-relevant routes. A capability may be added only after a
-reproducible residual gap and its exact authority, trust, data, cost,
-side-effect, rollback, and acceptance boundaries are known. Installed or
-visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer projections
-cannot create work or promote evidence.
+Compare only decision-relevant routes. A capability may be discovered or added
+only after a reproducible residual gap and its exact authority, trust, data,
+cost, side-effect, rollback, and acceptance boundaries are known. Catalogs and
+discovery channels are adaptive sources, not portable-core authority.
+Installed or visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer
+projections cannot create work or promote evidence.
 
 ## Paused boundary
 

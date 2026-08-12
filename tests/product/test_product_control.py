@@ -132,6 +132,10 @@ class ProductControlTests(unittest.TestCase):
                     "statement": "deliver the fixture task outcome",
                     "harnessEvaluationPrimary": False,
                 },
+                "demandEntry": {
+                    "mode": "goal-level",
+                    "userSpecifiedCapabilityRoute": False,
+                },
                 "goalAndBoundedAuthority": {
                     "goal": "complete the bounded fixture task",
                     "authorizedOperations": [
@@ -144,7 +148,7 @@ class ProductControlTests(unittest.TestCase):
                 "namedHumanAcceptor": "fixture reviewer",
                 "qualitySafetyEvidenceAndResidueFloors": floors,
                 "materialInterventionTaxonomy": [
-                    "tool-selection",
+                    "capability-route-selection",
                     "setup",
                     "invocation",
                     "recovery",
@@ -155,25 +159,37 @@ class ProductControlTests(unittest.TestCase):
             },
             "measures": {
                 "humanOutcomeDecision": "accepted",
-                "materialUserToolOrchestrationInterventions": {
+                "materialUserCapabilityOrchestrationInterventions": {
                     "count": 0,
                     "events": [],
                 },
                 "repeatedAlreadyBoundRequests": {"count": 0, "events": []},
-                "routeRecoveryVerificationAndCleanupEvents": [
+                "capabilityLifecycleEvents": [
                     {
                         "stage": stage,
-                        "status": "not-needed" if stage == "recovery" else "completed",
-                        "occurredAt": f"2026-08-12T03:0{index}:00+08:00",
+                        "status": (
+                            "no-residual-gap"
+                            if stage == "gap-assessment"
+                            else (
+                                "not-needed"
+                                if stage in {"capability-discovery", "recovery"}
+                                else "completed"
+                            )
+                        ),
+                        "occurredAt": f"2026-08-12T03:{index:02d}:00+08:00",
                         "source": deepcopy(source),
                     }
                     for index, stage in enumerate(
                         (
+                            "capability-observation",
+                            "gap-assessment",
+                            "capability-discovery",
                             "route-selection",
-                            "capability-learning",
+                            "task-scoped-dispatch",
                             "execution",
                             "recovery",
                             "verification",
+                            "route-release",
                             "cleanup",
                         ),
                         start=1,
@@ -219,7 +235,7 @@ class ProductControlTests(unittest.TestCase):
             "processLossBudget": {
                 "maxSameClassUserCorrectionBeforeStop": 1,
                 "maxConsecutiveOutcomeNeutralWorkItems": 1,
-                "maxMaterialUserToolOrchestrationInterventions": 0,
+                "maxMaterialUserCapabilityOrchestrationInterventions": 0,
                 "stopOnAuthorityOrIrreversibleIncident": True,
                 "stopOnUnboundedResidue": True,
             },
@@ -486,6 +502,29 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("constitution collaborationModel is invalid", report["errors"])
 
+    def test_product_form_cannot_collapse_into_a_catalog_or_host_product(self) -> None:
+        variants = (
+            ("identity", "codex-skill-catalog"),
+            ("durableOutputs", ["host-plugin"]),
+            ("portableCore", "fixed-plugin-list"),
+            ("referenceDelivery", "codex-only-runtime"),
+        )
+        for field, replacement in variants:
+            with self.subTest(field=field):
+                self.mutate(
+                    "product/constitution.json",
+                    lambda value: value["productForm"].__setitem__(
+                        field, replacement
+                    ),
+                )
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn("constitution productForm is invalid", report["errors"])
+                shutil.copy2(
+                    ROOT / "product/constitution.json",
+                    self.root / "product/constitution.json",
+                )
+
     def test_fixed_invariants_and_bootstrap_guards_cannot_self_disable(self) -> None:
         variants = (
             (
@@ -497,6 +536,11 @@ class ProductControlTests(unittest.TestCase):
                 "bootstrapGuards",
                 ["self-declaration is sufficient evidence"],
                 "constitution bootstrapGuards are invalid",
+            ),
+            (
+                "adaptiveSurfaces",
+                ["fixed capability catalog"],
+                "constitution adaptiveSurfaces are invalid",
             ),
         )
         for field, replacement, expected_error in variants:
@@ -1128,6 +1172,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["criterionStates"]["O1"])
         self.assertTrue(report["criterionStates"]["G2"])
 
+        evidence = self.read_json("product/evidence/o1.json")
+        events = evidence["receipt"]["measures"]["capabilityLifecycleEvents"]
+        events[1]["status"] = "residual-gap"
+        events[2]["status"] = "completed"
+        self.write_json("product/evidence/o1.json", evidence)
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertTrue(report["criterionStates"]["O1"])
+
     def test_o1_natural_task_receipt_rejects_material_failures(self) -> None:
         baseline_program = self.read_json("product/program.json")
         baseline_acceptance = self.read_json("product/acceptance.json")
@@ -1150,10 +1203,22 @@ class ProductControlTests(unittest.TestCase):
                     "namedHumanAcceptor", "different reviewer"
                 ),
             ),
+            "user-specified-route": (
+                "O1 task must enter as goal-level demand without a user-specified capability route",
+                lambda value: value["receipt"]["preRegistration"][
+                    "demandEntry"
+                ].__setitem__("userSpecifiedCapabilityRoute", True),
+            ),
+            "non-goal-entry": (
+                "O1 task must enter as goal-level demand without a user-specified capability route",
+                lambda value: value["receipt"]["preRegistration"][
+                    "demandEntry"
+                ].__setitem__("mode", "capability-first"),
+            ),
             "tool-intervention": (
-                "O1 tool orchestration interventions must be exactly zero",
+                "O1 capability orchestration interventions must be exactly zero",
                 lambda value: value["receipt"]["measures"][
-                    "materialUserToolOrchestrationInterventions"
+                    "materialUserCapabilityOrchestrationInterventions"
                 ].__setitem__("count", 1),
             ),
             "repeated-request": (
@@ -1169,16 +1234,56 @@ class ProductControlTests(unittest.TestCase):
                 ].__setitem__("passed", False),
             ),
             "missing-cleanup": (
-                "O1 route lifecycle events must cover all required stages in order",
+                "O1 capability lifecycle events must cover all required stages in order",
                 lambda value: value["receipt"]["measures"][
-                    "routeRecoveryVerificationAndCleanupEvents"
+                    "capabilityLifecycleEvents"
                 ].pop(),
             ),
             "out-of-order-route": (
-                "O1 route lifecycle events are invalid",
+                "O1 capability lifecycle events are invalid",
                 lambda value: value["receipt"]["measures"][
-                    "routeRecoveryVerificationAndCleanupEvents"
+                    "capabilityLifecycleEvents"
                 ].reverse(),
+            ),
+            "route-selection-not-performed": (
+                "O1 capability lifecycle events are invalid",
+                lambda value: next(
+                    event
+                    for event in value["receipt"]["measures"][
+                        "capabilityLifecycleEvents"
+                    ]
+                    if event["stage"] == "route-selection"
+                ).__setitem__("status", "not-needed"),
+            ),
+            "route-release-not-performed": (
+                "O1 capability lifecycle events are invalid",
+                lambda value: next(
+                    event
+                    for event in value["receipt"]["measures"][
+                        "capabilityLifecycleEvents"
+                    ]
+                    if event["stage"] == "route-release"
+                ).__setitem__("status", "not-needed"),
+            ),
+            "discovery-without-gap": (
+                "O1 capability discovery must match the recorded residual gap",
+                lambda value: next(
+                    event
+                    for event in value["receipt"]["measures"][
+                        "capabilityLifecycleEvents"
+                    ]
+                    if event["stage"] == "capability-discovery"
+                ).__setitem__("status", "completed"),
+            ),
+            "gap-without-discovery": (
+                "O1 capability discovery must match the recorded residual gap",
+                lambda value: next(
+                    event
+                    for event in value["receipt"]["measures"][
+                        "capabilityLifecycleEvents"
+                    ]
+                    if event["stage"] == "gap-assessment"
+                ).__setitem__("status", "residual-gap"),
             ),
             "undeclared-residue": (
                 "O1 residue and claim limits are invalid",
