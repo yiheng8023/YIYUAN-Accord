@@ -26,7 +26,8 @@ python -B -m harness verify --root . --json
 ```
 
 当前 `main` 是 paused 的 v0.2 工序，会报告 `0/5` 项结果、`4/4` 项护栏、
-no active increment，completion 为 `in-progress`。仅护栏的权威重置已在
+no active increment，completion 为 `in-progress`。当前 increment graph 为空；已关闭的
+零 outcome 修复只保留在 Git 历史中，不再累积成当前工作队列。仅护栏的权威重置已在
 `a5a0834` 推送，但计为零产品进展。随后基于六条真实 Harness 任务完成了能力链与
 当前资产审计，建立路线增量评价和干净树基线，但没有验证 O4 或任何其他结果。
 accepted 的 v0.1 仓库控制里程碑固定在

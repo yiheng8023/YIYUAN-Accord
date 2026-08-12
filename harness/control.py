@@ -696,11 +696,11 @@ def _program_graph(
     errors: list[str],
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any] | None]:
     increments = _objects(program.get("increments"), "program increments", errors)
-    if not increments:
-        _error(errors, "program must contain at least one causal increment")
     program_state = program.get("status")
     if not isinstance(program_state, str) or program_state not in PROGRAM_STATES:
         _error(errors, "program status must be active, paused, or completed")
+    if not increments and program_state != "paused":
+        _error(errors, "only a paused program may have an empty current increment graph")
     active_increment_id = program.get("activeIncrementId")
     active_increments: list[dict[str, Any]] = []
     all_work: list[dict[str, Any]] = []
@@ -863,6 +863,7 @@ def _process_loss_guardrail(
         work_items = increment.get("workItems") if isinstance(increment.get("workItems"), list) else []
         current_neutral = 0
         max_neutral = 0
+        increment_has_validated_outcome = False
         for work in work_items:
             if not isinstance(work, dict):
                 continue
@@ -875,12 +876,18 @@ def _process_loss_guardrail(
             mapped_outcomes = set(mapped) & OUTCOME_IDS
             work_outcomes = validated_work_outcomes.get(work.get("id"), set())
             if mapped_outcomes & work_outcomes:
+                increment_has_validated_outcome = True
                 current_neutral = 0
             else:
                 current_neutral += 1
                 max_neutral = max(max_neutral, current_neutral)
         if isinstance(neutral_budget, int) and max_neutral > neutral_budget:
             _error(errors, f"increment {increment_id} exceeds its outcome-neutral work budget")
+        if state in TERMINAL_STATES and not increment_has_validated_outcome:
+            _error(
+                errors,
+                f"closed outcome-neutral increment must leave the current graph: {increment_id}",
+            )
         correction_class = increment.get("correctionClass")
         if (
             isinstance(correction_class, str)

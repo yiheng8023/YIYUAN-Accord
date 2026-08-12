@@ -31,6 +31,8 @@ python -B -m harness verify --root . --json
 
 Current `main` is the paused v0.2 program. It reports `0/5` outcomes, `4/4`
 guardrails, no active causal increment, and completion `in-progress`. The
+current increment graph is empty; closed outcome-neutral repairs remain in Git
+history instead of accumulating as a current work queue. The
 guardrail-only authority reset was pushed at `a5a0834`; it counts as zero
 product progress. A later six-thread capability-chain and current-asset audit
 established the route-delta evaluation and clean-tree baseline without

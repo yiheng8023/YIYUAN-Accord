@@ -51,9 +51,11 @@ authority, unsupported states, lifecycle ownership, evidence shape, outcome
 floors, fallback, recovery, cleanup, and process-loss stop rules.
 
 The current implemented slice is the v0.2 historical-event-neutral
-product-control kernel plus the capability-chain and current-asset integrity
-baseline. Both increments are closed and the program is paused with no active
-increment. O1-O5 are deliberately planned and false. A
+product-control kernel plus the capability-chain, current-asset integrity,
+outcome-operationalization, and causal-evidence controls. Their closed
+outcome-neutral increments are recoverable from Git rather than retained as a
+current queue. The program is paused with an empty current increment graph.
+O1-O5 are deliberately planned and false. A
 repository-authored JSON file cannot promote them: every verified outcome
 requires a code-owned validator added with the real slice that needs it.
 The pause limits outcome-bearing experimentation, not bounded retrospective
@@ -117,8 +119,10 @@ green test is not user value.
 
 ## 6. Process-loss control
 
-Every causal increment declares a correction budget, a guardrail-only-work
-budget, a material user tool-orchestration budget, hard authority stops, and
-exact repository cleanup paths. At most one explicit guardrail-only reset may
-precede real outcome work; it counts as zero product progress. Actual process
-loss is measured by O1/O2 receipts, not inferred from a budget declaration.
+Every current causal increment declares a correction budget, an outcome-neutral
+work budget, a material user tool-orchestration budget, hard authority stops,
+and exact repository cleanup paths. A closed outcome-neutral increment leaves
+the current graph and remains recoverable from Git; a completed increment stays
+current only while validator-accepted outcome evidence needs its exact causal
+identity. Actual process loss is measured by O1/O2 receipts, not inferred from
+a budget declaration.

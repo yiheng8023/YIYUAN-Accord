@@ -21,7 +21,10 @@ interesting paper is not sufficient entry evidence.
 
 The causal-authority reset closed at `a5a0834`. A subsequent six-thread
 counterexample and current-asset audit established the v0.2 capability-chain
-integrity baseline, and v0.2 is paused with no active increment. These changes
+integrity baseline; later authority repairs tightened outcome operationalization
+and causal evidence binding. v0.2 is paused with an empty current increment
+graph. Closed outcome-neutral increments remain recoverable from Git rather
+than accumulating as a current queue. These changes
 bound the terminal proposition, froze v0.1 receipts in Git history, removed
 one-off historical proxy checks and duplicate execution surfaces, and kept
 O1-O5 planned and false. They did not run A/B tasks, mutate a capability
@@ -33,9 +36,8 @@ validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
 failures are non-authoritative counterevidence and may trigger replanning.
 
-After the integrity baseline is committed and pushed, the next outcome-bearing
-increment may bind exactly one natural vertical dogfood task. The current
-planned order is:
+When a natural task is bound, the next outcome-bearing increment may bind
+exactly one vertical dogfood task. The current planned order is:
 
 1. **Freeze a provisional evaluation protocol.** Before the first event, define
    material intervention classes, capability-added goal/input/deliverable/

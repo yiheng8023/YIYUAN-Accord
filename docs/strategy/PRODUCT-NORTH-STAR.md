@@ -87,6 +87,11 @@ mapped acceptance criteria, and a finite stop condition. Evidence may change
 the next increment. Novel ecosystem capability, research interest, or an
 available mechanism cannot create mainline work by itself.
 
+The current program is not an append-only history ledger. Once an
+outcome-neutral increment closes, its exact state remains in Git and leaves the
+current graph. A completed increment stays current only when validated outcome
+evidence needs its exact causal identity.
+
 Acceptance defines the destination; a plan is only a falsifiable causal claim
 about how to reach it. A criterion ID on a work item is necessary but cannot
 prove semantic contribution. At every decision-relevant event, compare the

@@ -35,6 +35,8 @@ AUTHORITY_FILES = (
     "docs/operations/CONTINUATION.md",
     "docs/operations/HISTORY.md",
 )
+FIXTURE_INCREMENT_ID = "increment.fixture-current"
+FIXTURE_WORK_ID = "work.fixture-current"
 
 
 class ProductControlTests(unittest.TestCase):
@@ -80,8 +82,8 @@ class ProductControlTests(unittest.TestCase):
             "id": "typed-o2",
             "criterionIds": ["O2"] if criterion_ids is None else criterion_ids,
             "observedAt": "2026-08-12T03:00:00+08:00",
-            "incrementId": "increment.v0.2-outcome-progress-evidence-binding",
-            "workItemId": "work.bind-outcome-progress-to-validated-evidence",
+            "incrementId": FIXTURE_INCREMENT_ID,
+            "workItemId": FIXTURE_WORK_ID,
             "source": {
                 "kind": "repository-task-receipt",
                 "locator": "task-receipt-001",
@@ -98,16 +100,57 @@ class ProductControlTests(unittest.TestCase):
             "validator": {"kind": validator_kind, "version": 1},
         }
 
+    def increment_fixture(self, *, state: str = "planned") -> dict:
+        work_state = "completed" if state == "completed" else "planned"
+        return {
+            "id": FIXTURE_INCREMENT_ID,
+            "state": state,
+            "correctionClass": "fixture-correction",
+            "observedProblem": "fixture observed problem",
+            "hypothesis": "fixture causal hypothesis",
+            "falsifier": "fixture falsifier",
+            "stopCondition": "fixture finite stop",
+            "acceptanceIds": ["G4"],
+            "processLossBudget": {
+                "maxSameClassUserCorrectionBeforeStop": 1,
+                "maxConsecutiveOutcomeNeutralWorkItems": 1,
+                "maxMaterialUserToolOrchestrationInterventions": 0,
+                "stopOnAuthorityOrIrreversibleIncident": True,
+                "stopOnUnboundedResidue": True,
+            },
+            "cleanupBoundary": {
+                "repositoryTemporaryPaths": [
+                    ".tmp",
+                    "harness/__pycache__",
+                    "tests/product/__pycache__",
+                ]
+            },
+            "workItems": [
+                {
+                    "id": FIXTURE_WORK_ID,
+                    "state": work_state,
+                    "acceptanceIds": ["G4"],
+                    "operationIds": ["repository-read", "local-verification"],
+                    "deliverables": ["fixture deliverable"],
+                }
+            ],
+        }
+
+    def ensure_increment(self, program: dict, *, state: str = "planned") -> dict:
+        if not program["increments"]:
+            program["increments"].append(self.increment_fixture(state=state))
+        return program["increments"][-1]
+
     def map_outcome_to_latest_work(self, criterion_id: str) -> None:
         def add_mapping(value: dict) -> None:
-            increment = value["increments"][-1]
+            increment = self.ensure_increment(value, state="completed")
             increment["acceptanceIds"].append(criterion_id)
             increment["workItems"][0]["acceptanceIds"].append(criterion_id)
 
         self.mutate("product/program.json", add_mapping)
 
     def activate_program(self, program: dict) -> dict:
-        increment = program["increments"][-1]
+        increment = self.ensure_increment(program)
         program["status"] = "active"
         program["activeIncrementId"] = increment["id"]
         increment["state"] = "active"
@@ -313,7 +356,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding has more than one active work item",
+            "increment increment.fixture-current has more than one active work item",
             report["errors"],
         )
 
@@ -325,7 +368,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding requires a correctionClass",
+            "increment increment.fixture-current requires a correctionClass",
             report["errors"],
         )
 
@@ -338,13 +381,13 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.bind-outcome-progress-to-validated-evidence "
+            "work item work.fixture-current "
             "acceptanceIds exceed increment "
-            "increment.v0.2-outcome-progress-evidence-binding",
+            "increment.fixture-current",
             report["errors"],
         )
 
-    def test_outcome_neutral_repairs_are_valid_but_not_product_progress(self) -> None:
+    def test_empty_paused_current_graph_is_valid_but_not_product_progress(self) -> None:
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["outcomes"]["verified"], 0)
@@ -360,7 +403,7 @@ class ProductControlTests(unittest.TestCase):
         report = json.loads(completed.stdout)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.bind-outcome-progress-to-validated-evidence has invalid state",
+            "work item work.fixture-current has invalid state",
             report["errors"],
         )
 
@@ -372,7 +415,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "work item work.bind-outcome-progress-to-validated-evidence exceeds agent authority",
+            "work item work.fixture-current exceeds agent authority",
             report["errors"],
         )
 
@@ -404,7 +447,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding requires the exact process-loss budget fields",
+            "increment increment.fixture-current requires the exact process-loss budget fields",
             report["errors"],
         )
 
@@ -424,7 +467,8 @@ class ProductControlTests(unittest.TestCase):
 
     def test_adjacent_increments_cannot_repeat_a_correction_class(self) -> None:
         def repeat(value: dict) -> None:
-            duplicate = deepcopy(value["increments"][-1])
+            first = self.ensure_increment(value, state="completed")
+            duplicate = deepcopy(first)
             duplicate["id"] = "increment.repeated-correction"
             duplicate["workItems"][0]["id"] = "work.repeated-correction"
             value["increments"].append(duplicate)
@@ -434,7 +478,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
             "adjacent increments repeat correctionClass: "
-            "outcome-progress-label-arbitrage",
+            "fixture-correction",
             report["errors"],
         )
 
@@ -448,6 +492,48 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn("outcome-neutral work budget must be zero or one", report["errors"])
+
+    def test_paused_program_cannot_accumulate_closed_outcome_neutral_queue(self) -> None:
+        def queue(value: dict) -> None:
+            first = self.ensure_increment(value, state="completed")
+            second = deepcopy(first)
+            second["id"] = "increment.second-neutral"
+            second["correctionClass"] = "second-neutral-correction"
+            second["workItems"][0]["id"] = "work.second-neutral"
+            value["increments"].append(second)
+
+        self.mutate("product/program.json", queue)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "closed outcome-neutral increment must leave the current graph: increment.fixture-current",
+            report["errors"],
+        )
+        self.assertIn(
+            "closed outcome-neutral increment must leave the current graph: increment.second-neutral",
+            report["errors"],
+        )
+
+    def test_paused_program_retains_completed_validated_outcome_binding(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        evidence = self.evidence_document(criterion_ids=["O1"])
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {"test-validator": validator},
+        ):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertTrue(report["criterionStates"]["O1"])
+        self.assertTrue(report["criterionStates"]["G4"])
 
     def test_outcome_label_without_validated_evidence_cannot_reset_neutral_count(self) -> None:
         def label_arbitrage(value: dict) -> None:
@@ -466,7 +552,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding exceeds its outcome-neutral work budget",
+            "increment increment.fixture-current exceeds its outcome-neutral work budget",
             report["errors"],
         )
 
@@ -504,7 +590,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["criterionStates"]["G2"], report["errors"])
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding exceeds its outcome-neutral work budget",
+            "increment increment.fixture-current exceeds its outcome-neutral work budget",
             report["errors"],
         )
 
@@ -527,6 +613,7 @@ class ProductControlTests(unittest.TestCase):
         )
 
     def test_dangling_cleanup_symlink_is_residue(self) -> None:
+        self.mutate("product/program.json", self.activate_program)
         link = self.root / ".tmp"
         try:
             link.symlink_to(self.root / "missing-target", target_is_directory=True)
@@ -718,27 +805,25 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         self.assertFalse(json.loads(completed.stdout)["valid"])
 
-    def test_completed_program_with_planned_outcomes_is_not_accepted(self) -> None:
+    def test_completed_program_without_validated_outcome_binding_is_invalid(self) -> None:
         def close(value: dict) -> None:
+            increment = self.ensure_increment(value, state="completed")
             value["status"] = "completed"
             value["activeIncrementId"] = None
-            value["increments"][0]["state"] = "completed"
-            value["increments"][0]["workItems"][0]["state"] = "completed"
+            increment["state"] = "completed"
+            increment["workItems"][0]["state"] = "completed"
 
         self.mutate("product/program.json", close)
         report = self.report()
-        self.assertTrue(report["valid"], report["errors"])
+        self.assertFalse(report["valid"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"]["verified"], 0)
+        self.assertIn(
+            "closed outcome-neutral increment must leave the current graph: increment.fixture-current",
+            report["errors"],
+        )
 
     def test_paused_program_has_no_active_increment_and_remains_in_progress(self) -> None:
-        def pause(value: dict) -> None:
-            value["status"] = "paused"
-            value["activeIncrementId"] = None
-            value["increments"][0]["state"] = "completed"
-            value["increments"][0]["workItems"][0]["state"] = "completed"
-
-        self.mutate("product/program.json", pause)
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["activeIncrement"], None)
@@ -765,25 +850,32 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("paused program must have no active increment", report["errors"])
         self.assertIn("paused program must have a terminal increment graph", report["errors"])
 
-    def test_completed_program_cannot_retain_active_work(self) -> None:
+    def test_completed_increment_cannot_retain_active_work(self) -> None:
         def invalid(value: dict) -> None:
-            self.activate_program(value)
+            increment = self.activate_program(value)
             value["status"] = "completed"
             value["activeIncrementId"] = None
-            value["increments"][0]["state"] = "completed"
+            increment["state"] = "completed"
 
         self.mutate("product/program.json", invalid)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("completed program must have no active increment", report["errors"])
-        self.assertIn("completed program must have a terminal increment graph", report["errors"])
+        self.assertIn(
+            "active work item work.fixture-current must belong to the active increment",
+            report["errors"],
+        )
+        self.assertIn(
+            "terminal increment increment.fixture-current has non-terminal work",
+            report["errors"],
+        )
 
     def test_completed_program_still_checks_repository_residue(self) -> None:
         def close(value: dict) -> None:
+            increment = self.ensure_increment(value, state="completed")
             value["status"] = "completed"
             value["activeIncrementId"] = None
-            value["increments"][0]["state"] = "completed"
-            value["increments"][0]["workItems"][0]["state"] = "completed"
+            increment["state"] = "completed"
+            increment["workItems"][0]["state"] = "completed"
 
         self.mutate("product/program.json", close)
         (self.root / ".tmp").mkdir()
@@ -800,7 +892,10 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/program.json", empty)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("program must contain at least one causal increment", report["errors"])
+        self.assertIn(
+            "only a paused program may have an empty current increment graph",
+            report["errors"],
+        )
 
     def test_increment_requires_non_empty_work_graph(self) -> None:
         def empty(value: dict) -> None:
@@ -810,7 +905,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-progress-evidence-binding must contain at least one work item",
+            "increment increment.fixture-current must contain at least one work item",
             report["errors"],
         )
 
@@ -824,7 +919,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program agent authority contains an unknown operation", report["errors"])
         self.assertIn(
-            "work item work.bind-outcome-progress-to-validated-evidence contains an unknown operation",
+            "work item work.fixture-current contains an unknown operation",
             report["errors"],
         )
 

@@ -61,6 +61,12 @@ validator resets that item's outcome-neutral count. The earlier capability-chain
 baseline therefore maps only to the guardrails it actually satisfied, not to O4
 progress.
 
+Closed outcome-neutral increments are no longer retained as a queue or history
+ledger in the current machine program. Their exact prior states remain
+recoverable from Git. A paused program with no validated outcome binding has an
+empty current increment graph; a future completed increment remains current
+only when accepted outcome evidence needs its exact increment/work identity.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,
