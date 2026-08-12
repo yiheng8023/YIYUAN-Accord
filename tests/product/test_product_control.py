@@ -595,6 +595,37 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["criterionStates"]["O1"])
         self.assertTrue(report["criterionStates"]["G4"])
 
+    def test_cancelled_or_stopped_increment_cannot_retain_outcome_binding(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        evidence = self.evidence_document(criterion_ids=["O1"])
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        baseline = self.read_json("product/program.json")
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {"test-validator": validator},
+        ):
+            for state in ("cancelled", "stopped"):
+                with self.subTest(state=state):
+                    program = deepcopy(baseline)
+                    program["increments"][0]["state"] = state
+                    self.write_json("product/program.json", program)
+                    report = self.report()
+                    self.assertFalse(report["criterionStates"]["O1"])
+                    self.assertFalse(report["criterionStates"]["G4"])
+                    self.assertIn(
+                        "only a completed increment may retain validated outcome "
+                        f"binding: {FIXTURE_INCREMENT_ID}",
+                        report["errors"],
+                    )
+
     def test_outcome_label_without_validated_evidence_cannot_reset_neutral_count(self) -> None:
         def label_arbitrage(value: dict) -> None:
             increment = self.activate_program(value)

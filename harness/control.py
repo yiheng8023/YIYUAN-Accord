@@ -906,11 +906,18 @@ def _process_loss_guardrail(
                 max_neutral = max(max_neutral, current_neutral)
         if isinstance(neutral_budget, int) and max_neutral > neutral_budget:
             _error(errors, f"increment {increment_id} exceeds its outcome-neutral work budget")
-        if state in TERMINAL_STATES and not increment_has_validated_outcome:
-            _error(
-                errors,
-                f"closed outcome-neutral increment must leave the current graph: {increment_id}",
-            )
+        if state in TERMINAL_STATES:
+            if not increment_has_validated_outcome:
+                _error(
+                    errors,
+                    f"closed outcome-neutral increment must leave the current graph: {increment_id}",
+                )
+            elif state != "completed":
+                _error(
+                    errors,
+                    "only a completed increment may retain validated outcome "
+                    f"binding: {increment_id}",
+                )
         correction_class = increment.get("correctionClass")
         if (
             isinstance(correction_class, str)
