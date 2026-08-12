@@ -179,7 +179,6 @@ RFC3339 = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
 )
 RELEASE = re.compile(r"^v\d+\.\d+$")
-REVISION = re.compile(r"^[0-9a-f]{40}$")
 FORBIDDEN_AUTHORITY_PATTERNS = (
     re.compile(r"agent[-]skills[-]curated", re.IGNORECASE),
     re.compile(r"registry/curation[-]program[-]plan[.]json", re.IGNORECASE),
@@ -241,6 +240,20 @@ EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY = {
     "releaseAuthority": False,
     "counterevidenceInput": True,
     "mayTriggerReplanning": True,
+}
+EXPECTED_PRIOR_RELEASE = {
+    "release": "v0.1",
+    "state": "accepted-repository-control-milestone",
+    "revision": "be498f960c9e0587d355291fb24261c91e75cd77",
+    "currentAuthority": False,
+}
+EXPECTED_HISTORICAL_MILESTONE = {
+    **EXPECTED_PRIOR_RELEASE,
+    "claimLimit": (
+        "repository-bound control evidence only; not terminal proposition, "
+        "broad user value, software-engineering standard, cross-host, "
+        "production, or publication proof"
+    ),
 }
 
 
@@ -568,25 +581,11 @@ def _historical_boundary_valid(
 ) -> bool:
     before = len(errors)
     prior = program.get("priorRelease")
-    prior_valid = isinstance(prior, dict) and set(prior) == {
-        "release",
-        "state",
-        "revision",
-        "currentAuthority",
-    }
-    if prior_valid:
-        prior_valid = (
-            isinstance(prior.get("release"), str)
-            and RELEASE.fullmatch(prior["release"]) is not None
-            and prior.get("release") != program.get("release")
-            and isinstance(prior.get("state"), str)
-            and bool(prior["state"].strip())
-            and isinstance(prior.get("revision"), str)
-            and REVISION.fullmatch(prior["revision"]) is not None
-            and prior.get("currentAuthority") is False
+    if not _same_typed_value(prior, EXPECTED_PRIOR_RELEASE):
+        _error(
+            errors,
+            "program priorRelease must match the code-owned historical milestone",
         )
-    if not prior_valid:
-        _error(errors, "program priorRelease must be a non-authoritative historical milestone")
     if not _same_typed_value(
         constitution.get("historicalEvidenceBoundary"),
         EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY,
@@ -595,17 +594,11 @@ def _historical_boundary_valid(
     milestones = constitution.get("historicalMilestones")
     if not isinstance(milestones, list) or len(milestones) != 1:
         _error(errors, "constitution must retain exactly one historical milestone")
-    else:
-        milestone = milestones[0]
-        expected = dict(prior) if isinstance(prior, dict) else {}
-        if not isinstance(milestone, dict) or any(
-            milestone.get(key) != value for key, value in expected.items()
-        ):
-            _error(errors, "constitution historical milestone must match program priorRelease")
-        if not isinstance(milestone, dict) or not isinstance(
-            milestone.get("claimLimit"), str
-        ) or not milestone["claimLimit"].strip():
-            _error(errors, "constitution historical milestone requires a claim limit")
+    elif not _same_typed_value(milestones[0], EXPECTED_HISTORICAL_MILESTONE):
+        _error(
+            errors,
+            "constitution historical milestone must match the code-owned record",
+        )
     return len(errors) == before
 
 

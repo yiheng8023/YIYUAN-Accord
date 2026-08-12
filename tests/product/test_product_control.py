@@ -1379,7 +1379,46 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn(
-            "program priorRelease must be a non-authoritative historical milestone",
+            "program priorRelease must match the code-owned historical milestone",
+            report["errors"],
+        )
+
+    def test_historical_milestone_identity_is_code_owned(self) -> None:
+        fabricated = {
+            "release": "v9.9",
+            "state": "accepted-terminal-product",
+            "revision": "0123456789abcdef0123456789abcdef01234567",
+            "currentAuthority": False,
+        }
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__("priorRelease", fabricated.copy()),
+        )
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value["historicalMilestones"].__setitem__(
+                0,
+                {**fabricated, "claimLimit": "fabricated but non-empty"},
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "program priorRelease must match the code-owned historical milestone",
+            report["errors"],
+        )
+
+    def test_historical_milestone_claim_limit_is_code_owned(self) -> None:
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value["historicalMilestones"][0].__setitem__(
+                "claimLimit", "terminal product and cross-host proof"
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "constitution historical milestone must match the code-owned record",
             report["errors"],
         )
 

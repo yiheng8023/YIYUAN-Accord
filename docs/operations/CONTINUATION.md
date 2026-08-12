@@ -112,6 +112,12 @@ The program authority boundary likewise accepts only its code-owned `userOwns`
 and `agentOwnsWithinBoundedAuthority` fields. A differently named permission
 flag cannot piggyback on the current machine contract while G1 remains green.
 
+The retained v0.1 milestone metadata and claim limit are exact code-owned
+values. Coordinated edits to the program and constitution cannot fabricate a
+different historical release, state, revision, or broader claim while G3 stays
+green. This identity check does not require a shallow clone to contain the old
+Git object.
+
 G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
