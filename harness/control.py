@@ -132,7 +132,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "456367895d85ec19d265458e8065517cd2a9532d7ee332a85f57a458f11af6ea"
+    "32f1bbe645679dec67be36dc75398dd157e4df9aa277a1bfaf08ded3fba0e2db"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -283,7 +283,7 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "only one causal increment and at most one work item may be active",
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability exposure is minimal even when the managed portfolio is broad",
-        "native and already-authorized capability is evaluated before expansion, but subtraction is not a veto on evidenced addition",
+        "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",

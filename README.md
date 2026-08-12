@@ -111,6 +111,10 @@ For a bound need, prefer a healthy native/runtime capability, then a suitable
 official capability, then a reviewed maintained external implementation, then
 composition. Author new capability only for a reproducible residual gap.
 
+Capability scope follows demand rather than catalog size. End task-scoped
+exposure when the need ends; retaining a candidate inactive is distinct from
+persistent activation, which requires separate evidence and authority.
+
 Installation, enablement, account connection, meaningful cost, live dispatch,
 consumer mutation, acceptance, publication, and release are separate state
 transitions. Native host authorization remains authoritative.

@@ -54,12 +54,16 @@ exactly one vertical dogfood task. The current planned order is:
 3. **Capability coexistence and controlled addition.** Keep managed portfolio
    breadth distinct from task exposure. Evaluate an already-disabled or
    discoverable candidate only for a bound demand, use reversible task-scoped
-   activation where authorized, and end in a retain, replace, or retire
-   decision. Subtraction controls cost; it does not veto evidenced addition.
+   activation where authorized, end task exposure when the need ends, and then
+   retain inactive, justify persistent activation, replace, or retire. Dynamic
+   lifecycle control—not capability count—is the principle.
 4. **Evaluation and minimum standard.** Calibrate and complete the Agent-neutral
    software-engineering evaluation and collaboration standard from repeated
-   real behavior. Measure outcome quality, user interventions, route errors,
-   recovery, time and call cost, residue, human judgment, and continuity.
+   real behavior. Measure outcome and communication quality, intent-mode and
+   decision-completeness errors, user capability-learning burden, unnecessary
+   design/process/artifact load, route errors, recovery, time and call cost,
+   resource lifecycle, residue, context/handoff transparency, human judgment,
+   and continuity.
 5. **Cross-host proof.** Keep Codex as the reference host, then exercise the
    same portable semantics on a distinct second Agent host or runtime through
    its own thin adapter. A same-host second adapter is conformance evidence

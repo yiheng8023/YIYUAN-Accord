@@ -90,7 +90,7 @@
       "name": "capability coexistence and marginal-value arbitration",
       "statement": "A broad user-controlled portfolio can coexist with minimal task exposure, and relevant native, official, maintained external, composition, and self-authored routes are compared by real marginal value rather than capability count.",
       "metric": "real-task route decisions, exposure deltas, lifecycle receipts, and retain-replace-retire outcomes",
-      "threshold": "natural tasks produce at least one evidence-backed route decision, where retaining the existing route with no addition is valid; only a reproducible residual gap may trigger reversible external live evaluation; candidates admitted by the bound cohort receive a retention or expiry rule without inventorying the user's whole ecosystem; the three current self-authored control roles each receive a retain, merge, replace, or retire decision; the current advisory recall Hook stays off unless recall A/B proves net benefit, while any other Hook role requires its own use case, authority, side-effect, and acceptance contract",
+      "threshold": "natural tasks produce at least one evidence-backed route decision, where retaining the existing route with no addition is valid; only a reproducible residual gap may trigger reversible external live evaluation; task-scoped exposure ends when the bound need ends unless separate evidence and authority justify continued activation; candidates admitted by the bound cohort receive an inactive-retention, persistent-activation, replacement, or expiry rule without inventorying the user's whole ecosystem; the three current self-authored control roles each receive a retain, merge, replace, or retire decision; the current advisory recall Hook stays off unless recall A/B proves net benefit, while any other Hook role requires its own use case, authority, side-effect, and acceptance contract",
       "operationalization": {
         "sampleUnit": "one evidence-backed route decision tied to an accepted natural-task context",
         "minimumSampleCount": 3,
@@ -108,14 +108,14 @@
           "routeAlternativesCompared",
           "marginalOutcomeProcessAndCostDelta",
           "residualGapResult",
-          "candidateLifecycleDisposition",
+          "postTaskExposureAndCandidateLifecycleDisposition",
           "selfAuthoredRoleDisposition"
         ],
-        "passRule": "At least three route decisions across at least two route classes compare only decision-relevant candidates, preserve retention with no addition as a valid result, admit external live evaluation only after a reproducible residual gap, and give every admitted candidate and current self-authored role a bounded disposition without inventorying the whole user ecosystem.",
+        "passRule": "At least three route decisions across at least two route classes compare only decision-relevant candidates, preserve retention with no addition as a valid result, admit external live evaluation only after a reproducible residual gap, end task-scoped exposure by default, and give every admitted candidate and current self-authored role a bounded disposition without inventorying the whole user ecosystem.",
         "falsifiers": [
           "capability count, installation, or exposure is treated as marginal value",
           "a capability is added without a reproducible residual gap",
-          "an admitted candidate remains active without a retention or expiry rule",
+          "a task-scoped candidate remains exposed after the bound need ends without separate net-value evidence and activation authority",
           "portfolio-wide inventory is required for a task-bound decision"
         ],
         "humanAuthority": "The user retains portfolio ownership and any new trust, account, data, cost, or activation decision."
@@ -128,7 +128,7 @@
       "name": "Agent-neutral software-engineering evaluation and standard",
       "statement": "The product owns an Agent-neutral evaluation system and minimum software-engineering collaboration standard grounded in repeated real behavior, not in one host projection or membership inventory.",
       "metric": "accepted evaluation specification, route-delta and outcome scorecards, calibrated minimum standard, and human review",
-      "threshold": "the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios are used as sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, user interventions, route errors, recovery, time and call cost, residue, human judgment, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome; a named accountable human accepts or rejects the evaluation, minimum standard, and claim boundary before host-specific projections are promoted",
+      "threshold": "the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios are used as sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, communication fit, conversation-versus-deliverable intent errors, first-response decision completeness, user capability-learning and configuration burden, user interventions, unnecessary design, process and artifact load, route errors, recovery, time and call cost, system-resource lifecycle, durable residue, human judgment, context-pressure and handoff transparency, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome; a named accountable human accepts or rejects the evaluation, minimum standard, and claim boundary before host-specific projections are promoted",
       "operationalization": {
         "sampleUnit": "one outcome-and-process receipt evaluated by one versioned scorecard",
         "minimumSampleCount": 4,
@@ -142,10 +142,13 @@
           "claimBoundary"
         ],
         "requiredMeasures": [
-          "resultQuality",
-          "userInterventionsAndRepeatedRequests",
+          "resultQualityCommunicationFitAndFirstResponseDecisionCompleteness",
+          "conversationVersusDeliverableIntentErrors",
+          "userInterventionsRepeatedRequestsAndCapabilityLearningBurden",
           "routeErrorsRecoveryTimeAndCallCost",
-          "residueAndContinuity",
+          "systemResourceLifecycleDurableResidueAndContinuity",
+          "unnecessaryDesignProcessAndArtifactLoad",
+          "contextPressureAndHandoffTransparency",
           "reopenedDecisionsAndUnrequestedArtifacts",
           "capabilityAddedRequirements",
           "humanDecisionAndDisagreement"
