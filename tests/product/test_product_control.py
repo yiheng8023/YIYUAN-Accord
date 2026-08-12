@@ -243,6 +243,28 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn("program id must be harness-product-program-v0.2", report["errors"])
 
+    def test_authority_json_rejects_duplicate_keys_and_nonfinite_constants(self) -> None:
+        path = self.root / "product" / "program.json"
+        baseline = path.read_text(encoding="utf-8")
+        variants = {
+            "duplicate-key": baseline.replace(
+                '"status": "paused",',
+                '"status": "paused",\n  "status": "paused",',
+                1,
+            ),
+            "nonfinite-constant": baseline.replace(
+                '"schema": 1,',
+                '"schema": 1,\n  "nonStandard": NaN,',
+                1,
+            ),
+        }
+        for label, content in variants.items():
+            with self.subTest(label=label):
+                path.write_text(content, encoding="utf-8")
+                report = self.report()
+                self.assertFalse(report["valid"])
+                self.assertIn("cannot read product program: invalid JSON", report["errors"])
+
     def test_acceptance_release_must_match_program(self) -> None:
         self.mutate(
             "product/acceptance.json",

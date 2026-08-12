@@ -88,6 +88,10 @@ The product and Harness authority surfaces likewise fail G3 when enumeration
 is incomplete. Their closed scans do not rely on `Path.glob` or `Path.rglob`,
 which may silently suppress scan errors on current Python versions.
 
+Current authority and evidence JSON is parsed strictly. Duplicate object keys
+and non-finite constants (`NaN`, `Infinity`, or `-Infinity`) fail closed rather
+than allowing different readers to assign different meanings.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,

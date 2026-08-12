@@ -182,6 +182,31 @@ EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidator] = MappingProxyType({})
 
 
+class _InvalidJson(ValueError):
+    pass
+
+
+def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise _InvalidJson(f"duplicate key: {key}")
+        result[key] = value
+    return result
+
+
+def _reject_json_constant(value: str) -> None:
+    raise _InvalidJson(f"non-finite constant: {value}")
+
+
+def _parse_json(text: str) -> Any:
+    return json.loads(
+        text,
+        object_pairs_hook=_unique_json_object,
+        parse_constant=_reject_json_constant,
+    )
+
+
 def _error(errors: list[str], message: str) -> None:
     if message not in errors:
         errors.append(message)
@@ -192,11 +217,14 @@ def _load_json(path: Path, label: str, errors: list[str]) -> dict[str, Any]:
         if path.is_symlink():
             _error(errors, f"{label} cannot be a symlink")
             return {}
-        value = json.loads(path.read_text(encoding="utf-8"))
+        value = _parse_json(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         _error(errors, f"missing {label}")
         return {}
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except (json.JSONDecodeError, _InvalidJson):
+        _error(errors, f"cannot read {label}: invalid JSON")
+        return {}
+    except (OSError, UnicodeError) as exc:
         _error(errors, f"cannot read {label}: {exc.__class__.__name__}")
         return {}
     if not isinstance(value, dict):
@@ -428,8 +456,8 @@ def _authority_identity_valid(
                 _error(errors, f"forbidden predecessor identity in active authority: {relative}")
         if path.suffix.casefold() == ".json":
             try:
-                document = json.loads(text)
-            except json.JSONDecodeError:
+                document = _parse_json(text)
+            except (json.JSONDecodeError, _InvalidJson):
                 continue
             stack: list[Any] = [document]
             while stack:
