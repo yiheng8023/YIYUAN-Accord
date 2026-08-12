@@ -116,9 +116,10 @@ surface; the retired verifier wrapper is absent and no replacement is needed.
 It also moved CLI root resolution inside the fail-closed verifier seam, made
 cleanup and authority enumeration errors explicit, rejected ambiguous JSON and
 non-literal schema versions, and aligned invalid acceptance declarations with
-G2. The current local public seam reports 82/82 product tests passing on the
-minimum supported CPython 3.10.20 as well as the default local interpreter,
-while remaining at `0/5` outcomes and `4/4` guardrails.
+G2. At `c8dfc11`, a public HTTPS depth-one clone with no v0.1 Git object reports
+85/85 product tests passing on the minimum supported CPython 3.10.20. The
+default local interpreter reports the same current contract, while the product
+remains at `0/5` outcomes and `4/4` guardrails.
 
 The accountable product judgment now distinguishes terminal work states:
 `cancelled` means bound but never active or executed, so G1 does not count its
