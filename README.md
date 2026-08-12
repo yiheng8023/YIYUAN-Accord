@@ -17,6 +17,11 @@ The current implementation verifies that contract and its causal program.
 Task execution, behavior evaluation, and cross-host adapters remain planned
 v0.2 outcomes rather than current runtime claims.
 
+Delivery is sequenced Codex-first: Codex is the reference host for the first
+vertical slice, while the product semantics remain Agent-neutral. Stabilizing
+that reference path does not satisfy cross-host O5; a distinct second Agent
+host or runtime remains separate proof.
+
 ## Start here
 
 Prerequisites: Git and Python 3.10 or newer. The current checkout is
