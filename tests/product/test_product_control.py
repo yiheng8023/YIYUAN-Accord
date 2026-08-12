@@ -374,6 +374,31 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G2"])
         self.assertIn("duplicate acceptance criterion O1", report["errors"])
 
+    def test_criteria_reject_undeclared_self_promotion_fields(self) -> None:
+        variants = (
+            ("O1", {"accepted": True, "verified": True}),
+            ("G1", {"passed": True}),
+        )
+        for criterion_id, additions in variants:
+            with self.subTest(criterion_id=criterion_id):
+                def self_promote(value: dict) -> None:
+                    criterion = next(
+                        item for item in value["criteria"] if item["id"] == criterion_id
+                    )
+                    criterion.update(additions)
+
+                self.mutate("product/acceptance.json", self_promote)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G2"])
+                self.assertIn(
+                    f"criterion {criterion_id} fields must match the code-owned schema",
+                    report["errors"],
+                )
+                shutil.copy2(
+                    ROOT / "product/acceptance.json",
+                    self.root / "product/acceptance.json",
+                )
+
     def test_malformed_criterion_id_fails_without_traceback(self) -> None:
         def malformed(value: dict) -> None:
             value["criteria"][1]["id"] = []

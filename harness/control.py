@@ -25,6 +25,15 @@ COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
 EXPECTED_CRITERION_IDS = OUTCOME_IDS | GUARDRAIL_IDS
+CRITERION_BASE_FIELDS = {
+    "id",
+    "class",
+    "name",
+    "statement",
+    "metric",
+    "threshold",
+    "assessment",
+}
 AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
     {
         "constitution": frozenset(
@@ -775,6 +784,17 @@ def _criteria(
         assessment = item.get("assessment")
         if not isinstance(assessment, str) or assessment not in ASSESSMENTS:
             _error(errors, f"criterion {criterion_id} has invalid assessment")
+        if criterion_id in EXPECTED_CRITERION_IDS:
+            expected_fields = set(CRITERION_BASE_FIELDS)
+            if criterion_id in OUTCOME_IDS:
+                expected_fields.add("operationalization")
+                if assessment == "verified":
+                    expected_fields.add("evidence")
+            if set(item) != expected_fields:
+                _error(
+                    errors,
+                    f"criterion {criterion_id} fields must match the code-owned schema",
+                )
         if criterion_id in GUARDRAIL_IDS and assessment != "computed":
             _error(errors, f"criterion {criterion_id} must be computed")
         if criterion_id in OUTCOME_IDS and assessment == "computed":

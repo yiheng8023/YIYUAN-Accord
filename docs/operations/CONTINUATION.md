@@ -122,6 +122,11 @@ G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
 
+Criterion objects also accept only their code-owned fields. Outcomes add the
+fixed operationalization object, and only a verified outcome may add an
+evidence locator list; `accepted`, `verified`, `passed`, or other parallel state
+flags cannot self-promote a criterion while G2 remains green.
+
 RFC3339 observation and human-decision instants are compared at their complete
 declared fractional precision after timezone normalization. Sub-microsecond
 ordering cannot be hidden by truncation to Python `datetime` precision.
