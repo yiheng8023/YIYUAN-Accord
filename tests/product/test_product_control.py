@@ -820,6 +820,26 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_harness_authority_enumeration_error_fails_closed(self) -> None:
+        real_walk = os.walk
+
+        def unreadable_harness(root, *, topdown, followlinks, onerror=None):
+            if Path(root).name == "harness":
+                if onerror is not None:
+                    onerror(PermissionError("fixture access denied"))
+                return []
+            return real_walk(
+                root,
+                topdown=topdown,
+                followlinks=followlinks,
+                onerror=onerror,
+            )
+
+        with patch("harness.control.os.walk", side_effect=unreadable_harness):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("Harness authority closure cannot be enumerated", report["errors"])
+
     def test_forbidden_predecessor_identity_is_rejected_from_current_authority(self) -> None:
         predecessor = "agent" + "-skills" + "-curated"
         self.mutate(
@@ -1223,6 +1243,19 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("undeclared product authority JSON: product/extra.json", report["errors"])
+
+    def test_product_authority_enumeration_error_fails_closed(self) -> None:
+        real_scandir = os.scandir
+
+        def unreadable_product(path):
+            if Path(path).name == "product":
+                raise PermissionError("fixture access denied")
+            return real_scandir(path)
+
+        with patch("harness.control.os.scandir", side_effect=unreadable_product):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("product authority root cannot be enumerated", report["errors"])
 
     def test_parent_authority_symlink_is_rejected(self) -> None:
         product = self.root / "product"

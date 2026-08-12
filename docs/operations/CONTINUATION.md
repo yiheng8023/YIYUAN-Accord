@@ -84,6 +84,10 @@ The repository-wide cleanup scan also fails G4 when any directory cannot be
 enumerated. An inaccessible region is not accepted as evidence that residue is
 absent.
 
+The product and Harness authority surfaces likewise fail G3 when enumeration
+is incomplete. Their closed scans do not rely on `Path.glob` or `Path.rglob`,
+which may silently suppress scan errors on current Python versions.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,

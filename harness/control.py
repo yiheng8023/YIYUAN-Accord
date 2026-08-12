@@ -325,18 +325,21 @@ def _authority_files(
         required = sorted(BOOTSTRAP_REQUIRED_AUTHORITY)
     if globs is None or set(globs) != EXPECTED_AUTHORITY_GLOBS:
         _error(errors, "activeAuthorityGlobs must equal the code-owned lean authority globs")
-        globs = sorted(EXPECTED_AUTHORITY_GLOBS)
 
     found: dict[str, Path] = {}
     product_root = _inside_root(root, "product", errors, "product authority root")
-    try:
-        candidates = product_root.glob("*.json") if product_root is not None else []
-        for candidate in candidates:
-            relative = candidate.relative_to(root).as_posix()
-            if relative not in BOOTSTRAP_REQUIRED_AUTHORITY:
-                _error(errors, f"undeclared product authority JSON: {relative}")
-    except (OSError, RuntimeError, ValueError):
-        _error(errors, "product authority root cannot be enumerated")
+    if product_root is not None:
+        try:
+            with os.scandir(product_root) as entries:
+                for entry in entries:
+                    if Path(entry.name).suffix.casefold() != ".json":
+                        continue
+                    candidate = product_root / entry.name
+                    relative = candidate.relative_to(root).as_posix()
+                    if relative not in BOOTSTRAP_REQUIRED_AUTHORITY:
+                        _error(errors, f"undeclared product authority JSON: {relative}")
+        except (OSError, RuntimeError, ValueError):
+            _error(errors, "product authority root cannot be enumerated")
     for raw in required:
         relative = _relative_locator(raw)
         if relative is None:
@@ -354,55 +357,54 @@ def _authority_files(
             continue
         found[relative] = candidate
 
-    for pattern in globs:
-        relative_pattern = _relative_locator(pattern)
-        if relative_pattern is None:
-            _error(errors, f"invalid active authority glob: {pattern!r}")
-            continue
-        authority_root = _inside_root(
-            root, PurePosixPath(pattern).parts[0], errors, "active authority root"
-        )
-        if authority_root is None:
-            continue
-        try:
-            candidates = root.glob(relative_pattern)
-            for candidate in candidates:
-                try:
-                    relative = candidate.relative_to(root).as_posix()
-                except ValueError:
-                    _error(errors, f"authority glob escaped repository root: {pattern}")
-                    continue
-                parts = {part.casefold() for part in PurePosixPath(relative).parts}
-                if parts & EXCLUDED_AUTHORITY_PARTS:
-                    _error(errors, f"authority glob activated excluded path: {relative}")
-                    continue
-                checked = _inside_root(root, relative, errors, "active authority")
-                if checked is None:
-                    continue
-                try:
-                    if not checked.is_file():
-                        continue
-                    checked.resolve(strict=True).relative_to(root.resolve(strict=True))
-                except (OSError, RuntimeError, ValueError):
-                    _error(errors, f"active authority path is invalid: {relative}")
-                    continue
-                found[relative] = checked
-        except (OSError, RuntimeError, ValueError):
-            _error(errors, f"active authority glob cannot be evaluated: {pattern}")
-
     harness_root = _inside_root(root, "harness", errors, "Harness authority root")
     if harness_root is not None:
+        def record_harness_enumeration_error(error: OSError) -> None:
+            _error(errors, "Harness authority closure cannot be enumerated")
+
         try:
-            for candidate in harness_root.rglob("*"):
-                relative = candidate.relative_to(root).as_posix()
-                parts = {part.casefold() for part in PurePosixPath(relative).parts}
-                if "__pycache__" in parts:
-                    continue
-                if _link_or_reparse(candidate):
-                    _error(errors, f"undeclared Harness authority link: {relative}")
-                    continue
-                if candidate.is_file() and relative not in found:
-                    _error(errors, f"undeclared Harness authority file: {relative}")
+            for current, directories, files in os.walk(
+                harness_root,
+                topdown=True,
+                followlinks=False,
+                onerror=record_harness_enumeration_error,
+            ):
+                current_path = Path(current)
+                retained: list[str] = []
+                for name in directories:
+                    candidate = current_path / name
+                    relative = candidate.relative_to(root).as_posix()
+                    if name.casefold() == "__pycache__":
+                        continue
+                    if _link_or_reparse(candidate):
+                        _error(errors, f"undeclared Harness authority link: {relative}")
+                        continue
+                    retained.append(name)
+                directories[:] = retained
+                for name in files:
+                    candidate = current_path / name
+                    relative = candidate.relative_to(root).as_posix()
+                    if _link_or_reparse(candidate):
+                        if current_path == harness_root and candidate.suffix.casefold() == ".py":
+                            _inside_root(root, relative, errors, "active authority")
+                        else:
+                            _error(errors, f"undeclared Harness authority link: {relative}")
+                        continue
+                    if current_path != harness_root or candidate.suffix.casefold() != ".py":
+                        _error(errors, f"undeclared Harness authority file: {relative}")
+                        continue
+                    checked = _inside_root(root, relative, errors, "active authority")
+                    if checked is None:
+                        continue
+                    try:
+                        if not checked.is_file():
+                            _error(errors, f"active authority path is invalid: {relative}")
+                            continue
+                        checked.resolve(strict=True).relative_to(root.resolve(strict=True))
+                    except (OSError, RuntimeError, ValueError):
+                        _error(errors, f"active authority path is invalid: {relative}")
+                        continue
+                    found[relative] = checked
         except (OSError, RuntimeError, ValueError):
             _error(errors, "Harness authority closure cannot be enumerated")
     return sorted(found.items())
