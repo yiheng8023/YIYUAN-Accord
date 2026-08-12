@@ -1183,7 +1183,9 @@ def _verify_product(root: Path) -> dict[str, Any]:
     historical_boundary = _historical_boundary_valid(constitution, program, errors)
     capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
+    criteria_before = len(errors)
     criteria = _criteria(acceptance, errors)
+    criteria_valid = len(errors) == criteria_before
     graph_before = len(errors)
     increments, all_work, active_increment = _program_graph(program, criteria, errors)
     graph_valid = len(errors) == graph_before
@@ -1223,7 +1225,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
     states.update(evidence_states)
     states["G1"] = authority_guardrail
-    states["G2"] = evidence_valid
+    states["G2"] = criteria_valid and evidence_valid
     states["G3"] = authority_identity
     states["G4"] = process_guardrail
 

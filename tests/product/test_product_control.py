@@ -303,6 +303,7 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/acceptance.json", duplicate)
         report = self.report()
         self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G2"])
         self.assertIn("duplicate acceptance criterion O1", report["errors"])
 
     def test_malformed_criterion_id_fails_without_traceback(self) -> None:
@@ -907,6 +908,7 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/acceptance.json", add)
         report = self.report()
         self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G2"])
         self.assertIn("non-verified criterion O2 cannot bind evidence", report["errors"])
 
     def test_verified_criterion_requires_evidence(self) -> None:

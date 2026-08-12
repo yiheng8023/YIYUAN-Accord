@@ -94,6 +94,10 @@ than allowing different readers to assign different meanings. Authority and
 evidence schema versions must be the literal integer `1`; booleans cannot pass
 through Python's integer equality behavior.
 
+G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
+or self-contradictory criterion declarations cannot leave the evidence
+guardrail green merely because no evidence validator ran.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,
