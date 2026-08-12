@@ -243,6 +243,22 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn("program id must be harness-product-program-v0.2", report["errors"])
 
+    def test_coordinated_release_rename_cannot_self_promote(self) -> None:
+        def rename_program(value: dict) -> None:
+            value["release"] = "v9.9"
+            value["id"] = "harness-product-program-v9.9"
+
+        def rename_acceptance(value: dict) -> None:
+            value["release"] = "v9.9"
+            value["id"] = "harness-product-acceptance-v9.9"
+
+        self.mutate("product/program.json", rename_program)
+        self.mutate("product/acceptance.json", rename_acceptance)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("program release must be v0.2", report["errors"])
+
     def test_authority_json_rejects_duplicate_keys_and_nonfinite_constants(self) -> None:
         path = self.root / "product" / "program.json"
         baseline = path.read_text(encoding="utf-8")
@@ -492,6 +508,25 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn(
             "criterion O1 requires the exact operationalization fields",
+            report["errors"],
+        )
+
+    def test_release_criteria_semantics_cannot_self_downgrade(self) -> None:
+        def self_accept(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["threshold"] = "Agent self-declaration is sufficient."
+            criterion["operationalization"]["passRule"] = "The Agent declares success."
+            criterion["operationalization"]["falsifiers"] = ["none"]
+            criterion["operationalization"]["humanAuthority"] = (
+                "The Agent owns acceptance."
+            )
+
+        self.mutate("product/acceptance.json", self_accept)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "acceptance criteria contract identity is invalid",
             report["errors"],
         )
 

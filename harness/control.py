@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from decimal import Decimal
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
@@ -21,6 +22,7 @@ from typing import Any, Callable, Mapping
 
 PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
+CURRENT_RELEASE = "v0.2"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -106,6 +108,10 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
         "O4": (4, "same-version-scorecard-including-pass-and-fail-cases"),
         "O5": (1, "same-task-matched-cross-host-pair"),
     }
+)
+CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
+EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
+    "8d97ea709ae5c17227012412360cf42552d722b9d16d3b5cca141e29b7c64700"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -446,6 +452,35 @@ def _same_typed_value(value: Any, expected: Any) -> bool:
     return value == expected
 
 
+def _criteria_contract_digest(value: Any) -> str | None:
+    if not isinstance(value, list):
+        return None
+    by_id: dict[str, dict[str, Any]] = {}
+    for item in value:
+        if not isinstance(item, dict):
+            return None
+        criterion_id = item.get("id")
+        if not isinstance(criterion_id, str) or criterion_id in by_id:
+            return None
+        by_id[criterion_id] = item
+    if set(by_id) != EXPECTED_CRITERION_IDS:
+        return None
+    contract: list[dict[str, Any]] = []
+    for criterion_id in sorted(EXPECTED_CRITERION_IDS):
+        fields = set(CRITERION_CONTRACT_BASE_FIELDS)
+        if criterion_id in OUTCOME_IDS:
+            fields.add("operationalization")
+        item = by_id[criterion_id]
+        contract.append({field: item.get(field) for field in sorted(fields)})
+    payload = json.dumps(
+        contract,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def _relative_locator(value: Any, *, allow_evidence: bool = False) -> str | None:
     if not isinstance(value, str) or not value.strip() or "\\" in value:
         return None
@@ -743,8 +778,8 @@ def _release_identity_valid(
     if not isinstance(release, str) or RELEASE.fullmatch(release) is None:
         _error(errors, "program release must use v<major>.<minor>")
         release = "invalid"
-    expected_program_id = f"harness-product-program-{release}"
-    expected_acceptance_id = f"harness-product-acceptance-{release}"
+    expected_program_id = f"harness-product-program-{CURRENT_RELEASE}"
+    expected_acceptance_id = f"harness-product-acceptance-{CURRENT_RELEASE}"
     checks = (
         (
             type(constitution.get("schema")) is int
@@ -766,6 +801,7 @@ def _release_identity_valid(
         (constitution.get("productId") == PRODUCT_ID, "constitution productId is invalid"),
         (program.get("productId") == PRODUCT_ID, "program productId is invalid"),
         (acceptance.get("productId") == PRODUCT_ID, "acceptance productId is invalid"),
+        (release == CURRENT_RELEASE, f"program release must be {CURRENT_RELEASE}"),
         (acceptance.get("release") == release, "program and acceptance releases must match"),
         (program.get("constitution") == "product/constitution.json", "program constitution path is invalid"),
         (program.get("acceptance") == "product/acceptance.json", "program acceptance path is invalid"),
@@ -816,6 +852,11 @@ def _release_identity_valid(
         constitution.get("planningModel"), EXPECTED_PLANNING_MODEL
     ):
         _error(errors, "constitution planningModel is invalid")
+    if (
+        _criteria_contract_digest(acceptance.get("criteria"))
+        != EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
+    ):
+        _error(errors, "acceptance criteria contract identity is invalid")
     return len(errors) == before
 
 
