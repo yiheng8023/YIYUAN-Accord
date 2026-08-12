@@ -2,224 +2,69 @@
 
 Updated: 2026-08-12
 
-This is a navigation aid. Recheck live Git truth and the three product
-authority files before acting.
+This file is a navigation aid, not product authority or a history ledger.
+Recheck live Git truth and the machine contract before acting. Closed changes
+remain recoverable from Git and `docs/operations/HISTORY.md`; do not copy their
+commit-by-commit narrative back here.
 
 ## Current authority and state
+
+Read these files first:
 
 - `product/constitution.json`
 - `product/program.json`
 - `product/acceptance.json`
 
-The machine program is v0.2 and `paused`, with `no active increment` and no
-active work item. The public verifier should report:
+The current machine program is v0.2 and `paused`. Its current increment graph
+is empty. The public verifier should report:
 
-- release `v0.2`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
 - no active increment.
 
-## What closed
-
-The guardrail-only causal-authority reset was committed and pushed at
-`a5a0834`. It:
-
-- bound v0.2 to the terminal user-burden proposition;
-- froze v0.1 at `be498f9` as historical repository-control evidence;
-- replaced historical-event-specific current authority with a smaller
-  historical-event-neutral fail-closed control seam;
-- reconciled the README, North Star, research plan, architecture, acceptance,
-  program, and continuation surfaces;
-- left O1-O5 planned and false;
-- did not change CC Switch, Skills, Hooks, consumers, accounts, or capability
-  activation.
-
-The later capability-chain and asset-integrity baseline used six real Harness
-threads as counterevidence. It bound capability-added goal, input, deliverable,
-human-round-trip, authority, side-effect, and acceptance requirements as an O4
-evaluation surface; removed raw v0.1 receipts from the current tree; retired a
-duplicate goal-mode prompt and verifier wrapper; removed one-time predecessor
-byte proxies and marker-only document parity; and closed mapping and residue
-blind spots. These are evaluation and debt results, not verified O1-O5
-outcomes. No consumer, Skill, Hook, account, or capability activation changed.
-
-The outcome-operationalization baseline then closed a pre-experiment authority
-defect: O1-O5 now declare structured sample units, code-owned sample floors and
-comparison designs, pre-registration fields, required measures, pass rules,
-falsifiers, and human authority. Generic outcome evidence must identify its
-source, carry a named accountable human acceptance, report an accepted result,
-declare claim limits, and still pass a criterion-specific code-owned validator.
-This narrows evidence admission; it does not make an absent validator or absent
-natural-task receipt valid. O1-O5 remain planned and false.
-
-Process-loss accounting is also evidence-bound: an O1-O5 acceptance label no
-longer makes a work item outcome-bearing by itself, and validated evidence from
-one work item cannot be reused by another labeled work item. Only evidence bound
-to the exact increment and work item that passes the current code-owned outcome
-validator resets that item's outcome-neutral count. The earlier capability-chain
-baseline therefore maps only to the guardrails it actually satisfied, not to O4
-progress.
-
-Closed outcome-neutral increments are no longer retained as a queue or history
-ledger in the current machine program. Their exact prior states remain
-recoverable from Git. A paused program with no validated outcome binding has an
-empty current increment graph; a future completed increment remains current
-only when accepted outcome evidence needs its exact increment/work identity.
-
-The paused-baseline counterexample audit then closed the remaining directly
-reproduced self-promotion paths through `93f7429`: the current graph rejects
-speculative planned queues and invalid active/terminal state combinations;
-invalid authority or guardrails suppress all O1-O5 progress; validators must
-return literal `true`; evidence claims must be mutually bound to the exact
-criterion, completed work item, containing increment, unique identity, and
-valid observation/decision chronology; conventional residue files and
-undeclared nested Harness code fail closed; and cancelled or stopped
-increments cannot retain validated outcome bindings. At that revision the
-local public seam reports 74/74 product tests passing, `0/5` outcomes, and
-`4/4` guardrails. These mechanism repairs count as zero O1-O5 progress and did
-not activate a capability or consumer.
-
-The repository-wide cleanup scan also fails G4 when any directory cannot be
-enumerated. An inaccessible region is not accepted as evidence that residue is
-absent.
-
-The product and Harness authority surfaces likewise fail G3 when enumeration
-is incomplete. Their closed scans do not rely on `Path.glob` or `Path.rglob`,
-which may silently suppress scan errors on current Python versions.
-
-Current authority and evidence JSON is parsed strictly. Duplicate object keys
-and non-finite constants (`NaN`, `Infinity`, or `-Infinity`) fail closed rather
-than allowing different readers to assign different meanings. Authority and
-evidence schema versions must be the literal integer `1`; booleans cannot pass
-through Python's integer equality behavior.
-
-The same literal-type rule applies to the constitution's one-active-increment
-and one-active-work-item limits. JSON booleans cannot impersonate those numeric
-control values.
-
-Code-owned nested policy constants are also compared with type as well as
-value. Integer `0/1` cannot impersonate boolean authority, history, or paused
-progression semantics.
-
-The collaboration burden split is likewise exact. A capability route cannot
-add Skill selection or workflow orchestration to the user's contributions, or
-make an external methodology a mandatory Agent obligation, merely by editing
-the current constitution while G3 remains green.
-
-The fixed invariants and bootstrap guards are also code-owned. Replacing either
-with a different non-empty list cannot make tests, artifacts, or self-declared
-evidence authoritative while G3 remains green. `adaptiveSurfaces` stays
-adaptable instead of being frozen into the verifier.
-
-The planning model is one exact code-owned object. Its causal prerequisites and
-replanning triggers cannot be replaced by non-empty no-op lists, and an
-undeclared mandatory workflow cannot enter the constitution while G3 remains
-green. Adaptive increments remain adaptive inside that small fixed boundary.
-
-The constitution, program, and acceptance documents also reject undeclared
-top-level fields. A field that merely spells a completion, outcome, or current
-authority claim cannot coexist with a green verifier outside the code-owned
-document schema; task-specific increment, work, and evidence validation remain
-separate bounded surfaces.
-
-The program authority boundary likewise accepts only its code-owned `userOwns`
-and `agentOwnsWithinBoundedAuthority` fields. A differently named permission
-flag cannot piggyback on the current machine contract while G1 remains green.
-Their current value sets are exact too: a route cannot assign Skill or workflow
-selection to the user, or silently remove an Agent-owned operation such as
-`git-push`, while G1 remains green.
-
-The retained v0.1 milestone metadata and claim limit are exact code-owned
-values. Coordinated edits to the program and constitution cannot fabricate a
-different historical release, state, revision, or broader claim while G3 stays
-green. This identity check does not require a shallow clone to contain the old
-Git object.
-
-G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
-or self-contradictory criterion declarations cannot leave the evidence
-guardrail green merely because no evidence validator ran.
-
-Criterion objects also accept only their code-owned fields. Outcomes add the
-fixed operationalization object, and only a verified outcome may add an
-evidence locator list; `accepted`, `verified`, `passed`, or other parallel state
-flags cannot self-promote a criterion while G2 remains green.
-
-RFC3339 observation and human-decision instants are compared at their complete
-declared fractional precision after timezone normalization. Sub-microsecond
-ordering cannot be hidden by truncation to Python `datetime` precision.
-
-The subsequent public-entry audit confirmed that a depth-one shallow clone
-without the pinned v0.1 Git object still passes the current verifier and test
-surface; the retired verifier wrapper is absent and no replacement is needed.
-It also moved CLI root resolution inside the fail-closed verifier seam, made
-cleanup and authority enumeration errors explicit, rejected ambiguous JSON and
-non-literal schema versions, and aligned invalid acceptance declarations with
-G2. At `c8dfc11`, a public HTTPS depth-one clone with no v0.1 Git object reports
-85/85 product tests passing on the minimum supported CPython 3.10.20. The
-default local interpreter reports the same current contract, while the product
-remains at `0/5` outcomes and `4/4` guardrails.
-
-The accountable product judgment now distinguishes terminal work states:
-`cancelled` means bound but never active or executed, so G1 does not count its
-declared operations as attempted authority while G4 counts one outcome-neutral
-planning loss. `stopped` means previously active or attempted and then stopped,
-so both G1 authority checks and G4 process-loss accounting apply.
-
-Current increment, work-item, process-loss, and cleanup-boundary objects use
-closed code-owned field sets. A capability route cannot attach an undeclared
-mandatory workflow, user tool-selection round trip, or user cleanup obligation
-to the live causal graph while G4 remains green; task content within the
-declared fields remains adaptive.
+If live Git or the verifier disagrees, investigate that evidence instead of
+repairing this document first.
 
 ## Why the program is paused
 
-The next positive outcome-bearing increment requires a natural,
-non-diagnostic real task. No such task is invented by the repository or
-requested from the user merely to keep the program active, and the next
-dogfood/A-B increment is not automatically active merely because the reset
-closed.
+O1-O5 require natural, non-diagnostic real-task evidence. The repository does
+not invent such a task or ask the user to manufacture one merely to keep the
+program active. The current release also has no code-owned outcome evidence
+validator, so an outcome-bearing increment has no valid entry path yet.
 
-The pause is not a whole-program stop. The Agent may continue bounded
-retrospective counterexample analysis, portfolio curation, mechanism-only
-validation, and authority-defect repair without claiming O1-O5 progress.
-Historical evidence in Git is inactive as product or acceptance authority, but
-remains valid counterevidence and replanning input. Do not replay the old O3
-lifecycle attempts or restore their validators as current code.
+The pause does not block bounded retrospective counterexample analysis,
+mechanism-only validation, authority-defect repair, or task-independent
+portfolio curation. Such work must start from an observed problem, have a
+finite stop, remain inside existing authority, and count as zero O1-O5
+progress.
 
-## Next causal slice
+## Outcome-entry boundary
 
-When a natural task is bound, open exactly one outcome-bearing increment. For
-that same task, instantiate only the task-specific values required by the
-existing operationalization contract: event taxonomy, applicable baseline
-matching, scenario/complexity/risk band, accountable acceptance fields, task
-floors, claim boundary, process-loss stop, and exact cleanup paths. Then run one
-vertical Codex reference-host O1 falsification slice.
+When a natural task is actually bound, do not open an outcome increment until
+the current release has the necessary code-owned validation path. Then open
+exactly one causal increment with at most one active work item and use the
+existing acceptance operationalization rather than creating a parallel
+workflow.
 
-The user supplies the goal, domain facts, bounded authority, corrections, and
-accountable final judgment—not Skill names, tool selection, setup, recovery,
-verification commands, cleanup commands, or push instructions. Compare only
-decision-relevant routes; do not run a full Cartesian experiment.
+The user supplies the goal, domain facts, bounded authorization, corrections,
+and accountable final judgment. The Agent owns route learning and selection,
+bounded execution, recovery, verification, cleanup, and progress accounting.
+Do not transfer Skill names, tool selection, setup, invocation, verification
+commands, cleanup commands, or push orchestration to the user.
 
-Record task outcome, material user tool-orchestration interventions, repeated
-fact/authority requests, reopened settled decisions, unrequested artifacts,
-capability-added requirements, route changes, failure and recovery, time/call
-cost, claim limits, and residue. A repeated process-loss class stops the slice.
-Capability addition is allowed when a reproducible residual gap survives
-comparison; subtraction is not a veto.
-
-Do not reopen a settled handoff decision without new counterevidence. Treat
-`AGENTS.md` as execution guidance, Skills and Hooks as advisory inputs,
-self-authored Skills as replaceable host projections, and the peripheral
-ecosystem as replaceable capability input. None may create product direction,
-causal work, authority, evidence promotion, acceptance, or release state.
+Compare only decision-relevant routes. A capability may be added only after a
+reproducible residual gap and its exact authority, trust, data, cost,
+side-effect, rollback, and acceptance boundaries are known. Installed or
+visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer projections
+cannot create work or promote evidence.
 
 ## Paused boundary
 
-With no active increment, do not run A/B tasks, mutate CC Switch or a consumer,
-install or enable capabilities, connect accounts, execute a third-party
-candidate, activate a Hook, incur new cost, publish, release, deploy, or open a
-new trust/data boundary.
+Without a bound task and its required authority, do not run outcome A/B work,
+mutate CC Switch or another consumer, install or enable capabilities, connect
+accounts, execute a third-party candidate, activate a Hook, incur cost,
+publish, release, deploy, or open a new trust or data boundary.
 
 ## First checks
 
