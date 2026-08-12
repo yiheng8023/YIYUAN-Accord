@@ -826,7 +826,10 @@ def _authority_guardrail(
 
 
 def _process_loss_guardrail(
-    root: Path, increments: list[dict[str, Any]], errors: list[str]
+    root: Path,
+    increments: list[dict[str, Any]],
+    validated_work_outcomes: Mapping[str, set[str]],
+    errors: list[str],
 ) -> bool:
     before = len(errors)
     previous_correction_class: str | None = None
@@ -852,7 +855,7 @@ def _process_loss_guardrail(
             _error(errors, "same-class user correction budget must stop before recurrence")
         neutral_budget = budget.get("maxConsecutiveOutcomeNeutralWorkItems")
         if neutral_budget not in {0, 1}:
-            _error(errors, "guardrail-only work budget must be zero or one")
+            _error(errors, "outcome-neutral work budget must be zero or one")
         for field in ("stopOnAuthorityOrIrreversibleIncident", "stopOnUnboundedResidue"):
             if budget.get(field) is not True:
                 _error(errors, f"process-loss budget {field} must be true")
@@ -869,13 +872,15 @@ def _process_loss_guardrail(
             if work_state in {"planned", "cancelled"}:
                 continue
             mapped = _string_list(work.get("acceptanceIds")) or []
-            if set(mapped) & OUTCOME_IDS:
+            mapped_outcomes = set(mapped) & OUTCOME_IDS
+            work_outcomes = validated_work_outcomes.get(work.get("id"), set())
+            if mapped_outcomes & work_outcomes:
                 current_neutral = 0
             else:
                 current_neutral += 1
                 max_neutral = max(max_neutral, current_neutral)
         if isinstance(neutral_budget, int) and max_neutral > neutral_budget:
-            _error(errors, f"increment {increment_id} exceeds its guardrail-only work budget")
+            _error(errors, f"increment {increment_id} exceeds its outcome-neutral work budget")
         correction_class = increment.get("correctionClass")
         if (
             isinstance(correction_class, str)
@@ -936,9 +941,11 @@ def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
 def _evidence_states(
     root: Path,
     criteria: dict[str, dict[str, Any]],
+    work_bindings: Mapping[str, tuple[str, set[str], str]],
     errors: list[str],
-) -> tuple[dict[str, bool], bool]:
+) -> tuple[dict[str, bool], bool, dict[str, set[str]]]:
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
+    validated_work_outcomes: dict[str, set[str]] = {}
     before = len(errors)
     for criterion_id in sorted(OUTCOME_IDS):
         criterion = criteria.get(criterion_id, {})
@@ -946,6 +953,7 @@ def _evidence_states(
             continue
         locators = _string_list(criterion.get("evidence")) or []
         valid = bool(locators)
+        criterion_work_ids: set[str] = set()
         for raw in locators:
             relative = _relative_locator(raw, allow_evidence=True)
             evidence_path = PurePosixPath(relative) if relative is not None else None
@@ -968,12 +976,21 @@ def _evidence_states(
             source = document.get("source")
             authority = document.get("authority")
             result = document.get("result")
+            increment_id = document.get("incrementId")
+            work_id = document.get("workItemId")
+            work_binding = work_bindings.get(work_id) if _nonempty_text(work_id) else None
             shape_valid = (
                 document.get("schema") == 1
                 and _nonempty_text(document.get("id"))
                 and criterion_ids is not None
                 and criterion_id in criterion_ids
                 and _rfc3339(document.get("observedAt"))
+                and _nonempty_text(increment_id)
+                and _nonempty_text(work_id)
+                and work_binding is not None
+                and work_binding[0] == increment_id
+                and criterion_id in work_binding[1]
+                and work_binding[2] == "completed"
                 and isinstance(source, dict)
                 and all(
                     _nonempty_text(source.get(field))
@@ -1003,11 +1020,16 @@ def _evidence_states(
             try:
                 if not evidence_validator(document, criterion_id, root, errors):
                     valid = False
+                else:
+                    criterion_work_ids.add(work_id)
             except Exception as exc:  # fail closed at the public verifier seam
                 _error(errors, f"criterion {criterion_id} evidence validator failed closed: {exc.__class__.__name__}")
                 valid = False
         states[criterion_id] = valid
-    return states, len(errors) == before
+        if valid:
+            for work_id in criterion_work_ids:
+                validated_work_outcomes.setdefault(work_id, set()).add(criterion_id)
+    return states, len(errors) == before, validated_work_outcomes
 
 
 def _verify_product(root: Path) -> dict[str, Any]:
@@ -1041,9 +1063,25 @@ def _verify_product(root: Path) -> dict[str, Any]:
         and progression_policy
         and len(errors) == authority_before
     )
-    evidence_states, evidence_valid = _evidence_states(root, criteria, errors)
+    work_bindings: dict[str, tuple[str, set[str], str]] = {}
+    for increment in increments:
+        increment_id = increment.get("id")
+        work_items = increment.get("workItems")
+        if not isinstance(increment_id, str) or not isinstance(work_items, list):
+            continue
+        for work in work_items:
+            if not isinstance(work, dict) or not isinstance(work.get("id"), str):
+                continue
+            mapped = _string_list(work.get("acceptanceIds")) or []
+            work_state = work.get("state") if isinstance(work.get("state"), str) else ""
+            work_bindings[work["id"]] = (increment_id, set(mapped), work_state)
+    evidence_states, evidence_valid, validated_work_outcomes = _evidence_states(
+        root, criteria, work_bindings, errors
+    )
     authority_guardrail = _authority_guardrail(program, all_work, errors)
-    process_guardrail = _process_loss_guardrail(root, increments, errors)
+    process_guardrail = _process_loss_guardrail(
+        root, increments, validated_work_outcomes, errors
+    )
 
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
     states.update(evidence_states)

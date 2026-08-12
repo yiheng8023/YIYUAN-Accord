@@ -9,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -79,6 +80,8 @@ class ProductControlTests(unittest.TestCase):
             "id": "typed-o2",
             "criterionIds": ["O2"] if criterion_ids is None else criterion_ids,
             "observedAt": "2026-08-12T03:00:00+08:00",
+            "incrementId": "increment.v0.2-outcome-progress-evidence-binding",
+            "workItemId": "work.bind-outcome-progress-to-validated-evidence",
             "source": {
                 "kind": "repository-task-receipt",
                 "locator": "task-receipt-001",
@@ -94,6 +97,14 @@ class ProductControlTests(unittest.TestCase):
             "claimLimits": ["fixture only"],
             "validator": {"kind": validator_kind, "version": 1},
         }
+
+    def map_outcome_to_latest_work(self, criterion_id: str) -> None:
+        def add_mapping(value: dict) -> None:
+            increment = value["increments"][-1]
+            increment["acceptanceIds"].append(criterion_id)
+            increment["workItems"][0]["acceptanceIds"].append(criterion_id)
+
+        self.mutate("product/program.json", add_mapping)
 
     def activate_program(self, program: dict) -> dict:
         increment = program["increments"][-1]
@@ -302,7 +313,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-operationalization-baseline has more than one active work item",
+            "increment increment.v0.2-outcome-progress-evidence-binding has more than one active work item",
             report["errors"],
         )
 
@@ -314,7 +325,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-operationalization-baseline requires a correctionClass",
+            "increment increment.v0.2-outcome-progress-evidence-binding requires a correctionClass",
             report["errors"],
         )
 
@@ -327,9 +338,9 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.operationalize-outcome-evidence-boundary "
+            "work item work.bind-outcome-progress-to-validated-evidence "
             "acceptanceIds exceed increment "
-            "increment.v0.2-outcome-operationalization-baseline",
+            "increment.v0.2-outcome-progress-evidence-binding",
             report["errors"],
         )
 
@@ -349,7 +360,7 @@ class ProductControlTests(unittest.TestCase):
         report = json.loads(completed.stdout)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.operationalize-outcome-evidence-boundary has invalid state",
+            "work item work.bind-outcome-progress-to-validated-evidence has invalid state",
             report["errors"],
         )
 
@@ -361,7 +372,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "work item work.operationalize-outcome-evidence-boundary exceeds agent authority",
+            "work item work.bind-outcome-progress-to-validated-evidence exceeds agent authority",
             report["errors"],
         )
 
@@ -393,7 +404,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.v0.2-outcome-operationalization-baseline requires the exact process-loss budget fields",
+            "increment increment.v0.2-outcome-progress-evidence-binding requires the exact process-loss budget fields",
             report["errors"],
         )
 
@@ -423,11 +434,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
             "adjacent increments repeat correctionClass: "
-            "outcome-acceptance-operability-and-evidence-admission",
+            "outcome-progress-label-arbitrage",
             report["errors"],
         )
 
-    def test_guardrail_only_work_budget_cannot_exceed_one(self) -> None:
+    def test_outcome_neutral_work_budget_cannot_exceed_one(self) -> None:
         def loosen(value: dict) -> None:
             self.activate_program(value)["processLossBudget"][
                 "maxConsecutiveOutcomeNeutralWorkItems"
@@ -436,7 +447,66 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/program.json", loosen)
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
-        self.assertIn("guardrail-only work budget must be zero or one", report["errors"])
+        self.assertIn("outcome-neutral work budget must be zero or one", report["errors"])
+
+    def test_outcome_label_without_validated_evidence_cannot_reset_neutral_count(self) -> None:
+        def label_arbitrage(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            first = increment["workItems"][0]
+            first["acceptanceIds"].append("O1")
+            first["state"] = "completed"
+            second = deepcopy(first)
+            second["id"] = "work.second-labeled-neutral-item"
+            second["state"] = "active"
+            increment["workItems"].append(second)
+
+        self.mutate("product/program.json", label_arbitrage)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "increment increment.v0.2-outcome-progress-evidence-binding exceeds its outcome-neutral work budget",
+            report["errors"],
+        )
+
+    def test_validated_outcome_evidence_cannot_reset_another_labeled_work(self) -> None:
+        def reuse_evidence(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            first = increment["workItems"][0]
+            first["acceptanceIds"].append("O1")
+            first["state"] = "completed"
+            second = deepcopy(first)
+            second["id"] = "work.second-labeled-item"
+            third = deepcopy(first)
+            third["id"] = "work.third-labeled-item"
+            third["state"] = "active"
+            increment["workItems"].extend([second, third])
+
+        self.mutate("product/program.json", reuse_evidence)
+        evidence = self.evidence_document(criterion_ids=["O1"])
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {"test-validator": validator},
+        ):
+            report = self.report()
+        self.assertTrue(report["criterionStates"]["O1"], report["errors"])
+        self.assertTrue(report["criterionStates"]["G2"], report["errors"])
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.v0.2-outcome-progress-evidence-binding exceeds its outcome-neutral work budget",
+            report["errors"],
+        )
 
     def test_declared_repository_residue_fails_closed(self) -> None:
         residue = self.root / ".tmp"
@@ -573,6 +643,7 @@ class ProductControlTests(unittest.TestCase):
             criterion["evidence"] = ["product/evidence/self.json"]
 
         self.mutate("product/acceptance.json", promote)
+        self.map_outcome_to_latest_work("O2")
         report = self.report()
         self.assertFalse(report["criterionStates"]["O2"])
         self.assertFalse(report["criterionStates"]["G2"])
@@ -582,7 +653,12 @@ class ProductControlTests(unittest.TestCase):
         )
 
     def test_weak_generic_evidence_identity_authority_or_result_fails_closed(self) -> None:
+        self.map_outcome_to_latest_work("O2")
         mutations = {
+            "missing work binding": lambda value: value.pop("workItemId"),
+            "wrong increment binding": lambda value: value.__setitem__(
+                "incrementId", "increment.other"
+            ),
             "missing source locator": lambda value: value["source"].pop("locator"),
             "unnamed authority kind": lambda value: value["authority"].__setitem__(
                 "kind", "user"
@@ -734,7 +810,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-outcome-operationalization-baseline must contain at least one work item",
+            "increment increment.v0.2-outcome-progress-evidence-binding must contain at least one work item",
             report["errors"],
         )
 
@@ -748,7 +824,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program agent authority contains an unknown operation", report["errors"])
         self.assertIn(
-            "work item work.operationalize-outcome-evidence-boundary contains an unknown operation",
+            "work item work.bind-outcome-progress-to-validated-evidence contains an unknown operation",
             report["errors"],
         )
 
@@ -845,6 +921,7 @@ class ProductControlTests(unittest.TestCase):
         )
 
     def test_evidence_criterion_ids_must_be_a_unique_string_list(self) -> None:
+        self.map_outcome_to_latest_work("O2")
         for malformed in (123, {"O2": True}, "O2", ["O2", "O2"]):
             with self.subTest(malformed=malformed):
                 evidence = self.evidence_document(criterion_ids=malformed)

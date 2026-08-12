@@ -53,6 +53,14 @@ declare claim limits, and still pass a criterion-specific code-owned validator.
 This narrows evidence admission; it does not make an absent validator or absent
 natural-task receipt valid. O1-O5 remain planned and false.
 
+Process-loss accounting is also evidence-bound: an O1-O5 acceptance label no
+longer makes a work item outcome-bearing by itself, and validated evidence from
+one work item cannot be reused by another labeled work item. Only evidence bound
+to the exact increment and work item that passes the current code-owned outcome
+validator resets that item's outcome-neutral count. The earlier capability-chain
+baseline therefore maps only to the guardrails it actually satisfied, not to O4
+progress.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,

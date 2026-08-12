@@ -118,10 +118,10 @@
       "hypothesis": "Making capability-added requirements an explicit O4 evaluation surface, retiring duplicate and inactive current-tree assets, deriving historical boundaries from the current contract rather than hard-coded predecessor events, enforcing work-to-increment acceptance containment, and detecting conventional residue repository-wide will establish a smaller truthful baseline without claiming runtime behavior or O1-O5 acceptance.",
       "falsifier": "The verifier still accepts a work acceptance ID outside its increment, depends on a historical Git object or byte-ratio proxy, reports valid with an undeclared repository __pycache__ or .tmp directory, treats document markers as semantic parity, or the current tree retains the retired prompt, wrapper, or raw historical receipt corpus; any O1-O5 criterion becomes verified from this repair alone.",
       "stopCondition": "The current tree retains one continuation surface and one public verifier entry point; v0.1 receipts are recoverable from Git but absent from current product/evidence; route-delta evaluation fields are bound in current authority; SECURITY names v0.2; work mappings are contained by increment mappings; conventional repository residue fails closed; no active increment remains; O1-O5 stay planned and false; deterministic verification passes; exact cleanup targets are absent; the change is committed and pushed.",
-      "acceptanceIds": ["O4", "G2", "G3", "G4"],
+      "acceptanceIds": ["G2", "G3", "G4"],
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 0,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
         "maxMaterialUserToolOrchestrationInterventions": 0,
         "stopOnAuthorityOrIrreversibleIncident": true,
         "stopOnUnboundedResidue": true
@@ -141,7 +141,7 @@
         {
           "id": "work.audit-capability-chain-and-reset-current-assets",
           "state": "completed",
-          "acceptanceIds": ["O4", "G2", "G3", "G4"],
+          "acceptanceIds": ["G2", "G3", "G4"],
           "operationIds": [
             "repository-read",
             "repository-edit",
@@ -204,6 +204,51 @@
             "O1-O5 structured operationalization contracts",
             "code-owned sample, comparison, and generic evidence admission gates",
             "focused fail-closed mutation tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2-outcome-progress-evidence-binding",
+      "state": "completed",
+      "correctionClass": "outcome-progress-label-arbitrage",
+      "observedProblem": "The process-loss guard treated any work acceptanceIds entry containing O1-O5 as outcome-bearing, so governance work could reset its outcome-neutral count by attaching an outcome label even when no outcome evidence existed or passed a code-owned validator; the completed capability-chain baseline carried exactly such an O4 label while truthfully claiming zero O progress.",
+      "hypothesis": "Classifying work as outcome-bearing only when a mapped outcome has passed the current code-owned evidence seam with evidence bound to that exact increment and work item, and removing the unsupported historical O4 mapping, will make process-loss accounting depend on accepted causal evidence rather than self-declared or reusable labels.",
+      "falsifier": "Two outcome-neutral work items with O labels fit inside a one-item neutral budget; a mapped planned, malformed, unsupported, or rejected outcome resets the neutral count; validated evidence from one work item resets another work item carrying the same O label; the capability-chain baseline retains its unsupported O4 mapping; any current O1-O5 state becomes true; or the repair adds a task, current evidence payload, report, capability mutation, or behavior claim.",
+      "stopCondition": "Outcome labels alone and evidence from another work item cannot reset the process-loss neutral count; only a mapped outcome with validator-accepted evidence bound to the exact increment and work item can do so; the unsupported historical O4 mapping is absent; current O1-O5 remain planned and false; G1-G4 pass; no active increment or residue remains; focused and product verification pass; the change is committed and pushed.",
+      "acceptanceIds": ["G4"],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserToolOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.bind-outcome-progress-to-validated-evidence",
+          "state": "completed",
+          "acceptanceIds": ["G4"],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "evidence-bound outcome-neutral process-loss accounting",
+            "truthful capability-chain baseline acceptance mapping",
+            "focused outcome-label arbitrage regression test"
           ]
         }
       ]
