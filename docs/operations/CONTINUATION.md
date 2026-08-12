@@ -102,6 +102,12 @@ Code-owned nested policy constants are also compared with type as well as
 value. Integer `0/1` cannot impersonate boolean authority, history, or paused
 progression semantics.
 
+The constitution, program, and acceptance documents also reject undeclared
+top-level fields. A field that merely spells a completion, outcome, or current
+authority claim cannot coexist with a green verifier outside the code-owned
+document schema; task-specific increment, work, and evidence validation remain
+separate bounded surfaces.
+
 G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.

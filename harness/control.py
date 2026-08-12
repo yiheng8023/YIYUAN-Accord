@@ -25,6 +25,60 @@ COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
 EXPECTED_CRITERION_IDS = OUTCOME_IDS | GUARDRAIL_IDS
+AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
+    {
+        "constitution": frozenset(
+            {
+                "schema",
+                "id",
+                "productId",
+                "purpose",
+                "successDefinition",
+                "collaborationModel",
+                "capabilityInfluenceBoundary",
+                "fixedInvariants",
+                "adaptiveSurfaces",
+                "planningModel",
+                "requiredAuthorityFiles",
+                "activeAuthorityGlobs",
+                "supportingDocuments",
+                "historicalMilestones",
+                "bootstrapGuards",
+                "historicalEvidenceBoundary",
+            }
+        ),
+        "program": frozenset(
+            {
+                "schema",
+                "id",
+                "productId",
+                "release",
+                "purpose",
+                "constitution",
+                "acceptance",
+                "status",
+                "activeIncrementId",
+                "progressionPolicy",
+                "priorRelease",
+                "authorityBoundary",
+                "completionExpression",
+                "increments",
+            }
+        ),
+        "acceptance": frozenset(
+            {
+                "schema",
+                "id",
+                "productId",
+                "release",
+                "program",
+                "completionExpression",
+                "progressRule",
+                "criteria",
+            }
+        ),
+    }
+)
 OUTCOME_OPERATIONALIZATION_FIELDS = {
     "sampleUnit",
     "minimumSampleCount",
@@ -582,6 +636,16 @@ def _release_identity_valid(
     errors: list[str],
 ) -> bool:
     before = len(errors)
+    for label, document in (
+        ("constitution", constitution),
+        ("program", program),
+        ("acceptance", acceptance),
+    ):
+        if set(document) != AUTHORITY_TOP_LEVEL_FIELDS[label]:
+            _error(
+                errors,
+                f"{label} top-level fields must match the code-owned schema",
+            )
     release = program.get("release")
     if not isinstance(release, str) or RELEASE.fullmatch(release) is None:
         _error(errors, "program release must use v<major>.<minor>")

@@ -278,6 +278,28 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIn(f"{label} schema must be integer 1", report["errors"])
                 shutil.copy2(ROOT / relative, self.root / relative)
 
+    def test_authority_documents_reject_undeclared_top_level_fields(self) -> None:
+        variants = (
+            (
+                "product/constitution.json",
+                "currentAuthorityOverride",
+                True,
+                "constitution",
+            ),
+            ("product/program.json", "completionState", "accepted", "program"),
+            ("product/acceptance.json", "accepted", True, "acceptance"),
+        )
+        for relative, field, value, label in variants:
+            with self.subTest(relative=relative, field=field):
+                self.mutate(relative, lambda document: document.__setitem__(field, value))
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn(
+                    f"{label} top-level fields must match the code-owned schema",
+                    report["errors"],
+                )
+                shutil.copy2(ROOT / relative, self.root / relative)
+
     def test_planning_active_limits_must_be_literal_integer_one(self) -> None:
         def boolean_limits(value: dict) -> None:
             value["planningModel"]["maxActiveIncrements"] = True
