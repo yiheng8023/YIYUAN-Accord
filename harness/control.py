@@ -766,6 +766,8 @@ def _program_graph(
             all_work.append(work)
         if active_work_count > 1:
             _error(errors, f"increment {increment_id} has more than one active work item")
+        if increment_state == "active" and active_work_count != 1:
+            _error(errors, f"active increment {increment_id} must have exactly one active work item")
         if increment_state in TERMINAL_STATES and any(
             not isinstance(work.get("state"), str)
             or work.get("state") not in TERMINAL_STATES
@@ -819,7 +821,11 @@ def _authority_guardrail(
         _error(errors, "agent authority overlaps a human-only authority")
     for work in all_work:
         work_state = work.get("state")
-        if not isinstance(work_state, str) or work_state not in {"active", "completed"}:
+        if not isinstance(work_state, str) or work_state not in {
+            "active",
+            "completed",
+            "stopped",
+        }:
             continue
         operations = _string_list(work.get("operationIds")) or []
         if set(operations) - set(OPERATION_EFFECTS):

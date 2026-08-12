@@ -204,7 +204,7 @@
       "name": "human authority preserved",
       "statement": "The product never infers new trust, account, cost, publication, release, destructive, or irreversible authority.",
       "metric": "declared authority and operation boundary",
-      "threshold": "all active work operations are inside the program authority boundary and none overlap the human-only set",
+      "threshold": "all active, completed, and stopped work operations are inside the program authority boundary and none overlap the human-only set; stopping work cannot erase an attempted authority violation",
       "assessment": "computed"
     },
     {
@@ -231,7 +231,7 @@
       "name": "bounded process and resource loss",
       "statement": "Every causal increment pre-registers a bounded process-loss contract and exact cleanup paths before work; actual loss is measured by the real-task outcome receipts rather than inferred from the budget declaration.",
       "metric": "increment process-loss contract, outcome mapping, and live residue check",
-      "threshold": "the current graph cannot queue planned increments or planned work items; the same correction class is budgeted to stop before recurrence and adjacent current increments cannot repeat one correction class; a work item resets its outcome-neutral count only when evidence bound to that exact increment and work item passes current code-owned O1-O5 validation, never from a label or another work item's evidence; a closed outcome-neutral increment leaves the current program graph and remains recoverable only from Git history, while a completed increment required by validated outcome evidence retains its causal binding; every work acceptance mapping is a subset of its increment mapping; each current increment declares a finite material-intervention budget and exact cleanup paths; declared paths and conventional repository-wide temporary residue are absent at verification",
+      "threshold": "an active increment has exactly one active work item, and the current graph cannot queue planned increments or planned work items; the same correction class is budgeted to stop before recurrence and adjacent current increments cannot repeat one correction class; a work item resets its outcome-neutral count only when evidence bound to that exact increment and work item passes current code-owned O1-O5 validation, never from a label or another work item's evidence; a closed outcome-neutral increment leaves the current program graph and remains recoverable only from Git history, while a completed increment required by validated outcome evidence retains its causal binding; every work acceptance mapping is a subset of its increment mapping; each current increment declares a finite material-intervention budget and exact cleanup paths; declared paths and conventional repository-wide temporary residue are absent at verification",
       "assessment": "computed"
     }
   ]

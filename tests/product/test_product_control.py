@@ -393,6 +393,19 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_active_increment_requires_exactly_one_active_work_item(self) -> None:
+        def stall(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["workItems"][0]["state"] = "stopped"
+
+        self.mutate("product/program.json", stall)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "active increment increment.fixture-current must have exactly one active work item",
+            report["errors"],
+        )
+
     def test_increment_requires_a_correction_class(self) -> None:
         def remove(value: dict) -> None:
             self.activate_program(value).pop("correctionClass")
@@ -445,6 +458,20 @@ class ProductControlTests(unittest.TestCase):
             self.activate_program(value)["workItems"][0]["operationIds"].append("release")
 
         self.mutate("product/program.json", exceed)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "work item work.fixture-current exceeds agent authority",
+            report["errors"],
+        )
+
+    def test_stopped_work_cannot_hide_an_authority_violation(self) -> None:
+        def hide(value: dict) -> None:
+            work = self.activate_program(value)["workItems"][0]
+            work["state"] = "stopped"
+            work["operationIds"].append("release")
+
+        self.mutate("product/program.json", hide)
         report = self.report()
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
