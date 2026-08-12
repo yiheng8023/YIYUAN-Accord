@@ -561,6 +561,20 @@ def _release_identity_valid(
     expected_program_id = f"harness-product-program-{release}"
     expected_acceptance_id = f"harness-product-acceptance-{release}"
     checks = (
+        (
+            type(constitution.get("schema")) is int
+            and constitution.get("schema") == 1,
+            "constitution schema must be integer 1",
+        ),
+        (
+            type(program.get("schema")) is int and program.get("schema") == 1,
+            "program schema must be integer 1",
+        ),
+        (
+            type(acceptance.get("schema")) is int
+            and acceptance.get("schema") == 1,
+            "acceptance schema must be integer 1",
+        ),
         (constitution.get("id") == CONSTITUTION_ID, f"constitution id must be {CONSTITUTION_ID}"),
         (program.get("id") == expected_program_id, f"program id must be {expected_program_id}"),
         (acceptance.get("id") == expected_acceptance_id, f"acceptance id must be {expected_acceptance_id}"),
@@ -1084,7 +1098,8 @@ def _evidence_states(
             elif _nonempty_text(evidence_id):
                 evidence_id_locators[evidence_id] = relative
             shape_valid = (
-                document.get("schema") == 1
+                type(document.get("schema")) is int
+                and document.get("schema") == 1
                 and _nonempty_text(evidence_id)
                 and (prior_locator is None or prior_locator == relative)
                 and criterion_ids is not None
@@ -1164,7 +1179,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
         root, "product/acceptance.json", "product acceptance", errors
     )
 
-    _release_identity_valid(constitution, program, acceptance, errors)
+    release_identity = _release_identity_valid(constitution, program, acceptance, errors)
     historical_boundary = _historical_boundary_valid(constitution, program, errors)
     capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
@@ -1178,6 +1193,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     authority_identity = _authority_identity_valid(authority_files, errors)
     authority_identity = (
         authority_identity
+        and release_identity
         and historical_boundary
         and capability_influence
         and supporting_documents

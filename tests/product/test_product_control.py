@@ -265,6 +265,19 @@ class ProductControlTests(unittest.TestCase):
                 self.assertFalse(report["valid"])
                 self.assertIn("cannot read product program: invalid JSON", report["errors"])
 
+    def test_authority_schema_must_be_literal_integer_one(self) -> None:
+        for relative, label in (
+            ("product/constitution.json", "constitution"),
+            ("product/program.json", "program"),
+            ("product/acceptance.json", "acceptance"),
+        ):
+            with self.subTest(relative=relative):
+                self.mutate(relative, lambda value: value.__setitem__("schema", True))
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn(f"{label} schema must be integer 1", report["errors"])
+                shutil.copy2(ROOT / relative, self.root / relative)
+
     def test_acceptance_release_must_match_program(self) -> None:
         self.mutate(
             "product/acceptance.json",
@@ -930,6 +943,7 @@ class ProductControlTests(unittest.TestCase):
     def test_weak_generic_evidence_identity_authority_or_result_fails_closed(self) -> None:
         self.map_outcome_to_latest_work("O2")
         mutations = {
+            "boolean schema": lambda value: value.__setitem__("schema", True),
             "missing work binding": lambda value: value.pop("workItemId"),
             "wrong increment binding": lambda value: value.__setitem__(
                 "incrementId", "increment.other"

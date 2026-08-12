@@ -90,7 +90,9 @@ which may silently suppress scan errors on current Python versions.
 
 Current authority and evidence JSON is parsed strictly. Duplicate object keys
 and non-finite constants (`NaN`, `Infinity`, or `-Infinity`) fail closed rather
-than allowing different readers to assign different meanings.
+than allowing different readers to assign different meanings. Authority and
+evidence schema versions must be the literal integer `1`; booleans cannot pass
+through Python's integer equality behavior.
 
 ## Why the program is paused
 
