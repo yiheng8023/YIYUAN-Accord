@@ -67,6 +67,19 @@ recoverable from Git. A paused program with no validated outcome binding has an
 empty current increment graph; a future completed increment remains current
 only when accepted outcome evidence needs its exact increment/work identity.
 
+The paused-baseline counterexample audit then closed the remaining directly
+reproduced self-promotion paths through `93f7429`: the current graph rejects
+speculative planned queues and invalid active/terminal state combinations;
+invalid authority or guardrails suppress all O1-O5 progress; validators must
+return literal `true`; evidence claims must be mutually bound to the exact
+criterion, completed work item, containing increment, unique identity, and
+valid observation/decision chronology; conventional residue files and
+undeclared nested Harness code fail closed; and cancelled or stopped
+increments cannot retain validated outcome bindings. At that revision the
+local public seam reports 74/74 product tests passing, `0/5` outcomes, and
+`4/4` guardrails. These mechanism repairs count as zero O1-O5 progress and did
+not activate a capability or consumer.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,
@@ -125,4 +138,5 @@ git rev-parse HEAD
 git for-each-ref --format='%(upstream:short)' refs/heads/main
 git rev-list --left-right --count HEAD...origin/main
 python -B -m harness verify --root . --json
+python -B -m unittest discover -s tests/product -v
 ```

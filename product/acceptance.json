@@ -213,7 +213,7 @@
       "name": "zero-trust claims and evidence",
       "statement": "Current state, capability effectiveness, outcome, and acceptance claims require source-bound evidence and a code-owned validator; inventory, exposure, tests, fixtures, and self-declaration cannot promote themselves.",
       "metric": "evidence identity, validator, authority, result, and claim-limit validation",
-      "threshold": "every verified criterion passes a current code-owned validator, binds its evidence to the exact completed causal work item and containing increment that produced it, and declares non-empty claim limits",
+      "threshold": "every verified criterion passes a current code-owned validator; each admitted evidence document has a unique current identity, non-empty source locator and identity, observation-to-human-decision chronology, a named accountable human accepted decision, an accepted result, and non-empty claim limits; every declared criterion binds the same evidence file and maps to the exact completed causal work item and containing increment that produced it",
       "assessment": "computed"
     },
     {
@@ -231,7 +231,7 @@
       "name": "bounded process and resource loss",
       "statement": "Every causal increment pre-registers a bounded process-loss contract and exact cleanup paths before work; actual loss is measured by the real-task outcome receipts rather than inferred from the budget declaration.",
       "metric": "increment process-loss contract, outcome mapping, and live residue check",
-      "threshold": "an active increment has exactly one active work item, and the current graph cannot queue planned increments or planned work items; the same correction class is budgeted to stop before recurrence and adjacent current increments cannot repeat one correction class; a work item resets its outcome-neutral count only when evidence bound to that exact increment and work item passes current code-owned O1-O5 validation, never from a label or another work item's evidence; a closed outcome-neutral increment leaves the current program graph and remains recoverable only from Git history, while a completed increment required by validated outcome evidence retains its causal binding; every work acceptance mapping is a subset of its increment mapping; each current increment declares a finite material-intervention budget and exact cleanup paths; declared paths and conventional repository-wide temporary residue are absent at verification",
+      "threshold": "an active increment has exactly one active work item, and the current graph cannot queue planned increments or planned work items; the same correction class is budgeted to stop before recurrence and adjacent current increments cannot repeat one correction class; a work item resets its outcome-neutral count only when evidence bound to that exact increment and work item passes current code-owned O1-O5 validation, never from a label or another work item's evidence; a closed outcome-neutral increment leaves the current program graph and remains recoverable only from Git history, while only a completed increment required by validated outcome evidence may retain its causal binding and a cancelled or stopped increment cannot; every work acceptance mapping is a subset of its increment mapping; each current increment declares a finite material-intervention budget and exact cleanup paths; declared paths and conventional repository-wide temporary residue are absent at verification",
       "assessment": "computed"
     }
   ]
