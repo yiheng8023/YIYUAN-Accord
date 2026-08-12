@@ -288,6 +288,31 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("constitution planningModel active limits are invalid", report["errors"])
 
+    def test_code_owned_policy_booleans_cannot_be_replaced_by_integers(self) -> None:
+        variants = (
+            (
+                "product/program.json",
+                lambda value: value["progressionPolicy"].__setitem__(
+                    "userMustNotInventTasks", 1
+                ),
+                "program progressionPolicy is invalid",
+            ),
+            (
+                "product/constitution.json",
+                lambda value: value["historicalEvidenceBoundary"].__setitem__(
+                    "productAuthority", 0
+                ),
+                "constitution historicalEvidenceBoundary is invalid",
+            ),
+        )
+        for relative, mutation, expected_error in variants:
+            with self.subTest(relative=relative):
+                self.mutate(relative, mutation)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn(expected_error, report["errors"])
+                shutil.copy2(ROOT / relative, self.root / relative)
+
     def test_acceptance_release_must_match_program(self) -> None:
         self.mutate(
             "product/acceptance.json",

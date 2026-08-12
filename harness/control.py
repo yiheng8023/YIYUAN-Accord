@@ -257,6 +257,21 @@ def _nonempty_text(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _same_typed_value(value: Any, expected: Any) -> bool:
+    if type(value) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return set(value) == set(expected) and all(
+            _same_typed_value(value[key], expected[key]) for key in expected
+        )
+    if isinstance(expected, list):
+        return len(value) == len(expected) and all(
+            _same_typed_value(item, expected_item)
+            for item, expected_item in zip(value, expected)
+        )
+    return value == expected
+
+
 def _relative_locator(value: Any, *, allow_evidence: bool = False) -> str | None:
     if not isinstance(value, str) or not value.strip() or "\\" in value:
         return None
@@ -507,9 +522,9 @@ def _historical_boundary_valid(
         )
     if not prior_valid:
         _error(errors, "program priorRelease must be a non-authoritative historical milestone")
-    if (
-        constitution.get("historicalEvidenceBoundary")
-        != EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY
+    if not _same_typed_value(
+        constitution.get("historicalEvidenceBoundary"),
+        EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY,
     ):
         _error(errors, "constitution historicalEvidenceBoundary is invalid")
     milestones = constitution.get("historicalMilestones")
@@ -648,9 +663,9 @@ def _capability_influence_valid(
     constitution: dict[str, Any], errors: list[str]
 ) -> bool:
     before = len(errors)
-    if (
-        constitution.get("capabilityInfluenceBoundary")
-        != EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY
+    if not _same_typed_value(
+        constitution.get("capabilityInfluenceBoundary"),
+        EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY,
     ):
         _error(errors, "constitution capabilityInfluenceBoundary is invalid")
     return len(errors) == before
@@ -862,7 +877,9 @@ def _program_graph(
 
 def _progression_policy_valid(program: dict[str, Any], errors: list[str]) -> bool:
     before = len(errors)
-    if program.get("progressionPolicy") != EXPECTED_PROGRESSION_POLICY:
+    if not _same_typed_value(
+        program.get("progressionPolicy"), EXPECTED_PROGRESSION_POLICY
+    ):
         _error(errors, "program progressionPolicy is invalid")
     return len(errors) == before
 

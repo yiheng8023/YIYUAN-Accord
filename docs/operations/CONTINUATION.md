@@ -98,6 +98,10 @@ The same literal-type rule applies to the constitution's one-active-increment
 and one-active-work-item limits. JSON booleans cannot impersonate those numeric
 control values.
 
+Code-owned nested policy constants are also compared with type as well as
+value. Integer `0/1` cannot impersonate boolean authority, history, or paused
+progression semantics.
+
 G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
