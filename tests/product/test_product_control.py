@@ -321,6 +321,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("constitution workStateSemantics is invalid", report["errors"])
 
+    def test_collaboration_model_cannot_add_user_or_process_burden(self) -> None:
+        def inject_workflow(value: dict) -> None:
+            model = value["collaborationModel"]
+            model["userContributions"].append("skill-and-workflow-selection")
+            model["agentObligations"].append("mandatory-external-methodology")
+            model["requiredWorkflow"] = "brainstorm-plan-worktree-subagents-review"
+
+        self.mutate("product/constitution.json", inject_workflow)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("constitution collaborationModel is invalid", report["errors"])
+
     def test_code_owned_policy_booleans_cannot_be_replaced_by_integers(self) -> None:
         variants = (
             (

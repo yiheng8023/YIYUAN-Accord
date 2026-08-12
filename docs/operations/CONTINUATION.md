@@ -102,6 +102,11 @@ Code-owned nested policy constants are also compared with type as well as
 value. Integer `0/1` cannot impersonate boolean authority, history, or paused
 progression semantics.
 
+The collaboration burden split is likewise exact. A capability route cannot
+add Skill selection or workflow orchestration to the user's contributions, or
+make an external methodology a mandatory Agent obligation, merely by editing
+the current constitution while G3 remains green.
+
 The constitution, program, and acceptance documents also reject undeclared
 top-level fields. A field that merely spells a completion, outcome, or current
 authority claim cannot coexist with a green verifier outside the code-owned

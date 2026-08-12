@@ -183,6 +183,24 @@ EXPECTED_WORK_STATE_SEMANTICS = {
     "cancelled": "bound but never active or executed",
     "stopped": "previously active or attempted, then stopped",
 }
+EXPECTED_COLLABORATION_MODEL = {
+    "userContributions": [
+        "ideas-and-goals",
+        "domain-facts-and-judgment",
+        "bounded-authorization",
+        "corrections",
+        "accountable-final-judgment",
+    ],
+    "agentObligations": [
+        "intent-and-omission-detection",
+        "capability-learning-and-selection",
+        "bounded-setup-and-execution",
+        "failure-recovery",
+        "verification-and-claim-control",
+        "cleanup-and-continuity",
+        "process-loss-detection-and-replanning",
+    ],
+}
 ASSESSMENTS = {"planned", "computed", "verified"}
 RFC3339 = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
@@ -707,14 +725,10 @@ def _release_identity_valid(
     for valid, message in checks:
         if not valid:
             _error(errors, message)
-    collaboration = constitution.get("collaborationModel")
-    if not isinstance(collaboration, dict):
+    if not _same_typed_value(
+        constitution.get("collaborationModel"), EXPECTED_COLLABORATION_MODEL
+    ):
         _error(errors, "constitution collaborationModel is invalid")
-    else:
-        if _string_list(collaboration.get("userContributions")) is None:
-            _error(errors, "constitution userContributions are invalid")
-        if _string_list(collaboration.get("agentObligations")) is None:
-            _error(errors, "constitution agentObligations are invalid")
     for field in ("fixedInvariants", "adaptiveSurfaces", "bootstrapGuards"):
         if _string_list(constitution.get(field)) is None:
             _error(errors, f"constitution {field} are invalid")
