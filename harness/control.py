@@ -172,6 +172,27 @@ PROCESS_LOSS_FIELDS = {
     "stopOnAuthorityOrIrreversibleIncident",
     "stopOnUnboundedResidue",
 }
+INCREMENT_FIELDS = {
+    "id",
+    "state",
+    "correctionClass",
+    "observedProblem",
+    "hypothesis",
+    "falsifier",
+    "stopCondition",
+    "acceptanceIds",
+    "processLossBudget",
+    "cleanupBoundary",
+    "workItems",
+}
+WORK_ITEM_FIELDS = {
+    "id",
+    "state",
+    "acceptanceIds",
+    "operationIds",
+    "deliverables",
+}
+CLEANUP_BOUNDARY_FIELDS = {"repositoryTemporaryPaths"}
 PROGRAM_STATES = {"active", "paused", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 WORK_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
@@ -941,6 +962,11 @@ def _program_graph(
     work_ids: set[str] = set()
     for increment in increments:
         increment_id = increment.get("id")
+        if set(increment) != INCREMENT_FIELDS:
+            _error(
+                errors,
+                f"increment {increment_id} fields must match the code-owned schema",
+            )
         if not isinstance(increment_id, str) or not increment_id:
             _error(errors, "every increment requires a string id")
             continue
@@ -969,6 +995,11 @@ def _program_graph(
         active_work_count = 0
         for work in work_items:
             work_id = work.get("id")
+            if set(work) != WORK_ITEM_FIELDS:
+                _error(
+                    errors,
+                    f"work item {work_id} fields must match the code-owned schema",
+                )
             if not isinstance(work_id, str) or not work_id:
                 _error(errors, f"increment {increment_id} has work without a string id")
                 continue
@@ -1160,7 +1191,13 @@ def _process_loss_guardrail(
             previous_correction_class = correction_class
 
         cleanup = increment.get("cleanupBoundary")
-        paths = cleanup.get("repositoryTemporaryPaths") if isinstance(cleanup, dict) else None
+        if not isinstance(cleanup, dict) or set(cleanup) != CLEANUP_BOUNDARY_FIELDS:
+            _error(
+                errors,
+                f"increment {increment_id} requires the exact cleanup boundary fields",
+            )
+            continue
+        paths = cleanup.get("repositoryTemporaryPaths")
         paths = _string_list(paths)
         if paths is None:
             _error(errors, f"increment {increment_id} requires exact repository cleanup paths")

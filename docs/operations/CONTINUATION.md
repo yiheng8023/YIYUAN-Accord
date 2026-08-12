@@ -166,6 +166,12 @@ declared operations as attempted authority while G4 counts one outcome-neutral
 planning loss. `stopped` means previously active or attempted and then stopped,
 so both G1 authority checks and G4 process-loss accounting apply.
 
+Current increment, work-item, process-loss, and cleanup-boundary objects use
+closed code-owned field sets. A capability route cannot attach an undeclared
+mandatory workflow, user tool-selection round trip, or user cleanup obligation
+to the live causal graph while G4 remains green; task content within the
+declared fields remains adaptive.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,

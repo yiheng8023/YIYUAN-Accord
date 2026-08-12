@@ -660,6 +660,44 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_program_graph_rejects_capability_added_requirements(self) -> None:
+        variants = (
+            (
+                "increment workflow",
+                lambda increment: increment.__setitem__(
+                    "mandatoryWorkflow", "external-methodology"
+                ),
+                "increment increment.fixture-current fields must match the code-owned schema",
+            ),
+            (
+                "work human round trip",
+                lambda increment: increment["workItems"][0].__setitem__(
+                    "humanRoundTrip", "user-selects-tool"
+                ),
+                "work item work.fixture-current fields must match the code-owned schema",
+            ),
+            (
+                "cleanup shifted to user",
+                lambda increment: increment["cleanupBoundary"].__setitem__(
+                    "userCleanupRequired", True
+                ),
+                "increment increment.fixture-current requires the exact cleanup boundary fields",
+            ),
+        )
+        for label, mutate_increment, expected_error in variants:
+            with self.subTest(label=label):
+                self.mutate(
+                    "product/program.json",
+                    lambda value: mutate_increment(self.activate_program(value)),
+                )
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G4"])
+                self.assertIn(expected_error, report["errors"])
+                shutil.copy2(
+                    ROOT / "product/program.json",
+                    self.root / "product/program.json",
+                )
+
     def test_empty_paused_current_graph_is_valid_but_not_product_progress(self) -> None:
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
