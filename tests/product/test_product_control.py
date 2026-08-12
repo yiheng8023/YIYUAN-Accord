@@ -102,6 +102,109 @@ class ProductControlTests(unittest.TestCase):
             "validator": {"kind": validator_kind, "version": 1},
         }
 
+    def o1_evidence_document(self) -> dict:
+        document = self.evidence_document(
+            criterion_ids=["O1"],
+            validator_kind="o1-natural-task-receipt",
+        )
+        document.update(
+            {
+                "id": "o1-natural-task-001",
+                "observedAt": "2026-08-12T03:10:00+08:00",
+                "claimLimits": ["one pre-registered fixture task only"],
+            }
+        )
+        document["authority"]["decidedAt"] = "2026-08-12T03:11:00+08:00"
+        floors = [
+            {
+                "id": f"{category}-floor",
+                "category": category,
+                "statement": f"fixture {category} floor",
+            }
+            for category in ("quality", "safety", "evidence", "residue")
+        ]
+        source = {"locator": "task-receipt-001", "identity": "sha256:fixture"}
+        document["receipt"] = {
+            "preRegistration": {
+                "registeredAt": "2026-08-12T03:00:00+08:00",
+                "taskIdentity": "natural-task-fixture-001",
+                "nonDiagnosticPurpose": {
+                    "statement": "deliver the fixture task outcome",
+                    "harnessEvaluationPrimary": False,
+                },
+                "goalAndBoundedAuthority": {
+                    "goal": "complete the bounded fixture task",
+                    "authorizedOperations": [
+                        "repository-read",
+                        "repository-edit",
+                        "local-verification",
+                    ],
+                    "humanReservedDecisions": ["accountable-outcome-acceptance"],
+                },
+                "namedHumanAcceptor": "fixture reviewer",
+                "qualitySafetyEvidenceAndResidueFloors": floors,
+                "materialInterventionTaxonomy": [
+                    "tool-selection",
+                    "setup",
+                    "invocation",
+                    "recovery",
+                    "verification-command",
+                    "cleanup",
+                    "push",
+                ],
+            },
+            "measures": {
+                "humanOutcomeDecision": "accepted",
+                "materialUserToolOrchestrationInterventions": {
+                    "count": 0,
+                    "events": [],
+                },
+                "repeatedAlreadyBoundRequests": {"count": 0, "events": []},
+                "routeRecoveryVerificationAndCleanupEvents": [
+                    {
+                        "stage": stage,
+                        "status": "not-needed" if stage == "recovery" else "completed",
+                        "occurredAt": f"2026-08-12T03:0{index}:00+08:00",
+                        "source": deepcopy(source),
+                    }
+                    for index, stage in enumerate(
+                        (
+                            "route-selection",
+                            "capability-learning",
+                            "execution",
+                            "recovery",
+                            "verification",
+                            "cleanup",
+                        ),
+                        start=1,
+                    )
+                ],
+                "taskFloorResults": [
+                    {
+                        "id": floor["id"],
+                        "category": floor["category"],
+                        "passed": True,
+                        "evidence": deepcopy(source),
+                    }
+                    for floor in floors
+                ],
+                "residueAndClaimLimits": {
+                    "undeclaredResidue": [],
+                    "claimLimits": document["claimLimits"],
+                },
+            },
+        }
+        return document
+
+    @staticmethod
+    def validator_registry(validator) -> dict:
+        return {
+            "test-validator": (
+                frozenset({"O1", "O2", "O3", "O4", "O5"}),
+                validator,
+            )
+        }
+
     def increment_fixture(self, *, state: str = "planned") -> dict:
         work_state = "completed" if state == "completed" else "planned"
         return {
@@ -631,18 +734,29 @@ class ProductControlTests(unittest.TestCase):
         def manufacture(value: dict) -> None:
             increment = self.activate_program(value)
             increment["observedProblem"] = "No natural task exists, so create Harness work."
-            increment["acceptanceIds"].append("O1")
-            increment["workItems"][0]["acceptanceIds"].append("O1")
+            increment["acceptanceIds"].append("O2")
+            increment["workItems"][0]["acceptanceIds"].append("O2")
 
         self.mutate("product/program.json", manufacture)
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "active outcome-bearing increment requires a code-owned evidence validator: "
-            f"{FIXTURE_INCREMENT_ID}",
+            "active outcome-bearing increment requires code-owned evidence validators "
+            f"for O2: {FIXTURE_INCREMENT_ID}",
             report["errors"],
         )
+
+    def test_o1_increment_has_a_criterion_scoped_validation_path(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertFalse(report["criterionStates"]["O1"])
 
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:
@@ -999,6 +1113,125 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_o1_natural_task_receipt_passes_its_code_owned_validator(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        self.write_json("product/evidence/o1.json", self.o1_evidence_document())
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/o1.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertTrue(report["criterionStates"]["O1"])
+        self.assertTrue(report["criterionStates"]["G2"])
+
+    def test_o1_natural_task_receipt_rejects_material_failures(self) -> None:
+        baseline_program = self.read_json("product/program.json")
+        baseline_acceptance = self.read_json("product/acceptance.json")
+        mutations = {
+            "diagnostic-task": (
+                "O1 task must declare a non-diagnostic primary purpose",
+                lambda value: value["receipt"]["preRegistration"][
+                    "nonDiagnosticPurpose"
+                ].__setitem__("harnessEvaluationPrimary", True),
+            ),
+            "late-registration": (
+                "O1 task must be registered no later than its outcome observation",
+                lambda value: value["receipt"]["preRegistration"].__setitem__(
+                    "registeredAt", "2026-08-12T03:10:01+08:00"
+                ),
+            ),
+            "human-mismatch": (
+                "O1 named human acceptor must match evidence authority",
+                lambda value: value["receipt"]["preRegistration"].__setitem__(
+                    "namedHumanAcceptor", "different reviewer"
+                ),
+            ),
+            "tool-intervention": (
+                "O1 tool orchestration interventions must be exactly zero",
+                lambda value: value["receipt"]["measures"][
+                    "materialUserToolOrchestrationInterventions"
+                ].__setitem__("count", 1),
+            ),
+            "repeated-request": (
+                "O1 repeated already-bound requests must be exactly zero",
+                lambda value: value["receipt"]["measures"][
+                    "repeatedAlreadyBoundRequests"
+                ].__setitem__("count", 1),
+            ),
+            "failed-floor": (
+                "O1 task floor results are invalid",
+                lambda value: value["receipt"]["measures"]["taskFloorResults"][
+                    0
+                ].__setitem__("passed", False),
+            ),
+            "missing-cleanup": (
+                "O1 route lifecycle events must cover all required stages in order",
+                lambda value: value["receipt"]["measures"][
+                    "routeRecoveryVerificationAndCleanupEvents"
+                ].pop(),
+            ),
+            "out-of-order-route": (
+                "O1 route lifecycle events are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "routeRecoveryVerificationAndCleanupEvents"
+                ].reverse(),
+            ),
+            "undeclared-residue": (
+                "O1 residue and claim limits are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "residueAndClaimLimits"
+                ].__setitem__("undeclaredResidue", ["fixture residue"]),
+            ),
+        }
+        for label, (expected_error, mutate_evidence) in mutations.items():
+            with self.subTest(label=label):
+                self.write_json("product/program.json", baseline_program)
+                self.write_json("product/acceptance.json", baseline_acceptance)
+                self.map_outcome_to_latest_work("O1")
+                evidence = self.o1_evidence_document()
+                mutate_evidence(evidence)
+                self.write_json("product/evidence/o1.json", evidence)
+
+                def promote(value: dict) -> None:
+                    criterion = next(
+                        item for item in value["criteria"] if item["id"] == "O1"
+                    )
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = ["product/evidence/o1.json"]
+
+                self.mutate("product/acceptance.json", promote)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["O1"])
+                self.assertFalse(report["criterionStates"]["G2"])
+                self.assertIn(expected_error, report["errors"])
+
+    def test_o1_validator_cannot_validate_another_outcome(self) -> None:
+        self.map_outcome_to_latest_work("O2")
+        evidence = self.evidence_document(
+            criterion_ids=["O2"],
+            validator_kind="o1-natural-task-receipt",
+        )
+        self.write_json("product/evidence/o2.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O2")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/o2.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["O2"])
+        self.assertFalse(report["criterionStates"]["G2"])
+        self.assertIn(
+            "criterion O2 is not supported by evidence validator: "
+            "o1-natural-task-receipt",
+            report["errors"],
+        )
+
     def test_paused_program_retains_completed_validated_outcome_binding(self) -> None:
         self.map_outcome_to_latest_work("O1")
         evidence = self.evidence_document(criterion_ids=["O1"])
@@ -1013,7 +1246,7 @@ class ProductControlTests(unittest.TestCase):
         validator = lambda document, criterion_id, root, errors: True
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            {"test-validator": validator},
+            self.validator_registry(validator),
         ):
             report = self.report()
         self.assertTrue(report["valid"], report["errors"])
@@ -1035,7 +1268,7 @@ class ProductControlTests(unittest.TestCase):
         validator = lambda document, criterion_id, root, errors: True
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            {"test-validator": validator},
+            self.validator_registry(validator),
         ):
             for state in ("cancelled", "stopped"):
                 with self.subTest(state=state):
@@ -1099,7 +1332,7 @@ class ProductControlTests(unittest.TestCase):
         validator = lambda document, criterion_id, root, errors: True
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            {"test-validator": validator},
+            self.validator_registry(validator),
         ):
             report = self.report()
         self.assertFalse(report["criterionStates"]["O1"])
@@ -1390,7 +1623,7 @@ class ProductControlTests(unittest.TestCase):
                 )
                 with patch(
                     "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-                    {"test-validator": validator},
+                    self.validator_registry(validator),
                 ):
                     report = self.report()
                 self.assertFalse(report["criterionStates"]["O1"])
@@ -1422,7 +1655,7 @@ class ProductControlTests(unittest.TestCase):
         validator = lambda document, criterion_id, root, errors: True
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            {"test-validator": validator},
+            self.validator_registry(validator),
         ):
             report = self.report()
         self.assertFalse(report["criterionStates"]["O1"])
@@ -1451,7 +1684,7 @@ class ProductControlTests(unittest.TestCase):
         validator = lambda document, criterion_id, root, errors: True
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            {"test-validator": validator},
+            self.validator_registry(validator),
         ):
             report = self.report()
         self.assertFalse(report["criterionStates"]["O1"])

@@ -30,8 +30,9 @@ repairing this document first.
 
 O1-O5 require natural, non-diagnostic real-task evidence. The repository does
 not invent such a task or ask the user to manufacture one merely to keep the
-program active. The current release also has no code-owned outcome evidence
-validator, so an outcome-bearing increment has no valid entry path yet.
+program active. The current release has only the criterion-scoped O1 receipt
+validator; it does not create a natural task or prove naturalness. O2-O5 have
+no code-owned validation path.
 
 The pause does not block bounded retrospective counterexample analysis,
 mechanism-only validation, authority-defect repair, or task-independent
@@ -42,10 +43,10 @@ progress.
 ## Outcome-entry boundary
 
 When a natural task is actually bound, do not open an outcome increment until
-the current release has the necessary code-owned validation path. Then open
-exactly one causal increment with at most one active work item and use the
-existing acceptance operationalization rather than creating a parallel
-workflow.
+every mapped outcome has the necessary criterion-scoped code-owned validation
+path. Then open exactly one causal increment with at most one active work item
+and use the existing acceptance operationalization rather than creating a
+parallel workflow.
 
 The user supplies the goal, domain facts, bounded authorization, corrections,
 and accountable final judgment. The Agent owns route learning and selection,

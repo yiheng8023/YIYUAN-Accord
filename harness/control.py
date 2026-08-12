@@ -132,7 +132,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "f0e6339060490334abad7d91efcdd7df7d6d2bb0e6244aeef4566672a4df872b"
+    "456367895d85ec19d265458e8065517cd2a9532d7ee332a85f57a458f11af6ea"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -308,6 +308,25 @@ FORBIDDEN_AUTHORITY_PATTERNS = (
     re.compile(r"registry/program[-]acceptance[-]map[.]json", re.IGNORECASE),
 )
 CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
+O1_VALIDATOR_KIND = "o1-natural-task-receipt"
+O1_INTERVENTION_TAXONOMY = {
+    "tool-selection",
+    "setup",
+    "invocation",
+    "recovery",
+    "verification-command",
+    "cleanup",
+    "push",
+}
+O1_FLOOR_CATEGORIES = {"quality", "safety", "evidence", "residue"}
+O1_ROUTE_ORDER = (
+    "route-selection",
+    "capability-learning",
+    "execution",
+    "recovery",
+    "verification",
+    "cleanup",
+)
 EXPECTED_PROGRESSION_POLICY = {
     "pausedScope": "no-active-outcome-bearing-increment",
     "agentOwnedWithoutInventedUserTask": [
@@ -381,7 +400,196 @@ EXPECTED_HISTORICAL_MILESTONE = {
 
 
 EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
-SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidator] = MappingProxyType({})
+EvidenceValidatorSpec = tuple[frozenset[str], EvidenceValidator]
+
+
+def _validate_o1_natural_task_receipt(
+    document: dict[str, Any], criterion_id: str, _root: Path, errors: list[str]
+) -> bool:
+    def reject(message: str) -> bool:
+        _error(errors, message)
+        return False
+
+    def exact_object(value: Any, fields: set[str]) -> bool:
+        return isinstance(value, dict) and set(value) == fields
+
+    def source_reference(value: Any) -> bool:
+        return exact_object(value, {"locator", "identity"}) and all(
+            _nonempty_text(value.get(field)) for field in ("locator", "identity")
+        )
+
+    receipt = document.get("receipt")
+    if criterion_id != "O1":
+        return reject(f"{O1_VALIDATOR_KIND} cannot validate {criterion_id}")
+    if not exact_object(receipt, {"preRegistration", "measures"}):
+        return reject("O1 receipt requires exact preRegistration and measures fields")
+
+    pre_registration = receipt.get("preRegistration")
+    expected_pre_registration_fields = {
+        "registeredAt",
+        "taskIdentity",
+        "nonDiagnosticPurpose",
+        "goalAndBoundedAuthority",
+        "namedHumanAcceptor",
+        "qualitySafetyEvidenceAndResidueFloors",
+        "materialInterventionTaxonomy",
+    }
+    if not exact_object(pre_registration, expected_pre_registration_fields):
+        return reject("O1 pre-registration fields are invalid")
+
+    registered_at = _rfc3339_instant(pre_registration.get("registeredAt"))
+    observed_at = _rfc3339_instant(document.get("observedAt"))
+    if registered_at is None or observed_at is None or registered_at > observed_at:
+        return reject("O1 task must be registered no later than its outcome observation")
+    if not _nonempty_text(pre_registration.get("taskIdentity")):
+        return reject("O1 pre-registration taskIdentity is invalid")
+
+    purpose = pre_registration.get("nonDiagnosticPurpose")
+    if (
+        not exact_object(purpose, {"statement", "harnessEvaluationPrimary"})
+        or not _nonempty_text(purpose.get("statement"))
+        or purpose.get("harnessEvaluationPrimary") is not False
+    ):
+        return reject("O1 task must declare a non-diagnostic primary purpose")
+
+    goal_authority = pre_registration.get("goalAndBoundedAuthority")
+    if not exact_object(
+        goal_authority, {"goal", "authorizedOperations", "humanReservedDecisions"}
+    ):
+        return reject("O1 goal and bounded authority fields are invalid")
+    authorized_operations = _string_list(goal_authority.get("authorizedOperations"))
+    human_reserved = _string_list(goal_authority.get("humanReservedDecisions"))
+    if (
+        not _nonempty_text(goal_authority.get("goal"))
+        or authorized_operations is None
+        or not set(authorized_operations) <= set(OPERATION_EFFECTS)
+        or human_reserved is None
+        or "accountable-outcome-acceptance" not in human_reserved
+    ):
+        return reject("O1 goal and bounded authority values are invalid")
+
+    authority = document.get("authority")
+    authority_name = authority.get("name") if isinstance(authority, dict) else None
+    if (
+        not _nonempty_text(pre_registration.get("namedHumanAcceptor"))
+        or pre_registration.get("namedHumanAcceptor") != authority_name
+    ):
+        return reject("O1 named human acceptor must match evidence authority")
+    taxonomy = _string_list(pre_registration.get("materialInterventionTaxonomy"))
+    if taxonomy is None or set(taxonomy) != O1_INTERVENTION_TAXONOMY:
+        return reject("O1 material intervention taxonomy is invalid")
+
+    floors = pre_registration.get("qualitySafetyEvidenceAndResidueFloors")
+    floor_index: dict[str, str] = {}
+    if not isinstance(floors, list) or not floors:
+        return reject("O1 pre-registered task floors are invalid")
+    for floor in floors:
+        if (
+            not exact_object(floor, {"id", "category", "statement"})
+            or not _nonempty_text(floor.get("id"))
+            or floor.get("id") in floor_index
+            or floor.get("category") not in O1_FLOOR_CATEGORIES
+            or not _nonempty_text(floor.get("statement"))
+        ):
+            return reject("O1 pre-registered task floors are invalid")
+        floor_index[floor["id"]] = floor["category"]
+    if set(floor_index.values()) != O1_FLOOR_CATEGORIES:
+        return reject("O1 task floors must cover quality, safety, evidence, and residue")
+
+    measures = receipt.get("measures")
+    expected_measure_fields = {
+        "humanOutcomeDecision",
+        "materialUserToolOrchestrationInterventions",
+        "repeatedAlreadyBoundRequests",
+        "routeRecoveryVerificationAndCleanupEvents",
+        "taskFloorResults",
+        "residueAndClaimLimits",
+    }
+    if not exact_object(measures, expected_measure_fields):
+        return reject("O1 receipt measure fields are invalid")
+    if measures.get("humanOutcomeDecision") != "accepted":
+        return reject("O1 human outcome decision must be accepted")
+
+    for field, label in (
+        ("materialUserToolOrchestrationInterventions", "tool orchestration interventions"),
+        ("repeatedAlreadyBoundRequests", "repeated already-bound requests"),
+    ):
+        value = measures.get(field)
+        if (
+            not exact_object(value, {"count", "events"})
+            or type(value.get("count")) is not int
+            or value.get("count") != 0
+            or value.get("events") != []
+        ):
+            return reject(f"O1 {label} must be exactly zero")
+
+    route_events = measures.get("routeRecoveryVerificationAndCleanupEvents")
+    if not isinstance(route_events, list) or len(route_events) != len(O1_ROUTE_ORDER):
+        return reject("O1 route lifecycle events must cover all required stages in order")
+    prior_time = registered_at
+    for expected_stage, event in zip(O1_ROUTE_ORDER, route_events):
+        source = event.get("source") if isinstance(event, dict) else None
+        occurred_at = (
+            _rfc3339_instant(event.get("occurredAt"))
+            if isinstance(event, dict)
+            else None
+        )
+        allowed_status = (
+            {"completed", "not-needed"}
+            if expected_stage == "recovery"
+            else {"completed"}
+        )
+        if (
+            not exact_object(event, {"stage", "status", "occurredAt", "source"})
+            or event.get("stage") != expected_stage
+            or event.get("status") not in allowed_status
+            or occurred_at is None
+            or not prior_time <= occurred_at <= observed_at
+            or not source_reference(source)
+        ):
+            return reject("O1 route lifecycle events are invalid")
+        prior_time = occurred_at
+
+    floor_results = measures.get("taskFloorResults")
+    if not isinstance(floor_results, list) or len(floor_results) != len(floor_index):
+        return reject("O1 task floor results must match every pre-registered floor")
+    result_ids: set[str] = set()
+    for result in floor_results:
+        evidence = result.get("evidence") if isinstance(result, dict) else None
+        result_id = result.get("id") if isinstance(result, dict) else None
+        if (
+            not exact_object(result, {"id", "category", "passed", "evidence"})
+            or result_id in result_ids
+            or result.get("category") != floor_index.get(result_id)
+            or result.get("passed") is not True
+            or not source_reference(evidence)
+        ):
+            return reject("O1 task floor results are invalid")
+        result_ids.add(result_id)
+    if result_ids != set(floor_index):
+        return reject("O1 task floor results must match every pre-registered floor")
+
+    residue = measures.get("residueAndClaimLimits")
+    if (
+        not exact_object(residue, {"undeclaredResidue", "claimLimits"})
+        or residue.get("undeclaredResidue") != []
+        or residue.get("claimLimits") != document.get("claimLimits")
+    ):
+        return reject("O1 residue and claim limits are invalid")
+    return True
+
+
+SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
+    {O1_VALIDATOR_KIND: (frozenset({"O1"}), _validate_o1_natural_task_receipt)}
+)
+
+
+def _supported_evidence_criteria() -> frozenset[str]:
+    return frozenset(
+        criterion_id
+        for criterion_ids, _validator in SUPPORTED_EVIDENCE_VALIDATORS.values()
+        for criterion_id in criterion_ids
+    )
 
 
 class _InvalidJson(ValueError):
@@ -1043,14 +1251,15 @@ def _program_graph(
         mapped = _string_list(increment.get("acceptanceIds"))
         if mapped is None or not set(mapped) <= set(criteria):
             _error(errors, f"increment {increment_id} has invalid acceptanceIds")
-        elif (
-            increment_state == "active"
-            and set(mapped) & OUTCOME_IDS
-            and not SUPPORTED_EVIDENCE_VALIDATORS
+        elif increment_state == "active" and (
+            unsupported_outcomes := (
+                (set(mapped) & OUTCOME_IDS) - _supported_evidence_criteria()
+            )
         ):
             _error(
                 errors,
-                f"active outcome-bearing increment requires a code-owned evidence validator: {increment_id}",
+                "active outcome-bearing increment requires code-owned evidence validators "
+                f"for {', '.join(sorted(unsupported_outcomes))}: {increment_id}",
             )
         work_items = _objects(increment.get("workItems"), f"increment {increment_id} workItems", errors)
         if not work_items:
@@ -1428,9 +1637,17 @@ def _evidence_states(
                 _error(errors, f"criterion {criterion_id} evidence shape is invalid: {relative}")
                 valid = False
                 continue
-            evidence_validator = SUPPORTED_EVIDENCE_VALIDATORS.get(validator_kind)
-            if evidence_validator is None:
+            validator_spec = SUPPORTED_EVIDENCE_VALIDATORS.get(validator_kind)
+            if validator_spec is None:
                 _error(errors, f"criterion {criterion_id} has no code-owned evidence validator: {validator_kind}")
+                valid = False
+                continue
+            supported_criteria, evidence_validator = validator_spec
+            if criterion_id not in supported_criteria:
+                _error(
+                    errors,
+                    f"criterion {criterion_id} is not supported by evidence validator: {validator_kind}",
+                )
                 valid = False
                 continue
             try:

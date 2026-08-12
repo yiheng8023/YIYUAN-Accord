@@ -55,9 +55,11 @@ product-control kernel plus the capability-chain, current-asset integrity,
 outcome-operationalization, and causal-evidence controls. Their closed
 outcome-neutral increments are recoverable from Git rather than retained as a
 current queue. The program is paused with an empty current increment graph.
-O1-O5 are deliberately planned and false. A
-repository-authored JSON file cannot promote them: every verified outcome
-requires a code-owned validator added with the real slice that needs it.
+O1-O5 are deliberately planned and false. A repository-authored JSON file
+cannot promote them: every verified outcome requires a code-owned validator
+scoped to that criterion. The current O1 validator checks the pre-registered
+receipt contract only; it neither creates a natural task nor proves that a
+self-described task was natural. O2-O5 still have no validation path.
 The pause limits outcome-bearing experimentation, not bounded retrospective
 analysis, portfolio curation, mechanism validation, or authority-defect repair.
 
