@@ -1035,7 +1035,12 @@ def _evidence_states(
                 valid = False
                 continue
             try:
-                if not evidence_validator(document, criterion_id, root, errors):
+                validator_result = evidence_validator(document, criterion_id, root, errors)
+                if validator_result is not True:
+                    _error(
+                        errors,
+                        f"criterion {criterion_id} evidence validator did not return true: {relative}",
+                    )
                     valid = False
                 else:
                     criterion_work_ids.add(work_id)

@@ -852,6 +852,44 @@ class ProductControlTests(unittest.TestCase):
                     self.root / "product/acceptance.json",
                 )
 
+    def test_evidence_validator_must_return_literal_true(self) -> None:
+        for validator_result in (False, "truthy-but-not-bool"):
+            with self.subTest(validator_result=validator_result):
+                self.map_outcome_to_latest_work("O1")
+                evidence = self.evidence_document(criterion_ids=["O1"])
+                self.write_json("product/evidence/bound.json", evidence)
+
+                def promote(value: dict) -> None:
+                    criterion = next(
+                        item for item in value["criteria"] if item["id"] == "O1"
+                    )
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = ["product/evidence/bound.json"]
+
+                self.mutate("product/acceptance.json", promote)
+                validator = (
+                    lambda document, criterion_id, root, errors: validator_result
+                )
+                with patch(
+                    "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+                    {"test-validator": validator},
+                ):
+                    report = self.report()
+                self.assertFalse(report["criterionStates"]["O1"])
+                self.assertFalse(report["criterionStates"]["G2"])
+                self.assertIn(
+                    "criterion O1 evidence validator did not return true: product/evidence/bound.json",
+                    report["errors"],
+                )
+                shutil.copy2(
+                    ROOT / "product/program.json",
+                    self.root / "product/program.json",
+                )
+                shutil.copy2(
+                    ROOT / "product/acceptance.json",
+                    self.root / "product/acceptance.json",
+                )
+
     def test_malformed_evidence_fails_without_traceback(self) -> None:
         self.write_json("product/evidence/malformed.json", {"schema": 1})
 
