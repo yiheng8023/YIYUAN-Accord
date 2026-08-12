@@ -717,6 +717,8 @@ def _program_graph(
         increment_state = increment.get("state")
         if not isinstance(increment_state, str) or increment_state not in INCREMENT_STATES:
             _error(errors, f"increment {increment_id} has invalid state")
+        if increment_state == "planned":
+            _error(errors, f"current program cannot queue planned increment {increment_id}")
         if increment_state == "active":
             active_increments.append(increment)
         correction_class = increment.get("correctionClass")
@@ -743,6 +745,8 @@ def _program_graph(
             work_state = work.get("state")
             if not isinstance(work_state, str) or work_state not in WORK_STATES:
                 _error(errors, f"work item {work_id} has invalid state")
+            if work_state == "planned":
+                _error(errors, f"current increment cannot queue planned work item {work_id}")
             if work_state == "active":
                 active_work_count += 1
                 if increment.get("state") != "active":
@@ -1057,7 +1061,9 @@ def _verify_product(root: Path) -> dict[str, Any]:
     capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
     criteria = _criteria(acceptance, errors)
+    graph_before = len(errors)
     increments, all_work, active_increment = _program_graph(program, criteria, errors)
+    graph_valid = len(errors) == graph_before
     progression_policy = _progression_policy_valid(program, errors)
     authority_before = len(errors)
     authority_files = _authority_files(root, constitution, errors)
@@ -1088,7 +1094,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     authority_guardrail = _authority_guardrail(program, all_work, errors)
     process_guardrail = _process_loss_guardrail(
         root, increments, validated_work_outcomes, errors
-    )
+    ) and graph_valid
 
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
     states.update(evidence_states)

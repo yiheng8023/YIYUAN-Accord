@@ -121,8 +121,10 @@ green test is not user value.
 
 Every current causal increment declares a correction budget, an outcome-neutral
 work budget, a material user tool-orchestration budget, hard authority stops,
-and exact repository cleanup paths. A closed outcome-neutral increment leaves
-the current graph and remains recoverable from Git; a completed increment stays
-current only while validator-accepted outcome evidence needs its exact causal
-identity. Actual process loss is measured by O1/O2 receipts, not inferred from
-a budget declaration.
+and exact repository cleanup paths. Planned increments and work items are not
+stored as a future queue: bind the next item only when it becomes current. A
+closed outcome-neutral increment leaves the current graph and remains
+recoverable from Git; a completed increment stays current only while
+validator-accepted outcome evidence needs its exact causal identity. Actual
+process loss is measured by O1/O2 receipts, not inferred from a budget
+declaration.

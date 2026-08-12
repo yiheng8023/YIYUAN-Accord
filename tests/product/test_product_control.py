@@ -360,6 +360,39 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_active_program_cannot_queue_planned_increment(self) -> None:
+        def queue(value: dict) -> None:
+            self.activate_program(value)
+            planned = self.increment_fixture()
+            planned["id"] = "increment.queued"
+            planned["correctionClass"] = "queued-correction"
+            planned["workItems"][0]["id"] = "work.queued"
+            value["increments"].append(planned)
+
+        self.mutate("product/program.json", queue)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "current program cannot queue planned increment increment.queued",
+            report["errors"],
+        )
+
+    def test_active_increment_cannot_queue_planned_work_item(self) -> None:
+        def queue(value: dict) -> None:
+            increment = self.activate_program(value)
+            planned = deepcopy(increment["workItems"][0])
+            planned["id"] = "work.queued"
+            planned["state"] = "planned"
+            increment["workItems"].append(planned)
+
+        self.mutate("product/program.json", queue)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "current increment cannot queue planned work item work.queued",
+            report["errors"],
+        )
+
     def test_increment_requires_a_correction_class(self) -> None:
         def remove(value: dict) -> None:
             self.activate_program(value).pop("correctionClass")
