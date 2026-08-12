@@ -742,6 +742,17 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_undeclared_nested_harness_code_cannot_escape_authority_scan(self) -> None:
+        nested = self.root / "harness" / "nested" / "authority.py"
+        nested.parent.mkdir(parents=True)
+        nested.write_text("VALUE = 'hidden authority'\n", encoding="utf-8")
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "undeclared Harness authority file: harness/nested/authority.py",
+            report["errors"],
+        )
+
     def test_forbidden_predecessor_identity_is_rejected_from_current_authority(self) -> None:
         predecessor = "agent" + "-skills" + "-curated"
         self.mutate(

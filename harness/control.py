@@ -389,6 +389,22 @@ def _authority_files(
                 found[relative] = checked
         except (OSError, RuntimeError, ValueError):
             _error(errors, f"active authority glob cannot be evaluated: {pattern}")
+
+    harness_root = _inside_root(root, "harness", errors, "Harness authority root")
+    if harness_root is not None:
+        try:
+            for candidate in harness_root.rglob("*"):
+                relative = candidate.relative_to(root).as_posix()
+                parts = {part.casefold() for part in PurePosixPath(relative).parts}
+                if "__pycache__" in parts:
+                    continue
+                if _link_or_reparse(candidate):
+                    _error(errors, f"undeclared Harness authority link: {relative}")
+                    continue
+                if candidate.is_file() and relative not in found:
+                    _error(errors, f"undeclared Harness authority file: {relative}")
+        except (OSError, RuntimeError, ValueError):
+            _error(errors, "Harness authority closure cannot be enumerated")
     return sorted(found.items())
 
 

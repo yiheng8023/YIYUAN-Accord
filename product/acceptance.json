@@ -222,7 +222,7 @@
       "name": "independent lean current authority",
       "statement": "Only the current machine contract and historical-event-neutral kernel hold product authority; history, memory, consumer configuration, routing projections, temporary payloads, and predecessor identities remain non-authoritative.",
       "metric": "code-owned current-authority file, locator, identity, and symlink scan",
-      "threshold": "all bootstrap authority files are present, active locators stay inside the repository and outside excluded roots, no active authority symlink exists, and zero forbidden identity or authority-path matches occur",
+      "threshold": "all bootstrap authority files are present, the Harness code surface contains no undeclared file or link outside the code-owned authority glob, active locators stay inside the repository and outside excluded roots, no active authority symlink exists, and zero forbidden identity or authority-path matches occur",
       "assessment": "computed"
     },
     {
