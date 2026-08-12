@@ -13,6 +13,13 @@ Before proposing work, name:
 - authority, data, cost, external dependency, rollback, cleanup, and claim
   boundaries.
 
+A proposal is not a current program item. Put the fields above in the issue or
+change description; do not add a `planned` increment or work item to
+`product/program.json`. The current graph deliberately rejects speculative
+queues. Change that graph only after maintainers bind the work as current: use
+one `active` increment with exactly one `active` work item, or leave the paused
+empty graph unchanged for a bounded guardrail repair.
+
 For any proposed capability route, list additions to the bound goal, input,
 deliverable, human round trip, authority, side effect, and acceptance surface.
 An addition without source-bound causal necessity is a route defect, not a
