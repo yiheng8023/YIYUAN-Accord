@@ -98,6 +98,22 @@ G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
 
+The subsequent public-entry audit confirmed that a depth-one shallow clone
+without the pinned v0.1 Git object still passes the current verifier and test
+surface; the retired verifier wrapper is absent and no replacement is needed.
+It also moved CLI root resolution inside the fail-closed verifier seam, made
+cleanup and authority enumeration errors explicit, rejected ambiguous JSON and
+non-literal schema versions, and aligned invalid acceptance declarations with
+G2. The current local public seam reports 80/80 product tests passing while
+remaining at `0/5` outcomes and `4/4` guardrails.
+
+One state meaning remains intentionally undecided: the current contract does
+not say whether a `cancelled` work item proves it never became current or may
+represent attempted work. Until accountable product judgment defines that
+meaning, do not make cancelled work count toward G1 authority attempts or G4
+process loss, and do not use that omission as evidence that either treatment is
+correct.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,
