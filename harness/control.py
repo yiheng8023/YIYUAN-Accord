@@ -1110,6 +1110,9 @@ def _verify_product(root: Path) -> dict[str, Any]:
     states["G4"] = process_guardrail
 
     guardrails_pass = all(states[criterion_id] for criterion_id in GUARDRAIL_IDS)
+    if errors or not guardrails_pass:
+        for criterion_id in OUTCOME_IDS:
+            states[criterion_id] = False
     outcomes_pass = all(states[criterion_id] for criterion_id in OUTCOME_IDS)
     graph_terminal = (
         program.get("status") == "completed"

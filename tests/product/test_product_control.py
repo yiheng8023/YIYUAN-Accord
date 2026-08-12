@@ -616,7 +616,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_validated_outcome_evidence_cannot_reset_another_labeled_work(self) -> None:
+    def test_invalid_process_graph_suppresses_outcome_and_cannot_reuse_its_evidence(self) -> None:
         def reuse_evidence(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
@@ -646,7 +646,8 @@ class ProductControlTests(unittest.TestCase):
             {"test-validator": validator},
         ):
             report = self.report()
-        self.assertTrue(report["criterionStates"]["O1"], report["errors"])
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertEqual(report["outcomes"]["verified"], 0)
         self.assertTrue(report["criterionStates"]["G2"], report["errors"])
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(

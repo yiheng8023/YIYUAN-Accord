@@ -5,7 +5,7 @@
   "release": "v0.2",
   "program": "product/program.json",
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "progressRule": "Only accepted real-task outcomes O1-O5 count as progress. Documents, tests, inventories, fixtures, memberships, and research volume are supporting evidence only.",
+  "progressRule": "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count as progress. Documents, tests, inventories, fixtures, memberships, and research volume are supporting evidence only.",
   "criteria": [
     {
       "id": "O1",
