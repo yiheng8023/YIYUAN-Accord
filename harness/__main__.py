@@ -16,7 +16,7 @@ def main() -> int:
     verify_parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    report = verify_product(args.root.resolve())
+    report = verify_product(args.root)
     if args.json:
         print(json.dumps(report, ensure_ascii=False, sort_keys=True))
     else:

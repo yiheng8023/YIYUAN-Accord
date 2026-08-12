@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from io import StringIO
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from harness.control import verify_product  # noqa: E402
+from harness.__main__ import main as cli_main  # noqa: E402
 
 
 AUTHORITY_FILES = (
@@ -208,6 +210,29 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotEqual(completed.returncode, 0)
         self.assertIn("ERROR: program id must be", completed.stderr)
         self.assertNotIn("ERROR:", completed.stdout)
+
+    def test_cli_delegates_root_resolution_to_fail_closed_verifier(self) -> None:
+        report = {
+            "productId": "agent-autonomy-harness",
+            "release": None,
+            "valid": False,
+            "completionState": "in-progress",
+            "activeIncrement": None,
+            "outcomes": {"verified": 0, "total": 5},
+            "guardrails": {"passed": 0, "total": 4},
+            "criterionStates": {},
+            "errors": ["verifier failed closed: OSError"],
+        }
+        arguments = ["python -m harness", "verify", "--root", "unresolvable", "--json"]
+        with (
+            patch("harness.__main__.Path.resolve", side_effect=OSError("fixture")),
+            patch("harness.__main__.verify_product", return_value=report) as verifier,
+            patch.object(sys, "argv", arguments),
+            patch("sys.stdout", new=StringIO()),
+        ):
+            returncode = cli_main()
+        self.assertEqual(returncode, 1)
+        verifier.assert_called_once()
 
     def test_release_id_drift_fails_closed(self) -> None:
         self.mutate(
