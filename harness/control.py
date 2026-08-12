@@ -183,6 +183,31 @@ EXPECTED_WORK_STATE_SEMANTICS = {
     "cancelled": "bound but never active or executed",
     "stopped": "previously active or attempted, then stopped",
 }
+EXPECTED_PLANNING_MODEL = {
+    "method": "fixed-release-acceptance-with-adaptive-causal-increments",
+    "maxActiveIncrements": 1,
+    "maxActiveWorkItems": 1,
+    "workStateSemantics": EXPECTED_WORK_STATE_SEMANTICS,
+    "incrementRequires": [
+        "observed problem",
+        "causal hypothesis",
+        "falsifier",
+        "correction class",
+        "mapped acceptance criteria",
+        "finite stop condition",
+        "process-loss budget",
+        "cleanup boundary",
+    ],
+    "replanWhen": [
+        "the hypothesis is falsified",
+        "new evidence changes the critical path",
+        "the user must reassert already-bound direction",
+        "the same process-loss class recurs",
+        "a phase produces no direct outcome movement",
+        "authority, trust, cost, or data boundaries change",
+        "the increment reaches its stop condition",
+    ],
+}
 EXPECTED_COLLABORATION_MODEL = {
     "userContributions": [
         "ideas-and-goals",
@@ -766,25 +791,10 @@ def _release_identity_valid(
         or set(bootstrap_guards) != EXPECTED_BOOTSTRAP_GUARDS
     ):
         _error(errors, "constitution bootstrapGuards are invalid")
-    planning = constitution.get("planningModel")
-    if not isinstance(planning, dict):
+    if not _same_typed_value(
+        constitution.get("planningModel"), EXPECTED_PLANNING_MODEL
+    ):
         _error(errors, "constitution planningModel is invalid")
-    else:
-        if (
-            type(planning.get("maxActiveIncrements")) is not int
-            or planning.get("maxActiveIncrements") != 1
-            or type(planning.get("maxActiveWorkItems")) is not int
-            or planning.get("maxActiveWorkItems") != 1
-        ):
-            _error(errors, "constitution planningModel active limits are invalid")
-        if not _same_typed_value(
-            planning.get("workStateSemantics"), EXPECTED_WORK_STATE_SEMANTICS
-        ):
-            _error(errors, "constitution workStateSemantics is invalid")
-        if _string_list(planning.get("incrementRequires")) is None:
-            _error(errors, "constitution incrementRequires are invalid")
-        if _string_list(planning.get("replanWhen")) is None:
-            _error(errors, "constitution replanWhen is invalid")
     return len(errors) == before
 
 

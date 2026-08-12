@@ -112,6 +112,11 @@ with a different non-empty list cannot make tests, artifacts, or self-declared
 evidence authoritative while G3 remains green. `adaptiveSurfaces` stays
 adaptable instead of being frozen into the verifier.
 
+The planning model is one exact code-owned object. Its causal prerequisites and
+replanning triggers cannot be replaced by non-empty no-op lists, and an
+undeclared mandatory workflow cannot enter the constitution while G3 remains
+green. Adaptive increments remain adaptive inside that small fixed boundary.
+
 The constitution, program, and acceptance documents also reject undeclared
 top-level fields. A field that merely spells a completion, outcome, or current
 authority claim cannot coexist with a green verifier outside the code-owned

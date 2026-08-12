@@ -308,7 +308,7 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/constitution.json", boolean_limits)
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn("constitution planningModel active limits are invalid", report["errors"])
+        self.assertIn("constitution planningModel is invalid", report["errors"])
 
     def test_work_state_semantics_cannot_self_disable(self) -> None:
         self.mutate(
@@ -319,7 +319,41 @@ class ProductControlTests(unittest.TestCase):
         )
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn("constitution workStateSemantics is invalid", report["errors"])
+        self.assertIn("constitution planningModel is invalid", report["errors"])
+
+    def test_planning_model_cannot_disable_causality_or_add_workflow(self) -> None:
+        variants = (
+            (
+                "remove causal prerequisites",
+                lambda value: value["planningModel"].__setitem__(
+                    "incrementRequires", ["none"]
+                ),
+            ),
+            (
+                "disable replanning",
+                lambda value: value["planningModel"].__setitem__(
+                    "replanWhen", ["never"]
+                ),
+            ),
+            (
+                "inject workflow",
+                lambda value: value["planningModel"].__setitem__(
+                    "mandatoryWorkflow", "plan-worktree-review"
+                ),
+            ),
+        )
+        for label, mutate_planning_model in variants:
+            with self.subTest(label=label):
+                self.mutate("product/constitution.json", mutate_planning_model)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn(
+                    "constitution planningModel is invalid", report["errors"]
+                )
+                shutil.copy2(
+                    ROOT / "product/constitution.json",
+                    self.root / "product/constitution.json",
+                )
 
     def test_collaboration_model_cannot_add_user_or_process_burden(self) -> None:
         def inject_workflow(value: dict) -> None:
