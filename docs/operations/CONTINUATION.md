@@ -40,14 +40,27 @@ portfolio curation. Such work must start from an observed problem, have a
 finite stop, remain inside existing authority, and count as zero O1-O5
 progress.
 
-A 2026-08-13 source-bound landscape and historical-asset audit found public
-implementations and documented coverage across protocol, discovery, runtime,
-governance, and evaluation layers. Do not reopen predecessor fixed
-registries, repository-owned general-purpose Skills, universal-runtime work,
-or manager-specific proofs as the product. Refresh only a decision-relevant
-external cohort, reuse sufficient layers, and require a residual semantic gap
-before composition or authoring. This audit changes the route and acceptance
-boundary but proves none of O1-O5.
+A 2026-08-13 fixed-source landscape and historical-asset audit found strong
+overlap at every neighboring layer. CHAP already defines a composable human-
+Agent collaboration wire and auditable workspace; Human Tool supplies an
+empirical Agent-led allocation pattern and burden measures; Agentlas OS is the
+strongest full-substitute hypothesis for intake, routing, lifecycle, receipts,
+and cross-host packaging; existing runtimes, policy layers, provenance formats,
+and evaluators cover the rest. Do not reopen predecessor fixed registries,
+repository-owned general-purpose Skills, universal-runtime work, wire-protocol
+work, audit formats, or manager-specific proofs as the product. The surviving
+Harness boundary is a testable demand-to-capability collaboration methodology,
+open minimum quality-conformance profile, and thin reference adapters that
+reuse those layers. This audit changes the route and acceptance boundary but
+proves none of O1-O5.
+
+The next outcome-bearing slice remains Codex-first and task-bound. At entry,
+freeze the task floors, source-bound baseline, material-intervention taxonomy,
+and exact reused substrate identities; then use healthy native Codex behavior
+as the smallest initial route. Add an external protocol, runtime, or capability
+only if the task exposes a reproducible residual gap. Do not prebuild a wire
+protocol, adapter stack, audit schema, or outcome validator in anticipation of
+that evidence.
 
 ## Outcome-entry boundary
 

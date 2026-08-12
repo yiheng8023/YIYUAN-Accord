@@ -5,7 +5,7 @@ English | [简体中文](README.zh-CN.md)
 Shortest path: [verify the checkout](#start-here) · [understand the loop](#what-the-harness-does) · [choose a deeper path](#progressive-paths)
 
 Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
-capability control plane. It is being built to keep a real task's goal,
+collaboration quality harness. It is being built to keep a real task's goal,
 capability route, authority boundary, lifecycle, continuity, evidence, and
 cleanup coherent without making the user orchestrate every Agent, Skill, MCP
 server, Plugin, Hook, thread, worktree, catalog, or manager.
@@ -22,9 +22,11 @@ to own the stack. Each implementation decision is checked against a
 source-bound external landscape: reuse or adapt first, compose for an actual
 integration gap, and author only for a repeatable residual semantic gap.
 
-The durable target is a collaboration methodology, an open standard, and an
-executable reference implementation. Codex is the first reference slice, not
-a dependency of the portable core.
+The durable target is a demand-to-capability collaboration methodology, an
+open minimum quality-conformance profile, and executable reference adapters.
+The profile states testable behavior and quality floors; it is not a new wire
+protocol, runtime, identity system, audit log, or generic tool schema. Codex is
+the first reference slice, not a dependency of the portable core.
 
 The current implementation verifies that contract and its causal program.
 Task execution, behavior evaluation, and cross-host adapters remain planned
@@ -103,9 +105,11 @@ Current v0.2 outcomes are:
   real tasks;
 - O3 — adaptive discovery, build-versus-reuse evidence, and lifecycle decisions
   keep a broad and changing ecosystem outside the user's cognitive path;
-- O4 — an accepted Agent-neutral human-Agent collaboration methodology and
-  core minimum standard, compared against a source-bound external reference
-  cohort, with software engineering as the first reference profile;
+- O4 — an accepted Agent-neutral demand-to-capability collaboration
+  methodology and open minimum quality-conformance profile, compared against a
+  fixed source-bound external cohort while reusing sufficient protocol,
+  runtime, identity, provenance, and evaluation layers; software engineering
+  is the first reference profile;
 - O5 — portable closed-loop delivery through Codex and a distinct second Agent
   host or runtime through its own thin adapter. A same-host second adapter is
   conformance evidence only and cannot pass O5.

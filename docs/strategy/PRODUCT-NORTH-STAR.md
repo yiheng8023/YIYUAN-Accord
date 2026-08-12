@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Provide an open, Agent-neutral, demand-driven human-Agent capability control
-plane that reduces the user's Agent and capability learning and orchestration
+Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality
+harness that reduces the user's Agent and capability learning and orchestration
 burden while preserving human control over goals, creative and consequential
 judgment, trust, cost, publication, release, and irreversible effects.
 
@@ -34,17 +34,18 @@ research breadth, and green fixtures are not substitutes for that result.
 
 ## Fixed product boundary
 
-The durable product form consists of a collaboration methodology, an open
-standard, and an executable reference implementation. Its portable core
-consists of:
+The durable product form consists of a demand-to-capability collaboration
+methodology, an open minimum quality-conformance profile, and executable
+reference adapters. Its portable core consists of:
 
-1. a portable decision core for goal-level demand, authority, capability
+1. testable quality requirements for goal-level demand, authority, capability
    observation, gap assessment, routing, rerouting, verification, closure, and
    handoff;
-2. a lifecycle plane for desired state, ownership, observation, actuation,
-   rollback, release, and cleanup;
-3. thin host and manager adapters;
-4. evidence and acceptance contracts;
+2. task-scoped lifecycle and burden measures for desired state, ownership,
+   observation, actuation, rollback, release, cleanup, and user intervention;
+3. evidence and acceptance floors that bind sufficient external record formats
+   rather than redefining them;
+4. thin host and manager reference adapters;
 5. generated or consumer-owned projections that never replace product
    authority.
 
@@ -56,12 +57,15 @@ sufficiency is evaluated against bound demand; it is not a bias toward the
 smallest portfolio. A material coverage gap creates an obligation to discover,
 compare and, when justified, add a governed capability.
 
-The same rule applies to the product implementation itself. Before building a
-protocol, registry, gateway, search surface, runtime, governance kernel, or
-evaluation mechanism, compare current source-bound external implementations.
-Reuse or thinly adapt a sufficient layer, compose only for an integration gap,
-and author only for a repeatable residual semantic gap. Owning more stack is not
-independence; preserving the portable contract across replaceable layers is.
+The same rule applies to the product implementation itself. The Harness is not
+a collaboration wire protocol, generic human-tool schema, runtime, identity
+system, audit log, or provenance format. Before building any protocol, registry,
+gateway, search surface, runtime, governance kernel, evidence format, or
+evaluation mechanism, compare current source-bound external implementations by
+fixed version or commit, licence, maturity, and actual boundary. Reuse or thinly
+adapt a sufficient layer, compose only for an integration gap, and author only
+for a repeatable residual semantic gap. Owning more stack is not independence;
+preserving the quality contract across replaceable layers is.
 
 ## Release acceptance
 
@@ -81,9 +85,10 @@ Current `v0.2` acceptance directly measures the missing product outcomes:
   natural tasks;
 - O3 — adaptive discovery and real marginal-value lifecycle decisions keep a
   broad and changing capability ecosystem outside the user's cognitive path;
-- O4 — an accepted Agent-neutral human-Agent collaboration methodology and
-  core minimum standard, with software engineering as the first calibrated
-  profile rather than the product boundary;
+- O4 — an accepted Agent-neutral demand-to-capability collaboration methodology
+  and open minimum quality-conformance profile that reuses sufficient external
+  layers, with software engineering as the first calibrated reference profile
+  rather than the product boundary;
 - O5 — the common closed loop works through the Codex reference adapter and a
   distinct second Agent host or runtime through its own thin adapter; a
   same-host second adapter is conformance evidence only and cannot pass O5.
@@ -142,7 +147,7 @@ design the tool route. Task-time discovery binds that gap and uses an isolated,
 finite, cleaned review pool; portfolio discovery binds the complete curation
 contract. Neither path silently grants live mutation.
 
-## World-class standard
+## World-class quality target
 
 World-class quality here means causal integrity, a small deep interface,
 honest evidence, recoverability, measurable user value, and the ability to

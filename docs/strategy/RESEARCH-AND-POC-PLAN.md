@@ -47,7 +47,7 @@ is:
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
    outcome denominator, and named accountable human acceptance. This is a
    prerequisite to O1, not a product outcome by itself.
-2. **Codex reference control-plane slice.** Enter through the user's goal rather
+2. **Codex reference quality-harness slice.** Enter through the user's goal rather
    than a named tool route. Record available-capability observation, gap
    assessment, optional discovery, smallest-sufficient route selection,
    task-scoped dispatch, recovery, verification, release, and cleanup. Compare
@@ -60,10 +60,12 @@ is:
    cognition and standing context; end task exposure when the need ends, then
    retain inactive, justify persistent activation, merge, replace, retire, or
    expire each admitted route.
-4. **Methodology and open minimum standard.** Calibrate the Agent-neutral
-   collaboration method and portable core standard from repeated real
-   behavior. Use software engineering as the first reference profile, not as
-   the product boundary. Measure outcome and communication quality,
+4. **Methodology and open minimum quality-conformance profile.** Calibrate the
+   Agent-neutral collaboration method and testable portable profile from
+   repeated real behavior. Bind existing protocol, allocation, runtime,
+   identity, audit, provenance, and evaluation layers rather than redefining
+   them. Use software engineering as the first reference profile, not as the
+   product boundary. Measure outcome and communication quality,
    intent-mode and decision-completeness errors, user capability-learning
    burden, unnecessary design/process/artifact load, route errors, recovery,
    time and call cost, resource lifecycle, residue, context/handoff
@@ -125,53 +127,42 @@ to satisfy the capability.
 
 ## External landscape and build-versus-reuse gate
 
-A source-bound landscape checkpoint on 2026-08-13 found public implementations
-and documented coverage at every neighboring layer:
+The first broad checkpoint was too weak to support a “no complete substitute”
+claim because several sources were mutable and project self-description was not
+tested against implementation and evaluation evidence. A second checkpoint on
+2026-08-13 fixed the closest sources and deliberately searched for a full
+substitute:
 
-- [MCP](https://modelcontextprotocol.io/docs/learn/architecture),
-  [A2A discovery](https://a2a-protocol.org/latest/topics/agent-discovery/), and
-  [Agent Skills](https://agentskills.io/client-implementation/adding-skills-support)
-  already cover interoperable tool/context exchange, Agent discovery, and
-  progressively loaded method packaging;
-- [OpenAI tool search](https://openai.github.io/openai-agents-python/tools/) and
-  [Anthropic tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)
-  already defer large tool surfaces and load relevant definitions on demand;
-- [Composio sessions](https://docs.composio.dev/docs/how-composio-works) already
-  combine runtime discovery, authentication, and execution behind meta-tools;
-- [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview),
-  [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/),
-  [Compozy](https://github.com/compozy/compozy), and
-  [Agentlas OS](https://github.com/agentlas-ai/Agentlas-OS) document substantial
-  runtime, orchestration, cross-host, permission, persistence, and receipt
-  surfaces;
-- [NIST evaluation probes](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai),
-  [ToolSandbox](https://machinelearning.apple.com/research/toolsandbox-stateful-conversational-llm-benchmark),
-  [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html), and
-  [AgentDojo](https://github.com/ethz-spylab/agentdojo) provide reusable
-  evaluation and adversarial reference surfaces.
+| Layer and fixed source | Verified overlap | Reuse boundary and falsifier |
+| --- | --- | --- |
+| [CHAP working draft 0.2 at `9e7af2b`](https://github.com/BrightbeamAI/chap/tree/9e7af2b811d3368b4afba7c6d318764959c2fd0d), Apache-2.0 code and CC-BY-4.0 specification | Small Core plus optional review, routing, modes, handoff, control, identity, signed-security, and audit profiles; TypeScript and Python implementations | Use as the leading collaboration-wire and auditable-workspace candidate instead of inventing one. Its own scope excludes claim/evidence taxonomy, confidence calibration, and evidence sufficiency; Full conformance is not yet normative because the harness covers Core and review rather than every profile. |
+| [Human Tool, arXiv:2602.12953v1](https://arxiv.org/abs/2602.12953), CC-BY-4.0 | Models human capability, information, and authority as dynamically invocable input; a controlled 32-person, two-task comparison reports better outcomes and lower coordination burden | Reuse the allocation hypothesis, matched comparison design, workload measures, and explicit authority boundary. It does not establish long-horizon, high-stakes, cross-host, capability-release, cleanup, or durable-continuity value; some participants felt carried along. |
+| [Agentlas OS v1.2 source at `8b3f8bc`](https://github.com/agentlas-ai/Agentlas-OS/tree/8b3f8bcffdfc57bf4991ed6e43d153d9230ea186), Apache-2.0 | Natural-language intake, bounded clarification, capability and role routing, portable packages, multi-host adapters, permissions, memory, receipts, and governed skill promotion make it the strongest full-substitute hypothesis in this cohort | Evaluate it as a possible route or substrate, not dismiss it as “just another runtime.” The fixed source also requires installation and host configuration, offers an optional global router and background runtime update, and contains an evaluation design and schemas but no public benchmark result files. It becomes a full substitute only if matched evidence also shows lower user orchestration burden, accepted outcomes, task-scoped release and cleanup, and equivalent cross-host value without an additional Harness profile. |
+| [Compozy at `36bd815`](https://github.com/compozy/compozy/tree/36bd8156bba6f91b10929ed4d5e1b91623a3cb5f), [Microsoft Agent Governance Toolkit at `7d0cef5`](https://github.com/microsoft/agent-governance-toolkit/tree/7d0cef5d9820a865c3c19b07bd39ecf7053b58a1), [CUGA at `a4567d3`](https://github.com/cuga-project/cuga-agent/tree/a4567d3e35c056af05cefd53fae668006a8e5d03), and [Composio at `6e261d6`](https://github.com/ComposioHQ/composio/tree/6e261d6abf305a0081487d4ccf064963e7111a97) | Maintained runtime, policy, enterprise-agent, tool discovery, authentication, and execution surfaces | Reuse the sufficient operational layer. None of the fixed sources by itself supplies accepted matched evidence for the complete burden-transfer and resource-closure proposition; that observation is provisional and must be refreshed before a claim. |
+| [AAS-1 v0.1 at `a82f9fc`](https://github.com/Kadikoy1/aas-1/tree/a82f9fc2d98860760030840d05c099f04652501d), [Decision Provenance Standard v1.0 rev. 8](https://decisionprovenancestandard.org/dps-v1.0-rev8-core.html), and [NIST agentic-AI evaluation probes](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai) | Reusable audit-record, named-human decision, provenance, conformance, and evaluator concepts | Do not invent a generic audit or provenance format. AAS-1 is an early draft with only its Class A schema implemented; Decision Provenance is self-declared and explicitly says its records are input rather than evidence; domain evidence sufficiency and Harness outcome floors remain separate. |
 
-This checkpoint does not prove that no complete substitute exists. It does
-falsify any plan to make a universal runtime, fixed catalog, gateway, generic
-tool search, authentication broker, policy engine, or benchmark suite the
-Harness's novelty. The remaining product hypothesis is narrower: a thin,
-Agent-neutral control contract that transfers goal-to-capability orchestration
-burden from the user while keeping authority, task-scoped lifecycle, evidence,
-acceptance, cleanup, and cross-host semantics coherent across replaceable
-layers.
+MCP, A2A, Agent Skills, native tool search, LangGraph and comparable host
+runtimes remain default reusable substrate for tool exchange, Agent exchange,
+progressive capability loading, and execution. Their presence does not prove the
+Harness proposition, but it removes those mechanisms from the novelty claim.
 
-The closest overlaps in this cohort still center on owning a runtime, package,
-marketplace, or enterprise governance surface. The checkpoint did not verify a
-single maintained project that jointly proves goal-level entry without user
-route selection, reduced user capability-learning burden, bounded authority,
-task-scoped release and cleanup, evidence-backed acceptance, and the same thin
-semantics across distinct hosts. That is a provisional gap, not a novelty
-claim; a contrary implementation is a direct falsifier.
+This checkpoint invalidates a generic collaboration protocol, universal
+runtime, fixed catalog, gateway, generic tool or human schema, authentication
+broker, policy engine, audit/provenance format, or benchmark suite as the
+Harness product. The remaining hypothesis is narrower and explicitly
+falsifiable: a thin Agent-neutral methodology and open quality-conformance
+profile can measurably transfer goal-to-capability orchestration burden from the
+user while preserving accepted outcome quality, accountable authority,
+task-scoped exposure release and cleanup, evidence integrity, continuity, and
+equivalent semantics across replaceable hosts and external layers.
 
-Before implementation, refresh only the decision-relevant cohort and record
-the as-of source identities. If an external implementation satisfies that
-remaining hypothesis, integrate or narrow the Harness rather than competing by
-inventory size. This landscape work is bounded research and authority repair;
-it counts as zero O1-O5 progress.
+No fixed source reviewed here currently proves that whole proposition. That is
+not a novelty claim. A maintained implementation with matched, source-bound
+evidence for those same floors is a direct falsifier and requires the Harness to
+integrate, shrink, or stop. Before implementation or comparative claims,
+refresh only the decision-relevant cohort and bind exact source, version or
+commit, licence, maturity, actual behavior, and missing evidence. This bounded
+research and authority repair counts as zero O1-O5 progress.
 
 ## Stop and cleanup rules
 

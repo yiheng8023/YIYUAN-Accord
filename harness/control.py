@@ -25,11 +25,11 @@ CONSTITUTION_ID = "harness-product-constitution-v1"
 CURRENT_RELEASE = "v0.2"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
-    "Provide an open, Agent-neutral, demand-driven human-Agent capability control "
-    "plane that transfers capability observation, discovery, selection, bounded setup "
-    "and task-scoped dispatch, recovery, verification, and release burden from the user "
-    "to the Agent while preserving human authority over goals, domain judgment, trust, "
-    "cost, and irreversible effects."
+    "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality "
+    "harness that transfers capability observation, discovery, selection, bounded setup "
+    "and task-scoped dispatch, recovery, verification, release, and cleanup burden from "
+    "the user to the Agent while preserving human authority over goals, domain judgment, "
+    "trust, cost, and irreversible effects."
 )
 EXPECTED_SUCCESS_DEFINITION = (
     "Across repeated real tasks entered at the goal level, a user can provide ideas, "
@@ -41,10 +41,11 @@ EXPECTED_SUCCESS_DEFINITION = (
     "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the open Agent-neutral demand-driven human-Agent capability control plane "
+    "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness "
     "through goal-level natural-task dogfooding, dynamic capability discovery and "
-    "lifecycle arbitration, an accepted collaboration methodology and open standard, "
-    "and thin cross-host reference adapters."
+    "lifecycle arbitration, an accepted methodology and open quality-conformance profile, "
+    "and thin cross-host reference adapters that reuse sufficient external protocol, "
+    "runtime, and evidence layers."
 )
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
@@ -139,7 +140,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "875b11e18c2893e6eccd5accea048d31ab8b0a4ae044351e325a8656125ac6c2"
+    "c0b455cb9c8d3986314a7cc5c4a869645bd0e716d52ceb3d5d44008943202225"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -284,13 +285,13 @@ EXPECTED_COLLABORATION_MODEL = {
     ],
 }
 EXPECTED_PRODUCT_FORM = {
-    "identity": "open-agent-neutral-demand-driven-human-agent-capability-control-plane",
+    "identity": "open-agent-neutral-demand-driven-human-agent-collaboration-quality-harness",
     "durableOutputs": [
         "methodology",
-        "open-standard",
-        "executable-reference-implementation",
+        "open-quality-conformance-profile",
+        "executable-reference-adapter",
     ],
-    "portableCore": "demand-authority-capability-lifecycle-evidence-and-acceptance-semantics",
+    "portableCore": "testable-demand-authority-capability-lifecycle-evidence-acceptance-and-burden-semantics",
     "referenceDelivery": "codex-first-reference-slice-then-distinct-host-portability-proof",
 }
 EXPECTED_FIXED_INVARIANTS = frozenset(
@@ -301,12 +302,12 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "every active work item maps to at least one release criterion",
         "only one causal increment and at most one work item may be active",
         "goal-level demand is the default entry; the user need not name a capability, product, discovery channel, or invocation syntax",
-        "the portable core is not a capability catalog, capability manager, universal runtime, or host projection",
+        "the portable core is not a capability catalog, capability manager, collaboration wire protocol, audit log, universal runtime, or host projection",
         "capability discovery sources and query strategies are adaptive inputs and no fixed channel can become product authority",
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
         "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
-        "reuse or adapt sufficient external protocols, runtimes, discovery, governance, and evaluation capability before composition or authoring; new implementation requires an evidenced residual semantic gap",
+        "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; new implementation requires an evidenced residual semantic gap",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",

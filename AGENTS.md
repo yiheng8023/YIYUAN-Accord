@@ -1,8 +1,10 @@
 # Agent Autonomy Harness Repository Guidance
 
 This repository is the product authority for an open, Agent-neutral,
-demand-driven human-Agent capability control plane. Its durable product target
-is a methodology, an open standard, and an executable reference implementation.
+demand-driven human-Agent collaboration quality harness. Its durable product
+target is a methodology, an open minimum quality-conformance profile, and thin
+executable reference adapters that reuse sufficient external protocol, runtime,
+identity, evidence, and evaluation layers.
 
 ## Current authority
 

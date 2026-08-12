@@ -1,15 +1,16 @@
 # Architecture
 
 Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
-capability control plane. Its durable outputs are a collaboration methodology,
-an open standard, and an executable reference implementation. It has one
-portable product contract, one small control seam, and replaceable host edges.
+collaboration quality harness. Its durable outputs are a demand-to-capability
+collaboration methodology, an open minimum quality-conformance profile, and
+executable reference adapters. It has one testable portable product contract,
+one small reference seam, and replaceable host edges.
 
 ```text
 user goal + domain facts + bounded authority
                     |
                     v
-          Agent-neutral control plane
+      Agent-neutral collaboration quality profile
  observe capability -> assess gap -> discover if needed -> select route
  -> authorize -> task-scoped dispatch -> execute/observe/recover
  -> verify -> release/clean -> accept or continue
@@ -52,11 +53,14 @@ bind demand and authority -> observe available capability -> assess the gap
 -> emit a bounded receipt or continue
 ```
 
-The portable layer owns semantics, not host commands. It defines required
+The portable layer owns testable quality semantics, not host commands or wire
+primitives. It defines required
 authority, unsupported states, lifecycle ownership, evidence shape, outcome
 floors, fallback, recovery, cleanup, and process-loss stop rules. It does not
-own a fixed catalog, provider list, universal runtime, or host projection.
-Catalogs and discovery channels are replaceable source inputs.
+own a fixed catalog, provider list, collaboration protocol, identity system,
+audit log, generic human-tool schema, universal runtime, or host projection.
+Protocols, runtimes, evidence formats, catalogs, and discovery channels are
+replaceable external substrate.
 
 The current implemented reference slice is the v0.2 historical-event-neutral
 product-control kernel plus the capability-chain, current-asset integrity,
@@ -69,7 +73,7 @@ scoped to that criterion. The current O1 validator checks the pre-registered
 goal-level demand and capability-lifecycle receipt contract only; it neither
 creates a natural task nor proves that a self-described task was natural.
 O2-O5 still have no validation path. The control kernel is not yet the task-
-execution runtime, accepted methodology, accepted standard, or cross-host
+execution runtime, accepted methodology, accepted quality profile, or cross-host
 proof.
 The pause limits outcome-bearing experimentation, not bounded retrospective
 analysis, portfolio curation, mechanism validation, or authority-defect repair.
@@ -86,13 +90,16 @@ Each task begins by observing available healthy and authorized routes. Only a
 reproducible residual gap justifies finite, source-bound discovery. The query,
 channel, and provider may adapt to demand; none becomes product authority.
 
-Implementation follows the same residual-gap rule across layers. Protocols,
-registries, gateways, tool search, runtimes, governance kernels, and evaluation
-systems are first treated as external substrate. A source-bound as-of landscape
-check decides whether to reuse, thinly adapt, compose, or author. The reference
-implementation owns only the missing portable semantics and integration needed
-to preserve the Harness contract; duplicating a sufficient external layer is a
-failed route decision, not product independence.
+Implementation follows the same residual-gap rule across layers. Collaboration
+protocols, human-allocation patterns, registries, gateways, tool search,
+runtimes, identity and authorization, audit and provenance formats, governance
+kernels, and evaluation systems are first treated as external substrate. A
+source-bound as-of landscape check records exact version or commit, licence,
+maturity, and reuse boundary before deciding whether to reuse, thinly adapt,
+compose, or author. The reference adapters own only the missing portable quality
+semantics and integration needed to preserve the Harness contract; duplicating
+a sufficient external layer is a failed route decision, not product
+independence.
 
 Acquisition, installation, enablement, exposure, invocation, instruction
 delivery, behavior, value, projection, rollback, cleanup, acceptance, release,
@@ -142,8 +149,10 @@ owns consequential acceptance.
 Historical dimensions and scenarios are sampling and risk coordinates.
 Membership is not coverage, a fixture is not behavior, and a green test is not
 user value. Software engineering is the first calibration profile for the
-general human-Agent collaboration method and core standard, not the product
-boundary.
+general human-Agent collaboration method and open minimum quality-conformance
+profile, not the product boundary. The profile may bind existing protocol or
+evidence artifacts by fixed identity, but it does not redefine their wire or
+record semantics.
 
 ## 6. Process-loss control
 

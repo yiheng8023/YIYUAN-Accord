@@ -53,6 +53,17 @@ collaboration core with software engineering as the first reference profile.
 This repaired authority and validation semantics but counted as zero O1-O5
 progress; the program returned to `paused` with an empty current graph.
 
+A later fixed-source substitute audit narrowed that wording again. CHAP already
+occupies the collaboration-wire and auditable-workspace layer; Human Tool
+supplies an empirical Agent-led allocation pattern; Agentlas OS substantially
+overlaps intake, routing, capability lifecycle, receipts, and cross-host
+packaging; established runtimes, identity, audit, provenance, and evaluation
+projects cover adjacent mechanisms. The current product therefore no longer
+claims a new general control plane or open wire standard. Its surviving form is
+a demand-to-capability collaboration methodology, an open minimum quality-
+conformance profile, and thin executable reference adapters. This is an
+authority and route correction, not O1-O5 evidence.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
@@ -85,3 +96,5 @@ generic protocol, registry, gateway, tool-search surface, universal runtime,
 authentication broker, governance kernel, or benchmark suite as the Harness's
 distinct product. Existing implementations are replaceable substrate. Only an
 evidenced residual semantic or integration gap can justify new Harness code.
+The fixed-source follow-up additionally invalidates a generic human-tool schema,
+collaboration wire, audit log, or decision-provenance format as product novelty.
