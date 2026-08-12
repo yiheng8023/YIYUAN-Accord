@@ -711,6 +711,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn("repository cleanup residue remains: .tmp", report["errors"])
 
+    def test_repository_residue_enumeration_error_fails_closed(self) -> None:
+        def unreadable_walk(root, *, topdown, followlinks, onerror=None):
+            if onerror is not None:
+                onerror(PermissionError("fixture access denied"))
+            return []
+
+        with patch("harness.control.os.walk", side_effect=unreadable_walk):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn("repository residue cannot be enumerated", report["errors"])
+
     def test_dangling_cleanup_symlink_is_residue(self) -> None:
         self.mutate("product/program.json", self.activate_program)
         link = self.root / ".tmp"

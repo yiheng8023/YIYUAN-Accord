@@ -80,6 +80,10 @@ local public seam reports 74/74 product tests passing, `0/5` outcomes, and
 `4/4` guardrails. These mechanism repairs count as zero O1-O5 progress and did
 not activate a capability or consumer.
 
+The repository-wide cleanup scan also fails G4 when any directory cannot be
+enumerated. An inaccessible region is not accepted as evidence that residue is
+absent.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,

@@ -948,8 +948,17 @@ def _process_loss_guardrail(
 
 def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
     before = len(errors)
+
+    def record_enumeration_error(error: OSError) -> None:
+        _error(errors, "repository residue cannot be enumerated")
+
     try:
-        for current, directories, files in os.walk(root, topdown=True, followlinks=False):
+        for current, directories, files in os.walk(
+            root,
+            topdown=True,
+            followlinks=False,
+            onerror=record_enumeration_error,
+        ):
             current_path = Path(current)
             retained: list[str] = []
             for name in directories:
