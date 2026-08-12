@@ -1006,7 +1006,15 @@ def _evidence_states(
                 and _nonempty_text(work_id)
                 and work_binding is not None
                 and work_binding[0] == increment_id
-                and criterion_id in work_binding[1]
+                and set(criterion_ids) <= OUTCOME_IDS
+                and set(criterion_ids) <= work_binding[1]
+                and all(
+                    declared_id in criteria
+                    and criteria[declared_id].get("assessment") == "verified"
+                    and relative
+                    in (_string_list(criteria[declared_id].get("evidence")) or [])
+                    for declared_id in criterion_ids
+                )
                 and work_binding[2] == "completed"
                 and isinstance(source, dict)
                 and all(

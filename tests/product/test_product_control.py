@@ -890,6 +890,30 @@ class ProductControlTests(unittest.TestCase):
                     self.root / "product/acceptance.json",
                 )
 
+    def test_evidence_cannot_carry_unbound_criterion_claims(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        evidence = self.evidence_document(criterion_ids=["O1", "O2"])
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {"test-validator": validator},
+        ):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertFalse(report["criterionStates"]["G2"])
+        self.assertIn(
+            "criterion O1 evidence shape is invalid: product/evidence/bound.json",
+            report["errors"],
+        )
+
     def test_malformed_evidence_fails_without_traceback(self) -> None:
         self.write_json("product/evidence/malformed.json", {"schema": 1})
 
