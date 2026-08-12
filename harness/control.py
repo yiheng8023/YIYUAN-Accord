@@ -132,7 +132,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "ebba4dcfe4f8f6f3aa1a58cd6e845dc94b726fe21aad3b6bf6ac63b323e77ced"
+    "f0e6339060490334abad7d91efcdd7df7d6d2bb0e6244aeef4566672a4df872b"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -1043,6 +1043,15 @@ def _program_graph(
         mapped = _string_list(increment.get("acceptanceIds"))
         if mapped is None or not set(mapped) <= set(criteria):
             _error(errors, f"increment {increment_id} has invalid acceptanceIds")
+        elif (
+            increment_state == "active"
+            and set(mapped) & OUTCOME_IDS
+            and not SUPPORTED_EVIDENCE_VALIDATORS
+        ):
+            _error(
+                errors,
+                f"active outcome-bearing increment requires a code-owned evidence validator: {increment_id}",
+            )
         work_items = _objects(increment.get("workItems"), f"increment {increment_id} workItems", errors)
         if not work_items:
             _error(errors, f"increment {increment_id} must contain at least one work item")

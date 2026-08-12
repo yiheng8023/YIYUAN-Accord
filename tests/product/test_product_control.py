@@ -627,6 +627,23 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
 
+    def test_outcome_increment_cannot_open_without_a_validation_path(self) -> None:
+        def manufacture(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["observedProblem"] = "No natural task exists, so create Harness work."
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+
+        self.mutate("product/program.json", manufacture)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "active outcome-bearing increment requires a code-owned evidence validator: "
+            f"{FIXTURE_INCREMENT_ID}",
+            report["errors"],
+        )
+
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:
             self.activate_program(value)
