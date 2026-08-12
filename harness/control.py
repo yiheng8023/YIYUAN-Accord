@@ -24,6 +24,25 @@ COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
 EXPECTED_CRITERION_IDS = OUTCOME_IDS | GUARDRAIL_IDS
+OUTCOME_OPERATIONALIZATION_FIELDS = {
+    "sampleUnit",
+    "minimumSampleCount",
+    "comparisonDesign",
+    "preRegistrationFields",
+    "requiredMeasures",
+    "passRule",
+    "falsifiers",
+    "humanAuthority",
+}
+OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
+    {
+        "O1": (1, "single-pre-registered-natural-task"),
+        "O2": (3, "source-bound-baseline-by-pre-registered-scenario-class"),
+        "O3": (3, "bounded-route-cohort-with-retain-option"),
+        "O4": (4, "same-version-scorecard-including-pass-and-fail-cases"),
+        "O5": (1, "same-task-matched-cross-host-pair"),
+    }
+)
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
     "product/program.json",
@@ -203,6 +222,10 @@ def _string_list(value: Any) -> list[str] | None:
     if len(value) != len(set(value)):
         return None
     return value
+
+
+def _nonempty_text(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
 
 
 def _relative_locator(value: Any, *, allow_evidence: bool = False) -> str | None:
@@ -601,6 +624,52 @@ def _criteria(
             _error(errors, f"criterion {criterion_id} must be computed")
         if criterion_id in OUTCOME_IDS and assessment == "computed":
             _error(errors, f"criterion {criterion_id} must be planned or verified")
+        operationalization = item.get("operationalization")
+        if criterion_id in OUTCOME_IDS:
+            if (
+                not isinstance(operationalization, dict)
+                or set(operationalization) != OUTCOME_OPERATIONALIZATION_FIELDS
+            ):
+                _error(
+                    errors,
+                    f"criterion {criterion_id} requires the exact operationalization fields",
+                )
+            else:
+                sample_floor, comparison_design = OUTCOME_OPERATIONALIZATION_BASELINES[
+                    criterion_id
+                ]
+                sample_count = operationalization.get("minimumSampleCount")
+                if (
+                    type(sample_count) is not int
+                    or sample_count < sample_floor
+                ):
+                    _error(
+                        errors,
+                        f"criterion {criterion_id} minimumSampleCount must be at least {sample_floor}",
+                    )
+                if operationalization.get("comparisonDesign") != comparison_design:
+                    _error(
+                        errors,
+                        f"criterion {criterion_id} comparisonDesign is invalid",
+                    )
+                for field in ("sampleUnit", "passRule", "humanAuthority"):
+                    if not _nonempty_text(operationalization.get(field)):
+                        _error(
+                            errors,
+                            f"criterion {criterion_id} operationalization {field} is invalid",
+                        )
+                for field in (
+                    "preRegistrationFields",
+                    "requiredMeasures",
+                    "falsifiers",
+                ):
+                    if _string_list(operationalization.get(field)) is None:
+                        _error(
+                            errors,
+                            f"criterion {criterion_id} operationalization {field} is invalid",
+                        )
+        elif "operationalization" in item:
+            _error(errors, f"guardrail {criterion_id} cannot declare operationalization")
         if assessment == "verified" and _string_list(item.get("evidence")) is None:
             _error(errors, f"verified criterion {criterion_id} requires evidence")
         if assessment != "verified" and "evidence" in item:
@@ -896,18 +965,27 @@ def _evidence_states(
             validator = document.get("validator")
             validator_kind = validator.get("kind") if isinstance(validator, dict) else None
             criterion_ids = _string_list(document.get("criterionIds"))
+            source = document.get("source")
+            authority = document.get("authority")
+            result = document.get("result")
             shape_valid = (
                 document.get("schema") == 1
-                and isinstance(document.get("id"), str)
+                and _nonempty_text(document.get("id"))
                 and criterion_ids is not None
                 and criterion_id in criterion_ids
                 and _rfc3339(document.get("observedAt"))
-                and isinstance(document.get("source"), dict)
-                and bool(document.get("source"))
-                and isinstance(document.get("authority"), dict)
-                and bool(document.get("authority"))
-                and isinstance(document.get("result"), dict)
-                and bool(document.get("result"))
+                and isinstance(source, dict)
+                and all(
+                    _nonempty_text(source.get(field))
+                    for field in ("kind", "locator", "identity")
+                )
+                and isinstance(authority, dict)
+                and authority.get("kind") == "named-accountable-human"
+                and _nonempty_text(authority.get("name"))
+                and authority.get("decision") == "accepted"
+                and _rfc3339(authority.get("decidedAt"))
+                and isinstance(result, dict)
+                and result.get("accepted") is True
                 and _string_list(document.get("claimLimits")) is not None
                 and isinstance(validator_kind, str)
                 and type(validator.get("version")) is int

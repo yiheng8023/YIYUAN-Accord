@@ -44,6 +44,15 @@ byte proxies and marker-only document parity; and closed mapping and residue
 blind spots. These are evaluation and debt results, not verified O1-O5
 outcomes. No consumer, Skill, Hook, account, or capability activation changed.
 
+The outcome-operationalization baseline then closed a pre-experiment authority
+defect: O1-O5 now declare structured sample units, code-owned sample floors and
+comparison designs, pre-registration fields, required measures, pass rules,
+falsifiers, and human authority. Generic outcome evidence must identify its
+source, carry a named accountable human acceptance, report an accepted result,
+declare claim limits, and still pass a criterion-specific code-owned validator.
+This narrows evidence admission; it does not make an absent validator or absent
+natural-task receipt valid. O1-O5 remain planned and false.
+
 ## Why the program is paused
 
 The next positive outcome-bearing increment requires a natural,
@@ -62,10 +71,11 @@ lifecycle attempts or restore their validators as current code.
 ## Next causal slice
 
 When a natural task is bound, open exactly one outcome-bearing increment. For
-that same task, first freeze only the provisional event taxonomy, baseline
+that same task, instantiate only the task-specific values required by the
+existing operationalization contract: event taxonomy, applicable baseline
 matching, scenario/complexity/risk band, accountable acceptance fields, task
-floors, claim boundary, process-loss stop, and exact cleanup paths needed to
-evaluate it. Then run one vertical Codex reference-host O1 falsification slice.
+floors, claim boundary, process-loss stop, and exact cleanup paths. Then run one
+vertical Codex reference-host O1 falsification slice.
 
 The user supplies the goal, domain facts, bounded authority, corrections, and
 accountable final judgment—not Skill names, tool selection, setup, recovery,

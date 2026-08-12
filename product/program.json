@@ -162,6 +162,51 @@
           ]
         }
       ]
+    },
+    {
+      "id": "increment.v0.2-outcome-operationalization-baseline",
+      "state": "completed",
+      "correctionClass": "outcome-acceptance-operability-and-evidence-admission",
+      "observedProblem": "O1-O5 still relied on prose terms such as material difference, marginal value, calibrated minimum, and cross-host portability without machine-checkable sample floors or comparison designs, while the generic evidence seam admitted arbitrary non-empty source, authority, and result objects before dispatching to a criterion validator.",
+      "hypothesis": "A small structured operationalization contract for each outcome, code-owned sample floors and comparison designs, and a named-human, source-identity, accepted-result evidence base will block the observed post-hoc dilution and unrelated-task loopholes before any natural task is used for outcome verification.",
+      "falsifier": "Deleting an outcome operationalization field, lowering a sample floor, changing its comparison design, duplicating a required list value, or supplying evidence without source identity, a named accountable human acceptance, or an accepted result still passes; any O1-O5 criterion becomes verified; or the repair adds a report, research plan, evidence payload, capability mutation, or natural-task claim.",
+      "stopCondition": "All five outcomes carry bounded operationalization contracts; code rejects missing fields, diluted sample floors, changed comparison designs, and weak generic evidence identity or authority; O1-O5 remain planned and false; G1-G4 pass; no active increment or repository residue remains; deterministic verification passes; the change is committed and pushed.",
+      "acceptanceIds": ["G2", "G4"],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserToolOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.operationalize-outcome-evidence-boundary",
+          "state": "completed",
+          "acceptanceIds": ["G2", "G4"],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "O1-O5 structured operationalization contracts",
+            "code-owned sample, comparison, and generic evidence admission gates",
+            "focused fail-closed mutation tests"
+          ]
+        }
+      ]
     }
   ]
 }

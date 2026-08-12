@@ -68,6 +68,33 @@ class ProductControlTests(unittest.TestCase):
     def report(self) -> dict:
         return verify_product(self.root)
 
+    def evidence_document(
+        self,
+        *,
+        criterion_ids: object | None = None,
+        validator_kind: str = "test-validator",
+    ) -> dict:
+        return {
+            "schema": 1,
+            "id": "typed-o2",
+            "criterionIds": ["O2"] if criterion_ids is None else criterion_ids,
+            "observedAt": "2026-08-12T03:00:00+08:00",
+            "source": {
+                "kind": "repository-task-receipt",
+                "locator": "task-receipt-001",
+                "identity": "sha256:fixture",
+            },
+            "authority": {
+                "kind": "named-accountable-human",
+                "name": "fixture reviewer",
+                "decision": "accepted",
+                "decidedAt": "2026-08-12T03:01:00+08:00",
+            },
+            "result": {"accepted": True},
+            "claimLimits": ["fixture only"],
+            "validator": {"kind": validator_kind, "version": 1},
+        }
+
     def activate_program(self, program: dict) -> dict:
         increment = program["increments"][-1]
         program["status"] = "active"
@@ -175,6 +202,70 @@ class ProductControlTests(unittest.TestCase):
         report = json.loads(completed.stdout)
         self.assertFalse(report["valid"])
 
+    def test_outcomes_require_exact_operationalization_fields(self) -> None:
+        def remove(value: dict) -> None:
+            value["criteria"][0]["operationalization"].pop("passRule")
+
+        self.mutate("product/acceptance.json", remove)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "criterion O1 requires the exact operationalization fields",
+            report["errors"],
+        )
+
+    def test_outcome_sample_floor_and_comparison_design_are_code_owned(self) -> None:
+        def dilute(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O2")
+            criterion["operationalization"]["minimumSampleCount"] = 2
+
+        self.mutate("product/acceptance.json", dilute)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "criterion O2 minimumSampleCount must be at least 3",
+            report["errors"],
+        )
+
+        shutil.copy2(ROOT / "product/acceptance.json", self.root / "product/acceptance.json")
+
+        def change_design(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O5")
+            criterion["operationalization"]["comparisonDesign"] = "unrelated-host-tasks"
+
+        self.mutate("product/acceptance.json", change_design)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn("criterion O5 comparisonDesign is invalid", report["errors"])
+
+    def test_outcome_operationalization_lists_are_typed_and_unique(self) -> None:
+        def duplicate(value: dict) -> None:
+            fields = value["criteria"][0]["operationalization"]["requiredMeasures"]
+            fields.append(fields[0])
+
+        self.mutate("product/acceptance.json", duplicate)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "criterion O1 operationalization requiredMeasures is invalid",
+            report["errors"],
+        )
+
+    def test_guardrails_cannot_self_declare_outcome_operationalization(self) -> None:
+        def add(value: dict) -> None:
+            guardrail = next(item for item in value["criteria"] if item["id"] == "G1")
+            guardrail["operationalization"] = deepcopy(
+                value["criteria"][0]["operationalization"]
+            )
+
+        self.mutate("product/acceptance.json", add)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "guardrail G1 cannot declare operationalization",
+            report["errors"],
+        )
+
     def test_active_program_requires_exactly_one_active_increment(self) -> None:
         def close(value: dict) -> None:
             increment = self.activate_program(value)
@@ -211,7 +302,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-capability-chain-integrity-baseline has more than one active work item",
+            "increment increment.v0.2-outcome-operationalization-baseline has more than one active work item",
             report["errors"],
         )
 
@@ -223,7 +314,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-capability-chain-integrity-baseline requires a correctionClass",
+            "increment increment.v0.2-outcome-operationalization-baseline requires a correctionClass",
             report["errors"],
         )
 
@@ -236,13 +327,13 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.audit-capability-chain-and-reset-current-assets "
+            "work item work.operationalize-outcome-evidence-boundary "
             "acceptanceIds exceed increment "
-            "increment.v0.2-capability-chain-integrity-baseline",
+            "increment.v0.2-outcome-operationalization-baseline",
             report["errors"],
         )
 
-    def test_one_guardrail_only_reset_is_valid_but_not_product_progress(self) -> None:
+    def test_outcome_neutral_repairs_are_valid_but_not_product_progress(self) -> None:
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["outcomes"]["verified"], 0)
@@ -258,7 +349,7 @@ class ProductControlTests(unittest.TestCase):
         report = json.loads(completed.stdout)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "work item work.audit-capability-chain-and-reset-current-assets has invalid state",
+            "work item work.operationalize-outcome-evidence-boundary has invalid state",
             report["errors"],
         )
 
@@ -270,7 +361,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn(
-            "work item work.audit-capability-chain-and-reset-current-assets exceeds agent authority",
+            "work item work.operationalize-outcome-evidence-boundary exceeds agent authority",
             report["errors"],
         )
 
@@ -302,7 +393,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.v0.2-capability-chain-integrity-baseline requires the exact process-loss budget fields",
+            "increment increment.v0.2-outcome-operationalization-baseline requires the exact process-loss budget fields",
             report["errors"],
         )
 
@@ -332,7 +423,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
             "adjacent increments repeat correctionClass: "
-            "capability-chain-goal-authority-and-asset-integrity",
+            "outcome-acceptance-operability-and-evidence-admission",
             report["errors"],
         )
 
@@ -472,17 +563,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("verified criterion O2 requires evidence", report["errors"])
 
     def test_self_declared_evidence_cannot_promote_without_code_validator(self) -> None:
-        evidence = {
-            "schema": 1,
-            "id": "self-declared-o2",
-            "criterionIds": ["O2"],
-            "observedAt": "2026-08-12T03:00:00+08:00",
-            "source": {"kind": "test"},
-            "authority": {"kind": "user"},
-            "result": {"accepted": True},
-            "claimLimits": ["fixture only"],
-            "validator": {"kind": "missing-validator", "version": 1},
-        }
+        evidence = self.evidence_document(validator_kind="missing-validator")
+        evidence["id"] = "self-declared-o2"
         self.write_json("product/evidence/self.json", evidence)
 
         def promote(value: dict) -> None:
@@ -498,6 +580,53 @@ class ProductControlTests(unittest.TestCase):
             "criterion O2 has no code-owned evidence validator: missing-validator",
             report["errors"],
         )
+
+    def test_weak_generic_evidence_identity_authority_or_result_fails_closed(self) -> None:
+        mutations = {
+            "missing source locator": lambda value: value["source"].pop("locator"),
+            "unnamed authority kind": lambda value: value["authority"].__setitem__(
+                "kind", "user"
+            ),
+            "blank human name": lambda value: value["authority"].__setitem__("name", " "),
+            "unaccepted human decision": lambda value: value["authority"].__setitem__(
+                "decision", "rejected"
+            ),
+            "invalid decision time": lambda value: value["authority"].__setitem__(
+                "decidedAt", "today"
+            ),
+            "unaccepted result": lambda value: value["result"].__setitem__(
+                "accepted", False
+            ),
+        }
+        for label, mutate_evidence in mutations.items():
+            with self.subTest(label=label):
+                evidence = self.evidence_document(validator_kind="missing-validator")
+                mutate_evidence(evidence)
+                self.write_json("product/evidence/weak.json", evidence)
+
+                def promote(value: dict) -> None:
+                    criterion = next(
+                        item for item in value["criteria"] if item["id"] == "O2"
+                    )
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = ["product/evidence/weak.json"]
+
+                self.mutate("product/acceptance.json", promote)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["O2"])
+                self.assertFalse(report["criterionStates"]["G2"])
+                self.assertIn(
+                    "criterion O2 evidence shape is invalid: product/evidence/weak.json",
+                    report["errors"],
+                )
+                self.assertNotIn(
+                    "criterion O2 has no code-owned evidence validator: missing-validator",
+                    report["errors"],
+                )
+                shutil.copy2(
+                    ROOT / "product/acceptance.json",
+                    self.root / "product/acceptance.json",
+                )
 
     def test_malformed_evidence_fails_without_traceback(self) -> None:
         self.write_json("product/evidence/malformed.json", {"schema": 1})
@@ -605,7 +734,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "increment increment.v0.2-capability-chain-integrity-baseline must contain at least one work item",
+            "increment increment.v0.2-outcome-operationalization-baseline must contain at least one work item",
             report["errors"],
         )
 
@@ -619,7 +748,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program agent authority contains an unknown operation", report["errors"])
         self.assertIn(
-            "work item work.audit-capability-chain-and-reset-current-assets contains an unknown operation",
+            "work item work.operationalize-outcome-evidence-boundary contains an unknown operation",
             report["errors"],
         )
 
@@ -718,17 +847,7 @@ class ProductControlTests(unittest.TestCase):
     def test_evidence_criterion_ids_must_be_a_unique_string_list(self) -> None:
         for malformed in (123, {"O2": True}, "O2", ["O2", "O2"]):
             with self.subTest(malformed=malformed):
-                evidence = {
-                    "schema": 1,
-                    "id": "typed-o2",
-                    "criterionIds": malformed,
-                    "observedAt": "2026-08-12T03:00:00+08:00",
-                    "source": {"kind": "test"},
-                    "authority": {"kind": "user"},
-                    "result": {"accepted": True},
-                    "claimLimits": ["fixture only"],
-                    "validator": {"kind": "test-validator", "version": 1},
-                }
+                evidence = self.evidence_document(criterion_ids=malformed)
                 self.write_json("product/evidence/typed.json", evidence)
 
                 def promote(value: dict) -> None:
