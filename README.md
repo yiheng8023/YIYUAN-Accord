@@ -16,6 +16,12 @@ product contract requires the Harness to observe what is available, detect a
 real gap, discover only when needed, select and dispatch the smallest
 sufficient route, and release it when the need ends.
 
+The Harness also does not reimplement an adequate protocol, registry, gateway,
+tool-search surface, runtime, governance kernel, or evaluation mechanism merely
+to own the stack. Each implementation decision is checked against a
+source-bound external landscape: reuse or adapt first, compose for an actual
+integration gap, and author only for a repeatable residual semantic gap.
+
 The durable target is a collaboration methodology, an open standard, and an
 executable reference implementation. Codex is the first reference slice, not
 a dependency of the portable core.
@@ -95,11 +101,11 @@ Current v0.2 outcomes are:
   pre-registered protocol;
 - O2 — lower user capability-orchestration burden across repeated goal-level
   real tasks;
-- O3 — adaptive discovery and evidence-backed lifecycle decisions keep a broad
-  and changing ecosystem outside the user's cognitive path;
+- O3 — adaptive discovery, build-versus-reuse evidence, and lifecycle decisions
+  keep a broad and changing ecosystem outside the user's cognitive path;
 - O4 — an accepted Agent-neutral human-Agent collaboration methodology and
-  core minimum standard, with software engineering as the first reference
-  profile;
+  core minimum standard, compared against a source-bound external reference
+  cohort, with software engineering as the first reference profile;
 - O5 — portable closed-loop delivery through Codex and a distinct second Agent
   host or runtime through its own thin adapter. A same-host second adapter is
   conformance evidence only and cannot pass O5.

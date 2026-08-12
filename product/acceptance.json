@@ -95,7 +95,7 @@
       "name": "demand-driven capability discovery and lifecycle arbitration",
       "statement": "A broad and changing capability ecosystem can remain outside the user's cognitive path and the portable core's standing context while the Agent observes available routes, detects a task-bound gap, discovers through source-bounded adaptive channels only when needed, and dispatches and releases the smallest sufficient route by real marginal value rather than capability count.",
       "metric": "real-task capability observations, gap decisions, discovery receipts, route and exposure deltas, task-scoped lifecycle receipts, and retain-replace-retire outcomes",
-      "threshold": "at least three natural-task route decisions across at least two route classes start with source-bound available-capability observation and residual-gap assessment without requiring portfolio-wide inventory or user route selection; at least one no-gap case retains the current route with no discovery or addition; at least one reproducible-gap case performs finite source-bounded discovery through a channel not enumerated as portable-core authority and compares only decision-relevant candidates; every selected route is task-scoped and released when the need ends unless separate net-value evidence and authority justify continued activation; every admitted candidate and existing provisional self-authored or Hook projection receives inactive-retention, persistent-activation, merge, replacement, retirement, off, or expiry disposition",
+      "threshold": "at least three natural-task route decisions across at least two route classes start with source-bound available-capability observation and residual-gap assessment without requiring portfolio-wide inventory or user route selection; at least one no-gap case retains the current route with no discovery or addition; at least one reproducible-gap case performs finite source-bounded discovery through a channel not enumerated as portable-core authority and compares only decision-relevant candidates; each decision records an as-of external landscape and build-reuse-compose-author boundary, reuses or adapts a sufficient native, official, or maintained external implementation, and permits composition or authoring only for an evidenced residual semantic gap; every selected route is task-scoped and released when the need ends unless separate net-value evidence and authority justify continued activation; every admitted candidate and existing provisional self-authored or Hook projection receives inactive-retention, persistent-activation, merge, replacement, retirement, off, or expiry disposition",
       "operationalization": {
         "sampleUnit": "one evidence-backed route decision tied to an accepted natural-task context",
         "minimumSampleCount": 3,
@@ -107,6 +107,7 @@
           "decisionRelevantCandidateCohort",
           "residualGapTest",
           "discoverySourceBoundaryAndStopRule",
+          "externalLandscapeAsOfAndBuildReuseComposeAuthorBoundary",
           "taskScopedDispatchReleaseAndCleanupBoundary",
           "candidateRetentionOrExpiryRule"
         ],
@@ -114,18 +115,20 @@
           "availableCapabilityAndGapResult",
           "discoveryQueriesAndCandidates",
           "routeAlternativesCompared",
+          "buildReuseComposeAuthorDecisionAndResidualSemanticGap",
           "taskExposureDelta",
           "marginalOutcomeProcessAndCostDelta",
           "residualGapResult",
           "postTaskExposureAndCandidateLifecycleDisposition",
           "provisionalProjectionDisposition"
         ],
-        "passRule": "At least three route decisions across at least two route classes start from source-bound observation; include both a no-gap retain/no-discovery result and a reproducible-gap bounded-discovery result; keep discovery channels outside portable-core authority; compare only decision-relevant candidates; end task-scoped exposure by default; and give every admitted candidate and provisional projection a bounded disposition without requiring user route selection or portfolio-wide inventory.",
+        "passRule": "At least three route decisions across at least two route classes start from source-bound observation; include both a no-gap retain/no-discovery result and a reproducible-gap bounded-discovery result; keep discovery channels outside portable-core authority; compare only decision-relevant candidates against a source-bound as-of external landscape; reuse or adapt a sufficient existing layer before composition and author only for an evidenced residual semantic gap; end task-scoped exposure by default; and give every admitted candidate and provisional projection a bounded disposition without requiring user route selection or portfolio-wide inventory.",
         "falsifiers": [
           "capability count, installation, or exposure is treated as marginal value",
           "the user must know or select a capability, product, discovery channel, or invocation syntax because the Agent cannot route the task",
           "the portable core requires a fixed capability catalog or discovery provider",
           "a capability is added without a reproducible residual gap",
+          "the Harness authors a protocol, registry, gateway, search surface, runtime, governance kernel, or evaluation mechanism already sufficient for the bound need without evidence of a residual semantic gap",
           "a task-scoped candidate remains exposed after the bound need ends without separate net-value evidence and activation authority",
           "portfolio-wide inventory is required for a task-bound decision"
         ],
@@ -138,16 +141,19 @@
       "class": "outcome",
       "name": "Agent-neutral human-Agent collaboration methodology and minimum standard",
       "statement": "The product owns an Agent-neutral demand-to-capability collaboration methodology, evaluation system, and open minimum standard grounded in repeated real behavior; software engineering is the first calibrated reference profile rather than the product boundary, and no host projection or capability membership inventory can define the standard.",
-      "metric": "accepted versioned methodology, core minimum standard, software-engineering reference profile, route-delta and outcome scorecards, applicability limits, and human review",
-      "threshold": "the methodology and core standard define goal-level demand, human and Agent authority, available-capability observation, gap assessment, bounded discovery, route choice, authorization, task-scoped dispatch, execution, recovery, verification, release, cleanup, evidence, acceptance, and honest unsupported states; the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios remain sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, communication fit, conversation-versus-deliverable intent errors, first-response decision completeness, user capability-learning and configuration burden, user interventions, unnecessary design, process and artifact load, route errors, recovery, time and call cost, system-resource lifecycle, durable residue, human judgment, context-pressure and handoff transparency, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome; a named accountable human accepts or rejects the methodology, standard, software-engineering profile, and claim boundary before host-specific projections are promoted",
+      "metric": "accepted versioned methodology, core minimum standard, software-engineering reference profile, source-bound external reference cohort, comparative route-delta and outcome scorecards, applicability limits, and human review",
+      "threshold": "the methodology and core standard define goal-level demand, human and Agent authority, available-capability observation, gap assessment, bounded discovery, route choice, authorization, task-scoped dispatch, execution, recovery, verification, release, cleanup, evidence, acceptance, and honest unsupported states; world-class is a time-bound comparative target rather than a self-label, so each evaluation version pre-registers an as-of source-bound external reference cohort, distinct-value hypothesis, falsifier, and mandatory floors for outcome quality, user burden, reliability and recovery, authority and safety, evidence integrity, context and resource efficiency, portability, and interface and adoption simplicity; the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios remain sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, communication fit, conversation-versus-deliverable intent errors, first-response decision completeness, user capability-learning and configuration burden, user interventions, unnecessary design, process and artifact load, route errors, recovery, time and call cost, system-resource lifecycle, durable residue, human judgment, context-pressure and handoff transparency, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome, no aggregate score can hide a failed floor, and the accepted claim must demonstrate a source-bound comparative advantage in user capability-orchestration burden or cross-layer lifecycle coherence without claiming universal or permanent superiority; a named accountable human accepts or rejects the methodology, standard, software-engineering profile, external comparison, and claim boundary before host-specific projections are promoted",
       "operationalization": {
         "sampleUnit": "one outcome-and-process receipt evaluated by one versioned scorecard",
         "minimumSampleCount": 4,
-        "comparisonDesign": "same-version-scorecard-including-pass-and-fail-cases",
+        "comparisonDesign": "same-version-scorecard-with-external-reference-cohort-and-pass-fail-cases",
         "preRegistrationFields": [
           "scorecardVersion",
           "methodologyAndCoreStandardVersion",
           "referenceProfileIdentity",
+          "externalReferenceCohortAsOfAndSources",
+          "distinctValueHypothesisAndFalsifier",
+          "comparativeAxesAndMandatoryFloors",
           "evaluationDimensions",
           "mandatoryOutcomeAuthoritySafetyEvidenceAndResidueFloors",
           "scoringAndMissingDataRules",
@@ -165,15 +171,19 @@
           "reopenedDecisionsAndUnrequestedArtifacts",
           "capabilityAddedRequirements",
           "demandToCapabilityLifecycleConformance",
+          "externalReferenceCohortDeltasAndBuildReuseResult",
           "methodologyStandardAndProfileApplicabilityLimits",
           "humanDecisionAndDisagreement"
         ],
-        "passRule": "One versioned methodology, core minimum standard, and software-engineering reference profile are applied through the same scorecard to at least three accepted receipts and at least one rejected or stopped receipt; every accepted receipt passes all mandatory floors; no aggregate score overrides a failed floor; applicability limits are explicit; and a named accountable human accepts the methodology, standard, profile, evaluation specification, and claim boundary.",
+        "passRule": "One versioned methodology, core minimum standard, and software-engineering reference profile are applied through the same scorecard to at least three accepted receipts and at least one rejected or stopped receipt, against a pre-registered source-bound external reference cohort fixed as of the evaluation date; every accepted receipt passes all mandatory floors; no aggregate score overrides a failed floor; the evidence demonstrates a comparative advantage in user capability-orchestration burden or cross-layer lifecycle coherence while reusing sufficient external layers; applicability and temporal limits are explicit; and a named accountable human accepts the methodology, standard, profile, external comparison, evaluation specification, and claim boundary.",
         "falsifiers": [
           "process or artifact completion substitutes for the bound outcome",
           "a failed mandatory floor is hidden by an aggregate score",
           "dimensions or scenarios are claimed covered because they are merely listed",
           "the scorecard, methodology, standard, or reference profile is changed after observing a receipt",
+          "the external reference cohort, comparative axes, floors, or distinct-value hypothesis is chosen after observing the result",
+          "a maintained external implementation satisfies the claimed distinct value without the Harness layer",
+          "world-class, best-in-class, universal, or permanent superiority is claimed without a source-bound time-limited comparison",
           "one host, fixed capability catalog, or software-engineering profile is presented as the universal product core"
         ],
         "humanAuthority": "A named accountable human accepts or rejects the methodology, core minimum standard, reference profile, evaluation specification, receipt decisions, and claim boundary."

@@ -133,13 +133,13 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
         "O1": (1, "single-pre-registered-natural-task"),
         "O2": (3, "source-bound-baseline-by-pre-registered-scenario-class"),
         "O3": (3, "bounded-route-cohort-with-retain-option"),
-        "O4": (4, "same-version-scorecard-including-pass-and-fail-cases"),
+        "O4": (4, "same-version-scorecard-with-external-reference-cohort-and-pass-fail-cases"),
         "O5": (1, "same-task-matched-cross-host-pair"),
     }
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "9ce8d8adce4e1b5a0c6b0afc4db7886cde383736301253da288babfd4c721f9c"
+    "875b11e18c2893e6eccd5accea048d31ab8b0a4ae044351e325a8656125ac6c2"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -306,6 +306,7 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
         "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
+        "reuse or adapt sufficient external protocols, runtimes, discovery, governance, and evaluation capability before composition or authoring; new implementation requires an evidenced residual semantic gap",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",

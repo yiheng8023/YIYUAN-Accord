@@ -47,6 +47,13 @@ Prefer healthy native/runtime capability, then suitable official capability,
 then a reviewed maintained external implementation, then composition. Author
 only for an evidenced residual gap.
 
+Before implementing a product-layer protocol, registry, gateway, search
+surface, runtime, governance kernel, or evaluation mechanism, perform a
+source-bound as-of landscape check. Reuse or adapt a sufficient existing layer;
+compose only when integration is the remaining need; author only when evidence
+isolates a repeatable residual semantic gap. External breadth can change the
+implementation route but cannot define product authority or prove acceptance.
+
 Goal-level demand is the normal entry. The Agent owns observation of available
 capability, gap detection, source-bounded discovery when needed, route
 selection, task-scoped dispatch and release, verification, and cleanup. Do not

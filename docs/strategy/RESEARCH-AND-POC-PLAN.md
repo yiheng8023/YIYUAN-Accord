@@ -123,6 +123,56 @@ workflow conflicts with bound user intent, current product authority, or the
 active causal need, reject or downgrade that route rather than creating work
 to satisfy the capability.
 
+## External landscape and build-versus-reuse gate
+
+A source-bound landscape checkpoint on 2026-08-13 found public implementations
+and documented coverage at every neighboring layer:
+
+- [MCP](https://modelcontextprotocol.io/docs/learn/architecture),
+  [A2A discovery](https://a2a-protocol.org/latest/topics/agent-discovery/), and
+  [Agent Skills](https://agentskills.io/client-implementation/adding-skills-support)
+  already cover interoperable tool/context exchange, Agent discovery, and
+  progressively loaded method packaging;
+- [OpenAI tool search](https://openai.github.io/openai-agents-python/tools/) and
+  [Anthropic tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)
+  already defer large tool surfaces and load relevant definitions on demand;
+- [Composio sessions](https://docs.composio.dev/docs/how-composio-works) already
+  combine runtime discovery, authentication, and execution behind meta-tools;
+- [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview),
+  [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/),
+  [Compozy](https://github.com/compozy/compozy), and
+  [Agentlas OS](https://github.com/agentlas-ai/Agentlas-OS) document substantial
+  runtime, orchestration, cross-host, permission, persistence, and receipt
+  surfaces;
+- [NIST evaluation probes](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai),
+  [ToolSandbox](https://machinelearning.apple.com/research/toolsandbox-stateful-conversational-llm-benchmark),
+  [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html), and
+  [AgentDojo](https://github.com/ethz-spylab/agentdojo) provide reusable
+  evaluation and adversarial reference surfaces.
+
+This checkpoint does not prove that no complete substitute exists. It does
+falsify any plan to make a universal runtime, fixed catalog, gateway, generic
+tool search, authentication broker, policy engine, or benchmark suite the
+Harness's novelty. The remaining product hypothesis is narrower: a thin,
+Agent-neutral control contract that transfers goal-to-capability orchestration
+burden from the user while keeping authority, task-scoped lifecycle, evidence,
+acceptance, cleanup, and cross-host semantics coherent across replaceable
+layers.
+
+The closest overlaps in this cohort still center on owning a runtime, package,
+marketplace, or enterprise governance surface. The checkpoint did not verify a
+single maintained project that jointly proves goal-level entry without user
+route selection, reduced user capability-learning burden, bounded authority,
+task-scoped release and cleanup, evidence-backed acceptance, and the same thin
+semantics across distinct hosts. That is a provisional gap, not a novelty
+claim; a contrary implementation is a direct falsifier.
+
+Before implementation, refresh only the decision-relevant cohort and record
+the as-of source identities. If an external implementation satisfies that
+remaining hypothesis, integrate or narrow the Harness rather than competing by
+inventory size. This landscape work is bounded research and authority repair;
+it counts as zero O1-O5 progress.
+
 ## Stop and cleanup rules
 
 Stop the active slice when its hypothesis is falsified, the same user

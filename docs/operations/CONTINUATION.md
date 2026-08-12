@@ -40,6 +40,15 @@ portfolio curation. Such work must start from an observed problem, have a
 finite stop, remain inside existing authority, and count as zero O1-O5
 progress.
 
+A 2026-08-13 source-bound landscape and historical-asset audit found public
+implementations and documented coverage across protocol, discovery, runtime,
+governance, and evaluation layers. Do not reopen predecessor fixed
+registries, repository-owned general-purpose Skills, universal-runtime work,
+or manager-specific proofs as the product. Refresh only a decision-relevant
+external cohort, reuse sufficient layers, and require a residual semantic gap
+before composition or authoring. This audit changes the route and acceptance
+boundary but proves none of O1-O5.
+
 ## Outcome-entry boundary
 
 When a natural task is actually bound, do not open an outcome increment until

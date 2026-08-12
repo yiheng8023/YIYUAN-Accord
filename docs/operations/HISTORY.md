@@ -52,3 +52,36 @@ generalized O4 from a software-engineering-only standard to the human-Agent
 collaboration core with software engineering as the first reference profile.
 This repaired authority and validation semantics but counted as zero O1-O5
 progress; the program returned to `paused` with an empty current graph.
+
+## Strategic invalidation audit
+
+The demand-driven control-plane reset also changes how predecessor assets may
+be reused. The following categories at pre-reset revision `c5386672` are
+superseded as current architecture and must not be restored wholesale:
+
+- the fixed `registry/capabilities.json` inventory, curated-skill ownership
+  map, portfolio-wide coverage machinery, and catalog-shaped planning;
+- repository-owned general-purpose Skills and the self-authored three-role
+  chain when treated as mandatory product structure rather than replaceable
+  host projections;
+- CC Switch, Codex app-server, Hook, and manager-specific probes when treated
+  as portable product proof rather than host observations;
+- process-fidelity stage envelopes, lifecycle ledgers, authority receipts,
+  scorecards, and green fixtures when treated as outcome or standard proof;
+- software-engineering-only lifecycle coverage when treated as the universal
+  human-Agent collaboration boundary;
+- predecessor program, acceptance, verifier, scheduler, and queued work as
+  current authority.
+
+Historical incidents, user corrections, source-pinned capability reviews,
+security and provenance failures, recovery cases, evaluation dimensions, and
+scenario ideas remain useful counterevidence or candidate test material. Reuse
+is by the smallest source-bound fragment after a current gap is shown; the old
+package, workflow, membership, pass state, and authority do not travel with the
+fragment.
+
+The 2026-08-13 external landscape checkpoint further invalidates building a
+generic protocol, registry, gateway, tool-search surface, universal runtime,
+authentication broker, governance kernel, or benchmark suite as the Harness's
+distinct product. Existing implementations are replaceable substrate. Only an
+evidenced residual semantic or integration gap can justify new Harness code.

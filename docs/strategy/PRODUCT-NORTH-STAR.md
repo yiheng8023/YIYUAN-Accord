@@ -56,6 +56,13 @@ sufficiency is evaluated against bound demand; it is not a bias toward the
 smallest portfolio. A material coverage gap creates an obligation to discover,
 compare and, when justified, add a governed capability.
 
+The same rule applies to the product implementation itself. Before building a
+protocol, registry, gateway, search surface, runtime, governance kernel, or
+evaluation mechanism, compare current source-bound external implementations.
+Reuse or thinly adapt a sufficient layer, compose only for an integration gap,
+and author only for a repeatable residual semantic gap. Owning more stack is not
+independence; preserving the portable contract across replaceable layers is.
+
 ## Release acceptance
 
 `v0.1` is an accepted, repository-bound control milestone at Git revision
@@ -143,3 +150,18 @@ adapt across evolving Agents and ecosystems without transferring that entropy
 to the user. It does not mean maximum scope, maximum governance, maximum
 automation, a universal runtime, or permanent activation of the largest
 ecosystem.
+
+“World-class” is a real goal-level quality demand, but not a self-verifying
+acceptance label. Every evaluation version must bind an as-of date, public
+source identities, a decision-relevant external reference cohort, a distinct-
+value hypothesis, a falsifier, and mandatory floors. Comparison covers at
+least outcome quality, user capability-orchestration burden, reliability and
+recovery, authority and safety, evidence integrity, context and resource
+efficiency, portability, and interface and adoption simplicity. An aggregate
+score cannot hide a failed floor.
+
+The strongest allowed claim is time- and scope-bounded comparative advantage.
+If a maintained external implementation satisfies the claimed cross-layer
+value without the Harness, the product boundary must shrink, integrate, or
+stop; it cannot preserve novelty by redefining the comparison after results are
+known.

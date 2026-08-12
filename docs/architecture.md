@@ -86,6 +86,14 @@ Each task begins by observing available healthy and authorized routes. Only a
 reproducible residual gap justifies finite, source-bound discovery. The query,
 channel, and provider may adapt to demand; none becomes product authority.
 
+Implementation follows the same residual-gap rule across layers. Protocols,
+registries, gateways, tool search, runtimes, governance kernels, and evaluation
+systems are first treated as external substrate. A source-bound as-of landscape
+check decides whether to reuse, thinly adapt, compose, or author. The reference
+implementation owns only the missing portable semantics and integration needed
+to preserve the Harness contract; duplicating a sufficient external layer is a
+failed route decision, not product independence.
+
 Acquisition, installation, enablement, exposure, invocation, instruction
 delivery, behavior, value, projection, rollback, cleanup, acceptance, release,
 and publication are distinct states. One never proves the next. One live
