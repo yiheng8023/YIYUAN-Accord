@@ -1051,9 +1051,13 @@ def _authority_guardrail(
     agent = _string_list(boundary.get("agentOwnsWithinBoundedAuthority"))
     if user is None or not REQUIRED_USER_AUTHORITY <= set(user):
         _error(errors, "program userOwns omits a mandatory human authority")
+    elif set(user) != REQUIRED_USER_AUTHORITY:
+        _error(errors, "program userOwns contains an undeclared human authority")
     if agent is None:
         _error(errors, "program agent authority must be a non-empty string list")
         agent = []
+    elif set(agent) != set(OPERATION_EFFECTS):
+        _error(errors, "program agent authority must equal the code-owned operation set")
     unknown_agent_operations = set(agent) - set(OPERATION_EFFECTS)
     if unknown_agent_operations:
         _error(errors, "program agent authority contains an unknown operation")

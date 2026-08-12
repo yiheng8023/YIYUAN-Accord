@@ -744,6 +744,34 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G1"])
         self.assertIn("program userOwns omits a mandatory human authority", report["errors"])
 
+    def test_user_authority_cannot_absorb_agent_work(self) -> None:
+        def add(value: dict) -> None:
+            value["authorityBoundary"]["userOwns"].append(
+                "skill-and-workflow-selection"
+            )
+
+        self.mutate("product/program.json", add)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "program userOwns contains an undeclared human authority",
+            report["errors"],
+        )
+
+    def test_agent_authority_cannot_silently_drop_owned_operations(self) -> None:
+        def remove(value: dict) -> None:
+            value["authorityBoundary"]["agentOwnsWithinBoundedAuthority"].remove(
+                "git-push"
+            )
+
+        self.mutate("product/program.json", remove)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G1"])
+        self.assertIn(
+            "program agent authority must equal the code-owned operation set",
+            report["errors"],
+        )
+
     def test_agent_authority_cannot_claim_human_only_release(self) -> None:
         def add(value: dict) -> None:
             value["authorityBoundary"]["agentOwnsWithinBoundedAuthority"].append("release")

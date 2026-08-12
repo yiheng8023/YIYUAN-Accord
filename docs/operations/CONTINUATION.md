@@ -126,6 +126,9 @@ separate bounded surfaces.
 The program authority boundary likewise accepts only its code-owned `userOwns`
 and `agentOwnsWithinBoundedAuthority` fields. A differently named permission
 flag cannot piggyback on the current machine contract while G1 remains green.
+Their current value sets are exact too: a route cannot assign Skill or workflow
+selection to the user, or silently remove an Agent-owned operation such as
+`git-push`, while G1 remains green.
 
 The retained v0.1 milestone metadata and claim limit are exact code-owned
 values. Coordinated edits to the program and constitution cannot fabricate a
