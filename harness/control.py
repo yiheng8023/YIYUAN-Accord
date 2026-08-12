@@ -201,6 +201,29 @@ EXPECTED_COLLABORATION_MODEL = {
         "process-loss-detection-and-replanning",
     ],
 }
+EXPECTED_FIXED_INVARIANTS = frozenset(
+    {
+        "product outcomes outrank artifact counts, test counts, inventory counts, and research volume",
+        "one release has one explicit finite acceptance expression",
+        "guardrails constrain delivery but never count as product progress",
+        "every active work item maps to at least one release criterion",
+        "only one causal increment and at most one work item may be active",
+        "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
+        "task-time capability exposure is minimal even when the managed portfolio is broad",
+        "native and already-authorized capability is evaluated before expansion, but subtraction is not a veto on evidenced addition",
+        "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
+        "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
+        "unsupported host behavior is reported rather than simulated",
+    }
+)
+EXPECTED_BOOTSTRAP_GUARDS = frozenset(
+    {
+        "code-owned authority identity and path validation",
+        "active authority cannot include evidence archives, temporary roots, legacy roots, or symlinks",
+        "verified outcomes require a code-owned evidence validator",
+        "conventional repository residue is detected outside declared cleanup paths",
+    }
+)
 ASSESSMENTS = {"planned", "computed", "verified"}
 RFC3339 = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
@@ -729,9 +752,20 @@ def _release_identity_valid(
         constitution.get("collaborationModel"), EXPECTED_COLLABORATION_MODEL
     ):
         _error(errors, "constitution collaborationModel is invalid")
-    for field in ("fixedInvariants", "adaptiveSurfaces", "bootstrapGuards"):
-        if _string_list(constitution.get(field)) is None:
-            _error(errors, f"constitution {field} are invalid")
+    fixed_invariants = _string_list(constitution.get("fixedInvariants"))
+    if (
+        fixed_invariants is None
+        or set(fixed_invariants) != EXPECTED_FIXED_INVARIANTS
+    ):
+        _error(errors, "constitution fixedInvariants are invalid")
+    if _string_list(constitution.get("adaptiveSurfaces")) is None:
+        _error(errors, "constitution adaptiveSurfaces are invalid")
+    bootstrap_guards = _string_list(constitution.get("bootstrapGuards"))
+    if (
+        bootstrap_guards is None
+        or set(bootstrap_guards) != EXPECTED_BOOTSTRAP_GUARDS
+    ):
+        _error(errors, "constitution bootstrapGuards are invalid")
     planning = constitution.get("planningModel")
     if not isinstance(planning, dict):
         _error(errors, "constitution planningModel is invalid")

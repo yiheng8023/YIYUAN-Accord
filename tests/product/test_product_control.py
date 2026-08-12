@@ -333,6 +333,33 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("constitution collaborationModel is invalid", report["errors"])
 
+    def test_fixed_invariants_and_bootstrap_guards_cannot_self_disable(self) -> None:
+        variants = (
+            (
+                "fixedInvariants",
+                ["tests and artifact counts are product outcomes"],
+                "constitution fixedInvariants are invalid",
+            ),
+            (
+                "bootstrapGuards",
+                ["self-declaration is sufficient evidence"],
+                "constitution bootstrapGuards are invalid",
+            ),
+        )
+        for field, replacement, expected_error in variants:
+            with self.subTest(field=field):
+                self.mutate(
+                    "product/constitution.json",
+                    lambda value: value.__setitem__(field, replacement),
+                )
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G3"])
+                self.assertIn(expected_error, report["errors"])
+                shutil.copy2(
+                    ROOT / "product/constitution.json",
+                    self.root / "product/constitution.json",
+                )
+
     def test_code_owned_policy_booleans_cannot_be_replaced_by_integers(self) -> None:
         variants = (
             (
