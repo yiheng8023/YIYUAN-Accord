@@ -98,6 +98,10 @@ G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
 
+RFC3339 observation and human-decision instants are compared at their complete
+declared fractional precision after timezone normalization. Sub-microsecond
+ordering cannot be hidden by truncation to Python `datetime` precision.
+
 The subsequent public-entry audit confirmed that a depth-one shallow clone
 without the pinned v0.1 Git object still passes the current verifier and test
 surface; the retired verifier wrapper is absent and no replacement is needed.

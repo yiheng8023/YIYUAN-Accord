@@ -8,7 +8,8 @@ as current product authority.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
+from decimal import Decimal
 import json
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
@@ -325,24 +326,29 @@ def _path_entry_absent(path: Path) -> bool:
     return False
 
 
-def _rfc3339_datetime(value: Any) -> datetime | None:
+def _rfc3339_instant(value: Any) -> Decimal | None:
     if not isinstance(value, str) or RFC3339.fullmatch(value) is None:
         return None
     normalized = value[:-1] + "+00:00" if value.endswith("Z") else value
-    head, separator, offset = normalized.rpartition("+")
-    if not separator:
-        minus = normalized.rfind("-", 19)
-        if minus > 18:
-            head, offset = normalized[:minus], normalized[minus:]
-            separator = ""
+    offset_start = len(normalized) - 6
+    if offset_start <= 18 or normalized[offset_start] not in {"+", "-"}:
+        return None
+    head = normalized[:offset_start]
+    offset = normalized[offset_start:]
+    fraction = ""
     if "." in head:
         prefix, fraction = head.split(".", 1)
-        head = prefix + "." + fraction[:6]
-    normalized = head + ("+" + offset if separator else offset)
+        head = prefix
     try:
-        return datetime.fromisoformat(normalized)
+        moment = datetime.fromisoformat(head + offset).astimezone(timezone.utc)
     except ValueError:
         return None
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    delta = moment - epoch
+    seconds = Decimal(delta.days * 86400 + delta.seconds)
+    if fraction:
+        seconds += Decimal(f"0.{fraction}")
+    return seconds
 def _authority_files(
     root: Path, constitution: dict[str, Any], errors: list[str]
 ) -> list[tuple[str, Path]]:
@@ -1082,9 +1088,9 @@ def _evidence_states(
             work_id = document.get("workItemId")
             work_binding = work_bindings.get(work_id) if _nonempty_text(work_id) else None
             evidence_id = document.get("id")
-            observed_at = _rfc3339_datetime(document.get("observedAt"))
+            observed_at = _rfc3339_instant(document.get("observedAt"))
             decided_at = (
-                _rfc3339_datetime(authority.get("decidedAt"))
+                _rfc3339_instant(authority.get("decidedAt"))
                 if isinstance(authority, dict)
                 else None
             )

@@ -213,7 +213,7 @@
       "name": "zero-trust claims and evidence",
       "statement": "Current state, capability effectiveness, outcome, and acceptance claims require source-bound evidence and a code-owned validator; inventory, exposure, tests, fixtures, and self-declaration cannot promote themselves.",
       "metric": "evidence identity, validator, authority, result, and claim-limit validation",
-      "threshold": "the acceptance criteria contract is structurally valid; every verified criterion passes a current code-owned validator; each admitted strict and unambiguous JSON evidence document declares schema as literal integer 1, has a unique current identity, non-empty source locator and identity, observation-to-human-decision chronology, a named accountable human accepted decision, an accepted result, and non-empty claim limits; every declared criterion binds the same evidence file and maps to the exact completed causal work item and containing increment that produced it",
+      "threshold": "the acceptance criteria contract is structurally valid; every verified criterion passes a current code-owned validator; each admitted strict and unambiguous JSON evidence document declares schema as literal integer 1, has a unique current identity, non-empty source locator and identity, full-precision observation-to-human-decision chronology, a named accountable human accepted decision, an accepted result, and non-empty claim limits; every declared criterion binds the same evidence file and maps to the exact completed causal work item and containing increment that produced it",
       "assessment": "computed"
     },
     {

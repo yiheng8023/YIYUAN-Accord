@@ -944,6 +944,11 @@ class ProductControlTests(unittest.TestCase):
 
     def test_weak_generic_evidence_identity_authority_or_result_fails_closed(self) -> None:
         self.map_outcome_to_latest_work("O2")
+
+        def precede_observation_below_microsecond(value: dict) -> None:
+            value["observedAt"] = "2026-08-12T03:00:00.0000009+08:00"
+            value["authority"]["decidedAt"] = "2026-08-12T03:00:00.0000001+08:00"
+
         mutations = {
             "boolean schema": lambda value: value.__setitem__("schema", True),
             "missing work binding": lambda value: value.pop("workItemId"),
@@ -963,6 +968,9 @@ class ProductControlTests(unittest.TestCase):
             ),
             "decision precedes observation": lambda value: value["authority"].__setitem__(
                 "decidedAt", "2026-08-12T02:59:59+08:00"
+            ),
+            "sub-microsecond decision precedes observation": (
+                precede_observation_below_microsecond
             ),
             "unaccepted result": lambda value: value["result"].__setitem__(
                 "accepted", False
