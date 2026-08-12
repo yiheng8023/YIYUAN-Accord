@@ -673,6 +673,13 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_conventional_residue_file_fails_closed_with_empty_graph(self) -> None:
+        residue = self.root / ".tmp"
+        residue.write_text("residue", encoding="utf-8")
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn("repository cleanup residue remains: .tmp", report["errors"])
+
     def test_dangling_cleanup_symlink_is_residue(self) -> None:
         self.mutate("product/program.json", self.activate_program)
         link = self.root / ".tmp"

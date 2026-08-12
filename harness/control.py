@@ -926,7 +926,7 @@ def _process_loss_guardrail(
 def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
     before = len(errors)
     try:
-        for current, directories, _ in os.walk(root, topdown=True, followlinks=False):
+        for current, directories, files in os.walk(root, topdown=True, followlinks=False):
             current_path = Path(current)
             retained: list[str] = []
             for name in directories:
@@ -947,6 +947,17 @@ def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
                     continue
                 retained.append(name)
             directories[:] = retained
+            for name in files:
+                if name.casefold() not in CONVENTIONAL_RESIDUE_NAMES:
+                    continue
+                candidate = current_path / name
+                try:
+                    relative = candidate.relative_to(root).as_posix()
+                except ValueError:
+                    continue
+                if relative == ".git" or relative.startswith(".git/"):
+                    continue
+                _error(errors, f"repository cleanup residue remains: {relative}")
     except OSError:
         _error(errors, "repository residue cannot be enumerated")
     return len(errors) == before
