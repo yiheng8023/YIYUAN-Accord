@@ -278,6 +278,16 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIn(f"{label} schema must be integer 1", report["errors"])
                 shutil.copy2(ROOT / relative, self.root / relative)
 
+    def test_planning_active_limits_must_be_literal_integer_one(self) -> None:
+        def boolean_limits(value: dict) -> None:
+            value["planningModel"]["maxActiveIncrements"] = True
+            value["planningModel"]["maxActiveWorkItems"] = True
+
+        self.mutate("product/constitution.json", boolean_limits)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("constitution planningModel active limits are invalid", report["errors"])
+
     def test_acceptance_release_must_match_program(self) -> None:
         self.mutate(
             "product/acceptance.json",

@@ -630,7 +630,12 @@ def _release_identity_valid(
     if not isinstance(planning, dict):
         _error(errors, "constitution planningModel is invalid")
     else:
-        if planning.get("maxActiveIncrements") != 1 or planning.get("maxActiveWorkItems") != 1:
+        if (
+            type(planning.get("maxActiveIncrements")) is not int
+            or planning.get("maxActiveIncrements") != 1
+            or type(planning.get("maxActiveWorkItems")) is not int
+            or planning.get("maxActiveWorkItems") != 1
+        ):
             _error(errors, "constitution planningModel active limits are invalid")
         if _string_list(planning.get("incrementRequires")) is None:
             _error(errors, "constitution incrementRequires are invalid")

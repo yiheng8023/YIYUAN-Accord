@@ -94,6 +94,10 @@ than allowing different readers to assign different meanings. Authority and
 evidence schema versions must be the literal integer `1`; booleans cannot pass
 through Python's integer equality behavior.
 
+The same literal-type rule applies to the constitution's one-active-increment
+and one-active-work-item limits. JSON booleans cannot impersonate those numeric
+control values.
+
 G2 also includes the acceptance-criteria contract itself. Duplicate, malformed,
 or self-contradictory criterion declarations cannot leave the evidence
 guardrail green merely because no evidence validator ran.
