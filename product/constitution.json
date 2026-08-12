@@ -71,6 +71,13 @@
     "method": "fixed-release-acceptance-with-adaptive-causal-increments",
     "maxActiveIncrements": 1,
     "maxActiveWorkItems": 1,
+    "workStateSemantics": {
+      "planned": "bound but not current or executed",
+      "active": "current and execution may have started",
+      "completed": "execution finished",
+      "cancelled": "bound but never active or executed",
+      "stopped": "previously active or attempted, then stopped"
+    },
     "incrementRequires": [
       "observed problem",
       "causal hypothesis",

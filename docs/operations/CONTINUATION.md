@@ -120,12 +120,11 @@ G2. The current local public seam reports 82/82 product tests passing on the
 minimum supported CPython 3.10.20 as well as the default local interpreter,
 while remaining at `0/5` outcomes and `4/4` guardrails.
 
-One state meaning remains intentionally undecided: the current contract does
-not say whether a `cancelled` work item proves it never became current or may
-represent attempted work. Until accountable product judgment defines that
-meaning, do not make cancelled work count toward G1 authority attempts or G4
-process loss, and do not use that omission as evidence that either treatment is
-correct.
+The accountable product judgment now distinguishes terminal work states:
+`cancelled` means bound but never active or executed, so G1 does not count its
+declared operations as attempted authority while G4 counts one outcome-neutral
+planning loss. `stopped` means previously active or attempted and then stopped,
+so both G1 authority checks and G4 process-loss accounting apply.
 
 ## Why the program is paused
 

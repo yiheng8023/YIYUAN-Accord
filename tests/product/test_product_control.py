@@ -288,6 +288,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("constitution planningModel active limits are invalid", report["errors"])
 
+    def test_work_state_semantics_cannot_self_disable(self) -> None:
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value["planningModel"]["workStateSemantics"].__setitem__(
+                "cancelled", "may have executed"
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("constitution workStateSemantics is invalid", report["errors"])
+
     def test_code_owned_policy_booleans_cannot_be_replaced_by_integers(self) -> None:
         variants = (
             (
@@ -575,6 +586,21 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_cancelled_work_does_not_claim_an_authority_attempt(self) -> None:
+        def cancel_before_execution(value: dict) -> None:
+            increment = self.ensure_increment(value, state="cancelled")
+            work = increment["workItems"][0]
+            work["state"] = "cancelled"
+            work["operationIds"].append("release")
+
+        self.mutate("product/program.json", cancel_before_execution)
+        report = self.report()
+        self.assertTrue(report["criterionStates"]["G1"], report["errors"])
+        self.assertNotIn(
+            "work item work.fixture-current exceeds agent authority",
+            report["errors"],
+        )
+
     def test_human_authority_cannot_be_removed(self) -> None:
         def remove(value: dict) -> None:
             value["authorityBoundary"]["userOwns"].remove("new-trust")
@@ -648,6 +674,27 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn("outcome-neutral work budget must be zero or one", report["errors"])
+
+    def test_cancelled_and_stopped_work_count_toward_process_loss(self) -> None:
+        baseline = self.read_json("product/program.json")
+        for terminal_state in ("cancelled", "stopped"):
+            with self.subTest(terminal_state=terminal_state):
+                program = deepcopy(baseline)
+                increment = self.activate_program(program)
+                first = increment["workItems"][0]
+                first["state"] = terminal_state
+                second = deepcopy(first)
+                second["id"] = f"work.after-{terminal_state}"
+                second["state"] = "active"
+                increment["workItems"].append(second)
+                self.write_json("product/program.json", program)
+                report = self.report()
+                self.assertFalse(report["criterionStates"]["G4"])
+                self.assertIn(
+                    "increment increment.fixture-current exceeds its "
+                    "outcome-neutral work budget",
+                    report["errors"],
+                )
 
     def test_paused_program_cannot_accumulate_closed_outcome_neutral_queue(self) -> None:
         def queue(value: dict) -> None:

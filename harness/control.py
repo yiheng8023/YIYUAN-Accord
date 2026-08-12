@@ -109,6 +109,13 @@ PROGRAM_STATES = {"active", "paused", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 WORK_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 TERMINAL_STATES = {"completed", "cancelled", "stopped"}
+EXPECTED_WORK_STATE_SEMANTICS = {
+    "planned": "bound but not current or executed",
+    "active": "current and execution may have started",
+    "completed": "execution finished",
+    "cancelled": "bound but never active or executed",
+    "stopped": "previously active or attempted, then stopped",
+}
 ASSESSMENTS = {"planned", "computed", "verified"}
 RFC3339 = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
@@ -652,6 +659,10 @@ def _release_identity_valid(
             or planning.get("maxActiveWorkItems") != 1
         ):
             _error(errors, "constitution planningModel active limits are invalid")
+        if not _same_typed_value(
+            planning.get("workStateSemantics"), EXPECTED_WORK_STATE_SEMANTICS
+        ):
+            _error(errors, "constitution workStateSemantics is invalid")
         if _string_list(planning.get("incrementRequires")) is None:
             _error(errors, "constitution incrementRequires are invalid")
         if _string_list(planning.get("replanWhen")) is None:
@@ -965,7 +976,7 @@ def _process_loss_guardrail(
             work_state = work.get("state")
             if not isinstance(work_state, str):
                 continue
-            if work_state in {"planned", "cancelled"}:
+            if work_state == "planned":
                 continue
             mapped = _string_list(work.get("acceptanceIds")) or []
             mapped_outcomes = set(mapped) & OUTCOME_IDS
