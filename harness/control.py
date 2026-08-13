@@ -461,7 +461,9 @@ CODEX_CONTINUITY_REGISTRATION_SHA256 = (
 CODEX_CONTINUITY_HOST_EVIDENCE = (
     "product/evidence/o1-codex-single-thread-continuity-host.json"
 )
-CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v2"
+CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v3"
+CODEX_CONTINUITY_REGISTRATION_COMMIT = "525136bffc69982ebbd8d5d85b47797f8d7bc6de"
+CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT = "2026-08-13T20:04:13+08:00"
 CODEX_CONTINUITY_MODEL = "gpt-5.6-sol"
 CODEX_CONTINUITY_REASONING_EFFORT = "xhigh"
 CODEX_CONTINUITY_ROLLOUT_IDENTITY = (
@@ -545,6 +547,7 @@ def _validate_codex_single_thread_continuity(
         registered_at = _rfc3339_instant(observation.get("registeredAt"))
         compacted_at = _rfc3339_instant(observation.get("compactedAt"))
         commit = observation.get("registrationCommit")
+        head = observation.get("headAtReconciliation")
         require(observation.get("threadIdentity") == CODEX_CONTINUITY_THREAD_IDENTITY, "uses a different task thread")
         require(observation.get("sourceTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "uses a different demand turn")
         require(
@@ -558,9 +561,20 @@ def _validate_codex_single_thread_continuity(
             and observation.get("registeredAt") == registration_document.get("registeredAt"),
             "uses a different registration time",
         )
-        require(registered_at is not None and compacted_at is not None and compacted_at > registered_at, "does not show post-registration compaction")
+        require(
+            registered_at is not None
+            and compacted_at is not None
+            and compacted_at > registered_at
+            and compacted_at > _rfc3339_instant(CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT),
+            "does not show post-registration and post-validator compaction",
+        )
         require(observation.get("postCompactionTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "does not continue the measured turn")
-        require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None and observation.get("headAtReconciliation") == commit, "does not bind the registration checkpoint")
+        require(
+            commit == CODEX_CONTINUITY_REGISTRATION_COMMIT
+            and isinstance(head, str)
+            and re.fullmatch(r"[0-9a-f]{40}", head) is not None,
+            "does not bind the registration checkpoint and reconciliation head",
+        )
         require(observation.get("branch") == "main" and observation.get("upstream") == "origin/main" and observation.get("aheadBehind") == [0, 0], "does not reconcile the bound mainline")
         require(observation.get("worktreeCleanAtReconciliation") is True, "does not reconcile a clean checkpoint")
         require(observation.get("goalObjectiveSha256") == CODEX_CONTINUITY_GOAL_SHA256, "does not preserve the bound goal")
@@ -652,7 +666,7 @@ def _validate_codex_single_thread_continuity(
     )
     authority = document.get("authority")
     require(isinstance(authority, dict) and authority.get("name") == "yiheng8023" and authority.get("decision") == "accepted", "lacks the pre-registered human decision")
-    require(document.get("validator") == {"kind": CODEX_CONTINUITY_VALIDATOR_KIND, "version": 2}, "names a different validator")
+    require(document.get("validator") == {"kind": CODEX_CONTINUITY_VALIDATOR_KIND, "version": 3}, "names a different validator")
     return len(errors) == before
 
 

@@ -102,6 +102,14 @@ checkpoint. A mismatch blocks further effects while the Agent recovers
 read-only from the authoritative sources; it does not ask the user to replay
 discoverable context or choose a Codex mechanism.
 
+The measurement contract and its registration identity freeze before the
+eligible event; the repository does not freeze while waiting for normal context
+growth. Authorized work may advance HEAD. After compaction, evidence binds both
+the fixed registration commit and the actual clean reconciliation HEAD while
+the validator rechecks the unchanged registration hash. Requiring both commits
+to be identical would turn continuity measurement into an artificial delivery
+blocker.
+
 Healthy native continuation remains the smallest route. A Hook, external
 memory layer, new task, or authored adapter requires a reproducible residual
 gap plus its own authority and data boundary. If repeated compaction or a host

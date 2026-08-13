@@ -44,6 +44,11 @@ emitted `custom_tool_call_output`. The current registration supersedes that
 seam, preserves the pilot as zero O1-O5 evidence, and makes only a later native
 compaction after the repair checkpoint eligible for O1.
 
+Do not freeze ordinary authorized product work while waiting for that event.
+The registration identity and validator floors are fixed, but HEAD may advance.
+At the eligible compaction, reconcile and record the actual clean HEAD before
+further mutation while separately retaining the fixed registration commit.
+
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
 audits, or a manufactured task. Bounded retrospective counterexample analysis,

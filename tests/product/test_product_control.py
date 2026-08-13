@@ -20,8 +20,10 @@ if str(ROOT) not in sys.path:
 from harness.control import (  # noqa: E402
     CODEX_CONTINUITY_EVENT_SEQUENCE,
     CODEX_CONTINUITY_MODEL,
+    CODEX_CONTINUITY_REGISTRATION_COMMIT,
     CODEX_CONTINUITY_REASONING_EFFORT,
     CODEX_CONTINUITY_ROLLOUT_IDENTITY,
+    CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT,
     _validate_codex_single_thread_continuity,
     verify_product,
 )
@@ -806,6 +808,14 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(CODEX_CONTINUITY_MODEL, "gpt-5.6-sol")
         self.assertEqual(CODEX_CONTINUITY_REASONING_EFFORT, "xhigh")
+        self.assertEqual(
+            CODEX_CONTINUITY_REGISTRATION_COMMIT,
+            "525136bffc69982ebbd8d5d85b47797f8d7bc6de",
+        )
+        self.assertEqual(
+            CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT,
+            "2026-08-13T20:04:13+08:00",
+        )
         self.assertEqual(
             CODEX_CONTINUITY_ROLLOUT_IDENTITY,
             "sha256:a2374976d4b97bb280a8fee497f3560532d5e64a48975b6e995451e999eb4544",
