@@ -140,7 +140,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "08ac21f16a3c0c520d636bd36de58e1f417d7aef698b7731e9aaab067dbf4a79"
+    "fcc7027f7e62e7f68d44251ca73e409273addf45e662743ec20a7d5521842899"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -444,15 +444,6 @@ EvidenceValidatorSpec = tuple[
 
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
-
-
-def _has_scoped_evidence_validator(increment_id: str, criterion_id: str) -> bool:
-    return any(
-        criterion_id in criterion_ids and increment_id in increment_ids
-        for criterion_ids, increment_ids, _validator in (
-            SUPPORTED_EVIDENCE_VALIDATORS.values()
-        )
-    )
 
 
 class _InvalidJson(ValueError):
@@ -1125,19 +1116,6 @@ def _program_graph(
         mapped = _string_list(increment.get("acceptanceIds"))
         if mapped is None or not set(mapped) <= set(criteria):
             _error(errors, f"increment {increment_id} has invalid acceptanceIds")
-        elif increment_state == "active" and (
-            unsupported_outcomes := {
-                criterion_id
-                for criterion_id in set(mapped) & OUTCOME_IDS
-                if not _has_scoped_evidence_validator(increment_id, criterion_id)
-            }
-        ):
-            _error(
-                errors,
-                "active outcome-bearing increment requires task-bound code-owned "
-                "evidence validators "
-                f"for {', '.join(sorted(unsupported_outcomes))}: {increment_id}",
-            )
         work_items = _objects(increment.get("workItems"), f"increment {increment_id} workItems", errors)
         if not work_items:
             _error(errors, f"increment {increment_id} must contain at least one work item")

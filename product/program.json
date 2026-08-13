@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2-preregistration-verifier-separation",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -61,5 +61,60 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2-preregistration-verifier-separation",
+      "state": "active",
+      "correctionClass": "pre-execution-outcome-validator-brittleness",
+      "observedProblem": "Two natural Codex compactions produced no user-managed recovery, but the task-specific validation path failed twice because it guessed volatile host record and turn semantics before observing the eligible event; the second validator imposed an original-turn restriction absent from the immutable pre-registration, turning real product work into a repeated verifier-calibration loop.",
+      "hypothesis": "Freezing criterion-defined measurement fields, source-capture boundaries, floors, falsifiers, and claim limits before measured execution while requiring the exact task-bound code validator only before outcome promotion will preserve zero-trust acceptance without guessing future host serialization or adding post-hoc rules.",
+      "falsifier": "A verified outcome can pass without an exact task-bound criterion and increment validator; a validator may weaken or add measurement rules after observing results without rejection; a generic receipt validator returns; or the repair requires a new runtime, audit format, receipt ecosystem, user round trip, or outcome claim.",
+      "stopCondition": "Stop when the active gate distinguishes immutable pre-execution measurement registration from pre-promotion code validation, verified outcomes still require exact task-bound validators and completed causal bindings, the current tree has no generic or task-specific outcome validator, public architecture and operations describe the same boundary, O1-O5 remain false, deterministic verification passes, residue is absent, and the repair is committed and pushed before leaving the current graph.",
+      "acceptanceIds": [
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2-separate-measurement-registration-from-validation-code",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "targeted-capability-discovery",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one lean pre-execution measurement and pre-promotion validation boundary grounded in the stopped continuity attempt and fixed evaluation sources"
+          ]
+        }
+      ]
+    }
+  ]
 }

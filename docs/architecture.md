@@ -88,17 +88,21 @@ install capabilities, route work, or operate a host adapter.
 O1-O5 are deliberately planned and false. A repository-authored JSON file
 cannot promote them: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
-evidence. The active O1 continuity task has one validator bound to its exact
-thread, demand turn, increment, work item, immutable registration, and host
-event chronology; it cannot validate another task or criterion. Before a task
-exists, a generic self-report schema could validate only its own structure,
-not naturalness, source truth, behavior, or value; G4 blocks any other
-outcome-bearing increment until its smallest required validation path exists.
+evidence. Before measured execution, the increment freezes an immutable task
+registration containing every mapped criterion's required values, the task's
+source-capture eligibility and stop rule, floors, and claim limit. A
+task-specific validator may implement previously unknown source serialization
+after the event, but no outcome can be promoted unless that validator binds the
+registration identity and chronology, enforces its unchanged rules, and passes
+the exact evidence and completed causal binding. This permits source-grounded
+post-hoc checking, not post-hoc rule changes. A generic self-report schema could
+validate only its own structure, not naturalness, source truth, behavior, or
+value.
 
-The v0.2 program has one active Codex same-task continuity increment and one
-active work item. O1-O5 remain false. The current verifier is not an accepted
-methodology, quality profile, task runtime, reference adapter, or cross-host
-proof; this task can establish only one bounded O1 reference-host outcome.
+The v0.2 program is repairing that timing boundary after a stopped Codex
+same-task continuity attempt exposed two pre-execution validator guesses. O1-O5
+remain false. The current verifier is not an accepted methodology, quality
+profile, task runtime, reference adapter, or cross-host proof.
 
 ### Continuity is reconciliation, not unlimited context
 

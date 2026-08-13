@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from harness.control import verify_product  # noqa: E402
+from harness.control import SUPPORTED_EVIDENCE_VALIDATORS, verify_product  # noqa: E402
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -227,12 +227,15 @@ class ProductControlTests(unittest.TestCase):
             timeout=30,
         )
 
-    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
+    def test_current_v02_contract_is_valid_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2-preregistration-verifier-separation",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -245,13 +248,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress", completed.stdout)
+        self.assertIn("v0.2: active, in-progress", completed.stdout)
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -708,72 +711,20 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
 
-    def test_outcome_increment_cannot_open_without_a_validation_path(self) -> None:
-        def manufacture(value: dict) -> None:
+    def test_outcome_increment_can_observe_source_before_validator_implementation(self) -> None:
+        def activate_o2(value: dict) -> None:
             increment = self.activate_program(value)
-            increment["observedProblem"] = "No natural task exists, so create Harness work."
             increment["acceptanceIds"].append("O2")
             increment["workItems"][0]["acceptanceIds"].append("O2")
 
-        self.mutate("product/program.json", manufacture)
+        self.mutate("product/program.json", activate_o2)
         report = self.report()
-        self.assertFalse(report["valid"])
-        self.assertFalse(report["criterionStates"]["G4"])
-        self.assertIn(
-            "active outcome-bearing increment requires task-bound code-owned evidence validators "
-            f"for O2: {FIXTURE_INCREMENT_ID}",
-            report["errors"],
-        )
-
-    def test_outcome_increment_requires_exact_increment_scoped_validator(self) -> None:
-        def activate_o1(value: dict) -> None:
-            increment = self.activate_program(value)
-            increment["acceptanceIds"].append("O1")
-            increment["workItems"][0]["acceptanceIds"].append("O1")
-
-        self.mutate("product/program.json", activate_o1)
-        validator = lambda document, criterion_id, root, errors: True
-        with patch(
-            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            self.validator_registry(
-                validator,
-                increment_ids=frozenset({"increment.other-task"}),
-            ),
-        ):
-            report = self.report()
-        self.assertFalse(report["valid"])
-        self.assertFalse(report["criterionStates"]["G4"])
-        self.assertIn(
-            "active outcome-bearing increment requires task-bound code-owned evidence validators "
-            f"for O1: {FIXTURE_INCREMENT_ID}",
-            report["errors"],
-        )
-
-        with patch(
-            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
-            self.validator_registry(validator),
-        ):
-            report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertTrue(report["criterionStates"]["G4"])
-        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertFalse(report["criterionStates"]["O2"])
 
-    def test_ready_release_has_no_prebuilt_outcome_validation_path(self) -> None:
-        def activate_o1(value: dict) -> None:
-            increment = self.activate_program(value)
-            increment["acceptanceIds"].append("O1")
-            increment["workItems"][0]["acceptanceIds"].append("O1")
-
-        self.mutate("product/program.json", activate_o1)
-        report = self.report()
-        self.assertFalse(report["valid"])
-        self.assertFalse(report["criterionStates"]["O1"])
-        self.assertFalse(report["criterionStates"]["G4"])
-        self.assertIn(
-            "active outcome-bearing increment requires task-bound code-owned evidence validators "
-            f"for O1: {FIXTURE_INCREMENT_ID}",
-            report["errors"],
-        )
+    def test_current_release_has_no_prebuilt_outcome_validation_path(self) -> None:
+        self.assertEqual(SUPPORTED_EVIDENCE_VALIDATORS, {})
 
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:

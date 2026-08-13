@@ -15,19 +15,19 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active` on one outcome-neutral
+authority repair. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2-preregistration-verifier-separation`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is ready
+## Why the program is active
 
 The user supplied a real goal-level continuity demand after the same v0.2
 closeout goal reached a seventh Codex task. The resulting O1 attempt first
@@ -46,6 +46,15 @@ new rule, or open another continuity measurement to chase a green result. The
 attempt stopped with zero O1-O5 credit; its registration and task-specific
 validator left the current tree and remain recoverable from Git history. This
 is valid stopped-case counterevidence, not an accepted O1 or O4 receipt.
+
+The current authority repair separates two times that the stopped attempt had
+conflated. An immutable task registration containing the mapped criteria's
+required values, source-capture eligibility and stop rule, floors, and claim
+limit remains fixed before measured execution. The code validator may implement
+previously unknown source serialization only after observation and must exist
+before any result is promoted; it must bind the registration identity and
+chronology without adding or weakening its rules. This repair maps only to
+G2-G4 and counts as zero O1-O5 progress.
 
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
@@ -84,13 +93,15 @@ receipt ecosystem.
 
 ## Outcome-entry boundary
 
-When a natural task is actually bound, pre-register the measurement contract
-and add only the validation path scoped to the mapped criterion and exact
-causal increment. Open exactly one causal increment with at most one active work
-item before measured execution, and use the existing acceptance
-operationalization rather than creating a parallel workflow. O4 may establish
-only a bounded Codex reference-host calibration; O5 alone can establish the
-first bounded Agent-neutral portability claim through a distinct host.
+When a natural task is actually bound, freeze and commit its immutable task
+registration, then open exactly one causal increment with at most one active
+work item before measured execution. Implement the smallest validation path
+scoped to the mapped criterion and exact increment before any result promotion;
+it must bind that registration and use the unchanged acceptance
+operationalization rather than a parallel workflow or new post-hoc rule. O4 may
+establish only a bounded Codex reference-host calibration; O5 alone can
+establish the first bounded Agent-neutral portability claim through a distinct
+host.
 
 The user supplies the goal, domain facts, bounded authorization, corrections,
 and accountable final judgment. The Agent owns available-capability
