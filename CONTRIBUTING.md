@@ -28,6 +28,10 @@ A proposal is not automatically current work. Do not add a speculative queue to
 `product/program.json`. Maintainers bind at most one active causal increment and
 one active work item when the work becomes current.
 
+Do not prebuild an outcome validator before its real task and evidence sources
+are bound. Add only the smallest task- and criterion-scoped code path needed to
+falsify that event's claim; a self-reported receipt shape is not outcome proof.
+
 ## Capability and external-layer changes
 
 Start from the user's goal and the observed healthy, authorized route. Name an

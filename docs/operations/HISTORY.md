@@ -86,6 +86,14 @@ explicit in the public report and closes the supporting-document set without
 claiming machine understanding of prose. It is acceptance and observability
 repair only, with zero O1-O5 progress.
 
+A subsequent thin-kernel audit removed the prebuilt generic O1 receipt
+validator. That parser could reject malformed self-reporting, but without a
+bound task or independent source it could not establish naturalness, behavior,
+value, or zero loss. The current tree therefore carries no O1-O5 outcome
+validator: G4 blocks outcome work until a real task binds the smallest
+criterion-scoped validation path. This removal is an authority and false-
+positive repair, not O1-O5 progress.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

@@ -73,9 +73,11 @@ install capabilities, route work, or operate a host adapter.
 
 O1-O5 are deliberately planned and false. A repository-authored JSON file
 cannot promote them: every verified outcome requires a code-owned validator
-scoped to that criterion. The O1 validator checks receipt structure, but it
-cannot create a natural task or prove naturalness from self-description.
-O2-O5 have no validation path yet.
+scoped to both the criterion and the bound task evidence. The current release
+deliberately ships no O1-O5 outcome validator. Before a task exists, a generic
+self-report schema could validate only its own structure, not naturalness,
+source truth, behavior, or value; G4 blocks opening an outcome-bearing
+increment until the smallest required validation path is added.
 
 The v0.2 program is paused with an empty current increment graph. Closed
 authority repairs remain available in Git history instead of becoming a
@@ -171,8 +173,8 @@ stored as a future queue: bind the next item only when it becomes current. A
 closed outcome-neutral increment leaves the current graph and remains
 recoverable from Git; a completed increment stays current only while
 validator-accepted outcome evidence needs its exact causal identity. Actual
-process loss is measured by O1/O2 receipts. Those receipts separately reject
-both capability-orchestration intervention and material collaboration-loss
-events such as intent correction, reopened decisions, unrequested work,
-unnecessary process, residue or context recovery, and false completion
-correction.
+process loss must be measured by task-bound O1/O2 receipts. Their acceptance
+contract separately rejects both capability-orchestration intervention and
+material collaboration-loss events such as intent correction, reopened
+decisions, unrequested work, unnecessary process, residue or context recovery,
+and false completion correction.

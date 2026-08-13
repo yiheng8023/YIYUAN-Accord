@@ -31,9 +31,10 @@ repairing this document first.
 
 O1-O5 require natural, non-diagnostic real-task evidence. The repository does
 not invent such a task or ask the user to manufacture one merely to keep the
-program active. The current release has only the criterion-scoped O1 receipt
-validator; it does not create a natural task or prove naturalness. O2-O5 have
-no code-owned validation path.
+program active. The current release deliberately has no O1-O5 outcome
+validator. A task-bound, criterion-scoped validator is added only after the
+task and its evidence sources are known, and before measured execution. G4
+therefore blocks every outcome-bearing increment in the paused tree.
 
 The pause does not block bounded retrospective counterexample analysis,
 mechanism-only validation, authority-defect repair, or task-independent
