@@ -99,12 +99,11 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready with one unaccepted candidate methodology and minimum
-quality profile available for exact pre-registration by future tasks. The
-closed outcome-neutral slice prevents a later O4 cohort from packaging its
-common scorecard after observing results. O1-O5 remain false. The current
-verifier is not an accepted methodology, task runtime, reference adapter, or
-cross-host proof.
+The v0.2 program is adding one missing proactive-risk and expected-state
+feedback floor to the unaccepted candidate before any eligible cohort task
+binds it. This outcome-neutral correction does not add a risk runtime, ledger,
+or new user workflow. O1-O5 remain false. The current verifier is not an
+accepted methodology, task runtime, reference adapter, or cross-host proof.
 
 ### Continuity is reconciliation, not unlimited context
 

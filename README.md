@@ -16,12 +16,11 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
-repository now carries one directly applicable, explicitly unaccepted candidate
-methodology and quality profile. Future eligible tasks must bind its exact Git
-and content identity before execution, so their common O4 scorecard cannot be
-packaged after observing results. The candidate adds no runtime or accepted
-outcome. The verifier is the current machine-readable state source.
+v0.2 is `active` on one outcome-neutral correction to the unaccepted candidate
+profile, with O1-O5 still false. The correction makes proactive risk prediction
+and expected-versus-observed state control a mandatory floor before the first
+eligible cohort task starts. It adds no runtime or accepted outcome. The
+verifier is the current machine-readable state source.
 
 ## The problem
 
