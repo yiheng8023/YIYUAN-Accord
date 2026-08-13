@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 from io import StringIO
 import json
 import os
@@ -246,15 +247,12 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
-    def test_current_v02_contract_is_active_and_in_progress(self) -> None:
+    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.codex-plugin-payload-version-identity",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -299,13 +297,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -437,7 +435,17 @@ class ProductControlTests(unittest.TestCase):
             (CODEX_PLUGIN_ROOT / "hooks/hooks.json").read_text(encoding="utf-8")
         )
         self.assertEqual(manifest["name"], "agent-autonomy-harness-codex")
-        self.assertEqual(manifest["version"], "0.2.0-candidate.1")
+        payload_identity = hashlib.sha256()
+        for relative in ("hooks/hooks.json", "scripts/session_start.py"):
+            payload_identity.update(relative.encode("utf-8"))
+            payload_identity.update(b"\0")
+            payload_identity.update((CODEX_PLUGIN_ROOT / relative).read_bytes())
+            payload_identity.update(b"\0")
+        self.assertEqual(
+            manifest["version"],
+            "0.2.0-candidate.1+codex.payload-"
+            f"{payload_identity.hexdigest()[:12]}",
+        )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
         self.assertNotIn("skills", manifest)
         self.assertNotIn("mcpServers", manifest)

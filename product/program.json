@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-plugin-payload-version-identity",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,58 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.codex-plugin-payload-version-identity",
-      "state": "active",
-      "correctionClass": "codex-plugin-payload-version-identity-drift",
-      "observedProblem": "The Codex plugin launcher payload changed when its reviewed verifier hash was synchronized to the current acceptance contract, but the manifest still declares version 0.2.0-candidate.1; Codex can therefore cache or reinstall different plugin bytes under one version identity, making later activation and evidence attribution unreliable.",
-      "hypothesis": "Advancing only the Codex packaging projection to 0.2.0-candidate.2 and binding the current offline test to that identity will restore a one-version/one-reviewed-payload relationship without changing the portable core, adapter semantics, user workflow, or any O1-O5 outcome state.",
-      "falsifier": "The current payload is byte-identical to the candidate.1 payload, the installed Codex version does not use manifest version in plugin materialization or refresh identity, the new manifest fails the fixed plugin schema, or the repair requires changing portable semantics, a user operation, a new trust boundary, or an outcome claim.",
-      "stopCondition": "Stop after one packaging-only version repair is validated against the current plugin schema and canonical product tests, records zero O1-O5 progress, restores an empty ready graph, and leaves no repository or consumer residue; stop earlier on any falsifier.",
-      "acceptanceIds": [
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/scripts/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.codex-plugin-payload-version-identity",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one Codex plugin manifest version that uniquely identifies the current reviewed packaging payload"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
