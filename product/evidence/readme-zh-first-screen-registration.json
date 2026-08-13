@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "id": "registration.readme-zh-first-screen.2026-08-14",
+  "registeredAt": "2026-08-14T02:45:42+08:00",
+  "taskIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite",
+  "incrementId": "increment.v0.2.readme-zh-first-screen-delivery",
+  "criterionIds": [
+    "O1",
+    "O2",
+    "O3",
+    "O4",
+    "O5"
+  ],
+  "preRegistrationValues": {
+    "adapterAndUnsupportedStateBoundary": {
+      "commonAdapterRole": "The Codex and Claude Code adapters may supply only the same root-scoped current-authority continuation projection at SessionStart; they do not write copy, choose routes, inspect prompts or transcripts, persist session state, validate outcomes, or add product authority.",
+      "codexExposure": "One temporary root-scoped user SessionStart Hook may be configured only after the exact human grant because the Codex workspace projection is not installed; restore C:/Users/15521/.codex/hooks.json to its exact pre-change sha256:ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356 and length 3 after the call.",
+      "claudeExposure": "Use adapters/agent-autonomy-harness-claude only through Claude Code's session-scoped --plugin-dir surface; do not persist installation or consumer settings.",
+      "unsupportedStates": "A missing, untrusted, non-executing, stale, over-broad, leaking, or behaviorally ineffective Hook; unsupported exact model; inability to isolate writes; or failure to restore task exposure stops the affected execution and cannot be normalized into conformance."
+    },
+    "availableCapabilityObservation": {
+      "nativeAgent": "The current Agent can read and edit the bounded repository, reconcile Git and product authority, apply a selected draft, verify it, clean task residue, commit, and push main.",
+      "codex": "Installed and authenticated Codex CLI 0.147.0 with native read-only exec and model selection is available; its continuity projection is present in the repository but not installed or enabled.",
+      "claude": "Installed and authenticated Claude Code 2.1.231 with a session-scoped plugin directory and read-only tool allow-list is available; its continuity projection is present in the repository but not installed or enabled.",
+      "excludedPortfolio": "No Skill, catalog, MCP service, App, CC Switch operation, installation, broad discovery, or external writing workflow is needed. The locally inspected edit-article Skill is excluded because an exact upstream source and license were not bound before registration."
+    },
+    "candidateRetentionOrExpiryRule": "Use at most one Codex draft and one Claude Code draft for this task. Keep neither consumer projection enabled after execution, retain no raw model session, temporary output, or backup, and admit only content-addressed task evidence required by the eventual criterion-scoped validator. The repository adapters remain inactive release-ineligible candidates; this task grants no persistence or promotion.",
+    "commonAuthorityBoundary": {
+      "agent": "May read and change only this repository, run local checks, clean task-created residue, commit and push main, and after an exact grant temporarily expose the reviewed adapters and invoke the two already-authenticated model hosts for the registered task.",
+      "human": "yiheng8023 retains the new-trust and model-cost grant, accountable acceptance of each host outcome and the final copy, any persistent consumer enablement, new account or data boundary, publication, release, deployment, destructive action, and any claim beyond this task.",
+      "forbidden": "No installation, OAuth or account change, external publication, release, deployment, unrelated repository or consumer mutation, prompt or transcript capture, hidden post-registration acceptance change, or cross-repository write."
+    },
+    "commonDemandToCapabilityLifecycle": "Both hosts receive the same goal-level task and fixed source facts without a user-specified capability route. The Agent observes the already-available native model capabilities, applies the same authority and quality floors, dispatches each once with read-only repository access, compares the two independently usable outcomes under the registered rule, applies at most one bounded final rewrite, verifies the repository, releases temporary exposure, deletes task output and caches, and seeks only the named human's accountable judgment.",
+    "commonQualitySafetyEvidenceAndResidueFloors": {
+      "quality": "Each host draft must independently produce a usable Chinese first screen for README.zh-CN.md lines 1 through 32: a nontechnical reader must understand the user benefit, human-Agent division of responsibility, current research maturity, and non-runtime boundary on first pass; the prose must be concise, natural Chinese without slogan padding, translated-English syntax, unexplained capability jargon, or a semicolon train.",
+      "factualIntegrity": "No draft or selected result may claim an installed, enabled, behaviorally accepted, cross-host-proven, released, production-ready, or completed Harness. It must preserve that adapters are inactive candidates, O1-O5 are unverified, the product is not an Agent runtime or control plane, and current machine state is determined by repository authority and verification rather than marketing copy.",
+      "scope": "Only the Chinese README first-screen region before the existing heading '## 目标交互' may change; English README, later Chinese sections, product authority, adapters, tests, and acceptance semantics are out of scope.",
+      "safety": "Model hosts receive only the public repository source and registered task facts under read-only execution. No secret, prompt history, transcript, unrelated user file, account mutation, installation, publication, release, or persistent consumer change is permitted.",
+      "evidence": "Eligible evidence must bind the immutable registration and chronology, exact host/runtime/model/adapter identities, fixed input blob, raw output hashes, SessionStart behavior or honest unsupported state, model exit status and cost where reported, exact selected diff, link and maturity checks, canonical verifier and full product tests, cleanup, Git state, and named-human decisions. Self-report or a green generic receipt is insufficient.",
+      "residue": "Restore the exact Codex user Hook bytes, leave no Claude consumer setting, model session, temporary draft/output, backup, .tmp item, __pycache__, undeclared repository file, or unrelated working-tree change.",
+      "humanAcceptance": "The named human must accept or reject each host draft as an equivalent usable outcome within tolerance, the selected final copy, the measured intervention/loss classification, and the bounded claim; missing or ambiguous judgment cannot pass."
+    },
+    "commonTaskIdentityGoalAndInput": {
+      "taskIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite",
+      "goal": "Rewrite the Chinese README first screen so a user who knows nothing about Codex or its capability ecosystem immediately understands what Agent Autonomy Harness is for, what the user supplies, what the Agent owns, and what is and is not currently proven.",
+      "input": "README.zh-CN.md at repository commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea, git blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b, sha256:9dce757586698762a83b531ac6d1b401e20bd62e1c81e06180189fe2e60fd0d5, exact target lines 1 through 32 ending before '## 目标交互', plus current constitution/program/acceptance facts at the same commit.",
+      "sameInputRule": "Both hosts receive byte-identical source text and the same registered brief, floors, scope, claim limits, and output contract; no host-specific substantive hint or post-output correction is allowed before both raw drafts are captured."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "The fixed current first screen at blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b is factually cautious but exposes internal implementation and program state in a long dense block. The named user reported that the project's copy is poor, AI-like, and lacks human readability, requiring a material correction before public use.",
+      "axes": [
+        "named-human acceptance and independent usability",
+        "factual and maturity integrity",
+        "first-pass comprehension for a nontechnical Chinese user",
+        "natural Chinese and absence of AI-like filler",
+        "material user corrections or capability-orchestration interventions",
+        "authority, evidence, resource, interface, and residue floors"
+      ],
+      "decisionRule": "The selected route is advantaged only if at least one registered host draft is independently accepted, the final bounded diff is accepted, every mandatory floor passes, measured material intervention and collaboration-loss counts are zero, and the baseline required more material correction than the measured route. Missing evidence, a post-hoc floor change, or human rejection fails this comparison."
+    },
+    "complexityAndAuthorityRiskBands": {
+      "scenarioClass": "public-product-communication-for-a-nontechnical-user",
+      "complexity": "medium: the prose is short but must compress a complex boundary without false maturity claims",
+      "authorityRisk": "medium: repository mutation and two metered model hosts are involved, but execution is read-only until the Agent applies one reviewed diff and no publication or release is authorized"
+    },
+    "contextLifecycleBoundaryAndContinuityFloor": "No compaction, clearing, or task rollover is planned for this bounded receipt. Any naturally occurring host boundary must be recorded and must not require user reconstruction or handoff selection. This receipt cannot satisfy O4's required context-lifecycle cohort sample unless such a qualifying boundary actually occurs and is independently evidenced.",
+    "currentRoute": "Use the two already-installed authenticated native hosts as independent copy candidates because the user specifically reported Codex-like writing quality as a defect. Dispatch Codex 0.147.0 with gpt-5.6-sol and Claude Code 2.1.231 with claude-opus-4-8 once each, read-only and session-scoped; then the current Agent applies the smallest independently compliant draft or a fact-preserving minimal synthesis only if the registered selection rule permits it. No capability discovery or installation is justified.",
+    "decisionRelevantCandidateCohort": [
+      "unchanged README.zh-CN.md first screen at git blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b",
+      "one raw Codex CLI 0.147.0 gpt-5.6-sol draft using the registered input",
+      "one raw Claude Code 2.1.231 claude-opus-4-8 draft using the registered input",
+      "a minimal synthesis is eligible only when neither raw draft alone satisfies all fixed factual and prose floors and synthesis introduces no new claim or scope"
+    ],
+    "demandEntry": {
+      "kind": "goal-level-real-product-delivery-demand",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "experienceSourceThreadId": "019ff267-f93d-7860-98c1-4762b94092aa",
+      "userSpecifiedCapabilityRoute": false,
+      "demand": "Improve the project's poor, AI-like public copy and make the product usable from zero knowledge while continuing the already-authorized v0.2 closeout plan.",
+      "primaryPurpose": "Deliver a better public Chinese product interface, not diagnose, rehearse, or manufacture evidence for the Harness."
+    },
+    "discoverySourceBoundaryAndStopRule": "No new discovery is authorized or needed. Use only the already-observed installed Codex and Claude Code runtimes, their fixed official source/package identities, and the repository adapters at commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea. Stop rather than search or install if either exact route is unavailable or fails a registered floor.",
+    "distinctValueHypothesisAndFalsifier": "A source-bound independent Claude draft beside the Codex reference-host draft will reduce the named user's already-observed AI-like copy defect while the common profile prevents factual drift; this is falsified if neither raw host result is independently acceptable, the comparison adds a material user round trip or capability-orchestration burden, a final synthesis changes unregistered claims, any floor fails, or the unchanged baseline is preferred.",
+    "equivalenceTolerance": {
+      "requiredEquivalentOutcome": "Each host must independently deliver a usable replacement for the identical first-screen scope that communicates the same four semantic commitments: user describes the desired result and retains judgment/authorization; the Agent owns capability orchestration, recovery, verification and cleanup; the product is a collaboration-quality Harness rather than a runtime/control plane; and current maturity remains research/validation with no accepted cross-host or completion claim.",
+      "allowedVariation": "Natural wording, paragraph boundaries, heading choice, sentence order, and total length may differ if no semantic commitment, factual floor, authority boundary, or user burden changes.",
+      "notEquivalent": "Any extra or missing product promise, maturity promotion, omitted responsibility boundary, required user knowledge of Codex/tools/Skills/Plugins/MCP/Hook syntax, new call to action, or material difference in usability or safety.",
+      "decision": "The named human must accept both individual raw outcomes as usable and equivalent within this tolerance for O5; acceptance of only the selected final result does not pass O5."
+    },
+    "executionDatesApplicableTaskAndProfile": "Execution is eligible only on 2026-08-14 Asia/Shanghai for natural-task.2026-08-14.readme-zh-first-screen-rewrite under harness-demand-to-capability-v0.2-candidate.3 and the Chinese public-product-communication scenario. A later date, different source blob, model, host, adapter, task, language, or profile requires a new registration.",
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": [
+      {
+        "identity": "OpenAI Codex CLI source commit be6e8eac029b183056b7e4402879f15d2c85f61b and installed Windows binary sha256:935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+        "versionOrCommit": "0.147.0 / be6e8eac029b183056b7e4402879f15d2c85f61b",
+        "licenseOrTerms": "Apache-2.0 for the CLI; existing authenticated OpenAI model service under https://openai.com/policies/terms-of-use/ effective 2026-01-01",
+        "maturity": "released installed reference-host CLI and existing authenticated service",
+        "reuseBoundary": "one read-only Chinese copy draft and native SessionStart evidence only"
+      },
+      {
+        "identity": "Anthropic Claude Code package @anthropic-ai/claude-code 2.1.231, source tag commit be90077c6a353f292fa612d97173865a9ab21b83, installed Windows binary sha256:99dbf97ef1b03ca94db818977bfc0970889bb5bbe6e981405a55f225d0fbf603",
+        "versionOrCommit": "2.1.231 / be90077c6a353f292fa612d97173865a9ab21b83",
+        "licenseOrTerms": "package LICENSE.md and applicable Anthropic commercial terms at https://www.anthropic.com/legal/commercial-terms",
+        "maturity": "released installed distinct-host CLI and existing authenticated service",
+        "reuseBoundary": "one read-only Chinese copy draft, session-scoped plugin loading, and native SessionStart evidence only"
+      },
+      {
+        "identity": "Agent Autonomy Harness shared continuation module git-blob:309d76e360455417a642c06d99da2d4fe76b34da sha256:13fed2acd44fcbc039a2fac30c3972bca4c85a88f955d7c51183268b22c07de4 and thin Codex/Claude adapter payloads at repository commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea",
+        "versionOrCommit": "Codex 0.2.0-candidate.1+codex.payload-4f72289bfc71; Claude 0.2.0-candidate.1+claude.payload-768da720a55b",
+        "licenseOrTerms": "Apache-2.0",
+        "maturity": "inactive tested reference-adapter candidates with no behavior or release acceptance",
+        "reuseBoundary": "root-scoped stateless authority continuation only; no drafting, routing, state, audit, outcome, or acceptance role"
+      },
+      {
+        "identity": "CPython executable sha256:03168c01b7b7491423350e82c26fee71f35b43694d1319d3c668bda6903a0c38 and Git for Windows executable sha256:7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+        "versionOrCommit": "CPython 3.14.6; Git 2.55.0.windows.3",
+        "licenseOrTerms": "Python-2.0; GPL-2.0-only",
+        "maturity": "released local verification and repository substrates",
+        "reuseBoundary": "adapter execution, deterministic verification, source identity, authorized commit and push only"
+      }
+    ],
+    "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary": "The selected route is fixed to Codex CLI 0.147.0 source be6e8eac029b183056b7e4402879f15d2c85f61b (Apache-2.0) with gpt-5.6-sol under existing OpenAI terms, Claude Code 2.1.231 source be90077c6a353f292fa612d97173865a9ab21b83 under its package license and Anthropic commercial terms with claude-opus-4-8, Harness commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea (Apache-2.0), CPython 3.14.6 (Python-2.0), and Git 2.55.0.windows.3 (GPL-2.0-only). All are mature released runtimes except the explicitly inactive Harness adapter candidates; reuse is limited to read-only drafting, continuation evidence, verification, cleanup, and authorized repository delivery for this task.",
+    "goalAndBoundedAuthority": {
+      "goal": "Deliver an accepted rewrite of the Chinese README first screen that resolves the named user's real copy-quality and zero-knowledge usability problem without false maturity or ecosystem learning burden.",
+      "alreadyGranted": "Repository read/edit, causal planning, local verification, task-owned cleanup, commit and push main inside the active program.",
+      "pendingExactHumanGate": "Before measured host execution, yiheng8023 must authorize one temporary root-scoped Codex user SessionStart Hook and its reviewed trust bypass for one ephemeral invocation, one Codex gpt-5.6-sol call, and one Claude Code claude-opus-4-8 call with a maximum Claude budget of USD 2.00; exact consumer bytes must be restored afterward.",
+      "retained": "The human retains new trust and cost, persistent enablement, any account/data change, publication, release, destructive action, and accountable acceptance."
+    },
+    "mandatoryFloorsAndMissingDataRules": "Every field under commonQualitySafetyEvidenceAndResidueFloors is mandatory for each host draft and the final diff. Missing host identity, raw output hash, chronology, cost where reported, semantic commitment, maturity statement, named-human decision, verification, cleanup, or residue data fails the affected floor; no aggregation, imputation, generic self-report, or post-hoc rule change can convert it to pass.",
+    "matchedOrHistoricalBaselineIdentityAndRule": {
+      "identity": "README.zh-CN.md first screen at repository commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea, git blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b",
+      "source": "current repository plus the named user's direct experience report in source thread 019ff267-f93d-7860-98c1-4762b94092aa",
+      "baselineMaterialInterventions": 1,
+      "matchingRule": "Count the user's explicit correction that the project's copy is poor, AI-like, and not human-readable as one material correction of the current ad-hoc result. Compare only a rewrite of the same fixed first-screen source, facts, language, and public audience."
+    },
+    "materialCollaborationLossTaxonomy": [
+      "material-intent-or-mode-correction",
+      "material-omission",
+      "reopened-settled-decision",
+      "unrequested-deliverable-or-mutation",
+      "unnecessary-human-round-trip-or-process",
+      "resource-or-residue-recovery-returned-to-user",
+      "context-or-handoff-recovery-returned-to-user",
+      "false-completion-or-claim-correction",
+      "tool-learning-burden-returned-to-user",
+      "ai-like-or-materially-unclear-communication-correction"
+    ],
+    "materialInterventionTaxonomy": [
+      "user-capability-route-selection",
+      "user-capability-setup",
+      "user-capability-invocation",
+      "user-configuration-operation",
+      "user-recovery-operation",
+      "user-verification-command",
+      "user-cleanup-command",
+      "user-task-or-handoff-creation",
+      "user-push-route"
+    ],
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.3, docs/DEMAND-TO-CAPABILITY-PROFILE.md git-blob:db6aafcebc84cd04cd144ff8875ec6b3d5a0e0ed sha256:7d5ef20af9d128de3fce6b39aebbc4a7345b2f41c115731c78a8ed6fbfe493e9 at repository commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea; unaccepted Codex reference-host calibration candidate.",
+    "namedHumanAcceptor": "yiheng8023",
+    "namedHumanReviewerAndClaimBoundary": "yiheng8023 must accept or reject both raw host outcomes, the selected final copy, comparison, floors, intervention/loss classification, applicability, and claim boundary. Any accepted claim is limited to this Chinese README first-screen task, exact source blob, Codex/Claude host-runtime-model-adapter identities, profile candidate.3, and 2026-08-14; it is not a general writing, repeated-task, methodology, Agent-neutral, release, publication, production, or v0.2-completion claim.",
+    "nonDiagnosticPurpose": "Deliver a materially better Chinese public entry point for Agent Autonomy Harness in response to the user's real product experience. The primary output is the accepted README copy; the task is not created to exercise the Harness, produce a receipt, occupy the program, or diagnose a capability.",
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "identity": "The existing ad-hoc Chinese README first screen at git blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b",
+      "sourceVersion": "Agent Autonomy Harness commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea, Apache-2.0",
+      "maturity": "current public repository copy, not accepted as an O1-O5 outcome",
+      "eligibility": "Same Chinese first-screen audience, source facts, responsibility boundary, maturity boundary, and scope before '## 目标交互'.",
+      "matchingRule": "Compare the unchanged baseline against independently captured registered-host drafts and the final bounded diff on the fixed axes; the user's original copy-quality correction remains a baseline material loss and is not erased."
+    },
+    "preRegisteredPortabilityClaimBoundary": "At most one matched conformance observation for the exact Chinese README task on Codex CLI 0.147.0 gpt-5.6-sol with the Codex adapter payload and Claude Code 2.1.231 claude-opus-4-8 with the Claude adapter payload on Windows on 2026-08-14. Even if both outcomes are accepted, do not claim general model, host, language, task, adapter, methodology, Agent-neutral, release, publication, or production portability, and do not mark O5 true without its criterion-scoped validator and human authority.",
+    "qualitySafetyEvidenceAndResidueFloors": {
+      "quality": "Each host draft and the final copy independently satisfy first-pass nontechnical comprehension, natural concise Chinese, all four semantic commitments, and no AI-like filler or unexplained capability syntax.",
+      "safety": "No false maturity, added authority, secret or transcript exposure, unbounded write, installation, persistent enablement, account/data change, publication, release, destructive action, or task-unrelated model input.",
+      "evidence": "Immutable registration chronology, exact inputs and source identities, raw host outputs and hashes, native Hook or honest unsupported-state evidence, cost where reported, final diff, deterministic checks, cleanup, Git state, criterion-scoped code validation, and named-human decisions are all required.",
+      "residue": "Exact Codex Hook restoration, no Claude consumer mutation, no model session or temporary output, no backup, .tmp, __pycache__, undeclared evidence, or unrelated working-tree change.",
+      "claim": "One bounded task observation only; no outcome, portability, release, production, or completion promotion beyond independently validated and human-accepted evidence."
+    },
+    "referenceAndDistinctHostRuntimeModelAndAdapterSubstrateSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": {
+      "referenceHost": "OpenAI Codex CLI 0.147.0 source commit be6e8eac029b183056b7e4402879f15d2c85f61b, installed binary sha256:935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d length 298668336, Apache-2.0; gpt-5.6-sol under existing OpenAI Terms effective 2026-01-01; Codex adapter 0.2.0-candidate.1+codex.payload-4f72289bfc71 at Harness commit 63e1a6bd85bb218d53689dad69478fd7eeec97ea, Apache-2.0, inactive candidate; reuse limited to one read-only draft and SessionStart continuity evidence.",
+      "distinctHost": "Anthropic Claude Code 2.1.231 package/source tag commit be90077c6a353f292fa612d97173865a9ab21b83, installed binary sha256:99dbf97ef1b03ca94db818977bfc0970889bb5bbe6e981405a55f225d0fbf603 length 307186848, package LICENSE.md and Anthropic commercial terms; claude-opus-4-8 under the existing authenticated service; Claude adapter 0.2.0-candidate.1+claude.payload-768da720a55b at the same Harness commit, Apache-2.0, inactive candidate; reuse limited to one read-only draft, session-only SessionStart continuity evidence, and no persistent installation.",
+      "sharedSubstrate": "Harness shared continuation git-blob:309d76e360455417a642c06d99da2d4fe76b34da sha256:13fed2acd44fcbc039a2fac30c3972bca4c85a88f955d7c51183268b22c07de4, CPython 3.14.6 executable sha256:03168c01b7b7491423350e82c26fee71f35b43694d1319d3c668bda6903a0c38, and Git 2.55.0.windows.3 executable sha256:7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364; reuse limited to root-scoped projection, verification, cleanup, and repository identity/delivery."
+    },
+    "referenceHostContextLifecycleCoverageRule": "This receipt is eligible for the Codex reference-host scenario cohort only if its Codex outcome otherwise passes. It is pre-registered as not satisfying O4's required context-lifecycle sample because no compact, clear, or host-required task rollover is planned; only a naturally occurring qualifying boundary with native evidence and zero user reconstruction may change that fact, without changing the rule.",
+    "referenceHostProfileAndEligibleReceiptSet": "Codex CLI 0.147.0 on Windows, gpt-5.6-sol, Chinese public-product-communication scenario, README source blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b, profile candidate.3. The receipt is eligible only if registration precedes execution, the exact host/model/adapter/input is used once, every mandatory floor passes, raw output and chronology are captured, residue is zero, and yiheng8023 accepts the individual outcome and bounded claim.",
+    "registeredAt": "2026-08-14T02:45:42+08:00",
+    "residualGapTest": "The unchanged baseline and Codex-only route remain insufficient because the named user has already reported poor AI-like copy. An independently authored distinct-host candidate is causally useful only if it yields an individually acceptable, fact-preserving first screen without added user orchestration. If the exact two installed hosts cannot do so within one call each and the fixed floors, stop; do not discover, install, teach, or fabricate another route.",
+    "scenarioClass": "public-product-communication-for-a-nontechnical-user",
+    "scorecardVersion": "harness-acceptance-v0.2-criteria-sha256-ea88f3ac99f8e58342207c79ebb67897a1bdb804f487ba0f07d886d898ed69ab with candidate.3 mandatory dimensions and zero-imputation missing-data rule",
+    "selectedRouteSubstrateMetadataRule": "Before either measured call, bind exact host CLI source/version, installed binary hash, model identifier and service terms, adapter payload/source/license/maturity/reuse boundary, CPython and Git identities, fixed README input blob, date, and exposure/cleanup boundary. Any substitution requires a new registration; an ambient Skill, plugin, model, or configuration cannot enter because it is installed or visible.",
+    "taskDemandIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite: real delivery of a concise, human Chinese README entry point for a zero-knowledge user, sourced from the named user's copy-quality correction and active v0.2 product plan, not a diagnostic or Harness exercise.",
+    "taskIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite",
+    "taskScopedDispatchReleaseAndCleanupBoundary": "After the exact human grant, invoke each fixed host once with read-only repository access and the byte-identical brief; cap Claude at USD 2.00 and do not retry with another model or route after a floor or host failure. Keep raw outputs only in a task-owned temporary location until their hashes and eligible evidence are bound, restore C:/Users/15521/.codex/hooks.json exactly, make no persistent Claude setting, remove all temporary outputs, backups, .tmp and Python caches, and preserve unrelated user changes."
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "ea88f3ac99f8e58342207c79ebb67897a1bdb804f487ba0f07d886d898ed69ab"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "quality": "Each host draft and the final copy independently satisfy first-pass nontechnical comprehension, natural concise Chinese, all four semantic commitments, and no AI-like filler or unexplained capability syntax.",
+    "safety": "No false maturity, added authority, secret or transcript exposure, unbounded write, installation, persistent enablement, account/data change, publication, release, destructive action, or task-unrelated model input.",
+    "evidence": "Immutable registration chronology, exact inputs and source identities, raw host outputs and hashes, native Hook or honest unsupported-state evidence, cost where reported, final diff, deterministic checks, cleanup, Git state, criterion-scoped code validation, and named-human decisions are all required.",
+    "residue": "Exact Codex Hook restoration, no Claude consumer mutation, no model session or temporary output, no backup, .tmp, __pycache__, undeclared evidence, or unrelated working-tree change.",
+    "claim": "One bounded task observation only; no outcome, portability, release, production, or completion promotion beyond independently validated and human-accepted evidence."
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection",
+    "user-capability-setup",
+    "user-capability-invocation",
+    "user-configuration-operation",
+    "user-recovery-operation",
+    "user-verification-command",
+    "user-cleanup-command",
+    "user-task-or-handoff-creation",
+    "user-push-route"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-or-residue-recovery-returned-to-user",
+    "context-or-handoff-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-learning-burden-returned-to-user",
+    "ai-like-or-materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "This registration and the exact active increment binding it are committed and pushed unchanged, and yiheng8023 grants the registered temporary Codex Hook trust plus the two exact model calls and stated cost ceiling.",
+    "eligibleSources": [
+      "post-registration Codex and Claude Code native process output, exit status, model identity, usage or cost fields where reported, and native SessionStart events or honest unsupported-state evidence",
+      "byte-identical registered prompt input and content-addressed raw host outputs captured before selection or correction",
+      "the exact bounded README diff, deterministic maturity and link checks, canonical verifier, full product tests, Git state, cleanup hashes, residue checks, and named-human judgments",
+      "a future minimal task-bound criterion-scoped code validator authored only after actual evidence sources and failure modes are known"
+    ],
+    "ineligibleSources": [
+      "any host output or user judgment before this registration and active binding are committed and pushed",
+      "adapter or unit tests as proof of live writing quality, value, behavior, or equivalence",
+      "a prebuilt generic receipt schema, self-report, artifact count, commit count, or local green check without task-bound outcome evidence",
+      "an output from a substituted model, host, adapter, source blob, later date, ambient Skill, unregistered hint, or post-hoc floor change"
+    ],
+    "stopRule": "Stop successfully only after both exact host calls complete once, both raw drafts are captured and independently assessed, the named human supplies the required judgments, the selected bounded README result and every mandatory floor pass, exact consumer restoration and zero residue are proven, and a task-bound criterion-scoped validator supports only the evidence actually earned. Stop immediately and retain an honest failed, stopped, or partially accepted result on host/model/Hook mismatch, budget or authority conflict, any floor failure, human rejection, material intervention or collaboration loss, evidence gap, unbounded residue, or need for an unregistered retry or route."
+  },
+  "claimLimits": [
+    "one Chinese README first-screen delivery at source blob 0cbfe52d11196aa67916f8de5a7cf9a44cfca66b",
+    "Codex CLI 0.147.0 gpt-5.6-sol and Claude Code 2.1.231 claude-opus-4-8 on Windows on 2026-08-14 only",
+    "candidate.3 profile and exact inactive adapter payloads only",
+    "no general writing-quality, repeated-task, methodology, Agent-neutral, release, publication, production, or full-v0.2-completion claim",
+    "no O1-O5 promotion without post-result criterion-scoped validation and named-human authority"
+  ]
+}

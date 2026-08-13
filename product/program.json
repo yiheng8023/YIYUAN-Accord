@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.readme-zh-first-screen-delivery",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,5 +63,77 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.readme-zh-first-screen-delivery",
+      "state": "active",
+      "correctionClass": "public-copy-quality-and-zero-knowledge-entry",
+      "observedProblem": "The named user reports that the project's public copy is poor, AI-like, and not human-readable, while the current Chinese README first screen exposes dense internal program and adapter detail before a zero-knowledge reader can understand the product benefit and responsibility boundary.",
+      "hypothesis": "For the same fixed public-product brief, one read-only Codex reference-host draft and one independent read-only Claude Code draft, judged against immutable factual, prose, authority, evidence, and residue floors before the Agent applies the smallest sufficient result, will produce an accepted Chinese first screen with less user correction and no capability-orchestration burden.",
+      "falsifier": "Either exact host, model, adapter, Hook, authority, or cost boundary is unavailable; neither raw draft is independently usable; the drafts require a post-registration substantive correction, omit or add a product promise, promote maturity, teach ecosystem syntax, add a material human round trip, incur a registered collaboration loss, fail any mandatory floor or deterministic check, leave residue, or require an unregistered retry, Skill, discovery, installation, model, or route.",
+      "stopCondition": "After the immutable registration and active binding are committed and pushed and the exact human trust and model-use gate is granted, stop successfully only after both registered host calls run once against the byte-identical input, both raw outputs and chronology are captured, the named human accepts the required individual and final judgments, the smallest compliant first-screen diff is delivered, every floor and canonical check passes, exact consumer restoration and zero residue are proven, and a post-result task-bound criterion-scoped validator supports only earned outcomes; stop earlier with an honest failed, stopped, or partially accepted result on any falsifier.",
+      "acceptanceIds": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/readme-zh-first-screen-registration.json",
+        "sha256": "16f5685c18e5c5ae2fa04b2f4211d7d534f36f194a1306adf876763a6323b91b"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.readme-zh-first-screen-delivery",
+          "state": "active",
+          "acceptanceIds": [
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+            "O5",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one accepted Chinese README first-screen replacement plus exact two-host task evidence, zero-residue cleanup, bounded outcome validation, and named-human judgments"
+          ]
+        }
+      ]
+    }
+  ]
 }
