@@ -126,6 +126,12 @@ The JSON report is the current state surface. See the
   accepted, equivalent outcomes on Codex and a distinct second Agent host or
   runtime through thin adapters.
 
+For O1-O4, a natural task is a logical pre-registered demand-and-outcome unit,
+not a Codex sidebar task or thread. Sequential receipts may remain in one
+healthy host task, and one receipt may support more than one criterion only
+when it independently meets each criterion's pre-registration and validation
+burden. It cannot be counted twice toward one criterion's sample minimum.
+
 Human authority, zero-trust evidence, lean independent authority, and bounded
 process/resource loss are mandatory guardrails, not substitutes for outcomes.
 

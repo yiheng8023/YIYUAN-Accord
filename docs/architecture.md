@@ -57,6 +57,13 @@ bind demand and authority -> observe available capability -> assess the gap
 -> emit a bounded receipt or continue
 ```
 
+The natural-task receipt is a logical goal-level demand and accountable outcome
+unit, not a host conversation or sidebar-thread unit. Multiple sequential
+receipts may remain in one healthy host task. One receipt may be eligible for
+multiple criteria only when each criterion's pre-registration, measures,
+validator, and human authority independently pass; it remains one sample
+within any single criterion.
+
 The portable layer owns testable quality semantics, not host commands or wire
 primitives. It defines required
 authority, unsupported states, lifecycle ownership, evidence shape, outcome
