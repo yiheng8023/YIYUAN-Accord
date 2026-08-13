@@ -16,15 +16,12 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `ready`, with no active causal increment and O1-O5 still false. A Codex
-same-task continuity attempt observed native compaction without returning
-recovery to the user, but its task-specific validator over-bound the event to
-the original demand turn even though the pre-registration allowed the first
-later same-task compaction. The attempt stopped rather than changing the rule
-after observing the event. The resulting authority repair now separates
-pre-execution task registration from code validation required before outcome
-promotion; it counts as zero O1-O5 progress. The verifier is the current
-machine-readable state source.
+v0.2 is `active` on one outcome-neutral prerequisite to the O4 cohort, with
+O1-O5 still false. The project is freezing one directly applicable, explicitly
+unaccepted candidate methodology and quality profile before another natural
+task begins; this prevents the three future accepted tasks from being judged
+under a profile packaged after their results. It adds no runtime or accepted
+outcome. The verifier is the current machine-readable state source.
 
 ## The problem
 
@@ -78,6 +75,8 @@ The current repository provides:
   fixed boundaries;
 - a [program](product/program.json) for the current causal work state;
 - explicit [v0.2 acceptance criteria](product/acceptance.json);
+- an [unaccepted candidate methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)
+  for exact pre-registration by future Codex cohort tasks;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - product tests for the public verification seam;
@@ -149,6 +148,7 @@ process/resource loss are mandatory guardrails, not substitutes for outcomes.
 | Need | Document |
 | --- | --- |
 | Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| Apply the unaccepted Codex-first candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | Understand the technical separation of concerns | [Architecture](docs/architecture.md) |
 | Inspect the proof sequence and external reuse gate | [Research and proof plan](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
 | Resume repository work | [Continuation](docs/operations/CONTINUATION.md) |

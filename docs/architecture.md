@@ -99,11 +99,11 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready after repairing that timing boundary. A stopped Codex
-same-task continuity attempt exposed two pre-execution validator guesses, and
-the repair counts as zero O1-O5 progress. O1-O5 remain false. The current
-verifier is not an accepted methodology, quality profile, task runtime,
-reference adapter, or cross-host proof.
+The v0.2 program is freezing one unaccepted candidate methodology and minimum
+quality profile before another natural task begins. This outcome-neutral slice
+prevents a later O4 cohort from packaging its common scorecard after observing
+results. O1-O5 remain false. The current verifier is not an accepted
+methodology, task runtime, reference adapter, or cross-host proof.
 
 ### Continuity is reconciliation, not unlimited context
 

@@ -11,12 +11,10 @@ Agent、工具及外围生态的负担。
 负责找到充分路线、安全执行、处理失败、验证结果，并在任务结束后释放能力和清理残留。
 
 **当前处于研究与验证阶段：**仓库现有内容是产品契约、验收模型和确定性验证器，尚不
-包含 Agent 运行时、可安装的参考适配器或已验收的跨宿主证明。v0.2 当前为 `ready`，
-没有 active causal increment，O1-O5 仍全部为 false。一次 Codex 同任务连续性尝试中，
-原生压缩没有把恢复负担交还用户，但任务验证器把事件额外限制在最初需求 turn；预注册
-文字实际允许后续同任务的第一次压缩。项目没有在看到事件后修改规则，而是停止该尝试。
-后续权威修复已把执行前固定任务注册与结果晋级前完成代码验证分开，对 O1-O5 计零。
-当前机器状态以验证器输出为准。
+包含 Agent 运行时、可安装的参考适配器或已验收的跨宿主证明。v0.2 当前为 `active`，
+正在冻结一个可直接应用、但明确尚未验收的候选方法与最低质量 profile，避免未来三个
+自然任务完成后才倒推 O4 评分标准。该切片不增加 runtime，也不构成 O1-O5 结果；
+O1-O5 仍全部为 false。当前机器状态以验证器输出为准。
 
 ## 要解决的问题
 
@@ -63,6 +61,7 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 描述目的和固定边界的机器可读[产品宪法](product/constitution.json)；
 - 描述当前因果工作状态的[产品工序](product/program.json)；
 - 明确的 [v0.2 验收标准](product/acceptance.json)；
+- 一个供未来 Codex cohort 任务精确预注册的[未验收候选方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
 - 针对公开验证入口的产品测试；
 - 固定来源的外部方案审查，用来缩小自研边界，避免重复造轮子。
@@ -120,6 +119,7 @@ criterion 的预注册与验证负担时，才能同时支持多个 criterion，
 | 你的目的 | 对应文档 |
 | --- | --- |
 | 理解产品边界 | [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| 应用尚未验收的 Codex-first 候选 profile | [需求到能力方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | 理解技术职责分离 | [架构](docs/architecture.md) |
 | 查看证明顺序与外部复用门槛 | [研究与验证计划](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
 | 接续仓库工作 | [接续说明](docs/operations/CONTINUATION.md) |

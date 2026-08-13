@@ -160,6 +160,7 @@ EXPECTED_REQUIRED_SUPPORTING_DOCUMENTS = frozenset(
         "SECURITY.md",
         "SUPPORT.md",
         "SUPPORT.zh-CN.md",
+        "docs/DEMAND-TO-CAPABILITY-PROFILE.md",
         "docs/architecture.md",
         "docs/strategy/PRODUCT-NORTH-STAR.md",
         "docs/strategy/RESEARCH-AND-POC-PLAN.md",

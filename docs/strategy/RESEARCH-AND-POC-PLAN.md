@@ -39,14 +39,17 @@ When a natural goal-level task is bound, the next outcome-bearing increment
 may bind exactly one vertical Codex reference slice. The current planned order
 is:
 
-1. **Freeze a provisional evaluation protocol.** Before the first event, define
+1. **Freeze a provisional methodology and evaluation profile.** Before the
+   first event, bind the exact revision and content identity of the
+   [unaccepted candidate](../DEMAND-TO-CAPABILITY-PROFILE.md), then define
    material intervention classes, capability-added goal/input/deliverable/
    human-round-trip/authority/side-effect/acceptance requirements, reopened
    settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
    outcome denominator, named accountable human acceptance, and the fixed
-   material collaboration-loss taxonomy used by O1/O2 receipts. This is a
-   prerequisite to O1, not a product outcome by itself.
+   material collaboration-loss taxonomy used by O1/O2 receipts. A changed
+   method, profile, scorecard, or missing-data rule starts a new cohort; this
+   prerequisite is not a product outcome by itself.
 2. **Codex reference quality-harness slice.** Enter through the user's goal rather
    than a named tool route. Record available-capability observation, gap
    assessment, optional discovery, smallest-sufficient route selection,
@@ -61,8 +64,8 @@ is:
    retain inactive, justify persistent activation, merge, replace, retire, or
    expire each admitted route.
 4. **Methodology and open minimum quality-conformance profile.** Calibrate the
-   collaboration method and testable profile on the Codex reference host from
-   repeated real behavior. Bind existing protocol, allocation, runtime,
+   same pre-registered candidate on the Codex reference host from repeated real
+   behavior. Bind existing protocol, allocation, runtime,
    identity, audit, provenance, and evaluation layers rather than redefining
    them. Use software engineering as the first reference profile, not as the
    product boundary. Measure outcome and communication quality,

@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2-candidate-profile-preregistration",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -61,5 +61,60 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2-candidate-profile-preregistration",
+      "state": "active",
+      "correctionClass": "pre-cohort-methodology-profile-absence",
+      "observedProblem": "O4 requires the same pre-registered methodology, quality profile, scorecard, and missing-data rules across the first three eligible accepted tasks and a stopped case, but the current tree exposes only distributed acceptance clauses and no directly applicable versioned candidate; starting another natural measurement now would risk post-hoc packaging or make the receipt ineligible for the O4 cohort.",
+      "hypothesis": "One lean, explicitly unaccepted candidate that applies the existing authority without duplicating it can freeze the demand-to-capability method, mandatory floors, missing-data rule, nine observed user-loss classes, and Codex-first claim ceiling before the first eligible cohort receipt, while adding no runtime, wire, generic receipt schema, or user learning burden.",
+      "falsifier": "The candidate becomes a fourth product authority, changes O1-O5, requires the user to learn tools or Harness vocabulary, invents a runtime, wire, audit or receipt ecosystem, hides a mandatory failure behind scoring, cannot map every current O4 axis and the nine observed loss classes, or claims accepted methodology, behavior, portability, release, or production evidence.",
+      "stopCondition": "Stop when one versioned unaccepted candidate methodology and minimum quality-conformance profile is a protected public supporting document, future task registration can bind its exact Git and content identity before measured execution, all mandatory floors and missing-data behavior are directly applicable without a parallel acceptance system, public and machine status remain aligned, O1-O5 remain false, verification and tests pass, residue is absent, and the slice is committed and pushed before leaving the current graph.",
+      "acceptanceIds": [
+        "O4",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2-freeze-candidate-methodology-profile",
+          "state": "active",
+          "acceptanceIds": [
+            "O4",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one versioned unaccepted demand-to-capability methodology and minimum quality-conformance candidate for exact pre-registration by future Codex cohort tasks"
+          ]
+        }
+      ]
+    }
+  ]
 }
