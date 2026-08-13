@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "id": "result.readme-zh-first-screen.stopped.2026-08-14",
+  "criterionIds": [
+    "O1",
+    "O2",
+    "O3",
+    "O4",
+    "O5"
+  ],
+  "registration": "product/evidence/readme-zh-first-screen-registration.json",
+  "taskIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The registered Codex call returned one content-addressed README draft, but its JSON event stream and targeted local logs contained no native HookStarted, HookCompleted, or independently identifiable Harness authority-projection evidence. The registration made that evidence mandatory and required an immediate stop on an evidence gap, so the Claude call did not run and this attempt cannot promote O1-O5.",
+  "chronology": [
+    {
+      "event": "registration-and-active-binding-pushed",
+      "commit": "5eef1234a726a6d300e40abcd5aa0e8c27221863",
+      "committedAt": "2026-08-14T02:52:44+08:00",
+      "remoteMainVerified": true
+    },
+    {
+      "event": "exact-human-grant-received",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "grant": "one temporary Codex SessionStart Hook, one Codex gpt-5.6-sol call, and one Claude Code claude-opus-4-8 call with a USD 2.00 Claude ceiling"
+    },
+    {
+      "event": "temporary-input-and-hook-bound",
+      "promptSha256": "774790091d112e6c05fbc32aa4ec30f1823b31b511010365ec1413a7825de51a",
+      "promptLength": 3715,
+      "temporaryHookSha256": "edfb1c5904505238f4a59648b395d4e262fea34af4d71683ac2e876e1c041b50",
+      "preExistingConfigTomlSha256": "35fe3d119cd82c7505681d112a6b6b53947d065db1673e15719e8a233a26c392"
+    },
+    {
+      "event": "codex-call-completed",
+      "threadId": "019ffc87-167b-7963-8473-bd4b8b831071",
+      "runtime": "codex-cli 0.147.0",
+      "model": "gpt-5.6-sol",
+      "sandbox": "read-only",
+      "ephemeral": true,
+      "userConfigIgnored": true,
+      "userRulesIgnored": true,
+      "exitCode": 0,
+      "usage": {
+        "inputTokens": 18798,
+        "cachedInputTokens": 9984,
+        "outputTokens": 270,
+        "reasoningOutputTokens": 0
+      },
+      "draftSha256": "364fddf941219ede52960397af30f694dac3e5dc1d62f77fea216085da328c6b",
+      "draftLength": 1125,
+      "draftCapturedAt": "2026-08-14T03:09:14.2387635+08:00"
+    },
+    {
+      "event": "required-hook-evidence-absent",
+      "hookStartedCountInJsonEventStream": 0,
+      "hookCompletedCountInJsonEventStream": 0,
+      "harnessProjectionMarkersInJsonEventStream": 0,
+      "targetedLocalLogMatches": 0,
+      "claim": "The absence proves an evidence-floor failure, not that the command definitely did not execute."
+    },
+    {
+      "event": "temporary-user-hook-restored",
+      "verifiedAt": "2026-08-14T03:12:45.6533592+08:00",
+      "hooksJsonSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "hooksJsonLength": 3,
+      "configTomlSha256": "35fe3d119cd82c7505681d112a6b6b53947d065db1673e15719e8a233a26c392",
+      "restoredExactPreMeasurementHashes": true
+    }
+  ],
+  "falsifiersTriggered": [
+    "mandatory native Hook event evidence was missing",
+    "the Harness authority projection could not be independently identified",
+    "continuing to the Claude call would have violated the registered stop rule"
+  ],
+  "causalFinding": {
+    "fact": "Codex 0.147.0 returned the requested copy under a read-only ephemeral invocation, but the chosen exec evidence surface did not expose the registration's required native Hook chronology or an independently identifiable projection marker.",
+    "inference": "Coupling a public-copy delivery to continuity-adapter behavior and O5 evidence added a noncausal mandatory floor that could stop the user-valued result before the independent alternative ran.",
+    "correction": "Exit this attempt from the active graph, preserve it as counterevidence, and pre-register a smallest-sufficient recovery route that delivers the same README demand through the still-authorized Claude call without any Hook, plugin, adapter, or portability claim."
+  },
+  "safetyAndCleanup": {
+    "claudeCallExecuted": false,
+    "repositoryMutationFromModel": false,
+    "promptOrTranscriptReadByHook": false,
+    "installationAdded": false,
+    "accountOrOAuthChanged": false,
+    "persistentHookRetained": false,
+    "configTomlChanged": false,
+    "publicationOrRelease": false,
+    "temporaryTaskDirectoryDisposition": "removed before checkpoint commit"
+  },
+  "humanAuthority": {
+    "executionGrant": "granted",
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-judgment",
+    "unusedGrantedOperation": "one Claude Code claude-opus-4-8 call with a USD 2.00 ceiling remains unused for the same README demand"
+  },
+  "claimLimit": "This is a stopped task attempt and counterevidence against coupling user-valued delivery to noncausal adapter evidence. It proves neither accepted README value, live Hook behavior, O1-O5, methodology value, cross-host portability, release, production readiness, nor v0.2 completion."
+}
