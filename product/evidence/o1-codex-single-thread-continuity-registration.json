@@ -71,13 +71,13 @@
       "currentRoute": "Retain native Codex compaction plus repository and Git authority reconciliation with no discovery or added exposure.",
       "decisionRelevantCandidateCohort": [
         "native-codex-compaction-and-repository-reconciliation",
-        "codex-0.147.0-UserPromptSubmit-remains-off-unless-native-route-leaves-a-reproducible-residual-gap"
+        "codex-0.147.0-PreCompact-and-PostCompact-hooks-remain-off-unless-native-route-leaves-a-reproducible-residual-gap"
       ],
       "residualGapTest": "A post-registration compaction causes objective, settled-decision, authority, repository-state, pending-gate, or cleanup-boundary loss that cannot be recovered read-only without user orchestration.",
       "discoverySourceBoundaryAndStopRule": "No discovery in the no-gap case; after a reproducible gap, inspect only exact official Codex sources needed to isolate the missing seam and stop when one sufficient route or no eligible route is established.",
-      "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary": "Final evidence must bind every route substrate actually used; the current Codex candidate is OpenAI Codex 0.147.0 at commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host, reused only for native task execution and compaction.",
+      "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary": "Final evidence must bind every route substrate actually used. The current runtime is OpenAI Codex 0.147.0 at commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host, reused only for native task execution and compaction. Its exact compact.rs, compact_remote.rs, hook_runtime.rs, and config.schema.json sources expose released PreCompact and PostCompact seams carrying task metadata, but this task treats them as inactive and not independently receipt-proven.",
       "taskScopedDispatchReleaseAndCleanupBoundary": "No added task exposure on the native route; any later authorized task-only exposure must be released and its residue removed before acceptance.",
-      "candidateRetentionOrExpiryRule": "Retain the native route when floors pass; keep UserPromptSubmit off and expire it from this task unless the residual-gap test fails and separate activation authority is granted."
+      "candidateRetentionOrExpiryRule": "Retain the native route when floors pass; keep PreCompact and PostCompact off and expire them from this task unless the residual-gap test fails and separate activation, prompt-data, and trust-boundary authority is granted."
     },
     "O4": {
       "scorecardVersion": "harness-acceptance-v0.2-sha256-5d13ecd14693a41751454af075748dbe0a650727d0894aeb41394dc95c808704",

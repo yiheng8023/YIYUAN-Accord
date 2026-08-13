@@ -456,7 +456,7 @@ CODEX_CONTINUITY_REGISTRATION = (
     "product/evidence/o1-codex-single-thread-continuity-registration.json"
 )
 CODEX_CONTINUITY_REGISTRATION_SHA256 = (
-    "14382feb51285ef783f67b11de323fa61d444f7e233c27d3858af0079dd68bce"
+    "7331935f4a86d9ee95e60401b7710fad899ae270601b64d4a72eea8fe4dd7cba"
 )
 CODEX_CONTINUITY_HOST_EVIDENCE = (
     "product/evidence/o1-codex-single-thread-continuity-host.json"
