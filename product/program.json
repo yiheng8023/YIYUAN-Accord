@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.claude-thin-reference-adapter",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,5 +63,61 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.claude-thin-reference-adapter",
+      "state": "active",
+      "correctionClass": "distinct-host-thin-adapter-delivery",
+      "observedProblem": "O5 requires the common Harness semantics to cross a distinct Agent host through a thin adapter, but the current tree contains only a Codex projection. Live observation found an already-installed and authenticated Claude Code 2.1.231 runtime whose native SessionStart lifecycle and session-scoped --plugin-dir exposure can reuse the existing stateless authority projection without a persistent installation, account change, or user-managed capability route.",
+      "hypothesis": "A Hook-only Claude Code projection that translates the host's native SessionStart input and plain-stdout context output into the same repository-owned authority projection will isolate all host differences behind a thin, stateless adapter and provide the minimum executable candidate needed before any separately authorized matched cross-host task.",
+      "falsifier": "The fixed Claude Code 2.1.231 plugin contract requires a persistent installation, Skill, MCP server, command, state store, copied portable core, user configuration, or new protocol; cannot represent startup, resume, clear, and compact without reading prompt or transcript content; cannot fail to a non-blocking no-op outside the Harness root or on runtime drift; cannot pass the host's strict manifest validator and offline semantic-parity tests without a model call; or creates conventional repository or consumer residue.",
+      "stopCondition": "Stop after one Claude Code Hook-only projection either passes the fixed host's strict plugin validation plus offline input, output, root, drift, and common-semantics parity checks with no user configuration or residue, or is rejected and removed; record zero O1-O5 progress, restore an empty ready graph, and leave live cross-host execution, model cost, equivalence tolerance, and human outcome judgment to a separately pre-registered and authorized O5 task.",
+      "acceptanceIds": [
+        "O5",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
+          "adapters/agent-autonomy-harness-claude/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.claude-thin-reference-adapter",
+          "state": "active",
+          "acceptanceIds": [
+            "O5",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one inactive session-scoped Claude Code reference projection that reuses the common Harness authority semantics without persistent installation or consumer mutation"
+          ]
+        }
+      ]
+    }
+  ]
 }
