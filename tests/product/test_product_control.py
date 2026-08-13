@@ -17,7 +17,10 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from harness.control import verify_product  # noqa: E402
+from harness.control import (  # noqa: E402
+    _validate_codex_single_thread_continuity,
+    verify_product,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -54,6 +57,7 @@ class ProductControlTests(unittest.TestCase):
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
+        self.reset_program_fixture()
 
     def tearDown(self) -> None:
         self.temporary.cleanup()
@@ -68,6 +72,17 @@ class ProductControlTests(unittest.TestCase):
             json.dumps(value, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+
+    def reset_program_fixture(self) -> None:
+        """Keep generic mutation tests independent of the live causal increment."""
+
+        program = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )
+        program["status"] = "ready"
+        program["activeIncrementId"] = None
+        program["increments"] = []
+        self.write_json("product/program.json", program)
 
     def mutate(self, relative: str, callback) -> None:
         value = self.read_json(relative)
@@ -188,9 +203,12 @@ class ProductControlTests(unittest.TestCase):
         increment["workItems"][0]["state"] = "active"
         return increment
 
-    def run_cli(self, *, json_output: bool = True) -> subprocess.CompletedProcess[str]:
+    def run_cli(
+        self, *, json_output: bool = True, root: Path | None = None
+    ) -> subprocess.CompletedProcess[str]:
         environment = os.environ.copy()
         environment["PYTHONPATH"] = str(ROOT)
+        verification_root = self.root if root is None else root
         command = [
             sys.executable,
             "-B",
@@ -198,7 +216,7 @@ class ProductControlTests(unittest.TestCase):
             "harness",
             "verify",
             "--root",
-            str(self.root),
+            str(verification_root),
         ]
         if json_output:
             command.append("--json")
@@ -213,10 +231,14 @@ class ProductControlTests(unittest.TestCase):
         )
 
     def test_current_v02_contract_is_valid_and_in_progress(self) -> None:
-        report = self.report()
+        report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2.codex-single-thread-continuity",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -224,18 +246,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O2"])
 
     def test_public_cli_reports_the_same_contract(self) -> None:
-        completed = self.run_cli()
+        completed = self.run_cli(root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
-        completed = self.run_cli(json_output=False)
+        completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress", completed.stdout)
+        self.assertIn("v0.2: active, in-progress", completed.stdout)
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -759,6 +781,20 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_continuity_validator_rejects_an_empty_self_report(self) -> None:
+        errors: list[str] = []
+        self.assertFalse(
+            _validate_codex_single_thread_continuity({}, "O1", ROOT, errors)
+        )
+        self.assertIn(
+            "Codex continuity evidence fields do not match the task-specific schema",
+            errors,
+        )
+        self.assertIn(
+            "Codex continuity evidence host-event manifest identity changed",
+            errors,
+        )
+
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:
             self.activate_program(value)
@@ -890,10 +926,7 @@ class ProductControlTests(unittest.TestCase):
                 report = self.report()
                 self.assertFalse(report["criterionStates"]["G4"])
                 self.assertIn(expected_error, report["errors"])
-                shutil.copy2(
-                    ROOT / "product/program.json",
-                    self.root / "product/program.json",
-                )
+                self.reset_program_fixture()
 
     def test_empty_ready_current_graph_is_valid_but_not_product_progress(self) -> None:
         report = self.report()
@@ -1514,10 +1547,7 @@ class ProductControlTests(unittest.TestCase):
                     "criterion O1 evidence validator did not return true: product/evidence/bound.json",
                     report["errors"],
                 )
-                shutil.copy2(
-                    ROOT / "product/program.json",
-                    self.root / "product/program.json",
-                )
+                self.reset_program_fixture()
                 shutil.copy2(
                     ROOT / "product/acceptance.json",
                     self.root / "product/acceptance.json",

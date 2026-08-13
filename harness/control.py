@@ -443,8 +443,188 @@ EvidenceValidatorSpec = tuple[
 ]
 
 
+CODEX_CONTINUITY_INCREMENT_ID = "increment.v0.2.codex-single-thread-continuity"
+CODEX_CONTINUITY_WORK_ID = "work.v0.2.codex-single-thread-continuity"
+CODEX_CONTINUITY_THREAD_ID = "019ffaa8-b44a-7bf2-97de-65875bceec33"
+CODEX_CONTINUITY_SOURCE_TURN_ID = "019ffad0-2aa2-76e3-ad3f-565668344609"
+CODEX_CONTINUITY_TASK_ID = "natural-task.2026-08-13.codex-single-thread-continuity"
+CODEX_CONTINUITY_REGISTRATION = (
+    "product/evidence/o1-codex-single-thread-continuity-registration.json"
+)
+CODEX_CONTINUITY_REGISTRATION_SHA256 = (
+    "4c4eee118a7bbf53bc3582147c97b8e1967fe4e0efde5b579533ae4e2fe9dca5"
+)
+CODEX_CONTINUITY_HOST_EVIDENCE = (
+    "product/evidence/o1-codex-single-thread-continuity-host.json"
+)
+CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v1"
+CODEX_CONTINUITY_GOAL_SHA256 = (
+    "61c1448115f33801572dc3d8dd2d3ba74d2a0005d0c8a5c04d0124444387cea8"
+)
+
+
+def _validate_codex_single_thread_continuity(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    """Validate only the pre-registered natural task named by this increment."""
+
+    before = len(errors)
+
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            _error(errors, f"Codex continuity evidence {message}")
+
+    require(
+        set(document)
+        == {
+            "schema", "id", "criterionIds", "observedAt", "incrementId",
+            "workItemId", "source", "authority", "result", "claimLimits",
+            "validator", "registration", "hostObservation", "lifecycle", "measures",
+        },
+        "fields do not match the task-specific schema",
+    )
+    require(criterion_id == "O1" and document.get("criterionIds") == ["O1"], "may validate only O1")
+    require(document.get("incrementId") == CODEX_CONTINUITY_INCREMENT_ID, "is bound to the wrong increment")
+    require(document.get("workItemId") == CODEX_CONTINUITY_WORK_ID, "is bound to the wrong work item")
+    require(
+        document.get("registration")
+        == {
+            "locator": CODEX_CONTINUITY_REGISTRATION,
+            "identity": f"sha256:{CODEX_CONTINUITY_REGISTRATION_SHA256}",
+            "taskIdentity": CODEX_CONTINUITY_TASK_ID,
+        },
+        "does not bind the immutable pre-registration",
+    )
+    registration = _inside_root(root, CODEX_CONTINUITY_REGISTRATION, errors, "continuity registration")
+    try:
+        registration_hash = hashlib.sha256(registration.read_bytes()).hexdigest() if registration else None
+    except OSError:
+        registration_hash = None
+    require(registration_hash == CODEX_CONTINUITY_REGISTRATION_SHA256, "registration identity changed")
+
+    source = document.get("source")
+    observation = document.get("hostObservation")
+    source_identity = source.get("identity") if isinstance(source, dict) else None
+    require(
+        isinstance(source, dict)
+        and source.get("kind") == "codex-rollout-event-manifest"
+        and source.get("locator") == CODEX_CONTINUITY_HOST_EVIDENCE
+        and isinstance(source_identity, str)
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", source_identity) is not None,
+        "does not bind the exact host-event manifest",
+    )
+    expected_observation_fields = {
+        "threadId", "sourceTurnId", "cliVersion", "model", "registeredAt",
+        "compactedAt", "postCompactionTurnId", "registrationCommit",
+        "headAtReconciliation", "branch", "upstream", "aheadBehind",
+        "worktreeCleanAtReconciliation", "goalObjectiveSha256",
+        "repositoryStateReconciledBeforeMutation", "identity",
+    }
+    require(isinstance(observation, dict) and set(observation) == expected_observation_fields, "host observation fields are invalid")
+    if isinstance(observation, dict):
+        registered_at = _rfc3339_instant(observation.get("registeredAt"))
+        compacted_at = _rfc3339_instant(observation.get("compactedAt"))
+        commit = observation.get("registrationCommit")
+        require(observation.get("threadId") == CODEX_CONTINUITY_THREAD_ID, "uses a different task thread")
+        require(observation.get("sourceTurnId") == CODEX_CONTINUITY_SOURCE_TURN_ID, "uses a different demand turn")
+        require(observation.get("cliVersion") == "0.147.0" and _nonempty_text(observation.get("model")), "uses an unregistered host identity")
+        require(registered_at is not None and compacted_at is not None and compacted_at > registered_at, "does not show post-registration compaction")
+        require(observation.get("postCompactionTurnId") == CODEX_CONTINUITY_SOURCE_TURN_ID, "does not continue the measured turn")
+        require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None and observation.get("headAtReconciliation") == commit, "does not bind the registration checkpoint")
+        require(observation.get("branch") == "main" and observation.get("upstream") == "origin/main" and observation.get("aheadBehind") == [0, 0], "does not reconcile the bound mainline")
+        require(observation.get("worktreeCleanAtReconciliation") is True, "does not reconcile a clean checkpoint")
+        require(observation.get("goalObjectiveSha256") == CODEX_CONTINUITY_GOAL_SHA256, "does not preserve the bound goal")
+        require(observation.get("repositoryStateReconciledBeforeMutation") is True, "does not show fail-closed reconciliation")
+        require(observation.get("identity") == source_identity, "host identities disagree")
+    else:
+        registered_at = compacted_at = None
+
+    host_path = _inside_root(root, CODEX_CONTINUITY_HOST_EVIDENCE, errors, "continuity host evidence")
+    host_bytes = b""
+    try:
+        host_bytes = host_path.read_bytes() if host_path else b""
+        manifest = _parse_json(host_bytes.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError, _InvalidJson):
+        manifest = {}
+    require(source_identity == f"sha256:{hashlib.sha256(host_bytes).hexdigest()}", "host-event manifest identity changed")
+    require(
+        isinstance(manifest, dict)
+        and set(manifest) == {"schema", "threadId", "sourceRollout", "sourceRolloutSha256", "capturedAt", "events"}
+        and manifest.get("schema") == 1
+        and manifest.get("threadId") == CODEX_CONTINUITY_THREAD_ID
+        and _nonempty_text(manifest.get("sourceRollout"))
+        and re.fullmatch(r"[0-9a-f]{64}", manifest.get("sourceRolloutSha256", "")) is not None
+        and _rfc3339_instant(manifest.get("capturedAt")) is not None,
+        "host-event manifest is invalid",
+    )
+    events = manifest.get("events") if isinstance(manifest, dict) else None
+    expected_event_sequence = [
+        ("compacted", None),
+        ("event_msg", "context_compacted"),
+        ("response_item", "function_call_output"),
+        ("event_msg", "task_complete"),
+        ("event_msg", "task_started"),
+        ("event_msg", "user_message"),
+    ]
+    event_fields = {"line", "timestamp", "recordType", "payloadType", "turnId", "rawLineSha256"}
+    valid_events = (
+        isinstance(events, list)
+        and len(events) == len(expected_event_sequence)
+        and all(isinstance(event, dict) and set(event) == event_fields for event in events)
+    )
+    require(valid_events, "host event fields are invalid")
+    if valid_events:
+        instants = [_rfc3339_instant(event.get("timestamp")) for event in events]
+        require([(event["recordType"], event["payloadType"]) for event in events] == expected_event_sequence, "host event sequence is invalid")
+        require(all(type(event["line"]) is int and event["line"] > 0 and re.fullmatch(r"[0-9a-f]{64}", event["rawLineSha256"]) is not None for event in events), "host event identity is invalid")
+        require(all(instant is not None for instant in instants) and instants == sorted(instants) and [event["line"] for event in events] == sorted(event["line"] for event in events), "host event chronology is invalid")
+        require(registered_at is not None and compacted_at is not None and instants[0] == compacted_at and registered_at < instants[0], "host events are not post-registration")
+        require(events[3]["turnId"] == CODEX_CONTINUITY_SOURCE_TURN_ID, "host events do not complete the measured turn")
+
+    required_stages = [
+        "available-capability-observation", "gap-assessment", "discovery",
+        "route-selection", "task-scoped-dispatch", "execution", "recovery",
+        "verification", "route-release", "cleanup",
+    ]
+    lifecycle = document.get("lifecycle")
+    substrates = lifecycle.get("selectedRouteSubstrates") if isinstance(lifecycle, dict) else None
+    substrate_fields = {"identity", "versionOrCommit", "licenseOrTerms", "maturity", "reuseBoundary"}
+    require(
+        isinstance(lifecycle, dict)
+        and lifecycle.get("stageOrder") == required_stages
+        and isinstance(lifecycle.get("stages"), dict)
+        and set(lifecycle["stages"]) == set(required_stages)
+        and all(isinstance(value, dict) and value for value in lifecycle["stages"].values())
+        and isinstance(substrates, list) and substrates
+        and all(isinstance(item, dict) and set(item) == substrate_fields and all(_nonempty_text(item.get(field)) for field in substrate_fields) for item in substrates),
+        "does not record the complete source-bound lifecycle",
+    )
+
+    measures = document.get("measures")
+    floors = measures.get("taskFloorResults") if isinstance(measures, dict) else None
+    residue = measures.get("residueAndClaimLimits") if isinstance(measures, dict) else None
+    require(
+        isinstance(measures, dict)
+        and measures.get("humanOutcomeDecision") == "accepted"
+        and all(measures.get(field) == [] for field in ("materialUserCapabilityOrchestrationInterventions", "materialCollaborationLossEvents", "repeatedAlreadyBoundRequests"))
+        and isinstance(floors, dict) and set(floors) == {"outcomeQuality", "continuity", "authorityAndSafety", "evidence", "residue"} and all(value is True for value in floors.values())
+        and residue == {"taskTemporaryPathsAbsent": True, "undeclaredResidueAbsent": True, "claimLimited": True},
+        "has a missing measure, nonzero loss, failed floor, or open residue",
+    )
+    authority = document.get("authority")
+    require(isinstance(authority, dict) and authority.get("name") == "yiheng8023" and authority.get("decision") == "accepted", "lacks the pre-registered human decision")
+    require(document.get("validator") == {"kind": CODEX_CONTINUITY_VALIDATOR_KIND, "version": 1}, "names a different validator")
+    return len(errors) == before
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
-    {}
+    {
+        CODEX_CONTINUITY_VALIDATOR_KIND: (
+            frozenset({"O1"}),
+            frozenset({CODEX_CONTINUITY_INCREMENT_ID}),
+            _validate_codex_single_thread_continuity,
+        )
+    }
 )
 
 

@@ -74,20 +74,17 @@ install capabilities, route work, or operate a host adapter.
 O1-O5 are deliberately planned and false. A repository-authored JSON file
 cannot promote them: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
-evidence. The current release deliberately ships no O1-O5 outcome validator.
-Before a task exists, a generic
-self-report schema could validate only its own structure, not naturalness,
-source truth, behavior, or value; G4 blocks opening an outcome-bearing
-increment until the smallest required validation path is added.
+evidence. The active O1 continuity task has one validator bound to its exact
+thread, demand turn, increment, work item, immutable registration, and host
+event chronology; it cannot validate another task or criterion. Before a task
+exists, a generic self-report schema could validate only its own structure,
+not naturalness, source truth, behavior, or value; G4 blocks any other
+outcome-bearing increment until its smallest required validation path exists.
 
-The v0.2 program is ready with an empty current increment graph. Closed
-authority repairs remain available in Git history instead of becoming a
-permanent work queue. The current verifier is not an accepted methodology,
-quality profile, task runtime, reference adapter, or cross-host proof.
-Natural-task evidence gates outcome-bearing execution and claims but does not
-block the program. Bounded retrospective analysis, portfolio curation,
-mechanism validation, and authority-defect repair remain available when a
-current observed problem justifies them.
+The v0.2 program has one active Codex same-task continuity increment and one
+active work item. O1-O5 remain false. The current verifier is not an accepted
+methodology, quality profile, task runtime, reference adapter, or cross-host
+proof; this task can establish only one bounded O1 reference-host outcome.
 
 ## 3. Capability and lifecycle plane
 

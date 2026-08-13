@@ -16,10 +16,12 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `ready`: its empty graph is open to the next causally justified
-increment. A natural task is still required before outcome execution can
-produce honest evidence, but its absence is an outcome gate rather than a
-program blocker. The verifier is the current machine-readable state source.
+v0.2 is `active` on one pre-registered natural task: preserving the user's
+same-task goal and repository continuity across native Codex context
+compaction without returning recovery or Codex orchestration to the user. O1
+remains false until the post-registration behavior, task floors, cleanup, and
+named-human decision are all evidenced. The verifier is the current
+machine-readable state source.
 
 ## The problem
 

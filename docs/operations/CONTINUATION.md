@@ -15,28 +15,27 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`. Its current increment graph
-is empty. The public verifier should report:
+The current machine program is v0.2 and `active` on the pre-registered Codex
+same-task continuity natural task. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2.codex-single-thread-continuity`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the ready program has an empty graph
+## Why the program is active
 
-O1-O5 require natural, non-diagnostic real-task evidence. The repository does
-not invent such a task or ask the user to manufacture one merely to keep the
-program active. The current release deliberately has no O1-O5 outcome
-validator. A task-bound validator scoped to the criterion and exact causal
-increment is added only after the task and its evidence sources are known, and
-before measured execution. G4
-therefore blocks opening an outcome-bearing increment until the task-bound
-validation path exists.
+The user supplied a real goal-level demand: keep advancing the Harness in one
+Codex task without learning or operating context recovery as the task grows.
+The active increment tests whether native Codex compaction plus fail-closed
+goal, authority, program, Git, gate, and cleanup reconciliation can meet that
+demand without a Hook or new task. Its O1 registration and validator are bound
+to this exact thread, demand turn, increment, work item, and post-registration
+host chronology. They cannot validate another task or criterion.
 
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
@@ -60,15 +59,12 @@ open minimum quality-conformance profile, and thin reference adapters that
 reuse those layers. This audit changes the route and acceptance boundary but
 proves none of O1-O5.
 
-The next outcome-bearing slice remains Codex-first and task-bound. Once a
-natural task exists, but before its measured execution, freeze the task floors,
-source-bound baseline, capability-intervention and material collaboration-loss
-taxonomies, exact reused substrate identities, and the smallest criterion-
-scoped validation path needed for that event. Start with healthy native Codex
-behavior. Add an external layer or
-capability only if the task exposes a reproducible residual gap. Before a task
-is bound, do not prebuild a wire protocol, adapter stack, audit schema, or
-outcome validator in anticipation of evidence.
+The active outcome slice remains Codex-first and task-bound. Start with healthy
+native compaction and keep the user Hook configuration unchanged. Add an
+external layer or capability only if a post-registration event exposes the
+pre-registered reproducible residual gap and the required authority is granted.
+Do not generalize the task validator into a wire protocol, adapter stack,
+audit schema, or receipt ecosystem.
 
 ## Outcome-entry boundary
 
@@ -97,12 +93,12 @@ adaptive sources, not portable-core authority.
 Installed or visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer
 projections cannot create work or promote evidence.
 
-## Outcome boundary while ready
+## Outcome boundary while active
 
-Without a bound task and its required authority, do not run outcome A/B work,
-mutate CC Switch or another consumer, install or enable capabilities, connect
-accounts, execute a third-party candidate, activate a Hook, incur cost,
-publish, release, deploy, or open a new trust or data boundary.
+The active task grants no authority to mutate CC Switch or another consumer,
+install or enable capabilities, connect accounts, execute a third-party
+candidate, activate a Hook, incur cost, publish, release, deploy, run a second
+host, or open a new trust or data boundary.
 
 ## First checks
 
