@@ -212,6 +212,7 @@ OPERATION_EFFECTS = {
     "git-commit": "bounded-local-write",
     "git-push": "bounded-external-write",
     "installed-authorized-capability-use": "bounded-capability-use",
+    "bounded-consumer-configuration-after-explicit-grant": "bounded-local-write",
     "coverage-analysis": "local-read",
     "targeted-capability-discovery": "bounded-public-read",
     "capability-static-review": "local-read",

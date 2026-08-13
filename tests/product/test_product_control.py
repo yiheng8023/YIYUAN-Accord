@@ -1026,6 +1026,18 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_explicitly_granted_consumer_configuration_is_agent_executed(self) -> None:
+        def add_granted_configuration(value: dict) -> None:
+            self.activate_program(value)["workItems"][0]["operationIds"].append(
+                "bounded-consumer-configuration-after-explicit-grant"
+            )
+
+        self.mutate("product/program.json", add_granted_configuration)
+        report = self.report()
+        self.assertTrue(report["criterionStates"]["G1"], report["errors"])
+        program = json.loads((self.root / "product/program.json").read_text())
+        self.assertIn("new-trust", program["authorityBoundary"]["userOwns"])
+
     def test_stopped_work_cannot_hide_an_authority_violation(self) -> None:
         def hide(value: dict) -> None:
             work = self.activate_program(value)["workItems"][0]

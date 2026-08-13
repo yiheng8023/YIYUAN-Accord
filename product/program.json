@@ -55,6 +55,7 @@
       "git-commit",
       "git-push",
       "installed-authorized-capability-use",
+      "bounded-consumer-configuration-after-explicit-grant",
       "coverage-analysis",
       "targeted-capability-discovery",
       "capability-static-review",
