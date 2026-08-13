@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "id": "registration.o1.codex-single-thread-continuity.2026-08-13.measurement-2",
-  "registeredAt": "2026-08-13T19:51:17+08:00",
+  "id": "registration.o1.codex-single-thread-continuity.2026-08-13.measurement-3",
+  "registeredAt": "2026-08-13T19:57:44+08:00",
   "supersedes": {
     "identity": "sha256:7331935f4a86d9ee95e60401b7710fad899ae270601b64d4a72eea8fe4dd7cba",
     "repositoryCheckpoint": "610f201ce603c00891f014ad3d647e2e8e376d4e",
@@ -14,11 +14,28 @@
       "outcomeCredit": "zero-O1-O5"
     }
   },
+  "preMeasurementAmendment": {
+    "supersededIdentity": "sha256:f0c92603bfff3f88fa97c5e0707e55c0565b57c1970e1bf97af027fa7ac4859c",
+    "repositoryCheckpoint": "30106c23f42b9a882e6c86119aa5b1d8425fac9d",
+    "reason": "A pre-measurement schema audit found that the host observation accepted any non-empty model, omitted reasoning effort and exact rollout identity, and underconstrained the next-turn event relation. Measurement 3 freezes those facts before any eligible compaction."
+  },
   "measurementEligibility": {
     "eligibleEvent": "the first native same-task compacted event after this registration revision is committed and pushed",
     "requiredPostCompactionOutputType": "custom_tool_call_output",
     "postHocReuseOfExcludedPilotForbidden": true
   },
+  "measuredHostProfile": {
+    "cliVersion": "0.147.0",
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "xhigh",
+    "sourceRolloutIdentity": "sha256:a2374976d4b97bb280a8fee497f3560532d5e64a48975b6e995451e999eb4544",
+    "modelTerms": "OpenAI Terms of Use or OpenAI Services Agreement plus Service Terms, as applicable to the ChatGPT account on 2026-08-13; https://openai.com/policies/terms-of-use/; https://openai.com/policies/services-agreement/; https://openai.com/policies/service-terms/",
+    "claimBoundary": "The provider-managed service revision behind the emitted model identifier is not exposed; evidence and claims bind only gpt-5.6-sol, xhigh, this Codex task, and this date."
+  },
+  "knownEvidenceAndSafetyDisclosures": [
+    "The local Codex rollout is not a signed host attestation. The task-specific validator binds a hashed rollout identity, captured source-file hash, ordered raw-line hashes, repository checkpoint, and named-human judgment; it does not claim cryptographic non-repudiation.",
+    "Public Git commit 0bffbcab9fef30f7d967bbb5350729355e55727a contains opaque raw internal task and turn identifiers that the current tree hashes. They are not credentials, ordinary history retains them, and no history rewrite is authorized; named-human acceptance must include this disclosure."
+  ],
   "taskIdentity": "natural-task.2026-08-13.codex-single-thread-continuity",
   "nonDiagnosticPurpose": "Advance the user's real Agent Autonomy Harness v0.2 closeout goal while absorbing same-task context growth, compaction, recovery, verification, and cleanup without teaching or returning Codex orchestration to the user.",
   "demandEntry": {
@@ -107,6 +124,13 @@
           "licenseOrTerms": "Apache-2.0",
           "maturity": "released reference-host runtime",
           "reuseBoundary": "native task execution and context compaction only"
+        },
+        {
+          "identity": "OpenAI model identifier gpt-5.6-sol emitted by the measured Codex turn_context with reasoning effort xhigh",
+          "versionOrCommit": "gpt-5.6-sol; provider-managed service revision not exposed",
+          "licenseOrTerms": "OpenAI Terms of Use or OpenAI Services Agreement plus Service Terms, as applicable to the ChatGPT account on 2026-08-13",
+          "maturity": "host-provided service model with an undisclosed service-side revision",
+          "reuseBoundary": "reasoning and action selection in this measured Codex task only"
         },
         {
           "identity": "Git for Windows local executable sha256:7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",

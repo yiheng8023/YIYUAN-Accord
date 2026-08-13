@@ -456,12 +456,17 @@ CODEX_CONTINUITY_REGISTRATION = (
     "product/evidence/o1-codex-single-thread-continuity-registration.json"
 )
 CODEX_CONTINUITY_REGISTRATION_SHA256 = (
-    "f0c92603bfff3f88fa97c5e0707e55c0565b57c1970e1bf97af027fa7ac4859c"
+    "6d3c68accacec03f387bc580440a0b5e068a109acb312043573c3e7362bdf6a9"
 )
 CODEX_CONTINUITY_HOST_EVIDENCE = (
     "product/evidence/o1-codex-single-thread-continuity-host.json"
 )
-CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v1"
+CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v2"
+CODEX_CONTINUITY_MODEL = "gpt-5.6-sol"
+CODEX_CONTINUITY_REASONING_EFFORT = "xhigh"
+CODEX_CONTINUITY_ROLLOUT_IDENTITY = (
+    "sha256:a2374976d4b97bb280a8fee497f3560532d5e64a48975b6e995451e999eb4544"
+)
 CODEX_CONTINUITY_EVENT_SEQUENCE = (
     ("compacted", None),
     ("event_msg", "context_compacted"),
@@ -509,9 +514,12 @@ def _validate_codex_single_thread_continuity(
     )
     registration = _inside_root(root, CODEX_CONTINUITY_REGISTRATION, errors, "continuity registration")
     try:
-        registration_hash = hashlib.sha256(registration.read_bytes()).hexdigest() if registration else None
-    except OSError:
+        registration_bytes = registration.read_bytes() if registration else b""
+        registration_hash = hashlib.sha256(registration_bytes).hexdigest()
+        registration_document = _parse_json(registration_bytes.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError, _InvalidJson):
         registration_hash = None
+        registration_document = {}
     require(registration_hash == CODEX_CONTINUITY_REGISTRATION_SHA256, "registration identity changed")
 
     source = document.get("source")
@@ -526,7 +534,7 @@ def _validate_codex_single_thread_continuity(
         "does not bind the exact host-event manifest",
     )
     expected_observation_fields = {
-        "threadIdentity", "sourceTurnIdentity", "cliVersion", "model", "registeredAt",
+        "threadIdentity", "sourceTurnIdentity", "cliVersion", "model", "reasoningEffort", "registeredAt",
         "compactedAt", "postCompactionTurnIdentity", "registrationCommit",
         "headAtReconciliation", "branch", "upstream", "aheadBehind",
         "worktreeCleanAtReconciliation", "goalObjectiveSha256",
@@ -539,7 +547,17 @@ def _validate_codex_single_thread_continuity(
         commit = observation.get("registrationCommit")
         require(observation.get("threadIdentity") == CODEX_CONTINUITY_THREAD_IDENTITY, "uses a different task thread")
         require(observation.get("sourceTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "uses a different demand turn")
-        require(observation.get("cliVersion") == "0.147.0" and _nonempty_text(observation.get("model")), "uses an unregistered host identity")
+        require(
+            observation.get("cliVersion") == "0.147.0"
+            and observation.get("model") == CODEX_CONTINUITY_MODEL
+            and observation.get("reasoningEffort") == CODEX_CONTINUITY_REASONING_EFFORT,
+            "uses an unregistered host identity",
+        )
+        require(
+            isinstance(registration_document, dict)
+            and observation.get("registeredAt") == registration_document.get("registeredAt"),
+            "uses a different registration time",
+        )
         require(registered_at is not None and compacted_at is not None and compacted_at > registered_at, "does not show post-registration compaction")
         require(observation.get("postCompactionTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "does not continue the measured turn")
         require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None and observation.get("headAtReconciliation") == commit, "does not bind the registration checkpoint")
@@ -564,7 +582,7 @@ def _validate_codex_single_thread_continuity(
         and set(manifest) == {"schema", "threadIdentity", "sourceRolloutIdentity", "sourceRolloutSha256", "capturedAt", "events"}
         and manifest.get("schema") == 1
         and manifest.get("threadIdentity") == CODEX_CONTINUITY_THREAD_IDENTITY
-        and re.fullmatch(r"sha256:[0-9a-f]{64}", manifest.get("sourceRolloutIdentity", "")) is not None
+        and manifest.get("sourceRolloutIdentity") == CODEX_CONTINUITY_ROLLOUT_IDENTITY
         and re.fullmatch(r"[0-9a-f]{64}", manifest.get("sourceRolloutSha256", "")) is not None
         and _rfc3339_instant(manifest.get("capturedAt")) is not None,
         "host-event manifest is invalid",
@@ -580,11 +598,27 @@ def _validate_codex_single_thread_continuity(
     require(valid_events, "host event fields are invalid")
     if valid_events:
         instants = [_rfc3339_instant(event.get("timestamp")) for event in events]
+        captured_at = _rfc3339_instant(manifest.get("capturedAt"))
         require([(event["recordType"], event["payloadType"]) for event in events] == expected_event_sequence, "host event sequence is invalid")
         require(all(type(event["line"]) is int and event["line"] > 0 and re.fullmatch(r"[0-9a-f]{64}", event["rawLineSha256"]) is not None for event in events), "host event identity is invalid")
-        require(all(instant is not None for instant in instants) and instants == sorted(instants) and [event["line"] for event in events] == sorted(event["line"] for event in events), "host event chronology is invalid")
+        require(
+            all(instant is not None for instant in instants)
+            and instants == sorted(instants)
+            and [event["line"] for event in events] == sorted({event["line"] for event in events})
+            and len({event["rawLineSha256"] for event in events}) == len(events)
+            and captured_at is not None
+            and captured_at >= instants[-1],
+            "host event chronology is invalid",
+        )
         require(registered_at is not None and compacted_at is not None and instants[0] == compacted_at and registered_at < instants[0], "host events are not post-registration")
-        require(events[3]["turnIdentity"] == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "host events do not complete the measured turn")
+        require(
+            all(event["turnIdentity"] == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY for event in events[:4])
+            and isinstance(events[4]["turnIdentity"], str)
+            and re.fullmatch(r"sha256:[0-9a-f]{64}", events[4]["turnIdentity"]) is not None
+            and events[4]["turnIdentity"] != CODEX_CONTINUITY_SOURCE_TURN_IDENTITY
+            and events[5]["turnIdentity"] == events[4]["turnIdentity"],
+            "host events do not preserve the measured turn and bind the acceptance turn",
+        )
 
     required_stages = [
         "available-capability-observation", "gap-assessment", "discovery",
@@ -618,7 +652,7 @@ def _validate_codex_single_thread_continuity(
     )
     authority = document.get("authority")
     require(isinstance(authority, dict) and authority.get("name") == "yiheng8023" and authority.get("decision") == "accepted", "lacks the pre-registered human decision")
-    require(document.get("validator") == {"kind": CODEX_CONTINUITY_VALIDATOR_KIND, "version": 1}, "names a different validator")
+    require(document.get("validator") == {"kind": CODEX_CONTINUITY_VALIDATOR_KIND, "version": 2}, "names a different validator")
     return len(errors) == before
 
 
