@@ -12,17 +12,19 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route,
 uses it safely, verifies the result, and cleans up afterward.
 
 **Research-stage status:** the repository currently contains the product
-contract, acceptance model, deterministic verifier, and an inactive Codex
-`SessionStart` reference-adapter candidate. It does not contain an Agent
-runtime, an installed or behavior-accepted adapter, or accepted cross-host
-proof.
+contract, acceptance model, deterministic verifier, an inactive Codex
+`SessionStart` reference adapter, and an inactive thin Codex plugin projection
+for that adapter. It does not contain an Agent runtime, an installed or
+behavior-accepted adapter, or accepted cross-host proof.
 
 v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The adapter only derives bounded continuation context
-from the current repository authority; it is not enabled and proves no runtime
-behavior or outcome. The verifier is the current machine-readable state source.
+from the current repository authority. The plugin projection adds no Skill,
+MCP server, App, prompt interception, CC Switch dependency, or product
+authority. Neither is installed or enabled, and neither proves runtime behavior
+or an outcome. The verifier is the current machine-readable state source.
 
 ## The problem
 
@@ -83,6 +85,9 @@ The current repository provides:
 - an inactive, standard-library-only Codex `SessionStart` adapter candidate
   that projects current authority after startup, resume, clear, or compaction
   without reading prompt or transcript content or storing session state;
+- an inactive, Hook-only Codex plugin projection that packages that adapter
+  through the host's plugin boundary without turning the repository or portable
+  core into a plugin;
 - product tests for the public verification seam;
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.

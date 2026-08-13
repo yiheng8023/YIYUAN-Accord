@@ -148,15 +148,35 @@ task classifier, transcript store, or compaction runtime. The adapter does not
 observe the full capability lifecycle, prove a receipt, validate a result, or
 supply an outcome completion event.
 
+The same fixed source has a dedicated
+[`HooksOnly` plugin load path](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/core-plugins/src/loader.rs#L189-L219),
+loads a legacy plugin's declared or default `hooks/hooks.json` without loading
+Skills, MCP servers, or Apps, and supplies `PLUGIN_ROOT` to the command Hook.
+The local app-server
+[`plugin/install` path](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/app-server/src/request_processors/plugins.rs#L1406-L1501)
+materializes the plugin and invalidates plugin consumers. Local Hook trust is
+not inferred from installation: exact trust plus app-owned user-config reload
+remains a separate activation condition.
+
+Reuse disposition: `adapters/agent-autonomy-harness-codex` is an inactive
+Hook-only packaging projection. Its launcher discovers a containing Harness
+authority root from the native Hook working directory and delegates to the
+repository-owned adapter only when the adapter and verifier bytes match the
+candidate's exact SHA-256 pins. It runs in Python isolated mode, neither copies
+the portable core into the plugin nor depends on CC Switch, and fails to a
+non-blocking no-op on runtime drift. The repository itself does not become a
+plugin.
+
 Goal-level demand continues to use Codex's native conversation path. The
 candidate does not use `UserPromptSubmit`: raw-prompt access and turn-blocking
 authority are unnecessary for the observed continuity gap and would enlarge
 the data and trust boundary.
 
-The current user Hook configuration remains empty. Installation or enablement
-is a separate consumer and trust transition and stays off until separately
-authorized reversible behavior evidence can test distinct value. The candidate
-and its offline mechanism tests count as zero O1-O5 progress.
+The current user Hook configuration remains empty. Plugin installation,
+enablement, exact Hook trust, and live runtime measurement are separate
+consumer transitions and stay off until a scoped grant authorizes reversible
+behavior evidence. The candidate and its offline mechanism tests count as zero
+O1-O5 progress.
 
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed

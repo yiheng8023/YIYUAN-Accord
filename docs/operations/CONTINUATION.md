@@ -1,6 +1,6 @@
 # Continuation
 
-Updated: 2026-08-13
+Updated: 2026-08-14
 
 This file is a navigation aid, not product authority or a history ledger.
 Recheck live Git truth and the machine contract before acting. Closed changes
@@ -46,6 +46,23 @@ The candidate adapter projects only the current constitution, program,
 acceptance, and verifier state; it does not read prompt or transcript content,
 persist session state, emit a receipt, or enable a user Hook. This is mechanism
 work, counted as zero O1-O5 progress, and has left the current graph.
+
+The first authorized user-layer activation then falsified its hot-refresh
+hypothesis: the Hook was present and trusted on disk, but the already-running
+task emitted no Hook event or projection at native compaction. The exact user
+files were restored, the stopped result is recorded in
+`product/evidence/o1-codex-session-start-continuity-stopped-2026-08-14.json`,
+and O1 remains false.
+
+A later bounded mechanism slice added the inactive Hook-only projection at
+`adapters/agent-autonomy-harness-codex`. Fixed Codex 0.147.0 source shows that
+legacy plugins can load only their Hooks, supply `PLUGIN_ROOT`, and use native
+plugin materialization while keeping exact Hook trust separate. The projection
+therefore packages the existing adapter without a Skill, MCP server, App,
+whole-repository plugin identity, or CC Switch dependency. Its isolated
+launcher accepts only the exact reviewed adapter and verifier hashes and is a
+no-op on runtime drift. It is not installed, enabled, trusted, live-measured,
+released, or outcome-accepted and counts as zero O1-O5 progress.
 
 ## Earlier ready-state basis
 
@@ -123,8 +140,10 @@ reuse those layers. This audit changes the route and acceptance boundary but
 proves none of O1-O5.
 
 Codex remains the first reference host, and the user Hook configuration remains
-unchanged. The next causal slice must come from the highest-priority current
-observed problem rather than a fourth continuity measurement. The nine
+unchanged. A later activation may use the new plugin candidate only through a
+separate exact install, enable, trust, rollback, and native-compaction gate; it
+must not reuse the stopped user-layer attempt as a green result. The next causal
+slice must come from the highest-priority current observed problem. The nine
 user-reported experience failures are real product problems and replanning
 inputs; they do not self-promote into accepted receipts. Do not generalize the
 retired task validator into a wire protocol, adapter stack, audit schema, or

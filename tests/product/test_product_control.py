@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
+CODEX_PLUGIN_ROOT = ROOT / "adapters/agent-autonomy-harness-codex"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -388,6 +389,112 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(returncode, 0)
         self.assertEqual(
             json.loads(stdout.getvalue()),
+            {"continue": True, "suppressOutput": True},
+        )
+
+    def test_codex_plugin_projection_is_thin_inactive_and_host_rooted(self) -> None:
+        manifest = json.loads(
+            (CODEX_PLUGIN_ROOT / ".codex-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        hooks = json.loads(
+            (CODEX_PLUGIN_ROOT / "hooks/hooks.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["name"], "agent-autonomy-harness-codex")
+        self.assertEqual(manifest["version"], "0.2.0-candidate.1")
+        self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
+        self.assertNotIn("skills", manifest)
+        self.assertNotIn("mcpServers", manifest)
+        self.assertNotIn("apps", manifest)
+        self.assertNotIn("defaultPrompt", manifest["interface"])
+        self.assertNotIn("hooks", manifest)
+        handlers = hooks["hooks"]["SessionStart"]
+        self.assertEqual(len(handlers), 1)
+        command = handlers[0]["hooks"][0]
+        self.assertEqual(command["type"], "command")
+        self.assertIn("${PLUGIN_ROOT}", command["command"])
+        self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
+        self.assertIn(" -I ", command["command"])
+        self.assertNotIn(str(ROOT), json.dumps(hooks))
+        candidate_text = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (
+                CODEX_PLUGIN_ROOT / ".codex-plugin/plugin.json",
+                CODEX_PLUGIN_ROOT / "hooks/hooks.json",
+                CODEX_PLUGIN_ROOT / "scripts/session_start.py",
+            )
+        ).lower()
+        self.assertNotIn("cc switch", candidate_text)
+
+    def test_codex_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
+        nested = self.root / "docs/nested"
+        nested.mkdir(parents=True)
+        payload = self.codex_session_start_payload(source="compact")
+        payload["cwd"] = str(nested)
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
+            ],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        output = json.loads(completed.stdout)
+        context = json.loads(output["hookSpecificOutput"]["additionalContext"])
+        self.assertEqual(context["adapter"], ADAPTER_ID)
+        self.assertEqual(context["event"]["source"], "compact")
+        self.assertNotIn("transcript_path", output["hookSpecificOutput"]["additionalContext"])
+        self.assertNotIn(payload["session_id"], completed.stdout)
+
+    def test_codex_plugin_launcher_is_noop_without_harness_authority(self) -> None:
+        payload = self.codex_session_start_payload()
+        payload["cwd"] = str(self.root.parent)
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
+            ],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(
+            json.loads(completed.stdout),
+            {"continue": True, "suppressOutput": True},
+        )
+
+    def test_codex_plugin_launcher_rejects_unreviewed_runtime_bytes(self) -> None:
+        with (self.root / "harness/control.py").open("a", encoding="utf-8") as handle:
+            handle.write("\n# unreviewed runtime drift\n")
+        payload = self.codex_session_start_payload()
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
+            ],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(
+            json.loads(completed.stdout),
             {"continue": True, "suppressOutput": True},
         )
 

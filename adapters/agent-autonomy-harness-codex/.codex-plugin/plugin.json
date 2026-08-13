@@ -1,0 +1,27 @@
+{
+  "name": "agent-autonomy-harness-codex",
+  "version": "0.2.0-candidate.1",
+  "description": "Thin Codex continuity projection for an Agent Autonomy Harness authority root.",
+  "author": {
+    "name": "Agent Autonomy Harness contributors"
+  },
+  "homepage": "https://github.com/yiheng8023/agent-autonomy-harness",
+  "repository": "https://github.com/yiheng8023/agent-autonomy-harness",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent-autonomy",
+    "continuity",
+    "session-start"
+  ],
+  "interface": {
+    "displayName": "Agent Autonomy Harness for Codex",
+    "shortDescription": "Restores current Harness authority after Codex session transitions",
+    "longDescription": "A thin reference-host projection that supplies current Harness authority after Codex startup, resume, clear, or compaction. It does not inspect prompts or transcripts, store session state, route capabilities, or validate outcomes.",
+    "developerName": "Agent Autonomy Harness contributors",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read"
+    ],
+    "websiteURL": "https://github.com/yiheng8023/agent-autonomy-harness"
+  }
+}

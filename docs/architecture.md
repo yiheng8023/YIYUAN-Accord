@@ -201,6 +201,24 @@ authority. A second host must implement the same portable semantics through
 its own thin adapter; a Codex projection cannot prove cross-Agent behavior.
 Codex-first is the reference-adapter sequence, not a core dependency.
 
+The repository as a whole is not a plugin. The portable methodology, quality
+profile, evidence semantics, and acceptance remain manager- and host-neutral.
+`adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
+projection containing only a `SessionStart` Hook and a standard-library
+launcher for the repository-owned adapter. It adds no Skill, MCP server, App,
+prompt entry, capability router, state store, or outcome validator.
+The launcher uses Python isolated mode, reads the adapter and verifier once,
+and executes only those same bytes after they match the exact hashes reviewed
+for that plugin version. An unknown or changed runtime is a non-blocking no-op
+rather than a new repository-code execution grant.
+
+CC Switch has no dependency role in the portable core, verifier, Codex adapter,
+or Codex plugin runtime. It may remain useful as one replaceable operational
+manager for shared third-party Skills, but stopping or removing it must not
+change Harness semantics or disable the Codex continuity projection. Codex's
+native plugin manager owns this projection's install, cache, enable, update,
+disable, and uninstall lifecycle.
+
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
 fires for startup, resume, clear, and compact, supplies the working directory
@@ -220,6 +238,16 @@ The adapter remains inactive. Installing or enabling a Hook is a separate
 consumer and trust transition requiring explicit authority and reversible
 behavior evidence. The candidate therefore establishes only an executable
 reference seam and zero O1-O5 progress.
+
+An authorized user-layer Hook edit was later present and trusted on disk but
+did not refresh the already-running task's Hook runtime before native
+compaction. That stopped result is retained at
+`product/evidence/o1-codex-session-start-continuity-stopped-2026-08-14.json`
+and receives zero O1-O5 credit. The plugin projection corrects the packaging
+boundary and lets Codex own materialization; exact Hook trust and an app-owned
+runtime config reload remain part of the later activation gate. The inactive
+candidate and its offline tests do not claim that ingestion or live refresh
+has happened.
 
 ## 5. Evidence and acceptance
 
