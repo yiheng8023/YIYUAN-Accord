@@ -15,15 +15,14 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on the bounded recovery of the
-already-requested Chinese README first-screen delivery. The public verifier
-should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2.readme-zh-first-screen-recovery`.
+- no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.

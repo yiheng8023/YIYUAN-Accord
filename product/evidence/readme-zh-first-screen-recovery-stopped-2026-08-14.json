@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "id": "result.readme-zh-first-screen-recovery.stopped.2026-08-14",
+  "criterionIds": [
+    "O1",
+    "O2"
+  ],
+  "registration": "product/evidence/readme-zh-first-screen-recovery-registration.json",
+  "taskIdentity": "natural-task.2026-08-14.readme-zh-first-screen-rewrite",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The one authorized Claude Code 2.1.231 claude-opus-4-8 call remained running without output until the bounded shell invocation timed out after 124 seconds. It returned no JSON or candidate text, so the registered route stopped without a retry, model substitution, README mutation, or outcome claim.",
+  "chronology": [
+    {
+      "event": "registration-and-active-binding-pushed",
+      "commit": "e93be52d788570536769ad27620ab68b311f0227",
+      "remoteMainVerified": true
+    },
+    {
+      "event": "single-claude-call-started",
+      "startedAt": "2026-08-14T03:46:52+08:00",
+      "runtime": "Claude Code 2.1.231",
+      "model": "claude-opus-4-8",
+      "flags": [
+        "--print",
+        "--output-format json",
+        "--effort high",
+        "--max-budget-usd 2",
+        "--safe-mode",
+        "--tools empty",
+        "--no-chrome",
+        "--no-session-persistence",
+        "--permission-mode plan"
+      ],
+      "processId": 30180
+    },
+    {
+      "event": "bounded-invocation-timed-out",
+      "elapsedSeconds": 124,
+      "shellExitCode": 124,
+      "jsonReturned": false,
+      "candidateReturned": false,
+      "reportedCost": null,
+      "reportedUsage": null,
+      "retryAttempted": false
+    },
+    {
+      "event": "task-owned-process-and-lock-residue-cleaned",
+      "processId": 30180,
+      "processTerminated": true,
+      "pidScopedPluginInUseMarkersRemoved": 244,
+      "pidScopedPluginInUseMarkersRemaining": 0,
+      "recentClaudeRootFiles": 0,
+      "recentHarnessProjectSessionFiles": 0,
+      "desktopClaudeProcessesTouched": false,
+      "pluginPayloadsTouched": false
+    },
+    {
+      "event": "repository-reconciled",
+      "head": "e93be52d788570536769ad27620ab68b311f0227",
+      "upstreamHead": "e93be52d788570536769ad27620ab68b311f0227",
+      "ahead": 0,
+      "behind": 0,
+      "unrelatedChanges": false
+    }
+  ],
+  "falsifiersTriggered": [
+    "the exact host call returned no raw result before the bounded invocation timeout",
+    "the registered route could not satisfy the quality or evidence floor without a prohibited retry or substitution"
+  ],
+  "causalFinding": {
+    "fact": "The already-authorized Claude call produced no eligible output and left only PID-scoped cache lock markers, which the Agent removed exactly.",
+    "inference": "An external independent writing candidate is not causally necessary for this bounded README delivery; retaining it as a prerequisite adds latency and cleanup burden while the current Agent already has sufficient native writing and repository capability.",
+    "correction": "Exit this route and deliver the README through the current Agent's native capability in the same task and checkout, with no model retry, external candidate, new topology, or O1/O2 credit."
+  },
+  "safetyAndCleanup": {
+    "readmeMutated": false,
+    "consumerConfigurationChanged": false,
+    "installationAdded": false,
+    "pluginEnabled": false,
+    "hookEnabled": false,
+    "accountOrOAuthChanged": false,
+    "publicationOrRelease": false,
+    "taskOwnedResidueRemaining": false
+  },
+  "humanAuthority": {
+    "executionGrant": "previously granted for one exact call with a USD 2.00 ceiling",
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-no-candidate-delivered",
+    "unusedOperationRemaining": "none; the single authorized Claude call was attempted and is not reusable"
+  },
+  "claimLimit": "This proves only that the exact registered external-candidate route timed out without eligible output and was cleaned. It proves neither README quality, Claude model quality, O1-O5, methodology value, cross-host portability, release, production readiness, nor v0.2 completion."
+}

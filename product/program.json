@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability and task-topology lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.readme-zh-first-screen-recovery",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,69 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.readme-zh-first-screen-recovery",
-      "state": "active",
-      "correctionClass": "remove-noncausal-hook-and-portability-coupling-from-readme-delivery",
-      "observedProblem": "The user's real Chinese README first-screen demand remains undelivered because the prior route made unrelated Hook chronology and cross-host evidence mandatory, stopped before the already-authorized Claude candidate ran, and returned process burden without improving the public copy.",
-      "hypothesis": "One already-authorized, tool-free, non-persistent Claude Opus candidate followed by one current-Agent fact-preserving bounded rewrite can deliver a substantially clearer Chinese first screen without Hook, plugin, adapter, portability, topology, installation, or user tool-learning burden; the prior collaboration loss remains attached, so the result can be useful while staying ineligible for O1 and O2 zero-loss promotion.",
-      "falsifier": "The exact Claude runtime or model is unavailable, the call exceeds USD 2.00, the raw result is missing, the candidate cannot satisfy the fixed factual and prose floors without a retry or new route, the edit escapes the first-screen scope, the user must operate capability or task topology, a new authority boundary appears, residue cannot be bounded, or the named human rejects the delivered copy.",
-      "stopCondition": "After the immutable recovery registration and active binding are committed and pushed, run the exact Claude call once; stop successfully only after its raw result is content-addressed, the current Agent delivers the smallest compliant first-screen rewrite, canonical verification and residue checks pass, the repository result is committed and pushed, the named human judges the final copy and bounded claim, and the same logical task is recorded as O1/O2-ineligible because its prior material collaboration loss persists; otherwise stop honestly on the first falsifier.",
-      "acceptanceIds": [
-        "O1",
-        "O2",
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/readme-zh-first-screen-recovery-registration.json",
-        "sha256": "8aa66f1eda469b53501e0b26d92fe6c06e0f2adf7e2d5eaaaf43fec11142fe41"
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.readme-zh-first-screen-recovery",
-          "state": "active",
-          "acceptanceIds": [
-            "O1",
-            "O2",
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use"
-          ],
-          "deliverables": [
-            "one bounded Chinese README first-screen rewrite plus exact single-call evidence, zero-residue cleanup, and named-human result and claim judgment, with no O1/O2 promotion because the prior loss persists"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
