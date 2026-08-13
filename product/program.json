@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-session-start-continuity-delivery",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,5 +63,65 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.codex-session-start-continuity-delivery",
+      "state": "active",
+      "correctionClass": "codex-long-task-context-recovery-returned-to-user",
+      "observedProblem": "The user's real v0.2 closeout work has reached a seventh mainline task and repeatedly required user correction or handoff because long-running Codex context recovery was not owned automatically; the reviewed SessionStart adapter is still inactive and therefore has not delivered the requested continuity.",
+      "hypothesis": "After one explicit human trust grant, the existing Codex 0.147.0 user-layer SessionStart Hook plus the root-scoped stateless Harness adapter can hot-refresh into this task and inject exact current authority on the next native compact event, allowing the Agent to continue without user context or capability orchestration and without adding an external memory system, runtime, prompt interceptor, or control plane.",
+      "falsifier": "The Hook is untrusted, not hot-refreshed, not invoked for compact, fails, blocks, leaks prompt or transcript data, runs materially outside the bound root, injects stale or incorrect authority, adds unacceptable resource or interface cost, requires user setup or recovery, causes any registered material collaboration loss, fails a mandatory floor, leaves residue, or cannot be independently evidenced by native Hook events and observed continuation.",
+      "stopCondition": "After the immutable task registration is committed and pushed and the exact human trust gate is granted, stop successfully only when one native compact-source SessionStart Hook in this same task completes, the Agent reconciles every registered continuity field before further product mutation, canonical checks pass, task exposure is released or separately retained by accountable human authority, residue is absent, task-bound evidence is validated, and the named human accepts the bounded outcome; stop earlier and retain an honest failed or stopped result on any falsifier.",
+      "acceptanceIds": [
+        "O1",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-session-start-continuity-delivery",
+          "state": "active",
+          "acceptanceIds": [
+            "O1",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one accepted live Codex compact-source automatic continuity outcome bound to the immutable registration, task floors, native Hook evidence, exact cleanup, and claim limit"
+          ]
+        }
+      ]
+    }
+  ]
 }
