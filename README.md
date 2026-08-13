@@ -20,8 +20,8 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment, and O1-O5 are still false.
-The
+v0.2 is `active` on one bounded recovery of the already-requested Chinese
+README first-screen delivery, and O1-O5 are still false. The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The adapters only derive bounded continuation context
