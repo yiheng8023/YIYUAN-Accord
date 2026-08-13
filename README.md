@@ -17,9 +17,9 @@ contract, acceptance model, deterministic verifier, and an inactive Codex
 runtime, an installed or behavior-accepted adapter, or accepted cross-host
 proof.
 
-v0.2 currently has one outcome-neutral Codex continuity increment active and
-O1-O5 remain false. It clarifies that authorized product-plan delivery is real
-demand when the primary purpose is the deliverable, rather than exercising or
+v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
+program now makes explicit that authorized product-plan delivery is real demand
+when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The adapter only derives bounded continuation context
 from the current repository authority; it is not enabled and proves no runtime
 behavior or outcome. The verifier is the current machine-readable state source.

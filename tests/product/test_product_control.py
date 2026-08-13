@@ -245,15 +245,12 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
-    def test_current_v02_contract_has_one_active_continuity_increment(self) -> None:
+    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2-bind-product-demand-and-codex-continuity",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -266,13 +263,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
