@@ -114,10 +114,12 @@ gap. Installation, enablement, account connection, paid service use, live
 execution, consumer projection, persistent activation, and Hook enablement are
 separate state transitions.
 
-The three current self-authored control Skills are provisional. Their
-functional roles may survive while their packaging is simplified, merged,
-replaced, or retired. Hook stays off unless repeated natural-task evidence
-isolates a recall gap and a reversible A/B proves net benefit.
+Codex-specific self-authored control Skills, when present in a separately
+governed consumer projection, are provisional host packaging rather than the
+portable core. Their functional roles may survive while their packaging is
+simplified, merged, replaced, or retired. Hook stays off unless repeated
+natural-task evidence isolates a recall gap and a reversible A/B proves net
+benefit.
 
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed
