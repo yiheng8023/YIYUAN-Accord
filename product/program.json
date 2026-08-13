@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-native-plugin-current-task-refresh",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,5 +63,63 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.codex-native-plugin-current-task-refresh",
+      "state": "active",
+      "correctionClass": "codex-plugin-current-task-lifecycle-refresh",
+      "observedProblem": "The inactive thin Codex continuity plugin projection passes local mechanism tests, but the earlier direct user-Hook experiment proved that an external config edit does not hot-refresh the already-running Codex task; without a current-app native install and trust measurement, the projection cannot address the user's observed long-task continuity failure.",
+      "hypothesis": "After the user's exact temporary installation and trust grant, a task-owned local marketplace opened through the current Codex app can install and enable the thin legacy Hook plugin, refresh the current task's effective Hook set, and execute the exact SessionStart projection on the next native compact event without CC Switch, prompt or transcript access, account access, external data, publication, or cross-repository mutation.",
+      "falsifier": "The current app cannot install or trust the local plugin, requires a new task to pick it up, does not emit the exact Hook on native compact, executes untrusted or drifted code, reads prompt or transcript content, adds an undeclared boundary or residue, blocks the task, or cannot be fully uninstalled and restored to the pre-change configuration and cache state.",
+      "stopCondition": "Stop this mechanism-only slice after one current-task native compact attempt or the first decisive install, trust, refresh, execution, or rollback failure; record zero O1-O5 progress, uninstall and disable the exact plugin, remove the temporary marketplace and task-owned cache or residue, verify pre-change configuration semantics plus canonical product checks, close the current graph, and do not repeat this correction class.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 1,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-native-plugin-current-task-refresh",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant"
+          ],
+          "deliverables": [
+            "one bounded current-task Codex native plugin install, trust, compact-event mechanism measurement, exact rollback, and zero-outcome disposition"
+          ]
+        }
+      ]
+    }
+  ]
 }
