@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "paused",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.nonterminal-readiness-state",
   "progressionPolicy": {
     "pausedScope": "no-active-outcome-bearing-increment",
     "agentOwnedWithoutInventedUserTask": [
@@ -60,5 +60,54 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.nonterminal-readiness-state",
+      "state": "active",
+      "correctionClass": "nonterminal-readiness-state",
+      "observedProblem": "The empty nonterminal program is labelled paused even though authority leaves bounded Agent-owned progress open; that label has repeatedly been promoted into a goal blocker and premature handoff.",
+      "hypothesis": "Representing the empty nonterminal state as ready, while retaining the natural-task evidence gates and rejecting active work or accepted completion in that state, removes the false stop signal without lowering O1-O5.",
+      "falsifier": "The repair permits ready state to carry active work, verify an outcome without task-bound evidence, report accepted completion, or leaves current public and machine state describing the program as paused.",
+      "stopCondition": "The verifier reports a valid ready, in-progress, empty graph with O1-O5 false and G1-G4 true; ready-state bypass fixtures fail closed; public current-state surfaces agree; the full product suite passes; and task residue is absent.",
+      "acceptanceIds": [
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.nonterminal-readiness-state",
+          "state": "active",
+          "acceptanceIds": [
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "progress-accounting",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "Nonterminal readiness state and fail-closed transition checks"
+          ]
+        }
+      ]
+    }
+  ]
 }
