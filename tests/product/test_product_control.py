@@ -259,7 +259,7 @@ class ProductControlTests(unittest.TestCase):
             "acceptanceAuthority": {
                 "locator": "product/acceptance.json",
                 "criteriaContractSha256": (
-                    "ea88f3ac99f8e58342207c79ebb67897a1bdb804f487ba0f07d886d898ed69ab"
+                    "1539c15b7a694331c14f700667648e71ea98cbaba388283179530261e36e4ff5"
                 ),
             },
             "namedHumanAcceptor": aliases["namedHumanAcceptor"],
@@ -337,12 +337,15 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
+    def test_current_v02_contract_is_active_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2.task-topology-authority-repair",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -381,19 +384,61 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("native compaction", o4["operationalization"]["passRule"])
         self.assertNotIn("resume", o4["operationalization"]["passRule"])
 
+    def test_task_topology_lifecycle_is_agent_owned(self) -> None:
+        constitution = self.read_json("product/constitution.json")
+        acceptance = self.read_json("product/acceptance.json")
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+
+        self.assertIn(
+            "task-topology-selection-reconciliation-merge-release-and-cleanup",
+            constitution["collaborationModel"]["agentObligations"],
+        )
+        self.assertTrue(
+            any(
+                invariant.startswith("task topology is demand-driven:")
+                for invariant in constitution["fixedInvariants"]
+            )
+        )
+        for criterion_id in ("O1", "O2", "O4"):
+            criterion = criteria[criterion_id]
+            self.assertIn("topology", criterion["threshold"])
+            self.assertIn("merge or conclusion reconciliation", criterion["operationalization"]["passRule"])
+        for criterion_id in ("O1", "O2"):
+            operationalization = criteria[criterion_id]["operationalization"]
+            self.assertIn(
+                "taskTopologyBoundaryAndLifecycleFloor",
+                operationalization["preRegistrationFields"],
+            )
+            self.assertIn(
+                "taskTopologyLifecycleEvents",
+                operationalization["requiredMeasures"],
+            )
+        self.assertIn(
+            "taskTopologyLifecycleAndBurden",
+            criteria["O4"]["operationalization"]["requiredMeasures"],
+        )
+        self.assertIn(
+            "commonTaskTopologyLifecycle",
+            criteria["O5"]["operationalization"]["preRegistrationFields"],
+        )
+        self.assertIn(
+            "taskTopologyParity",
+            criteria["O5"]["operationalization"]["requiredMeasures"],
+        )
+
     def test_public_cli_reports_the_same_contract(self) -> None:
         completed = self.run_cli(root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress", completed.stdout)
+        self.assertIn("v0.2: active, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")

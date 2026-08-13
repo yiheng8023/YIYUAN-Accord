@@ -15,19 +15,34 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active` on exactly one outcome-neutral
+task-topology authority repair. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2.task-topology-authority-repair`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is ready
+## Why the current repair is active
+
+The user's reported code and conversation topology burden exposed an acceptance
+false positive. Capability orchestration and context recovery were already
+Agent obligations, but O1, O2, and O4 could still accept a task that made an
+inexperienced user choose or operate branches, worktrees, repository forks,
+conversation continuation, conversation forks, new tasks, synchronization,
+merge or conclusion reconciliation, archive, release, or cleanup. The current
+outcome-neutral slice makes task topology one lifecycle: preserve the healthy
+current carrier by default, create an isolated carrier only for causal
+necessity, and make the Agent own identity, synchronization, reconciliation,
+archive or release, and cleanup. Goal divergence and new authority remain human
+decisions. The repair adds no runtime, Git manager, task manager, wire protocol,
+or O1-O5 credit.
+
+## Earlier ready-state basis
 
 The seventh-task correction exposed a machine-authority ambiguity: the program
 said the user must not invent a task, but repeated execution still treated the
@@ -92,7 +107,7 @@ the committed binding preceded eligible execution and verify the chronology.
 Outcome-neutral work binds `null`. This repair adds no task result or O1-O5
 credit.
 
-## Earlier ready-state basis
+## Earlier outcome attempts
 
 The user supplied a real goal-level continuity demand after the same v0.2
 closeout goal reached a seventh Codex task. The resulting O1 attempt first
@@ -142,10 +157,12 @@ checklist. It counts as zero O1-O5 progress and has left the current graph.
 
 A later coverage audit found that the O2/O4 cohort could still consist only of
 short tasks and therefore avoid the user's observed context-limit failure. The
-current candidate.3 requires at least one accepted Codex reference-host task to
+candidate.3 required at least one accepted Codex reference-host task to
 pre-register and cross a context-history-reducing or task-container-changing
 boundary without user context reconstruction, handoff selection, or recovery.
-This closes an acceptance false positive; it is not itself an outcome receipt.
+This closed one acceptance false positive; candidate.4 now adds the mandatory
+code-and-conversation task-topology lifecycle floor before any eligible task
+binds the new contract. Neither correction is itself an outcome receipt.
 
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
@@ -199,10 +216,13 @@ host.
 The user supplies the goal, domain facts, bounded authorization, corrections,
 and accountable final judgment. The Agent owns available-capability
 observation, gap detection, source-bounded discovery when needed, route
-selection, task-scoped dispatch and release, bounded execution, recovery,
-verification, cleanup, and progress accounting. Do not transfer capability or
-product names, discovery channels, invocation syntax, setup, verification
-commands, cleanup commands, or push orchestration to the user.
+selection, task-scoped dispatch and release, code and conversation task-
+topology selection, synchronization, merge or conclusion reconciliation,
+archive or release, bounded execution, recovery, verification, cleanup, and
+progress accounting. Do not transfer capability or product names, discovery
+channels, invocation syntax, setup, branch/worktree/repository-fork choice,
+conversation continuation/fork/new-task choice, merge, archive, verification,
+cleanup, or push orchestration to the user.
 
 Compare only decision-relevant routes. Before an external capability or
 product-layer substrate influences a decision, bind its exact source identity,

@@ -28,22 +28,23 @@ COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
     "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality "
     "harness that transfers capability observation, discovery, selection, bounded setup "
-    "and task-scoped dispatch, recovery, verification, release, and cleanup burden from "
+    "and task-scoped dispatch, task-topology selection and reconciliation, recovery, "
+    "verification, release, and cleanup burden from "
     "the user to the Agent while preserving human authority over goals, domain judgment, "
     "trust, cost, and irreversible effects."
 )
 EXPECTED_SUCCESS_DEFINITION = (
     "Across repeated real tasks entered at the goal level, a user can provide ideas, "
     "domain facts, bounded authorization, corrections, and accountable final judgment "
-    "without needing to know, select, invoke, or manage the underlying Agent or "
-    "capability ecosystem; the Agent observes available capability, discovers beyond "
-    "its current view only for an evidenced gap, dispatches the smallest sufficient "
-    "route, and returns accepted outcomes with fewer material orchestration interventions "
+    "without needing to know, select, invoke, or manage the underlying Agent, capability "
+    "ecosystem, or code and conversation topology; the Agent observes available capability, "
+    "discovers beyond its current view only for an evidenced gap, dispatches the smallest "
+    "sufficient route and task carrier, and returns accepted outcomes with fewer material orchestration interventions "
     "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
     "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness "
-    "through goal-level natural-task dogfooding, dynamic capability discovery and "
+    "through goal-level natural-task dogfooding, dynamic capability and task-topology "
     "lifecycle arbitration, an accepted methodology and open quality-conformance profile, "
     "and thin cross-host reference adapters that reuse sufficient external protocol, "
     "runtime, identity, audit, provenance, and evaluation layers."
@@ -141,7 +142,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "ea88f3ac99f8e58342207c79ebb67897a1bdb804f487ba0f07d886d898ed69ab"
+    "1539c15b7a694331c14f700667648e71ea98cbaba388283179530261e36e4ff5"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -330,6 +331,7 @@ EXPECTED_COLLABORATION_MODEL = {
         "available-capability-observation-and-gap-detection",
         "source-bounded-targeted-capability-discovery",
         "capability-selection-and-task-scoped-dispatch",
+        "task-topology-selection-reconciliation-merge-release-and-cleanup",
         "bounded-setup-and-execution",
         "failure-recovery",
         "verification-and-claim-control",
@@ -344,7 +346,7 @@ EXPECTED_PRODUCT_FORM = {
         "open-quality-conformance-profile",
         "executable-reference-adapter",
     ],
-    "portableCore": "testable-demand-authority-capability-lifecycle-evidence-acceptance-and-burden-semantics",
+    "portableCore": "testable-demand-authority-capability-and-task-topology-lifecycle-evidence-acceptance-and-burden-semantics",
     "referenceDelivery": "codex-first-reference-slice-then-distinct-host-portability-proof",
 }
 EXPECTED_FIXED_INVARIANTS = frozenset(
@@ -360,6 +362,7 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
         "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
+        "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
         "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; bind each decision-relevant external substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; new implementation requires an evidenced residual semantic gap",
         "reference-host calibration cannot establish Agent-neutral portability; a distinct-host O5 proof is required",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
@@ -372,6 +375,7 @@ EXPECTED_ADAPTIVE_SURFACES = frozenset(
         "module and Skill shape",
         "capability discovery source and query strategy",
         "host and manager adapter sequence",
+        "task carrier topology and host primitive",
         "native, official, reviewed external, composed, or authored capability choice",
         "experiment design",
         "delivery order inside the active causal increment",

@@ -11,7 +11,8 @@ The user should normally provide ideas, goals, corrections, domain judgment,
 bounded authorization, and the smallest decisions that genuinely require
 human authority. The Agent and Harness should own capability observation, gap
 detection, source-bounded discovery when needed, selection, task-scoped
-dispatch and release, bounded execution, verification, continuity, cleanup,
+dispatch and release, code and conversation topology selection and
+reconciliation, bounded execution, verification, continuity, cleanup,
 and honest degradation. The user should not need to know a capability name,
 product, discovery channel, or invocation syntax to enter a task.
 
@@ -25,9 +26,10 @@ coverage without making the user remember or enumerate the whole system.
 
 On repeated real tasks entered at the goal level, the Harness should reduce
 material user interventions needed to reconstruct context, discover, select,
-and manage capabilities, recover from drift, verify completion, and clean
-resources, without reducing intent fidelity, evidence quality, reversibility,
-or human control.
+and manage capabilities, choose or operate code and conversation topology,
+recover from drift, merge work or conclusions, verify completion, archive or
+release carriers, and clean resources, without reducing intent fidelity,
+evidence quality, reversibility, or human control.
 
 Code volume, document count, test count, candidate count, inventory exposure,
 research breadth, and green fixtures are not substitutes for that result.
@@ -39,8 +41,9 @@ methodology, an open minimum quality-conformance profile, and executable
 reference adapters. Its portable core consists of:
 
 1. testable quality requirements for goal-level demand, authority, capability
-   observation, gap assessment, routing, rerouting, verification, closure, and
-   handoff;
+   observation, gap assessment, routing, task-topology selection,
+   synchronization, merge or conclusion reconciliation, archive or release,
+   verification, closure, and handoff;
 2. task-scoped lifecycle and burden measures for desired state, ownership,
    observation, actuation, rollback, release, cleanup, and user intervention;
 3. evidence and acceptance floors that bind sufficient external record formats
@@ -79,10 +82,10 @@ publication.
 Current `v0.2` acceptance directly measures the missing product outcomes:
 
 - O1 — one goal-level natural real task completes the demand-to-capability
-  closed loop with zero user capability-orchestration intervention under a
-  pre-registered protocol;
-- O2 — lower user capability-orchestration burden across repeated goal-level
-  natural tasks;
+  closed loop with zero user capability-orchestration or code-and-conversation
+  task-topology intervention under a pre-registered protocol;
+- O2 — lower user capability-orchestration and task-topology burden across
+  repeated goal-level natural tasks;
 - O3 — adaptive discovery and real marginal-value lifecycle decisions keep a
   broad and changing capability ecosystem outside the user's cognitive path;
 - O4 — an accepted demand-to-capability collaboration methodology and open

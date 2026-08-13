@@ -8,8 +8,9 @@ Agent Autonomy Harness is an open research project for reducing the amount of
 Agent and tool knowledge a person must carry into a task.
 
 The intended experience is simple: the user states a goal, supplies facts and
-judgment, and grants bounded authority. The Agent chooses a sufficient route,
-uses it safely, verifies the result, and cleans up afterward.
+judgment, and grants bounded authority. The Agent chooses a sufficient route
+and task carrier, uses them safely, reconciles any split work, verifies the
+result, and cleans up afterward.
 
 **Research-stage status:** the repository currently contains the product
 contract, acceptance model, deterministic verifier, an inactive Codex
@@ -19,7 +20,8 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
+v0.2 is `active` on one outcome-neutral task-topology authority repair and
+O1-O5 are still false. The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The adapters only derive bounded continuation context
@@ -52,11 +54,16 @@ The target behavior is that the Agent:
 1. understands the desired result and the publication boundary;
 2. checks whether its healthy, authorized native capabilities are sufficient;
 3. discovers or adds an external capability only if a real gap remains;
-4. asks the user only for missing facts, consequential judgment, or new
+4. stays in the current task and checkout by default, creating a branch,
+   worktree, repository fork, conversation fork, or new task only when
+   isolation, parallelism, host capacity, or an authority boundary requires it;
+5. owns synchronization, code merge or conclusion reconciliation, archive or
+   release, and cleanup for any such carrier;
+6. asks the user only for missing facts, consequential judgment, or new
    authority—not for tool names or invocation syntax;
-5. executes, recovers, verifies, releases task-scoped capability exposure, and
+7. executes, recovers, verifies, releases task-scoped capability exposure, and
    removes task-created residue;
-6. returns the result and its evidence for accountable human judgment.
+8. returns the result and its evidence for accountable human judgment.
 
 This is the product target, not a claim about current runtime behavior.
 
@@ -66,7 +73,7 @@ This is the product target, not a claim about current runtime behavior.
 | --- | --- | --- |
 | A demand-to-capability collaboration methodology | Healthy Agent-native behavior | A universal Agent runtime |
 | An open minimum quality-conformance profile | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
-| Measures for user burden, outcome quality, authority, evidence, recovery, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, and evaluation layers | A new wire protocol, identity system, or audit format without a proven residual gap |
+| Measures for user burden, outcome quality, authority, evidence, recovery, code and conversation task-topology lifecycle, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, Git, and host task primitives | A new wire protocol, Git or task manager, identity system, or audit format without a proven residual gap |
 | Thin reference adapters that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
 
 Codex is the first reference host because it is a strong, practical test bed.
@@ -126,9 +133,11 @@ The JSON report is the current state surface. See the
 
 - **O1 — one closed loop:** one natural goal-level task completes without the
   user selecting, invoking, recovering, verifying, or cleaning the capability
-  route, and without a material collaboration-loss correction such as fixing
-  misunderstood intent, reopened decisions, unrequested work, process bloat,
-  residue, continuity failure, or a false completion claim.
+  route or choosing, operating, merging, archiving, or cleaning code and
+  conversation topology, and without a material collaboration-loss correction
+  such as fixing misunderstood intent, reopened decisions, unrequested work,
+  process bloat, residue, continuity failure, topology divergence, or a false
+  completion claim.
 - **O2 — repeated burden reduction:** at least three materially different
   natural tasks repeat that zero-loss floor and beat a source-bound ad-hoc
   baseline without losing task quality.

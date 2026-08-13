@@ -19,8 +19,8 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is ready with an empty current increment graph and O1-O5 planned and
-false. The current tree contains a product-contract verifier and inactive
+v0.2 is active on one outcome-neutral task-topology authority repair, with
+O1-O5 planned and false. The current tree contains a product-contract verifier and inactive
 Codex and Claude Code reference-adapter candidates, not a task runtime or an
 accepted host result. Closed outcome-neutral work remains recoverable from Git
 rather than accumulating as a current queue.
@@ -47,14 +47,17 @@ is:
    human-round-trip/authority/side-effect/acceptance requirements, reopened
    settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
-   outcome denominator, named accountable human acceptance, and the fixed
+   task-topology boundary and lifecycle floor, outcome denominator, named
+   accountable human acceptance, and the fixed
    material collaboration-loss taxonomy used by O1/O2 receipts. A changed
    method, profile, scorecard, or missing-data rule starts a new cohort; this
    prerequisite is not a product outcome by itself.
 2. **Codex reference quality-harness slice.** Enter through the user's goal rather
    than a named tool route. Record available-capability observation, gap
    assessment, optional discovery, smallest-sufficient route selection,
-   task-scoped dispatch, recovery, verification, release, and cleanup. Compare
+   smallest-sufficient code and conversation topology, task-scoped dispatch,
+   synchronization, merge or conclusion reconciliation, recovery,
+   verification, archive or release, and cleanup. Compare
    only routes that can change the decision; do not run a catalog-shaped or
    Cartesian experiment.
 3. **Adaptive discovery and lifecycle proof.** Require both a no-gap case that
@@ -72,8 +75,9 @@ is:
    product boundary. Measure outcome and communication quality,
    intent-mode and decision-completeness errors, user capability-learning
    burden, unnecessary design/process/artifact load, route errors, recovery,
-   time and call cost, resource lifecycle, residue, context/handoff
-   transparency, human judgment, and continuity. Limit O4 claims to the tested
+   time and call cost, resource lifecycle, residue, code and conversation
+   topology burden, context/handoff transparency, human judgment, and
+   continuity. Limit O4 claims to the tested
    host, profile, scenario classes, sources, and date; O5 owns portability.
 5. **Cross-host proof.** Keep Codex as the reference host, then exercise the
    same portable semantics on a distinct second Agent host or runtime through
@@ -87,8 +91,9 @@ sequence is direction, not preauthorization.
 ## Baseline and evaluation boundary
 
 The project's repeated drift is valid dogfooding counterevidence. User
-corrections that reassert bound direction, select a tool, request recovery,
-request cleanup or push, or correct false completion count as process loss.
+corrections that reassert bound direction, select a tool or task topology,
+request synchronization, merge, conclusion reconciliation, archive, recovery,
+cleanup or push, or correct false completion count as process loss.
 Necessary domain judgment and new trust decisions remain accountable human
 control and are not mislabeled as capability failure.
 

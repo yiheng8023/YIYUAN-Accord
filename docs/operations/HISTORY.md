@@ -160,6 +160,20 @@ checking observation chronology. The registration cannot act as product
 authority, result evidence, or an outcome validator. The repair is
 outcome-neutral.
 
+Before the first eligible task bound the revised acceptance contract, the
+user's code-and-conversation topology examples exposed another false-positive
+path. Capability routing and context recovery were Agent obligations, but the
+contract did not explicitly reject asking an inexperienced user to choose or
+operate a branch, worktree, repository fork, conversation continuation,
+conversation fork, new task, synchronization, merge or conclusion
+reconciliation, archive, release, or cleanup. Candidate.4 and the revised O1,
+O2, O4, and O5 semantics make the healthy current task and checkout the default,
+require causal necessity for any isolated carrier, and assign carrier identity,
+synchronization, reconciliation, archive or release, and cleanup to the Agent.
+Human authority over goal divergence, trust, data, cost, release, publication,
+and irreversible effects is unchanged. This is an outcome-neutral contract
+repair, not a Git manager, task manager, wire protocol, or accepted receipt.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

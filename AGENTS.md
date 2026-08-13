@@ -70,6 +70,14 @@ selection, task-scoped dispatch and release, verification, and cleanup. Do not
 require the user to know or name a capability, product, discovery channel, or
 invocation syntax unless it is an explicit user preference or task boundary.
 
+Code and conversation topology are Agent-owned orchestration. Preserve the
+healthy current task and checkout by default. Create a branch, worktree,
+repository fork, conversation fork, or new task only for bounded causal
+necessity, then own carrier identity, synchronization, merge or conclusion
+reconciliation, archive or release, and cleanup. Ask only when the topology
+would represent a real goal divergence or cross a new authority, trust, data,
+cost, destructive, or irreversible boundary.
+
 Use already-installed, already-authorized, healthy capabilities proactively
 when they materially improve a bound task. Within a bound task or complete
 portfolio-curation contract, the Agent may perform coverage analysis, targeted

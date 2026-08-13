@@ -99,8 +99,8 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready after closing the outcome-neutral Codex continuity
-correction. O1-O5 remain false. Authorized product-plan delivery is real demand
+The v0.2 program is active on one outcome-neutral task-topology authority
+repair. O1-O5 remain false. Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
 the unchanged pre-registration, evidence, floors, and human-acceptance burden.
@@ -139,6 +139,30 @@ source-bound, verified handoff when the host and task authority permit it; the
 user still supplies judgment, not transcript reconstruction. O1 can calibrate
 only the exact compaction and task it observes. Repeated reliability and
 cross-host portability remain separate O2-O5 burdens.
+
+### Task topology is a lifecycle, not a user prerequisite
+
+Code carriers include the current checkout, a branch, a worktree, and a
+repository fork. Conversation carriers include the current task, a conversation
+fork, and a new task. The default is the healthy current carrier on both planes.
+An isolated carrier is justified only by a source-bound need for parallelism,
+isolation, host capacity, or a distinct authority boundary; a routine phase
+change or context growth is not enough.
+
+When a split is necessary, the Agent binds the canonical goal and authority,
+carrier identity and owner, synchronization point, merge or conclusion-
+reconciliation route, archive or release condition, and cleanup boundary. It
+then operates those mechanics and verifies the final topology. The user retains
+goal divergence and new trust, data, cost, destructive, irreversible, release,
+or publication decisions; the user does not decide whether to continue, fork,
+open a new task, merge, archive, or clean when that route is safely discoverable
+inside existing authority.
+
+This is a quality-contract lifecycle, not a generic Git manager, task manager,
+conversation wire protocol, or cross-host synchronization runtime. Each host's
+native Git and task primitives remain replaceable substrate behind thin
+adapters. Unsupported native behavior is reported and bounded rather than
+simulated.
 
 ## 3. Capability and lifecycle plane
 

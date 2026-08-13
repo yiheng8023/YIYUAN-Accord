@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agent-autonomy-harness-claude",
-  "version": "0.2.0-candidate.1+claude.payload-768da720a55b",
+  "version": "0.2.0-candidate.1+claude.payload-3afc2fe5a822",
   "description": "Thin Claude Code continuity projection for an Agent Autonomy Harness authority root.",
   "author": {
     "name": "Agent Autonomy Harness contributors"
