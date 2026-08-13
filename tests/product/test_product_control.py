@@ -17,16 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from harness.control import (  # noqa: E402
-    CODEX_CONTINUITY_EVENT_SEQUENCE,
-    CODEX_CONTINUITY_MODEL,
-    CODEX_CONTINUITY_REGISTRATION_COMMIT,
-    CODEX_CONTINUITY_REASONING_EFFORT,
-    CODEX_CONTINUITY_ROLLOUT_IDENTITY,
-    CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT,
-    _validate_codex_single_thread_continuity,
-    verify_product,
-)
+from harness.control import verify_product  # noqa: E402
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -236,15 +227,12 @@ class ProductControlTests(unittest.TestCase):
             timeout=30,
         )
 
-    def test_current_v02_contract_is_valid_and_in_progress(self) -> None:
+    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.codex-single-thread-continuity",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -257,13 +245,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -785,40 +773,6 @@ class ProductControlTests(unittest.TestCase):
             "active outcome-bearing increment requires task-bound code-owned evidence validators "
             f"for O1: {FIXTURE_INCREMENT_ID}",
             report["errors"],
-        )
-
-    def test_continuity_validator_rejects_an_empty_self_report(self) -> None:
-        errors: list[str] = []
-        self.assertFalse(
-            _validate_codex_single_thread_continuity({}, "O1", ROOT, errors)
-        )
-        self.assertIn(
-            "Codex continuity evidence fields do not match the task-specific schema",
-            errors,
-        )
-        self.assertIn(
-            "Codex continuity evidence host-event manifest identity changed",
-            errors,
-        )
-
-    def test_continuity_validator_uses_the_observed_codex_output_record_type(self) -> None:
-        self.assertEqual(
-            CODEX_CONTINUITY_EVENT_SEQUENCE[2],
-            ("response_item", "custom_tool_call_output"),
-        )
-        self.assertEqual(CODEX_CONTINUITY_MODEL, "gpt-5.6-sol")
-        self.assertEqual(CODEX_CONTINUITY_REASONING_EFFORT, "xhigh")
-        self.assertEqual(
-            CODEX_CONTINUITY_REGISTRATION_COMMIT,
-            "525136bffc69982ebbd8d5d85b47797f8d7bc6de",
-        )
-        self.assertEqual(
-            CODEX_CONTINUITY_VALIDATOR_FINALIZED_AT,
-            "2026-08-13T20:04:13+08:00",
-        )
-        self.assertEqual(
-            CODEX_CONTINUITY_ROLLOUT_IDENTITY,
-            "sha256:a2374976d4b97bb280a8fee497f3560532d5e64a48975b6e995451e999eb4544",
         )
 
     def test_active_increment_id_must_match(self) -> None:

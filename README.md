@@ -16,18 +16,14 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `active` on one pre-registered natural task: preserving the user's
-same-task goal and repository continuity across native Codex context
-compaction without returning recovery or Codex orchestration to the user. O1
-remains false until the post-registration behavior, task floors, cleanup, and
-named-human decision are all evidenced. The verifier is the current
+v0.2 is `ready`, with no active causal increment and O1-O5 still false. A
+Codex same-task continuity attempt observed native compaction without returning
+recovery to the user, but its task-specific validator over-bound the event to
+the original demand turn even though the pre-registration allowed the first
+later same-task compaction. The attempt stopped rather than changing the rule
+after observing the event. Its registration and validator are no longer in the
+current tree, and it counts as zero O1-O5 progress. The verifier is the current
 machine-readable state source.
-
-The first observed post-registration compaction is an outcome-neutral
-calibration: continuity held, but the pre-registered evidence seam named the
-wrong Codex output record type. The current registration excludes that pilot
-and requires a later compaction after the corrected seam is committed and
-pushed; the pilot counts as zero O1-O5 progress.
 
 ## The problem
 

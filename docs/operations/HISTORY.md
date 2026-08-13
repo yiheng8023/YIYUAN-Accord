@@ -94,6 +94,21 @@ validator: G4 blocks outcome work until a real task binds the smallest
 criterion-scoped validation path. This removal is an authority and false-
 positive repair, not O1-O5 progress.
 
+A later Codex-first attempt bound a task-specific O1 continuity validator to
+the user's real demand to continue one long-running Harness goal without
+operating context recovery. The first observed compaction exposed an incorrect
+Codex output-record assumption and was excluded as calibration. After the
+corrected registration at `525136b`, a native compaction at
+`2026-08-13T12:12:57.198Z` continued the same task without user-supplied
+recovery. The registration admitted the first later same-task compaction, but
+the code validator additionally required the compacted event to carry the
+original demand-turn identity; the real event occurred in a later turn. The
+project stopped the attempt instead of changing the rule after seeing the
+event or opening another measurement to pursue a pass. O1 remained false, the
+task registration and validator left the current tree, and the stopped attempt
+remains counterevidence recoverable from Git history. It proves neither O1 nor
+O4, but it preserves a real failed evaluation case for future bounded use.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

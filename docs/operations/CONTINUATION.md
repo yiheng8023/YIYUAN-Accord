@@ -15,39 +15,37 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on the pre-registered Codex
-same-task continuity natural task. The public verifier should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2.codex-single-thread-continuity`.
+- no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is active
+## Why the program is ready
 
-The user supplied a real goal-level demand: keep advancing the Harness in one
-Codex task without learning or operating context recovery as the task grows.
-The active increment tests whether native Codex compaction plus fail-closed
-goal, authority, program, Git, gate, and cleanup reconciliation can meet that
-demand without a Hook or new task. Its O1 registration and validator are bound
-to this exact thread, demand turn, increment, work item, and post-registration
-host chronology. They cannot validate another task or criterion.
+The user supplied a real goal-level continuity demand after the same v0.2
+closeout goal reached a seventh Codex task. The resulting O1 attempt first
+excluded an outcome-neutral schema calibration, then pre-registered a corrected
+measurement at commit `525136b`.
 
-The first post-registration compaction at `2026-08-13T11:48:38.906Z` is an
-outcome-neutral calibration. Same-task reconciliation succeeded, but the
-pre-registered validator expected `function_call_output` while Codex 0.147.0
-emitted `custom_tool_call_output`. The current registration supersedes that
-seam, preserves the pilot as zero O1-O5 evidence, and makes only a later native
-compaction after the repair checkpoint eligible for O1.
+A later native compaction at `2026-08-13T12:12:57.198Z` occurred after that
+registration and the validator finalization checkpoint. The task continued
+without user-supplied context recovery. However, the pre-registration admitted
+the first later same-task compaction while the code validator additionally
+required the event to retain the original demand-turn identity. The real event
+occurred in a later turn, so the pre-registered code path cannot validate it.
 
-Do not freeze ordinary authorized product work while waiting for that event.
-The registration identity and validator floors are fixed, but HEAD may advance.
-At the eligible compaction, reconcile and record the actual clean HEAD before
-further mutation while separately retaining the fixed registration commit.
+Do not repair that mismatch after observing the event, reuse the event under a
+new rule, or open another continuity measurement to chase a green result. The
+attempt stopped with zero O1-O5 credit; its registration and task-specific
+validator left the current tree and remain recoverable from Git history. This
+is valid stopped-case counterevidence, not an accepted O1 or O4 receipt.
 
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
@@ -76,12 +74,13 @@ open minimum quality-conformance profile, and thin reference adapters that
 reuse those layers. This audit changes the route and acceptance boundary but
 proves none of O1-O5.
 
-The active outcome slice remains Codex-first and task-bound. Start with healthy
-native compaction and keep the user Hook configuration unchanged. Add an
-external layer or capability only if a post-registration event exposes the
-pre-registered reproducible residual gap and the required authority is granted.
-Do not generalize the task validator into a wire protocol, adapter stack,
-audit schema, or receipt ecosystem.
+Codex remains the first reference host, and the user Hook configuration remains
+unchanged. The next causal slice must come from the highest-priority current
+observed problem rather than a fourth continuity measurement. The nine
+user-reported experience failures are real product problems and replanning
+inputs; they do not self-promote into accepted receipts. Do not generalize the
+retired task validator into a wire protocol, adapter stack, audit schema, or
+receipt ecosystem.
 
 ## Outcome-entry boundary
 
@@ -110,9 +109,9 @@ adaptive sources, not portable-core authority.
 Installed or visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer
 projections cannot create work or promote evidence.
 
-## Outcome boundary while active
+## Current authority boundary
 
-The active task grants no authority to mutate CC Switch or another consumer,
+The current task grants no authority to mutate CC Switch or another consumer,
 install or enable capabilities, connect accounts, execute a third-party
 candidate, activate a Hook, incur cost, publish, release, deploy, run a second
 host, or open a new trust or data boundary.

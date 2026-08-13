@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-single-thread-continuity",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -61,64 +61,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.codex-single-thread-continuity",
-      "state": "active",
-      "correctionClass": "codex-same-task-context-continuity-loss",
-      "observedProblem": "The user's real v0.2 closeout work has reached a seventh mainline task because long-running Codex context and handoff burden has repeatedly returned to the user, while the current natural demand is to keep using one task without learning or operating Codex continuity mechanisms.",
-      "hypothesis": "Codex 0.147.0 native compaction, combined with fail-closed reconciliation against the durable goal, current product authority, Git state, pending human gates, and cleanup boundary, can preserve same-task progress without a Hook, new thread, or user-managed recovery; Harness needs only task-specific continuity semantics and evidence unless a reproducible residual gap remains.",
-      "falsifier": "A post-registration compaction causes objective, settled-decision, authority, active-increment, Git-state, pending-gate, or cleanup-boundary loss; the user must restore context or select, set up, invoke, recover, verify, clean, or push a capability route; a material collaboration-loss event occurs; a declared floor fails; or the native route leaves a reproducible gap that invalidates the no-Hook hypothesis.",
-      "stopCondition": "After at least one natural post-registration context compaction in this same task, stop when the Agent has reconciled all declared continuity state before further mutation, completed and verified the bounded v0.2 slice, released any task exposure, removed residue, recorded exact route and host evidence, and received the named human's accountable outcome and claim-boundary decision; stop earlier on any falsifier and retain the honest failed or stopped receipt.",
-      "acceptanceIds": [
-        "O1",
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.codex-single-thread-continuity",
-          "state": "active",
-          "acceptanceIds": [
-            "O1",
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "capability-static-review"
-          ],
-          "deliverables": [
-            "one accepted same-task Codex continuity outcome bound to the pre-registered O1 floors and claim limit"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
