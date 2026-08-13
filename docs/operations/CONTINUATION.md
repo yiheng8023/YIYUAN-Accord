@@ -15,19 +15,30 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active`, with one bounded Chinese
+README first-screen delivery increment. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2.readme-zh-first-screen-native-delivery`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is ready
+## Why the program is active
+
+Two external-candidate routes for the user's already-authorized Chinese README
+first-screen result stopped without producing usable copy. The current Agent
+already has the repository facts, writing capability, and bounded edit authority,
+so the remaining causal route is one direct first-screen rewrite in the current
+checkout. It adds no model call, capability, topology, or user tool-learning
+burden. The prior collaboration loss remains attached to the same logical demand,
+so this delivery cannot promote O1-O5; it will leave the graph after canonical
+checks, push, cleanup, and the named human's judgment.
+
+## Latest ready-state basis
 
 The user's reported code and conversation topology burden exposed an acceptance
 false positive. Capability orchestration and context recovery were already

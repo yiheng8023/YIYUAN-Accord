@@ -20,7 +20,8 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment, and O1-O5 are still false.
+v0.2 has one bounded Chinese first-screen delivery increment active, and O1-O5
+are still false.
 The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
