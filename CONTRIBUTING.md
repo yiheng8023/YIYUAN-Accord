@@ -29,8 +29,9 @@ A proposal is not automatically current work. Do not add a speculative queue to
 one active work item when the work becomes current.
 
 Do not prebuild an outcome validator before its real task and evidence sources
-are bound. Add only the smallest task- and criterion-scoped code path needed to
-falsify that event's claim; a self-reported receipt shape is not outcome proof.
+are bound. Add only the smallest code path scoped to that exact causal
+increment and criterion needed to falsify the event's claim; a self-reported
+receipt shape is not outcome proof.
 
 ## Capability and external-layer changes
 

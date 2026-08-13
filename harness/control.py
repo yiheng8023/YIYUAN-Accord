@@ -140,7 +140,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "c408731bc59d61f6b8dca54f9c1aa36785849ebf72216497a191a43d63d4a117"
+    "08ac21f16a3c0c520d636bd36de58e1f417d7aef698b7731e9aaab067dbf4a79"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -435,17 +435,24 @@ EXPECTED_HISTORICAL_MILESTONE = {
 
 
 EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
-EvidenceValidatorSpec = tuple[frozenset[str], EvidenceValidator]
+EvidenceValidatorSpec = tuple[
+    frozenset[str],
+    frozenset[str],
+    EvidenceValidator,
+]
 
 
-SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
+SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
+    {}
+)
 
 
-def _supported_evidence_criteria() -> frozenset[str]:
-    return frozenset(
-        criterion_id
-        for criterion_ids, _validator in SUPPORTED_EVIDENCE_VALIDATORS.values()
-        for criterion_id in criterion_ids
+def _has_scoped_evidence_validator(increment_id: str, criterion_id: str) -> bool:
+    return any(
+        criterion_id in criterion_ids and increment_id in increment_ids
+        for criterion_ids, increment_ids, _validator in (
+            SUPPORTED_EVIDENCE_VALIDATORS.values()
+        )
     )
 
 
@@ -1120,13 +1127,16 @@ def _program_graph(
         if mapped is None or not set(mapped) <= set(criteria):
             _error(errors, f"increment {increment_id} has invalid acceptanceIds")
         elif increment_state == "active" and (
-            unsupported_outcomes := (
-                (set(mapped) & OUTCOME_IDS) - _supported_evidence_criteria()
-            )
+            unsupported_outcomes := {
+                criterion_id
+                for criterion_id in set(mapped) & OUTCOME_IDS
+                if not _has_scoped_evidence_validator(increment_id, criterion_id)
+            }
         ):
             _error(
                 errors,
-                "active outcome-bearing increment requires code-owned evidence validators "
+                "active outcome-bearing increment requires task-bound code-owned "
+                "evidence validators "
                 f"for {', '.join(sorted(unsupported_outcomes))}: {increment_id}",
             )
         work_items = _objects(increment.get("workItems"), f"increment {increment_id} workItems", errors)
@@ -1510,11 +1520,19 @@ def _evidence_states(
                 _error(errors, f"criterion {criterion_id} has no code-owned evidence validator: {validator_kind}")
                 valid = False
                 continue
-            supported_criteria, evidence_validator = validator_spec
+            supported_criteria, supported_increments, evidence_validator = validator_spec
             if criterion_id not in supported_criteria:
                 _error(
                     errors,
                     f"criterion {criterion_id} is not supported by evidence validator: {validator_kind}",
+                )
+                valid = False
+                continue
+            if increment_id not in supported_increments:
+                _error(
+                    errors,
+                    f"criterion {criterion_id} evidence validator is not bound to "
+                    f"increment {increment_id}: {validator_kind}",
                 )
                 valid = False
                 continue

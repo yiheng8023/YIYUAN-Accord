@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v02-task-bound-validator-scope",
+  "status": "paused",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "pausedScope": "no-active-outcome-bearing-increment",
     "agentOwnedWithoutInventedUserTask": [
@@ -60,56 +60,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v02-task-bound-validator-scope",
-      "state": "active",
-      "correctionClass": "outcome-validator-scope",
-      "observedProblem": "G4 currently admits an outcome-bearing increment when any registered validator supports its criterion, even when that validator is not bound to the current causal increment.",
-      "hypothesis": "Binding every outcome validator registration to exact criterion and causal-increment identities will reject generic or mismatched validation paths while preserving a validator registered for the bound task increment.",
-      "falsifier": "A generic or differently bound validator can still open or verify an outcome increment, or an exactly matched validator cannot pass the generic admission seam.",
-      "stopCondition": "Focused and canonical product checks prove mismatched-scope rejection and matched-scope admission, documentation matches the machine contract, and the completed outcome-neutral increment leaves the current graph.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v02-task-bound-validator-scope",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "exact increment-scoped outcome-validator admission"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

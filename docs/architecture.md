@@ -73,8 +73,9 @@ install capabilities, route work, or operate a host adapter.
 
 O1-O5 are deliberately planned and false. A repository-authored JSON file
 cannot promote them: every verified outcome requires a code-owned validator
-scoped to both the criterion and the bound task evidence. The current release
-deliberately ships no O1-O5 outcome validator. Before a task exists, a generic
+scoped to the criterion and exact causal increment for the bound task
+evidence. The current release deliberately ships no O1-O5 outcome validator.
+Before a task exists, a generic
 self-report schema could validate only its own structure, not naturalness,
 source truth, behavior, or value; G4 blocks opening an outcome-bearing
 increment until the smallest required validation path is added.

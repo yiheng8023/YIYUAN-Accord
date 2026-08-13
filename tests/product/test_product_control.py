@@ -107,10 +107,26 @@ class ProductControlTests(unittest.TestCase):
         }
 
     @staticmethod
-    def validator_registry(validator) -> dict:
+    def validator_registry(
+        validator,
+        *,
+        criterion_ids: frozenset[str] | None = None,
+        increment_ids: frozenset[str] | None = None,
+    ) -> dict:
+        supported_criteria = (
+            criterion_ids
+            if criterion_ids is not None
+            else frozenset({"O1", "O2", "O3", "O4", "O5"})
+        )
+        supported_increments = (
+            increment_ids
+            if increment_ids is not None
+            else frozenset({FIXTURE_INCREMENT_ID})
+        )
         return {
             "test-validator": (
-                frozenset({"O1", "O2", "O3", "O4", "O5"}),
+                supported_criteria,
+                supported_increments,
                 validator,
             )
         }
@@ -688,10 +704,43 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "active outcome-bearing increment requires code-owned evidence validators "
+            "active outcome-bearing increment requires task-bound code-owned evidence validators "
             f"for O2: {FIXTURE_INCREMENT_ID}",
             report["errors"],
         )
+
+    def test_outcome_increment_requires_exact_increment_scoped_validator(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+
+        self.mutate("product/program.json", activate_o1)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(
+                validator,
+                increment_ids=frozenset({"increment.other-task"}),
+            ),
+        ):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "active outcome-bearing increment requires task-bound code-owned evidence validators "
+            f"for O1: {FIXTURE_INCREMENT_ID}",
+            report["errors"],
+        )
+
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertTrue(report["criterionStates"]["G4"])
+        self.assertFalse(report["criterionStates"]["O1"])
 
     def test_paused_release_has_no_prebuilt_outcome_validation_path(self) -> None:
         def activate_o1(value: dict) -> None:
@@ -705,7 +754,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["O1"])
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "active outcome-bearing increment requires code-owned evidence validators "
+            "active outcome-bearing increment requires task-bound code-owned evidence validators "
             f"for O1: {FIXTURE_INCREMENT_ID}",
             report["errors"],
         )
@@ -1473,6 +1522,34 @@ class ProductControlTests(unittest.TestCase):
                     ROOT / "product/acceptance.json",
                     self.root / "product/acceptance.json",
                 )
+
+    def test_evidence_validator_must_bind_the_evidence_increment(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        evidence = self.evidence_document(criterion_ids=["O1"])
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(
+                validator,
+                increment_ids=frozenset({"increment.other-task"}),
+            ),
+        ):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertFalse(report["criterionStates"]["G2"])
+        self.assertIn(
+            "criterion O1 evidence validator is not bound to "
+            f"increment {FIXTURE_INCREMENT_ID}: test-validator",
+            report["errors"],
+        )
 
     def test_evidence_cannot_carry_unbound_criterion_claims(self) -> None:
         self.map_outcome_to_latest_work("O1")

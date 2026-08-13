@@ -32,8 +32,9 @@ repairing this document first.
 O1-O5 require natural, non-diagnostic real-task evidence. The repository does
 not invent such a task or ask the user to manufacture one merely to keep the
 program active. The current release deliberately has no O1-O5 outcome
-validator. A task-bound, criterion-scoped validator is added only after the
-task and its evidence sources are known, and before measured execution. G4
+validator. A task-bound validator scoped to the criterion and exact causal
+increment is added only after the task and its evidence sources are known, and
+before measured execution. G4
 therefore blocks every outcome-bearing increment in the paused tree.
 
 The pause does not block bounded retrospective counterexample analysis,
@@ -69,8 +70,8 @@ outcome validator in anticipation of evidence.
 ## Outcome-entry boundary
 
 When a natural task is actually bound, pre-register the measurement contract
-and add only the criterion-scoped code-owned validation path required for the
-mapped outcome. Open exactly one causal increment with at most one active work
+and add only the validation path scoped to the mapped criterion and exact
+causal increment. Open exactly one causal increment with at most one active work
 item before measured execution, and use the existing acceptance
 operationalization rather than creating a parallel workflow. O4 may establish
 only a bounded Codex reference-host calibration; O5 alone can establish the
