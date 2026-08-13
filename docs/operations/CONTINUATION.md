@@ -54,21 +54,24 @@ open minimum quality-conformance profile, and thin reference adapters that
 reuse those layers. This audit changes the route and acceptance boundary but
 proves none of O1-O5.
 
-The next outcome-bearing slice remains Codex-first and task-bound. At entry,
-freeze the task floors, source-bound baseline, material-intervention taxonomy,
-and exact reused substrate identities; then use healthy native Codex behavior
-as the smallest initial route. Add an external protocol, runtime, or capability
-only if the task exposes a reproducible residual gap. Do not prebuild a wire
-protocol, adapter stack, audit schema, or outcome validator in anticipation of
-that evidence.
+The next outcome-bearing slice remains Codex-first and task-bound. Once a
+natural task exists, but before its measured execution, freeze the task floors,
+source-bound baseline, material-intervention taxonomy, exact reused substrate
+identities, and the smallest criterion-scoped validation path needed for that
+event. Start with healthy native Codex behavior. Add an external layer or
+capability only if the task exposes a reproducible residual gap. Before a task
+is bound, do not prebuild a wire protocol, adapter stack, audit schema, or
+outcome validator in anticipation of evidence.
 
 ## Outcome-entry boundary
 
-When a natural task is actually bound, do not open an outcome increment until
-every mapped outcome has the necessary criterion-scoped code-owned validation
-path. Then open exactly one causal increment with at most one active work item
-and use the existing acceptance operationalization rather than creating a
-parallel workflow.
+When a natural task is actually bound, pre-register the measurement contract
+and add only the criterion-scoped code-owned validation path required for the
+mapped outcome. Open exactly one causal increment with at most one active work
+item before measured execution, and use the existing acceptance
+operationalization rather than creating a parallel workflow. O4 may establish
+only a bounded Codex reference-host calibration; O5 alone can establish the
+first bounded Agent-neutral portability claim through a distinct host.
 
 The user supplies the goal, domain facts, bounded authorization, corrections,
 and accountable final judgment. The Agent owns available-capability
@@ -78,10 +81,12 @@ verification, cleanup, and progress accounting. Do not transfer capability or
 product names, discovery channels, invocation syntax, setup, verification
 commands, cleanup commands, or push orchestration to the user.
 
-Compare only decision-relevant routes. A capability may be discovered or added
-only after a reproducible residual gap and its exact authority, trust, data,
-cost, side-effect, rollback, and acceptance boundaries are known. Catalogs and
-discovery channels are adaptive sources, not portable-core authority.
+Compare only decision-relevant routes. Before an external capability or
+product-layer substrate influences a decision, bind its exact source identity,
+version or commit, license or applicable terms, maturity, reuse boundary,
+authority, trust, data, cost, side-effect, rollback, and acceptance boundaries. Discovery or addition
+also requires a reproducible residual gap. Catalogs and discovery channels are
+adaptive sources, not portable-core authority.
 Installed or visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer
 projections cannot create work or promote evidence.
 

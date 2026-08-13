@@ -1,4 +1,4 @@
-"""Historical-event-neutral product-control verification for the Harness.
+"""Historical-event-neutral product-contract verification for the Harness.
 
 The verifier owns current authority shape, causal-program invariants, evidence
 admission, human authority, and bounded process loss. Historical release event
@@ -45,7 +45,7 @@ EXPECTED_PROGRAM_PURPOSE = (
     "through goal-level natural-task dogfooding, dynamic capability discovery and "
     "lifecycle arbitration, an accepted methodology and open quality-conformance profile, "
     "and thin cross-host reference adapters that reuse sufficient external protocol, "
-    "runtime, and evidence layers."
+    "runtime, identity, audit, provenance, and evaluation layers."
 )
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
@@ -134,13 +134,13 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
         "O1": (1, "single-pre-registered-natural-task"),
         "O2": (3, "source-bound-baseline-by-pre-registered-scenario-class"),
         "O3": (3, "bounded-route-cohort-with-retain-option"),
-        "O4": (4, "same-version-scorecard-with-external-reference-cohort-and-pass-fail-cases"),
+        "O4": (4, "same-version-scorecard-with-source-bound-comparator-and-pass-fail-cases"),
         "O5": (1, "same-task-matched-cross-host-pair"),
     }
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "c0b455cb9c8d3986314a7cc5c4a869645bd0e716d52ceb3d5d44008943202225"
+    "78c8c197099e615f328205a4911d9ad7b6bd7329fad71e455fe4c107893ab268"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -151,6 +151,22 @@ BOOTSTRAP_REQUIRED_AUTHORITY = {
     "harness/control.py",
 }
 EXPECTED_AUTHORITY_GLOBS = {"harness/*.py"}
+EXPECTED_REQUIRED_SUPPORTING_DOCUMENTS = frozenset(
+    {
+        "README.md",
+        "README.zh-CN.md",
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "SECURITY.md",
+        "SUPPORT.md",
+        "SUPPORT.zh-CN.md",
+        "docs/architecture.md",
+        "docs/strategy/PRODUCT-NORTH-STAR.md",
+        "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+        "docs/operations/CONTINUATION.md",
+        "docs/operations/HISTORY.md",
+    }
+)
 EXCLUDED_AUTHORITY_PARTS = {
     ".git",
     ".tmp",
@@ -307,7 +323,8 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
         "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
-        "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; new implementation requires an evidenced residual semantic gap",
+        "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; bind each decision-relevant external substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; new implementation requires an evidenced residual semantic gap",
+        "reference-host calibration cannot establish Agent-neutral portability; a distinct-host O5 proof is required",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",
@@ -456,9 +473,40 @@ def _validate_o1_natural_task_receipt(
         return isinstance(value, dict) and set(value) == fields
 
     def source_reference(value: Any) -> bool:
-        return exact_object(value, {"locator", "identity"}) and all(
-            _nonempty_text(value.get(field)) for field in ("locator", "identity")
+        return (
+            exact_object(value, {"locator", "identity"})
+            and all(
+                _nonempty_text(value.get(field))
+                for field in ("locator", "identity")
+            )
+            and value["identity"].strip().casefold()
+            not in {
+                "current",
+                "head",
+                "latest",
+                "main",
+                "master",
+                "n/a",
+                "none",
+                "tbd",
+                "unknown",
+                "unspecified",
+            }
         )
+
+    def specific_metadata(value: Any) -> bool:
+        return _nonempty_text(value) and value.strip().casefold() not in {
+            "current",
+            "head",
+            "latest",
+            "main",
+            "master",
+            "n/a",
+            "none",
+            "tbd",
+            "unknown",
+            "unspecified",
+        }
 
     receipt = document.get("receipt")
     if criterion_id != "O1":
@@ -555,6 +603,7 @@ def _validate_o1_natural_task_receipt(
         "materialUserCapabilityOrchestrationInterventions",
         "repeatedAlreadyBoundRequests",
         "capabilityLifecycleEvents",
+        "selectedRouteSubstrates",
         "taskFloorResults",
         "residueAndClaimLimits",
     }
@@ -562,6 +611,39 @@ def _validate_o1_natural_task_receipt(
         return reject("O1 receipt measure fields are invalid")
     if measures.get("humanOutcomeDecision") != "accepted":
         return reject("O1 human outcome decision must be accepted")
+
+    route_substrates = measures.get("selectedRouteSubstrates")
+    selected_route_count = 0
+    if not isinstance(route_substrates, list) or not route_substrates:
+        return reject("O1 selected route substrates are invalid")
+    for substrate in route_substrates:
+        expected_substrate_fields = {
+            "role",
+            "source",
+            "versionOrCommit",
+            "licenseOrTerms",
+            "maturity",
+            "reuseBoundary",
+        }
+        if (
+            not exact_object(substrate, expected_substrate_fields)
+            or substrate.get("role") not in {"selected-route", "supporting-layer"}
+            or not source_reference(substrate.get("source"))
+            or not all(
+                specific_metadata(substrate.get(field))
+                for field in (
+                    "versionOrCommit",
+                    "licenseOrTerms",
+                    "maturity",
+                    "reuseBoundary",
+                )
+            )
+        ):
+            return reject("O1 selected route substrates are invalid")
+        if substrate["role"] == "selected-route":
+            selected_route_count += 1
+    if selected_route_count != 1:
+        return reject("O1 receipt must identify exactly one selected route")
 
     for field, label in (
         (
@@ -1034,6 +1116,8 @@ def _supporting_documents_exist(
     if documents is None:
         _error(errors, "supportingDocuments must be a non-empty unique string list")
         return False
+    if not EXPECTED_REQUIRED_SUPPORTING_DOCUMENTS <= set(documents):
+        _error(errors, "supportingDocuments must include the code-owned semantic document set")
     for raw in documents:
         relative = _relative_locator(raw)
         if relative is None:

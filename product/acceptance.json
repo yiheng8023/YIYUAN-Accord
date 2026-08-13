@@ -13,7 +13,7 @@
       "name": "one goal-level natural-task autonomous closed loop",
       "statement": "On one pre-registered natural real task entered as goal-level demand without a user-specified capability route, the Agent observes available capability, assesses gaps, discovers only if needed, selects and dispatches the smallest sufficient task-scoped route, executes, recovers, verifies, releases exposure, and cleans up while the user supplies domain facts, bounded authority, corrections, and accountable final judgment.",
       "metric": "accepted demand-to-capability lifecycle receipt under the provisional evaluation protocol",
-      "threshold": "one non-diagnostic real task begins without a user-specified capability, product, discovery channel, or invocation syntax; has zero material user capability-route-selection, setup, invocation, recovery, verification-command, cleanup, or push interventions; records source-bound available-capability observation, gap assessment, optional discovery, route selection, task-scoped dispatch, execution, recovery, verification, route release, and cleanup; has zero repeated already-bound fact or authority requests; and passes named-human acceptance plus task-specific quality, safety, evidence, and residue floors",
+      "threshold": "one non-diagnostic real task begins without a user-specified capability, product, discovery channel, or invocation syntax; has zero material user capability-route-selection, setup, invocation, recovery, verification-command, cleanup, or push interventions; records source-bound available-capability observation, gap assessment, optional discovery, route selection, task-scoped dispatch, execution, recovery, verification, route release, and cleanup; binds the selected route and every decision-relevant substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; has zero repeated already-bound fact or authority requests; and passes named-human acceptance plus task-specific quality, safety, evidence, and residue floors",
       "operationalization": {
         "sampleUnit": "one pre-registered natural-task receipt",
         "minimumSampleCount": 1,
@@ -33,14 +33,16 @@
           "materialUserCapabilityOrchestrationInterventions",
           "repeatedAlreadyBoundRequests",
           "capabilityLifecycleEvents",
+          "selectedRouteSubstrates",
           "taskFloorResults",
           "residueAndClaimLimits"
         ],
-        "passRule": "The task enters at the goal level with no user-specified capability route; the source-bound lifecycle records every required stage in order; the receipt is accepted by the named human; every declared task floor passes; material user capability-orchestration interventions and repeated already-bound requests are both zero; and no undeclared task residue remains.",
+        "passRule": "The task enters at the goal level with no user-specified capability route; the source-bound lifecycle records every required stage in order; the selected route and every decision-relevant substrate bind exact source, version or commit, license or applicable terms, maturity, and reuse boundary; the receipt is accepted by the named human; every declared task floor passes; material user capability-orchestration interventions and repeated already-bound requests are both zero; and no undeclared task residue remains.",
         "falsifiers": [
           "the task exists primarily to exercise or diagnose the Harness",
           "the user must name or select a capability, product, discovery channel, invocation syntax, setup, recovery, verification command, cleanup command, or push route",
           "capability discovery or task-scoped exposure is treated as required when observation shows no gap",
+          "the selected route or a decision-relevant substrate lacks exact source, version or commit, license or applicable terms, maturity, or reuse boundary",
           "any declared task floor fails or the named human does not accept the outcome and claim boundary"
         ],
         "humanAuthority": "The named accountable human owns the task outcome decision and claim boundary, not the capability route."
@@ -53,7 +55,7 @@
       "name": "repeated goal-level capability-orchestration burden transfer",
       "statement": "Across repeated natural real tasks entered at the goal level, the user supplies goals, domain facts, bounded authority, corrections, and final judgment while the Agent observes capability, detects gaps, discovers only when needed, selects and dispatches routes, executes, recovers, verifies, releases exposure, and cleans up.",
       "metric": "material user capability-orchestration interventions per accepted outcome compared with a source-bound ad-hoc baseline",
-      "threshold": "before execution, each task declares its goal-level demand entry, scenario class, complexity band, authority-risk band, event taxonomy, matched or historical baseline rule, task-quality floor, evidence floor, cleanup floor, and named human acceptor; at least three accepted tasks from three materially different scenario classes each have zero material user capability-orchestration interventions, zero user-specified capability routes required by the Agent, and zero repeated already-bound fact or authority requests; total material interventions per accepted outcome are strictly lower than the source-bound ad-hoc baseline and no task regresses below a declared floor",
+      "threshold": "before execution, each task declares its goal-level demand entry, scenario class, complexity band, authority-risk band, event taxonomy, matched or historical baseline rule, task-quality floor, evidence floor, cleanup floor, selected-route substrate metadata rule, and named human acceptor; each selected route and decision-relevant substrate binds exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; at least three accepted tasks from three materially different scenario classes each have zero material user capability-orchestration interventions, zero user-specified capability routes required by the Agent, and zero repeated already-bound fact or authority requests; total material interventions per accepted outcome are strictly lower than the source-bound ad-hoc baseline and no task regresses below a declared floor",
       "operationalization": {
         "sampleUnit": "one accepted pre-registered natural-task receipt with a source-bound baseline",
         "minimumSampleCount": 3,
@@ -64,6 +66,7 @@
           "scenarioClass",
           "complexityAndAuthorityRiskBands",
           "matchedOrHistoricalBaselineIdentityAndRule",
+          "selectedRouteSubstrateMetadataRule",
           "namedHumanAcceptor",
           "qualitySafetyEvidenceAndResidueFloors",
           "materialInterventionTaxonomy"
@@ -74,14 +77,16 @@
           "baselineMaterialInterventions",
           "repeatedAlreadyBoundRequests",
           "capabilityLifecycleEvents",
+          "selectedRouteSubstrates",
           "taskFloorResults",
           "residueAndClaimLimits"
         ],
-        "passRule": "At least three accepted receipts represent three pre-registered materially different scenario classes entered without an Agent-required user capability route; each has zero material user capability-orchestration interventions and zero repeated already-bound requests; aggregate interventions per accepted outcome are strictly below the source-bound baseline without regressing any declared floor.",
+        "passRule": "At least three accepted receipts represent three pre-registered materially different scenario classes entered without an Agent-required user capability route; every receipt binds its selected route and decision-relevant substrates to exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; each has zero material user capability-orchestration interventions and zero repeated already-bound requests; aggregate interventions per accepted outcome are strictly below the source-bound baseline without regressing any declared floor.",
         "falsifiers": [
           "scenario class or baseline matching is selected after observing the result",
           "fewer than three materially different scenario classes are accepted",
           "the baseline is not source-bound or comparable under the pre-registered rule",
+          "a selected route or decision-relevant substrate lacks exact source identity, version or commit, license or applicable terms, maturity, or reuse boundary",
           "the Agent transfers capability discovery, selection, invocation, or cleanup back to the user",
           "any task regresses a declared floor"
         ],
@@ -95,7 +100,7 @@
       "name": "demand-driven capability discovery and lifecycle arbitration",
       "statement": "A broad and changing capability ecosystem can remain outside the user's cognitive path and the portable core's standing context while the Agent observes available routes, detects a task-bound gap, discovers through source-bounded adaptive channels only when needed, and dispatches and releases the smallest sufficient route by real marginal value rather than capability count.",
       "metric": "real-task capability observations, gap decisions, discovery receipts, route and exposure deltas, task-scoped lifecycle receipts, and retain-replace-retire outcomes",
-      "threshold": "at least three natural-task route decisions across at least two route classes start with source-bound available-capability observation and residual-gap assessment without requiring portfolio-wide inventory or user route selection; at least one no-gap case retains the current route with no discovery or addition; at least one reproducible-gap case performs finite source-bounded discovery through a channel not enumerated as portable-core authority and compares only decision-relevant candidates; each decision records an as-of external landscape and build-reuse-compose-author boundary, reuses or adapts a sufficient native, official, or maintained external implementation, and permits composition or authoring only for an evidenced residual semantic gap; every selected route is task-scoped and released when the need ends unless separate net-value evidence and authority justify continued activation; every admitted candidate and existing provisional self-authored or Hook projection receives inactive-retention, persistent-activation, merge, replacement, retirement, off, or expiry disposition",
+      "threshold": "at least three natural-task route decisions across at least two route classes start with source-bound available-capability observation and residual-gap assessment without requiring portfolio-wide inventory or user route selection; at least one no-gap case retains the current route with no discovery or addition; at least one reproducible-gap case performs finite source-bounded discovery through a channel not enumerated as portable-core authority and compares only decision-relevant candidates; every external capability or product-layer substrate considered is bound to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; each decision reuses or adapts a sufficient native, official, or maintained external implementation and permits composition or authoring only for an evidenced residual semantic gap; every selected route is task-scoped and released when the need ends unless separate net-value evidence and authority justify continued activation; every admitted candidate and existing provisional self-authored or Hook projection receives inactive-retention, persistent-activation, merge, replacement, retirement, off, or expiry disposition",
       "operationalization": {
         "sampleUnit": "one evidence-backed route decision tied to an accepted natural-task context",
         "minimumSampleCount": 3,
@@ -107,7 +112,7 @@
           "decisionRelevantCandidateCohort",
           "residualGapTest",
           "discoverySourceBoundaryAndStopRule",
-          "externalLandscapeAsOfAndBuildReuseComposeAuthorBoundary",
+          "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary",
           "taskScopedDispatchReleaseAndCleanupBoundary",
           "candidateRetentionOrExpiryRule"
         ],
@@ -115,20 +120,21 @@
           "availableCapabilityAndGapResult",
           "discoveryQueriesAndCandidates",
           "routeAlternativesCompared",
-          "buildReuseComposeAuthorDecisionAndResidualSemanticGap",
+          "externalSubstrateReuseDecisionAndResidualSemanticGap",
           "taskExposureDelta",
           "marginalOutcomeProcessAndCostDelta",
           "residualGapResult",
           "postTaskExposureAndCandidateLifecycleDisposition",
           "provisionalProjectionDisposition"
         ],
-        "passRule": "At least three route decisions across at least two route classes start from source-bound observation; include both a no-gap retain/no-discovery result and a reproducible-gap bounded-discovery result; keep discovery channels outside portable-core authority; compare only decision-relevant candidates against a source-bound as-of external landscape; reuse or adapt a sufficient existing layer before composition and author only for an evidenced residual semantic gap; end task-scoped exposure by default; and give every admitted candidate and provisional projection a bounded disposition without requiring user route selection or portfolio-wide inventory.",
+        "passRule": "At least three route decisions across at least two route classes start from source-bound observation; include both a no-gap retain/no-discovery result and a reproducible-gap bounded-discovery result; keep discovery channels outside portable-core authority; bind every considered external capability or product-layer substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; compare only decision-relevant candidates; reuse or adapt a sufficient existing layer before composition and author only for an evidenced residual semantic gap; end task-scoped exposure by default; and give every admitted candidate and provisional projection a bounded disposition without requiring user route selection or portfolio-wide inventory.",
         "falsifiers": [
           "capability count, installation, or exposure is treated as marginal value",
           "the user must know or select a capability, product, discovery channel, or invocation syntax because the Agent cannot route the task",
           "the portable core requires a fixed capability catalog or discovery provider",
           "a capability is added without a reproducible residual gap",
-          "the Harness authors a protocol, registry, gateway, search surface, runtime, governance kernel, or evaluation mechanism already sufficient for the bound need without evidence of a residual semantic gap",
+          "the Harness authors a collaboration protocol, human-allocation schema, registry, gateway, search surface, runtime, identity or authorization layer, audit or provenance format, governance kernel, or evaluation mechanism already sufficient for the bound need without evidence of a residual semantic gap",
+          "an external candidate or substrate influences the decision without an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary",
           "a task-scoped candidate remains exposed after the bound need ends without separate net-value evidence and activation authority",
           "portfolio-wide inventory is required for a task-bound decision"
         ],
@@ -139,56 +145,51 @@
     {
       "id": "O4",
       "class": "outcome",
-      "name": "Agent-neutral demand-to-capability collaboration methodology and quality profile",
-      "statement": "The product owns only an Agent-neutral demand-to-capability collaboration methodology, evaluation specification, and open minimum quality-conformance profile grounded in repeated real behavior; it reuses sufficient collaboration protocols, human-allocation research, runtimes, identity and authorization, audit and provenance formats, and evaluators rather than redefining them, software engineering is the first calibrated reference profile rather than the product boundary, and no host projection or capability inventory can define the profile.",
-      "metric": "accepted versioned methodology, open minimum quality-conformance profile, software-engineering reference profile, fixed external-substrate and reference cohort, comparative route-delta and outcome scorecards, applicability limits, and human review",
-      "threshold": "the methodology and quality-conformance profile define testable requirements for goal-level demand, human and Agent authority, available-capability observation, gap assessment, bounded discovery, route choice, authorization, task-scoped dispatch, execution, recovery, verification, release, cleanup, evidence, acceptance, user burden, and honest unsupported states without defining a new collaboration wire protocol, runtime, identity system, audit log, or generic human-tool schema; each evaluation version pre-registers fixed source identities, versions or commits, licenses, maturity, reuse boundaries, the decision-relevant external reference cohort, a distinct-value hypothesis, a falsifier, and mandatory floors for outcome quality, user burden, reliability and recovery, authority and safety, evidence integrity, context and resource efficiency, portability, and interface and adoption simplicity; world-class is a time-bound comparative target rather than a self-label; the 14 lifecycle slices, 12 evaluation dimensions, and 13 Harness scenarios remain sampling and risk coordinates rather than coverage claims; repeated real behavior measures result quality, communication fit, conversation-versus-deliverable intent errors, first-response decision completeness, user capability-learning and configuration burden, user interventions, unnecessary design, process and artifact load, route errors, recovery, time and call cost, system-resource lifecycle, durable residue, human judgment, context-pressure and handoff transparency, continuity, repeated already-bound requests, reopened settled decisions, unrequested artifacts, and capability-added goal, input, deliverable, human-round-trip, authority, side-effect, or acceptance requirements; process completion cannot substitute for the bound outcome, no aggregate score can hide a failed floor, and the accepted claim must demonstrate a source-bound comparative advantage in user capability-orchestration burden or cross-layer lifecycle coherence after sufficient external layers are reused; a named accountable human accepts or rejects the methodology, profile, software-engineering reference profile, external comparison, and claim boundary before host-specific projections are promoted",
+      "name": "demand-to-capability collaboration methodology and quality profile",
+      "statement": "The product owns only a demand-to-capability collaboration methodology, evaluation specification, and open minimum quality-conformance profile grounded in repeated real behavior. O4 calibrates that profile on the Codex reference host and software-engineering profile while reusing sufficient external layers; it does not prove Agent-neutral portability, which remains O5's separate burden.",
+      "metric": "one accepted versioned methodology and quality profile applied to mixed pass-and-fail real-task receipts, with separately fixed external-substrate reuse and outcome-comparator cohorts, mandatory floors, applicability limits, and accountable human review",
+      "threshold": "the same pre-registered methodology, quality profile, scorecard, and missing-data rules evaluate at least three O2-eligible accepted natural-task receipts from three materially different scenario classes and at least one rejected or stopped receipt; external protocol, human-allocation, runtime, identity and authorization, audit and provenance, and evaluation layers are bound to exact source identities, versions or commits, licenses or applicable terms, maturity, and reuse boundaries; a separate source-bound comparator cohort identifies at least one alternative implementation or ad-hoc route capable of producing comparable task outcomes and fixes its source, version, license or applicable terms, maturity, eligibility and matching rules, comparison axes, baseline results, and decision rule before results are observed; accepted receipts pass mandatory floors for outcome quality, user orchestration burden, intent and communication fit, reliability and recovery, authority and safety, evidence and residue, resource and context cost, and interface simplicity; the rejected or stopped receipt remains honestly failed rather than being normalized into success; the pre-registered comparison demonstrates a bounded advantage in user capability-orchestration burden or cross-layer lifecycle coherence; the accepted claim is limited to the tested reference host, profile, scenario classes, sources, and date and cannot claim Agent-neutral or cross-host portability before O5; a named accountable human accepts or rejects the methodology, profile, comparison, applicability limits, and claim boundary",
       "operationalization": {
         "sampleUnit": "one outcome-and-process receipt evaluated by one versioned scorecard",
         "minimumSampleCount": 4,
-        "comparisonDesign": "same-version-scorecard-with-external-reference-cohort-and-pass-fail-cases",
+        "comparisonDesign": "same-version-scorecard-with-source-bound-comparator-and-pass-fail-cases",
         "preRegistrationFields": [
           "scorecardVersion",
           "methodologyAndQualityProfileVersion",
-          "referenceProfileIdentity",
-          "externalSubstrateVersionsLicensesMaturityAndReuseBoundaries",
-          "externalReferenceCohortAsOfAndSources",
+          "referenceHostProfileAndEligibleReceiptSet",
+          "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries",
+          "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules",
+          "comparatorBaselineResultsComparisonAxesAndDecisionRule",
           "distinctValueHypothesisAndFalsifier",
-          "comparativeAxesAndMandatoryFloors",
-          "evaluationDimensions",
-          "mandatoryOutcomeAuthoritySafetyEvidenceAndResidueFloors",
-          "scoringAndMissingDataRules",
-          "namedHumanReviewer",
-          "claimBoundary"
+          "mandatoryFloorsAndMissingDataRules",
+          "namedHumanReviewerAndClaimBoundary"
         ],
         "requiredMeasures": [
-          "resultQualityCommunicationFitAndFirstResponseDecisionCompleteness",
-          "conversationVersusDeliverableIntentErrors",
-          "userInterventionsRepeatedRequestsAndCapabilityLearningBurden",
-          "routeErrorsRecoveryTimeAndCallCost",
-          "systemResourceLifecycleDurableResidueAndContinuity",
-          "unnecessaryDesignProcessAndArtifactLoad",
-          "contextPressureAndHandoffTransparency",
-          "reopenedDecisionsAndUnrequestedArtifacts",
-          "capabilityAddedRequirements",
-          "demandToCapabilityLifecycleConformance",
-          "externalReferenceCohortDeltasAndBuildReuseResult",
-          "methodologyQualityProfileAndReferenceProfileApplicabilityLimits",
-          "humanDecisionAndDisagreement"
+          "outcomeQuality",
+          "userOrchestrationBurden",
+          "intentCommunicationAndDecisionCompleteness",
+          "routeReliabilityRecoveryTimeAndCallCost",
+          "authoritySafetyEvidenceAndResidue",
+          "resourceContinuityContextAndProcessCost",
+          "comparatorOutcomeAndProcessResults",
+          "externalComparisonAndReuseDecision",
+          "applicabilityLimitsAndHumanDecision"
         ],
-        "passRule": "One versioned methodology, open minimum quality-conformance profile, and software-engineering reference profile are applied through the same scorecard to at least three accepted receipts and at least one rejected or stopped receipt, against a pre-registered source-bound external reference cohort fixed as of the evaluation date; sufficient external protocol, allocation, runtime, identity, audit, provenance, and evaluation layers are identified by fixed source, license, maturity, and reuse boundary rather than duplicated; every accepted receipt passes all mandatory floors; no aggregate score overrides a failed floor; the evidence demonstrates a comparative advantage in user capability-orchestration burden or cross-layer lifecycle coherence; applicability and temporal limits are explicit; and a named accountable human accepts the methodology, quality profile, reference profile, external comparison, evaluation specification, and claim boundary.",
+        "passRule": "One versioned methodology and open minimum quality-conformance profile use the same pre-registered scorecard and missing-data rules on at least three O2-eligible accepted receipts from three materially different scenario classes and at least one rejected or stopped receipt; all external substrate is fixed by source, version or commit, license or applicable terms, maturity, and reuse boundary; a separate pre-registered comparator cohort contains at least one outcome-capable alternative or ad-hoc route with fixed source, identity, eligibility, matching, baseline, axes, and decision rule; every accepted receipt passes every mandatory floor and the failed receipt stays failed; the matched comparison shows a bounded advantage in user orchestration burden or cross-layer lifecycle coherence; applicability is limited to the tested host, profile, scenarios, sources, and date; and a named accountable human accepts the methodology, profile, comparison, applicability limits, and claim boundary without making an Agent-neutral portability claim before O5.",
         "falsifiers": [
           "process or artifact completion substitutes for the bound outcome",
           "a failed mandatory floor is hidden by an aggregate score",
-          "dimensions or scenarios are claimed covered because they are merely listed",
+          "fewer than three materially different O2-eligible accepted scenario classes or no rejected or stopped receipt is evaluated",
           "the scorecard, methodology, quality-conformance profile, or reference profile is changed after observing a receipt",
-          "the external reference cohort, comparative axes, floors, or distinct-value hypothesis is chosen after observing the result",
+          "the external substrate reuse cohort is treated as an outcome comparator without a separately eligible outcome-producing alternative or ad-hoc route",
+          "the comparator cohort, matching rule, baseline, comparative axes, decision rule, floors, or distinct-value hypothesis is chosen after observing the result",
           "a maintained external implementation satisfies the claimed distinct value without the Harness layer",
           "the Harness redefines a sufficient collaboration protocol, human-allocation pattern, runtime, identity or authorization system, audit or provenance format, or evaluator without an evidenced residual semantic gap",
           "world-class, best-in-class, universal, or permanent superiority is claimed without a source-bound time-limited comparison",
+          "Agent-neutral or cross-host portability is claimed before O5",
           "one host, fixed capability catalog, or software-engineering profile is presented as the universal product core"
         ],
-        "humanAuthority": "A named accountable human accepts or rejects the methodology, open minimum quality-conformance profile, reference profile, evaluation specification, receipt decisions, and claim boundary."
+        "humanAuthority": "A named accountable human accepts or rejects the methodology, open minimum quality-conformance profile, reference-host calibration, evaluation specification, receipt decisions, applicability limits, and claim boundary."
       },
       "assessment": "planned"
     },
@@ -198,7 +199,7 @@
       "name": "portable closed-loop delivery",
       "statement": "The same Agent-neutral goal-level demand, authority, capability observation, gap assessment, bounded discovery, route choice, task-scoped dispatch and release, evidence, recovery, verification, cleanup, and acceptance semantics deliver equivalent accepted outcomes through thin host adapters.",
       "metric": "cross-host real-task receipts and adapter deltas",
-      "threshold": "the same pre-registered goal-level natural task runs on the Codex reference host and a distinct second Agent host or runtime without requiring a user-specified capability route; both use the common demand-to-capability quality-profile semantics, bounded authority, explicit unsupported states, and zero task residue while reusing each host's healthy native or external protocol and runtime layers; discovery sources and host operations may differ only behind thin adapters; a second adapter on the same host is conformance evidence only and cannot pass O5; Codex-specific configuration is never treated as cross-Agent authority",
+      "threshold": "the same pre-registered goal-level natural task runs on the Codex reference host and a distinct second Agent host or runtime without requiring a user-specified capability route; exact host, runtime, model where material, and adapter identities and versions, license or applicable terms, maturity, reuse boundaries, execution dates, applicable task and profile, equivalence tolerance, and maximum portability claim are fixed before execution; both use the common demand-to-capability quality-profile semantics, bounded authority, explicit unsupported states, and zero task residue while reusing each host's healthy native or external protocol and runtime layers; discovery sources and host operations may differ only behind thin adapters; a second adapter on the same host is conformance evidence only and cannot pass O5; Codex-specific configuration is never treated as cross-Agent authority; the accepted claim is limited to the tested task, profile, host-runtime-adapter identities, versions, and dates",
       "operationalization": {
         "sampleUnit": "one matched cross-host receipt pair for the same pre-registered natural task",
         "minimumSampleCount": 1,
@@ -208,8 +209,10 @@
           "commonAuthorityBoundary",
           "commonDemandToCapabilityLifecycle",
           "commonQualitySafetyEvidenceAndResidueFloors",
-          "referenceAndDistinctHostIdentities",
+          "referenceAndDistinctHostRuntimeModelAndAdapterSubstrateSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries",
+          "executionDatesApplicableTaskAndProfile",
           "equivalenceTolerance",
+          "preRegisteredPortabilityClaimBoundary",
           "adapterAndUnsupportedStateBoundary"
         ],
         "requiredMeasures": [
@@ -217,16 +220,21 @@
           "outputAndQualityParity",
           "coreSemanticDelta",
           "capabilityLifecycleParity",
+          "selectedRouteSubstratesPerHost",
+          "hostRuntimeModelAdapterVersionsAndExecutionDates",
           "adapterSpecificDelta",
           "unsupportedStates",
-          "residueAndClaimLimits"
+          "residueAndClaimLimits",
+          "applicabilityLimitsAndHumanDecision"
         ],
-        "passRule": "One matched pair runs the same pre-registered goal-level task through Codex and a distinct Agent host or runtime without a user-specified capability route; both outcomes are accepted within the pre-declared equivalence tolerance; demand, authority, observation, gap assessment, discovery, route, dispatch, release, evidence, recovery, verification, cleanup, and acceptance semantics remain common; host and discovery-source differences are confined to adapter plumbing; no task residue remains.",
+        "passRule": "One matched pair runs the same pre-registered goal-level task through exact pre-registered Codex and distinct-host runtime, model where material, and adapter identities and versions with bound license or applicable terms, maturity, and reuse boundaries, without a user-specified capability route; both outcomes are accepted within the pre-declared equivalence tolerance; demand, authority, observation, gap assessment, discovery, route, dispatch, release, evidence, recovery, verification, cleanup, and acceptance semantics remain common; host and discovery-source differences are confined to adapter plumbing; no task residue remains; and the accepted portability claim stays within the pre-registered task, profile, host-runtime-adapter, version, and date boundary.",
         "falsifiers": [
           "the two hosts execute unrelated or non-equivalent tasks",
           "equivalence tolerance is selected after observing the outputs",
+          "host, runtime, model where material, adapter identity or version, license or applicable terms, maturity, reuse boundary, execution date, applicable task or profile, or claim boundary is absent or selected after observing the outputs",
           "core semantics fork by host rather than remaining behind thin adapters",
-          "the second receipt is another adapter on the same host"
+          "the second receipt is another adapter on the same host",
+          "one matched task is generalized beyond its pre-registered host, version, date, task, profile, or claim boundary"
         ],
         "humanAuthority": "A named accountable human accepts both host outcomes, their equivalence, and the portability claim boundary."
       },

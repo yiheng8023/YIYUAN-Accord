@@ -1,4 +1,4 @@
-"""Agent Autonomy Harness product-control kernel."""
+"""Agent Autonomy Harness product-contract verifier."""
 
 from .control import verify_product
 

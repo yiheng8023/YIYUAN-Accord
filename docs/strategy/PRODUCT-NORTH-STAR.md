@@ -62,7 +62,7 @@ a collaboration wire protocol, generic human-tool schema, runtime, identity
 system, audit log, or provenance format. Before building any protocol, registry,
 gateway, search surface, runtime, governance kernel, evidence format, or
 evaluation mechanism, compare current source-bound external implementations by
-fixed version or commit, licence, maturity, and actual boundary. Reuse or thinly
+fixed version or commit, licence or applicable terms, maturity, and actual boundary. Reuse or thinly
 adapt a sufficient layer, compose only for an integration gap, and author only
 for a repeatable residual semantic gap. Owning more stack is not independence;
 preserving the quality contract across replaceable layers is.
@@ -85,13 +85,14 @@ Current `v0.2` acceptance directly measures the missing product outcomes:
   natural tasks;
 - O3 — adaptive discovery and real marginal-value lifecycle decisions keep a
   broad and changing capability ecosystem outside the user's cognitive path;
-- O4 — an accepted Agent-neutral demand-to-capability collaboration methodology
-  and open minimum quality-conformance profile that reuses sufficient external
-  layers, with software engineering as the first calibrated reference profile
-  rather than the product boundary;
+- O4 — an accepted demand-to-capability collaboration methodology and open
+  minimum quality-conformance profile, calibrated on the Codex reference host
+  and software-engineering profile without claiming Agent-neutral portability;
 - O5 — the common closed loop works through the Codex reference adapter and a
   distinct second Agent host or runtime through its own thin adapter; a
   same-host second adapter is conformance evidence only and cannot pass O5.
+  Only this outcome can establish the first bounded Agent-neutral portability
+  claim.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as

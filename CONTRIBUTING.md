@@ -1,51 +1,70 @@
 # Contributing
 
-Contributions should improve a mapped Agent Autonomy Harness product outcome
-or mandatory guardrail. Research volume, candidate count, test count, and
-governance artifacts are not independent contribution goals.
+Agent Autonomy Harness is still a research-stage product contract, not a
+released runtime.
 
-Before proposing work, name:
+Contributions should make its claims clearer, its evidence stronger, or its
+verified implementation closer to O1-O5 without adding user burden or
+duplicating an existing external layer.
+
+## Small corrections
+
+Typos, broken links, clearer wording, and narrowly scoped test repairs do not
+need a full causal proposal. Explain what was wrong, make the smallest change,
+and run the relevant checks.
+
+## Product or behavior changes
+
+For a change that affects purpose, behavior, acceptance, authority, capability
+routing, external dependencies, or lifecycle state, describe:
 
 - the affected O1-O5 outcome or G1-G4 guardrail;
-- the observed problem and current evidence;
-- the causal hypothesis and falsifier;
+- the observed problem and evidence;
+- the proposed cause-and-effect hypothesis and what would falsify it;
 - the smallest deliverable and finite stop condition;
-- authority, data, cost, external dependency, rollback, cleanup, and claim
-  boundaries.
+- authority, data, cost, rollback, cleanup, and claim boundaries.
 
-A proposal is not a current program item. Put the fields above in the issue or
-change description; do not add a `planned` increment or work item to
-`product/program.json`. The current graph deliberately rejects speculative
-queues. Change that graph only after maintainers bind the work as current: use
-one `active` increment with exactly one `active` work item, or leave the paused
-empty graph unchanged for a bounded guardrail repair.
+A proposal is not automatically current work. Do not add a speculative queue to
+`product/program.json`. Maintainers bind at most one active causal increment and
+one active work item when the work becomes current.
 
-For any proposed capability route, list additions to the bound goal, input,
-deliverable, human round trip, authority, side effect, and acceptance surface.
-An addition without source-bound causal necessity is a route defect, not a
-contribution prerequisite.
+## Capability and external-layer changes
 
-Start capability proposals from goal-level demand and evidence about available
-healthy routes. State the residual gap before naming a candidate or discovery
-channel. A contribution must not require users to know or select a capability,
-product, provider, catalog, channel, or invocation syntax, and must not make
-one of those adaptive sources part of the portable product core.
+Start from the user's goal and the observed healthy, authorized route. Name an
+external candidate only after identifying a residual gap or when performing a
+bounded product-layer landscape review.
 
-External capabilities remain exact upstream and inactive until their own
-review and state-transition gates pass. Installation, enablement, account
-connection, dispatch, behavior, value, portability, acceptance, release, and
-publication are distinct states.
+Bind every decision-relevant external capability or product layer to its exact
+source, version or commit, license or applicable terms, maturity, and intended
+reuse boundary.
 
-Use Python 3.10 or newer. Run the canonical product checks from the repository
-root:
+Prefer reuse or a thin adapter when an existing layer is sufficient.
+Composition requires an integration gap; new implementation requires a
+repeatable residual semantic gap.
+
+Do not make users learn a provider, catalog, product, or invocation syntax
+merely to contribute to the Harness.
+
+Installation, enablement, account connection, live execution, persistent
+activation, publication, and release are separate operations and require their
+own authority. A reviewed candidate remains inactive by default.
+
+## Verify the change
+
+Use Python 3.10 or newer and run the canonical checks from the repository root:
 
 ```powershell
 python -B -m harness verify --root . --json
 python -B -m unittest discover -s tests/product -v
 ```
 
-Do not run archived scripts or treat legacy green tests as current acceptance.
+A green check proves only the current repository contract. Claims about Agent
+behavior, user value, portability, production, or release need their own
+evidence and acceptance.
+
 Do not submit credentials, private memory, account state, unsanitized consumer
 configuration, restricted source bodies, or claims broader than the supplied
-evidence. See [SECURITY.md](SECURITY.md), [NOTICE](NOTICE), and the
+evidence.
+
+See [SECURITY.md](SECURITY.md), [NOTICE](NOTICE), and the
 [license policy](docs/license-policy.md).

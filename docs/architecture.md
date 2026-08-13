@@ -10,7 +10,7 @@ one small reference seam, and replaceable host edges.
 user goal + domain facts + bounded authority
                     |
                     v
-      Agent-neutral collaboration quality profile
+        target portable quality profile
  observe capability -> assess gap -> discover if needed -> select route
  -> authorize -> task-scoped dispatch -> execute/observe/recover
  -> verify -> release/clean -> accept or continue
@@ -38,10 +38,12 @@ replanning. The accepted v0.1 verifier and event-specific validators remain
 reproducible at revision `be498f9`; carrying their one-off logic or raw receipts
 in every later current tree would turn evidence history into product debt.
 
-Supporting strategy, README, architecture, and continuation documents explain
-the current contract but do not override the three machine-authority files.
+The code-owned semantic supporting-document set explains the current contract,
+contribution, support, and security boundaries. Community and rights files are
+public review surfaces but do not block G3 merely by existing or changing.
+None of these documents can override the three machine-authority files.
 
-## 2. Portable Harness loop
+## 2. Target portable loop
 
 The product target is one conceptual transaction entered at the goal level:
 
@@ -62,19 +64,21 @@ audit log, generic human-tool schema, universal runtime, or host projection.
 Protocols, runtimes, evidence formats, catalogs, and discovery channels are
 replaceable external substrate.
 
-The current implemented reference slice is the v0.2 historical-event-neutral
-product-control kernel plus the capability-chain, current-asset integrity,
-outcome-operationalization, and causal-evidence controls. Their closed
-outcome-neutral increments are recoverable from Git rather than retained as a
-current queue. The program is paused with an empty current increment graph.
+The current implementation is a product-contract verifier. It validates the
+authority graph, criterion contracts, admitted evidence, human authority,
+process loss, and repository residue. It does not execute tasks, discover or
+install capabilities, route work, or operate a host adapter.
+
 O1-O5 are deliberately planned and false. A repository-authored JSON file
 cannot promote them: every verified outcome requires a code-owned validator
-scoped to that criterion. The current O1 validator checks the pre-registered
-goal-level demand and capability-lifecycle receipt contract only; it neither
-creates a natural task nor proves that a self-described task was natural.
-O2-O5 still have no validation path. The control kernel is not yet the task-
-execution runtime, accepted methodology, accepted quality profile, or cross-host
-proof.
+scoped to that criterion. The O1 validator checks receipt structure, but it
+cannot create a natural task or prove naturalness from self-description.
+O2-O5 have no validation path yet.
+
+The v0.2 program is paused with an empty current increment graph. Closed
+authority repairs remain available in Git history instead of becoming a
+permanent work queue. The current verifier is not an accepted methodology,
+quality profile, task runtime, reference adapter, or cross-host proof.
 The pause limits outcome-bearing experimentation, not bounded retrospective
 analysis, portfolio curation, mechanism validation, or authority-defect repair.
 
@@ -94,9 +98,9 @@ Implementation follows the same residual-gap rule across layers. Collaboration
 protocols, human-allocation patterns, registries, gateways, tool search,
 runtimes, identity and authorization, audit and provenance formats, governance
 kernels, and evaluation systems are first treated as external substrate. A
-source-bound as-of landscape check records exact version or commit, licence,
-maturity, and reuse boundary before deciding whether to reuse, thinly adapt,
-compose, or author. The reference adapters own only the missing portable quality
+source-bound as-of landscape check records exact version or commit, licence or
+applicable terms, maturity, and reuse boundary before deciding whether to
+reuse, thinly adapt, compose, or author. The reference adapters own only the missing portable quality
 semantics and integration needed to preserve the Harness contract; duplicating
 a sufficient external layer is a failed route decision, not product
 independence.
@@ -137,7 +141,7 @@ Adapters translate only unavoidable host facts:
 separately governed capability manager. Neither is Agent-neutral product
 authority. A second host must implement the same portable semantics through
 its own thin adapter; a Codex projection cannot prove cross-Agent behavior.
-Codex-first is the reference implementation sequence, not a core dependency.
+Codex-first is the reference-adapter sequence, not a core dependency.
 
 ## 5. Evidence and acceptance
 
@@ -150,9 +154,11 @@ Historical dimensions and scenarios are sampling and risk coordinates.
 Membership is not coverage, a fixture is not behavior, and a green test is not
 user value. Software engineering is the first calibration profile for the
 general human-Agent collaboration method and open minimum quality-conformance
-profile, not the product boundary. The profile may bind existing protocol or
-evidence artifacts by fixed identity, but it does not redefine their wire or
-record semantics.
+profile, not the product boundary. O4 can establish only a bounded reference-
+host calibration; O5 owns the separate cross-host portability claim.
+
+The profile may bind existing protocol or evidence artifacts by fixed identity,
+but it does not redefine their wire or record semantics.
 
 ## 6. Process-loss control
 

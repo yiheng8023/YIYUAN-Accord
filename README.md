@@ -2,182 +2,151 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Shortest path: [verify the checkout](#start-here) · [understand the loop](#what-the-harness-does) · [choose a deeper path](#progressive-paths)
+> Describe the outcome. Let the Agent work out which capabilities it needs.
 
-Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
-collaboration quality harness. It is being built to keep a real task's goal,
-capability route, authority boundary, lifecycle, continuity, evidence, and
-cleanup coherent without making the user orchestrate every Agent, Skill, MCP
-server, Plugin, Hook, thread, worktree, catalog, or manager.
+Agent Autonomy Harness is an open research project for reducing the amount of
+Agent and tool knowledge a person must carry into a task.
 
-It is not a large Skills list, fixed capability catalog, or universal runtime.
-External capabilities and discovery channels are replaceable inputs; the
-product contract requires the Harness to observe what is available, detect a
-real gap, discover only when needed, select and dispatch the smallest
-sufficient route, and release it when the need ends.
+The intended experience is simple: the user states a goal, supplies facts and
+judgment, and grants bounded authority. The Agent chooses a sufficient route,
+uses it safely, verifies the result, and cleans up afterward.
 
-The Harness also does not reimplement an adequate protocol, registry, gateway,
-tool-search surface, runtime, governance kernel, or evaluation mechanism merely
-to own the stack. Each implementation decision is checked against a
-source-bound external landscape: reuse or adapt first, compose for an actual
-integration gap, and author only for a repeatable residual semantic gap.
+**Research-stage status:** the repository currently contains the product
+contract, acceptance model, and deterministic verifier. It does not yet contain
+an Agent runtime, an installable reference adapter, or accepted cross-host
+proof.
 
-The durable target is a demand-to-capability collaboration methodology, an
-open minimum quality-conformance profile, and executable reference adapters.
-The profile states testable behavior and quality floors; it is not a new wire
-protocol, runtime, identity system, audit log, or generic tool schema. Codex is
-the first reference slice, not a dependency of the portable core.
+Outcome-bearing v0.2 experimentation is paused until a natural task can
+produce honest evidence. Bounded retrospective and authority-repair work may
+continue. The verifier is the current machine-readable state source.
 
-The current implementation verifies that contract and its causal program.
-Task execution, behavior evaluation, and cross-host adapters remain planned
-v0.2 outcomes rather than current runtime claims.
+## The problem
 
-Delivery is sequenced Codex-first: Codex is the reference host for the first
-vertical slice, while the product semantics remain Agent-neutral. Stabilizing
-that reference path does not satisfy cross-host O5; a distinct second Agent
-host or runtime remains separate proof.
+Agent platforms keep gaining native features, tools, Skills, Plugins, Apps,
+MCP servers, and other extensions. That growth is useful.
 
-## Start here
+Users are still often expected to know what exists, choose the right route,
+configure it, recover failures, verify completion, and remove residue.
 
-Prerequisites: Git and Python 3.10 or newer. The current checkout is
-standard-library-only; no package installation, account, or external service is
-needed for local verification.
+The Harness asks whether that burden can move upstream to the Agent without
+moving away the decisions that should remain human.
+
+## The target experience
+
+Imagine a user says:
+
+> Audit this repository and make it ready for a public release. Do not publish
+> anything until I approve it.
+
+The target behavior is that the Agent:
+
+1. understands the desired result and the publication boundary;
+2. checks whether its healthy, authorized native capabilities are sufficient;
+3. discovers or adds an external capability only if a real gap remains;
+4. asks the user only for missing facts, consequential judgment, or new
+   authority—not for tool names or invocation syntax;
+5. executes, recovers, verifies, releases task-scoped capability exposure, and
+   removes task-created residue;
+6. returns the result and its evidence for accountable human judgment.
+
+This is the product target, not a claim about current runtime behavior.
+
+## What belongs to the Harness
+
+| The Harness owns | The Harness reuses | The Harness does not become |
+| --- | --- | --- |
+| A demand-to-capability collaboration methodology | Healthy Agent-native behavior | A universal Agent runtime |
+| An open minimum quality-conformance profile | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
+| Measures for user burden, outcome quality, authority, evidence, recovery, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, and evaluation layers | A new wire protocol, identity system, or audit format without a proven residual gap |
+| Thin reference adapters that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
+
+Codex is the first reference host because it is a strong, practical test bed.
+Codex-specific configuration remains outside the portable product core. A
+distinct second host is required before any cross-host claim can pass.
+
+## What exists today
+
+The current repository provides:
+
+- a machine-readable [constitution](product/constitution.json) for purpose and
+  fixed boundaries;
+- a [program](product/program.json) for the current causal work state;
+- explicit [v0.2 acceptance criteria](product/acceptance.json);
+- a standard-library-only verifier that rejects invalid authority, evidence,
+  work graphs, and repository residue;
+- product tests for the public verification seam;
+- a fixed-source external-landscape review that narrows what the project may
+  build instead of duplicating existing layers.
+
+It does not provide task execution, capability installation, live routing, or
+an accepted quality profile today. Passing repository checks proves that the
+current contract is internally valid; it does not prove user value.
+
+## Verify the repository
+
+Prerequisites: Git and Python 3.10 or newer. No package installation, account,
+or external service is required.
 
 ```powershell
 git clone https://github.com/yiheng8023/agent-autonomy-harness.git
 cd agent-autonomy-harness
 python -B -m harness verify --root . --json
-```
-
-Current `main` is the paused v0.2 program. It reports `0/5` outcomes, `4/4`
-guardrails, no active causal increment, and completion `in-progress`. The
-current increment graph is empty; closed outcome-neutral repairs remain in Git
-history instead of accumulating as a current work queue. The
-guardrail-only authority reset was pushed at `a5a0834`; it counts as zero
-product progress. A later six-thread capability-chain and current-asset audit
-established the route-delta evaluation and clean-tree baseline without
-verifying O4 or any other outcome. The accepted v0.1 repository-control milestone remains
-pinned at `be498f9`; it is history, not proof that the terminal product
-proposition is complete. The pause applies to an outcome-bearing increment,
-not to retrospective counterexample analysis, bounded portfolio curation,
-mechanism-only validation, or authority-defect repair. Historical failures may
-trigger replanning without becoming acceptance authority. The next outcome
-increment opens only around a bound natural task; the user is not asked to
-invent one to keep the repository busy.
-
-For the full deterministic product suite:
-
-```powershell
 python -B -m unittest discover -s tests/product -v
 ```
 
-## What the Harness does
+The JSON report is the current state surface. See the
+[continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-For one goal-level bound task, the Harness keeps this loop explicit:
+## What v0.2 must prove
 
-1. bind the real goal, inputs, authority, and verification surface without
-   requiring a user-specified capability route;
-2. observe available healthy and authorized capability, then assess the gap;
-3. discover through a source-bound adaptive channel only when the gap requires it;
-4. select and preview the smallest sufficient route before meaningful side effects;
-5. dispatch only inside the granted task boundary;
-6. observe, recover, and verify the result, user intervention, and claim ceiling;
-7. release task-scoped exposure, clean up, and leave a continuation record.
+- **O1 — one closed loop:** one natural goal-level task completes without the
+  user selecting, invoking, recovering, verifying, or cleaning the capability
+  route.
+- **O2 — repeated burden reduction:** at least three materially different
+  natural tasks beat a source-bound ad-hoc baseline without losing task quality.
+- **O3 — demand-driven capability lifecycle:** both a no-gap/native case and a
+  real-gap/discovery case make bounded, evidence-backed route decisions and end
+  task-scoped exposure.
+- **O4 — calibrated methodology and quality profile:** the same pre-registered
+  profile evaluates accepted and failed real-task receipts on the Codex
+  reference host. It cannot claim Agent-neutral portability.
+- **O5 — bounded cross-host proof:** the same task and core semantics produce
+  accepted, equivalent outcomes on Codex and a distinct second Agent host or
+  runtime through thin adapters.
 
-The historical v0.1 O3 evidence exercised this loop once on a source-bound
-current-host task. v0.2 now tests whether the loop actually reduces user
-tool-learning and orchestration burden across repeated natural tasks.
+Human authority, zero-trust evidence, lean independent authority, and bounded
+process/resource loss are mandatory guardrails, not substitutes for outcomes.
 
-## Completion standard
+## Design rules
 
-The machine-readable [acceptance](product/acceptance.json) is the current
-release target. Product acceptance requires all five outcomes, all four
-guardrails, a completed program, no active increment, and a terminal work
-graph. Tests, inventories, fixtures, memberships, and research volume may
-support an outcome; they never substitute for one.
+- Start from the user's goal, not a named tool or catalog.
+- Observe healthy authorized capability before searching for more.
+- Add only for an evidenced residual gap; release task-scoped exposure when the
+  need ends.
+- Reuse sufficient protocols, runtimes, and evidence layers before composing or
+  authoring anything new.
+- Keep goals, consequential judgment, new trust, cost, publication, release,
+  and irreversible actions under human authority.
+- Claim only what source-bound evidence actually proves.
 
-Current v0.2 outcomes are:
+## Read, contribute, and report
 
-- O1 — one goal-level natural real task completes the demand-to-capability
-  closed loop with zero user capability-orchestration intervention under a
-  pre-registered protocol;
-- O2 — lower user capability-orchestration burden across repeated goal-level
-  real tasks;
-- O3 — adaptive discovery, build-versus-reuse evidence, and lifecycle decisions
-  keep a broad and changing ecosystem outside the user's cognitive path;
-- O4 — an accepted Agent-neutral demand-to-capability collaboration
-  methodology and open minimum quality-conformance profile, compared against a
-  fixed source-bound external cohort while reusing sufficient protocol,
-  runtime, identity, provenance, and evaluation layers; software engineering
-  is the first reference profile;
-- O5 — portable closed-loop delivery through Codex and a distinct second Agent
-  host or runtime through its own thin adapter. A same-host second adapter is
-  conformance evidence only and cannot pass O5.
-
-## Progressive paths
-
-| If you want to… | Continue with… |
+| Need | Document |
 | --- | --- |
-| check whether the checkout is coherent | the one-command [verification](#start-here) |
-| understand product boundaries and extension seams | [Architecture](docs/architecture.md) |
-| inspect purpose, work, and acceptance authority | [Constitution](product/constitution.json), [program](product/program.json), and [acceptance](product/acceptance.json) |
-| resume active repository work | [Continuation](docs/operations/CONTINUATION.md) after checking live Git truth |
-| propose a focused change | [Contributing](CONTRIBUTING.md) |
-| ask a question or report a non-sensitive problem | [Support](SUPPORT.md) |
-| report a vulnerability or sensitive finding | [Security](SECURITY.md) |
-| inspect provenance and rights | [NOTICE](NOTICE), [third-party notices](THIRD_PARTY_NOTICES.md), and [license policy](docs/license-policy.md) |
+| Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| Understand the technical separation of concerns | [Architecture](docs/architecture.md) |
+| Inspect the proof sequence and external reuse gate | [Research and proof plan](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
+| Resume repository work | [Continuation](docs/operations/CONTINUATION.md) |
+| See why earlier assets are not current authority | [History boundary](docs/operations/HISTORY.md) |
+| Propose a focused change | [Contributing](CONTRIBUTING.md) |
+| Read participation expectations | [Code of Conduct](CODE_OF_CONDUCT.md) |
+| Ask a non-sensitive question | [Support](SUPPORT.md) |
+| Report a sensitive vulnerability | [Security policy](SECURITY.md) |
+| Support maintenance | [Sponsoring](SPONSORING.md) |
 
-## Capability order and authority
+Repository-owned code and documentation are Apache-2.0 unless a file says
+otherwise. Third-party material keeps its original rights.
 
-For a bound need, first observe healthy and already-authorized capability. If
-it is insufficient, prefer a suitable native/runtime or official route, then a
-reviewed maintained external implementation, then composition. Author new
-capability only for a reproducible residual gap.
-
-Capability scope follows demand rather than catalog size. End task-scoped
-exposure when the need ends; retaining a candidate inactive is distinct from
-persistent activation, which requires separate evidence and authority.
-The user does not need to name a capability, product, discovery channel, or
-invocation syntax. Catalogs, providers, and discovery channels remain adaptive
-sources rather than product authority.
-
-Installation, enablement, account connection, meaningful cost, live dispatch,
-consumer mutation, acceptance, publication, and release are separate state
-transitions. Native host authorization remains authoritative.
-
-`AGENTS.md` is execution guidance, Skills and Hooks are advisory execution
-inputs, self-authored Skills are replaceable host projections, and the
-peripheral ecosystem is a replaceable capability input. None can set product
-direction, create causal work without an observed problem, expand authority,
-or promote evidence and acceptance. Bound user intent and the current product
-authority win; a conflicting or process-heavy route is rejected or downgraded.
-
-## Product contract
-
-The current machine authority is deliberately small:
-
-- `product/constitution.json` — purpose, invariants, adaptive surfaces, and
-  planning method;
-- `product/program.json` — the finite causal program and current active or paused state;
-- `product/acceptance.json` — five outcomes and four mandatory guardrails;
-- `harness/` — the public product-control kernel;
-- `tests/product/` — mutation tests through the public CLI seam.
-
-Historical v0.1 evidence, research, and predecessor payloads remain retrievable
-from Git history, but do not become current authority by remaining
-recoverable. See the [history boundary](docs/operations/HISTORY.md).
-
-## Community and rights
-
-Community support is best effort. Read [Support](SUPPORT.md),
-[Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md), and
-[Security](SECURITY.md) before sharing evidence. Remove credentials, private
-memory, account state, restricted material, and sensitive logs.
-
-Repository-owned code and documentation are licensed under Apache-2.0 unless a
-file says otherwise. Third-party material retains its original rights. See
-[LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Voluntary sponsorship is described in [SPONSORING.md](SPONSORING.md); it does
-not purchase support priority, features, release authority, or technical
-influence.
+See [LICENSE](LICENSE), [NOTICE](NOTICE),
+[third-party notices](THIRD_PARTY_NOTICES.md), and the
+[license policy](docs/license-policy.md).

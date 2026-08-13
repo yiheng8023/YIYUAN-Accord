@@ -31,6 +31,10 @@ AUTHORITY_FILES = (
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "SUPPORT.zh-CN.md",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
@@ -194,6 +198,16 @@ class ProductControlTests(unittest.TestCase):
                         ),
                         start=1,
                     )
+                ],
+                "selectedRouteSubstrates": [
+                    {
+                        "role": "selected-route",
+                        "source": deepcopy(source),
+                        "versionOrCommit": "fixture-native-version",
+                        "licenseOrTerms": "fixture-host-terms",
+                        "maturity": "fixture-observed-healthy",
+                        "reuseBoundary": "fixture task only",
+                    }
                 ],
                 "taskFloorResults": [
                     {
@@ -1285,6 +1299,30 @@ class ProductControlTests(unittest.TestCase):
                     if event["stage"] == "gap-assessment"
                 ).__setitem__("status", "residual-gap"),
             ),
+            "missing-route-substrate-maturity": (
+                "O1 selected route substrates are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "selectedRouteSubstrates"
+                ][0].pop("maturity"),
+            ),
+            "mutable-route-version": (
+                "O1 selected route substrates are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "selectedRouteSubstrates"
+                ][0].__setitem__("versionOrCommit", "latest"),
+            ),
+            "unknown-route-terms": (
+                "O1 selected route substrates are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "selectedRouteSubstrates"
+                ][0].__setitem__("licenseOrTerms", "unknown"),
+            ),
+            "mutable-route-source-identity": (
+                "O1 selected route substrates are invalid",
+                lambda value: value["receipt"]["measures"][
+                    "selectedRouteSubstrates"
+                ][0]["source"].__setitem__("identity", "main"),
+            ),
             "undeclared-residue": (
                 "O1 residue and claim limits are invalid",
                 lambda value: value["receipt"]["measures"][
@@ -2024,6 +2062,18 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("supporting document is missing: README.md", report["errors"])
+
+    def test_semantic_supporting_document_set_cannot_silently_shrink(self) -> None:
+        def omit_security_policy(value: dict) -> None:
+            value["supportingDocuments"].remove("SECURITY.md")
+
+        self.mutate("product/constitution.json", omit_security_policy)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "supportingDocuments must include the code-owned semantic document set",
+            report["errors"],
+        )
 
     def test_undeclared_product_root_json_is_rejected(self) -> None:
         self.write_json("product/extra.json", {"schema": 1})

@@ -19,16 +19,14 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-The causal-authority reset closed at `a5a0834`. A subsequent six-thread
-counterexample and current-asset audit established the v0.2 capability-chain
-integrity baseline; later authority repairs tightened outcome operationalization
-and causal evidence binding. v0.2 is paused with an empty current increment
-graph. Closed outcome-neutral increments remain recoverable from Git rather
-than accumulating as a current queue. These changes
-bound the terminal proposition, froze v0.1 receipts in Git history, removed
-one-off historical proxy checks and duplicate execution surfaces, and kept
-O1-O5 planned and false. They did not run A/B tasks, mutate a capability
-manager, install or enable a capability, activate a Hook, or change a consumer.
+v0.2 is paused with an empty current increment graph and O1-O5 planned and
+false. The current tree contains a product-contract verifier, not a task
+runtime or reference adapter. Closed authority repairs remain recoverable from
+Git rather than accumulating as a current queue.
+
+No current evidence proves user-value reduction, an accepted methodology or
+quality profile, or cross-host behavior. No outcome-bearing A/B task should be
+manufactured merely to move the program.
 
 This pause applies only to outcome-bearing experimentation. Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
@@ -61,7 +59,7 @@ is:
    retain inactive, justify persistent activation, merge, replace, retire, or
    expire each admitted route.
 4. **Methodology and open minimum quality-conformance profile.** Calibrate the
-   Agent-neutral collaboration method and testable portable profile from
+   collaboration method and testable profile on the Codex reference host from
    repeated real behavior. Bind existing protocol, allocation, runtime,
    identity, audit, provenance, and evaluation layers rather than redefining
    them. Use software engineering as the first reference profile, not as the
@@ -69,7 +67,8 @@ is:
    intent-mode and decision-completeness errors, user capability-learning
    burden, unnecessary design/process/artifact load, route errors, recovery,
    time and call cost, resource lifecycle, residue, context/handoff
-   transparency, human judgment, and continuity.
+   transparency, human judgment, and continuity. Limit O4 claims to the tested
+   host, profile, scenario classes, sources, and date; O5 owns portability.
 5. **Cross-host proof.** Keep Codex as the reference host, then exercise the
    same portable semantics on a distinct second Agent host or runtime through
    its own thin adapter. A same-host second adapter is conformance evidence
@@ -138,18 +137,30 @@ substitute:
 | [CHAP working draft 0.2 at `9e7af2b`](https://github.com/BrightbeamAI/chap/tree/9e7af2b811d3368b4afba7c6d318764959c2fd0d), Apache-2.0 code and CC-BY-4.0 specification | Small Core plus optional review, routing, modes, handoff, control, identity, signed-security, and audit profiles; TypeScript and Python implementations | Use as the leading collaboration-wire and auditable-workspace candidate instead of inventing one. Its own scope excludes claim/evidence taxonomy, confidence calibration, and evidence sufficiency; Full conformance is not yet normative because the harness covers Core and review rather than every profile. |
 | [Human Tool, arXiv:2602.12953v1](https://arxiv.org/abs/2602.12953), CC-BY-4.0 | Models human capability, information, and authority as dynamically invocable input; a controlled 32-person, two-task comparison reports better outcomes and lower coordination burden | Reuse the allocation hypothesis, matched comparison design, workload measures, and explicit authority boundary. It does not establish long-horizon, high-stakes, cross-host, capability-release, cleanup, or durable-continuity value; some participants felt carried along. |
 | [Agentlas OS v1.2 source at `8b3f8bc`](https://github.com/agentlas-ai/Agentlas-OS/tree/8b3f8bcffdfc57bf4991ed6e43d153d9230ea186), Apache-2.0 | Natural-language intake, bounded clarification, capability and role routing, portable packages, multi-host adapters, permissions, memory, receipts, and governed skill promotion make it the strongest full-substitute hypothesis in this cohort | Evaluate it as a possible route or substrate, not dismiss it as “just another runtime.” The fixed source also requires installation and host configuration, offers an optional global router and background runtime update, and contains an evaluation design and schemas but no public benchmark result files. It becomes a full substitute only if matched evidence also shows lower user orchestration burden, accepted outcomes, task-scoped release and cleanup, and equivalent cross-host value without an additional Harness profile. |
-| [Compozy at `36bd815`](https://github.com/compozy/compozy/tree/36bd8156bba6f91b10929ed4d5e1b91623a3cb5f), [Microsoft Agent Governance Toolkit at `7d0cef5`](https://github.com/microsoft/agent-governance-toolkit/tree/7d0cef5d9820a865c3c19b07bd39ecf7053b58a1), [CUGA at `a4567d3`](https://github.com/cuga-project/cuga-agent/tree/a4567d3e35c056af05cefd53fae668006a8e5d03), and [Composio at `6e261d6`](https://github.com/ComposioHQ/composio/tree/6e261d6abf305a0081487d4ccf064963e7111a97) | Maintained runtime, policy, enterprise-agent, tool discovery, authentication, and execution surfaces | Reuse the sufficient operational layer. None of the fixed sources by itself supplies accepted matched evidence for the complete burden-transfer and resource-closure proposition; that observation is provisional and must be refreshed before a claim. |
-| [AAS-1 v0.1 at `a82f9fc`](https://github.com/Kadikoy1/aas-1/tree/a82f9fc2d98860760030840d05c099f04652501d), [Decision Provenance Standard v1.0 rev. 8](https://decisionprovenancestandard.org/dps-v1.0-rev8-core.html), and [NIST agentic-AI evaluation probes](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai) | Reusable audit-record, named-human decision, provenance, conformance, and evaluator concepts | Do not invent a generic audit or provenance format. AAS-1 is an early draft with only its Class A schema implemented; Decision Provenance is self-declared and explicitly says its records are input rather than evidence; domain evidence sufficiency and Harness outcome floors remain separate. |
 
-MCP, A2A, Agent Skills, native tool search, LangGraph and comparable host
-runtimes remain default reusable substrate for tool exchange, Agent exchange,
-progressive capability loading, and execution. Their presence does not prove the
-Harness proposition, but it removes those mechanisms from the novelty claim.
+Adjacent fixed observations remain discovery and falsifier leads rather than
+decision-eligible members of the cohort:
 
-This checkpoint invalidates a generic collaboration protocol, universal
-runtime, fixed catalog, gateway, generic tool or human schema, authentication
-broker, policy engine, audit/provenance format, or benchmark suite as the
-Harness product. The remaining hypothesis is narrower and explicitly
+- [Compozy `36bd815`](https://github.com/compozy/compozy/tree/36bd8156bba6f91b10929ed4d5e1b91623a3cb5f),
+  [Microsoft Agent Governance Toolkit `7d0cef5`](https://github.com/microsoft/agent-governance-toolkit/tree/7d0cef5d9820a865c3c19b07bd39ecf7053b58a1),
+  [CUGA `a4567d3`](https://github.com/cuga-project/cuga-agent/tree/a4567d3e35c056af05cefd53fae668006a8e5d03),
+  and [Composio `6e261d6`](https://github.com/ComposioHQ/composio/tree/6e261d6abf305a0081487d4ccf064963e7111a97);
+- [AAS-1 v0.1 `a82f9fc`](https://github.com/Kadikoy1/aas-1/tree/a82f9fc2d98860760030840d05c099f04652501d)
+  and [Decision Provenance Standard v1.0 rev. 8](https://decisionprovenancestandard.org/dps-v1.0-rev8-core.html).
+
+MCP, A2A, Agent Skills, native tool search, LangGraph, comparable host
+runtimes, and the
+[NIST agentic-AI evaluation-probes page](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai)
+are living leads for the same reason. Their documented surfaces reject
+novelty-by-inventory but do not prove a layer sufficient.
+
+Before one of those leads influences an implementation, acceptance, or reuse
+decision, bind its exact specification or source identity, version or commit,
+license or applicable terms, maturity, and reuse boundary. This checkpoint therefore invalidates
+treating a generic collaboration protocol, runtime, catalog, gateway, human or
+tool schema, identity layer, policy engine, audit/provenance format, or
+benchmark suite as unexamined product novelty; it does not prove every external
+layer sufficient. The remaining hypothesis is narrower and explicitly
 falsifiable: a thin Agent-neutral methodology and open quality-conformance
 profile can measurably transfer goal-to-capability orchestration burden from the
 user while preserving accepted outcome quality, accountable authority,
@@ -161,7 +172,7 @@ not a novelty claim. A maintained implementation with matched, source-bound
 evidence for those same floors is a direct falsifier and requires the Harness to
 integrate, shrink, or stop. Before implementation or comparative claims,
 refresh only the decision-relevant cohort and bind exact source, version or
-commit, licence, maturity, actual behavior, and missing evidence. This bounded
+commit, licence or applicable terms, maturity, actual behavior, and missing evidence. This bounded
 research and authority repair counts as zero O1-O5 progress.
 
 ## Stop and cleanup rules

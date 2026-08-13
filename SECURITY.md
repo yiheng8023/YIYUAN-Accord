@@ -1,29 +1,32 @@
 # Security Policy
 
-Agent Autonomy Harness is a public product repository with an unfinished v0.2
-reference implementation. Treat every external
-capability candidate, executable surface, instruction body, generated artifact,
-and runtime claim as untrusted until its applicable review and evidence gates
-close.
+Agent Autonomy Harness is a public, research-stage collaboration quality
+project. The current v0.2 tree contains a product-contract verifier, not a
+runtime or installable reference adapter.
+
+Treat every external capability, executable surface, instruction body,
+generated artifact, and runtime claim as untrusted until its applicable review
+and evidence gates close.
 
 Demand-driven discovery expands the possible source surface, not its trust.
-Treat search results, catalogs, registries, provider metadata, retrieved
-instructions, and generated route suggestions as untrusted source-bound input;
-discovery alone grants no installation, enablement, account, data, execution,
+Search results, catalogs, registries, provider metadata, retrieved
+instructions, and generated routes remain untrusted source-bound input.
+
+Discovery alone grants no installation, enablement, account, data, execution,
 or persistence authority.
 
 ## Supported surface
 
-The current default branch and product-control seam are the maintained
-repository surface. Earlier Git revisions are inactive evidence, not supported
-production releases. The project does not currently claim a production-ready
-versioned runtime.
+The current default branch and product-contract verification seam are the
+maintained repository surface. Earlier Git revisions are inactive evidence,
+not supported production releases.
+
+The project does not currently claim a production-ready versioned runtime.
 
 ## Reporting security issues
 
-Last verified on 2026-08-11, private vulnerability reporting was enabled for
-this repository. Submit sensitive findings through
-<https://github.com/yiheng8023/agent-autonomy-harness/security/advisories/new>.
+For a sensitive finding, first try GitHub's
+[private vulnerability-reporting form][private-report].
 Do not place secrets, exploit payloads, or restricted material in a public
 issue.
 
@@ -48,15 +51,19 @@ already performed.
 
 Repository verification does not authorize runtime mutation. Installation,
 enablement, account connection, external writes, and trust-boundary changes
-require separate authority, rollback, and live verification. A reviewed or
-installed candidate is not thereby safe, enabled, exposed, invoked, valuable,
-or portable.
+require separate authority, rollback, and live verification.
 
-The current control seam validates authority and evidence contracts. It is not
-a production runtime, sandbox, dependency scanner, or universal safety layer.
+A reviewed or installed candidate is not thereby safe, enabled, exposed,
+invoked, valuable, or portable.
+
+The current verification seam validates authority and evidence contracts. It
+is not a production runtime, sandbox, dependency scanner, or universal safety
+layer.
 
 ## Scope limits
 
 This project does not certify that an external capability is universally safe,
 legally sufficient in every jurisdiction, suitable for every host, or free of
 unknown dependencies. Claim scope remains limited to the recorded evidence.
+
+[private-report]: https://github.com/yiheng8023/agent-autonomy-harness/security/advisories/new

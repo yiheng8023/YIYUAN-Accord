@@ -1,7 +1,7 @@
 # Code of Conduct
 
 Agent Autonomy Harness is a public, Agent-neutral, demand-driven human-Agent
-capability-control product. Participation should stay evidence-based,
+collaboration quality research project. Participation should stay evidence-based,
 respectful, and focused on bounded, observable human-Agent collaboration.
 
 ## Expected behavior

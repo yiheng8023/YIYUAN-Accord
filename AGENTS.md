@@ -27,7 +27,9 @@ trigger replanning; lack of acceptance authority does not erase observed loss.
 - Product progress counts only O1-O5. Guardrails, artifacts, inventory,
   exposure, fixtures, and test counts do not count as outcomes.
 - State the observed problem, hypothesis, falsifier, and finite stop condition
-  before adding work.
+  before adding material product or behavior work. A typo, broken link, wording
+  clarification, or narrow test repair may instead bind the exact defect,
+  target, and relevant check when it changes no product or behavior semantics.
 - Replan when evidence falsifies the hypothesis, changes the critical path, or
   closes the increment. Do not accumulate speculative future work.
 - Use `python -B -m harness verify --root . --json` and
@@ -49,12 +51,16 @@ Prefer healthy native/runtime capability, then suitable official capability,
 then a reviewed maintained external implementation, then composition. Author
 only for an evidenced residual gap.
 
-Before implementing a product-layer protocol, registry, gateway, search
-surface, runtime, governance kernel, or evaluation mechanism, perform a
-source-bound as-of landscape check. Reuse or adapt a sufficient existing layer;
-compose only when integration is the remaining need; author only when evidence
-isolates a repeatable residual semantic gap. External breadth can change the
-implementation route but cannot define product authority or prove acceptance.
+Before a product-layer protocol, human-allocation model, registry, gateway,
+search surface, runtime, identity or authorization system, governance kernel,
+audit or provenance format, or evaluation mechanism influences a route, bind
+its exact source identity, version or commit, license or applicable terms,
+maturity, and reuse boundary through a source-bound as-of landscape check.
+Reuse or adapt a
+sufficient existing layer; compose only when integration is the remaining
+need; author only when evidence isolates a repeatable residual semantic gap.
+External breadth can change the implementation route but cannot define product
+authority or prove acceptance.
 
 Goal-level demand is the normal entry. The Agent owns observation of available
 capability, gap detection, source-bounded discovery when needed, route

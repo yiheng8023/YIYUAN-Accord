@@ -64,6 +64,16 @@ a demand-to-capability collaboration methodology, an open minimum quality-
 conformance profile, and thin executable reference adapters. This is an
 authority and route correction, not O1-O5 evidence.
 
+A follow-up global diffusion audit found that the strategic narrowing at
+`4b99e8d` had not reached every public and machine-readable surface. Community
+documents still used the predecessor positioning, the public entry point mixed
+target behavior with current capability, the external-substrate reuse gate was
+incomplete, and O4 could imply Agent-neutral portability before O5. The
+correction made current verifier limits explicit, bound the product-semantic
+supporting set, strengthened exact-source reuse gates, and confined O4 to
+Codex reference-host calibration. It repaired authority and communication
+consistency but proved none of O1-O5.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
