@@ -15,19 +15,19 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on one outcome-neutral
-prerequisite to the O4 cohort. The public verifier should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2-candidate-profile-preregistration`.
+- no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is active
+## Why the program is ready
 
 The user supplied a real goal-level continuity demand after the same v0.2
 closeout goal reached a seventh Codex task. The resulting O1 attempt first
@@ -61,10 +61,11 @@ accepted tasks and the stopped case to use the same pre-registered methodology,
 profile, scorecard, and missing-data rules, while the tree had no directly
 applicable versioned candidate. Starting another natural measurement first
 would allow post-hoc packaging or make the receipt ineligible. The current
-slice therefore freezes one lean, explicitly unaccepted candidate before the
-cohort starts. It maps the nine reported user failures to mandatory floors but
-does not turn them into accepted receipts, add a runtime, or claim O1-O5
-progress.
+closed slice therefore froze one lean, explicitly unaccepted candidate before
+the cohort starts. It maps the nine reported user failures to mandatory floors
+but does not turn them into accepted receipts, add a runtime, or claim O1-O5
+progress. The candidate remains as a public supporting document; the causal
+increment has left the current graph.
 
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated

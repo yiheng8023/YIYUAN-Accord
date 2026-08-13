@@ -119,6 +119,17 @@ registration identity and chronology and cannot add or weaken its rules. This
 removes a repeated pre-execution host-schema guessing loop without restoring a
 generic receipt validator or granting any O1-O5 credit.
 
+A critical-path audit then found that O4 required the first eligible accepted
+tasks and stopped case to share one pre-registered methodology, quality
+profile, scorecard, and missing-data rule, but the current tree had no directly
+applicable versioned candidate. The project added
+`harness-demand-to-capability-v0.2-candidate.1` as an explicitly unaccepted
+supporting document before another cohort task. It applies the current
+authority, maps the nine user-reported experience failures to mandatory floors,
+fails on any mandatory or missing-data floor, and requires future task
+registrations to bind its exact Git and content identity. It adds no runtime,
+fourth authority, receipt schema, or O1-O5 credit.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
