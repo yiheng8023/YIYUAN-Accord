@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2-proactive-risk-control",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -61,62 +61,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2-proactive-risk-control",
-      "state": "active",
-      "correctionClass": "missing-proactive-risk-control-loop",
-      "observedProblem": "The user explicitly requires a controllable process and proactive risk prediction, but candidate.1 only says to preview material effects and does not define the minimum pre-effect risk check or the post-effect expected-versus-actual comparison; a task could therefore satisfy the written method while reacting only after avoidable drift or returning risk triage to the user.",
-      "hypothesis": "A single lean control step that predicts only decision-relevant authority, reversibility, failure, verification, cleanup, resource, and continuity risks before a material effect, then compares observed state with the expected state immediately afterward, will make process control testable without creating a ledger, universal risk model, or routine user round trip.",
-      "falsifier": "The change creates a new authority, generic audit or risk schema, mandatory ceremony for immaterial actions, a user-operated risk checklist, an extra approval outside existing human gates, or a floor that cannot be evaluated from task-bound source evidence and accountable judgment.",
-      "stopCondition": "Stop when candidate.2 contains one directly applicable pre-effect risk preview and post-effect feedback rule, the scorecard fails an accepted task that omits either side of that loop, the user receives only risks that change accountable judgment or authority, O1-O5 remain false, current status and public documents align, verification and tests pass, residue is absent, and the slice is committed and pushed before leaving the current graph.",
-      "acceptanceIds": [
-        "O4",
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2-add-proactive-risk-feedback-loop",
-          "state": "active",
-          "acceptanceIds": [
-            "O4",
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "candidate.2 with one minimum proactive risk and feedback control loop"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

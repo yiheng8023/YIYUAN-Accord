@@ -130,6 +130,16 @@ fails on any mandatory or missing-data floor, and requires future task
 registrations to bind its exact Git and content identity. It adds no runtime,
 fourth authority, receipt schema, or O1-O5 credit.
 
+Before any eligible task bound candidate.1, the user's explicit requirement for
+controllable execution and proactive risk prediction exposed a missing
+two-sided control. Candidate.2 now requires a minimal pre-effect check of the
+expected state, human gate, reversibility, failure and recovery signal,
+verification evidence, resource and cleanup effect, and continuity boundary;
+after the effect, the Agent compares observed with expected state and stops or
+replans on a material mismatch. Only a risk that changes accountable judgment
+or authority is returned to the user. This is a mandatory profile floor, not a
+risk runtime, ledger, extra approval system, or O1-O5 result.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

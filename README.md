@@ -16,9 +16,9 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `active` on one outcome-neutral correction to the unaccepted candidate
-profile, with O1-O5 still false. The correction makes proactive risk prediction
-and expected-versus-observed state control a mandatory floor before the first
+v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
+unaccepted candidate.2 profile now makes proactive risk prediction and
+expected-versus-observed state control a mandatory floor before the first
 eligible cohort task starts. It adds no runtime or accepted outcome. The
 verifier is the current machine-readable state source.
 
