@@ -86,6 +86,31 @@ active work item. O1-O5 remain false. The current verifier is not an accepted
 methodology, quality profile, task runtime, reference adapter, or cross-host
 proof; this task can establish only one bounded O1 reference-host outcome.
 
+### Continuity is reconciliation, not unlimited context
+
+A host context window, transcript view, or compaction summary is a lossy
+execution cache. It can help the next model step, but it cannot become product,
+task, factual, or acceptance authority. The Harness does not reimplement host
+compaction or promise that one thread can grow without accuracy loss.
+
+Before any post-compaction mutation, the Agent re-observes the smallest durable
+truth set already owned by the task: the bound goal and corrections, current
+product authority and active increment, Git branch/HEAD/upstream/status,
+completed and pending verification, human-retained gates, known side effects,
+and the cleanup boundary. It compares those observations with the last verified
+checkpoint. A mismatch blocks further effects while the Agent recovers
+read-only from the authoritative sources; it does not ask the user to replay
+discoverable context or choose a Codex mechanism.
+
+Healthy native continuation remains the smallest route. A Hook, external
+memory layer, new task, or authored adapter requires a reproducible residual
+gap plus its own authority and data boundary. If repeated compaction or a host
+limit eventually makes same-task continuation unsafe, the Agent owns a
+source-bound, verified handoff when the host and task authority permit it; the
+user still supplies judgment, not transcript reconstruction. O1 can calibrate
+only the exact compaction and task it observes. Repeated reliability and
+cross-host portability remain separate O2-O5 burdens.
+
 ## 3. Capability and lifecycle plane
 
 Capabilities include native functions, official runtime capabilities, reviewed
