@@ -39,11 +39,13 @@ trigger replanning; lack of acceptance authority does not erase observed loss.
   exhaustive fact inventory. Proactively inspect, detect omissions, disclose
   assumptions, seek counterexamples, reconcile evidence, and supplement
   coverage inside the bound task.
-- A paused product program blocks outcome-bearing experimentation, not bounded
-  retrospective counterexample analysis, portfolio curation, mechanism-only
-  validation, or authority-defect repair. These lanes require an observed
-  problem and finite stop, count as zero O1-O5 progress, and must not require
-  the user to invent work.
+- A `ready` program with no active increment is nonterminal and open to the
+  next causally justified increment. Absence of a natural task gates outcome
+  verification and behavior or value claims; it does not complete or block the
+  program. Bounded retrospective counterexample analysis, portfolio curation,
+  mechanism-only validation, and authority-defect repair remain available
+  when an observed problem and finite stop exist, count as zero O1-O5
+  progress, and must not require the user to invent work.
 
 ## Capability and authority boundary
 

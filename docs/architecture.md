@@ -80,12 +80,14 @@ self-report schema could validate only its own structure, not naturalness,
 source truth, behavior, or value; G4 blocks opening an outcome-bearing
 increment until the smallest required validation path is added.
 
-The v0.2 program is paused with an empty current increment graph. Closed
+The v0.2 program is ready with an empty current increment graph. Closed
 authority repairs remain available in Git history instead of becoming a
 permanent work queue. The current verifier is not an accepted methodology,
 quality profile, task runtime, reference adapter, or cross-host proof.
-The pause limits outcome-bearing experimentation, not bounded retrospective
-analysis, portfolio curation, mechanism validation, or authority-defect repair.
+Natural-task evidence gates outcome-bearing execution and claims but does not
+block the program. Bounded retrospective analysis, portfolio curation,
+mechanism validation, and authority-defect repair remain available when a
+current observed problem justifies them.
 
 ## 3. Capability and lifecycle plane
 

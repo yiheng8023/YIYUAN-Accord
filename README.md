@@ -16,9 +16,10 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-Outcome-bearing v0.2 experimentation is paused until a natural task can
-produce honest evidence. Bounded retrospective and authority-repair work may
-continue. The verifier is the current machine-readable state source.
+v0.2 is `ready`: its empty graph is open to the next causally justified
+increment. A natural task is still required before outcome execution can
+produce honest evidence, but its absence is an outcome gate rather than a
+program blocker. The verifier is the current machine-readable state source.
 
 ## The problem
 

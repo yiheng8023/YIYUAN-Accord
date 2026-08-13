@@ -19,7 +19,7 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is paused with an empty current increment graph and O1-O5 planned and
+v0.2 is ready with an empty current increment graph and O1-O5 planned and
 false. The current tree contains a product-contract verifier, not a task
 runtime or reference adapter. Closed authority repairs remain recoverable from
 Git rather than accumulating as a current queue.
@@ -28,7 +28,8 @@ No current evidence proves user-value reduction, an accepted methodology or
 quality profile, or cross-host behavior. No outcome-bearing A/B task should be
 manufactured merely to move the program.
 
-This pause applies only to outcome-bearing experimentation. Bounded
+Natural-task evidence is required for outcome-bearing experimentation, but its
+absence does not block the program. Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical

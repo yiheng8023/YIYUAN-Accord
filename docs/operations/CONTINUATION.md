@@ -15,10 +15,10 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `paused`. Its current increment graph
+The current machine program is v0.2 and `ready`. Its current increment graph
 is empty. The public verifier should report:
 
-- program status `paused`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
@@ -27,7 +27,7 @@ is empty. The public verifier should report:
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is paused
+## Why the ready program has an empty graph
 
 O1-O5 require natural, non-diagnostic real-task evidence. The repository does
 not invent such a task or ask the user to manufacture one merely to keep the
@@ -35,13 +35,16 @@ program active. The current release deliberately has no O1-O5 outcome
 validator. A task-bound validator scoped to the criterion and exact causal
 increment is added only after the task and its evidence sources are known, and
 before measured execution. G4
-therefore blocks every outcome-bearing increment in the paused tree.
+therefore blocks opening an outcome-bearing increment until the task-bound
+validation path exists.
 
-The pause does not block bounded retrospective counterexample analysis,
-mechanism-only validation, authority-defect repair, or task-independent
-portfolio curation. Such work must start from an observed problem, have a
-finite stop, remain inside existing authority, and count as zero O1-O5
-progress.
+The absence of a natural task is an outcome and claim gate, not a program or
+goal blocker. It does not justify completion, a blocked disposition, repeated
+audits, or a manufactured task. Bounded retrospective counterexample analysis,
+mechanism-only validation, authority-defect repair, and task-independent
+portfolio curation remain available. Such work must start from an observed
+problem, have a finite stop, remain inside existing authority, and count as
+zero O1-O5 progress.
 
 A 2026-08-13 fixed-source landscape and historical-asset audit found strong
 overlap at every neighboring layer. CHAP already defines a composable human-
@@ -94,7 +97,7 @@ adaptive sources, not portable-core authority.
 Installed or visible Skills, Hooks, Plugins, MCPs, Apps, memories, and consumer
 projections cannot create work or promote evidence.
 
-## Paused boundary
+## Outcome boundary while ready
 
 Without a bound task and its required authority, do not run outcome A/B work,
 mutate CC Switch or another consumer, install or enable capabilities, connect

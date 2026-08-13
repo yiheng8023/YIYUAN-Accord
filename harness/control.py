@@ -244,7 +244,7 @@ WORK_ITEM_FIELDS = {
     "deliverables",
 }
 CLEANUP_BOUNDARY_FIELDS = {"repositoryTemporaryPaths"}
-PROGRAM_STATES = {"active", "paused", "completed"}
+PROGRAM_STATES = {"active", "ready", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 WORK_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 TERMINAL_STATES = {"completed", "cancelled", "stopped"}
@@ -360,7 +360,8 @@ FORBIDDEN_AUTHORITY_PATTERNS = (
 )
 CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
 EXPECTED_PROGRESSION_POLICY = {
-    "pausedScope": "no-active-outcome-bearing-increment",
+    "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
+    "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
     "agentOwnedWithoutInventedUserTask": [
         "retrospective-counterexample-analysis",
         "bounded-portfolio-curation",
@@ -1089,9 +1090,9 @@ def _program_graph(
     increments = _objects(program.get("increments"), "program increments", errors)
     program_state = program.get("status")
     if not isinstance(program_state, str) or program_state not in PROGRAM_STATES:
-        _error(errors, "program status must be active, paused, or completed")
-    if not increments and program_state != "paused":
-        _error(errors, "only a paused program may have an empty current increment graph")
+        _error(errors, "program status must be active, ready, or completed")
+    if not increments and program_state != "ready":
+        _error(errors, "only a ready program may have an empty current increment graph")
     active_increment_id = program.get("activeIncrementId")
     active_increments: list[dict[str, Any]] = []
     all_work: list[dict[str, Any]] = []
@@ -1196,7 +1197,7 @@ def _program_graph(
             _error(errors, "activeIncrementId must identify the active increment")
     elif active_increment_id is not None or active_increments:
         _error(errors, f"{program_state} program must have no active increment")
-    if program_state in {"paused", "completed"} and any(
+    if program_state in {"ready", "completed"} and any(
         not isinstance(increment.get("state"), str)
         or increment.get("state") not in TERMINAL_STATES
         for increment in increments

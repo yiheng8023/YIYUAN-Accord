@@ -216,7 +216,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "paused")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -229,13 +229,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "paused")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: paused, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -301,8 +301,8 @@ class ProductControlTests(unittest.TestCase):
         baseline = path.read_text(encoding="utf-8")
         variants = {
             "duplicate-key": baseline.replace(
-                '"status": "paused",',
-                '"status": "paused",\n  "status": "paused",',
+                '"status": "ready",',
+                '"status": "ready",\n  "status": "ready",',
                 1,
             ),
             "nonfinite-constant": baseline.replace(
@@ -742,7 +742,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["criterionStates"]["G4"])
         self.assertFalse(report["criterionStates"]["O1"])
 
-    def test_paused_release_has_no_prebuilt_outcome_validation_path(self) -> None:
+    def test_ready_release_has_no_prebuilt_outcome_validation_path(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
@@ -895,7 +895,7 @@ class ProductControlTests(unittest.TestCase):
                     self.root / "product/program.json",
                 )
 
-    def test_empty_paused_current_graph_is_valid_but_not_product_progress(self) -> None:
+    def test_empty_ready_current_graph_is_valid_but_not_product_progress(self) -> None:
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["outcomes"]["verified"], 0)
@@ -1093,7 +1093,7 @@ class ProductControlTests(unittest.TestCase):
                     report["errors"],
                 )
 
-    def test_paused_program_cannot_accumulate_closed_outcome_neutral_queue(self) -> None:
+    def test_ready_program_cannot_accumulate_closed_outcome_neutral_queue(self) -> None:
         def queue(value: dict) -> None:
             first = self.ensure_increment(value, state="completed")
             second = deepcopy(first)
@@ -1114,7 +1114,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_paused_program_retains_completed_validated_outcome_binding(self) -> None:
+    def test_ready_program_retains_completed_validated_outcome_binding(self) -> None:
         self.map_outcome_to_latest_work("O1")
         evidence = self.evidence_document(criterion_ids=["O1"])
         self.write_json("product/evidence/bound.json", evidence)
@@ -1636,14 +1636,52 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_paused_program_has_no_active_increment_and_remains_in_progress(self) -> None:
+    def test_ready_program_has_no_active_increment_and_remains_in_progress(self) -> None:
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["activeIncrement"], None)
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"]["verified"], 0)
 
-    def test_paused_program_cannot_erase_agent_owned_non_outcome_progression(self) -> None:
+    def test_obsolete_paused_program_state_is_rejected(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__("status", "paused"),
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertIn(
+            "program status must be active, ready, or completed",
+            report["errors"],
+        )
+
+    def test_ready_program_cannot_report_accepted_with_all_outcomes_verified(self) -> None:
+        outcome_ids = ["O1", "O2", "O3", "O4", "O5"]
+        for criterion_id in outcome_ids:
+            self.map_outcome_to_latest_work(criterion_id)
+        evidence = self.evidence_document(criterion_ids=outcome_ids)
+        self.write_json("product/evidence/all-outcomes.json", evidence)
+
+        def promote(value: dict) -> None:
+            for criterion in value["criteria"]:
+                if criterion["id"] in outcome_ids:
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = ["product/evidence/all-outcomes.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["outcomes"]["verified"], 5)
+        self.assertEqual(report["completionState"], "in-progress")
+
+    def test_ready_program_cannot_erase_agent_owned_non_outcome_progression(self) -> None:
         self.mutate(
             "product/program.json",
             lambda value: value.pop("progressionPolicy", None),
@@ -1652,16 +1690,16 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn("program progressionPolicy is invalid", report["errors"])
 
-    def test_paused_program_cannot_retain_active_work(self) -> None:
+    def test_ready_program_cannot_retain_active_work(self) -> None:
         def invalid(value: dict) -> None:
             self.activate_program(value)
-            value["status"] = "paused"
+            value["status"] = "ready"
 
         self.mutate("product/program.json", invalid)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("paused program must have no active increment", report["errors"])
-        self.assertIn("paused program must have a terminal increment graph", report["errors"])
+        self.assertIn("ready program must have no active increment", report["errors"])
+        self.assertIn("ready program must have a terminal increment graph", report["errors"])
 
     def test_completed_increment_cannot_retain_active_work(self) -> None:
         def invalid(value: dict) -> None:
@@ -1706,7 +1744,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "only a paused program may have an empty current increment graph",
+            "only a ready program may have an empty current increment graph",
             report["errors"],
         )
 
