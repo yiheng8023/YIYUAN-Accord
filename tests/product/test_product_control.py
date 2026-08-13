@@ -16,9 +16,14 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 CODEX_PLUGIN_ROOT = ROOT / "adapters/agent-autonomy-harness-codex"
+CLAUDE_PLUGIN_ROOT = ROOT / "adapters/agent-autonomy-harness-claude"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from harness.claude_reference import (  # noqa: E402
+    ADAPTER_ID as CLAUDE_ADAPTER_ID,
+    render_session_start_context as render_claude_session_start_context,
+)
 from harness.codex_reference import (  # noqa: E402
     ADAPTER_ID,
     render_session_start_context,
@@ -34,7 +39,9 @@ AUTHORITY_FILES = (
     "product/acceptance.json",
     "harness/__init__.py",
     "harness/__main__.py",
+    "harness/claude_reference.py",
     "harness/codex_reference.py",
+    "harness/continuation.py",
     "harness/control.py",
     "README.md",
     "README.zh-CN.md",
@@ -247,15 +254,22 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
-    def test_current_v02_contract_is_active_and_in_progress(self) -> None:
+    def claude_session_start_payload(self, *, source: str = "startup") -> dict:
+        return {
+            "session_id": "00000000-0000-4000-8000-000000000002",
+            "transcript_path": str(self.root / "must-not-be-read.jsonl"),
+            "cwd": str(self.root),
+            "hook_event_name": "SessionStart",
+            "source": source,
+            "model": "claude-test",
+        }
+
+    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.claude-thin-reference-adapter",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -300,13 +314,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -500,6 +514,154 @@ class ProductControlTests(unittest.TestCase):
         source = (ROOT / entry["source"]["path"]).resolve(strict=True)
         self.assertEqual(source, CODEX_PLUGIN_ROOT.resolve(strict=True))
         self.assertNotEqual(source, ROOT.resolve(strict=True))
+
+    def test_claude_reference_adapter_preserves_common_projection_semantics(
+        self,
+    ) -> None:
+        codex = json.loads(
+            render_session_start_context(
+                self.root, self.codex_session_start_payload(source="compact")
+            )
+        )
+        claude = json.loads(
+            render_claude_session_start_context(
+                self.root, self.claude_session_start_payload(source="compact")
+            )
+        )
+        self.assertEqual(claude["adapter"], CLAUDE_ADAPTER_ID)
+        self.assertEqual(
+            claude["referenceHostSubstrate"]["version"], "2.1.231"
+        )
+        self.assertIn(
+            "Legal Agreements",
+            claude["referenceHostSubstrate"]["licenseOrTerms"],
+        )
+        for projection in (codex, claude):
+            projection.pop("adapter")
+            projection.pop("referenceHostSubstrate")
+        self.assertEqual(claude, codex)
+
+    def test_package_exports_explicit_host_adapters_and_keeps_codex_aliases(
+        self,
+    ) -> None:
+        import harness
+
+        self.assertIs(
+            harness.render_codex_session_start_context,
+            render_session_start_context,
+        )
+        self.assertIs(
+            harness.render_claude_session_start_context,
+            render_claude_session_start_context,
+        )
+        self.assertIs(
+            harness.render_session_start_context,
+            render_session_start_context,
+        )
+        self.assertIs(harness.session_start_hook_output, session_start_hook_output)
+
+    def test_claude_reference_adapter_supports_native_continuity_events(self) -> None:
+        for source in ("startup", "resume", "clear", "compact"):
+            with self.subTest(source=source):
+                context = render_claude_session_start_context(
+                    self.root, self.claude_session_start_payload(source=source)
+                )
+                projection = json.loads(context)
+                self.assertEqual(
+                    projection["event"], {"name": "SessionStart", "source": source}
+                )
+
+    def test_claude_reference_adapter_is_noop_for_unsupported_input(self) -> None:
+        outside = self.claude_session_start_payload()
+        outside["cwd"] = str(self.root.parent)
+        self.assertIsNone(render_claude_session_start_context(self.root, outside))
+        wrong_event = self.claude_session_start_payload()
+        wrong_event["hook_event_name"] = "UserPromptSubmit"
+        self.assertIsNone(render_claude_session_start_context(self.root, wrong_event))
+
+    def test_claude_plugin_projection_is_hook_only_and_payload_bound(self) -> None:
+        manifest = json.loads(
+            (CLAUDE_PLUGIN_ROOT / ".claude-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        hooks = json.loads(
+            (CLAUDE_PLUGIN_ROOT / "hooks/hooks.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["name"], "agent-autonomy-harness-claude")
+        payload_identity = hashlib.sha256()
+        for relative in ("hooks/hooks.json", "scripts/session_start.py"):
+            payload_identity.update(relative.encode("utf-8"))
+            payload_identity.update(b"\0")
+            payload_identity.update((CLAUDE_PLUGIN_ROOT / relative).read_bytes())
+            payload_identity.update(b"\0")
+        self.assertEqual(
+            manifest["version"],
+            "0.2.0-candidate.1+claude.payload-"
+            f"{payload_identity.hexdigest()[:12]}",
+        )
+        self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
+        for component in ("skills", "commands", "agents", "mcpServers"):
+            self.assertNotIn(component, manifest)
+        self.assertEqual(set(hooks["hooks"]), {"SessionStart"})
+        handlers = hooks["hooks"]["SessionStart"]
+        self.assertEqual(len(handlers), 1)
+        command = handlers[0]["hooks"][0]
+        self.assertEqual(command["type"], "command")
+        self.assertIn("${CLAUDE_PLUGIN_ROOT}", json.dumps(command))
+        self.assertNotIn(str(ROOT), json.dumps(hooks))
+
+    def test_claude_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
+        nested = self.root / "docs/nested"
+        nested.mkdir(parents=True)
+        payload = self.claude_session_start_payload(source="compact")
+        payload["cwd"] = str(nested)
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CLAUDE_PLUGIN_ROOT / "scripts/session_start.py"),
+            ],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        projection = json.loads(completed.stdout)
+        self.assertEqual(projection["adapter"], CLAUDE_ADAPTER_ID)
+        self.assertEqual(projection["event"]["source"], "compact")
+        self.assertNotIn("transcript_path", completed.stdout)
+        self.assertNotIn(payload["session_id"], completed.stdout)
+
+    def test_claude_plugin_launcher_is_silent_on_unsupported_or_drift(self) -> None:
+        payload = self.claude_session_start_payload()
+        payload["cwd"] = str(self.root.parent)
+        for case in ("outside-root", "runtime-drift"):
+            with self.subTest(case=case):
+                if case == "runtime-drift":
+                    payload["cwd"] = str(self.root)
+                    with (self.root / "harness/control.py").open(
+                        "a", encoding="utf-8"
+                    ) as handle:
+                        handle.write("\n# unreviewed runtime drift\n")
+                completed = subprocess.run(
+                    [
+                        sys.executable,
+                        "-I",
+                        "-B",
+                        str(CLAUDE_PLUGIN_ROOT / "scripts/session_start.py"),
+                    ],
+                    input=json.dumps(payload),
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=30,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                self.assertEqual(completed.stdout, "")
 
     def test_codex_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
         nested = self.root / "docs/nested"

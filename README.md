@@ -14,18 +14,20 @@ uses it safely, verifies the result, and cleans up afterward.
 **Research-stage status:** the repository currently contains the product
 contract, acceptance model, deterministic verifier, an inactive Codex
 `SessionStart` reference adapter, an inactive thin Codex plugin projection for
-that adapter, and a workspace discovery entry that exposes the projection as
-available without installing it. It does not contain an Agent runtime, an
-installed or behavior-accepted adapter, or accepted cross-host proof.
+that adapter, a workspace discovery entry that exposes the projection as
+available without installing it, and an inactive session-scoped Claude Code
+projection over the same continuation semantics. It does not contain an Agent
+runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
 v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
-diagnosing the Harness. The adapter only derives bounded continuation context
-from the current repository authority. The plugin projection adds no Skill,
+diagnosing the Harness. The adapters only derive bounded continuation context
+from the current repository authority. The host projections add no Skill,
 MCP server, App, prompt interception, CC Switch dependency, or product
-authority. Neither is installed or enabled, and neither proves runtime behavior
-or an outcome. The verifier is the current machine-readable state source.
+authority. Neither is persistently installed or enabled, and neither proves
+runtime behavior or an outcome. The verifier is the current machine-readable
+state source.
 
 ## The problem
 
@@ -91,6 +93,10 @@ The current repository provides:
   core into a plugin;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
+- an inactive, Hook-only Claude Code projection that translates the host's
+  native `SessionStart` input and plain-stdout context output into the same
+  repository-owned continuation semantics and can be exposed for one session
+  without persistent installation;
 - product tests for the public verification seam;
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.

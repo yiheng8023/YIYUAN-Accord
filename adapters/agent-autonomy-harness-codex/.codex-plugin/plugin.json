@@ -1,6 +1,6 @@
 {
   "name": "agent-autonomy-harness-codex",
-  "version": "0.2.0-candidate.1+codex.payload-92909130483d",
+  "version": "0.2.0-candidate.1+codex.payload-2f59f2374ab4",
   "description": "Thin Codex continuity projection for an Agent Autonomy Harness authority root.",
   "author": {
     "name": "Agent Autonomy Harness contributors"

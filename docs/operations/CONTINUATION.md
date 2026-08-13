@@ -72,6 +72,15 @@ removes the earlier repository `.tmp` discovery-source conflict without making
 the repository a plugin, adding a CC Switch dependency, crossing the install
 or trust gates, or changing O1-O5.
 
+The next bounded product-delivery slice found an already-installed and
+authenticated distinct host, Claude Code 2.1.231, and added the inactive
+Hook-only projection at `adapters/agent-autonomy-harness-claude`. Both host
+edges now reuse `harness/continuation.py`; Claude-specific differences are
+limited to the native event envelope, host metadata, and plain-stdout context
+output. The fixed host's strict plugin validation and 132 offline product tests
+pass. No Claude model call, persistent install, consumer mutation, matched
+cross-host task, human equivalence judgment, or O5 credit occurred.
+
 ## Earlier ready-state basis
 
 The user supplied a real goal-level continuity demand after the same v0.2

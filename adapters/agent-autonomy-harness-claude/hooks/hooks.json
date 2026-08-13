@@ -1,0 +1,18 @@
+{
+  "description": "Restore current Harness authority at native Claude Code session transitions.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -I -B \"${CLAUDE_PLUGIN_ROOT}/scripts/session_start.py\"",
+            "timeout": 15,
+            "statusMessage": "Restoring current Harness authority"
+          }
+        ]
+      }
+    ]
+  }
+}

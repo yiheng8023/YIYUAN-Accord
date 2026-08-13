@@ -20,9 +20,10 @@ interesting paper is not sufficient entry evidence.
 ## Current v0.2 sequence
 
 v0.2 is ready with an empty current increment graph and O1-O5 planned and
-false. The current tree contains a product-contract verifier, not a task
-runtime or reference adapter. Closed authority repairs remain recoverable from
-Git rather than accumulating as a current queue.
+false. The current tree contains a product-contract verifier and inactive
+Codex and Claude Code reference-adapter candidates, not a task runtime or an
+accepted host result. Closed outcome-neutral work remains recoverable from Git
+rather than accumulating as a current queue.
 
 No current evidence proves user-value reduction, an accepted methodology or
 quality profile, or cross-host behavior. No outcome-bearing A/B task should be
@@ -184,6 +185,27 @@ app-server discovery resolves its single `AVAILABLE` entry to the existing
 projection with `installed=false` and `enabled=false`. It replaces the earlier
 repository-temporary discovery source without adding CC Switch, installation,
 enablement, trust, or outcome credit.
+
+### Claude Code distinct-host seam
+
+The 2026-08-14 reference machine already has authenticated Claude Code 2.1.231
+with binary SHA-256
+`99dbf97ef1b03ca94db818977bfc0970889bb5bbe6e981405a55f225d0fbf603`.
+Its fixed source tag commit is
+[`be90077`](https://github.com/anthropics/claude-code/tree/be90077c6a353f292fa612d97173865a9ab21b83),
+and use remains subject to the Anthropic Legal Agreements named by the package
+`LICENSE.md`. Native `SessionStart` covers startup, resume, clear, and compact;
+command Hook stdout becomes model context; and `--plugin-dir` exposes a local
+plugin for one session without persistent installation.
+
+`harness/claude_reference.py` and
+`adapters/agent-autonomy-harness-claude` reuse the common read-only projection
+and translate only those native boundaries. The projection has no Skill, MCP
+server, user command, prompt capture, transcript access, state store, or consumer
+configuration. Claude Code 2.1.231 strict manifest validation and offline
+semantic-parity checks pass. Live model execution, matched cross-host task
+evidence, cost authority, equivalence tolerance, and O5 acceptance remain
+separate pre-execution gates, so this candidate counts as zero O1-O5 progress.
 
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed

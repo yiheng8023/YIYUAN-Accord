@@ -1,10 +1,8 @@
-"""Root-bounded launcher for the Codex SessionStart reference projection.
+"""Root-bounded launcher for the Claude Code SessionStart projection.
 
-The plugin owns only host packaging. The repository-owned adapter and verifier
-remain the implementation and product authority. This isolated launcher reads
-the Hook envelope, discovers a containing Harness authority root, loads only
-the exact reviewed module bytes, forwards only the three fields used by the
-adapter, and otherwise returns a non-blocking no-op.
+Claude Code adds plain stdout from SessionStart command hooks to model context.
+The launcher therefore prints only the bounded common projection, and remains
+silent for malformed, unsupported, out-of-root, or runtime-drift inputs.
 """
 
 from __future__ import annotations
@@ -25,10 +23,9 @@ AUTHORITY_PATHS = (
 PINNED_RUNTIME_SHA256 = {
     "harness/control.py": "8cc49be2bfd1c8eb988d641a414cb44f79bcf88161ae97e28acee6b38b46fd05",
     "harness/continuation.py": "13fed2acd44fcbc039a2fac30c3972bca4c85a88f955d7c51183268b22c07de4",
-    "harness/codex_reference.py": "15d10628f2e8989d376e5c61adc9bf75cd086e88f8fd6ac25a76bfebc069186b",
+    "harness/claude_reference.py": "c7954897608e10be29eff6bb5817245049d5c616fc16ddd660a85ae75a9c3823",
 }
 FORWARDED_FIELDS = ("hook_event_name", "source", "cwd")
-NOOP = {"continue": True, "suppressOutput": True}
 
 
 def find_harness_root(cwd: Any) -> Path | None:
@@ -73,46 +70,40 @@ def _load_module(name: str, path: Path, source: bytes) -> ModuleType:
 
 
 def _load_reference_module(root: Path, sources: dict[str, bytes]) -> ModuleType:
-    package_name = "_agent_autonomy_harness_plugin_runtime"
+    package_name = "_agent_autonomy_harness_claude_plugin_runtime"
     package = ModuleType(package_name)
     package.__path__ = [str(root / "harness")]  # type: ignore[attr-defined]
     package.__package__ = package_name
     sys.modules[package_name] = package
-    _load_module(
-        f"{package_name}.control",
-        root / "harness/control.py",
-        sources["harness/control.py"],
-    )
-    _load_module(
-        f"{package_name}.continuation",
-        root / "harness/continuation.py",
-        sources["harness/continuation.py"],
-    )
+    for module in ("control", "continuation"):
+        _load_module(
+            f"{package_name}.{module}",
+            root / f"harness/{module}.py",
+            sources[f"harness/{module}.py"],
+        )
     return _load_module(
-        f"{package_name}.codex_reference",
-        root / "harness/codex_reference.py",
-        sources["harness/codex_reference.py"],
+        f"{package_name}.claude_reference",
+        root / "harness/claude_reference.py",
+        sources["harness/claude_reference.py"],
     )
 
 
-def run_projection(payload: Any) -> dict[str, Any]:
+def run_projection(payload: Any) -> str | None:
     if not isinstance(payload, dict):
-        return dict(NOOP)
+        return None
     root = find_harness_root(payload.get("cwd"))
     if root is None:
-        return dict(NOOP)
+        return None
     sources = _read_reviewed_runtime(root)
     if sources is None:
-        return dict(NOOP)
+        return None
     forwarded = {field: payload.get(field) for field in FORWARDED_FIELDS}
     try:
         reference = _load_reference_module(root, sources)
-        output = reference.session_start_hook_output(root, forwarded)
+        output = reference.render_session_start_context(root, forwarded)
     except Exception:
-        return dict(NOOP)
-    if not isinstance(output, dict) or output.get("continue") is not True:
-        return dict(NOOP)
-    return output
+        return None
+    return output if isinstance(output, str) and output else None
 
 
 def main() -> int:
@@ -120,7 +111,9 @@ def main() -> int:
         payload = json.load(sys.stdin)
     except (json.JSONDecodeError, OSError, UnicodeError):
         payload = None
-    print(json.dumps(run_projection(payload), ensure_ascii=False, sort_keys=True))
+    output = run_projection(payload)
+    if output is not None:
+        print(output)
     return 0
 
 

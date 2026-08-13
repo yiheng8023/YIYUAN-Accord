@@ -140,6 +140,15 @@ replans on a material mismatch. Only a risk that changes accountable judgment
 or authority is returned to the user. This is a mandatory profile floor, not a
 risk runtime, ledger, extra approval system, or O1-O5 result.
 
+A later distinct-host delivery slice found an already-installed Claude Code
+2.1.231 runtime with native SessionStart Hooks and session-scoped plugin
+exposure. The repository extracted the existing bounded authority projection
+into a shared read-only module and added a Hook-only Claude translation edge.
+The fixed host's strict manifest validator and offline parity tests passed
+without a model call, installation, consumer mutation, or residue. This is an
+inactive reference-adapter candidate and counts as zero O1-O5 progress; only a
+separately pre-registered matched real task can test O5.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

@@ -4,7 +4,7 @@ Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
 collaboration quality harness. Its durable outputs are a demand-to-capability
 collaboration methodology, an open minimum quality-conformance profile, and
 executable reference adapters. It has one testable portable product contract,
-one small reference seam, and replaceable host edges.
+one common read-only continuation projection, and replaceable host edges.
 
 ```text
 user goal + domain facts + bounded authority
@@ -203,6 +203,9 @@ Codex-first is the reference-adapter sequence, not a core dependency.
 
 The repository as a whole is not a plugin. The portable methodology, quality
 profile, evidence semantics, and acceptance remain manager- and host-neutral.
+`harness/continuation.py` derives the common bounded authority projection;
+host modules validate native event envelopes and supply only adapter identity,
+host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
 projection containing only a `SessionStart` Hook and a standard-library
 launcher for the repository-owned adapter. It adds no Skill, MCP server, App,
@@ -225,6 +228,16 @@ directory rather than the repository root. Codex 0.147.0 app-server discovery
 from this workspace reports the candidate as neither installed nor enabled;
 the index does not grant installation, enablement, Hook trust, or runtime
 execution.
+
+`adapters/agent-autonomy-harness-claude` is the corresponding inactive
+distinct-host projection for Claude Code 2.1.231 at source tag commit
+`be90077c6a353f292fa612d97173865a9ab21b83`. It contains only a native
+`SessionStart` Hook and an isolated standard-library launcher. Claude Code's
+session-scoped `--plugin-dir` exposure avoids persistent installation; its
+native input and plain-stdout context output differences remain behind
+`harness/claude_reference.py`. The fixed host's strict manifest validation and
+offline semantic-parity checks pass, but no Claude model task, matched Codex
+pair, human equivalence judgment, or O5 evidence has occurred.
 
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
