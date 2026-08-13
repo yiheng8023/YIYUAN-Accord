@@ -445,14 +445,18 @@ EvidenceValidatorSpec = tuple[
 
 CODEX_CONTINUITY_INCREMENT_ID = "increment.v0.2.codex-single-thread-continuity"
 CODEX_CONTINUITY_WORK_ID = "work.v0.2.codex-single-thread-continuity"
-CODEX_CONTINUITY_THREAD_ID = "019ffaa8-b44a-7bf2-97de-65875bceec33"
-CODEX_CONTINUITY_SOURCE_TURN_ID = "019ffad0-2aa2-76e3-ad3f-565668344609"
+CODEX_CONTINUITY_THREAD_IDENTITY = (
+    "sha256:8fb1736259272c287505f25b9bbd8a00cb733ce583d5f0bd2bd2f8e012320278"
+)
+CODEX_CONTINUITY_SOURCE_TURN_IDENTITY = (
+    "sha256:dc38ce71baf52083f0a88b9ed5ae93dc5682db517d497dba3ada227ab2f0e01a"
+)
 CODEX_CONTINUITY_TASK_ID = "natural-task.2026-08-13.codex-single-thread-continuity"
 CODEX_CONTINUITY_REGISTRATION = (
     "product/evidence/o1-codex-single-thread-continuity-registration.json"
 )
 CODEX_CONTINUITY_REGISTRATION_SHA256 = (
-    "4c4eee118a7bbf53bc3582147c97b8e1967fe4e0efde5b579533ae4e2fe9dca5"
+    "14382feb51285ef783f67b11de323fa61d444f7e233c27d3858af0079dd68bce"
 )
 CODEX_CONTINUITY_HOST_EVIDENCE = (
     "product/evidence/o1-codex-single-thread-continuity-host.json"
@@ -514,8 +518,8 @@ def _validate_codex_single_thread_continuity(
         "does not bind the exact host-event manifest",
     )
     expected_observation_fields = {
-        "threadId", "sourceTurnId", "cliVersion", "model", "registeredAt",
-        "compactedAt", "postCompactionTurnId", "registrationCommit",
+        "threadIdentity", "sourceTurnIdentity", "cliVersion", "model", "registeredAt",
+        "compactedAt", "postCompactionTurnIdentity", "registrationCommit",
         "headAtReconciliation", "branch", "upstream", "aheadBehind",
         "worktreeCleanAtReconciliation", "goalObjectiveSha256",
         "repositoryStateReconciledBeforeMutation", "identity",
@@ -525,11 +529,11 @@ def _validate_codex_single_thread_continuity(
         registered_at = _rfc3339_instant(observation.get("registeredAt"))
         compacted_at = _rfc3339_instant(observation.get("compactedAt"))
         commit = observation.get("registrationCommit")
-        require(observation.get("threadId") == CODEX_CONTINUITY_THREAD_ID, "uses a different task thread")
-        require(observation.get("sourceTurnId") == CODEX_CONTINUITY_SOURCE_TURN_ID, "uses a different demand turn")
+        require(observation.get("threadIdentity") == CODEX_CONTINUITY_THREAD_IDENTITY, "uses a different task thread")
+        require(observation.get("sourceTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "uses a different demand turn")
         require(observation.get("cliVersion") == "0.147.0" and _nonempty_text(observation.get("model")), "uses an unregistered host identity")
         require(registered_at is not None and compacted_at is not None and compacted_at > registered_at, "does not show post-registration compaction")
-        require(observation.get("postCompactionTurnId") == CODEX_CONTINUITY_SOURCE_TURN_ID, "does not continue the measured turn")
+        require(observation.get("postCompactionTurnIdentity") == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "does not continue the measured turn")
         require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None and observation.get("headAtReconciliation") == commit, "does not bind the registration checkpoint")
         require(observation.get("branch") == "main" and observation.get("upstream") == "origin/main" and observation.get("aheadBehind") == [0, 0], "does not reconcile the bound mainline")
         require(observation.get("worktreeCleanAtReconciliation") is True, "does not reconcile a clean checkpoint")
@@ -549,10 +553,10 @@ def _validate_codex_single_thread_continuity(
     require(source_identity == f"sha256:{hashlib.sha256(host_bytes).hexdigest()}", "host-event manifest identity changed")
     require(
         isinstance(manifest, dict)
-        and set(manifest) == {"schema", "threadId", "sourceRollout", "sourceRolloutSha256", "capturedAt", "events"}
+        and set(manifest) == {"schema", "threadIdentity", "sourceRolloutIdentity", "sourceRolloutSha256", "capturedAt", "events"}
         and manifest.get("schema") == 1
-        and manifest.get("threadId") == CODEX_CONTINUITY_THREAD_ID
-        and _nonempty_text(manifest.get("sourceRollout"))
+        and manifest.get("threadIdentity") == CODEX_CONTINUITY_THREAD_IDENTITY
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", manifest.get("sourceRolloutIdentity", "")) is not None
         and re.fullmatch(r"[0-9a-f]{64}", manifest.get("sourceRolloutSha256", "")) is not None
         and _rfc3339_instant(manifest.get("capturedAt")) is not None,
         "host-event manifest is invalid",
@@ -566,7 +570,7 @@ def _validate_codex_single_thread_continuity(
         ("event_msg", "task_started"),
         ("event_msg", "user_message"),
     ]
-    event_fields = {"line", "timestamp", "recordType", "payloadType", "turnId", "rawLineSha256"}
+    event_fields = {"line", "timestamp", "recordType", "payloadType", "turnIdentity", "rawLineSha256"}
     valid_events = (
         isinstance(events, list)
         and len(events) == len(expected_event_sequence)
@@ -579,7 +583,7 @@ def _validate_codex_single_thread_continuity(
         require(all(type(event["line"]) is int and event["line"] > 0 and re.fullmatch(r"[0-9a-f]{64}", event["rawLineSha256"]) is not None for event in events), "host event identity is invalid")
         require(all(instant is not None for instant in instants) and instants == sorted(instants) and [event["line"] for event in events] == sorted(event["line"] for event in events), "host event chronology is invalid")
         require(registered_at is not None and compacted_at is not None and instants[0] == compacted_at and registered_at < instants[0], "host events are not post-registration")
-        require(events[3]["turnId"] == CODEX_CONTINUITY_SOURCE_TURN_ID, "host events do not complete the measured turn")
+        require(events[3]["turnIdentity"] == CODEX_CONTINUITY_SOURCE_TURN_IDENTITY, "host events do not complete the measured turn")
 
     required_stages = [
         "available-capability-observation", "gap-assessment", "discovery",

@@ -6,8 +6,8 @@
   "nonDiagnosticPurpose": "Advance the user's real Agent Autonomy Harness v0.2 closeout goal while absorbing same-task context growth, compaction, recovery, verification, and cleanup without teaching or returning Codex orchestration to the user.",
   "demandEntry": {
     "kind": "goal-level-natural-demand",
-    "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
-    "sourceTurnId": "019ffad0-2aa2-76e3-ad3f-565668344609",
+    "sourceThreadIdentity": "sha256:8fb1736259272c287505f25b9bbd8a00cb733ce583d5f0bd2bd2f8e012320278",
+    "sourceTurnIdentity": "sha256:dc38ce71baf52083f0a88b9ed5ae93dc5682db517d497dba3ada227ab2f0e01a",
     "userSpecifiedCapabilityRoute": false,
     "demand": "A user who does not know Codex can keep using one task while the Agent preserves the goal, settled decisions, authority, repository state, and progress across inevitable context compaction."
   },
