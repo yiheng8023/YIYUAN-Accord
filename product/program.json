@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability and task-topology lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.task-topology-authority-repair",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,61 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.task-topology-authority-repair",
-      "state": "active",
-      "correctionClass": "code-and-conversation-topology-burden-omission",
-      "observedProblem": "The current contract transfers capability orchestration and context recovery to the Agent but does not explicitly require the Agent to select, create only when necessary, synchronize, reconcile or merge, archive or release, and clean up code and conversation topology. It can therefore accept a result that still makes an inexperienced user choose or operate branches, worktrees, repository forks, conversation continuation, conversation forks, new tasks, conclusion merge, or archival.",
-      "hypothesis": "Adding one host-neutral task-topology lifecycle obligation and mandatory O1, O2, O4, and O5 floors across constitution, acceptance, profile, verifier tests, and public guidance will close that false-positive path without creating a topology manager, collaboration protocol, runtime, or new user workflow.",
-      "falsifier": "The repair still permits safely discoverable topology choice or operation to be returned to the user, treats every task as requiring a fork, expands the portable core into a Git or conversation manager, infers a goal divergence or new authority boundary, weakens any existing acceptance floor, or leaves product authority, code-owned verification, and public guidance inconsistent.",
-      "stopCondition": "Stop when the constitution, O1, O2, O4, O5, candidate profile, verifier contract and regression tests, AGENTS guidance, architecture, North Star, research plan, README files, and continuation guide consistently require default reuse of the healthy current carrier, source-bound causal necessity for an isolated topology, Agent-owned synchronization, merge or reconciliation, archive or release, and cleanup, and human-retained decisions only for goal divergence, authority, trust, data, cost, or irreversible effects; all canonical checks pass and the outcome-neutral increment can leave the current graph.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.task-topology-authority-repair",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one globally consistent Agent-owned code-and-conversation task-topology contract with machine regression coverage and public explanation"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

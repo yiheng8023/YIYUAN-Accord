@@ -19,8 +19,9 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is active on one outcome-neutral task-topology authority repair, with
-O1-O5 planned and false. The current tree contains a product-contract verifier and inactive
+v0.2 is ready with an empty current graph after the outcome-neutral task-
+topology authority repair, with O1-O5 planned and false. The current tree
+contains a product-contract verifier and inactive
 Codex and Claude Code reference-adapter candidates, not a task runtime or an
 accepted host result. Closed outcome-neutral work remains recoverable from Git
 rather than accumulating as a current queue.

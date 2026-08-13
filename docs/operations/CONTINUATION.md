@@ -15,19 +15,19 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on exactly one outcome-neutral
-task-topology authority repair. The public verifier should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2.task-topology-authority-repair`.
+- no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the current repair is active
+## Why the program is ready
 
 The user's reported code and conversation topology burden exposed an acceptance
 false positive. Capability orchestration and context recovery were already
@@ -35,12 +35,12 @@ Agent obligations, but O1, O2, and O4 could still accept a task that made an
 inexperienced user choose or operate branches, worktrees, repository forks,
 conversation continuation, conversation forks, new tasks, synchronization,
 merge or conclusion reconciliation, archive, release, or cleanup. The current
-outcome-neutral slice makes task topology one lifecycle: preserve the healthy
+closed outcome-neutral slice makes task topology one lifecycle: preserve the healthy
 current carrier by default, create an isolated carrier only for causal
 necessity, and make the Agent own identity, synchronization, reconciliation,
 archive or release, and cleanup. Goal divergence and new authority remain human
 decisions. The repair adds no runtime, Git manager, task manager, wire protocol,
-or O1-O5 credit.
+or O1-O5 credit. It has left the current graph and remains recoverable from Git.
 
 ## Earlier ready-state basis
 
