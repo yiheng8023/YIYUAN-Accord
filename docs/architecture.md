@@ -29,8 +29,8 @@ user goal + domain facts + bounded authority
 `product/constitution.json`, `product/program.json`, and
 `product/acceptance.json` are the machine authority. `harness/control.py`
 verifies their identity, mapping, authority, evidence-admission, and
-process-loss invariants. The verifier derives release identities instead of
-hard-coding one release.
+process-loss invariants. The verifier pins the current release in code and
+requires the program and acceptance identities to match it.
 
 Historical release evidence remains in Git, but it is not scanned as current
 authority. It remains usable as retrospective counterevidence and may trigger
