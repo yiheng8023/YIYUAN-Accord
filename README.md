@@ -16,13 +16,13 @@ contract, acceptance model, and deterministic verifier. It does not yet contain
 an Agent runtime, an installable reference adapter, or accepted cross-host
 proof.
 
-v0.2 is `active` on an outcome-neutral authority repair, with O1-O5 still
-false. A Codex same-task continuity attempt observed native compaction without
-returning recovery to the user, but its task-specific validator over-bound the
-event to the original demand turn even though the pre-registration allowed the
-first later same-task compaction. The attempt stopped rather than changing the
-rule after observing the event. The current repair separates pre-execution
-measurement registration from code validation required before outcome
+v0.2 is `ready`, with no active causal increment and O1-O5 still false. A Codex
+same-task continuity attempt observed native compaction without returning
+recovery to the user, but its task-specific validator over-bound the event to
+the original demand turn even though the pre-registration allowed the first
+later same-task compaction. The attempt stopped rather than changing the rule
+after observing the event. The resulting authority repair now separates
+pre-execution task registration from code validation required before outcome
 promotion; it counts as zero O1-O5 progress. The verifier is the current
 machine-readable state source.
 

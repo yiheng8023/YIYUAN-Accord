@@ -109,6 +109,16 @@ task registration and validator left the current tree, and the stopped attempt
 remains counterevidence recoverable from Git history. It proves neither O1 nor
 O4, but it preserves a real failed evaluation case for future bounded use.
 
+The ensuing authority repair separated immutable pre-execution task
+registration from code validation needed before outcome promotion. A natural
+task must still freeze every mapped criterion's required values, source-capture
+eligibility and stop rule, floors, and claim limit before measured execution.
+Previously unknown host serialization may now be implemented in the smallest
+task-bound validator after observation, but the validator must bind the exact
+registration identity and chronology and cannot add or weaken its rules. This
+removes a repeated pre-execution host-schema guessing loop without restoring a
+generic receipt validator or granting any O1-O5 credit.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
