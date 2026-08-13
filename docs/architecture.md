@@ -38,10 +38,12 @@ replanning. The accepted v0.1 verifier and event-specific validators remain
 reproducible at revision `be498f9`; carrying their one-off logic or raw receipts
 in every later current tree would turn evidence history into product debt.
 
-The code-owned semantic supporting-document set explains the current contract,
-contribution, support, and security boundaries. Community and rights files are
-public review surfaces but do not block G3 merely by existing or changing.
-None of these documents can override the three machine-authority files.
+The code-owned supporting-document set explains the current contract,
+contribution, support, and security boundaries. The verifier closes this set
+and checks that each declared document is a non-empty UTF-8 file; it does not
+claim to understand prose or prove semantic parity. Community and rights files
+are public review surfaces but do not block G3 merely by existing or changing.
+No document can override the three machine-authority files.
 
 ## 2. Target portable loop
 
@@ -169,5 +171,8 @@ stored as a future queue: bind the next item only when it becomes current. A
 closed outcome-neutral increment leaves the current graph and remains
 recoverable from Git; a completed increment stays current only while
 validator-accepted outcome evidence needs its exact causal identity. Actual
-process loss is measured by O1/O2 receipts, not inferred from a budget
-declaration.
+process loss is measured by O1/O2 receipts. Those receipts separately reject
+both capability-orchestration intervention and material collaboration-loss
+events such as intent correction, reopened decisions, unrequested work,
+unnecessary process, residue or context recovery, and false completion
+correction.

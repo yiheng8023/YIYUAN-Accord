@@ -74,6 +74,18 @@ supporting set, strengthened exact-source reuse gates, and confined O4 to
 Codex reference-host calibration. It repaired authority and communication
 consistency but proved none of O1-O5.
 
+A bounded retrospective counterexample audit then showed that zero user tool-
+selection intervention was necessary but insufficient: an Agent could still
+misread conversational mode, omit material issues, reopen settled decisions,
+create unrequested work, over-engineer the process, return residue or context
+recovery to the user, or require correction of a false completion claim. O1
+and O2 now pre-register one fixed material collaboration-loss taxonomy and
+require zero such events rather than allowing those failures to disappear
+behind a successful capability route. The same repair makes paused state
+explicit in the public report and closes the supporting-document set without
+claiming machine understanding of prose. It is acceptance and observability
+repair only, with zero O1-O5 progress.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

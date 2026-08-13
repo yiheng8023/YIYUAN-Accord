@@ -160,6 +160,17 @@ class ProductControlTests(unittest.TestCase):
                     "cleanup",
                     "push",
                 ],
+                "materialCollaborationLossTaxonomy": [
+                    "intent-or-mode-correction",
+                    "material-omission-correction",
+                    "reopened-settled-decision",
+                    "unrequested-deliverable-or-mutation",
+                    "unnecessary-human-round-trip",
+                    "unnecessary-process-or-overengineering",
+                    "user-required-resource-residue-or-cleanup-recovery",
+                    "user-required-context-or-handoff-recovery",
+                    "false-completion-or-claim-correction",
+                ],
             },
             "measures": {
                 "humanOutcomeDecision": "accepted",
@@ -167,6 +178,7 @@ class ProductControlTests(unittest.TestCase):
                     "count": 0,
                     "events": [],
                 },
+                "materialCollaborationLossEvents": {"count": 0, "events": []},
                 "repeatedAlreadyBoundRequests": {"count": 0, "events": []},
                 "capabilityLifecycleEvents": [
                     {
@@ -320,6 +332,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
+        self.assertEqual(report["programStatus"], "paused")
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -332,7 +345,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
+        self.assertEqual(report["programStatus"], "paused")
         self.assertTrue(report["valid"])
+
+    def test_plain_cli_exposes_program_and_completion_states(self) -> None:
+        completed = self.run_cli(json_output=False)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertIn("v0.2: paused, in-progress", completed.stdout)
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -348,6 +367,7 @@ class ProductControlTests(unittest.TestCase):
         report = {
             "productId": "agent-autonomy-harness",
             "release": None,
+            "programStatus": None,
             "valid": False,
             "completionState": "in-progress",
             "activeIncrement": None,
@@ -1235,6 +1255,18 @@ class ProductControlTests(unittest.TestCase):
                     "materialUserCapabilityOrchestrationInterventions"
                 ].__setitem__("count", 1),
             ),
+            "collaboration-loss": (
+                "O1 material collaboration-loss events must be exactly zero",
+                lambda value: value["receipt"]["measures"][
+                    "materialCollaborationLossEvents"
+                ].__setitem__("count", 1),
+            ),
+            "collaboration-loss-taxonomy-shrink": (
+                "O1 material collaboration-loss taxonomy is invalid",
+                lambda value: value["receipt"]["preRegistration"][
+                    "materialCollaborationLossTaxonomy"
+                ].pop(),
+            ),
             "repeated-request": (
                 "O1 repeated already-bound requests must be exactly zero",
                 lambda value: value["receipt"]["measures"][
@@ -2063,7 +2095,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn("supporting document is missing: README.md", report["errors"])
 
-    def test_semantic_supporting_document_set_cannot_silently_shrink(self) -> None:
+    def test_supporting_document_set_cannot_silently_shrink(self) -> None:
         def omit_security_policy(value: dict) -> None:
             value["supportingDocuments"].remove("SECURITY.md")
 
@@ -2071,9 +2103,32 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn(
-            "supportingDocuments must include the code-owned semantic document set",
+            "supportingDocuments must equal the code-owned semantic document set",
             report["errors"],
         )
+
+    def test_supporting_document_set_cannot_silently_expand(self) -> None:
+        (self.root / "docs" / "extra-process.md").write_text(
+            "# Extra process\n", encoding="utf-8"
+        )
+        self.mutate(
+            "product/constitution.json",
+            lambda value: value["supportingDocuments"].append(
+                "docs/extra-process.md"
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn(
+            "supportingDocuments must equal the code-owned semantic document set",
+            report["errors"],
+        )
+
+    def test_empty_supporting_document_is_rejected(self) -> None:
+        (self.root / "README.md").write_text("\n", encoding="utf-8")
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("supporting document is empty: README.md", report["errors"])
 
     def test_undeclared_product_root_json_is_rejected(self) -> None:
         self.write_json("product/extra.json", {"schema": 1})

@@ -140,7 +140,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "78c8c197099e615f328205a4911d9ad7b6bd7329fad71e455fe4c107893ab268"
+    "c408731bc59d61f6b8dca54f9c1aa36785849ebf72216497a191a43d63d4a117"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -369,6 +369,17 @@ O1_INTERVENTION_TAXONOMY = {
     "cleanup",
     "push",
 }
+O1_COLLABORATION_LOSS_TAXONOMY = {
+    "intent-or-mode-correction",
+    "material-omission-correction",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip",
+    "unnecessary-process-or-overengineering",
+    "user-required-resource-residue-or-cleanup-recovery",
+    "user-required-context-or-handoff-recovery",
+    "false-completion-or-claim-correction",
+}
 O1_FLOOR_CATEGORIES = {"quality", "safety", "evidence", "residue"}
 O1_ROUTE_ORDER = (
     "capability-observation",
@@ -524,6 +535,7 @@ def _validate_o1_natural_task_receipt(
         "namedHumanAcceptor",
         "qualitySafetyEvidenceAndResidueFloors",
         "materialInterventionTaxonomy",
+        "materialCollaborationLossTaxonomy",
     }
     if not exact_object(pre_registration, expected_pre_registration_fields):
         return reject("O1 pre-registration fields are invalid")
@@ -579,6 +591,14 @@ def _validate_o1_natural_task_receipt(
     taxonomy = _string_list(pre_registration.get("materialInterventionTaxonomy"))
     if taxonomy is None or set(taxonomy) != O1_INTERVENTION_TAXONOMY:
         return reject("O1 material intervention taxonomy is invalid")
+    collaboration_loss_taxonomy = _string_list(
+        pre_registration.get("materialCollaborationLossTaxonomy")
+    )
+    if (
+        collaboration_loss_taxonomy is None
+        or set(collaboration_loss_taxonomy) != O1_COLLABORATION_LOSS_TAXONOMY
+    ):
+        return reject("O1 material collaboration-loss taxonomy is invalid")
 
     floors = pre_registration.get("qualitySafetyEvidenceAndResidueFloors")
     floor_index: dict[str, str] = {}
@@ -601,6 +621,7 @@ def _validate_o1_natural_task_receipt(
     expected_measure_fields = {
         "humanOutcomeDecision",
         "materialUserCapabilityOrchestrationInterventions",
+        "materialCollaborationLossEvents",
         "repeatedAlreadyBoundRequests",
         "capabilityLifecycleEvents",
         "selectedRouteSubstrates",
@@ -650,6 +671,7 @@ def _validate_o1_natural_task_receipt(
             "materialUserCapabilityOrchestrationInterventions",
             "capability orchestration interventions",
         ),
+        ("materialCollaborationLossEvents", "material collaboration-loss events"),
         ("repeatedAlreadyBoundRequests", "repeated already-bound requests"),
     ):
         value = measures.get(field)
@@ -1116,8 +1138,8 @@ def _supporting_documents_exist(
     if documents is None:
         _error(errors, "supportingDocuments must be a non-empty unique string list")
         return False
-    if not EXPECTED_REQUIRED_SUPPORTING_DOCUMENTS <= set(documents):
-        _error(errors, "supportingDocuments must include the code-owned semantic document set")
+    if set(documents) != EXPECTED_REQUIRED_SUPPORTING_DOCUMENTS:
+        _error(errors, "supportingDocuments must equal the code-owned semantic document set")
     for raw in documents:
         relative = _relative_locator(raw)
         if relative is None:
@@ -1129,7 +1151,10 @@ def _supporting_documents_exist(
         try:
             if not candidate.is_file():
                 _error(errors, f"supporting document is missing: {relative}")
-        except OSError:
+                continue
+            if not candidate.read_text(encoding="utf-8").strip():
+                _error(errors, f"supporting document is empty: {relative}")
+        except (OSError, UnicodeError):
             _error(errors, f"supporting document cannot be inspected: {relative}")
     return len(errors) == before
 
@@ -1911,6 +1936,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     return {
         "productId": PRODUCT_ID,
         "release": program.get("release"),
+        "programStatus": program.get("status"),
         "valid": valid,
         "completionState": "accepted" if accepted else "in-progress",
         "activeIncrement": program.get("activeIncrementId"),
@@ -1936,6 +1962,7 @@ def verify_product(root: Path) -> dict[str, Any]:
         return {
             "productId": PRODUCT_ID,
             "release": None,
+            "programStatus": None,
             "valid": False,
             "completionState": "in-progress",
             "activeIncrement": None,

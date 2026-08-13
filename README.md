@@ -101,9 +101,12 @@ The JSON report is the current state surface. See the
 
 - **O1 — one closed loop:** one natural goal-level task completes without the
   user selecting, invoking, recovering, verifying, or cleaning the capability
-  route.
+  route, and without a material collaboration-loss correction such as fixing
+  misunderstood intent, reopened decisions, unrequested work, process bloat,
+  residue, continuity failure, or a false completion claim.
 - **O2 — repeated burden reduction:** at least three materially different
-  natural tasks beat a source-bound ad-hoc baseline without losing task quality.
+  natural tasks repeat that zero-loss floor and beat a source-bound ad-hoc
+  baseline without losing task quality.
 - **O3 — demand-driven capability lifecycle:** both a no-gap/native case and a
   real-gap/discovery case make bounded, evidence-backed route decisions and end
   task-scoped exposure.

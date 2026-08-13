@@ -18,6 +18,7 @@ Read these files first:
 The current machine program is v0.2 and `paused`. Its current increment graph
 is empty. The public verifier should report:
 
+- program status `paused`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
@@ -56,9 +57,10 @@ proves none of O1-O5.
 
 The next outcome-bearing slice remains Codex-first and task-bound. Once a
 natural task exists, but before its measured execution, freeze the task floors,
-source-bound baseline, material-intervention taxonomy, exact reused substrate
-identities, and the smallest criterion-scoped validation path needed for that
-event. Start with healthy native Codex behavior. Add an external layer or
+source-bound baseline, capability-intervention and material collaboration-loss
+taxonomies, exact reused substrate identities, and the smallest criterion-
+scoped validation path needed for that event. Start with healthy native Codex
+behavior. Add an external layer or
 capability only if the task exposes a reproducible residual gap. Before a task
 is bound, do not prebuild a wire protocol, adapter stack, audit schema, or
 outcome validator in anticipation of evidence.

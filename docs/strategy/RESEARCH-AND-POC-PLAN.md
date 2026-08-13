@@ -43,7 +43,8 @@ is:
    human-round-trip/authority/side-effect/acceptance requirements, reopened
    settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
-   outcome denominator, and named accountable human acceptance. This is a
+   outcome denominator, named accountable human acceptance, and the fixed
+   material collaboration-loss taxonomy used by O1/O2 receipts. This is a
    prerequisite to O1, not a product outcome by itself.
 2. **Codex reference quality-harness slice.** Enter through the user's goal rather
    than a named tool route. Record available-capability observation, gap

@@ -13,7 +13,7 @@
       "name": "one goal-level natural-task autonomous closed loop",
       "statement": "On one pre-registered natural real task entered as goal-level demand without a user-specified capability route, the Agent observes available capability, assesses gaps, discovers only if needed, selects and dispatches the smallest sufficient task-scoped route, executes, recovers, verifies, releases exposure, and cleans up while the user supplies domain facts, bounded authority, corrections, and accountable final judgment.",
       "metric": "accepted demand-to-capability lifecycle receipt under the provisional evaluation protocol",
-      "threshold": "one non-diagnostic real task begins without a user-specified capability, product, discovery channel, or invocation syntax; has zero material user capability-route-selection, setup, invocation, recovery, verification-command, cleanup, or push interventions; records source-bound available-capability observation, gap assessment, optional discovery, route selection, task-scoped dispatch, execution, recovery, verification, route release, and cleanup; binds the selected route and every decision-relevant substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; has zero repeated already-bound fact or authority requests; and passes named-human acceptance plus task-specific quality, safety, evidence, and residue floors",
+      "threshold": "one non-diagnostic real task begins without a user-specified capability, product, discovery channel, or invocation syntax; has zero material user capability-route-selection, setup, invocation, recovery, verification-command, cleanup, or push interventions; has zero material collaboration-loss events from intent or mode correction, material omission, reopened settled decisions, unrequested deliverables or mutations, unnecessary human round trips or process, resource or residue recovery returned to the user, context or handoff recovery returned to the user, or false completion and claim correction; records source-bound available-capability observation, gap assessment, optional discovery, route selection, task-scoped dispatch, execution, recovery, verification, route release, and cleanup; binds the selected route and every decision-relevant substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; has zero repeated already-bound fact or authority requests; and passes named-human acceptance plus task-specific quality, safety, evidence, and residue floors",
       "operationalization": {
         "sampleUnit": "one pre-registered natural-task receipt",
         "minimumSampleCount": 1,
@@ -26,21 +26,24 @@
           "goalAndBoundedAuthority",
           "namedHumanAcceptor",
           "qualitySafetyEvidenceAndResidueFloors",
-          "materialInterventionTaxonomy"
+          "materialInterventionTaxonomy",
+          "materialCollaborationLossTaxonomy"
         ],
         "requiredMeasures": [
           "humanOutcomeDecision",
           "materialUserCapabilityOrchestrationInterventions",
+          "materialCollaborationLossEvents",
           "repeatedAlreadyBoundRequests",
           "capabilityLifecycleEvents",
           "selectedRouteSubstrates",
           "taskFloorResults",
           "residueAndClaimLimits"
         ],
-        "passRule": "The task enters at the goal level with no user-specified capability route; the source-bound lifecycle records every required stage in order; the selected route and every decision-relevant substrate bind exact source, version or commit, license or applicable terms, maturity, and reuse boundary; the receipt is accepted by the named human; every declared task floor passes; material user capability-orchestration interventions and repeated already-bound requests are both zero; and no undeclared task residue remains.",
+        "passRule": "The task enters at the goal level with no user-specified capability route; the source-bound lifecycle records every required stage in order; the selected route and every decision-relevant substrate bind exact source, version or commit, license or applicable terms, maturity, and reuse boundary; the receipt is accepted by the named human; every declared task floor passes; material user capability-orchestration interventions, material collaboration-loss events, and repeated already-bound requests are all zero; and no undeclared task residue remains.",
         "falsifiers": [
           "the task exists primarily to exercise or diagnose the Harness",
           "the user must name or select a capability, product, discovery channel, invocation syntax, setup, recovery, verification command, cleanup command, or push route",
+          "the user must correct a material intent or mode error, omission, reopened settled decision, unrequested deliverable or mutation, unnecessary human round trip or process, resource or residue failure, context or handoff failure, or false completion or claim",
           "capability discovery or task-scoped exposure is treated as required when observation shows no gap",
           "the selected route or a decision-relevant substrate lacks exact source, version or commit, license or applicable terms, maturity, or reuse boundary",
           "any declared task floor fails or the named human does not accept the outcome and claim boundary"
@@ -54,8 +57,8 @@
       "class": "outcome",
       "name": "repeated goal-level capability-orchestration burden transfer",
       "statement": "Across repeated natural real tasks entered at the goal level, the user supplies goals, domain facts, bounded authority, corrections, and final judgment while the Agent observes capability, detects gaps, discovers only when needed, selects and dispatches routes, executes, recovers, verifies, releases exposure, and cleans up.",
-      "metric": "material user capability-orchestration interventions per accepted outcome compared with a source-bound ad-hoc baseline",
-      "threshold": "before execution, each task declares its goal-level demand entry, scenario class, complexity band, authority-risk band, event taxonomy, matched or historical baseline rule, task-quality floor, evidence floor, cleanup floor, selected-route substrate metadata rule, and named human acceptor; each selected route and decision-relevant substrate binds exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; at least three accepted tasks from three materially different scenario classes each have zero material user capability-orchestration interventions, zero user-specified capability routes required by the Agent, and zero repeated already-bound fact or authority requests; total material interventions per accepted outcome are strictly lower than the source-bound ad-hoc baseline and no task regresses below a declared floor",
+      "metric": "material user capability-orchestration interventions and collaboration-loss events per accepted outcome compared with a source-bound ad-hoc baseline",
+      "threshold": "before execution, each task declares its goal-level demand entry, scenario class, complexity band, authority-risk band, capability-intervention and collaboration-loss event taxonomies, matched or historical baseline rule, task-quality floor, evidence floor, cleanup floor, selected-route substrate metadata rule, and named human acceptor; each selected route and decision-relevant substrate binds exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; at least three accepted tasks from three materially different scenario classes each have zero material user capability-orchestration interventions, zero material collaboration-loss events, zero user-specified capability routes required by the Agent, and zero repeated already-bound fact or authority requests; total material interventions per accepted outcome are strictly lower than the source-bound ad-hoc baseline and no task regresses below a declared floor",
       "operationalization": {
         "sampleUnit": "one accepted pre-registered natural-task receipt with a source-bound baseline",
         "minimumSampleCount": 3,
@@ -69,11 +72,13 @@
           "selectedRouteSubstrateMetadataRule",
           "namedHumanAcceptor",
           "qualitySafetyEvidenceAndResidueFloors",
-          "materialInterventionTaxonomy"
+          "materialInterventionTaxonomy",
+          "materialCollaborationLossTaxonomy"
         ],
         "requiredMeasures": [
           "humanOutcomeDecision",
           "materialUserCapabilityOrchestrationInterventions",
+          "materialCollaborationLossEvents",
           "baselineMaterialInterventions",
           "repeatedAlreadyBoundRequests",
           "capabilityLifecycleEvents",
@@ -81,13 +86,14 @@
           "taskFloorResults",
           "residueAndClaimLimits"
         ],
-        "passRule": "At least three accepted receipts represent three pre-registered materially different scenario classes entered without an Agent-required user capability route; every receipt binds its selected route and decision-relevant substrates to exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; each has zero material user capability-orchestration interventions and zero repeated already-bound requests; aggregate interventions per accepted outcome are strictly below the source-bound baseline without regressing any declared floor.",
+        "passRule": "At least three accepted receipts represent three pre-registered materially different scenario classes entered without an Agent-required user capability route; every receipt binds its selected route and decision-relevant substrates to exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; each has zero material user capability-orchestration interventions, zero material collaboration-loss events, and zero repeated already-bound requests; aggregate interventions per accepted outcome are strictly below the source-bound baseline without regressing any declared floor.",
         "falsifiers": [
           "scenario class or baseline matching is selected after observing the result",
           "fewer than three materially different scenario classes are accepted",
           "the baseline is not source-bound or comparable under the pre-registered rule",
           "a selected route or decision-relevant substrate lacks exact source identity, version or commit, license or applicable terms, maturity, or reuse boundary",
           "the Agent transfers capability discovery, selection, invocation, or cleanup back to the user",
+          "a receipt omits or normalizes a material collaboration-loss event",
           "any task regresses a declared floor"
         ],
         "humanAuthority": "A named accountable human accepts each task outcome and the aggregate comparison claim boundary."

@@ -22,7 +22,7 @@ def main() -> int:
     else:
         print(
             f"{report['productId']} {report['release']}: "
-            f"{report['completionState']} "
+            f"{report['programStatus']}, {report['completionState']} "
             f"({report['outcomes']['verified']}/{report['outcomes']['total']} outcomes)"
         )
         for error in report["errors"]:
