@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-natural-task-entry-seam",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -61,5 +61,56 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2.codex-natural-task-entry-seam",
+      "state": "active",
+      "correctionClass": "codex-natural-task-entry-seam",
+      "observedProblem": "The ready program has no installable reference adapter, so the route for binding a future natural Codex task before measured execution is unverified and could reopen speculative Hook or protocol work.",
+      "hypothesis": "The exact installed Codex release already exposes a sufficiently early native task-entry event that can remain an inactive thin-adapter candidate, eliminating any need to author an entry protocol while preserving a separate consumer trust gate.",
+      "falsifier": "The fixed Codex source lacks a pre-execution task event with sufficient task identity, requires a Harness-owned runtime or protocol, or can be activated without a new consumer, prompt-data, and trust boundary.",
+      "stopCondition": "Bind the installed Codex package and exact release source, verify the event input and output boundary, record reuse and off disposition in existing architecture and research surfaces, leave user Hooks unchanged, return to a ready empty graph, pass canonical checks, and remove task residue.",
+      "acceptanceIds": [
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-natural-task-entry-seam",
+          "state": "active",
+          "acceptanceIds": [
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "progress-accounting",
+            "targeted-capability-discovery",
+            "capability-static-review",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "Source-bound Codex natural-task entry seam reuse and off disposition"
+          ]
+        }
+      ]
+    }
+  ]
 }
