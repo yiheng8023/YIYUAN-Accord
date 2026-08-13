@@ -23,6 +23,12 @@ remains false until the post-registration behavior, task floors, cleanup, and
 named-human decision are all evidenced. The verifier is the current
 machine-readable state source.
 
+The first observed post-registration compaction is an outcome-neutral
+calibration: continuity held, but the pre-registered evidence seam named the
+wrong Codex output record type. The current registration excludes that pilot
+and requires a later compaction after the corrected seam is committed and
+pushed; the pilot counts as zero O1-O5 progress.
+
 ## The problem
 
 Agent platforms keep gaining native features, tools, Skills, Plugins, Apps,

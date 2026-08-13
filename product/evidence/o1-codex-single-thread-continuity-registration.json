@@ -1,7 +1,24 @@
 {
   "schema": 1,
-  "id": "registration.o1.codex-single-thread-continuity.2026-08-13",
-  "registeredAt": "2026-08-13T19:18:33+08:00",
+  "id": "registration.o1.codex-single-thread-continuity.2026-08-13.measurement-2",
+  "registeredAt": "2026-08-13T19:51:17+08:00",
+  "supersedes": {
+    "identity": "sha256:7331935f4a86d9ee95e60401b7710fad899ae270601b64d4a72eea8fe4dd7cba",
+    "repositoryCheckpoint": "610f201ce603c00891f014ad3d647e2e8e376d4e",
+    "reason": "The first post-registration compaction preserved same-task continuity, but the pre-registered host seam expected response_item/function_call_output while Codex 0.147.0 emitted response_item/custom_tool_call_output. That event is an outcome-neutral mechanism calibration and cannot receive O1 credit.",
+    "excludedPilotObservation": {
+      "compactedAt": "2026-08-13T11:48:38.906Z",
+      "compactedRawLineSha256": "a290b782aaac062c2edb13a09a7174e1df58a07bd57ff75f8191899a252d6c0d",
+      "contextCompactedRawLineSha256": "39813c1956332c470d47137aba30c9c6dbf65ec436300a39d8c43193e510e06d",
+      "postCompactionOutputRawLineSha256": "2adf565f55a7a9c70e7a5ad598171cb54f4c25635dfc5b41a89259a1218a5b3b",
+      "outcomeCredit": "zero-O1-O5"
+    }
+  },
+  "measurementEligibility": {
+    "eligibleEvent": "the first native same-task compacted event after this registration revision is committed and pushed",
+    "requiredPostCompactionOutputType": "custom_tool_call_output",
+    "postHocReuseOfExcludedPilotForbidden": true
+  },
   "taskIdentity": "natural-task.2026-08-13.codex-single-thread-continuity",
   "nonDiagnosticPurpose": "Advance the user's real Agent Autonomy Harness v0.2 closeout goal while absorbing same-task context growth, compaction, recovery, verification, and cleanup without teaching or returning Codex orchestration to the user.",
   "demandEntry": {

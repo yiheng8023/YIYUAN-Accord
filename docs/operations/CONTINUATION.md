@@ -37,6 +37,13 @@ demand without a Hook or new task. Its O1 registration and validator are bound
 to this exact thread, demand turn, increment, work item, and post-registration
 host chronology. They cannot validate another task or criterion.
 
+The first post-registration compaction at `2026-08-13T11:48:38.906Z` is an
+outcome-neutral calibration. Same-task reconciliation succeeded, but the
+pre-registered validator expected `function_call_output` while Codex 0.147.0
+emitted `custom_tool_call_output`. The current registration supersedes that
+seam, preserves the pilot as zero O1-O5 evidence, and makes only a later native
+compaction after the repair checkpoint eligible for O1.
+
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
 audits, or a manufactured task. Bounded retrospective counterexample analysis,

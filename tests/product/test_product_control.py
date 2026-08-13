@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from harness.control import (  # noqa: E402
+    CODEX_CONTINUITY_EVENT_SEQUENCE,
     _validate_codex_single_thread_continuity,
     verify_product,
 )
@@ -793,6 +794,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             "Codex continuity evidence host-event manifest identity changed",
             errors,
+        )
+
+    def test_continuity_validator_uses_the_observed_codex_output_record_type(self) -> None:
+        self.assertEqual(
+            CODEX_CONTINUITY_EVENT_SEQUENCE[2],
+            ("response_item", "custom_tool_call_output"),
         )
 
     def test_active_increment_id_must_match(self) -> None:

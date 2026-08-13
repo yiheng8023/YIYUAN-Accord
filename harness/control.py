@@ -456,12 +456,20 @@ CODEX_CONTINUITY_REGISTRATION = (
     "product/evidence/o1-codex-single-thread-continuity-registration.json"
 )
 CODEX_CONTINUITY_REGISTRATION_SHA256 = (
-    "7331935f4a86d9ee95e60401b7710fad899ae270601b64d4a72eea8fe4dd7cba"
+    "f0c92603bfff3f88fa97c5e0707e55c0565b57c1970e1bf97af027fa7ac4859c"
 )
 CODEX_CONTINUITY_HOST_EVIDENCE = (
     "product/evidence/o1-codex-single-thread-continuity-host.json"
 )
 CODEX_CONTINUITY_VALIDATOR_KIND = "o1-codex-single-thread-continuity-v1"
+CODEX_CONTINUITY_EVENT_SEQUENCE = (
+    ("compacted", None),
+    ("event_msg", "context_compacted"),
+    ("response_item", "custom_tool_call_output"),
+    ("event_msg", "task_complete"),
+    ("event_msg", "task_started"),
+    ("event_msg", "user_message"),
+)
 CODEX_CONTINUITY_GOAL_SHA256 = (
     "61c1448115f33801572dc3d8dd2d3ba74d2a0005d0c8a5c04d0124444387cea8"
 )
@@ -562,14 +570,7 @@ def _validate_codex_single_thread_continuity(
         "host-event manifest is invalid",
     )
     events = manifest.get("events") if isinstance(manifest, dict) else None
-    expected_event_sequence = [
-        ("compacted", None),
-        ("event_msg", "context_compacted"),
-        ("response_item", "function_call_output"),
-        ("event_msg", "task_complete"),
-        ("event_msg", "task_started"),
-        ("event_msg", "user_message"),
-    ]
+    expected_event_sequence = CODEX_CONTINUITY_EVENT_SEQUENCE
     event_fields = {"line", "timestamp", "recordType", "payloadType", "turnIdentity", "rawLineSha256"}
     valid_events = (
         isinstance(events, list)
