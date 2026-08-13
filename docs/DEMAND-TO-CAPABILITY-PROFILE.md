@@ -146,7 +146,7 @@ but it cannot rewrite a registered cohort after seeing its results.
 
 ## Applicability and claim ceiling
 
-Candidate 2 is intended for Codex-first calibration on software-engineering
+Candidate 3 is intended for Codex-first calibration on software-engineering
 tasks. It does not establish Agent-neutral portability, a universal host
 workflow, production readiness, release publication, or superiority over every
 alternative. O5 requires a separately pre-registered equivalent task on a

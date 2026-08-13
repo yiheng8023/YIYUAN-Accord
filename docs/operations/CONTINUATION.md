@@ -77,9 +77,20 @@ authenticated distinct host, Claude Code 2.1.231, and added the inactive
 Hook-only projection at `adapters/agent-autonomy-harness-claude`. Both host
 edges now reuse `harness/continuation.py`; Claude-specific differences are
 limited to the native event envelope, host metadata, and plain-stdout context
-output. The fixed host's strict plugin validation and 132 offline product tests
+output. The fixed host's strict plugin validation and 137 offline product tests
 pass. No Claude model call, persistent install, consumer mutation, matched
 cross-host task, human equivalence judgment, or O5 credit occurred.
+
+A subsequent authority-defect repair found that G4 described immutable
+pre-registration but the current increment schema did not bind a registration
+file or content identity. The verifier now requires an outcome-bearing
+increment to bind one canonical registration by SHA-256 and checks the complete
+union of its mapped criteria's current pre-registration fields, acceptance
+contract identity, source, floor, loss, human, stop, and claim boundaries. The
+content address detects drift; a future task validator must still prove that
+the committed binding preceded eligible execution and verify the chronology.
+Outcome-neutral work binds `null`. This repair adds no task result or O1-O5
+credit.
 
 ## Earlier ready-state basis
 

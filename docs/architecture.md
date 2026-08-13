@@ -300,3 +300,14 @@ contract separately rejects both capability-orchestration intervention and
 material collaboration-loss events such as intent correction, reopened
 decisions, unrequested work, unnecessary process, residue or context recovery,
 and false completion correction.
+
+Before measured execution, every outcome-bearing increment also binds one
+canonical `product/evidence/*-registration.json` by raw-byte SHA-256. The
+registration must cover the union of the mapped criteria's current
+`preRegistrationFields`, the current acceptance-contract identity, source
+eligibility, mandatory task floors, loss taxonomies, named human, stop rule,
+and claim limits. The content address detects current registration drift. A
+later task-bound validator must still prove that the committed binding preceded
+eligible execution and bind the observation chronology; the registration is
+not product authority, result evidence, or an outcome validator. Outcome-neutral
+increments bind `null` rather than manufacture a task.

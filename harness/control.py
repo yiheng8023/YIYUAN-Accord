@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
@@ -234,9 +235,42 @@ INCREMENT_FIELDS = {
     "falsifier",
     "stopCondition",
     "acceptanceIds",
+    "taskRegistration",
     "processLossBudget",
     "cleanupBoundary",
     "workItems",
+}
+TASK_REGISTRATION_BINDING_FIELDS = {"locator", "sha256"}
+TASK_REGISTRATION_FIELDS = {
+    "schema",
+    "id",
+    "registeredAt",
+    "taskIdentity",
+    "incrementId",
+    "criterionIds",
+    "preRegistrationValues",
+    "acceptanceAuthority",
+    "namedHumanAcceptor",
+    "qualitySafetyEvidenceAndResidueFloors",
+    "materialInterventionTaxonomy",
+    "materialCollaborationLossTaxonomy",
+    "sourceCaptureEligibilityAndStopRule",
+    "claimLimits",
+}
+SOURCE_CAPTURE_FIELDS = {
+    "measurementStartsAfter",
+    "eligibleSources",
+    "ineligibleSources",
+    "stopRule",
+}
+ACCEPTANCE_AUTHORITY_FIELDS = {"locator", "criteriaContractSha256"}
+TASK_REGISTRATION_VALUE_ALIASES = {
+    "registeredAt",
+    "taskIdentity",
+    "namedHumanAcceptor",
+    "qualitySafetyEvidenceAndResidueFloors",
+    "materialInterventionTaxonomy",
+    "materialCollaborationLossTaxonomy",
 }
 WORK_ITEM_FIELDS = {
     "id",
@@ -268,6 +302,7 @@ EXPECTED_PLANNING_MODEL = {
         "falsifier",
         "correction class",
         "mapped acceptance criteria",
+        "content-addressed task registration for outcome-bearing work",
         "finite stop condition",
         "process-loss budget",
         "cleanup boundary",
@@ -524,6 +559,29 @@ def _string_list(value: Any) -> list[str] | None:
 
 def _nonempty_text(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def _substantive_registration_value(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, bool):
+        return True
+    if isinstance(value, (int, float)):
+        return not isinstance(value, bool) and (
+            not isinstance(value, float) or math.isfinite(value)
+        )
+    if isinstance(value, list):
+        return bool(value) and all(
+            _substantive_registration_value(item) for item in value
+        )
+    if isinstance(value, dict):
+        return bool(value) and all(
+            isinstance(key, str)
+            and bool(key.strip())
+            and _substantive_registration_value(item)
+            for key, item in value.items()
+        )
+    return False
 
 
 def _same_typed_value(value: Any, expected: Any) -> bool:
@@ -1243,9 +1301,123 @@ def _authority_guardrail(
     return len(errors) == before
 
 
+def _task_registration_guardrail(
+    root: Path,
+    increment: dict[str, Any],
+    criteria: Mapping[str, dict[str, Any]],
+    errors: list[str],
+) -> bool:
+    before = len(errors)
+    increment_id = increment.get("id")
+    mapped = _string_list(increment.get("acceptanceIds")) or []
+    mapped_outcomes = sorted(set(mapped) & OUTCOME_IDS)
+    binding = increment.get("taskRegistration")
+    if not mapped_outcomes:
+        if binding is not None:
+            _error(
+                errors,
+                f"outcome-neutral increment {increment_id} must bind null taskRegistration",
+            )
+        return len(errors) == before
+    if not isinstance(binding, dict) or set(binding) != TASK_REGISTRATION_BINDING_FIELDS:
+        _error(
+            errors,
+            f"outcome-bearing increment {increment_id} requires an exact taskRegistration binding",
+        )
+        return False
+    locator = _relative_locator(binding.get("locator"), allow_evidence=True)
+    registration_path = PurePosixPath(locator) if locator is not None else None
+    if (
+        registration_path is None
+        or registration_path.parent != PurePosixPath("product/evidence")
+        or not registration_path.name.endswith("-registration.json")
+    ):
+        _error(errors, f"increment {increment_id} has invalid taskRegistration locator")
+        return False
+    candidate = _inside_root(root, locator, errors, "task registration")
+    if candidate is None:
+        return False
+    try:
+        raw = candidate.read_bytes()
+    except OSError as exc:
+        _error(errors, f"cannot read task registration {locator}: {exc.__class__.__name__}")
+        return False
+    expected_sha256 = binding.get("sha256")
+    if (
+        not isinstance(expected_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+        or hashlib.sha256(raw).hexdigest() != expected_sha256
+    ):
+        _error(errors, f"increment {increment_id} taskRegistration identity mismatch")
+        return False
+    registration = _load_json(candidate, f"task registration {locator}", errors)
+    if set(registration) != TASK_REGISTRATION_FIELDS:
+        _error(errors, f"task registration {locator} fields must match the code-owned schema")
+        return False
+    criterion_ids = _string_list(registration.get("criterionIds"))
+    source_capture = registration.get("sourceCaptureEligibilityAndStopRule")
+    acceptance_authority = registration.get("acceptanceAuthority")
+    floors = registration.get("qualitySafetyEvidenceAndResidueFloors")
+    values = registration.get("preRegistrationValues")
+    expected_fields: set[str] = set()
+    for criterion_id in mapped_outcomes:
+        operationalization = criteria.get(criterion_id, {}).get("operationalization")
+        if not isinstance(operationalization, dict):
+            _error(errors, f"task registration {locator} cannot resolve {criterion_id}")
+            continue
+        required = _string_list(operationalization.get("preRegistrationFields"))
+        if required is None:
+            _error(errors, f"task registration {locator} cannot resolve {criterion_id}")
+            continue
+        expected_fields.update(required)
+    shape_valid = (
+        type(registration.get("schema")) is int
+        and registration.get("schema") == 1
+        and _nonempty_text(registration.get("id"))
+        and _rfc3339_instant(registration.get("registeredAt")) is not None
+        and _nonempty_text(registration.get("taskIdentity"))
+        and registration.get("incrementId") == increment_id
+        and criterion_ids == mapped_outcomes
+        and isinstance(values, dict)
+        and set(values) == expected_fields
+        and all(_substantive_registration_value(item) for item in values.values())
+        and all(
+            _same_typed_value(values[field], registration[field])
+            for field in TASK_REGISTRATION_VALUE_ALIASES & expected_fields
+        )
+        and _nonempty_text(registration.get("namedHumanAcceptor"))
+        and isinstance(acceptance_authority, dict)
+        and set(acceptance_authority) == ACCEPTANCE_AUTHORITY_FIELDS
+        and acceptance_authority.get("locator") == "product/acceptance.json"
+        and acceptance_authority.get("criteriaContractSha256")
+        == EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
+        and isinstance(floors, dict)
+        and bool(floors)
+        and all(
+            isinstance(key, str)
+            and bool(key.strip())
+            and _substantive_registration_value(item)
+            for key, item in floors.items()
+        )
+        and _string_list(registration.get("materialInterventionTaxonomy")) is not None
+        and _string_list(registration.get("materialCollaborationLossTaxonomy")) is not None
+        and isinstance(source_capture, dict)
+        and set(source_capture) == SOURCE_CAPTURE_FIELDS
+        and _nonempty_text(source_capture.get("measurementStartsAfter"))
+        and _string_list(source_capture.get("eligibleSources")) is not None
+        and _string_list(source_capture.get("ineligibleSources")) is not None
+        and _nonempty_text(source_capture.get("stopRule"))
+        and _string_list(registration.get("claimLimits")) is not None
+    )
+    if not shape_valid:
+        _error(errors, f"task registration {locator} shape is invalid")
+    return len(errors) == before
+
+
 def _process_loss_guardrail(
     root: Path,
     increments: list[dict[str, Any]],
+    criteria: Mapping[str, dict[str, Any]],
     validated_work_outcomes: Mapping[str, set[str]],
     errors: list[str],
 ) -> bool:
@@ -1257,6 +1429,7 @@ def _process_loss_guardrail(
             continue
         budget = increment.get("processLossBudget")
         increment_id = increment.get("id")
+        _task_registration_guardrail(root, increment, criteria, errors)
         if not isinstance(budget, dict) or set(budget) != PROCESS_LOSS_FIELDS:
             _error(errors, f"increment {increment_id} requires the exact process-loss budget fields")
             continue
@@ -1592,7 +1765,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     )
     authority_guardrail = _authority_guardrail(program, all_work, errors)
     process_guardrail = _process_loss_guardrail(
-        root, increments, validated_work_outcomes, errors
+        root, increments, criteria, validated_work_outcomes, errors
     ) and graph_valid
 
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}

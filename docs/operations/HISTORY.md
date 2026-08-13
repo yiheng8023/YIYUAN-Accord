@@ -149,6 +149,17 @@ without a model call, installation, consumer mutation, or residue. This is an
 inactive reference-adapter candidate and counts as zero O1-O5 progress; only a
 separately pre-registered matched real task can test O5.
 
+The next authority-defect repair closed a gap between G4's written
+pre-registration rule and the machine program schema. Outcome-bearing
+increments now content-address one canonical task registration, and the
+verifier derives its required field union from the currently mapped acceptance
+criteria and binds that acceptance-contract identity. Content addressing
+detects current drift; the later task-bound result validator remains
+responsible for proving that the committed binding preceded execution and for
+checking observation chronology. The registration cannot act as product
+authority, result evidence, or an outcome validator. The repair is
+outcome-neutral.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

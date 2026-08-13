@@ -96,6 +96,9 @@ class ProductControlTests(unittest.TestCase):
         program["activeIncrementId"] = None
         program["increments"] = []
         self.write_json("product/program.json", program)
+        registration = self.root / "product/evidence/fixture-registration.json"
+        if registration.exists():
+            registration.unlink()
 
     def mutate(self, relative: str, callback) -> None:
         value = self.read_json(relative)
@@ -170,6 +173,7 @@ class ProductControlTests(unittest.TestCase):
             "falsifier": "fixture falsifier",
             "stopCondition": "fixture finite stop",
             "acceptanceIds": ["G4"],
+            "taskRegistration": None,
             "processLossBudget": {
                 "maxSameClassUserCorrectionBeforeStop": 1,
                 "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -205,8 +209,77 @@ class ProductControlTests(unittest.TestCase):
             increment = self.ensure_increment(value, state="completed")
             increment["acceptanceIds"].append(criterion_id)
             increment["workItems"][0]["acceptanceIds"].append(criterion_id)
+            self.bind_fixture_registration(increment)
 
         self.mutate("product/program.json", add_mapping)
+
+    def bind_fixture_registration(self, increment: dict) -> None:
+        outcome_ids = sorted(
+            set(increment["acceptanceIds"]) & {"O1", "O2", "O3", "O4", "O5"}
+        )
+        if not outcome_ids:
+            increment["taskRegistration"] = None
+            return
+        acceptance = self.read_json("product/acceptance.json")
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+        fields = {
+            field
+            for criterion_id in outcome_ids
+            for field in criteria[criterion_id]["operationalization"][
+                "preRegistrationFields"
+            ]
+        }
+        floors = {
+            "quality": "fixture quality floor",
+            "safety": "fixture safety floor",
+            "evidence": "fixture evidence floor",
+            "residue": "fixture residue floor",
+        }
+        interventions = ["fixture material intervention"]
+        losses = ["fixture material collaboration loss"]
+        aliases = {
+            "registeredAt": "2026-08-12T02:59:00+08:00",
+            "taskIdentity": "natural-task.fixture-current",
+            "namedHumanAcceptor": "fixture reviewer",
+            "qualitySafetyEvidenceAndResidueFloors": floors,
+            "materialInterventionTaxonomy": interventions,
+            "materialCollaborationLossTaxonomy": losses,
+        }
+        registration = {
+            "schema": 1,
+            "id": "registration.fixture-current",
+            "registeredAt": aliases["registeredAt"],
+            "taskIdentity": aliases["taskIdentity"],
+            "incrementId": increment["id"],
+            "criterionIds": outcome_ids,
+            "preRegistrationValues": {
+                field: aliases.get(field, f"fixture value for {field}")
+                for field in sorted(fields)
+            },
+            "acceptanceAuthority": {
+                "locator": "product/acceptance.json",
+                "criteriaContractSha256": (
+                    "ea88f3ac99f8e58342207c79ebb67897a1bdb804f487ba0f07d886d898ed69ab"
+                ),
+            },
+            "namedHumanAcceptor": aliases["namedHumanAcceptor"],
+            "qualitySafetyEvidenceAndResidueFloors": floors,
+            "materialInterventionTaxonomy": interventions,
+            "materialCollaborationLossTaxonomy": losses,
+            "sourceCaptureEligibilityAndStopRule": {
+                "measurementStartsAfter": "the committed registration binding",
+                "eligibleSources": ["fixture source after registration"],
+                "ineligibleSources": ["fixture source before registration"],
+                "stopRule": "stop on any fixture floor failure",
+            },
+            "claimLimits": ["fixture task only"],
+        }
+        relative = "product/evidence/fixture-registration.json"
+        self.write_json(relative, registration)
+        increment["taskRegistration"] = {
+            "locator": relative,
+            "sha256": hashlib.sha256((self.root / relative).read_bytes()).hexdigest(),
+        }
 
     def activate_program(self, program: dict) -> dict:
         increment = self.ensure_increment(program)
@@ -1194,12 +1267,126 @@ class ProductControlTests(unittest.TestCase):
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O2")
             increment["workItems"][0]["acceptanceIds"].append("O2")
+            self.bind_fixture_registration(increment)
 
         self.mutate("product/program.json", activate_o2)
         report = self.report()
         self.assertTrue(report["valid"], report["errors"])
         self.assertTrue(report["criterionStates"]["G4"])
         self.assertFalse(report["criterionStates"]["O2"])
+
+    def test_outcome_increment_requires_content_addressed_task_registration(
+        self,
+    ) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "outcome-bearing increment increment.fixture-current requires an exact "
+            "taskRegistration binding",
+            report["errors"],
+        )
+
+    def test_task_registration_rejects_drift_or_missing_criterion_fields(self) -> None:
+        def activate_o5(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].extend(["O1", "O5"])
+            increment["workItems"][0]["acceptanceIds"].extend(["O1", "O5"])
+            self.bind_fixture_registration(increment)
+
+        self.mutate("product/program.json", activate_o5)
+        baseline = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+
+        registration = self.read_json(relative)
+        registration["preRegistrationValues"].pop("equivalenceTolerance")
+        self.write_json(relative, registration)
+        baseline["increments"][0]["taskRegistration"]["sha256"] = hashlib.sha256(
+            (self.root / relative).read_bytes()
+        ).hexdigest()
+        self.write_json("product/program.json", baseline)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            f"task registration {relative} shape is invalid",
+            report["errors"],
+        )
+
+        self.bind_fixture_registration(baseline["increments"][0])
+        self.write_json("product/program.json", baseline)
+        registration = self.read_json(relative)
+        registration["claimLimits"].append("unbound post-registration drift")
+        self.write_json(relative, registration)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current taskRegistration identity mismatch",
+            report["errors"],
+        )
+
+    def test_task_registration_binds_current_acceptance_contract(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        registration["acceptanceAuthority"]["criteriaContractSha256"] = "0" * 64
+        self.write_json(relative, registration)
+        program["increments"][0]["taskRegistration"]["sha256"] = hashlib.sha256(
+            (self.root / relative).read_bytes()
+        ).hexdigest()
+        self.write_json("product/program.json", program)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            f"task registration {relative} shape is invalid",
+            report["errors"],
+        )
+
+    def test_task_registration_locator_is_canonical_and_non_nested(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(increment)
+            increment["taskRegistration"]["locator"] = (
+                "product/evidence/nested/fixture-registration.json"
+            )
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current has invalid taskRegistration locator",
+            report["errors"],
+        )
+
+    def test_outcome_neutral_increment_rejects_registration_binding(self) -> None:
+        def bind(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["taskRegistration"] = {
+                "locator": "product/evidence/fixture-registration.json",
+                "sha256": "0" * 64,
+            }
+
+        self.mutate("product/program.json", bind)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "outcome-neutral increment increment.fixture-current must bind null "
+            "taskRegistration",
+            report["errors"],
+        )
 
     def test_current_release_has_no_prebuilt_outcome_validation_path(self) -> None:
         self.assertEqual(SUPPORTED_EVIDENCE_VALIDATORS, {})
@@ -1626,6 +1813,7 @@ class ProductControlTests(unittest.TestCase):
             increment["acceptanceIds"].append("O1")
             first = increment["workItems"][0]
             first["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(increment)
             first["state"] = "completed"
             second = deepcopy(first)
             second["id"] = "work.second-labeled-neutral-item"
@@ -1647,6 +1835,7 @@ class ProductControlTests(unittest.TestCase):
             increment["acceptanceIds"].append("O1")
             first = increment["workItems"][0]
             first["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(increment)
             first["state"] = "completed"
             second = deepcopy(first)
             second["id"] = "work.second-labeled-item"
