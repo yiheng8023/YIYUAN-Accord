@@ -57,6 +57,11 @@ portfolio curation remain available. Such work must start from an observed
 problem, have a finite stop, remain inside existing authority, and count as
 zero O1-O5 progress.
 
+Likewise, O3's required real-gap route and O4's required rejected or stopped
+receipt are cohort eligibility conditions, not permission to manufacture a
+gap, disable a healthy route, induce failure, or split and relabel one demand.
+Leave those criteria false until a bound natural task produces the case.
+
 A 2026-08-13 fixed-source landscape and historical-asset audit found strong
 overlap at every neighboring layer. CHAP already defines a composable human-
 Agent collaboration wire and auditable workspace; Human Tool supplies an

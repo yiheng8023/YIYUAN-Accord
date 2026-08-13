@@ -64,6 +64,13 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
+Portfolio minima are eligibility predicates, not work generators. O3's
+reproducible-gap case and O4's rejected or stopped receipt count only when a
+bound natural task produces them without induced degradation. The Agent cannot
+disable a healthy capability, stage a failure, split or relabel one demand, or
+invent a task to fill a cohort; the affected criterion remains false until an
+eligible case occurs.
+
 The portable layer owns testable quality semantics, not host commands or wire
 primitives. It defines required
 authority, unsupported states, lifecycle ownership, evidence shape, outcome
