@@ -15,19 +15,38 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active`, with one outcome-neutral
+Codex continuity increment. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2-bind-product-demand-and-codex-continuity`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is ready
+## Why the program is active
+
+The seventh-task correction exposed a machine-authority ambiguity: the program
+said the user must not invent a task, but repeated execution still treated the
+absence of a newly supplied external task as a wait condition even though the
+v0.2 product plan already contained authorized, unresolved deliverables. The
+current outcome-neutral increment fixes the distinction: an authorized product-
+plan delivery is real demand when its primary purpose is the needed deliverable,
+while a task created mainly to exercise or diagnose the Harness remains
+ineligible. Pre-registration, task-bound evidence, mandatory floors, and named-
+human acceptance remain unchanged.
+
+The same increment adds one inactive Codex reference seam. The fixed 0.147.0
+native `SessionStart` event already covers startup, resume, clear, and compact.
+The candidate adapter projects only the current constitution, program,
+acceptance, and verifier state; it does not read prompt or transcript content,
+persist session state, emit a receipt, or enable a user Hook. This is mechanism
+work and counts as zero O1-O5 progress.
+
+## Earlier ready-state basis
 
 The user supplied a real goal-level continuity demand after the same v0.2
 closeout goal reached a seventh Codex task. The resulting O1 attempt first

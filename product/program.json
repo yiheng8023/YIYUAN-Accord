@@ -6,11 +6,12 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2-bind-product-demand-and-codex-continuity",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
+    "boundProductDeliveryDemandDisposition": "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-deliverable-rather-than-exercising-or-diagnosing-the-harness",
     "agentOwnedWithoutInventedUserTask": [
       "retrospective-counterexample-analysis",
       "bounded-portfolio-curation",
@@ -61,5 +62,69 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v0.2-bind-product-demand-and-codex-continuity",
+      "state": "active",
+      "correctionClass": "product-demand-misclassified-as-missing-natural-task",
+      "observedProblem": "Across seven sequential Codex tasks, the Agent repeatedly treated the absence of a newly invented external task as a reason to wait even though the authorized v0.2 product plan already contains unresolved deliverable demand; compaction and handoff then returned goal recovery and route selection to the user.",
+      "hypothesis": "If the current program explicitly distinguishes authorized product-delivery demand from tasks created primarily to exercise or diagnose the Harness, and a stateless Codex reference adapter re-injects only a fresh projection of current repository authority on native session start, resume, clear, or compact events, the Agent can continue planned delivery without a user-authored replacement task or a duplicated state store.",
+      "falsifier": "Stop if the correction weakens O1-O5 natural-task evidence requirements, promotes this slice as an outcome, copies product authority into a fourth source, reads or persists prompt or transcript contents, creates a generic memory runtime or protocol, enables a user Hook without separate authority, adds routine user orchestration, or cannot remain a thin replaceable Codex projection.",
+      "stopCondition": "Stop when machine authority rejects the missing-demand interpretation, an inactive executable Codex SessionStart adapter derives bounded continuation context from the live constitution, program, acceptance, and verifier report for startup, resume, clear, and compact without persistent session state or prompt/transcript access, unsupported inputs fail safely, public boundaries are aligned, O1-O5 remain false, the user Hook stays disabled, local verification and tests pass, residue is absent, and the slice is committed and pushed before leaving the current graph.",
+      "acceptanceIds": [
+        "O1",
+        "O2",
+        "O4",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2-bind-product-demand-and-session-start-adapter",
+          "state": "active",
+          "acceptanceIds": [
+            "O1",
+            "O2",
+            "O4",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "targeted-capability-discovery"
+          ],
+          "deliverables": [
+            "machine-authoritative product-delivery demand distinction",
+            "inactive stateless Codex SessionStart reference adapter"
+          ]
+        }
+      ]
+    }
+  ]
 }

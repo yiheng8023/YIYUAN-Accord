@@ -125,7 +125,7 @@ simplified, merged, replaced, or retired. Hook stays off unless repeated
 natural-task evidence isolates a recall gap and a reversible A/B proves net
 benefit.
 
-### Codex reference-host entry seam
+### Codex reference-host continuity seam
 
 The 2026-08-13 reference machine runs the non-prerelease Apache-2.0
 `@openai/codex` 0.147.0 Windows x64 package (binary SHA-256
@@ -133,23 +133,30 @@ The 2026-08-13 reference machine runs the non-prerelease Apache-2.0
 Its `hooks` feature reports stable. The corresponding
 [`rust-v0.147.0` source at `be6e8ea`](https://github.com/openai/codex/tree/be6e8eac029b183056b7e4402879f15d2c85f61b)
 defines a
-[`UserPromptSubmit` input](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/user-prompt-submit.command.input.schema.json)
-with the raw prompt, working directory, session and turn identities, model,
-permission mode, and transcript path before the handler returns. Its
-[`UserPromptSubmit` output](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/user-prompt-submit.command.output.schema.json)
-can inject additional model context, stop processing, or block the turn.
+[`SessionStart` input](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/session-start.command.input.schema.json)
+for startup, resume, clear, and compact with the working directory, source,
+model, permission mode, session identity, and transcript location. Its
+[`SessionStart` output](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/session-start.command.output.schema.json)
+can inject additional model context.
 
-Reuse disposition: this is the leading native entry seam for a future thin
-Codex projection, so the Harness does not author an intake protocol or global
-task classifier. It does not observe the full capability lifecycle, prove a
-receipt, validate a result, or by itself supply a completion event sufficient
-for a lifecycle receipt.
-The current user Hook configuration is empty, and no Hook was enabled or
-executed by this review. Since a handler receives prompt data and can alter
-turn behavior, installation or enablement opens a consumer, prompt-data, and
-trust boundary and remains off without a task-bound recall gap, separate
-authority, and reversible value evidence. This source review changes only the
-candidate route and counts as zero O1-O5 progress.
+Reuse disposition: `harness/codex_reference.py` is an inactive, stateless thin
+projection over this native seam. It derives a bounded continuation context
+from the live constitution, program, acceptance, and verifier report; ignores
+the transcript path; stores no session state; and is a no-op outside the bound
+repository. The Harness therefore does not author an intake protocol, global
+task classifier, transcript store, or compaction runtime. The adapter does not
+observe the full capability lifecycle, prove a receipt, validate a result, or
+supply an outcome completion event.
+
+Goal-level demand continues to use Codex's native conversation path. The
+candidate does not use `UserPromptSubmit`: raw-prompt access and turn-blocking
+authority are unnecessary for the observed continuity gap and would enlarge
+the data and trust boundary.
+
+The current user Hook configuration remains empty. Installation or enablement
+is a separate consumer and trust transition and stays off until separately
+authorized reversible behavior evidence can test distinct value. The candidate
+and its offline mechanism tests count as zero O1-O5 progress.
 
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed

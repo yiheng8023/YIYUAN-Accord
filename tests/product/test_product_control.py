@@ -17,6 +17,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from harness.codex_reference import (  # noqa: E402
+    ADAPTER_ID,
+    render_session_start_context,
+    session_start_hook_output,
+)
 from harness.control import SUPPORTED_EVIDENCE_VALIDATORS, verify_product  # noqa: E402
 from harness.__main__ import main as cli_main  # noqa: E402
 
@@ -27,6 +32,7 @@ AUTHORITY_FILES = (
     "product/acceptance.json",
     "harness/__init__.py",
     "harness/__main__.py",
+    "harness/codex_reference.py",
     "harness/control.py",
     "README.md",
     "README.zh-CN.md",
@@ -228,12 +234,26 @@ class ProductControlTests(unittest.TestCase):
             timeout=30,
         )
 
-    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
+    def codex_session_start_payload(self, *, source: str = "startup") -> dict:
+        return {
+            "session_id": "00000000-0000-4000-8000-000000000001",
+            "transcript_path": str(self.root / "must-not-be-read.jsonl"),
+            "cwd": str(self.root),
+            "hook_event_name": "SessionStart",
+            "model": "gpt-test",
+            "permission_mode": "default",
+            "source": source,
+        }
+
+    def test_current_v02_contract_has_one_active_continuity_increment(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2-bind-product-demand-and-codex-continuity",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -246,13 +266,133 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress", completed.stdout)
+        self.assertIn("v0.2: active, in-progress", completed.stdout)
+
+    def test_codex_session_start_adapter_projects_live_authority(self) -> None:
+        payload = self.codex_session_start_payload(source="resume")
+        context = render_session_start_context(self.root, payload)
+        self.assertIsNotNone(context)
+        projection = json.loads(context)
+        self.assertEqual(projection["adapter"], ADAPTER_ID)
+        self.assertEqual(projection["event"], {"name": "SessionStart", "source": "resume"})
+        self.assertEqual(projection["program"]["status"], "ready")
+        self.assertEqual(
+            projection["program"]["progressionPolicy"][
+                "boundProductDeliveryDemandDisposition"
+            ],
+            "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-deliverable-rather-than-exercising-or-diagnosing-the-harness",
+        )
+        self.assertEqual(
+            projection["nextRoute"],
+            "select-smallest-causally-justified-product-delivery-increment-from-current-authority",
+        )
+        self.assertNotIn("transcript_path", context)
+        self.assertNotIn(payload["session_id"], context)
+
+    def test_codex_session_start_adapter_supports_native_continuity_events(self) -> None:
+        for source in ("startup", "resume", "clear", "compact"):
+            with self.subTest(source=source):
+                output = session_start_hook_output(
+                    self.root, self.codex_session_start_payload(source=source)
+                )
+                self.assertEqual(output["continue"], True)
+                self.assertEqual(output["suppressOutput"], True)
+                context = json.loads(output["hookSpecificOutput"]["additionalContext"])
+                self.assertEqual(context["event"]["source"], source)
+
+    def test_codex_session_start_adapter_projects_exact_active_increment(self) -> None:
+        self.mutate("product/program.json", self.activate_program)
+        context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="compact")
+        )
+        projection = json.loads(context)
+        self.assertEqual(projection["nextRoute"], "continue-current-active-increment")
+        self.assertEqual(projection["currentWork"]["id"], FIXTURE_INCREMENT_ID)
+        self.assertEqual(
+            projection["currentWork"]["correctionClass"], "fixture-correction"
+        )
+
+    def test_codex_session_start_adapter_is_noop_outside_bound_repository(self) -> None:
+        payload = self.codex_session_start_payload()
+        payload["cwd"] = str(self.root.parent)
+        self.assertIsNone(render_session_start_context(self.root, payload))
+        self.assertEqual(
+            session_start_hook_output(self.root, payload),
+            {"continue": True, "suppressOutput": True},
+        )
+
+    def test_codex_session_start_adapter_rejects_other_events_and_sources(self) -> None:
+        wrong_event = self.codex_session_start_payload()
+        wrong_event["hook_event_name"] = "UserPromptSubmit"
+        self.assertIsNone(render_session_start_context(self.root, wrong_event))
+
+        wrong_source = self.codex_session_start_payload(source="unknown")
+        self.assertIsNone(render_session_start_context(self.root, wrong_source))
+
+    def test_codex_session_start_adapter_surfaces_invalid_authority_without_claiming_work(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__("completionExpression", "true"),
+        )
+        context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="compact")
+        )
+        projection = json.loads(context)
+        self.assertFalse(projection["verification"]["valid"])
+        self.assertEqual(
+            projection["nextRoute"], "repair-current-authority-before-product-mutation"
+        )
+        self.assertNotIn("product", projection)
+
+    def test_codex_session_start_cli_emits_hook_schema_without_traceback(self) -> None:
+        arguments = [
+            "python -m harness",
+            "codex-session-start",
+            "--root",
+            str(self.root),
+        ]
+        stdout = StringIO()
+        stderr = StringIO()
+        with (
+            patch.object(sys, "argv", arguments),
+            patch("sys.stdin", new=StringIO(json.dumps(self.codex_session_start_payload()))),
+            patch("sys.stdout", new=stdout),
+            patch("sys.stderr", new=stderr),
+        ):
+            returncode = cli_main()
+        self.assertEqual(returncode, 0)
+        self.assertEqual(stderr.getvalue(), "")
+        output = json.loads(stdout.getvalue())
+        self.assertEqual(set(output), {"continue", "suppressOutput", "hookSpecificOutput"})
+        self.assertEqual(
+            output["hookSpecificOutput"]["hookEventName"], "SessionStart"
+        )
+
+    def test_codex_session_start_cli_malformed_input_is_nonblocking_noop(self) -> None:
+        arguments = [
+            "python -m harness",
+            "codex-session-start",
+            "--root",
+            str(self.root),
+        ]
+        stdout = StringIO()
+        with (
+            patch.object(sys, "argv", arguments),
+            patch("sys.stdin", new=StringIO("not-json")),
+            patch("sys.stdout", new=stdout),
+        ):
+            returncode = cli_main()
+        self.assertEqual(returncode, 0)
+        self.assertEqual(
+            json.loads(stdout.getvalue()),
+            {"continue": True, "suppressOutput": True},
+        )
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -1645,6 +1785,17 @@ class ProductControlTests(unittest.TestCase):
             "product/program.json",
             lambda value: value.pop("progressionPolicy", None),
         )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn("program progressionPolicy is invalid", report["errors"])
+
+    def test_program_cannot_reclassify_bound_product_delivery_as_missing_demand(self) -> None:
+        def erase_product_demand(value: dict) -> None:
+            value["progressionPolicy"].pop(
+                "boundProductDeliveryDemandDisposition", None
+            )
+
+        self.mutate("product/program.json", erase_product_demand)
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn("program progressionPolicy is invalid", report["errors"])

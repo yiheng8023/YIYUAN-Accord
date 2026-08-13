@@ -363,6 +363,10 @@ CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
 EXPECTED_PROGRESSION_POLICY = {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
+    "boundProductDeliveryDemandDisposition": (
+        "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-"
+        "deliverable-rather-than-exercising-or-diagnosing-the-harness"
+    ),
     "agentOwnedWithoutInventedUserTask": [
         "retrospective-counterexample-analysis",
         "bounded-portfolio-curation",

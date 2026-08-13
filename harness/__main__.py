@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 
+from .codex_reference import session_start_hook_output
 from .control import verify_product
 
 
@@ -14,7 +15,23 @@ def main() -> int:
     verify_parser = subparsers.add_parser("verify")
     verify_parser.add_argument("--root", type=Path, default=Path.cwd())
     verify_parser.add_argument("--json", action="store_true")
+    codex_parser = subparsers.add_parser("codex-session-start")
+    codex_parser.add_argument("--root", type=Path, default=Path.cwd())
     args = parser.parse_args()
+
+    if args.command == "codex-session-start":
+        try:
+            payload = json.load(sys.stdin)
+        except (json.JSONDecodeError, OSError, UnicodeError):
+            payload = None
+        print(
+            json.dumps(
+                session_start_hook_output(args.root, payload),
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+        )
+        return 0
 
     report = verify_product(args.root)
     if args.json:

@@ -99,12 +99,13 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready after adding the missing proactive-risk and
-expected-state feedback floor to unaccepted candidate.2 before any eligible
-cohort task bound it. The closed outcome-neutral correction added no risk
-runtime, ledger, or new user workflow. O1-O5 remain false. The current verifier
-is not an accepted methodology, task runtime, reference adapter, or cross-host
-proof.
+The v0.2 program currently has one outcome-neutral Codex continuity increment
+active. O1-O5 remain false. Authorized product-plan delivery is real demand
+when its primary purpose is the required deliverable rather than exercising or
+diagnosing the Harness; this does not make the task outcome-eligible without
+the unchanged pre-registration, evidence, floors, and human-acceptance burden.
+The current verifier and inactive adapter candidate are not an accepted
+methodology, task runtime, behavior result, or cross-host proof.
 
 ### Continuity is reconciliation, not unlimited context
 
@@ -200,16 +201,25 @@ authority. A second host must implement the same portable semantics through
 its own thin adapter; a Codex projection cannot prove cross-Agent behavior.
 Codex-first is the reference-adapter sequence, not a core dependency.
 
-For the Codex reference host, reuse the host's pre-execution task-entry event
-before considering a Harness-owned entry protocol. The fixed v0.147.0
-`UserPromptSubmit` input provides task text, working directory, session and turn
-identities, model, permission mode, and transcript location; its output can add
-model context or block the turn. That makes it only a possible thin entry seam,
-not an evidence store, lifecycle observer, task validator, or accepted adapter.
-Because a handler receives the raw prompt and can change turn behavior, any
-projection or enablement remains a separate consumer, prompt-data, and trust
-decision. It stays off until a bound task exposes a repeatable entry-recall gap
-and a reversible test can measure distinct value.
+For the Codex reference host, reuse the host's lifecycle event before inventing
+a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
+fires for startup, resume, clear, and compact, supplies the working directory
+and source, and can return additional model context. The candidate adapter in
+`harness/codex_reference.py` uses only that seam to project the live
+constitution, program, acceptance, and verifier state. It ignores the supplied
+transcript path, stores no session data, is a no-op outside the bound repository,
+and does not validate results or emit receipts.
+
+Goal-level demand still enters through Codex's normal native conversation
+path. The adapter does not intercept or classify prompts. Using
+`UserPromptSubmit` for this continuity gap would add raw-prompt access and
+turn-blocking authority without causal necessity, so it is not part of the
+candidate.
+
+The adapter remains inactive. Installing or enabling a Hook is a separate
+consumer and trust transition requiring explicit authority and reversible
+behavior evidence. The candidate therefore establishes only an executable
+reference seam and zero O1-O5 progress.
 
 ## 5. Evidence and acceptance
 

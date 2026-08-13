@@ -12,15 +12,17 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route,
 uses it safely, verifies the result, and cleans up afterward.
 
 **Research-stage status:** the repository currently contains the product
-contract, acceptance model, and deterministic verifier. It does not yet contain
-an Agent runtime, an installable reference adapter, or accepted cross-host
+contract, acceptance model, deterministic verifier, and an inactive Codex
+`SessionStart` reference-adapter candidate. It does not contain an Agent
+runtime, an installed or behavior-accepted adapter, or accepted cross-host
 proof.
 
-v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
-unaccepted candidate.2 profile now makes proactive risk prediction and
-expected-versus-observed state control a mandatory floor before the first
-eligible cohort task starts. It adds no runtime or accepted outcome. The
-verifier is the current machine-readable state source.
+v0.2 currently has one outcome-neutral Codex continuity increment active and
+O1-O5 remain false. It clarifies that authorized product-plan delivery is real
+demand when the primary purpose is the deliverable, rather than exercising or
+diagnosing the Harness. The adapter only derives bounded continuation context
+from the current repository authority; it is not enabled and proves no runtime
+behavior or outcome. The verifier is the current machine-readable state source.
 
 ## The problem
 
@@ -78,13 +80,18 @@ The current repository provides:
   for exact pre-registration by future Codex cohort tasks;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
+- an inactive, standard-library-only Codex `SessionStart` adapter candidate
+  that projects current authority after startup, resume, clear, or compaction
+  without reading prompt or transcript content or storing session state;
 - product tests for the public verification seam;
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.
 
 It does not provide task execution, capability installation, live routing, or
-an accepted quality profile today. Passing repository checks proves that the
-current contract is internally valid; it does not prove user value.
+an accepted quality profile today. The adapter is executable for offline
+mechanism validation but is not installed in user configuration. Passing
+repository checks proves that the current contract is internally valid; it does
+not prove user value.
 
 ## Verify the repository
 
@@ -126,6 +133,10 @@ not a Codex sidebar task or thread. Sequential receipts may remain in one
 healthy host task, and one receipt may support more than one criterion only
 when it independently meets each criterion's pre-registration and validation
 burden. It cannot be counted twice toward one criterion's sample minimum.
+An authorized product-plan delivery is already real demand when its primary
+purpose is the needed deliverable; the excluded case is a task created mainly
+to exercise or diagnose the Harness. This distinction does not waive
+pre-registration, evidence, floors, or named-human acceptance.
 
 Human authority, zero-trust evidence, lean independent authority, and bounded
 process/resource loss are mandatory guardrails, not substitutes for outcomes.
