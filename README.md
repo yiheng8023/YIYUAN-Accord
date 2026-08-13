@@ -13,9 +13,10 @@ uses it safely, verifies the result, and cleans up afterward.
 
 **Research-stage status:** the repository currently contains the product
 contract, acceptance model, deterministic verifier, an inactive Codex
-`SessionStart` reference adapter, and an inactive thin Codex plugin projection
-for that adapter. It does not contain an Agent runtime, an installed or
-behavior-accepted adapter, or accepted cross-host proof.
+`SessionStart` reference adapter, an inactive thin Codex plugin projection for
+that adapter, and a workspace discovery entry that exposes the projection as
+available without installing it. It does not contain an Agent runtime, an
+installed or behavior-accepted adapter, or accepted cross-host proof.
 
 v0.2 is `ready`, with no active causal increment and O1-O5 still false. The
 program now makes explicit that authorized product-plan delivery is real demand
@@ -88,6 +89,8 @@ The current repository provides:
 - an inactive, Hook-only Codex plugin projection that packages that adapter
   through the host's plugin boundary without turning the repository or portable
   core into a plugin;
+- a workspace-scoped Codex marketplace entry that exposes only that projection
+  as `AVAILABLE`; discovery does not install, enable, or trust it;
 - product tests for the public verification seam;
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.

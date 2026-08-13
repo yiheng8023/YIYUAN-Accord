@@ -1,0 +1,20 @@
+{
+  "name": "agent-autonomy-harness",
+  "interface": {
+    "displayName": "Agent Autonomy Harness"
+  },
+  "plugins": [
+    {
+      "name": "agent-autonomy-harness-codex",
+      "source": {
+        "source": "local",
+        "path": "./adapters/agent-autonomy-harness-codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

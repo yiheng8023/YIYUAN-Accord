@@ -247,15 +247,12 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
-    def test_current_v02_contract_is_active_and_in_progress(self) -> None:
+    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.codex-workspace-marketplace-entry",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -300,13 +297,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -472,6 +469,34 @@ class ProductControlTests(unittest.TestCase):
             )
         ).lower()
         self.assertNotIn("cc switch", candidate_text)
+
+    def test_codex_workspace_marketplace_exposes_only_the_thin_projection(
+        self,
+    ) -> None:
+        marketplace = json.loads(
+            (ROOT / ".agents/plugins/marketplace.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(marketplace["name"], "agent-autonomy-harness")
+        self.assertEqual(
+            marketplace["interface"], {"displayName": "Agent Autonomy Harness"}
+        )
+        self.assertEqual(len(marketplace["plugins"]), 1)
+        entry = marketplace["plugins"][0]
+        self.assertEqual(entry["name"], "agent-autonomy-harness-codex")
+        self.assertEqual(
+            entry["source"],
+            {
+                "source": "local",
+                "path": "./adapters/agent-autonomy-harness-codex",
+            },
+        )
+        self.assertEqual(
+            entry["policy"],
+            {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+        )
+        source = (ROOT / entry["source"]["path"]).resolve(strict=True)
+        self.assertEqual(source, CODEX_PLUGIN_ROOT.resolve(strict=True))
+        self.assertNotEqual(source, ROOT.resolve(strict=True))
 
     def test_codex_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
         nested = self.root / "docs/nested"

@@ -178,6 +178,13 @@ consumer transitions and stay off until a scoped grant authorizes reversible
 behavior evidence. The candidate and its offline mechanism tests count as zero
 O1-O5 progress.
 
+The committed `.agents/plugins/marketplace.json` is a workspace-scoped
+discovery source, not a Harness-owned marketplace product. Codex 0.147.0
+app-server discovery resolves its single `AVAILABLE` entry to the existing
+projection with `installed=false` and `enabled=false`. It replaces the earlier
+repository-temporary discovery source without adding CC Switch, installation,
+enablement, trust, or outcome credit.
+
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed
 workflow conflicts with bound user intent, current product authority, or the

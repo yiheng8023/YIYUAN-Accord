@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-workspace-marketplace-entry",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,58 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.codex-workspace-marketplace-entry",
-      "state": "active",
-      "correctionClass": "codex-plugin-residue-free-discovery-source",
-      "observedProblem": "The first native Codex plugin lifecycle attempt needed a repository .tmp marketplace source, and that source itself falsified G4's no-residue floor; the existing Hook-only projection therefore has no durable repository-owned discovery entry through which Codex can materialize it without first polluting the repository.",
-      "hypothesis": "One committed workspace marketplace entry marked AVAILABLE and pointing only to the existing adapters/agent-autonomy-harness-codex projection will let Codex 0.147.0 discover the optional plugin from a clean checkout without installing or activating it, turning later materialization into a native Codex lifecycle while preserving the repository-as-product and CC-Switch-independent boundaries.",
-      "falsifier": "Codex rejects the workspace-relative adapter path, discovery installs or enables the plugin automatically, the entry makes the repository root the plugin payload, a separate manager or user-operated setup becomes required, the entry creates conventional residue, or validation requires moving or expanding the thin projection.",
-      "stopCondition": "Stop after one marketplace entry is either discovered by the fixed Codex 0.147.0 CLI as available but not installed from a clean repository, with targeted and canonical checks passing, or is rejected and removed; record zero O1-O5 progress, restore an empty ready graph, and leave no temporary or consumer residue.",
-      "acceptanceIds": [
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/scripts/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.codex-workspace-marketplace-entry",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one optional workspace marketplace entry that exposes only the existing thin Codex projection from a clean checkout"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

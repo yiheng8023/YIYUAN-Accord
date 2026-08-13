@@ -219,6 +219,13 @@ change Harness semantics or disable the Codex continuity projection. Codex's
 native plugin manager owns this projection's install, cache, enable, update,
 disable, and uninstall lifecycle.
 
+`.agents/plugins/marketplace.json` is only a workspace discovery index. It
+marks the existing thin projection `AVAILABLE` and points at that adapter
+directory rather than the repository root. Codex 0.147.0 app-server discovery
+from this workspace reports the candidate as neither installed nor enabled;
+the index does not grant installation, enablement, Hook trust, or runtime
+execution.
+
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
 fires for startup, resume, clear, and compact, supplies the working directory

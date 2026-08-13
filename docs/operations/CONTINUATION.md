@@ -64,6 +64,14 @@ launcher accepts only the exact reviewed adapter and verifier hashes and is a
 no-op on runtime drift. It is not installed, enabled, trusted, live-measured,
 released, or outcome-accepted and counts as zero O1-O5 progress.
 
+A subsequent outcome-neutral slice added
+`.agents/plugins/marketplace.json` as the durable workspace discovery entry.
+Codex 0.147.0 app-server discovery resolves its only `AVAILABLE` candidate to
+the thin adapter directory and reports it uninstalled and disabled. This
+removes the earlier repository `.tmp` discovery-source conflict without making
+the repository a plugin, adding a CC Switch dependency, crossing the install
+or trust gates, or changing O1-O5.
+
 ## Earlier ready-state basis
 
 The user supplied a real goal-level continuity demand after the same v0.2
