@@ -112,6 +112,13 @@ added that two-sided control in candidate.2 as one mandatory floor while
 avoiding a risk ledger, universal model, extra approval, or user-operated
 checklist. It counts as zero O1-O5 progress and has left the current graph.
 
+A later coverage audit found that the O2/O4 cohort could still consist only of
+short tasks and therefore avoid the user's observed context-limit failure. The
+current candidate.3 requires at least one accepted Codex reference-host task to
+pre-register and cross a context-history-reducing or task-container-changing
+boundary without user context reconstruction, handoff selection, or recovery.
+This closes an acceptance false positive; it is not itself an outcome receipt.
+
 The absence of a natural task is an outcome and claim gate, not a program or
 goal blocker. It does not justify completion, a blocked disposition, repeated
 audits, or a manufactured task. Bounded retrospective counterexample analysis,

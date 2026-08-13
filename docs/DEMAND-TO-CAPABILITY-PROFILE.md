@@ -1,6 +1,6 @@
 # Demand-to-Capability Method and Minimum Quality Profile
 
-Version: `harness-demand-to-capability-v0.2-candidate.2`
+Version: `harness-demand-to-capability-v0.2-candidate.3`
 
 Status: unaccepted candidate for Codex reference-host calibration. It is not an
 accepted methodology, a portability claim, a runtime, or a user workflow.
@@ -111,11 +111,18 @@ support more than one criterion only when every criterion's registration,
 measures, validator, sample rule, and human authority independently pass.
 
 O2 comparisons use a source-bound matched or historical ad-hoc baseline fixed
-before execution. O4 uses the same candidate version and missing-data rule on
-at least three O2-eligible accepted scenario classes and at least one honest
-rejected or stopped receipt. The external-substrate reuse cohort and the
-outcome-capable comparator cohort are separate and fixed before results. A
-failed receipt remains failed; it is not edited into the accepted cohort.
+before execution. The accepted O2 cohort must include at least one task that
+pre-registers and actually crosses a host context-lifecycle boundary through
+native compaction, a context-clearing transition, or a host-required task
+rollover, where the boundary reduces available conversation history or changes
+the task container, then continues without user context reconstruction,
+handoff selection, or recovery operation. O4 applies that same requirement to
+its Codex reference-host cohort and uses the same candidate version and
+missing-data rule on at least three
+O2-eligible accepted scenario classes and at least one honest rejected or
+stopped receipt. The external-substrate reuse cohort and the outcome-capable
+comparator cohort are separate and fixed before results. A failed receipt
+remains failed; it is not edited into the accepted cohort.
 
 ## User-experience coverage
 

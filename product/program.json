@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability discovery and lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.context-lifecycle-sample-coverage",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,59 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.context-lifecycle-sample-coverage",
-      "state": "active",
-      "correctionClass": "context-continuity-acceptance-coverage-hole",
-      "observedProblem": "The current O1 and O2 collaboration-loss taxonomy rejects user-required context or handoff recovery when such an event is observed, and O4 measures context cost, but the O2/O4 cohort can still consist entirely of short tasks that never cross a host context-lifecycle boundary; v0.2 could therefore be accepted without exercising the constitution's task continuity obligation or the user's reported long-thread failure.",
-      "hypothesis": "Requiring the O2/O4 Codex reference cohort to include at least one accepted receipt whose context boundary and continuity floor are pre-registered and which actually crosses a native compaction, resume, clear, or host-required task rollover will close the false-positive path while keeping host mechanics in the reference profile, preserving the existing completion expression, and returning no context or handoff operation to the user.",
-      "falsifier": "Existing O2/O4 semantics already make a real context transition unavoidable, the added rule requires a user to choose or operate the boundary, makes a Codex event part of the Agent-neutral portable core, adds a new product outcome or human authority, cannot be enforced by the current code-owned semantic identity, or materially narrows unrelated eligible tasks instead of requiring one bounded cohort case.",
-      "stopCondition": "Stop after one bounded current-authority repair either proves the existing contract already excludes all-short-task acceptance or minimally requires one pre-registered Codex reference-host context-lifecycle crossing with zero user context or handoff recovery; synchronize the acceptance semantic identity, targeted regression tests, and directly affected public quality-profile text, record zero O1-O5 progress, restore an empty ready graph, and leave no temporary residue.",
-      "acceptanceIds": [
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/scripts/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.context-lifecycle-sample-coverage",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one minimal acceptance-authority repair that prevents an all-short-task Codex cohort from satisfying v0.2 continuity claims without changing the release completion expression"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
