@@ -150,6 +150,17 @@ authority. A second host must implement the same portable semantics through
 its own thin adapter; a Codex projection cannot prove cross-Agent behavior.
 Codex-first is the reference-adapter sequence, not a core dependency.
 
+For the Codex reference host, reuse the host's pre-execution task-entry event
+before considering a Harness-owned entry protocol. The fixed v0.147.0
+`UserPromptSubmit` input provides task text, working directory, session and turn
+identities, model, permission mode, and transcript location; its output can add
+model context or block the turn. That makes it only a possible thin entry seam,
+not an evidence store, lifecycle observer, task validator, or accepted adapter.
+Because a handler receives the raw prompt and can change turn behavior, any
+projection or enablement remains a separate consumer, prompt-data, and trust
+decision. It stays off until a bound task exposes a repeatable entry-recall gap
+and a reversible test can measure distinct value.
+
 ## 5. Evidence and acceptance
 
 Evidence binds source, time, authority, operation, result, verification, and

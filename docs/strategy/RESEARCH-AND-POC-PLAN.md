@@ -122,6 +122,32 @@ simplified, merged, replaced, or retired. Hook stays off unless repeated
 natural-task evidence isolates a recall gap and a reversible A/B proves net
 benefit.
 
+### Codex reference-host entry seam
+
+The 2026-08-13 reference machine runs the non-prerelease Apache-2.0
+`@openai/codex` 0.147.0 Windows x64 package (binary SHA-256
+`935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d`).
+Its `hooks` feature reports stable. The corresponding
+[`rust-v0.147.0` source at `be6e8ea`](https://github.com/openai/codex/tree/be6e8eac029b183056b7e4402879f15d2c85f61b)
+defines a
+[`UserPromptSubmit` input](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/user-prompt-submit.command.input.schema.json)
+with the raw prompt, working directory, session and turn identities, model,
+permission mode, and transcript path before the handler returns. Its
+[`UserPromptSubmit` output](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/hooks/schema/generated/user-prompt-submit.command.output.schema.json)
+can inject additional model context, stop processing, or block the turn.
+
+Reuse disposition: this is the leading native entry seam for a future thin
+Codex projection, so the Harness does not author an intake protocol or global
+task classifier. It does not observe the full capability lifecycle, prove a
+receipt, validate a result, or by itself supply a completion event sufficient
+for a lifecycle receipt.
+The current user Hook configuration is empty, and no Hook was enabled or
+executed by this review. Since a handler receives prompt data and can alter
+turn behavior, installation or enablement opens a consumer, prompt-data, and
+trust boundary and remains off without a task-bound recall gap, separate
+authority, and reversible value evidence. This source review changes only the
+candidate route and counts as zero O1-O5 progress.
+
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed
 workflow conflicts with bound user intent, current product authority, or the
