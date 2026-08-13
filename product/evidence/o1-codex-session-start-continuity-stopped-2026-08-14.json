@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "id": "result.o1.codex-session-start-continuity.stopped.2026-08-14",
+  "criterionId": "O1",
+  "registration": "product/evidence/o1-codex-session-start-continuity-registration.json",
+  "taskIdentity": "natural-task.2026-08-13.codex-session-start-continuity-delivery",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "sourceTurnId": "019ffbcd-ea15-7c62-a659-c05be27619ed",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The first native compact after the authorized temporary Hook configuration completed without any SessionStart Hook event or Harness authority projection. The registered hot-refresh hypothesis was falsified, so this task cannot promote O1.",
+  "chronology": [
+    {
+      "event": "temporary-user-hook-written",
+      "observedAt": "2026-08-13T23:48:04.7993449+08:00",
+      "hooksJsonSha256": "500b05941979e9b8a66236b178d51c5dd6152c87df820379e6835c5c9a6db366"
+    },
+    {
+      "event": "exact-hook-trust-written",
+      "observedAt": "2026-08-13T23:48:53.1054115+08:00",
+      "configTomlSha256": "b5684ee42a946b24e3d27dea88cf65a38a23f7f6c39311553df19d9d03c676f7",
+      "hookKey": "C:\\Users\\15521\\.codex\\hooks.json:session_start:0:0",
+      "hookHash": "sha256:33207fbbe337a4094bc6675f60aae1833db4ef2de050ffa3bd6aa7ce25a585a0"
+    },
+    {
+      "event": "native-context-compacted",
+      "observedAt": "2026-08-13T15:52:09.768Z",
+      "contextCompactedEventAt": "2026-08-13T15:52:09.832Z",
+      "hookStartedCount": 0,
+      "hookCompletedCount": 0,
+      "adapterMarkerPresentInReplacementHistory": false
+    },
+    {
+      "event": "temporary-user-hook-released",
+      "observedAt": "2026-08-14T00:01:15.8757385+08:00",
+      "hooksJsonSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "configTomlSha256": "35fe3d119cd82c7505681d112a6b6b53947d065db1673e15719e8a233a26c392",
+      "restoredExactPreMeasurementHashes": true
+    }
+  ],
+  "falsifiersTriggered": [
+    "the Hook did not hot-refresh into the already-running task",
+    "the Hook was not invoked for the first native compact after configuration",
+    "native HookStarted and HookCompleted evidence is absent",
+    "the registered authority projection is absent from the replacement history"
+  ],
+  "causalFinding": {
+    "fact": "Codex 0.147.0 queues SessionStartSource::Compact after compaction and runs pending SessionStart hooks before the next sampling request, but an existing task rebuilds its Hook runtime only through an application-owned runtime config refresh. Direct external edits to hooks.json and config.toml did not invoke that refresh for this task.",
+    "source": "OpenAI Codex 0.147.0 source commit be6e8eac029b183056b7e4402879f15d2c85f61b: codex-rs/core/src/session/mod.rs, codex-rs/core/src/session/turn.rs, codex-rs/core/src/hook_runtime.rs, codex-rs/app-server/src/request_processors/config_processor.rs",
+    "inference": "The stateless projection mechanism remains independently executable, but manual external consumer-file mutation is not a sufficient activation route for an already-running Codex task. A future route must use an application-owned install or enable lifecycle, or predate measured task execution, without returning setup or recovery to the user."
+  },
+  "safetyAndCleanup": {
+    "promptOrTranscriptRead": false,
+    "outsideRootExecutionProducedContext": false,
+    "accountOrOAuthAdded": false,
+    "installationAdded": false,
+    "networkDestinationAdded": false,
+    "temporaryHookRetained": false,
+    "temporaryTrustEntryRetained": false,
+    "repositoryResidueKnown": false
+  },
+  "humanAuthority": {
+    "activationGrant": "granted by the user in the source turn",
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-judgment",
+    "persistentRetention": "not-granted-and-not-retained"
+  },
+  "claimLimit": "This is a stopped reference-host task result and counterevidence for activation and continuity-route design. It proves neither O1, accepted user value, persistent Codex continuity, plugin conformance, CC Switch value, cross-host portability, release, nor production readiness."
+}
