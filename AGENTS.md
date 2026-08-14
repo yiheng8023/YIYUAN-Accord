@@ -71,7 +71,12 @@ require the user to know or name a capability, product, discovery channel, or
 invocation syntax unless it is an explicit user preference or task boundary.
 
 Code and conversation topology are Agent-owned orchestration. Preserve the
-healthy current task and checkout by default. Create a branch, worktree,
+healthy current task and checkout by default, but do not wait for preventable
+context quality or host-capacity failure. At material checkpoints, use
+available source-bound host and task signals to decide whether the current
+conversation carrier remains safe; if reliable signals are unavailable, keep
+that state explicit and apply a conservative task-bound transition rule rather
+than asking the user to guess. Create a branch, worktree,
 repository fork, conversation fork, or new task only for bounded causal
 necessity, then own carrier identity, synchronization, merge or conclusion
 reconciliation, archive or release, and cleanup. Ask only when the topology

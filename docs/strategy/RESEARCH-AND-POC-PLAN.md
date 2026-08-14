@@ -19,8 +19,8 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is ready with an empty current graph after the outcome-neutral task-
-topology authority repair, with O1-O5 planned and false. The current tree
+v0.2 is active on one outcome-neutral proactive context-carrier fitness and
+transition repair, with O1-O5 planned and false. The current tree
 contains a product-contract verifier and inactive
 Codex and Claude Code reference-adapter candidates, not a task runtime or an
 accepted host result. Closed outcome-neutral work remains recoverable from Git
@@ -48,7 +48,8 @@ is:
    human-round-trip/authority/side-effect/acceptance requirements, reopened
    settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
    bands, baseline matching, per-task quality/evidence/cleanup floors, the
-   task-topology boundary and lifecycle floor, outcome denominator, named
+   task-topology boundary and lifecycle floor, context-carrier fitness signals
+   and pre-declared transition rule, outcome denominator, named
    accountable human acceptance, and the fixed
    material collaboration-loss taxonomy used by O1/O2 receipts. A changed
    method, profile, scorecard, or missing-data rule starts a new cohort; this
@@ -56,7 +57,9 @@ is:
 2. **Codex reference quality-harness slice.** Enter through the user's goal rather
    than a named tool route. Record available-capability observation, gap
    assessment, optional discovery, smallest-sufficient route selection,
-   smallest-sufficient code and conversation topology, task-scoped dispatch,
+   smallest-sufficient code and conversation topology, source-bound
+   context-carrier fitness observation and continue/compact/handoff decision,
+   task-scoped dispatch,
    synchronization, merge or conclusion reconciliation, recovery,
    verification, archive or release, and cleanup. Compare
    only routes that can change the decision; do not run a catalog-shaped or

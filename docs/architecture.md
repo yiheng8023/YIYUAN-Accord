@@ -99,8 +99,9 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready after closing the outcome-neutral task-topology
-authority repair. O1-O5 remain false. Authorized product-plan delivery is real demand
+The v0.2 program has one outcome-neutral proactive context-carrier fitness and
+transition repair active after closing the task-topology authority repair.
+O1-O5 remain false. Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
 the unchanged pre-registration, evidence, floors, and human-acceptance burden.
@@ -136,8 +137,16 @@ memory layer, new task, or authored adapter requires a reproducible residual
 gap plus its own authority and data boundary. If repeated compaction or a host
 limit eventually makes same-task continuation unsafe, the Agent owns a
 source-bound, verified handoff when the host and task authority permit it; the
-user still supplies judgment, not transcript reconstruction. O1 can calibrate
-only the exact compaction and task it observes. Repeated reliability and
+user still supplies judgment, not transcript reconstruction. This decision is
+not deferred until failure. At pre-registered material checkpoints, the Agent
+uses available source-bound host signals and task signals such as repeated
+compression, reconciliation uncertainty, goal or evidence divergence, and the
+size and risk of the remaining work to decide whether the current carrier is
+still safe. A missing reliable host signal remains `unknown` and activates the
+task's conservative pre-declared transition rule; it cannot be treated as
+proof that unlimited continuation is safe. No universal token threshold,
+transcript monitor, Hook, or new task is mandated. O1 can calibrate only the
+exact signals, transition, and task it observes. Repeated reliability and
 cross-host portability remain separate O2-O5 burdens.
 
 ### Task topology is a lifecycle, not a user prerequisite

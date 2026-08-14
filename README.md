@@ -20,7 +20,8 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment, and O1-O5 are still false.
+v0.2 has one outcome-neutral proactive context-carrier fitness repair active,
+and O1-O5 are still false.
 The
 program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
@@ -57,13 +58,15 @@ The target behavior is that the Agent:
 4. stays in the current task and checkout by default, creating a branch,
    worktree, repository fork, conversation fork, or new task only when
    isolation, parallelism, host capacity, or an authority boundary requires it;
-5. owns synchronization, code merge or conclusion reconciliation, archive or
+5. observes whether the current conversation remains a safe carrier and owns
+   native compaction or verified handoff before preventable context loss;
+6. owns synchronization, code merge or conclusion reconciliation, archive or
    release, and cleanup for any such carrier;
-6. asks the user only for missing facts, consequential judgment, or new
+7. asks the user only for missing facts, consequential judgment, or new
    authority—not for tool names or invocation syntax;
-7. executes, recovers, verifies, releases task-scoped capability exposure, and
+8. executes, recovers, verifies, releases task-scoped capability exposure, and
    removes task-created residue;
-8. returns the result and its evidence for accountable human judgment.
+9. returns the result and its evidence for accountable human judgment.
 
 This is the product target, not a claim about current runtime behavior.
 
@@ -73,7 +76,7 @@ This is the product target, not a claim about current runtime behavior.
 | --- | --- | --- |
 | A demand-to-capability collaboration methodology | Healthy Agent-native behavior | A universal Agent runtime |
 | An open minimum quality-conformance profile | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
-| Measures for user burden, outcome quality, authority, evidence, recovery, code and conversation task-topology lifecycle, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, Git, and host task primitives | A new wire protocol, Git or task manager, identity system, or audit format without a proven residual gap |
+| Measures for user burden, outcome quality, authority, evidence, recovery, context-carrier fitness and transition, code and conversation task-topology lifecycle, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, Git, and host task primitives | A new wire protocol, context monitor, Git or task manager, identity system, or audit format without a proven residual gap |
 | Thin reference adapters that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
 
 Codex is the first reference host because it is a strong, practical test bed.

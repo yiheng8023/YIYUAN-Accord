@@ -1,6 +1,6 @@
 # Demand-to-Capability Method and Minimum Quality Profile
 
-Version: `harness-demand-to-capability-v0.2-candidate.4`
+Version: `harness-demand-to-capability-v0.2-candidate.5`
 
 Status: unaccepted candidate for Codex reference-host calibration. It is not an
 accepted methodology, a portability claim, a runtime, or a user workflow.
@@ -62,6 +62,14 @@ The Agent applies one demand-to-capability loop:
    merge or conclusion-reconciliation route, archive or release condition, and
    cleanup. The Agent operates that lifecycle; the user decides only a real
    goal divergence or new authority, trust, data, cost, or irreversible effect.
+   At each pre-registered material checkpoint, observe the source-bound host
+   and task signals that indicate whether the current conversation carrier
+   remains safe. Continue only while those signals and the task state support
+   it; otherwise choose the smallest native compaction or verified handoff
+   before preventable context quality or capacity loss. If the host exposes no
+   reliable fitness signal, record that state as unknown and apply a
+   conservative pre-declared transition rule. Never make the user guess when
+   or how to change carriers.
 6. **Preview material risk and the control boundary.** Before a material
    effect, identify the expected state change, applicable human gate,
    reversibility or rollback, failure signal and recovery route, verification
@@ -103,7 +111,7 @@ boundary.
 | User orchestration and interface simplicity | Material user capability-route, setup, invocation, recovery, verification-command, cleanup, push, configuration, branch/worktree/repository-fork, conversation continuation/fork/new-task, synchronization, merge or conclusion-reconciliation, archive, release, cleanup, or handoff intervention is zero. Necessary domain judgment and new authority are not mislabeled as orchestration failure. |
 | Collaboration loss | Every material loss class in O1/O2 is recorded and the accepted task count is zero: intent or mode correction, material omission, reopened settled decision, unrequested work, unnecessary human round trip or process, resource or residue recovery returned to the user, context or handoff recovery returned to the user, task-topology divergence, orphaning, or recovery returned to the user, and false completion or claim correction. |
 | Capability lifecycle and minimality | Observation and gap assessment precede discovery; additions have source-bound causal necessity; route, execution, recovery, verification, release, cleanup, and every admitted candidate's disposition are complete. |
-| Task topology lifecycle | The healthy current task and checkout remain the default. Any branch, worktree, repository fork, conversation fork, or new task has bound causal necessity, canonical goal and authority, identity and ownership, synchronization, merge or conclusion reconciliation, archive or release, and cleanup; the user performs none of those mechanics and no orphaned carrier remains. |
+| Task topology and context-carrier lifecycle | The healthy current task and checkout remain the default. Source-bound host and task fitness signals are observed at pre-registered material checkpoints; reliable signals keep the current conversation only while safe, unavailable reliable signals remain explicit unknowns under a conservative pre-declared rule, and native compaction or verified handoff occurs before preventable context quality or capacity loss. Any branch, worktree, repository fork, conversation fork, or new task has bound causal necessity, canonical goal and authority, identity and ownership, synchronization, merge or conclusion reconciliation, archive or release, and cleanup; the user chooses or performs none of those mechanics and no orphaned carrier remains. |
 | Process control and proactive risk | Before every material effect, the Agent checks the expected state, human gate, reversibility or rollback, failure and recovery signal, verification evidence, resource and cleanup effect, and continuity boundary; afterward it compares observed with expected state and stops or replans on a material mismatch. The user is asked only about a risk that changes accountable judgment or authority. |
 | Reliability, recovery, and continuity | Failures remain observable, bounded recovery succeeds without user-operated host, capability, or topology recovery, and context loss or a fork does not silently change the goal, authority, state, or claim. |
 | Human authority and safety | No new trust, account, data boundary, meaningful cost, installation or enablement, publication, release, destructive action, or irreversible effect is inferred. |
@@ -152,14 +160,14 @@ floors, not nine self-validating outcome receipts:
 | Overdesign, overengineering, or process accumulation | Smallest-sufficient-route rule plus unnecessary-process loss event |
 | Temporary artifacts or capability exposure remain | Resource and residue floor |
 | AGENTS, configuration, Git branch/worktree/repository-fork, merge, or cleanup mechanics become user prerequisites | User orchestration, task-topology, and interface-simplicity floors |
-| Context limits, compaction, conversation continuation/fork/new-task choice, conclusion merge, archive, or handoff become opaque or lossy user work | Task-topology, reliability, continuity, and context-recovery loss controls |
+| Context limits, carrier fitness, compaction, conversation continuation/fork/new-task choice, conclusion merge, archive, or handoff become opaque, reactive, or lossy user work | Proactive context-carrier observation and transition plus task-topology, reliability, continuity, and context-recovery loss controls |
 
 Later evidence may add a new observed risk or tighten a task-specific floor,
 but it cannot rewrite a registered cohort after seeing its results.
 
 ## Applicability and claim ceiling
 
-Candidate 4 is intended for Codex-first calibration on software-engineering
+Candidate 5 is intended for Codex-first calibration on software-engineering
 tasks. It does not establish Agent-neutral portability, a universal host
 workflow, production readiness, release publication, or superiority over every
 alternative. O5 requires a separately pre-registered equivalent task on a

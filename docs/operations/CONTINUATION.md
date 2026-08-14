@@ -15,17 +15,31 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active` on one outcome-neutral
+proactive context-carrier fitness and transition repair. The public verifier
+should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- active increment `increment.v0.2.proactive-context-carrier-fitness`.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
+
+## Why the current repair is active
+
+The ninth user-reported experience failure remained only partly closed. The
+current contract required recovery after compaction or task rollover, but it
+could still accept an Agent that never observed conversation-carrier fitness
+and waited for preventable quality or host-capacity failure, leaving the user
+to guess when to continue, compact, or hand off. This outcome-neutral repair
+adds a source-bound host-and-task signal check at pre-registered material
+checkpoints, explicit `unknown` handling when reliable host signals do not
+exist, and a conservative pre-declared continue/compact/handoff rule. It does
+not add a context monitor, transcript store, universal token threshold,
+mandatory Hook, new task, or O1-O5 credit.
 
 ## Latest closed delivery
 

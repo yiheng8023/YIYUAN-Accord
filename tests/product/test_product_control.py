@@ -259,7 +259,7 @@ class ProductControlTests(unittest.TestCase):
             "acceptanceAuthority": {
                 "locator": "product/acceptance.json",
                 "criteriaContractSha256": (
-                    "1539c15b7a694331c14f700667648e71ea98cbaba388283179530261e36e4ff5"
+                    "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
                 ),
             },
             "namedHumanAcceptor": aliases["namedHumanAcceptor"],
@@ -337,12 +337,15 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_is_ready_and_in_progress(self) -> None:
+    def test_current_v02_contract_has_one_context_carrier_repair_and_is_in_progress(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2.proactive-context-carrier-fitness",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -423,19 +426,55 @@ class ProductControlTests(unittest.TestCase):
             criteria["O5"]["operationalization"]["requiredMeasures"],
         )
 
+    def test_context_carrier_fitness_and_transition_is_agent_owned(self) -> None:
+        constitution = self.read_json("product/constitution.json")
+        acceptance = self.read_json("product/acceptance.json")
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+
+        self.assertIn(
+            "context-carrier-fitness-observation-and-proactive-transition",
+            constitution["collaborationModel"]["agentObligations"],
+        )
+        self.assertTrue(
+            any(
+                invariant.startswith("conversation-carrier fitness is Agent-owned:")
+                for invariant in constitution["fixedInvariants"]
+            )
+        )
+        for criterion_id in ("O1", "O2", "O4"):
+            operationalization = criteria[criterion_id]["operationalization"]
+            self.assertIn(
+                "contextCarrierFitnessSignalsAndTransitionRule",
+                operationalization["preRegistrationFields"],
+            )
+            self.assertIn(
+                "contextCarrierFitnessObservationsAndTransitions",
+                operationalization["requiredMeasures"],
+            )
+            self.assertIn("preventable context quality or capacity loss", operationalization["passRule"])
+            self.assertIn("unknown", operationalization["passRule"])
+        self.assertIn(
+            "commonContextCarrierFitnessAndTransitionLifecycle",
+            criteria["O5"]["operationalization"]["preRegistrationFields"],
+        )
+        self.assertIn(
+            "contextCarrierFitnessAndTransitionParity",
+            criteria["O5"]["operationalization"]["requiredMeasures"],
+        )
+
     def test_public_cli_reports_the_same_contract(self) -> None:
         completed = self.run_cli(root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress", completed.stdout)
+        self.assertIn("v0.2: active, in-progress", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")

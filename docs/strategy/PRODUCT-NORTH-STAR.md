@@ -12,7 +12,8 @@ bounded authorization, and the smallest decisions that genuinely require
 human authority. The Agent and Harness should own capability observation, gap
 detection, source-bounded discovery when needed, selection, task-scoped
 dispatch and release, code and conversation topology selection and
-reconciliation, bounded execution, verification, continuity, cleanup,
+reconciliation, context-carrier fitness observation and proactive transition,
+bounded execution, verification, continuity, cleanup,
 and honest degradation. The user should not need to know a capability name,
 product, discovery channel, or invocation syntax to enter a task.
 
@@ -25,7 +26,7 @@ coverage without making the user remember or enumerate the whole system.
 ## Observable success
 
 On repeated real tasks entered at the goal level, the Harness should reduce
-material user interventions needed to reconstruct context, discover, select,
+material user interventions needed to judge carrier fitness, reconstruct context, discover, select,
 and manage capabilities, choose or operate code and conversation topology,
 recover from drift, merge work or conclusions, verify completion, archive or
 release carriers, and clean resources, without reducing intent fidelity,
