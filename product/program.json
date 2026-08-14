@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-tool-surface-suppression-mechanism",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -267,6 +267,63 @@
           ],
           "deliverables": [
             "one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate that reuses the exact candidate.5 demand method, adds no MCP or CC Switch dependency, preserves host-specific boundaries, passes task-bound validation, and makes no live or portability claim"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.codex-tool-surface-suppression-mechanism",
+      "state": "active",
+      "correctionClass": "validate-task-scoped-codex-app-and-mcp-surface-suppression",
+      "observedProblem": "The exact Codex 0.147.0 context-carrier execution stopped because the model-visible built-in list_mcp_resources route exposed 46 ambient plugin and Skill resources despite isolated plugin installation and explicit non-Harness Skill disablement. This invalidated the registered no-extra-MCP-or-App floor before a task result could exist, so any later Codex-first outcome task would repeat the same failure unless the host tool surface can be bounded independently of the model.",
+      "hypothesis": "The documented per-process apps._default.enabled=false override, combined with an isolated unauthenticated Codex 0.147.0 app-server inspection of effective config, installed App callable state, MCP server status and generated protocol surface, can determine whether ambient Apps and MCP resources are actually suppressed while preserving the native repository execution seam, without another model call, plugin installation, consumer mutation or new trust boundary.",
+      "falsifier": "Codex 0.147.0 rejects or ignores the override; any ambient App remains enabled or callable; any configured or plugin-bundled MCP server, tool or resource remains available; the built-in MCP enumeration tool remains necessarily model-visible even with an empty backing surface; the probe requires authentication, a model turn, installation, persistent configuration, a second work item, another host, new authority or unbounded residue; or the exact result cannot distinguish current-version behavior from documentation for another version.",
+      "stopCondition": "Run one isolated no-auth, no-plugin, no-model Codex 0.147.0 app-server process with only per-process configuration overrides; inspect effective config and the available no-model App, MCP and protocol status surfaces; then stop the process and remove the exact temporary root. Close this increment after the current Codex route is classified eligible or ineligible for a future separately registered task, canonical verification passes, Git is delivered and residue is zero. Count zero O1-O5 and do not create an outcome validator, model result, consumer configuration or follow-on queue.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp/codex-tool-surface-suppression-probe",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-tool-surface-suppression-mechanism",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "targeted-capability-discovery",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one exact-version, no-model eligibility disposition for task-scoped Codex App and MCP surface suppression, with bounded evidence and zero retained probe residue"
           ]
         }
       ]
