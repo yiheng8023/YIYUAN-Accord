@@ -696,6 +696,73 @@ _PUBLIC_INTAKE_RECEIPT = (
 _CODEX_SKILL_RECEIPT = (
     "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json"
 )
+_CONTINUATION_INCREMENT_ID = (
+    "increment.v0.2.continuation-reconciliation-projection"
+)
+_CONTINUATION_WORK_ID = "work.v0.2.continuation-reconciliation-projection"
+_CONTINUATION_RECEIPT = (
+    "product/evidence/continuation-reconciliation-projection-2026-08-14.json"
+)
+_CONTINUATION_REGISTRATION = (
+    "product/evidence/continuation-reconciliation-projection-registration.json"
+)
+_CONTINUATION_REGISTRATION_SHA256 = (
+    "d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140"
+)
+_CONTINUATION_BASELINE_COMMIT = "e35a86f7550494b4efbf12f89efc5447f8951920"
+_CONTINUATION_REGISTRATION_COMMIT = "19f189341b51147e60b7f48299f0562c35a398ee"
+_CONTINUATION_RESULT_COMMIT = "8f3b08502d85b23d4101c8c2550a3954963b1de9"
+_CONTINUATION_DECISION_SCOPE_SHA256 = (
+    "3a67a213b652c20c3b4fbaf657d06630a28c534b8ae3fec078a60e75fff71850"
+)
+_CONTINUATION_ACCEPTANCE_MESSAGE_SHA256 = (
+    "10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7"
+)
+_CONTINUATION_PRE_HUMAN_SOURCE_IDENTITY = (
+    "sha256:6443578495bd932e6e5b072a4e5bc04e04afad88882a7a88195bfaac18e9d133"
+)
+_CONTINUATION_SOURCE_EVENTS = (
+    "goal-level-context-and-topology-demand-bound",
+    "registration-committed-and-pushed",
+    "active-work-baseline-measured",
+    "deliverable-committed-and-pushed",
+    "clean-delivery-reconciliation-verified",
+)
+_CONTINUATION_RESULT_PATHS = (
+    "README.md",
+    "README.zh-CN.md",
+    "adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+    "adapters/agent-autonomy-harness-claude/scripts/session_start.py",
+    "adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    "adapters/agent-autonomy-harness-codex/scripts/session_start.py",
+    "docs/architecture.md",
+    "docs/operations/CONTINUATION.md",
+    "docs/operations/HISTORY.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "harness/continuation.py",
+    "harness/control.py",
+    "tests/product/test_product_control.py",
+)
+_CONTINUATION_TASK_FILES = MappingProxyType(
+    {
+        "harness/continuation.py": (
+            "1b3385200765aa1df92d90193a79883244650e53",
+            "7151a0fdfab1703374fdc42871d4dc7b68f68e1dc175238a577240fa2ae80bb7",
+        ),
+        "harness/control.py": (
+            "df2df63294dff153dbebb3524768cfded2029f15",
+            "31d4683756f8d380ae3d95fa2b8850cd6aef0b09e743f53606a9d6c27f5ff4d3",
+        ),
+        "adapters/agent-autonomy-harness-codex/scripts/session_start.py": (
+            "fd6f46ec3e7b8c35dc5781aab6ba0b9a105ad22f",
+            "b8ef23facd120bf48623b763c39d7333cc308906b1c47ded3d9d0e56645156e0",
+        ),
+        "adapters/agent-autonomy-harness-claude/scripts/session_start.py": (
+            "43b11f82aeee45884e193de9c6b26fd7235b126b",
+            "ed834a577108c394e98bcfbfbb2597b443e6b89c5ef6c12ade6e53a0dadc49bc",
+        ),
+    }
+)
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...]], bytes | None] | None
 ] = ContextVar("harness_evidence_git_cache", default=None)
@@ -1688,6 +1755,555 @@ def _validate_claude_skill_o1_o3(
     return len(errors) == before
 
 
+def _validate_continuation_reconciliation_o2_candidate(
+    document: dict[str, Any],
+    root: Path,
+    errors: list[str],
+    *,
+    require_human: bool,
+) -> bool:
+    """Validate this exact continuation result and its fixed O2 cohort."""
+
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"continuation reconciliation O2 evidence {message}")
+
+    expected_top_level = {
+        "schema",
+        "id",
+        "observedAt",
+        "taskIdentity",
+        "criterionIds",
+        "incrementId",
+        "workItemId",
+        "registration",
+        "source",
+        "authority",
+        "result",
+        "sourceRecords",
+        "artifacts",
+        "measures",
+        "claimLimits",
+        "validator",
+    }
+    if set(document) != expected_top_level:
+        reject("top-level receipt shape changed")
+        return False
+
+    try:
+        registration_ref = document["registration"]
+        source = document["source"]
+        authority = document["authority"]
+        result = document["result"]
+        records = document["sourceRecords"]
+        artifacts = document["artifacts"]
+        measures = document["measures"]
+        human = measures["humanOutcomeDecision"]
+        orchestration = measures[
+            "materialUserCapabilityOrchestrationInterventions"
+        ]
+        losses = measures["materialCollaborationLossEvents"]
+        context = measures["contextCarrierFitnessObservationsAndTransitions"]
+        lifecycle = measures["contextLifecycleTransitionAndRecovery"]
+        topology = measures["taskTopologyLifecycleEvents"]
+        validation = measures["validationResults"]
+        floors = measures["taskFloorResults"]
+        comparison = measures["outcomeComparison"]
+        residue = measures["residueAndClaimLimits"]
+    except (KeyError, TypeError):
+        reject("required receipt structure is missing")
+        return False
+
+    decision_scope = (
+        "Accept or reject the delivered compact continuation-reconciliation "
+        "source result, whether it is materially distinct from the public-intake "
+        "and Codex-Skill source scenarios, and only the registered three-scenario "
+        "Codex reference-host O2 burden-reduction claim ceiling."
+    )
+    required_response = "接受该结果、第三场景区分和上述有界 O2 声明。"
+    if (
+        document["schema"] != 1
+        or document["id"]
+        != "evidence.continuation-reconciliation-projection.2026-08-14"
+        or document["taskIdentity"]
+        != "natural-task.2026-08-14.continuation-reconciliation-projection"
+        or document["criterionIds"] != ["O2"]
+        or document["incrementId"] != _CONTINUATION_INCREMENT_ID
+        or document["workItemId"] != _CONTINUATION_WORK_ID
+        or registration_ref
+        != {
+            "locator": _CONTINUATION_REGISTRATION,
+            "sha256": _CONTINUATION_REGISTRATION_SHA256,
+            "commit": _CONTINUATION_REGISTRATION_COMMIT,
+        }
+        or source.get("threadId") != "019ffaa8-b44a-7bf2-97de-65875bceec33"
+        or source.get("identityBeforeHumanDecision")
+        != _CONTINUATION_PRE_HUMAN_SOURCE_IDENTITY
+        or authority.get("namedHuman") != "yiheng8023"
+        or authority.get("decisionScope") != decision_scope
+        or authority.get("decisionScopeSha256")
+        != _CONTINUATION_DECISION_SCOPE_SHA256
+        or hashlib.sha256((decision_scope + "\n").encode()).hexdigest()
+        != _CONTINUATION_DECISION_SCOPE_SHA256
+        or authority.get("requiredResponse") != required_response
+        or authority.get("requiredResponseSha256")
+        != _CONTINUATION_ACCEPTANCE_MESSAGE_SHA256
+        or hashlib.sha256((required_response + "\n").encode()).hexdigest()
+        != _CONTINUATION_ACCEPTANCE_MESSAGE_SHA256
+        or result.get("baselineCommit") != _CONTINUATION_BASELINE_COMMIT
+        or result.get("registrationCommit")
+        != _CONTINUATION_REGISTRATION_COMMIT
+        or result.get("deliverableCommit") != _CONTINUATION_RESULT_COMMIT
+        or result.get("scenarioClass")
+        != "host-neutral-continuation-reconciliation-adapter-implementation"
+    ):
+        reject("task, registration, decision scope, or result identity changed")
+
+    if len(records) < len(_CONTINUATION_SOURCE_EVENTS):
+        reject("source chronology is incomplete")
+    else:
+        prefix_records = records[: len(_CONTINUATION_SOURCE_EVENTS)]
+        if (
+            tuple(item.get("order") for item in prefix_records)
+            != tuple(range(1, 6))
+            or tuple(item.get("event") for item in prefix_records)
+            != _CONTINUATION_SOURCE_EVENTS
+        ):
+            reject("source chronology order or events changed")
+        identities = [
+            item.get("identity", "").removeprefix("sha256:")
+            for item in prefix_records
+        ]
+        combined = hashlib.sha256(("\n".join(identities) + "\n").encode()).hexdigest()
+        if f"sha256:{combined}" != _CONTINUATION_PRE_HUMAN_SOURCE_IDENTITY:
+            reject("pre-human source chronology identity changed")
+
+    baseline_ready = artifacts.get("baselineReadyProjection", {})
+    baseline_active = artifacts.get("baselineActiveProjection", {})
+    delivered = artifacts.get("deliveredSource", {})
+    clean_codex = artifacts.get("cleanCodexProjection", {})
+    dirty_codex = artifacts.get("dirtyCodexProjection", {})
+    dirty_claude = artifacts.get("dirtyClaudeProjection", {})
+    if (
+        baseline_ready
+        != {"characters": 3643, "hasLiveRepositoryCheckpoint": False}
+        or baseline_active
+        != {
+            "characters": 6301,
+            "limit": 4096,
+            "sha256": "75d4a5881cbc7ee45ac14f67b3011670fcc2a01244f290a8dcbed07698ef8c66",
+            "hasLiveRepositoryCheckpoint": False,
+        }
+        or delivered.get("continuationBlob")
+        != _CONTINUATION_TASK_FILES["harness/continuation.py"][0]
+        or delivered.get("continuationSha256")
+        != _CONTINUATION_TASK_FILES["harness/continuation.py"][1]
+        or delivered.get("controlBlob")
+        != _CONTINUATION_TASK_FILES["harness/control.py"][0]
+        or delivered.get("controlSha256")
+        != _CONTINUATION_TASK_FILES["harness/control.py"][1]
+        or delivered.get("scopedDiffSha256")
+        != "1c29743c3d8508b293afac885add732e2b320c22c08fa993e40004372bc83650"
+        or clean_codex
+        != {
+            "characters": 2728,
+            "limit": 3072,
+            "valid": True,
+            "branch": "main",
+            "head": _CONTINUATION_RESULT_COMMIT,
+            "upstream": "origin/main",
+            "ahead": 0,
+            "behind": 0,
+            "worktreeCount": 1,
+            "dirtyEntryCount": 0,
+        }
+        or dirty_codex
+        != {
+            "characters": 2730,
+            "limit": 3072,
+            "valid": True,
+            "dirtyPathNamesExposed": False,
+        }
+        or dirty_claude
+        != {
+            "characters": 2922,
+            "limit": 3072,
+            "valid": True,
+            "commonSemanticsMatchCodex": True,
+        }
+    ):
+        reject("registered baseline or measured result changed")
+
+    floor_names = {
+        "outcomeQuality",
+        "intentAndCommunication",
+        "contextCarrierFitness",
+        "taskTopology",
+        "reliabilityAndRecovery",
+        "authorityAndSafety",
+        "scopeAndMinimality",
+        "evidence",
+        "residue",
+    }
+    if (
+        orchestration.get("count") != 0
+        or orchestration.get("taskTopologyInterventions") != 0
+        or losses.get("count") != 0
+        or losses.get("repeatedSameClassCorrections") != 0
+        or measures.get("repeatedAlreadyBoundRequests", {}).get("count") != 0
+        or context.get("reliableRemainingCapacitySignal") != "unknown"
+        or context.get("preventableContextLoss") is not False
+        or lifecycle.get("crossedInThisTask") is not False
+        or lifecycle.get("userReconstructionCount") != 0
+        or lifecycle.get("cohortCoverage")
+        != [
+            "public-intake receipt native compaction at 2026-08-14T00:56:49.178Z",
+            "Codex Skill receipt native compaction at 2026-08-14T02:01:32.757Z",
+        ]
+        or topology.get("isolatedCarrierCreated") is not False
+        or topology.get("userTopologyOperationCount") != 0
+        or topology.get("codeCarrier") != "existing main checkout retained"
+        or len(measures.get("selectedRouteSubstrates", [])) != 4
+        or set(measures.get("capabilityLifecycleEvents", {}))
+        != {"observation", "gapAssessment", "discovery", "dispatch", "release"}
+        or validation
+        != {
+            "canonicalVerifier": "valid=true; O1=true; O2=false; O3=true; O4=false; O5=false",
+            "fullProductTests": "150/150 PASS",
+            "claudeStrictPluginValidation": "pass",
+            "codexLauncher": "exit=0; 2728 characters on clean main; valid=true",
+            "claudeLauncher": "exit=0; 2922 characters while dirty; valid=true",
+            "fallbackOverflowTest": "pass",
+            "gitPrivacyAndUnknownStateTests": "pass",
+        }
+        or set(floors) != floor_names | {"missingData"}
+        or any(floors.get(name) != "pass" for name in floor_names)
+        or any(
+            residue.get(name) != []
+            for name in (
+                "repositoryTemporaryResidue",
+                "externalWritesBeyondAuthorizedGitPush",
+                "consumerOrHostMutation",
+                "remainingTaskScopedExposure",
+                "codeOrConversationCarriersCreated",
+            )
+        )
+    ):
+        reject("a mandatory zero-loss, lifecycle, validation, floor, or residue value changed")
+
+    expected_tasks = [
+        "natural-task.2026-08-14.public-intake-zero-knowledge",
+        "natural-task.2026-08-14.codex-demand-skill-plugin",
+        "natural-task.2026-08-14.continuation-reconciliation-projection",
+    ]
+    expected_scenarios = [
+        "public-support-and-contribution-intake-for-zero-knowledge-users",
+        "codex-plugin-skill-reference-adapter-delivery",
+        "host-neutral-continuation-reconciliation-adapter-implementation",
+    ]
+    if (
+        comparison.get("taskIdentities") != expected_tasks
+        or comparison.get("scenarioClasses") != expected_scenarios
+        or len(set(expected_scenarios)) != 3
+        or comparison.get("baselineMaterialInterventions") != [3, 2, 3]
+        or comparison.get("observedMaterialInterventions") != [0, 0, 0]
+        or comparison.get("aggregateBaseline") != 8
+        or comparison.get("aggregateObserved") != 0
+        or comparison.get("strictReduction") is not True
+        or comparison.get("minimumScenarioCount") != 3
+    ):
+        reject("three-scenario cohort or strict burden reduction changed")
+
+    prior_documents: list[dict[str, Any]] = []
+    for relative, validator in (
+        (_PUBLIC_INTAKE_RECEIPT, _validate_public_intake_o1),
+        (_CODEX_SKILL_RECEIPT, _validate_codex_skill_o1),
+    ):
+        try:
+            prior = _parse_json((root / relative).read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, _InvalidJson, TypeError):
+            reject(f"prior O2 receipt is unavailable or invalid: {relative}")
+            continue
+        if validator(prior, "O1", root, errors) is not True:
+            reject(f"prior O2 receipt no longer passes its validator: {relative}")
+        prior_documents.append(prior)
+
+    if len(prior_documents) == 2:
+        for index, prior in enumerate(prior_documents):
+            prior_measures = prior.get("measures", {})
+            prior_orchestration = prior_measures.get(
+                "materialUserCapabilityOrchestrationInterventions", {}
+            )
+            if (
+                prior.get("taskIdentity") != expected_tasks[index]
+                or prior_orchestration.get("count") != 0
+                or prior_orchestration.get("taskTopologyInterventions") != 0
+                or prior_measures.get("materialCollaborationLossEvents", {}).get(
+                    "count"
+                )
+                != 0
+                or prior_measures.get("repeatedAlreadyBoundRequests", {}).get("count")
+                != 0
+                or prior_measures.get("humanOutcomeDecision", {}).get("accepted")
+                is not True
+            ):
+                reject("a prior cohort result or zero-loss floor changed")
+        public_events = tuple(
+            item.get("event") for item in prior_documents[0].get("sourceRecords", [])
+        )
+        codex_events = tuple(
+            item.get("event") for item in prior_documents[1].get("sourceRecords", [])
+        )
+        if (
+            "native-context-compacted" not in public_events
+            or "post-compaction-task-recovered" not in public_events
+            or "native-context-compacted" not in codex_events
+            or "post-compaction-task-and-source-recovered" not in codex_events
+        ):
+            reject("registered context-lifecycle crossing coverage changed")
+
+        registration_expectations = (
+            (
+                prior_documents[0].get("registration", {}).get("locator"),
+                expected_scenarios[0],
+                3,
+            ),
+            (
+                prior_documents[1].get("registration", {}).get("locator"),
+                expected_scenarios[1],
+                2,
+            ),
+            (
+                _CONTINUATION_REGISTRATION,
+                expected_scenarios[2],
+                3,
+            ),
+        )
+        for locator, scenario, baseline_count in registration_expectations:
+            try:
+                registered = _parse_json(
+                    (root / locator).read_text(encoding="utf-8")
+                )
+                values = registered["preRegistrationValues"]
+                registered_scenario = values["scenarioClass"]
+                registered_baseline = values[
+                    "matchedOrHistoricalBaselineIdentityAndRule"
+                ]["baselineMaterialInterventions"]
+            except (OSError, KeyError, TypeError, UnicodeError, _InvalidJson):
+                reject(f"cohort registration is unavailable or invalid: {locator}")
+                continue
+            if (
+                registered_scenario != scenario
+                or registered_baseline != baseline_count
+            ):
+                reject(f"cohort scenario or baseline changed: {locator}")
+
+    try:
+        registration_raw = (root / _CONTINUATION_REGISTRATION).read_bytes()
+    except OSError:
+        registration_raw = None
+    if (
+        registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _CONTINUATION_REGISTRATION_SHA256
+    ):
+        reject("registration bytes changed")
+
+    registration_parent = _evidence_git(
+        root, "rev-parse", f"{_CONTINUATION_REGISTRATION_COMMIT}^"
+    )
+    result_parent = _evidence_git(root, "rev-parse", f"{_CONTINUATION_RESULT_COMMIT}^")
+    committed_registration = _evidence_git(
+        root,
+        "show",
+        f"{_CONTINUATION_REGISTRATION_COMMIT}:{_CONTINUATION_REGISTRATION}",
+    )
+    committed_program = _evidence_git(
+        root, "show", f"{_CONTINUATION_REGISTRATION_COMMIT}:product/program.json"
+    )
+    result_is_ancestor = _evidence_git(
+        root, "merge-base", "--is-ancestor", _CONTINUATION_RESULT_COMMIT, "HEAD"
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip() != _CONTINUATION_BASELINE_COMMIT
+        or result_parent is None
+        or result_parent.decode().strip() != _CONTINUATION_REGISTRATION_COMMIT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _CONTINUATION_REGISTRATION_SHA256
+        or result_is_ancestor is None
+    ):
+        reject("Git registration-to-result chronology changed")
+
+    if committed_program is None:
+        reject("committed active registration binding is unavailable")
+    else:
+        try:
+            registered_program = _parse_json(committed_program.decode())
+            registered_increment = next(
+                item
+                for item in registered_program["increments"]
+                if item.get("id") == _CONTINUATION_INCREMENT_ID
+            )
+        except (KeyError, StopIteration, UnicodeError, _InvalidJson, TypeError):
+            reject("committed active registration binding is invalid")
+        else:
+            if (
+                registered_program.get("status") != "active"
+                or registered_program.get("activeIncrementId")
+                != _CONTINUATION_INCREMENT_ID
+                or registered_increment.get("state") != "active"
+                or registered_increment.get("taskRegistration")
+                != {
+                    "locator": _CONTINUATION_REGISTRATION,
+                    "sha256": _CONTINUATION_REGISTRATION_SHA256,
+                }
+            ):
+                reject("registration was not active before the result commit")
+
+    changed_paths = _evidence_git(
+        root,
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "-r",
+        _CONTINUATION_RESULT_COMMIT,
+    )
+    if changed_paths is None or tuple(changed_paths.decode().splitlines()) != (
+        _CONTINUATION_RESULT_PATHS
+    ):
+        reject("result commit changed paths differ from the registered task")
+    scoped_diff = _evidence_git(
+        root,
+        "diff",
+        "--no-ext-diff",
+        "--no-color",
+        _CONTINUATION_REGISTRATION_COMMIT,
+        _CONTINUATION_RESULT_COMMIT,
+    )
+    if (
+        scoped_diff is None
+        or hashlib.sha256(scoped_diff).hexdigest()
+        != delivered.get("scopedDiffSha256")
+    ):
+        reject("scoped result diff changed")
+
+    for path, expected in _CONTINUATION_TASK_FILES.items():
+        result_blob, result_sha256 = expected
+        result_identity = _evidence_git(
+            root, "rev-parse", f"{_CONTINUATION_RESULT_COMMIT}:{path}"
+        )
+        result_bytes = _evidence_git(
+            root, "show", f"{_CONTINUATION_RESULT_COMMIT}:{path}"
+        )
+        if (
+            result_identity is None
+            or result_identity.decode().strip() != result_blob
+            or result_bytes is None
+            or hashlib.sha256(result_bytes).hexdigest() != result_sha256
+        ):
+            reject(f"delivered task source changed: {path}")
+        if path == "harness/continuation.py":
+            try:
+                current_bytes = (root / path).read_bytes()
+            except OSError:
+                current_bytes = None
+            if current_bytes != result_bytes:
+                reject("accepted continuation behavior no longer matches the result")
+
+    claims = document.get("claimLimits", [])
+    if (
+        len(claims) != 5
+        or not any("At most one candidate.5 Codex reference-host O2 cohort" in item for item in claims)
+        or not any("not proof of installed Hook value" in item for item in claims)
+        or not any("does not establish O5 portability" in item for item in claims)
+        or not any("cannot verify O4" in item for item in claims)
+    ):
+        reject("claim ceiling changed or broadened")
+
+    if require_human:
+        if (
+            authority.get("decisionState") != "accepted"
+            or result.get("accepted") is not True
+            or result.get("humanJudgment")
+            != "accepted task result, material third-scenario distinction, and bounded O2 claim"
+            or human
+            != {
+                "accepted": True,
+                "namedHuman": "yiheng8023",
+                "decisionMessageLocator": (
+                    "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+                    "messages/by-content-sha256/"
+                    + _CONTINUATION_ACCEPTANCE_MESSAGE_SHA256
+                ),
+                "decisionMessageIdentity": (
+                    "sha256:" + _CONTINUATION_ACCEPTANCE_MESSAGE_SHA256
+                ),
+                "acceptedTaskResult": True,
+                "acceptedMaterialThirdScenarioDistinction": True,
+                "acceptedBoundedO2Claim": True,
+            }
+            or comparison.get("materialDistinctionState")
+            != "accepted-by-yiheng8023"
+            or floors.get("missingData") != []
+            or residue.get("claim")
+            != "O2 only for the exact registered three-scenario Codex reference-host cohort"
+            or document.get("validator", {}).get("state") != "accepted"
+            or len(records) != 6
+            or records[-1].get("order") != 6
+            or records[-1].get("event") != "named-human-accepted"
+            or records[-1].get("identity")
+            != "sha256:" + _CONTINUATION_ACCEPTANCE_MESSAGE_SHA256
+            or not records[-1].get("locator", "").startswith(
+                "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+            )
+            or source.get("identityWithHumanDecision")
+            != "sha256:63b44f9d54b8fd2ba8d32d10a68c0a8ea0b6a3fda46f7cbae93d318ba664ab55"
+        ):
+            reject("named-human result, distinction, or bounded O2 decision is absent")
+    else:
+        if (
+            authority.get("decisionState") != "pending"
+            or result.get("accepted") is not None
+            or result.get("humanJudgment") != "pending"
+            or human.get("accepted") is not None
+            or any(
+                human.get(name) is not None
+                for name in (
+                    "decisionMessageLocator",
+                    "decisionMessageIdentity",
+                    "acceptedTaskResult",
+                    "acceptedMaterialThirdScenarioDistinction",
+                    "acceptedBoundedO2Claim",
+                )
+            )
+            or comparison.get("materialDistinctionState")
+            != "pending-named-human-judgment"
+            or floors.get("missingData")
+            != ["named-human outcome, material-distinction, and bounded O2 judgment"]
+            or residue.get("claim") != "pending named-human judgment; no O2 credit yet"
+            or document.get("validator", {}).get("state")
+            != "machine-eligible-human-pending"
+            or len(records) != 5
+        ):
+            reject("pending human gate was hidden or pre-accepted")
+
+    return len(errors) == before
+
+
+def _validate_continuation_reconciliation_o2(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    if criterion_id != "O2":
+        _error(errors, "continuation reconciliation evidence used for non-O2 criterion")
+        return False
+    return _validate_continuation_reconciliation_o2_candidate(
+        document, root, errors, require_human=True
+    )
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
     {
         "public-intake-zero-knowledge-o1": (
@@ -1704,6 +2320,11 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             frozenset({"O1", "O3"}),
             frozenset({_CLAUDE_SKILL_INCREMENT_ID}),
             _validate_claude_skill_o1_o3,
+        ),
+        "continuation-reconciliation-o2": (
+            frozenset({"O2"}),
+            frozenset({_CONTINUATION_INCREMENT_ID}),
+            _validate_continuation_reconciliation_o2,
         ),
     }
 )

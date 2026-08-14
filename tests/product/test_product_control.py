@@ -797,7 +797,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.3+codex.payload-"
+            "0.2.0-candidate.4+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -979,7 +979,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.3+claude.payload-"
+            "0.2.0-candidate.4+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
@@ -1732,6 +1732,7 @@ class ProductControlTests(unittest.TestCase):
                 "public-intake-zero-knowledge-o1",
                 "codex-demand-skill-plugin-o1",
                 "claude-demand-skill-plugin-o1-o3",
+                "continuation-reconciliation-o2",
             },
         )
         criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
@@ -1741,6 +1742,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             increments,
             frozenset({"increment.v0.2.public-intake-zero-knowledge"}),
+        )
+        self.assertTrue(callable(validator))
+
+        criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "continuation-reconciliation-o2"
+        ]
+        self.assertEqual(criteria, frozenset({"O2"}))
+        self.assertEqual(
+            increments,
+            frozenset(
+                {"increment.v0.2.continuation-reconciliation-projection"}
+            ),
         )
         self.assertTrue(callable(validator))
 
@@ -1875,6 +1888,63 @@ class ProductControlTests(unittest.TestCase):
                         candidate_criterion,
                         ROOT,
                         candidate_errors,
+                    )
+                )
+                self.assertTrue(candidate_errors)
+
+    def test_continuation_o2_candidate_binds_machine_cohort_before_human_gate(
+        self,
+    ) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "product/evidence/continuation-reconciliation-projection-2026-08-14.json"
+            ).read_text(encoding="utf-8")
+        )
+        errors: list[str] = []
+        self.assertTrue(
+            control._validate_continuation_reconciliation_o2_candidate(
+                document, ROOT, errors, require_human=False
+            ),
+            errors,
+        )
+
+        accepted_errors: list[str] = []
+        validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "continuation-reconciliation-o2"
+        ][2]
+        self.assertFalse(validator(document, "O2", ROOT, accepted_errors))
+        self.assertTrue(
+            any("named-human" in error for error in accepted_errors),
+            accepted_errors,
+        )
+
+        mutations = {
+            "different active baseline": lambda value: value["artifacts"][
+                "baselineActiveProjection"
+            ].__setitem__("characters", 4096),
+            "dirty path exposure": lambda value: value["artifacts"][
+                "dirtyCodexProjection"
+            ].__setitem__("dirtyPathNamesExposed", True),
+            "hidden intervention": lambda value: value["measures"][
+                "materialUserCapabilityOrchestrationInterventions"
+            ].__setitem__("count", 1),
+            "lost strict reduction": lambda value: value["measures"][
+                "outcomeComparison"
+            ].__setitem__("strictReduction", False),
+            "broadened claim": lambda value: value["claimLimits"].clear(),
+        }
+        for label, mutate_document in mutations.items():
+            with self.subTest(label=label):
+                candidate = deepcopy(document)
+                mutate_document(candidate)
+                candidate_errors: list[str] = []
+                self.assertFalse(
+                    control._validate_continuation_reconciliation_o2_candidate(
+                        candidate,
+                        ROOT,
+                        candidate_errors,
+                        require_human=False,
                     )
                 )
                 self.assertTrue(candidate_errors)

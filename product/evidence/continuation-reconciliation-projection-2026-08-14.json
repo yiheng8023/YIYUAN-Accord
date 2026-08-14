@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "id": "evidence.continuation-reconciliation-projection.2026-08-14",
+  "observedAt": "2026-08-14T19:44:19.7990665+08:00",
+  "taskIdentity": "natural-task.2026-08-14.continuation-reconciliation-projection",
+  "criterionIds": [
+    "O2"
+  ],
+  "incrementId": "increment.v0.2.continuation-reconciliation-projection",
+  "workItemId": "work.v0.2.continuation-reconciliation-projection",
+  "registration": {
+    "locator": "product/evidence/continuation-reconciliation-projection-registration.json",
+    "sha256": "d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140",
+    "commit": "19f189341b51147e60b7f48299f0562c35a398ee"
+  },
+  "source": {
+    "threadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+    "identityBeforeHumanDecision": "sha256:6443578495bd932e6e5b072a4e5bc04e04afad88882a7a88195bfaac18e9d133"
+  },
+  "authority": {
+    "namedHuman": "yiheng8023",
+    "decisionState": "pending",
+    "decisionScope": "Accept or reject the delivered compact continuation-reconciliation source result, whether it is materially distinct from the public-intake and Codex-Skill source scenarios, and only the registered three-scenario Codex reference-host O2 burden-reduction claim ceiling.",
+    "decisionScopeSha256": "3a67a213b652c20c3b4fbaf657d06630a28c534b8ae3fec078a60e75fff71850",
+    "requiredResponse": "接受该结果、第三场景区分和上述有界 O2 声明。",
+    "requiredResponseSha256": "10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7"
+  },
+  "result": {
+    "baselineCommit": "e35a86f7550494b4efbf12f89efc5447f8951920",
+    "registrationCommit": "19f189341b51147e60b7f48299f0562c35a398ee",
+    "deliverableCommit": "8f3b08502d85b23d4101c8c2550a3954963b1de9",
+    "scenarioClass": "host-neutral-continuation-reconciliation-adapter-implementation",
+    "accepted": null,
+    "humanJudgment": "pending"
+  },
+  "sourceRecords": [
+    {
+      "order": 1,
+      "event": "goal-level-context-and-topology-demand-bound",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/msg_019ffad0-2bf8-70f2-a0ce-f17151550169",
+      "identity": "sha256:afe020ef14e4ffa07bbd05112fd52bde11582e5e4f9ef41fc649c611b30eb733"
+    },
+    {
+      "order": 2,
+      "event": "registration-committed-and-pushed",
+      "locator": "git:commit/19f189341b51147e60b7f48299f0562c35a398ee",
+      "identity": "sha256:a65db812924ba976945141949ef9a0f10a0fde7099bb948e69e2b2dca9ab2c64"
+    },
+    {
+      "order": 3,
+      "event": "active-work-baseline-measured",
+      "locator": "measurement:active-common-projection-before-implementation",
+      "identity": "sha256:4012ad89799cd62da24b709d905551a4718a8e3e560b8f4a156c777ef7f9945e"
+    },
+    {
+      "order": 4,
+      "event": "deliverable-committed-and-pushed",
+      "locator": "git:commit/8f3b08502d85b23d4101c8c2550a3954963b1de9",
+      "identity": "sha256:345ecd3086c155ed560fda59677c5b1af8b3c929d58fbdf69bac816b989da19f"
+    },
+    {
+      "order": 5,
+      "event": "clean-delivery-reconciliation-verified",
+      "locator": "measurement:clean-main-after-push",
+      "identity": "sha256:b6e5adb83f9f38c3c281a23a4d057b952bed2f15a5cc4351b141090ccbae7afa"
+    }
+  ],
+  "artifacts": {
+    "baselineReadyProjection": {
+      "characters": 3643,
+      "hasLiveRepositoryCheckpoint": false
+    },
+    "baselineActiveProjection": {
+      "characters": 6301,
+      "limit": 4096,
+      "sha256": "75d4a5881cbc7ee45ac14f67b3011670fcc2a01244f290a8dcbed07698ef8c66",
+      "hasLiveRepositoryCheckpoint": false
+    },
+    "deliveredSource": {
+      "continuationBlob": "1b3385200765aa1df92d90193a79883244650e53",
+      "continuationSha256": "7151a0fdfab1703374fdc42871d4dc7b68f68e1dc175238a577240fa2ae80bb7",
+      "controlBlob": "df2df63294dff153dbebb3524768cfded2029f15",
+      "controlSha256": "31d4683756f8d380ae3d95fa2b8850cd6aef0b09e743f53606a9d6c27f5ff4d3",
+      "scopedDiffSha256": "1c29743c3d8508b293afac885add732e2b320c22c08fa993e40004372bc83650"
+    },
+    "cleanCodexProjection": {
+      "characters": 2728,
+      "limit": 3072,
+      "valid": true,
+      "branch": "main",
+      "head": "8f3b08502d85b23d4101c8c2550a3954963b1de9",
+      "upstream": "origin/main",
+      "ahead": 0,
+      "behind": 0,
+      "worktreeCount": 1,
+      "dirtyEntryCount": 0
+    },
+    "dirtyCodexProjection": {
+      "characters": 2730,
+      "limit": 3072,
+      "valid": true,
+      "dirtyPathNamesExposed": false
+    },
+    "dirtyClaudeProjection": {
+      "characters": 2922,
+      "limit": 3072,
+      "valid": true,
+      "commonSemanticsMatchCodex": true
+    }
+  },
+  "measures": {
+    "humanOutcomeDecision": {
+      "accepted": null,
+      "namedHuman": "yiheng8023",
+      "decisionMessageLocator": null,
+      "decisionMessageIdentity": null,
+      "acceptedTaskResult": null,
+      "acceptedMaterialThirdScenarioDistinction": null,
+      "acceptedBoundedO2Claim": null
+    },
+    "materialUserCapabilityOrchestrationInterventions": {
+      "count": 0,
+      "taskTopologyInterventions": 0,
+      "userInputsAfterMeasurementStart": [
+        "one accountable final result, material-distinction, and bounded O2 judgment pending"
+      ]
+    },
+    "materialCollaborationLossEvents": {
+      "count": 0,
+      "repeatedSameClassCorrections": 0
+    },
+    "repeatedAlreadyBoundRequests": {
+      "count": 0
+    },
+    "capabilityLifecycleEvents": {
+      "observation": "The current Codex task, main checkout, shared continuation adapter, inactive Codex and Claude launchers, Git, Python, verifier, and tests were sufficient.",
+      "gapAssessment": "The shared active-work projection exceeded the Codex context limit and lacked a live repository checkpoint; no new runtime, manager, protocol, state store, carrier, plugin installation, MCP server, or App was needed.",
+      "discovery": "No task-time external discovery or capability addition was needed after the registered exact-source landscape and native Hook boundary were retained.",
+      "dispatch": "Current native editing, bounded read-only Git observation, local verification, commit, and push in the existing main checkout only.",
+      "release": "No task-scoped capability exposure, installed plugin, Hook trust, MCP server, App, account, process, branch, worktree, fork, or new task remained."
+    },
+    "contextCarrierFitnessObservationsAndTransitions": {
+      "reliableRemainingCapacitySignal": "unknown",
+      "decision": "continue while the task, goal, immutable registration, product authority, Git state, exact diff, verifier, tests, and human gate remained recoverable",
+      "transition": "none during this registered task; the existing task remained healthy",
+      "recovery": "the active registration, implementation checkpoint, Git state, verification state, and pending human gate remained recoverable without user reconstruction",
+      "preventableContextLoss": false
+    },
+    "contextLifecycleTransitionAndRecovery": {
+      "crossedInThisTask": false,
+      "cohortCoverage": [
+        "public-intake receipt native compaction at 2026-08-14T00:56:49.178Z",
+        "Codex Skill receipt native compaction at 2026-08-14T02:01:32.757Z"
+      ],
+      "userReconstructionCount": 0
+    },
+    "taskTopologyLifecycleEvents": {
+      "conversationCarrier": "current task 019ffaa8-b44a-7bf2-97de-65875bceec33 retained",
+      "codeCarrier": "existing main checkout retained",
+      "isolatedCarrierCreated": false,
+      "userTopologyOperationCount": 0,
+      "reconciliationAndRelease": "main, origin/main, HEAD, upstream, ahead/behind, worktree count, dirty state, diff, tests, push, and cleanup were reconciled by the Agent; no carrier, merge, archive, release, or cleanup operation remained"
+    },
+    "selectedRouteSubstrates": [
+      "OpenAI Codex CLI 0.147.0 at source commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host, reused only for current authorized task execution and native SessionStart semantics",
+      "Claude Code 2.1.232 at official tag commit 1f6015b5d578adf79c8527443328a216d6b6a3f1 under applicable Anthropic Commercial Terms and Privacy Policy, released distinct-host runtime, reused only for the existing inactive SessionStart parity projection",
+      "Git 2.55.0.windows.3 executable sha256:7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364, GPL-2.0-only, released repository substrate, reused only for bounded read-only checkpoint observation and authorized commit and push",
+      "CPython 3.14.6 executable sha256:03168c01b7b7491423350e82c26fee71f35b43694d1319d3c668bda6903a0c38 under Python-2.0 and Windows PowerShell 5.1.26100.9168 under Microsoft Windows terms, reused only for standard-library implementation and bounded verification"
+    ],
+    "validationResults": {
+      "canonicalVerifier": "valid=true; O1=true; O2=false; O3=true; O4=false; O5=false",
+      "fullProductTests": "150/150 PASS",
+      "claudeStrictPluginValidation": "pass",
+      "codexLauncher": "exit=0; 2728 characters on clean main; valid=true",
+      "claudeLauncher": "exit=0; 2922 characters while dirty; valid=true",
+      "fallbackOverflowTest": "pass",
+      "gitPrivacyAndUnknownStateTests": "pass"
+    },
+    "taskFloorResults": {
+      "outcomeQuality": "pass",
+      "intentAndCommunication": "pass",
+      "contextCarrierFitness": "pass",
+      "taskTopology": "pass",
+      "reliabilityAndRecovery": "pass",
+      "authorityAndSafety": "pass",
+      "scopeAndMinimality": "pass",
+      "evidence": "pass",
+      "residue": "pass",
+      "missingData": [
+        "named-human outcome, material-distinction, and bounded O2 judgment"
+      ]
+    },
+    "outcomeComparison": {
+      "taskIdentities": [
+        "natural-task.2026-08-14.public-intake-zero-knowledge",
+        "natural-task.2026-08-14.codex-demand-skill-plugin",
+        "natural-task.2026-08-14.continuation-reconciliation-projection"
+      ],
+      "scenarioClasses": [
+        "public-support-and-contribution-intake-for-zero-knowledge-users",
+        "codex-plugin-skill-reference-adapter-delivery",
+        "host-neutral-continuation-reconciliation-adapter-implementation"
+      ],
+      "baselineMaterialInterventions": [
+        3,
+        2,
+        3
+      ],
+      "observedMaterialInterventions": [
+        0,
+        0,
+        0
+      ],
+      "aggregateBaseline": 8,
+      "aggregateObserved": 0,
+      "strictReduction": true,
+      "minimumScenarioCount": 3,
+      "materialDistinctionState": "pending-named-human-judgment"
+    },
+    "residueAndClaimLimits": {
+      "repositoryTemporaryResidue": [],
+      "externalWritesBeyondAuthorizedGitPush": [],
+      "consumerOrHostMutation": [],
+      "remainingTaskScopedExposure": [],
+      "codeOrConversationCarriersCreated": [],
+      "claim": "pending named-human judgment; no O2 credit yet"
+    }
+  },
+  "claimLimits": [
+    "At most one candidate.5 Codex reference-host O2 cohort across the exact public-intake, Codex Skill-source, and continuation-reconciliation implementation receipts on 2026-08-14.",
+    "The current result is one inactive source implementation and clean Git delivery, not proof of installed Hook value, general context management, or production behavior.",
+    "The Claude output establishes only inactive common-semantics parity for this source result and does not establish O5 portability.",
+    "This receipt cannot verify O4 methodology calibration, O5, release, publication, production, or v0.2 completion.",
+    "Until the exact named-human decision and final task-bound validator pass, O2 remains false."
+  ],
+  "validator": {
+    "kind": "continuation-reconciliation-o2",
+    "criterionId": "O2",
+    "state": "machine-eligible-human-pending"
+  }
+}
