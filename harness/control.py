@@ -550,8 +550,78 @@ _PUBLIC_INTAKE_DOCUMENTS = MappingProxyType(
     }
 )
 
+_CODEX_SKILL_INCREMENT_ID = "increment.v0.2.codex-demand-skill-plugin"
+_CODEX_SKILL_WORK_ID = "work.v0.2.codex-demand-skill-plugin"
+_CODEX_SKILL_REGISTRATION = (
+    "product/evidence/codex-demand-skill-plugin-registration.json"
+)
+_CODEX_SKILL_REGISTRATION_SHA256 = (
+    "16e737b569c41f5b7f2c847d67bb70c2eb7ca0491481fec7c533a498d4051824"
+)
+_CODEX_SKILL_BASELINE_COMMIT = "784c26dd813a8a38764c896bbcda1d2ec7385001"
+_CODEX_SKILL_REGISTRATION_COMMIT = "aa7effd4de8739a63418f826f5f4d927973d024d"
+_CODEX_SKILL_RESULT_COMMIT = "6892fef39e88f17d628bee7ff0f837a4d051665d"
+_CODEX_SKILL_RECEIPT_SHA256 = (
+    "266115dd0f5e030afc3be41920b3ac4d15a0b3d91193f1e0bbcbf2851149f904"
+)
+_CODEX_SKILL_SOURCE_IDENTITY = (
+    "sha256:3074a4feb2877a8be9129c2eb15b0f75249991a84b084abd8716693f43564e6a"
+)
+_CODEX_SKILL_ACCEPTANCE_MESSAGE_SHA256 = (
+    "a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0"
+)
+_CODEX_SKILL_ACCEPTANCE_RECORD_SHA256 = (
+    "35afae0352cb00c13c80c328a3c46f8fc233c6223f9d220f609b0da6ca120372"
+)
+_CODEX_SKILL_JUDGMENT_REQUEST_SHA256 = (
+    "80f78659b62bd2601b6030c54f84e2327816b5ea20363e752597fe542c1029d3"
+)
+_CODEX_SKILL_SOURCE_EVENTS = (
+    "goal-level-demand-received",
+    "registration-committed",
+    "registration-pushed",
+    "native-context-compacted",
+    "post-compaction-task-and-source-recovered",
+    "deliverable-committed",
+    "deliverable-pushed",
+    "bounded-human-judgment-requested",
+    "goal-mode-continuation-commentary-one",
+    "goal-mode-continuation-final-one",
+    "goal-mode-continuation-commentary-two",
+    "goal-mode-temporary-blocked-final",
+    "named-human-accepted",
+)
+_CODEX_SKILL_RESULT_PATHS = (
+    "README.md",
+    "README.zh-CN.md",
+    "adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/SKILL.md",
+    "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/agents/openai.yaml",
+    "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+    "docs/architecture.md",
+    "docs/operations/CONTINUATION.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "tests/product/test_product_control.py",
+)
+_CODEX_SKILL_TASK_FILES = MappingProxyType(
+    {
+        "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/SKILL.md": (
+            "e34d2299a9ef6e3abded16b88fab2396cfefb361",
+            None,
+        ),
+        "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/agents/openai.yaml": (
+            "87d0ec0ac486d5a3cc2d451d0ae1c247cb5455e3",
+            None,
+        ),
+        "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md": (
+            "e3ac88f8d8e38b6ee673738801962d9ef35149e8",
+            "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+        ),
+    }
+)
 
-def _public_intake_git(root: Path, *arguments: str) -> bytes | None:
+
+def _evidence_git(root: Path, *arguments: str) -> bytes | None:
     try:
         completed = subprocess.run(
             ["git", *arguments],
@@ -688,21 +758,21 @@ def _validate_public_intake_o1(
     ):
         reject("registration bytes changed")
 
-    registration_parent = _public_intake_git(
+    registration_parent = _evidence_git(
         root, "rev-parse", f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}^"
     )
-    result_parent = _public_intake_git(
+    result_parent = _evidence_git(
         root, "rev-parse", f"{_PUBLIC_INTAKE_RESULT_COMMIT}^"
     )
-    committed_registration = _public_intake_git(
+    committed_registration = _evidence_git(
         root,
         "show",
         f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}:{_PUBLIC_INTAKE_REGISTRATION}",
     )
-    committed_program = _public_intake_git(
+    committed_program = _evidence_git(
         root, "show", f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}:product/program.json"
     )
-    result_is_ancestor = _public_intake_git(
+    result_is_ancestor = _evidence_git(
         root, "merge-base", "--is-ancestor", _PUBLIC_INTAKE_RESULT_COMMIT, "HEAD"
     )
     if (
@@ -743,7 +813,7 @@ def _validate_public_intake_o1(
             ):
                 reject("registration was not active before the result commit")
 
-    changed_paths = _public_intake_git(
+    changed_paths = _evidence_git(
         root,
         "diff-tree",
         "--no-commit-id",
@@ -755,7 +825,7 @@ def _validate_public_intake_o1(
         _PUBLIC_INTAKE_DOCUMENTS
     ):
         reject("result commit is not scoped to the three registered documents")
-    scoped_diff = _public_intake_git(
+    scoped_diff = _evidence_git(
         root,
         "diff",
         "--no-ext-diff",
@@ -776,16 +846,16 @@ def _validate_public_intake_o1(
         baseline_blob, result_blob, result_sha256, old_phrase, new_phrase, safety = (
             expected
         )
-        baseline_identity = _public_intake_git(
+        baseline_identity = _evidence_git(
             root, "rev-parse", f"{_PUBLIC_INTAKE_BASELINE_COMMIT}:{path}"
         )
-        result_identity = _public_intake_git(
+        result_identity = _evidence_git(
             root, "rev-parse", f"{_PUBLIC_INTAKE_RESULT_COMMIT}:{path}"
         )
-        baseline_bytes = _public_intake_git(
+        baseline_bytes = _evidence_git(
             root, "show", f"{_PUBLIC_INTAKE_BASELINE_COMMIT}:{path}"
         )
-        result_bytes = _public_intake_git(
+        result_bytes = _evidence_git(
             root, "show", f"{_PUBLIC_INTAKE_RESULT_COMMIT}:{path}"
         )
         try:
@@ -811,13 +881,344 @@ def _validate_public_intake_o1(
     return len(errors) == before
 
 
+def _validate_codex_skill_o1(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    """Validate only the observed Codex Skill source task and bounded decision."""
+
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"Codex Skill O1 evidence {message}")
+
+    canonical = json.dumps(
+        document, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    if hashlib.sha256(canonical).hexdigest() != _CODEX_SKILL_RECEIPT_SHA256:
+        reject("serialization differs from the observed task receipt")
+        return False
+
+    authority = document["authority"]
+    result = document["result"]
+    if (
+        criterion_id != "O1"
+        or document["incrementId"] != _CODEX_SKILL_INCREMENT_ID
+        or document["workItemId"] != _CODEX_SKILL_WORK_ID
+        or document["taskIdentity"]
+        != "natural-task.2026-08-14.codex-demand-skill-plugin"
+        or document["source"]["identity"] != _CODEX_SKILL_SOURCE_IDENTITY
+        or authority["name"] != "yiheng8023"
+        or authority["sourceThreadId"]
+        != "019ffaa8-b44a-7bf2-97de-65875bceec33"
+        or authority["sourceMessageId"]
+        != "msg_019ffe0c-2d1e-7cd2-96d4-caf5be0e94bb"
+        or authority["sourceMessageSha256"]
+        != _CODEX_SKILL_ACCEPTANCE_MESSAGE_SHA256
+        or authority["sourceRecordSha256"]
+        != _CODEX_SKILL_ACCEPTANCE_RECORD_SHA256
+        or authority["responseToMessageSha256"]
+        != _CODEX_SKILL_JUDGMENT_REQUEST_SHA256
+        or hashlib.sha256("认可。\n".encode()).hexdigest()
+        != _CODEX_SKILL_ACCEPTANCE_MESSAGE_SHA256
+        or result["deliverableCommit"] != _CODEX_SKILL_RESULT_COMMIT
+        or result["accepted"] is not True
+    ):
+        reject("criterion, task source, result, or named-human decision changed")
+
+    records = document["sourceRecords"]
+    if tuple(item["event"] for item in records) != _CODEX_SKILL_SOURCE_EVENTS:
+        reject("source chronology events changed")
+    instants = [_rfc3339_instant(item["observedAt"]) for item in records]
+    if any(item is None for item in instants) or instants != sorted(instants):
+        reject("source chronology is not ordered")
+    if any(
+        not item["locator"].startswith(
+            "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+        )
+        for item in records
+    ):
+        reject("source chronology left the bound task")
+    identities = [item["identity"].removeprefix("sha256:") for item in records]
+    combined = hashlib.sha256(("\n".join(identities) + "\n").encode()).hexdigest()
+    if document["source"]["identity"] != f"sha256:{combined}":
+        reject("source chronology identity changed")
+
+    measures = document["measures"]
+    orchestration = measures["materialUserCapabilityOrchestrationInterventions"]
+    losses = measures["materialCollaborationLossEvents"]
+    process_noise = losses["nonMaterialHostGoalProcessNoise"]
+    repeats = measures["repeatedAlreadyBoundRequests"]
+    context = measures["contextCarrierFitnessObservationsAndTransitions"]
+    topology = measures["taskTopologyLifecycleEvents"]
+    floors = measures["taskFloorResults"]
+    residue = measures["residueAndClaimLimits"]
+    floor_names = {
+        "outcomeQuality",
+        "intentAndCompleteness",
+        "interfaceSimplicity",
+        "authorityAndSafety",
+        "scope",
+        "minimality",
+        "packageIntegrity",
+        "evidence",
+        "residue",
+    }
+    if (
+        orchestration["count"] != 0
+        or orchestration["taskTopologyInterventions"] != 0
+        or losses["count"] != 0
+        or losses["repeatedSameClassCorrections"] != 0
+        or repeats["count"] != 0
+    ):
+        reject("zero user-intervention or material collaboration-loss floor changed")
+    if (
+        process_noise["count"] != 1
+        or process_noise["visibleAssistantMessagesAfterJudgmentRequest"] != 4
+        or process_noise["automaticFinalReminders"] != 2
+        or process_noise["temporaryGoalBlocked"] is not True
+        or process_noise["additionalHumanInputsOrActionsBeyondRegisteredJudgment"]
+        != 0
+        or "not evidence of product value" not in process_noise["classification"]
+    ):
+        reject("observed host goal-mode process cost was hidden or reclassified")
+    if (
+        context["reliableRemainingCapacitySignal"] != "unknown"
+        or context["transition"]
+        != "one native compaction at 2026-08-14T02:01:32.757Z"
+        or context["preventableContextLoss"] is not False
+        or topology["isolatedCarrierCreated"] is not False
+        or topology["userTopologyOperationCount"] != 0
+        or topology["codeCarrier"] != "existing main checkout retained"
+    ):
+        reject("context-carrier or task-topology lifecycle changed")
+    if (
+        set(floors) != floor_names | {"missingData"}
+        or any(floors[name] != "pass" for name in floor_names)
+        or floors["missingData"] != []
+        or any(
+            residue[name] != []
+            for name in (
+                "repositoryTemporaryResidue",
+                "externalWritesBeyondAuthorizedGitPush",
+                "consumerOrHostMutation",
+                "remainingTaskScopedExposure",
+            )
+        )
+    ):
+        reject("a mandatory quality, safety, package, evidence, or residue floor failed")
+    if len(measures["selectedRouteSubstrates"]) != 6 or set(
+        measures["capabilityLifecycleEvents"]
+    ) != {"observation", "gapAssessment", "discovery", "dispatch", "release"}:
+        reject("capability lifecycle or substrate binding is incomplete")
+    claims = document["claimLimits"]
+    if (
+        len(claims) != 6
+        or not any("does not itself verify O2 or O4" in item for item in claims)
+        or not any("goal-mode continuation noise" in item for item in claims)
+        or not any("does not verify live Skill triggering" in item for item in claims)
+    ):
+        reject("claim limits changed or broadened")
+
+    try:
+        registration_raw = (root / _CODEX_SKILL_REGISTRATION).read_bytes()
+    except OSError:
+        registration_raw = None
+    if (
+        registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _CODEX_SKILL_REGISTRATION_SHA256
+    ):
+        reject("registration bytes changed")
+
+    registration_parent = _evidence_git(
+        root, "rev-parse", f"{_CODEX_SKILL_REGISTRATION_COMMIT}^"
+    )
+    result_parent = _evidence_git(root, "rev-parse", f"{_CODEX_SKILL_RESULT_COMMIT}^")
+    committed_registration = _evidence_git(
+        root,
+        "show",
+        f"{_CODEX_SKILL_REGISTRATION_COMMIT}:{_CODEX_SKILL_REGISTRATION}",
+    )
+    committed_program = _evidence_git(
+        root, "show", f"{_CODEX_SKILL_REGISTRATION_COMMIT}:product/program.json"
+    )
+    result_is_ancestor = _evidence_git(
+        root, "merge-base", "--is-ancestor", _CODEX_SKILL_RESULT_COMMIT, "HEAD"
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip() != _CODEX_SKILL_BASELINE_COMMIT
+        or result_parent is None
+        or result_parent.decode().strip() != _CODEX_SKILL_REGISTRATION_COMMIT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _CODEX_SKILL_REGISTRATION_SHA256
+        or result_is_ancestor is None
+    ):
+        reject("Git registration-to-result chronology changed")
+
+    if committed_program is None:
+        reject("committed active registration binding is unavailable")
+    else:
+        try:
+            registered_program = _parse_json(committed_program.decode())
+            registered_increment = next(
+                item
+                for item in registered_program["increments"]
+                if item.get("id") == _CODEX_SKILL_INCREMENT_ID
+            )
+        except (KeyError, StopIteration, UnicodeDecodeError, _InvalidJson, TypeError):
+            reject("committed active registration binding is invalid")
+        else:
+            if (
+                registered_program.get("status") != "active"
+                or registered_program.get("activeIncrementId")
+                != _CODEX_SKILL_INCREMENT_ID
+                or registered_increment.get("state") != "active"
+                or registered_increment.get("taskRegistration")
+                != {
+                    "locator": _CODEX_SKILL_REGISTRATION,
+                    "sha256": _CODEX_SKILL_REGISTRATION_SHA256,
+                }
+            ):
+                reject("registration was not active before the result commit")
+
+    changed_paths = _evidence_git(
+        root,
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "-r",
+        _CODEX_SKILL_RESULT_COMMIT,
+    )
+    if changed_paths is None or tuple(changed_paths.decode().splitlines()) != (
+        _CODEX_SKILL_RESULT_PATHS
+    ):
+        reject("result commit changed paths differ from the registered source task")
+    scoped_diff = _evidence_git(
+        root,
+        "diff",
+        "--no-ext-diff",
+        "--no-color",
+        _CODEX_SKILL_BASELINE_COMMIT,
+        _CODEX_SKILL_RESULT_COMMIT,
+        "--",
+        *_CODEX_SKILL_RESULT_PATHS,
+    )
+    if (
+        scoped_diff is None
+        or hashlib.sha256(scoped_diff).hexdigest()
+        != document["artifacts"]["scopedDiffSha256"]
+    ):
+        reject("scoped result diff changed")
+
+    baseline_tree = _evidence_git(
+        root,
+        "rev-parse",
+        f"{_CODEX_SKILL_BASELINE_COMMIT}:adapters/agent-autonomy-harness-codex",
+    )
+    baseline_manifest = _evidence_git(
+        root,
+        "rev-parse",
+        f"{_CODEX_SKILL_BASELINE_COMMIT}:adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    )
+    result_tree = _evidence_git(
+        root,
+        "rev-parse",
+        f"{_CODEX_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-codex",
+    )
+    result_manifest_identity = _evidence_git(
+        root,
+        "rev-parse",
+        f"{_CODEX_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    )
+    result_manifest_bytes = _evidence_git(
+        root,
+        "show",
+        f"{_CODEX_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    )
+    if (
+        baseline_tree is None
+        or baseline_tree.decode().strip() != "5af87a619fbd8a020f2751eafa3cc4a8dedf002d"
+        or baseline_manifest is None
+        or baseline_manifest.decode().strip()
+        != "08c5b063e3f03e00b5dc4df5cbab910344710bce"
+        or result_tree is None
+        or result_tree.decode().strip() != "3cf400757dd74c1a6bac01bbf88337572934ffa3"
+        or result_manifest_identity is None
+        or result_manifest_identity.decode().strip()
+        != "9cd4115bad162255741848969db0d345b4c60461"
+        or result_manifest_bytes is None
+    ):
+        reject("baseline or result plugin identity changed")
+    else:
+        try:
+            result_manifest = _parse_json(result_manifest_bytes.decode())
+        except (UnicodeDecodeError, _InvalidJson, TypeError):
+            reject("result plugin manifest is invalid")
+        else:
+            if (
+                result_manifest.get("version")
+                != "0.2.0-candidate.2+codex.payload-69031aa1e26c"
+                or result_manifest.get("skills") != "./skills/"
+                or any(
+                    field in result_manifest for field in ("mcpServers", "apps", "hooks")
+                )
+            ):
+                reject("result plugin manifest boundary changed")
+
+    for path, expected in _CODEX_SKILL_TASK_FILES.items():
+        result_blob, result_sha256 = expected
+        result_identity = _evidence_git(
+            root, "rev-parse", f"{_CODEX_SKILL_RESULT_COMMIT}:{path}"
+        )
+        result_bytes = _evidence_git(
+            root, "show", f"{_CODEX_SKILL_RESULT_COMMIT}:{path}"
+        )
+        try:
+            current_bytes = (root / path).read_bytes()
+        except OSError:
+            current_bytes = None
+        if (
+            result_identity is None
+            or result_identity.decode().strip() != result_blob
+            or result_bytes is None
+            or current_bytes != result_bytes
+            or (
+                result_sha256 is not None
+                and hashlib.sha256(result_bytes).hexdigest() != result_sha256
+            )
+        ):
+            reject(f"accepted task-facing source changed: {path}")
+
+    profile_path = (
+        root
+        / "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/"
+        "references/demand-to-capability-profile.md"
+    )
+    try:
+        if profile_path.read_bytes() != (
+            root / "docs/DEMAND-TO-CAPABILITY-PROFILE.md"
+        ).read_bytes():
+            reject("projected profile is not byte-identical to the registered profile")
+    except OSError:
+        reject("projected or registered profile is unavailable")
+
+    return len(errors) == before
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
     {
         "public-intake-zero-knowledge-o1": (
             frozenset({"O1"}),
             frozenset({_PUBLIC_INTAKE_INCREMENT_ID}),
             _validate_public_intake_o1,
-        )
+        ),
+        "codex-demand-skill-plugin-o1": (
+            frozenset({"O1"}),
+            frozenset({_CODEX_SKILL_INCREMENT_ID}),
+            _validate_codex_skill_o1,
+        ),
     }
 )
 

@@ -21,19 +21,22 @@ inactive session-scoped Claude Code projection over the same continuation
 semantics. It does not contain an Agent runtime, an installed or
 behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `active`, with one pre-registered Codex task-facing Skill projection
-increment. O1 is verified by one
-accepted, task-bound public-intake result; O2-O5 remain unverified (`1/5`
-outcomes). The program now makes explicit that authorized product-plan delivery is real demand
+v0.2 is `ready`, with no active causal increment. O1 is verified by two
+accepted, task-bound results: the public-intake rewrite and the uninstalled
+Codex task-facing Skill source package. O2-O5 remain unverified (`1/5`
+outcomes; two receipts support the same O1 criterion). The program makes
+explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The Codex source candidate now projects the unaccepted
 method through one concise implicitly invocable Skill; its Hook and the Claude
 projection only derive bounded continuation context from current repository
 authority. Neither host projection adds an MCP server, App, prompt interception,
 CC Switch dependency, runtime, or product authority. Neither is persistently
-installed or enabled, and neither proves live trigger quality, adapter runtime
-behavior, or cross-host portability. The verifier is the current
-machine-readable state source.
+installed or enabled. The Skill receipt records one native compaction and also
+records duplicate goal-mode continuation prompts as non-material host process
+cost, not product value. Neither projection proves live trigger quality,
+adapter runtime behavior, or cross-host portability. The verifier is the
+current machine-readable state source.
 
 ## The problem
 

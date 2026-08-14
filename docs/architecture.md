@@ -85,7 +85,8 @@ authority graph, criterion contracts, admitted evidence, human authority,
 process loss, and repository residue. It does not execute tasks, discover or
 install capabilities, route work, or operate a host adapter.
 
-O1 is verified by the accepted, task-bound public-intake result; O2-O5 remain
+O1 is verified by two accepted, task-bound results: the public-intake rewrite
+and the uninstalled Codex task-facing Skill source package. O2-O5 remain
 planned and false. A repository-authored JSON file alone cannot promote an
 outcome: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
@@ -100,11 +101,13 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is active on one pre-registered task-facing Codex Skill
-projection after closing the outcome-neutral task-topology and proactive
-context-carrier fitness repairs and the accepted public-intake O1 increment.
-O1 is true and O2-O5 remain false. Authorized
-product-plan delivery is real demand
+The v0.2 program is ready with no active causal increment after closing the
+task-facing Codex Skill source delivery, the outcome-neutral task-topology and
+proactive context-carrier fitness repairs, and the public-intake O1 increment.
+The Skill task adds a second O1 receipt, including one native compaction and an
+explicit record of duplicate goal-mode continuation prompts as non-material
+host process cost rather than value. O1 is true and O2-O5 remain false.
+Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
 the unchanged pre-registration, evidence, floors, and human-acceptance burden.

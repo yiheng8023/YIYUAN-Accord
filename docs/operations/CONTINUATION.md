@@ -15,24 +15,27 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active`, with the single causal
-increment `increment.v0.2.codex-demand-skill-plugin`. The public verifier
-should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
-- O1 true and O2-O5 false (`1/5` outcomes), with O1 bound to
-  `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`;
+- O1 true and O2-O5 false (`1/5` outcomes), with two task-bound receipts for
+  the same O1 criterion: `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`
+  and `product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json`;
 - G1-G4 true (`4/4` guardrails);
-- that exact active increment and one active work item.
+- no active increment or active work item.
 
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
 0.147.0 source distinguishes a Hook-only preload from normal all-capability
-loading, which still discovers the plugin's Skill inventory. No install,
-enablement, Hook trust, live trigger, or behavior claim has occurred. The next
-gate is verified source delivery followed by yiheng8023's bounded result and
-claim judgment.
+loading, which still discovers the plugin's Skill inventory. The exact source
+delivery at `6892fef` was accepted by yiheng8023 without installation or
+enablement. Its receipt records one native compaction and records two automatic
+goal-mode continuation finals plus their commentary as non-material host
+process noise: they required no additional human input or operation and do not
+count as product value. No Hook trust, live trigger, repeated behavior, O2-O4,
+cross-host, release, or completion claim has occurred.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
