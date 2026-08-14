@@ -19,7 +19,7 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is ready with no active causal increment after the accepted task-facing
+v0.2 is active on one pre-registered Claude Skill-plus-Hook source delivery after the accepted task-facing
 Codex Skill source delivery, the outcome-neutral proactive context-carrier
 fitness and transition repair, the accepted public-intake increment, and one
 stopped live Codex continuity task. O1 is verified by two exact task-bound

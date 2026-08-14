@@ -22,7 +22,7 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment. O1 is verified by two
+v0.2 is `active` on one pre-registered Claude Skill-plus-Hook source delivery. O1 is verified by two
 accepted, task-bound results: the public-intake rewrite and the uninstalled
 Codex task-facing Skill source package. O2-O5 remain unverified (`1/5`
 outcomes; two receipts support the same O1 criterion). The program makes

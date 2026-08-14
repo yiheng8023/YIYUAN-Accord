@@ -15,16 +15,16 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active` on
+`increment.v0.2.claude-demand-skill-plugin`. The public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1 true and O2-O5 false (`1/5` outcomes), with two task-bound receipts for
   the same O1 criterion: `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`
   and `product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json`;
 - G1-G4 true (`4/4` guardrails);
-- no active increment or active work item.
+- exactly that one active increment and its one active work item.
 
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex

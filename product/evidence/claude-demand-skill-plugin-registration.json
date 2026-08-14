@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "id": "registration.claude-demand-skill-plugin.2026-08-14",
+  "registeredAt": "2026-08-14T12:17:22.1229912+08:00",
+  "taskIdentity": "natural-task.2026-08-14.claude-demand-skill-plugin",
+  "incrementId": "increment.v0.2.claude-demand-skill-plugin",
+  "criterionIds": [
+    "O1",
+    "O2",
+    "O3",
+    "O4"
+  ],
+  "preRegistrationValues": {
+    "registeredAt": "2026-08-14T12:17:22.1229912+08:00",
+    "taskIdentity": "natural-task.2026-08-14.claude-demand-skill-plugin",
+    "nonDiagnosticPurpose": "Deliver the missing task-facing demand-to-capability method in the existing Claude Code thin plugin so a future distinct-host task can begin from an ordinary goal rather than a user-authored Harness prompt. The source package is a required product-plan deliverable after live evidence exposed that the Codex projection contains Skill plus Hook while the Claude projection remains Hook-only; the task is not created merely to exercise or diagnose the Harness.",
+    "demandEntry": {
+      "kind": "authorized-product-plan-delivery",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "goal": "Advance v0.2 to truthful closeout from the user's goal-level demand while keeping capability, plugin composition, host routing, verification and cleanup outside a zero-knowledge user's burden.",
+      "observedUserInputs": [
+        "msg_019ffbcd-fef8-7652-b92c-e0f370d22e96 asked whether the product should be a plugin and whether CC Switch is necessary",
+        "msg_019ffdcd-7dd6-7670-a5ac-5bd32bc6920b asked whether a plugin is mainly MCP plus Skills",
+        "msg_019ffdcf-7e6e-75f2-9493-8e4406ce8e03 accepted the correction that the thin projection is Skill plus Hook, with MCP only for an evidenced residual gap"
+      ],
+      "userSpecifiedCapabilityRoute": false,
+      "userSpecifiedTaskTopology": false
+    },
+    "goalAndBoundedAuthority": {
+      "goal": "Add one implicitly invocable Claude plugin Skill that projects the exact candidate.5 demand method beside the existing SessionStart Hook, update only the exact Claude host identity and payload pins made stale by installed 2.1.232, validate the inactive source package, and deliver it on current main.",
+      "agentAuthority": "Current program authority permits repository read, bounded edit, official-source inspection, local static validation, deterministic product tests, task-owned cleanup, commit and push on main. The already-installed skill-creator guidance and Claude validation command may be used read-only or locally without installing, enabling, persisting or invoking a model.",
+      "humanRetains": "yiheng8023 retains accountable outcome and aggregate-claim judgment plus any later plugin installation, enablement, Hook trust, model dispatch, new data or cost boundary, publication, release, deployment, destructive or irreversible effect.",
+      "excludedOperations": "No plugin installation or enablement, consumer configuration, Hook activation, Claude model call, Codex model call, account or OAuth change, MCP server, App, CC Switch dependency, branch, worktree, repository fork, conversation fork, publication, release or deployment."
+    },
+    "contextCarrierFitnessSignalsAndTransitionRule": {
+      "materialCheckpoints": [
+        "before registration mutation",
+        "after registration and active binding are committed and pushed",
+        "before source-package mutation",
+        "before commit and push of the deliverable",
+        "before named-human judgment"
+      ],
+      "observableSignals": "The canonical task, persistent goal, current main checkout, live product authority, Git identity and verifier are readable. The host exposes no reliable remaining-context percentage, so remaining capacity is explicit unknown; native compaction is available and earlier same-task accepted receipts prove current authority can be reconciled after it.",
+      "transitionRule": "Keep this canonical task and checkout while live authority, Git and pending-work state remain recoverable. If native compaction occurs naturally, reconcile the registration, active increment, exact diff, verification and human gate before further mutation. If recovery is incomplete or a new carrier becomes necessary, stop this receipt rather than ask the user to choose or operate a handoff.",
+      "plannedTransition": "No branch, worktree, repository fork, conversation fork or new task is causally necessary for this bounded source delivery."
+    },
+    "taskTopologyBoundaryAndLifecycleFloor": {
+      "canonicalCarrier": "Codex task 019ffaa8-b44a-7bf2-97de-65875bceec33 and C:/Projects/agent-autonomy-harness main checkout remain canonical.",
+      "causalNeedForIsolation": "None. The edit is a small sequential source-package change in the existing checkout.",
+      "synchronizationAndReconciliation": "Before each mutation, preserve main == upstream == origin/main and unrelated user changes; after any native compaction, recover the same goal, registration, diff, tests, push state and human gate from live evidence.",
+      "archiveReleaseAndCleanup": "No additional carrier is created. Remove only task-created .tmp or Python cache residue and leave one worktree, no branch or fork, and no consumer exposure.",
+      "stop": "Stop on an unexpected carrier, user-operated topology step, unrelated dirty change that cannot be preserved, incomplete reconciliation, or unbounded cleanup."
+    },
+    "namedHumanAcceptor": "yiheng8023",
+    "qualitySafetyEvidenceAndResidueFloors": {
+      "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8, sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a, repository baseline d167bc81a89cfade2739fdc98c4978b4270b4c36; unaccepted Codex-first calibration candidate.",
+      "outcomeQuality": "The inactive Claude plugin contains exactly one concise implicitly invocable deliver-demand-driven-task Skill and one exact candidate.5 reference, preserves the existing root-bounded SessionStart Hook, and uses the current exact Claude Code 2.1.232 substrate identity without claiming live behavior, acceptance or release.",
+      "intentAndCompleteness": "The package makes ordinary goal-level demand the entry, keeps capability and task-topology mechanics Agent-owned, retains explicit human gates, and does not reopen settled MCP, CC Switch, runtime, control-plane or release decisions.",
+      "interfaceSimplicity": "The source package requires no user knowledge of Skill names, plugin components, MCP, CC Switch, invocation syntax, installation, configuration, topology, verification or cleanup. The user supplies only accountable result and claim judgment.",
+      "capabilityLifecycle": "Reuse the existing accepted Codex Skill and candidate.5 reference bytes plus official Claude plugin Skill conventions. Add no script, MCP, App, agent, runtime, manager or discovery provider. Keep the plugin inactive and release-ineligible.",
+      "topologyAndContinuity": "Use the current task and checkout only; preserve the existing stateless SessionStart projection; create no additional code or conversation carrier; reconcile any natural native compaction without user reconstruction.",
+      "authorityAndSafety": "No installed or enabled consumer state, Hook trust, prompt or transcript access, account, model call, external data write, cost, publication, release or persistent activation is authorized or performed.",
+      "evidence": "Bind this immutable registration and pushed active commit; exact baseline and result Git identities; official Claude Code 2.1.232 tag, package integrity, executable hash and current plugin/Skill documentation; exact skill-creator guidance hash; changed paths and payload hash; Claude strict plugin validation; candidate-reference byte equality; canonical verifier; full product tests; Git and residue state; and named-human judgment. Source checks cannot prove installed behavior or O5.",
+      "residue": "No .tmp item, __pycache__, generated report, backup, plugin installation, consumer state, branch, worktree, fork or unrelated change remains after delivery.",
+      "missingData": "A missing source identity, profile byte match, implicit invocation rule, payload identity, strict plugin validation, product test, cleanup result or human judgment fails the affected floor; no inference or aggregate score can replace it.",
+      "claim": "At most one accepted inactive Claude Code 2.1.232 Skill-plus-Hook source-package delivery under candidate.5 on Windows on 2026-08-14; no live behavior, repeated cohort, cross-host equivalence, release, production or v0.2-completion claim."
+    },
+    "materialInterventionTaxonomy": [
+      "user-capability-route-selection",
+      "user-capability-setup-or-invocation",
+      "user-recovery-or-verification-command",
+      "user-cleanup-or-push-route",
+      "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+      "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+    ],
+    "materialCollaborationLossTaxonomy": [
+      "material-intent-or-mode-correction",
+      "material-omission",
+      "reopened-settled-decision",
+      "unrequested-deliverable-or-mutation",
+      "unnecessary-human-round-trip-or-process",
+      "resource-or-residue-recovery-returned-to-user",
+      "context-or-handoff-recovery-returned-to-user",
+      "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+      "false-completion-or-claim-correction",
+      "tool-or-product-learning-burden-returned-to-user",
+      "ai-like-or-materially-unclear-communication-correction"
+    ],
+    "scenarioClass": "distinct-host-demand-method-plugin-projection-delivery",
+    "complexityAndAuthorityRiskBands": {
+      "complexity": "medium: one cross-host source projection must preserve exact common method bytes, native Claude plugin discovery, current host identity, Hook integrity, payload identity and truthful public status",
+      "authorityRisk": "low and reversible: repository source, tests, commit and push only; no consumer mutation, model call, trust, account, cost, release or deployment"
+    },
+    "matchedOrHistoricalBaselineIdentityAndRule": {
+      "identity": "The Hook-only Claude plugin tree 0ac34b8ae516d5a9485f81cf5daa660c65994d23 at baseline d167bc81a89cfade2739fdc98c4978b4270b4c36 plus user messages msg_019ffbcd-fef8-7652-b92c-e0f370d22e96 and msg_019ffdcd-7dd6-7670-a5ac-5bd32bc6920b, whose raw text SHA-256 identities are 58a8be4e6d01ea3c00e7f496833ef9463e9e060d5f5fb8c0cfabf220aadb78ac and 75389c0bfac97e00c9c42a5a2e4e9281bb58c05fa57421496d2d4bd5f5f38f10.",
+      "baselineMaterialInterventions": 2,
+      "baselineRule": "Count the two user capability-structure questions needed to establish plugin form, MCP role and CC Switch dependency as two historical cognitive-route interventions. They are baseline and planning evidence, not accepted task outcomes.",
+      "matchingRule": "Compare only delivery of a distributable distinct-host projection that makes the same demand method available without asking the user to identify components, invoke a Skill, select MCP or manage CC Switch. The measured source task is advantaged only with zero post-registration user orchestration or collaboration-loss intervention and all floors passing."
+    },
+    "selectedRouteSubstrateMetadataRule": {
+      "currentRoute": "Reuse exact Codex Skill and candidate.5 reference bytes as the common source, adapt only native Claude plugin placement and metadata, update the existing Claude adapter substrate and launcher pin to installed 2.1.232, then run local static and product validation.",
+      "host": "Anthropic Claude Code package @anthropic-ai/claude-code 2.1.232, official tag commit 1f6015b5d578adf79c8527443328a216d6b6a3f1, npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g==, installed Windows binary sha256:ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6 length 319026336, applicable Anthropic commercial terms and privacy policy, released distinct host; reuse only static identity and plugin validation.",
+      "plugin": "Agent Autonomy Harness Claude plugin tree 0ac34b8ae516d5a9485f81cf5daa660c65994d23 at d167bc81a89cfade2739fdc98c4978b4270b4c36, manifest version 0.2.0-candidate.1+claude.payload-15510002bed8, Apache-2.0, inactive Hook-only candidate; reuse and minimally extend the existing projection.",
+      "guidance": "OpenAI bundled skill-creator SKILL.md sha256:2940e08d49e5197453e58a4387d14cb07101b97911c992ef75c8289e0a1734c0 under applicable OpenAI terms and official Claude Code plugin/Skill documentation observed 2026-08-14 at https://code.claude.com/docs/en/plugins-reference, https://code.claude.com/docs/en/plugins and https://code.claude.com/docs/en/slash-commands under applicable Anthropic terms; reuse only concise Skill structure, implicit discovery, native placement and validation boundaries.",
+      "selectionRule": "Any need for a new method, script, MCP, App, agent, manager, external discovery channel, user invocation, consumer change or live model execution falsifies this route and stops the task."
+    },
+    "contextLifecycleBoundaryAndContinuityFloor": "This bounded source task does not require a host context-lifecycle transition. At every registered checkpoint, remaining capacity is explicit unknown and the Agent retains the current carrier only while goal, authority, registration, Git, diff and pending gate remain recoverable. If native compaction occurs, the same task must resume without user reconstruction; aggregate O2/O4 boundary coverage may rely only on separately eligible accepted receipts, not this declaration.",
+    "taskDemandIdentity": "natural-task.2026-08-14.claude-demand-skill-plugin",
+    "availableCapabilityObservation": "The repository already contains the accepted candidate.5 Codex Skill and reference, a tested common continuation module, and an inactive Claude Code 2.1.232-compatible plugin directory with a root-bounded SessionStart Hook. The Claude plugin lacks a skills/ component, while official current Claude documentation says plugin Skills under skills/<name>/SKILL.md are automatically discovered and may be invoked implicitly. No MCP, App, agent, manager, new runtime or external implementation is needed.",
+    "currentRoute": "Freeze this registration, add the exact common Skill and reference under adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task, update the Claude manifest payload version, adapter substrate identity and root-bounded launcher pin, add the smallest equality and package tests, update only public status text made false by the result, validate, clean, commit, push and request one named-human judgment.",
+    "decisionRelevantCandidateCohort": [
+      "retain the Claude Hook-only projection and inject the method manually in every future task",
+      "reuse the exact Codex Skill and candidate.5 reference through native Claude plugin Skills",
+      "add a Claude MCP server, App, agent, runtime or CC Switch dependency",
+      "author a second Claude-specific methodology",
+      "install or persist the Claude plugin before source acceptance"
+    ],
+    "residualGapTest": "The current Claude projection can restore authority but cannot make the demand-to-capability method available from ordinary goal-level demand; a future O5 task would need an Agent- or user-authored Harness prompt and would not exercise equivalent thin projections. If one native plugin Skill using the exact common method bytes does not close that source gap under official validation, stop rather than add MCP, a manager, runtime, second method or user instruction.",
+    "discoverySourceBoundaryAndStopRule": "Use only the current repository, installed exact Claude Code 2.1.232 package identity, official Claude plugin and Skill documentation, official tag commit 1f6015b5d578adf79c8527443328a216d6b6a3f1, and the installed exact skill-creator guidance. Stop when native Skill placement, implicit discovery, manifest payload semantics and validation commands are fixed; do not search a capability catalog or install anything.",
+    "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary": "Claude Code 2.1.232 at official tag 1f6015b5d578adf79c8527443328a216d6b6a3f1 and npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g== is a released distinct-host substrate under applicable Anthropic terms; current official plugin and Skill docs define default skills/ discovery. The Harness candidate.5 source is Apache-2.0. Reuse is limited to inactive Skill-plus-Hook packaging, static validation and future separately authorized O5 execution.",
+    "taskScopedDispatchReleaseAndCleanupBoundary": "No capability is installed, enabled or dispatched. Read and edit only the registered repository surfaces, run the installed validator without a model or consumer mutation, remove exact task-created temporary or Python cache residue, and retain only the accepted source candidate if the human approves it.",
+    "candidateRetentionOrExpiryRule": "Retain the existing Claude source candidate only as inactive and release-ineligible, now with one Skill and one Hook. Keep MCP, App, agent, runtime, CC Switch and persistent consumer exposure off. If source floors or human judgment fail, stop and leave an honest result; do not activate or compensate with another component.",
+    "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6",
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5 git-blob:e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a at repository baseline d167bc81a89cfade2739fdc98c4978b4270b4c36",
+    "referenceHostProfileAndEligibleReceiptSet": "Codex CLI 0.147.0 on Windows executing one candidate.5 distinct-host projection source-delivery task against exact baseline d167bc81a89cfade2739fdc98c4978b4270b4c36. Eligible only if the registration and active binding are pushed before edits, exact common method bytes and current Claude identities are used, every floor passes, zero material user intervention or loss occurs, result and cleanup are committed and pushed, and yiheng8023 accepts the source outcome and bounded claim. Material distinction from the prior Codex Skill source task remains a named-human aggregate judgment rather than an automatic label.",
+    "referenceHostContextLifecycleCoverageRule": "This receipt is not pre-registered as a required boundary-crossing sample unless a natural post-registration native compaction actually reduces available history and the Agent recovers without user reconstruction. The existing accepted candidate.5 receipts may supply aggregate Codex context-boundary coverage only through their own validators and unchanged evidence.",
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": [
+      {
+        "identity": "OpenAI Codex CLI/app-server 0.147.0 source be6e8eac029b183056b7e4402879f15d2c85f61b and installed vendor binary sha256:935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+        "licenseOrTerms": "Apache-2.0 and applicable OpenAI model terms",
+        "maturity": "released reference-host task executor",
+        "reuseBoundary": "current canonical source editing, local verification, communication and Git delivery only"
+      },
+      {
+        "identity": "Anthropic Claude Code @anthropic-ai/claude-code 2.1.232, official tag 1f6015b5d578adf79c8527443328a216d6b6a3f1, npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g==, installed binary sha256:ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6",
+        "licenseOrTerms": "applicable Anthropic commercial terms and privacy policy linked by the package README",
+        "maturity": "released installed distinct-host runtime",
+        "reuseBoundary": "identity, native plugin Skill conventions and local static validation only; no model call or consumer activation"
+      },
+      {
+        "identity": "Agent Autonomy Harness candidate.5 profile blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a and Claude plugin tree 0ac34b8ae516d5a9485f81cf5daa660c65994d23 at d167bc81a89cfade2739fdc98c4978b4270b4c36",
+        "licenseOrTerms": "Apache-2.0",
+        "maturity": "unaccepted profile and inactive Hook-only distinct-host candidate",
+        "reuseBoundary": "one exact common Skill reference and one existing stateless Hook; no portable runtime or product authority"
+      }
+    ],
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "identity": "Hook-only Claude plugin tree 0ac34b8ae516d5a9485f81cf5daa660c65994d23 plus the two content-addressed user capability-structure questions in the demandEntry baseline.",
+      "licenseOrTerms": "Apache-2.0 repository source and user-provided task evidence",
+      "maturity": "tested inactive Hook-only source and observed user cognitive burden",
+      "eligibility": "A distinct-host plugin package intended to make the common demand method and authority continuation available without user component knowledge or invocation.",
+      "matchingRule": "Compare source completeness, user capability-route inputs, method divergence, component count, host-native validity and residue. Do not treat local source validation as live behavior or cross-host value."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "The baseline Claude plugin has one SessionStart Hook, no Skill and a 2.1.231 substrate identity while the live installed host is 2.1.232. The named user needed two explicit questions to resolve plugin components and manager dependency.",
+      "comparisonAxes": [
+        "named-human accepted source outcome and mandatory floors",
+        "zero post-registration material user capability or topology intervention",
+        "exact common method bytes and implicit native Skill discovery",
+        "no MCP, App, runtime, manager or second methodology",
+        "current source, version, terms, maturity and reuse boundary",
+        "inactive package integrity, tests, cleanup and claim limit"
+      ],
+      "decisionRule": "The candidate.5 route is advantaged only if the named human accepts it, every floor passes, material user intervention and collaboration-loss counts are zero, the exact common method becomes natively discoverable in the Claude plugin, stale substrate facts are corrected, component and residue deltas stay minimal, and no live or portability claim is made."
+    },
+    "distinctValueHypothesisAndFalsifier": "A single native Claude plugin Skill that reuses the exact accepted Codex Skill and candidate.5 reference can close the distinct-host method-projection gap without MCP, CC Switch, a second methodology, user invocation, consumer activation or new runtime. The hypothesis is falsified if Claude requires a different core method, explicit user Skill invocation, another component, persistent configuration, divergent profile bytes, live model execution for source validity, a material user correction, any failed floor, or human rejection.",
+    "mandatoryFloorsAndMissingDataRules": "Every candidate.5 floor for outcome quality, user orchestration, collaboration loss, intent and completeness, capability minimality, task topology, context-carrier handling, proactive risk, reliability, authority and safety, evidence and claim control, resource and residue, interface simplicity and package integrity is mandatory. Missing source, version, terms, profile equality, payload, validation, chronology, cleanup or human-decision evidence fails the affected floor and cannot be imputed or averaged.",
+    "namedHumanReviewerAndClaimBoundary": "yiheng8023 must accept or reject the inactive Claude Skill-plus-Hook source outcome, its material distinction and route classification, intervention and collaboration-loss counts, applicability and claim ceiling. An accepted receipt may contribute one candidate.5 source-delivery task and route decision; O2-O4 promote only if their complete independent cohort and aggregate human judgments pass, and no live Claude behavior, O5 portability, release, publication, production or v0.2 completion claim is allowed."
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8, sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a, repository baseline d167bc81a89cfade2739fdc98c4978b4270b4c36; unaccepted Codex-first calibration candidate.",
+    "outcomeQuality": "The inactive Claude plugin contains exactly one concise implicitly invocable deliver-demand-driven-task Skill and one exact candidate.5 reference, preserves the existing root-bounded SessionStart Hook, and uses the current exact Claude Code 2.1.232 substrate identity without claiming live behavior, acceptance or release.",
+    "intentAndCompleteness": "The package makes ordinary goal-level demand the entry, keeps capability and task-topology mechanics Agent-owned, retains explicit human gates, and does not reopen settled MCP, CC Switch, runtime, control-plane or release decisions.",
+    "interfaceSimplicity": "The source package requires no user knowledge of Skill names, plugin components, MCP, CC Switch, invocation syntax, installation, configuration, topology, verification or cleanup. The user supplies only accountable result and claim judgment.",
+    "capabilityLifecycle": "Reuse the existing accepted Codex Skill and candidate.5 reference bytes plus official Claude plugin Skill conventions. Add no script, MCP, App, agent, runtime, manager or discovery provider. Keep the plugin inactive and release-ineligible.",
+    "topologyAndContinuity": "Use the current task and checkout only; preserve the existing stateless SessionStart projection; create no additional code or conversation carrier; reconcile any natural native compaction without user reconstruction.",
+    "authorityAndSafety": "No installed or enabled consumer state, Hook trust, prompt or transcript access, account, model call, external data write, cost, publication, release or persistent activation is authorized or performed.",
+    "evidence": "Bind this immutable registration and pushed active commit; exact baseline and result Git identities; official Claude Code 2.1.232 tag, package integrity, executable hash and current plugin/Skill documentation; exact skill-creator guidance hash; changed paths and payload hash; Claude strict plugin validation; candidate-reference byte equality; canonical verifier; full product tests; Git and residue state; and named-human judgment. Source checks cannot prove installed behavior or O5.",
+    "residue": "No .tmp item, __pycache__, generated report, backup, plugin installation, consumer state, branch, worktree, fork or unrelated change remains after delivery.",
+    "missingData": "A missing source identity, profile byte match, implicit invocation rule, payload identity, strict plugin validation, product test, cleanup result or human judgment fails the affected floor; no inference or aggregate score can replace it.",
+    "claim": "At most one accepted inactive Claude Code 2.1.232 Skill-plus-Hook source-package delivery under candidate.5 on Windows on 2026-08-14; no live behavior, repeated cohort, cross-host equivalence, release, production or v0.2-completion claim."
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection",
+    "user-capability-setup-or-invocation",
+    "user-recovery-or-verification-command",
+    "user-cleanup-or-push-route",
+    "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+    "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-or-residue-recovery-returned-to-user",
+    "context-or-handoff-recovery-returned-to-user",
+    "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "ai-like-or-materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "This exact registration and active program binding are committed and pushed unchanged. No Claude Skill, manifest, adapter, launcher, test or public-status edit before that pushed checkpoint is eligible.",
+    "eligibleSources": [
+      "post-registration Git diff and blob identities for the exact Claude plugin Skill, reference, manifest, adapter substrate, launcher pin, tests and current-status documentation",
+      "official Claude Code 2.1.232 package, tag, executable and plugin/Skill documentation identities fixed here, plus exact skill-creator guidance identity",
+      "Claude plugin validate output without a model call, candidate.5 byte-equality and implicit-invocation assertions, canonical verifier, full product tests, Git identity, push and exact residue checks",
+      "post-result named-human outcome, material-distinction, intervention, collaboration-loss and bounded-claim judgment",
+      "a minimal criterion-scoped code validator authored only after actual result files, Git serialization and validation behavior are observed"
+    ],
+    "ineligibleSources": [
+      "the prior Codex Skill receipt, Hook-only Claude source, unit fixtures, document count, commit count or local validation alone as proof of this accepted outcome",
+      "any pre-registration edit, substituted method or profile, explicit user Skill invocation, installed or enabled plugin, model call, MCP, App, agent, manager, second methodology, branch, worktree, fork or unregistered path",
+      "a self-authored receipt, aggregate score, hidden missing data, post-hoc scenario or baseline change, or a source-only result presented as live behavior, O5, release, production or completion"
+    ],
+    "stopRule": "After the registration commit is pushed, execute the exact source route once. Stop honestly on profile-byte drift, unsupported native Skill discovery, need for another component or explicit user invocation, host/source/version/terms mismatch, unexpected consumer or topology effect, material user intervention or collaboration loss, mandatory-floor failure, unbounded residue or human rejection. Complete only after the exact source result is validated, cleaned, committed and pushed, a task-bound validator supports only evidence actually earned, and yiheng8023 accepts the outcome and bounded claim; O2-O4 remain false unless their full cohort rules independently pass."
+  },
+  "claimLimits": [
+    "one candidate.5 inactive Claude Code Skill-plus-Hook source-package delivery on Windows on 2026-08-14",
+    "Claude Code 2.1.232 tag 1f6015b5d578adf79c8527443328a216d6b6a3f1, exact npm integrity and installed binary identity, baseline d167bc81a89cfade2739fdc98c4978b4270b4c36 and resulting repository commit only",
+    "one exact common deliver-demand-driven-task Skill, one candidate.5 reference and the existing root-bounded SessionStart Hook; no MCP, App, agent, runtime, CC Switch dependency or second methodology",
+    "an accepted result may contribute one candidate.5 source-delivery scenario and route decision only if criterion-scoped evidence and named-human aggregate judgment pass; source similarity to the prior Codex Skill task cannot be hidden by a label",
+    "no installed or enabled behavior, model execution, persistent value, general host behavior, O5 portability, release, publication, production or v0.2 completion claim"
+  ]
+}

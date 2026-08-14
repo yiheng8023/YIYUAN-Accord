@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.claude-demand-skill-plugin",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -197,6 +197,76 @@
           ],
           "deliverables": [
             "one concise task-facing Codex Skill projection inside the existing inactive plugin, with exact candidate-profile and payload identity, structural and product tests, no MCP or manager dependency, no consumer mutation, and bounded source evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.claude-demand-skill-plugin",
+      "state": "active",
+      "correctionClass": "project-common-demand-method-into-thin-claude-skill",
+      "observedProblem": "The current distinct-host Claude plugin is Hook-only while the accepted Codex source projection already contains the task-facing demand method. The live installed Claude Code host has also advanced from the adapter's pinned 2.1.231 identity to 2.1.232. Running O5 now would require an Agent- or user-authored Harness prompt on Claude and would test asymmetric projections, while the stale host and license description would make the source package factually inaccurate.",
+      "hypothesis": "Reusing the exact Codex Skill and candidate.5 reference bytes through Claude Code's native plugin Skill directory, while updating only the exact 2.1.232 host identity, Claude adapter version, root-bounded launcher pin, payload identity, equality tests and current status text, can produce a minimal inactive Skill-plus-Hook distinct-host projection without MCP, CC Switch, a second methodology, consumer mutation or model execution.",
+      "falsifier": "Claude requires explicit user Skill invocation, a divergent method, MCP, App, agent, runtime, manager, installation, enablement or model execution; the common profile bytes diverge; native plugin validation or canonical product tests fail; the change expands beyond registered source and status surfaces; a material collaboration loss or user orchestration intervention occurs; residue remains; or yiheng8023 rejects the source outcome or bounded claim.",
+      "stopCondition": "After the immutable registration and active binding are committed and pushed, apply the exact native Claude Skill-plus-Hook source route once. Stop successfully only when the common Skill and profile bytes, current host identity, adapter and payload pins, strict plugin validation, canonical verifier, full product tests, Git delivery and zero-residue floors pass, a minimal task-bound validator supports only the observed source result, and yiheng8023 accepts the outcome and claim boundary. Stop honestly on the first falsifier; live Claude behavior and O5 remain unverified until a separately registered and authorized matched cross-host task passes.",
+      "acceptanceIds": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/claude-demand-skill-plugin-registration.json",
+        "sha256": "67a34f4c83abcc364738816d62bdb84e0130be70ffe3cda15ed167f4ebe3e53d"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.claude-demand-skill-plugin",
+          "state": "active",
+          "acceptanceIds": [
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "targeted-capability-discovery",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate that reuses the exact candidate.5 demand method, adds no MCP or CC Switch dependency, preserves host-specific boundaries, passes task-bound validation, and makes no live or portability claim"
           ]
         }
       ]
