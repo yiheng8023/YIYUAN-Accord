@@ -14,12 +14,20 @@
     "commit": "19f189341b51147e60b7f48299f0562c35a398ee"
   },
   "source": {
+    "kind": "repository-task-receipt",
+    "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/continuation-reconciliation-projection",
+    "identity": "sha256:63b44f9d54b8fd2ba8d32d10a68c0a8ea0b6a3fda46f7cbae93d318ba664ab55",
     "threadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
-    "identityBeforeHumanDecision": "sha256:6443578495bd932e6e5b072a4e5bc04e04afad88882a7a88195bfaac18e9d133"
+    "identityBeforeHumanDecision": "sha256:6443578495bd932e6e5b072a4e5bc04e04afad88882a7a88195bfaac18e9d133",
+    "identityWithHumanDecision": "sha256:63b44f9d54b8fd2ba8d32d10a68c0a8ea0b6a3fda46f7cbae93d318ba664ab55"
   },
   "authority": {
+    "kind": "named-accountable-human",
+    "name": "yiheng8023",
+    "decision": "accepted",
+    "decidedAt": "2026-08-14T20:11:19.6317831+08:00",
     "namedHuman": "yiheng8023",
-    "decisionState": "pending",
+    "decisionState": "accepted",
     "decisionScope": "Accept or reject the delivered compact continuation-reconciliation source result, whether it is materially distinct from the public-intake and Codex-Skill source scenarios, and only the registered three-scenario Codex reference-host O2 burden-reduction claim ceiling.",
     "decisionScopeSha256": "3a67a213b652c20c3b4fbaf657d06630a28c534b8ae3fec078a60e75fff71850",
     "requiredResponse": "接受该结果、第三场景区分和上述有界 O2 声明。",
@@ -30,8 +38,8 @@
     "registrationCommit": "19f189341b51147e60b7f48299f0562c35a398ee",
     "deliverableCommit": "8f3b08502d85b23d4101c8c2550a3954963b1de9",
     "scenarioClass": "host-neutral-continuation-reconciliation-adapter-implementation",
-    "accepted": null,
-    "humanJudgment": "pending"
+    "accepted": true,
+    "humanJudgment": "accepted task result, material third-scenario distinction, and bounded O2 claim"
   },
   "sourceRecords": [
     {
@@ -63,6 +71,12 @@
       "event": "clean-delivery-reconciliation-verified",
       "locator": "measurement:clean-main-after-push",
       "identity": "sha256:b6e5adb83f9f38c3c281a23a4d057b952bed2f15a5cc4351b141090ccbae7afa"
+    },
+    {
+      "order": 6,
+      "event": "named-human-accepted",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/by-content-sha256/10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7",
+      "identity": "sha256:10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7"
     }
   ],
   "artifacts": {
@@ -110,19 +124,19 @@
   },
   "measures": {
     "humanOutcomeDecision": {
-      "accepted": null,
+      "accepted": true,
       "namedHuman": "yiheng8023",
-      "decisionMessageLocator": null,
-      "decisionMessageIdentity": null,
-      "acceptedTaskResult": null,
-      "acceptedMaterialThirdScenarioDistinction": null,
-      "acceptedBoundedO2Claim": null
+      "decisionMessageLocator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/by-content-sha256/10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7",
+      "decisionMessageIdentity": "sha256:10f21bea505ccff8000c243554fd132ba131a8125b83b2e5122fa8196a60cda7",
+      "acceptedTaskResult": true,
+      "acceptedMaterialThirdScenarioDistinction": true,
+      "acceptedBoundedO2Claim": true
     },
     "materialUserCapabilityOrchestrationInterventions": {
       "count": 0,
       "taskTopologyInterventions": 0,
       "userInputsAfterMeasurementStart": [
-        "one accountable final result, material-distinction, and bounded O2 judgment pending"
+        "one accountable final result, material-distinction, and bounded O2 judgment"
       ]
     },
     "materialCollaborationLossEvents": {
@@ -186,9 +200,7 @@
       "scopeAndMinimality": "pass",
       "evidence": "pass",
       "residue": "pass",
-      "missingData": [
-        "named-human outcome, material-distinction, and bounded O2 judgment"
-      ]
+      "missingData": []
     },
     "outcomeComparison": {
       "taskIdentities": [
@@ -215,7 +227,7 @@
       "aggregateObserved": 0,
       "strictReduction": true,
       "minimumScenarioCount": 3,
-      "materialDistinctionState": "pending-named-human-judgment"
+      "materialDistinctionState": "accepted-by-yiheng8023"
     },
     "residueAndClaimLimits": {
       "repositoryTemporaryResidue": [],
@@ -223,7 +235,7 @@
       "consumerOrHostMutation": [],
       "remainingTaskScopedExposure": [],
       "codeOrConversationCarriersCreated": [],
-      "claim": "pending named-human judgment; no O2 credit yet"
+      "claim": "O2 only for the exact registered three-scenario Codex reference-host cohort"
     }
   },
   "claimLimits": [
@@ -235,7 +247,8 @@
   ],
   "validator": {
     "kind": "continuation-reconciliation-o2",
+    "version": 1,
     "criterionId": "O2",
-    "state": "machine-eligible-human-pending"
+    "state": "accepted"
   }
 }

@@ -22,18 +22,18 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 has one active, pre-registered continuation-reconciliation delivery. O1 is verified by three accepted,
-task-bound results: the public-intake rewrite and the uninstalled Codex and
-Claude task-facing Skill source packages. O3 is independently verified over
-those three route decisions: one no-gap/native retention case and two finite,
-source-bound official discovery or adaptation cases. O2, O4, and O5 remain
-unverified (`2/5` outcomes). The Claude result is intentionally not counted as
-a materially different O2 scenario from the Codex Skill delivery. The active
-candidate replaces a 6,301-character active-work continuation projection that
-exceeded Codex's 4,096-character Hook limit with a bounded read-only authority,
-active-work, and Git reconciliation checkpoint. It remains unaccepted and does
-not change O2 until its task evidence, cohort validator, and named-human
-judgment all pass. The program
+v0.2 is `ready` with no active increment. O1, O2, and O3 are verified (`3/5`
+outcomes); O4 and O5 remain unverified. O1 is supported by the accepted
+public-intake, Codex Skill-source, and Claude Skill-source results. O3 binds
+those three route decisions across native retention and finite official
+discovery or adaptation. O2 instead binds the materially distinct
+public-intake, Codex Skill-source, and continuation-reconciliation scenarios;
+the similar Claude and Codex Skill deliveries are not double-counted. The
+accepted continuation result replaces a 6,301-character active-work projection
+that exceeded Codex's 4,096-character Hook limit with a bounded read-only
+authority, active-work, and Git reconciliation checkpoint. This exact
+three-scenario Codex reference-host cohort does not verify O4, O5, installed
+Hook value, general context management, release, or production. The program
 makes explicit that authorized product-plan delivery is real demand when the
 primary purpose is the deliverable, rather than exercising or diagnosing the
 Harness.

@@ -102,17 +102,16 @@ validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
 The v0.2 program is ready with no active increment after closing the
-public-intake and task-facing Codex and Claude Skill source deliveries and
-honestly stopping the later measured Codex attempts. Those three completed
-task-bound results support O1. A separate criterion-scoped aggregate
-check over their exact validators supports O3 through one no-gap/native-retain
-route and two finite source-bound official discovery or adaptation routes,
-with every projection inactive and task exposure released. The Codex Skill
-task includes one native compaction and an explicit record of duplicate
-goal-mode continuation prompts as non-material host process cost rather than
-value. The Claude and Codex source deliveries are deliberately not treated as
-materially different O2 scenarios. O1 and O3 are true; O2, O4, and O5 remain
-false.
+public-intake, task-facing Codex and Claude Skill source deliveries, and the
+continuation-reconciliation implementation. The first three support O1. A
+criterion-scoped aggregate check supports O3 through one native-retain route
+and two finite official discovery or adaptation routes. O2 uses a different
+three-scenario cohort: public intake, Codex Skill source, and continuation
+reconciliation, with exact baselines, two native-compaction recoveries, zero
+material user orchestration or topology interventions, zero material
+collaboration losses, and named-human acceptance. The similar Claude and Codex
+Skill deliveries are deliberately not double-counted. O1, O2, and O3 are true;
+O4 and O5 remain false.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without

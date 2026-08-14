@@ -19,27 +19,26 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 has one active pre-registered continuation-reconciliation delivery after the accepted public-intake,
-task-facing Codex Skill, and task-facing Claude Skill source deliveries, the
-outcome-neutral proactive context-carrier fitness and transition repair, and
-content-addressed stopped Codex tasks. O1 and O3 are verified; O2, O4, and O5
-remain planned and false. The current tree contains a product-contract
-verifier, three exact task-bound validators for those receipts and the O3
-cohort, inactive Codex and Claude Code reference-adapter candidates, and the
-content-addressed stopped results, not a task runtime or accepted
-live host behavior. Closed outcome-neutral work remains recoverable from Git
-rather than accumulating as a current queue.
+v0.2 is ready with no active increment after the accepted public-intake,
+task-facing Codex and Claude Skill source, and continuation-reconciliation
+deliveries, the outcome-neutral context-carrier repairs, and content-addressed
+stopped Codex tasks. O1, O2, and O3 are verified; O4 and O5 remain planned and
+false. The tree contains exact task-bound validators for those outcomes,
+inactive Codex and Claude Code reference-adapter candidates, and stopped
+results, not a task runtime or accepted live installed-host behavior. Closed
+outcome-neutral work remains recoverable from Git rather than accumulating as
+a current queue.
 
-The active task is a real source delivery for the user's context and topology
-burden, not another model-dispatch experiment. Its immutable baseline measured
+The accepted continuation task is a real source delivery for the user's context
+and topology burden, not another model-dispatch experiment. Its immutable baseline measured
 the active-work common projection at 6,301 characters against the Codex Hook's
 4,096-character limit. The bounded implementation candidate now projects exact
 authority pointers, active-work identity, cleanup paths, and a privacy-minimal
 read-only Git checkpoint at no more than 3,072 characters. It adds no model
 call, plugin installation, consumer mutation, new carrier, manager, state
-store, protocol, MCP server, or App. It can become the third O2 scenario only
-after task-bound source evidence, aggregate cohort validation, and named-human
-acceptance; it cannot promote O4 by itself.
+store, protocol, MCP server, or App. Task-bound source evidence, aggregate
+cohort validation, and named-human acceptance make it the materially distinct
+third O2 scenario; it cannot promote O4 by itself.
 
 The stopped continuity task used the official temporary plugin lifecycle and
 showed that the exact Skill plus startup and post-compaction `SessionStart`

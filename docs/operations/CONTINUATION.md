@@ -15,31 +15,30 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on one pre-registered
-continuation-reconciliation delivery. The
+The current machine program is v0.2 and `ready` with no active increment. The
 public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
-- O1 and O3 true, with O2, O4, and O5 false (`2/5` outcomes); O1 is supported
-  by three task-bound receipts, and the Claude receipt independently binds the
-  exact three-route O3 cohort;
+- O1, O2, and O3 true, with O4 and O5 false (`3/5` outcomes); O2 binds the
+  exact public-intake, Codex Skill-source, and continuation-reconciliation
+  scenarios without double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2.continuation-reconciliation-projection`
-  with exactly one active work item.
+- no active increment or work item.
 
 The registered baseline proved a concrete adapter defect after its immutable
 binding was pushed: the active-work `SessionStart` projection was 6,301
 characters against Codex's 4,096-character additional-context limit and did
-not contain a live Git checkpoint. The current unaccepted implementation
-candidate removes re-readable long-form program prose, adds bounded read-only
+not contain a live Git checkpoint. The accepted source implementation removes
+re-readable long-form program prose, adds bounded read-only
 branch-or-detached, HEAD, upstream, ahead/behind, worktree-count, dirty-count,
 and status-digest observations, and carries exact active increment, work item,
 registration, and cleanup identities. Dirty path names, prompt, transcript,
 session identity, diff content, consumer state, and persistent storage remain
-outside the projection. O2 remains false until the exact task result, three-
-scenario cohort validator, and yiheng8023's material-distinction and bounded
-claim judgment pass; O4 remains a later separate calibration.
+outside the projection. Its task-specific validator rechecks the exact Git
+delivery, two prior accepted task validators, source-bound baselines, two
+native-compaction recoveries, zero-loss floors, and yiheng8023's bounded
+three-scenario judgment. O4 remains a later separate calibration.
 
 The latest context-carrier architecture task was the user's bound Codex
 context-overflow and repeated-carrier decision, not a Harness diagnostic or a

@@ -352,21 +352,20 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_binds_one_continuation_delivery_with_two_verified_outcomes(self) -> None:
+    def test_current_v02_contract_has_three_verified_outcomes_and_no_active_work(
+        self,
+    ) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.continuation-reconciliation-projection",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
-        self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
+        self.assertEqual(report["outcomes"], {"verified": 3, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
         self.assertTrue(report["criterionStates"]["O1"])
         self.assertTrue(report["criterionStates"]["O3"])
-        self.assertFalse(report["criterionStates"]["O2"])
+        self.assertTrue(report["criterionStates"]["O2"])
         self.assertFalse(report["criterionStates"]["O4"])
         self.assertFalse(report["criterionStates"]["O5"])
 
@@ -486,8 +485,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["outcomes"], {"verified": 3, "total": 5})
         self.assertTrue(report["valid"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
@@ -507,7 +506,7 @@ class ProductControlTests(unittest.TestCase):
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress (2/5 outcomes)", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress (3/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -1892,34 +1891,25 @@ class ProductControlTests(unittest.TestCase):
                 )
                 self.assertTrue(candidate_errors)
 
-    def test_continuation_o2_candidate_binds_machine_cohort_before_human_gate(
-        self,
-    ) -> None:
+    def test_continuation_o2_validator_binds_accepted_task_and_cohort(self) -> None:
         document = json.loads(
             (
                 ROOT
                 / "product/evidence/continuation-reconciliation-projection-2026-08-14.json"
             ).read_text(encoding="utf-8")
         )
-        errors: list[str] = []
-        self.assertTrue(
-            control._validate_continuation_reconciliation_o2_candidate(
-                document, ROOT, errors, require_human=False
-            ),
-            errors,
-        )
-
-        accepted_errors: list[str] = []
         validator = SUPPORTED_EVIDENCE_VALIDATORS[
             "continuation-reconciliation-o2"
         ][2]
-        self.assertFalse(validator(document, "O2", ROOT, accepted_errors))
-        self.assertTrue(
-            any("named-human" in error for error in accepted_errors),
-            accepted_errors,
-        )
+        cache_token = control._EVIDENCE_GIT_CACHE.set({})
+        self.addCleanup(control._EVIDENCE_GIT_CACHE.reset, cache_token)
+        errors: list[str] = []
+        self.assertTrue(validator(document, "O2", ROOT, errors), errors)
 
         mutations = {
+            "missing human decision": lambda value: value["authority"].__setitem__(
+                "decisionState", "pending"
+            ),
             "different active baseline": lambda value: value["artifacts"][
                 "baselineActiveProjection"
             ].__setitem__("characters", 4096),
@@ -1940,12 +1930,7 @@ class ProductControlTests(unittest.TestCase):
                 mutate_document(candidate)
                 candidate_errors: list[str] = []
                 self.assertFalse(
-                    control._validate_continuation_reconciliation_o2_candidate(
-                        candidate,
-                        ROOT,
-                        candidate_errors,
-                        require_human=False,
-                    )
+                    validator(candidate, "O2", ROOT, candidate_errors)
                 )
                 self.assertTrue(candidate_errors)
 

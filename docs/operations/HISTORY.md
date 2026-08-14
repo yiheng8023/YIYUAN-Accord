@@ -248,7 +248,7 @@ tools, the current measured route remains ineligible. The finite result is
 `product/evidence/codex-tool-surface-suppression-mechanism-2026-08-14.json` and
 adds zero O1-O5 credit.
 
-## Active continuation-reconciliation delivery
+## Accepted continuation-reconciliation delivery
 
 The next real product delivery binds the user's repeated context-overflow and
 code/conversation-topology burden to the common read-only reference adapter.
@@ -260,8 +260,9 @@ candidate removes long-form prose already available from machine authority and
 adds bounded active-work, task-registration, cleanup, and privacy-minimal Git
 reconciliation facts within a 3,072-character internal budget. It neither
 installs a plugin nor creates a state store, manager, protocol, model call, or
-task carrier. This paragraph records the active route only; no O2 result or O4
-calibration exists until task-bound validation and named-human judgment pass.
+task carrier. Task-bound validation and yiheng8023's exact judgment accepted it
+as the materially distinct third O2 scenario beside public intake and Codex
+Skill source delivery. The bounded three-scenario claim does not accept O4.
 
 ## Strategic invalidation audit
 

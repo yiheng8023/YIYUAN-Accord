@@ -116,7 +116,10 @@
         ],
         "humanAuthority": "A named accountable human accepts each task outcome and the aggregate comparison claim boundary and retains goal-divergence, new-authority, trust, data, cost, and irreversible decisions rather than routine task-topology mechanics."
       },
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/continuation-reconciliation-projection-2026-08-14.json"
+      ]
     },
     {
       "id": "O3",
