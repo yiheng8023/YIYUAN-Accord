@@ -243,13 +243,21 @@ profile, evidence semantics, and acceptance remain manager- and host-neutral.
 host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
-projection containing only a `SessionStart` Hook and a standard-library
-launcher for the repository-owned adapter. It adds no Skill, MCP server, App,
-prompt entry, capability router, state store, or outcome validator.
-The launcher uses Python isolated mode, reads the adapter and verifier once,
-and executes only those same bytes after they match the exact hashes reviewed
-for that plugin version. An unknown or changed runtime is a non-blocking no-op
-rather than a new repository-code execution grant.
+projection. It contains one concise, implicitly invocable task-facing Skill
+bound to the unaccepted candidate profile, plus a `SessionStart` Hook and
+standard-library launcher for the repository-owned continuation adapter. It
+adds no MCP server, App, prompt interception, capability router, state store,
+or outcome validator. The launcher uses Python isolated mode, reads the adapter
+and verifier once, and executes only those same bytes after they match the exact
+hashes reviewed for that plugin version. An unknown or changed runtime is a
+non-blocking no-op rather than a new repository-code execution grant.
+
+Codex 0.147.0 uses two complementary plugin-loading scopes. The dedicated
+`HooksOnly` startup path deliberately omits Skills, MCP servers, and Apps while
+preloading Hooks. Normal `AllCapabilities` loading discovers the same legacy
+plugin's declared `skills/` path and loads its Skill inventory. A plugin that
+contains both the Skill and Hook therefore does not strand the Skill behind the
+Hook-only preload path.
 
 CC Switch has no dependency role in the portable core, verifier, Codex adapter,
 or Codex plugin runtime. It may remain useful as one replaceable operational
@@ -285,15 +293,17 @@ transcript path, stores no session data, is a no-op outside the bound repository
 and does not validate results or emit receipts.
 
 Goal-level demand still enters through Codex's normal native conversation
-path. The adapter does not intercept or classify prompts. Using
-`UserPromptSubmit` for this continuity gap would add raw-prompt access and
-turn-blocking authority without causal necessity, so it is not part of the
-candidate.
+path. Codex may implicitly select the task-facing Skill from its metadata; the
+Hook does not intercept or classify prompts. Using `UserPromptSubmit` would add
+raw-prompt access and turn-blocking authority without causal necessity, so it is
+not part of the candidate.
 
-The adapter remains inactive. Installing or enabling a Hook is a separate
-consumer and trust transition requiring explicit authority and reversible
-behavior evidence. The candidate therefore establishes only an executable
-reference seam and zero O1-O5 progress.
+The plugin source candidate remains inactive. Installation, enablement, and
+exact Hook trust are separate consumer transitions requiring explicit authority
+and reversible behavior evidence. The current source-delivery task can establish
+only a bounded package result after named-human acceptance; it cannot establish
+live Skill triggering, Hook behavior, repeated burden reduction, or cross-host
+portability.
 
 An authorized user-layer Hook edit was later present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native

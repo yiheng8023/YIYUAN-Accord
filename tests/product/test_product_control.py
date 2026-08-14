@@ -621,21 +621,36 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(manifest["name"], "agent-autonomy-harness-codex")
         payload_identity = hashlib.sha256()
-        for relative in ("hooks/hooks.json", "scripts/session_start.py"):
+        payload_files = (
+            "hooks/hooks.json",
+            "scripts/session_start.py",
+            "skills/deliver-demand-driven-task/SKILL.md",
+            "skills/deliver-demand-driven-task/agents/openai.yaml",
+            "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+        )
+        for relative in payload_files:
             payload_identity.update(relative.encode("utf-8"))
             payload_identity.update(b"\0")
             payload_identity.update((CODEX_PLUGIN_ROOT / relative).read_bytes())
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.1+codex.payload-"
+            "0.2.0-candidate.2+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
-        self.assertNotIn("skills", manifest)
+        self.assertEqual(manifest["skills"], "./skills/")
         self.assertNotIn("mcpServers", manifest)
         self.assertNotIn("apps", manifest)
-        self.assertNotIn("defaultPrompt", manifest["interface"])
+        self.assertEqual(
+            manifest["interface"]["defaultPrompt"],
+            [
+                "Tell me the result you want. I will own the capability route, continuity, verification, and cleanup."
+            ],
+        )
+        self.assertEqual(
+            manifest["interface"]["capabilities"], ["Interactive", "Read"]
+        )
         self.assertNotIn("hooks", manifest)
         handlers = hooks["hooks"]["SessionStart"]
         self.assertEqual(len(handlers), 1)
@@ -649,11 +664,37 @@ class ProductControlTests(unittest.TestCase):
             path.read_text(encoding="utf-8")
             for path in (
                 CODEX_PLUGIN_ROOT / ".codex-plugin/plugin.json",
-                CODEX_PLUGIN_ROOT / "hooks/hooks.json",
-                CODEX_PLUGIN_ROOT / "scripts/session_start.py",
+                *(CODEX_PLUGIN_ROOT / relative for relative in payload_files),
             )
         ).lower()
         self.assertNotIn("cc switch", candidate_text)
+
+    def test_codex_plugin_skill_is_implicit_thin_and_profile_bound(self) -> None:
+        skill_root = (
+            CODEX_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
+        )
+        skill = (skill_root / "SKILL.md").read_text(encoding="utf-8")
+        interface = (skill_root / "agents/openai.yaml").read_text(
+            encoding="utf-8"
+        )
+        projected_profile = (
+            skill_root / "references/demand-to-capability-profile.md"
+        ).read_bytes()
+
+        self.assertLessEqual(len(skill.splitlines()), 60)
+        self.assertNotIn("TODO", skill)
+        self.assertIn("do not use for simple conversation", skill.lower())
+        self.assertIn("read\n`references/demand-to-capability-profile.md` completely", skill)
+        self.assertIn("Do not teach or expose capability", skill)
+        self.assertIn("treat unavailable capacity as\n   unknown", skill)
+        self.assertIn("allow_implicit_invocation: true", interface)
+        self.assertNotIn("dependencies:", interface)
+        self.assertEqual(
+            projected_profile,
+            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE.md").read_bytes(),
+        )
+        self.assertFalse((CODEX_PLUGIN_ROOT / ".mcp.json").exists())
+        self.assertFalse((CODEX_PLUGIN_ROOT / ".app.json").exists())
 
     def test_codex_workspace_marketplace_exposes_only_the_thin_projection(
         self,

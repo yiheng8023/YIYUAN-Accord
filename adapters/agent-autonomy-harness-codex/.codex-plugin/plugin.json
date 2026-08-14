@@ -1,7 +1,7 @@
 {
   "name": "agent-autonomy-harness-codex",
-  "version": "0.2.0-candidate.1+codex.payload-99918defa387",
-  "description": "Thin Codex continuity projection for an Agent Autonomy Harness authority root.",
+  "version": "0.2.0-candidate.2+codex.payload-69031aa1e26c",
+  "description": "Thin Codex projection for demand-driven task delivery and Harness authority continuity.",
   "author": {
     "name": "Agent Autonomy Harness contributors"
   },
@@ -10,18 +10,25 @@
   "license": "Apache-2.0",
   "keywords": [
     "agent-autonomy",
+    "demand-driven",
+    "task-delivery",
     "continuity",
     "session-start"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Agent Autonomy Harness for Codex",
-    "shortDescription": "Restores current Harness authority after Codex session transitions",
-    "longDescription": "A thin reference-host projection that supplies current Harness authority after Codex startup, resume, clear, or compaction. It does not inspect prompts or transcripts, store session state, route capabilities, or validate outcomes.",
+    "shortDescription": "Delivers goals with demand-driven routing and continuity",
+    "longDescription": "A thin reference-host projection with one task-facing Skill for demand-driven delivery and one Hook for restoring current Harness authority after Codex startup, resume, clear, or compaction. It does not inspect prompts or transcripts, store session state, provide an MCP server, or validate outcomes.",
     "developerName": "Agent Autonomy Harness contributors",
     "category": "Developer Tools",
     "capabilities": [
+      "Interactive",
       "Read"
     ],
-    "websiteURL": "https://github.com/yiheng8023/agent-autonomy-harness"
+    "websiteURL": "https://github.com/yiheng8023/agent-autonomy-harness",
+    "defaultPrompt": [
+      "Tell me the result you want. I will own the capability route, continuity, verification, and cleanup."
+    ]
   }
 }

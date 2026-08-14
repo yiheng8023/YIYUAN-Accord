@@ -166,31 +166,41 @@ The same fixed source has a dedicated
 [`HooksOnly` plugin load path](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/core-plugins/src/loader.rs#L189-L219),
 loads a legacy plugin's declared or default `hooks/hooks.json` without loading
 Skills, MCP servers, or Apps, and supplies `PLUGIN_ROOT` to the command Hook.
+That path is a preload specialization, not the plugin's only loading mode. The
+normal
+[`AllCapabilities` path](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/core-plugins/src/loader.rs#L894-L936)
+loads the same installed plugin's Skill inventory, and the fixed legacy-skill
+resolver uses the declared paths or default `skills/` directory. A package may
+therefore contain both the task-facing Skill and continuation Hook without the
+Hook-only preload stranding the Skill.
 The local app-server
 [`plugin/install` path](https://github.com/openai/codex/blob/be6e8eac029b183056b7e4402879f15d2c85f61b/codex-rs/app-server/src/request_processors/plugins.rs#L1406-L1501)
 materializes the plugin and invalidates plugin consumers. Local Hook trust is
 not inferred from installation: exact trust plus app-owned user-config reload
 remains a separate activation condition.
 
-Reuse disposition: `adapters/agent-autonomy-harness-codex` is an inactive
-Hook-only packaging projection. Its launcher discovers a containing Harness
-authority root from the native Hook working directory and delegates to the
-repository-owned adapter only when the adapter and verifier bytes match the
-candidate's exact SHA-256 pins. It runs in Python isolated mode, neither copies
-the portable core into the plugin nor depends on CC Switch, and fails to a
-non-blocking no-op on runtime drift. The repository itself does not become a
-plugin.
+Reuse disposition: `adapters/agent-autonomy-harness-codex` is an inactive thin
+packaging projection with one task-facing Skill bound to the unaccepted profile
+and one continuation Hook. The Skill supplies no MCP, App, runtime, state, or
+product authority. The Hook launcher discovers a containing Harness authority
+root from the native working directory and delegates to the repository-owned
+adapter only when the adapter and verifier bytes match the candidate's exact
+SHA-256 pins. It runs in Python isolated mode, neither copies the portable core
+into the plugin nor depends on CC Switch, and fails to a non-blocking no-op on
+runtime drift. The repository itself does not become a plugin.
 
-Goal-level demand continues to use Codex's native conversation path. The
-candidate does not use `UserPromptSubmit`: raw-prompt access and turn-blocking
-authority are unnecessary for the observed continuity gap and would enlarge
-the data and trust boundary.
+Goal-level demand continues to use Codex's native conversation path, where the
+host may implicitly select the Skill from its metadata. The candidate does not
+use `UserPromptSubmit`: raw-prompt access and turn-blocking authority are
+unnecessary and would enlarge the data and trust boundary.
 
 The current user Hook configuration remains empty. Plugin installation,
 enablement, exact Hook trust, and live runtime measurement are separate
 consumer transitions and stay off until a scoped grant authorizes reversible
-behavior evidence. The candidate and its offline mechanism tests count as zero
-O1-O5 progress.
+behavior evidence. The package and its offline checks do not prove live Skill
+selection or Hook execution. The current source-delivery task can add only its
+pre-registered bounded receipt after named-human acceptance; it cannot promote
+live behavior, repeated burden reduction, or portability.
 
 The committed `.agents/plugins/marketplace.json` is a workspace-scoped
 discovery source, not a Harness-owned marketplace product. Codex 0.147.0

@@ -26,6 +26,14 @@ should report:
 - G1-G4 true (`4/4` guardrails);
 - that exact active increment and one active work item.
 
+The measured source candidate adds one concise implicitly invocable Skill to
+the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
+0.147.0 source distinguishes a Hook-only preload from normal all-capability
+loading, which still discovers the plugin's Skill inventory. No install,
+enablement, Hook trust, live trigger, or behavior claim has occurred. The next
+gate is verified source delivery followed by yiheng8023's bounded result and
+claim judgment.
+
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
@@ -97,15 +105,16 @@ files were restored, the stopped result is recorded in
 `product/evidence/o1-codex-session-start-continuity-stopped-2026-08-14.json`,
 and O1 remains false.
 
-A later bounded mechanism slice added the inactive Hook-only projection at
+A later bounded mechanism slice added the then Hook-only projection at
 `adapters/agent-autonomy-harness-codex`. Fixed Codex 0.147.0 source shows that
-legacy plugins can load only their Hooks, supply `PLUGIN_ROOT`, and use native
-plugin materialization while keeping exact Hook trust separate. The projection
-therefore packages the existing adapter without a Skill, MCP server, App,
+the dedicated startup path can preload only its Hook, supply `PLUGIN_ROOT`, and
+use native plugin materialization while keeping exact Hook trust separate. The
+projection then packaged the existing adapter without a Skill, MCP server, App,
 whole-repository plugin identity, or CC Switch dependency. Its isolated
 launcher accepts only the exact reviewed adapter and verifier hashes and is a
-no-op on runtime drift. It is not installed, enabled, trusted, live-measured,
-released, or outcome-accepted and counts as zero O1-O5 progress.
+no-op on runtime drift. That historical mechanism slice was not installed,
+enabled, trusted, live-measured, released, or outcome-accepted and counted as
+zero O1-O5 progress.
 
 A subsequent outcome-neutral slice added
 `.agents/plugins/marketplace.json` as the durable workspace discovery entry.
@@ -220,14 +229,14 @@ reuse those layers. This audit changes the route and acceptance boundary but
 proves none of O1-O5.
 
 Codex remains the first reference host, and the user Hook configuration remains
-unchanged. A later activation may use the new plugin candidate only through a
+unchanged. A later activation may use the plugin candidate only through a
 separate exact install, enable, trust, rollback, and native-compaction gate; it
-must not reuse the stopped user-layer attempt as a green result. The next causal
-slice must come from the highest-priority current observed problem. The nine
-user-reported experience failures are real product problems and replanning
-inputs; they do not self-promote into accepted receipts. Do not generalize the
-retired task validator into a wire protocol, adapter stack, audit schema, or
-receipt ecosystem.
+must not reuse the stopped user-layer attempt or the current source-only result
+as live evidence. The current causal slice addresses the highest-priority
+task-facing projection gap. The nine user-reported experience failures are real
+product problems and replanning inputs; they do not self-promote into accepted
+receipts. Do not generalize a task validator into a wire protocol, adapter
+stack, audit schema, or receipt ecosystem.
 
 ## Outcome-entry boundary
 

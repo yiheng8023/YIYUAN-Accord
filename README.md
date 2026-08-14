@@ -14,22 +14,25 @@ result, and cleans up afterward.
 
 **Research-stage status:** the repository currently contains the product
 contract, acceptance model, deterministic verifier, an inactive Codex
-`SessionStart` reference adapter, an inactive thin Codex plugin projection for
-that adapter, a workspace discovery entry that exposes the projection as
-available without installing it, and an inactive session-scoped Claude Code
-projection over the same continuation semantics. It does not contain an Agent
-runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
+`SessionStart` reference adapter, an inactive thin Codex plugin source candidate
+with one task-facing Skill and that continuation Hook, a workspace discovery
+entry that exposes the projection as available without installing it, and an
+inactive session-scoped Claude Code projection over the same continuation
+semantics. It does not contain an Agent runtime, an installed or
+behavior-accepted adapter, or accepted cross-host proof.
 
 v0.2 is `active`, with one pre-registered Codex task-facing Skill projection
 increment. O1 is verified by one
 accepted, task-bound public-intake result; O2-O5 remain unverified (`1/5`
 outcomes). The program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
-diagnosing the Harness. The adapters only derive bounded continuation context
-from the current repository authority. The host projections add no Skill,
-MCP server, App, prompt interception, CC Switch dependency, or product
-authority. Neither is persistently installed or enabled, and neither proves
-adapter runtime behavior or cross-host portability. The verifier is the current
+diagnosing the Harness. The Codex source candidate now projects the unaccepted
+method through one concise implicitly invocable Skill; its Hook and the Claude
+projection only derive bounded continuation context from current repository
+authority. Neither host projection adds an MCP server, App, prompt interception,
+CC Switch dependency, runtime, or product authority. Neither is persistently
+installed or enabled, and neither proves live trigger quality, adapter runtime
+behavior, or cross-host portability. The verifier is the current
 machine-readable state source.
 
 ## The problem
@@ -98,9 +101,9 @@ The current repository provides:
 - an inactive, standard-library-only Codex `SessionStart` adapter candidate
   that projects current authority after startup, resume, clear, or compaction
   without reading prompt or transcript content or storing session state;
-- an inactive, Hook-only Codex plugin projection that packages that adapter
-  through the host's plugin boundary without turning the repository or portable
-  core into a plugin;
+- an inactive Codex plugin source candidate with one task-facing Skill for the
+  unaccepted method and one Hook that packages the continuation adapter, without
+  turning the repository or portable core into a plugin;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
 - an inactive, Hook-only Claude Code projection that translates the host's
