@@ -85,8 +85,9 @@ authority graph, criterion contracts, admitted evidence, human authority,
 process loss, and repository residue. It does not execute tasks, discover or
 install capabilities, route work, or operate a host adapter.
 
-O1-O5 are deliberately planned and false. A repository-authored JSON file
-cannot promote them: every verified outcome requires a code-owned validator
+O1 is verified by the accepted, task-bound public-intake result; O2-O5 remain
+planned and false. A repository-authored JSON file alone cannot promote an
+outcome: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
 evidence. Before measured execution, the increment freezes an immutable task
 registration containing every mapped criterion's required values, the task's
@@ -100,7 +101,8 @@ validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
 The v0.2 program is ready after closing the outcome-neutral task-topology and
-proactive context-carrier fitness repairs. O1-O5 remain false. Authorized
+proactive context-carrier fitness repairs and the accepted public-intake O1
+increment. O1 is true and O2-O5 remain false. Authorized
 product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without

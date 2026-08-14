@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "id": "result.o1.public-intake-zero-knowledge.accepted.2026-08-14",
+  "criterionIds": [
+    "O1"
+  ],
+  "observedAt": "2026-08-14T01:00:28.807Z",
+  "incrementId": "increment.v0.2.public-intake-zero-knowledge",
+  "workItemId": "work.v0.2.public-intake-zero-knowledge",
+  "source": {
+    "kind": "codex-task-chronology-and-git-result",
+    "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33#public-intake-zero-knowledge",
+    "identity": "sha256:f7c68b722f7824d5c57ff0e25fa1f725508600c1cd48264390b1aec77ad3dc2a"
+  },
+  "authority": {
+    "kind": "named-accountable-human",
+    "name": "yiheng8023",
+    "decision": "accepted",
+    "decidedAt": "2026-08-14T01:00:55.558Z",
+    "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+    "sourceTurnId": "6292f541-5f01-4c30-96a3-f026763ef07d",
+    "sourceMessageId": "msg_019ffdc9-4b86-7bb1-9342-f9e56d4e8cf3",
+    "sourceMessageSha256": "a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0",
+    "responseToMessageId": "msg_019f592550f72fc5016a7e68a4e01481918b45210c29af9c88",
+    "responseToMessageSha256": "6f7e8b8891f218210a2bc25c48439d3d85ae4801ee4def504a7abd444237e199"
+  },
+  "result": {
+    "accepted": true,
+    "deliverableCommit": "2008d0d4a5b44caa32652f2a15ba12d403348ce2",
+    "publicRepository": "https://github.com/yiheng8023/agent-autonomy-harness",
+    "humanJudgment": "The delivered public intake lets a person who knows nothing about Codex start from the demand while the Agent or maintainer owns the technical mechanics.",
+    "boundedClaim": "One accepted candidate.5 Codex public-intake task verifies O1 only."
+  },
+  "validator": {
+    "kind": "public-intake-zero-knowledge-o1",
+    "version": 1
+  },
+  "registration": {
+    "locator": "product/evidence/public-intake-zero-knowledge-registration.json",
+    "sha256": "125397f528f7042b82973a2aa47e6f429bd24d4b85ceeb29e7baa1c334c0a89f",
+    "committedAndPushedAt": "2026-08-14T00:53:06.796Z",
+    "commit": "25ddc0cb6493bb7bce0cc722b29387d1a9155ee3"
+  },
+  "taskIdentity": "natural-task.2026-08-14.public-intake-zero-knowledge",
+  "sourceRecords": [
+    {
+      "event": "goal-level-demand-received",
+      "observedAt": "2026-08-13T11:09:34.585Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/turns/019ffad0-2aa2-76e3-ad3f-565668344609/messages/msg_019ffad0-2bf8-70f2-a0ce-f17151550169",
+      "identity": "sha256:5c5ef7a5c28fe554ba7d4a8d7cfc7ceeb21a81eb18b5433fe77af2ffac0cef3f"
+    },
+    {
+      "event": "registration-committed-and-pushed",
+      "observedAt": "2026-08-14T00:53:06.796Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/events/ctco_019ffdc2-246c-7503-b1f8-e226aebfe02a",
+      "identity": "sha256:dbff95dc999244a2adbb1b1e427f525221d9b1902b7cdf2a564e3d1ea1216cb6"
+    },
+    {
+      "event": "native-context-compacted",
+      "observedAt": "2026-08-14T00:56:49.178Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/events/compacted-2026-08-14T00:56:49.178Z",
+      "identity": "sha256:d77fd4e862e684a85049c4046a5ccfd7d07696b2d85b60fd19c4dc7137eaff58"
+    },
+    {
+      "event": "post-compaction-task-recovered",
+      "observedAt": "2026-08-14T00:56:54.199Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/msg_019f592550f72fc5016a7e67d54b088191bf1d70cd9e002fbd",
+      "identity": "sha256:e0c1e4f03c10d8a874c64c5b0d6a9c13d7f18d4604af59da510fc255f3b9d50a"
+    },
+    {
+      "event": "deliverable-committed-and-pushed",
+      "observedAt": "2026-08-14T00:59:16.727Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/events/ctco_019ffdc7-c977-7501-97c2-c9f5c38de9b4",
+      "identity": "sha256:47005a703c337f182aeb6dd0631d9abdb5730499a044a8a04fa0e1211e122860"
+    },
+    {
+      "event": "bounded-human-judgment-requested",
+      "observedAt": "2026-08-14T01:00:28.807Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/msg_019f592550f72fc5016a7e68a4e01481918b45210c29af9c88",
+      "identity": "sha256:6f7e8b8891f218210a2bc25c48439d3d85ae4801ee4def504a7abd444237e199"
+    },
+    {
+      "event": "public-result-identity-confirmed",
+      "observedAt": "2026-08-14T01:00:55.515Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/events/ctco_019ffdc9-4b5b-7703-98e2-55c02fec3a46",
+      "identity": "sha256:7f9f4d2f7b0f3cf93ddda8c930ab1de8de5890fb27d028ebd8c0ba0381d178a4"
+    },
+    {
+      "event": "named-human-accepted",
+      "observedAt": "2026-08-14T01:00:55.558Z",
+      "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/turns/6292f541-5f01-4c30-96a3-f026763ef07d/messages/msg_019ffdc9-4b86-7bb1-9342-f9e56d4e8cf3",
+      "identity": "sha256:a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0"
+    }
+  ],
+  "artifacts": {
+    "baselineCommit": "a2d291f0cbe5a53d1c5beb68ae1591efd5bdfdce",
+    "registrationCommit": "25ddc0cb6493bb7bce0cc722b29387d1a9155ee3",
+    "resultCommit": "2008d0d4a5b44caa32652f2a15ba12d403348ce2",
+    "resultCommitChangedPaths": [
+      "CONTRIBUTING.md",
+      "SUPPORT.md",
+      "SUPPORT.zh-CN.md"
+    ],
+    "scopedDiffSha256": "622f13c605808e00848a5901532683415170ed3c108b459e49a2f72cca09f9e1",
+    "documents": [
+      {
+        "path": "CONTRIBUTING.md",
+        "baselineBlob": "bb700a5833de4861d459493d9f8a6aa0b93833e9",
+        "resultBlob": "0c7f6ae6479956983c8025ee44fb450b2654bde3",
+        "resultSha256": "190cc5f8a3551b01d740a5944646e2678e9dbdb14f168d99ccf79d5e504b78ed"
+      },
+      {
+        "path": "SUPPORT.md",
+        "baselineBlob": "9df45cf2d43a78d460c6d5e5356f04e20f1bd256",
+        "resultBlob": "eadf2127fad52fcd10c9f4064e330c8c0a7cb1f9",
+        "resultSha256": "dd02723f0d52be6a8a180ca415d30faa221f8343632119f9b2786dec68c5d4c7"
+      },
+      {
+        "path": "SUPPORT.zh-CN.md",
+        "baselineBlob": "3bd9e87c015b7d89029b1e5f861e8477619f6a37",
+        "resultBlob": "5fd0410ccbf9bee8a981967acfa0b9bebf2ed721",
+        "resultSha256": "2801340c7679a2c3e6c4ddc786d1df51050cefaa9ad1da80f0034bba10e7b933"
+      }
+    ],
+    "publicResultUrls": [
+      "https://github.com/yiheng8023/agent-autonomy-harness/blob/2008d0d4a5b44caa32652f2a15ba12d403348ce2/CONTRIBUTING.md",
+      "https://github.com/yiheng8023/agent-autonomy-harness/blob/2008d0d4a5b44caa32652f2a15ba12d403348ce2/SUPPORT.md",
+      "https://github.com/yiheng8023/agent-autonomy-harness/blob/2008d0d4a5b44caa32652f2a15ba12d403348ce2/SUPPORT.zh-CN.md"
+    ]
+  },
+  "measures": {
+    "humanOutcomeDecision": {
+      "accepted": true,
+      "namedHuman": "yiheng8023",
+      "decisionMessageIdentity": "sha256:a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0"
+    },
+    "materialUserCapabilityOrchestrationInterventions": {
+      "count": 0,
+      "taskTopologyInterventions": 0,
+      "userInputsAfterMeasurementStart": [
+        "accountable final result and bounded-claim judgment"
+      ]
+    },
+    "materialCollaborationLossEvents": {
+      "count": 0,
+      "repeatedSameClassCorrections": 0
+    },
+    "repeatedAlreadyBoundRequests": {
+      "count": 0
+    },
+    "capabilityLifecycleEvents": {
+      "observation": "Healthy current Codex task, repository, Git, Python, verifier, and three public documents were sufficient.",
+      "gapAssessment": "The gap was in the public intake text, not in executable capability.",
+      "discovery": "No capability discovery or addition was needed; only the pre-registered GitHub intake semantics were retained.",
+      "dispatch": "Current native Codex editing and verification route only.",
+      "release": "No task-scoped capability, Hook, plugin, MCP server, App, account, or configuration exposure remained to release."
+    },
+    "contextCarrierFitnessObservationsAndTransitions": {
+      "reliableRemainingCapacitySignal": "unknown",
+      "decisionBeforeCompaction": "continue while task, goal, authority, Git, and verification signals remained recoverable",
+      "transition": "one native compaction at 2026-08-14T00:56:49.178Z",
+      "recovery": "registration, goal, exact scope, Git state, verifier state, pending checks, and human gate were reconciled in the same task without user reconstruction",
+      "preventableContextLoss": false
+    },
+    "taskTopologyLifecycleEvents": {
+      "conversationCarrier": "current task 019ffaa8-b44a-7bf2-97de-65875bceec33 retained across native compaction",
+      "codeCarrier": "existing main checkout retained",
+      "isolatedCarrierCreated": false,
+      "userTopologyOperationCount": 0,
+      "reconciliationAndRelease": "post-compaction conclusion and Git state were reconciled in the same task; no branch, worktree, repository fork, conversation fork, new task, orphaned carrier, merge, archive, or cleanup operation remained"
+    },
+    "selectedRouteSubstrates": [
+      "OpenAI Codex CLI 0.147.0 at source commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host, reused only for native task execution",
+      "Git 2.55.0.windows.3, GPL-2.0-only, released repository substrate, reused only for identity, diff, commit, and push",
+      "CPython 3.14.6 under Python-2.0 and Windows PowerShell 5.1.26100.9168 under Microsoft Windows terms, reused only for bounded local verification",
+      "GitHub Issues and private vulnerability reporting official documentation at the registered URLs observed 2026-08-14 under applicable GitHub terms, reused only for the existing public and sensitive intake boundaries"
+    ],
+    "taskFloorResults": {
+      "outcomeQuality": "pass",
+      "intentAndCompleteness": "pass",
+      "interfaceSimplicity": "pass",
+      "authorityAndSafety": "pass",
+      "scope": "pass",
+      "evidence": "pass",
+      "residue": "pass",
+      "missingData": []
+    },
+    "residueAndClaimLimits": {
+      "repositoryTemporaryResidue": [],
+      "externalWritesBeyondAuthorizedGitPush": [],
+      "consumerOrHostMutation": [],
+      "remainingTaskScopedExposure": [],
+      "claim": "O1 only for this exact candidate.5 Codex public-intake task and date"
+    }
+  },
+  "claimLimits": [
+    "one candidate.5 Codex public-intake documentation task on 2026-08-14",
+    "CONTRIBUTING.md, SUPPORT.md, and SUPPORT.zh-CN.md at baseline a2d291f0cbe5a53d1c5beb68ae1591efd5bdfdce and result 2008d0d4a5b44caa32652f2a15ba12d403348ce2",
+    "one no-gap retain-native route decision with no capability discovery or addition",
+    "the observed native compaction and same-task recovery may be evaluated later as a candidate.5 context-boundary cohort sample, but this receipt does not itself verify O2 or O4",
+    "this receipt does not verify repeated burden transfer, the full O3 route cohort, methodology acceptance, cross-host portability, release, publication, production, or v0.2 completion"
+  ]
+}

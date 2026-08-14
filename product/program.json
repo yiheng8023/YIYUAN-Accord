@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.public-intake-zero-knowledge",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -66,7 +66,7 @@
   "increments": [
     {
       "id": "increment.v0.2.public-intake-zero-knowledge",
-      "state": "active",
+      "state": "completed",
       "correctionClass": "move-public-intake-mechanics-from-user-to-agent",
       "observedProblem": "The current public support and contribution entry points require a reporter or contributor to identify repository revision, affected artifact, evidence class, commands, O/G mapping, causal hypothesis, falsifier, lifecycle boundaries, and verification mechanics before maintainers can act, contradicting the bound zero-knowledge demand and transferring safely discoverable orchestration work to the user.",
       "hypothesis": "A bounded native rewrite of CONTRIBUTING.md, SUPPORT.md, and SUPPORT.zh-CN.md can make goal, observed behavior, expected behavior, already-known facts, and sensitivity the only default user inputs while assigning safely discoverable revision, artifact, command, route, causal binding, verification, and cleanup work to the Agent or maintainer, reducing required orchestration inputs from three to zero without weakening security, authority, support scope, or no-SLA boundaries.",
@@ -103,7 +103,7 @@
       "workItems": [
         {
           "id": "work.v0.2.public-intake-zero-knowledge",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": [
             "O1",
             "O2",

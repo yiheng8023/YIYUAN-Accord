@@ -20,16 +20,16 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment, and O1-O5 are still false.
-The
-program now makes explicit that authorized product-plan delivery is real demand
+v0.2 is `ready`, with no active causal increment. O1 is verified by one
+accepted, task-bound public-intake result; O2-O5 remain unverified (`1/5`
+outcomes). The program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The adapters only derive bounded continuation context
 from the current repository authority. The host projections add no Skill,
 MCP server, App, prompt interception, CC Switch dependency, or product
 authority. Neither is persistently installed or enabled, and neither proves
-runtime behavior or an outcome. The verifier is the current machine-readable
-state source.
+adapter runtime behavior or cross-host portability. The verifier is the current
+machine-readable state source.
 
 ## The problem
 

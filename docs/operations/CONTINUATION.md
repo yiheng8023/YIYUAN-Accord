@@ -20,14 +20,15 @@ increment. The public verifier should report:
 
 - program status `ready`;
 - completion `in-progress`;
-- O1-O5 false (`0/5` outcomes);
+- O1 true and O2-O5 false (`1/5` outcomes), with O1 bound to
+  `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`;
 - G1-G4 true (`4/4` guardrails);
 - no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Latest closed authority repair
+## Latest closed outcome-neutral authority repair
 
 The ninth user-reported experience failure remained only partly closed. The
 current contract required recovery after compaction or task rollover, but it

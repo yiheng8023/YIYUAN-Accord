@@ -99,6 +99,19 @@ class ProductControlTests(unittest.TestCase):
         registration = self.root / "product/evidence/fixture-registration.json"
         if registration.exists():
             registration.unlink()
+        self.reset_acceptance_fixture()
+
+    def reset_acceptance_fixture(self) -> None:
+        """Keep generic tests independent of live outcome evidence and validators."""
+
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        for criterion in acceptance["criteria"]:
+            if criterion["id"] in {"O1", "O2", "O3", "O4", "O5"}:
+                criterion["assessment"] = "planned"
+                criterion.pop("evidence", None)
+        self.write_json("product/acceptance.json", acceptance)
 
     def mutate(self, relative: str, callback) -> None:
         value = self.read_json(relative)
@@ -337,19 +350,16 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_is_active_and_in_progress(self) -> None:
+    def test_current_v02_contract_retains_one_verified_outcome_and_is_ready(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.public-intake-zero-knowledge",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["activeIncrement"], None)
         self.assertEqual(report["completionState"], "in-progress")
-        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
+        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
-        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertTrue(report["criterionStates"]["O1"])
         self.assertFalse(report["criterionStates"]["O2"])
 
     def test_codex_reference_cohort_must_cross_context_lifecycle_boundary(
@@ -468,13 +478,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress (1/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -980,7 +991,10 @@ class ProductControlTests(unittest.TestCase):
                 report = self.report()
                 self.assertFalse(report["criterionStates"]["G3"])
                 self.assertIn(f"{label} schema must be integer 1", report["errors"])
-                shutil.copy2(ROOT / relative, self.root / relative)
+                if relative == "product/acceptance.json":
+                    self.reset_acceptance_fixture()
+                else:
+                    shutil.copy2(ROOT / relative, self.root / relative)
 
     def test_authority_documents_reject_undeclared_top_level_fields(self) -> None:
         variants = (
@@ -1002,7 +1016,10 @@ class ProductControlTests(unittest.TestCase):
                     f"{label} top-level fields must match the code-owned schema",
                     report["errors"],
                 )
-                shutil.copy2(ROOT / relative, self.root / relative)
+                if relative == "product/acceptance.json":
+                    self.reset_acceptance_fixture()
+                else:
+                    shutil.copy2(ROOT / relative, self.root / relative)
 
     def test_planning_active_limits_must_be_literal_integer_one(self) -> None:
         def boolean_limits(value: dict) -> None:
@@ -1229,10 +1246,7 @@ class ProductControlTests(unittest.TestCase):
                     f"criterion {criterion_id} fields must match the code-owned schema",
                     report["errors"],
                 )
-                shutil.copy2(
-                    ROOT / "product/acceptance.json",
-                    self.root / "product/acceptance.json",
-                )
+                self.reset_acceptance_fixture()
 
     def test_malformed_criterion_id_fails_without_traceback(self) -> None:
         def malformed(value: dict) -> None:
@@ -1289,7 +1303,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-        shutil.copy2(ROOT / "product/acceptance.json", self.root / "product/acceptance.json")
+        self.reset_acceptance_fixture()
 
         def change_design(value: dict) -> None:
             criterion = next(item for item in value["criteria"] if item["id"] == "O5")
@@ -1469,8 +1483,54 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_current_release_has_no_prebuilt_outcome_validation_path(self) -> None:
-        self.assertEqual(SUPPORTED_EVIDENCE_VALIDATORS, {})
+    def test_current_release_has_only_the_observed_task_bound_o1_validator(self) -> None:
+        self.assertEqual(
+            set(SUPPORTED_EVIDENCE_VALIDATORS),
+            {"public-intake-zero-knowledge-o1"},
+        )
+        criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "public-intake-zero-knowledge-o1"
+        ]
+        self.assertEqual(criteria, frozenset({"O1"}))
+        self.assertEqual(
+            increments,
+            frozenset({"increment.v0.2.public-intake-zero-knowledge"}),
+        )
+        self.assertTrue(callable(validator))
+
+    def test_public_intake_o1_validator_binds_observed_sources_and_result(self) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json"
+            ).read_text(encoding="utf-8")
+        )
+        validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "public-intake-zero-knowledge-o1"
+        ][2]
+        errors: list[str] = []
+        self.assertTrue(validator(document, "O1", ROOT, errors), errors)
+
+        mutations = {
+            "wrong criterion": lambda value: None,
+            "different human message": lambda value: value["authority"].__setitem__(
+                "sourceMessageSha256", "0" * 64
+            ),
+            "different result blob": lambda value: value["artifacts"]["documents"][
+                0
+            ].__setitem__("resultBlob", "0" * 40),
+            "broadened claim": lambda value: value["claimLimits"].clear(),
+        }
+        for label, mutate_document in mutations.items():
+            with self.subTest(label=label):
+                candidate = deepcopy(document)
+                mutate_document(candidate)
+                candidate_errors: list[str] = []
+                candidate_criterion = "O2" if label == "wrong criterion" else "O1"
+                self.assertFalse(
+                    validator(candidate, candidate_criterion, ROOT, candidate_errors)
+                )
+                self.assertTrue(candidate_errors)
 
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:
@@ -2204,10 +2264,7 @@ class ProductControlTests(unittest.TestCase):
                     "criterion O2 has no code-owned evidence validator: missing-validator",
                     report["errors"],
                 )
-                shutil.copy2(
-                    ROOT / "product/acceptance.json",
-                    self.root / "product/acceptance.json",
-                )
+                self.reset_acceptance_fixture()
 
     def test_evidence_validator_must_return_literal_true(self) -> None:
         for validator_result in (False, "truthy-but-not-bool"):
@@ -2239,10 +2296,7 @@ class ProductControlTests(unittest.TestCase):
                     report["errors"],
                 )
                 self.reset_program_fixture()
-                shutil.copy2(
-                    ROOT / "product/acceptance.json",
-                    self.root / "product/acceptance.json",
-                )
+                self.reset_acceptance_fixture()
 
     def test_evidence_validator_must_bind_the_evidence_increment(self) -> None:
         self.map_outcome_to_latest_work("O1")
@@ -2709,7 +2763,7 @@ class ProductControlTests(unittest.TestCase):
                     "criterion O2 evidence shape is invalid: product/evidence/typed.json",
                     report["errors"],
                 )
-                shutil.copy2(ROOT / "product/acceptance.json", self.root / "product/acceptance.json")
+                self.reset_acceptance_fixture()
 
     def test_evidence_locator_must_be_canonical_and_non_nested(self) -> None:
         for relative in (
@@ -2733,7 +2787,7 @@ class ProductControlTests(unittest.TestCase):
                     f"criterion O2 has invalid evidence locator: '{relative}'",
                     report["errors"],
                 )
-                shutil.copy2(ROOT / "product/acceptance.json", self.root / "product/acceptance.json")
+                self.reset_acceptance_fixture()
 
 if __name__ == "__main__":
     unittest.main()

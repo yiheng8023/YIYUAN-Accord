@@ -17,6 +17,7 @@ import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import stat
+import subprocess
 from types import MappingProxyType
 from typing import Any, Callable, Mapping
 
@@ -490,8 +491,335 @@ EvidenceValidatorSpec = tuple[
 ]
 
 
-SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
+_PUBLIC_INTAKE_INCREMENT_ID = "increment.v0.2.public-intake-zero-knowledge"
+_PUBLIC_INTAKE_WORK_ID = "work.v0.2.public-intake-zero-knowledge"
+_PUBLIC_INTAKE_REGISTRATION = (
+    "product/evidence/public-intake-zero-knowledge-registration.json"
+)
+_PUBLIC_INTAKE_REGISTRATION_SHA256 = (
+    "125397f528f7042b82973a2aa47e6f429bd24d4b85ceeb29e7baa1c334c0a89f"
+)
+_PUBLIC_INTAKE_BASELINE_COMMIT = "a2d291f0cbe5a53d1c5beb68ae1591efd5bdfdce"
+_PUBLIC_INTAKE_REGISTRATION_COMMIT = "25ddc0cb6493bb7bce0cc722b29387d1a9155ee3"
+_PUBLIC_INTAKE_RESULT_COMMIT = "2008d0d4a5b44caa32652f2a15ba12d403348ce2"
+_PUBLIC_INTAKE_RECEIPT_SHA256 = (
+    "1359e130bb1ac9afec6f0159a0c9661e3a2c822fea3c402ff0b9c67e548dea45"
+)
+_PUBLIC_INTAKE_SOURCE_IDENTITY = (
+    "sha256:f7c68b722f7824d5c57ff0e25fa1f725508600c1cd48264390b1aec77ad3dc2a"
+)
+_PUBLIC_INTAKE_ACCEPTANCE_MESSAGE_SHA256 = (
+    "a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0"
+)
+_PUBLIC_INTAKE_SOURCE_EVENTS = (
+    "goal-level-demand-received",
+    "registration-committed-and-pushed",
+    "native-context-compacted",
+    "post-compaction-task-recovered",
+    "deliverable-committed-and-pushed",
+    "bounded-human-judgment-requested",
+    "public-result-identity-confirmed",
+    "named-human-accepted",
+)
+_PUBLIC_INTAKE_DOCUMENTS = MappingProxyType(
+    {
+        "CONTRIBUTING.md": (
+            "bb700a5833de4861d459493d9f8a6aa0b93833e9",
+            "0c7f6ae6479956983c8025ee44fb450b2654bde3",
+            "190cc5f8a3551b01d740a5944646e2678e9dbdb14f168d99ccf79d5e504b78ed",
+            "For a change that affects purpose, behavior, acceptance",
+            "You do not need to know the Harness criteria",
+            "Do not submit credentials, private memory, account state",
+        ),
+        "SUPPORT.md": (
+            "9df45cf2d43a78d460c6d5e5356f04e20f1bd256",
+            "eadf2127fad52fcd10c9f4064e330c8c0a7cb1f9",
+            "dd02723f0d52be6a8a180ca415d30faa221f8343632119f9b2786dec68c5d4c7",
+            "identify the exact repository revision and affected artifact",
+            "You do not need to identify a Git revision",
+            "The project does not provide a support SLA",
+        ),
+        "SUPPORT.zh-CN.md": (
+            "3bd9e87c015b7d89029b1e5f861e8477619f6a37",
+            "5fd0410ccbf9bee8a981967acfa0b9bebf2ed721",
+            "2801340c7679a2c3e6c4ddc786d1df51050cefaa9ad1da80f0034bba10e7b933",
+            "标明准确的仓库 revision 和受影响产物",
+            "你不需要先查 Git revision",
+            "本项目不提供支持 SLA",
+        ),
+    }
+)
 
+
+def _public_intake_git(root: Path, *arguments: str) -> bytes | None:
+    try:
+        completed = subprocess.run(
+            ["git", *arguments],
+            cwd=root,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return completed.stdout if completed.returncode == 0 else None
+
+
+def _validate_public_intake_o1(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    """Validate only the observed public-intake task against its frozen sources."""
+
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"public-intake O1 evidence {message}")
+
+    canonical = json.dumps(
+        document, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    if hashlib.sha256(canonical).hexdigest() != _PUBLIC_INTAKE_RECEIPT_SHA256:
+        reject("serialization differs from the observed task receipt")
+        return False
+
+    if (
+        criterion_id != "O1"
+        or document["incrementId"] != _PUBLIC_INTAKE_INCREMENT_ID
+        or document["workItemId"] != _PUBLIC_INTAKE_WORK_ID
+        or document["source"]["identity"] != _PUBLIC_INTAKE_SOURCE_IDENTITY
+        or document["authority"]["name"] != "yiheng8023"
+        or document["authority"]["sourceMessageSha256"]
+        != _PUBLIC_INTAKE_ACCEPTANCE_MESSAGE_SHA256
+        or hashlib.sha256("认可。\n".encode()).hexdigest()
+        != _PUBLIC_INTAKE_ACCEPTANCE_MESSAGE_SHA256
+    ):
+        reject("criterion, task source, or named-human decision identity changed")
+
+    records = document["sourceRecords"]
+    if tuple(item["event"] for item in records) != _PUBLIC_INTAKE_SOURCE_EVENTS:
+        reject("source chronology events changed")
+    instants = [_rfc3339_instant(item["observedAt"]) for item in records]
+    if any(item is None for item in instants) or instants != sorted(instants):
+        reject("source chronology is not ordered")
+    if any(
+        not item["locator"].startswith(
+            "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+        )
+        for item in records
+    ):
+        reject("source chronology left the bound task")
+    identities = [item["identity"].removeprefix("sha256:") for item in records]
+    combined = hashlib.sha256(("\n".join(identities) + "\n").encode()).hexdigest()
+    if document["source"]["identity"] != f"sha256:{combined}":
+        reject("source chronology identity changed")
+
+    measures = document["measures"]
+    orchestration = measures["materialUserCapabilityOrchestrationInterventions"]
+    losses = measures["materialCollaborationLossEvents"]
+    repeats = measures["repeatedAlreadyBoundRequests"]
+    context = measures["contextCarrierFitnessObservationsAndTransitions"]
+    topology = measures["taskTopologyLifecycleEvents"]
+    floors = measures["taskFloorResults"]
+    residue = measures["residueAndClaimLimits"]
+    floor_names = {
+        "outcomeQuality",
+        "intentAndCompleteness",
+        "interfaceSimplicity",
+        "authorityAndSafety",
+        "scope",
+        "evidence",
+        "residue",
+    }
+    if (
+        orchestration["count"] != 0
+        or orchestration["taskTopologyInterventions"] != 0
+        or losses["count"] != 0
+        or losses["repeatedSameClassCorrections"] != 0
+        or repeats["count"] != 0
+    ):
+        reject("zero user-intervention or collaboration-loss floor changed")
+    if (
+        context["reliableRemainingCapacitySignal"] != "unknown"
+        or context["transition"]
+        != "one native compaction at 2026-08-14T00:56:49.178Z"
+        or context["preventableContextLoss"] is not False
+        or topology["isolatedCarrierCreated"] is not False
+        or topology["userTopologyOperationCount"] != 0
+        or topology["codeCarrier"] != "existing main checkout retained"
+    ):
+        reject("context-carrier or task-topology lifecycle changed")
+    if (
+        any(floors[name] != "pass" for name in floor_names)
+        or floors["missingData"] != []
+        or any(
+            residue[name] != []
+            for name in (
+                "repositoryTemporaryResidue",
+                "externalWritesBeyondAuthorizedGitPush",
+                "consumerOrHostMutation",
+                "remainingTaskScopedExposure",
+            )
+        )
+    ):
+        reject("a mandatory quality, safety, evidence, or residue floor failed")
+    if len(measures["selectedRouteSubstrates"]) != 4 or set(
+        measures["capabilityLifecycleEvents"]
+    ) != {"observation", "gapAssessment", "discovery", "dispatch", "release"}:
+        reject("capability lifecycle or substrate binding is incomplete")
+    claims = document["claimLimits"]
+    if (
+        len(claims) != 5
+        or not any("does not itself verify O2 or O4" in item for item in claims)
+        or not any("does not verify repeated burden transfer" in item for item in claims)
+    ):
+        reject("claim limits changed or broadened")
+
+    registration_path = root / _PUBLIC_INTAKE_REGISTRATION
+    try:
+        registration_raw = registration_path.read_bytes()
+    except OSError:
+        registration_raw = None
+    if (
+        registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _PUBLIC_INTAKE_REGISTRATION_SHA256
+    ):
+        reject("registration bytes changed")
+
+    registration_parent = _public_intake_git(
+        root, "rev-parse", f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}^"
+    )
+    result_parent = _public_intake_git(
+        root, "rev-parse", f"{_PUBLIC_INTAKE_RESULT_COMMIT}^"
+    )
+    committed_registration = _public_intake_git(
+        root,
+        "show",
+        f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}:{_PUBLIC_INTAKE_REGISTRATION}",
+    )
+    committed_program = _public_intake_git(
+        root, "show", f"{_PUBLIC_INTAKE_REGISTRATION_COMMIT}:product/program.json"
+    )
+    result_is_ancestor = _public_intake_git(
+        root, "merge-base", "--is-ancestor", _PUBLIC_INTAKE_RESULT_COMMIT, "HEAD"
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip() != _PUBLIC_INTAKE_BASELINE_COMMIT
+        or result_parent is None
+        or result_parent.decode().strip() != _PUBLIC_INTAKE_REGISTRATION_COMMIT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _PUBLIC_INTAKE_REGISTRATION_SHA256
+        or result_is_ancestor is None
+    ):
+        reject("Git registration-to-result chronology changed")
+
+    if committed_program is None:
+        reject("committed active registration binding is unavailable")
+    else:
+        try:
+            registered_program = _parse_json(committed_program.decode())
+            registered_increment = next(
+                item
+                for item in registered_program["increments"]
+                if item.get("id") == _PUBLIC_INTAKE_INCREMENT_ID
+            )
+        except (KeyError, StopIteration, UnicodeDecodeError, _InvalidJson, TypeError):
+            reject("committed active registration binding is invalid")
+        else:
+            if (
+                registered_program.get("status") != "active"
+                or registered_program.get("activeIncrementId")
+                != _PUBLIC_INTAKE_INCREMENT_ID
+                or registered_increment.get("state") != "active"
+                or registered_increment.get("taskRegistration")
+                != {
+                    "locator": _PUBLIC_INTAKE_REGISTRATION,
+                    "sha256": _PUBLIC_INTAKE_REGISTRATION_SHA256,
+                }
+            ):
+                reject("registration was not active before the result commit")
+
+    changed_paths = _public_intake_git(
+        root,
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "-r",
+        _PUBLIC_INTAKE_RESULT_COMMIT,
+    )
+    if changed_paths is None or changed_paths.decode().splitlines() != list(
+        _PUBLIC_INTAKE_DOCUMENTS
+    ):
+        reject("result commit is not scoped to the three registered documents")
+    scoped_diff = _public_intake_git(
+        root,
+        "diff",
+        "--no-ext-diff",
+        "--no-color",
+        _PUBLIC_INTAKE_BASELINE_COMMIT,
+        _PUBLIC_INTAKE_RESULT_COMMIT,
+        "--",
+        *_PUBLIC_INTAKE_DOCUMENTS,
+    )
+    if (
+        scoped_diff is None
+        or hashlib.sha256(scoped_diff).hexdigest()
+        != document["artifacts"]["scopedDiffSha256"]
+    ):
+        reject("scoped result diff changed")
+
+    for path, expected in _PUBLIC_INTAKE_DOCUMENTS.items():
+        baseline_blob, result_blob, result_sha256, old_phrase, new_phrase, safety = (
+            expected
+        )
+        baseline_identity = _public_intake_git(
+            root, "rev-parse", f"{_PUBLIC_INTAKE_BASELINE_COMMIT}:{path}"
+        )
+        result_identity = _public_intake_git(
+            root, "rev-parse", f"{_PUBLIC_INTAKE_RESULT_COMMIT}:{path}"
+        )
+        baseline_bytes = _public_intake_git(
+            root, "show", f"{_PUBLIC_INTAKE_BASELINE_COMMIT}:{path}"
+        )
+        result_bytes = _public_intake_git(
+            root, "show", f"{_PUBLIC_INTAKE_RESULT_COMMIT}:{path}"
+        )
+        try:
+            current_bytes = (root / path).read_bytes()
+        except OSError:
+            current_bytes = None
+        if (
+            baseline_identity is None
+            or baseline_identity.decode().strip() != baseline_blob
+            or result_identity is None
+            or result_identity.decode().strip() != result_blob
+            or baseline_bytes is None
+            or old_phrase.encode() not in baseline_bytes
+            or result_bytes is None
+            or old_phrase.encode() in result_bytes
+            or new_phrase.encode() not in result_bytes
+            or safety.encode() not in result_bytes
+            or hashlib.sha256(result_bytes).hexdigest() != result_sha256
+            or current_bytes != result_bytes
+        ):
+            reject(f"baseline or accepted document content changed: {path}")
+
+    return len(errors) == before
+
+
+SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
+    {
+        "public-intake-zero-knowledge-o1": (
+            frozenset({"O1"}),
+            frozenset({_PUBLIC_INTAKE_INCREMENT_ID}),
+            _validate_public_intake_o1,
+        )
+    }
+)
 
 class _InvalidJson(ValueError):
     pass

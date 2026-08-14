@@ -55,7 +55,10 @@
         ],
         "humanAuthority": "The named accountable human owns the task outcome decision, goal divergence, new authority, trust, data, cost, irreversible effects, and claim boundary, not routine capability or task-topology mechanics."
       },
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json"
+      ]
     },
     {
       "id": "O2",

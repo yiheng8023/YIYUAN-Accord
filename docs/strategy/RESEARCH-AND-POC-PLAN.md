@@ -20,14 +20,17 @@ interesting paper is not sufficient entry evidence.
 ## Current v0.2 sequence
 
 v0.2 is ready with an empty current graph after the outcome-neutral proactive
-context-carrier fitness and transition repair, with O1-O5 planned and false. The current tree
-contains a product-contract verifier and inactive
+context-carrier fitness and transition repair and the accepted public-intake
+increment. O1 is verified and O2-O5 remain planned and false. The current tree
+contains a product-contract verifier, one exact task-bound O1 evidence
+validator, and inactive
 Codex and Claude Code reference-adapter candidates, not a task runtime or an
 accepted host result. Closed outcome-neutral work remains recoverable from Git
 rather than accumulating as a current queue.
 
-No current evidence proves user-value reduction, an accepted methodology or
-quality profile, or cross-host behavior. No outcome-bearing A/B task should be
+No current evidence proves the O2 cohort-level user-value reduction, an
+accepted methodology or quality profile, or cross-host behavior. No
+outcome-bearing A/B task should be
 manufactured merely to move the program.
 
 Natural-task evidence is required for outcome-bearing experimentation, but its
