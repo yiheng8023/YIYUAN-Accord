@@ -16,7 +16,7 @@ Read these files first:
 - `product/acceptance.json`
 
 The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate-input-bound`. The public verifier should
+`increment.v0.2.portable-source-candidate-gate-host-current`. The public verifier should
 report:
 
 - program status `active`;
@@ -27,20 +27,31 @@ report:
 - G1-G4 true (`4/4` guardrails);
 - one active O5 increment and one active work item.
 
-The active O5 input-bound registration freezes one independently useful read-only
+The active O5 host-current registration freezes one independently useful read-only
 source-candidate gate on exact commit `48ef653` before either model runs. It
-binds Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude Code
-2.1.232/claude-sonnet-5, the current candidate.6 package trees over the exact
-candidate.5 common method, the exact task and target in both prompt and
-type-plus-const schema, minimum task-scoped tool surfaces, zero ancestor project
-instructions, explicit unknown-context handling, sequential ephemeral carriers,
-normalized P0/P1 equivalence, cleanup and the maximum claim. It also freezes the
-observed isolated authentication labels and the narrow Windows canonical Git
-blob plus manifest-CRLF materialization rule. It still requires one new exact
+binds Codex CLI 0.147.0/gpt-5.6-sol and the live distinct-host Claude Code
+2.1.233/claude-sonnet-5, while disclosing to both models that the exact target
+Claude adapter source remains pinned to 2.1.232. A fact-grounded equivalent
+blocked decision remains eligible; no 2.1.233 adapter-support claim is possible.
+The registration preserves the candidate.6 package trees, candidate.5 common
+method, exact task and target in prompt plus type-and-const schema, minimum
+task-scoped tool surfaces, zero ancestor project instructions, isolated
+authentication labels, canonical Windows Git-blob rule, explicit unknown
+context, normalized P0/P1 equivalence, cleanup and the maximum claim. It still
+requires one new exact
 human grant for two temporary host-owned credential hardlinks, reviewed Hooks,
 the public-data boundary and the two conditional model calls, both eligible host
 results, task-bound validation and a later named-human outcome/equivalence
 judgment. Until then O5 remains false.
+
+The preceding input-bound registration stopped before creating task state or
+starting either model. The default Claude executable was already 2.1.233 at
+07:22 local time, before that registration froze stale 2.1.232 evidence at
+07:31. Substituting the new host or acquiring an old one was outside its exact
+scope. The grant and both unused call allowances are consumed; no credential
+link, plugin state or task root was created. The active registration binds the
+live executable and makes the carrier-versus-source version mismatch an
+identical decision input rather than hiding it.
 
 The preceding auth-isolated registration stopped before either model call after
 source, credential, authentication, package, minimum capability and dual-Hook

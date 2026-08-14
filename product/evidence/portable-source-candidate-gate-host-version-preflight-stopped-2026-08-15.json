@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.host-version-preflight-stopped.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-input-bound-registration.json",
+    "sha256": "453474c01b50d98e0fbafcdcf38e5051d7b06707743f702073ffbd1311cabf10",
+    "registeredCommit": "40bfb3a86a1d83af03eac87cf4082a55c0f87584"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-input-bound",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The exact post-grant zero-cost preflight confirmed clean synchronized Git state, the immutable input-bound registration, date and target, then resolved the live host commands before creating any task state. Codex remained the registered CLI 0.147.0. Claude resolved to the installed absolute npm executable at version 2.1.233 with SHA-256 8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd, not the registration's exact 2.1.232 executable and SHA. The 2.1.233 executable was last written at 07:22:10+08:00, before the input-bound registration was authored at 07:31:43+08:00, proving that the parent registered a stale preflight identity rather than a post-registration host change. No eligible installed 2.1.232 executable was present in the exact active package root; acquiring, installing or substituting one was outside the registration. The parent stopped with zero model calls, no task root, no credential link and no repository residue. This result makes zero O1-O5 progress.",
+  "authority": {
+    "executionGrant": "同意本次 input-bound 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 21653,
+      "id": "ctc_019f592550f72fc5016a7fa9cbf3b88191897e0d8195978a92",
+      "recordedAt": "2026-08-14T23:50:41.535Z",
+      "rawLineSha256": "fb5fd1250ecfb457e1e0f615dd0686a9178718fdc6e5269c61f2fb6589abd409",
+      "contentSha256": "57293a3a5ca7cd80ef90580c52068baa6936eaabd6353c7dc8d353c59b61d5db"
+    },
+    "codexCallsAuthorized": 1,
+    "codexCallsAttempted": 0,
+    "claudeCallsAuthorizedConditionalOnCodexSuccess": 1,
+    "claudeCallsAttempted": 0,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-model-execution"
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "40bfb3a86a1d83af03eac87cf4082a55c0f87584",
+      "aheadBehind": "0/0",
+      "registeredAt": "2026-08-15T07:31:43.8967842+08:00"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "ctc_019f592550f72fc5016a7fa9cbf3b88191897e0d8195978a92",
+      "recordedAt": "2026-08-14T23:50:41.535Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "static-git-registration-date-and-target-preflight-passed",
+      "gitClean": true,
+      "headAndOriginMain": "40bfb3a86a1d83af03eac87cf4082a55c0f87584",
+      "aheadBehind": "0/0",
+      "registrationSha256": "453474c01b50d98e0fbafcdcf38e5051d7b06707743f702073ffbd1311cabf10",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8"
+    },
+    {
+      "event": "reference-host-identity-preflight-passed",
+      "codexVersion": "0.147.0",
+      "codexBinarySha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d"
+    },
+    {
+      "event": "distinct-host-version-falsifier-triggered",
+      "registeredVersion": "2.1.232",
+      "registeredBinarySha256": "ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6",
+      "observedVersion": "2.1.233",
+      "observedExecutable": "C:/Users/15521/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+      "observedBinarySha256": "8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd",
+      "observedNpmIntegrity": "sha512-WS0ZSsNu2zkQonC+rW7HdByMCkPQ2l+hO1G0LdvWTj40kiYr0qAiSJjCBNRIbi0foBol4IFTCKwLHAN83qxxUQ==",
+      "executableLastWrite": "2026-08-15T07:22:10.4430819+08:00",
+      "precedesRegistration": true,
+      "modelCallStarted": false
+    },
+    {
+      "event": "registered-stop-enforced",
+      "reasons": [
+        "the installed distinct-host runtime version and binary hash did not equal the immutable registration",
+        "the live executable predated the registration, so the parent had registered stale host evidence",
+        "installing, acquiring or substituting a 2.1.232 runtime was not authorized"
+      ],
+      "retryOrSubstitution": false
+    },
+    {
+      "event": "zero-task-state-confirmed",
+      "observedAt": "2026-08-15T07:52:16.5110466+08:00",
+      "temporaryRootAbsent": true,
+      "temporaryCredentialLinkCreated": false,
+      "modelProcessStarted": false,
+      "gitClean": true
+    }
+  ],
+  "falsifiersTriggered": [
+    "the exact distinct-host runtime version and binary hash drifted from the immutable registration",
+    "the parent registration relied on stale host evidence after the live package had already updated",
+    "the matched host results, independent fact checks, equivalence comparison and named-human judgments did not occur"
+  ],
+  "causalFinding": {
+    "fact": "The active Claude npm executable was already 2.1.233 at 07:22:10+08:00, while the input-bound registration created at 07:31:43+08:00 still bound 2.1.232.",
+    "inference": "The input-binding correction itself was not falsified. The defect is the parent's failure to repeat the cheap live host identity check immediately before freezing the new registration.",
+    "correction": "Do not edit or retry this registration. A later immutable registration must bind the current 2.1.233 absolute executable, hash and npm integrity, disclose to both models that the target Claude adapter source remains pinned to 2.1.232, preserve a fact-grounded blocked outcome as eligible, and require another immediate pre-task identity check after a new grant."
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 1,
+    "lossEvents": [
+      "the parent's stale distinct-host identity consumed this exact grant and requires another bounded grant before any model result"
+    ],
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "one read-only executable search was broader than necessary, was stopped by the parent using its exact process identity, and left no task process or filesystem state",
+      "the first static script assumed a claude.exe command alias before resolving the npm wrapper; no model or task state was created"
+    ]
+  },
+  "safetyAndCleanup": {
+    "modelGenerationStarted": false,
+    "codexModelCallStarted": false,
+    "claudeModelCallStarted": false,
+    "credentialLinkCreated": false,
+    "credentialContentsReadOrRecorded": false,
+    "repositoryMutationByModel": false,
+    "consumerMutationRetained": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryAuthLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimit": "This is one honestly stopped zero-model execution of the input-bound 2026-08-15 portable source-candidate registration. It proves only the observed live host-version drift, its pre-registration timing, zero model calls and zero task residue. It proves no Codex or Claude task outcome, no cross-host equivalence, no O5 progress, no release eligibility, no publication, no production readiness and no v0.2 completion."
+}
