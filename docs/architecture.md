@@ -101,7 +101,8 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready with no active increment after closing the
+The v0.2 program is active on one pre-registered O5 matched source-candidate
+gate after closing the
 public-intake, task-facing Codex and Claude Skill source deliveries, the
 continuation-reconciliation implementation, and the bounded Codex reference-
 host calibration. The first three support O1. A
@@ -114,7 +115,9 @@ collaboration losses, and named-human acceptance. The similar Claude and Codex
 Skill deliveries are deliberately not double-counted. O4 applies the unchanged
 candidate.5 profile to those three accepted scenarios and one honestly stopped
 plugin-rollover case under fixed comparators, mandatory floors, and a named-
-human Codex-only claim. O1 through O4 are true; O5 remains false.
+human Codex-only claim. O1 through O4 are true; O5 remains false while the
+exact Codex CLI and distinct-host Claude Code pair awaits its separately
+authorized measured execution and human equivalence judgment.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without

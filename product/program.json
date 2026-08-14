@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.portable-source-candidate-gate",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -394,6 +394,70 @@
           ],
           "deliverables": [
             "one task-bound Codex reference-host calibration of the immutable candidate.5 methodology and minimum profile over the exact three accepted O2 scenarios plus one exact stopped case, with fixed comparator and external-reuse evidence, strict bounded claim limits, named-human judgment, and no O5 promotion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.portable-source-candidate-gate",
+      "state": "active",
+      "correctionClass": "prove-bounded-portability-with-tool-contained-matched-source-gate",
+      "observedProblem": "O1 through O4 are accepted, the current Codex and Claude Code inactive projections reuse the same candidate.5 Skill and profile, and O5 alone remains false. Earlier cross-host attempts are ineligible because ambient Skills or App/MCP resource enumeration escaped their registered capability boundary, or a pre-model output-schema defect fired. The current official and installed hosts now expose the smaller task-scoped controls frozen in this registration, but no accepted matched same-task result has tested them.",
+      "hypothesis": "One independently useful read-only source-candidate gate can run exactly once on Codex CLI 0.147.0/gpt-5.6-sol and once on distinct-host Claude Code 2.1.232/claude-sonnet-5 through the exact current thin adapters, with Apps and ambient Skills excluded, multi-agent disabled, a strict empty MCP and read-only tool boundary, one supported common schema, explicit unknown context capacity, sequential ephemeral carriers and parent-owned cleanup. If both fact-grounded decisions are accepted within the pre-registered equivalence tolerance, the common closed-loop semantics support only the bounded O5 claim.",
+      "falsifier": "The registration, date, target, host, runtime, model, adapter, prompt, schema, tool surface, Skill/profile, Hook projection or claim boundary drifts; a required read-only operation is unavailable; an ambient Skill, App, MCP, subagent, web or write route appears; a host retries, falls back, times out or lacks a valid final object; independent source checks reject a decision-relevant fact; normalized P0/P1 blockers or verdicts differ; any mandatory floor, cleanup or zero-loss condition fails; or yiheng8023 rejects either result, their equivalence or the bounded portability claim.",
+      "stopCondition": "After this exact registration and active binding are committed and pushed, obtain one exact human grant for the registered temporary plugin, Hook, public-data and two-model execution scope. Preflight both task-scoped host surfaces before cost, run Codex once, and only if eligible run Claude once. Stop successfully only when both exact streams and outputs are independently validated, all floors and cleanup pass, a minimal actual-stream-bound O5 validator passes, Git delivery is complete, and yiheng8023 accepts both outcomes, their equivalence and the registered claim ceiling. Stop honestly on the first falsifier without retry, substitution, tolerance change or unused conditional execution.",
+      "acceptanceIds": [
+        "O5",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/portable-source-candidate-gate-registration.json",
+        "sha256": "6f21372f98acd800abca47aed50362635c1014e94e65324d93bb975b2ce6b1e0"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
+          "adapters/agent-autonomy-harness-claude/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.portable-source-candidate-gate",
+          "state": "active",
+          "acceptanceIds": [
+            "O5",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant"
+          ],
+          "deliverables": [
+            "one accepted matched Codex and Claude Code source-candidate gate receipt for the exact current thin adapters, target, task, profile, host-runtime-model pair, equivalence tolerance and 2026-08-14 claim ceiling, or one honestly stopped and fully cleaned counterexample"
           ]
         }
       ]

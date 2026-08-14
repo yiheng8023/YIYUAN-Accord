@@ -22,8 +22,8 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `ready` with no active increment. O1 through O4 are verified (`4/5`
-outcomes); O5 remains unverified. O1 is
+v0.2 is `active` on one pre-registered matched O5 source-candidate gate. O1
+through O4 are verified (`4/5` outcomes); O5 remains unverified. O1 is
 supported by the accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O3 binds
 those three route decisions across native retention and finite official
@@ -43,6 +43,15 @@ installed Hook value, general context management, release, or production. The
 program makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness.
+
+The active O5 task asks Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude
+Code 2.1.232/claude-sonnet-5 to perform the same independently useful, read-only
+source-candidate gate on exact commit `48ef653`. The registration freezes the
+prompt, supported common schema, host and adapter identities, minimum tool
+surfaces, equivalence tolerance, explicit unknown-context rule, cleanup floor,
+and claim ceiling before either model runs. A matched fact-grounded `blocked`
+decision can pass; no result, model execution, cross-host acceptance, release,
+or completion is claimed yet.
 
 The Codex source candidate projects the Codex-reference-calibrated candidate.5
 method through one concise

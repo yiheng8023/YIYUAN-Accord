@@ -15,16 +15,28 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready` with no active increment. The
-public verifier should report:
+The current machine program is v0.2 and `active` on
+`increment.v0.2.portable-source-candidate-gate`. The public verifier should
+report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1 through O4 true, with O5 false (`4/5` outcomes); O2 binds the
   exact public-intake, Codex Skill-source, and continuation-reconciliation
   scenarios without double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- no active increment or work item.
+- one active O5 increment and one active work item.
+
+The active O5 registration freezes one independently useful read-only
+source-candidate gate on exact commit `48ef653` before either model runs. It
+binds Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude Code
+2.1.232/claude-sonnet-5, the current candidate.6 package trees over the exact
+candidate.5 common method, one prompt and supported schema, minimum task-scoped
+tool surfaces, explicit unknown-context handling, sequential ephemeral
+carriers, normalized P0/P1 equivalence, cleanup and the maximum claim. It still
+requires one exact human trust/data/model-execution grant, both eligible host
+results, task-bound validation and a later named-human outcome/equivalence
+judgment. Until then O5 remains false.
 
 The O4 registration freezes the unchanged candidate.5 profile and scorecard,
 the exact three accepted O2 scenarios, and the exact honestly stopped

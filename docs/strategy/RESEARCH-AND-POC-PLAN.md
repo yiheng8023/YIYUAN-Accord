@@ -19,11 +19,13 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is ready with no active increment after the accepted public-intake,
-task-facing Codex and Claude Skill source, continuation-reconciliation, and
-bounded Codex reference-host calibration results, the outcome-neutral
-context-carrier repairs, and content-addressed stopped Codex tasks. O1 through
-O4 are verified; O5 remains planned and false. The tree contains exact
+v0.2 is active on one pre-registered O5 matched source-candidate gate after the
+accepted public-intake, task-facing Codex and Claude Skill source,
+continuation-reconciliation, and bounded Codex reference-host calibration
+results, the outcome-neutral context-carrier repairs, and content-addressed
+stopped Codex tasks. O1 through O4 are verified; O5 remains false pending the
+exact separately authorized Codex and distinct-host Claude Code executions,
+task-bound validation and human equivalence judgment. The tree contains exact
 task-bound validators for those outcomes,
 inactive Codex and Claude Code reference-adapter candidates, and stopped
 results, not a task runtime or accepted live installed-host behavior. Closed
