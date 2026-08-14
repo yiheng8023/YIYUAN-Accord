@@ -8,6 +8,7 @@ as current product authority.
 
 from __future__ import annotations
 
+from contextvars import ContextVar
 from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
@@ -695,9 +696,16 @@ _PUBLIC_INTAKE_RECEIPT = (
 _CODEX_SKILL_RECEIPT = (
     "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json"
 )
+_EVIDENCE_GIT_CACHE: ContextVar[
+    dict[tuple[str, tuple[str, ...]], bytes | None] | None
+] = ContextVar("harness_evidence_git_cache", default=None)
 
 
 def _evidence_git(root: Path, *arguments: str) -> bytes | None:
+    cache = _EVIDENCE_GIT_CACHE.get()
+    key = (str(root.resolve(strict=False)), arguments)
+    if cache is not None and key in cache:
+        return cache[key]
     try:
         completed = subprocess.run(
             ["git", *arguments],
@@ -709,8 +717,12 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
             timeout=10,
         )
     except (OSError, subprocess.SubprocessError):
-        return None
-    return completed.stdout if completed.returncode == 0 else None
+        result = None
+    else:
+        result = completed.stdout if completed.returncode == 0 else None
+    if cache is not None:
+        cache[key] = result
+    return result
 
 
 def _validate_public_intake_o1(
@@ -3028,20 +3040,24 @@ def _verify_product(root: Path) -> dict[str, Any]:
 def verify_product(root: Path) -> dict[str, Any]:
     """Verify current product state and fail closed without leaking tracebacks."""
 
+    cache_token = _EVIDENCE_GIT_CACHE.set({})
     try:
-        return _verify_product(root)
-    except Exception as exc:
-        return {
-            "productId": PRODUCT_ID,
-            "release": None,
-            "programStatus": None,
-            "valid": False,
-            "completionState": "in-progress",
-            "activeIncrement": None,
-            "outcomes": {"verified": 0, "total": len(OUTCOME_IDS)},
-            "guardrails": {"passed": 0, "total": len(GUARDRAIL_IDS)},
-            "criterionStates": {
-                key: False for key in sorted(EXPECTED_CRITERION_IDS)
-            },
-            "errors": [f"verifier failed closed: {exc.__class__.__name__}"],
-        }
+        try:
+            return _verify_product(root)
+        except Exception as exc:
+            return {
+                "productId": PRODUCT_ID,
+                "release": None,
+                "programStatus": None,
+                "valid": False,
+                "completionState": "in-progress",
+                "activeIncrement": None,
+                "outcomes": {"verified": 0, "total": len(OUTCOME_IDS)},
+                "guardrails": {"passed": 0, "total": len(GUARDRAIL_IDS)},
+                "criterionStates": {
+                    key: False for key in sorted(EXPECTED_CRITERION_IDS)
+                },
+                "errors": [f"verifier failed closed: {exc.__class__.__name__}"],
+            }
+    finally:
+        _EVIDENCE_GIT_CACHE.reset(cache_token)

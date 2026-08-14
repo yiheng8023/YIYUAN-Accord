@@ -22,13 +22,18 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `ready` with no active increment. O1 is verified by three accepted,
+v0.2 has one active, pre-registered continuation-reconciliation delivery. O1 is verified by three accepted,
 task-bound results: the public-intake rewrite and the uninstalled Codex and
 Claude task-facing Skill source packages. O3 is independently verified over
 those three route decisions: one no-gap/native retention case and two finite,
 source-bound official discovery or adaptation cases. O2, O4, and O5 remain
 unverified (`2/5` outcomes). The Claude result is intentionally not counted as
-a materially different O2 scenario from the Codex Skill delivery. The program
+a materially different O2 scenario from the Codex Skill delivery. The active
+candidate replaces a 6,301-character active-work continuation projection that
+exceeded Codex's 4,096-character Hook limit with a bounded read-only authority,
+active-work, and Git reconciliation checkpoint. It remains unaccepted and does
+not change O2 until its task evidence, cohort validator, and named-human
+judgment all pass. The program
 makes explicit that authorized product-plan delivery is real demand when the
 primary purpose is the deliverable, rather than exercising or diagnosing the
 Harness.
@@ -144,8 +149,10 @@ The current repository provides:
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - an inactive, standard-library-only Codex `SessionStart` adapter candidate
-  that projects current authority after startup, resume, clear, or compaction
-  without reading prompt or transcript content or storing session state;
+  that projects a bounded current-authority, active-work, and read-only Git
+  reconciliation checkpoint after startup, resume, clear, or compaction without
+  reading prompt, transcript, session, diff, or dirty-path content or storing
+  session state;
 - an inactive Codex plugin source candidate with one task-facing Skill for the
   unaccepted method and one Hook that packages the continuation adapter, without
   turning the repository or portable core into a plugin;

@@ -248,6 +248,21 @@ tools, the current measured route remains ineligible. The finite result is
 `product/evidence/codex-tool-surface-suppression-mechanism-2026-08-14.json` and
 adds zero O1-O5 credit.
 
+## Active continuation-reconciliation delivery
+
+The next real product delivery binds the user's repeated context-overflow and
+code/conversation-topology burden to the common read-only reference adapter.
+Its immutable registration was pushed at `19f1893`. Only after that checkpoint
+did the exact active-work baseline measure 6,301 characters against Codex's
+4,096-character Hook limit, confirming that the former projection could be
+truncated precisely when an active increment needed recovery. The registered
+candidate removes long-form prose already available from machine authority and
+adds bounded active-work, task-registration, cleanup, and privacy-minimal Git
+reconciliation facts within a 3,072-character internal budget. It neither
+installs a plugin nor creates a state store, manager, protocol, model call, or
+task carrier. This paragraph records the active route only; no O2 result or O4
+calibration exists until task-bound validation and named-human judgment pass.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

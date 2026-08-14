@@ -20,6 +20,8 @@ CLAUDE_PLUGIN_ROOT = ROOT / "adapters/agent-autonomy-harness-claude"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import harness.control as control  # noqa: E402
+from harness.continuation import _serialize_bounded  # noqa: E402
 from harness.claude_reference import (  # noqa: E402
     ADAPTER_ID as CLAUDE_ADAPTER_ID,
     render_session_start_context as render_claude_session_start_context,
@@ -488,6 +490,20 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
         self.assertTrue(report["valid"])
 
+    def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
+        token = control._EVIDENCE_GIT_CACHE.set({})
+        try:
+            with patch("harness.control.subprocess.run", wraps=subprocess.run) as run:
+                self.assertIsNone(control._evidence_git(self.root, "rev-parse", "HEAD"))
+                self.assertIsNone(control._evidence_git(self.root, "rev-parse", "HEAD"))
+                self.assertEqual(run.call_count, 1)
+        finally:
+            control._EVIDENCE_GIT_CACHE.reset(token)
+
+        with patch("harness.control.subprocess.run", wraps=subprocess.run) as run:
+            self.assertIsNone(control._evidence_git(self.root, "rev-parse", "HEAD"))
+            self.assertEqual(run.call_count, 1)
+
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
@@ -502,11 +518,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(projection["event"], {"name": "SessionStart", "source": "resume"})
         self.assertEqual(projection["program"]["status"], "ready")
         self.assertEqual(
-            projection["program"]["progressionPolicy"][
-                "boundProductDeliveryDemandDisposition"
+            projection["authorityPaths"],
+            [
+                "product/constitution.json",
+                "product/program.json",
+                "product/acceptance.json",
             ],
-            "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-deliverable-rather-than-exercising-or-diagnosing-the-harness",
         )
+        self.assertEqual(projection["remainingContextCapacity"], "unknown")
+        self.assertEqual(projection["repositoryCheckpoint"]["state"], "unknown")
+        self.assertEqual(projection["projectionBudget"]["characters"], len(context))
+        self.assertLessEqual(len(context), 3072)
         self.assertEqual(
             projection["nextRoute"],
             "select-smallest-causally-justified-product-delivery-increment-from-current-authority",
@@ -534,8 +556,144 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(projection["nextRoute"], "continue-current-active-increment")
         self.assertEqual(projection["currentWork"]["id"], FIXTURE_INCREMENT_ID)
         self.assertEqual(
-            projection["currentWork"]["correctionClass"], "fixture-correction"
+            projection["currentWork"]["workItem"],
+            {"id": FIXTURE_WORK_ID, "state": "active"},
         )
+        self.assertEqual(
+            projection["currentWork"]["cleanupPaths"],
+            [".tmp", "harness/__pycache__", "tests/product/__pycache__"],
+        )
+        self.assertLessEqual(len(context), 3072)
+
+    def test_common_projection_does_not_copy_unbounded_active_work_prose(self) -> None:
+        def activate_long_work(program: dict) -> None:
+            increment = self.activate_program(program)
+            for field in ("observedProblem", "hypothesis", "falsifier", "stopCondition"):
+                increment[field] = field + ":" + ("x" * 10000)
+
+        self.mutate("product/program.json", activate_long_work)
+        context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="compact")
+        )
+        projection = json.loads(context)
+        self.assertEqual(projection["currentWork"]["id"], FIXTURE_INCREMENT_ID)
+        self.assertNotIn("observedProblem", projection["currentWork"])
+        self.assertNotIn("hypothesis", projection["currentWork"])
+        self.assertLessEqual(len(context), 3072)
+
+    def test_common_projection_has_a_bounded_second_level_fallback(self) -> None:
+        context = _serialize_bounded(
+            {
+                "schema": 1,
+                "adapter": "fixture-adapter",
+                "role": "derived-read-only-continuation-context",
+                "event": {"name": "SessionStart", "source": "compact"},
+                "authorityPaths": ["product/program.json"],
+                "verification": {
+                    "valid": True,
+                    "completionState": "in-progress",
+                    "errors": ["verification:" + ("x" * 10000)],
+                },
+                "repositoryCheckpoint": {"state": "observed"},
+                "program": {"status": "active"},
+                "currentWork": {
+                    "id": FIXTURE_INCREMENT_ID,
+                    "workItem": {"id": FIXTURE_WORK_ID, "state": "active"},
+                    "taskRegistration": "registration:" + ("x" * 10000),
+                },
+                "claimBoundary": "fixture claim boundary",
+            }
+        )
+        projection = json.loads(context)
+        self.assertLessEqual(len(context), 3072)
+        self.assertEqual(
+            projection["projectionBudget"]["state"], "fallback-overflow"
+        )
+        self.assertEqual(
+            projection["currentWorkIdentity"]["incrementId"], FIXTURE_INCREMENT_ID
+        )
+        self.assertNotIn("registration:" + ("x" * 100), context)
+
+    def test_common_projection_reports_git_checkpoint_without_dirty_path_names(self) -> None:
+        def git(*arguments: str) -> subprocess.CompletedProcess[str]:
+            return subprocess.run(
+                ["git", "-C", str(self.root), *arguments],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=30,
+            )
+
+        initialized = git("init", "-b", "main")
+        self.assertEqual(initialized.returncode, 0, initialized.stderr)
+        self.assertEqual(git("add", ".").returncode, 0)
+        committed = git(
+            "-c",
+            "user.name=Harness Test",
+            "-c",
+            "user.email=harness-test@example.invalid",
+            "commit",
+            "-m",
+            "fixture",
+        )
+        self.assertEqual(committed.returncode, 0, committed.stderr)
+
+        clean_context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="startup")
+        )
+        clean = json.loads(clean_context)["repositoryCheckpoint"]
+        self.assertEqual(clean["state"], "observed")
+        self.assertEqual(clean["branch"], "main")
+        self.assertRegex(clean["head"], r"^[0-9a-f]{40}$")
+        self.assertEqual(clean["upstream"], "absent")
+        self.assertEqual(clean["aheadBehind"], "unknown-no-upstream")
+        self.assertEqual(clean["worktreeCount"], 1)
+        self.assertEqual(clean["dirtyEntryCount"], 0)
+
+        private_path = self.root / "private-reconciliation-secret.txt"
+        private_path.write_text("must not enter projection", encoding="utf-8")
+        dirty_context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="compact")
+        )
+        dirty = json.loads(dirty_context)["repositoryCheckpoint"]
+        self.assertEqual(dirty["dirtyEntryCount"], 1)
+        self.assertNotEqual(dirty["statusSha256"], clean["statusSha256"])
+        self.assertNotIn(private_path.name, dirty_context)
+        private_path.unlink()
+
+        detached = git("checkout", "--detach")
+        self.assertEqual(detached.returncode, 0, detached.stderr)
+        detached_context = render_session_start_context(
+            self.root, self.codex_session_start_payload(source="resume")
+        )
+        checkpoint = json.loads(detached_context)["repositoryCheckpoint"]
+        self.assertEqual(checkpoint["branch"], "detached")
+        self.assertRegex(checkpoint["head"], r"^[0-9a-f]{40}$")
+        self.assertLessEqual(len(detached_context), 3072)
+
+    def test_common_projection_keeps_unavailable_git_explicit(self) -> None:
+        with patch("harness.continuation._git_output", return_value=None):
+            context = render_session_start_context(
+                self.root, self.codex_session_start_payload(source="compact")
+            )
+        checkpoint = json.loads(context)["repositoryCheckpoint"]
+        self.assertEqual(checkpoint["state"], "unknown")
+        self.assertEqual(checkpoint["reason"], "git-status-unavailable")
+        self.assertEqual(checkpoint["dirtyEntryCount"], "unknown")
+        self.assertLessEqual(len(context), 3072)
+
+    def test_common_projection_keeps_malformed_git_explicit(self) -> None:
+        with patch(
+            "harness.continuation._git_output",
+            return_value=b"# branch.oid \xff\0",
+        ):
+            context = render_session_start_context(
+                self.root, self.codex_session_start_payload(source="resume")
+            )
+        checkpoint = json.loads(context)["repositoryCheckpoint"]
+        self.assertEqual(checkpoint["state"], "unknown")
+        self.assertEqual(checkpoint["reason"], "git-status-malformed")
+        self.assertLessEqual(len(context), 3072)
 
     def test_codex_session_start_adapter_is_noop_outside_bound_repository(self) -> None:
         payload = self.codex_session_start_payload()
@@ -568,6 +726,7 @@ class ProductControlTests(unittest.TestCase):
             projection["nextRoute"], "repair-current-authority-before-product-mutation"
         )
         self.assertNotIn("product", projection)
+        self.assertLessEqual(len(context), 3072)
 
     def test_codex_session_start_cli_emits_hook_schema_without_traceback(self) -> None:
         arguments = [
@@ -638,7 +797,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.2+codex.payload-"
+            "0.2.0-candidate.3+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -755,6 +914,7 @@ class ProductControlTests(unittest.TestCase):
         for projection in (codex, claude):
             projection.pop("adapter")
             projection.pop("referenceHostSubstrate")
+            projection.pop("projectionBudget")
         self.assertEqual(claude, codex)
 
     def test_package_exports_explicit_host_adapters_and_keeps_codex_aliases(
@@ -819,7 +979,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.2+claude.payload-"
+            "0.2.0-candidate.3+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())

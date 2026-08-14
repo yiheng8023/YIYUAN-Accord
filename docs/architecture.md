@@ -248,7 +248,7 @@ Codex-first is the reference-adapter sequence, not a core dependency.
 
 The repository as a whole is not a plugin. The portable methodology, quality
 profile, evidence semantics, and acceptance remain manager- and host-neutral.
-`harness/continuation.py` derives the common bounded authority projection;
+`harness/continuation.py` derives the common bounded reconciliation projection;
 host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
@@ -382,10 +382,16 @@ For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
 fires for startup, resume, clear, and compact, supplies the working directory
 and source, and can return additional model context. The candidate adapter in
-`harness/codex_reference.py` uses only that seam to project the live
-constitution, program, acceptance, and verifier state. It ignores the supplied
-transcript path, stores no session data, is a no-op outside the bound repository,
-and does not validate results or emit receipts.
+`harness/codex_reference.py` uses only that seam to project live authority and
+verifier state, exact active increment/work/registration/cleanup identities,
+and a shell-free read-only Git checkpoint. The checkpoint exposes branch or
+detached state, HEAD, upstream or absence, ahead/behind or unknown, worktree
+count or unknown, dirty-entry count, and a status digest, but not dirty paths or
+diff content. The common projection has a 3,072-character budget inside the
+Codex Hook's 4,096-character limit; an over-budget full form degrades to an
+explicit hashed fallback rather than silent truncation. It ignores the supplied
+transcript and session fields, stores no session data, is a no-op outside the
+bound repository, and does not validate results or emit receipts.
 
 Goal-level demand still enters through Codex's normal native conversation
 path. Codex may implicitly select the task-facing Skill from its metadata; the
