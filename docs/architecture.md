@@ -267,6 +267,37 @@ plugin's declared `skills/` path and loads its Skill inventory. A plugin that
 contains both the Skill and Hook therefore does not strand the Skill behind the
 Hook-only preload path.
 
+`CODEX_HOME` bounds Codex configuration, authentication, plugin cache, and
+session state; it is not by itself an authority boundary for every user-global
+Skill. One registered source-gate run installed only this plugin in an isolated
+home but still exposed a separate user-global code-review Skill. That Skill's
+workflow required parallel subagents even though the immutable source-gate task
+did not require a diff review or parallel topology. The carrier selected the
+larger route and timed out without a final result, so the attempt remains an
+honest stopped counterexample at
+`product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
+
+The current native correction stays in the parent dispatch boundary. Codex
+0.147.0 can render the model-visible prompt through `codex debug prompt-input`,
+disable an exact Skill for one invocation through `skills.config`, and disable
+multi-agent tools through `features.multi_agent=false` or `--disable
+multi_agent`. The official [Skill documentation](https://learn.chatgpt.com/docs/build-skills),
+[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference),
+and [CLI reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
+describe the implicit Skill selection and per-invocation configuration seams.
+Before an outcome-bearing automated Codex dispatch, the parent Agent must inspect
+the visible Skill set, bind any causally rejected Skill path and topology state
+in the task registration, apply only those task-scoped native overrides, and
+verify the resulting prompt and feature state before the model call. It must not
+delete or move user Skills, persist a consumer-wide deny list, disable unrelated
+healthy capabilities, or ask the user to select the route.
+
+The plugin manifest has no field that can override other installed Skills or
+multi-agent policy, and the plugin must not acquire that authority. This keeps
+ambient-capability arbitration in Agent-owned task dispatch rather than adding a
+capability manager, prompt interceptor, MCP server, runtime, or control plane to
+the portable core or thin plugin.
+
 CC Switch has no dependency role in the portable core, verifier, Codex adapter,
 or Codex plugin runtime. It may remain useful as one replaceable operational
 manager for shared third-party Skills, but stopping or removing it must not

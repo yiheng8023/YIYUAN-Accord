@@ -28,24 +28,31 @@ Claude task-facing Skill source packages. O3 is independently verified over
 those three route decisions: one no-gap/native retention case and two finite,
 source-bound official discovery or adaptation cases. O2, O4, and O5 remain
 unverified (`2/5` outcomes). The Claude result is intentionally not counted as
-a materially different O2 scenario from the Codex Skill delivery. The program makes
-explicit that authorized product-plan delivery is real demand
-when the primary purpose is the deliverable, rather than exercising or
-diagnosing the Harness. The Codex source candidate now projects the unaccepted
-method through one concise implicitly invocable Skill; its Hook and the Claude
-projection only derive bounded continuation context from current repository
-authority. Neither host projection adds an MCP server, App, prompt interception,
-CC Switch dependency, runtime, or product authority. Neither is persistently
-installed or enabled. The Skill receipt records one native compaction and also
-records duplicate goal-mode continuation prompts as non-material host process
-cost, not product value. A later temporary Codex installation delivered the
-expected Skill plus startup and post-compaction projections in one
-same-directory child without user reconstruction. That result remains stopped:
-its pre-registered evidence floor required native `HookStarted` and
-`HookCompleted` records that the available host archive and logs did not expose.
-The child was archived and the plugin, trust state, cache, and configuration
-changes were removed. This is live mechanism evidence, not accepted behavior or
-cross-host proof. The verifier is the current machine-readable state source.
+a materially different O2 scenario from the Codex Skill delivery. The program
+makes explicit that authorized product-plan delivery is real demand when the
+primary purpose is the deliverable, rather than exercising or diagnosing the
+Harness.
+
+The Codex source candidate projects the unaccepted method through one concise
+implicitly invocable Skill; its Hook and the Claude projection only derive
+bounded continuation context from current repository authority. Neither host
+projection adds an MCP server, App, prompt interception, CC Switch dependency,
+runtime, or product authority. Neither is persistently installed or enabled.
+One temporary Codex continuity task delivered the expected Skill plus startup
+and post-compaction projections but stopped when required native Hook lifecycle
+records were unavailable. A later fixed-source review stopped before the
+conditional Claude call: an isolated `CODEX_HOME` still exposed an unrelated
+user-global code-review Skill, which selected an unregistered parallel route and
+the single Codex call timed out without a final result. Both attempts were
+cleaned completely and count as zero O1-O5 progress.
+
+Current Codex exposes task-scoped native controls for inspecting the
+model-visible prompt, disabling an exact Skill, and disabling multi-agent tools.
+For a future measured dispatch, the Agent—not the user—must inspect visible
+capabilities, reject only the causally inapplicable routes through per-invocation
+configuration, and fail closed when the intended capability and topology cannot
+be proven. The plugin does not override the user's broader capability inventory.
+The verifier is the current machine-readable state source.
 
 ## The problem
 

@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-ambient-capability-arbitration",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -267,65 +267,6 @@
           ],
           "deliverables": [
             "one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate that reuses the exact candidate.5 demand method, adds no MCP or CC Switch dependency, preserves host-specific boundaries, passes task-bound validation, and makes no live or portability claim"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v0.2.codex-ambient-capability-arbitration",
-      "state": "active",
-      "correctionClass": "fail-closed-unbound-ambient-capability-topology-before-model-dispatch",
-      "observedProblem": "The registered fixed-source review installed the exact Codex plugin into an isolated CODEX_HOME, yet the measured carrier still admitted a user-global .agents code-review Skill whose declared trigger did not match the immutable source-gate task and whose workflow mandated parallel subagents. The carrier selected that larger route, attempted unregistered topology, executed or attempted 96 commands, and timed out without an eligible result. This demonstrates that plugin-home isolation and advisory profile text do not currently contain ambient capability authority, so broader installed ecosystems can still redirect a demand, add data and topology, and defeat the product's zero-user-orchestration route.",
-      "hypothesis": "The exact current Codex host may expose a supported task-scoped Skill-discovery, tool-availability, or collaboration-control seam that can preserve the bound Harness Skill and native read-only repository capability while excluding or failing closed on an unbound ambient Skill before measured work. A source-bound inspection can identify that seam and, only if sufficient, support one thin reference-adapter or preflight correction without moving or deleting user Skills, mutating persistent consumer state, intercepting raw prompts, adding an MCP/runtime/control plane, or changing the portable candidate.5 semantics.",
-      "falsifier": "The current host has no supported task-scoped seam that can distinguish or contain ambient Skill and collaboration authority; the only route hides installed breadth by moving or deleting user assets, changes HOME or another broad consumer identity, requires persistent configuration or user setup, adds prompt interception, a capability registry, manager, MCP, runtime, control plane, custom collaboration protocol or another model call, weakens the registered data/topology boundary, changes candidate.5 semantics without invalidating prior evidence, leaves residue, or triggers another material collaboration loss.",
-      "stopCondition": "First bind the exact installed Codex 0.147.0 behavior and fixed official source or documentation for Skill roots, plugin Skills, tool exposure, collaboration controls and noninteractive isolation. If one sufficient native task-scoped seam exists, implement and test only the smallest inactive fail-closed reference projection or preflight needed to prevent the observed ambient-capability authority collision, reconcile affected source identities and public status, remove task residue, run canonical verification and full product tests, commit and push, then close this outcome-neutral increment. If no such seam exists, record the exact unsupported state and replan without a model call, consumer mutation, retry of the stopped task or invented outcome work.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.codex-ambient-capability-arbitration",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "targeted-capability-discovery",
-            "capability-static-review"
-          ],
-          "deliverables": [
-            "one exact-source disposition of Codex ambient Skill and collaboration authority plus the smallest sufficient inactive fail-closed reference correction when supported, or an explicit unsupported-state boundary when not, with zero O1-O5 credit and no consumer mutation or repeated model task"
           ]
         }
       ]

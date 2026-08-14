@@ -48,38 +48,44 @@ consumer changes were removed. The content-addressed result is
 No accepted live behavior, repeated O2-O4 result, cross-host proof, release, or
 completion claim has occurred.
 
+A later registered fixed-source review also stopped with zero O1-O5 credit. Its
+single isolated Codex call still admitted a user-global code-review Skill, which
+selected an unregistered parallel-subagent route and timed out without a final
+structured result, usage, or cost. The conditional Claude call did not run. The
+exact plugin, auth hardlink, temporary home, processes, and files were removed;
+the stopped receipt is
+`product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
+
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
 ## Latest closed outcome attempt
 
-The user's seventh-task continuity failure supplied a real long-horizon demand:
-the Agent, not a zero-knowledge user, had to decide and operate a safe
-conversation-carrier transition. The official plugin lifecycle fixed the prior
-hot-refresh failure and delivered the candidate.5 Skill and two native
-SessionStart projections in one same-directory child. The child recovered the
-goal, authority, active work, Git state, topology ownership, human gate, and
-cleanup boundary without user reconstruction, and natural compaction produced a
-second projection. The attempt nevertheless stopped because its immutable
-registration required native Hook lifecycle events that the available host
-evidence did not serialize. Do not rerun the task, normalize it to success, or
-lower its evidence floor. Future outcome work may pre-register the developer
-projection record actually exposed by the host, or another authoritative host
-API, before execution. This stopped candidate.5 sample changes no O1-O5 state.
+The fixed-source review was a real release-decision demand, not a Harness
+diagnostic. Its immutable registration allowed one Codex call and one
+conditional Claude/DeepSeek call with no retry. The Codex call loaded the exact
+candidate.5 projection, but isolated `CODEX_HOME` did not isolate the separate
+user-global Skill inventory. An inapplicable code-review Skill mandated parallel
+subagents, the carrier attempted that unregistered topology, and the call
+reached its 600-second finite stop without a final result. Do not rerun this
+registration, normalize it to success, execute the unused Claude call, or hide
+the material unnecessary-process loss. The exact stopped evidence is retained;
+consumer and process state is clean.
 
 ## Latest closed outcome-neutral authority repair
 
-The ninth user-reported experience failure remained only partly closed. The
-current contract required recovery after compaction or task rollover, but it
-could still accept an Agent that never observed conversation-carrier fitness
-and waited for preventable quality or host-capacity failure, leaving the user
-to guess when to continue, compact, or hand off. The closed outcome-neutral
-repair adds a source-bound host-and-task signal check at pre-registered material
-checkpoints, explicit `unknown` handling when reliable host signals do not
-exist, and a conservative pre-declared continue/compact/handoff rule. It does
-not add a context monitor, transcript store, universal token threshold,
-mandatory Hook, new task, or O1-O5 credit. It passed canonical checks, left the
-current graph, and remains recoverable from Git.
+The stopped result exposed a distinct dispatch defect: plugin-home isolation
+does not contain every prompt-visible Skill, while the plugin manifest has no
+authority to override user-global Skills or collaboration policy. Current
+official Codex documentation and the installed 0.147.0 binary provide the
+smaller native seam. The parent Agent can inspect the model-visible prompt with
+`codex debug prompt-input`, disable an exact causally rejected Skill through a
+single-call `skills.config` override, and set `features.multi_agent=false` when
+parallel topology is not bound. Future measured registrations must bind and
+verify those exact task-scoped states before a model call. Do not move or delete
+user Skills, persist a broad deny list, add prompt interception, or turn this
+into a capability manager or runtime. This repair changes no candidate.5
+semantics, creates no consumer state, and earns zero O1-O5 credit.
 
 ## Latest closed delivery
 
@@ -272,9 +278,8 @@ proves none of O1-O5.
 Codex remains the first reference host, and the user Hook configuration remains
 unchanged. A later activation may use the plugin candidate only through a
 separate exact install, enable, trust, rollback, and native-compaction gate; it
-must not reuse the stopped user-layer attempt or the current source-only result
-as live evidence. The current causal slice addresses the highest-priority
-task-facing projection gap. The nine user-reported experience failures are real
+must not reuse a stopped user-layer or fixed-source attempt as live evidence.
+The nine user-reported experience failures are real
 product problems and replanning inputs; they do not self-promote into accepted
 receipts. Do not generalize a task validator into a wire protocol, adapter
 stack, audit schema, or receipt ecosystem.
