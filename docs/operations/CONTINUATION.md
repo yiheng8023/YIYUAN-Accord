@@ -16,7 +16,7 @@ Read these files first:
 - `product/acceptance.json`
 
 The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate-auth-isolated`. The public verifier should
+`increment.v0.2.portable-source-candidate-gate-input-bound`. The public verifier should
 report:
 
 - program status `active`;
@@ -27,18 +27,32 @@ report:
 - G1-G4 true (`4/4` guardrails);
 - one active O5 increment and one active work item.
 
-The active O5 auth-isolated registration freezes one independently useful read-only
+The active O5 input-bound registration freezes one independently useful read-only
 source-candidate gate on exact commit `48ef653` before either model runs. It
 binds Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude Code
 2.1.232/claude-sonnet-5, the current candidate.6 package trees over the exact
-candidate.5 common method, one prompt and supported schema, minimum task-scoped
-tool surfaces, explicit unknown-context handling, sequential ephemeral
-carriers, normalized P0/P1 equivalence, cleanup and the maximum claim. It still
-requires one new exact human grant for two temporary host-owned credential
-hardlinks, reviewed Hooks, the public-data boundary and the two conditional
-model calls, both eligible host
+candidate.5 common method, the exact task and target in both prompt and
+type-plus-const schema, minimum task-scoped tool surfaces, zero ancestor project
+instructions, explicit unknown-context handling, sequential ephemeral carriers,
+normalized P0/P1 equivalence, cleanup and the maximum claim. It also freezes the
+observed isolated authentication labels and the narrow Windows canonical Git
+blob plus manifest-CRLF materialization rule. It still requires one new exact
+human grant for two temporary host-owned credential hardlinks, reviewed Hooks,
+the public-data boundary and the two conditional model calls, both eligible host
 results, task-bound validation and a later named-human outcome/equivalence
 judgment. Until then O5 remains false.
+
+The preceding auth-isolated registration stopped before either model call after
+source, credential, authentication, package, minimum capability and dual-Hook
+preflight passed. Its frozen result contract required an exact `taskIdentity`,
+but the prompt, target snapshot and Hook did not supply it and the output schema
+constrained only an arbitrary string. Returning the registered value would have
+required a guess. The exact grant and unused conditional model allowances are
+therefore consumed; both model-call counts are zero, and all task credential
+links, plugin state, processes and temporary roots were removed without user
+cleanup. The active registration changes only the missing input binding and
+already observed host-mechanical facts while preserving every result and claim
+floor.
 
 The preceding 2026-08-15 registration stopped before either model call after
 its target, schema, package, Codex Skill/App/MCP and dual-Hook checks passed.
@@ -50,9 +64,9 @@ were removed without user cleanup. A no-model correction probe also fixed the
 nested-snapshot geometry: `GIT_CEILING_DIRECTORIES` must name the task root, at
 which point both Hooks expose the outer repository checkpoint as explicit
 `unknown` and remain equivalent after normalizing only thin-adapter fields.
-The active registration preserves every product and result floor, adds only
-the second exact temporary credential link and that Git ceiling, and consumes
-all earlier grants and call allowances.
+That stopped registration preserved every product and result floor, added only
+the second exact temporary credential link and that Git ceiling, and consumed
+all still-earlier grants and call allowances.
 
 The superseded 2026-08-14 registration stopped before either model call. Its
 target, source snapshot, common Skill/profile bytes, supported schema and

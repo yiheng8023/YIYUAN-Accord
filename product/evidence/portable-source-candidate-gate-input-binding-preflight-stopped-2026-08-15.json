@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.input-binding-preflight-stopped.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-auth-isolated-registration.json",
+    "sha256": "dc8af97f118dd754f98dfe5e28dd1a4fee5fbdaf5c55d1e34162b8acd4ce5239",
+    "registeredCommit": "260954c2a5e5d100f9132d11775ae1377e28bb6d"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-auth-isolated",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The exact post-grant preflight rebuilt the registered target snapshot, isolated both existing host credentials without reading them, authenticated both hosts, installed and canonically verified the Codex plugin, reduced the Codex capability surface to the one exact Harness Skill with Apps, MCP and multi-agent disabled, validated the strict Claude plugin, and proved normalized dual-Hook parity with an explicit unknown repository checkpoint. Before either model call, the parent inspected the final eligible model inputs and found that the immutable registration required both final objects to name taskIdentity natural-task.2026-08-15.portable-source-candidate-gate-auth-isolated, but neither the frozen prompt, target snapshot, Hook projection nor output schema supplied that exact value. The schema declared only an unconstrained string. Any exact return would therefore be a guess rather than source-bound evidence. The parent stopped with zero model calls, consumed the exact grant under the no-retry rule, removed every task-created link, process and filesystem root, and retained no repository residue. This result makes zero O1-O5 progress.",
+  "authority": {
+    "executionGrant": "同意本次 auth-isolated 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 21178,
+      "id": "msg_01a0028e-8ee7-7163-8bec-b4e18eb6abbe",
+      "recordedAt": "2026-08-14T23:14:52.263Z",
+      "rawLineSha256": "346210cf85ce735ff9f3595829d537b507f34976a556d474a45a83acef393f40",
+      "trimmedContentSha256": "119b70e95bdab2e925e574c72e156baf92eacc5687062c8293444cb87e8f69e7"
+    },
+    "codexCallsAuthorized": 1,
+    "codexCallsAttempted": 0,
+    "claudeCallsAuthorizedConditionalOnCodexSuccess": 1,
+    "claudeCallsAttempted": 0,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-model-execution"
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "260954c2a5e5d100f9132d11775ae1377e28bb6d",
+      "aheadBehind": "0/0"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "msg_01a0028e-8ee7-7163-8bec-b4e18eb6abbe",
+      "recordedAt": "2026-08-14T23:14:52.263Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "exact-task-root-source-schema-and-authentication-preflight-passed",
+      "taskRoot": "C:/Projects/agent-autonomy-harness/.tmp/portable-source-candidate-gate-auth-isolated",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+      "snapshotFileCount": 19,
+      "allBlobIdentitiesMatchedTargetCommit": true,
+      "sourceFilesMadeReadOnly": true,
+      "codexCredentialHardlinkNamesMatchedExactOriginalAndTaskPaths": true,
+      "claudeCredentialHardlinkNamesMatchedExactOriginalAndTaskPaths": true,
+      "credentialContentsReadHashedPrintedOrRecorded": false,
+      "codexLoggedIn": true,
+      "claudeAuthStatus": {
+        "loggedIn": true,
+        "authMethod": "claude.ai",
+        "apiProvider": "firstParty"
+      }
+    },
+    {
+      "event": "isolated-package-capability-and-hook-preflight-passed",
+      "codexPluginVersion": "0.2.0-candidate.6+codex.payload-ccd593e9fc43",
+      "codexInstalledFileCount": 6,
+      "codexInstalledFilesMappedToExactTargetGitBlobs": true,
+      "codexRawFileMatches": 5,
+      "codexManifestRawDifference": "Windows CRLF materialization only",
+      "codexManifestJsonSemanticsEqual": true,
+      "commonSkillRawSha256Exact": true,
+      "commonProfileRawSha256Exact": true,
+      "visibleSkillCountBeforeExclusions": 25,
+      "excludedNonHarnessSkillCount": 24,
+      "visibleSkillCountAfterExclusions": 1,
+      "visibleSkill": "agent-autonomy-harness-codex:deliver-demand-driven-task",
+      "appsEnabled": false,
+      "multiAgentEnabled": false,
+      "multiAgentV2Enabled": false,
+      "isolatedMcpServerCount": 0,
+      "claudePluginStrictValidation": "passed",
+      "gitCeilingProducedExplicitUnknownCheckpointPerHost": true,
+      "normalizedThinAdapterEquivalence": true
+    },
+    {
+      "event": "model-visible-input-preflight-found-unregistered-ambient-authority-and-corrected-within-preflight",
+      "ancestorAgentsVisibleBeforeOverride": true,
+      "projectDocMaxBytesZeroRemovedAncestorAgents": true,
+      "memoryOrInternalContextVisibleAfterOverride": false,
+      "modelCallStarted": false
+    },
+    {
+      "event": "immutable-task-identity-input-binding-falsifier-triggered",
+      "requiredTaskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-auth-isolated",
+      "promptContainsExactTaskIdentity": false,
+      "targetSnapshotContainsCurrentRegistration": false,
+      "hookContainsExactTaskIdentity": false,
+      "outputSchemaTaskIdentityConstraint": {
+        "type": "string"
+      },
+      "eligibleSourceForExactTaskIdentity": false,
+      "modelCallStarted": false,
+      "reason": "The model cannot return the required exact registered task identity from eligible evidence without guessing."
+    },
+    {
+      "event": "task-consumer-process-and-filesystem-state-cleaned",
+      "observedAt": "2026-08-15T07:29:28.6758877+08:00",
+      "temporaryRootAbsent": true,
+      "temporaryParentAbsent": true,
+      "matchingTaskProcessCount": 0,
+      "originalCodexAuthFilePresent": true,
+      "originalClaudeCredentialFilePresent": true,
+      "originalCodexAuthHardlinkNames": [
+        "C:/Users/15521/.codex/auth.json"
+      ],
+      "originalClaudeCredentialHardlinkNames": [
+        "C:/Users/15521/.claude/.credentials.json"
+      ],
+      "gitClean": true,
+      "headAndOriginMain": "260954c2a5e5d100f9132d11775ae1377e28bb6d",
+      "aheadBehind": "0/0"
+    }
+  ],
+  "falsifiersTriggered": [
+    "the immutable prompt and schema omitted a mandatory exact result identity from eligible model input",
+    "an exact taskIdentity return would have required guessing rather than evidence",
+    "the matched host results, independent fact checks, equivalence comparison and named-human judgments did not occur"
+  ],
+  "causalFinding": {
+    "fact": "The registration required exact taskIdentity equality, but the only model-visible taskIdentity schema constraint was type string and the frozen prompt did not contain the registered value.",
+    "inference": "Authentication, source identity, minimum capability surfaces and thin-adapter Hook parity were not falsified. The defect is the parent's pre-registration input contract, not a missing natural task or missing host capability.",
+    "correction": "Do not edit or retry this registration. A later immutable registration must put the exact taskIdentity and targetCommit literally in the prompt and constrain both with JSON Schema type-plus-const before a new grant. It must also freeze project_doc_max_bytes=0, exact isolated auth labels, canonical Git-blob treatment of Windows plugin materialization and the already observed capability and Hook surfaces."
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 1,
+    "lossEvents": [
+      "the parent's pre-registration omission of a mandatory model input consumed this exact grant and requires another bounded grant before any model result"
+    ],
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "one earlier no-prompt unauthenticated Claude help probe was terminated after 15 seconds with zero credential, source or model-generation input and no retained process or filesystem state",
+      "relative-path normalization, allowed host-generated Codex state, Windows canonical Git identity, PowerShell boolean syntax and reviewed Hook trust invocation assumptions were corrected during parent preflight before model cost",
+      "all corrections remained inside the registered task root and were automatically cleaned"
+    ]
+  },
+  "safetyAndCleanup": {
+    "modelGenerationStarted": false,
+    "codexModelCallStarted": false,
+    "claudeModelCallStarted": false,
+    "credentialContentsReadOrRecorded": false,
+    "repositoryMutationByModel": false,
+    "consumerMutationRetained": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryAuthLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimit": "This is one honestly stopped pre-model execution of the auth-isolated 2026-08-15 portable source-candidate registration. It proves only the observed preflight facts, the missing exact task-identity input, zero model calls and exact cleanup. It proves no Codex or Claude task outcome, no cross-host equivalence, no O5 progress, no release eligibility, no publication, no production readiness and no v0.2 completion."
+}

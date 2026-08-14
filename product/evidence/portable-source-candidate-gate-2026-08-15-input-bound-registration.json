@@ -1,0 +1,284 @@
+{
+  "schema": 1,
+  "id": "registration.portable-source-candidate-gate.input-bound.2026-08-15",
+  "registeredAt": "2026-08-15T07:31:43.8967842+08:00",
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-input-bound",
+  "incrementId": "increment.v0.2.portable-source-candidate-gate-input-bound",
+  "criterionIds": [
+    "O5"
+  ],
+  "preRegistrationValues": {
+    "commonTaskIdentityGoalAndInput": {
+      "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-input-bound",
+      "goal": "Produce one release-blocking source-candidate readiness decision for the current inactive Codex and Claude Code thin plugin projections at exact target commit 48ef653521d890999137499b4ad7a42c02a90842.",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+      "scope": [
+        "adapters/agent-autonomy-harness-codex",
+        "adapters/agent-autonomy-harness-claude",
+        "harness/control.py",
+        "harness/continuation.py",
+        "harness/codex_reference.py",
+        "harness/claude_reference.py",
+        "docs/DEMAND-TO-CAPABILITY-PROFILE.md",
+        "product/constitution.json",
+        "product/program.json",
+        "product/acceptance.json"
+      ],
+      "decision": "Return source-candidate-ready only if the two inactive packages preserve one byte-identical candidate.5 method, remain thin host projections without an MCP, App, runtime, manager or CC Switch dependency, keep the continuation launchers root-bounded and integrity-pinned, expose truthful package identities and claim boundaries, and contain no P0 or P1 source blocker. A fact-grounded blocked verdict is an accepted useful task outcome.",
+      "prompt": "Perform one read-only Agent Autonomy Harness source-candidate gate. The required taskIdentity is natural-task.2026-08-15.portable-source-candidate-gate-input-bound and the required targetCommit is 48ef653521d890999137499b4ad7a42c02a90842. Inspect only the registered repository scope at that target commit. Decide whether both inactive thin plugin sources are source-candidate-ready under the registered decision rule. Cite every finding with a repository path and observed fact. Do not modify anything, browse the web, invoke MCP, Apps, subagents, extra Skills, or infer unavailable context capacity. Return only the registered JSON object with those exact taskIdentity and targetCommit values; source-candidate-ready is not release, publication, production, installed behavior, or universal portability.",
+      "primaryPurpose": "a final bounded source-readiness decision needed before v0.2 closeout, not a Harness diagnostic or a request to exercise tools"
+    },
+    "commonAuthorityBoundary": {
+      "userAuthority": "yiheng8023 supplies the bound closeout goal, one exact trust/data/model-execution grant after this registration is pushed, and final accountable per-host, equivalence and portability judgment.",
+      "agentAuthority": "The parent Agent owns exact capability observation, path and hardlink checks, preflight, sequential dispatch, source validation, comparison, cleanup, criterion-scoped validator implementation after real streams, Git delivery and claim control.",
+      "humanOnly": "the post-registration grant for the two exact temporary credential links and model calls, final outcome acceptance, equivalence acceptance, O5 portability judgment, and any release or publication decision",
+      "modelDataBoundary": "Only the public Apache-2.0 repository bytes in the registered scope, exact registered prompt, output schema and bounded SessionStart projection may be sent to the two model services. No secret value, private configuration, prompt history, transcript, memory, connector data or unrelated file is eligible.",
+      "credentialBoundary": "The existing C:/Users/15521/.codex/auth.json and C:/Users/15521/.claude/.credentials.json may each be exposed only as one exact same-volume task-root hardlink to its owning host process. The parent must not read, hash, copy, print, record or send credential contents. No login, refresh command, token creation, account mutation or cross-host credential use is allowed.",
+      "sideEffects": "One isolated temporary Codex plugin install with per-invocation reviewed Hook trust bypass, two exact temporary credential hardlinks, one ephemeral Codex model call, one task-scoped Claude plugin load and ephemeral Claude model call, host-generated state only inside the exact task root, temporary event/schema files, exact cleanup, repository commit and push. No persistent consumer mutation, account change, branch, worktree, fork, release, publication or deployment."
+    },
+    "commonDemandToCapabilityLifecycle": {
+      "entry": "The bound goal-level source-readiness decision; the user does not select a capability, host route, tool, topology or invocation syntax.",
+      "observation": "The repository already contains byte-identical candidate.5 Skills, current inactive candidate.6 plugin packages, root-bounded SessionStart launchers and the accepted Codex O4 calibration. Codex CLI and Claude Code supply sufficient native read-only repository tools.",
+      "gapAndDiscovery": "The only residual product gap is accepted same-task behavior on a distinct host. The stopped preflight additionally isolates one host-mechanical need: on Windows the empty Claude configuration root must receive the existing credential file without receiving ambient settings, Skills, plugins or sessions. Official host documentation and a no-model local preflight bind that route; no catalog search or new capability is required.",
+      "route": "Use the current Codex plugin through one isolated temporary home and the current Claude plugin through one isolated temporary configuration home and task-scoped plugin directory. Link only each host's exact existing credential file, expose the same prompt and output schema, allow only each host's minimum read-only repository surface, set the task root as the Git discovery ceiling, then release all exposure.",
+      "release": "Both processes, plugin exposure, credential links, host-generated task state, configuration, schema, event output and temporary roots are removed by the parent after capture, whether the pair passes or stops."
+    },
+    "commonContextCarrierFitnessAndTransitionLifecycle": {
+      "signals": "Each measured carrier is a new ephemeral single-turn process with a 300-second parent timeout. Neither host exposes a reliable remaining-capacity percentage before dispatch, so remaining capacity is explicit unknown.",
+      "conservativeRule": "Use one bounded turn with no resume, compaction induction or retry. Set GIT_CEILING_DIRECTORIES to the exact task root so the nested target snapshot cannot inherit the outer live repository. For Codex, also set project_doc_max_bytes=0 per invocation so no ancestor AGENTS.md enters the model prompt; the exact Harness Skill remains the only method input. The SessionStart repository checkpoint must remain explicit unknown and cannot be used as target evidence. Stop the host on timeout, malformed or absent final output, unexpected context transition, capability-boundary breach or unavailable required evidence; do not ask the user to recover or choose a carrier.",
+      "checkpoints": [
+        "after registration and active binding are committed and pushed",
+        "after exact post-link authentication, capability and adapter preflight and before the first model call",
+        "after the Codex result before conditional distinct-host dispatch",
+        "after the Claude result before equivalence judgment",
+        "before cleanup, commit and final human judgment"
+      ],
+      "claimFloor": "The pair tests only bounded single-turn carrier semantics, thin-adapter Hook projection and explicit unknown handling; it does not claim general long-context management or cross-host compaction equivalence."
+    },
+    "commonTaskTopologyLifecycle": {
+      "codeTopology": "Retain the current main checkout. Create no branch, worktree, repository fork or model-writable copy.",
+      "conversationTopology": "Retain this canonical parent task. The only measured carriers are two sequential no-resume subprocess turns, not user-owned Codex tasks or conversation forks.",
+      "synchronization": "Both hosts read the same content-addressed target snapshot and registered prompt/schema. The parent content-addresses their event streams and final objects, independently checks every decision-relevant repository fact, and computes normalized equivalence.",
+      "reconciliationAndCleanup": "The parent reconciles the two conclusions into one O5 receipt, terminates processes, removes exact task state and retains no orphaned carrier. The user performs no topology, merge, archive, recovery or cleanup operation."
+    },
+    "commonQualitySafetyEvidenceAndResidueFloors": {
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "taskIdentity": {
+            "type": "string",
+            "const": "natural-task.2026-08-15.portable-source-candidate-gate-input-bound"
+          },
+          "targetCommit": {
+            "type": "string",
+            "const": "48ef653521d890999137499b4ad7a42c02a90842"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "source-candidate-ready",
+              "blocked"
+            ]
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": [
+                    "P0",
+                    "P1"
+                  ]
+                },
+                "path": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "severity",
+                "path",
+                "evidence",
+                "rationale"
+              ]
+            }
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": [
+                    "P2",
+                    "P3"
+                  ]
+                },
+                "path": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "severity",
+                "path",
+                "evidence",
+                "rationale"
+              ]
+            }
+          },
+          "executionContext": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "methodProfileVersionObserved": {
+                "type": "string"
+              },
+              "authorityProjectionAdapterObserved": {
+                "type": "string"
+              },
+              "capabilitySurfaceObserved": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unsupportedStates": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "methodProfileVersionObserved",
+              "authorityProjectionAdapterObserved",
+              "capabilitySurfaceObserved",
+              "unsupportedStates"
+            ]
+          },
+          "claimBoundary": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "taskIdentity",
+          "targetCommit",
+          "verdict",
+          "blockers",
+          "observations",
+          "executionContext",
+          "claimBoundary"
+        ]
+      },
+      "outcomeQuality": "Each host returns one complete fact-grounded source gate for both plugin packages. Every finding cites an eligible repository path and observed fact; verdict blocked is required when any validated P0/P1 blocker remains.",
+      "authorityAndSafety": "Read-only repository input and tools only; no model write, web, MCP, App, subagent, private data, publication, release or deployment. Credentials remain host-local and never enter model input or retained evidence.",
+      "evidence": "Exact registration and grant, Git/package/host/model/adapter identities, preflight, process chronology, raw stream and final-object hashes, exposed method and SessionStart adapter evidence, independent fact checks, usage where exposed, cleanup, task-bound O5 validator and named-human decisions.",
+      "residue": "No task-created credential link, config, plugin cache, process, event file, schema, temporary root, session, branch, worktree, fork, consumer mutation or repository residue remains.",
+      "missingData": "Any missing identity, preflight, model, stream, output, fact check, adapter/method observation, equivalence, cleanup or human judgment fails the affected floor and cannot be imputed."
+    },
+    "referenceAndDistinctHostRuntimeModelAndAdapterSubstrateSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": {
+      "referenceHost": "OpenAI Codex CLI 0.147.0 Windows x64 binary sha256:935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d, official source tag rust-v0.147.0 commit be6e8eac029b183056b7e4402879f15d2c85f61b, npm integrity sha512-EQLEXecAG2ptxI7UpBMo2TR/ga5596/c/OsYF/0LoUDh5JANZ7IoGqlzBEWbuEVQ76JePIbtTW/ihCkp1a7Z3w==, Apache-2.0, released; gpt-5.6-sol high/default under applicable OpenAI terms. Reuse one isolated read-only ephemeral call only.",
+      "referenceControlSources": "Official OpenAI configuration reference https://learn.chatgpt.com/docs/config-file/config-reference and non-interactive reference https://learn.chatgpt.com/docs/non-interactive-mode observed 2026-08-15 document per-invocation configuration, ephemeral execution, read-only sandboxing and structured output. The installed CLI exposes exact post-load prompt visibility, stable features.apps, agents.enabled and dynamic SKILL.md exclusions. Bind actual preflight; documentation alone is not behavior proof.",
+      "referenceAdapter": "Codex plugin tree 1379b56cb43cd137815ee5e8acf15cfcfbdf36dd at target commit 48ef653521d890999137499b4ad7a42c02a90842, manifest blob 3ea3c0815a5cf075c2f16c2658807ab336f47bd3, version 0.2.0-candidate.6+codex.payload-ccd593e9fc43, Apache-2.0, inactive and release-ineligible; exact task-scoped temporary install only. On Windows, every installed package file must map through its registered repository path to the exact target Git blob. The common Skill and candidate.5 profile must also retain exact raw SHA-256 bytes. The manifest may differ in raw bytes only through CRLF checkout materialization when both canonical Git-blob identity and parsed JSON semantic equality pass; no other normalization or drift is allowed.",
+      "distinctHost": "Anthropic Claude Code 2.1.232 Windows x64 binary sha256:ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6, npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g==, released under the installed LICENSE.md sha256:8ce94b9478bb9868f9641f818e06cd722fbe55d4c22e2d2ed11971b20146173a. Exact model claude-sonnet-5, high effort, is current first-party Anthropic capability per https://platform.claude.com/docs/en/about-claude/models/overview observed 2026-08-14. Existing first-party authentication is used without reading or persisting credential contents; under the isolated hardlinked Windows credential, the required preflight label is exactly loggedIn=true, authMethod=claude.ai, apiProvider=firstParty. One read-only no-session call only.",
+      "distinctHostIsolationSources": "Official https://code.claude.com/docs/en/env-vars and https://code.claude.com/docs/en/team observed 2026-08-15 state that CLAUDE_CONFIG_DIR relocates settings, credentials, session history and plugins and that Windows credentials live in .credentials.json under that root. Reuse only the exact existing credential file through a checked temporary hardlink into an otherwise empty task root; this is host authentication plumbing, not portable product semantics.",
+      "distinctAdapter": "Claude plugin tree 9dd711704fbaf86b4c8f27526318d8091463b56d at target commit 48ef653521d890999137499b4ad7a42c02a90842, manifest blob c74237f0767b12c4d89e06b7f56c3c3227d802bb, version 0.2.0-candidate.6+claude.payload-0d96961b88b3, Apache-2.0, inactive and release-ineligible; exact --plugin-dir task exposure only.",
+      "commonSemanticSource": "Byte-identical deliver-demand-driven-task Skill blob e34d2299a9ef6e3abded16b88fab2396cfefb361 sha256:e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7 and candidate.5 profile blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a under Apache-2.0. Host-specific Hook, credential and launcher plumbing may differ only behind the two thin adapters."
+    },
+    "executionDatesApplicableTaskAndProfile": "Both measured executions must occur on 2026-08-15 Asia/Shanghai against target commit 48ef653521d890999137499b4ad7a42c02a90842 and tree 8a3e26f429c24d82f23d06376b525b520dfed5d8, task natural-task.2026-08-15.portable-source-candidate-gate-input-bound, software-engineering source-review profile and candidate.5 method. A later date, changed target, host, runtime, model or adapter stops this registration.",
+    "equivalenceTolerance": {
+      "requiredEqual": "Both final objects name the exact task and target, return the same verdict, and have the same normalized P0/P1 blocker set. Normalize blockers only by severity, repository path and factual requirement violated after independent source validation.",
+      "allowedDifference": "P2/P3 observations, prose, ordering, capabilitySurfaceObserved, adapter identity wording and explicit host-specific unsupported states may differ when factually compatible and unable to change the verdict.",
+      "qualityFloor": "Every decision-relevant claim passes independent repository checks. A hallucinated path, ungrounded blocker, missed P0/P1 blocker, contradictory common-core fact, output-schema failure or hidden unsupported state makes that host result ineligible.",
+      "humanRule": "yiheng8023 separately accepts each host result's usefulness and correctness, the normalized equivalence decision, and only the registered portability ceiling. Equivalent blocked outcomes can pass O5 as accepted task outcomes; source-candidate-ready is not required."
+    },
+    "preRegisteredPortabilityClaimBoundary": "If every floor and human judgment passes, claim only that the same candidate.5 goal, authority, demand-to-capability, explicit unknown context, Agent-owned task topology, evidence, recovery, verification, cleanup and acceptance semantics produced equivalent accepted source-readiness decisions on exact Codex CLI 0.147.0/gpt-5.6-sol and Claude Code 2.1.232/claude-sonnet-5 through the registered adapter trees, target, task and 2026-08-15 date. Do not claim all Agents, all Codex or Claude configurations, long-context parity, live installed value, release, publication, production, model superiority or universal portability.",
+    "adapterAndUnsupportedStateBoundary": {
+      "codex": "Use exact task home C:/Projects/agent-autonomy-harness/.tmp/portable-source-candidate-gate-input-bound/codex-home with the exact plugin, one hardlink from C:/Users/15521/.codex/auth.json to task-home auth.json, --ephemeral, --ignore-rules, read-only sandbox, never approval, project_doc_max_bytes=0, features.apps=false, agents.enabled=false, and dynamic skills.config exclusions by exact SKILL.md path. The final preflight must observe exactly 25 initially visible Skills, exclude the 24 exact non-Harness SKILL.md paths, and leave only agent-autonomy-harness-codex:deliver-demand-driven-task with SHA-256 e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7. Use the top-level --dangerously-bypass-hook-trust flag only for the reviewed exact task-scoped Hook in prompt-input and model invocations. Disable other unnecessary browser, computer, image, search, suggestion and workspace-dependency features. Require zero isolated MCP servers and no Apps or multi-agent surface. Every installed plugin file must map to its exact target Git blob; common Skill/profile raw bytes remain exact, and only manifest CRLF materialization may differ under the registered canonical-blob plus JSON-semantic rule. Host-generated codex-home/tmp/arg0 wrapper state is allowed only inside the task home and must be removed. Any ambient resource, ancestor AGENTS.md, unexpected tool invocation, declined required read command, internal retry, Hook drift or model mismatch stops the task. Parent path construction must use task-specific variable $taskCodexHome and never $HOME or $home. Immediately before and after link creation, require exact resolved path containment and a hardlink list containing exactly the original and intended task paths.",
+      "claude": "Use the exact absolute Claude Code 2.1.232 executable and exact CLAUDE_CONFIG_DIR C:/Projects/agent-autonomy-harness/.tmp/portable-source-candidate-gate-input-bound/claude-home. Before authentication, require that root to contain only one hardlink from C:/Users/15521/.claude/.credentials.json to task-home .credentials.json, with exact resolved containment and a hardlink list containing exactly the original and intended task paths; never read or hash its contents. The isolated auth preflight must report exactly loggedIn=true, authMethod=claude.ai and apiProvider=firstParty. Allow only host-generated state inside that root after authentication and require complete cleanup. Use the exact --plugin-dir, empty task-scoped settings file, --setting-sources with no ambient source, strict empty MCP config, --tools Read,Grep,Glob, --no-chrome, --no-session-persistence, stream-json with Hook events, exact JSON schema, claude-sonnet-5 and high effort; close subprocess stdin immediately. Any unrelated Skill/plugin/MCP, extra tool, subagent, write, fallback model, missing Hook/Skill projection, login/account mutation or out-of-root state stops the task.",
+      "common": "Set GIT_CEILING_DIRECTORIES to the forward-slash exact task root C:/Projects/agent-autonomy-harness/.tmp/portable-source-candidate-gate-input-bound for Hook and model subprocesses. The target snapshot has no .git directory, so both Hook repository checkpoints must be explicit unknown and their remaining context must match after normalizing only adapter identity and projection hashes. The exact taskIdentity and targetCommit are eligible model inputs only through the frozen prompt and JSON Schema type-plus-const bindings; neither model may guess or derive them from ambient state. Host signal, tool names, plugin loading, credential access and Hook envelopes may differ only as thin adapter plumbing. Missing reliable carrier capacity remains unknown. No host may add a goal, input, deliverable, human round trip, authority, side effect or acceptance requirement."
+    }
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "profile": "exact candidate.5 Skill/profile bytes and candidate.6 inactive package identities fixed in this registration",
+    "outcomeQuality": "two independently fact-checked accepted source-readiness decisions within the exact equivalence tolerance",
+    "interfaceSimplicity": "one exact pre-execution trust/data/model grant and one accountable post-result judgment; no user capability or topology operation",
+    "capabilityLifecycle": "minimum native read-only host tools plus exact task-scoped adapters and authentication links, no discovery/addition, complete release after use",
+    "contextAndTopology": "two sequential bounded ephemeral turns under one canonical parent, explicit unknown capacity and repository checkpoint, and no user recovery",
+    "authorityAndSafety": "public registered repository data only reaches models; credentials stay local to their owning host processes; no write, web, MCP, App, subagent, release, publication or deployment",
+    "evidence": "exact chronology, identities, raw hashes, independent fact checks, adapter/method observations, cleanup, task validator and human judgments",
+    "residue": "zero task-created credential link, consumer state, account state, process, filesystem, repository or conversation residue",
+    "missingData": "every missing or contradicted mandatory datum fails closed",
+    "claim": "exact task, target, host-runtime-model-adapter pair and 2026-08-15 only"
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection-setup-invocation-recovery-verification-cleanup-or-push",
+    "user-host-model-plugin-tool-credential-link-or-topology-selection-operation-or-reconciliation"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission-or-reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-context-topology-or-residue-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "this exact input-bound registration, active O5 program binding and the stopped input-binding-preflight receipt are committed and pushed to origin/main unchanged, then yiheng8023 grants the exact two temporary credential hardlinks, reviewed Hook execution, public-data and two-model execution scope; every earlier grant and unused call allowance is consumed and ineligible",
+    "eligibleSources": [
+      "the immutable registration, target Git tree, current candidate.5 profile and candidate.6 package identities",
+      "exact post-registration human execution grant content and identity",
+      "post-link preflight, process/event chronology, structured final objects, usage where exposed and independent repository checks from exactly one eligible call per host",
+      "canonical verifier, full product tests, Git delivery and exact credential/process/filesystem residue checks",
+      "a minimal criterion-scoped O5 validator authored only after the actual host streams are observed",
+      "post-result named-human per-host outcome, equivalence and bounded portability judgment"
+    ],
+    "ineligibleSources": [
+      "the prior stopped cross-host, closeout, context-carrier, path-defect, auth-preflight or auth-isolated input-binding registrations or calls as an accepted receipt",
+      "a changed date, target, host, model, adapter, prompt, schema, tolerance, floor, claim or second attempt",
+      "self-report, schema validity, local tests, source-package similarity or O4 acceptance alone",
+      "credential contents, private input, web search, fallback, MCP, App, extra Skill, subagent, model write, persistent consumer mutation, branch, worktree, fork, release, publication or deployment"
+    ],
+    "stopRule": "After the pushed binding and exact new grant, rebuild the exact task root and preflight both task-scoped credential link name sets, isolated authentication labels, canonical package identities, model-visible prompt inputs and host surfaces before cost. The prompt and schema must expose the exact registered taskIdentity and targetCommit, Codex project_doc_max_bytes must be zero, and no ancestor AGENTS.md may be visible. Run Codex once; only if eligible, remove its task credential link and run Claude once using its separately checked task credential link and closed stdin. Stop on the first source, credential-path, identity, date, model or isolated-auth mismatch, ambient capability, unauthorized data or tool, missing adapter/method observation, timeout, retry, malformed output, factual contradiction, P0/P1 mismatch, failed floor, residue, material user intervention or collaboration loss, or human rejection. Do not retry, substitute, weaken the tolerance or use an unused conditional allowance. Any path mismatch, credential content access, extra link name, out-of-root state or human recovery approval stops before model execution."
+  },
+  "claimLimits": [
+    "one matched source-candidate gate against commit 48ef653521d890999137499b4ad7a42c02a90842 on 2026-08-15",
+    "one Codex CLI 0.147.0/gpt-5.6-sol/high/default result through plugin tree 1379b56cb43cd137815ee5e8acf15cfcfbdf36dd and one Claude Code 2.1.232/claude-sonnet-5/high result through plugin tree 9dd711704fbaf86b4c8f27526318d8091463b56d",
+    "equivalence only under the exact normalized P0/P1 and fact-grounding tolerance registered above",
+    "portable semantics only for this task, profile, source, host-runtime-model-adapter pair and date",
+    "no all-Agent, all-Codex, all-Claude, long-context, installed-value, release, publication, production, model-superiority or universal portability claim"
+  ]
+}

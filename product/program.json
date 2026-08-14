@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v0.2.portable-source-candidate-gate-auth-isolated",
+  "activeIncrementId": "increment.v0.2.portable-source-candidate-gate-input-bound",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -399,13 +399,13 @@
       ]
     },
     {
-      "id": "increment.v0.2.portable-source-candidate-gate-auth-isolated",
+      "id": "increment.v0.2.portable-source-candidate-gate-input-bound",
       "state": "active",
-      "correctionClass": "repair-distinct-host-auth-isolation-before-bounded-portability-gate",
-      "observedProblem": "The pushed 2026-08-15 O5 registration passed target, schema, package, Codex authentication, exact Skill/App/MCP, Hook and Claude plugin preflight but stopped before either model call: on Windows an empty CLAUDE_CONFIG_DIR also removes the existing .credentials.json, so Claude reported loggedIn=false. The registration authorized neither a Claude credential link nor new login or token, and the nested target snapshot also let both Hooks observe the outer live repository until a task-root Git ceiling was applied. Exact cleanup passed, the model allowances are consumed, O5 alone remains false, and no user should be asked to operate credentials or topology.",
-      "hypothesis": "The unchanged matched Codex and Claude source-candidate gate can produce one independently useful same-task pair under the original candidate.5, target, schema, host, model, adapter, equivalence and claim floors if a fresh registration authorizes exactly one task-scoped hardlink for each host credential, isolates every other Claude configuration input, sets GIT_CEILING_DIRECTORIES to the task root, validates both link-name sets and authenticated surfaces before cost, and releases each exposure without reading credential contents or changing an account.",
-      "falsifier": "The registration, date, target, host, runtime, model, adapter, prompt, schema, tool surface, Skill/profile, Hook projection, equivalence or claim boundary drifts; either credential source, target, containment or exact two-name link set differs; credential contents are read, hashed, printed, copied, recorded or sent; isolated first-party authentication remains unavailable; ambient settings, Skill, plugin, MCP, App, subagent, web, write route or outer-repository checkpoint appears; a host retries, falls back, times out or lacks a valid final object; independent source checks reject a decision-relevant fact; normalized P0/P1 blockers or verdicts differ; any mandatory floor, cleanup or zero-loss condition fails; or yiheng8023 rejects either result, their equivalence or the bounded portability claim.",
-      "stopCondition": "After the auth-isolated registration, active binding and stopped authentication-preflight receipt are committed and pushed, obtain one exact human grant for the two registered temporary credential hardlinks, reviewed Hook execution, public-data boundary and two conditional model calls. Preflight both authenticated isolated host surfaces before cost, run Codex once, release its link, and only if eligible run Claude once. Stop successfully only when both exact streams and outputs are independently validated, all floors and cleanup pass, a minimal actual-stream-bound O5 validator passes, Git delivery is complete, and yiheng8023 accepts both outcomes, their equivalence and the registered claim ceiling. Stop honestly on the first falsifier without retry, substitution, tolerance change or reuse of any consumed grant.",
+      "correctionClass": "bind-mandatory-result-identity-into-bounded-portability-input",
+      "observedProblem": "The pushed auth-isolated O5 registration and exact grant passed source, credential, authentication, package, minimum capability and dual-Hook preflight but stopped before either model call. Its frozen result contract required an exact taskIdentity that did not appear in the prompt, target snapshot, Hook projection or schema const, so any compliant value would have been a guess. Exact cleanup passed, both model allowances are consumed, O5 alone remains false, and the user must not be asked to repair model inputs, credentials, capabilities or topology.",
+      "hypothesis": "The unchanged matched Codex and Claude source-candidate gate can produce one independently useful same-task pair under the existing candidate.5, target, host, model, adapter, equivalence, safety and claim floors if one fresh immutable registration makes the exact taskIdentity and targetCommit eligible inputs in both the prompt and type-plus-const schema, freezes the already observed ancestor-instruction, authentication-label, canonical Windows plugin materialization and subprocess-input rules, then executes exactly one call per host after a new bounded grant.",
+      "falsifier": "The registration, date, target, host, runtime, model, adapter, prompt, schema, tool surface, Skill/profile, Hook projection, equivalence or claim boundary drifts; either exact taskIdentity or targetCommit is absent from eligible prompt and schema input; an ancestor AGENTS.md, ambient setting, Skill, plugin, MCP, App, subagent, web or write route appears; credential source, containment, exact two-name link set or isolated authentication label differs; credential contents are read, hashed, printed, copied, recorded or sent; package identity fails the exact target-blob and narrowly registered CRLF rule; a host retries, falls back, times out or lacks a valid final object; independent source checks reject a decision-relevant fact; normalized P0/P1 blockers or verdicts differ; any mandatory floor, cleanup or zero-loss condition fails; or yiheng8023 rejects either result, their equivalence or the bounded portability claim.",
+      "stopCondition": "After the input-bound registration, active binding and stopped input-binding-preflight receipt are committed and pushed, obtain one new exact human grant for the two registered temporary credential hardlinks, reviewed Hook execution, public-data boundary and two conditional model calls. Rebuild and preflight the exact registered task root and model-visible inputs before cost, run Codex once, release its link, and only if eligible run Claude once. Stop successfully only when both exact streams and outputs are independently validated, all floors and cleanup pass, a minimal actual-stream-bound O5 validator passes, Git delivery is complete, and yiheng8023 accepts both outcomes, their equivalence and the registered claim ceiling. Stop honestly on the first falsifier without retry, substitution, tolerance change or reuse of any consumed grant.",
       "acceptanceIds": [
         "O5",
         "G1",
@@ -414,8 +414,8 @@
         "G4"
       ],
       "taskRegistration": {
-        "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-auth-isolated-registration.json",
-        "sha256": "dc8af97f118dd754f98dfe5e28dd1a4fee5fbdaf5c55d1e34162b8acd4ce5239"
+        "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-input-bound-registration.json",
+        "sha256": "453474c01b50d98e0fbafcdcf38e5051d7b06707743f702073ffbd1311cabf10"
       },
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
@@ -435,7 +435,7 @@
       },
       "workItems": [
         {
-          "id": "work.v0.2.portable-source-candidate-gate-auth-isolated",
+          "id": "work.v0.2.portable-source-candidate-gate-input-bound",
           "state": "active",
           "acceptanceIds": [
             "O5",
@@ -457,7 +457,7 @@
             "bounded-consumer-configuration-after-explicit-grant"
           ],
           "deliverables": [
-            "one accepted matched Codex and Claude Code source-candidate gate receipt for the exact current thin adapters, target, task, profile, host-runtime-model pair, equivalence tolerance and 2026-08-15 claim ceiling, or one honestly stopped and fully cleaned counterexample"
+            "one accepted matched Codex and Claude Code source-candidate gate receipt for the exact input-bound task, current thin adapters, target, profile, host-runtime-model pair, equivalence tolerance and 2026-08-15 claim ceiling, or one honestly stopped and fully cleaned counterexample"
           ]
         }
       ]
