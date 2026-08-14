@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "id": "registration.continuation-reconciliation-projection.2026-08-14",
+  "registeredAt": "2026-08-14T19:03:15.6863367+08:00",
+  "taskIdentity": "natural-task.2026-08-14.continuation-reconciliation-projection",
+  "incrementId": "increment.v0.2.continuation-reconciliation-projection",
+  "criterionIds": [
+    "O2",
+    "O4"
+  ],
+  "preRegistrationValues": {
+    "taskIdentity": "natural-task.2026-08-14.continuation-reconciliation-projection",
+    "demandEntry": {
+      "kind": "goal-level-real-product-delivery-demand",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "experienceSourceThreadId": "019ff267-f93d-7860-98c1-4762b94092aa",
+      "demand": "A nontechnical user must not recover repository state, decide whether context is still safe, or choose and operate branch, worktree, repository-fork, conversation-fork, new-task, reconciliation, archive, or cleanup mechanics when Codex context is compacted or a task carrier changes.",
+      "observedProductProblem": "At repository commit e35a86f7550494b4efbf12f89efc5447f8951920 the common SessionStart projection is 3643 characters even with no active increment, while its active-work form copies unbounded prose and the projection carries no live branch, HEAD, upstream, ahead/behind, worktree, or dirty-state checkpoint. The Codex Hook limits additionalContext to 4096 characters. The stopped live rollover receipt also records that exact live Git and cleanup state had to be recovered separately from repository authority.",
+      "userSpecifiedCapabilityRoute": false,
+      "userSpecifiedTaskTopology": false,
+      "primaryResult": "A compact, read-only common continuation projection that exposes enough live repository and active-work identity for Agent-owned reconciliation before mutation without becoming a state store, task manager, Git manager, receipt, or product authority."
+    },
+    "scenarioClass": "host-neutral-continuation-reconciliation-adapter-implementation",
+    "complexityAndAuthorityRiskBands": {
+      "complexity": "medium: change one shared read-only adapter and the two inactive host launchers while preserving exact byte pins, parity, fail-closed behavior, and a fixed context budget",
+      "authorityRisk": "low: repository source, tests, documentation, local verification, bounded cleanup, commit, and push only; no installation, enablement, trust, account, model call, consumer mutation, publication, release, deployment, branch, worktree, repository fork, conversation fork, or new task"
+    },
+    "matchedOrHistoricalBaselineIdentityAndRule": {
+      "implementationIdentity": "harness/continuation.py git blob 309d76e360455417a642c06d99da2d4fe76b34da, sha256:13fed2acd44fcbc039a2fac30c3972bca4c85a88f955d7c51183268b22c07de4 at repository commit e35a86f7550494b4efbf12f89efc5447f8951920",
+      "readyProjectionBaseline": "Codex compact SessionStart projection at commit e35a86f7550494b4efbf12f89efc5447f8951920 is 3643 characters of the registered 4096-character Hook limit, includes no live repository checkpoint, and has no active work.",
+      "historicalUserBurdenSources": [
+        "current task rollout line 224, user message msg_019ffab0-fbd1-7010-ab71-f72180366df6, raw sha256:5ef922aa27edb440de44ca699d26c3b0ed490fa58a59749b37bff694b4e6f832: user had to correct the seventh-thread wait loop",
+        "current task rollout line 996, user message msg_019ffad0-2bf8-70f2-a0ce-f17151550169, raw sha256:afe020ef14e4ffa07bbd05112fd52bde11582e5e4f9ef41fc649c611b30eb733: user had to state that context exhaustion is a real demand the product must solve",
+        "current task rollout line 8567, user message msg_019ffc8e-30c2-7db2-b8a6-26fff89fb203, raw sha256:63648002db2b1959459342354bfc17a55e36ee47693bcba8a33919ef82056e93: user had to enumerate code and conversation topology lifecycle"
+      ],
+      "baselineMaterialInterventions": 3,
+      "baselineRule": "Count those three source-bound corrections as distinct ad-hoc intervention classes: restart-or-wait correction, context-lifecycle problem recovery, and code/conversation topology specification. Do not count repeated copies or later summaries of the same source messages.",
+      "matchingRule": "Compare the same Harness repository, current main checkout, candidate.5 method, native SessionStart startup/resume/clear/compact events, 4096-character Codex additional-context budget, no prompt or transcript read, and no persistent state or consumer activation before and after the bounded implementation."
+    },
+    "selectedRouteSubstrateMetadataRule": {
+      "agent": "OpenAI Codex CLI 0.147.0, source commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host; reuse only the current authorized repository execution, native SessionStart envelope semantics, local verification, and communication.",
+      "codexHook": "Codex 0.147.0 native SessionStart startup, resume, clear, and compact source plus additionalContext output; reuse only the existing inactive Hook projection with its 4096-character limit and exact reviewed runtime pins.",
+      "claudeHook": "Claude Code 2.1.232 at official tag commit 1f6015b5d578adf79c8527443328a216d6b6a3f1 under applicable Anthropic Commercial Terms and Privacy Policy; reuse only the existing inactive SessionStart plain-stdout parity projection, without model execution or consumer exposure.",
+      "git": "Git 2.55.0.windows.3, GPL-2.0-only, released repository substrate; reuse only bounded read-only branch, HEAD, upstream, ahead/behind, worktree, and porcelain-status observations.",
+      "runtime": "CPython 3.14.6 executable sha256:03168c01b7b7491423350e82c26fee71f35b43694d1319d3c668bda6903a0c38 under Python-2.0 and Windows PowerShell 5.1.26100.9168 under Microsoft Windows terms; reuse only standard-library implementation and canonical local checks.",
+      "selectionRule": "Every decision-relevant substrate keeps exact identity, version or commit, license or terms, maturity, and reuse boundary; no external capability discovery, installation, manager, MCP server, App, state store, prompt interception, or additional task carrier may influence measured execution."
+    },
+    "contextCarrierFitnessSignalsAndTransitionRule": {
+      "materialCheckpoints": [
+        "after registration and active binding are committed and pushed",
+        "before the first adapter implementation edit",
+        "after the exact baseline active-work projection is measured",
+        "before each commit and push",
+        "before requesting named-human result judgment"
+      ],
+      "observableSignals": "The current task remains subscribed and writable; the active goal, immutable registration, product authority, Git state, diff, verifier, tests, and pending human gate remain recoverable. Codex exposes no reliable remaining-context percentage, so remaining capacity is explicit unknown.",
+      "transitionRule": "Keep the current task while those signals remain healthy. If native compaction occurs, re-read the immutable registration, live authority, exact active work, Git checkpoint, verification state, pending human gate, and cleanup before further mutation. If a host-required rollover occurs, stop this receipt rather than asking the user to select or reconstruct a carrier.",
+      "claimLimit": "This task need not cross a new context boundary because the public-intake and Codex-Skill receipts already contain pre-registered native-compaction recovery; any transition in this task must still satisfy the same zero-user-reconstruction rule."
+    },
+    "contextLifecycleBoundaryAndContinuityFloor": "No compaction, clear, handoff, fork, or task rollover is planned. The result must remain correct for startup, resume, clear, and compact sources, keep unavailable capacity explicit as unknown, fit within the Codex 4096-character additional-context budget, and tell the Agent to reconcile live authority and repository state before mutation. A native transition, if one occurs, must continue without user context reconstruction or topology operation.",
+    "taskTopologyBoundaryAndLifecycleFloor": {
+      "defaultCarriers": "Continue this Codex task and the existing main checkout.",
+      "causalNeedForIsolation": "None; implementation, tests, evidence, cleanup, commit, and push are sequential and bounded in the current checkout.",
+      "agentOwnedLifecycle": "The Agent owns branch, HEAD, upstream, ahead/behind, dirty-state and worktree observation, exact diff scope, verification, commit, push, conclusion reconciliation, and cleanup without a user branch, worktree, fork, new task, merge, archive, or cleanup operation.",
+      "stop": "Stop on any need for an additional code or conversation carrier, user topology choice or operation, cross-repository write, unregistered consumer mutation, or orphaned carrier."
+    },
+    "namedHumanAcceptor": "yiheng8023",
+    "qualitySafetyEvidenceAndResidueFloors": {
+      "outcomeQuality": "The shared projection contains exact product/program/criterion state, active increment and work-item identities when present, task-registration identity, bounded cleanup paths, and a live read-only Git checkpoint containing branch or detached state, HEAD, upstream or explicit absence, ahead/behind or explicit unknown, worktree count or explicit unknown, dirty entry count, and a deterministic status digest without exposing dirty path names.",
+      "intentAndCommunication": "The projection leads with the facts needed to resume safely and an exact before-mutation reconciliation route; it removes verbose purpose and progression-policy copies that the Agent can re-read from authority and does not teach the user Git, Codex, or task topology.",
+      "contextCarrierFitness": "Serialized common context is valid JSON and no more than 4096 characters for ready, active, invalid-authority, clean, dirty, detached, no-upstream, and unavailable-Git states covered by the bounded tests; unavailable facts remain explicit unknown rather than inferred safe.",
+      "taskTopology": "The current carrier remains default, no carrier is created, and projected Git/work identities are observations rather than commands or authority. The Agent, not the user, performs any later safe reconciliation.",
+      "reliabilityAndRecovery": "Git observation uses argv-only, shell-free, read-only bounded subprocesses; timeout, missing Git, non-repository root, detached HEAD, missing upstream, malformed output, or dirty state produce bounded explicit states without blocking SessionStart or fabricating cleanliness.",
+      "authorityAndSafety": "Read no prompt, transcript, session identifier, credential, remote content, diff content, or dirty path name; write no session or repository state; do not promote evidence, acceptance, release, or completion.",
+      "scopeAndMinimality": "Change only the common continuation adapter, exact Codex and Claude launcher pins or payload identities required by those bytes, task-bound tests and validator, current authority/evidence, and concise public status text necessary for coherence. Add no runtime, manager, registry, gateway, wire protocol, state store, MCP server, App, prompt hook, or persistent consumer configuration.",
+      "evidence": "Bind the pushed registration commit, exact baseline implementation and projection size, post-registration active-work baseline, current task chronology, final source blobs and output samples, deterministic tests, canonical verifier, Git delivery, residue checks, and named-human outcome plus third-scenario and bounded O2-cohort judgment. Tests or Agent self-report alone cannot prove value or acceptance.",
+      "residue": "No .tmp item, __pycache__, backup, generated report, consumer mutation, installed plugin, Hook trust, branch, worktree, repository fork, conversation fork, new task, process, or unrelated change remains.",
+      "missingData": "Any unobserved mandatory floor fails; an aggregate score cannot hide it."
+    },
+    "materialInterventionTaxonomy": [
+      "user-capability-route-selection",
+      "user-capability-setup-or-invocation",
+      "user-recovery-or-verification-command",
+      "user-cleanup-or-push-route",
+      "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+      "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+    ],
+    "materialCollaborationLossTaxonomy": [
+      "material-intent-or-mode-correction",
+      "material-omission",
+      "reopened-settled-decision",
+      "unrequested-deliverable-or-mutation",
+      "unnecessary-human-round-trip-or-process",
+      "resource-or-residue-recovery-returned-to-user",
+      "context-or-handoff-recovery-returned-to-user",
+      "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+      "false-completion-or-claim-correction",
+      "tool-or-product-learning-burden-returned-to-user",
+      "ai-like-or-materially-unclear-communication-correction"
+    ],
+    "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6",
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5 git-blob:e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a at repository commit e35a86f7550494b4efbf12f89efc5447f8951920",
+    "referenceHostProfileAndEligibleReceiptSet": {
+      "hostProfile": "Codex 0.147.0 on Windows, software-engineering profile, observed 2026-08-14",
+      "candidateAcceptedReceipts": [
+        "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json under its immutable registration and task-bound validator",
+        "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json under its immutable registration and task-bound validator",
+        "this continuation-reconciliation implementation only if its immutable registration, task-bound evidence, all candidate.5 floors, material distinction, zero material intervention/loss counts, and named-human judgment pass"
+      ],
+      "excludedAsThirdScenario": "product/evidence/claude-demand-skill-plugin-accepted-2026-08-14.json is accepted O1/O3 evidence but is materially too similar to the Codex Skill source task for O2, as already judged by yiheng8023.",
+      "stoppedReceiptForLaterO4": "product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json remains honestly stopped on its registered missing native Hook-event evidence floor and may be evaluated by O4 only under the unchanged candidate.5 scorecard.",
+      "eligibilityRule": "No receipt is admitted by filename or self-report. Every candidate must pass its exact task-bound validator and O2 cohort checks; O4 remains false until the complete comparison, mandatory floors, applicability limits, and named-human methodology judgment independently pass."
+    },
+    "referenceHostContextLifecycleCoverageRule": "The public-intake receipt records a native compaction at 2026-08-14T00:56:49.178Z and the Codex Skill receipt records a native compaction at 2026-08-14T02:01:32.757Z; each continued in the same task without user reconstruction or topology operation under its pre-registered rule. The final O2/O4 validator must independently bind those exact records. This task cannot erase or substitute them and must still obey its own transition rule.",
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": [
+      {
+        "identity": "OpenAI Codex source commit be6e8eac029b183056b7e4402879f15d2c85f61b and installed CLI 0.147.0",
+        "licenseOrTerms": "Apache-2.0",
+        "maturity": "released Codex reference host with native repository, SessionStart, compaction, and task primitives",
+        "reuseBoundary": "reference-host execution and current inactive continuation projection only; no portable product authority"
+      },
+      {
+        "identity": "Git 2.55.0.windows.3 executable sha256:7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+        "licenseOrTerms": "GPL-2.0-only",
+        "maturity": "released repository substrate",
+        "reuseBoundary": "bounded read-only repository identity and topology observations plus normal authorized commit and push"
+      },
+      {
+        "identity": "CHAP working draft 0.2 at commit 9e7af2b811d3368b4afba7c6d318764959c2fd0d",
+        "licenseOrTerms": "Apache-2.0 code and CC-BY-4.0 specification",
+        "maturity": "working-draft collaboration protocol with implementations",
+        "reuseBoundary": "collaboration-wire and auditable-workspace comparison only; no need to author or integrate a wire protocol for this read-only projection"
+      },
+      {
+        "identity": "Human Tool arXiv:2602.12953v1",
+        "licenseOrTerms": "CC-BY-4.0",
+        "maturity": "published preprint with a controlled 32-person two-task comparison",
+        "reuseBoundary": "human allocation, matched comparison, workload, and authority hypothesis only"
+      },
+      {
+        "identity": "NIST AI 800-2 Initial Public Draft January 2026 and NIST Agentic AI evaluation-probes page observed 2026-08-14",
+        "licenseOrTerms": "NIST public-information and Technical Series terms",
+        "maturity": "initial public draft plus active public evaluation program",
+        "reuseBoundary": "fixed evaluation protocol and source-grounded task-validator separation only"
+      }
+    ],
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "identity": "Current common continuation projection and inactive Codex/Claude launchers at repository commit e35a86f7550494b4efbf12f89efc5447f8951920, with exact implementation blobs and hashes fixed in this registration",
+      "licenseOrTerms": "Apache-2.0 repository code",
+      "maturity": "current source candidate before measured delivery; one live stopped rollover showed authority projection but independently recovered live Git and cleanup state",
+      "eligibility": "The comparator produces a usable startup/resume/clear/compact authority projection and is outcome-capable, but its ready form consumes 3643 of 4096 characters, its active-work form has no pre-declared bound, and it does not surface live repository topology.",
+      "matchingRule": "Compare identical repository authority, host events, adapter metadata, no-prompt/no-transcript/no-session-state boundary, current checkout, and inactive source-delivery scope."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "Ready projection length is 3643 characters; live repository checkpoint fields are zero; active work currently copies correction class plus four long causal prose fields and acceptance IDs; historical source-bound user intervention classes are three.",
+      "comparisonAxes": [
+        "serialized context length against the fixed 4096-character Codex limit",
+        "correct live branch-or-detached, HEAD, upstream-or-absent, ahead/behind-or-unknown, worktree-count-or-unknown, dirty-count, and status-digest observation",
+        "exact active increment, work item, registration, cleanup, verifier, and authority pointer recovery",
+        "zero prompt, transcript, session-ID, credential, dirty-path, consumer, topology, or persistent-state exposure",
+        "material user capability/topology intervention and collaboration-loss counts",
+        "dual-host semantic parity and fail-closed recovery behavior"
+      ],
+      "decisionRule": "Pass the task only if every mandatory floor passes, every tested projection is valid JSON at or below 4096 characters, live Git and active-work facts match independent source observations or are explicit unknown, the task records zero material user orchestration/topology interventions and zero material collaboration losses after measurement begins, the bounded output is committed and pushed cleanly, and yiheng8023 accepts the result and third-scenario distinction. O2 passes only if a task-bound aggregate validator also confirms all three materially different accepted receipts, both historical context crossings, source-bound baselines, and a strict aggregate burden reduction."
+    },
+    "distinctValueHypothesisAndFalsifier": {
+      "hypothesis": "Replacing verbose, re-readable authority prose with compact authority pointers and adding one bounded live Git plus active-work reconciliation checkpoint will let an Agent resume safely after SessionStart events without user reconstruction, while remaining a stateless thin adapter and leaving at least 25 percent headroom inside the 4096-character Codex limit.",
+      "falsifier": "The result exceeds 3072 characters in any mandatory case, omits or misstates a required live fact, exposes dirty paths or host-private data, blocks SessionStart when Git facts are unavailable, requires a new runtime/manager/store/protocol, changes product authority or acceptance semantics, diverges across Codex and Claude common projections, adds a user operation or carrier, fails any mandatory floor, leaves residue, triggers a material collaboration loss, or the named human rejects the outcome or material scenario distinction."
+    },
+    "mandatoryFloorsAndMissingDataRules": {
+      "outcomeQuality": "all exact qualitySafetyEvidenceAndResidueFloors pass",
+      "userOrchestration": "zero material user capability-route or code/conversation-topology interventions after measured start",
+      "collaborationLoss": "zero material collaboration-loss events and zero repeated already-bound requests after measured start",
+      "intentCommunicationAndInterface": "the Agent owns recovery and topology mechanics; the user receives only the result, material evidence limits, and accountable judgment boundary",
+      "contextAndTopology": "unknown capacity is explicit; all mandatory outputs are at most 3072 characters; live state and active work are bounded and accurate; current carriers remain healthy and no orphan exists",
+      "reliabilitySafetyAndRecovery": "all unavailable/malformed Git states fail soft to explicit unknown or non-repository without false cleanliness; no prompt/transcript/session/credential/dirty-path access",
+      "evidenceAndResidue": "task-bound content-addressed chronology, deterministic checks, exact Git delivery, zero declared residue, and human judgment are all present",
+      "comparison": "the registered comparator remains outcome-capable and the measured result demonstrates lower context cost plus higher lifecycle coherence without a new user burden",
+      "missingData": "a missing, ambiguous, self-reported-only, changed-after-measurement, or unvalidated mandatory value fails; no aggregate score can hide it"
+    },
+    "namedHumanReviewerAndClaimBoundary": {
+      "reviewer": "yiheng8023",
+      "taskJudgment": "Accept or reject the delivered compact continuation-reconciliation source behavior and claim limit.",
+      "scenarioJudgment": "Accept or reject whether host-neutral continuation reconciliation is materially different from public intake rewriting and task-facing Codex Skill packaging for the candidate.5 O2 cohort.",
+      "o2Judgment": "Accept or reject the bounded three-scenario Codex reference-host burden-reduction claim only after the task-bound O2 cohort validator passes.",
+      "o4Boundary": "This task freezes candidate.5 and its comparison inputs but does not itself accept O4. A later named-human review must separately accept or reject the calibrated methodology, profile, stopped case, comparator result, applicability limits, and Codex-only claim.",
+      "claimCeiling": "At most one candidate.5 Codex reference-host O2 cohort across the public-intake, Codex Skill-source, and compact continuation-reconciliation implementation scenarios on the exact registered sources and dates; no general context management, live installed plugin value, O4 profile acceptance, O5 portability, release, publication, production, or v0.2 completion claim."
+    }
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "outcomeQuality": "The shared projection contains exact product/program/criterion state, active increment and work-item identities when present, task-registration identity, bounded cleanup paths, and a live read-only Git checkpoint containing branch or detached state, HEAD, upstream or explicit absence, ahead/behind or explicit unknown, worktree count or explicit unknown, dirty entry count, and a deterministic status digest without exposing dirty path names.",
+    "intentAndCommunication": "The projection leads with the facts needed to resume safely and an exact before-mutation reconciliation route; it removes verbose purpose and progression-policy copies that the Agent can re-read from authority and does not teach the user Git, Codex, or task topology.",
+    "contextCarrierFitness": "Serialized common context is valid JSON and no more than 4096 characters for ready, active, invalid-authority, clean, dirty, detached, no-upstream, and unavailable-Git states covered by the bounded tests; unavailable facts remain explicit unknown rather than inferred safe.",
+    "taskTopology": "The current carrier remains default, no carrier is created, and projected Git/work identities are observations rather than commands or authority. The Agent, not the user, performs any later safe reconciliation.",
+    "reliabilityAndRecovery": "Git observation uses argv-only, shell-free, read-only bounded subprocesses; timeout, missing Git, non-repository root, detached HEAD, missing upstream, malformed output, or dirty state produce bounded explicit states without blocking SessionStart or fabricating cleanliness.",
+    "authorityAndSafety": "Read no prompt, transcript, session identifier, credential, remote content, diff content, or dirty path name; write no session or repository state; do not promote evidence, acceptance, release, or completion.",
+    "scopeAndMinimality": "Change only the common continuation adapter, exact Codex and Claude launcher pins or payload identities required by those bytes, task-bound tests and validator, current authority/evidence, and concise public status text necessary for coherence. Add no runtime, manager, registry, gateway, wire protocol, state store, MCP server, App, prompt hook, or persistent consumer configuration.",
+    "evidence": "Bind the pushed registration commit, exact baseline implementation and projection size, post-registration active-work baseline, current task chronology, final source blobs and output samples, deterministic tests, canonical verifier, Git delivery, residue checks, and named-human outcome plus third-scenario and bounded O2-cohort judgment. Tests or Agent self-report alone cannot prove value or acceptance.",
+    "residue": "No .tmp item, __pycache__, backup, generated report, consumer mutation, installed plugin, Hook trust, branch, worktree, repository fork, conversation fork, new task, process, or unrelated change remains.",
+    "missingData": "Any unobserved mandatory floor fails; an aggregate score cannot hide it."
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection",
+    "user-capability-setup-or-invocation",
+    "user-recovery-or-verification-command",
+    "user-cleanup-or-push-route",
+    "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+    "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-or-residue-recovery-returned-to-user",
+    "context-or-handoff-recovery-returned-to-user",
+    "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "ai-like-or-materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "This exact registration and active program binding are committed and pushed unchanged on main. No adapter, launcher, test, documentation, evidence-validator, or acceptance mutation before that pushed checkpoint is eligible as measured execution.",
+    "eligibleSources": [
+      "the pushed registration commit and exact baseline blobs, hashes, ready projection length, active-work projection length, and independent Git observations captured after that checkpoint",
+      "the current task's post-registration response items addressed by immutable message or tool-call identity, timestamp, and raw-line or output hash",
+      "final common-adapter, host-launcher, manifest payload, test, documentation, program, acceptance, evidence, and validator blobs plus exact Git diff and commit identities",
+      "deterministic output samples for clean, dirty, detached, missing-upstream, unavailable-Git, ready, active, and invalid-authority cases; canonical verifier; full product tests; Git topology; exact cleanup and residue checks",
+      "a minimal O2 task and cohort validator authored only after actual output serialization and failure modes are observed, followed by yiheng8023's task result, third-scenario distinction, and bounded O2 claim judgment"
+    ],
+    "ineligibleSources": [
+      "the historical seven-task messages, stopped rollover, source-gate, closeout, context-carrier, or mechanism-probe records as this task's successful outcome",
+      "source code, tests, fixtures, output size, plugin packaging, commit count, or Agent self-report alone as proof of accepted behavior, value, material distinction, zero loss, O2, O4, release, or completion",
+      "a result produced before the pushed registration, after a changed registration/floor/comparator/claim rule, through a branch/worktree/fork/new task, or with an unregistered capability, model, manager, consumer mutation, data source, retry, or human operation",
+      "a generalized receipt schema, prebuilt green validator, hidden missing data, post-hoc baseline inflation, induced Git or context failure, or normalization of a stopped result into success"
+    ],
+    "stopRule": "After the registration commit is pushed, measure the exact active-work baseline, then implement the bounded common projection once in the current checkout. Stop honestly on the first incorrect or over-budget mandatory output, unbounded or blocking Git observation, prompt/transcript/session/credential/dirty-path exposure, host-parity break, new runtime/manager/store/protocol need, second implementation route or carrier need, user capability/topology/recovery operation, material collaboration loss, authority expansion, mandatory-floor failure, unbounded residue, or human rejection. Complete only after exact delivery, task-bound O2 cohort validation, cleanup, commit and push, and yiheng8023 acceptance; O4 remains false until its later complete calibration and human review."
+  },
+  "claimLimits": [
+    "one candidate.5 host-neutral continuation-reconciliation source implementation on the existing Codex 0.147.0 reference host and inactive Claude 2.1.232 parity projection on Windows on 2026-08-14",
+    "one compact read-only live repository and active-work checkpoint within the existing SessionStart adapters; no prompt or transcript read, session store, task manager, Git manager, runtime, protocol, capability manager, MCP server, App, consumer activation, or new topology",
+    "the result may become the third materially different O2 scenario only if task-bound validation and yiheng8023's explicit distinction and bounded cohort judgment pass",
+    "no accepted O4 methodology/profile calibration, live installed-plugin value, general context-management guarantee, O5 Agent-neutral portability, release, publication, production, or v0.2 completion claim"
+  ]
+}

@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.continuation-reconciliation-projection",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -267,6 +267,71 @@
           ],
           "deliverables": [
             "one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate that reuses the exact candidate.5 demand method, adds no MCP or CC Switch dependency, preserves host-specific boundaries, passes task-bound validation, and makes no live or portability claim"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.continuation-reconciliation-projection",
+      "state": "active",
+      "correctionClass": "bound-continuation-projection-to-live-reconciliation-state",
+      "observedProblem": "At commit e35a86f7550494b4efbf12f89efc5447f8951920 the common SessionStart continuation projection is already 3643 characters with no active increment, copies unbounded active-work prose when work exists, and does not expose live branch, HEAD, upstream, ahead/behind, worktree, or dirty-state identity. The Codex Hook caps additionalContext at 4096 characters, while the user's repeated context and topology corrections and the stopped live rollover show that safely reconciling those facts must not be returned to the user.",
+      "hypothesis": "A single bounded change to the common read-only projection can replace verbose re-readable authority prose with exact authority pointers, add a shell-free read-only Git and active-work checkpoint, retain explicit unknowns and dual-host parity, and keep every mandatory output at or below 3072 characters so an Agent can reconcile before mutation without a user operation or a new runtime, manager, protocol, state store, task carrier, or consumer activation.",
+      "falsifier": "Any mandatory output exceeds 3072 characters, omits or misstates a registered live fact, exposes prompt, transcript, session, credential, diff, or dirty-path content, blocks SessionStart when Git is missing or malformed, fabricates cleanliness, diverges between the common Codex and Claude projection, needs a new runtime, manager, protocol, store, carrier, consumer mutation, model call, or user operation, fails a registered floor, leaves residue, triggers a material collaboration-loss event, or the named human rejects the result or material scenario distinction.",
+      "stopCondition": "After this immutable registration and active binding are committed and pushed, first measure the exact active-work baseline, then implement the compact common projection once in the existing checkout. Stop successfully only when all registered ready, active, invalid-authority, clean, dirty, detached, missing-upstream, and unavailable-Git cases produce valid JSON at or below 3072 characters; live facts, exact pins, dual-host parity, task-bound O2 cohort validation, canonical verifier, full product tests, Git delivery and zero-residue floors pass; and yiheng8023 accepts the delivered result, material third-scenario distinction, and bounded O2 claim. Stop honestly on the first falsifier. O4 remains false until its later full calibration and human review.",
+      "acceptanceIds": [
+        "O2",
+        "O4",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/continuation-reconciliation-projection-registration.json",
+        "sha256": "d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
+          "adapters/agent-autonomy-harness-claude/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.continuation-reconciliation-projection",
+          "state": "active",
+          "acceptanceIds": [
+            "O2",
+            "O4",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use"
+          ],
+          "deliverables": [
+            "one compact host-neutral read-only continuation projection with bounded live Git and active-work reconciliation state, exact Codex and Claude inactive-launcher pins, task-bound source evidence and O2 cohort validation, no user topology operation, no new runtime or manager, and no claim beyond the accepted Codex reference-host scenarios"
           ]
         }
       ]
