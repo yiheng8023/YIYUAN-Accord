@@ -15,28 +15,29 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active`, with one bounded Chinese
-README first-screen delivery increment. The public verifier should report:
+The current machine program is v0.2 and `ready`, with no active causal
+increment. The public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1-O5 false (`0/5` outcomes);
 - G1-G4 true (`4/4` guardrails);
-- active increment `increment.v0.2.readme-zh-first-screen-native-delivery`.
+- no active increment.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
-## Why the program is active
+## Latest closed delivery
 
 Two external-candidate routes for the user's already-authorized Chinese README
 first-screen result stopped without producing usable copy. The current Agent
 already has the repository facts, writing capability, and bounded edit authority,
-so the remaining causal route is one direct first-screen rewrite in the current
-checkout. It adds no model call, capability, topology, or user tool-learning
-burden. The prior collaboration loss remains attached to the same logical demand,
-so this delivery cannot promote O1-O5; it will leave the graph after canonical
-checks, push, cleanup, and the named human's judgment.
+so the remaining causal route was one direct first-screen rewrite in the current
+checkout. It added no model call, capability, topology, or user tool-learning
+burden. The named human accepted the delivered copy on 2026-08-14, canonical
+checks and cleanup passed, and the slice left the current graph. The prior
+collaboration loss remains attached to the same logical demand, so this delivery
+promoted none of O1-O5.
 
 ## Latest ready-state basis
 

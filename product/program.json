@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability and task-topology lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.readme-zh-first-screen-native-delivery",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,61 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.readme-zh-first-screen-native-delivery",
-      "state": "active",
-      "correctionClass": "remove-noncausal-external-candidate-from-readme-delivery",
-      "observedProblem": "The user's authorized Chinese README first-screen result remains undelivered after two overcoupled external-candidate routes stopped without producing usable copy, while the current Agent already has the repository facts, writing capability, and bounded edit authority needed to deliver it directly.",
-      "hypothesis": "A direct current-Agent rewrite limited to the Chinese README first screen can make the product purpose, Agent-owned task topology, product boundary, and honest maturity legible to a newcomer without another model call, capability route, topology change, or user tool-learning burden; the prior material collaboration loss remains attached to the logical demand, so this delivery earns zero O1-O5 credit.",
-      "falsifier": "The rewrite changes a fixed product fact, hides the unaccepted state, escapes the Chinese first-screen scope, requires a new capability or topology, fails canonical checks, leaves task-owned residue, or the named human rejects the delivered copy.",
-      "stopCondition": "Stop when one bounded Chinese first-screen rewrite is committed and pushed from the current checkout, canonical verification and residue checks pass, the named human judges the copy, and the outcome-neutral increment either closes and leaves the current graph or stops honestly on the first falsifier; do not promote O1-O5 or retry an external candidate.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.readme-zh-first-screen-native-delivery",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one directly authored Chinese README first screen with canonical checks, named-human judgment, and zero O1-O5 promotion"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
