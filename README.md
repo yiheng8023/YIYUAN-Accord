@@ -16,10 +16,11 @@ result, and cleans up afterward.
 contract, acceptance model, deterministic verifier, an inactive Codex
 `SessionStart` reference adapter, an inactive thin Codex plugin source candidate
 with one task-facing Skill and that continuation Hook, a workspace discovery
-entry that exposes the projection as available without installing it, and an
-inactive session-scoped Claude Code projection over the same continuation
-semantics. It does not contain an Agent runtime, an installed or
-behavior-accepted adapter, or accepted cross-host proof.
+entry that exposes the projection as available without installing it, one
+stopped live Codex continuity result, and an inactive session-scoped Claude
+Code projection over the same continuation semantics. It does not contain an
+Agent runtime, a persistently installed or behavior-accepted adapter, or
+accepted cross-host proof.
 
 v0.2 is `ready`, with no active causal increment. O1 is verified by two
 accepted, task-bound results: the public-intake rewrite and the uninstalled
@@ -34,9 +35,14 @@ authority. Neither host projection adds an MCP server, App, prompt interception,
 CC Switch dependency, runtime, or product authority. Neither is persistently
 installed or enabled. The Skill receipt records one native compaction and also
 records duplicate goal-mode continuation prompts as non-material host process
-cost, not product value. Neither projection proves live trigger quality,
-adapter runtime behavior, or cross-host portability. The verifier is the
-current machine-readable state source.
+cost, not product value. A later temporary Codex installation delivered the
+expected Skill plus startup and post-compaction projections in one
+same-directory child without user reconstruction. That result remains stopped:
+its pre-registered evidence floor required native `HookStarted` and
+`HookCompleted` records that the available host archive and logs did not expose.
+The child was archived and the plugin, trust state, cache, and configuration
+changes were removed. This is live mechanism evidence, not accepted behavior or
+cross-host proof. The verifier is the current machine-readable state source.
 
 ## The problem
 
@@ -109,6 +115,10 @@ The current repository provides:
   turning the repository or portable core into a plugin;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
+- one content-addressed stopped Codex continuity result showing that an exact
+  temporary install delivered the Skill and both startup and compact
+  projections, while preserving the missing native Hook-event evidence as a
+  failed mandatory floor and restoring all consumer state afterward;
 - an inactive, Hook-only Claude Code projection that translates the host's
   native `SessionStart` input and plain-stdout context output into the same
   repository-owned continuation semantics and can be exposed for one session
@@ -117,11 +127,10 @@ The current repository provides:
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.
 
-It does not provide task execution, capability installation, live routing, or
-an accepted quality profile today. The adapter is executable for offline
-mechanism validation but is not installed in user configuration. Passing
-repository checks proves that the current contract is internally valid; it does
-not prove user value.
+It does not provide task execution, persistent capability installation,
+accepted live routing, or an accepted quality profile today. The adapters are
+not installed in user configuration. Passing repository checks and the stopped
+live mechanism result do not prove accepted user value.
 
 ## Verify the repository
 

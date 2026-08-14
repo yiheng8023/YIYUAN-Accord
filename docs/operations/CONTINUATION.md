@@ -34,11 +34,38 @@ delivery at `6892fef` was accepted by yiheng8023 without installation or
 enablement. Its receipt records one native compaction and records two automatic
 goal-mode continuation finals plus their commentary as non-material host
 process noise: they required no additional human input or operation and do not
-count as product value. No Hook trust, live trigger, repeated behavior, O2-O4,
-cross-host, release, or completion claim has occurred.
+count as product value.
+
+A later exact temporary install produced live mechanism evidence but no accepted
+outcome. The child received the expected Skill and both startup and compact
+authority projections, recovered current state without user reconstruction,
+and remained read-only. The pre-registered mandatory evidence floor also
+required native `HookStarted` and `HookCompleted` chronology; neither appeared
+in the child archive or available host logs. The result therefore stayed
+stopped, the child was archived, and the exact plugin, Hook trust, cache, and
+consumer changes were removed. The content-addressed result is
+`product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json`.
+No accepted live behavior, repeated O2-O4 result, cross-host proof, release, or
+completion claim has occurred.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
+
+## Latest closed outcome attempt
+
+The user's seventh-task continuity failure supplied a real long-horizon demand:
+the Agent, not a zero-knowledge user, had to decide and operate a safe
+conversation-carrier transition. The official plugin lifecycle fixed the prior
+hot-refresh failure and delivered the candidate.5 Skill and two native
+SessionStart projections in one same-directory child. The child recovered the
+goal, authority, active work, Git state, topology ownership, human gate, and
+cleanup boundary without user reconstruction, and natural compaction produced a
+second projection. The attempt nevertheless stopped because its immutable
+registration required native Hook lifecycle events that the available host
+evidence did not serialize. Do not rerun the task, normalize it to success, or
+lower its evidence floor. Future outcome work may pre-register the developer
+projection record actually exposed by the host, or another authoritative host
+API, before execution. This stopped candidate.5 sample changes no O1-O5 state.
 
 ## Latest closed outcome-neutral authority repair
 

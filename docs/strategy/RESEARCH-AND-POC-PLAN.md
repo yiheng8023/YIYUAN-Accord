@@ -21,13 +21,25 @@ interesting paper is not sufficient entry evidence.
 
 v0.2 is ready with no active causal increment after the accepted task-facing
 Codex Skill source delivery, the outcome-neutral proactive context-carrier
-fitness and transition repair, and the accepted public-intake increment. O1 is
-verified by two exact task-bound receipts and O2-O5 remain planned and false.
-The current tree contains a product-contract verifier, two exact task-bound O1
-evidence validators, and inactive
-Codex and Claude Code reference-adapter candidates, not a task runtime or an
-accepted host result. Closed outcome-neutral work remains recoverable from Git
-rather than accumulating as a current queue.
+fitness and transition repair, the accepted public-intake increment, and one
+stopped live Codex continuity task. O1 is verified by two exact task-bound
+receipts and O2-O5 remain planned and false. The current tree contains a
+product-contract verifier, two exact task-bound O1 evidence validators,
+inactive Codex and Claude Code reference-adapter candidates, and the
+content-addressed stopped continuity result, not a task runtime or an accepted
+host result. Closed outcome-neutral work remains recoverable from Git rather
+than accumulating as a current queue.
+
+The stopped continuity task used the official temporary plugin lifecycle and
+showed that the exact Skill plus startup and post-compaction `SessionStart`
+projections reached one same-directory child without user context or topology
+work. Its registration also required native `HookStarted` and `HookCompleted`
+chronology, but the current user-facing archive and host logs exposed neither
+event type. Missing mandatory data kept the task stopped; the child, plugin,
+Hook trust, cache, and consumer changes were removed. Do not retry or weaken
+that result. A later natural task may use the actual serialized developer
+projection as a pre-registered host evidence surface, or a different
+authoritative API if one exists, but must fix that route before execution.
 
 No current evidence proves the O2 cohort-level user-value reduction, an
 accepted methodology or quality profile, or cross-host behavior. No

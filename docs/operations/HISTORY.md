@@ -174,6 +174,32 @@ Human authority over goal divergence, trust, data, cost, release, publication,
 and irreversible effects is unchanged. This is an outcome-neutral contract
 repair, not a Git manager, task manager, wire protocol, or accepted receipt.
 
+## Codex live continuity counterexample
+
+After two candidate.5 tasks had produced accepted O1 receipts, the user's
+seventh-task continuity failure supplied a distinct long-horizon goal: move the
+same product closeout work to a fresh conversation carrier without making the
+user choose, reconstruct, reconcile, archive, or clean it. The immutable task
+registration bound one official temporary Codex plugin install, one exact
+SessionStart Hook trust, and one same-directory child with no code topology.
+
+The host lifecycle materially improved on the earlier direct-file attempt. The
+child received the installed task-facing Skill and the exact authority
+projection at startup, used the Skill as advisory input, recovered live product
+and Git truth without user reconstruction, then received the projection again
+after natural compaction. The child made no repository or consumer mutation.
+
+The result still stopped. Its pre-registered missing-data rule required native
+`HookStarted` and `HookCompleted` chronology, while the available child archive
+and host logs serialized neither event type. The developer projection records
+prove that the context reached the model, but they cannot retroactively replace
+the registered evidence floor. The child was archived, the plugin uninstalled,
+the exact trust entry removed, the empty cache root deleted, and the consumer
+configuration restored to its pre-measurement hash. The task adds no O1-O5
+credit and remains the honest candidate.5 stopped input for a later O4 cohort.
+Its content-addressed result is
+`product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json`.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
