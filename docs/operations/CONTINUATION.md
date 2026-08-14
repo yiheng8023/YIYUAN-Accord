@@ -15,16 +15,29 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready` with no active increment. The
-public verifier should report:
+The current machine program is v0.2 and `active` on
+`increment.v0.2.codex-reference-calibration`. The public verifier should
+report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1, O2, and O3 true, with O4 and O5 false (`3/5` outcomes); O2 binds the
   exact public-intake, Codex Skill-source, and continuation-reconciliation
   scenarios without double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- no active increment or work item.
+- one active increment and one active work item, both limited to the O4 Codex
+  reference-host calibration.
+
+The O4 registration freezes the unchanged candidate.5 profile and scorecard,
+the exact three accepted O2 scenarios, and the exact honestly stopped
+plugin-rollover case before aggregate evaluation. The work reuses only their
+existing registrations, task validators, fixed comparators, external-source
+boundaries, and recorded context-lifecycle evidence. It must not rerun the
+stopped task, induce another natural task, change a rule after results, add a
+model, host, carrier, consumer effect, manager, runtime, or protocol, or infer
+human acceptance. O4 remains false until a post-registration task-bound
+validator passes and yiheng8023 accepts the bounded methodology, applicability,
+comparison, and claim. O5 remains a separate cross-host gate.
 
 The registered baseline proved a concrete adapter defect after its immutable
 binding was pushed: the active-work `SessionStart` projection was 6,301
@@ -38,7 +51,8 @@ session identity, diff content, consumer state, and persistent storage remain
 outside the projection. Its task-specific validator rechecks the exact Git
 delivery, two prior accepted task validators, source-bound baselines, two
 native-compaction recoveries, zero-loss floors, and yiheng8023's bounded
-three-scenario judgment. O4 remains a later separate calibration.
+three-scenario judgment. That result is now one fixed input to the active O4
+calibration, not O4 proof by itself.
 
 The latest context-carrier architecture task was the user's bound Codex
 context-overflow and repeated-carrier decision, not a Harness diagnostic or a

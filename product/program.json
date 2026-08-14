@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-reference-calibration",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -332,6 +332,68 @@
           ],
           "deliverables": [
             "one compact host-neutral read-only continuation projection with bounded live Git and active-work reconciliation state, exact Codex and Claude inactive-launcher pins, task-bound source evidence and O2 cohort validation, no user topology operation, no new runtime or manager, and no claim beyond the accepted Codex reference-host scenarios"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.codex-reference-calibration",
+      "state": "active",
+      "correctionClass": "calibrate-immutable-candidate-five-on-fixed-mixed-outcome-cohort",
+      "observedProblem": "O2 now supplies three accepted, pre-registered, materially distinct Codex reference-host scenarios under the same candidate.5 profile and scorecard, while the same-version plugin-rollover receipt remains honestly stopped. O4 is still false because no task-bound aggregate calibration independently applies the unchanged profile to that fixed pass-and-stop cohort, validates the pre-result comparator and external-reuse boundaries, records applicability limits, and obtains the named-human methodology judgment.",
+      "hypothesis": "One bounded, source-only calibration can reuse the exact three accepted task validators, immutable registrations, candidate.5 bytes, fixed comparator and external-substrate inputs, and the exact stopped receipt to demonstrate a Codex-reference-host advantage in user orchestration burden and continuation coherence without changing the method, scorecard, floors, missing-data rules, plugin snapshots, runtime, host, consumer state, or task topology.",
+      "falsifier": "Any accepted receipt validator fails; fewer than three materially distinct O2 scenarios remain; the stopped receipt is normalized or lacks its registered missing-data proof; candidate.5, the scorecard, comparator, floor, external-source or claim rule changed after a result; no strict burden or lifecycle-coherence advantage remains; a sufficient external layer removes the residual Harness value; the calibration needs a model call, new host, consumer mutation, carrier, runtime, manager or protocol; residue or a material collaboration loss appears; or yiheng8023 rejects the methodology, profile, comparison, applicability or claim boundary.",
+      "stopCondition": "After the immutable calibration registration and active binding are committed and pushed, evaluate exactly the three accepted O2 receipts and one stopped rollover receipt once. Stop successfully only when a task-specific O4 validator independently binds their registrations, existing validators, profile and scorecard identities, fixed comparators and external sources, mixed pass-and-stop results, strict burden and continuity advantage, all mandatory floors, zero residue, and the named-human bounded calibration judgment. O5 remains false. Stop honestly on the first falsifier without rerunning a natural task or editing candidate.5 semantics.",
+      "acceptanceIds": [
+        "O4",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/codex-reference-calibration-registration.json",
+        "sha256": "01fd3723f35747174d54701affffd7b9211780cdc0d3105c6df0326c8bc815b6"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
+          "adapters/agent-autonomy-harness-claude/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-reference-calibration",
+          "state": "active",
+          "acceptanceIds": [
+            "O4",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one task-bound Codex reference-host calibration of the immutable candidate.5 methodology and minimum profile over the exact three accepted O2 scenarios plus one exact stopped case, with fixed comparator and external-reuse evidence, strict bounded claim limits, named-human judgment, and no O5 promotion"
           ]
         }
       ]

@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "id": "registration.codex-reference-calibration.2026-08-14",
+  "registeredAt": "2026-08-14T20:25:21.7850943+08:00",
+  "taskIdentity": "natural-task.2026-08-14.codex-reference-calibration",
+  "incrementId": "increment.v0.2.codex-reference-calibration",
+  "criterionIds": [
+    "O4"
+  ],
+  "preRegistrationValues": {
+    "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6; current O4 criterion canonical sha256:63aa85b31339d988e49dac5932bda292c542bcbb67caa628d01e9c51dbf4a828",
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5 git-blob:e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a; the bytes and semantic rules remain immutable during calibration",
+    "referenceHostProfileAndEligibleReceiptSet": {
+      "hostProfile": "OpenAI Codex CLI 0.147.0 on Windows, software-engineering profile, observed 2026-08-14",
+      "acceptedReceipts": [
+        "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json sha256:04ff48d3bb65dcb11bcbe1be41ee4b26ef9b76f34e7019b9b24e0cbda952adb5 under registration sha256:125397f528f7042b82973a2aa47e6f429bd24d4b85ceeb29e7baa1c334c0a89f",
+        "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json sha256:7d8a02d8b54e723d9606c679fcc47f7590a5fdb9301f7c886bfa1364ac95b323 under registration sha256:16e737b569c41f5b7f2c847d67bb70c2eb7ca0491481fec7c533a498d4051824",
+        "product/evidence/continuation-reconciliation-projection-2026-08-14.json sha256:3754dfe6e1fb8cff7c400e8ad7a1c4bacb2ebcc714f3b08c55a82b9197cae952 under registration sha256:d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140"
+      ],
+      "stoppedReceipt": "product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json sha256:71df89f236f974b22dc44cc59f73ded945b88b4cc9b53ecd0851f35aa5d23173 under registration sha256:b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29",
+      "eligibilityRule": "Each accepted receipt must pass its current exact task validator and O2 cohort membership; the stopped receipt must remain failed on its registered missing native HookStarted and HookCompleted evidence floor. Claude Skill source evidence is excluded from the O4 accepted cohort because it is not a materially distinct O2 scenario."
+    },
+    "contextCarrierFitnessSignalsAndTransitionRule": {
+      "materialCheckpoints": [
+        "after this calibration registration and active binding are committed and pushed",
+        "after exact receipt and registration identities are revalidated",
+        "after mixed pass-and-stop scorecard evaluation and before any profile-status claim",
+        "before requesting named-human methodology and applicability judgment",
+        "before calibration closeout commit and push"
+      ],
+      "observableSignals": "The current task, goal, repository authority, exact cohort files and Git history remain readable and writable. Codex exposes no reliable remaining-context percentage, so capacity remains explicit unknown.",
+      "transitionRule": "Retain this task and checkout while the goal, immutable registration, exact cohort, Git checkpoint, verifier, tests, pending judgment and cleanup remain recoverable. On native compaction, re-read those sources before mutation. Stop rather than create another carrier or ask the user to recover context."
+    },
+    "referenceHostContextLifecycleCoverageRule": {
+      "acceptedCrossings": [
+        "public-intake receipt native compaction at 2026-08-14T00:56:49.178Z followed by same-task recovery without user reconstruction",
+        "Codex Skill receipt native compaction at 2026-08-14T02:01:32.757Z followed by same-task recovery without user reconstruction"
+      ],
+      "stoppedCrossing": "The context-rollover receipt created and archived one same-directory child and delivered startup plus compact projections without user topology work, but remains stopped because its separately registered native Hook event chronology was missing.",
+      "decisionRule": "The two accepted native-compaction crossings satisfy the minimum accepted lifecycle coverage. The stopped child case is negative evidence and cannot be normalized into an accepted crossing."
+    },
+    "taskTopologyBoundaryAndLifecycleFloor": {
+      "conversationCarrier": "Retain Codex task 019ffaa8-b44a-7bf2-97de-65875bceec33; no fork, new task, handoff or archive is planned.",
+      "codeCarrier": "Retain C:/Projects/agent-autonomy-harness main with no branch, worktree or repository fork.",
+      "agentOwnedLifecycle": "The Agent owns source reconciliation, evaluation, validation, Git delivery and cleanup. The named human supplies only the accountable methodology, applicability and claim judgment.",
+      "stop": "Stop on a new carrier need, user topology operation, orphaned carrier, divergent authority, unbounded residue or changed cohort identity."
+    },
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": {
+      "sourceRegistration": "product/evidence/continuation-reconciliation-projection-registration.json sha256:d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140 committed before its result",
+      "canonicalValueSha256": "6fe3e3f056addc663b1c6784df405a3ad56027bfc36b569933c8a93f874ecea3",
+      "boundCohort": "OpenAI Codex 0.147.0, Git 2.55.0.windows.3, CHAP working draft 0.2 at 9e7af2b, Human Tool arXiv:2602.12953v1, and NIST AI 800-2/evaluation probes under the exact identities, licenses or terms, maturity and reuse boundaries in the source registration",
+      "reuseDecision": "Reuse native host, repository, collaboration-wire, human-allocation and evaluation layers only within their fixed boundaries; the Harness distinct value must remain the thin demand-to-capability method, minimum profile and adapters rather than reauthoring those layers."
+    },
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "fixedBeforeEachResult": [
+        "public-intake predecessor at commit a2d291f under registration sha256:125397f528f7042b82973a2aa47e6f429bd24d4b85ceeb29e7baa1c334c0a89f",
+        "Hook-only Codex plugin at commit 784c26d under registration sha256:16e737b569c41f5b7f2c847d67bb70c2eb7ca0491481fec7c533a498d4051824",
+        "unbounded continuation projection at commit e35a86f under registration sha256:d809c2107d1ccd8c91284971a05ab47cfd3920ef4688aff39fb27f5e6d244140",
+        "manual successor-task/context reconstruction route and stopped direct-file activation under registration sha256:b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29"
+      ],
+      "eligibility": "Each predecessor or ad-hoc route was capable of the corresponding task outcome but imposed the registered user-mechanics burden, omitted the task-facing method, exceeded the continuation budget or lacked lifecycle coherence.",
+      "matchingRule": "Use each task's immutable registered source, scenario, host, authority-risk, baseline and decision rule; do not pool unmatched metrics or select a new comparator after results."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "The three accepted scenario baselines contain 3, 2 and 3 material interventions respectively (aggregate 8), versus zero observed material interventions, topology interventions, collaboration losses and repeated bound requests. The continuation baseline is 6,301 characters without a live Git checkpoint versus a bounded clean 2,728-character result. The rollover case remains stopped on missing mandatory native Hook chronology.",
+      "comparisonAxes": [
+        "accepted outcome and every mandatory floor",
+        "material user capability-orchestration and code/conversation-topology interventions",
+        "material collaboration-loss and repeated-bound-request counts",
+        "context carrier fitness, actual native-compaction recovery and lifecycle coherence",
+        "route reliability, recovery, call and context cost",
+        "authority, safety, evidence, residue and interface simplicity",
+        "external-layer reuse versus unnecessary Harness-owned duplication"
+      ],
+      "decisionRule": "Pass O4 only if the exact three accepted receipts still pass their task validators, the stopped receipt remains stopped, candidate.5 and the scorecard are byte/identity unchanged, every accepted mandatory floor passes, aggregate material burden is strictly lower than the fixed baselines, the external layers remain reused rather than reauthored, applicability stays Codex/Windows/software-engineering/date bounded, and yiheng8023 accepts the methodology, profile, comparison and claim."
+    },
+    "distinctValueHypothesisAndFalsifier": {
+      "hypothesis": "The unchanged candidate.5 method and minimum profile explain three materially different accepted Codex reference-host outcomes and one honest stopped outcome while transferring registered orchestration and topology burden from the user, improving continuation coherence, and reusing sufficient external layers.",
+      "falsifier": "Any accepted receipt validator fails; fewer than three materially distinct O2 scenarios remain; the stopped receipt is normalized; the profile, scorecard, comparator, floors or missing-data rule changes after results; no strict burden or lifecycle-coherence advantage remains; a sufficient external layer removes the residual Harness value; or the named human rejects the methodology, applicability or claim boundary."
+    },
+    "mandatoryFloorsAndMissingDataRules": {
+      "outcomeQuality": "all three accepted task outcomes and their task-specific floors pass",
+      "userOrchestrationBurden": "zero material capability-route and task-topology interventions, strictly below aggregate baseline 8",
+      "intentCommunicationAndDecisionCompleteness": "no material intent, omission, reopened decision, unnecessary process or unclear-result correction",
+      "contextCarrierFitness": "two accepted native-compaction recoveries remain source-bound; unknown capacity stays explicit and the stopped child case stays stopped",
+      "reliabilityRecoveryCost": "registered route reliability, recovery, context and call-cost observations remain present without hidden missing data",
+      "authoritySafetyEvidenceResidue": "all accepted receipt authority, safety, evidence and residue floors pass and no current residue remains",
+      "interfaceSimplicity": "the user supplied no capability or topology mechanics and provides only the registered accountable calibration judgment",
+      "profilePromotion": "If accepted, candidate.5 bytes and version remain immutable; product acceptance and public status may describe that exact version as Codex-reference calibrated without editing its method, scorecard or plugin snapshot bytes.",
+      "missingData": "Any absent, ambiguous, self-reported-only, changed-after-result or unvalidated mandatory value fails; no aggregate score can hide a failed floor."
+    },
+    "namedHumanReviewerAndClaimBoundary": {
+      "reviewer": "yiheng8023",
+      "decision": "Accept or reject the exact candidate.5 methodology and minimum profile, mixed pass-and-stop calibration, fixed comparator and external-reuse conclusion, applicability limits and bounded O4 claim after the task validator passes.",
+      "claimCeiling": "At most candidate.5 calibrated on OpenAI Codex CLI 0.147.0 on Windows for the exact public-intake, Codex Skill-source and continuation-reconciliation scenarios plus the stopped plugin-rollover case on 2026-08-14.",
+      "excludedClaims": "No Agent-neutral or cross-host portability, live installed-plugin value, universal superiority, release, publication, production or v0.2 completion claim."
+    }
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "profileAndScorecard": "exact candidate.5 and O4 contract identities remain unchanged",
+    "cohort": "three exact accepted O2 scenarios and one exact stopped case are independently revalidated",
+    "comparison": "every comparator and decision rule was fixed in its task registration before its result",
+    "externalReuse": "decision-relevant external layers retain exact source, license or terms, maturity and reuse boundaries",
+    "burdenAndContinuity": "strict aggregate burden reduction and accepted native-compaction recovery are source-bound",
+    "authorityAndClaim": "named-human acceptance is required and the claim remains Codex reference-host bounded",
+    "residue": "no task-created temporary path, process, capability exposure, consumer change or carrier remains",
+    "missingData": "one missing or unvalidated mandatory value stops the calibration"
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection-setup-invocation-recovery-verification-cleanup-or-push",
+    "user-code-or-conversation-topology-selection-creation-synchronization-reconciliation-archive-release-or-cleanup"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission-or-reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-context-topology-or-residue-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "this registration and its exact active program binding are committed and pushed to origin/main",
+    "eligibleSources": [
+      "the exact registration, receipt, profile, acceptance and Git identities listed above",
+      "the existing task-specific validators and canonical repository verifier",
+      "deterministic post-registration cohort evaluation and local tests",
+      "the exact named-human response to one bounded calibration judgment request"
+    ],
+    "ineligibleSources": [
+      "a changed profile, scorecard, comparator, floor, missing-data rule or receipt",
+      "a new natural task, induced failure, rerun of the stopped plugin task or invented receipt",
+      "generic self-report, unbound research breadth, test count, documentation volume or Agent assertion",
+      "a new host, model call, consumer mutation, installation, release, publication or production signal"
+    ],
+    "stopRule": "Stop on the first identity mismatch, failed accepted receipt, hidden stopped floor, missing comparator or external-source boundary, absent strict advantage, changed profile semantics, new carrier or consumer effect, material collaboration loss, residue, or named-human rejection."
+  },
+  "claimLimits": [
+    "one candidate.5 Codex 0.147.0 Windows software-engineering reference-host calibration over three exact accepted scenarios and one exact stopped case on 2026-08-14",
+    "one bounded advantage in registered user orchestration burden and cross-layer continuation coherence under fixed task comparators",
+    "no change to candidate.5 method, scorecard, mandatory floors, missing-data rules or plugin snapshot bytes",
+    "no Agent-neutral or cross-host portability, live installed-plugin value, universal superiority, release, publication, production or v0.2 completion claim"
+  ]
+}

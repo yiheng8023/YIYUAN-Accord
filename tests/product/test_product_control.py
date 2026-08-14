@@ -352,14 +352,17 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_has_three_verified_outcomes_and_no_active_work(
+    def test_current_v02_contract_has_three_verified_outcomes_and_active_o4_work(
         self,
     ) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2.codex-reference-calibration",
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 3, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
@@ -485,7 +488,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["programStatus"], "active")
+        self.assertEqual(
+            report["activeIncrement"],
+            "increment.v0.2.codex-reference-calibration",
+        )
         self.assertEqual(report["outcomes"], {"verified": 3, "total": 5})
         self.assertTrue(report["valid"])
 
@@ -506,7 +513,7 @@ class ProductControlTests(unittest.TestCase):
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: ready, in-progress (3/5 outcomes)", completed.stdout)
+        self.assertIn("v0.2: active, in-progress (3/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")

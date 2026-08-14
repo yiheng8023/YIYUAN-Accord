@@ -22,21 +22,25 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `ready` with no active increment. O1, O2, and O3 are verified (`3/5`
-outcomes); O4 and O5 remain unverified. O1 is supported by the accepted
-public-intake, Codex Skill-source, and Claude Skill-source results. O3 binds
+v0.2 is `active` on one pre-registered Codex reference-host calibration. O1,
+O2, and O3 are verified (`3/5` outcomes); O4 and O5 remain unverified. O1 is
+supported by the accepted public-intake, Codex Skill-source, and Claude
+Skill-source results. O3 binds
 those three route decisions across native retention and finite official
 discovery or adaptation. O2 instead binds the materially distinct
 public-intake, Codex Skill-source, and continuation-reconciliation scenarios;
 the similar Claude and Codex Skill deliveries are not double-counted. The
 accepted continuation result replaces a 6,301-character active-work projection
 that exceeded Codex's 4,096-character Hook limit with a bounded read-only
-authority, active-work, and Git reconciliation checkpoint. This exact
-three-scenario Codex reference-host cohort does not verify O4, O5, installed
-Hook value, general context management, release, or production. The program
-makes explicit that authorized product-plan delivery is real demand when the
-primary purpose is the deliverable, rather than exercising or diagnosing the
-Harness.
+authority, active-work, and Git reconciliation checkpoint. The active O4 work
+freezes that exact three-scenario cohort, the unchanged candidate.5 profile,
+and one honestly stopped plugin-rollover case before aggregate evaluation. It
+does not require another induced natural task and cannot promote O4 until the
+task-bound validator and named-human bounded judgment both pass. It does not
+verify O5, installed Hook value, general context management, release, or
+production. The program makes explicit that authorized product-plan delivery
+is real demand when the primary purpose is the deliverable, rather than
+exercising or diagnosing the Harness.
 
 The Codex source candidate projects the unaccepted method through one concise
 implicitly invocable Skill; its Hook and the Claude projection only derive
