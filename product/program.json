@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-plugin-context-rollover",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -197,79 +197,6 @@
           ],
           "deliverables": [
             "one concise task-facing Codex Skill projection inside the existing inactive plugin, with exact candidate-profile and payload identity, structural and product tests, no MCP or manager dependency, no consumer mutation, and bounded source evidence"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v0.2.codex-plugin-context-rollover",
-      "state": "active",
-      "correctionClass": "activate-accepted-codex-projection-through-host-owned-lifecycle-and-agent-owned-rollover",
-      "observedProblem": "The accepted Codex plugin source is live-discoverable but remains uninstalled and therefore cannot deliver its task-facing Skill or SessionStart continuity projection. The user's long-running Harness goal has already produced seven successor mainline tasks and explicit context-overflow concern, while the earlier registered direct-file activation attempt proved that an already-running task does not hot-refresh its Hook runtime. Leaving activation, carrier selection, handoff, reconciliation, archive, and cleanup to a zero-knowledge user would preserve the central product failure.",
-      "hypothesis": "After an immutable task registration is pushed, the official local plugin install lifecycle plus one exact Hook trust and one native same-directory child that starts afterward can load the accepted candidate.5 Skill and SessionStart projection before measured execution, let the child recover live goal, authority, causal, Git, topology, judgment, and cleanup state without user reconstruction, return one reconciled conclusion to the canonical parent, and then release all plugin, trust, and carrier exposure without adding MCP, App, CC Switch, account, cost, code topology, or persistent state.",
-      "falsifier": "The exact plugin cannot be installed once through the official lifecycle; its installed bytes or ID diverge; more than one Hook appears or the exact Hook cannot be trusted; the child lacks native SessionStart evidence, injected authority, or the task-facing Skill; the child uses a worktree, branch, different cwd, different goal, stale authority, mutation, second carrier, or user reconstruction; the parent cannot reconcile or archive it; exact uninstall or trust cleanup fails; an undeclared side effect, material user orchestration intervention, material collaboration-loss event, mandatory-floor failure, residue, or named-human rejection occurs; or an equally sufficient native-only route leaves no Harness semantic contribution.",
-      "stopCondition": "First commit and push the immutable registration and this exact active binding. Then execute the registered official plugin install, exact Hook trust, and one same-directory child route once. Stop successfully only after the child crosses the registered task-container boundary, native evidence proves the exact SessionStart projection and Skill availability, its live reconciliation matches parent truth, its conclusion is returned, the child is archived, the plugin and exact trust state are removed, zero residue and canonical checks pass, a minimal criterion-scoped validator based on the observed native serialization supports only the outcomes earned, the bounded result is committed and pushed, and yiheng8023 accepts the outcome and claim. Stop honestly on the first falsifier; do not retry through another carrier or route, and do not promote O2-O4 unless their full cohort thresholds independently pass.",
-      "acceptanceIds": [
-        "O1",
-        "O2",
-        "O3",
-        "O4",
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/codex-plugin-context-rollover-registration.json",
-        "sha256": "b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29"
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
-          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.codex-plugin-context-rollover",
-          "state": "active",
-          "acceptanceIds": [
-            "O1",
-            "O2",
-            "O3",
-            "O4",
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "coverage-analysis",
-            "targeted-capability-discovery",
-            "capability-static-review"
-          ],
-          "deliverables": [
-            "one live temporary Codex candidate.5 plugin activation and Agent-owned same-directory conversation rollover that restores current Harness authority and task state without user context or topology operations, reconciles and archives the child, removes exact consumer exposure and residue, and retains only task-bound evidence and a bounded claim"
           ]
         }
       ]
