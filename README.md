@@ -22,10 +22,7 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `active` on one pre-registered, matched Codex and distinct-host
-context-carrier architecture decision. No model execution for that task has
-started; it first requires the exact temporary trust, cost, and cleanup grant
-named in its registration. O1 is verified by three accepted,
+v0.2 is `ready` with no active increment. O1 is verified by three accepted,
 task-bound results: the public-intake rewrite and the uninstalled Codex and
 Claude task-facing Skill source packages. O3 is independently verified over
 those three route decisions: one no-gap/native retention case and two finite,
@@ -50,8 +47,13 @@ the single Codex call timed out without a final result. A subsequent closeout
 decision task successfully excluded 24 non-Harness Skills and disabled
 multi-agent, but its immutable structured-output schema was rejected before
 model generation because one constant property lacked the explicit type
-required by the host. The conditional Claude call did not run. All task-created
-state was cleaned, and every stopped attempt counts as zero O1-O5 progress.
+required by the host. A later context-carrier decision passed that corrected
+schema and the same Skill and topology preflight, but the single Codex call then
+used the built-in `list_mcp_resources` surface and enumerated 46 ambient App
+plugin and Skill descriptors. That unregistered capability and data boundary
+triggered the fixed stop; the process was terminated and the conditional Claude
+call did not run. All task-created state was cleaned, and every stopped attempt
+counts as zero O1-O5 progress.
 
 Current Codex exposes task-scoped native controls for inspecting the
 model-visible prompt, disabling an exact Skill, and disabling multi-agent tools.
@@ -61,9 +63,13 @@ configuration, and fail closed when the intended capability and topology cannot
 be proven. The plugin does not override the user's broader capability inventory.
 The parent must also bind a schema that the exact host accepts before consuming
 the task's only allowed model call; general JSON Schema validity alone is not
-host-compatibility evidence. The active task uses a schema restricted to the
-documented supported subset and still fails closed if the exact host rejects
-it. The verifier is the current machine-readable state source.
+host-compatibility evidence. Prompt-visible Skill exclusion is likewise not a
+complete tool or data-boundary preflight: the current measured Codex route is
+ineligible until an official stable per-call seam can suppress ambient MCP/App
+resource enumeration while retaining only the required read-only repository
+operations. This is a parent-dispatch constraint, not authority to add a generic
+capability manager or control plane. The verifier is the current
+machine-readable state source.
 
 ## The problem
 

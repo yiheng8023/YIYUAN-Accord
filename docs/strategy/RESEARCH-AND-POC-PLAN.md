@@ -41,7 +41,7 @@ that result. A later natural task may use the actual serialized developer
 projection as a pre-registered host evidence surface, or a different
 authoritative API if one exists, but must fix that route before execution.
 
-Later tasks exposed two different pre-result failures. One isolated
+Later tasks exposed three different pre-result failures. One isolated
 `CODEX_HOME` still admitted an unrelated user-global Skill that selected
 unregistered parallel topology and timed out. Task-scoped prompt inspection,
 exact Skill exclusions, and multi-agent disablement then contained that defect,
@@ -52,6 +52,17 @@ and cleanup is complete. A future materially different task must bind both the
 prompt-visible capability boundary and an exact host-supported output shape
 before its single call; neither failure authorizes a retry, schema registry,
 runtime, or generic outcome validator.
+
+The next materially different context-carrier decision used the corrected
+schema and passed the exact Skill and multi-agent preflight, but its sole Codex
+call still had the built-in `list_mcp_resources` tool. The model used it and
+received 46 ambient App plugin and Skill descriptors, crossing the task's fixed
+capability and public-input boundary before a final result. The process was
+terminated, Claude was skipped, and cleanup completed. Future mechanism-only
+work may inspect only official stable per-call tool restriction seams and must
+stop if the required read-only repository operations cannot coexist with MCP
+and ambient App resource suppression. Do not create a generic manager,
+registry, runtime, or new outcome task to hide this counterexample.
 
 No current evidence proves the O2 cohort-level user-value reduction, an
 accepted methodology or quality profile, or cross-host behavior. No

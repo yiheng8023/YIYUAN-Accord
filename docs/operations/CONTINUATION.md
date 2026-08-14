@@ -15,26 +15,30 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on
-`increment.v0.2.codex-context-carrier-boundary-decision`. The
+The current machine program is v0.2 and `ready` with no active increment. The
 public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1 and O3 true, with O2, O4, and O5 false (`2/5` outcomes); O1 is supported
   by three task-bound receipts, and the Claude receipt independently binds the
   exact three-route O3 cohort;
 - G1-G4 true (`4/4` guardrails);
-- that exact active increment and its single active work item.
+- no active increment or work item.
 
-The active task answers the user's bound Codex context-overflow and repeated
-carrier problem; it is not a rerun of the stopped closeout-plan decision. Its
-immutable registration freezes a matched architecture decision against target
-`6b91226`, the exact stable Hook facts, explicit unknown remaining capacity, a
-conservative no-resume measured boundary, a documented-subset output schema,
-and the O2/O4/O5 tolerance and claim ceiling. No model call, temporary plugin,
-Hook trust, credential link, isolated consumer state, or distinct-host cost has
-started. Those effects require one new exact post-registration human grant.
+The latest context-carrier architecture task was the user's bound Codex
+context-overflow and repeated-carrier decision, not a Harness diagnostic or a
+rerun of the stopped closeout task. It passed the corrected structured schema,
+reduced 25 prompt-visible Skills to the one exact Harness Skill, and disabled
+multi-agent. Its single Codex call then invoked the built-in
+`list_mcp_resources` tool and received 46 ambient App plugin and Skill
+descriptors. That capability and data surface was outside the immutable public
+task boundary, so the parent terminated the process, skipped the conditional
+Claude/DeepSeek call, and cleaned the credential link, isolated plugin, Hook
+trust exposure, configuration, processes, outputs, caches, and `.tmp` root.
+The stopped receipt is
+`product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json` and
+adds zero O1-O5 credit.
 
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
@@ -80,16 +84,17 @@ repairing this document first.
 
 ## Latest closed outcome attempt
 
-The closeout-critical-path task was a real requested plan and risk decision,
-not a Harness diagnostic or a retry of the fixed-source review. Its immutable
-registration allowed one Codex call and one conditional Claude/DeepSeek call
-with no retry. Ambient-capability arbitration passed, but the registered schema
-was not accepted by the exact host, so the task stopped before model behavior.
-Do not edit or rerun this registration, execute its unused Claude allowance, or
-normalize the host rejection into an outcome. A future materially different
-task must freeze explicit property types and a host-supported structured-output
-shape before its one allowed call. Do not turn that task-specific correction
-into a generic receipt ecosystem, runtime, or product-layer schema registry.
+The context-carrier task proved that prompt-visible Skill exclusion and
+multi-agent disablement are not a complete model capability or data-boundary
+preflight. The built-in MCP resource-enumeration tool remained available in the
+isolated home and exposed ambient `codex_apps` metadata even though no specific
+connector or external data source was called. Do not edit or rerun the
+registration, execute its unused Claude allowance, or normalize this into an
+outcome. Before another measured Codex dispatch, bind an official stable
+per-call seam that suppresses MCP/App resource enumeration while retaining only
+the causally required read-only repository operations, or treat this route as
+ineligible. Do not add a generic MCP manager, capability registry, runtime, or
+control plane.
 
 ## Latest closed outcome-neutral authority repair
 

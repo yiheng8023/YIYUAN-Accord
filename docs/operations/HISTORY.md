@@ -221,6 +221,20 @@ or residue followed. The exact result is
 host-compatibility counterevidence, not a reason to add a schema registry,
 runtime, or generic outcome validator.
 
+A materially different context-carrier architecture task then used the
+corrected supported-subset schema and again reduced 25 visible Skills to the
+one Harness Skill with multi-agent false. During its one Codex call, however,
+the built-in `list_mcp_resources` tool remained available and enumerated 46
+ambient App plugin and Skill descriptors. The call crossed its registered
+capability and public-input boundary before producing a final result; the
+parent terminated it, skipped Claude/DeepSeek, and removed all temporary state.
+The exact zero-progress receipt is
+`product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json`.
+This counterexample narrows future parent dispatch: inspect the entire model
+tool and resource surface, not only Skills and topology, and require an official
+stable per-call MCP/App suppression seam before another measured call. It does
+not authorize a generic manager, registry, runtime, or control plane.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

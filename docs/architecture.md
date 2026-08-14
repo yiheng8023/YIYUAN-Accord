@@ -101,12 +101,10 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program has one active, pre-registered matched context-carrier
-architecture decision after closing the public-intake and task-facing Codex
-and Claude Skill source deliveries. No measured model execution for the active
-task has started, and its temporary trust, cost, and cleanup boundary still
-requires the registered human grant. Those three completed task-bound results
-support O1. A separate criterion-scoped aggregate
+The v0.2 program is ready with no active increment after closing the
+public-intake and task-facing Codex and Claude Skill source deliveries and
+honestly stopping the later measured Codex attempts. Those three completed
+task-bound results support O1. A separate criterion-scoped aggregate
 check over their exact validators supports O3 through one no-gap/native-retain
 route and two finite source-bound official discovery or adaptation routes,
 with every projection inactive and task exposure released. The Codex Skill
@@ -308,6 +306,24 @@ before dispatch. General JSON Schema validity, prompt visibility, and feature
 state do not prove structured-output compatibility. This remains parent
 orchestration evidence, not a reason to add a schema registry or outcome
 validator to the product.
+
+The next registered context-carrier dispatch passed the corrected structured
+schema and repeated the 25-to-one Skill reduction with multi-agent disabled.
+Its single Codex call nevertheless invoked the built-in
+`list_mcp_resources` tool, which exposed 46 ambient `codex_apps` plugin and
+Skill descriptors from the isolated home. No specific connector or external
+data source was called, but the resource enumeration itself crossed the fixed
+capability and public-input boundary. The parent terminated the process,
+skipped the conditional distinct host, cleaned all task state, and retained the
+zero-progress receipt at
+`product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json`.
+This proves that `skills.config` and multi-agent controls do not establish the
+whole model tool and data surface. A future measured dispatch must first bind
+and verify an official stable per-call restriction that removes ambient MCP/App
+enumeration while retaining the required read-only repository operations, or
+treat this Codex route as ineligible. The correction remains parent
+orchestration and does not justify an MCP manager, registry, runtime, or control
+plane.
 
 The plugin manifest has no field that can override other installed Skills or
 multi-agent policy, and the plugin must not acquire that authority. This keeps
