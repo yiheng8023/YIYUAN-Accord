@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.codex-demand-skill-plugin",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -127,6 +127,76 @@
           ],
           "deliverables": [
             "accepted zero-knowledge English and Chinese support intake plus contribution intake, with exact task evidence, bounded claim, and no user-owned repository or Harness mechanics"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.codex-demand-skill-plugin",
+      "state": "active",
+      "correctionClass": "project-demand-method-into-task-facing-codex-skill",
+      "observedProblem": "The existing Codex plugin source at commit 784c26dd813a8a38764c896bbcda1d2ec7385001 packages only the repository-local continuation Hook. It has no task-facing Skill, so a person or Agent must already know that the Harness method exists and how to apply it; marketplace availability alone does not provide the zero-knowledge, goal-level experience required by the product plan.",
+      "hypothesis": "One concise, version-bound Skill inside the existing plugin, generated and validated against the current official plugin and Skill guidance and backed by an exact candidate-profile projection, can make the demand-to-capability method available from ordinary goal-level Codex demand without adding MCP, App, runtime, manager, prompt interception, user configuration, or standing product authority.",
+      "falsifier": "The Skill requires explicit user invocation or product knowledge, duplicates or overrides live task or product authority, omits a registered lifecycle or quality floor, needs MCP/App/runtime/manager capability, changes consumer configuration or trust, expands outside the registered source and evidence surfaces, breaks the existing Hook or marketplace boundary, cannot bind the exact candidate profile and payload, leaves residue, triggers a material collaboration-loss event, or the named human rejects the source deliverable or claim boundary.",
+      "stopCondition": "After the immutable registration and active binding are committed and pushed, use only the registered official and repository sources to generate and refine one Skill under the existing Codex plugin, add only the minimum manifest, profile-projection, product-test, and current-status changes required for a coherent source package, and stop successfully only when the exact result is verified, cleaned, committed and pushed, a minimal task-bound validator based on the observed task source verifies this additional O1 receipt, and yiheng8023 accepts the deliverable and bounded claim. Stop honestly on the first falsifier; O2-O4 remain unverified until their complete cohort thresholds independently pass.",
+      "acceptanceIds": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/codex-demand-skill-plugin-registration.json",
+        "sha256": "16e737b569c41f5b7f2c847d67bb70c2eb7ca0491481fec7c533a498d4051824"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.codex-demand-skill-plugin",
+          "state": "active",
+          "acceptanceIds": [
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "targeted-capability-discovery",
+            "capability-static-review"
+          ],
+          "deliverables": [
+            "one concise task-facing Codex Skill projection inside the existing inactive plugin, with exact candidate-profile and payload identity, structural and product tests, no MCP or manager dependency, no consumer mutation, and bounded source evidence"
           ]
         }
       ]

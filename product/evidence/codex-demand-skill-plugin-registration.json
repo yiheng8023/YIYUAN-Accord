@@ -1,0 +1,248 @@
+{
+  "schema": 1,
+  "id": "registration.codex-demand-skill-plugin.2026-08-14",
+  "registeredAt": "2026-08-14T09:45:04.2056828+08:00",
+  "taskIdentity": "natural-task.2026-08-14.codex-demand-skill-plugin",
+  "incrementId": "increment.v0.2.codex-demand-skill-plugin",
+  "criterionIds": [
+    "O1",
+    "O2",
+    "O3",
+    "O4"
+  ],
+  "preRegistrationValues": {
+    "registeredAt": "2026-08-14T09:45:04.2056828+08:00",
+    "taskIdentity": "natural-task.2026-08-14.codex-demand-skill-plugin",
+    "nonDiagnosticPurpose": "Deliver the missing task-facing Codex reference projection so a person can state a goal without first learning the Harness profile, Codex plugin composition, Skill invocation, MCP, Hook, CC Switch, configuration, or task-topology mechanics. The usable source package is the primary deliverable; it is not created merely to exercise or diagnose the Harness.",
+    "demandEntry": {
+      "kind": "authorized-goal-level-product-plan-delivery",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "sourceTurnId": "019ffad0-2aa2-76e3-ad3f-565668344609",
+      "sourceMessageId": "msg_019ffad0-2bf8-70f2-a0ce-f17151550169",
+      "sourceMessageSha256": "5c5ef7a5c28fe554ba7d4a8d7cfc7ceeb21a81eb18b5433fe77af2ffac0cef3f",
+      "demand": "Assume the user knows nothing about Codex and make the Agent recognize intent and help from zero at every point instead of teaching the user which capability, product, command, configuration, or workflow to operate.",
+      "observedRepositoryProblem": "At commit 784c26dd813a8a38764c896bbcda1d2ec7385001, the Codex plugin tree 5af87a619fbd8a020f2751eafa3cc4a8dedf002d packages only a repository-local continuation Hook and launcher. It exposes no task-facing Skill, so the candidate can project Harness authority inside this repository but cannot carry the demand-to-capability method into an ordinary goal-level Codex task.",
+      "userSpecifiedBuildCapabilityRoute": false,
+      "userSpecifiedTaskTopology": false,
+      "settledProductFormBoundary": "The existing Codex reference projection remains plugin-compatible and manager-agnostic. Skills are the default task-facing payload, MCP is admitted only for a later reproducible runtime or data gap, and Hooks remain an optional host continuity edge rather than the portable product core."
+    },
+    "goalAndBoundedAuthority": {
+      "goal": "Add one concise, version-bound, task-facing Skill to the existing Codex plugin source candidate so Codex can apply the candidate demand-to-capability method from a goal without requiring the user to name the Skill or operate capability, context, or task-topology mechanics.",
+      "agentAuthority": "Read and edit the current repository on main; use the already-installed official plugin-creator and skill-creator guidance, official public Codex plugin documentation, native Codex, Git, PowerShell, and Python; validate, remove exact task-owned residue, commit, and push main.",
+      "humanRetains": "Accountable acceptance of the delivered source package and bounded claim, plus any install, enable, trust, consumer mutation, live behavior trial, new account or data boundary, cost, publication, release, deployment, destructive action, or irreversible effect.",
+      "excludedOperations": "No plugin installation or enablement, Hook activation, user or personal marketplace mutation, config.toml mutation, CC Switch dependency, MCP server, App, account connection, external model dispatch, publication, release, deployment, branch, worktree, repository fork, conversation fork, or new task."
+    },
+    "contextCarrierFitnessSignalsAndTransitionRule": {
+      "materialCheckpoints": [
+        "after the registration and active binding are pushed",
+        "before generating the Skill skeleton",
+        "before the first plugin payload mutation",
+        "before commit and push",
+        "before requesting the named-human outcome judgment"
+      ],
+      "observableSignals": "The current task remains subscribed and writable, the active goal remains recoverable, repository authority and Git state can be re-read, and no host warning or observed loss requires rollover. Codex exposes no reliable remaining-context percentage here, so remaining capacity stays explicit unknown.",
+      "transitionRule": "Keep the current task while observable task and repository signals remain healthy. After native compaction, re-read this registration, current product authority, Git state, exact scope, selected source identities, pending checks, and human gate before mutation. On a host-required rollover that cannot preserve those identities, stop this receipt rather than asking the user to choose or reconstruct a carrier.",
+      "claimLimit": "A naturally occurring eligible compaction may later support the Codex cohort, but no compaction is induced and this task cannot by itself satisfy O2 or O4 cohort thresholds."
+    },
+    "taskTopologyBoundaryAndLifecycleFloor": {
+      "defaultCarrier": "Continue the current Codex task and existing main checkout.",
+      "causalNeedForIsolation": "None; the bounded source change belongs in the existing plugin directory and current mainline, while generated scratch and validation residue can remain exact and temporary.",
+      "agentOwnedLifecycle": "The Agent owns source discovery, generation, edits, synchronization, verification, commit, push, conclusion reconciliation, and exact cleanup without a user branch, worktree, fork, new-task, merge, archive, or cleanup operation.",
+      "stop": "Stop on any need for user topology selection or operation, an additional carrier, consumer mutation, installation, unrelated repository change, or new authority boundary."
+    },
+    "namedHumanAcceptor": "yiheng8023",
+    "qualitySafetyEvidenceAndResidueFloors": {
+      "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8, sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a, repository commit 784c26dd813a8a38764c896bbcda1d2ec7385001; unaccepted Codex reference-host calibration candidate.",
+      "outcomeQuality": "The existing Codex plugin contains exactly one task-facing Skill projection whose metadata can trigger from goal-level, multi-step demand without requiring explicit invocation; its body stays concise, binds the candidate profile version, preserves human authority, owns capability and carrier lifecycle, and does not claim to be a runtime or accepted behavior.",
+      "intentAndCompleteness": "The first useful pass must cover goal and authority recovery, omission and risk checks, native-first gap assessment, finite discovery only for an evidenced gap, smallest route and carrier choice, execution, verification, recovery, release, cleanup, honest claim limits, and context transition without turning each step into mandatory ceremony.",
+      "interfaceSimplicity": "A user-facing trigger requires only the desired result, known domain facts, bounded authority, corrections, and accountable judgment. It must not require a Skill name, plugin name, MCP server, Hook, CC Switch, AGENTS.md, configuration, command, code topology, conversation topology, verification, cleanup, or push route.",
+      "authorityAndSafety": "The Skill is advisory and subordinate to the current task, live repository authority, and host authorization. It cannot add goals, approvals, trust, data access, cost, external writes, publication, release, deployment, destructive action, or acceptance authority.",
+      "minimality": "Add one Skill plus only directly required Skill metadata and a version-bound candidate-profile reference. Add no MCP server, App, runtime, state store, prompt interception, catalog, wire protocol, receipt schema, extra Hook, installation guide, README inside the Skill, or generic outcome validator.",
+      "packageIntegrity": "The plugin manifest and content-addressed payload version bind the new source bytes. The bundled profile reference is byte-identical to the registered root candidate profile, and existing Hook launcher pins remain valid after any verifier change.",
+      "evidence": "Bind the immutable registration and active commit, exact baseline plugin tree and manifest blobs, exact official and bundled guidance identities, generated source diff, structural validators, canonical verifier, full product tests, Git and residue checks, current-task chronology after measurement start, and named-human final result and claim judgment. Local green checks or Agent self-report cannot prove user value, live activation, or acceptance.",
+      "residue": "No .tmp item, __pycache__, generated placeholder, backup, cache install, user marketplace edit, consumer configuration, installed or enabled plugin, new Hook trust, branch, worktree, repository fork, conversation fork, new task, or unrelated change remains.",
+      "missingData": "Any unobserved mandatory floor fails; an aggregate score cannot hide it."
+    },
+    "materialInterventionTaxonomy": [
+      "user-capability-route-selection",
+      "user-capability-setup-or-invocation",
+      "user-recovery-or-verification-command",
+      "user-cleanup-or-push-route",
+      "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+      "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+    ],
+    "materialCollaborationLossTaxonomy": [
+      "material-intent-or-mode-correction",
+      "material-omission",
+      "reopened-settled-decision",
+      "unrequested-deliverable-or-mutation",
+      "unnecessary-human-round-trip-or-process",
+      "resource-or-residue-recovery-returned-to-user",
+      "context-or-handoff-recovery-returned-to-user",
+      "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+      "false-completion-or-claim-correction",
+      "tool-or-product-learning-burden-returned-to-user",
+      "ai-like-or-materially-unclear-communication-correction"
+    ],
+    "scenarioClass": "codex-plugin-skill-reference-adapter-delivery",
+    "complexityAndAuthorityRiskBands": {
+      "complexity": "medium-high: a task-facing Skill must project a broad method with low standing context, correct trigger behavior, version integrity, and no parallel authority or runtime expansion",
+      "authorityRisk": "low before activation: bounded public repository source, tests, commit, and push only; installation, enablement, trust, live behavior, consumer mutation, release, and publication remain excluded human gates"
+    },
+    "matchedOrHistoricalBaselineIdentityAndRule": {
+      "identity": "Codex plugin tree 5af87a619fbd8a020f2751eafa3cc4a8dedf002d and manifest blob 08c5b063e3f03e00b5dc4df5cbab910344710bce at commit 784c26dd813a8a38764c896bbcda1d2ec7385001, plus the nine-issue experience report at codex://threads/019ff267-f93d-7860-98c1-4762b94092aa/turns/019ff6b2-fc17-79f0-bd42-a2ae03180429/messages/msg_019ff6b2-fd9c-72a2-ab5a-58031581809d, content sha256:fd44cb1a9a99afa5944c9484c9148264a1c60a7a8037294b3a63f5d95bf37c4b",
+      "baselineMaterialInterventions": 2,
+      "baselineRule": "The current plugin provides no task-facing method. Count learning that a plugin or Skill exists and selecting or invoking it as two material user orchestration interventions; the historical report independently identifies official capability documentation and AGENTS/config/topology mechanics as user learning burdens.",
+      "matchingRule": "Compare the same Codex plugin source candidate, same candidate.5 method, same no-install boundary, same current main checkout, and same goal-level user entry before and after the Skill addition. Do not compare live activation or a different runtime."
+    },
+    "selectedRouteSubstrateMetadataRule": {
+      "agent": "OpenAI Codex CLI 0.147.0, source commit be6e8eac029b183056b7e4402879f15d2c85f61b, Apache-2.0, released reference host; reuse only current authorized repository execution and communication.",
+      "pluginGuidance": "OpenAI bundled plugin-creator SKILL.md sha256:40354d99ca66f16a8bd92b0e6b315b4cd773ebc8a6348a70398a4b787b86213, plugin-json-spec.md sha256:254f18eb2cf9390c0b85f0b885db3b1facf90e060257cde70b6e55e21797382e, and installing-and-updating.md sha256:4dc1728ba11cdad366cad501aa04cd25cafba0c08d66d4b1d2d33e7af77f1319, observed 2026-08-14 under applicable OpenAI product terms, bundled system guidance; reuse only package shape, manifest, marketplace, validation, and no-install update boundaries.",
+      "skillGuidance": "OpenAI bundled skill-creator SKILL.md sha256:2940e08d49e5197453e58a4387d14cb07101b97911c992ef75c8289e0a1734c0, observed 2026-08-14 under applicable OpenAI product terms, bundled system guidance; reuse only concise Skill structure, trigger metadata, progressive disclosure, initialization, and validation.",
+      "officialPluginDocs": "OpenAI Codex plugin documentation at https://learn.chatgpt.com/docs/build-plugins observed 2026-08-14 under applicable OpenAI terms, current official documentation; use only to confirm that a plugin may contain Skills and/or MCP servers with optional UI while MCP is unnecessary for this source-only residual gap.",
+      "repository": "Git 2.55.0.windows.3, GPL-2.0-only, released repository substrate; reuse only identity, diff, commit, and push.",
+      "runtime": "CPython 3.14.6 under Python-2.0 and Windows PowerShell 5.1.26100.9168 under Microsoft Windows terms; reuse only bundled validators, canonical checks, bounded source inspection, and exact cleanup.",
+      "selectionRule": "Before any source influences measured implementation, record its exact content identity or fixed source version, license or applicable terms, maturity, and reuse boundary. Stop discovery once the minimum valid Skill-plus-versioned-reference package is determined."
+    },
+    "contextLifecycleBoundaryAndContinuityFloor": "No compaction, clear, handoff, or rollover is planned. If native compaction occurs, reconcile the immutable registration, live authority, Git state, source identities, exact plugin scope, evidence state, pending checks, and human gate before further mutation without user reconstruction or topology choice. Use the event as cohort evidence only if the registered eligibility and later task-bound validator independently pass.",
+    "taskDemandIdentity": "natural-task.2026-08-14.codex-demand-skill-plugin",
+    "availableCapabilityObservation": "The current Codex host, repository, profile candidate, Hook-only plugin source, Git, Python, verifier, bundled official plugin-creator and skill-creator Skills, and official plugin documentation are healthy and already authorized for read/use. No MCP server, App, new model, account, installation, or portfolio-wide search is required.",
+    "currentRoute": "Use the current main checkout; bind the existing plugin source and candidate profile; use the already-installed official authoring guidance to generate one minimal Skill; adapt it to the Harness boundary; validate structure, payload integrity, profile identity, verifier, tests, Git, and residue; push main; request only named-human outcome judgment.",
+    "decisionRelevantCandidateCohort": [
+      "retain the current Hook-only plugin unchanged",
+      "add one concise Skill with a version-bound profile reference",
+      "add an MCP server or App",
+      "turn the plugin into a runtime, catalog, state store, or control plane"
+    ],
+    "residualGapTest": "The current Hook-only package can project repository authority at continuation events but contains no task-facing method. A concise Skill is the smallest standard plugin payload that can carry goal-level guidance; MCP or App capability has no reproducible runtime, data, or UI gap here and must be rejected. Native free-form authoring alone is insufficient because current plugin and Skill manifest conventions are temporally unstable and the official bundled guidance is already available.",
+    "discoverySourceBoundaryAndStopRule": "Use only the available bundled plugin-creator and skill-creator packages, their directly required references and scripts, the current official OpenAI plugin page, and current repository sources. Stop after the minimum Skill structure, metadata, validation commands, and payload binding are known; do not search a capability catalog, install anything, compare unrelated plugin managers, or add MCP, App, runtime, UI, account, or state capability.",
+    "externalSubstrateSourceVersionLicenseOrTermsMaturityAndReuseBoundary": "OpenAI Codex 0.147.0 at commit be6e8eac029b183056b7e4402879f15d2c85f61b under Apache-2.0 is the released reference host. The content-addressed bundled plugin-creator and skill-creator guidance and official build-plugins page observed 2026-08-14 under applicable OpenAI terms are reused only for current package, Skill, progressive-disclosure, and validation semantics. Git 2.55.0.windows.3 under GPL-2.0-only and CPython 3.14.6 under Python-2.0 are reused only for repository and validation operations. None becomes portable product authority.",
+    "taskScopedDispatchReleaseAndCleanupBoundary": "Use the already-installed authoring guidance only in this task. Create source only under the registered plugin, related product tests and current public status surfaces, plus later exact task evidence and validator if earned. Remove generated placeholders, .tmp, and Python cache residue. Leave personal marketplaces, installed plugin caches, config.toml, Hooks, MCP, Apps, accounts, branches, worktrees, forks, and tasks unchanged.",
+    "candidateRetentionOrExpiryRule": "Retain the one validated Skill source and byte-bound profile projection only if it meets every floor and the named human accepts the deliverable. Reject MCP, App, runtime, catalog, state, manager dependency, and extra Hook candidates because no residual gap supports them. No task-scoped executable exposure remains after completion.",
+    "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6",
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5 git-blob:e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a at repository commit 784c26dd813a8a38764c896bbcda1d2ec7385001",
+    "referenceHostProfileAndEligibleReceiptSet": "Codex 0.147.0 on Windows, source-package software-integration scenario. Eligible only if this immutable registration and active binding are pushed before generation or plugin mutation, every candidate.5 floor passes, exact sources and baseline remain bound, post-start material user orchestration and collaboration-loss counts are zero, no consumer mutation or residue remains, and yiheng8023 accepts the source deliverable and bounded claim.",
+    "referenceHostContextLifecycleCoverageRule": "Observe carrier fitness at every registered checkpoint and preserve unknown capacity status. A natural eligible transition may join the candidate.5 Codex boundary cohort, but none is induced and O4 still requires the full same-version accepted and stopped/rejected cohort.",
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": [
+      {
+        "identity": "OpenAI Codex source commit be6e8eac029b183056b7e4402879f15d2c85f61b and installed CLI 0.147.0",
+        "licenseOrTerms": "Apache-2.0",
+        "maturity": "released Codex reference host with native plugin, Skill, Hook, compaction, repository, and task primitives",
+        "reuseBoundary": "reference-host execution and plugin ingestion only; no portable product authority"
+      },
+      {
+        "identity": "OpenAI bundled plugin-creator and skill-creator files at the registered SHA-256 identities, observed 2026-08-14",
+        "licenseOrTerms": "applicable OpenAI product terms",
+        "maturity": "bundled system authoring and validation guidance in the current host",
+        "reuseBoundary": "plugin and Skill package shape, concise trigger guidance, progressive disclosure, initialization, and local validation only"
+      },
+      {
+        "identity": "OpenAI build-plugins documentation at https://learn.chatgpt.com/docs/build-plugins observed 2026-08-14",
+        "licenseOrTerms": "applicable OpenAI terms",
+        "maturity": "current official product documentation",
+        "reuseBoundary": "Skills-and-or-MCP plugin composition and optional UI boundary only"
+      },
+      {
+        "identity": "CHAP working draft 0.2 at commit 9e7af2b811d3368b4afba7c6d318764959c2fd0d",
+        "licenseOrTerms": "Apache-2.0 code and CC-BY-4.0 specification",
+        "maturity": "working-draft collaboration protocol with implementations",
+        "reuseBoundary": "leading collaboration-wire candidate; not duplicated in the Skill"
+      },
+      {
+        "identity": "Human Tool arXiv:2602.12953v1",
+        "licenseOrTerms": "CC-BY-4.0",
+        "maturity": "published preprint with a controlled 32-person two-task comparison",
+        "reuseBoundary": "Agent-led allocation hypothesis and burden measures only"
+      },
+      {
+        "identity": "NIST AI 800-2 Initial Public Draft January 2026 and NIST Agentic AI evaluation-probes page observed 2026-08-14",
+        "licenseOrTerms": "NIST public-information and Technical Series terms",
+        "maturity": "initial public draft plus active public evaluation program",
+        "reuseBoundary": "fixed evaluation protocol and later source-grounded task validator separation only"
+      }
+    ],
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "identity": "Hook-only Codex plugin tree 5af87a619fbd8a020f2751eafa3cc4a8dedf002d and manifest blob 08c5b063e3f03e00b5dc4df5cbab910344710bce at commit 784c26dd813a8a38764c896bbcda1d2ec7385001",
+      "licenseOrTerms": "Apache-2.0 repository content",
+      "maturity": "validated inactive continuation projection with marketplace availability but no task-facing Skill",
+      "eligibility": "The comparator preserves current Hook continuation behavior and package discovery but cannot expose the candidate method to an ordinary goal-level task without separate user or Agent knowledge.",
+      "matchingRule": "Compare the same plugin, candidate profile, no-install state, Hook payload, marketplace policy, repository, host, date, and authority boundary. Do not compare live behavior, a different host, or a larger plugin runtime."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "The registered plugin tree contains a manifest, one continuation Hook configuration, and one launcher only. It has no skills directory or task-facing method. The historical nine-issue source identifies capability documentation and AGENTS/config/topology knowledge as user burdens.",
+      "comparisonAxes": [
+        "named-human accepted source deliverable and mandatory quality floors",
+        "goal-level trigger and zero required user capability or topology mechanics",
+        "intent, first-pass completeness, risk, authority, and claim discipline",
+        "source-bound capability lifecycle and smallest sufficient plugin payload",
+        "standing context, process, resource, package-integrity, and residue cost"
+      ],
+      "decisionRule": "The Skill route is advantaged only if yiheng8023 accepts it, every mandatory floor passes, post-start material intervention and collaboration-loss counts are zero, the plugin gains a valid goal-triggered Skill while preserving the Hook and marketplace boundaries, standing metadata and body remain concise, no MCP/App/runtime/manager dependency or consumer mutation appears, exact source and profile identities remain bound, and no residue remains. Otherwise fail or stop."
+    },
+    "distinctValueHypothesisAndFalsifier": "A concise, version-bound Skill inside the existing plugin is the smallest reusable Codex projection that moves method selection and task orchestration out of the user's cognitive path while preserving a thin Agent-neutral core. The hypothesis is falsified if explicit user invocation or product knowledge remains required; the Skill duplicates or overrides product authority; its trigger is too broad or too narrow for the registered examples; essential intent, risk, lifecycle, context, topology, evidence, or cleanup duties are omitted; an MCP/App/runtime/manager dependency is needed; validation or package identity fails; process or standing-context cost is disproportionate; the named human rejects it; or an existing route provides the same task-facing value with lower burden and no Harness contribution.",
+    "mandatoryFloorsAndMissingDataRules": "Every candidate.5 floor for outcome quality, user orchestration burden, intent and communication fit, capability lifecycle, task topology, context-carrier fitness, reliability and recovery, authority and safety, evidence and residue, resource and process cost, interface simplicity, and package integrity is mandatory. Missing data fails the affected floor and cannot be imputed or hidden by aggregation.",
+    "namedHumanReviewerAndClaimBoundary": "yiheng8023; at most one accepted candidate.5 Codex source-package task for adding the exact task-facing Skill to the registered inactive plugin on 2026-08-14. No installed or enabled behavior, live trigger quality, repeated burden reduction, full O3 route cohort, accepted methodology, Agent-neutral portability, cross-host equivalence, release, publication, production, or v0.2-completion claim."
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8, sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a, repository commit 784c26dd813a8a38764c896bbcda1d2ec7385001; unaccepted Codex reference-host calibration candidate.",
+    "outcomeQuality": "The existing Codex plugin contains exactly one task-facing Skill projection whose metadata can trigger from goal-level, multi-step demand without requiring explicit invocation; its body stays concise, binds the candidate profile version, preserves human authority, owns capability and carrier lifecycle, and does not claim to be a runtime or accepted behavior.",
+    "intentAndCompleteness": "The first useful pass must cover goal and authority recovery, omission and risk checks, native-first gap assessment, finite discovery only for an evidenced gap, smallest route and carrier choice, execution, verification, recovery, release, cleanup, honest claim limits, and context transition without turning each step into mandatory ceremony.",
+    "interfaceSimplicity": "A user-facing trigger requires only the desired result, known domain facts, bounded authority, corrections, and accountable judgment. It must not require a Skill name, plugin name, MCP server, Hook, CC Switch, AGENTS.md, configuration, command, code topology, conversation topology, verification, cleanup, or push route.",
+    "authorityAndSafety": "The Skill is advisory and subordinate to the current task, live repository authority, and host authorization. It cannot add goals, approvals, trust, data access, cost, external writes, publication, release, deployment, destructive action, or acceptance authority.",
+    "minimality": "Add one Skill plus only directly required Skill metadata and a version-bound candidate-profile reference. Add no MCP server, App, runtime, state store, prompt interception, catalog, wire protocol, receipt schema, extra Hook, installation guide, README inside the Skill, or generic outcome validator.",
+    "packageIntegrity": "The plugin manifest and content-addressed payload version bind the new source bytes. The bundled profile reference is byte-identical to the registered root candidate profile, and existing Hook launcher pins remain valid after any verifier change.",
+    "evidence": "Bind the immutable registration and active commit, exact baseline plugin tree and manifest blobs, exact official and bundled guidance identities, generated source diff, structural validators, canonical verifier, full product tests, Git and residue checks, current-task chronology after measurement start, and named-human final result and claim judgment. Local green checks or Agent self-report cannot prove user value, live activation, or acceptance.",
+    "residue": "No .tmp item, __pycache__, generated placeholder, backup, cache install, user marketplace edit, consumer configuration, installed or enabled plugin, new Hook trust, branch, worktree, repository fork, conversation fork, new task, or unrelated change remains.",
+    "missingData": "Any unobserved mandatory floor fails; an aggregate score cannot hide it."
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection",
+    "user-capability-setup-or-invocation",
+    "user-recovery-or-verification-command",
+    "user-cleanup-or-push-route",
+    "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+    "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-or-residue-recovery-returned-to-user",
+    "context-or-handoff-recovery-returned-to-user",
+    "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "ai-like-or-materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "This exact registration and active program binding are committed and pushed unchanged. No further human grant is required for the bounded repository source edit, use of already-installed official authoring guidance, public documentation reads, local verification, exact cleanup, commit, or push already authorized by the current program.",
+    "eligibleSources": [
+      "post-registration current-task chronology for source discovery, route and carrier decisions, generation, edits, recovery, verification, cleanup, and named-human decision",
+      "the exact committed baseline plugin tree, manifest, marketplace, profile blob, final committed Skill package, manifest, tests, public status surfaces, and their bounded diff",
+      "the registered content-addressed bundled plugin-creator and skill-creator sources plus the official OpenAI build-plugins page observed on 2026-08-14",
+      "structural plugin and Skill validators, canonical verifier, full product tests, Git state, payload integrity, profile-byte equality, residue checks, and one named-human final result and claim judgment",
+      "a later minimal task-bound criterion-scoped validator implemented only after actual task chronology and result serialization are observed and before any additional O1 evidence is promoted"
+    ],
+    "ineligibleSources": [
+      "any pre-registration generated Skill or plugin mutation, later substituted task, host, profile, source, route, package scope, or date",
+      "the earlier Hook activation attempt, public-intake task, plugin architecture answer, or historical nine-issue report as successful result evidence for this distinct source-delivery task",
+      "self-report, file or commit count, local green tests, or current Agent judgment as proof of named-human acceptance, live plugin behavior, or zero loss",
+      "any post-hoc weakening of the profile, baseline, route cohort, taxonomy, floors, missing-data rule, source eligibility, or claim limit"
+    ],
+    "stopRule": "After the binding is pushed, generate and edit the registered source package once through the selected current route. Stop on any material user orchestration intervention, material collaboration-loss event, user topology operation, explicit-invocation requirement, scope expansion, consumer or marketplace mutation, install or trust need, MCP/App/runtime/manager addition, parallel authority, repeated same-class correction, unbounded residue, mandatory-floor failure, or named-human rejection. Complete the task only after the source result is pushed, exact task evidence and a task-bound validator support this additional O1 receipt without self-report promotion, all checks and cleanup pass, and yiheng8023 accepts the result and bounded claim; O2-O4 remain unverified until their full cohort thresholds independently pass."
+  },
+  "claimLimits": [
+    "one candidate.5 Codex source-package software-integration task on 2026-08-14",
+    "one task-facing Skill added to the existing inactive Codex plugin at the exact registered baseline",
+    "one finite source-bound existing-capability discovery and selection case using bundled official authoring guidance, with MCP, App, runtime, manager, and extra Hook routes rejected for lack of residual gap",
+    "an accepted source result can add one O1-eligible receipt and one candidate sample for later O2-O4 cohort evaluation; it cannot by itself verify repeated burden reduction, the full O3 route cohort, accepted methodology, live plugin behavior, or a context-boundary cohort requirement",
+    "no installation, enablement, trust, consumer configuration, cross-host equivalence, Agent-neutral portability, release, publication, production, or v0.2-completion claim"
+  ]
+}

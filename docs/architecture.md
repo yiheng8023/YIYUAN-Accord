@@ -100,9 +100,10 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready after closing the outcome-neutral task-topology and
-proactive context-carrier fitness repairs and the accepted public-intake O1
-increment. O1 is true and O2-O5 remain false. Authorized
+The v0.2 program is active on one pre-registered task-facing Codex Skill
+projection after closing the outcome-neutral task-topology and proactive
+context-carrier fitness repairs and the accepted public-intake O1 increment.
+O1 is true and O2-O5 remain false. Authorized
 product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without

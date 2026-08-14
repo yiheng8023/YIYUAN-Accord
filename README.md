@@ -20,7 +20,8 @@ available without installing it, and an inactive session-scoped Claude Code
 projection over the same continuation semantics. It does not contain an Agent
 runtime, an installed or behavior-accepted adapter, or accepted cross-host proof.
 
-v0.2 is `ready`, with no active causal increment. O1 is verified by one
+v0.2 is `active`, with one pre-registered Codex task-facing Skill projection
+increment. O1 is verified by one
 accepted, task-bound public-intake result; O2-O5 remain unverified (`1/5`
 outcomes). The program now makes explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or

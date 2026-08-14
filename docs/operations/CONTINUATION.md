@@ -15,15 +15,16 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready`, with no active causal
-increment. The public verifier should report:
+The current machine program is v0.2 and `active`, with the single causal
+increment `increment.v0.2.codex-demand-skill-plugin`. The public verifier
+should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1 true and O2-O5 false (`1/5` outcomes), with O1 bound to
   `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`;
 - G1-G4 true (`4/4` guardrails);
-- no active increment.
+- that exact active increment and one active work item.
 
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.

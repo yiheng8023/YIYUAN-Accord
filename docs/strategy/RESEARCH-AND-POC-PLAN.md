@@ -19,9 +19,10 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is ready with an empty current graph after the outcome-neutral proactive
-context-carrier fitness and transition repair and the accepted public-intake
-increment. O1 is verified and O2-O5 remain planned and false. The current tree
+v0.2 is active on one pre-registered task-facing Codex Skill projection after
+the outcome-neutral proactive context-carrier fitness and transition repair and
+the accepted public-intake increment. O1 is verified and O2-O5 remain planned
+and false. The current tree
 contains a product-contract verifier, one exact task-bound O1 evidence
 validator, and inactive
 Codex and Claude Code reference-adapter candidates, not a task runtime or an
