@@ -20,10 +20,11 @@ interesting paper is not sufficient entry evidence.
 ## Current v0.2 sequence
 
 v0.2 is ready with no active increment after the accepted public-intake,
-task-facing Codex and Claude Skill source, and continuation-reconciliation
-deliveries, the outcome-neutral context-carrier repairs, and content-addressed
-stopped Codex tasks. O1, O2, and O3 are verified; O4 and O5 remain planned and
-false. The tree contains exact task-bound validators for those outcomes,
+task-facing Codex and Claude Skill source, continuation-reconciliation, and
+bounded Codex reference-host calibration results, the outcome-neutral
+context-carrier repairs, and content-addressed stopped Codex tasks. O1 through
+O4 are verified; O5 remains planned and false. The tree contains exact
+task-bound validators for those outcomes,
 inactive Codex and Claude Code reference-adapter candidates, and stopped
 results, not a task runtime or accepted live installed-host behavior. Closed
 outcome-neutral work remains recoverable from Git rather than accumulating as
@@ -98,13 +99,12 @@ validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
 failures are non-authoritative counterevidence and may trigger replanning.
 
-When a natural goal-level task is bound, the next outcome-bearing increment
-may bind exactly one vertical Codex reference slice. The current planned order
-is:
+The completed O1-O4 sequence bound one vertical Codex reference slice in this
+order:
 
 1. **Freeze a provisional methodology and evaluation profile.** Before the
    first event, bind the exact revision and content identity of the
-   [unaccepted candidate](../DEMAND-TO-CAPABILITY-PROFILE.md), then define
+   [candidate.5 profile](../DEMAND-TO-CAPABILITY-PROFILE.md), then define
    material intervention classes, capability-added goal/input/deliverable/
    human-round-trip/authority/side-effect/acceptance requirements, reopened
    settled decisions, unrequested artifacts, task scenario/complexity/authority-risk
@@ -149,9 +149,11 @@ is:
    its own thin adapter. A same-host second adapter is conformance evidence
    only and cannot pass O5.
 
-Each item becomes active only through a new observed problem, hypothesis,
-falsifier, stop condition, authority boundary, and acceptance mapping. The
-sequence is direction, not preauthorization.
+Each item became active only through a new observed problem, hypothesis,
+falsifier, stop condition, authority boundary, and acceptance mapping. O4 now
+accepts candidate.5 only for the exact bounded Codex reference-host
+calibration. The sequence remains evidence history, not preauthorization for
+O5 or later work.
 
 ## Baseline and evaluation boundary
 
@@ -237,7 +239,8 @@ not inferred from installation: exact trust plus app-owned user-config reload
 remains a separate activation condition.
 
 Reuse disposition: `adapters/agent-autonomy-harness-codex` is an inactive thin
-packaging projection with one task-facing Skill bound to the unaccepted profile
+packaging projection with one task-facing Skill bound to the exact candidate.5
+profile now accepted only for the bounded Codex reference-host calibration,
 and one continuation Hook. The Skill supplies no MCP, App, runtime, state, or
 product authority. The Hook launcher discovers a containing Harness authority
 root from the native working directory and delegates to the repository-owned

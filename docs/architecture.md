@@ -102,22 +102,26 @@ validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
 The v0.2 program is ready with no active increment after closing the
-public-intake, task-facing Codex and Claude Skill source deliveries, and the
-continuation-reconciliation implementation. The first three support O1. A
+public-intake, task-facing Codex and Claude Skill source deliveries, the
+continuation-reconciliation implementation, and the bounded Codex reference-
+host calibration. The first three support O1. A
 criterion-scoped aggregate check supports O3 through one native-retain route
 and two finite official discovery or adaptation routes. O2 uses a different
 three-scenario cohort: public intake, Codex Skill source, and continuation
 reconciliation, with exact baselines, two native-compaction recoveries, zero
 material user orchestration or topology interventions, zero material
 collaboration losses, and named-human acceptance. The similar Claude and Codex
-Skill deliveries are deliberately not double-counted. O1, O2, and O3 are true;
-O4 and O5 remain false.
+Skill deliveries are deliberately not double-counted. O4 applies the unchanged
+candidate.5 profile to those three accepted scenarios and one honestly stopped
+plugin-rollover case under fixed comparators, mandatory floors, and a named-
+human Codex-only claim. O1 through O4 are true; O5 remains false.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
 the unchanged pre-registration, evidence, floors, and human-acceptance burden.
-The current verifier and inactive adapter candidate are not an accepted
-methodology, task runtime, behavior result, or cross-host proof.
+The current verifier and inactive adapters are not a task runtime, installed-
+host behavior result, or cross-host proof; O4 accepts only the frozen
+candidate.5 Codex reference-host calibration.
 
 ### Continuity is reconciliation, not unlimited context
 
@@ -252,7 +256,7 @@ host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
 projection. It contains one concise, implicitly invocable task-facing Skill
-bound to the unaccepted candidate profile, plus a `SessionStart` Hook and
+bound to the Codex-reference-calibrated candidate.5 profile, plus a `SessionStart` Hook and
 standard-library launcher for the repository-owned continuation adapter. It
 adds no MCP server, App, prompt interception, capability router, state store,
 or outcome validator. The launcher uses Python isolated mode, reads the adapter

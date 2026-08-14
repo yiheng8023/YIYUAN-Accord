@@ -264,6 +264,21 @@ task carrier. Task-bound validation and yiheng8023's exact judgment accepted it
 as the materially distinct third O2 scenario beside public intake and Codex
 Skill source delivery. The bounded three-scenario claim does not accept O4.
 
+## Accepted Codex reference-host calibration
+
+The immutable O4 registration was committed and pushed at `31d62d4` before
+the fixed cohort was evaluated. Commit `7822314` then preserved the
+machine-eligible result before human judgment: the exact three accepted task
+validators passed, the exact plugin-rollover receipt remained stopped on its
+missing native Hook chronology, registered material user orchestration fell
+from 8 to 0, and two accepted native-compaction crossings recovered without
+user reconstruction. yiheng8023 subsequently accepted the unchanged
+candidate.5 methodology and minimum profile, mixed pass-and-stop calibration,
+applicability limits, and bounded O4 claim. This calibrates only Codex CLI
+0.147.0 on Windows for the registered scenario classes and date. It does not
+accept O5, installed Hook value, general context management, release, or
+production.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

@@ -14,25 +14,33 @@
     "commit": "31d62d425df813dc76de860646f6a961acad32d3"
   },
   "source": {
+    "kind": "repository-task-receipt",
+    "locator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/codex-reference-calibration",
+    "identity": "sha256:d94d0c2f520c4b7bc96ff5d038e98ae394a44be5d0b80e5a15aec77418115e93",
     "threadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
     "machineEvaluationInputIdentity": "sha256:3c8bc530e65e1d7a6859a9933d73c654e7d0f2279259635756ea0aefeb427ce5",
-    "identityWithHumanDecision": null,
+    "identityWithHumanDecision": "sha256:d94d0c2f520c4b7bc96ff5d038e98ae394a44be5d0b80e5a15aec77418115e93",
     "evaluationMode": "one post-registration source-only evaluation of the exact fixed cohort; no natural-task rerun, model call, host change, consumer mutation, or new carrier"
   },
   "authority": {
+    "kind": "named-accountable-human",
+    "name": "yiheng8023",
+    "decision": "accepted",
+    "decidedAt": "2026-08-14T21:09:08.0744341+08:00",
     "namedHuman": "yiheng8023",
-    "decisionState": "pending",
+    "decisionState": "accepted",
     "decisionScope": "Accept or reject the unchanged candidate.5 methodology and open minimum quality-conformance profile, exact three-pass/one-stopped Codex reference-host calibration, fixed comparator and external-reuse conclusion, applicability limits, and only the registered bounded O4 claim.",
     "decisionScopeSha256": "e11a0b8eafe60dda3ab11502c0214c497d016172515a4649465ca356cd6c53b9",
     "requiredResponse": "接受上述 candidate.5 方法与最低质量 profile、混合通过/停止校准、适用边界和有界 O4 声明。",
     "requiredResponseSha256": "6309471b550b44accb4853659b421186325c84dd4b8b5a1d9ea9bb4fc05d0d1c"
   },
   "result": {
-    "state": "machine-eligible-human-pending",
-    "accepted": null,
-    "humanJudgment": "pending",
+    "machineEvaluationCommit": "78223144e1a14f3d4530841282cb57f45669f51a",
+    "state": "accepted",
+    "accepted": true,
+    "humanJudgment": "accepted methodology, profile, mixed calibration, applicability, and bounded O4 claim",
     "machineComparisonPassed": true,
-    "profileDisposition": "candidate.5 bytes and semantics remain immutable; Codex reference-host calibration acceptance is pending the named-human judgment",
+    "profileDisposition": "candidate.5 bytes and semantics remain immutable; accepted as the bounded Codex reference-host calibration while O5 remains false",
     "boundedAdvantage": "Across the exact three accepted scenarios, registered material user orchestration burden falls from 8 to 0 and two accepted native-compaction crossings recover without user context or topology work; the exact fourth receipt remains stopped on its missing native Hook chronology."
   },
   "cohort": {
@@ -132,7 +140,7 @@
         0
       ],
       "calibrationMaterialCollaborationLossCount": 0,
-      "pendingHumanInput": "one accountable bounded O4 judgment only"
+      "pendingHumanInput": "none; exact bounded O4 human judgment accepted"
     },
     "routeReliabilityRecoveryTimeAndCallCost": {
       "acceptedReceiptValidatorsReexecuted": 3,
@@ -143,8 +151,8 @@
       "stoppedTaskReruns": 0,
       "inactiveProjectionIntegrityRefresh": {
         "reason": "the new criterion-scoped repository validator changed harness/control.py, so both inactive launchers refreshed only their control.py integrity pin and payload identity",
-        "codexPackageVersion": "0.2.0-candidate.5+codex.payload-67299b7df7c1",
-        "claudePackageVersion": "0.2.0-candidate.5+claude.payload-3a4c96161949",
+        "codexPackageVersion": "0.2.0-candidate.6+codex.payload-ccd593e9fc43",
+        "claudePackageVersion": "0.2.0-candidate.6+claude.payload-0d96961b88b3",
         "evaluatedHistoricalPluginSnapshotsChanged": false,
         "methodProfileSkillOrHookSemanticsChanged": false,
         "installedEnabledOrConsumerStateChanged": false
@@ -232,12 +240,12 @@
       "stoppedScenarioClass": "long-horizon software-product continuity through Agent-owned conversation rollover",
       "sourcesAsOf": "2026-08-14",
       "namedHuman": "yiheng8023",
-      "accepted": null,
-      "decisionMessageLocator": null,
-      "decisionMessageIdentity": null,
-      "acceptedMethodologyAndProfile": null,
-      "acceptedMixedCalibration": null,
-      "acceptedApplicabilityAndBoundedO4Claim": null
+      "accepted": true,
+      "decisionMessageLocator": "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/messages/by-content-sha256/6309471b550b44accb4853659b421186325c84dd4b8b5a1d9ea9bb4fc05d0d1c",
+      "decisionMessageIdentity": "sha256:6309471b550b44accb4853659b421186325c84dd4b8b5a1d9ea9bb4fc05d0d1c",
+      "acceptedMethodologyAndProfile": true,
+      "acceptedMixedCalibration": true,
+      "acceptedApplicabilityAndBoundedO4Claim": true
     },
     "mandatoryFloorResults": {
       "outcomeQuality": "pass",
@@ -251,10 +259,8 @@
       "referenceHostContextLifecycleTransitionAndRecovery": "pass",
       "comparatorOutcomeAndProcessResults": "pass",
       "externalComparisonAndReuseDecision": "pass",
-      "applicabilityLimitsAndHumanDecision": "pending",
-      "missingData": [
-        "named-human methodology, profile, mixed-calibration, applicability, and bounded O4 judgment"
-      ]
+      "applicabilityLimitsAndHumanDecision": "pass",
+      "missingData": []
     }
   },
   "claimLimits": [
@@ -265,7 +271,8 @@
   ],
   "validator": {
     "kind": "codex-reference-calibration-o4",
+    "version": 1,
     "criterionId": "O4",
-    "state": "machine-eligible-human-pending"
+    "state": "accepted"
   }
 }

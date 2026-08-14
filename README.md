@@ -22,8 +22,8 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `active` on one pre-registered Codex reference-host calibration. O1,
-O2, and O3 are verified (`3/5` outcomes); O4 and O5 remain unverified. O1 is
+v0.2 is `ready` with no active increment. O1 through O4 are verified (`4/5`
+outcomes); O5 remains unverified. O1 is
 supported by the accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O3 binds
 those three route decisions across native retention and finite official
@@ -32,17 +32,20 @@ public-intake, Codex Skill-source, and continuation-reconciliation scenarios;
 the similar Claude and Codex Skill deliveries are not double-counted. The
 accepted continuation result replaces a 6,301-character active-work projection
 that exceeded Codex's 4,096-character Hook limit with a bounded read-only
-authority, active-work, and Git reconciliation checkpoint. The active O4 work
-freezes that exact three-scenario cohort, the unchanged candidate.5 profile,
-and one honestly stopped plugin-rollover case before aggregate evaluation. It
-does not require another induced natural task and cannot promote O4 until the
-task-bound validator and named-human bounded judgment both pass. It does not
-verify O5, installed Hook value, general context management, release, or
-production. The program makes explicit that authorized product-plan delivery
-is real demand when the primary purpose is the deliverable, rather than
-exercising or diagnosing the Harness.
+authority, active-work, and Git reconciliation checkpoint. O4 applies the
+unchanged candidate.5 profile and scorecard to that exact three-scenario cohort
+plus one honestly stopped plugin-rollover case. The task-bound validator and
+named-human bounded judgment accept only this Codex 0.147.0 Windows reference-
+host calibration: aggregate registered user orchestration falls from 8 to 0,
+two accepted native-compaction crossings recover without user reconstruction,
+and the failed Hook-chronology floor remains failed. It does not verify O5,
+installed Hook value, general context management, release, or production. The
+program makes explicit that authorized product-plan delivery is real demand
+when the primary purpose is the deliverable, rather than exercising or
+diagnosing the Harness.
 
-The Codex source candidate projects the unaccepted method through one concise
+The Codex source candidate projects the Codex-reference-calibrated candidate.5
+method through one concise
 implicitly invocable Skill; its Hook and the Claude projection only derive
 bounded continuation context from current repository authority. Neither host
 projection adds an MCP server, App, prompt interception, CC Switch dependency,
@@ -148,8 +151,9 @@ The current repository provides:
   fixed boundaries;
 - a [program](product/program.json) for the current causal work state;
 - explicit [v0.2 acceptance criteria](product/acceptance.json);
-- an [unaccepted candidate methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)
-  for exact pre-registration by future Codex cohort tasks;
+- the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
+  accepted only for the bounded O4 Codex reference-host calibration; its source
+  bytes retain the pre-calibration status header frozen by registration;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - an inactive, standard-library-only Codex `SessionStart` adapter candidate
@@ -158,7 +162,7 @@ The current repository provides:
   reading prompt, transcript, session, diff, or dirty-path content or storing
   session state;
 - an inactive Codex plugin source candidate with one task-facing Skill for the
-  unaccepted method and one Hook that packages the continuation adapter, without
+  Codex-reference-calibrated method and one Hook that packages the continuation adapter, without
   turning the repository or portable core into a plugin;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
@@ -246,7 +250,7 @@ process/resource loss are mandatory guardrails, not substitutes for outcomes.
 | Need | Document |
 | --- | --- |
 | Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
-| Apply the unaccepted Codex-first candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
+| Apply the bounded Codex-reference-calibrated candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | Understand the technical separation of concerns | [Architecture](docs/architecture.md) |
 | Inspect the proof sequence and external reuse gate | [Research and proof plan](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
 | Resume repository work | [Continuation](docs/operations/CONTINUATION.md) |

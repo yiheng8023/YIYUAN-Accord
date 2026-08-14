@@ -230,7 +230,10 @@
         ],
         "humanAuthority": "A named accountable human accepts or rejects the methodology, open minimum quality-conformance profile, reference-host calibration, evaluation specification, receipt decisions, applicability limits, and claim boundary."
       },
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/codex-reference-calibration-2026-08-14.json"
+      ]
     },
     {
       "id": "O5",

@@ -780,6 +780,12 @@ _CODEX_CALIBRATION_REGISTRATION_COMMIT = (
 _CODEX_CALIBRATION_REGISTRATION_PARENT = (
     "29b520d01c1b85da1fd0c8905bba2922fb3e33d0"
 )
+_CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT = (
+    "78223144e1a14f3d4530841282cb57f45669f51a"
+)
+_CODEX_CALIBRATION_PENDING_RECEIPT_SHA256 = (
+    "5c92180356ba92ca26494264aa3a74d370063cd2f99140c7806976717908cda2"
+)
 _CODEX_CALIBRATION_DECISION_SCOPE_SHA256 = (
     "e11a0b8eafe60dda3ab11502c0214c497d016172515a4649465ca356cd6c53b9"
 )
@@ -2500,6 +2506,8 @@ def _validate_codex_reference_calibration_o4_candidate(
         or document["criterionIds"] != ["O4"]
         or document["incrementId"] != _CODEX_CALIBRATION_INCREMENT_ID
         or document["workItemId"] != _CODEX_CALIBRATION_WORK_ID
+        or result.get("machineEvaluationCommit")
+        != _CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT
         or registration_ref
         != {
             "locator": _CODEX_CALIBRATION_REGISTRATION,
@@ -2626,6 +2634,45 @@ def _validate_codex_reference_calibration_o4_candidate(
         or registration_is_pushed is None
     ):
         reject("registration was not immutably committed and pushed before evaluation")
+
+    machine_parent = _evidence_git(
+        root,
+        "rev-parse",
+        f"{_CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT}^",
+    )
+    committed_pending_receipt = _evidence_git(
+        root,
+        "show",
+        (
+            f"{_CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT}:"
+            f"{_CODEX_CALIBRATION_RECEIPT}"
+        ),
+    )
+    machine_is_local = _evidence_git(
+        root,
+        "merge-base",
+        "--is-ancestor",
+        _CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT,
+        "HEAD",
+    )
+    machine_is_pushed = _evidence_git(
+        root,
+        "merge-base",
+        "--is-ancestor",
+        _CODEX_CALIBRATION_MACHINE_EVALUATION_COMMIT,
+        "origin/main",
+    )
+    if (
+        machine_parent is None
+        or machine_parent.decode().strip()
+        != _CODEX_CALIBRATION_REGISTRATION_COMMIT
+        or committed_pending_receipt is None
+        or hashlib.sha256(committed_pending_receipt).hexdigest()
+        != _CODEX_CALIBRATION_PENDING_RECEIPT_SHA256
+        or machine_is_local is None
+        or machine_is_pushed is None
+    ):
+        reject("machine evaluation was not committed and pushed before human judgment")
 
     if committed_program is None:
         reject("committed active program binding is unavailable")
@@ -2860,7 +2907,7 @@ def _validate_codex_reference_calibration_o4_candidate(
         or intent.get("acceptedReceiptRepeatedBoundRequestCounts") != [0, 0, 0]
         or intent.get("calibrationMaterialCollaborationLossCount") != 0
         or intent.get("pendingHumanInput")
-        != "one accountable bounded O4 judgment only"
+        != "none; exact bounded O4 human judgment accepted"
     ):
         reject("intent, communication, or decision-completeness floor changed")
 
@@ -2907,10 +2954,10 @@ def _validate_codex_reference_calibration_o4_candidate(
         or integrity_refresh.get("codexPackageVersion") != codex_package_version
         or integrity_refresh.get("claudePackageVersion") != claude_package_version
         or not str(codex_package_version).startswith(
-            "0.2.0-candidate.5+codex.payload-"
+            "0.2.0-candidate.6+codex.payload-"
         )
         or not str(claude_package_version).startswith(
-            "0.2.0-candidate.5+claude.payload-"
+            "0.2.0-candidate.6+claude.payload-"
         )
         or integrity_refresh.get("evaluatedHistoricalPluginSnapshotsChanged")
         is not False
@@ -3106,7 +3153,19 @@ def _validate_codex_reference_calibration_o4_candidate(
             ).encode()
         ).hexdigest()
         if (
-            authority.get("decisionState") != "accepted"
+            source.get("kind") != "repository-task-receipt"
+            or source.get("locator")
+            != (
+                "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+                "codex-reference-calibration"
+            )
+            or source.get("identity") != combined_identity
+            or authority.get("kind") != "named-accountable-human"
+            or authority.get("name") != "yiheng8023"
+            or authority.get("decision") != "accepted"
+            or authority.get("decidedAt")
+            != "2026-08-14T21:09:08.0744341+08:00"
+            or authority.get("decisionState") != "accepted"
             or result.get("state") != "accepted"
             or result.get("accepted") is not True
             or result.get("humanJudgment")
@@ -3127,6 +3186,7 @@ def _validate_codex_reference_calibration_o4_candidate(
             or applicability.get("acceptedApplicabilityAndBoundedO4Claim") is not True
             or floors.get("applicabilityLimitsAndHumanDecision") != "pass"
             or floors.get("missingData") != []
+            or document.get("validator", {}).get("version") != 1
             or document.get("validator", {}).get("state") != "accepted"
         ):
             reject("named-human methodology, profile, calibration, or bounded O4 decision is absent")

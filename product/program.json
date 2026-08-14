@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.codex-reference-calibration",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -338,7 +338,7 @@
     },
     {
       "id": "increment.v0.2.codex-reference-calibration",
-      "state": "active",
+      "state": "completed",
       "correctionClass": "calibrate-immutable-candidate-five-on-fixed-mixed-outcome-cohort",
       "observedProblem": "O2 now supplies three accepted, pre-registered, materially distinct Codex reference-host scenarios under the same candidate.5 profile and scorecard, while the same-version plugin-rollover receipt remains honestly stopped. O4 is still false because no task-bound aggregate calibration independently applies the unchanged profile to that fixed pass-and-stop cohort, validates the pre-result comparator and external-reuse boundaries, records applicability limits, and obtains the named-human methodology judgment.",
       "hypothesis": "One bounded, source-only calibration can reuse the exact three accepted task validators, immutable registrations, candidate.5 bytes, fixed comparator and external-substrate inputs, and the exact stopped receipt to demonstrate a Codex-reference-host advantage in user orchestration burden and continuation coherence without changing the method, scorecard, floors, missing-data rules, plugin snapshots, runtime, host, consumer state, or task topology.",
@@ -374,7 +374,7 @@
       "workItems": [
         {
           "id": "work.v0.2.codex-reference-calibration",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": [
             "O4",
             "G1",
