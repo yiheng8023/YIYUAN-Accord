@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v0.2.cross-host-source-gate",
+  "activeIncrementId": "increment.v0.2.codex-ambient-capability-arbitration",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -272,26 +272,20 @@
       ]
     },
     {
-      "id": "increment.v0.2.cross-host-source-gate",
+      "id": "increment.v0.2.codex-ambient-capability-arbitration",
       "state": "active",
-      "correctionClass": "deliver-one-matched-cross-host-source-gate-and-aggregate-candidate5-evidence",
-      "observedProblem": "O1 and O3 are verified, but O2 still lacks a third materially different accepted scenario, O4 lacks an accepted three-scenario Codex aggregate judgment, and O5 has no matched task on a distinct runtime. The repository now contains byte-aligned thin Codex and Claude source adapters, while the user's real need to know whether those packages have a source-level release blocker remains unanswered. Current Claude configuration also routes Claude Code through DeepSeek, so any cross-host run must bind the actual endpoint, model resolution, terms and cost rather than reusing stale first-party Anthropic assumptions.",
-      "hypothesis": "One useful fixed-source release-blocking review, executed once from the same goal-level input through the exact candidate.5 Codex and Claude thin adapters, can produce an independently checkable source decision, supply the third materially different O2 scenario, complete bounded Codex candidate.5 calibration with the existing accepted and stopped receipts, and demonstrate only the pre-registered O5 matched-task portability claim. A session-scoped isolated Codex home and Claude --plugin-dir route can contain trust, credentials, plugin exposure, model cost and cleanup without CC Switch, MCP, new tasks, worktrees, branches or persistent consumer mutation.",
-      "falsifier": "The task is primarily diagnostic rather than a useful source-gate deliverable; either host requires user route or topology selection, a different prompt or common method, MCP, CC Switch, a new runtime, a write, a retry, a model fallback, private data, persistent configuration or an unregistered side effect; the effective DeepSeek model cannot be bound; a mandatory host, result, context-boundary, comparator, cost, evidence or residue floor is missing; the two results differ outside the frozen tolerance or contain a factual contradiction; the historical comparator is not outcome-capable or comparable; the three Codex scenarios are not materially distinct; a material collaboration loss occurs; or yiheng8023 rejects either result, equivalence, candidate.5 calibration or claim boundary.",
-      "stopCondition": "After the immutable registration and active binding are committed and pushed, stop at the exact human gate for one isolated temporary Codex auth link and plugin lifecycle, exact Hook execution, one Codex gpt-5.6-sol call and one Claude Code/DeepSeek-V4-Pro-0813 call capped at USD 0.15. After grant, execute each host at most once, read-only and without persistence or retry; capture and independently validate only the observed task-bound sources, compare under the frozen tolerance, remove every exact task-created consumer/process/filesystem exposure, then request the named-human per-host, aggregate and portability judgment. Complete successfully only if O2, O4 and O5 each pass a minimal result-bound criterion-scoped validator, current authority and public status are reconciled, canonical verification and full product tests pass, Git is clean and pushed, and the verifier reports completionState=accepted. Stop honestly on the first falsifier without weakening a floor or manufacturing replacement evidence.",
+      "correctionClass": "fail-closed-unbound-ambient-capability-topology-before-model-dispatch",
+      "observedProblem": "The registered fixed-source review installed the exact Codex plugin into an isolated CODEX_HOME, yet the measured carrier still admitted a user-global .agents code-review Skill whose declared trigger did not match the immutable source-gate task and whose workflow mandated parallel subagents. The carrier selected that larger route, attempted unregistered topology, executed or attempted 96 commands, and timed out without an eligible result. This demonstrates that plugin-home isolation and advisory profile text do not currently contain ambient capability authority, so broader installed ecosystems can still redirect a demand, add data and topology, and defeat the product's zero-user-orchestration route.",
+      "hypothesis": "The exact current Codex host may expose a supported task-scoped Skill-discovery, tool-availability, or collaboration-control seam that can preserve the bound Harness Skill and native read-only repository capability while excluding or failing closed on an unbound ambient Skill before measured work. A source-bound inspection can identify that seam and, only if sufficient, support one thin reference-adapter or preflight correction without moving or deleting user Skills, mutating persistent consumer state, intercepting raw prompts, adding an MCP/runtime/control plane, or changing the portable candidate.5 semantics.",
+      "falsifier": "The current host has no supported task-scoped seam that can distinguish or contain ambient Skill and collaboration authority; the only route hides installed breadth by moving or deleting user assets, changes HOME or another broad consumer identity, requires persistent configuration or user setup, adds prompt interception, a capability registry, manager, MCP, runtime, control plane, custom collaboration protocol or another model call, weakens the registered data/topology boundary, changes candidate.5 semantics without invalidating prior evidence, leaves residue, or triggers another material collaboration loss.",
+      "stopCondition": "First bind the exact installed Codex 0.147.0 behavior and fixed official source or documentation for Skill roots, plugin Skills, tool exposure, collaboration controls and noninteractive isolation. If one sufficient native task-scoped seam exists, implement and test only the smallest inactive fail-closed reference projection or preflight needed to prevent the observed ambient-capability authority collision, reconcile affected source identities and public status, remove task residue, run canonical verification and full product tests, commit and push, then close this outcome-neutral increment. If no such seam exists, record the exact unsupported state and replan without a model call, consumer mutation, retry of the stopped task or invented outcome work.",
       "acceptanceIds": [
-        "O2",
-        "O4",
-        "O5",
         "G1",
         "G2",
         "G3",
         "G4"
       ],
-      "taskRegistration": {
-        "locator": "product/evidence/cross-host-source-gate-registration.json",
-        "sha256": "15a3fbbbf9be11257bc0f24e822bdaf656828d6741e18155abbc8e538aaa323d"
-      },
+      "taskRegistration": null,
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
         "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -304,18 +298,14 @@
           ".tmp",
           "harness/__pycache__",
           "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__",
-          "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/__pycache__"
+          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__"
         ]
       },
       "workItems": [
         {
-          "id": "work.v0.2.cross-host-source-gate",
+          "id": "work.v0.2.codex-ambient-capability-arbitration",
           "state": "active",
           "acceptanceIds": [
-            "O2",
-            "O4",
-            "O5",
             "G1",
             "G2",
             "G3",
@@ -331,10 +321,11 @@
             "git-commit",
             "git-push",
             "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant"
+            "targeted-capability-discovery",
+            "capability-static-review"
           ],
           "deliverables": [
-            "one decision-ready fixed-source review of the exact Codex and Claude thin plugin packages, two independently accepted equivalent host results, bounded candidate.5 Codex aggregate calibration and exact-task cross-host portability evidence, with no release action or persistent consumer residue"
+            "one exact-source disposition of Codex ambient Skill and collaboration authority plus the smallest sufficient inactive fail-closed reference correction when supported, or an explicit unsupported-state boundary when not, with zero O1-O5 credit and no consumer mutation or repeated model task"
           ]
         }
       ]

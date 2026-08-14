@@ -350,13 +350,14 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_retains_two_verified_outcomes_and_active_cross_host_gate(self) -> None:
+    def test_current_v02_contract_retains_two_verified_outcomes_and_active_ambient_capability_repair(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
         self.assertEqual(report["programStatus"], "active")
         self.assertEqual(
-            report["activeIncrement"], "increment.v0.2.cross-host-source-gate"
+            report["activeIncrement"],
+            "increment.v0.2.codex-ambient-capability-arbitration",
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
