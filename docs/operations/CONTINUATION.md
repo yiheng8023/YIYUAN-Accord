@@ -16,7 +16,7 @@ Read these files first:
 - `product/acceptance.json`
 
 The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate-reregistered`. The public verifier should
+`increment.v0.2.portable-source-candidate-gate-auth-isolated`. The public verifier should
 report:
 
 - program status `active`;
@@ -27,16 +27,32 @@ report:
 - G1-G4 true (`4/4` guardrails);
 - one active O5 increment and one active work item.
 
-The active O5 re-registration freezes one independently useful read-only
+The active O5 auth-isolated registration freezes one independently useful read-only
 source-candidate gate on exact commit `48ef653` before either model runs. It
 binds Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude Code
 2.1.232/claude-sonnet-5, the current candidate.6 package trees over the exact
 candidate.5 common method, one prompt and supported schema, minimum task-scoped
 tool surfaces, explicit unknown-context handling, sequential ephemeral
 carriers, normalized P0/P1 equivalence, cleanup and the maximum claim. It still
-requires one new exact human trust/data/model-execution grant, both eligible host
+requires one new exact human grant for two temporary host-owned credential
+hardlinks, reviewed Hooks, the public-data boundary and the two conditional
+model calls, both eligible host
 results, task-bound validation and a later named-human outcome/equivalence
 judgment. Until then O5 remains false.
+
+The preceding 2026-08-15 registration stopped before either model call after
+its target, schema, package, Codex Skill/App/MCP and dual-Hook checks passed.
+An empty Windows `CLAUDE_CONFIG_DIR` also removes the existing
+`.credentials.json`, so the isolated host correctly reported `loggedIn=false`;
+the immutable registration had authorized neither a Claude credential link nor
+new login, token or ambient configuration. The exact task root and Codex link
+were removed without user cleanup. A no-model correction probe also fixed the
+nested-snapshot geometry: `GIT_CEILING_DIRECTORIES` must name the task root, at
+which point both Hooks expose the outer repository checkpoint as explicit
+`unknown` and remain equivalent after normalizing only thin-adapter fields.
+The active registration preserves every product and result floor, adds only
+the second exact temporary credential link and that Git ceiling, and consumes
+all earlier grants and call allowances.
 
 The superseded 2026-08-14 registration stopped before either model call. Its
 target, source snapshot, common Skill/profile bytes, supported schema and
