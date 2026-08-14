@@ -56,21 +56,30 @@ exact plugin, auth hardlink, temporary home, processes, and files were removed;
 the stopped receipt is
 `product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
 
+A subsequent matched closeout-decision task also stopped with zero O1-O5
+credit. Its Codex preflight correctly reduced 25 visible Skills to the one exact
+Harness Skill and verified multi-agent disabled. The immutable output schema
+then failed the host's stricter structured-output subset because
+`targetCommit` had `const` but no explicit `type`; the service returned
+`invalid_json_schema` before model generation. No result, usage, cost, or
+Claude call followed. Cleanup is complete, and the exact receipt is
+`product/evidence/closeout-critical-path-stopped-2026-08-14.json`.
+
 If live Git or the verifier disagrees, investigate that evidence instead of
 repairing this document first.
 
 ## Latest closed outcome attempt
 
-The fixed-source review was a real release-decision demand, not a Harness
-diagnostic. Its immutable registration allowed one Codex call and one
-conditional Claude/DeepSeek call with no retry. The Codex call loaded the exact
-candidate.5 projection, but isolated `CODEX_HOME` did not isolate the separate
-user-global Skill inventory. An inapplicable code-review Skill mandated parallel
-subagents, the carrier attempted that unregistered topology, and the call
-reached its 600-second finite stop without a final result. Do not rerun this
-registration, normalize it to success, execute the unused Claude call, or hide
-the material unnecessary-process loss. The exact stopped evidence is retained;
-consumer and process state is clean.
+The closeout-critical-path task was a real requested plan and risk decision,
+not a Harness diagnostic or a retry of the fixed-source review. Its immutable
+registration allowed one Codex call and one conditional Claude/DeepSeek call
+with no retry. Ambient-capability arbitration passed, but the registered schema
+was not accepted by the exact host, so the task stopped before model behavior.
+Do not edit or rerun this registration, execute its unused Claude allowance, or
+normalize the host rejection into an outcome. A future materially different
+task must freeze explicit property types and a host-supported structured-output
+shape before its one allowed call. Do not turn that task-specific correction
+into a generic receipt ecosystem, runtime, or product-layer schema registry.
 
 ## Latest closed outcome-neutral authority repair
 

@@ -292,6 +292,20 @@ verify the resulting prompt and feature state before the model call. It must not
 delete or move user Skills, persist a consumer-wide deny list, disable unrelated
 healthy capabilities, or ask the user to select the route.
 
+A later registered dispatch demonstrated both the value and the limit of that
+preflight. It reduced 25 prompt-visible Skills to the single exact Harness Skill
+and verified all multi-agent feature states false, but the immutable
+structured-output schema used `const` without an explicit `type` on one
+property. The Codex service rejected it as `invalid_json_schema` before model
+generation. That stopped result is
+`product/evidence/closeout-critical-path-stopped-2026-08-14.json`. Future
+one-call registrations must therefore bind a schema known to be accepted by the
+exact host, or a deterministic compatibility check when the host exposes one,
+before dispatch. General JSON Schema validity, prompt visibility, and feature
+state do not prove structured-output compatibility. This remains parent
+orchestration evidence, not a reason to add a schema registry or outcome
+validator to the product.
+
 The plugin manifest has no field that can override other installed Skills or
 multi-agent policy, and the plugin must not acquire that authority. This keeps
 ambient-capability arbitration in Agent-owned task dispatch rather than adding a

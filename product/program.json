@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.closeout-critical-path-decision",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -267,75 +267,6 @@
           ],
           "deliverables": [
             "one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate that reuses the exact candidate.5 demand method, adds no MCP or CC Switch dependency, preserves host-specific boundaries, passes task-bound validation, and makes no live or portability claim"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v0.2.closeout-critical-path-decision",
-      "state": "active",
-      "correctionClass": "deliver-matched-cross-host-closeout-critical-path-decision-with-bounded-capability-topology",
-      "observedProblem": "The user has already supplied nine concrete Codex experience failures, declared the product-plan goals to be real demand, and repeatedly requested a global review of plan, sequence, acceptance, priorities, risks, and hidden assumptions. The current program has two materially distinct accepted Codex scenario classes and honest stopped samples, but O2, O4, and O5 remain false; continuing with another supporting repair or asking for a new task would repeat the reported planning and orchestration loss rather than deliver the requested decision.",
-      "hypothesis": "One short, read-only, fixed-schema closeout-critical-path decision task executed through the exact candidate.5 Codex and distinct Claude Code projections can produce equivalent, independently fact-checked plan and risk dispositions while the Agent owns capability isolation, topology, comparison, verification, and cleanup. If accepted, this materially distinct decision-support scenario can complete the third O2 class, calibrate candidate.5 against the existing accepted and stopped Codex cohort for O4, and provide one bounded O5 matched pair without teaching the user any host or capability mechanics.",
-      "falsifier": "The task is merely diagnostic rather than a useful requested decision; a host or capability identity, official source, terms, model, prompt, schema, target, task-scoped exclusion, context-boundary record, cost, event stream, or fact check is missing; a model writes, uses web/private data, selects another Skill or subagent, times out, falls back, diverges on decision or normalized P0/P1 blockers, misses or invents a critical fact, needs a retry or user orchestration, exceeds cost or authority, leaves residue, changes the frozen profile or tolerance, or the named human rejects any required outcome, comparison, methodology, equivalence, portability, or claim judgment.",
-      "stopCondition": "First commit and push the exact immutable registration and active binding. Then wait for one new exact human grant scoped to the registered isolated Codex credential link and plugin lifecycle, task-scoped Hook and capability controls, one Codex gpt-5.6-sol/high/default call, one Claude Code/DeepSeek-V4-Pro-0813/max call capped at USD 0.15, and exact cleanup. After the grant, execute each host at most once in the registered order, stop the pair on the first mandatory-floor failure without running an ineligible conditional host or retry, independently verify every decision-relevant fact, remove all task-created process/consumer/filesystem state, and request only the registered accountable judgments. Complete only if minimal observed-source criterion-scoped validators establish O2, O4, and O5 under the unchanged registration and human decisions, canonical checks pass, delivery is committed and pushed, and the verifier reports those outcomes true; otherwise retain an honest stopped receipt with zero progress and leave the current graph.",
-      "acceptanceIds": [
-        "O2",
-        "O4",
-        "O5",
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/closeout-critical-path-registration.json",
-        "sha256": "dfdb03455a86d30c4424ac27a4c30e96c41fdd31222f75c9640f2e28c3ac7155"
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp/closeout-critical-path-pair",
-          "harness/__pycache__",
-          "tests/product/__pycache__",
-          "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/__pycache__",
-          "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.closeout-critical-path-decision",
-          "state": "active",
-          "acceptanceIds": [
-            "O2",
-            "O4",
-            "O5",
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "capability-static-review"
-          ],
-          "deliverables": [
-            "one independently fact-checked, matched Codex and distinct-host closeout-critical-path decision pair for the exact target and profile, with Agent-owned capability and topology lifecycle, exact cleanup, bounded human judgments, and either criterion-scoped O2/O4/O5 evidence or an honest zero-progress stopped receipt"
           ]
         }
       ]

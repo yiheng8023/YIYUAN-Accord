@@ -22,11 +22,11 @@ interesting paper is not sufficient entry evidence.
 v0.2 is ready with no active increment after the accepted public-intake,
 task-facing Codex Skill, and task-facing Claude Skill source deliveries, the
 outcome-neutral proactive context-carrier fitness and transition repair, and
-one stopped live Codex continuity task. O1 and O3 are verified; O2, O4, and O5
+content-addressed stopped Codex tasks. O1 and O3 are verified; O2, O4, and O5
 remain planned and false. The current tree contains a product-contract
 verifier, three exact task-bound validators for those receipts and the O3
 cohort, inactive Codex and Claude Code reference-adapter candidates, and the
-content-addressed stopped continuity result, not a task runtime or accepted
+content-addressed stopped results, not a task runtime or accepted
 live host behavior. Closed outcome-neutral work remains recoverable from Git
 rather than accumulating as a current queue.
 
@@ -40,6 +40,18 @@ Hook trust, cache, and consumer changes were removed. Do not retry or weaken
 that result. A later natural task may use the actual serialized developer
 projection as a pre-registered host evidence surface, or a different
 authoritative API if one exists, but must fix that route before execution.
+
+Later tasks exposed two different pre-result failures. One isolated
+`CODEX_HOME` still admitted an unrelated user-global Skill that selected
+unregistered parallel topology and timed out. Task-scoped prompt inspection,
+exact Skill exclusions, and multi-agent disablement then contained that defect,
+but a subsequent immutable structured-output schema omitted the explicit type
+required by the Codex service and was rejected before model generation. Both
+registrations remain stopped, their conditional Claude calls are ineligible,
+and cleanup is complete. A future materially different task must bind both the
+prompt-visible capability boundary and an exact host-supported output shape
+before its single call; neither failure authorizes a retry, schema registry,
+runtime, or generic outcome validator.
 
 No current evidence proves the O2 cohort-level user-value reduction, an
 accepted methodology or quality profile, or cross-host behavior. No

@@ -16,8 +16,8 @@ result, and cleans up afterward.
 contract, acceptance model, deterministic verifier, an inactive Codex
 `SessionStart` reference adapter, an inactive thin Codex plugin source candidate
 with one task-facing Skill and that continuation Hook, a workspace discovery
-entry that exposes the projection as available without installing it, one
-stopped live Codex continuity result, and an inactive session-scoped Claude
+entry that exposes the projection as available without installing it,
+content-addressed stopped Codex results, and an inactive session-scoped Claude
 Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
@@ -43,8 +43,12 @@ and post-compaction projections but stopped when required native Hook lifecycle
 records were unavailable. A later fixed-source review stopped before the
 conditional Claude call: an isolated `CODEX_HOME` still exposed an unrelated
 user-global code-review Skill, which selected an unregistered parallel route and
-the single Codex call timed out without a final result. Both attempts were
-cleaned completely and count as zero O1-O5 progress.
+the single Codex call timed out without a final result. A subsequent closeout
+decision task successfully excluded 24 non-Harness Skills and disabled
+multi-agent, but its immutable structured-output schema was rejected before
+model generation because one constant property lacked the explicit type
+required by the host. The conditional Claude call did not run. All task-created
+state was cleaned, and every stopped attempt counts as zero O1-O5 progress.
 
 Current Codex exposes task-scoped native controls for inspecting the
 model-visible prompt, disabling an exact Skill, and disabling multi-agent tools.
@@ -52,7 +56,10 @@ For a future measured dispatch, the Agent—not the user—must inspect visible
 capabilities, reject only the causally inapplicable routes through per-invocation
 configuration, and fail closed when the intended capability and topology cannot
 be proven. The plugin does not override the user's broader capability inventory.
-The verifier is the current machine-readable state source.
+The parent must also bind a schema that the exact host accepts before consuming
+the task's only allowed model call; general JSON Schema validity alone is not
+host-compatibility evidence. The verifier is the current machine-readable state
+source.
 
 ## The problem
 

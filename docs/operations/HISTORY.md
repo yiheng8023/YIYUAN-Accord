@@ -200,6 +200,27 @@ credit and remains the honest candidate.5 stopped input for a later O4 cohort.
 Its content-addressed result is
 `product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json`.
 
+## Later Codex dispatch counterexamples
+
+A fixed-source review then showed that an isolated `CODEX_HOME` did not
+isolate user-global Skills. An inapplicable code-review Skill selected
+unregistered parallel topology and the single Codex call timed out. The result
+was stopped, the conditional Claude call was skipped, and all exposure was
+removed. The counterexample is retained at
+`product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
+
+The parent dispatch boundary subsequently used Codex's native prompt rendering,
+exact per-invocation Skill configuration, and multi-agent feature control. A
+new closeout-decision task proved that correction effective for its preflight:
+25 visible Skills became the one exact Harness Skill and multi-agent remained
+false. The immutable task still stopped before model generation because its
+structured-output schema used a constant without the explicit property type
+required by the service. No retry, substitution, Claude call, outcome credit,
+or residue followed. The exact result is
+`product/evidence/closeout-critical-path-stopped-2026-08-14.json`. This is
+host-compatibility counterevidence, not a reason to add a schema registry,
+runtime, or generic outcome validator.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may
