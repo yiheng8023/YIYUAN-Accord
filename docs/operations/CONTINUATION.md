@@ -40,6 +40,17 @@ The stopped receipt is
 `product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json` and
 adds zero O1-O5 credit.
 
+The latest bounded mechanism probe then tested the smallest documented
+per-process correction without auth, plugin installation, thread, turn, or
+model call. Codex 0.147.0 honored `apps._default.enabled=false` and reported zero
+installed or callable Apps and zero MCP servers. It still discovered 39 enabled
+Skills: 33 from the shared CC Switch root and six Codex system Skills. The probe
+therefore closes with zero O1-O5 credit and leaves the measured route
+ineligible: it did not prove the future thread-specific model tool surface or
+coexistence with required model-driven repository operations. Its bounded
+evidence is
+`product/evidence/codex-tool-surface-suppression-mechanism-2026-08-14.json`.
+
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
 0.147.0 source distinguishes a Hook-only preload from normal all-capability
@@ -97,6 +108,21 @@ ineligible. Do not add a generic MCP manager, capability registry, runtime, or
 control plane.
 
 ## Latest closed outcome-neutral authority repair
+
+The exact-version App/MCP suppression probe confirms one usable native
+component and one remaining boundary. Per-process
+`apps._default.enabled=false` removes the observable App and MCP backing surface
+in an empty isolated process, but isolated `CODEX_HOME` does not remove shared
+CC Switch or Codex system Skills. Future parent dispatch must dynamically
+inventory the post-load Skill set, exclude every non-Harness Skill within the
+task, and independently prove the thread-specific model-visible resource and
+required repository-tool surface before consuming a model call. If a stable
+host keeps a harmless enumeration primitive, bind zero unauthorized resources,
+invocation, and effects rather than requiring undocumented tool absence. Do not
+install, stop, reconfigure, or depend on CC Switch for the Harness; it remains a
+replaceable ambient consumer source.
+
+The earlier authority repair remains valid:
 
 The stopped result exposed a distinct dispatch defect: plugin-home isolation
 does not contain every prompt-visible Skill, while the plugin manifest has no

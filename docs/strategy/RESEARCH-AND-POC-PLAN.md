@@ -64,6 +64,18 @@ stop if the required read-only repository operations cannot coexist with MCP
 and ambient App resource suppression. Do not create a generic manager,
 registry, runtime, or new outcome task to hide this counterexample.
 
+That finite mechanism lane is now closed. One exact Codex 0.147.0 app-server
+process, isolated and stripped of credentials, plugins, threads, turns, and
+model calls, honored `apps._default.enabled=false` and reported zero installed
+or callable Apps and zero MCP servers. It also discovered 39 enabled Skills—33
+from CC Switch and six from the Codex system root—so neither isolated home nor
+the App switch is a complete capability preflight. The probe did not prove the
+future thread-specific model tool surface or repository-tool coexistence; the
+current measured route remains ineligible and no follow-on task is queued.
+Future natural-task registration may use this App switch only with exact
+post-load Skill exclusion and independent pre-model verification of unauthorized
+resources, invocations, effects, and required repository tools.
+
 No current evidence proves the O2 cohort-level user-value reduction, an
 accepted methodology or quality profile, or cross-host behavior. No
 outcome-bearing A/B task should be

@@ -65,11 +65,20 @@ The parent must also bind a schema that the exact host accepts before consuming
 the task's only allowed model call; general JSON Schema validity alone is not
 host-compatibility evidence. Prompt-visible Skill exclusion is likewise not a
 complete tool or data-boundary preflight: the current measured Codex route is
-ineligible until an official stable per-call seam can suppress ambient MCP/App
-resource enumeration while retaining only the required read-only repository
-operations. This is a parent-dispatch constraint, not authority to add a generic
-capability manager or control plane. The verifier is the current
-machine-readable state source.
+ineligible until an official stable per-call seam can bound ambient MCP/App
+resources while retaining the required read-only repository operations. A
+subsequent no-auth, no-plugin, no-model Codex 0.147.0 app-server probe verified
+that `apps._default.enabled=false` is honored per process: it reported zero
+installed or callable Apps and zero MCP servers. The same isolated home still
+discovered 39 enabled Skills—33 from the replaceable CC Switch shared root and
+six Codex system Skills—so home isolation alone is not capability isolation and
+CC Switch is not a Harness dependency. The probe could not prove the later
+thread-specific model tool specification or repository-tool coexistence; future
+registrations must preflight those exact surfaces and constrain unauthorized
+resources, invocation, and effects rather than demand the absence of harmless
+host plumbing without causal need. This is a parent-dispatch constraint, not
+authority to add a generic capability manager or control plane. The verifier is
+the current machine-readable state source.
 
 ## The problem
 

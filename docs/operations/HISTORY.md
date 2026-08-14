@@ -235,6 +235,19 @@ tool and resource surface, not only Skills and topology, and require an official
 stable per-call MCP/App suppression seam before another measured call. It does
 not authorize a generic manager, registry, runtime, or control plane.
 
+One bounded mechanism-only follow-up then used Codex 0.147.0 app-server with an
+isolated home, no credentials, no plugin, no thread or turn, and no model call.
+The documented per-process `apps._default.enabled=false` override was effective:
+the host reported zero installed or callable Apps and zero MCP servers. Skill
+discovery nevertheless returned 39 enabled entries—33 from the shared CC Switch
+root and six Codex system Skills—showing that `CODEX_HOME` isolation is not a
+capability-isolation boundary and that CC Switch is ambient input, not a Harness
+dependency. Because the no-thread probe could not prove the future
+model-visible enumeration primitive or its coexistence with required repository
+tools, the current measured route remains ineligible. The finite result is
+`product/evidence/codex-tool-surface-suppression-mechanism-2026-08-14.json` and
+adds zero O1-O5 credit.
+
 ## Strategic invalidation audit
 
 The demand-driven control-plane reset also changes how predecessor assets may

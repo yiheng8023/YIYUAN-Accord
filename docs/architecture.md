@@ -325,6 +325,25 @@ treat this Codex route as ineligible. The correction remains parent
 orchestration and does not justify an MCP manager, registry, runtime, or control
 plane.
 
+The bounded follow-up mechanism probe used the official app-server configuration
+and inspection RPCs against the installed Codex 0.147.0 binary, with no auth,
+plugin, thread, turn, or model call. The per-process
+`apps._default.enabled=false` override was present in effective configuration;
+`app/installed` returned zero installed, enabled, or callable Apps and
+`mcpServerStatus/list` returned zero MCP servers. This establishes a usable App
+suppression component, not a complete task route. `skills/list` still found 39
+enabled Skills: 33 under the shared CC Switch root and six system Skills copied
+into the isolated Codex home. The no-thread RPCs cannot prove that
+`list_mcp_resources` is absent from a later model-visible tool specification or
+that the required model-driven repository operations coexist with the same
+boundary. Future dispatch must therefore re-inventory and exclude every
+non-task Skill after loading the exact Harness projection, inspect the
+thread-specific MCP/App resource surface, and fail before a model call when
+that evidence is unavailable. A stable host enumeration primitive is not itself
+a product defect when it exposes no unauthorized resource and causes no
+unauthorized invocation or effect; registrations must bind the causal boundary,
+not an impossible host-implementation shape.
+
 The plugin manifest has no field that can override other installed Skills or
 multi-agent policy, and the plugin must not acquire that authority. This keeps
 ambient-capability arbitration in Agent-owned task dispatch rather than adding a
@@ -333,10 +352,13 @@ the portable core or thin plugin.
 
 CC Switch has no dependency role in the portable core, verifier, Codex adapter,
 or Codex plugin runtime. It may remain useful as one replaceable operational
-manager for shared third-party Skills, but stopping or removing it must not
-change Harness semantics or disable the Codex continuity projection. Codex's
-native plugin manager owns this projection's install, cache, enable, update,
-disable, and uninstall lifecycle.
+manager for shared third-party Skills. The exact app-server probe also shows
+that those shared Skills remain discoverable from an isolated `CODEX_HOME`, so
+CC Switch is an ambient input to task-time arbitration, not an isolation or
+security boundary. Stopping or removing it must not change Harness semantics or
+disable the Codex continuity projection. Codex's native plugin manager owns
+this projection's install, cache, enable, update, disable, and uninstall
+lifecycle.
 
 `.agents/plugins/marketplace.json` is only a workspace discovery index. It
 marks the existing thin projection `AVAILABLE` and points at that adapter
