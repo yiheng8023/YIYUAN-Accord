@@ -1,6 +1,6 @@
 # Continuation
 
-Updated: 2026-08-14
+Updated: 2026-08-15
 
 This file is a navigation aid, not product authority or a history ledger.
 Recheck live Git truth and the machine contract before acting. Closed changes
@@ -16,7 +16,7 @@ Read these files first:
 - `product/acceptance.json`
 
 The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate`. The public verifier should
+`increment.v0.2.portable-source-candidate-gate-reregistered`. The public verifier should
 report:
 
 - program status `active`;
@@ -27,16 +27,29 @@ report:
 - G1-G4 true (`4/4` guardrails);
 - one active O5 increment and one active work item.
 
-The active O5 registration freezes one independently useful read-only
+The active O5 re-registration freezes one independently useful read-only
 source-candidate gate on exact commit `48ef653` before either model runs. It
 binds Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude Code
 2.1.232/claude-sonnet-5, the current candidate.6 package trees over the exact
 candidate.5 common method, one prompt and supported schema, minimum task-scoped
 tool surfaces, explicit unknown-context handling, sequential ephemeral
 carriers, normalized P0/P1 equivalence, cleanup and the maximum claim. It still
-requires one exact human trust/data/model-execution grant, both eligible host
+requires one new exact human trust/data/model-execution grant, both eligible host
 results, task-bound validation and a later named-human outcome/equivalence
 judgment. Until then O5 remains false.
+
+The superseded 2026-08-14 registration stopped before either model call. Its
+target, source snapshot, common Skill/profile bytes, supported schema and
+isolated Codex plugin package passed the observed preflight portions, but the
+parent used PowerShell `$home`, which collided with the read-only `$HOME`
+variable and redirected the temporary authentication hardlink to the user-home
+root. The error was disclosed and the exact link and task root were removed;
+the original login file remains the only hardlink name. The unnecessary cleanup
+approval and date rollover are registered falsifiers, so the old grant and both
+unused call allowances are consumed. The 2026-08-15 registration changes only
+the task/date identity, source eligibility, and a mandatory exact-path plus
+two-name hardlink preflight; all product, host, model, schema, equivalence,
+zero-loss and claim floors remain unchanged.
 
 The O4 registration freezes the unchanged candidate.5 profile and scorecard,
 the exact three accepted O2 scenarios, and the exact honestly stopped

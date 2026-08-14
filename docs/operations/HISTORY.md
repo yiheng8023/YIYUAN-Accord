@@ -202,6 +202,22 @@ Its content-addressed result is
 
 ## Later Codex dispatch counterexamples
 
+A later O5 source-candidate gate stopped before model execution. The exact
+target, 19-file public source snapshot, candidate.5 Skill/profile bytes,
+supported schema, host binary identities and isolated candidate.6 Codex plugin
+bytes passed their observed preflight portions. The parent then used the
+case-insensitive PowerShell variable `$home`, which collided with the read-only
+system `$HOME` value and created the authorized auth hardlink at the user-home
+root instead of the task root. The error was disclosed before either model
+call, the two hardlink names were verified without reading credential content,
+and the wrong link, isolated plugin, marketplace, snapshot and task root were
+removed. The unnecessary cleanup approval and resulting date rollover consumed
+the registration and grant, add zero O1-O5 credit, and are retained at
+`product/evidence/portable-source-candidate-gate-preflight-stopped-2026-08-15.json`.
+The next registration keeps every host, model, profile, schema, equivalence,
+zero-loss and claim floor while adding exact task-path and two-name hardlink
+checks; it does not add a credential manager, runtime or product protocol.
+
 A fixed-source review then showed that an isolated `CODEX_HOME` did not
 isolate user-global Skills. An inapplicable code-review Skill selected
 unregistered parallel topology and the single Codex call timed out. The result
