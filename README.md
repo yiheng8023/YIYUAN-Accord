@@ -22,10 +22,13 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `active` on one pre-registered Claude Skill-plus-Hook source delivery. O1 is verified by two
-accepted, task-bound results: the public-intake rewrite and the uninstalled
-Codex task-facing Skill source package. O2-O5 remain unverified (`1/5`
-outcomes; two receipts support the same O1 criterion). The program makes
+v0.2 is `ready` with no active increment. O1 is verified by three accepted,
+task-bound results: the public-intake rewrite and the uninstalled Codex and
+Claude task-facing Skill source packages. O3 is independently verified over
+those three route decisions: one no-gap/native retention case and two finite,
+source-bound official discovery or adaptation cases. O2, O4, and O5 remain
+unverified (`2/5` outcomes). The Claude result is intentionally not counted as
+a materially different O2 scenario from the Codex Skill delivery. The program makes
 explicit that authorized product-plan delivery is real demand
 when the primary purpose is the deliverable, rather than exercising or
 diagnosing the Harness. The Codex source candidate now projects the unaccepted

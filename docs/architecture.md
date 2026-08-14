@@ -102,11 +102,16 @@ validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
 The v0.2 program is ready with no active causal increment after closing the
-task-facing Codex Skill source delivery, the outcome-neutral task-topology and
-proactive context-carrier fitness repairs, and the public-intake O1 increment.
-The Skill task adds a second O1 receipt, including one native compaction and an
-explicit record of duplicate goal-mode continuation prompts as non-material
-host process cost rather than value. O1 is true and O2-O5 remain false.
+public-intake and task-facing Codex and Claude Skill source deliveries. Those
+three task-bound results support O1. A separate criterion-scoped aggregate
+check over their exact validators supports O3 through one no-gap/native-retain
+route and two finite source-bound official discovery or adaptation routes,
+with every projection inactive and task exposure released. The Codex Skill
+task includes one native compaction and an explicit record of duplicate
+goal-mode continuation prompts as non-material host process cost rather than
+value. The Claude and Codex source deliveries are deliberately not treated as
+materially different O2 scenarios. O1 and O3 are true; O2, O4, and O5 remain
+false.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
@@ -302,12 +307,12 @@ Hook does not intercept or classify prompts. Using `UserPromptSubmit` would add
 raw-prompt access and turn-blocking authority without causal necessity, so it is
 not part of the candidate.
 
-The plugin source candidate remains inactive. Installation, enablement, and
+The plugin source candidates remain inactive. Installation, enablement, and
 exact Hook trust are separate consumer transitions requiring explicit authority
-and reversible behavior evidence. The current source-delivery task can establish
-only a bounded package result after named-human acceptance; it cannot establish
-live Skill triggering, Hook behavior, repeated burden reduction, or cross-host
-portability.
+and reversible behavior evidence. The accepted source deliveries establish
+only bounded package results plus the exact O3 route lifecycle cohort; they
+cannot establish live Skill triggering, Hook behavior, repeated burden
+reduction, methodology calibration, or cross-host portability.
 
 An authorized user-layer Hook edit was later present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native

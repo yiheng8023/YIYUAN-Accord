@@ -620,6 +620,82 @@ _CODEX_SKILL_TASK_FILES = MappingProxyType(
     }
 )
 
+_CLAUDE_SKILL_INCREMENT_ID = "increment.v0.2.claude-demand-skill-plugin"
+_CLAUDE_SKILL_WORK_ID = "work.v0.2.claude-demand-skill-plugin"
+_CLAUDE_SKILL_REGISTRATION = (
+    "product/evidence/claude-demand-skill-plugin-registration.json"
+)
+_CLAUDE_SKILL_REGISTRATION_SHA256 = (
+    "67a34f4c83abcc364738816d62bdb84e0130be70ffe3cda15ed167f4ebe3e53d"
+)
+_CLAUDE_SKILL_BASELINE_COMMIT = "d167bc81a89cfade2739fdc98c4978b4270b4c36"
+_CLAUDE_SKILL_REGISTRATION_COMMIT = "3b346c2f2abccae406cf282fcb8a90b778a7636a"
+_CLAUDE_SKILL_RESULT_COMMIT = "9d704b948d615ba55b3db9badd300a4ad7ad6541"
+_CLAUDE_SKILL_RECEIPT_SHA256 = (
+    "26279bc2f93ceb52bb13f6d11155b2de485c6b576381eeac1f5fa5aaef97461e"
+)
+_CLAUDE_SKILL_SOURCE_IDENTITY = (
+    "sha256:5551e40698276d98bd6c0cd8b934f0876453691768e8f8b12816525d4858904f"
+)
+_CLAUDE_SKILL_ACCEPTANCE_MESSAGE_SHA256 = (
+    "a5417defbb630b5e051a37aeb14aa523b2dcf6d6c29c9f4da587ef03dec6efc0"
+)
+_CLAUDE_SKILL_ACCEPTANCE_RECORD_SHA256 = (
+    "268bfa4c52c009551da6cce3e46408cf6590529062b1dbe0aeef5fcfb4111a06"
+)
+_CLAUDE_SKILL_JUDGMENT_REQUEST_SHA256 = (
+    "6371383a66d965ab052c75be1af4c21b5087cf48cc0d1f9fcbbefb3f57b8d3af"
+)
+_CLAUDE_SKILL_SOURCE_EVENTS = (
+    "goal-level-demand-received",
+    "registration-committed",
+    "registration-pushed",
+    "registered-source-route-started",
+    "deliverable-committed",
+    "deliverable-pushed",
+    "bounded-human-judgment-requested",
+    "named-human-accepted-source-and-o3-boundary",
+)
+_CLAUDE_SKILL_RESULT_PATHS = (
+    "README.md",
+    "README.zh-CN.md",
+    "adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+    "adapters/agent-autonomy-harness-claude/scripts/session_start.py",
+    "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+    "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+    "docs/architecture.md",
+    "docs/operations/CONTINUATION.md",
+    "docs/strategy/RESEARCH-AND-POC-PLAN.md",
+    "harness/claude_reference.py",
+    "tests/product/test_product_control.py",
+)
+_CLAUDE_SKILL_TASK_FILES = MappingProxyType(
+    {
+        "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md": (
+            "e34d2299a9ef6e3abded16b88fab2396cfefb361",
+            "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7",
+        ),
+        "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md": (
+            "e3ac88f8d8e38b6ee673738801962d9ef35149e8",
+            "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+        ),
+        "adapters/agent-autonomy-harness-claude/scripts/session_start.py": (
+            "880b69dc5592547da92e87b69bf0d1a35797c0a7",
+            "2d5c5e47d89b462d980cbb16e89e13b8523e4b56bb1c1443dd18293edde34652",
+        ),
+        "harness/claude_reference.py": (
+            "528046bdad4138b365c06197751cce2412ee235c",
+            "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
+        ),
+    }
+)
+_PUBLIC_INTAKE_RECEIPT = (
+    "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json"
+)
+_CODEX_SKILL_RECEIPT = (
+    "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json"
+)
+
 
 def _evidence_git(root: Path, *arguments: str) -> bytes | None:
     try:
@@ -1207,6 +1283,399 @@ def _validate_codex_skill_o1(
     return len(errors) == before
 
 
+def _validate_claude_skill_o1_o3(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    """Validate the observed Claude source result and its exact O3 route cohort."""
+
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"Claude Skill {criterion_id} evidence {message}")
+
+    canonical = json.dumps(
+        document, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    if hashlib.sha256(canonical).hexdigest() != _CLAUDE_SKILL_RECEIPT_SHA256:
+        reject("serialization differs from the observed task receipt")
+        return False
+
+    authority = document["authority"]
+    result = document["result"]
+    if (
+        criterion_id not in {"O1", "O3"}
+        or document["criterionIds"] != ["O1", "O3"]
+        or document["incrementId"] != _CLAUDE_SKILL_INCREMENT_ID
+        or document["workItemId"] != _CLAUDE_SKILL_WORK_ID
+        or document["taskIdentity"]
+        != "natural-task.2026-08-14.claude-demand-skill-plugin"
+        or document["source"]["identity"] != _CLAUDE_SKILL_SOURCE_IDENTITY
+        or authority["name"] != "yiheng8023"
+        or authority["sourceThreadId"]
+        != "019ffaa8-b44a-7bf2-97de-65875bceec33"
+        or authority["sourceTurnId"]
+        != "616cab65-9517-46e7-8676-a9a528423833"
+        or authority["sourceMessageId"]
+        != "msg_019ffe8c-a9a8-7fa0-8033-a486fa053e4f"
+        or authority["sourceMessageSha256"]
+        != _CLAUDE_SKILL_ACCEPTANCE_MESSAGE_SHA256
+        or authority["sourceRecordSha256"]
+        != _CLAUDE_SKILL_ACCEPTANCE_RECORD_SHA256
+        or authority["responseToMessageSha256"]
+        != _CLAUDE_SKILL_JUDGMENT_REQUEST_SHA256
+        or hashlib.sha256("认可。\n".encode()).hexdigest()
+        != _CLAUDE_SKILL_ACCEPTANCE_MESSAGE_SHA256
+        or result["deliverableCommit"] != _CLAUDE_SKILL_RESULT_COMMIT
+        or result["accepted"] is not True
+        or "explicitly rejecting material-distinction credit for O2"
+        not in result["humanJudgment"]
+    ):
+        reject("criterion, task source, result, or named-human decision changed")
+
+    records = document["sourceRecords"]
+    if tuple(item["event"] for item in records) != _CLAUDE_SKILL_SOURCE_EVENTS:
+        reject("source chronology events changed")
+    instants = [_rfc3339_instant(item["observedAt"]) for item in records]
+    if any(item is None for item in instants) or instants != sorted(instants):
+        reject("source chronology is not ordered")
+    if any(
+        not item["locator"].startswith(
+            "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+        )
+        for item in records
+    ):
+        reject("source chronology left the bound task")
+    identities = [item["identity"].removeprefix("sha256:") for item in records]
+    combined = hashlib.sha256(("\n".join(identities) + "\n").encode()).hexdigest()
+    if document["source"]["identity"] != f"sha256:{combined}":
+        reject("source chronology identity changed")
+
+    measures = document["measures"]
+    orchestration = measures["materialUserCapabilityOrchestrationInterventions"]
+    losses = measures["materialCollaborationLossEvents"]
+    process_noise = losses["nonMaterialHostGoalProcessNoise"]
+    context = measures["contextCarrierFitnessObservationsAndTransitions"]
+    topology = measures["taskTopologyLifecycleEvents"]
+    floors = measures["taskFloorResults"]
+    residue = measures["residueAndClaimLimits"]
+    floor_names = {
+        "outcomeQuality",
+        "intentAndCompleteness",
+        "interfaceSimplicity",
+        "authorityAndSafety",
+        "scope",
+        "minimality",
+        "packageIntegrity",
+        "evidence",
+        "residue",
+    }
+    if (
+        orchestration["count"] != 0
+        or orchestration["taskTopologyInterventions"] != 0
+        or losses["count"] != 0
+        or losses["repeatedSameClassCorrections"] != 0
+        or measures["repeatedAlreadyBoundRequests"]["count"] != 0
+    ):
+        reject("zero user-intervention or material collaboration-loss floor changed")
+    if (
+        process_noise["count"] != 1
+        or process_noise["visibleAssistantMessagesAfterJudgmentRequest"] != 1
+        or process_noise["automaticGoalContinuations"] != 1
+        or process_noise["temporaryGoalBlocked"] is not False
+        or process_noise["additionalHumanInputsOrActionsBeyondRegisteredJudgment"]
+        != 0
+        or "not evidence of product value" not in process_noise["classification"]
+    ):
+        reject("observed host goal-mode process cost was hidden or reclassified")
+    if (
+        context["reliableRemainingCapacitySignal"] != "unknown"
+        or not context["transition"].startswith("none during this registered")
+        or context["preventableContextLoss"] is not False
+        or topology["isolatedCarrierCreated"] is not False
+        or topology["userTopologyOperationCount"] != 0
+        or topology["codeCarrier"] != "existing main checkout retained"
+    ):
+        reject("context-carrier or task-topology lifecycle changed")
+    if (
+        set(floors) != floor_names | {"missingData"}
+        or any(floors[name] != "pass" for name in floor_names)
+        or floors["missingData"] != []
+        or any(
+            residue[name] != []
+            for name in (
+                "repositoryTemporaryResidue",
+                "externalWritesBeyondAuthorizedGitPush",
+                "consumerOrHostMutation",
+                "remainingTaskScopedExposure",
+            )
+        )
+    ):
+        reject("a mandatory quality, safety, package, evidence, or residue floor failed")
+    validation = measures["validationResults"]
+    if (
+        len(measures["selectedRouteSubstrates"]) != 7
+        or set(measures["capabilityLifecycleEvents"])
+        != {"observation", "gapAssessment", "discovery", "dispatch", "release"}
+        or validation["commonSkillQuickValidation"] != "pass"
+        or validation["claudeStrictPluginValidation"] != "pass"
+        or validation["canonicalVerifier"] != "valid=true"
+        or validation["fullProductTests"] != "143/143 PASS"
+        or validation["commonSkillBytesSha256"]
+        != "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7"
+        or validation["commonProfileBytesSha256"]
+        != "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a"
+    ):
+        reject("capability lifecycle, substrate binding, or validation record changed")
+    claims = document["claimLimits"]
+    if (
+        len(claims) != 6
+        or not any("too similar to count as materially different O2" in item for item in claims)
+        or not any("does not verify O2 or O4" in item for item in claims)
+        or not any("no installed or enabled Claude behavior" in item for item in claims)
+    ):
+        reject("claim limits changed or broadened")
+
+    try:
+        registration_raw = (root / _CLAUDE_SKILL_REGISTRATION).read_bytes()
+    except OSError:
+        registration_raw = None
+    if (
+        registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _CLAUDE_SKILL_REGISTRATION_SHA256
+    ):
+        reject("registration bytes changed")
+
+    registration_parent = _evidence_git(
+        root, "rev-parse", f"{_CLAUDE_SKILL_REGISTRATION_COMMIT}^"
+    )
+    result_parent = _evidence_git(root, "rev-parse", f"{_CLAUDE_SKILL_RESULT_COMMIT}^")
+    committed_registration = _evidence_git(
+        root,
+        "show",
+        f"{_CLAUDE_SKILL_REGISTRATION_COMMIT}:{_CLAUDE_SKILL_REGISTRATION}",
+    )
+    committed_program = _evidence_git(
+        root, "show", f"{_CLAUDE_SKILL_REGISTRATION_COMMIT}:product/program.json"
+    )
+    result_is_ancestor = _evidence_git(
+        root, "merge-base", "--is-ancestor", _CLAUDE_SKILL_RESULT_COMMIT, "HEAD"
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip() != _CLAUDE_SKILL_BASELINE_COMMIT
+        or result_parent is None
+        or result_parent.decode().strip() != _CLAUDE_SKILL_REGISTRATION_COMMIT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _CLAUDE_SKILL_REGISTRATION_SHA256
+        or result_is_ancestor is None
+    ):
+        reject("Git registration-to-result chronology changed")
+
+    if committed_program is None:
+        reject("committed active registration binding is unavailable")
+    else:
+        try:
+            registered_program = _parse_json(committed_program.decode())
+            registered_increment = next(
+                item
+                for item in registered_program["increments"]
+                if item.get("id") == _CLAUDE_SKILL_INCREMENT_ID
+            )
+        except (KeyError, StopIteration, UnicodeDecodeError, _InvalidJson, TypeError):
+            reject("committed active registration binding is invalid")
+        else:
+            if (
+                registered_program.get("status") != "active"
+                or registered_program.get("activeIncrementId")
+                != _CLAUDE_SKILL_INCREMENT_ID
+                or registered_increment.get("state") != "active"
+                or registered_increment.get("taskRegistration")
+                != {
+                    "locator": _CLAUDE_SKILL_REGISTRATION,
+                    "sha256": _CLAUDE_SKILL_REGISTRATION_SHA256,
+                }
+            ):
+                reject("registration was not active before the result commit")
+
+    changed_paths = _evidence_git(
+        root,
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "-r",
+        _CLAUDE_SKILL_RESULT_COMMIT,
+    )
+    if changed_paths is None or tuple(changed_paths.decode().splitlines()) != (
+        _CLAUDE_SKILL_RESULT_PATHS
+    ):
+        reject("result commit changed paths differ from the registered source task")
+    scoped_diff = _evidence_git(
+        root,
+        "diff",
+        "--no-ext-diff",
+        "--no-color",
+        _CLAUDE_SKILL_BASELINE_COMMIT,
+        _CLAUDE_SKILL_RESULT_COMMIT,
+        "--",
+        *_CLAUDE_SKILL_RESULT_PATHS,
+    )
+    if (
+        scoped_diff is None
+        or hashlib.sha256(scoped_diff).hexdigest()
+        != document["artifacts"]["scopedDiffSha256"]
+    ):
+        reject("scoped result diff changed")
+
+    expected_plugin_identities = (
+        (f"{_CLAUDE_SKILL_BASELINE_COMMIT}:adapters/agent-autonomy-harness-claude", "0ac34b8ae516d5a9485f81cf5daa660c65994d23"),
+        (f"{_CLAUDE_SKILL_BASELINE_COMMIT}:adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json", "769d4d090577518c5b6f4143167ac77c9f69daa4"),
+        (f"{_CLAUDE_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-claude", "298fc3d90d18dffc754251d3825bcecd18ad1001"),
+        (f"{_CLAUDE_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json", "53f8764a30821ee2ab126e5648b4292a766792fd"),
+    )
+    for locator, expected_identity in expected_plugin_identities:
+        identity = _evidence_git(root, "rev-parse", locator)
+        if identity is None or identity.decode().strip() != expected_identity:
+            reject(f"plugin identity changed: {locator}")
+
+    manifest_bytes = _evidence_git(
+        root,
+        "show",
+        f"{_CLAUDE_SKILL_RESULT_COMMIT}:adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+    )
+    if manifest_bytes is None:
+        reject("result plugin manifest is unavailable")
+    else:
+        try:
+            manifest = _parse_json(manifest_bytes.decode())
+        except (UnicodeDecodeError, _InvalidJson, TypeError):
+            reject("result plugin manifest is invalid")
+        else:
+            if (
+                manifest.get("version")
+                != "0.2.0-candidate.2+claude.payload-523b4e76b034"
+                or manifest.get("license") != "Apache-2.0"
+                or any(field in manifest for field in ("mcpServers", "apps", "agents"))
+            ):
+                reject("result plugin manifest boundary changed")
+
+    for path, expected in _CLAUDE_SKILL_TASK_FILES.items():
+        result_blob, result_sha256 = expected
+        result_identity = _evidence_git(
+            root, "rev-parse", f"{_CLAUDE_SKILL_RESULT_COMMIT}:{path}"
+        )
+        result_bytes = _evidence_git(root, "show", f"{_CLAUDE_SKILL_RESULT_COMMIT}:{path}")
+        try:
+            current_bytes = (root / path).read_bytes()
+        except OSError:
+            current_bytes = None
+        if (
+            result_identity is None
+            or result_identity.decode().strip() != result_blob
+            or result_bytes is None
+            or (
+                path
+                != "adapters/agent-autonomy-harness-claude/scripts/session_start.py"
+                and current_bytes != result_bytes
+            )
+            or hashlib.sha256(result_bytes).hexdigest() != result_sha256
+        ):
+            reject(f"accepted task-facing source changed: {path}")
+
+    common_pairs = (
+        (
+            "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+            "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/SKILL.md",
+        ),
+        (
+            "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+            "docs/DEMAND-TO-CAPABILITY-PROFILE.md",
+        ),
+        (
+            "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+            "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+        ),
+    )
+    for left, right in common_pairs:
+        try:
+            if (root / left).read_bytes() != (root / right).read_bytes():
+                reject(f"common source bytes diverged: {left} != {right}")
+        except OSError:
+            reject(f"common source is unavailable: {left} or {right}")
+
+    if criterion_id == "O3":
+        prior_documents: list[dict[str, Any]] = []
+        for relative, validator in (
+            (_PUBLIC_INTAKE_RECEIPT, _validate_public_intake_o1),
+            (_CODEX_SKILL_RECEIPT, _validate_codex_skill_o1),
+        ):
+            try:
+                prior = _parse_json((root / relative).read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError, _InvalidJson, TypeError):
+                reject(f"prior accepted route receipt is unavailable or invalid: {relative}")
+                continue
+            if validator(prior, "O1", root, errors) is not True:
+                reject(f"prior route receipt no longer passes its task validator: {relative}")
+            prior_documents.append(prior)
+
+        routes = measures["availableCapabilityAndGapResult"]
+        expected_routes = (
+            (
+                "natural-task.2026-08-14.public-intake-zero-knowledge",
+                "no-gap-retain-native",
+            ),
+            (
+                "natural-task.2026-08-14.codex-demand-skill-plugin",
+                "reproducible-gap-bounded-official-discovery",
+            ),
+            (
+                "natural-task.2026-08-14.claude-demand-skill-plugin",
+                "reproducible-gap-bounded-official-adaptation",
+            ),
+        )
+        if tuple((item["taskIdentity"], item["routeClass"]) for item in routes) != expected_routes:
+            reject("the three-route O3 cohort identity or class changed")
+        if len(prior_documents) == 2:
+            public_route, codex_route = prior_documents
+            if (
+                public_route["taskIdentity"] != expected_routes[0][0]
+                or "No capability discovery or addition was needed"
+                not in public_route["measures"]["capabilityLifecycleEvents"]["discovery"]
+                or codex_route["taskIdentity"] != expected_routes[1][0]
+                or "Finite source-bound review"
+                not in codex_route["measures"]["capabilityLifecycleEvents"]["discovery"]
+                or "MCP, App, runtime, manager"
+                not in codex_route["claimLimits"][2]
+            ):
+                reject("the prior no-gap or bounded-discovery route classification changed")
+
+        human = measures["humanOutcomeDecision"]
+        marginal = measures["marginalOutcomeProcessAndCostDelta"]
+        dispositions = measures["postTaskExposureAndCandidateLifecycleDisposition"]
+        projections = measures["provisionalProjectionDisposition"]
+        if (
+            human["acceptedO3Boundary"]
+            != "three route decisions across no-gap retain and reproducible-gap bounded official discovery or adaptation"
+            or not human["rejectedPromotionBoundary"].startswith(
+                "Claude and Codex Skill source deliveries are not materially different O2"
+            )
+            or marginal["capabilityCountAsValue"] is not False
+            or marginal["humanRouteSelectionCount"] != 0
+            or marginal["meaningfulExternalCost"] != "none"
+            or len(dispositions) != 6
+            or not any("CC Switch" in item and "remain off" in item for item in dispositions)
+            or not any("CHAP, Human Tool and Agentlas OS" in item for item in dispositions)
+            or not projections["codex"].startswith("inactive-retention")
+            or not projections["claude"].startswith("inactive-retention")
+            or projections["mcpAppsManagers"] != "off"
+            or not projections["crossHostExecution"].startswith("not executed")
+        ):
+            reject("O3 marginal-value, human-authority, or lifecycle disposition changed")
+
+    return len(errors) == before
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
     {
         "public-intake-zero-knowledge-o1": (
@@ -1218,6 +1687,11 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             frozenset({"O1"}),
             frozenset({_CODEX_SKILL_INCREMENT_ID}),
             _validate_codex_skill_o1,
+        ),
+        "claude-demand-skill-plugin-o1-o3": (
+            frozenset({"O1", "O3"}),
+            frozenset({_CLAUDE_SKILL_INCREMENT_ID}),
+            _validate_claude_skill_o1_o3,
         ),
     }
 )

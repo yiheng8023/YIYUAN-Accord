@@ -15,16 +15,16 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on
-`increment.v0.2.claude-demand-skill-plugin`. The public verifier should report:
+The current machine program is v0.2 and `ready` with no active increment. The
+public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
-- O1 true and O2-O5 false (`1/5` outcomes), with two task-bound receipts for
-  the same O1 criterion: `product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json`
-  and `product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json`;
+- O1 and O3 true, with O2, O4, and O5 false (`2/5` outcomes); O1 is supported
+  by three task-bound receipts, and the Claude receipt independently binds the
+  exact three-route O3 cohort;
 - G1-G4 true (`4/4` guardrails);
-- exactly that one active increment and its one active work item.
+- no active increment or work item.
 
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
@@ -163,14 +163,16 @@ output. The fixed host's strict plugin validation and 137 offline product tests
 pass. No Claude model call, persistent install, consumer mutation, matched
 cross-host task, human equivalence judgment, or O5 credit occurred.
 
-The current active source-delivery increment follows a later live host check:
-Claude Code is now 2.1.232 and its official plugin surface supports native
-`skills/<name>/SKILL.md` discovery. The bounded result adds the exact common
-candidate.5 Skill and reference beside the existing Hook, updates only the
-current host and payload identities, and keeps MCP, CC Switch, installation,
-model execution and O5 outside this slice. Until named-human acceptance and a
-task-bound validator exist, this remains an unaccepted source candidate and
-changes no O1-O5 state.
+The later Claude Code 2.1.232 source-delivery increment added the exact common
+candidate.5 Skill and reference beside the existing Hook, updated only the
+current host and payload identities, and kept MCP, CC Switch, installation,
+model execution and O5 outside the slice. The named human accepted the inactive
+source result and its role as the third bounded O3 route decision. Its
+task-bound validator also rechecks the two earlier route receipts rather than
+trusting an aggregate self-report. The result adds one O1 receipt and verifies
+O3 only. It is too similar to the Codex Skill source task to count as a third
+O2 scenario and proves no O4 methodology calibration, live Claude behavior,
+O5 portability, release, or completion.
 
 A subsequent authority-defect repair found that G4 described immutable
 pre-registration but the current increment schema did not bind a registration

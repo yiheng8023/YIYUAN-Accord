@@ -350,20 +350,20 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_retains_one_verified_outcome_and_active_graph(self) -> None:
+    def test_current_v02_contract_retains_two_verified_outcomes_and_ready_graph(self) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.claude-demand-skill-plugin",
-        )
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertIsNone(report["activeIncrement"])
         self.assertEqual(report["completionState"], "in-progress")
-        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
+        self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
         self.assertTrue(report["criterionStates"]["O1"])
+        self.assertTrue(report["criterionStates"]["O3"])
         self.assertFalse(report["criterionStates"]["O2"])
+        self.assertFalse(report["criterionStates"]["O4"])
+        self.assertFalse(report["criterionStates"]["O5"])
 
     def test_codex_reference_cohort_must_cross_context_lifecycle_boundary(
         self,
@@ -481,14 +481,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(report["outcomes"], {"verified": 2, "total": 5})
         self.assertTrue(report["valid"])
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress (1/5 outcomes)", completed.stdout)
+        self.assertIn("v0.2: ready, in-progress (2/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -1562,12 +1562,13 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_current_release_has_only_the_observed_task_bound_o1_validators(self) -> None:
+    def test_current_release_has_only_the_observed_task_bound_validators(self) -> None:
         self.assertEqual(
             set(SUPPORTED_EVIDENCE_VALIDATORS),
             {
                 "public-intake-zero-knowledge-o1",
                 "codex-demand-skill-plugin-o1",
+                "claude-demand-skill-plugin-o1-o3",
             },
         )
         criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
@@ -1587,6 +1588,16 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             increments,
             frozenset({"increment.v0.2.codex-demand-skill-plugin"}),
+        )
+        self.assertTrue(callable(validator))
+
+        criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "claude-demand-skill-plugin-o1-o3"
+        ]
+        self.assertEqual(criteria, frozenset({"O1", "O3"}))
+        self.assertEqual(
+            increments,
+            frozenset({"increment.v0.2.claude-demand-skill-plugin"}),
         )
         self.assertTrue(callable(validator))
 
@@ -1658,6 +1669,50 @@ class ProductControlTests(unittest.TestCase):
                 candidate_criterion = "O2" if label == "wrong criterion" else "O1"
                 self.assertFalse(
                     validator(candidate, candidate_criterion, ROOT, candidate_errors)
+                )
+                self.assertTrue(candidate_errors)
+
+    def test_claude_skill_validator_binds_source_result_and_o3_cohort(self) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "product/evidence/claude-demand-skill-plugin-accepted-2026-08-14.json"
+            ).read_text(encoding="utf-8")
+        )
+        validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "claude-demand-skill-plugin-o1-o3"
+        ][2]
+        for criterion_id in ("O1", "O3"):
+            with self.subTest(criterion_id=criterion_id):
+                errors: list[str] = []
+                self.assertTrue(validator(document, criterion_id, ROOT, errors), errors)
+
+        mutations = {
+            "wrong criterion": lambda value: None,
+            "different human record": lambda value: value["authority"].__setitem__(
+                "sourceRecordSha256", "0" * 64
+            ),
+            "hidden route gap": lambda value: value["measures"][
+                "availableCapabilityAndGapResult"
+            ][1].__setitem__("routeClass", "no-gap-retain-native"),
+            "activated projection": lambda value: value["measures"][
+                "provisionalProjectionDisposition"
+            ].__setitem__("claude", "persistent-activation"),
+            "broadened claim": lambda value: value["claimLimits"].clear(),
+        }
+        for label, mutate_document in mutations.items():
+            with self.subTest(label=label):
+                candidate = deepcopy(document)
+                mutate_document(candidate)
+                candidate_errors: list[str] = []
+                candidate_criterion = "O2" if label == "wrong criterion" else "O3"
+                self.assertFalse(
+                    validator(
+                        candidate,
+                        candidate_criterion,
+                        ROOT,
+                        candidate_errors,
+                    )
                 )
                 self.assertTrue(candidate_errors)
 

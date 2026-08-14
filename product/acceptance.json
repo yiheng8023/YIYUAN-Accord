@@ -58,7 +58,8 @@
       "assessment": "verified",
       "evidence": [
         "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json",
-        "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json"
+        "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json",
+        "product/evidence/claude-demand-skill-plugin-accepted-2026-08-14.json"
       ]
     },
     {
@@ -163,7 +164,10 @@
         ],
         "humanAuthority": "The user retains portfolio ownership and any new trust, account, data, cost, or activation decision."
       },
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/claude-demand-skill-plugin-accepted-2026-08-14.json"
+      ]
     },
     {
       "id": "O4",

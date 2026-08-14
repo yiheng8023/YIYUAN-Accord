@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.claude-demand-skill-plugin",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -203,7 +203,7 @@
     },
     {
       "id": "increment.v0.2.claude-demand-skill-plugin",
-      "state": "active",
+      "state": "completed",
       "correctionClass": "project-common-demand-method-into-thin-claude-skill",
       "observedProblem": "The current distinct-host Claude plugin is Hook-only while the accepted Codex source projection already contains the task-facing demand method. The live installed Claude Code host has also advanced from the adapter's pinned 2.1.231 identity to 2.1.232. Running O5 now would require an Agent- or user-authored Harness prompt on Claude and would test asymmetric projections, while the stale host and license description would make the source package factually inaccurate.",
       "hypothesis": "Reusing the exact Codex Skill and candidate.5 reference bytes through Claude Code's native plugin Skill directory, while updating only the exact 2.1.232 host identity, Claude adapter version, root-bounded launcher pin, payload identity, equality tests and current status text, can produce a minimal inactive Skill-plus-Hook distinct-host projection without MCP, CC Switch, a second methodology, consumer mutation or model execution.",
@@ -241,7 +241,7 @@
       "workItems": [
         {
           "id": "work.v0.2.claude-demand-skill-plugin",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": [
             "O1",
             "O2",

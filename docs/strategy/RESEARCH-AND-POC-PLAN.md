@@ -19,16 +19,16 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is active on one pre-registered Claude Skill-plus-Hook source delivery after the accepted task-facing
-Codex Skill source delivery, the outcome-neutral proactive context-carrier
-fitness and transition repair, the accepted public-intake increment, and one
-stopped live Codex continuity task. O1 is verified by two exact task-bound
-receipts and O2-O5 remain planned and false. The current tree contains a
-product-contract verifier, two exact task-bound O1 evidence validators,
-inactive Codex and Claude Code reference-adapter candidates, and the
-content-addressed stopped continuity result, not a task runtime or an accepted
-host result. Closed outcome-neutral work remains recoverable from Git rather
-than accumulating as a current queue.
+v0.2 is ready with no active increment after the accepted public-intake,
+task-facing Codex Skill, and task-facing Claude Skill source deliveries, the
+outcome-neutral proactive context-carrier fitness and transition repair, and
+one stopped live Codex continuity task. O1 and O3 are verified; O2, O4, and O5
+remain planned and false. The current tree contains a product-contract
+verifier, three exact task-bound validators for those receipts and the O3
+cohort, inactive Codex and Claude Code reference-adapter candidates, and the
+content-addressed stopped continuity result, not a task runtime or accepted
+live host behavior. Closed outcome-neutral work remains recoverable from Git
+rather than accumulating as a current queue.
 
 The stopped continuity task used the official temporary plugin lifecycle and
 showed that the exact Skill plus startup and post-compaction `SessionStart`
@@ -210,9 +210,10 @@ The current user Hook configuration remains empty. Plugin installation,
 enablement, exact Hook trust, and live runtime measurement are separate
 consumer transitions and stay off until a scoped grant authorizes reversible
 behavior evidence. The package and its offline checks do not prove live Skill
-selection or Hook execution. The current source-delivery task can add only its
-pre-registered bounded receipt after named-human acceptance; it cannot promote
-live behavior, repeated burden reduction, or portability.
+selection or Hook execution. The accepted Codex source-delivery task
+contributes one O1 receipt and one bounded discovery route decision. It cannot
+promote live behavior, repeated burden reduction, methodology calibration, or
+portability.
 
 The committed `.agents/plugins/marketplace.json` is a workspace-scoped
 discovery source, not a Harness-owned marketplace product. Codex 0.147.0
@@ -238,9 +239,12 @@ plugin for one session without persistent installation.
 and exact candidate.5 task-facing Skill while translating only native host
 boundaries. The projection has no MCP server, user command, prompt capture,
 transcript access, state store, or consumer configuration. Claude Code 2.1.232
-strict manifest validation and offline semantic-parity checks pass. Live model execution, matched cross-host task
-evidence, cost authority, equivalence tolerance, and O5 acceptance remain
-separate pre-execution gates, so this candidate counts as zero O1-O5 progress.
+strict manifest validation and offline semantic-parity checks pass. Its exact
+task-bound result contributes one O1 receipt and completes the three-decision
+O3 lifecycle cohort. It is not materially distinct from the Codex Skill source
+task for O2. Live model execution, matched cross-host task evidence, cost
+authority, equivalence tolerance, O4 calibration, and O5 acceptance remain
+separate pre-execution gates.
 
 `AGENTS.md`, Skills, Hooks, self-authored projections, and peripheral
 capabilities never set product direction or acceptance. If their prescribed
