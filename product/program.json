@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.proactive-context-carrier-fitness",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -63,61 +63,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v0.2.proactive-context-carrier-fitness",
-      "state": "active",
-      "correctionClass": "reactive-context-transition-acceptance-gap",
-      "observedProblem": "The user's ninth reported experience failure is only partially covered: current O2/O4 and candidate.4 require recovery after compaction or task rollover, but they can still accept a route that never observes conversation-carrier fitness and waits for a preventable quality loss or host capacity failure before transitioning, leaving an inexperienced user to guess when the current task is no longer safe.",
-      "hypothesis": "Adding one host-neutral, source-bound context-carrier fitness and proactive-transition floor to the constitution, O1/O2/O4/O5, candidate profile, verifier contract tests, and public guidance will close that false-positive path without creating a context monitor, transcript store, fixed token threshold, mandatory Hook, or user-operated rollover workflow.",
-      "falsifier": "The repair requires unavailable precise token telemetry, treats ordinary context growth as automatic rollover, mandates a Hook or new task, hides an unknown host signal as a passing observation, transfers the transition choice or handoff mechanics to the user, expands the Harness into a context runtime, weakens an existing floor, or leaves product authority, verifier tests, profile, architecture, and public guidance inconsistent.",
-      "stopCondition": "Stop when the current authority and candidate profile require source-bound observation of available host and task carrier-fitness signals at material checkpoints, a pre-declared conservative rule for unknown signals, and Agent-owned continuation, native compaction, or verified handoff before preventable context quality or capacity loss; current code and public guidance reject user guesswork and reactive-only transition without prescribing a runtime or fixed universal threshold; canonical checks pass and the outcome-neutral increment leaves the current graph.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v0.2.proactive-context-carrier-fitness",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one globally consistent proactive context-carrier fitness and transition contract with machine regression coverage and public explanation"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
