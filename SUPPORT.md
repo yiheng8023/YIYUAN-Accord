@@ -11,14 +11,30 @@ This repository accepts questions and reports about:
 - lifecycle and cleanup semantics; and
 - thin reference adapters.
 
-Before opening an issue:
+## Start with what you need
 
-1. identify the exact repository revision and affected artifact;
-2. distinguish current policy, dated evidence, historical transition material,
-   an external candidate, installed manager state, and live host behavior;
-3. provide safe reproduction evidence and the commands used;
-4. remove credentials, private account state, memory, private configuration,
-   restricted content, unnecessary local paths, and raw sensitive logs.
+You do not need to identify a Git revision, affected artifact, capability,
+command, evidence class, or task topology before asking for help. Tell us:
+
+- what you were trying to accomplish;
+- what happened and what you expected instead;
+- the relevant facts you already know; and
+- whether the report may contain sensitive material.
+
+If a screenshot, link, safe log, revision, or command is already available, you
+may include it. Do not learn a tool or reconstruct repository mechanics solely
+to open an issue.
+
+Maintainers and their Agents should recover safely discoverable repository
+state, artifacts, commands, evidence classification, and reproduction steps.
+They may ask for an inaccessible fact from your device, account, or environment
+only when it materially changes diagnosis or the next safe action. They must
+not assume access to private configuration, memory, transcripts, accounts, or
+local files.
+
+Remove credentials, private account state, memory, private configuration,
+restricted content, unnecessary local paths, and raw sensitive logs before
+sharing anything publicly.
 
 For credentials, leaked or restricted material, exploit payloads, or raw
 sensitive logs, first try the
