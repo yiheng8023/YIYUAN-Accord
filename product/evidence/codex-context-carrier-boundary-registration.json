@@ -1,0 +1,409 @@
+{
+  "schema": 1,
+  "id": "registration.codex-context-carrier-boundary.2026-08-14",
+  "registeredAt": "2026-08-14T17:53:30.5510999+08:00",
+  "taskIdentity": "natural-task.2026-08-14.codex-context-carrier-boundary-decision",
+  "incrementId": "increment.v0.2.codex-context-carrier-boundary-decision",
+  "criterionIds": [
+    "O2",
+    "O4",
+    "O5"
+  ],
+  "preRegistrationValues": {
+    "taskIdentity": "natural-task.2026-08-14.codex-context-carrier-boundary-decision",
+    "demandEntry": {
+      "kind": "goal-level-real-product-architecture-and-risk-decision-demand",
+      "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+      "demand": "For a nontechnical Codex user who stays in one task until context pressure grows, determine the smallest reliable Agent-owned continuation, compaction, fork, or new-task boundary; keep the process controllable, anticipate risks, and do not teach the user Codex mechanics.",
+      "sourceRecords": [
+        "msg_019ffad0-2bf8-70f2-a0ce-f17151550169 at rollout line 996: the user asks how the Agent should own context exhaustion, controllability, and risk prediction",
+        "msg_019ffab0-fbd1-7010-ab71-f72180366df6 at rollout line 224: the user reports seven repeated main tasks and asks whether the loop can stop recurring",
+        "msg_019ff6b2-fd9c-72a2-ab5a-58031581809d raw-line sha256:2988f0fd9a155b5826b830019b764381fb5833d07d36a7240443a573618ba54e: the fixed nine-issue inventory names opaque and lossy context capacity and task-switching as issue 9"
+      ],
+      "nonDiagnosticPurpose": "Deliver an actionable architecture decision for the current Codex-first product and apply its smallest repository correction if one is required. The decision answers the user's bound product question; it is not created merely to exercise the Harness.",
+      "userSpecifiedCapabilityRoute": false,
+      "userSpecifiedTaskTopology": false
+    },
+    "scenarioClass": "reference-host-context-carrier-architecture-and-risk-decision",
+    "complexityAndAuthorityRiskBands": {
+      "complexity": "high: reconcile stable and under-development Codex lifecycle surfaces, the portable profile, existing stopped continuity evidence, context and conversation topology, and the no-control-plane boundary",
+      "authorityRisk": "medium and bounded: one isolated Codex execution and one no-persistence Claude Code execution after a new exact grant, with temporary plugin and Hook trust, public repository and fixed public source facts only, read-only model access, capped distinct-host cost, no publication or release"
+    },
+    "matchedOrHistoricalBaselineIdentityAndRule": {
+      "identity": "The ad-hoc baseline is the user's source-bound experience in msg_019ffad0-2bf8-70f2-a0ce-f17151550169 and msg_019ffab0-fbd1-7010-ab71-f72180366df6 plus the fixed issue-9 record msg_019ff6b2-fd9c-72a2-ab5a-58031581809d. The user had to identify context exhaustion as product demand, ask how to control it, and reassert the same mainline after seven task carriers.",
+      "baselineMaterialInterventions": 0,
+      "baselineMaterialCollaborationLosses": 3,
+      "baselineRule": "The user's goal and experience reports are legitimate product input, not orchestration burden. Count only the repeated Agent failures that required the user to reclassify context lifecycle as real demand, recover the long-task problem, and object to repeated task-carrier loops.",
+      "matchingRule": "Compare the same architecture-decision purpose: whether the route identifies the exact stable signal and transition limits, selects the smallest viable adapter and Agent behavior, rejects unsupported or overpowered additions, states the conservative unknown-signal rule, and leaves the user with no Codex learning, carrier choice, recovery, verification, or cleanup work."
+    },
+    "selectedRouteSubstrateMetadataRule": {
+      "referenceHost": "OpenAI Codex Desktop 26.803.10989.0 and Codex CLI 0.147.0 source commit be6e8eac029b183056b7e4402879f15d2c85f61b, installed vendor binary sha256:935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d, and applicable Apache-2.0 CLI and OpenAI product/model terms; one isolated read-only execution only.",
+      "referenceModel": "gpt-5.6-sol, reasoning effort high, service tier default on 2026-08-14; execution identity only, not a permanent model-quality claim.",
+      "referenceCapabilityBoundary": "Use an isolated CODEX_HOME and install only the exact repository Codex plugin after explicit grant. Render the model-visible prompt, disable every visible non-Harness Skill by exact task-scoped skills.config entry, disable multi-agent, trust only the exact plugin SessionStart Hook, verify the resulting prompt and feature state, and fail closed otherwise.",
+      "distinctHost": "Anthropic Claude Code 2.1.232, official tag commit 1f6015b5d578adf79c8527443328a216d6b6a3f1, npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g== and installed Windows binary sha256:ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6 under applicable Anthropic terms; one no-persistence read-only execution only.",
+      "distinctModel": "DeepSeek Anthropic-compatible endpoint https://api.deepseek.com/anthropic using request name deepseek-v4-pro[1m], resolved by the fixed official DeepSeek Claude Code integration source to DeepSeek-V4-Pro-0813, effort max, under the current DeepSeek Terms of Use and Open Platform Terms; one call capped at USD 0.15 with no fallback.",
+      "distinctCapabilityBoundary": "Use a task-isolated Claude configuration directory, no persistent session, strict empty MCP configuration, only Bash/Read/Glob/Grep read tools, no agent/background/write tools, and only the exact repository Claude plugin through --plugin-dir. Fail closed on another Skill, plugin, MCP, agent, model fallback, or mutable route.",
+      "commonHarnessSource": "Agent Autonomy Harness target commit 6b912260613de3ed0ea54676fc822667da88b863; candidate.5 profile git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a; byte-identical Skill sha256:e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7; Codex plugin tree ed19c908abe42489c1f49e0b8e83a1cee0e8e150 manifest blob 526bd9132cb1d3e6eaa5f9ef34cb59842aca358f; Claude plugin tree 8442f03f4d155886b88062a53a709c1778896116 manifest blob 473e0525ff3900c970044683f15cc22395c34fe4; Apache-2.0 source candidates with unaccepted live behavior.",
+      "officialCodexLifecycleFacts": "Official Hooks documentation https://learn.chatgpt.com/docs/hooks observed 2026-08-14 and exact Codex 0.147.0 source commit be6e8eac029b183056b7e4402879f15d2c85f61b paths codex-rs/hooks/schema/generated/pre-compact.command.input.schema.json, codex-rs/hooks/src/events/compact.rs, codex-rs/core/src/tools/spec_plan.rs, codex-rs/core/src/tools/handlers/get_context_remaining.rs, codex-rs/core/src/tools/handlers/get_context_remaining_handler.rs, codex-rs/core/src/tools/handlers/new_context_window.rs, codex-rs/core/src/tools/handlers/new_context_window_handler.rs, and codex-rs/features/src/lib.rs establish: PreCompact and PostCompact expose manual or auto trigger and turn identity but no remaining-token count; PreCompact can stop before compaction but cannot initiate an app fork or inject additional developer context; SessionStart source compact runs before the immediate post-compaction model request and can inject additional context; UserPromptSubmit exposes raw prompt and blocking authority; get_context_remaining and new_context exist only behind under-development feature token_budget, whose default is false and which is not exposed in the current parent task. The fixed output schema is restricted to the supported subset documented at https://developers.openai.com/api/docs/guides/structured-outputs as observed 2026-08-14, but exact host acceptance remains a fail-closed execution floor.",
+      "selectionRule": "Use exactly the registered target, sources, hosts, models, adapters, prompt, supported output schema, single-call counts, capability exclusions, authority, cost, and cleanup. Any retry, substitution, web search, private data, extra Skill/plugin/MCP/agent, persistent config, branch, worktree, repository fork, app task, conversation fork, publication, release, or expanded data boundary stops the task."
+    },
+    "contextCarrierFitnessSignalsAndTransitionRule": {
+      "materialCheckpoints": [
+        "after registration and active binding are committed and pushed",
+        "before each external call after capability preflight",
+        "after each structured result is captured",
+        "before applying any result-driven repository correction",
+        "before cleanup and named-human judgment"
+      ],
+      "observableSignals": "Each measured carrier is one fixed-prompt no-resume process. Process start and exit, prompt-visible capability set, plugin projection, structured result, and cleanup are observable. Reliable remaining-context tokens are unavailable and remain unknown. The architecture decision itself must treat stable PreCompact or SessionStart lifecycle events as bounded signals without pretending they are an early capacity gauge.",
+      "transitionRule": "Measured processes are short and never resume. Timeout, malformed output, lost continuity, or capability drift stops without retry. For the product decision, retain the healthy current task by default; use native compaction plus immediate authority reconciliation while safe; only choose a verified fork or new task at a pre-declared material checkpoint when task-risk signals make continuation unsafe; never make the user choose. An unavailable reliable capacity gauge remains unknown and cannot justify unlimited continuation or an invented threshold.",
+      "claimLimit": "This task decides the bounded Codex-first architecture; it does not prove a universal token threshold, automatic task migration, stable experimental token-budget behavior, repeated long-thread reliability, or cross-host signal parity."
+    },
+    "contextLifecycleBoundaryAndContinuityFloor": "Neither measured host is intended to compact or roll over. Unknown remaining capacity invokes the conservative one-turn/no-resume rule. O2 and O4 context-boundary coverage may use only separately pre-registered accepted candidate.5 receipts whose native compaction and same-task recovery are independently content-addressed and validated; this decision cannot manufacture a boundary sample.",
+    "taskTopologyBoundaryAndLifecycleFloor": {
+      "canonicalCarrier": "Keep the current Codex Desktop task and current main checkout as the sole product carrier.",
+      "causalIsolation": "Use one ephemeral Codex CLI process and one no-persistence Claude Code process in the same checkout, read-only against target commit 6b912260613de3ed0ea54676fc822667da88b863. Create no app task, branch, worktree, repository fork, conversation fork, or subagent.",
+      "reconciliation": "The parent Agent validates both results against exact repository and official source facts, compares them under the fixed tolerance, applies at most the smallest accepted repository correction inside the existing checkout, commits and pushes it, releases all task exposure, and asks only for accountable outcome, methodology, equivalence, portability, and claim judgment.",
+      "stop": "Any model write, second attempt, persistent session, user topology operation, orphaned process or carrier, or unbounded residue stops the task."
+    },
+    "namedHumanAcceptor": "yiheng8023",
+    "qualitySafetyEvidenceAndResidueFloors": {
+      "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 and sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+      "outcomeQuality": "Both hosts return a complete, fact-grounded, decision-ready disposition of the Codex context-carrier boundary for target 6b912260613de3ed0ea54676fc822667da88b863, including the smallest route, exact rejected routes, risks, unsupported states, and any minimal repository correction.",
+      "intentAndCompleteness": "Answer how a nontechnical user's long-running Codex task should remain controllable and recoverable without teaching Codex, while distinguishing stable Hook facts, unavailable capacity data, experimental features, Agent-owned behavior, adapter responsibility, and portable-core limits on the first useful pass.",
+      "interfaceSimplicity": "One human trust and cost grant before execution and accountable judgments after the result; no user host, capability, command, topology, recovery, verification, cleanup, or push operation.",
+      "capabilityLifecycle": "Only exact candidate plugins, native read-only host and shell primitives, and the fixed official source facts; one call per host; no discovery during measured execution; all task exposure released afterward.",
+      "topologyAndContinuity": "One canonical parent plus two no-resume subprocesses; identity, comparison, reconciliation, result-driven correction, release, and cleanup remain parent-owned.",
+      "authorityAndSafety": "Public repository and fixed public source facts only; no transcript body, private configuration content, secret, model write, web search, account mutation, publication, release, deployment, persistent enablement, or irreversible effect.",
+      "evidence": "Immutable registration and binding; post-registration exact grant; target, source, host, runtime, model, adapter, plugin, prompt and schema identities; prompt and feature preflight; raw streams and structured results; independent official-source and repository checks; eligible accepted context-boundary records; cleanup, verifier, tests, Git state, and named-human judgments. Model agreement and schema validity alone are insufficient.",
+      "residue": "No task-created temporary home, credential link, plugin cache or config, Hook trust, process, output, schema, prompt, session, .tmp item, __pycache__, branch, worktree, fork, report, or unrelated change remains.",
+      "resourceAndCost": "Exactly one Codex gpt-5.6-sol/high/default call and one DeepSeek-V4-Pro-0813/max-through-Claude-Code call. The distinct-host call is capped at USD 0.15. No retry, fallback, subagent, or web call. Capture actual usage and cost when exposed; missing mandatory data fails that host floor.",
+      "missingData": "Any missing target, host/model/adapter, prompt, supported-schema identity, capability preflight, stream, result, source fact check, eligible context-boundary record, cleanup, cost, intervention or loss, or human-judgment datum fails the affected floor and cannot be imputed.",
+      "claim": "At most one accepted candidate.5 Codex context-carrier architecture decision on the exact two hosts, models, adapters, target, profile, and 2026-08-14 date, plus Codex-only candidate.5 calibration over the exact eligible cohort. No release, production, universal threshold, automatic migration, stable experimental-feature, model-superiority, or untested-host claim."
+    },
+    "materialInterventionTaxonomy": [
+      "user-capability-route-selection",
+      "user-capability-setup-or-invocation",
+      "user-host-or-model-selection",
+      "user-plugin-component-or-manager-selection",
+      "user-recovery-or-verification-command",
+      "user-cleanup-or-push-route",
+      "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+      "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+    ],
+    "materialCollaborationLossTaxonomy": [
+      "material-intent-or-mode-correction",
+      "material-omission",
+      "reopened-settled-decision",
+      "unrequested-deliverable-or-mutation",
+      "unnecessary-human-round-trip-or-process",
+      "resource-or-residue-recovery-returned-to-user",
+      "context-or-handoff-recovery-returned-to-user",
+      "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+      "false-completion-or-claim-correction",
+      "tool-or-product-learning-burden-returned-to-user",
+      "ai-like-or-materially-unclear-communication-correction"
+    ],
+    "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6",
+    "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5 git-blob:e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+    "referenceHostProfileAndEligibleReceiptSet": "Exactly three materially different candidate.5 Codex scenario classes are eligible for O2/O4 judgment: public-support-and-contribution-intake-for-zero-knowledge-users at accepted result commit 2008d0d4a5b44caa32652f2a15ba12d403348ce2; task-facing-Codex-plugin-source-integration at accepted result commit 6892fef39e88f17d628bee7ff0f837a4d051665d; and this reference-host-context-carrier-architecture-and-risk-decision task if its Codex result passes. Claude Skill source delivery remains excluded as materially duplicative for O2. Existing candidate.5 stopped continuity, source-gate, and closeout-decision receipts remain honest failures.",
+    "referenceHostContextLifecycleCoverageRule": "The accepted public-intake and Codex Skill registrations each froze conservative native-compaction recovery before execution and their accepted receipts record natural compaction plus same-task recovery. At least one supplies the O2/O4 boundary sample only if a later criterion-scoped validator content-addresses the exact transition and reconciliation records and confirms zero user reconstruction, topology choice, handoff, merge, archive, or recovery; otherwise O2/O4 remain false.",
+    "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": [
+      {
+        "identity": "OpenAI Codex Desktop 26.803.10989.0 and Codex CLI 0.147.0 source commit be6e8eac029b183056b7e4402879f15d2c85f61b",
+        "licenseOrTerms": "Apache-2.0 CLI and applicable OpenAI product and model terms",
+        "maturity": "released reference host and runtime; Hooks documented as current; token_budget source feature under development and default false",
+        "reuseBoundary": "one read-only reference-host architecture decision, native plugin lifecycle, stable lifecycle-event facts, and parent-owned task orchestration only"
+      },
+      {
+        "identity": "Anthropic Claude Code 2.1.232 official tag 1f6015b5d578adf79c8527443328a216d6b6a3f1 and npm integrity sha512-Lmt5bfOrGmnI0A3vvuvYHrbKtINqJMn3a5k+4yiaWXoTwiCkZKIypO+bAT/hVxvnIO/+6QDgMSEUvSy/K+PB+g==",
+        "licenseOrTerms": "applicable Anthropic commercial terms and privacy policy",
+        "maturity": "released distinct Agent host/runtime",
+        "reuseBoundary": "one no-persistence read-only task and session-scoped exact plugin load only"
+      },
+      {
+        "identity": "DeepSeek Anthropic-compatible API request name deepseek-v4-pro[1m] resolving to DeepSeek-V4-Pro-0813 under the fixed official integration source",
+        "licenseOrTerms": "current DeepSeek Terms of Use and Open Platform Terms",
+        "maturity": "GA API model and officially documented Claude Code provider integration",
+        "reuseBoundary": "one public-repository architecture-decision call at max effort, no fallback, private data, persistence, publication, or general model claim"
+      },
+      {
+        "identity": "Agent Autonomy Harness candidate.5 and exact Codex and Claude source plugins at target 6b912260613de3ed0ea54676fc822667da88b863",
+        "licenseOrTerms": "Apache-2.0",
+        "maturity": "accepted source candidates and unaccepted live behavior",
+        "reuseBoundary": "byte-identical common Skill/profile, root-bounded SessionStart Hooks, and thin native packaging only; no MCP, manager, runtime, context monitor, identity, audit, provenance, or generic outcome-validator role"
+      }
+    ],
+    "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": {
+      "identity": "The source-bound ad-hoc context-lifecycle and repeated-task route recorded in msg_019ffad0-2bf8-70f2-a0ce-f17151550169, msg_019ffab0-fbd1-7010-ab71-f72180366df6, and fixed issue-9 message msg_019ff6b2-fd9c-72a2-ab5a-58031581809d.",
+      "licenseOrTerms": "user-provided collaboration evidence plus Apache-2.0 repository outcomes",
+      "maturity": "observed human-Agent route that caused the user to identify context loss, carrier opacity, and seven repeated main tasks",
+      "eligibility": "The route is outcome-capable because it produced the current context and task-topology contract and thin continuation projection, but only after repeated user corrections and carrier restarts.",
+      "matchingRule": "Compare architecture-decision correctness, completeness, user correction and orchestration burden, stable-signal discipline, conservative unknown handling, topology ownership, lifecycle coherence, and claim accuracy only."
+    },
+    "comparatorBaselineResultsComparisonAxesAndDecisionRule": {
+      "baselineResults": "The ad-hoc route eventually established SessionStart continuity, Agent-owned task topology, and an unknown-signal rule, but the user had to classify context exhaustion as real demand, object to waiting, and restore the same mainline across seven tasks.",
+      "comparisonAxes": [
+        "factually correct stable and unsupported host-surface classification",
+        "complete smallest-route and rejected-route decision on first useful pass",
+        "zero user capability and topology orchestration",
+        "zero repeated goal or context reconstruction",
+        "explicit risk, falsifier, recovery, cleanup, and claim ceiling",
+        "no runtime, context-monitor, MCP, manager, or prompt-interception expansion"
+      ],
+      "decisionRule": "Candidate.5 demonstrates bounded advantage only if the Codex result passes every mandatory floor, needs zero material intervention or collaboration loss after grant, and the named human judges it more useful and complete with lower orchestration burden than the fixed baseline. One failed axis keeps O2/O4 false."
+    },
+    "distinctValueHypothesisAndFalsifier": {
+      "hypothesis": "Applying candidate.5 through the exact Codex projection will turn the user's context-overflow question into one complete, source-grounded smallest-route decision without requiring Codex learning or another carrier choice, improving both first-pass decision quality and cross-layer lifecycle coherence over the ad-hoc route.",
+      "falsifier": "The result misses a stable or unsupported host fact, treats PreCompact as an early capacity gauge, treats experimental token_budget as stable or silently enables it, adds UserPromptSubmit, MCP, a context monitor, runtime, manager, or user instruction without causal necessity, omits conservative unknown handling or topology cleanup, needs user correction or recovery, or is rejected by the named human."
+    },
+    "mandatoryFloorsAndMissingDataRules": "Every floor in qualitySafetyEvidenceAndResidueFloors is mandatory with no compensating score. Missing source, host, model, adapter, prompt, supported-schema, capability, result, fact-check, context-boundary, intervention/loss, cleanup, cost, or human-judgment evidence fails the affected result. A stopped receipt stays stopped and cannot be edited into the accepted cohort.",
+    "namedHumanReviewerAndClaimBoundary": "yiheng8023 decides per-host outcome usefulness and correctness, O2 burden advantage, O4 methodology/profile/applicability, matched equivalence, O5 portability, and the final claim. Any accepted claim is limited to candidate.5, the exact reference-host cohort, exact matched host/runtime/model/adapter pair, context-carrier architecture-decision scenario, sources, target, and 2026-08-14 date.",
+    "commonTaskIdentityGoalAndInput": {
+      "taskIdentity": "natural-task.2026-08-14.codex-context-carrier-boundary-decision",
+      "targetCommit": "6b912260613de3ed0ea54676fc822667da88b863",
+      "goal": "Decide the smallest correct Codex-first context-carrier architecture for a nontechnical user who keeps one task running until context pressure grows, preserving Agent-owned control, proactive risk handling, low-loss recovery, topology lifecycle, and portable-core boundaries.",
+      "prompt": "Read only target commit 6b912260613de3ed0ea54676fc822667da88b863 and apply the exact installed candidate.5 Harness Skill/profile. Decide whether the current SessionStart-only Codex adapter should be retained, minimally changed using a stable Hook, or stopped for a human decision. Use these fixed official facts: Codex 0.147.0 PreCompact and PostCompact expose only manual/auto trigger and turn identity, not remaining tokens; PreCompact may stop compaction but cannot initiate an app fork or add developer context; SessionStart source compact runs before the immediate post-compaction model request and can add context; UserPromptSubmit reads the raw prompt and can block; get_context_remaining and new_context are behind under-development token_budget, default false, and unavailable in the current parent. Do not use web, write, invoke another Skill or agent, teach the user Codex, invent a capacity threshold, silently enable an experimental feature, or expand the Harness into a runtime, context monitor, MCP, manager, audit system, or control plane. Return only JSON matching the schema.",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision",
+          "authorityAligned",
+          "findings",
+          "recommendedChanges",
+          "rejectedRoutes",
+          "riskControls",
+          "claimLimit",
+          "executionContext"
+        ],
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "retain-session-start-only",
+              "add-minimal-stable-hook",
+              "needs-human-decision"
+            ]
+          },
+          "authorityAligned": {
+            "type": "boolean"
+          },
+          "findings": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourcePath",
+                "sourcePointerOrSection",
+                "fact",
+                "impact"
+              ],
+              "properties": {
+                "sourcePath": {
+                  "type": "string"
+                },
+                "sourcePointerOrSection": {
+                  "type": "string"
+                },
+                "fact": {
+                  "type": "string"
+                },
+                "impact": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "recommendedChanges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "target",
+                "change",
+                "reason",
+                "acceptanceEffect"
+              ],
+              "properties": {
+                "target": {
+                  "type": "string"
+                },
+                "change": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "acceptanceEffect": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "rejectedRoutes": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "route",
+                "reason"
+              ],
+              "properties": {
+                "route": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "riskControls": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "risk",
+                "signal",
+                "control",
+                "stopCondition"
+              ],
+              "properties": {
+                "risk": {
+                  "type": "string"
+                },
+                "signal": {
+                  "type": "string"
+                },
+                "control": {
+                  "type": "string"
+                },
+                "stopCondition": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "claimLimit": {
+            "type": "string"
+          },
+          "executionContext": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "host",
+              "runtime",
+              "model"
+            ],
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "runtime": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "commonAuthorityBoundary": "Read only public Apache-2.0 repository state at target 6b912260613de3ed0ea54676fc822667da88b863 and the fixed public source facts and prompt. Models may not write, use web or private data, alter accounts or persistent configuration, publish, release, deploy, create app tasks, branches, worktrees, repository or conversation forks, invoke subagents, or expand trust, data, or cost. Parent-owned temporary plugin exposure and cleanup require a new exact post-registration grant; only yiheng8023 may accept outcomes and claims.",
+    "commonDemandToCapabilityLifecycle": "Each host receives the same goal-level architecture decision without a user capability or topology route, observes the exact loaded candidate.5 Skill/profile and native read-only repository tools, uses no discovery because fixed repository and official facts are sufficient, returns one result, and releases task exposure. Need for MCP, CC Switch, web, a new implementation, user invocation, another Skill, agent, fallback, or second attempt stops the task.",
+    "commonContextCarrierFitnessAndTransitionLifecycle": "Each host uses one short fixed-schema carrier, observes start, result, and exit state, treats remaining capacity as unknown, and never resumes or retries. Timeout or lost continuity stops. Both must apply the same portable rule: stable host and task signals decide safe continuation or transition; unavailable reliable capacity stays explicit unknown under a conservative pre-declared boundary; the Agent owns any native compaction, verified handoff, reconciliation, archive, release, and cleanup.",
+    "commonTaskTopologyLifecycle": "One canonical current Desktop task and main checkout; one isolated Codex CLI subprocess and one no-persistence Claude Code subprocess only; no app task, branch, worktree, repository fork, conversation fork, agent, merge, archive, or orphaned carrier; the parent owns identity, comparison, conclusion reconciliation, any accepted repository correction, release, and cleanup.",
+    "commonQualitySafetyEvidenceAndResidueFloors": "Both host decisions must satisfy the identical supported output schema, exact target and source facts, complete smallest-route and rejected-route checks, zero material intervention and collaboration loss, read-only authority, exact model and adapter identity, task-scoped capability boundary, resource and cost limit, no missing mandatory data, exact cleanup, and human acceptance. Agreement cannot cure a shared factual error.",
+    "referenceAndDistinctHostRuntimeModelAndAdapterSubstrateSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": {
+      "reference": "OpenAI Codex Desktop 26.803.10989.0; Codex CLI 0.147.0 source be6e8eac029b183056b7e4402879f15d2c85f61b under Apache-2.0; gpt-5.6-sol/high/default under applicable OpenAI terms; Harness Codex plugin tree ed19c908abe42489c1f49e0b8e83a1cee0e8e150 and common Skill sha256:e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7 under Apache-2.0; one isolated read-only call.",
+      "distinct": "Anthropic Claude Code 2.1.232 tag 1f6015b5d578adf79c8527443328a216d6b6a3f1 under applicable Anthropic terms; DeepSeek Anthropic endpoint request deepseek-v4-pro[1m] resolving to DeepSeek-V4-Pro-0813 under current DeepSeek terms; Harness Claude plugin tree 8442f03f4d155886b88062a53a709c1778896116 and common Skill sha256:e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7 under Apache-2.0; one read-only no-persistence call.",
+      "common": "Candidate.5 profile blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a and byte-identical common Skill are the portable semantic projection; host Hooks, configuration isolation, prompt preflight, provider plumbing, and process control remain adapter or parent orchestration."
+    },
+    "executionDatesApplicableTaskAndProfile": "Execute both hosts only on 2026-08-14 Asia/Shanghai against target 6b912260613de3ed0ea54676fc822667da88b863, task natural-task.2026-08-14.codex-context-carrier-boundary-decision, reference-host context-carrier architecture and risk profile, and exact candidate.5 method and scorecard. Changed date, source, host, model, adapter, prompt, schema, capability boundary, or task requires a new registration.",
+    "equivalenceTolerance": {
+      "requiredEqual": "Both results name an authority-aligned decision from the registered enum; agree whether SessionStart-only is sufficient at the adapter layer; agree that stable PreCompact lacks remaining capacity and cannot itself perform app task topology; agree that UserPromptSubmit and silent experimental token_budget enablement are rejected; and identify the same normalized mandatory repository corrections, where normalization uses target plus semantic change plus acceptance effect.",
+      "allowedDifference": "Prose, ordering below the primary decision, supporting risks, and host-specific executionContext may differ when factually compatible and when they do not change the decision, mandatory correction set, rejected routes, conservative unknown rule, or claim ceiling.",
+      "qualityFloor": "Every decision-relevant claim passes independent repository and official-source checks. Invented path or source fact, missed stable or unsupported boundary, incorrect Hook capability, unnecessary product-layer expansion, omitted risk or stop condition, schema failure, or unverified projection makes that host ineligible.",
+      "humanRule": "yiheng8023 accepts or rejects each decision's usefulness and correctness, normalized equivalence, O2 burden comparison, O4 methodology and applicability, O5 portability ceiling, and final claim. A retain or needs-decision outcome may pass if factually correct and actionable."
+    },
+    "preRegisteredPortabilityClaimBoundary": "If all floors and human judgments pass, claim only that the same candidate.5 goal, authority, capability, context, topology, evidence, recovery, verification, cleanup, and acceptance semantics produced equivalent accepted Codex context-carrier architecture decisions on the exact Codex and Claude Code/DeepSeek host-runtime-model-adapter pair, exact target task and profile, and 2026-08-14 date. Do not claim universal context management, automatic task migration, stable token_budget, all Claude or DeepSeek configurations, all Agents, production reliability, or model superiority.",
+    "adapterAndUnsupportedStateBoundary": "Codex may differ only through isolated official plugin lifecycle, exact non-Harness Skill exclusion, multi-agent disablement, SessionStart Hook trust, and current stable Hook facts; Claude may differ only through task-isolated configuration, --plugin-dir, read-tool allowlist, no-persistence, and provider-compatible request plumbing. DeepSeek compatibility does not make it an Anthropic model. Missing reliable capacity, unavailable token_budget, inability of a Hook to call app topology, prompt-visible extra capability, model fallback, persistent state, or common-method fork remains explicit unknown or failure rather than adapter flexibility."
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+  },
+  "namedHumanAcceptor": "yiheng8023",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "profile": "harness-demand-to-capability-v0.2-candidate.5 at git blob e3ac88f8d8e38b6ee673738801962d9ef35149e8 and sha256:1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+    "outcomeQuality": "Both hosts return a complete, fact-grounded, decision-ready disposition of the Codex context-carrier boundary for target 6b912260613de3ed0ea54676fc822667da88b863, including the smallest route, exact rejected routes, risks, unsupported states, and any minimal repository correction.",
+    "intentAndCompleteness": "Answer how a nontechnical user's long-running Codex task should remain controllable and recoverable without teaching Codex, while distinguishing stable Hook facts, unavailable capacity data, experimental features, Agent-owned behavior, adapter responsibility, and portable-core limits on the first useful pass.",
+    "interfaceSimplicity": "One human trust and cost grant before execution and accountable judgments after the result; no user host, capability, command, topology, recovery, verification, cleanup, or push operation.",
+    "capabilityLifecycle": "Only exact candidate plugins, native read-only host and shell primitives, and the fixed official source facts; one call per host; no discovery during measured execution; all task exposure released afterward.",
+    "topologyAndContinuity": "One canonical parent plus two no-resume subprocesses; identity, comparison, reconciliation, result-driven correction, release, and cleanup remain parent-owned.",
+    "authorityAndSafety": "Public repository and fixed public source facts only; no transcript body, private configuration content, secret, model write, web search, account mutation, publication, release, deployment, persistent enablement, or irreversible effect.",
+    "evidence": "Immutable registration and binding; post-registration exact grant; target, source, host, runtime, model, adapter, plugin, prompt and schema identities; prompt and feature preflight; raw streams and structured results; independent official-source and repository checks; eligible accepted context-boundary records; cleanup, verifier, tests, Git state, and named-human judgments. Model agreement and schema validity alone are insufficient.",
+    "residue": "No task-created temporary home, credential link, plugin cache or config, Hook trust, process, output, schema, prompt, session, .tmp item, __pycache__, branch, worktree, fork, report, or unrelated change remains.",
+    "resourceAndCost": "Exactly one Codex gpt-5.6-sol/high/default call and one DeepSeek-V4-Pro-0813/max-through-Claude-Code call. The distinct-host call is capped at USD 0.15. No retry, fallback, subagent, or web call. Capture actual usage and cost when exposed; missing mandatory data fails that host floor.",
+    "missingData": "Any missing target, host/model/adapter, prompt, supported-schema identity, capability preflight, stream, result, source fact check, eligible context-boundary record, cleanup, cost, intervention or loss, or human-judgment datum fails the affected floor and cannot be imputed.",
+    "claim": "At most one accepted candidate.5 Codex context-carrier architecture decision on the exact two hosts, models, adapters, target, profile, and 2026-08-14 date, plus Codex-only candidate.5 calibration over the exact eligible cohort. No release, production, universal threshold, automatic migration, stable experimental-feature, model-superiority, or untested-host claim."
+  },
+  "materialInterventionTaxonomy": [
+    "user-capability-route-selection",
+    "user-capability-setup-or-invocation",
+    "user-host-or-model-selection",
+    "user-plugin-component-or-manager-selection",
+    "user-recovery-or-verification-command",
+    "user-cleanup-or-push-route",
+    "user-code-topology-selection-creation-synchronization-merge-archive-release-or-cleanup",
+    "user-conversation-continuation-fork-new-task-conclusion-reconciliation-archive-release-or-cleanup"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "material-intent-or-mode-correction",
+    "material-omission",
+    "reopened-settled-decision",
+    "unrequested-deliverable-or-mutation",
+    "unnecessary-human-round-trip-or-process",
+    "resource-or-residue-recovery-returned-to-user",
+    "context-or-handoff-recovery-returned-to-user",
+    "task-topology-divergence-or-orphaning-or-recovery-returned-to-user",
+    "false-completion-or-claim-correction",
+    "tool-or-product-learning-burden-returned-to-user",
+    "ai-like-or-materially-unclear-communication-correction"
+  ],
+  "sourceCaptureEligibilityAndStopRule": {
+    "measurementStartsAfter": "This exact registration and active program binding are committed and pushed unchanged, followed by a new exact human grant scoped to this task. No model call, isolated home or config, credential link, plugin install or load, Hook trust, or measured result before the grant is eligible. All earlier grants and unused conditional calls are consumed and ineligible.",
+    "eligibleSources": [
+      "post-registration exact user grant for one isolated Codex credential link and plugin lifecycle, exact task-scoped Hook trust and capability controls, one Codex gpt-5.6-sol call, one Claude Code DeepSeek-V4-Pro-0813 call capped at USD 0.15, and exact cleanup",
+      "immutable target, user-demand, host, runtime, model, adapter, package, prompt, supported output schema, capability-preflight, official source, terms, and date identities fixed here",
+      "one Codex and one Claude raw event stream and structured result with full-precision chronology, content hashes, exits, exposed usage and cost, Skill/profile projection evidence, and independent repository and official-source fact checks",
+      "content-addressed eligible accepted candidate.5 receipts and native compaction recovery records plus honest candidate.5 stopped receipts",
+      "canonical verifier, full product tests, Git identity and push, exact consumer, process, filesystem and task residue checks, and any smallest result-driven repository correction",
+      "post-result named-human per-host outcome, equivalence, O2 aggregate, O4 methodology/profile/applicability, O5 portability, and final claim judgment",
+      "minimal criterion-scoped code validators authored only after actual host streams and result serialization are observed"
+    ],
+    "ineligibleSources": [
+      "any pre-registration or pre-grant model call, substituted host, model, adapter, source, date, prompt or schema, second attempt, fallback, web search, private input, self-authored receipt, green fixture, model agreement, general schema validity, or local test alone",
+      "a model write, unregistered Skill, plugin, MCP, App, manager or agent, new runtime, branch, worktree, repository fork, app task, conversation fork, persistent session, publication, release, deployment, or user-operated capability, topology, recovery, verification, cleanup or push route",
+      "the prior stopped closeout-critical-path task or its consumed grant, Claude Skill source delivery as a materially different O2 scenario, a stopped receipt as an accepted task, manufactured compaction, missing capacity presented as safety, or any result generalized beyond the registered ceiling"
+    ],
+    "stopRule": "After the registration commit is pushed and the new exact grant is received, run each host at most once in the registered order. Stop honestly on source, version, terms, model, prompt, schema or capability mismatch; unsupported fallback; extra prompt-visible capability; model write; timeout; malformed or nonzero result; mandatory-decision equivalence mismatch; independent factual contradiction; unexpected consumer or topology effect; cost overrun; mandatory-floor failure; material user intervention or collaboration loss; unbounded residue; or human rejection. Do not retry, substitute, run the conditional second host after the first host makes the pair ineligible, or weaken the tolerance. Complete only after exact evidence, cleanup, any accepted smallest correction, criterion-scoped validation, Git delivery, and all named-human judgments pass."
+  },
+  "claimLimits": [
+    "one candidate.5 reference-host-context-carrier architecture and risk decision task on 2026-08-14 against target 6b912260613de3ed0ea54676fc822667da88b863",
+    "one Codex CLI 0.147.0 gpt-5.6-sol high default execution through Codex plugin tree ed19c908abe42489c1f49e0b8e83a1cee0e8e150 and one Claude Code 2.1.232 DeepSeek-V4-Pro-0813 max execution through Claude plugin tree 8442f03f4d155886b88062a53a709c1778896116",
+    "O2 may aggregate only public intake, Codex Skill source integration, and this context-carrier architecture decision as three materially different accepted Codex scenarios",
+    "O4 may accept only exact candidate.5 Codex calibration, fixed comparator cohort, independently validated accepted context transitions, and honest stopped samples",
+    "O5 may claim portability only for this matched decision task, exact hosts, runtimes, models, adapters, date, and equivalence tolerance",
+    "no result grants release, publication, production, universal context management, automatic task migration, stable experimental token-budget behavior, model superiority, or untested-host status"
+  ]
+}

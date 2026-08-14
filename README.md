@@ -22,7 +22,10 @@ Code projection over the same continuation semantics. It does not contain an
 Agent runtime, a persistently installed or behavior-accepted adapter, or
 accepted cross-host proof.
 
-v0.2 is `ready` with no active increment. O1 is verified by three accepted,
+v0.2 is `active` on one pre-registered, matched Codex and distinct-host
+context-carrier architecture decision. No model execution for that task has
+started; it first requires the exact temporary trust, cost, and cleanup grant
+named in its registration. O1 is verified by three accepted,
 task-bound results: the public-intake rewrite and the uninstalled Codex and
 Claude task-facing Skill source packages. O3 is independently verified over
 those three route decisions: one no-gap/native retention case and two finite,
@@ -58,8 +61,9 @@ configuration, and fail closed when the intended capability and topology cannot
 be proven. The plugin does not override the user's broader capability inventory.
 The parent must also bind a schema that the exact host accepts before consuming
 the task's only allowed model call; general JSON Schema validity alone is not
-host-compatibility evidence. The verifier is the current machine-readable state
-source.
+host-compatibility evidence. The active task uses a schema restricted to the
+documented supported subset and still fails closed if the exact host rejects
+it. The verifier is the current machine-readable state source.
 
 ## The problem
 

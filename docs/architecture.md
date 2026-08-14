@@ -85,9 +85,9 @@ authority graph, criterion contracts, admitted evidence, human authority,
 process loss, and repository residue. It does not execute tasks, discover or
 install capabilities, route work, or operate a host adapter.
 
-O1 is verified by two accepted, task-bound results: the public-intake rewrite
-and the uninstalled Codex task-facing Skill source package. O2-O5 remain
-planned and false. A repository-authored JSON file alone cannot promote an
+O1 is verified by three accepted, task-bound results: the public-intake rewrite
+and the uninstalled Codex and Claude task-facing Skill source packages. O2, O4,
+and O5 remain false while O3 is true. A repository-authored JSON file alone cannot promote an
 outcome: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
 evidence. Before measured execution, the increment freezes an immutable task
@@ -101,9 +101,12 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is ready with no active causal increment after closing the
-public-intake and task-facing Codex and Claude Skill source deliveries. Those
-three task-bound results support O1. A separate criterion-scoped aggregate
+The v0.2 program has one active, pre-registered matched context-carrier
+architecture decision after closing the public-intake and task-facing Codex
+and Claude Skill source deliveries. No measured model execution for the active
+task has started, and its temporary trust, cost, and cleanup boundary still
+requires the registered human grant. Those three completed task-bound results
+support O1. A separate criterion-scoped aggregate
 check over their exact validators supports O3 through one no-gap/native-retain
 route and two finite source-bound official discovery or adaptation routes,
 with every projection inactive and task exposure released. The Codex Skill

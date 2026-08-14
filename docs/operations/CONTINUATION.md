@@ -15,16 +15,26 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready` with no active increment. The
+The current machine program is v0.2 and `active` on
+`increment.v0.2.codex-context-carrier-boundary-decision`. The
 public verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1 and O3 true, with O2, O4, and O5 false (`2/5` outcomes); O1 is supported
   by three task-bound receipts, and the Claude receipt independently binds the
   exact three-route O3 cohort;
 - G1-G4 true (`4/4` guardrails);
-- no active increment or work item.
+- that exact active increment and its single active work item.
+
+The active task answers the user's bound Codex context-overflow and repeated
+carrier problem; it is not a rerun of the stopped closeout-plan decision. Its
+immutable registration freezes a matched architecture decision against target
+`6b91226`, the exact stable Hook facts, explicit unknown remaining capacity, a
+conservative no-resume measured boundary, a documented-subset output schema,
+and the O2/O4/O5 tolerance and claim ceiling. No model call, temporary plugin,
+Hook trust, credential link, isolated consumer state, or distinct-host cost has
+started. Those effects require one new exact post-registration human grant.
 
 The measured source candidate adds one concise implicitly invocable Skill to
 the existing inactive Codex plugin and keeps the continuation Hook. Fixed Codex
