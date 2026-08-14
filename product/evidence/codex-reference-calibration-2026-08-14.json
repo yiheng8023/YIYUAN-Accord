@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "id": "evidence.codex-reference-calibration.2026-08-14",
+  "observedAt": "2026-08-14T20:38:08.5058796+08:00",
+  "taskIdentity": "natural-task.2026-08-14.codex-reference-calibration",
+  "criterionIds": [
+    "O4"
+  ],
+  "incrementId": "increment.v0.2.codex-reference-calibration",
+  "workItemId": "work.v0.2.codex-reference-calibration",
+  "registration": {
+    "locator": "product/evidence/codex-reference-calibration-registration.json",
+    "sha256": "01fd3723f35747174d54701affffd7b9211780cdc0d3105c6df0326c8bc815b6",
+    "commit": "31d62d425df813dc76de860646f6a961acad32d3"
+  },
+  "source": {
+    "threadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+    "machineEvaluationInputIdentity": "sha256:3c8bc530e65e1d7a6859a9933d73c654e7d0f2279259635756ea0aefeb427ce5",
+    "identityWithHumanDecision": null,
+    "evaluationMode": "one post-registration source-only evaluation of the exact fixed cohort; no natural-task rerun, model call, host change, consumer mutation, or new carrier"
+  },
+  "authority": {
+    "namedHuman": "yiheng8023",
+    "decisionState": "pending",
+    "decisionScope": "Accept or reject the unchanged candidate.5 methodology and open minimum quality-conformance profile, exact three-pass/one-stopped Codex reference-host calibration, fixed comparator and external-reuse conclusion, applicability limits, and only the registered bounded O4 claim.",
+    "decisionScopeSha256": "e11a0b8eafe60dda3ab11502c0214c497d016172515a4649465ca356cd6c53b9",
+    "requiredResponse": "接受上述 candidate.5 方法与最低质量 profile、混合通过/停止校准、适用边界和有界 O4 声明。",
+    "requiredResponseSha256": "6309471b550b44accb4853659b421186325c84dd4b8b5a1d9ea9bb4fc05d0d1c"
+  },
+  "result": {
+    "state": "machine-eligible-human-pending",
+    "accepted": null,
+    "humanJudgment": "pending",
+    "machineComparisonPassed": true,
+    "profileDisposition": "candidate.5 bytes and semantics remain immutable; Codex reference-host calibration acceptance is pending the named-human judgment",
+    "boundedAdvantage": "Across the exact three accepted scenarios, registered material user orchestration burden falls from 8 to 0 and two accepted native-compaction crossings recover without user context or topology work; the exact fourth receipt remains stopped on its missing native Hook chronology."
+  },
+  "cohort": {
+    "acceptedReceipts": [
+      {
+        "taskIdentity": "natural-task.2026-08-14.public-intake-zero-knowledge",
+        "scenarioClass": "public-support-and-contribution-intake-for-zero-knowledge-users",
+        "locator": "product/evidence/public-intake-zero-knowledge-accepted-2026-08-14.json",
+        "sha256": "04ff48d3bb65dcb11bcbe1be41ee4b26ef9b76f34e7019b9b24e0cbda952adb5",
+        "validator": "public-intake-zero-knowledge-o1",
+        "requiredCriterion": "O1",
+        "state": "accepted"
+      },
+      {
+        "taskIdentity": "natural-task.2026-08-14.codex-demand-skill-plugin",
+        "scenarioClass": "codex-plugin-skill-reference-adapter-delivery",
+        "locator": "product/evidence/codex-demand-skill-plugin-accepted-2026-08-14.json",
+        "sha256": "7d8a02d8b54e723d9606c679fcc47f7590a5fdb9301f7c886bfa1364ac95b323",
+        "validator": "codex-demand-skill-plugin-o1",
+        "requiredCriterion": "O1",
+        "state": "accepted"
+      },
+      {
+        "taskIdentity": "natural-task.2026-08-14.continuation-reconciliation-projection",
+        "scenarioClass": "host-neutral-continuation-reconciliation-adapter-implementation",
+        "locator": "product/evidence/continuation-reconciliation-projection-2026-08-14.json",
+        "sha256": "3754dfe6e1fb8cff7c400e8ad7a1c4bacb2ebcc714f3b08c55a82b9197cae952",
+        "validator": "continuation-reconciliation-o2",
+        "requiredCriterion": "O2",
+        "state": "accepted"
+      }
+    ],
+    "stoppedReceipt": {
+      "taskIdentity": "natural-task.2026-08-14.codex-plugin-context-rollover",
+      "scenarioClass": "long-horizon-software-product-continuity-through-agent-owned-conversation-rollover",
+      "locator": "product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json",
+      "sha256": "71df89f236f974b22dc44cc59f73ded945b88b4cc9b53ecd0851f35aa5d23173",
+      "registrationSha256": "b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29",
+      "state": "stopped",
+      "eligibleForOutcomeProgress": false,
+      "missingMandatoryEvidence": [
+        "native HookStarted chronology",
+        "native HookCompleted chronology"
+      ]
+    }
+  },
+  "measures": {
+    "scorecardAndProfileIdentity": {
+      "scorecardVersion": "harness-acceptance-v0.2-contract-sha256-c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6",
+      "o4CriterionCanonicalSha256": "63aa85b31339d988e49dac5932bda292c542bcbb67caa628d01e9c51dbf4a828",
+      "methodologyAndQualityProfileVersion": "harness-demand-to-capability-v0.2-candidate.5",
+      "profileBlob": "e3ac88f8d8e38b6ee673738801962d9ef35149e8",
+      "profileSha256": "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+      "bytesAndSemanticRulesChangedAfterResults": false
+    },
+    "outcomeQuality": {
+      "acceptedScenarioCount": 3,
+      "materiallyDistinctAcceptedScenarioCount": 3,
+      "stoppedScenarioCount": 1,
+      "acceptedTaskValidatorsPass": true,
+      "stoppedReceiptRemainsStopped": true
+    },
+    "userOrchestrationBurden": {
+      "baselineMaterialInterventions": [
+        3,
+        2,
+        3
+      ],
+      "observedMaterialInterventions": [
+        0,
+        0,
+        0
+      ],
+      "aggregateBaseline": 8,
+      "aggregateObserved": 0,
+      "strictAdvantage": true,
+      "userCapabilityOrTopologyOperationsForCalibration": 0
+    },
+    "taskTopologyLifecycleAndBurden": {
+      "acceptedReceiptUserTopologyOperations": 0,
+      "stoppedChildCreatedByAgent": true,
+      "stoppedChildArchivedByAgent": true,
+      "stoppedChildWorktreeCreated": false,
+      "currentConversationCarrier": "Codex task 019ffaa8-b44a-7bf2-97de-65875bceec33 retained",
+      "currentCodeCarrier": "C:/Projects/agent-autonomy-harness main retained",
+      "newCarrierForCalibration": false
+    },
+    "intentCommunicationAndDecisionCompleteness": {
+      "acceptedReceiptMaterialCollaborationLossCounts": [
+        0,
+        0,
+        0
+      ],
+      "acceptedReceiptRepeatedBoundRequestCounts": [
+        0,
+        0,
+        0
+      ],
+      "calibrationMaterialCollaborationLossCount": 0,
+      "pendingHumanInput": "one accountable bounded O4 judgment only"
+    },
+    "routeReliabilityRecoveryTimeAndCallCost": {
+      "acceptedReceiptValidatorsReexecuted": 3,
+      "acceptedReceiptValidatorFailures": 0,
+      "newModelCalls": 0,
+      "newHostExecutions": 0,
+      "naturalTaskReruns": 0,
+      "stoppedTaskReruns": 0,
+      "inactiveProjectionIntegrityRefresh": {
+        "reason": "the new criterion-scoped repository validator changed harness/control.py, so both inactive launchers refreshed only their control.py integrity pin and payload identity",
+        "codexPackageVersion": "0.2.0-candidate.5+codex.payload-67299b7df7c1",
+        "claudePackageVersion": "0.2.0-candidate.5+claude.payload-3a4c96161949",
+        "evaluatedHistoricalPluginSnapshotsChanged": false,
+        "methodProfileSkillOrHookSemanticsChanged": false,
+        "installedEnabledOrConsumerStateChanged": false
+      },
+      "recoveryAndCallCostDataSource": "the exact validated receipts and their pre-registered task-specific measures; no value imputed"
+    },
+    "authoritySafetyEvidenceAndResidue": {
+      "acceptedReceiptMandatoryFloorsPass": true,
+      "stoppedReceiptSafetyCleanupPass": true,
+      "repositoryTemporaryResidue": [],
+      "consumerOrHostMutation": [],
+      "remainingTaskScopedExposure": [],
+      "externalWritesBeyondAuthorizedGitPush": [],
+      "newTrustDataCostReleaseOrPublicationBoundary": false
+    },
+    "resourceContinuityContextAndProcessCost": {
+      "acceptedNativeCompactionCrossings": 2,
+      "userContextReconstructionCount": 0,
+      "userTopologyRecoveryCount": 0,
+      "continuationBaselineCharacters": 6301,
+      "continuationDeliveredCharacters": 2728,
+      "continuationCharacterReduction": 3573,
+      "calibrationProcessArtifactsCountAsOutcome": false
+    },
+    "contextCarrierFitnessObservationsAndTransitions": {
+      "reliableRemainingCapacitySignal": "unknown",
+      "conservativeRule": "retain the current task while goal, registration, cohort, Git, verifier, tests, pending judgment and cleanup remain recoverable; on native compaction re-read those sources before mutation; stop before a new carrier or user recovery burden",
+      "preventableContextLossObserved": false,
+      "userSelectedTransition": false
+    },
+    "referenceHostContextLifecycleTransitionAndRecovery": {
+      "acceptedCrossings": [
+        {
+          "receipt": "public-intake",
+          "transition": "native compaction at 2026-08-14T00:56:49.178Z",
+          "sameTaskRecovery": true,
+          "userReconstructionOrTopologyOperationCount": 0
+        },
+        {
+          "receipt": "Codex Skill",
+          "transition": "native compaction at 2026-08-14T02:01:32.757Z",
+          "sameTaskRecovery": true,
+          "userReconstructionOrTopologyOperationCount": 0
+        }
+      ],
+      "stoppedCrossing": {
+        "startupProjectionObserved": true,
+        "postCompactionProjectionObserved": true,
+        "nativeHookStartedPayloadTypeCount": 0,
+        "nativeHookCompletedPayloadTypeCount": 0,
+        "classification": "stopped-not-normalized"
+      }
+    },
+    "comparatorOutcomeAndProcessResults": {
+      "sourceRegistration": "product/evidence/continuation-reconciliation-projection-registration.json",
+      "referenceHostCohortCanonicalSha256": "036a697e6eda36e250bc1e037d4f14fc4f01fa4481d359dc4fe5b094b43a60e3",
+      "outcomeComparatorCohortCanonicalSha256": "563967495af6d8400f8c4a1f6ae5f983f866a2f2aad953569a23d75cbdfe00c9",
+      "comparisonDecisionCanonicalSha256": "d4f23577da4f57828a49fe1c1bf5950a677811de5a2bd744767c06549be30f24",
+      "mandatoryFloorsCanonicalSha256": "4d152c2ed10be2a22073c0514d473d2306be3723f55017e541319c2207ce705b",
+      "strictBurdenAdvantage": true,
+      "stoppedReceiptHiddenByAggregate": false
+    },
+    "externalComparisonAndReuseDecision": {
+      "sourceRegistration": "product/evidence/continuation-reconciliation-projection-registration.json",
+      "externalSubstrateCohortCanonicalSha256": "6fe3e3f056addc663b1c6784df405a3ad56027bfc36b569933c8a93f874ecea3",
+      "layersReused": [
+        "Codex host and native context lifecycle",
+        "Git repository identity and delivery",
+        "CHAP collaboration-wire concepts",
+        "Human Tool human-allocation pattern",
+        "NIST AI 800-2 evaluation probes"
+      ],
+      "harnessOwnedResidual": "demand-to-capability methodology, open minimum quality-conformance profile, and thin reference adapters",
+      "sufficientExternalLayerRemovedResidualValue": false,
+      "reauthoredProtocolRuntimeIdentityAuditOrEvaluator": false
+    },
+    "applicabilityLimitsAndHumanDecision": {
+      "host": "OpenAI Codex CLI 0.147.0 on Windows",
+      "profile": "software engineering",
+      "acceptedScenarioClasses": [
+        "public support and contribution intake for zero-knowledge users",
+        "Codex plugin Skill reference-adapter delivery",
+        "host-neutral continuation-reconciliation adapter implementation"
+      ],
+      "stoppedScenarioClass": "long-horizon software-product continuity through Agent-owned conversation rollover",
+      "sourcesAsOf": "2026-08-14",
+      "namedHuman": "yiheng8023",
+      "accepted": null,
+      "decisionMessageLocator": null,
+      "decisionMessageIdentity": null,
+      "acceptedMethodologyAndProfile": null,
+      "acceptedMixedCalibration": null,
+      "acceptedApplicabilityAndBoundedO4Claim": null
+    },
+    "mandatoryFloorResults": {
+      "outcomeQuality": "pass",
+      "userOrchestrationBurden": "pass",
+      "taskTopologyLifecycleAndBurden": "pass",
+      "intentCommunicationAndDecisionCompleteness": "pass",
+      "routeReliabilityRecoveryTimeAndCallCost": "pass",
+      "authoritySafetyEvidenceAndResidue": "pass",
+      "resourceContinuityContextAndProcessCost": "pass",
+      "contextCarrierFitnessObservationsAndTransitions": "pass",
+      "referenceHostContextLifecycleTransitionAndRecovery": "pass",
+      "comparatorOutcomeAndProcessResults": "pass",
+      "externalComparisonAndReuseDecision": "pass",
+      "applicabilityLimitsAndHumanDecision": "pending",
+      "missingData": [
+        "named-human methodology, profile, mixed-calibration, applicability, and bounded O4 judgment"
+      ]
+    }
+  },
+  "claimLimits": [
+    "At most the unchanged candidate.5 methodology and minimum profile are calibrated on OpenAI Codex CLI 0.147.0 on Windows for the exact three accepted scenario classes and one stopped plugin-rollover case on 2026-08-14.",
+    "The comparison demonstrates only a bounded advantage in registered user orchestration burden and cross-layer continuation coherence against the fixed task comparators.",
+    "The stopped receipt remains failed on missing native Hook chronology; no installed-plugin, general context-management, universal-superiority, release, publication, production, or v0.2 completion claim is made.",
+    "This O4 calibration does not establish Agent-neutral or cross-host portability; O5 remains separate and false."
+  ],
+  "validator": {
+    "kind": "codex-reference-calibration-o4",
+    "criterionId": "O4",
+    "state": "machine-eligible-human-pending"
+  }
+}

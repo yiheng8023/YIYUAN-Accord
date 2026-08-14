@@ -39,6 +39,15 @@ human acceptance. O4 remains false until a post-registration task-bound
 validator passes and yiheng8023 accepts the bounded methodology, applicability,
 comparison, and claim. O5 remains a separate cross-host gate.
 
+The one post-registration source-only evaluation is now machine-eligible and
+human-pending. Its task-bound validator re-executes the three exact accepted
+task validators, preserves the exact stopped Hook-chronology failure, rechecks
+the immutable profile, scorecard, Git chronology, comparators, external reuse,
+strict 8-to-0 burden result, two accepted native-compaction recoveries, package
+integrity, and cleanup. The formal O4 validator still rejects the pending
+receipt until the named-human bounded judgment exists; this adds no O4 credit
+by itself.
+
 The registered baseline proved a concrete adapter defect after its immutable
 binding was pushed: the active-work `SessionStart` projection was 6,301
 characters against Codex's 4,096-character additional-context limit and did

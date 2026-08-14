@@ -803,7 +803,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.4+codex.payload-"
+            "0.2.0-candidate.5+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -985,7 +985,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.4+claude.payload-"
+            "0.2.0-candidate.5+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
@@ -1739,6 +1739,7 @@ class ProductControlTests(unittest.TestCase):
                 "codex-demand-skill-plugin-o1",
                 "claude-demand-skill-plugin-o1-o3",
                 "continuation-reconciliation-o2",
+                "codex-reference-calibration-o4",
             },
         )
         criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
@@ -1748,6 +1749,16 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             increments,
             frozenset({"increment.v0.2.public-intake-zero-knowledge"}),
+        )
+        self.assertTrue(callable(validator))
+
+        criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "codex-reference-calibration-o4"
+        ]
+        self.assertEqual(criteria, frozenset({"O4"}))
+        self.assertEqual(
+            increments,
+            frozenset({"increment.v0.2.codex-reference-calibration"}),
         )
         self.assertTrue(callable(validator))
 
@@ -1938,6 +1949,68 @@ class ProductControlTests(unittest.TestCase):
                 candidate_errors: list[str] = []
                 self.assertFalse(
                     validator(candidate, "O2", ROOT, candidate_errors)
+                )
+                self.assertTrue(candidate_errors)
+
+    def test_codex_reference_o4_candidate_binds_fixed_mixed_cohort_before_human(
+        self,
+    ) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "product/evidence/codex-reference-calibration-2026-08-14.json"
+            ).read_text(encoding="utf-8")
+        )
+        cache_token = control._EVIDENCE_GIT_CACHE.set({})
+        self.addCleanup(control._EVIDENCE_GIT_CACHE.reset, cache_token)
+        errors: list[str] = []
+        self.assertTrue(
+            control._validate_codex_reference_calibration_o4_candidate(
+                document, ROOT, errors, require_human=False
+            ),
+            errors,
+        )
+
+        accepted_errors: list[str] = []
+        validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "codex-reference-calibration-o4"
+        ][2]
+        self.assertFalse(validator(document, "O4", ROOT, accepted_errors))
+        self.assertTrue(
+            any("named-human" in error for error in accepted_errors),
+            accepted_errors,
+        )
+
+        mutations = {
+            "different accepted receipt": lambda value: value["cohort"][
+                "acceptedReceipts"
+            ][0].__setitem__("sha256", "0" * 64),
+            "normalized stopped receipt": lambda value: value["cohort"][
+                "stoppedReceipt"
+            ].__setitem__("state", "accepted"),
+            "changed profile": lambda value: value["measures"][
+                "scorecardAndProfileIdentity"
+            ].__setitem__("profileSha256", "0" * 64),
+            "lost strict advantage": lambda value: value["measures"][
+                "userOrchestrationBurden"
+            ].__setitem__("strictAdvantage", False),
+            "changed external cohort": lambda value: value["measures"][
+                "externalComparisonAndReuseDecision"
+            ].__setitem__("externalSubstrateCohortCanonicalSha256", "0" * 64),
+            "broadened claim": lambda value: value["claimLimits"].clear(),
+        }
+        for label, mutate_document in mutations.items():
+            with self.subTest(label=label):
+                candidate = deepcopy(document)
+                mutate_document(candidate)
+                candidate_errors: list[str] = []
+                self.assertFalse(
+                    control._validate_codex_reference_calibration_o4_candidate(
+                        candidate,
+                        ROOT,
+                        candidate_errors,
+                        require_human=False,
+                    )
                 )
                 self.assertTrue(candidate_errors)
 

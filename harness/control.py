@@ -763,6 +763,109 @@ _CONTINUATION_TASK_FILES = MappingProxyType(
         ),
     }
 )
+_CODEX_CALIBRATION_INCREMENT_ID = "increment.v0.2.codex-reference-calibration"
+_CODEX_CALIBRATION_WORK_ID = "work.v0.2.codex-reference-calibration"
+_CODEX_CALIBRATION_RECEIPT = (
+    "product/evidence/codex-reference-calibration-2026-08-14.json"
+)
+_CODEX_CALIBRATION_REGISTRATION = (
+    "product/evidence/codex-reference-calibration-registration.json"
+)
+_CODEX_CALIBRATION_REGISTRATION_SHA256 = (
+    "01fd3723f35747174d54701affffd7b9211780cdc0d3105c6df0326c8bc815b6"
+)
+_CODEX_CALIBRATION_REGISTRATION_COMMIT = (
+    "31d62d425df813dc76de860646f6a961acad32d3"
+)
+_CODEX_CALIBRATION_REGISTRATION_PARENT = (
+    "29b520d01c1b85da1fd0c8905bba2922fb3e33d0"
+)
+_CODEX_CALIBRATION_DECISION_SCOPE_SHA256 = (
+    "e11a0b8eafe60dda3ab11502c0214c497d016172515a4649465ca356cd6c53b9"
+)
+_CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256 = (
+    "6309471b550b44accb4853659b421186325c84dd4b8b5a1d9ea9bb4fc05d0d1c"
+)
+_CODEX_CALIBRATION_INPUT_IDENTITY = (
+    "sha256:3c8bc530e65e1d7a6859a9933d73c654e7d0f2279259635756ea0aefeb427ce5"
+)
+_CODEX_CALIBRATION_PROFILE_BLOB = "e3ac88f8d8e38b6ee673738801962d9ef35149e8"
+_CODEX_CALIBRATION_PROFILE_SHA256 = (
+    "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a"
+)
+_CODEX_CALIBRATION_O4_REGISTERED_SHA256 = (
+    "63aa85b31339d988e49dac5932bda292c542bcbb67caa628d01e9c51dbf4a828"
+)
+_CODEX_CALIBRATION_ACCEPTED_RECEIPTS = MappingProxyType(
+    {
+        _PUBLIC_INTAKE_RECEIPT: (
+            "04ff48d3bb65dcb11bcbe1be41ee4b26ef9b76f34e7019b9b24e0cbda952adb5",
+            "natural-task.2026-08-14.public-intake-zero-knowledge",
+            "public-support-and-contribution-intake-for-zero-knowledge-users",
+            "public-intake-zero-knowledge-o1",
+            "O1",
+        ),
+        _CODEX_SKILL_RECEIPT: (
+            "7d8a02d8b54e723d9606c679fcc47f7590a5fdb9301f7c886bfa1364ac95b323",
+            "natural-task.2026-08-14.codex-demand-skill-plugin",
+            "codex-plugin-skill-reference-adapter-delivery",
+            "codex-demand-skill-plugin-o1",
+            "O1",
+        ),
+        _CONTINUATION_RECEIPT: (
+            "3754dfe6e1fb8cff7c400e8ad7a1c4bacb2ebcc714f3b08c55a82b9197cae952",
+            "natural-task.2026-08-14.continuation-reconciliation-projection",
+            "host-neutral-continuation-reconciliation-adapter-implementation",
+            "continuation-reconciliation-o2",
+            "O2",
+        ),
+    }
+)
+_CODEX_CALIBRATION_STOPPED_RECEIPT = (
+    "product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json"
+)
+_CODEX_CALIBRATION_STOPPED_RECEIPT_SHA256 = (
+    "71df89f236f974b22dc44cc59f73ded945b88b4cc9b53ecd0851f35aa5d23173"
+)
+_CODEX_CALIBRATION_REGISTRATIONS = MappingProxyType(
+    {
+        "product/evidence/public-intake-zero-knowledge-registration.json": (
+            "125397f528f7042b82973a2aa47e6f429bd24d4b85ceeb29e7baa1c334c0a89f",
+            "public-support-and-contribution-intake-for-zero-knowledge-users",
+        ),
+        "product/evidence/codex-demand-skill-plugin-registration.json": (
+            "16e737b569c41f5b7f2c847d67bb70c2eb7ca0491481fec7c533a498d4051824",
+            "codex-plugin-skill-reference-adapter-delivery",
+        ),
+        _CONTINUATION_REGISTRATION: (
+            _CONTINUATION_REGISTRATION_SHA256,
+            "host-neutral-continuation-reconciliation-adapter-implementation",
+        ),
+        "product/evidence/codex-plugin-context-rollover-registration.json": (
+            "b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29",
+            "long-horizon-software-product-continuity-through-agent-owned-conversation-rollover",
+        ),
+    }
+)
+_CODEX_CALIBRATION_CANONICAL_SOURCE_VALUES = MappingProxyType(
+    {
+        "referenceHostProfileAndEligibleReceiptSet": (
+            "036a697e6eda36e250bc1e037d4f14fc4f01fa4481d359dc4fe5b094b43a60e3"
+        ),
+        "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries": (
+            "6fe3e3f056addc663b1c6784df405a3ad56027bfc36b569933c8a93f874ecea3"
+        ),
+        "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules": (
+            "563967495af6d8400f8c4a1f6ae5f983f866a2f2aad953569a23d75cbdfe00c9"
+        ),
+        "comparatorBaselineResultsComparisonAxesAndDecisionRule": (
+            "d4f23577da4f57828a49fe1c1bf5950a677811de5a2bd744767c06549be30f24"
+        ),
+        "mandatoryFloorsAndMissingDataRules": (
+            "4d152c2ed10be2a22073c0514d473d2306be3723f55017e541319c2207ce705b"
+        ),
+    }
+)
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...]], bytes | None] | None
 ] = ContextVar("harness_evidence_git_cache", default=None)
@@ -2304,6 +2407,772 @@ def _validate_continuation_reconciliation_o2(
     )
 
 
+def _validate_codex_reference_calibration_o4_candidate(
+    document: dict[str, Any],
+    root: Path,
+    errors: list[str],
+    *,
+    require_human: bool,
+) -> bool:
+    """Validate the exact registered O4 mixed cohort without inventing a result."""
+
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"Codex reference calibration O4 evidence {message}")
+
+    expected_top_level = {
+        "schema",
+        "id",
+        "observedAt",
+        "taskIdentity",
+        "criterionIds",
+        "incrementId",
+        "workItemId",
+        "registration",
+        "source",
+        "authority",
+        "result",
+        "cohort",
+        "measures",
+        "claimLimits",
+        "validator",
+    }
+    if set(document) != expected_top_level:
+        reject("top-level receipt shape changed")
+        return False
+
+    try:
+        registration_ref = document["registration"]
+        source = document["source"]
+        authority = document["authority"]
+        result = document["result"]
+        cohort = document["cohort"]
+        accepted_cohort = cohort["acceptedReceipts"]
+        stopped_cohort = cohort["stoppedReceipt"]
+        measures = document["measures"]
+        identity = measures["scorecardAndProfileIdentity"]
+        outcome = measures["outcomeQuality"]
+        burden = measures["userOrchestrationBurden"]
+        topology = measures["taskTopologyLifecycleAndBurden"]
+        intent = measures["intentCommunicationAndDecisionCompleteness"]
+        reliability = measures["routeReliabilityRecoveryTimeAndCallCost"]
+        safety = measures["authoritySafetyEvidenceAndResidue"]
+        resource = measures["resourceContinuityContextAndProcessCost"]
+        context = measures["contextCarrierFitnessObservationsAndTransitions"]
+        lifecycle = measures["referenceHostContextLifecycleTransitionAndRecovery"]
+        comparator = measures["comparatorOutcomeAndProcessResults"]
+        external = measures["externalComparisonAndReuseDecision"]
+        applicability = measures["applicabilityLimitsAndHumanDecision"]
+        floors = measures["mandatoryFloorResults"]
+    except (KeyError, TypeError):
+        reject("required receipt structure is missing")
+        return False
+
+    decision_scope = (
+        "Accept or reject the unchanged candidate.5 methodology and open minimum "
+        "quality-conformance profile, exact three-pass/one-stopped Codex "
+        "reference-host calibration, fixed comparator and external-reuse "
+        "conclusion, applicability limits, and only the registered bounded O4 claim."
+    )
+    required_response = (
+        "接受上述 candidate.5 方法与最低质量 profile、混合通过/停止校准、"
+        "适用边界和有界 O4 声明。"
+    )
+    input_parts = (
+        _CODEX_CALIBRATION_REGISTRATION_SHA256,
+        _CODEX_CALIBRATION_ACCEPTED_RECEIPTS[_PUBLIC_INTAKE_RECEIPT][0],
+        _CODEX_CALIBRATION_ACCEPTED_RECEIPTS[_CODEX_SKILL_RECEIPT][0],
+        _CODEX_CALIBRATION_ACCEPTED_RECEIPTS[_CONTINUATION_RECEIPT][0],
+        _CODEX_CALIBRATION_STOPPED_RECEIPT_SHA256,
+        _CODEX_CALIBRATION_PROFILE_SHA256,
+        EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256,
+        _CODEX_CALIBRATION_REGISTRATION_COMMIT,
+    )
+    input_identity = "sha256:" + hashlib.sha256(
+        ("\n".join(input_parts) + "\n").encode()
+    ).hexdigest()
+    if (
+        document["schema"] != 1
+        or document["id"] != "evidence.codex-reference-calibration.2026-08-14"
+        or document["taskIdentity"]
+        != "natural-task.2026-08-14.codex-reference-calibration"
+        or document["criterionIds"] != ["O4"]
+        or document["incrementId"] != _CODEX_CALIBRATION_INCREMENT_ID
+        or document["workItemId"] != _CODEX_CALIBRATION_WORK_ID
+        or registration_ref
+        != {
+            "locator": _CODEX_CALIBRATION_REGISTRATION,
+            "sha256": _CODEX_CALIBRATION_REGISTRATION_SHA256,
+            "commit": _CODEX_CALIBRATION_REGISTRATION_COMMIT,
+        }
+        or source.get("threadId") != "019ffaa8-b44a-7bf2-97de-65875bceec33"
+        or source.get("machineEvaluationInputIdentity")
+        != _CODEX_CALIBRATION_INPUT_IDENTITY
+        or input_identity != _CODEX_CALIBRATION_INPUT_IDENTITY
+        or source.get("evaluationMode")
+        != (
+            "one post-registration source-only evaluation of the exact fixed cohort; "
+            "no natural-task rerun, model call, host change, consumer mutation, or "
+            "new carrier"
+        )
+        or authority.get("namedHuman") != "yiheng8023"
+        or authority.get("decisionScope") != decision_scope
+        or authority.get("decisionScopeSha256")
+        != _CODEX_CALIBRATION_DECISION_SCOPE_SHA256
+        or hashlib.sha256((decision_scope + "\n").encode()).hexdigest()
+        != _CODEX_CALIBRATION_DECISION_SCOPE_SHA256
+        or authority.get("requiredResponse") != required_response
+        or authority.get("requiredResponseSha256")
+        != _CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256
+        or hashlib.sha256((required_response + "\n").encode()).hexdigest()
+        != _CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256
+    ):
+        reject("task, registration, source, or human-decision identity changed")
+
+    expected_accepted = []
+    for locator, expected in _CODEX_CALIBRATION_ACCEPTED_RECEIPTS.items():
+        receipt_sha256, task, scenario, validator_kind, required_criterion = expected
+        expected_accepted.append(
+            {
+                "taskIdentity": task,
+                "scenarioClass": scenario,
+                "locator": locator,
+                "sha256": receipt_sha256,
+                "validator": validator_kind,
+                "requiredCriterion": required_criterion,
+                "state": "accepted",
+            }
+        )
+    expected_stopped = {
+        "taskIdentity": "natural-task.2026-08-14.codex-plugin-context-rollover",
+        "scenarioClass": (
+            "long-horizon-software-product-continuity-through-agent-owned-"
+            "conversation-rollover"
+        ),
+        "locator": _CODEX_CALIBRATION_STOPPED_RECEIPT,
+        "sha256": _CODEX_CALIBRATION_STOPPED_RECEIPT_SHA256,
+        "registrationSha256": (
+            "b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29"
+        ),
+        "state": "stopped",
+        "eligibleForOutcomeProgress": False,
+        "missingMandatoryEvidence": [
+            "native HookStarted chronology",
+            "native HookCompleted chronology",
+        ],
+    }
+    if accepted_cohort != expected_accepted or stopped_cohort != expected_stopped:
+        reject("fixed three-pass/one-stopped cohort changed")
+
+    try:
+        registration_raw = (root / _CODEX_CALIBRATION_REGISTRATION).read_bytes()
+        registration = _parse_json(registration_raw.decode())
+    except (OSError, UnicodeError, _InvalidJson, TypeError):
+        reject("calibration registration is unavailable or invalid")
+        registration_raw = None
+        registration = {}
+    if (
+        registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _CODEX_CALIBRATION_REGISTRATION_SHA256
+        or registration.get("taskIdentity")
+        != "natural-task.2026-08-14.codex-reference-calibration"
+        or registration.get("incrementId") != _CODEX_CALIBRATION_INCREMENT_ID
+        or registration.get("criterionIds") != ["O4"]
+    ):
+        reject("calibration registration bytes or identity changed")
+
+    registration_parent = _evidence_git(
+        root, "rev-parse", f"{_CODEX_CALIBRATION_REGISTRATION_COMMIT}^"
+    )
+    committed_registration = _evidence_git(
+        root,
+        "show",
+        f"{_CODEX_CALIBRATION_REGISTRATION_COMMIT}:{_CODEX_CALIBRATION_REGISTRATION}",
+    )
+    committed_program = _evidence_git(
+        root,
+        "show",
+        f"{_CODEX_CALIBRATION_REGISTRATION_COMMIT}:product/program.json",
+    )
+    committed_acceptance = _evidence_git(
+        root,
+        "show",
+        f"{_CODEX_CALIBRATION_REGISTRATION_COMMIT}:product/acceptance.json",
+    )
+    registration_is_local = _evidence_git(
+        root,
+        "merge-base",
+        "--is-ancestor",
+        _CODEX_CALIBRATION_REGISTRATION_COMMIT,
+        "HEAD",
+    )
+    registration_is_pushed = _evidence_git(
+        root,
+        "merge-base",
+        "--is-ancestor",
+        _CODEX_CALIBRATION_REGISTRATION_COMMIT,
+        "origin/main",
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip()
+        != _CODEX_CALIBRATION_REGISTRATION_PARENT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _CODEX_CALIBRATION_REGISTRATION_SHA256
+        or registration_is_local is None
+        or registration_is_pushed is None
+    ):
+        reject("registration was not immutably committed and pushed before evaluation")
+
+    if committed_program is None:
+        reject("committed active program binding is unavailable")
+    else:
+        try:
+            registered_program = _parse_json(committed_program.decode())
+            registered_increment = next(
+                item
+                for item in registered_program["increments"]
+                if item.get("id") == _CODEX_CALIBRATION_INCREMENT_ID
+            )
+        except (KeyError, StopIteration, TypeError, UnicodeError, _InvalidJson):
+            reject("committed active program binding is invalid")
+        else:
+            if (
+                registered_program.get("status") != "active"
+                or registered_program.get("activeIncrementId")
+                != _CODEX_CALIBRATION_INCREMENT_ID
+                or registered_increment.get("state") != "active"
+                or registered_increment.get("taskRegistration")
+                != {
+                    "locator": _CODEX_CALIBRATION_REGISTRATION,
+                    "sha256": _CODEX_CALIBRATION_REGISTRATION_SHA256,
+                }
+            ):
+                reject("registration was not active before the calibration")
+
+    try:
+        accepted_contract = _parse_json((root / "product/acceptance.json").read_text())
+    except (OSError, UnicodeError, _InvalidJson, TypeError):
+        reject("current acceptance contract is unavailable or invalid")
+        accepted_contract = {}
+    if (
+        _criteria_contract_digest(accepted_contract.get("criteria"))
+        != EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
+    ):
+        reject("current scorecard contract changed")
+
+    if committed_acceptance is None:
+        reject("registered O4 criterion is unavailable")
+    else:
+        try:
+            registered_acceptance = _parse_json(committed_acceptance.decode())
+            registered_o4 = next(
+                item
+                for item in registered_acceptance["criteria"]
+                if item.get("id") == "O4"
+            )
+            registered_o4_sha256 = hashlib.sha256(
+                json.dumps(
+                    registered_o4,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode()
+            ).hexdigest()
+        except (KeyError, StopIteration, TypeError, UnicodeError, _InvalidJson):
+            reject("registered O4 criterion is invalid")
+        else:
+            if registered_o4_sha256 != _CODEX_CALIBRATION_O4_REGISTERED_SHA256:
+                reject("registered O4 criterion changed")
+
+    try:
+        profile_raw = (root / "docs/DEMAND-TO-CAPABILITY-PROFILE.md").read_bytes()
+    except OSError:
+        profile_raw = None
+    profile_blob = _evidence_git(
+        root, "rev-parse", "HEAD:docs/DEMAND-TO-CAPABILITY-PROFILE.md"
+    )
+    if (
+        profile_raw is None
+        or hashlib.sha256(profile_raw).hexdigest()
+        != _CODEX_CALIBRATION_PROFILE_SHA256
+        or profile_blob is None
+        or profile_blob.decode().strip() != _CODEX_CALIBRATION_PROFILE_BLOB
+    ):
+        reject("candidate.5 profile bytes or Git identity changed")
+
+    source_registrations: dict[str, dict[str, Any]] = {}
+    expected_scorecard = (
+        "harness-acceptance-v0.2-contract-sha256-"
+        + EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
+    )
+    for locator, expected in _CODEX_CALIBRATION_REGISTRATIONS.items():
+        expected_sha256, expected_scenario = expected
+        try:
+            raw = (root / locator).read_bytes()
+            registered = _parse_json(raw.decode())
+            values = registered["preRegistrationValues"]
+            scorecard = values["scorecardVersion"]
+            profile = values["methodologyAndQualityProfileVersion"]
+            scenario = values["scenarioClass"]
+        except (OSError, KeyError, TypeError, UnicodeError, _InvalidJson):
+            reject(f"source registration is unavailable or invalid: {locator}")
+            continue
+        if (
+            hashlib.sha256(raw).hexdigest() != expected_sha256
+            or scorecard != expected_scorecard
+            or "harness-demand-to-capability-v0.2-candidate.5" not in profile
+            or _CODEX_CALIBRATION_PROFILE_BLOB not in profile
+            or _CODEX_CALIBRATION_PROFILE_SHA256 not in profile
+            or scenario != expected_scenario
+        ):
+            reject(f"source registration identity or fixed rule changed: {locator}")
+        source_registrations[locator] = registered
+
+    accepted_validators = {
+        _PUBLIC_INTAKE_RECEIPT: (_validate_public_intake_o1, "O1"),
+        _CODEX_SKILL_RECEIPT: (_validate_codex_skill_o1, "O1"),
+        _CONTINUATION_RECEIPT: (_validate_continuation_reconciliation_o2, "O2"),
+    }
+    for locator, expected in _CODEX_CALIBRATION_ACCEPTED_RECEIPTS.items():
+        expected_sha256, expected_task, _, _, _ = expected
+        validator, criterion = accepted_validators[locator]
+        try:
+            raw = (root / locator).read_bytes()
+            accepted_receipt = _parse_json(raw.decode())
+        except (OSError, UnicodeError, _InvalidJson, TypeError):
+            reject(f"accepted cohort receipt is unavailable or invalid: {locator}")
+            continue
+        if (
+            hashlib.sha256(raw).hexdigest() != expected_sha256
+            or accepted_receipt.get("taskIdentity") != expected_task
+        ):
+            reject(f"accepted cohort receipt identity changed: {locator}")
+        if validator(accepted_receipt, criterion, root, errors) is not True:
+            reject(f"accepted cohort receipt no longer passes its validator: {locator}")
+
+    try:
+        stopped_raw = (root / _CODEX_CALIBRATION_STOPPED_RECEIPT).read_bytes()
+        stopped = _parse_json(stopped_raw.decode())
+        stopped_floor = next(
+            item
+            for item in stopped["chronology"]
+            if item.get("event") == "mandatory-native-hook-event-floor-evaluated"
+        )
+        stopped_safety = stopped["safetyAndCleanup"]
+    except (OSError, KeyError, StopIteration, TypeError, UnicodeError, _InvalidJson):
+        reject("stopped cohort receipt is unavailable or invalid")
+        stopped_raw = None
+        stopped = {}
+        stopped_floor = {}
+        stopped_safety = {}
+    if (
+        stopped_raw is None
+        or hashlib.sha256(stopped_raw).hexdigest()
+        != _CODEX_CALIBRATION_STOPPED_RECEIPT_SHA256
+        or stopped.get("state") != "stopped"
+        or stopped.get("eligibleForOutcomeProgress") is not False
+        or stopped.get("outcomeProgress") != []
+        or stopped.get("taskIdentity")
+        != "natural-task.2026-08-14.codex-plugin-context-rollover"
+        or stopped.get("registration", {}).get("sha256")
+        != "b44bebeed83d629f6716d5e4d424195dd10c42564af2a8936fc7c41fbb018f29"
+        or stopped_floor.get("hookStartedPayloadTypeCount") != 0
+        or stopped_floor.get("hookCompletedPayloadTypeCount") != 0
+        or stopped_floor.get("result") != "stopped"
+        or stopped_safety.get("childArchived") is not True
+        or stopped_safety.get("temporaryPluginRetained") is not False
+        or stopped_safety.get("temporaryTrustEntryRetained") is not False
+        or stopped_safety.get("temporaryPluginCacheRetained") is not False
+        or stopped_safety.get("consumerConfigRestoredExactly") is not True
+    ):
+        reject("stopped receipt was changed, normalized, or left unclean")
+
+    continuation_registration = source_registrations.get(_CONTINUATION_REGISTRATION)
+    if continuation_registration is None:
+        reject("fixed comparator and external source registration is unavailable")
+        continuation_values = {}
+    else:
+        continuation_values = continuation_registration["preRegistrationValues"]
+    canonical_values: dict[str, str] = {}
+    for name, expected_sha256 in _CODEX_CALIBRATION_CANONICAL_SOURCE_VALUES.items():
+        value = continuation_values.get(name)
+        canonical_sha256 = hashlib.sha256(
+            json.dumps(
+                value,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest()
+        canonical_values[name] = canonical_sha256
+        if canonical_sha256 != expected_sha256:
+            reject(f"pre-registered comparator, floor, or external value changed: {name}")
+
+    if identity != {
+        "scorecardVersion": expected_scorecard,
+        "o4CriterionCanonicalSha256": _CODEX_CALIBRATION_O4_REGISTERED_SHA256,
+        "methodologyAndQualityProfileVersion": (
+            "harness-demand-to-capability-v0.2-candidate.5"
+        ),
+        "profileBlob": _CODEX_CALIBRATION_PROFILE_BLOB,
+        "profileSha256": _CODEX_CALIBRATION_PROFILE_SHA256,
+        "bytesAndSemanticRulesChangedAfterResults": False,
+    }:
+        reject("reported scorecard or profile identity changed")
+
+    if outcome != {
+        "acceptedScenarioCount": 3,
+        "materiallyDistinctAcceptedScenarioCount": 3,
+        "stoppedScenarioCount": 1,
+        "acceptedTaskValidatorsPass": True,
+        "stoppedReceiptRemainsStopped": True,
+    }:
+        reject("mixed cohort outcome result changed")
+
+    if burden != {
+        "baselineMaterialInterventions": [3, 2, 3],
+        "observedMaterialInterventions": [0, 0, 0],
+        "aggregateBaseline": 8,
+        "aggregateObserved": 0,
+        "strictAdvantage": True,
+        "userCapabilityOrTopologyOperationsForCalibration": 0,
+    }:
+        reject("strict user-orchestration advantage changed")
+
+    if (
+        topology.get("acceptedReceiptUserTopologyOperations") != 0
+        or topology.get("stoppedChildCreatedByAgent") is not True
+        or topology.get("stoppedChildArchivedByAgent") is not True
+        or topology.get("stoppedChildWorktreeCreated") is not False
+        or topology.get("newCarrierForCalibration") is not False
+        or not topology.get("currentConversationCarrier", "").startswith("Codex task ")
+        or topology.get("currentCodeCarrier")
+        != "C:/Projects/agent-autonomy-harness main retained"
+    ):
+        reject("task-topology lifecycle or burden result changed")
+
+    if (
+        intent.get("acceptedReceiptMaterialCollaborationLossCounts") != [0, 0, 0]
+        or intent.get("acceptedReceiptRepeatedBoundRequestCounts") != [0, 0, 0]
+        or intent.get("calibrationMaterialCollaborationLossCount") != 0
+        or intent.get("pendingHumanInput")
+        != "one accountable bounded O4 judgment only"
+    ):
+        reject("intent, communication, or decision-completeness floor changed")
+
+    try:
+        codex_package_version = _parse_json(
+            (
+                root
+                / "adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json"
+            ).read_text(encoding="utf-8")
+        )["version"]
+        claude_package_version = _parse_json(
+            (
+                root
+                / "adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json"
+            ).read_text(encoding="utf-8")
+        )["version"]
+    except (OSError, KeyError, TypeError, UnicodeError, _InvalidJson):
+        reject("inactive projection integrity metadata is unavailable")
+        codex_package_version = None
+        claude_package_version = None
+    integrity_refresh = reliability.get("inactiveProjectionIntegrityRefresh", {})
+    if (
+        reliability.get("acceptedReceiptValidatorsReexecuted") != 3
+        or reliability.get("acceptedReceiptValidatorFailures") != 0
+        or reliability.get("newModelCalls") != 0
+        or reliability.get("newHostExecutions") != 0
+        or reliability.get("naturalTaskReruns") != 0
+        or reliability.get("stoppedTaskReruns") != 0
+        or set(integrity_refresh)
+        != {
+            "reason",
+            "codexPackageVersion",
+            "claudePackageVersion",
+            "evaluatedHistoricalPluginSnapshotsChanged",
+            "methodProfileSkillOrHookSemanticsChanged",
+            "installedEnabledOrConsumerStateChanged",
+        }
+        or integrity_refresh.get("reason")
+        != (
+            "the new criterion-scoped repository validator changed "
+            "harness/control.py, so both inactive launchers refreshed only their "
+            "control.py integrity pin and payload identity"
+        )
+        or integrity_refresh.get("codexPackageVersion") != codex_package_version
+        or integrity_refresh.get("claudePackageVersion") != claude_package_version
+        or not str(codex_package_version).startswith(
+            "0.2.0-candidate.5+codex.payload-"
+        )
+        or not str(claude_package_version).startswith(
+            "0.2.0-candidate.5+claude.payload-"
+        )
+        or integrity_refresh.get("evaluatedHistoricalPluginSnapshotsChanged")
+        is not False
+        or integrity_refresh.get("methodProfileSkillOrHookSemanticsChanged")
+        is not False
+        or integrity_refresh.get("installedEnabledOrConsumerStateChanged")
+        is not False
+        or "no value imputed"
+        not in reliability.get("recoveryAndCallCostDataSource", "")
+    ):
+        reject("reliability, recovery, time, or call-cost result changed")
+
+    if (
+        safety.get("acceptedReceiptMandatoryFloorsPass") is not True
+        or safety.get("stoppedReceiptSafetyCleanupPass") is not True
+        or any(
+            safety.get(name) != []
+            for name in (
+                "repositoryTemporaryResidue",
+                "consumerOrHostMutation",
+                "remainingTaskScopedExposure",
+                "externalWritesBeyondAuthorizedGitPush",
+            )
+        )
+        or safety.get("newTrustDataCostReleaseOrPublicationBoundary") is not False
+    ):
+        reject("authority, safety, evidence, or residue floor changed")
+
+    if resource != {
+        "acceptedNativeCompactionCrossings": 2,
+        "userContextReconstructionCount": 0,
+        "userTopologyRecoveryCount": 0,
+        "continuationBaselineCharacters": 6301,
+        "continuationDeliveredCharacters": 2728,
+        "continuationCharacterReduction": 3573,
+        "calibrationProcessArtifactsCountAsOutcome": False,
+    }:
+        reject("resource, continuity, context, or process cost changed")
+
+    if (
+        context.get("reliableRemainingCapacitySignal") != "unknown"
+        or not context.get("conservativeRule", "").startswith(
+            "retain the current task while goal, registration, cohort, Git"
+        )
+        or context.get("preventableContextLossObserved") is not False
+        or context.get("userSelectedTransition") is not False
+    ):
+        reject("context-carrier fitness or conservative transition rule changed")
+
+    expected_crossings = [
+        {
+            "receipt": "public-intake",
+            "transition": "native compaction at 2026-08-14T00:56:49.178Z",
+            "sameTaskRecovery": True,
+            "userReconstructionOrTopologyOperationCount": 0,
+        },
+        {
+            "receipt": "Codex Skill",
+            "transition": "native compaction at 2026-08-14T02:01:32.757Z",
+            "sameTaskRecovery": True,
+            "userReconstructionOrTopologyOperationCount": 0,
+        },
+    ]
+    if (
+        lifecycle.get("acceptedCrossings") != expected_crossings
+        or lifecycle.get("stoppedCrossing")
+        != {
+            "startupProjectionObserved": True,
+            "postCompactionProjectionObserved": True,
+            "nativeHookStartedPayloadTypeCount": 0,
+            "nativeHookCompletedPayloadTypeCount": 0,
+            "classification": "stopped-not-normalized",
+        }
+    ):
+        reject("reference-host context lifecycle evidence changed")
+
+    if (
+        comparator.get("sourceRegistration") != _CONTINUATION_REGISTRATION
+        or comparator.get("referenceHostCohortCanonicalSha256")
+        != canonical_values.get("referenceHostProfileAndEligibleReceiptSet")
+        or comparator.get("outcomeComparatorCohortCanonicalSha256")
+        != canonical_values.get(
+            "outcomeComparatorCohortSourcesVersionsLicensesOrTermsMaturityEligibilityAndMatchingRules"
+        )
+        or comparator.get("comparisonDecisionCanonicalSha256")
+        != canonical_values.get("comparatorBaselineResultsComparisonAxesAndDecisionRule")
+        or comparator.get("mandatoryFloorsCanonicalSha256")
+        != canonical_values.get("mandatoryFloorsAndMissingDataRules")
+        or comparator.get("strictBurdenAdvantage") is not True
+        or comparator.get("stoppedReceiptHiddenByAggregate") is not False
+    ):
+        reject("comparator cohort, decision rule, or result changed")
+
+    if (
+        external.get("sourceRegistration") != _CONTINUATION_REGISTRATION
+        or external.get("externalSubstrateCohortCanonicalSha256")
+        != canonical_values.get(
+            "externalSubstrateCohortSourcesVersionsLicensesOrTermsMaturityAndReuseBoundaries"
+        )
+        or external.get("layersReused")
+        != [
+            "Codex host and native context lifecycle",
+            "Git repository identity and delivery",
+            "CHAP collaboration-wire concepts",
+            "Human Tool human-allocation pattern",
+            "NIST AI 800-2 evaluation probes",
+        ]
+        or external.get("harnessOwnedResidual")
+        != (
+            "demand-to-capability methodology, open minimum quality-conformance "
+            "profile, and thin reference adapters"
+        )
+        or external.get("sufficientExternalLayerRemovedResidualValue") is not False
+        or external.get("reauthoredProtocolRuntimeIdentityAuditOrEvaluator") is not False
+    ):
+        reject("external comparison or reuse decision changed")
+
+    expected_scenario_limits = [
+        "public support and contribution intake for zero-knowledge users",
+        "Codex plugin Skill reference-adapter delivery",
+        "host-neutral continuation-reconciliation adapter implementation",
+    ]
+    if (
+        applicability.get("host") != "OpenAI Codex CLI 0.147.0 on Windows"
+        or applicability.get("profile") != "software engineering"
+        or applicability.get("acceptedScenarioClasses") != expected_scenario_limits
+        or applicability.get("stoppedScenarioClass")
+        != (
+            "long-horizon software-product continuity through Agent-owned "
+            "conversation rollover"
+        )
+        or applicability.get("sourcesAsOf") != "2026-08-14"
+        or applicability.get("namedHuman") != "yiheng8023"
+    ):
+        reject("applicability limits or human identity changed")
+
+    floor_names = {
+        "outcomeQuality",
+        "userOrchestrationBurden",
+        "taskTopologyLifecycleAndBurden",
+        "intentCommunicationAndDecisionCompleteness",
+        "routeReliabilityRecoveryTimeAndCallCost",
+        "authoritySafetyEvidenceAndResidue",
+        "resourceContinuityContextAndProcessCost",
+        "contextCarrierFitnessObservationsAndTransitions",
+        "referenceHostContextLifecycleTransitionAndRecovery",
+        "comparatorOutcomeAndProcessResults",
+        "externalComparisonAndReuseDecision",
+    }
+    if (
+        set(floors) != floor_names | {"applicabilityLimitsAndHumanDecision", "missingData"}
+        or any(floors.get(name) != "pass" for name in floor_names)
+    ):
+        reject("one or more mandatory machine floors changed or failed")
+
+    expected_claims = [
+        (
+            "At most the unchanged candidate.5 methodology and minimum profile are "
+            "calibrated on OpenAI Codex CLI 0.147.0 on Windows for the exact three "
+            "accepted scenario classes and one stopped plugin-rollover case on 2026-08-14."
+        ),
+        (
+            "The comparison demonstrates only a bounded advantage in registered user "
+            "orchestration burden and cross-layer continuation coherence against the "
+            "fixed task comparators."
+        ),
+        (
+            "The stopped receipt remains failed on missing native Hook chronology; no "
+            "installed-plugin, general context-management, universal-superiority, release, "
+            "publication, production, or v0.2 completion claim is made."
+        ),
+        (
+            "This O4 calibration does not establish Agent-neutral or cross-host "
+            "portability; O5 remains separate and false."
+        ),
+    ]
+    if document.get("claimLimits") != expected_claims:
+        reject("claim ceiling changed or broadened")
+
+    if require_human:
+        decision_locator = (
+            "codex://threads/019ffaa8-b44a-7bf2-97de-65875bceec33/"
+            "messages/by-content-sha256/"
+            + _CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256
+        )
+        decision_identity = "sha256:" + _CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256
+        combined_identity = "sha256:" + hashlib.sha256(
+            (
+                _CODEX_CALIBRATION_INPUT_IDENTITY.removeprefix("sha256:")
+                + "\n"
+                + _CODEX_CALIBRATION_ACCEPTANCE_MESSAGE_SHA256
+                + "\n"
+            ).encode()
+        ).hexdigest()
+        if (
+            authority.get("decisionState") != "accepted"
+            or result.get("state") != "accepted"
+            or result.get("accepted") is not True
+            or result.get("humanJudgment")
+            != (
+                "accepted methodology, profile, mixed calibration, applicability, "
+                "and bounded O4 claim"
+            )
+            or result.get("machineComparisonPassed") is not True
+            or not result.get("profileDisposition", "").startswith(
+                "candidate.5 bytes and semantics remain immutable; accepted"
+            )
+            or source.get("identityWithHumanDecision") != combined_identity
+            or applicability.get("accepted") is not True
+            or applicability.get("decisionMessageLocator") != decision_locator
+            or applicability.get("decisionMessageIdentity") != decision_identity
+            or applicability.get("acceptedMethodologyAndProfile") is not True
+            or applicability.get("acceptedMixedCalibration") is not True
+            or applicability.get("acceptedApplicabilityAndBoundedO4Claim") is not True
+            or floors.get("applicabilityLimitsAndHumanDecision") != "pass"
+            or floors.get("missingData") != []
+            or document.get("validator", {}).get("state") != "accepted"
+        ):
+            reject("named-human methodology, profile, calibration, or bounded O4 decision is absent")
+    else:
+        if (
+            authority.get("decisionState") != "pending"
+            or result.get("state") != "machine-eligible-human-pending"
+            or result.get("accepted") is not None
+            or result.get("humanJudgment") != "pending"
+            or result.get("machineComparisonPassed") is not True
+            or source.get("identityWithHumanDecision") is not None
+            or applicability.get("accepted") is not None
+            or any(
+                applicability.get(name) is not None
+                for name in (
+                    "decisionMessageLocator",
+                    "decisionMessageIdentity",
+                    "acceptedMethodologyAndProfile",
+                    "acceptedMixedCalibration",
+                    "acceptedApplicabilityAndBoundedO4Claim",
+                )
+            )
+            or floors.get("applicabilityLimitsAndHumanDecision") != "pending"
+            or floors.get("missingData")
+            != [
+                "named-human methodology, profile, mixed-calibration, applicability, and bounded O4 judgment"
+            ]
+            or document.get("validator", {}).get("state")
+            != "machine-eligible-human-pending"
+        ):
+            reject("pending human gate was hidden or pre-accepted")
+
+    return len(errors) == before
+
+
+def _validate_codex_reference_calibration_o4(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    if criterion_id != "O4":
+        _error(errors, "Codex reference calibration evidence used for non-O4 criterion")
+        return False
+    return _validate_codex_reference_calibration_o4_candidate(
+        document, root, errors, require_human=True
+    )
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
     {
         "public-intake-zero-knowledge-o1": (
@@ -2325,6 +3194,11 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             frozenset({"O2"}),
             frozenset({_CONTINUATION_INCREMENT_ID}),
             _validate_continuation_reconciliation_o2,
+        ),
+        "codex-reference-calibration-o4": (
+            frozenset({"O4"}),
+            frozenset({_CODEX_CALIBRATION_INCREMENT_ID}),
+            _validate_codex_reference_calibration_o4,
         ),
     }
 )
