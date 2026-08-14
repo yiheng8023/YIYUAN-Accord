@@ -8,14 +8,14 @@ from typing import Any
 from .continuation import render_continuation_context
 
 
-ADAPTER_ID = "harness-claude-session-start-v0.2-candidate.1"
+ADAPTER_ID = "harness-claude-session-start-v0.2-candidate.2"
 CLAUDE_ENTRY_SUBSTRATE = {
-    "source": "https://github.com/anthropics/claude-code/tree/be90077c6a353f292fa612d97173865a9ab21b83",
+    "source": "https://github.com/anthropics/claude-code/tree/1f6015b5d578adf79c8527443328a216d6b6a3f1",
     "package": "@anthropic-ai/claude-code",
-    "version": "2.1.231",
+    "version": "2.1.232",
     "licenseOrTerms": (
-        "Anthropic Legal Agreements referenced by the @anthropic-ai/claude-code "
-        "2.1.231 package LICENSE.md"
+        "Anthropic Commercial Terms and Privacy Policy referenced by the "
+        "@anthropic-ai/claude-code 2.1.232 package README.md"
     ),
     "maturity": "released distinct-host runtime with native SessionStart hooks",
     "reuseBoundary": (

@@ -223,22 +223,22 @@ enablement, trust, or outcome credit.
 
 ### Claude Code distinct-host seam
 
-The 2026-08-14 reference machine already has authenticated Claude Code 2.1.231
+The 2026-08-14 reference machine has authenticated Claude Code 2.1.232
 with binary SHA-256
-`99dbf97ef1b03ca94db818977bfc0970889bb5bbe6e981405a55f225d0fbf603`.
+`ec9e32479bc887809003c91384c6c3a26e7691856d1916f72f6f6d21800f3bd6`.
 Its fixed source tag commit is
-[`be90077`](https://github.com/anthropics/claude-code/tree/be90077c6a353f292fa612d97173865a9ab21b83),
-and use remains subject to the Anthropic Legal Agreements named by the package
-`LICENSE.md`. Native `SessionStart` covers startup, resume, clear, and compact;
+[`1f6015b`](https://github.com/anthropics/claude-code/tree/1f6015b5d578adf79c8527443328a216d6b6a3f1),
+and use remains subject to the Anthropic Commercial Terms and Privacy Policy
+named by the package `README.md`. Native `SessionStart` covers startup, resume, clear, and compact;
 command Hook stdout becomes model context; and `--plugin-dir` exposes a local
 plugin for one session without persistent installation.
 
 `harness/claude_reference.py` and
 `adapters/agent-autonomy-harness-claude` reuse the common read-only projection
-and translate only those native boundaries. The projection has no Skill, MCP
-server, user command, prompt capture, transcript access, state store, or consumer
-configuration. Claude Code 2.1.231 strict manifest validation and offline
-semantic-parity checks pass. Live model execution, matched cross-host task
+and exact candidate.5 task-facing Skill while translating only native host
+boundaries. The projection has no MCP server, user command, prompt capture,
+transcript access, state store, or consumer configuration. Claude Code 2.1.232
+strict manifest validation and offline semantic-parity checks pass. Live model execution, matched cross-host task
 evidence, cost authority, equivalence tolerance, and O5 acceptance remain
 separate pre-execution gates, so this candidate counts as zero O1-O5 progress.
 

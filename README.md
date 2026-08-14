@@ -119,10 +119,10 @@ The current repository provides:
   temporary install delivered the Skill and both startup and compact
   projections, while preserving the missing native Hook-event evidence as a
   failed mandatory floor and restoring all consumer state afterward;
-- an inactive, Hook-only Claude Code projection that translates the host's
-  native `SessionStart` input and plain-stdout context output into the same
-  repository-owned continuation semantics and can be exposed for one session
-  without persistent installation;
+- an inactive Claude Code Skill-plus-Hook projection that reuses the same
+  candidate method, translates native `SessionStart` input and plain-stdout
+  context output into repository-owned continuation semantics, and can be
+  exposed for one session without persistent installation;
 - product tests for the public verification seam;
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.

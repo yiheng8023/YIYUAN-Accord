@@ -23,7 +23,7 @@ AUTHORITY_PATHS = (
 PINNED_RUNTIME_SHA256 = {
     "harness/control.py": "707dd653e35ac0a5526a2c0f22a99ea60a3feef7f6e03fa86fa415ababf959e2",
     "harness/continuation.py": "13fed2acd44fcbc039a2fac30c3972bca4c85a88f955d7c51183268b22c07de4",
-    "harness/claude_reference.py": "c7954897608e10be29eff6bb5817245049d5c616fc16ddd660a85ae75a9c3823",
+    "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }
 FORWARDED_FIELDS = ("hook_event_name", "source", "cwd")
 

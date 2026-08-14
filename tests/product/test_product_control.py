@@ -739,10 +739,14 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(claude["adapter"], CLAUDE_ADAPTER_ID)
         self.assertEqual(
-            claude["referenceHostSubstrate"]["version"], "2.1.231"
+            claude["referenceHostSubstrate"]["version"], "2.1.232"
         )
         self.assertIn(
-            "Legal Agreements",
+            "Commercial Terms and Privacy Policy",
+            claude["referenceHostSubstrate"]["licenseOrTerms"],
+        )
+        self.assertIn(
+            "package README.md",
             claude["referenceHostSubstrate"]["licenseOrTerms"],
         )
         for projection in (codex, claude):
@@ -788,7 +792,7 @@ class ProductControlTests(unittest.TestCase):
         wrong_event["hook_event_name"] = "UserPromptSubmit"
         self.assertIsNone(render_claude_session_start_context(self.root, wrong_event))
 
-    def test_claude_plugin_projection_is_hook_only_and_payload_bound(self) -> None:
+    def test_claude_plugin_projection_is_thin_skill_hook_and_payload_bound(self) -> None:
         manifest = json.loads(
             (CLAUDE_PLUGIN_ROOT / ".claude-plugin/plugin.json").read_text(
                 encoding="utf-8"
@@ -799,19 +803,29 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(manifest["name"], "agent-autonomy-harness-claude")
         payload_identity = hashlib.sha256()
-        for relative in ("hooks/hooks.json", "scripts/session_start.py"):
+        payload_files = (
+            "hooks/hooks.json",
+            "scripts/session_start.py",
+            "skills/deliver-demand-driven-task/SKILL.md",
+            "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+        )
+        for relative in payload_files:
             payload_identity.update(relative.encode("utf-8"))
             payload_identity.update(b"\0")
             payload_identity.update((CLAUDE_PLUGIN_ROOT / relative).read_bytes())
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.1+claude.payload-"
+            "0.2.0-candidate.2+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
-        for component in ("skills", "commands", "agents", "mcpServers"):
+        for component in ("commands", "agents", "mcpServers"):
             self.assertNotIn(component, manifest)
+        self.assertNotIn("skills", manifest)
+        self.assertTrue(
+            (CLAUDE_PLUGIN_ROOT / "skills/deliver-demand-driven-task/SKILL.md").is_file()
+        )
         self.assertEqual(set(hooks["hooks"]), {"SessionStart"})
         handlers = hooks["hooks"]["SessionStart"]
         self.assertEqual(len(handlers), 1)
@@ -819,6 +833,27 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(command["type"], "command")
         self.assertIn("${CLAUDE_PLUGIN_ROOT}", json.dumps(command))
         self.assertNotIn(str(ROOT), json.dumps(hooks))
+
+    def test_claude_plugin_skill_reuses_exact_implicit_common_method(self) -> None:
+        codex_skill_root = CODEX_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
+        claude_skill_root = CLAUDE_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
+        claude_skill = (claude_skill_root / "SKILL.md").read_text(encoding="utf-8")
+
+        self.assertEqual(
+            (claude_skill_root / "SKILL.md").read_bytes(),
+            (codex_skill_root / "SKILL.md").read_bytes(),
+        )
+        self.assertEqual(
+            (
+                claude_skill_root
+                / "references/demand-to-capability-profile.md"
+            ).read_bytes(),
+            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE.md").read_bytes(),
+        )
+        self.assertIn("Use implicitly", claude_skill)
+        self.assertIn("do not use for simple conversation", claude_skill.lower())
+        self.assertFalse((CLAUDE_PLUGIN_ROOT / ".mcp.json").exists())
+        self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
 
     def test_claude_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
         nested = self.root / "docs/nested"

@@ -277,14 +277,15 @@ the index does not grant installation, enablement, Hook trust, or runtime
 execution.
 
 `adapters/agent-autonomy-harness-claude` is the corresponding inactive
-distinct-host projection for Claude Code 2.1.231 at source tag commit
-`be90077c6a353f292fa612d97173865a9ab21b83`. It contains only a native
-`SessionStart` Hook and an isolated standard-library launcher. Claude Code's
-session-scoped `--plugin-dir` exposure avoids persistent installation; its
-native input and plain-stdout context output differences remain behind
-`harness/claude_reference.py`. The fixed host's strict manifest validation and
-offline semantic-parity checks pass, but no Claude model task, matched Codex
-pair, human equivalence judgment, or O5 evidence has occurred.
+distinct-host projection for Claude Code 2.1.232 at source tag commit
+`1f6015b5d578adf79c8527443328a216d6b6a3f1`. It reuses the exact common
+task-facing Skill and candidate-profile bytes beside one native `SessionStart`
+Hook and an isolated standard-library launcher. Claude Code's session-scoped
+`--plugin-dir` exposure avoids persistent installation; Skill discovery plus
+native input and plain-stdout context output differences remain behind the thin
+package and `harness/claude_reference.py`. The fixed host's strict manifest
+validation and offline semantic-parity checks pass, but no Claude model task,
+matched Codex pair, human equivalence judgment, or O5 evidence has occurred.
 
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event

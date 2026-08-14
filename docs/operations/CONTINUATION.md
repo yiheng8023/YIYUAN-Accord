@@ -163,6 +163,15 @@ output. The fixed host's strict plugin validation and 137 offline product tests
 pass. No Claude model call, persistent install, consumer mutation, matched
 cross-host task, human equivalence judgment, or O5 credit occurred.
 
+The current active source-delivery increment follows a later live host check:
+Claude Code is now 2.1.232 and its official plugin surface supports native
+`skills/<name>/SKILL.md` discovery. The bounded result adds the exact common
+candidate.5 Skill and reference beside the existing Hook, updates only the
+current host and payload identities, and keeps MCP, CC Switch, installation,
+model execution and O5 outside this slice. Until named-human acceptance and a
+task-bound validator exist, this remains an unaccepted source candidate and
+changes no O1-O5 state.
+
 A subsequent authority-defect repair found that G4 described immutable
 pre-registration but the current increment schema did not bind a registration
 file or content identity. The verifier now requires an outcome-bearing
