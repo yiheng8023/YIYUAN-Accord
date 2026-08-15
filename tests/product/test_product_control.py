@@ -17,6 +17,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -4896,6 +4897,15 @@ class ProductControlTests(unittest.TestCase):
             target_name,
         )
         calls: list[str] = []
+        last_error = {"value": 0}
+
+        def set_last_error(value: int) -> int:
+            previous = last_error["value"]
+            last_error["value"] = value
+            return previous
+
+        def get_last_error() -> int:
+            return last_error["value"]
 
         class FakeFunction:
             def __init__(self, callback) -> None:
@@ -4935,9 +4945,17 @@ class ProductControlTests(unittest.TestCase):
             EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT=(
                 target_commitment
             ),
-        ), patch("harness.control.os.name", "nt"), patch(
+        ), patch.object(control, "os", SimpleNamespace(name="nt")), patch(
             "harness.control.ctypes.WinDLL",
             return_value=FakeAdvapi(),
+            create=True,
+        ), patch(
+            "harness.control.ctypes.set_last_error",
+            side_effect=set_last_error,
+            create=True,
+        ), patch(
+            "harness.control.ctypes.get_last_error",
+            side_effect=get_last_error,
             create=True,
         ):
             errors: list[str] = []
