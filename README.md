@@ -181,7 +181,9 @@ The JSON report is the current state surface. See the
   preventable loss; every necessary code split is reconciled and cleaned.
 - **O5 — live portable open delivery:** two matched live Codex/distinct-host
   pairs include a useful completion and an honest stop or recovery, reproduce
-  from a clean checkout, and end with human acceptance of the versioned
+  from a clean checkout, pass the pre-closeout cross-dimensional counterexample
+  audit with zero unresolved P0/P1 findings and zero temporary process artifacts,
+  and end with human acceptance of the versioned
   profile, thin adapters, privacy disposition, claim ceiling, and exact public
   release.
 

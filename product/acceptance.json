@@ -192,7 +192,7 @@
       "name": "live portable open product delivery",
       "statement": "A versioned methodology, open minimum quality-conformance profile and thin executable reference adapters produce equivalent useful closed-loop behavior on Codex and a distinct Agent host or runtime, are reproducible from the public repository, and are released only with explicit human authority.",
       "metric": "matched live cross-host task pairs plus clean-room source verification of the versioned profile, adapter activation, behavior, rollback, cleanup, package/release identity and bounded claims",
-      "threshold": "at least two pre-registered matched live pairs on Codex and one distinct host use the same normative profile through thin adapters, including at least one completed useful delivery and one honestly stopped or recovered case; both hosts pass equivalent mandatory floors with no silent fallback; a clean checkout reproduces verification and task-scoped activation/cleanup; the named human accepts the final profile, adapters, privacy disposition, claim ceiling and public release identity",
+      "threshold": "at least two pre-registered matched live pairs on Codex and one distinct host use the same normative profile through thin adapters, including at least one completed useful delivery and one honestly stopped or recovered case; both hosts pass equivalent mandatory floors with no silent fallback; a clean checkout reproduces verification and task-scoped activation/cleanup; a pre-closeout cross-dimensional counterexample audit has zero unresolved P0 or P1 findings and the exact temporary-process-artifact inventory is empty; the named human accepts the final profile, adapters, privacy disposition, claim ceiling and public release identity",
       "assessment": "planned",
       "operationalization": {
         "sampleUnit": "one matched natural-task pair executed live through Codex and a distinct Agent host or runtime",
@@ -208,6 +208,7 @@
           "fallbackAndMissingDataRule",
           "activationRollbackReleaseAndCleanupBoundary",
           "cleanCheckoutReproductionProtocol",
+          "preCloseoutAuditDimensionsAndSeverityRule",
           "privacyAndPublicationBoundary",
           "claimCeiling",
           "namedHumanAcceptor"
@@ -219,16 +220,19 @@
           "adapterThinnessAndExternalSubstrateReuse",
           "activationRollbackReleaseAndCleanup",
           "cleanCheckoutReproducibility",
+          "preCloseoutCounterexampleAuditFindingsAndDisposition",
+          "temporaryProcessArtifactInventoryAndCleanup",
           "profileAndReleaseIdentity",
           "privacyDispositionAndClaimLimits"
         ],
-        "passRule": "Both matched pairs use the frozen common profile and registered host surfaces, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, and receive explicit named-human acceptance of the versioned product, privacy disposition, bounded claims and release/publication action.",
+        "passRule": "Both matched pairs use the frozen common profile and registered host surfaces, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, pass a source-bound audit of product semantics, authority, user burden, capability lifecycle, code and conversation carriers, cross-host behavior, privacy and security, release reproducibility, and resource residue with zero unresolved P0/P1 findings, leave zero temporary process artifacts, and receive explicit named-human acceptance of the versioned product, privacy disposition, bounded claims and release/publication action.",
         "falsifiers": [
           "the second path is the same Agent host or only source-level conformance",
           "no matched pair completes a useful live delivery",
           "host, model, adapter, task, tool surface, tolerance or profile changes after measurement begins",
           "a generic runtime, control plane, registry, wire protocol, identity or audit system becomes necessary product body without a proven residual gap",
           "clean-checkout reproduction, activation, rollback, release or cleanup fails",
+          "a pre-closeout audit dimension is omitted, a P0 or P1 finding remains unresolved, or any temporary process artifact remains",
           "privacy or publication authority is absent or claims exceed measured scope"
         ],
         "humanAuthority": "The named accountable human accepts equivalence, profile and adapter fitness, privacy treatment, claim ceiling and the exact publication/release action; the Agent owns preparation, verification, packaging, rollback and cleanup."
@@ -265,9 +269,9 @@
       "id": "G4",
       "class": "guardrail",
       "name": "bounded process and resource loss",
-      "statement": "Each causal increment has one active work item at most, finite stopping, correction and neutral-work budgets, task-bound registrations only when outcome-bearing, and exact cleanup; known historical loss remains counterevidence rather than being erased by a new release.",
-      "metric": "current causal graph, correction recurrence, outcome-neutral work, task registration, residue and cleanup validation",
-      "threshold": "zero invalid graph state, repeated same-class correction, unbounded neutral work, fabricated registration, undeclared residue or cleanup failure",
+      "statement": "Each causal increment has one active work item at most, finite stopping, correction and neutral-work budgets, task-bound registrations only when outcome-bearing, and exact cleanup; known historical loss remains counterevidence rather than being erased by a new release, and final acceptance additionally requires a cross-dimensional counterexample audit and empty temporary-process-artifact inventory.",
+      "metric": "current causal graph, correction recurrence, outcome-neutral work, task registration, residue and cleanup validation, plus the O5-bound pre-closeout audit and temporary artifact inventory",
+      "threshold": "zero invalid graph state, repeated same-class correction, unbounded neutral work, fabricated registration, undeclared residue or cleanup failure; terminal acceptance also requires zero unresolved P0/P1 audit findings and zero temporary process artifacts",
       "assessment": "computed"
     }
   ]
