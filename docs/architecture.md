@@ -424,6 +424,47 @@ only bounded package results plus the exact O3 route lifecycle cohort; they
 cannot establish live Skill triggering, Hook behavior, repeated burden
 reduction, methodology calibration, or cross-host portability.
 
+### Codex v1 carrier feasibility boundary
+
+The v1 carrier route is feasible as a thin host projection, but it is not the
+current candidate. Codex 0.147.0 exposes native `PreCompact`, `PostCompact`,
+`SessionStart`, and `SessionEnd` events with a session identity; compact events
+identify automatic versus manual compaction, plugin Hooks receive a stable
+installed-package root and writable plugin-data root, and the host exposes a
+same-directory thread-fork primitive. These are separate seams and must remain
+separate in the adapter:
+
+- a trusted Hook may observe lifecycle events, maintain only bounded
+  session-keyed carrier-risk state, inject the frozen profile and an explicit
+  remaining-capacity `unknown` state, and remove its state at session end;
+- the Agent, not the Hook, decides at the predeclared material checkpoint and
+  uses the host-native fork surface to create the destination, continue it,
+  verify recovered goal, authority, Git and work state, and only then archive
+  or release the source;
+- the packaged profile and adapter are trusted installed bytes. An arbitrary
+  task repository is untrusted task input, not the source of adapter code or
+  product authority, and the adapter must work outside a Harness-shaped
+  checkout;
+- activation must bind an absolute trusted interpreter or equivalent
+  app-managed runtime. It must not resolve `python`, `git`, or other executable
+  names through an untrusted session working directory, and task-repository
+  observation must not execute repository-controlled Git configuration;
+- Hook failure, missing native fork exposure, state overflow, malformed input,
+  or unavailable verification fails closed to an explicit stopped route. It
+  cannot silently treat continuation as safe or transfer topology work to the
+  user.
+
+The CLI `codex fork` and App Server `thread/fork` API corroborate the native
+host primitive, but Harness does not embed, proxy, or reimplement App Server
+and does not make a Hook launch a second Codex client. The current Codex app
+tool contract additionally proves that an Agent can fork the calling thread in
+the same directory and that only completed history is copied; therefore the
+Agent must transmit and independently verify the active handoff delta before
+source release. The exact conservative risk threshold belongs in the new
+program-frozen v1 profile before measured work. This feasibility decision is
+mechanism-only: no Hook has been installed or enabled and no O1-O5 result is
+claimed.
+
 An authorized user-layer Hook edit was later present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native
 compaction. That stopped result is retained at

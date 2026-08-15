@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-codex-carrier-feasibility",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,5 +80,53 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-codex-carrier-feasibility",
+      "state": "active",
+      "correctionClass": "codex-carrier-mechanism-unproven",
+      "observedProblem": "The terminal contract requires proactive Agent-owned same-goal carrier transition, but the inactive candidate Hook has no reliable remaining-capacity signal, does not persist compaction risk, no-ops outside a Harness-shaped repository, and its bare interpreter/Git launches are unsafe after activation.",
+      "hypothesis": "Current Codex lifecycle events and native task controls can support a thin, enrolled, bounded adapter that safely observes carrier risk and causes an Agent-owned verified transition without becoming a runtime or requiring the user to learn topology.",
+      "falsifier": "Official or live host evidence shows that same-goal transition necessarily requires a user topology operation, that the required signal cannot be observed conservatively, or that safe execution and enrollment require a generic runtime/control plane rather than a thin adapter.",
+      "stopCondition": "Exact local and official host evidence establishes a minimal safe implementation route with finite negative tests, or falsifies it and causes an explicit authority/acceptance replan; no install, Hook enablement, account connection, consumer mutation, outcome claim or temporary repository artifact remains.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-codex-carrier-feasibility",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "causal-planning",
+            "local-verification",
+            "coverage-analysis",
+            "targeted-capability-discovery"
+          ],
+          "deliverables": [
+            "source-bound Codex carrier feasibility decision",
+            "minimal safe adapter route or falsification replan"
+          ]
+        }
+      ]
+    }
+  ]
 }
