@@ -1,0 +1,586 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.deepseek-routed.measured.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-deepseek-routed-registration.json",
+    "sha256": "56d7740161a7cd92cc359d09a452afc47c0c05c6be1e741c4dcd55216a39d05c",
+    "registeredCommit": "02ff5663c0491063043f853eaa4ba8d2cc417360"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-deepseek-routed",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "observedAt": "2026-08-15T11:05:37.4237611+08:00",
+  "incrementId": "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
+  "workItemId": "work.v0.2.portable-source-candidate-gate-deepseek-routed",
+  "state": "accepted",
+  "eligibleForOutcomeProgress": true,
+  "outcomeProgress": [
+    "O5"
+  ],
+  "source": {
+    "kind": "registered-matched-cross-host-real-task-measurement",
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-deepseek-routed-registration.json",
+    "identity": "sha256:23cc0da08b01a9506df1a5e7c1076f14a37d68bad400ea48816aad7273b9607e"
+  },
+  "result": {
+    "state": "accepted",
+    "accepted": true,
+    "summary": "The exact post-registration grant produced one complete schema-valid Codex result and one complete schema-valid Claude Code/DeepSeek result for the same registered source-candidate gate. Both verdicts are blocked and their independently checked normalized P0/P1 set is the same single P1: target harness/claude_reference.py pins Claude Code 2.1.232 while the registered distinct carrier is 2.1.233. The Claude route reported only deepseek-v4-pro[1m], the lowercase form of the requested deepseek-v4-pro[1M], with no observed fallback, no web use, one successful Harness SessionStart Hook, only the Harness task plugin, zero MCP servers and $1.422023 exposed cost. One attempted Claude Glob of the isolated task parent was denied before data exposure; every successful Claude repository tool stayed inside the registered source. Codex policy declined redundant combined or hash reads, while every decision-relevant fact was recovered read-only in the same single call; no model network/write command or provider retry occurred. Exact credential links, processes and task state were cleaned.",
+    "referenceHostOutcome": {
+      "host": "Codex CLI 0.147.0/gpt-5.6-sol/high",
+      "verdict": "blocked",
+      "acceptedCorrectAndUseful": true
+    },
+    "distinctHostOutcome": {
+      "host": "Claude Code 2.1.233/DeepSeek-V4-Pro reported as deepseek-v4-pro[1m]",
+      "verdict": "blocked",
+      "acceptedCorrectAndUseful": true
+    },
+    "normalizedEquivalenceAccepted": true,
+    "boundedPortabilityClaimAccepted": true
+  },
+  "authority": {
+    "kind": "named-accountable-human",
+    "name": "yiheng8023",
+    "decision": "accepted",
+    "decidedAt": "2026-08-15T03:15:57.895Z",
+    "executionGrant": "同意本次 DeepSeek-routed 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 23632,
+      "id": "msg_01a00339-c7a8-79d0-a4ed-99be76eda0bf",
+      "recordedAt": "2026-08-15T02:21:53.448Z",
+      "rawLineSha256": "6b77265ceef7c97c3ff7749e6d29fe4460248dd8288e9c0fbed41600be31e3d8",
+      "contentSha256": "0fe852d0912da2c49549604c1fbf8ebf2c8fd737d4fdb71a58461a789f02b0fa",
+      "normalizedTextSha256": "4fd16722794b4a180f346a913e1eacea4be03e30cd40cdfcb2d2e4260164dc21"
+    },
+    "codexModelCallsAuthorized": 1,
+    "codexModelCallsAttempted": 1,
+    "codexModelCallsCompletedWithFinalObject": 1,
+    "claudeModelCallsAuthorizedConditionalOnCodexEligibility": 1,
+    "claudeModelCallsAttempted": 1,
+    "claudeModelCallsCompletedWithFinalObject": 1,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": true,
+    "outcomeAcceptance": "accepted",
+    "acceptedResponse": "接受本次 Codex 与 Claude Code/DeepSeek 两个 blocked 结果均正确且有用；接受二者归一后仅含同一项 P1 的等价判断，其中 deepseek-v4-pro[1M]→deepseek-v4-pro[1m] 为无回退的大小写归一、越出源目录的 Glob 已被拒绝且未暴露数据；接受仅限本次注册任务、目标提交、宿主/模型/适配器与 2026-08-15 的有界 O5 可移植性声明。",
+    "decisionRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 24268,
+      "id": "msg_01a0036b-4947-7500-b46c-fced2b184fee",
+      "recordedAt": "2026-08-15T03:15:57.895Z",
+      "rawLineSha256": "e1aeb8c15009c19b750f047367bef0588dfa5e6aaaf8fcfb79a4d0c0952653ce",
+      "contentSha256": "de147cf04b5462cd9bd234f78a4ddeee08abe456ba219ca5911e523c6da46b94",
+      "normalizedTextSha256": "09135fc552e88bd26f81f092adb9acbee3aeb961fb979a0780a3ecc333ca3e89"
+    }
+  },
+  "preflight": {
+    "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+    "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+    "snapshotFileCount": 19,
+    "allBlobIdentitiesMatched": true,
+    "commonSkillSha256": "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7",
+    "commonProfileSha256": "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+    "codexVersion": "0.147.0",
+    "codexBinarySha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+    "claudeVersion": "2.1.233",
+    "claudeBinarySha256": "8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd",
+    "ccSwitchVersion": "3.19.2",
+    "ccSwitchBinarySha256": "f712ddd95e080eb6a353ffa434904de5e786cbf11c96201a72af73ffa6116612",
+    "deepSeekProvider": {
+      "id": "10d9e95c-515d-414e-a25f-884092fd51a7",
+      "name": "DeepSeek",
+      "category": "cn_official",
+      "endpoint": "https://api.deepseek.com/anthropic",
+      "requestedModel": "deepseek-v4-pro[1M]",
+      "tokenPresent": true,
+      "proxyEnabledConfiguration": true,
+      "proxyRuntimeEnabled": false,
+      "autoFailoverEnabled": false,
+      "liveTakeoverActive": false
+    },
+    "credentialContentsReadHashedPrintedOrRecorded": false,
+    "codexInstalledFileCount": 6,
+    "allCodexInstalledFilesMatchedTargetGitBlobs": true,
+    "initialCodexSkillCount": 25,
+    "excludedNonHarnessSkillCount": 24,
+    "excludedPathSetSha256": "15638672477156a36b753770c40f9e7ce0bbf9ef46fcc0419ec2fc1f53bd3915",
+    "visibleCodexSkill": "agent-autonomy-harness-codex:deliver-demand-driven-task",
+    "installedClaudePluginIdCount": 285,
+    "claudePluginIdSetSha256": "776f96cda7a1499351623cf0ad3438d09960b0647b2813f87b3012eb6449040e",
+    "enabledAmbientClaudePlugins": 0,
+    "isolatedClaudeMcpServerCount": 0,
+    "codexAdapter": "harness-codex-session-start-v0.2-candidate.1",
+    "claudeAdapter": "harness-claude-session-start-v0.2-candidate.2",
+    "normalizedHookSha256": "809535348cf75b7885af1d08396d79e32e3767951f3531ff40fcbe00199f3a7d",
+    "normalizedThinAdapterEquivalence": true
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "02ff5663c0491063043f853eaa4ba8d2cc417360",
+      "aheadBehind": "0/0"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "msg_01a00339-c7a8-79d0-a4ed-99be76eda0bf",
+      "recordedAt": "2026-08-15T02:21:53.448Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "source-package-route-isolation-and-hook-preflight-passed",
+      "snapshotFileCount": 19,
+      "zeroEnabledAmbientClaudePlugins": true,
+      "zeroMcpServersBothHosts": true,
+      "onlyHarnessTaskPluginOnClaude": true,
+      "onlyHarnessTaskSkillOnCodex": true
+    },
+    {
+      "event": "single-codex-model-call-completed",
+      "startedAt": "2026-08-15T10:38:14.6420559+08:00",
+      "endedAt": "2026-08-15T10:43:00.0316385+08:00",
+      "durationSeconds": 285.39,
+      "exitCode": 0,
+      "eventLineCount": 115,
+      "validEventCount": 115,
+      "rawStreamSha256": "5ddc8c465aebcfb3e0aca3bd85b22e9616baa3465ca5ab2daa777a9cb2c738c1",
+      "stderrByteCount": 8715,
+      "stderrSha256": "8e46293ed124fb2d3ca897c5addd2afcfe91f7f6de027e9b31413536a763e4f1",
+      "finalObjectSha256": "bbba9f6319a4a9cf22118cca3f4c3e47306ca46afd8541961e1c61575bfe1bf2",
+      "finalObject": {
+        "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-deepseek-routed",
+        "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+        "verdict": "blocked",
+        "blockers": [
+          {
+            "id": "P1-CLAUDE-HOST-VERSION-MISMATCH",
+            "severity": "P1",
+            "path": "harness/claude_reference.py",
+            "evidence": "CLAUDE_ENTRY_SUBSTRATE binds @anthropic-ai/claude-code version 2.1.232, a 2.1.232 source revision, and terms referencing the 2.1.232 package. product/program.json likewise defines the inactive deliverable as a Claude Code 2.1.232 source candidate and says exact current-host identity is required. The registered distinct-host carrier is Claude Code 2.1.233. product/acceptance.json O5 requires exact pre-registered host, runtime, model, and adapter identities and versions.",
+            "rationale": "The distinct-host source identity does not match the registered carrier. This violates the exact-version decision rule and prevents the Claude source from being a candidate for this registered matched-host execution. Consequently, both sources cannot jointly be source-candidate-ready."
+          }
+        ],
+        "observations": [
+          {
+            "id": "P3-CODEX-SUBSTRATE-ALIGNED",
+            "severity": "P3",
+            "path": "harness/codex_reference.py",
+            "evidence": "CODEX_ENTRY_SUBSTRATE identifies @openai/codex 0.147.0 and ADAPTER_ID harness-codex-session-start-v0.2-candidate.1, matching the registered Codex CLI 0.147.0 reference carrier.",
+            "rationale": "No corresponding exact-carrier mismatch was observed for the Codex source in the registered scope."
+          },
+          {
+            "id": "P3-COMMON-METHOD-PARITY",
+            "severity": "P3",
+            "path": "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/SKILL.md; adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+            "evidence": "The Codex and Claude Skill files compare without differences. Their reference profile files also compare without differences and match docs/DEMAND-TO-CAPABILITY-PROFILE.md, which identifies harness-demand-to-capability-v0.2-candidate.5.",
+            "rationale": "The inspected host projections share the same method/profile semantics; the blocker is substrate identity, not a portable-core semantic fork."
+          },
+          {
+            "id": "P3-THIN-CONFIGURATION-BOUNDARY",
+            "severity": "P3",
+            "path": "product/program.json",
+            "evidence": "The Claude deliverable is explicitly defined as an inactive Skill-plus-Hook source candidate without MCP or CC Switch dependency and without model execution. The adapter manifests and hooks contain no DeepSeek or CC Switch runtime integration.",
+            "rationale": "The registered CC Switch settings projection and DeepSeek model routing remain external carrier configuration rather than portable-core or plugin runtime dependencies, as required."
+          }
+        ],
+        "executionContext": {
+          "methodProfileVersionObserved": "harness-demand-to-capability-v0.2-candidate.5",
+          "authorityProjectionAdapterObserved": "harness-codex-session-start-v0.2-candidate.1",
+          "capabilitySurfaceObserved": [
+            "implicit demand-driven task Skill",
+            "Codex SessionStart command Hook with additionalContext projection",
+            "Claude Code SessionStart command Hook with plain-stdout context projection",
+            "root-bounded SHA-256-pinned repository runtime loading",
+            "read-only authority verification and reconciliation projection"
+          ],
+          "unsupportedStates": [
+            "exact Claude Code 2.1.233 substrate binding",
+            "live Claude Code/DeepSeek execution proof",
+            "CC Switch runtime dependency",
+            "installation or enablement proof",
+            "release, publication, production, or universal portability proof",
+            "remaining context-capacity inference"
+          ]
+        },
+        "claimBoundary": "Read-only source-candidate gate over the registered repository scope for the specified target commit. The blocked result is caused solely by a validated source-level exact-carrier mismatch; it is not release, publication, production, installed-support, model-superiority, or universal-portability evidence."
+      },
+      "usage": {
+        "input_tokens": 1087724,
+        "cached_input_tokens": 983552,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10626,
+        "reasoning_output_tokens": 5320
+      },
+      "commandFinalStatusCounts": [
+        {
+          "status": "completed",
+          "count": 31
+        },
+        {
+          "status": "declined",
+          "count": 22
+        },
+        {
+          "status": "failed",
+          "count": 1
+        }
+      ],
+      "modelNetworkOrWriteCommands": 0,
+      "providerRetryMarkers": 0,
+      "requiredFactsRecovered": true
+    },
+    {
+      "event": "single-claude-deepseek-model-call-completed",
+      "startedAt": "2026-08-15T10:49:35.9517417+08:00",
+      "endedAt": "2026-08-15T10:54:46.5075444+08:00",
+      "durationSeconds": 310.556,
+      "exitCode": 0,
+      "eventLineCount": 15959,
+      "validEventCount": 15959,
+      "rawStreamSha256": "be130e9d4722b2a787499646803c7cd2ae419cde59b563dce07dbec743847695",
+      "stderrByteCount": 86,
+      "stderrSha256": "b080b6382999293327119d7af36f8dfd56cf347cdd838572f71c98bb1a77b490",
+      "stderr": "[claude-code:unrecognized_model] {\"model\":\"deepseek-v4-pro[1m]\",\"query_source\":\"sdk\"}",
+      "resultSubtype": "success",
+      "resultIsError": false,
+      "numTurns": 32,
+      "finalObjectSha256": "61a2ac6ccf1e8fc57c489fb0e909fb8658f0a1fe33372867ef929a20910bdfb0",
+      "finalObject": {
+        "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-deepseek-routed",
+        "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+        "verdict": "blocked",
+        "blockers": [
+          {
+            "id": "claude-host-identity-2.1.232-mismatch-registered-carrier-2.1.233",
+            "severity": "P1",
+            "path": "harness/claude_reference.py",
+            "evidence": "harness/claude_reference.py:15 pins CLAUDE_ENTRY_SUBSTRATE version to \"2.1.232\"; lines 16-19 bind licenseOrTerms to the \"@anthropic-ai/claude-code 2.1.232 package README.md\"; product/program.json:208-209 and 269 register the delivered deliverable as \"one inactive Claude Code 2.1.232 Skill-plus-Hook thin plugin source candidate\"; a repository-wide search finds no path referencing \"2.1.233\"; the registered distinct-host carrier for this gate is Claude Code 2.1.233.",
+            "rationale": "The registered distinct-host carrier is Claude Code 2.1.233, but the Claude thin plugin source pins its host substrate to 2.1.232, so the source package is one host release stale relative to the carrier it would execute on. The repository itself registers this as a decision-relevant defect class: product/program.json:208 states a stale host description \"would make the source package factually inaccurate\", and product/constitution.json fixedInvariants (exact source identity/version binding for decision-relevant substrates) plus product/acceptance.json O5 (exact host and adapter identities/versions fixed before execution) require the pin to match the carrier. Fixing it requires a host-identity refresh that changes source bytes beyond the target commit, so the Claude plugin source cannot be source-candidate-ready at this commit for the registered carrier; the Codex pin (0.147.0) matches its carrier, but the 'both sources ready' decision remains blocked."
+          }
+        ],
+        "observations": [
+          {
+            "id": "codex-host-substrate-pin-matches-registered-carrier",
+            "severity": "P3",
+            "path": "harness/codex_reference.py",
+            "evidence": "CODEX_ENTRY_SUBSTRATE pins package @openai/codex version \"0.147.0\" with exact source commit be6e8eac029b183056b7e4402879f15d2c85f61b (harness/codex_reference.py:12-16); the registered reference carrier is Codex CLI 0.147.0.",
+            "rationale": "Codex-side host identity is consistent with the registered reference carrier; only the Claude-side mismatch blocks."
+          },
+          {
+            "id": "launcher-pin-refresh-record-consistent-not-byte-reverified",
+            "severity": "P2",
+            "path": "adapters/agent-autonomy-harness-claude/scripts/session_start.py",
+            "evidence": "Both launchers pin identical harness/control.py sha256 96cf15d376e27dbbbd093569edf15bea7dda84bd43dba4f3136e36b1b21dbf5b and harness/continuation.py sha256 7151a0fdfab1703374fdc42871d4dc7b68f68e1dc175238a577240fa2ae80bb7 (adapters/agent-autonomy-harness-codex/scripts/session_start.py:25-29; adapters/agent-autonomy-harness-claude/scripts/session_start.py:23-27); the Claude launcher's claude_reference.py pin 9d70662c... matches the sha256 recorded at harness/control.py:687-690; the continuation pin matches harness/control.py:748-751; the new control.py pin differs from control.py's historical self-pin 31d46837... (harness/control.py:752-755), which is explained by the registered O4 inactive-projection integrity refresh (harness/control.py:2948-2953: the validator changed control.py, so both launchers refreshed only their control.py pin and payload identity).",
+            "rationale": "Pin refresh is coherent with the registered record; this read-only gate could not recompute sha256 over file bytes, so the 96cf15d3 control.py pin is cross-consistency-checked but not independently byte-verified; recorded as an unverified state rather than simulated."
+          },
+          {
+            "id": "claude-manifest-has-no-skills-field",
+            "severity": "P3",
+            "path": "adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+            "evidence": "The Codex manifest declares \"skills\": \"./skills/\" (adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json:18) while the Claude manifest has no skills field; the registered Claude result validator (harness/control.py:1743-1749) requires only that mcpServers/apps/agents are absent and version/license are set.",
+            "rationale": "Claude Code discovers the skills/ directory by host convention; absence of the field is not a registered defect and not a blocker."
+          },
+          {
+            "id": "adapter-ids-versus-payload-versions",
+            "severity": "P3",
+            "path": "harness/claude_reference.py",
+            "evidence": "ADAPTER_ID remains \"harness-claude-session-start-v0.2-candidate.2\" (harness/claude_reference.py:11) and \"harness-codex-session-start-v0.2-candidate.1\" (harness/codex_reference.py:11) while plugin payload manifests are 0.2.0-candidate.6 (both plugin.json files); the O4 refresh record states only the control.py pin and payload identity changed.",
+            "rationale": "Adapter-id and payload-identity are distinct namespaces; the difference is consistent with the registered record and not a defect."
+          },
+          {
+            "id": "common-skill-and-profile-bytes-textually-identical",
+            "severity": "P3",
+            "path": "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+            "evidence": "Both adapters' SKILL.md are textually identical; both adapters' references/demand-to-capability-profile.md are textually identical to docs/DEMAND-TO-CAPABILITY-PROFILE.md (harness-demand-to-capability-v0.2-candidate.5); harness/control.py:1774-1793 registers byte-equality checks for these pairs.",
+            "rationale": "Common-bytes floor satisfied by observation; sha256 equality was not recomputed in this read-only gate."
+          },
+          {
+            "id": "bootstrap-authority-files-outside-registered-slice",
+            "severity": "P2",
+            "path": "product/constitution.json",
+            "evidence": "product/constitution.json:128-153 lists requiredAuthorityFiles including harness/__init__.py and harness/__main__.py and sixteen supportingDocuments, none present in the registered 19-file scope enumerated at the target commit; the launchers' find_harness_root requires only product/constitution.json, product/program.json, product/acceptance.json plus the pinned harness files (both adapters' scripts/session_start.py:20-47), all present.",
+            "rationale": "The two plugin sources are self-sufficient within the registered slice; the absence of __init__/__main__ and supporting documents is recorded as a scope property, not counted as a plugin-source blocker."
+          },
+          {
+            "id": "program-state-ready-o5-planned",
+            "severity": "P3",
+            "path": "product/program.json",
+            "evidence": "product/program.json:9-10 sets status \"ready\" and activeIncrementId null with all five increments completed; product/acceptance.json:289 shows O5 assessment \"planned\".",
+            "rationale": "The gate decision does not promote O5, cross-host portability, or any release claim."
+          }
+        ],
+        "executionContext": {
+          "methodProfileVersionObserved": "harness-demand-to-capability-v0.2-candidate.5 (docs/DEMAND-TO-CAPABILITY-PROFILE.md:3; identical in both adapter reference profiles)",
+          "authorityProjectionAdapterObserved": "harness-codex-session-start-v0.2-candidate.1 (harness/codex_reference.py:11) and harness-claude-session-start-v0.2-candidate.2 (harness/claude_reference.py:11)",
+          "capabilitySurfaceObserved": [
+            "SessionStart continuation projection Hook (Codex additionalContextLimit 4096; Claude matcher startup|resume|clear|compact with plain-stdout output)",
+            "deliver-demand-driven-task Skill with implicit invocation policy (adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/agents/openai.yaml: allow_implicit_invocation true)",
+            "root-bounded sha256-pinned runtime launcher (python -I -B) that returns a non-blocking no-op on missing root or pin drift",
+            "no MCP, App, runtime, manager, CC Switch, prompt interception, or model-call surface in either plugin source",
+            "payload manifests 0.2.0-candidate.6+codex.payload-ccd593e9fc43 and 0.2.0-candidate.6+claude.payload-0d96961b88b3"
+          ],
+          "unsupportedStates": [
+            "Claude Code 2.1.233 carrier execution against the source-pinned 2.1.232 substrate (not registered anywhere in the repository paths; source pins 2.1.232 at harness/claude_reference.py:15,18)",
+            "live Skill triggering and Hook activation on either host (unverified; both plugin sources are inactive)",
+            "O5 matched cross-host task (planned, not executed)",
+            "launcher control.py pin 96cf15d3... byte re-verification (not recomputed in this read-only gate)",
+            "reliable remaining-context-capacity signal (projection records 'unknown' by design, harness/continuation.py:338)"
+          ]
+        },
+        "claimBoundary": "Read-only source-candidate gate over the registered 19-file repository scope at commit 48ef653521d890999137499b4ad7a42c02a90842. The blocked verdict rests solely on the validated mismatch between the source-pinned Claude Code 2.1.232 host identity (harness/claude_reference.py:15,18; product/program.json:208-209,269) and the registered 2.1.233 distinct-host carrier. It is not release, publication, production, installed support, model superiority, or universal portability."
+      },
+      "requestedModel": "deepseek-v4-pro[1M]",
+      "reportedModel": "deepseek-v4-pro[1m]",
+      "systemTools": [
+        "Glob",
+        "Grep",
+        "Read",
+        "StructuredOutput"
+      ],
+      "plugins": {
+        "name": "agent-autonomy-harness-claude",
+        "path": "C:\\Projects\\agent-autonomy-harness\\.tmp\\portable-source-candidate-gate-deepseek-routed\\source\\adapters\\agent-autonomy-harness-claude",
+        "source": "agent-autonomy-harness-claude@inline",
+        "version": "0.2.0-candidate.6+claude.payload-0d96961b88b3"
+      },
+      "skills": [
+        "deep-research",
+        "agent-autonomy-harness-claude:deliver-demand-driven-task",
+        "design-sync",
+        "dataviz",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "doctor",
+        "loop",
+        "claude-api",
+        "run",
+        "run-skill-generator"
+      ],
+      "agents": [
+        "claude",
+        "Explore",
+        "general-purpose",
+        "Plan",
+        "statusline-setup"
+      ],
+      "mcpServers": null,
+      "toolUseCounts": [
+        {
+          "name": "Glob",
+          "count": 2
+        },
+        {
+          "name": "Grep",
+          "count": 6
+        },
+        {
+          "name": "Read",
+          "count": 22
+        },
+        {
+          "name": "StructuredOutput",
+          "count": 1
+        }
+      ],
+      "outsideSourceToolRequests": [
+        {
+          "name": "Glob",
+          "input": {
+            "pattern": "*",
+            "path": "C:\\Projects\\agent-autonomy-harness\\.tmp\\portable-source-candidate-gate-deepseek-routed"
+          }
+        }
+      ],
+      "permissionDenials": {
+        "tool_name": "Glob",
+        "tool_use_id": "call_01_lonSNgNVExVWzeQpzTcd9808",
+        "tool_input": {
+          "pattern": "*",
+          "path": "C:\\Projects\\agent-autonomy-harness\\.tmp\\portable-source-candidate-gate-deepseek-routed"
+        }
+      },
+      "hookEventCount": 2,
+      "hookOutcome": "success",
+      "usage": {
+        "input_tokens": 105307,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 718976,
+        "output_tokens": 21440,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "",
+        "iterations": [],
+        "speed": "standard"
+      },
+      "modelUsage": {
+        "deepseek-v4-pro[1m]": {
+          "inputTokens": 105307,
+          "outputTokens": 21440,
+          "cacheReadInputTokens": 718976,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 1.422023,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 32000,
+          "canonicalModel": "deepseek-v4-pro[1m]",
+          "provider": "firstParty"
+        }
+      },
+      "totalCostUsd": 1.422023
+    },
+    {
+      "event": "machine-equivalence-assessed",
+      "verdictsEqual": true,
+      "normalizedP0P1Equal": true,
+      "normalizedP0P1": [
+        {
+          "severity": "P1",
+          "path": "harness/claude_reference.py",
+          "requirement": "registered-carrier-version-matches-target-adapter-source-identity"
+        }
+      ]
+    },
+    {
+      "event": "task-process-credential-and-filesystem-state-cleaned",
+      "taskFileCountBeforeCleanup": 5834,
+      "observedAt": "2026-08-15T11:05:37.4237611+08:00",
+      "taskRootAbsent": true,
+      "tmpRootAbsent": true,
+      "tmpRemoved": true,
+      "matchingProcessesAfterCleanup": 0,
+      "originalCodexAuthHardlinkNames": [
+        "\\Users\\15521\\.codex\\auth.json"
+      ],
+      "originalClaudeSettingsHardlinkNames": [
+        "\\Users\\15521\\.claude\\settings.json"
+      ],
+      "gitClean": true,
+      "head": "02ff5663c0491063043f853eaa4ba8d2cc417360",
+      "originMain": "02ff5663c0491063043f853eaa4ba8d2cc417360",
+      "aheadBehind": "0\t0"
+    }
+  ],
+  "machineAssessment": {
+    "hostResultsFactGrounded": true,
+    "verdictsEqual": true,
+    "normalizedP0P1Equal": true,
+    "normalizedP0P1": [
+      {
+        "severity": "P1",
+        "path": "harness/claude_reference.py",
+        "requirement": "registered-carrier-version-matches-target-adapter-source-identity",
+        "parentFactCheck": "confirmed"
+      }
+    ],
+    "routeIdentity": {
+      "requestedModel": "deepseek-v4-pro[1M]",
+      "reportedModel": "deepseek-v4-pro[1m]",
+      "normalization": "case-only 1M to official 1m spelling",
+      "fallbackObserved": false,
+      "onlyReportedModel": "deepseek-v4-pro[1m]",
+      "telemetryWarning": "[claude-code:unrecognized_model]",
+      "interpretation": "Claude Code telemetry did not recognize the external model catalog name; the call itself succeeded and modelUsage contains only the DeepSeek model."
+    },
+    "capabilityBoundary": {
+      "claudeTaskPluginCount": 1,
+      "claudeTaskPlugin": "agent-autonomy-harness-claude",
+      "claudeNativeBuiltInSkillsVisibleButUnused": true,
+      "claudeAgentToolExposed": false,
+      "claudeMcpServerCount": 0,
+      "claudeWebSearchRequests": 0,
+      "claudeWebFetchRequests": 0,
+      "claudeSuccessfulTools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "StructuredOutput"
+      ],
+      "claudeDeniedOutsideSourceGlobCount": 1,
+      "deniedDataExposed": false,
+      "codexModelNetworkOrWriteCommands": 0,
+      "codexProviderRetryMarkers": 0
+    },
+    "floorsPass": true,
+    "remainingGate": "named-human per-host outcome, equivalence and bounded portability judgment"
+  },
+  "humanJudgment": {
+    "namedHumanAcceptor": "yiheng8023",
+    "status": "accepted",
+    "requiredDecisions": [
+      "accept the Codex blocked outcome as correct and useful",
+      "accept the Claude Code/DeepSeek blocked outcome as correct and useful",
+      "accept the normalized single-P1 equivalence, including case-only reported model normalization and denied out-of-source request handling",
+      "accept only the pre-registered bounded portability claim"
+    ],
+    "decisionRecord": {
+      "id": "msg_01a0036b-4947-7500-b46c-fced2b184fee",
+      "recordedAt": "2026-08-15T03:15:57.895Z",
+      "contentSha256": "de147cf04b5462cd9bd234f78a4ddeee08abe456ba219ca5911e523c6da46b94",
+      "acceptedReferenceHostOutcome": true,
+      "acceptedDistinctHostOutcome": true,
+      "acceptedNormalizedEquivalence": true,
+      "acceptedBoundedPortabilityClaim": true
+    }
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 0,
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "Codex host startup attempted a task-home curated-plugin sync; all resulting non-Harness Skills were excluded before the model call and the task root was cleaned.",
+      "Codex policy declined redundant combined and hash reads; decision-relevant source facts were recovered read-only in the same call.",
+      "Claude Code lowercased the configured [1M] model suffix to its official [1m] form and emitted an unrecognized-model telemetry warning while completing on only that model.",
+      "Claude denied one attempted Glob of the isolated task parent; no out-of-source contents were exposed."
+    ]
+  },
+  "safetyAndCleanup": {
+    "repositoryMutationByModels": false,
+    "credentialContentsReadOrRecorded": false,
+    "persistentConsumerMutation": false,
+    "accountMutation": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryCredentialLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimits": [
+    "one matched source-candidate gate against commit 48ef653521d890999137499b4ad7a42c02a90842 on 2026-08-15",
+    "one Codex CLI 0.147.0/gpt-5.6-sol/high result through plugin tree 1379b56cb43cd137815ee5e8acf15cfcfbdf36dd and one Claude Code 2.1.233/DeepSeek-V4-Pro requested as deepseek-v4-pro[1M]/max result through target plugin tree 9dd711704fbaf86b4c8f27526318d8091463b56d whose source host identity remains 2.1.232",
+    "CC Switch 3.19.2 is only the existing static settings projection source and is not a runtime or portable dependency",
+    "equivalence only under the exact normalized P0/P1 and fact-grounding tolerance registered above",
+    "portable semantics only for this task, profile, source, host-runtime-provider-model-adapter pair and date",
+    "no all-Agent, all-Codex, all-Claude-Code, all-DeepSeek, all-CC-Switch, Anthropic-model, long-context, installed-value, release, publication, production, model-superiority or universal portability claim",
+    "the target Claude adapter's 2.1.232 source identity may yield an accepted blocked decision; no 2.1.233 adapter-support claim"
+  ],
+  "validator": {
+    "kind": "portable-source-candidate-gate-deepseek-routed-o5",
+    "version": 1,
+    "state": "accepted"
+  }
+}
