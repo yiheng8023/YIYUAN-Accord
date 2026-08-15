@@ -39,6 +39,7 @@ from harness.__main__ import main as cli_main  # noqa: E402
 
 
 AUTHORITY_FILES = (
+    ".github/workflows/validate.yml",
     "product/constitution.json",
     "product/program.json",
     "product/acceptance.json",
@@ -3456,6 +3457,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("programStatus=ready", readme)
         self.assertIn("整个项目尚未收官", readme_zh)
         self.assertNotIn("programStatus=ready", readme_zh)
+
+    def test_hosted_validation_has_finite_ref_scoped_resource_limits(self) -> None:
+        workflow = (self.root / ".github/workflows/validate.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("group: validate-product-${{ github.workflow }}-${{ github.ref }}", workflow)
+        self.assertIn("cancel-in-progress: true", workflow)
+        self.assertIn("timeout-minutes: 20", workflow)
 
     def test_continuation_is_lean_navigation_not_static_authority(self) -> None:
         continuation = (

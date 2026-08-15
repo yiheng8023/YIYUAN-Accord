@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-ci-resource-boundary-hardening",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,5 +80,49 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-ci-resource-boundary-hardening",
+      "state": "active",
+      "correctionClass": "hosted-validation-resource-unbounded",
+      "observedProblem": "The three-platform hosted validation workflow has neither concurrency cancellation nor a job timeout, so superseded or stalled validation can consume hosted resources without a code-owned finite stop.",
+      "hypothesis": "A ref-scoped concurrency group with cancellation and a conservative job timeout can bound hosted validation resource loss without changing product acceptance or treating CI as primary evidence.",
+      "falsifier": "The limits cancel distinct refs, prevent the full canonical suite from completing on a supported host, or change hosted corroboration into an acceptance authority.",
+      "stopCondition": "Workflow source and tests bind ref-scoped cancellation and a finite timeout above the measured canonical-suite duration; local canonical verification passes; no hosted run claim, outcome credit or residue is created.",
+      "acceptanceIds": [
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-ci-resource-boundary-hardening",
+          "state": "active",
+          "acceptanceIds": [
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup"
+          ],
+          "deliverables": [
+            "bounded hosted-validation concurrency policy",
+            "finite hosted-validation timeout",
+            "workflow source regression test"
+          ]
+        }
+      ]
+    }
+  ]
 }
