@@ -15,40 +15,45 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate-stream-ready`. The public verifier should
-report:
+The current machine program is v0.2 and `ready` with no active increment. The
+public verifier should report:
 
-- program status `active`;
+- program status `ready`;
 - completion `in-progress`;
 - O1 through O4 true, with O5 false (`4/5` outcomes); O2 binds the
   exact public-intake, Codex Skill-source, and continuation-reconciliation
   scenarios without double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- one active O5 increment and one active work item.
+- zero active increments and zero active work items.
 
-The active O5 stream-ready registration freezes one independently useful read-only
-source-candidate gate on exact commit `48ef653` before either model runs. It
-binds Codex CLI 0.147.0/gpt-5.6-sol and the live distinct-host Claude Code
-2.1.233/claude-sonnet-5, while disclosing to both models that the exact target
-Claude adapter source remains pinned to 2.1.232. A fact-grounded equivalent
-blocked decision remains eligible; no 2.1.233 adapter-support claim is possible.
-The registration preserves the candidate.6 package trees, candidate.5 common
-method, exact task and target in prompt plus type-and-const schema, minimum
-task-scoped tool surfaces, zero ancestor project instructions, isolated
-authentication labels, canonical Windows Git-blob rule, explicit unknown
-context, normalized P0/P1 equivalence, cleanup and the maximum claim. Each
-one-shot host has a 900-second parent timeout and continuous stream drain plus
-partial-stream hashing before any stop. The Claude stream-json invocation now
-adds only the live 2.1.233 launcher's required `--verbose` flag; the task,
-prompt, model, tools, data, method, adapter, tolerance and claim ceiling remain
-unchanged. It still requires one new exact
-human grant for two temporary host-owned credential hardlinks, reviewed Hooks,
-the public-data boundary and the two conditional model calls, both eligible host
-results, task-bound validation and a later named-human outcome/equivalence
-judgment. Until then O5 remains false.
+The closed stream-ready registration froze one independently useful read-only
+source-candidate gate on exact commit `48ef653`. Codex CLI
+0.147.0/gpt-5.6-sol completed once and returned a parent-confirmed P1: the live
+distinct-host carrier was Claude Code 2.1.233 while the target Claude adapter
+source remained pinned to 2.1.232. The conditional Claude invocation included
+the host-required `--verbose` argument and its SessionStart Hook succeeded, but
+it returned an error before any model token or tool call and produced no
+structured task result. The parent retained seven valid stream events and
+their hash but only hashed, rather than retained, the exact error-result text.
+Consequently the exact pre-model cause is unknown and the registered evidence
+floor failed. Ambient custom endpoint settings are not the measured cause on
+current evidence because the call excluded all setting sources and relevant
+process-environment overrides. A stale or remotely invalid account credential,
+unresolved organization, entitlement or another remote validation failure is
+only a hypothesis. The no-retry rule stopped the pair. Both credential links,
+8,575 temporary files and the task root were removed without user action; Git
+remained clean. This execution adds zero O1-O5 credit and has left the current
+graph.
 
-The preceding extended-carrier registration passed the full preflight. Codex
+The next safe route first needs a separate human decision for any Claude Code
+account refresh. Before a later O5 dispatch, remote/auth readiness must be
+re-established as far as the native host allows and the parent capture path
+must retain bounded raw error text before cleanup. Only a later immutable
+registration and new exact execution grant can authorize another matched pair;
+no outcome validator exists or should be prepared before an actual eligible
+pair.
+
+The earlier extended-carrier registration passed the full preflight. Codex
 completed in 241.677 seconds with 126 valid events and one schema-valid
 fact-grounded blocked decision for the exact Claude carrier/source identity
 mismatch. After the Codex credential link was released, Claude Code 2.1.233
@@ -56,9 +61,9 @@ rejected the local stream-json launcher before model contact because print mode
 also requires `--verbose`: zero events, empty stdout, no session id and no final
 object. The no-retry rule stopped the pair, so the Codex result does not count
 toward O5. Both credential links, 5,559 temporary files and the task root were
-removed without user action; Git remained clean. The active registration
-changes only that observed local carrier argument and requires both hosts to run
-again under the new immutable identity.
+removed without user action; Git remained clean. The now-closed stream-ready
+registration changed only that observed local carrier argument and required
+both hosts to run again under its immutable identity.
 
 The preceding host-current registration passed every static, source,
 authentication, capability and dual-Hook preflight, but its one authorized

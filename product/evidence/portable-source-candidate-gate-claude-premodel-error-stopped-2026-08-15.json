@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.claude-premodel-error-stopped.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-stream-ready-registration.json",
+    "sha256": "68c2580daf01e57a6fb73113610f5c9eca8220e73dce17f957ad0c6d0220b69f",
+    "registeredCommit": "f3467f43aa0213432a31359324095f3c9cee5f13"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-stream-ready",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The exact post-grant execution passed current Git, registration, date, target, host, credential-name, 19-file target snapshot, candidate.5 byte identity, schema, isolated authentication-label, canonical Codex plugin, one-visible-Skill, disabled App/MCP/multi-agent, strict Claude plugin and normalized dual-Hook preflights. The one authorized Codex gpt-5.6-sol/high read-only call completed in 254.300 seconds with 95 valid events, a schema-valid blocked object and a fact-grounded P1 carrier/source identity mismatch. Parent checks confirmed that target harness/claude_reference.py pins Claude Code 2.1.232 while the registered carrier is 2.1.233. After releasing the Codex credential link, the parent invoked Claude Code once with the registered --verbose stream-json route. Its SessionStart Hook completed successfully, but Claude returned an error result after 5.926 seconds with zero model tokens, zero tool calls and no structured final object. The parent retained the complete stream hash and structural event facts but, contrary to the registered capture floor, retained only a hash of the non-JSON result text rather than its exact bounded text. Therefore the exact pre-model error and root cause cannot be independently recovered. The once-only and no-retry rule prohibited another call. The parent removed both task credential links and all 8,575 temporary files, restored each original credential as the sole hardlink name, and left no process, .tmp or Git residue. No Claude task result, cross-host pair or O5 progress exists.",
+  "authority": {
+    "executionGrant": "同意本次 stream-ready 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 22547,
+      "id": "msg_01a002f8-b876-7961-8bd9-0e3d997addd2",
+      "recordedAt": "2026-08-15T01:10:49.718Z",
+      "rawLineSha256": "b3e89e69b41e1361789c33c1fbca7996b06ac8668cad179d60576aa6460f76f2",
+      "contentSha256": "25b9edefec8abaa6a6a4dde4655c53bf2463ce997546282906d80f439e65ef12",
+      "normalizedTextSha256": "64a14faaafc01e7f0977afc3307bbabc91f2bbbf32b034c0f8289b4e50fdb416"
+    },
+    "codexModelCallsAuthorized": 1,
+    "codexModelCallsAttempted": 1,
+    "codexModelCallsCompletedWithFinalObject": 1,
+    "claudeModelCallsAuthorizedConditionalOnCodexEligibility": 1,
+    "claudeLauncherInvocationsAttempted": 1,
+    "claudeModelCallsStarted": 0,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-distinct-host-model-generation"
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "f3467f43aa0213432a31359324095f3c9cee5f13",
+      "aheadBehind": "0/0"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "msg_01a002f8-b876-7961-8bd9-0e3d997addd2",
+      "recordedAt": "2026-08-15T01:10:49.718Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "source-schema-auth-package-capability-and-adapter-preflight-passed",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+      "snapshotFileCount": 19,
+      "allBlobIdentitiesMatched": true,
+      "sourceReadOnly": true,
+      "commonSkillSha256": "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7",
+      "commonProfileSha256": "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+      "codexVersion": "0.147.0",
+      "codexBinarySha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+      "claudeVersion": "2.1.233",
+      "claudeBinarySha256": "8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd",
+      "isolatedCodexAuthentication": "Logged in using ChatGPT",
+      "isolatedClaudeAuthentication": {
+        "loggedIn": true,
+        "authMethod": "claude.ai",
+        "apiProvider": "firstParty"
+      },
+      "codexInstalledFileCount": 6,
+      "allCodexInstalledFilesMatchedTargetGitBlobs": true,
+      "initialCodexSkillCount": 25,
+      "excludedNonHarnessSkillCount": 24,
+      "excludedPathSetSha256": "522c5daebb15e8a2e0824e6e8dbaa2f1608bceea3559851e29f6e10729575359",
+      "visibleCodexSkill": "agent-autonomy-harness-codex:deliver-demand-driven-task",
+      "appsMcpAndMultiAgentDisabled": true,
+      "codexAdapter": "harness-codex-session-start-v0.2-candidate.1",
+      "claudeAdapter": "harness-claude-session-start-v0.2-candidate.2",
+      "repositoryCheckpointState": "unknown",
+      "normalizedHookSha256": "809535348cf75b7885af1d08396d79e32e3767951f3531ff40fcbe00199f3a7d",
+      "normalizedThinAdapterEquivalence": true,
+      "claudePluginStrictValidation": "PASS"
+    },
+    {
+      "event": "single-codex-model-call-completed",
+      "startedAt": "2026-08-15T09:23:31.2944862+08:00",
+      "endedAt": "2026-08-15T09:27:45.5946498+08:00",
+      "durationSeconds": 254.3,
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "high",
+      "sandbox": "read-only",
+      "exitCode": 0,
+      "eventLineCount": 95,
+      "validEventCount": 95,
+      "invalidEventLineCount": 0,
+      "rawStreamSha256": "36fe924dbc3e7fc58878acd7783c9a588152d2e7c9f095aac24e94719a7d62a1",
+      "stderrByteCount": 6404,
+      "stderrSha256": "9938aa93d752f4475914171788c454beb62537ae76498072a78dd81fe56cefe7",
+      "finalObjectSha256": "64a0337a6f3970b65baadc87451ee4e68b932102d09932a2e75ca56ceea5a482",
+      "verdict": "blocked",
+      "validatedBlocker": {
+        "id": "SCG-P1-CLAUDE-CARRIER-VERSION-DRIFT",
+        "severity": "P1",
+        "path": "harness/claude_reference.py:15",
+        "requirement": "registered-carrier-version-matches-target-adapter-source-identity",
+        "fact": "the target source pins Claude Code 2.1.232 while this registration fixes the distinct-host carrier at 2.1.233",
+        "parentFactCheck": "confirmed"
+      },
+      "usage": {
+        "inputTokens": 1064707,
+        "cachedInputTokens": 941568,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 9457,
+        "reasoningOutputTokens": 5108
+      }
+    },
+    {
+      "event": "claude-hook-completed-before-premodel-error",
+      "startedAt": "2026-08-15T09:32:18.9546099+08:00",
+      "endedAt": "2026-08-15T09:32:24.8805365+08:00",
+      "durationSeconds": 5.926,
+      "processExitCode": 1,
+      "resultSubtype": "success",
+      "resultIsError": true,
+      "sessionId": "d86d0e15-d949-4b0d-834a-9fc9ab93070f",
+      "eventLineCount": 7,
+      "validEventCount": 7,
+      "invalidEventLineCount": 0,
+      "eventTypes": {
+        "system": 5,
+        "assistant": 1,
+        "result": 1
+      },
+      "rawStreamSha256": "57e25a9d19fc15d5e0a32c7c6b888b3dc0e395f49665bccb2bde5f821aaa526d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resultTextRetained": false,
+      "resultTextSha256": "e25ed0a02ac842e77a5baaf16b6372e8f13e7b7a0e34aa44800ea291b29e1978",
+      "structuredFinalObjectPresent": false,
+      "sessionStartHookStarted": true,
+      "sessionStartHookOutcome": "success",
+      "sessionStartHookExitCode": 0,
+      "sessionStartAdapter": "harness-claude-session-start-v0.2-candidate.2",
+      "repositoryCheckpointState": "unknown",
+      "toolUseCount": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "cacheTokens": 0,
+      "modelUsage": {},
+      "totalCostUsd": 0,
+      "modelGenerationStarted": false,
+      "retry": false
+    },
+    {
+      "event": "task-process-credential-and-filesystem-state-cleaned",
+      "taskFileCountBeforeCleanup": 8575,
+      "matchingProcessesAfterCleanup": 0,
+      "taskRoot": "C:/Projects/agent-autonomy-harness/.tmp/portable-source-candidate-gate-stream-ready",
+      "taskRootAbsent": true,
+      "tmpRootAbsent": true,
+      "originalCodexAuthHardlinkNames": [
+        "C:/Users/15521/.codex/auth.json"
+      ],
+      "originalClaudeCredentialHardlinkNames": [
+        "C:/Users/15521/.claude/.credentials.json"
+      ],
+      "credentialContentsReadHashedPrintedOrRecorded": false,
+      "gitCleanBeforeReceiptWrite": true,
+      "headAndOriginMainBeforeReceiptWrite": "f3467f43aa0213432a31359324095f3c9cee5f13",
+      "aheadBehindBeforeReceiptWrite": "0/0"
+    }
+  ],
+  "falsifiersTriggered": [
+    "Claude returned no structured final object and no model usage under the exact once-only stream-ready invocation",
+    "the parent did not retain the exact bounded Claude error result text, so the registered continuous capture and independently reviewable evidence floor failed",
+    "the once-only and no-retry rule makes any repeated host call under this registration ineligible",
+    "no Claude task decision, cross-host equivalence or named-human outcome judgment exists"
+  ],
+  "causalFinding": {
+    "fact": "The registered --verbose launcher and SessionStart Hook worked. Claude then emitted a structurally valid error result before any model token or tool call, but the parent retained only the result-text hash and cannot recover the exact error text after required cleanup. Ambient user settings contain route-related key names, but the exact measured call excluded all setting sources and the measured process environment contained none of those override keys; a later no-model doctor emulation also removed the ambient custom-endpoint warning.",
+    "inference": "A stale or remotely invalid subscription credential, unresolved organization, account entitlement or another pre-model remote validation failure is plausible, but no exact cause is proven. The ambient custom endpoint is rejected as the measured-call cause on current evidence. Local auth status labels are insufficient remote-readiness evidence.",
+    "correction": "Do not retry this registration. Before any later O5 dispatch, obtain separate authority for any required Claude account refresh, establish a no-model remote/auth readiness fact if the host exposes one, keep ambient route isolation explicit, and make the parent persist the bounded raw error result text as well as its hash before cleanup. Only then may a new immutable task registration and new exact execution grant authorize a fresh matched two-host run. Do not prebuild an O5 outcome validator before an actual eligible pair exists."
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 1,
+    "lossEvents": [
+      "the parent's incomplete Claude error capture consumed this exact registration without preserving enough evidence to identify the pre-model failure, requiring a later human account decision before another registered pair can be safe"
+    ],
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "the full Codex call completed and yielded useful single-host counterevidence but cannot count as O5 without the registered pair",
+      "the Claude launcher and Hook ran correctly, but model generation did not start",
+      "the parent preserved stream identity and structure but failed to persist the exact bounded Claude error result text",
+      "exact cleanup of the 8,575-file isolated task root completed without user action"
+    ]
+  },
+  "safetyAndCleanup": {
+    "codexModelCallStarted": true,
+    "codexModelCallCompleted": true,
+    "claudeLauncherStarted": true,
+    "claudeSessionStartHookCompleted": true,
+    "claudeModelGenerationStarted": false,
+    "credentialContentsReadOrRecorded": false,
+    "repositoryMutationByModel": false,
+    "consumerMutationRetained": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryAuthLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimit": "This is one honestly stopped stream-ready execution. It proves the registered preflights, one bounded Codex blocked source decision, one successful Claude SessionStart Hook followed by a pre-model error with incomplete bounded error-text capture, and exact cleanup. It proves no Claude task outcome, no cross-host equivalence, no O5 progress, no release eligibility, no publication, no production readiness and no v0.2 completion."
+}
