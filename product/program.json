@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-public-truth-consistency",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,53 +80,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-public-truth-consistency",
-      "state": "active",
-      "correctionClass": "supporting-surface-semantic-drift",
-      "observedProblem": "Supporting surfaces still contain a stale current-v0.2 security statement, an obsolete three-task O2 floor, and a long continuation ledger that can be mistaken for current authority or task authorization.",
-      "hypothesis": "Correcting the exact stale claims, reducing continuation to stable navigation, and adding focused claim-consistency tests will align the public surface with the v1 machine contract without creating a fourth authority.",
-      "falsifier": "A maintained public document still calls v0.2 current, states the old O2 floor, embeds static task authorization, implies candidate.5 is the final v1 profile, or presents historical process detail as current execution authority.",
-      "stopCondition": "The focused claim checks, canonical verifier, full product suite and repository residue scan pass with O1-O5 unchanged at 0/5, and the outcome-neutral increment leaves the current graph.",
-      "acceptanceIds": [
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": []
-      },
-      "workItems": [
-        {
-          "id": "work.v1-public-truth-consistency",
-          "state": "active",
-          "acceptanceIds": [
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "progress-accounting",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "lean non-authoritative continuation navigation",
-            "current security and O2 public claims",
-            "public claim consistency regressions"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
