@@ -421,7 +421,9 @@ class ProductControlTests(unittest.TestCase):
             text=True,
         ).stdout.strip()
 
-    def freeze_program_profile(self, program: dict) -> None:
+    def freeze_program_profile(
+        self, program: dict, *, commit_binding: bool = True
+    ) -> None:
         if program["normativeProfileBinding"]["state"] == "frozen":
             return
         profile_locator = "docs/FIXTURE-V1-PROFILE.md"
@@ -451,6 +453,38 @@ class ProductControlTests(unittest.TestCase):
             "cohortProtocolSha256": hashlib.sha256(protocol_blob).hexdigest(),
             "frozenAtRevision": profile_revision,
         }
+        if commit_binding:
+            self.write_json("product/program.json", program)
+            environment = os.environ.copy()
+            environment.update(
+                {
+                    "GIT_AUTHOR_DATE": "2026-08-12T02:57:00+08:00",
+                    "GIT_COMMITTER_DATE": "2026-08-12T02:57:00+08:00",
+                }
+            )
+            subprocess.run(
+                ["git", "add", "product/program.json"],
+                cwd=self.root,
+                env=environment,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            staged = subprocess.run(
+                ["git", "diff", "--cached", "--quiet"],
+                cwd=self.root,
+                env=environment,
+                check=False,
+            )
+            if staged.returncode != 0:
+                subprocess.run(
+                    ["git", "commit", "--quiet", "-m", "freeze fixture profile binding"],
+                    cwd=self.root,
+                    env=environment,
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
 
     def bind_fixture_registration(
         self,
@@ -460,6 +494,7 @@ class ProductControlTests(unittest.TestCase):
         task_identity: str = "natural-task.fixture-current",
         registration_id: str = "registration.fixture-current",
         relative: str = "product/evidence/fixture-registration.json",
+        commit_profile_binding: bool = True,
     ) -> None:
         outcome_ids = sorted(
             set(increment["acceptanceIds"]) & {"O1", "O2", "O3", "O4", "O5"}
@@ -467,7 +502,7 @@ class ProductControlTests(unittest.TestCase):
         if not outcome_ids:
             increment["taskRegistration"] = None
             return
-        self.freeze_program_profile(program)
+        self.freeze_program_profile(program, commit_binding=commit_profile_binding)
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
         fields = {
@@ -2500,6 +2535,113 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
             "increment increment.fixture-current taskRegistration must strictly descend from the frozen profile and cohort protocol",
+            report["errors"],
+        )
+
+    def test_registration_parent_must_already_contain_frozen_binding(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                increment,
+                commit_profile_binding=False,
+            )
+            self.write_json("product/program.json", value)
+            subprocess.run(
+                ["git", "add", "product/program.json"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                [
+                    "git",
+                    "commit",
+                    "--quiet",
+                    "-m",
+                    "retrospectively freeze fixture profile binding",
+                ],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current taskRegistration must have one parent containing the exact frozen normative profile binding",
+            report["errors"],
+        )
+
+    def test_registration_merge_commit_cannot_supply_ambiguous_freeze_parent(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.freeze_program_profile(value)
+            base_branch = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            subprocess.run(
+                ["git", "switch", "--quiet", "-c", "fixture-merge-parent"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            marker = self.root / "docs/FIXTURE-MERGE-PARENT.md"
+            marker.write_text("fixture merge parent\n", encoding="utf-8")
+            subprocess.run(
+                ["git", "add", "docs/FIXTURE-MERGE-PARENT.md"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                ["git", "commit", "--quiet", "-m", "fixture merge parent"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                ["git", "switch", "--quiet", base_branch],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                [
+                    "git",
+                    "merge",
+                    "--quiet",
+                    "--no-ff",
+                    "--no-commit",
+                    "fixture-merge-parent",
+                ],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current taskRegistration must have one parent containing the exact frozen normative profile binding",
             report["errors"],
         )
 

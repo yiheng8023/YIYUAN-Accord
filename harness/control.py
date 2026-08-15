@@ -957,6 +957,44 @@ def _registration_added_at_revision(root: Path, revision: str, locator: str) -> 
         return False
 
 
+def _registration_parent_has_profile_binding(
+    root: Path,
+    revision: str,
+    profile_binding: Mapping[str, Any],
+    errors: list[str],
+) -> bool:
+    if re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision) is None:
+        return False
+    parents_raw = _evidence_git(root, "rev-list", "--parents", "-n", "1", revision)
+    if parents_raw is None:
+        return False
+    try:
+        ancestry = parents_raw.decode("ascii").strip().split()
+    except UnicodeError:
+        return False
+    if len(ancestry) != 2 or ancestry[0] != revision:
+        return False
+    parent = ancestry[1]
+    program_object = f"{parent}:product/program.json"
+    raw_size = _evidence_git(root, "cat-file", "-s", program_object)
+    try:
+        object_size = int(raw_size.decode("ascii").strip()) if raw_size is not None else -1
+    except (UnicodeError, ValueError):
+        return False
+    if object_size < 0 or object_size > MAX_DOCUMENT_BYTES:
+        return False
+    program_raw = _evidence_git(root, "show", program_object)
+    if program_raw is None or len(program_raw) != object_size:
+        return False
+    parent_program = _parse_json_object_bytes(
+        program_raw,
+        "task registration parent product/program.json",
+        errors,
+    )
+    parent_binding = parent_program.get("normativeProfileBinding")
+    return _same_typed_value(parent_binding, dict(profile_binding))
+
+
 def _registration_history_paths(
     root: Path, frozen_at_revision: Any, errors: list[str]
 ) -> set[str] | None:
@@ -2137,7 +2175,6 @@ def _task_registration_guardrail(
         or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
         != expected_sha256
         or not _committed_blob(root, source_revision, locator, expected_sha256)
-        or not _registration_added_at_revision(root, source_revision, locator)
         or measurement_not_before is None
         or profile_sha256 != profile_binding.get("sha256")
         or cohort_protocol_sha256
@@ -2152,6 +2189,20 @@ def _task_registration_guardrail(
         _error(
             errors,
             f"increment {increment_id} taskRegistration must strictly descend from the frozen profile and cohort protocol",
+        )
+        return None
+    if not _registration_parent_has_profile_binding(
+        root, source_revision, profile_binding, errors
+    ):
+        _error(
+            errors,
+            f"increment {increment_id} taskRegistration must have one parent containing the exact frozen normative profile binding",
+        )
+        return None
+    if not _registration_added_at_revision(root, source_revision, locator):
+        _error(
+            errors,
+            f"increment {increment_id} taskRegistration identity or frozen-profile binding mismatch",
         )
         return None
     registration = _parse_json_object_bytes(raw, registration_label, errors)
