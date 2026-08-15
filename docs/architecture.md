@@ -73,8 +73,14 @@ the first frozen binding revision is `d19d2fb`, and its canonical digest begins
 outcome evidence and do not become product authority. A named human authorized
 that exact binding in the frozen Codex source before any eligible demand; the
 next code revision pins the revision, digest, private-evidence disposition and
-one code-owned Windows source validator. That validator verifies the activation
-HMAC and complete user-event window and rejects any demand between freeze and
+one code-owned Windows source validator. That validator binds privacy-safe
+commitments for the exact Credential Manager target, the system-local Codex
+source root, the source-native authorization event and its complete raw cursor
+prefix. It opens only the bound local file object, locks the finite prefix while
+copying it to a private snapshot, rechecks file identity and the hard expiry,
+and provides one exact-target deletion route for withdrawal, expiry,
+stop or validation failure. Diagnostics never contain the raw target, root,
+event, key or source locator. It also rejects any demand between freeze and
 authorization. The private source is intentionally absent from hosted runners,
 which can corroborate only the non-private contract and the exact unavailable-
 source boundary. The protocol specifies

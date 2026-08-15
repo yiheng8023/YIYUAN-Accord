@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import base64
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
+from datetime import datetime, timezone
 import hashlib
+import hmac
 import importlib.util
 from io import BytesIO, StringIO
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import re
 import shutil
 import subprocess
@@ -77,6 +80,16 @@ def fixture_task_identity(label: str) -> str:
         "natural-task.public-v1:"
         + hashlib.sha256(label.encode("utf-8")).hexdigest()[:32]
     )
+
+
+def fixture_private_hmac(key: bytes, domain: str, *parts: str) -> str:
+    message = "\0".join((domain, *parts)).encode("utf-8")
+    return "hmac-sha256:" + hmac.new(key, message, hashlib.sha256).hexdigest()
+
+
+def fixture_private_bytes_hmac(key: bytes, domain: str, payload: bytes) -> str:
+    message = domain.encode("utf-8") + b"\0" + payload
+    return "hmac-sha256:" + hmac.new(key, message, hashlib.sha256).hexdigest()
 
 
 class ProductControlTests(unittest.TestCase):
@@ -4514,6 +4527,430 @@ class ProductControlTests(unittest.TestCase):
             "initial binding authorization private source does not match the frozen activation",
             errors,
         )
+
+    def test_initial_authorization_snapshot_binds_event_identity_time_and_window(
+        self,
+    ) -> None:
+        key = b"k" * 32
+        activation_identity = "11111111-1111-4111-8111-111111111111"
+        authorization_identity = "22222222-2222-4222-8222-222222222222"
+        activation_timestamp = "2026-08-15T01:00:00+00:00"
+        authorization_timestamp = "2026-08-15T01:00:01+00:00"
+        authorization_message = "fixture exact authorization"
+        private_evidence = {
+            "surfaceIdentity": "enrollment-surface.public-v1:fixture",
+            "sourceEventIdentity": activation_identity,
+            "sourceEventTimestamp": activation_timestamp,
+        }
+
+        def encoded(event: dict) -> bytes:
+            return (
+                json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
+            ).encode("utf-8")
+
+        activation = {
+            "timestamp": activation_timestamp,
+            "type": "event_msg",
+            "payload": {
+                "type": "user_message",
+                "client_id": activation_identity,
+                "message": "授权！",
+            },
+        }
+        authorization = {
+            "timestamp": authorization_timestamp,
+            "type": "event_msg",
+            "payload": {
+                "type": "user_message",
+                "client_id": authorization_identity,
+                "message": authorization_message,
+            },
+        }
+        snapshot = encoded(activation) + encoded(authorization)
+        event_commitment = fixture_private_hmac(
+            key,
+            control.INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+            private_evidence["surfaceIdentity"],
+            activation_identity,
+            authorization_identity,
+            "2026-08-15T01:00:01Z",
+            authorization_message,
+        )
+        window_commitment = fixture_private_bytes_hmac(
+            key,
+            control.INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+            snapshot,
+        )
+        patches = {
+            "EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256": hashlib.sha256(
+                authorization_message.encode("utf-8")
+            ).hexdigest(),
+            "EXPECTED_INITIAL_AUTHORIZATION_EVENT_COMMITMENT": event_commitment,
+            "EXPECTED_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT": window_commitment,
+        }
+        with patch.multiple(control, **patches):
+            errors: list[str] = []
+            self.assertTrue(
+                control._initial_authorization_snapshot_valid(
+                    private_evidence,
+                    snapshot,
+                    bytearray(key),
+                    errors,
+                ),
+                errors,
+            )
+
+            changed_id = deepcopy(authorization)
+            changed_id["payload"]["client_id"] = (
+                "33333333-3333-4333-8333-333333333333"
+            )
+            errors = []
+            self.assertFalse(
+                control._initial_authorization_snapshot_valid(
+                    private_evidence,
+                    encoded(activation) + encoded(changed_id),
+                    bytearray(key),
+                    errors,
+                )
+            )
+
+            changed_time = deepcopy(authorization)
+            changed_time["timestamp"] = "2026-08-15T01:00:02+00:00"
+            errors = []
+            self.assertFalse(
+                control._initial_authorization_snapshot_valid(
+                    private_evidence,
+                    encoded(activation) + encoded(changed_time),
+                    bytearray(key),
+                    errors,
+                )
+            )
+
+            inserted = encoded(
+                {
+                    "timestamp": "2026-08-15T01:00:00.500000+00:00",
+                    "type": "event_msg",
+                    "payload": {
+                        "type": "user_message",
+                        "client_id": "44444444-4444-4444-8444-444444444444",
+                        "message": "an intervening demand",
+                    },
+                }
+            )
+            errors = []
+            self.assertFalse(
+                control._initial_authorization_snapshot_valid(
+                    private_evidence,
+                    encoded(activation) + inserted + encoded(authorization),
+                    bytearray(key),
+                    errors,
+                )
+            )
+
+    def test_initial_authorization_target_and_local_source_root_are_exact(self) -> None:
+        key = b"r" * 32
+        target_name = "AgentAutonomyHarness/v1/exact-fixture"
+        source_root = PureWindowsPath(r"C:\Users\fixture\.codex\sessions")
+        target_commitment = fixture_private_hmac(
+            key,
+            control.INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+            target_name,
+        )
+        root_commitment = fixture_private_hmac(
+            key,
+            control.INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+            str(source_root).casefold(),
+        )
+        with patch.multiple(
+            control,
+            EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT=(
+                target_commitment
+            ),
+            EXPECTED_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT=root_commitment,
+        ), patch(
+            "harness.control._windows_system_drive", return_value="C:"
+        ), patch(
+            "harness.control._windows_drive_is_fixed", return_value=True
+        ):
+            errors: list[str] = []
+            self.assertTrue(
+                control._initial_authorization_credential_target_valid(
+                    target_name, bytearray(key), errors
+                ),
+                errors,
+            )
+            self.assertIsNotNone(
+                control._initial_authorization_source_locator_parts(
+                    r"C:\Users\fixture\.codex\sessions\2026\08\15\rollout-fixture.jsonl",
+                    bytearray(key),
+                    errors,
+                ),
+                errors,
+            )
+
+            for locator in (
+                r"\\host\Users\fixture\.codex\sessions\2026\08\15\rollout-fixture.jsonl",
+                r"\\?\C:\Users\fixture\.codex\sessions\2026\08\15\rollout-fixture.jsonl",
+                r"\\.\C:\Users\fixture\.codex\sessions\2026\08\15\rollout-fixture.jsonl",
+                r"D:\Users\fixture\.codex\sessions\2026\08\15\rollout-fixture.jsonl",
+                r"C:\outside\2026\08\15\rollout-fixture.jsonl",
+            ):
+                with self.subTest(locator=locator):
+                    locator_errors: list[str] = []
+                    self.assertIsNone(
+                        control._initial_authorization_source_locator_parts(
+                            locator,
+                            bytearray(key),
+                            locator_errors,
+                        )
+                    )
+                    self.assertTrue(locator_errors)
+
+            replacement_errors: list[str] = []
+            self.assertFalse(
+                control._initial_authorization_credential_target_valid(
+                    "AgentAutonomyHarness/v1/replacement-fixture",
+                    bytearray(key),
+                    replacement_errors,
+                )
+            )
+
+    def test_initial_authorization_snapshot_rejects_replacement_and_mutation(
+        self,
+    ) -> None:
+        source = self.root / "rollout-fixture.jsonl"
+        replacement = self.root / "rollout-replacement.jsonl"
+        source.write_bytes(b'{"fixture":"source"}\n')
+        replacement.write_bytes(b'{"fixture":"other!"}\n')
+        errors: list[str] = []
+        with patch(
+            "harness.control._open_initial_authorization_source",
+            side_effect=lambda path: path.open("rb"),
+        ), patch(
+            "harness.control._initial_authorization_opened_final_path",
+            side_effect=lambda stream: str(source),
+        ):
+            self.assertEqual(
+                control._read_stable_initial_authorization_snapshot(
+                    source,
+                    str(self.root),
+                    errors,
+                ),
+                source.read_bytes(),
+                errors,
+            )
+
+        errors = []
+        with patch(
+            "harness.control._open_initial_authorization_source",
+            side_effect=lambda path: replacement.open("rb"),
+        ), patch(
+            "harness.control._initial_authorization_opened_final_path",
+            side_effect=lambda stream: str(replacement),
+        ):
+            self.assertIsNone(
+                control._read_stable_initial_authorization_snapshot(
+                    source,
+                    str(self.root),
+                    errors,
+                )
+            )
+        self.assertTrue(errors)
+
+        class MutatingStream:
+            def __init__(self, path: Path) -> None:
+                self.path = path
+                self.stream = path.open("rb")
+
+            def fileno(self) -> int:
+                return self.stream.fileno()
+
+            def read(self, size: int = -1) -> bytes:
+                self.path.write_bytes(b'{"fixture":"mutate"}\n')
+                return self.stream.read(size)
+
+            def close(self) -> None:
+                self.stream.close()
+
+        source.write_bytes(b'{"fixture":"source"}\n')
+        errors = []
+        with patch(
+            "harness.control._open_initial_authorization_source",
+            side_effect=lambda path: MutatingStream(path),
+        ), patch(
+            "harness.control._initial_authorization_opened_final_path",
+            side_effect=lambda stream: str(source),
+        ):
+            self.assertIsNone(
+                control._read_stable_initial_authorization_snapshot(
+                    source,
+                    str(self.root),
+                    errors,
+                )
+            )
+        self.assertTrue(errors)
+
+    def test_initial_authorization_failure_and_crossed_expiry_delete_exact_resource(
+        self,
+    ) -> None:
+        document = {
+            "kind": "initial-normative-profile-binding-authorization",
+            "revision": control.EXPECTED_V1_INITIAL_BINDING_REVISION,
+            "bindingSha256": control.EXPECTED_V1_INITIAL_BINDING_SHA256,
+        }
+        resource = ({"fixture": "private"}, "AgentAutonomyHarness/v1/exact")
+        before_expiry = datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc)
+        after_expiry = datetime(2026, 12, 31, 16, 0, 0, tzinfo=timezone.utc)
+
+        def invalid_event(*args, **kwargs) -> bool:
+            del kwargs
+            args[-1].append("fixture private validation failed")
+            return False
+
+        with patch(
+            "harness.control._utc_now", return_value=before_expiry
+        ), patch(
+            "harness.control._read_initial_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._initial_authorization_event_window_valid",
+            side_effect=invalid_event,
+        ), patch(
+            "harness.control._delete_initial_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors: list[str] = []
+            self.assertFalse(
+                control._validate_initial_binding_authorization(
+                    document, self.root, errors
+                )
+            )
+            delete.assert_called_once()
+            self.assertEqual(delete.call_args.args[1], "validation-failure")
+
+        with patch(
+            "harness.control._utc_now",
+            side_effect=(before_expiry, after_expiry),
+        ), patch(
+            "harness.control._read_initial_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._initial_authorization_event_window_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._delete_initial_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors = []
+            self.assertFalse(
+                control._validate_initial_binding_authorization(
+                    document, self.root, errors
+                )
+            )
+            delete.assert_called_once()
+            self.assertEqual(delete.call_args.args[1], "expiry")
+
+        with patch(
+            "harness.control._utc_now", return_value=before_expiry
+        ), patch(
+            "harness.control._read_initial_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._initial_authorization_event_window_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._delete_initial_authorization_private_resource"
+        ) as delete:
+            errors = []
+            self.assertTrue(
+                control._validate_initial_binding_authorization(
+                    document, self.root, errors
+                ),
+                errors,
+            )
+            delete.assert_not_called()
+
+    def test_initial_authorization_deletion_uses_exact_target_and_safe_receipt(
+        self,
+    ) -> None:
+        key = b"d" * 32
+        target_name = "AgentAutonomyHarness/v1/delete-fixture"
+        target_commitment = fixture_private_hmac(
+            key,
+            control.INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+            target_name,
+        )
+        calls: list[str] = []
+
+        class FakeFunction:
+            def __init__(self, callback) -> None:
+                self.callback = callback
+                self.argtypes = None
+                self.restype = None
+
+            def __call__(self, *args):
+                return self.callback(*args)
+
+        def delete(target: str, credential_type: int, flags: int) -> int:
+            self.assertEqual((credential_type, flags), (1, 0))
+            calls.append(target)
+            return 1
+
+        def read(target: str, credential_type: int, flags: int, output) -> int:
+            self.assertEqual(target, target_name)
+            self.assertEqual((credential_type, flags), (1, 0))
+            del output
+            control.ctypes.set_last_error(1168)
+            return 0
+
+        class FakeAdvapi:
+            CredDeleteW = FakeFunction(delete)
+            CredReadW = FakeFunction(read)
+            CredFree = FakeFunction(lambda value: None)
+
+        resource = (
+            {"keyBase64": base64.b64encode(key).decode("ascii")},
+            target_name,
+        )
+        with patch.multiple(
+            control,
+            EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT=(
+                "sha256:" + hashlib.sha256(key).hexdigest()
+            ),
+            EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT=(
+                target_commitment
+            ),
+        ), patch("harness.control.ctypes.WinDLL", return_value=FakeAdvapi()):
+            errors: list[str] = []
+            self.assertTrue(
+                control._delete_initial_authorization_private_resource(
+                    resource,
+                    "validation-failure",
+                    errors,
+                )
+            )
+        self.assertEqual(calls, [target_name])
+        self.assertTrue(any("destruction verified" in item for item in errors))
+        self.assertTrue(all(target_name not in item for item in errors))
+
+    def test_initial_authorization_stop_and_withdrawal_use_cleanup_route(self) -> None:
+        resource = ({"fixture": "private"}, "AgentAutonomyHarness/v1/exact")
+        for trigger in ("stop", "withdrawal"):
+            with self.subTest(trigger=trigger), patch(
+                "harness.control._read_initial_authorization_private_evidence",
+                return_value=resource,
+            ), patch(
+                "harness.control._delete_initial_authorization_private_resource",
+                return_value=True,
+            ) as delete:
+                errors: list[str] = []
+                self.assertTrue(
+                    control._revoke_initial_authorization_private_evidence(
+                        trigger,
+                        errors,
+                    )
+                )
+                delete.assert_called_once_with(resource, trigger, errors)
 
     def test_bootstrap_authority_set_cannot_self_disable(self) -> None:
         def remove(value: dict) -> None:

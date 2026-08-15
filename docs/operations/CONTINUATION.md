@@ -56,8 +56,12 @@ The current tree's `docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md` and
 frozen bytes, but `product/program.json` now binds them at artifact revision
 `502c4ff`, first-freeze revision `d19d2fb`, and canonical binding digest
 `ee4ba7a`. The bound Codex source contains the exact named-human authorization,
-and the code-owned Windows source validator verifies the private activation
-HMAC and complete user-event window. Their binding still creates no task or
+and the code-owned Windows source validator verifies privacy-safe commitments
+for the exact protected target, system-local source root, source-native
+authorization event and complete locked source prefix. It rejects replacement
+or concurrent mutation, rechecks expiry before success, and owns exact deletion
+plus absence verification for the authorized withdrawal, expiry, stop or
+validation-failure route without exposing private identities. Their binding still creates no task or
 outcome evidence: O1-O5 remain 0/5. Hosted runners intentionally lack the
 private source and corroborate only the remaining contract plus the exact
 unavailable-source boundary; use the authorized source host for canonical live

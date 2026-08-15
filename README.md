@@ -224,8 +224,13 @@ supply chronology proof.
 The current program has now frozen candidate.5 and its cohort protocol at
 artifact revision `502c4ff`, first-freeze revision `d19d2fb`, and canonical
 binding digest `ee4ba7a`. The named human authorized that exact binding in the
-bound Codex source, and the code-owned Windows source validator verifies the
-private activation HMAC and complete user-event window. No eligible natural
+bound Codex source, and the code-owned Windows source validator verifies
+privacy-safe commitments for the exact protected resource, system-local source
+root, source-native authorization event and complete locked user-event prefix.
+It rejects path substitution or concurrent mutation, rechecks the hard expiry
+before success, and deletes plus rechecks the exact resource on the authorized
+withdrawal, expiry, stop or validation-failure route without exposing private
+identities. No eligible natural
 task has yet been registered, so O1-O5 remain 0/5 and the program remains
 `in-progress`. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,

@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
 import hmac
+from io import BytesIO
 import json
 import math
 import os
@@ -333,8 +334,38 @@ EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = (
 INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
     2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
 )
+EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT = (
+    "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3"
+)
 EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256 = (
     "9cb3002787034afb2df433256481d4a2bcaf907a0607f2ee4ccc497e84e09b58"
+)
+INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN = (
+    "agent-autonomy-harness/private-credential-target/v1"
+)
+INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/private-source-root/v1"
+)
+INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/first-freeze-authorization-event/v1"
+)
+INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
+    "agent-autonomy-harness/first-freeze-source-window/v1"
+)
+# These privacy-safe commitments are materialized from the already-authorized
+# protected source during this bounded repair. Until then, the live validator
+# fails closed rather than accepting an unbound private resource or event.
+EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT: str | None = (
+    "hmac-sha256:c049b95c7280c0e0e4c51eecfe0157d3e20bfdecfa35cbe5de4fe5e6cbe33c63"
+)
+EXPECTED_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT: str | None = (
+    "hmac-sha256:389a9ef54b945a10a2eb5801129b0055a2224b2fe14aa641436430a7aa28b1a4"
+)
+EXPECTED_INITIAL_AUTHORIZATION_EVENT_COMMITMENT: str | None = (
+    "hmac-sha256:a33a374922972043ee437072da7e017b5feac702b60d3d55f906d7ec853fdcd3"
+)
+EXPECTED_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT: str | None = (
+    "hmac-sha256:309ae590a3686d2a35238fa62b84e5eb3350951801edfbd8a4d092cdfced481f"
 )
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
@@ -899,6 +930,16 @@ class _WindowsCredential(ctypes.Structure):
     ]
 
 
+class _WindowsOverlapped(ctypes.Structure):
+    _fields_ = [
+        ("internal", ctypes.c_void_p),
+        ("internal_high", ctypes.c_void_p),
+        ("offset", ctypes.c_uint32),
+        ("offset_high", ctypes.c_uint32),
+        ("event", ctypes.c_void_p),
+    ]
+
+
 def _initial_authorization_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     value: dict[str, Any] = {}
     for key, item in pairs:
@@ -910,7 +951,7 @@ def _initial_authorization_json_object(pairs: list[tuple[str, Any]]) -> dict[str
 
 def _read_initial_authorization_private_evidence(
     errors: list[str],
-) -> dict[str, Any] | None:
+) -> tuple[dict[str, Any], str] | None:
     if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
         _error(errors, "initial binding authorization private source is unavailable")
         return None
@@ -955,11 +996,16 @@ def _read_initial_authorization_private_evidence(
             if (
                 credential.credential_type != 1
                 or credential.persist != 2
+                or not credential.target_name
                 or credential.credential_blob_size == 0
                 or credential.credential_blob_size
                 > MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES
                 or not credential.credential_blob
             ):
+                _error(errors, "initial binding authorization private source is invalid")
+                return None
+            target_name = ctypes.wstring_at(credential.target_name)
+            if not target_name:
                 _error(errors, "initial binding authorization private source is invalid")
                 return None
             raw = ctypes.string_at(
@@ -975,13 +1021,140 @@ def _read_initial_authorization_private_evidence(
                 ValueError(f"non-finite private evidence value: {constant}")
             ),
         )
-    except (OSError, ValueError, TypeError, RecursionError, json.JSONDecodeError):
+    except (
+        OSError,
+        ValueError,
+        TypeError,
+        OverflowError,
+        RecursionError,
+        json.JSONDecodeError,
+    ):
         _error(errors, "initial binding authorization private source is invalid")
         return None
     if not isinstance(value, dict) or set(value) != INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS:
         _error(errors, "initial binding authorization private source is invalid")
         return None
-    return value
+    return value, target_name
+
+
+def _initial_authorization_string_hmac(
+    key: bytes | bytearray, domain: str, *parts: str
+) -> str:
+    message = "\0".join((domain, *parts)).encode("utf-8")
+    return "hmac-sha256:" + hmac.new(key, message, hashlib.sha256).hexdigest()
+
+
+def _initial_authorization_bytes_hmac(
+    key: bytes | bytearray, domain: str, payload: bytes
+) -> str:
+    message = domain.encode("utf-8") + b"\0" + payload
+    return "hmac-sha256:" + hmac.new(key, message, hashlib.sha256).hexdigest()
+
+
+def _initial_authorization_credential_target_valid(
+    target_name: str, key: bytes | bytearray, errors: list[str]
+) -> bool:
+    expected = EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT
+    commitment = _initial_authorization_string_hmac(
+        key,
+        INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+        target_name,
+    )
+    if expected is None or not hmac.compare_digest(commitment, expected):
+        _error(errors, "initial binding authorization private source identity is invalid")
+        return False
+    return True
+
+
+def _windows_system_drive() -> str | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return None
+    try:
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        get_windows_directory = kernel32.GetWindowsDirectoryW
+        get_windows_directory.argtypes = [ctypes.c_wchar_p, ctypes.c_uint32]
+        get_windows_directory.restype = ctypes.c_uint32
+        buffer = ctypes.create_unicode_buffer(32_768)
+        length = get_windows_directory(buffer, len(buffer))
+        if length == 0 or length >= len(buffer):
+            return None
+        drive = PureWindowsPath(buffer.value).drive
+    except (OSError, ValueError):
+        return None
+    return drive.upper() if re.fullmatch(r"[A-Za-z]:", drive) else None
+
+
+def _windows_drive_is_fixed(drive: str) -> bool:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return False
+    try:
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        get_drive_type = kernel32.GetDriveTypeW
+        get_drive_type.argtypes = [ctypes.c_wchar_p]
+        get_drive_type.restype = ctypes.c_uint32
+        return get_drive_type(drive + "\\") == 3
+    except (OSError, ValueError):
+        return False
+
+
+def _initial_authorization_source_locator_parts(
+    source_locator: str,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> tuple[str, str] | None:
+    try:
+        pure = PureWindowsPath(source_locator)
+        normalized = str(pure)
+    except (TypeError, ValueError):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    relative_parts = pure.parts[1:]
+    if (
+        not source_locator
+        or source_locator.startswith("\\\\")
+        or not pure.is_absolute()
+        or re.fullmatch(r"[A-Za-z]:", pure.drive) is None
+        or source_locator.replace("/", "\\") != normalized
+        or any(part in {".", ".."} or ":" in part for part in relative_parts)
+        or not pure.name.startswith("rollout-")
+        or pure.suffix.casefold() != ".jsonl"
+        or len(pure.parents) < 4
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    day_root = pure.parent
+    month_root = day_root.parent
+    year_root = month_root.parent
+    source_root = year_root.parent
+    if (
+        re.fullmatch(r"\d{2}", day_root.name) is None
+        or re.fullmatch(r"\d{2}", month_root.name) is None
+        or re.fullmatch(r"\d{4}", year_root.name) is None
+        or source_root.name.casefold() != "sessions"
+        or source_root.parent.name.casefold() != ".codex"
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    system_drive = _windows_system_drive()
+    if (
+        system_drive is None
+        or pure.drive.casefold() != system_drive.casefold()
+        or not _windows_drive_is_fixed(system_drive)
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    expected_root = EXPECTED_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT
+    root_commitment = _initial_authorization_string_hmac(
+        key,
+        INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+        str(source_root).casefold(),
+    )
+    if expected_root is None or not hmac.compare_digest(
+        root_commitment, expected_root
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    return normalized, str(source_root)
 
 
 def _open_initial_authorization_source(path: Path):
@@ -1008,7 +1181,7 @@ def _open_initial_authorization_source(path: Path):
             0x00000001 | 0x00000002 | 0x00000004,
             None,
             3,
-            0x00000080,
+            0x00000080 | 0x00200000 | 0x08000000,
             None,
         )
         invalid_handle = ctypes.c_void_p(-1).value
@@ -1028,10 +1201,378 @@ def _open_initial_authorization_source(path: Path):
         return None
 
 
+def _lock_initial_authorization_source(stream, size: int) -> _WindowsOverlapped | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL") or size <= 0:
+        return None
+    try:
+        import msvcrt
+
+        handle = msvcrt.get_osfhandle(stream.fileno())
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        lock_file = kernel32.LockFileEx
+        lock_file.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.POINTER(_WindowsOverlapped),
+        ]
+        lock_file.restype = ctypes.c_int
+        overlapped = _WindowsOverlapped()
+        if not lock_file(
+            ctypes.c_void_p(handle),
+            0x00000001 | 0x00000002,
+            0,
+            size & 0xFFFFFFFF,
+            (size >> 32) & 0xFFFFFFFF,
+            ctypes.byref(overlapped),
+        ):
+            return None
+        return overlapped
+    except (OSError, ValueError):
+        return None
+
+
+def _unlock_initial_authorization_source(
+    stream, size: int, overlapped: _WindowsOverlapped
+) -> None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL") or size <= 0:
+        return
+    try:
+        import msvcrt
+
+        handle = msvcrt.get_osfhandle(stream.fileno())
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        unlock_file = kernel32.UnlockFileEx
+        unlock_file.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.POINTER(_WindowsOverlapped),
+        ]
+        unlock_file.restype = ctypes.c_int
+        unlock_file(
+            ctypes.c_void_p(handle),
+            0,
+            size & 0xFFFFFFFF,
+            (size >> 32) & 0xFFFFFFFF,
+            ctypes.byref(overlapped),
+        )
+    except (OSError, ValueError):
+        return
+
+
+def _initial_authorization_opened_final_path(stream) -> str | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return None
+    try:
+        import msvcrt
+
+        handle = msvcrt.get_osfhandle(stream.fileno())
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        get_final_path = kernel32.GetFinalPathNameByHandleW
+        get_final_path.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+        ]
+        get_final_path.restype = ctypes.c_uint32
+        buffer = ctypes.create_unicode_buffer(32_768)
+        length = get_final_path(
+            ctypes.c_void_p(handle),
+            buffer,
+            len(buffer),
+            0,
+        )
+        if length == 0 or length >= len(buffer):
+            return None
+        final_path = buffer.value
+    except (OSError, ValueError):
+        return None
+    if final_path.startswith("\\\\?\\UNC\\"):
+        return "\\\\" + final_path[8:]
+    if final_path.startswith("\\\\?\\"):
+        return final_path[4:]
+    return final_path
+
+
+def _initial_authorization_file_state(value: os.stat_result) -> tuple[int, ...]:
+    return (
+        int(value.st_dev),
+        int(value.st_ino),
+        int(value.st_size),
+        int(value.st_mtime_ns),
+    )
+
+
+def _normalized_native_path(value: str | os.PathLike[str]) -> str:
+    return os.path.normcase(os.path.abspath(os.path.normpath(os.fspath(value))))
+
+
+def _read_stable_initial_authorization_snapshot(
+    source_path: Path,
+    authorized_root: str,
+    errors: list[str],
+) -> bytes | None:
+    try:
+        source_stat = source_path.lstat()
+        parent_stats = [parent.lstat() for parent in source_path.parents[:-1]]
+    except (OSError, ValueError):
+        _error(errors, "initial binding authorization source event is unavailable")
+        return None
+    reparse_flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    if (
+        not source_path.is_absolute()
+        or not stat.S_ISREG(source_stat.st_mode)
+        or source_stat.st_ino <= 0
+        or getattr(source_stat, "st_file_attributes", 0) & reparse_flag
+        or any(
+            getattr(parent_stat, "st_file_attributes", 0) & reparse_flag
+            for parent_stat in parent_stats
+        )
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return None
+    stream = _open_initial_authorization_source(source_path)
+    if stream is None:
+        _error(errors, "initial binding authorization source event is unavailable")
+        return None
+    locked: _WindowsOverlapped | None = None
+    opened_size = 0
+    try:
+        try:
+            opened_stat = os.fstat(stream.fileno())
+            final_path = _initial_authorization_opened_final_path(stream)
+            normalized_source = _normalized_native_path(source_path)
+            normalized_root = _normalized_native_path(authorized_root)
+            normalized_final = (
+                _normalized_native_path(final_path) if final_path is not None else None
+            )
+            inside_root = (
+                normalized_final is not None
+                and os.path.commonpath([normalized_final, normalized_root])
+                == normalized_root
+            )
+        except (OSError, ValueError):
+            _error(errors, "initial binding authorization source event is unavailable")
+            return None
+        if (
+            not stat.S_ISREG(opened_stat.st_mode)
+            or opened_stat.st_ino <= 0
+            or getattr(opened_stat, "st_file_attributes", 0) & reparse_flag
+            or opened_stat.st_size <= 0
+            or opened_stat.st_size > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
+            or _initial_authorization_file_state(source_stat)
+            != _initial_authorization_file_state(opened_stat)
+            or normalized_final != normalized_source
+            or not inside_root
+        ):
+            _error(errors, "initial binding authorization source event is invalid")
+            return None
+        opened_size = opened_stat.st_size
+        locked = _lock_initial_authorization_source(stream, opened_size)
+        if locked is None:
+            _error(errors, "initial binding authorization source event is unavailable")
+            return None
+        try:
+            snapshot = stream.read(opened_stat.st_size + 1)
+            final_stat = os.fstat(stream.fileno())
+        except OSError:
+            _error(errors, "initial binding authorization source event is unavailable")
+            return None
+        if (
+            len(snapshot) != opened_stat.st_size
+            or _initial_authorization_file_state(opened_stat)
+            != _initial_authorization_file_state(final_stat)
+        ):
+            _error(errors, "initial binding authorization source event changed during validation")
+            return None
+        return snapshot
+    finally:
+        if locked is not None:
+            _unlock_initial_authorization_source(stream, opened_size, locked)
+        stream.close()
+
+
+def _initial_authorization_snapshot_valid(
+    private_evidence: Mapping[str, Any],
+    snapshot: bytes,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> bool:
+    source_identity = private_evidence.get("sourceEventIdentity")
+    source_timestamp = private_evidence.get("sourceEventTimestamp")
+    surface_identity = private_evidence.get("surfaceIdentity")
+    if (
+        not isinstance(source_identity, str)
+        or not isinstance(source_timestamp, str)
+        or not isinstance(surface_identity, str)
+        or not isinstance(snapshot, bytes)
+        or not snapshot
+        or len(snapshot) > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return False
+    try:
+        source_instant = datetime.fromisoformat(
+            source_timestamp.replace("Z", "+00:00")
+        ).astimezone(timezone.utc)
+    except ValueError:
+        _error(errors, "initial binding authorization source event is invalid")
+        return False
+    activation_found = False
+    record_count = 0
+    cursor = 0
+    stream = BytesIO(snapshot)
+    while cursor < len(snapshot):
+        line = stream.readline(MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES + 1)
+        if not line:
+            break
+        cursor += len(line)
+        record_count += 1
+        if (
+            record_count > MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS
+            or len(line) > MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES
+        ):
+            _error(
+                errors,
+                "initial binding authorization source event exceeds its finite bounds",
+            )
+            return False
+        try:
+            event = json.loads(
+                line,
+                object_pairs_hook=_initial_authorization_json_object,
+                parse_constant=lambda constant: (_ for _ in ()).throw(
+                    ValueError(f"non-finite source event value: {constant}")
+                ),
+            )
+        except (
+            UnicodeError,
+            ValueError,
+            TypeError,
+            RecursionError,
+            json.JSONDecodeError,
+        ):
+            _error(errors, "initial binding authorization source event is invalid")
+            return False
+        if not isinstance(event, dict) or event.get("type") != "event_msg":
+            continue
+        payload = event.get("payload")
+        if not isinstance(payload, dict) or payload.get("type") != "user_message":
+            continue
+        event_identity = payload.get("client_id")
+        event_message = payload.get("message")
+        event_timestamp = event.get("timestamp")
+        if not isinstance(event_identity, str) or not isinstance(event_message, str):
+            _error(errors, "initial binding authorization source event is invalid")
+            return False
+        normalized_message = event_message.rstrip("\r\n")
+        if event_identity == source_identity:
+            try:
+                event_instant = (
+                    datetime.fromisoformat(
+                        event_timestamp.replace("Z", "+00:00")
+                    ).astimezone(timezone.utc)
+                    if isinstance(event_timestamp, str)
+                    and RFC3339.fullmatch(event_timestamp) is not None
+                    else None
+                )
+            except ValueError:
+                event_instant = None
+            if (
+                activation_found
+                or event_instant != source_instant
+                or normalized_message != "授权！"
+            ):
+                _error(errors, "initial binding activation source event is invalid")
+                return False
+            activation_found = True
+            continue
+        if not activation_found:
+            continue
+        message_sha256 = hashlib.sha256(
+            normalized_message.encode("utf-8")
+        ).hexdigest()
+        if not hmac.compare_digest(
+            message_sha256,
+            EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256,
+        ):
+            _error(
+                errors,
+                "natural demand appeared before exact first-freeze authorization",
+            )
+            return False
+        try:
+            authorization_instant = (
+                datetime.fromisoformat(
+                    event_timestamp.replace("Z", "+00:00")
+                ).astimezone(timezone.utc)
+                if isinstance(event_timestamp, str)
+                and RFC3339.fullmatch(event_timestamp) is not None
+                else None
+            )
+        except ValueError:
+            authorization_instant = None
+        if (
+            re.fullmatch(
+                r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+                event_identity,
+            )
+            is None
+            or authorization_instant is None
+            or authorization_instant < source_instant
+        ):
+            _error(errors, "initial binding authorization source event is invalid")
+            return False
+        canonical_timestamp = authorization_instant.isoformat().replace(
+            "+00:00", "Z"
+        )
+        event_commitment = _initial_authorization_string_hmac(
+            key,
+            INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+            surface_identity,
+            source_identity,
+            event_identity,
+            canonical_timestamp,
+            normalized_message,
+        )
+        window_commitment = _initial_authorization_bytes_hmac(
+            key,
+            INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+            snapshot[:cursor],
+        )
+        if (
+            EXPECTED_INITIAL_AUTHORIZATION_EVENT_COMMITMENT is None
+            or EXPECTED_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT is None
+            or not hmac.compare_digest(
+                event_commitment,
+                EXPECTED_INITIAL_AUTHORIZATION_EVENT_COMMITMENT,
+            )
+            or not hmac.compare_digest(
+                window_commitment,
+                EXPECTED_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT,
+            )
+        ):
+            _error(errors, "initial binding authorization source event is invalid")
+            return False
+        return True
+    _error(
+        errors,
+        "initial frozen normative profile binding authorization source was not independently verified",
+    )
+    return False
+
+
 def _initial_authorization_event_window_valid(
     private_evidence: Mapping[str, Any],
     authorization_document: Mapping[str, Any],
     errors: list[str],
+    *,
+    credential_target_name: str | None = None,
 ) -> bool:
     expected_public = {
         "schema": 1,
@@ -1039,7 +1580,7 @@ def _initial_authorization_event_window_valid(
         "surfaceIdentity": "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
         "activationCursorCommitment": "hmac-sha256:e6038957ab84aea02af9c45ee8e19277e9cf14045634345571ed0b62d866003a",
         "keyIdentity": "cohort-key.public-v1:2d81fdcaa26da32778089bb53198e190",
-        "keyFingerprint": "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3",
+        "keyFingerprint": EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
         "sourceKind": "codex-rollout-user-event-v1",
         "disposition": (
             "authorized-retain-through-v1-accepted-or-stopped-no-later-than-"
@@ -1074,13 +1615,6 @@ def _initial_authorization_event_window_valid(
         _error(errors, "initial binding authorization private source is invalid")
         return False
     try:
-        source_instant = datetime.fromisoformat(
-            source_timestamp.replace("Z", "+00:00")
-        ).astimezone(timezone.utc)
-    except ValueError:
-        _error(errors, "initial binding authorization private source is invalid")
-        return False
-    try:
         key = bytearray(base64.b64decode(encoded_key, validate=True))
     except (ValueError, TypeError):
         _error(errors, "initial binding authorization private source is invalid")
@@ -1090,7 +1624,7 @@ def _initial_authorization_event_window_valid(
             _error(errors, "initial binding authorization private source is invalid")
             return False
         fingerprint = "sha256:" + hashlib.sha256(key).hexdigest()
-        message = (
+        activation_message = (
             EXPECTED_HMAC_DOMAIN
             + "\0"
             + expected_public["surfaceIdentity"]
@@ -1098,7 +1632,7 @@ def _initial_authorization_event_window_valid(
             + source_identity
         ).encode("utf-8")
         commitment = "hmac-sha256:" + hmac.new(
-            key, message, hashlib.sha256
+            key, activation_message, hashlib.sha256
         ).hexdigest()
         if not hmac.compare_digest(
             fingerprint, expected_public["keyFingerprint"]
@@ -1111,140 +1645,132 @@ def _initial_authorization_event_window_valid(
                 "initial binding authorization private source does not match the frozen activation",
             )
             return False
+        if credential_target_name is None or not _initial_authorization_credential_target_valid(
+            credential_target_name,
+            key,
+            errors,
+        ):
+            return False
+        locator_parts = _initial_authorization_source_locator_parts(
+            source_locator,
+            key,
+            errors,
+        )
+        if locator_parts is None:
+            return False
+        source_path_text, authorized_root = locator_parts
+        snapshot = _read_stable_initial_authorization_snapshot(
+            Path(source_path_text),
+            authorized_root,
+            errors,
+        )
+        if snapshot is None:
+            return False
+        return _initial_authorization_snapshot_valid(
+            private_evidence,
+            snapshot,
+            key,
+            errors,
+        )
     finally:
         key[:] = b"\0" * len(key)
-    try:
-        source_path = Path(source_locator)
-        source_stat = source_path.lstat()
-        parent_stats = [parent.lstat() for parent in source_path.parents[:-1]]
-    except (OSError, ValueError):
-        _error(errors, "initial binding authorization source event is unavailable")
+
+
+def _delete_initial_authorization_private_resource(
+    resource: tuple[dict[str, Any], str],
+    trigger: str,
+    errors: list[str],
+) -> bool:
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(errors, "initial binding authorization private evidence trigger is invalid")
         return False
-    reparse_flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
-    if (
-        not source_path.is_absolute()
-        or not source_path.name.startswith("rollout-")
-        or source_path.suffix.casefold() != ".jsonl"
-        or not stat.S_ISREG(source_stat.st_mode)
-        or getattr(source_stat, "st_file_attributes", 0) & reparse_flag
-        or any(
-            getattr(parent_stat, "st_file_attributes", 0) & reparse_flag
-            for parent_stat in parent_stats
-        )
-    ):
-        _error(errors, "initial binding authorization source event is invalid")
-        return False
-    stream = _open_initial_authorization_source(source_path)
-    if stream is None:
-        _error(errors, "initial binding authorization source event is unavailable")
+    private_evidence, target_name = resource
+    encoded_key = private_evidence.get("keyBase64")
+    if not isinstance(encoded_key, str):
+        _error(errors, "initial binding authorization private source is invalid")
         return False
     try:
-        opened_stat = os.fstat(stream.fileno())
-    except OSError:
-        stream.close()
-        _error(errors, "initial binding authorization source event is unavailable")
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, "initial binding authorization private source is invalid")
         return False
-    if (
-        not stat.S_ISREG(opened_stat.st_mode)
-        or getattr(opened_stat, "st_file_attributes", 0) & reparse_flag
-        or opened_stat.st_size <= 0
-        or opened_stat.st_size > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
-    ):
-        stream.close()
-        _error(errors, "initial binding authorization source event is invalid")
-        return False
-    activation_found = False
-    record_count = 0
-    remaining = opened_stat.st_size
     try:
-        while remaining > 0:
-            line = stream.readline(
-                min(MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES + 1, remaining)
-            )
-            if not line:
-                break
-            remaining -= len(line)
-            record_count += 1
-            if (
-                record_count > MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS
-                or len(line) > MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES
-            ):
-                _error(
-                    errors,
-                    "initial binding authorization source event exceeds its finite bounds",
-                )
-                return False
-            try:
-                event = json.loads(
-                    line,
-                    object_pairs_hook=_initial_authorization_json_object,
-                    parse_constant=lambda constant: (_ for _ in ()).throw(
-                        ValueError(f"non-finite source event value: {constant}")
-                    ),
-                )
-            except (
-                UnicodeError,
-                ValueError,
-                TypeError,
-                RecursionError,
-                json.JSONDecodeError,
-            ):
-                _error(errors, "initial binding authorization source event is invalid")
-                return False
-            if not isinstance(event, dict) or event.get("type") != "event_msg":
-                continue
-            payload = event.get("payload")
-            if not isinstance(payload, dict) or payload.get("type") != "user_message":
-                continue
-            event_identity = payload.get("client_id")
-            event_message = payload.get("message")
-            if not isinstance(event_identity, str) or not isinstance(event_message, str):
-                _error(errors, "initial binding authorization source event is invalid")
-                return False
-            normalized_message = event_message.rstrip("\r\n")
-            if event_identity == source_identity:
-                event_timestamp = event.get("timestamp")
-                try:
-                    event_instant = (
-                        datetime.fromisoformat(
-                            event_timestamp.replace("Z", "+00:00")
-                        ).astimezone(timezone.utc)
-                        if isinstance(event_timestamp, str)
-                        and RFC3339.fullmatch(event_timestamp) is not None
-                        else None
-                    )
-                except ValueError:
-                    event_instant = None
-                if (
-                    activation_found
-                    or event_instant != source_instant
-                    or normalized_message != "授权！"
-                ):
-                    _error(errors, "initial binding activation source event is invalid")
-                    return False
-                activation_found = True
-                continue
-            if activation_found:
-                message_sha256 = hashlib.sha256(
-                    normalized_message.encode("utf-8")
-                ).hexdigest()
-                if not hmac.compare_digest(
-                    message_sha256,
-                    EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256,
-                ):
-                    _error(
-                        errors,
-                        "natural demand appeared before exact first-freeze authorization",
-                    )
-                    return False
-                return True
+        if len(key) != 32 or not hmac.compare_digest(
+            "sha256:" + hashlib.sha256(key).hexdigest(),
+            EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+        ) or not _initial_authorization_credential_target_valid(
+            target_name,
+            key,
+            errors,
+        ):
+            _error(errors, "initial binding authorization private source is invalid")
+            return False
     finally:
-        stream.close()
+        key[:] = b"\0" * len(key)
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        _error(errors, "initial binding authorization private source is unavailable")
+        return False
+    try:
+        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
+        delete_credential = advapi32.CredDeleteW
+        delete_credential.argtypes = [ctypes.c_wchar_p, ctypes.c_uint32, ctypes.c_uint32]
+        delete_credential.restype = ctypes.c_int
+        read_credential = advapi32.CredReadW
+        read_credential.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.POINTER(ctypes.c_void_p),
+        ]
+        read_credential.restype = ctypes.c_int
+        free_credential = advapi32.CredFree
+        free_credential.argtypes = [ctypes.c_void_p]
+        free_credential.restype = None
+        ctypes.set_last_error(0)
+        deleted = delete_credential(target_name, 1, 0)
+        delete_error = ctypes.get_last_error()
+        if not deleted and delete_error != 1168:
+            _error(errors, "initial binding authorization private evidence cleanup failed")
+            return False
+        credential = ctypes.c_void_p()
+        ctypes.set_last_error(0)
+        remains = read_credential(target_name, 1, 0, ctypes.byref(credential))
+        read_error = ctypes.get_last_error()
+        if remains:
+            if credential.value:
+                free_credential(credential)
+            _error(errors, "initial binding authorization private evidence cleanup failed")
+            return False
+        if credential.value:
+            free_credential(credential)
+        if read_error != 1168:
+            _error(errors, "initial binding authorization private evidence cleanup failed")
+            return False
+    except (OSError, ValueError, TypeError):
+        _error(errors, "initial binding authorization private evidence cleanup failed")
+        return False
     _error(
         errors,
-        "initial frozen normative profile binding authorization source was not independently verified",
+        f"initial binding authorization private evidence destruction verified after {trigger}",
     )
-    return False
+    return True
+
+
+def _revoke_initial_authorization_private_evidence(
+    trigger: str,
+    errors: list[str],
+) -> bool:
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(errors, "initial binding authorization private evidence trigger is invalid")
+        return False
+    resource = _read_initial_authorization_private_evidence(errors)
+    if resource is None:
+        return False
+    return _delete_initial_authorization_private_resource(resource, trigger, errors)
+
+
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 def _validate_initial_binding_authorization(
@@ -1262,21 +1788,38 @@ def _validate_initial_binding_authorization(
             "initial binding authorization document does not match the frozen binding",
         )
         return False
-    if datetime.now(timezone.utc) > INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+    if _utc_now() > INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _revoke_initial_authorization_private_evidence("expiry", errors)
         _error(
             errors,
             "initial binding authorization private evidence retention has expired",
         )
         return False
-    private_evidence = _read_initial_authorization_private_evidence(errors)
-    if private_evidence is None:
+    resource = _read_initial_authorization_private_evidence(errors)
+    if resource is None:
         return False
-    _initial_authorization_event_window_valid(
+    private_evidence, target_name = resource
+    valid = _initial_authorization_event_window_valid(
         private_evidence,
         authorization_document,
         errors,
+        credential_target_name=target_name,
     )
-    return len(errors) == before
+    if not valid or len(errors) != before:
+        _delete_initial_authorization_private_resource(
+            resource,
+            "validation-failure",
+            errors,
+        )
+        return False
+    if _utc_now() > INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _delete_initial_authorization_private_resource(resource, "expiry", errors)
+        _error(
+            errors,
+            "initial binding authorization private evidence retention has expired",
+        )
+        return False
+    return True
 
 
 

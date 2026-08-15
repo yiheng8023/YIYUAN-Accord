@@ -156,7 +156,9 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 
 当前 program 已把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`、首冻 revision
 `d19d2fb` 和规范 binding digest `ee4ba7a`。具名人类已在绑定的 Codex 来源中授权该精确
-绑定，代码所有的 Windows 来源验证器会验证私密激活 HMAC 与完整用户事件窗口。尚无任何
+绑定，代码所有的 Windows 来源验证器会核验精确受保护资源、系统本地来源根、源原生授权
+事件和完整加锁用户事件前缀的隐私安全承诺；路径替换、并发改写与跨过硬到期边界都会失败
+关闭，撤销、到期、停止或验证失败路线会删除并复核同一精确资源，且不暴露私密身份。尚无任何
 合格自然任务完成注册，因此 O1-O5 仍为 0/5，program 仍是 `in-progress`。候选文件内部的
 `pre-freeze candidate` 是冻结字节的一部分；当前绑定状态只以 `product/program.json` 为准。
 托管 runner 不持有获授权的私密来源：CI 只接受精确的“private source unavailable”诊断并
