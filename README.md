@@ -221,6 +221,20 @@ Destroying the key requires an exact receipt and revokes live verifiability; it
 cannot preserve acceptance. Commit dates and self-reported timestamps cannot
 supply chronology proof.
 
+The current program has now frozen candidate.5 and its cohort protocol at
+artifact revision `502c4ff`, first-freeze revision `d19d2fb`, and canonical
+binding digest `ee4ba7a`. The named human authorized that exact binding in the
+bound Codex source, and the code-owned Windows source validator verifies the
+private activation HMAC and complete user-event window. No eligible natural
+task has yet been registered, so O1-O5 remain 0/5 and the program remains
+`in-progress`. The candidate file's internal `pre-freeze candidate` label is
+part of the frozen bytes; `product/program.json`, not that historical label,
+is the current binding state. Hosted runners do not possess the authorized
+private source: CI accepts only the exact unavailable-source diagnostic while
+testing the remaining contract, and does not claim live authorization or an
+outcome. The canonical live verifier remains strict on the authorized Windows
+source host.
+
 Terminal publication is deliberately two-stage. The immutable candidate tree
 predeclares a semantic-version tag, the fixed public HTTPS remote and the exact
 O5 evidence-set digest. A named human authorizes that candidate and release;
@@ -231,8 +245,10 @@ and the identical public tag object and peeled commit. Until that post-grant
 verification succeeds, O5 remains false and the project remains in progress.
 The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
-That validator registry is intentionally empty until a real authorization
-carrier and trust boundary are selected for the final candidate.
+The terminal-release validator entry remains intentionally absent until a real
+authorization carrier and trust boundary are selected for the final candidate;
+the registry currently contains only the bounded initial-freeze source
+validator described above.
 
 ## What v1.0 must prove
 

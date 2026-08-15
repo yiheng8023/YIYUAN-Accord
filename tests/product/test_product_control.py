@@ -104,6 +104,15 @@ class ProductControlTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def hosted_private_authorization_source_is_unavailable(self, report: dict) -> bool:
+        return (
+            os.environ.get("GITHUB_ACTIONS") == "true"
+            and report.get("valid") is False
+            and report.get("errors")
+            == ["initial binding authorization private source is unavailable"]
+            and report.get("criterionStates", {}).get("G3") is False
+        )
+
     def reset_program_fixture(self) -> None:
         """Keep generic mutation tests independent of the live causal increment."""
 
@@ -113,6 +122,9 @@ class ProductControlTests(unittest.TestCase):
         program["status"] = "ready"
         program["activeIncrementId"] = None
         program["increments"] = []
+        program["normativeProfileBinding"] = deepcopy(
+            control.UNFROZEN_NORMATIVE_PROFILE_BINDING
+        )
         self.write_json("product/program.json", program)
         registration = self.root / "product/evidence/fixture-registration.json"
         if registration.exists():
@@ -906,13 +918,19 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertTrue(report["valid"], report["errors"])
+        hosted_source_unavailable = (
+            self.hosted_private_authorization_source_is_unavailable(report)
+        )
+        self.assertTrue(report["valid"] or hosted_source_unavailable, report["errors"])
         self.assertEqual(report["release"], "v1.0")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
+        self.assertEqual(
+            report["guardrails"],
+            {"passed": 3 if hosted_source_unavailable else 4, "total": 4},
+        )
         self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
         constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
         v02 = constitution["historicalMilestones"][-1]
@@ -920,10 +938,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
-    def test_v1_profile_and_cohort_protocol_candidates_are_exact_and_unbound(self) -> None:
+    def test_v1_profile_and_cohort_protocol_are_exact_and_source_authorized(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
-        self.assertEqual(program["normativeProfileBinding"]["state"], "unfrozen")
-        self.assertIsNone(program["normativeProfileBinding"]["cohortActivation"])
+        binding = program["normativeProfileBinding"]
+        self.assertEqual(binding["state"], "frozen")
+        self.assertEqual(
+            binding["cohortActivation"]["surfaceIdentity"],
+            "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
+        )
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
             encoding="utf-8"
         )
@@ -950,10 +972,21 @@ class ProductControlTests(unittest.TestCase):
             control.EXPECTED_V1_PROFILE_ARTIFACT_REVISION,
             "502c4ff7edfc6307ea5469bcb81089e13612a24a",
         )
-        self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_REVISION)
-        self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_SHA256)
-        self.assertIsNone(
-            control.EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        self.assertEqual(
+            control.EXPECTED_V1_INITIAL_BINDING_REVISION,
+            "d19d2fb9da0883a44eec887eca4072e70a93f8d7",
+        )
+        self.assertEqual(
+            control.EXPECTED_V1_INITIAL_BINDING_SHA256,
+            "ee4ba7a16f15bba78efbefce1022ac6180d1c7e40e800011348df5ae21ab0eb7",
+        )
+        self.assertEqual(
+            control.EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            control.INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+        )
+        self.assertIn(
+            control.INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS,
         )
         for heading in (
             "## Agent method",
@@ -1274,9 +1307,16 @@ class ProductControlTests(unittest.TestCase):
 
     def test_public_cli_reports_the_same_contract(self) -> None:
         completed = self.run_cli(root=ROOT)
-        self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
+        hosted_source_unavailable = (
+            self.hosted_private_authorization_source_is_unavailable(report)
+        )
+        self.assertEqual(
+            completed.returncode,
+            1 if hosted_source_unavailable else 0,
+            completed.stderr,
+        )
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
@@ -1285,7 +1325,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertTrue(report["valid"])
+        self.assertTrue(report["valid"] or hosted_source_unavailable, report["errors"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
         token = control._EVIDENCE_GIT_CACHE.set({})
@@ -4422,6 +4462,47 @@ class ProductControlTests(unittest.TestCase):
             "increment increment.fixture-current requires exact privacy-safe "
             "private resource dispositions",
             report["errors"],
+        )
+
+    def test_initial_binding_private_source_rejects_boolean_schema_alias(self) -> None:
+        private_evidence = {
+            "schema": True,
+            "kind": "agent-autonomy-harness-v1-provisional-cohort-private-evidence",
+            "surfaceIdentity": (
+                "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187"
+            ),
+            "activationCursorCommitment": (
+                "hmac-sha256:e6038957ab84aea02af9c45ee8e19277"
+                "e9cf14045634345571ed0b62d866003a"
+            ),
+            "keyIdentity": "cohort-key.public-v1:2d81fdcaa26da32778089bb53198e190",
+            "keyFingerprint": (
+                "sha256:6d0edc4c500afdb7cc3a3e35a5805b21"
+                "87feb8fb7958c90f0a21e4101721a0e3"
+            ),
+            "sourceKind": "codex-rollout-user-event-v1",
+            "disposition": (
+                "authorized-retain-through-v1-accepted-or-stopped-no-later-than-"
+                "2026-12-31T23:59:59+08:00-delete-and-revoke-on-withdrawal-"
+                "expiry-stop-or-validation-failure"
+            ),
+        }
+        errors: list[str] = []
+
+        self.assertFalse(
+            control._initial_authorization_event_window_valid(
+                private_evidence,
+                {
+                    "kind": "initial-normative-profile-binding-authorization",
+                    "revision": control.EXPECTED_V1_INITIAL_BINDING_REVISION,
+                    "bindingSha256": control.EXPECTED_V1_INITIAL_BINDING_SHA256,
+                },
+                errors,
+            )
+        )
+        self.assertIn(
+            "initial binding authorization private source does not match the frozen activation",
+            errors,
         )
 
     def test_bootstrap_authority_set_cannot_self_disable(self) -> None:

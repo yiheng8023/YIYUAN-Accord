@@ -64,18 +64,20 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current tree contains an unbound
+The current tree binds the exact bytes of the
 [v1 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
-[prospective cohort protocol candidate](PROSPECTIVE-COHORT-PROTOCOL-V1.json).
-They carry zero task or outcome evidence and remain subordinate conformance
-operands rather than product authority. The future v1 measurement surface
-first freezes their exact reviewed bytes and binds the exact initial
-source-native ordered enrollment surface, activation cursor, and cohort key
-identity and fingerprint. That commit is only a provisional boundary: before
-eligible demand, a named human authorizes its exact revision, complete binding
-digest, source surface, private-evidence boundary, and cleanup disposition in a
-source-native event. The next commit pins those values and a code-owned source
-validator; any demand between freeze and authorization stops the cohort. The protocol specifies
+[prospective cohort protocol candidate](PROSPECTIVE-COHORT-PROTOCOL-V1.json)
+through `product/program.json`. The immutable artifact revision is `502c4ff`,
+the first frozen binding revision is `d19d2fb`, and its canonical digest begins
+`ee4ba7a`. These subordinate conformance operands still carry zero task or
+outcome evidence and do not become product authority. A named human authorized
+that exact binding in the frozen Codex source before any eligible demand; the
+next code revision pins the revision, digest, private-evidence disposition and
+one code-owned Windows source validator. That validator verifies the activation
+HMAC and complete user-event window and rejects any demand between freeze and
+authorization. The private source is intentionally absent from hosted runners,
+which can corroborate only the non-private contract and the exact unavailable-
+source boundary. The protocol specifies
 eligibility, random public task identity with fixed private keyed source-message binding, strata, first-eligible enrollment,
 the earliest-prefix stop rule, missing-data handling, distinct natural-demand
 and measurement-event chronology, and claim limits without pre-populating

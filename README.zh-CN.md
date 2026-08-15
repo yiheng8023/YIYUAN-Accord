@@ -154,6 +154,15 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 到期、撤销与清理处置留存。销毁密钥必须留下精确凭据，并会撤销实时可复验状态，不能在
 销毁后继续保留验收声明；提交日期和自报时间戳不能充当时序证明。
 
+当前 program 已把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`、首冻 revision
+`d19d2fb` 和规范 binding digest `ee4ba7a`。具名人类已在绑定的 Codex 来源中授权该精确
+绑定，代码所有的 Windows 来源验证器会验证私密激活 HMAC 与完整用户事件窗口。尚无任何
+合格自然任务完成注册，因此 O1-O5 仍为 0/5，program 仍是 `in-progress`。候选文件内部的
+`pre-freeze candidate` 是冻结字节的一部分；当前绑定状态只以 `product/program.json` 为准。
+托管 runner 不持有获授权的私密来源：CI 只接受精确的“private source unavailable”诊断并
+验证其余契约，不能据此声称实时授权或结果成立；获授权 Windows 来源宿主上的 canonical
+verifier 仍严格要求私密来源真实通过。
+
 终态发布采用明确的两阶段顺序。不可变候选树先预声明语义版本 tag、固定公开 HTTPS
 remote 和精确 O5 证据集摘要；具名人类只授权这个候选与发布动作；Agent 随后创建包含
 JSON 授权载荷的注释 tag，候选树不再变化。只有候选 checkout 干净、无 ignored 或
@@ -161,7 +170,8 @@ untracked 残留、本地注释 tag 指向 `HEAD`，且公开 tag object 与 pee
 一致时，验证器才允许 `completionState=accepted`。在授权后验证完成前，O5 仍为 false，
 整个项目仍是进行中。
 tag 中自报的人名和时间戳永远不能单独通过；必须由代码所有的验证器独立验证所绑定的
-授权来源。最终候选的真实授权载体与信任边界确定前，该验证器注册表故意保持为空。
+授权来源。最终候选的真实授权载体与信任边界确定前，终态发布验证器条目仍故意保持为空；
+当前注册表只有上述有界首冻来源验证器。
 
 ## v1.0 必须证明什么
 

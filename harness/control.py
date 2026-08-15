@@ -8,11 +8,13 @@ as current product authority.
 
 from __future__ import annotations
 
+import base64
 from contextvars import ContextVar
 import ctypes
 from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
+import hmac
 import json
 import math
 import os
@@ -312,14 +314,46 @@ EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = (
     "502c4ff7edfc6307ea5469bcb81089e13612a24a"
 )
 # The first frozen binding necessarily exists one commit before code can pin
-# its own revision and digest. A frozen program remains invalid until the next
-# commit sets both anchors, before any task registration is eligible.
-EXPECTED_V1_INITIAL_BINDING_REVISION: str | None = None
-EXPECTED_V1_INITIAL_BINDING_SHA256: str | None = None
+# its own revision and digest. These anchors make that first freeze immutable.
+EXPECTED_V1_INITIAL_BINDING_REVISION: str | None = (
+    "d19d2fb9da0883a44eec887eca4072e70a93f8d7"
+)
+EXPECTED_V1_INITIAL_BINDING_SHA256: str | None = (
+    "ee4ba7a16f15bba78efbefce1022ac6180d1c7e40e800011348df5ae21ab0eb7"
+)
 # The first frozen commit is not effective cohort activation until a named
 # human independently authorizes its exact revision and canonical binding
 # digest through a source that this code-owned validator can verify.
-EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID = (
+    "codex-windows-source-native-first-freeze-authorization-v1"
+)
+EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = (
+    INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+)
+INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
+    2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
+)
+EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256 = (
+    "9cb3002787034afb2df433256481d4a2bcaf907a0607f2ee4ccc497e84e09b58"
+)
+INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
+    "schema",
+    "kind",
+    "surfaceIdentity",
+    "activationCursorCommitment",
+    "keyIdentity",
+    "keyFingerprint",
+    "keyBase64",
+    "sourceKind",
+    "sourceRollout",
+    "sourceEventIdentity",
+    "sourceEventTimestamp",
+    "disposition",
+}
+MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES = 16_384
+MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES = 256 * 1_048_576
+MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES = 8 * 1_048_576
+MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS = 100_000
 COHORT_ACTIVATION_FIELDS = {
     "surfaceIdentity",
     "activationCursorCommitment",
@@ -561,8 +595,9 @@ CLEANUP_BOUNDARY_FIELDS = {
     "privateResourceDispositions",
 }
 ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
-    "v1-provisional-cohort-private-evidence:windows-user-protected;"
-    "retain-only-through-exact-authorization-or-delete-and-revoke"
+    "v1-cohort-private-evidence:windows-user-protected;"
+    "retain-through-accepted-or-stopped-no-later-than-2026-12-31T23:59:59+08:00;"
+    "delete-and-revoke-on-withdrawal-expiry-stop-or-validation-failure"
 }
 PROGRAM_STATES = {"active", "ready", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
@@ -843,11 +878,418 @@ HumanAuthorizationValidator = Callable[
 ]
 
 
+class _WindowsCredentialFileTime(ctypes.Structure):
+    _fields_ = [("low", ctypes.c_uint32), ("high", ctypes.c_uint32)]
+
+
+class _WindowsCredential(ctypes.Structure):
+    _fields_ = [
+        ("flags", ctypes.c_uint32),
+        ("credential_type", ctypes.c_uint32),
+        ("target_name", ctypes.c_void_p),
+        ("comment", ctypes.c_void_p),
+        ("last_written", _WindowsCredentialFileTime),
+        ("credential_blob_size", ctypes.c_uint32),
+        ("credential_blob", ctypes.c_void_p),
+        ("persist", ctypes.c_uint32),
+        ("attribute_count", ctypes.c_uint32),
+        ("attributes", ctypes.c_void_p),
+        ("target_alias", ctypes.c_void_p),
+        ("user_name", ctypes.c_void_p),
+    ]
+
+
+def _initial_authorization_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate private evidence key")
+        value[key] = item
+    return value
+
+
+def _read_initial_authorization_private_evidence(
+    errors: list[str],
+) -> dict[str, Any] | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        _error(errors, "initial binding authorization private source is unavailable")
+        return None
+    try:
+        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
+        enumerate_credentials = advapi32.CredEnumerateW
+        enumerate_credentials.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+            ctypes.POINTER(ctypes.c_uint32),
+            ctypes.POINTER(ctypes.c_void_p),
+        ]
+        enumerate_credentials.restype = ctypes.c_int
+        free_credentials = advapi32.CredFree
+        free_credentials.argtypes = [ctypes.c_void_p]
+        free_credentials.restype = None
+        count = ctypes.c_uint32()
+        credentials = ctypes.c_void_p()
+        available = enumerate_credentials(
+            "AgentAutonomyHarness/v1/*",
+            0,
+            ctypes.byref(count),
+            ctypes.byref(credentials),
+        )
+        if not available or not credentials.value:
+            if credentials.value:
+                free_credentials(credentials)
+            _error(errors, "initial binding authorization private source is unavailable")
+            return None
+        try:
+            if count.value != 1:
+                _error(
+                    errors,
+                    "initial binding authorization private source is unavailable",
+                )
+                return None
+            credential_array = ctypes.cast(
+                credentials,
+                ctypes.POINTER(ctypes.POINTER(_WindowsCredential)),
+            )
+            credential = credential_array[0].contents
+            if (
+                credential.credential_type != 1
+                or credential.persist != 2
+                or credential.credential_blob_size == 0
+                or credential.credential_blob_size
+                > MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES
+                or not credential.credential_blob
+            ):
+                _error(errors, "initial binding authorization private source is invalid")
+                return None
+            raw = ctypes.string_at(
+                credential.credential_blob,
+                credential.credential_blob_size,
+            )
+        finally:
+            free_credentials(credentials)
+        value = json.loads(
+            raw,
+            object_pairs_hook=_initial_authorization_json_object,
+            parse_constant=lambda constant: (_ for _ in ()).throw(
+                ValueError(f"non-finite private evidence value: {constant}")
+            ),
+        )
+    except (OSError, ValueError, TypeError, RecursionError, json.JSONDecodeError):
+        _error(errors, "initial binding authorization private source is invalid")
+        return None
+    if not isinstance(value, dict) or set(value) != INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS:
+        _error(errors, "initial binding authorization private source is invalid")
+        return None
+    return value
+
+
+def _open_initial_authorization_source(path: Path):
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return None
+    try:
+        import msvcrt
+
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        create_file = kernel32.CreateFileW
+        create_file.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_void_p,
+        ]
+        create_file.restype = ctypes.c_void_p
+        handle = create_file(
+            str(path),
+            0x80000000,
+            0x00000001 | 0x00000002 | 0x00000004,
+            None,
+            3,
+            0x00000080,
+            None,
+        )
+        invalid_handle = ctypes.c_void_p(-1).value
+        if not handle or handle == invalid_handle:
+            return None
+        try:
+            descriptor = msvcrt.open_osfhandle(handle, os.O_RDONLY)
+        except OSError:
+            kernel32.CloseHandle(ctypes.c_void_p(handle))
+            return None
+        try:
+            return os.fdopen(descriptor, "rb", closefd=True)
+        except (OSError, ValueError):
+            os.close(descriptor)
+            return None
+    except (OSError, ValueError):
+        return None
+
+
+def _initial_authorization_event_window_valid(
+    private_evidence: Mapping[str, Any],
+    authorization_document: Mapping[str, Any],
+    errors: list[str],
+) -> bool:
+    expected_public = {
+        "schema": 1,
+        "kind": "agent-autonomy-harness-v1-provisional-cohort-private-evidence",
+        "surfaceIdentity": "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
+        "activationCursorCommitment": "hmac-sha256:e6038957ab84aea02af9c45ee8e19277e9cf14045634345571ed0b62d866003a",
+        "keyIdentity": "cohort-key.public-v1:2d81fdcaa26da32778089bb53198e190",
+        "keyFingerprint": "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3",
+        "sourceKind": "codex-rollout-user-event-v1",
+        "disposition": (
+            "authorized-retain-through-v1-accepted-or-stopped-no-later-than-"
+            "2026-12-31T23:59:59+08:00-delete-and-revoke-on-withdrawal-expiry-"
+            "stop-or-validation-failure"
+        ),
+    }
+    if type(private_evidence.get("schema")) is not int or any(
+        private_evidence.get(key) != item for key, item in expected_public.items()
+    ):
+        _error(
+            errors,
+            "initial binding authorization private source does not match the frozen activation",
+        )
+        return False
+    source_identity = private_evidence.get("sourceEventIdentity")
+    source_timestamp = private_evidence.get("sourceEventTimestamp")
+    source_locator = private_evidence.get("sourceRollout")
+    encoded_key = private_evidence.get("keyBase64")
+    if (
+        not isinstance(source_identity, str)
+        or re.fullmatch(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            source_identity,
+        )
+        is None
+        or not isinstance(source_timestamp, str)
+        or RFC3339.fullmatch(source_timestamp) is None
+        or not isinstance(source_locator, str)
+        or not isinstance(encoded_key, str)
+    ):
+        _error(errors, "initial binding authorization private source is invalid")
+        return False
+    try:
+        source_instant = datetime.fromisoformat(
+            source_timestamp.replace("Z", "+00:00")
+        ).astimezone(timezone.utc)
+    except ValueError:
+        _error(errors, "initial binding authorization private source is invalid")
+        return False
+    try:
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, "initial binding authorization private source is invalid")
+        return False
+    try:
+        if len(key) != 32:
+            _error(errors, "initial binding authorization private source is invalid")
+            return False
+        fingerprint = "sha256:" + hashlib.sha256(key).hexdigest()
+        message = (
+            EXPECTED_HMAC_DOMAIN
+            + "\0"
+            + expected_public["surfaceIdentity"]
+            + "\0"
+            + source_identity
+        ).encode("utf-8")
+        commitment = "hmac-sha256:" + hmac.new(
+            key, message, hashlib.sha256
+        ).hexdigest()
+        if not hmac.compare_digest(
+            fingerprint, expected_public["keyFingerprint"]
+        ) or not hmac.compare_digest(
+            commitment,
+            expected_public["activationCursorCommitment"],
+        ):
+            _error(
+                errors,
+                "initial binding authorization private source does not match the frozen activation",
+            )
+            return False
+    finally:
+        key[:] = b"\0" * len(key)
+    try:
+        source_path = Path(source_locator)
+        source_stat = source_path.lstat()
+        parent_stats = [parent.lstat() for parent in source_path.parents[:-1]]
+    except (OSError, ValueError):
+        _error(errors, "initial binding authorization source event is unavailable")
+        return False
+    reparse_flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    if (
+        not source_path.is_absolute()
+        or not source_path.name.startswith("rollout-")
+        or source_path.suffix.casefold() != ".jsonl"
+        or not stat.S_ISREG(source_stat.st_mode)
+        or getattr(source_stat, "st_file_attributes", 0) & reparse_flag
+        or any(
+            getattr(parent_stat, "st_file_attributes", 0) & reparse_flag
+            for parent_stat in parent_stats
+        )
+    ):
+        _error(errors, "initial binding authorization source event is invalid")
+        return False
+    stream = _open_initial_authorization_source(source_path)
+    if stream is None:
+        _error(errors, "initial binding authorization source event is unavailable")
+        return False
+    try:
+        opened_stat = os.fstat(stream.fileno())
+    except OSError:
+        stream.close()
+        _error(errors, "initial binding authorization source event is unavailable")
+        return False
+    if (
+        not stat.S_ISREG(opened_stat.st_mode)
+        or getattr(opened_stat, "st_file_attributes", 0) & reparse_flag
+        or opened_stat.st_size <= 0
+        or opened_stat.st_size > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
+    ):
+        stream.close()
+        _error(errors, "initial binding authorization source event is invalid")
+        return False
+    activation_found = False
+    record_count = 0
+    remaining = opened_stat.st_size
+    try:
+        while remaining > 0:
+            line = stream.readline(
+                min(MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES + 1, remaining)
+            )
+            if not line:
+                break
+            remaining -= len(line)
+            record_count += 1
+            if (
+                record_count > MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS
+                or len(line) > MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES
+            ):
+                _error(
+                    errors,
+                    "initial binding authorization source event exceeds its finite bounds",
+                )
+                return False
+            try:
+                event = json.loads(
+                    line,
+                    object_pairs_hook=_initial_authorization_json_object,
+                    parse_constant=lambda constant: (_ for _ in ()).throw(
+                        ValueError(f"non-finite source event value: {constant}")
+                    ),
+                )
+            except (
+                UnicodeError,
+                ValueError,
+                TypeError,
+                RecursionError,
+                json.JSONDecodeError,
+            ):
+                _error(errors, "initial binding authorization source event is invalid")
+                return False
+            if not isinstance(event, dict) or event.get("type") != "event_msg":
+                continue
+            payload = event.get("payload")
+            if not isinstance(payload, dict) or payload.get("type") != "user_message":
+                continue
+            event_identity = payload.get("client_id")
+            event_message = payload.get("message")
+            if not isinstance(event_identity, str) or not isinstance(event_message, str):
+                _error(errors, "initial binding authorization source event is invalid")
+                return False
+            normalized_message = event_message.rstrip("\r\n")
+            if event_identity == source_identity:
+                event_timestamp = event.get("timestamp")
+                try:
+                    event_instant = (
+                        datetime.fromisoformat(
+                            event_timestamp.replace("Z", "+00:00")
+                        ).astimezone(timezone.utc)
+                        if isinstance(event_timestamp, str)
+                        and RFC3339.fullmatch(event_timestamp) is not None
+                        else None
+                    )
+                except ValueError:
+                    event_instant = None
+                if (
+                    activation_found
+                    or event_instant != source_instant
+                    or normalized_message != "授权！"
+                ):
+                    _error(errors, "initial binding activation source event is invalid")
+                    return False
+                activation_found = True
+                continue
+            if activation_found:
+                message_sha256 = hashlib.sha256(
+                    normalized_message.encode("utf-8")
+                ).hexdigest()
+                if not hmac.compare_digest(
+                    message_sha256,
+                    EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256,
+                ):
+                    _error(
+                        errors,
+                        "natural demand appeared before exact first-freeze authorization",
+                    )
+                    return False
+                return True
+    finally:
+        stream.close()
+    _error(
+        errors,
+        "initial frozen normative profile binding authorization source was not independently verified",
+    )
+    return False
+
+
+def _validate_initial_binding_authorization(
+    authorization_document: dict[str, Any], root: Path, errors: list[str]
+) -> bool:
+    del root
+    before = len(errors)
+    if authorization_document != {
+        "kind": "initial-normative-profile-binding-authorization",
+        "revision": EXPECTED_V1_INITIAL_BINDING_REVISION,
+        "bindingSha256": EXPECTED_V1_INITIAL_BINDING_SHA256,
+    }:
+        _error(
+            errors,
+            "initial binding authorization document does not match the frozen binding",
+        )
+        return False
+    if datetime.now(timezone.utc) > INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _error(
+            errors,
+            "initial binding authorization private evidence retention has expired",
+        )
+        return False
+    private_evidence = _read_initial_authorization_private_evidence(errors)
+    if private_evidence is None:
+        return False
+    _initial_authorization_event_window_valid(
+        private_evidence,
+        authorization_document,
+        errors,
+    )
+    return len(errors) == before
+
+
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
-] = MappingProxyType({})
+] = MappingProxyType(
+    {
+        INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: (
+            _validate_initial_binding_authorization
+        )
+    }
+)
 
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...], bytes | None, int], bytes | None] | None
@@ -1284,7 +1726,7 @@ def _normative_profile_binding_history_valid(
                         f"{exc.__class__.__name__}",
                     )
                 else:
-                    if authorization_verified is not True:
+                    if authorization_verified is not True and not authorization_errors:
                         _error(
                             authorization_errors,
                             "initial frozen normative profile binding authorization source was not independently verified",

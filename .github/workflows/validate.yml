@@ -32,5 +32,5 @@ jobs:
           python-version: "3.10"
       - name: Test current product seam
         run: python -B -m unittest discover -s tests/product -v
-      - name: Verify current product control
-        run: python -B -m harness verify --root . --json
+      - name: Verify hosted contract boundary
+        run: python -B -m unittest tests.product.test_product_control.ProductControlTests.test_public_cli_reports_the_same_contract -v

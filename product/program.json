@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-initial-cohort-freeze",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -100,57 +100,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-initial-cohort-freeze",
-      "state": "active",
-      "correctionClass": "prospective-cohort-initial-freeze-private-evidence-not-bound",
-      "observedProblem": "The reviewed v1 candidates cannot be honestly frozen because code does not pin their immutable artifact revision and the program cannot represent the privacy-safe lifecycle disposition for the user-authorized private activation evidence.",
-      "hypothesis": "If the code pins the exact reviewed artifact revision and validates one narrow public-safe disposition for the separately protected activation evidence, then the first binding can be frozen without exposing private locators or treating it as effective before exact human authorization.",
-      "falsifier": "Stop if candidate bytes change, private locators or key material enter the repository or logs, the change grants generic new authority, a frozen binding can become effective without source-verified exact human authorization, a natural demand appears after first freeze but before that authorization, or task-created residue cannot be bounded and removed.",
-      "stopCondition": "Stop after the immutable candidate revision and privacy-safe private-resource disposition are code-validated and the first frozen binding is committed locally for separate exact human authorization; this increment counts as zero O1-O5 outcomes.",
-      "acceptanceIds": [
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1-provisional-cohort-private-evidence:windows-user-protected;retain-only-through-exact-authorization-or-delete-and-revoke"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v1-initial-cohort-freeze",
-          "state": "active",
-          "acceptanceIds": [
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "authorized-private-evidence-materialization"
-          ],
-          "deliverables": [
-            "code-owned immutable candidate artifact revision pin",
-            "privacy-safe private-evidence lifecycle representation",
-            "first frozen v1 binding awaiting separate exact human authorization"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
