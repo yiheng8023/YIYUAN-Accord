@@ -34,15 +34,24 @@
     "currentAuthority": false
   },
   "normativeProfileBinding": {
-    "state": "unfrozen",
-    "profileIdentity": null,
-    "locator": null,
-    "sha256": null,
-    "cohortProtocolIdentity": null,
-    "cohortProtocolLocator": null,
-    "cohortProtocolSha256": null,
-    "frozenAtRevision": null,
-    "cohortActivation": null
+    "state": "frozen",
+    "profileIdentity": "harness-demand-to-capability-v1.0-candidate.5",
+    "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
+    "sha256": "c737d2614a602acdab1f66e29b5f0f957ccb142ef26bb5b5d946131e7dd5484e",
+    "cohortProtocolIdentity": "harness-prospective-cohort-v1.0-candidate.5",
+    "cohortProtocolLocator": "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
+    "cohortProtocolSha256": "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83",
+    "frozenAtRevision": "502c4ff7edfc6307ea5469bcb81089e13612a24a",
+    "cohortActivation": {
+      "surfaceIdentity": "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
+      "activationCursorCommitment": "hmac-sha256:e6038957ab84aea02af9c45ee8e19277e9cf14045634345571ed0b62d866003a",
+      "keyIdentity": "cohort-key.public-v1:2d81fdcaa26da32778089bb53198e190",
+      "keyFingerprint": "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3",
+      "sourceMessageRule": "domain-surface-source-native-immutable-event-identity-v1",
+      "hmacDomain": "agent-autonomy-harness/cohort-source-event/v1",
+      "surfaceTransitionRule": "pre-demand-causal-trigger-source-final-cursor-destination-verified-or-stop",
+      "keyRetentionRule": "retain-private-evidence-through-live-claim-or-destroy-and-revoke-verifiability"
+    }
   },
   "terminalReleaseBinding": {
     "state": "unregistered",
