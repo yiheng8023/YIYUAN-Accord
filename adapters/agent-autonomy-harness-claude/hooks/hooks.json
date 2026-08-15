@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python -I -B \"${CLAUDE_PLUGIN_ROOT}/scripts/session_start.py\"",
-            "timeout": 15,
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/.runtime/UNMATERIALIZED/python\" -I -B \"${CLAUDE_PLUGIN_ROOT}/scripts/session_start.py\"",
+            "timeout": 5,
             "statusMessage": "Restoring current Harness authority"
           }
         ]

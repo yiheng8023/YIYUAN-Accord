@@ -50,7 +50,9 @@ candidate: its package-owned Hook records only bounded native lifecycle counters
 does not execute task-repository code, and its checked-in command fails closed
 until an absolute trusted interpreter is materialized. Measured activation also
 requires the frozen v1 profile binding. It is not installed or enabled. The
-Claude tree remains the historical candidate.7 projection. Neither
+current Claude candidate.7 lineage now also has bounded input and a fail-closed
+unmaterialized interpreter command, but still loads only exact-hash reviewed
+repository runtime bytes and is not a live v1 carrier implementation. Neither
 adds an MCP server, App, provider manager, prompt interception, or product
 authority. CC Switch 3.19.2 supplied replaceable static
 DeepSeek settings for the measured distinct host; its proxy runtime was off and
@@ -126,11 +128,12 @@ The current repository provides:
   bytes retain the pre-calibration status header frozen by registration;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
-- a legacy inactive, standard-library-only Codex `SessionStart` repository seam
-  that projects a bounded current-authority, active-work, and read-only Git
-  reconciliation checkpoint after startup, resume, clear, or compaction without
-  reading prompt, transcript, session, diff, or dirty-path content or storing
-  session state;
+- a legacy inactive, standard-library-only `SessionStart` repository seam that
+  projects bounded code-owned authority and verifier state after startup,
+  resume, clear, or compaction without reading prompt, transcript, or session
+  content or storing session state; active-work identity is hashed, raw
+  diagnostics are excluded, and repository state remains explicitly unknown
+  until the Agent observes it through a trusted native execution boundary;
 - an inactive Codex plugin source candidate with one task-facing Skill for the
   Codex-reference-calibrated method and one package-contained Hook for bounded
   native compaction/clear state and conservative carrier decisions; it works

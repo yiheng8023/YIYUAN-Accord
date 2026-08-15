@@ -21,11 +21,13 @@ AUTHORITY_PATHS = (
     "product/acceptance.json",
 )
 PINNED_RUNTIME_SHA256 = {
-    "harness/control.py": "96f6af01b0ff0a866dafcece462c3c85fc0bc8eb9d499772912ae346ffc32a0d",
-    "harness/continuation.py": "7151a0fdfab1703374fdc42871d4dc7b68f68e1dc175238a577240fa2ae80bb7",
+    "harness/control.py": "90d193e99f752b627ea9121fecd45d994f32b6c8823c3d2779d658aeb42c6542",
+    "harness/continuation.py": "0e06d261b2ebf4e720c7d75db5d2a595ec9b7ed97aee392a0940fa7f7db27fc8",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }
 FORWARDED_FIELDS = ("hook_event_name", "source", "cwd")
+MAX_INPUT_CHARACTERS = 65_536
+MAX_RUNTIME_BYTES = 1_048_576
 
 
 def find_harness_root(cwd: Any) -> Path | None:
@@ -45,11 +47,14 @@ def find_harness_root(cwd: Any) -> Path | None:
 
 
 def _read_reviewed_runtime(root: Path) -> dict[str, bytes] | None:
+    sources: dict[str, bytes] = {}
     try:
-        sources = {
-            relative: (root / relative).read_bytes()
-            for relative in PINNED_RUNTIME_SHA256
-        }
+        for relative in PINNED_RUNTIME_SHA256:
+            with (root / relative).open("rb") as stream:
+                source = stream.read(MAX_RUNTIME_BYTES + 1)
+            if len(source) > MAX_RUNTIME_BYTES:
+                return None
+            sources[relative] = source
     except OSError:
         return None
     if not all(
@@ -108,8 +113,9 @@ def run_projection(payload: Any) -> str | None:
 
 def main() -> int:
     try:
-        payload = json.load(sys.stdin)
-    except (json.JSONDecodeError, OSError, UnicodeError):
+        raw = sys.stdin.read(MAX_INPUT_CHARACTERS + 1)
+        payload = json.loads(raw) if len(raw) <= MAX_INPUT_CHARACTERS else None
+    except (json.JSONDecodeError, OSError, RecursionError, UnicodeError):
         payload = None
     output = run_projection(payload)
     if output is not None:

@@ -403,17 +403,31 @@ For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
 fires for startup, resume, clear, and compact, supplies the working directory
 and source, and can return additional model context. The legacy repository-
-bound adapter in `harness/codex_reference.py` uses only that seam to project live authority and
-verifier state, exact active increment/work/registration/cleanup identities,
-and a shell-free read-only Git checkpoint. The checkpoint exposes branch or
-detached state, HEAD, upstream or absence, ahead/behind or unknown, worktree
-count or unknown, dirty-entry count, and a status digest, but not dirty paths or
-diff content. The common projection has a 3,072-character budget inside the
+bound adapter in `harness/codex_reference.py` uses only that seam to project
+code-owned live-authority and verifier state. It hashes active increment/work
+identity, excludes registration, cleanup paths, and raw verifier diagnostics,
+and leaves repository state explicitly unknown for observation through a
+trusted Agent execution boundary; it does not execute Git or repository-selected
+configuration in model-context construction. The common projection has a 3,072-character budget inside the
 Codex Hook's 4,096-character limit; an over-budget full form degrades to an
 explicit hashed fallback rather than silent truncation. It ignores the supplied
 transcript and session fields, stores no session data, is a no-op outside the
 bound repository, and does not validate results or emit receipts. It remains a
 historical mechanism seam and is not the outside-Harness v1 plugin Hook.
+
+The public verifier separately caps per-file and cumulative bytes, parsed
+structure, evidence-locator references, file count, diagnostic count, authority
+enumeration, residue enumeration, and traversal depth; repeated canonical paths
+reuse one immutable verification snapshot. Its future content-addressed
+registration checks resolve an absolute Git executable from code-owned anchored
+system installation roots outside the task repository (and on Windows only the
+OS-reported system drive), reject repository-local, lookalike, UNC, non-regular,
+link, and reparse candidates, strip ambient Git configuration variables, disable system
+and global configuration, fsmonitor, hooks, external diff, replacement objects,
+locking, paging, and prompts, and pass only fixed built-in operations. These
+operations preflight blob size and stream stdout through the same hard byte
+ceiling before caching. These mechanism limits are guardrails, not outcome or
+installed-host evidence.
 
 Goal-level demand still enters through Codex's normal native conversation
 path. Codex may implicitly select the task-facing Skill from its metadata; the

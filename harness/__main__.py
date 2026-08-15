@@ -8,6 +8,18 @@ import sys
 from .codex_reference import session_start_hook_output
 from .control import verify_product
 
+MAX_HOOK_INPUT_CHARACTERS = 65_536
+
+
+def _bounded_hook_payload() -> object | None:
+    try:
+        raw = sys.stdin.read(MAX_HOOK_INPUT_CHARACTERS + 1)
+        if len(raw) > MAX_HOOK_INPUT_CHARACTERS:
+            return None
+        return json.loads(raw)
+    except (json.JSONDecodeError, OSError, RecursionError, UnicodeError):
+        return None
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="python -m harness")
@@ -20,10 +32,7 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.command == "codex-session-start":
-        try:
-            payload = json.load(sys.stdin)
-        except (json.JSONDecodeError, OSError, UnicodeError):
-            payload = None
+        payload = _bounded_hook_payload()
         print(
             json.dumps(
                 session_start_hook_output(args.root, payload),

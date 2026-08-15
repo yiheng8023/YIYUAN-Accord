@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-verifier-resource-boundary-hardening",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,5 +80,53 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-verifier-resource-boundary-hardening",
+      "state": "active",
+      "correctionClass": "verifier-untrusted-input-unbounded",
+      "observedProblem": "The legacy continuation and public verifier still execute repository-selected Git behavior, project repository-controlled diagnostic text into model context, and parse JSON or traverse repository trees without code-owned resource ceilings, so future green verification can depend on untrusted local configuration or resource exhaustion.",
+      "hypothesis": "Removing Git execution from the legacy continuation projection, exposing only code-owned verifier state there, and enforcing deterministic JSON, traversal and diagnostic ceilings can close the known execution and denial-of-service boundary without changing product semantics or creating a runtime.",
+      "falsifier": "The verifier cannot preserve deterministic authority validation and useful bounded diagnostics without executing repository-selected programs, projecting raw repository text, or accepting unbounded input and traversal.",
+      "stopCondition": "Finite negative tests prove no Git execution in continuation, no raw verifier diagnostics in model context, bounded CLI and authority/evidence JSON input, bounded authority and residue enumeration, and bounded diagnostics; canonical verification passes and no installation, outcome claim or repository residue remains.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-verifier-resource-boundary-hardening",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup"
+          ],
+          "deliverables": [
+            "bounded public verifier input and traversal seam",
+            "non-executing prompt-safe continuation projection",
+            "finite negative security tests"
+          ]
+        }
+      ]
+    }
+  ]
 }

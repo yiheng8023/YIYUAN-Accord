@@ -9,6 +9,7 @@ as current product authority.
 from __future__ import annotations
 
 from contextvars import ContextVar
+import ctypes
 from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
@@ -17,8 +18,10 @@ import math
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
+import shutil
 import stat
 import subprocess
+from threading import Timer
 from types import MappingProxyType
 from typing import Any, Callable, Mapping
 
@@ -458,6 +461,21 @@ CONVENTIONAL_RESIDUE_SUFFIXES = (
     ".orig",
     ".rej",
 )
+MAX_DOCUMENT_BYTES = 1_048_576
+MAX_JSON_BYTES = MAX_DOCUMENT_BYTES
+MAX_VERIFICATION_FILES = 256
+MAX_VERIFICATION_TOTAL_BYTES = 16 * 1_048_576
+MAX_EVIDENCE_LOCATOR_REFERENCES = 256
+MAX_GIT_OUTPUT_BYTES = MAX_DOCUMENT_BYTES
+MAX_JSON_DEPTH = 64
+MAX_JSON_NODES = 100_000
+MAX_JSON_CONTAINER_ITEMS = 10_000
+MAX_JSON_STRING_CHARACTERS = 262_144
+MAX_VERIFICATION_DIAGNOSTICS = 128
+MAX_AUTHORITY_WALK_ENTRIES = 4_096
+MAX_REPOSITORY_WALK_ENTRIES = 100_000
+MAX_REPOSITORY_WALK_DEPTH = 32
+DIAGNOSTIC_LIMIT_MESSAGE = "verification diagnostic limit exceeded"
 FROZEN_V02_PROFILE_ARTIFACT_SHA256 = MappingProxyType(
     {
         "docs/DEMAND-TO-CAPABILITY-PROFILE.md": (
@@ -583,26 +601,175 @@ _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...]], bytes | None] | None
 ] = ContextVar("harness_evidence_git_cache", default=None)
 
+_VERIFICATION_READ_BUDGET: ContextVar[dict[str, Any] | None] = ContextVar(
+    "harness_verification_read_budget", default=None
+)
+
 
 def _evidence_git(root: Path, *arguments: str) -> bytes | None:
     cache = _EVIDENCE_GIT_CACHE.get()
     key = (str(root.resolve(strict=False)), arguments)
     if cache is not None and key in cache:
         return cache[key]
+    executable = shutil.which("git")
+    if executable is None:
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
     try:
-        completed = subprocess.run(
-            ["git", *arguments],
+        executable_path = Path(executable).resolve(strict=True)
+        executable_path.relative_to(root.resolve(strict=True))
+    except ValueError:
+        pass
+    except (OSError, RuntimeError):
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
+    else:
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
+    try:
+        metadata = executable_path.lstat()
+    except OSError:
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
+    if (
+        executable_path.name.casefold() not in {"git", "git.exe"}
+        or not stat.S_ISREG(metadata.st_mode)
+        or _link_or_reparse(executable_path)
+    ):
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
+    if os.name == "nt":
+        folded_parts = tuple(part.casefold() for part in executable_path.parts)
+        system_directory = ctypes.create_unicode_buffer(32_768)
+        system_length = ctypes.windll.kernel32.GetSystemDirectoryW(
+            system_directory, len(system_directory)
+        )
+        system_drive = (
+            Path(system_directory.value).drive.casefold()
+            if 0 < system_length < len(system_directory)
+            else ""
+        )
+        trusted_install = (
+            bool(executable_path.drive)
+            and not executable_path.drive.startswith("\\\\")
+            and executable_path.drive.casefold() == system_drive
+            and len(folded_parts) >= 4
+            and folded_parts[1:3]
+            in {
+                ("program files", "git"),
+                ("program files (x86)", "git"),
+            }
+        )
+    else:
+        trusted_roots = (
+            Path("/usr/bin"),
+            Path("/usr/local/bin"),
+            Path("/usr/local/Cellar"),
+            Path("/opt/homebrew"),
+            Path("/opt/local/bin"),
+        )
+        trusted_install = any(
+            executable_path == trusted_root
+            or trusted_root in executable_path.parents
+            for trusted_root in trusted_roots
+        )
+    if not trusted_install:
+        result = None
+        if cache is not None:
+            cache[key] = result
+        return result
+
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.casefold()
+        in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+    }
+    environment.update(
+        {
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_OPTIONAL_LOCKS": "0",
+            "GIT_TERMINAL_PROMPT": "0",
+            "GIT_PAGER": "cat",
+            "GIT_EXTERNAL_DIFF": "",
+            "GIT_ATTR_NOSYSTEM": "1",
+            "GIT_NO_REPLACE_OBJECTS": "1",
+        }
+    )
+    process: subprocess.Popen[bytes] | None = None
+
+    def stop_process() -> None:
+        if process is None:
+            return
+        try:
+            if process.poll() is None:
+                process.kill()
+        except OSError:
+            pass
+
+    try:
+        process = subprocess.Popen(
+            [
+                str(executable_path),
+                "--no-optional-locks",
+                "-c",
+                "core.fsmonitor=false",
+                "-c",
+                f"core.hooksPath={os.devnull}",
+                "-c",
+                "core.pager=cat",
+                "-c",
+                "color.ui=false",
+                "-c",
+                "diff.external=",
+                *arguments,
+            ],
             cwd=root,
+            env=environment,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-            timeout=10,
+            stderr=subprocess.DEVNULL,
         )
+        timer = Timer(10, stop_process)
+        timer.daemon = True
+        timer.start()
+        try:
+            if process.stdout is None:
+                result = None
+            else:
+                raw = process.stdout.read(MAX_GIT_OUTPUT_BYTES + 1)
+                if len(raw) > MAX_GIT_OUTPUT_BYTES:
+                    stop_process()
+                    result = None
+                else:
+                    result = raw if process.wait() == 0 else None
+        finally:
+            timer.cancel()
+            stop_process()
+            process.wait()
+            if process.stdout is not None:
+                process.stdout.close()
     except (OSError, subprocess.SubprocessError):
         result = None
-    else:
-        result = completed.stdout if completed.returncode == 0 else None
+    if result is not None:
+        budget = _VERIFICATION_READ_BUDGET.get()
+        if budget is not None:
+            total = budget["bytes"] + len(result)
+            if total > MAX_VERIFICATION_TOTAL_BYTES:
+                result = None
+            else:
+                budget["bytes"] = total
     if cache is not None:
         cache[key] = result
     return result
@@ -615,7 +782,12 @@ def _committed_blob(
         return False
     if _evidence_git(root, "merge-base", "--is-ancestor", revision, "HEAD") is None:
         return False
-    if _evidence_git(root, "diff", "--quiet", revision, "--", locator) is None:
+    raw_size = _evidence_git(root, "cat-file", "-s", f"{revision}:{locator}")
+    try:
+        object_size = int(raw_size.decode("ascii").strip()) if raw_size is not None else -1
+    except (UnicodeError, ValueError):
+        return False
+    if object_size < 0 or object_size > MAX_DOCUMENT_BYTES:
         return False
     committed = _evidence_git(root, "show", f"{revision}:{locator}")
     return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
@@ -657,29 +829,98 @@ def _parse_json(text: str) -> Any:
 
 
 def _error(errors: list[str], message: str) -> None:
-    if message not in errors:
+    if message in errors or DIAGNOSTIC_LIMIT_MESSAGE in errors:
+        return
+    if len(errors) < MAX_VERIFICATION_DIAGNOSTICS - 1:
         errors.append(message)
+    else:
+        errors.append(DIAGNOSTIC_LIMIT_MESSAGE)
 
 
-def _load_json(path: Path, label: str, errors: list[str]) -> dict[str, Any]:
+def _read_bounded_bytes(path: Path, label: str, errors: list[str]) -> bytes | None:
+    budget = _VERIFICATION_READ_BUDGET.get()
     try:
-        if path.is_symlink():
-            _error(errors, f"{label} cannot be a symlink")
-            return {}
-        value = _parse_json(path.read_text(encoding="utf-8"))
+        if _link_or_reparse(path):
+            _error(errors, f"{label} cannot be a link or reparse point")
+            return None
+        canonical = os.path.normcase(str(path.resolve(strict=True)))
+        if budget is not None:
+            cached = budget["files"].get(canonical)
+            if cached is not None:
+                return cached
+        with path.open("rb") as stream:
+            raw = stream.read(MAX_DOCUMENT_BYTES + 1)
     except FileNotFoundError:
         _error(errors, f"missing {label}")
-        return {}
-    except (json.JSONDecodeError, _InvalidJson):
+        return None
+    except OSError as exc:
+        _error(errors, f"cannot read {label}: {exc.__class__.__name__}")
+        return None
+    if len(raw) > MAX_DOCUMENT_BYTES:
+        _error(errors, f"cannot read {label}: byte limit exceeded")
+        return None
+    if budget is not None:
+        files = budget["files"]
+        if len(files) >= MAX_VERIFICATION_FILES:
+            _error(errors, "verification file limit exceeded")
+            return None
+        total = budget["bytes"] + len(raw)
+        if total > MAX_VERIFICATION_TOTAL_BYTES:
+            _error(errors, "verification cumulative byte limit exceeded")
+            return None
+        files[canonical] = raw
+        budget["bytes"] = total
+    return raw
+
+
+def _json_within_resource_limits(value: Any) -> bool:
+    nodes = 0
+    stack: list[tuple[Any, int]] = [(value, 1)]
+    while stack:
+        current, depth = stack.pop()
+        nodes += 1
+        if nodes > MAX_JSON_NODES or depth > MAX_JSON_DEPTH:
+            return False
+        if isinstance(current, str):
+            if len(current) > MAX_JSON_STRING_CHARACTERS:
+                return False
+        elif isinstance(current, dict):
+            if len(current) > MAX_JSON_CONTAINER_ITEMS:
+                return False
+            for key, item in current.items():
+                if len(key) > MAX_JSON_STRING_CHARACTERS:
+                    return False
+                stack.append((item, depth + 1))
+        elif isinstance(current, list):
+            if len(current) > MAX_JSON_CONTAINER_ITEMS:
+                return False
+            stack.extend((item, depth + 1) for item in current)
+    return True
+
+
+def _parse_json_object_bytes(
+    raw: bytes, label: str, errors: list[str]
+) -> dict[str, Any]:
+    try:
+        text = raw.decode("utf-8")
+        value = _parse_json(text)
+    except (json.JSONDecodeError, _InvalidJson, RecursionError, UnicodeError):
         _error(errors, f"cannot read {label}: invalid JSON")
         return {}
-    except (OSError, UnicodeError) as exc:
-        _error(errors, f"cannot read {label}: {exc.__class__.__name__}")
+    if not _json_within_resource_limits(value):
+        _error(errors, f"cannot read {label}: JSON resource limit exceeded")
         return {}
     if not isinstance(value, dict):
         _error(errors, f"{label} must be a JSON object")
         return {}
     return value
+
+
+def _load_json(path: Path, label: str, errors: list[str]) -> dict[str, Any]:
+    raw = _read_bounded_bytes(path, label, errors)
+    if raw is None:
+        return {}
+    return _parse_json_object_bytes(raw, label, errors)
 
 
 def _load_authority_json(
@@ -880,7 +1121,10 @@ def _authority_files(
     if product_root is not None:
         try:
             with os.scandir(product_root) as entries:
-                for entry in entries:
+                for index, entry in enumerate(entries, start=1):
+                    if index > MAX_AUTHORITY_WALK_ENTRIES:
+                        _error(errors, "product authority root entry limit exceeded")
+                        break
                     if Path(entry.name).suffix.casefold() != ".json":
                         continue
                     candidate = product_root / entry.name
@@ -908,54 +1152,58 @@ def _authority_files(
 
     harness_root = _inside_root(root, "harness", errors, "Harness authority root")
     if harness_root is not None:
-        def record_harness_enumeration_error(error: OSError) -> None:
-            _error(errors, "Harness authority closure cannot be enumerated")
-
-        try:
-            for current, directories, files in os.walk(
-                harness_root,
-                topdown=True,
-                followlinks=False,
-                onerror=record_harness_enumeration_error,
-            ):
-                current_path = Path(current)
-                retained: list[str] = []
-                for name in directories:
-                    candidate = current_path / name
-                    relative = candidate.relative_to(root).as_posix()
-                    if name.casefold() == "__pycache__":
-                        continue
-                    if _link_or_reparse(candidate):
-                        _error(errors, f"undeclared Harness authority link: {relative}")
-                        continue
-                    retained.append(name)
-                directories[:] = retained
-                for name in files:
-                    candidate = current_path / name
-                    relative = candidate.relative_to(root).as_posix()
-                    if _link_or_reparse(candidate):
-                        if current_path == harness_root and candidate.suffix.casefold() == ".py":
-                            _inside_root(root, relative, errors, "active authority")
-                        else:
-                            _error(errors, f"undeclared Harness authority link: {relative}")
-                        continue
-                    if current_path != harness_root or candidate.suffix.casefold() != ".py":
-                        _error(errors, f"undeclared Harness authority file: {relative}")
-                        continue
-                    checked = _inside_root(root, relative, errors, "active authority")
-                    if checked is None:
-                        continue
-                    try:
-                        if not checked.is_file():
+        authority_entries = 0
+        pending = [harness_root]
+        while pending:
+            current_path = pending.pop()
+            try:
+                with os.scandir(current_path) as entries:
+                    for entry in entries:
+                        authority_entries += 1
+                        if authority_entries > MAX_AUTHORITY_WALK_ENTRIES:
+                            _error(errors, "Harness authority closure entry limit exceeded")
+                            pending.clear()
+                            break
+                        candidate = Path(entry.path)
+                        relative = candidate.relative_to(root).as_posix()
+                        if _link_or_reparse(candidate):
+                            if (
+                                current_path == harness_root
+                                and candidate.suffix.casefold() == ".py"
+                            ):
+                                _inside_root(root, relative, errors, "active authority")
+                            else:
+                                _error(
+                                    errors,
+                                    f"undeclared Harness authority link: {relative}",
+                                )
+                            continue
+                        try:
+                            is_directory = entry.is_dir(follow_symlinks=False)
+                        except OSError:
+                            _error(errors, "Harness authority closure cannot be enumerated")
+                            continue
+                        if is_directory:
+                            if entry.name.casefold() != "__pycache__":
+                                pending.append(candidate)
+                            continue
+                        if current_path != harness_root or candidate.suffix.casefold() != ".py":
+                            _error(errors, f"undeclared Harness authority file: {relative}")
+                            continue
+                        checked = _inside_root(root, relative, errors, "active authority")
+                        if checked is None:
+                            continue
+                        try:
+                            if not checked.is_file():
+                                _error(errors, f"active authority path is invalid: {relative}")
+                                continue
+                            checked.resolve(strict=True).relative_to(root.resolve(strict=True))
+                        except (OSError, RuntimeError, ValueError):
                             _error(errors, f"active authority path is invalid: {relative}")
                             continue
-                        checked.resolve(strict=True).relative_to(root.resolve(strict=True))
-                    except (OSError, RuntimeError, ValueError):
-                        _error(errors, f"active authority path is invalid: {relative}")
-                        continue
-                    found[relative] = checked
-        except (OSError, RuntimeError, ValueError):
-            _error(errors, "Harness authority closure cannot be enumerated")
+                        found[relative] = checked
+            except (OSError, RuntimeError, ValueError):
+                _error(errors, "Harness authority closure cannot be enumerated")
     return sorted(found.items())
 
 
@@ -967,18 +1215,24 @@ def _authority_identity_valid(
         for pattern in FORBIDDEN_AUTHORITY_PATTERNS:
             if pattern.search(relative):
                 _error(errors, f"forbidden predecessor authority path: {relative}")
+        raw = _read_bounded_bytes(path, f"active authority {relative}", errors)
+        if raw is None:
+            continue
         try:
-            text = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeError):
+            text = raw.decode("utf-8")
+        except UnicodeError:
             _error(errors, f"active authority cannot be read: {relative}")
             continue
         for pattern in FORBIDDEN_AUTHORITY_PATTERNS:
             if pattern.search(text):
                 _error(errors, f"forbidden predecessor identity in active authority: {relative}")
         if path.suffix.casefold() == ".json":
-            try:
-                document = _parse_json(text)
-            except (json.JSONDecodeError, _InvalidJson):
+            parse_errors: list[str] = []
+            document = _parse_json_object_bytes(
+                raw, f"active authority {relative}", parse_errors
+            )
+            if parse_errors:
+                _error(errors, f"active authority JSON is invalid or unbounded: {relative}")
                 continue
             stack: list[Any] = [document]
             while stack:
@@ -1046,10 +1300,21 @@ def _supporting_documents_exist(
             if not candidate.is_file():
                 _error(errors, f"supporting document is missing: {relative}")
                 continue
-            if not candidate.read_text(encoding="utf-8").strip():
-                _error(errors, f"supporting document is empty: {relative}")
-        except (OSError, UnicodeError):
+        except OSError:
             _error(errors, f"supporting document cannot be inspected: {relative}")
+            continue
+        raw_document = _read_bounded_bytes(
+            candidate, f"supporting document {relative}", errors
+        )
+        if raw_document is None:
+            continue
+        try:
+            substantive = bool(raw_document.decode("utf-8").strip())
+        except UnicodeError:
+            _error(errors, f"supporting document cannot be inspected: {relative}")
+            continue
+        if not substantive:
+            _error(errors, f"supporting document is empty: {relative}")
     return len(errors) == before
 
 
@@ -1059,14 +1324,10 @@ def _frozen_v02_profile_artifacts_valid(root: Path, errors: list[str]) -> bool:
         candidate = _inside_root(root, relative, errors, "frozen v0.2 profile artifact")
         if candidate is None:
             continue
-        try:
-            raw = candidate.read_bytes()
-        except OSError as exc:
-            _error(
-                errors,
-                f"cannot read frozen v0.2 profile artifact {relative}: "
-                f"{exc.__class__.__name__}",
-            )
+        raw = _read_bounded_bytes(
+            candidate, f"frozen v0.2 profile artifact {relative}", errors
+        )
+        if raw is None:
             continue
         if hashlib.sha256(raw).hexdigest() != expected_sha256:
             _error(errors, f"frozen v0.2 profile artifact identity changed: {relative}")
@@ -1111,12 +1372,14 @@ def _normative_profile_binding_valid(
     candidate = _inside_root(root, locator, errors, "normative profile")
     if candidate is None:
         return False
-    try:
-        raw = candidate.read_bytes()
-    except OSError as exc:
-        _error(errors, f"cannot read normative profile {locator}: {exc.__class__.__name__}")
+    raw = _read_bounded_bytes(candidate, f"normative profile {locator}", errors)
+    if raw is None:
         return False
-    if not _committed_blob(root, revision, locator, expected_sha256):
+    if (
+        hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
+        != expected_sha256
+        or not _committed_blob(root, revision, locator, expected_sha256)
+    ):
         _error(errors, "frozen normative profile identity or source revision mismatch")
     return len(errors) == before
 
@@ -1556,10 +1819,9 @@ def _task_registration_guardrail(
     candidate = _inside_root(root, locator, errors, "task registration")
     if candidate is None:
         return None
-    try:
-        raw = candidate.read_bytes()
-    except OSError as exc:
-        _error(errors, f"cannot read task registration {locator}: {exc.__class__.__name__}")
+    registration_label = f"task registration {locator}"
+    raw = _read_bounded_bytes(candidate, registration_label, errors)
+    if raw is None:
         return None
     expected_sha256 = binding.get("sha256")
     if (
@@ -1577,6 +1839,8 @@ def _task_registration_guardrail(
     )
     if (
         not isinstance(source_revision, str)
+        or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
+        != expected_sha256
         or not _committed_blob(root, source_revision, locator, expected_sha256)
         or source_commit_at is None
         or measurement_not_before is None
@@ -1587,7 +1851,7 @@ def _task_registration_guardrail(
             f"increment {increment_id} taskRegistration was not committed before measurement",
         )
         return None
-    registration = _load_json(candidate, f"task registration {locator}", errors)
+    registration = _parse_json_object_bytes(raw, registration_label, errors)
     if set(registration) != TASK_REGISTRATION_FIELDS:
         _error(errors, f"task registration {locator} fields must match the code-owned schema")
         return None
@@ -1785,6 +2049,7 @@ def _process_loss_guardrail(
 
 def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
     before = len(errors)
+    scanned_entries = 0
 
     def conventional_directory(name: str) -> bool:
         return name.casefold() in CONVENTIONAL_RESIDUE_NAMES
@@ -1795,49 +2060,44 @@ def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
             CONVENTIONAL_RESIDUE_SUFFIXES
         )
 
-    def record_enumeration_error(error: OSError) -> None:
-        _error(errors, "repository residue cannot be enumerated")
-
-    try:
-        for current, directories, files in os.walk(
-            root,
-            topdown=True,
-            followlinks=False,
-            onerror=record_enumeration_error,
-        ):
-            current_path = Path(current)
-            retained: list[str] = []
-            for name in directories:
-                candidate = current_path / name
-                try:
-                    relative = candidate.relative_to(root).as_posix()
-                except ValueError:
-                    _error(errors, "repository residue scan escaped the repository root")
-                    continue
-                if relative == ".git" or relative.startswith(".git/"):
-                    continue
-                if _link_or_reparse(candidate):
-                    if conventional_directory(name):
+    pending: list[tuple[Path, int]] = [(root, 0)]
+    while pending:
+        current_path, depth = pending.pop()
+        if depth > MAX_REPOSITORY_WALK_DEPTH:
+            _error(errors, "repository residue scan depth limit exceeded")
+            break
+        try:
+            with os.scandir(current_path) as entries:
+                for entry in entries:
+                    scanned_entries += 1
+                    if scanned_entries > MAX_REPOSITORY_WALK_ENTRIES:
+                        _error(errors, "repository residue scan entry limit exceeded")
+                        pending.clear()
+                        break
+                    candidate = Path(entry.path)
+                    try:
+                        relative = candidate.relative_to(root).as_posix()
+                    except ValueError:
+                        _error(errors, "repository residue scan escaped the repository root")
+                        continue
+                    if relative == ".git" or relative.startswith(".git/"):
+                        continue
+                    linked = _link_or_reparse(candidate)
+                    try:
+                        is_directory = entry.is_dir(follow_symlinks=False)
+                    except OSError:
+                        _error(errors, "repository residue cannot be enumerated")
+                        continue
+                    if is_directory:
+                        if conventional_directory(entry.name):
+                            _error(errors, f"repository cleanup residue remains: {relative}")
+                        elif not linked:
+                            pending.append((candidate, depth + 1))
+                        continue
+                    if conventional_file(entry.name):
                         _error(errors, f"repository cleanup residue remains: {relative}")
-                    continue
-                if conventional_directory(name):
-                    _error(errors, f"repository cleanup residue remains: {relative}")
-                    continue
-                retained.append(name)
-            directories[:] = retained
-            for name in files:
-                if not conventional_file(name):
-                    continue
-                candidate = current_path / name
-                try:
-                    relative = candidate.relative_to(root).as_posix()
-                except ValueError:
-                    continue
-                if relative == ".git" or relative.startswith(".git/"):
-                    continue
-                _error(errors, f"repository cleanup residue remains: {relative}")
-    except OSError:
-        _error(errors, "repository residue cannot be enumerated")
+        except OSError:
+            _error(errors, "repository residue cannot be enumerated")
     return len(errors) == before
 
 
@@ -1852,6 +2112,14 @@ def _evidence_states(
     validated_work_outcomes: dict[str, set[str]] = {}
     evidence_id_locators: dict[str, str] = {}
     before = len(errors)
+    evidence_locator_references = sum(
+        len(_string_list(criteria.get(criterion_id, {}).get("evidence")) or [])
+        for criterion_id in OUTCOME_IDS
+        if criteria.get(criterion_id, {}).get("assessment") == "verified"
+    )
+    if evidence_locator_references > MAX_EVIDENCE_LOCATOR_REFERENCES:
+        _error(errors, "evidence locator reference limit exceeded")
+        return states, False, validated_work_outcomes
     for criterion_id in sorted(OUTCOME_IDS):
         criterion = criteria.get(criterion_id, {})
         if criterion.get("assessment") != "verified":
@@ -2111,6 +2379,7 @@ def verify_product(root: Path) -> dict[str, Any]:
     """Verify current product state and fail closed without leaking tracebacks."""
 
     cache_token = _EVIDENCE_GIT_CACHE.set({})
+    read_budget_token = _VERIFICATION_READ_BUDGET.set({"bytes": 0, "files": {}})
     try:
         try:
             return _verify_product(root)
@@ -2130,4 +2399,5 @@ def verify_product(root: Path) -> dict[str, Any]:
                 "errors": [f"verifier failed closed: {exc.__class__.__name__}"],
             }
     finally:
+        _VERIFICATION_READ_BUDGET.reset(read_budget_token)
         _EVIDENCE_GIT_CACHE.reset(cache_token)

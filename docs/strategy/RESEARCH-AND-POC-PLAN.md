@@ -42,8 +42,10 @@ The accepted continuation task is a real source delivery for the user's context
 and topology burden, not another model-dispatch experiment. Its immutable baseline measured
 the active-work common projection at 6,301 characters against the Codex Hook's
 4,096-character limit. The bounded implementation candidate now projects exact
-authority pointers, active-work identity, cleanup paths, and a privacy-minimal
-read-only Git checkpoint at no more than 3,072 characters. It adds no model
+authority pointers, hashed active-work identity, code-owned verifier state, and
+an explicit unknown repository checkpoint at no more than 3,072 characters.
+Raw diagnostics, registration and cleanup paths are excluded; repository
+observation is deferred to the Agent's trusted native execution boundary. It adds no model
 call, plugin installation, consumer mutation, new carrier, manager, state
 store, protocol, MCP server, or App. Task-bound source evidence, aggregate
 cohort validation, and named-human acceptance make it the materially distinct
