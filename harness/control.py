@@ -21,6 +21,7 @@ import re
 import shutil
 import stat
 import subprocess
+import tempfile
 from threading import Timer
 from types import MappingProxyType
 from typing import Any, Callable, Mapping
@@ -62,8 +63,12 @@ EXPECTED_PROGRESS_RULE = (
     "selected task roster. Git ancestry proves repository ordering only; every outcome requires "
     "a task-bound validator to prove natural demand and a source-bound measurement event after "
     "its immutable registration because Git dates and self-reported timestamps are not chronology "
-    "authority. Documents, tests, inventories, fixtures, memberships, research volume, and "
-    "prior-release evidence are supporting inputs only."
+    "authority. Even after O1-O5 task evidence passes, completionState remains in-progress until "
+    "the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 "
+    "evidence set, named-human authorization in the local annotated tag, the identical public tag "
+    "object and peeled commit, and no ignored or untracked repository residue; this is O5 release "
+    "enforcement, not an additional outcome. Documents, tests, inventories, fixtures, memberships, "
+    "research volume, and prior-release evidence are supporting inputs only."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -114,6 +119,7 @@ AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
                 "progressionPolicy",
                 "priorRelease",
                 "normativeProfileBinding",
+                "terminalReleaseBinding",
                 "authorityBoundary",
                 "completionExpression",
                 "increments",
@@ -289,6 +295,58 @@ EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
         "measurementEventRule": "task-bound-source-event-after-registration-required",
     }
 )
+TERMINAL_RELEASE_BINDING_FIELDS = {
+    "state",
+    "tag",
+    "publicRemote",
+    "annotationFormat",
+    "o5EvidenceSetSha256",
+}
+UNREGISTERED_TERMINAL_RELEASE_BINDING = {
+    "state": "unregistered",
+    "tag": None,
+    "publicRemote": None,
+    "annotationFormat": None,
+    "o5EvidenceSetSha256": None,
+}
+TERMINAL_RELEASE_ANNOTATION_FIELDS = {
+    "schema",
+    "format",
+    "productId",
+    "release",
+    "candidateRevision",
+    "tag",
+    "publicRemote",
+    "o5EvidenceSetSha256",
+    "authority",
+    "acceptedScope",
+}
+TERMINAL_RELEASE_AUTHORITY_FIELDS = {
+    "kind",
+    "name",
+    "decision",
+    "decidedAt",
+    "source",
+    "validator",
+}
+TERMINAL_RELEASE_AUTHORITY_SOURCE_FIELDS = {
+    "kind",
+    "locator",
+    "identity",
+    "payloadSha256",
+}
+TERMINAL_RELEASE_AUTHORITY_VALIDATOR_FIELDS = {"kind", "version"}
+EXPECTED_TERMINAL_RELEASE_SCOPE = [
+    "normative-profile",
+    "thin-reference-adapters",
+    "privacy-disposition",
+    "claim-ceiling",
+    "candidate-commit",
+    "annotated-tag",
+    "public-release",
+]
+EXPECTED_PUBLIC_REMOTE = "https://github.com/yiheng8023/agent-autonomy-harness.git"
+TERMINAL_RELEASE_ANNOTATION_FORMAT = "harness-release-authorization-v1"
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
     "maxConsecutiveOutcomeNeutralWorkItems",
@@ -630,10 +688,17 @@ EvidenceValidatorSpec = tuple[
     frozenset[str],
     EvidenceValidator,
 ]
+HumanAuthorizationValidator = Callable[
+    [dict[str, Any], Path, list[str]],
+    bool,
+]
 
 
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
+SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
+    str, HumanAuthorizationValidator
+] = MappingProxyType({})
 
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...]], bytes | None] | None
@@ -746,6 +811,19 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
         }
     )
     process: subprocess.Popen[bytes] | None = None
+    isolated_remote_workspace: tempfile.TemporaryDirectory[str] | None = None
+    process_cwd = root
+    if arguments and arguments[0] == "ls-remote":
+        try:
+            isolated_remote_workspace = tempfile.TemporaryDirectory(
+                prefix="harness-ls-remote-"
+            )
+            process_cwd = Path(isolated_remote_workspace.name).resolve()
+            environment["GIT_CEILING_DIRECTORIES"] = str(process_cwd)
+        except OSError:
+            if cache is not None:
+                cache[key] = None
+            return None
 
     def stop_process() -> None:
         if process is None:
@@ -771,9 +849,15 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
                 "color.ui=false",
                 "-c",
                 "diff.external=",
+                "-c",
+                "credential.helper=",
+                "-c",
+                "protocol.file.allow=never",
+                "-c",
+                "http.sslVerify=true",
                 *arguments,
             ],
-            cwd=root,
+            cwd=process_cwd,
             env=environment,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
@@ -800,6 +884,12 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
                 process.stdout.close()
     except (OSError, subprocess.SubprocessError):
         result = None
+    finally:
+        if isolated_remote_workspace is not None:
+            try:
+                isolated_remote_workspace.cleanup()
+            except OSError:
+                result = None
     if result is not None:
         budget = _VERIFICATION_READ_BUDGET.get()
         if budget is not None:
@@ -1557,6 +1647,37 @@ def _normative_profile_binding_valid(
     )
     if not protocol_valid:
         _error(errors, "frozen cohort protocol shape is invalid")
+    return len(errors) == before
+
+
+def _terminal_release_binding_valid(
+    program: dict[str, Any], errors: list[str]
+) -> bool:
+    before = len(errors)
+    binding = program.get("terminalReleaseBinding")
+    if not isinstance(binding, dict) or set(binding) != TERMINAL_RELEASE_BINDING_FIELDS:
+        _error(errors, "program terminalReleaseBinding fields must match the code-owned schema")
+        return False
+    if binding.get("state") == "unregistered":
+        if not _same_typed_value(binding, UNREGISTERED_TERMINAL_RELEASE_BINDING):
+            _error(errors, "unregistered terminal release binding must contain only null identities")
+        return len(errors) == before
+    tag = binding.get("tag")
+    expected_prefix = f"{program.get('release')}."
+    if (
+        binding.get("state") != "candidate"
+        or program.get("status") != "completed"
+        or not isinstance(tag, str)
+        or re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", tag) is None
+        or not tag.startswith(expected_prefix)
+        or binding.get("publicRemote") != EXPECTED_PUBLIC_REMOTE
+        or binding.get("annotationFormat")
+        != TERMINAL_RELEASE_ANNOTATION_FORMAT
+        or not isinstance(binding.get("o5EvidenceSetSha256"), str)
+        or re.fullmatch(r"[0-9a-f]{64}", binding["o5EvidenceSetSha256"])
+        is None
+    ):
+        _error(errors, "terminal release candidate binding shape is invalid")
     return len(errors) == before
 
 
@@ -2476,6 +2597,282 @@ def _evidence_states(
     return states, len(errors) == before, validated_work_outcomes
 
 
+def _criterion_evidence_set_sha256(
+    root: Path,
+    criterion: Mapping[str, Any],
+    errors: list[str],
+) -> str | None:
+    locators = _string_list(criterion.get("evidence"))
+    if criterion.get("assessment") != "verified" or locators is None:
+        return None
+    digest = hashlib.sha256()
+    for locator in sorted(locators):
+        relative = _relative_locator(locator, allow_evidence=True)
+        path = PurePosixPath(relative) if relative is not None else None
+        if (
+            path is None
+            or path.parent != PurePosixPath("product/evidence")
+            or path.suffix != ".json"
+        ):
+            return None
+        candidate = _inside_root(root, relative, errors, "terminal evidence")
+        if candidate is None:
+            return None
+        raw = _read_bounded_bytes(candidate, f"terminal evidence {relative}", errors)
+        if raw is None:
+            return None
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(raw.replace(b"\r\n", b"\n"))
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def _terminal_checkout_inventory_clean(root: Path, errors: list[str]) -> bool:
+    tracked_raw = _evidence_git(root, "ls-files", "-z", "--cached")
+    if tracked_raw is None:
+        _error(errors, "terminal tracked-file inventory cannot be resolved")
+        return False
+    try:
+        tracked = {
+            item.decode("utf-8")
+            for item in tracked_raw.split(b"\0")
+            if item
+        }
+    except UnicodeError:
+        _error(errors, "terminal tracked-file inventory is malformed")
+        return False
+    required_directories: set[str] = set()
+    for relative in tracked:
+        parent = PurePosixPath(relative).parent
+        while parent != PurePosixPath("."):
+            required_directories.add(parent.as_posix())
+            parent = parent.parent
+    observed_files: set[str] = set()
+    entries_seen = 0
+    stack: list[tuple[Path, int]] = [(root, 0)]
+    while stack:
+        directory, depth = stack.pop()
+        if depth > MAX_REPOSITORY_WALK_DEPTH:
+            _error(errors, "terminal checkout inventory depth limit exceeded")
+            return False
+        try:
+            with os.scandir(directory) as iterator:
+                entries = list(iterator)
+        except OSError:
+            _error(errors, "terminal checkout inventory cannot be enumerated")
+            return False
+        for entry in entries:
+            entries_seen += 1
+            if entries_seen > MAX_REPOSITORY_WALK_ENTRIES:
+                _error(errors, "terminal checkout inventory entry limit exceeded")
+                return False
+            candidate = Path(entry.path)
+            try:
+                relative = candidate.relative_to(root).as_posix()
+            except ValueError:
+                _error(errors, "terminal checkout inventory escaped the repository root")
+                return False
+            if depth == 0 and relative == ".git":
+                continue
+            try:
+                metadata = candidate.lstat()
+            except OSError:
+                _error(errors, "terminal checkout inventory entry cannot be inspected")
+                return False
+            if stat.S_ISDIR(metadata.st_mode) and not _link_or_reparse(candidate):
+                if relative not in required_directories:
+                    _error(errors, f"terminal checkout contains an extra directory: {relative}")
+                    return False
+                stack.append((candidate, depth + 1))
+                continue
+            if relative not in tracked:
+                _error(errors, f"terminal checkout contains an extra entry: {relative}")
+                return False
+            observed_files.add(relative)
+    if observed_files != tracked:
+        _error(errors, "terminal checkout does not materialize the exact tracked file set")
+        return False
+    return True
+
+
+def _terminal_release_gate(
+    root: Path,
+    program: Mapping[str, Any],
+    criteria: Mapping[str, Mapping[str, Any]],
+    errors: list[str],
+) -> tuple[bool, str]:
+    binding = program.get("terminalReleaseBinding")
+    if not isinstance(binding, dict) or binding.get("state") != "candidate":
+        _error(errors, "terminal completion requires a predeclared release candidate binding")
+        return False, "invalid"
+    expected_evidence_sha256 = _criterion_evidence_set_sha256(
+        root, criteria.get("O5", {}), errors
+    )
+    if expected_evidence_sha256 != binding.get("o5EvidenceSetSha256"):
+        _error(errors, "terminal release candidate does not bind the exact O5 evidence set")
+        return False, "invalid"
+    status = _evidence_git(
+        root,
+        "status",
+        "--porcelain=v1",
+        "-z",
+        "--untracked-files=all",
+        "--ignored=matching",
+    )
+    if status is None:
+        _error(
+            errors,
+            "terminal release candidate checkout status cannot be resolved",
+        )
+        return False, "invalid"
+    if status != b"":
+        _error(
+            errors,
+            "terminal release candidate must be a clean checkout with no ignored or untracked residue",
+        )
+        return False, "invalid"
+    if not _terminal_checkout_inventory_clean(root, errors):
+        return False, "invalid"
+    head_raw = _evidence_git(root, "rev-parse", "--verify", "HEAD")
+    try:
+        head = head_raw.decode("ascii").strip() if head_raw is not None else ""
+    except UnicodeError:
+        head = ""
+    if re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", head) is None:
+        _error(errors, "terminal release candidate HEAD cannot be resolved")
+        return False, "invalid"
+    tag = binding["tag"]
+    tag_ref = f"refs/tags/{tag}"
+    local_tag_raw = _evidence_git(root, "rev-parse", "--verify", tag_ref)
+    if local_tag_raw is None:
+        return False, "candidate-clean-awaiting-authorized-tag"
+    try:
+        local_tag_object = local_tag_raw.decode("ascii").strip()
+    except UnicodeError:
+        local_tag_object = ""
+    tag_type = _evidence_git(root, "cat-file", "-t", tag_ref)
+    tag_commit = _evidence_git(root, "rev-parse", f"{tag_ref}^{{commit}}")
+    annotation_raw = _evidence_git(
+        root, "for-each-ref", "--format=%(contents)", "--count=1", tag_ref
+    )
+    try:
+        tag_commit_text = tag_commit.decode("ascii").strip() if tag_commit is not None else ""
+    except UnicodeError:
+        tag_commit_text = ""
+    if (
+        re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", local_tag_object) is None
+        or tag_type is None
+        or tag_type.strip() != b"tag"
+        or tag_commit_text != head
+        or annotation_raw is None
+    ):
+        _error(errors, "local terminal tag is not one annotated tag over candidate HEAD")
+        return False, "invalid"
+    annotation = _parse_json_object_bytes(
+        annotation_raw.strip(), f"terminal tag annotation {tag}", errors
+    )
+    authority = annotation.get("authority")
+    authorization_source = (
+        authority.get("source") if isinstance(authority, dict) else None
+    )
+    authorization_validator = (
+        authority.get("validator") if isinstance(authority, dict) else None
+    )
+    annotation_valid = (
+        set(annotation) == TERMINAL_RELEASE_ANNOTATION_FIELDS
+        and type(annotation.get("schema")) is int
+        and annotation.get("schema") == 1
+        and annotation.get("format") == TERMINAL_RELEASE_ANNOTATION_FORMAT
+        and annotation.get("productId") == PRODUCT_ID
+        and annotation.get("release") == program.get("release")
+        and annotation.get("candidateRevision") == head
+        and annotation.get("tag") == tag
+        and annotation.get("publicRemote") == EXPECTED_PUBLIC_REMOTE
+        and annotation.get("o5EvidenceSetSha256") == expected_evidence_sha256
+        and isinstance(authority, dict)
+        and set(authority) == TERMINAL_RELEASE_AUTHORITY_FIELDS
+        and authority.get("kind") == "named-accountable-human"
+        and _nonempty_text(authority.get("name"))
+        and authority.get("decision") == "authorized"
+        and _rfc3339_instant(authority.get("decidedAt")) is not None
+        and isinstance(authorization_source, dict)
+        and set(authorization_source)
+        == TERMINAL_RELEASE_AUTHORITY_SOURCE_FIELDS
+        and all(
+            _nonempty_text(authorization_source.get(field))
+            for field in ("kind", "locator", "identity")
+        )
+        and isinstance(authorization_source.get("payloadSha256"), str)
+        and re.fullmatch(
+            r"[0-9a-f]{64}", authorization_source["payloadSha256"]
+        )
+        is not None
+        and isinstance(authorization_validator, dict)
+        and set(authorization_validator)
+        == TERMINAL_RELEASE_AUTHORITY_VALIDATOR_FIELDS
+        and _nonempty_text(authorization_validator.get("kind"))
+        and type(authorization_validator.get("version")) is int
+        and authorization_validator.get("version") == 1
+        and _same_typed_value(
+            annotation.get("acceptedScope"), EXPECTED_TERMINAL_RELEASE_SCOPE
+        )
+    )
+    if not annotation_valid:
+        _error(errors, "terminal tag annotation authorization is invalid")
+        return False, "invalid"
+    validator_kind = authorization_validator["kind"]
+    authorization_evaluator = SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(
+        validator_kind
+    )
+    if authorization_evaluator is None:
+        _error(
+            errors,
+            f"terminal human authorization has no code-owned source validator: {validator_kind}",
+        )
+        return False, "invalid"
+    try:
+        authorization_verified = authorization_evaluator(annotation, root, errors)
+    except Exception as exc:
+        _error(
+            errors,
+            "terminal human authorization validator failed closed: "
+            f"{exc.__class__.__name__}",
+        )
+        return False, "invalid"
+    if authorization_verified is not True:
+        _error(errors, "terminal human authorization source was not independently verified")
+        return False, "invalid"
+    remote_raw = _evidence_git(
+        root,
+        "ls-remote",
+        "--tags",
+        EXPECTED_PUBLIC_REMOTE,
+        tag_ref,
+    )
+    if remote_raw is None:
+        _error(errors, "public terminal tag cannot be verified")
+        return False, "invalid"
+    try:
+        remote_entries = {
+            ref: object_id
+            for line in remote_raw.decode("ascii").splitlines()
+            for object_id, ref in [line.split("\t", 1)]
+        }
+    except (UnicodeError, ValueError):
+        remote_entries = {}
+    if (
+        remote_entries
+        != {
+            tag_ref: local_tag_object,
+            f"{tag_ref}^{{}}": head,
+        }
+    ):
+        _error(errors, "public terminal tag object or peeled commit does not match locally")
+        return False, "invalid"
+    return True, "published-verified"
+
+
 def _verify_product(root: Path) -> dict[str, Any]:
     """Verify the current release contract and return a JSON-serializable report."""
 
@@ -2495,6 +2892,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
     frozen_v02_profile = _frozen_v02_profile_artifacts_valid(root, errors)
     normative_profile = _normative_profile_binding_valid(root, program, errors)
+    terminal_release_binding = _terminal_release_binding_valid(program, errors)
     criteria_before = len(errors)
     criteria = _criteria(acceptance, errors)
     criteria_valid = len(errors) == criteria_before
@@ -2513,6 +2911,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
         and supporting_documents
         and frozen_v02_profile
         and normative_profile
+        and terminal_release_binding
         and progression_policy
         and len(errors) == authority_before
     )
@@ -2559,7 +2958,9 @@ def _verify_product(root: Path) -> dict[str, Any]:
     if errors or not guardrails_pass:
         for criterion_id in OUTCOME_IDS:
             states[criterion_id] = False
-    outcomes_pass = all(states[criterion_id] for criterion_id in OUTCOME_IDS)
+    evidence_outcomes_pass = all(
+        states[criterion_id] for criterion_id in OUTCOME_IDS
+    )
     graph_terminal = (
         program.get("status") == "completed"
         and program.get("activeIncrementId") is None
@@ -2574,7 +2975,26 @@ def _verify_product(root: Path) -> dict[str, Any]:
             for work in all_work
         )
     )
-    accepted = not errors and guardrails_pass and outcomes_pass and graph_terminal
+    terminal_release_state = (
+        program.get("terminalReleaseBinding", {}).get("state", "invalid")
+        if isinstance(program.get("terminalReleaseBinding"), dict)
+        else "invalid"
+    )
+    terminal_release_verified = False
+    if guardrails_pass and evidence_outcomes_pass and graph_terminal:
+        terminal_release_verified, terminal_release_state = _terminal_release_gate(
+            root, program, criteria, errors
+        )
+        if not terminal_release_verified:
+            states["O5"] = False
+    outcomes_pass = all(states[criterion_id] for criterion_id in OUTCOME_IDS)
+    accepted = (
+        not errors
+        and guardrails_pass
+        and outcomes_pass
+        and graph_terminal
+        and terminal_release_verified
+    )
     valid = not errors and guardrails_pass
     return {
         "productId": PRODUCT_ID,
@@ -2582,6 +3002,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
         "programStatus": program.get("status"),
         "valid": valid,
         "completionState": "accepted" if accepted else "in-progress",
+        "terminalReleaseState": terminal_release_state,
         "activeIncrement": program.get("activeIncrementId"),
         "outcomes": {
             "verified": sum(bool(states[item]) for item in OUTCOME_IDS),
@@ -2611,6 +3032,7 @@ def verify_product(root: Path) -> dict[str, Any]:
                 "programStatus": None,
                 "valid": False,
                 "completionState": "in-progress",
+                "terminalReleaseState": "invalid",
                 "activeIncrement": None,
                 "outcomes": {"verified": 0, "total": len(OUTCOME_IDS)},
                 "guardrails": {"passed": 0, "total": len(GUARDRAIL_IDS)},

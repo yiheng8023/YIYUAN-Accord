@@ -152,6 +152,7 @@ class ProductControlTests(unittest.TestCase):
             ["git", "init", "--quiet"],
             ["git", "config", "user.name", "Harness Fixture"],
             ["git", "config", "user.email", "fixture@example.invalid"],
+            ["git", "config", "core.autocrlf", "true"],
             [
                 "git",
                 "add",
@@ -301,6 +302,123 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(value, increment)
 
         self.mutate("product/program.json", add_mapping)
+
+    def configure_terminal_candidate(
+        self, *, bind_release: bool = True
+    ) -> tuple[list[str], str, str]:
+        outcome_ids = ["O1", "O2", "O3", "O4", "O5"]
+
+        def map_all(value: dict) -> None:
+            increment = self.ensure_increment(value, state="completed")
+            increment["acceptanceIds"].extend(outcome_ids)
+            increment["workItems"][0]["acceptanceIds"].extend(outcome_ids)
+            self.bind_fixture_registration(value, increment)
+            value["status"] = "completed"
+            value["activeIncrementId"] = None
+
+        self.mutate("product/program.json", map_all)
+        evidence_locator = "product/evidence/all-outcomes.json"
+        self.write_json(
+            evidence_locator,
+            self.evidence_document(criterion_ids=outcome_ids),
+        )
+
+        def promote(value: dict) -> None:
+            for criterion in value["criteria"]:
+                if criterion["id"] in outcome_ids:
+                    criterion["assessment"] = "verified"
+                    criterion["evidence"] = [evidence_locator]
+
+        self.mutate("product/acceptance.json", promote)
+        evidence_digest = hashlib.sha256()
+        evidence_digest.update(evidence_locator.encode("utf-8"))
+        evidence_digest.update(b"\0")
+        evidence_digest.update(
+            (self.root / evidence_locator).read_bytes().replace(b"\r\n", b"\n")
+        )
+        evidence_digest.update(b"\0")
+        if bind_release:
+            program = self.read_json("product/program.json")
+            program["terminalReleaseBinding"] = {
+                "state": "candidate",
+                "tag": "v1.0.0",
+                "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
+                "annotationFormat": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
+                "o5EvidenceSetSha256": evidence_digest.hexdigest(),
+            }
+            self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "-A"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "terminal fixture candidate"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        head = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        return outcome_ids, evidence_digest.hexdigest(), head
+
+    def create_terminal_fixture_tag(self, evidence_digest: str, head: str) -> str:
+        annotation = {
+            "schema": 1,
+            "format": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
+            "productId": "agent-autonomy-harness",
+            "release": "v1.0",
+            "candidateRevision": head,
+            "tag": "v1.0.0",
+            "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
+            "o5EvidenceSetSha256": evidence_digest,
+            "authority": {
+                "kind": "named-accountable-human",
+                "name": "fixture reviewer",
+                "decision": "authorized",
+                "decidedAt": "2026-08-15T12:00:00+08:00",
+                "source": {
+                    "kind": "fixture-trusted-user-event",
+                    "locator": "fixture://authorization/1",
+                    "identity": "fixture-authorization-1",
+                    "payloadSha256": "f" * 64,
+                },
+                "validator": {
+                    "kind": "fixture-human-authorization-validator",
+                    "version": 1,
+                },
+            },
+            "acceptedScope": control.EXPECTED_TERMINAL_RELEASE_SCOPE,
+        }
+        subprocess.run(
+            [
+                "git",
+                "tag",
+                "-a",
+                "v1.0.0",
+                "-m",
+                json.dumps(annotation, separators=(",", ":")),
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return subprocess.run(
+            ["git", "rev-parse", "refs/tags/v1.0.0"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
 
     def freeze_program_profile(self, program: dict) -> None:
         if program["normativeProfileBinding"]["state"] == "frozen":
@@ -769,6 +887,62 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("GIT_CONFIG_COUNT", environment)
         self.assertEqual(environment["GIT_CONFIG_NOSYSTEM"], "1")
         self.assertEqual(environment["GIT_CONFIG_GLOBAL"], os.devnull)
+
+    def test_public_tag_lookup_cannot_load_repository_url_or_tls_overrides(self) -> None:
+        self.initialize_fixture_repository()
+        subprocess.run(
+            [
+                "git",
+                "config",
+                f"url.https://attacker.invalid/.insteadOf",
+                control.EXPECTED_PUBLIC_REMOTE,
+            ],
+            cwd=self.root,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "config", "http.sslVerify", "false"],
+            cwd=self.root,
+            check=True,
+        )
+
+        class CompletedProcess:
+            def __init__(self) -> None:
+                self.stdout = BytesIO(b"")
+
+            def poll(self) -> int:
+                return 0
+
+            def kill(self) -> None:
+                raise AssertionError("completed process must not be killed")
+
+            def wait(self) -> int:
+                return 0
+
+        with patch(
+            "harness.control.subprocess.Popen",
+            return_value=CompletedProcess(),
+        ) as run:
+            self.assertEqual(
+                control._evidence_git(
+                    self.root,
+                    "ls-remote",
+                    "--tags",
+                    control.EXPECTED_PUBLIC_REMOTE,
+                    "refs/tags/v1.0.0",
+                ),
+                b"",
+            )
+        command = run.call_args.args[0]
+        process_cwd = Path(run.call_args.kwargs["cwd"])
+        environment = run.call_args.kwargs["env"]
+        self.assertNotEqual(process_cwd, self.root)
+        self.assertFalse((process_cwd / ".git").exists())
+        self.assertEqual(environment["GIT_CEILING_DIRECTORIES"], str(process_cwd))
+        self.assertIn("http.sslVerify=true", command)
+        self.assertIn("credential.helper=", command)
+        self.assertIn("protocol.file.allow=never", command)
+        self.assertIn(control.EXPECTED_PUBLIC_REMOTE, command)
 
     def test_evidence_git_rejects_repository_local_executable(self) -> None:
         local_git = self.root / "git.exe"
@@ -3461,6 +3635,150 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["programStatus"], "ready")
         self.assertEqual(report["outcomes"]["verified"], 5)
         self.assertEqual(report["completionState"], "in-progress")
+
+    def test_terminal_completion_requires_predeclared_release_candidate(self) -> None:
+        self.configure_terminal_candidate(bind_release=False)
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertFalse(report["criterionStates"]["O5"])
+        self.assertIn(
+            "terminal completion requires a predeclared release candidate binding",
+            report["errors"],
+        )
+
+    def test_terminal_candidate_waits_for_tag_then_accepts_exact_public_identity(
+        self,
+    ) -> None:
+        _, evidence_digest, head = self.configure_terminal_candidate()
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            pending = self.report()
+        self.assertTrue(pending["valid"], pending["errors"])
+        self.assertEqual(pending["completionState"], "in-progress")
+        self.assertEqual(
+            pending["terminalReleaseState"],
+            "candidate-clean-awaiting-authorized-tag",
+        )
+        self.assertFalse(pending["criterionStates"]["O5"])
+
+        tag_object = self.create_terminal_fixture_tag(evidence_digest, head)
+        original = control._evidence_git
+
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            unverified_authorization = self.report()
+        self.assertFalse(unverified_authorization["valid"])
+        self.assertIn(
+            "terminal human authorization has no code-owned source validator: fixture-human-authorization-validator",
+            unverified_authorization["errors"],
+        )
+
+        def project_public_tag(root: Path, *args: str) -> bytes | None:
+            if args[:2] == ("ls-remote", "--tags"):
+                return (
+                    f"{tag_object}\trefs/tags/v1.0.0\n"
+                    f"{head}\trefs/tags/v1.0.0^{{}}\n"
+                ).encode("ascii")
+            return original(root, *args)
+
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
+            {"fixture-human-authorization-validator": lambda annotation, root, errors: True},
+        ), patch(
+            "harness.control._evidence_git", side_effect=project_public_tag
+        ):
+            accepted = self.report()
+        self.assertTrue(accepted["valid"], accepted["errors"])
+        self.assertEqual(accepted["completionState"], "accepted")
+        self.assertEqual(accepted["terminalReleaseState"], "published-verified")
+        self.assertTrue(accepted["criterionStates"]["O5"])
+
+        def project_mismatched_public_tag(root: Path, *args: str) -> bytes | None:
+            if args[:2] == ("ls-remote", "--tags"):
+                return (
+                    f"{'0' * len(tag_object)}\trefs/tags/v1.0.0\n"
+                    f"{head}\trefs/tags/v1.0.0^{{}}\n"
+                ).encode("ascii")
+            return original(root, *args)
+
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
+            {"fixture-human-authorization-validator": lambda annotation, root, errors: True},
+        ), patch(
+            "harness.control._evidence_git",
+            side_effect=project_mismatched_public_tag,
+        ):
+            mismatched = self.report()
+        self.assertFalse(mismatched["valid"])
+        self.assertEqual(mismatched["completionState"], "in-progress")
+        self.assertIn(
+            "public terminal tag object or peeled commit does not match locally",
+            mismatched["errors"],
+        )
+
+    def test_terminal_candidate_rejects_untracked_or_ignored_residue(self) -> None:
+        self.configure_terminal_candidate()
+        validator = lambda document, criterion_id, root, errors: True
+        extra_file = self.root / "scratch-output"
+        extra_file.write_text("residue", encoding="utf-8")
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            file_report = self.report()
+        self.assertFalse(file_report["valid"])
+        self.assertIn(
+            "terminal release candidate must be a clean checkout with no ignored or untracked residue",
+            file_report["errors"],
+        )
+        extra_file.unlink()
+
+        empty_directory = self.root / "scratch-empty"
+        empty_directory.mkdir()
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            directory_report = self.report()
+        self.assertFalse(directory_report["valid"])
+        self.assertIn(
+            "terminal checkout contains an extra directory: scratch-empty",
+            directory_report["errors"],
+        )
+        empty_directory.rmdir()
+
+        exclude = self.root / ".git/info/exclude"
+        exclude.write_text(exclude.read_text(encoding="utf-8") + "ignored-output/\n", encoding="utf-8")
+        ignored_directory = self.root / "ignored-output"
+        ignored_directory.mkdir()
+        (ignored_directory / "payload").write_text("residue", encoding="utf-8")
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ):
+            ignored_report = self.report()
+        self.assertFalse(ignored_report["valid"])
+        self.assertIn(
+            "terminal release candidate must be a clean checkout with no ignored or untracked residue",
+            ignored_report["errors"],
+        )
 
     def test_ready_program_cannot_erase_agent_owned_non_outcome_progression(self) -> None:
         self.mutate(

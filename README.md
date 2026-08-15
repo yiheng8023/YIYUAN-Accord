@@ -187,6 +187,19 @@ repository order: a task-bound validator must still prove the natural demand and
 the source event measured after registration. Commit dates and self-reported
 timestamps cannot supply that proof.
 
+Terminal publication is deliberately two-stage. The immutable candidate tree
+predeclares a semantic-version tag, the fixed public HTTPS remote and the exact
+O5 evidence-set digest. A named human authorizes that candidate and release;
+the Agent then creates an annotated JSON authorization tag without changing the
+candidate. `completionState=accepted` additionally requires a clean candidate
+checkout, no ignored or untracked residue, an annotated local tag over `HEAD`,
+and the identical public tag object and peeled commit. Until that post-grant
+verification succeeds, O5 remains false and the project remains in progress.
+The tag's human name and timestamp are never sufficient by themselves: a
+code-owned validator must independently verify the bound authorization source.
+That validator registry is intentionally empty until a real authorization
+carrier and trust boundary are selected for the final candidate.
+
 ## What v1.0 must prove
 
 - **O1 — sustained autonomous delivery:** a finite six-or-more natural-task

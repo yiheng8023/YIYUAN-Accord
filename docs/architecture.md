@@ -75,6 +75,20 @@ independently establish that its real source event followed registration. Git
 dates and evidence timestamps are diagnostic consistency fields, not trusted
 chronology.
 
+Terminal release is an external-state transition over one immutable candidate,
+not a final mutation inside that candidate. The tree predeclares the semantic
+tag, fixed public HTTPS remote and O5 evidence-set digest. After the named human
+authorizes that exact candidate and publication, the Agent creates an annotated
+JSON tag. The code-owned terminal gate then requires clean `HEAD`, zero ignored
+or untracked repository residue, an annotated local tag object over `HEAD`, and
+the identical public tag object plus peeled commit. This removes the
+self-reference loop while keeping release authorization separate from Agent-
+owned mechanics.
+An annotation's claimed human name and time are not authority proof. Terminal
+acceptance additionally dispatches a code-owned validator for the annotation's
+bound authorization source; the registry remains empty until the actual final
+authorization carrier and trust boundary are known.
+
 Portfolio minima are eligibility predicates, not work generators. O3's
 reproducible-gap case and O4's rejected or stopped receipt count only when a
 bound natural task produces them without induced degradation. The Agent cannot

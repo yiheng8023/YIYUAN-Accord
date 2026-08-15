@@ -70,6 +70,17 @@ proves a source event occurred after registration before promotion. Git dates
 and self-reported timestamps are consistency fields, not chronology proof.
 Never manufacture a task, baseline, receipt, or validator to create progress.
 
+Terminal publication is two-stage: commit one clean candidate with a candidate
+`terminalReleaseBinding`, report its exact `HEAD`, tag, public HTTPS remote and
+O5 evidence-set digest for named-human authorization, then create and publish
+the annotated authorization tag without changing the tree. Re-run the verifier
+from that same clean candidate. A missing tag is an honest pending state; a
+dirty tree, lightweight or malformed tag, mismatched public tag object/peeled
+commit, or any ignored/untracked repository residue fails closed.
+Do not treat the tag's human name or time as authorization proof. The final
+candidate must bind a real authorization source and its code-owned source
+validator; the registry remains empty until that exact carrier is selected.
+
 ## Authority and carrier transitions
 
 Installation, enablement, accounts, new trust or data access, meaningful cost,

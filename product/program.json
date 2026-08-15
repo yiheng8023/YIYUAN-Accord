@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-terminal-release-integrity",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -42,6 +42,13 @@
     "cohortProtocolLocator": null,
     "cohortProtocolSha256": null,
     "frozenAtRevision": null
+  },
+  "terminalReleaseBinding": {
+    "state": "unregistered",
+    "tag": null,
+    "publicRemote": null,
+    "annotationFormat": null,
+    "o5EvidenceSetSha256": null
   },
   "authorityBoundary": {
     "userOwns": [
@@ -82,5 +89,55 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-terminal-release-integrity",
+      "state": "active",
+      "correctionClass": "terminal-acceptance-not-bound-to-published-candidate",
+      "observedProblem": "Once outcome validators exist, the verifier can currently derive accepted from working-tree evidence and graph booleans without proving that the evaluated tree is a clean exact candidate, that a named human authorized its tag and public release, that the local annotated tag and public remote tag identify the same immutable object and commit, or that ignored and untracked process residue is absent.",
+      "hypothesis": "A code-owned two-stage terminal release binding plus a tag annotation bound to the exact candidate HEAD and O5 evidence set can let the human authorize one immutable candidate, let the Agent execute the tag/publication mechanics afterward without mutating that tree, and make accepted depend on clean-tree, local-tag, public-remote and repository-residue proof without prebuilding an outcome validator.",
+      "falsifier": "The design requires a self-referential candidate commit, treats authorization as publication, performs a real tag or external write during this repair, relies on mutable local remote configuration, or cannot distinguish a clean preauthorization candidate from a published immutable terminal state.",
+      "stopCondition": "The current binding remains unregistered; a future terminal candidate predeclares the exact tag and fixed public HTTPS remote; accepted is impossible unless HEAD is clean including ignored/untracked paths, the local annotated tag contains the exact code-owned human-authorization payload bound to HEAD and the O5 evidence-set digest, and the public tag object and peeled commit match locally; negative and legitimate-control tests plus canonical verification pass with zero O1-O5 credit and no real release action.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-terminal-release-integrity",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup"
+          ],
+          "deliverables": [
+            "two-stage terminal release binding",
+            "clean candidate and exact local tag gate",
+            "fixed public remote tag identity gate",
+            "terminal ignored and untracked residue gate",
+            "negative verifier regression tests"
+          ]
+        }
+      ]
+    }
+  ]
 }
