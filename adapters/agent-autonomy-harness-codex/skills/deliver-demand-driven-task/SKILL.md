@@ -11,8 +11,9 @@ topology, conversation-topology, recovery, verification, or cleanup mechanics
 unless the user asks about them.
 
 Before acting on a qualifying task, read
-`references/demand-to-capability-profile.md` completely. It is a versioned,
-unaccepted host projection. The latest bound user intent, live task facts,
+`references/demand-to-capability-profile.md` completely. Its embedded
+pre-calibration status bytes are frozen; v0.2 accepted only a bounded Codex
+reference-host calibration, and no v1.0 or general-standard claim follows. The latest bound user intent, live task facts,
 host authorization, and any current Agent Autonomy Harness repository authority
 win over it. Never use this Skill or its reference to create product work,
 expand authority, or promote evidence.

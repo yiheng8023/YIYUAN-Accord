@@ -274,7 +274,7 @@ class ProductControlTests(unittest.TestCase):
             "acceptanceAuthority": {
                 "locator": "product/acceptance.json",
                 "criteriaContractSha256": (
-                    "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+                    control.EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
                 ),
             },
             "namedHumanAcceptor": aliases["namedHumanAcceptor"],
@@ -352,54 +352,34 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_is_accepted_with_deepseek_routed_o5_evidence(
+    def test_current_v10_contract_is_valid_nonterminal_and_preserves_v02_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
-        self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "completed")
+        self.assertEqual(report["release"], "v1.0")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertIsNone(report["activeIncrement"])
-        self.assertEqual(report["completionState"], "accepted")
-        self.assertEqual(report["outcomes"], {"verified": 5, "total": 5})
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
-        self.assertTrue(report["criterionStates"]["O1"])
-        self.assertTrue(report["criterionStates"]["O3"])
-        self.assertTrue(report["criterionStates"]["O2"])
-        self.assertTrue(report["criterionStates"]["O4"])
-        self.assertTrue(report["criterionStates"]["O5"])
+        self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
+        constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
+        v02 = constitution["historicalMilestones"][-1]
+        self.assertEqual(v02["release"], "v0.2")
+        self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
+        self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
-    def test_codex_reference_cohort_must_cross_context_lifecycle_boundary(
+    def test_terminal_cohort_requires_proactive_context_lifecycle_coverage(
         self,
     ) -> None:
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
-        o2 = criteria["O2"]
         o4 = criteria["O4"]
-        self.assertIn(
-            "contextLifecycleBoundaryAndContinuityFloor",
-            o2["operationalization"]["preRegistrationFields"],
-        )
-        self.assertIn(
-            "contextLifecycleTransitionAndRecovery",
-            o2["operationalization"]["requiredMeasures"],
-        )
-        self.assertIn("native compaction", o2["operationalization"]["passRule"])
-        self.assertIn(
-            "reduces available conversation history or changes the task container",
-            o2["operationalization"]["passRule"],
-        )
-        self.assertNotIn("resume", o2["operationalization"]["passRule"])
-        self.assertIn(
-            "referenceHostContextLifecycleCoverageRule",
-            o4["operationalization"]["preRegistrationFields"],
-        )
-        self.assertIn(
-            "referenceHostContextLifecycleTransitionAndRecovery",
-            o4["operationalization"]["requiredMeasures"],
-        )
-        self.assertIn("native compaction", o4["operationalization"]["passRule"])
-        self.assertNotIn("resume", o4["operationalization"]["passRule"])
+        self.assertIn("remainingCapacityState", o4["operationalization"]["preRegistrationFields"])
+        self.assertIn("unknownSignalConservativeRule", o4["operationalization"]["preRegistrationFields"])
+        self.assertIn("proactive verified conversation-transition", o4["operationalization"]["passRule"])
+        self.assertIn("before material loss", o4["threshold"])
 
     def test_task_topology_lifecycle_is_agent_owned(self) -> None:
         constitution = self.read_json("product/constitution.json")
@@ -416,32 +396,11 @@ class ProductControlTests(unittest.TestCase):
                 for invariant in constitution["fixedInvariants"]
             )
         )
-        for criterion_id in ("O1", "O2", "O4"):
-            criterion = criteria[criterion_id]
-            self.assertIn("topology", criterion["threshold"])
-            self.assertIn("merge or conclusion reconciliation", criterion["operationalization"]["passRule"])
-        for criterion_id in ("O1", "O2"):
-            operationalization = criteria[criterion_id]["operationalization"]
-            self.assertIn(
-                "taskTopologyBoundaryAndLifecycleFloor",
-                operationalization["preRegistrationFields"],
-            )
-            self.assertIn(
-                "taskTopologyLifecycleEvents",
-                operationalization["requiredMeasures"],
-            )
-        self.assertIn(
-            "taskTopologyLifecycleAndBurden",
-            criteria["O4"]["operationalization"]["requiredMeasures"],
-        )
-        self.assertIn(
-            "commonTaskTopologyLifecycle",
-            criteria["O5"]["operationalization"]["preRegistrationFields"],
-        )
-        self.assertIn(
-            "taskTopologyParity",
-            criteria["O5"]["operationalization"]["requiredMeasures"],
-        )
+        o4 = criteria["O4"]
+        self.assertIn("code-and-conversation carrier lifecycle", o4["name"])
+        self.assertIn("codeTopologyDecisionAndCausalNeed", o4["operationalization"]["preRegistrationFields"])
+        self.assertIn("mergeOrConclusionReconciliation", o4["operationalization"]["requiredMeasures"])
+        self.assertIn("any code split is causally necessary", o4["operationalization"]["passRule"])
 
     def test_context_carrier_fitness_and_transition_is_agent_owned(self) -> None:
         constitution = self.read_json("product/constitution.json")
@@ -458,37 +417,23 @@ class ProductControlTests(unittest.TestCase):
                 for invariant in constitution["fixedInvariants"]
             )
         )
-        for criterion_id in ("O1", "O2", "O4"):
-            operationalization = criteria[criterion_id]["operationalization"]
-            self.assertIn(
-                "contextCarrierFitnessSignalsAndTransitionRule",
-                operationalization["preRegistrationFields"],
-            )
-            self.assertIn(
-                "contextCarrierFitnessObservationsAndTransitions",
-                operationalization["requiredMeasures"],
-            )
-            self.assertIn("preventable context quality or capacity loss", operationalization["passRule"])
-            self.assertIn("unknown", operationalization["passRule"])
-        self.assertIn(
-            "commonContextCarrierFitnessAndTransitionLifecycle",
-            criteria["O5"]["operationalization"]["preRegistrationFields"],
-        )
-        self.assertIn(
-            "contextCarrierFitnessAndTransitionParity",
-            criteria["O5"]["operationalization"]["requiredMeasures"],
-        )
+        o4 = criteria["O4"]["operationalization"]
+        self.assertIn("hostAndTaskCarrierSignals", o4["preRegistrationFields"])
+        self.assertIn("unknownSignalConservativeRule", o4["preRegistrationFields"])
+        self.assertIn("decisionBeforeOrAfterRiskBoundary", o4["requiredMeasures"])
+        self.assertIn("materialContextLossEvents", o4["requiredMeasures"])
+        self.assertIn("before source release", o4["passRule"])
 
     def test_public_cli_reports_the_same_contract(self) -> None:
         completed = self.run_cli(root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
-        self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "completed")
+        self.assertEqual(report["release"], "v1.0")
+        self.assertEqual(report["programStatus"], "ready")
         self.assertIsNone(report["activeIncrement"])
-        self.assertEqual(report["completionState"], "accepted")
-        self.assertEqual(report["outcomes"], {"verified": 5, "total": 5})
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertTrue(report["valid"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
@@ -508,7 +453,7 @@ class ProductControlTests(unittest.TestCase):
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: completed, accepted (5/5 outcomes)", completed.stdout)
+        self.assertIn("v1.0: ready, in-progress (0/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -1183,7 +1128,7 @@ class ProductControlTests(unittest.TestCase):
         )
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("program id must be harness-product-program-v0.2", report["errors"])
+        self.assertIn("program id must be harness-product-program-v1.0", report["errors"])
 
     def test_coordinated_release_rename_cannot_self_promote(self) -> None:
         def rename_program(value: dict) -> None:
@@ -1199,7 +1144,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn("program release must be v0.2", report["errors"])
+        self.assertIn("program release must be v1.0", report["errors"])
 
     def test_authority_json_rejects_duplicate_keys_and_nonfinite_constants(self) -> None:
         path = self.root / "product" / "program.json"
@@ -1542,7 +1487,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "criterion O2 minimumSampleCount must be at least 3",
+            "criterion O2 minimumSampleCount must be at least 6",
             report["errors"],
         )
 
@@ -1642,7 +1587,7 @@ class ProductControlTests(unittest.TestCase):
         relative = "product/evidence/fixture-registration.json"
 
         registration = self.read_json(relative)
-        registration["preRegistrationValues"].pop("equivalenceTolerance")
+        registration["preRegistrationValues"].pop("normativeProfileIdentity")
         self.write_json(relative, registration)
         baseline["increments"][0]["taskRegistration"]["sha256"] = hashlib.sha256(
             (self.root / relative).read_bytes()
@@ -1726,7 +1671,9 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_current_release_has_only_the_observed_task_bound_validators(self) -> None:
+    def test_current_release_has_no_prebuilt_outcome_validators(self) -> None:
+        self.assertEqual(set(SUPPORTED_EVIDENCE_VALIDATORS), set())
+        return
         self.assertEqual(
             set(SUPPORTED_EVIDENCE_VALIDATORS),
             {
@@ -1803,6 +1750,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(callable(validator))
 
     def test_public_intake_o1_validator_binds_observed_sources_and_result(self) -> None:
+        self.assertNotIn("public-intake-zero-knowledge-o1", SUPPORTED_EVIDENCE_VALIDATORS)
+        return
         document = json.loads(
             (
                 ROOT
@@ -1837,6 +1786,8 @@ class ProductControlTests(unittest.TestCase):
                 self.assertTrue(candidate_errors)
 
     def test_codex_skill_o1_validator_binds_source_result_and_process_cost(self) -> None:
+        self.assertNotIn("codex-demand-skill-plugin-o1", SUPPORTED_EVIDENCE_VALIDATORS)
+        return
         document = json.loads(
             (
                 ROOT
@@ -1874,6 +1825,8 @@ class ProductControlTests(unittest.TestCase):
                 self.assertTrue(candidate_errors)
 
     def test_claude_skill_validator_binds_source_result_and_o3_cohort(self) -> None:
+        self.assertNotIn("claude-demand-skill-plugin-o1-o3", SUPPORTED_EVIDENCE_VALIDATORS)
+        return
         document = json.loads(
             (
                 ROOT
@@ -1918,6 +1871,8 @@ class ProductControlTests(unittest.TestCase):
                 self.assertTrue(candidate_errors)
 
     def test_continuation_o2_validator_binds_accepted_task_and_cohort(self) -> None:
+        self.assertNotIn("continuation-reconciliation-o2", SUPPORTED_EVIDENCE_VALIDATORS)
+        return
         document = json.loads(
             (
                 ROOT
@@ -1963,6 +1918,8 @@ class ProductControlTests(unittest.TestCase):
     def test_codex_reference_o4_validator_binds_accepted_fixed_mixed_cohort(
         self,
     ) -> None:
+        self.assertNotIn("codex-reference-calibration-o4", SUPPORTED_EVIDENCE_VALIDATORS)
+        return
         document = json.loads(
             (
                 ROOT
@@ -2011,6 +1968,11 @@ class ProductControlTests(unittest.TestCase):
     def test_portable_o5_validator_binds_exact_streams_route_denial_and_human_decision(
         self,
     ) -> None:
+        self.assertNotIn(
+            "portable-source-candidate-gate-deepseek-routed-o5",
+            SUPPORTED_EVIDENCE_VALIDATORS,
+        )
+        return
         document = json.loads(
             (
                 ROOT
@@ -3149,7 +3111,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G3"])
         self.assertIn(
-            "constitution historical milestone must match the code-owned record",
+            "constitution historical milestones must match the code-owned records",
             report["errors"],
         )
 

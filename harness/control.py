@@ -25,7 +25,7 @@ from typing import Any, Callable, Mapping
 
 PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
-CURRENT_RELEASE = "v0.2"
+CURRENT_RELEASE = "v1.0"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
     "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality "
@@ -45,16 +45,16 @@ EXPECTED_SUCCESS_DEFINITION = (
     "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness "
-    "through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier "
-    "lifecycle arbitration, an accepted methodology and open quality-conformance profile, "
-    "and thin cross-host reference adapters that reuse sufficient external protocol, "
-    "runtime, identity, audit, provenance, and evaluation layers."
+    "Prove the constitution's terminal product proposition through a finite repeated-natural-task "
+    "cohort: sustained goal-level delivery, lower user orchestration burden than source-bound "
+    "ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host "
+    "open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot "
+    "satisfy this program by inheritance."
 )
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
-    "G1-G4 passing count as progress. Documents, tests, inventories, fixtures, "
-    "memberships, and research volume are supporting evidence only."
+    "G1-G4 passing count as progress. Documents, tests, inventories, fixtures, memberships, "
+    "research volume, and prior-release evidence are supporting inputs only."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -135,16 +135,16 @@ OUTCOME_OPERATIONALIZATION_FIELDS = {
 }
 OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
     {
-        "O1": (1, "single-pre-registered-natural-task"),
-        "O2": (3, "source-bound-baseline-by-pre-registered-scenario-class"),
-        "O3": (3, "bounded-route-cohort-with-retain-option"),
-        "O4": (4, "same-version-scorecard-with-source-bound-comparator-and-pass-fail-cases"),
-        "O5": (1, "same-task-matched-cross-host-pair"),
+        "O1": (6, "finite-stratified-natural-task-cohort"),
+        "O2": (6, "same-cohort-source-bound-ad-hoc-baselines"),
+        "O3": (4, "real-task-route-lifecycle-cohort"),
+        "O4": (4, "predeclared-carrier-fitness-and-transition-cohort"),
+        "O5": (2, "same-task-live-matched-cross-host-pairs"),
     }
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "c3993f40052ac2de75193c5cf923d98d6bd0b899aa7fc42ddeb772103932baf6"
+    "aad8017f01e00111348fd22e170db9717d3171ae9c82c8fcc5b9a27102688fee"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -469,19 +469,34 @@ EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY = {
     "mayTriggerReplanning": True,
 }
 EXPECTED_PRIOR_RELEASE = {
-    "release": "v0.1",
-    "state": "accepted-repository-control-milestone",
-    "revision": "be498f960c9e0587d355291fb24261c91e75cd77",
+    "release": "v0.2",
+    "state": "accepted-bounded-calibration-milestone",
+    "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
     "currentAuthority": False,
 }
-EXPECTED_HISTORICAL_MILESTONE = {
-    **EXPECTED_PRIOR_RELEASE,
-    "claimLimit": (
-        "repository-bound control evidence only; not terminal proposition, "
-        "broad user value, software-engineering standard, cross-host, "
-        "production, or publication proof"
-    ),
-}
+EXPECTED_HISTORICAL_MILESTONES = (
+    {
+        "release": "v0.1",
+        "state": "accepted-repository-control-milestone",
+        "revision": "be498f960c9e0587d355291fb24261c91e75cd77",
+        "currentAuthority": False,
+        "claimLimit": (
+            "repository-bound control evidence only; not terminal proposition, "
+            "broad user value, software-engineering standard, cross-host, "
+            "production, or publication proof"
+        ),
+    },
+    {
+        **EXPECTED_PRIOR_RELEASE,
+        "claimLimit": (
+            "bounded O1-O5 calibration evidence for the fixed natural-task, Codex "
+            "reference-host and matched source-gate cohorts only; not the constitution "
+            "terminal proposition, sustained live capability and carrier orchestration, "
+            "installed product value, universal portability, production, publication, "
+            "or release proof"
+        ),
+    },
+)
 
 
 EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
@@ -3710,38 +3725,7 @@ def _validate_portable_source_candidate_gate_o5(
 
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
-    {
-        "public-intake-zero-knowledge-o1": (
-            frozenset({"O1"}),
-            frozenset({_PUBLIC_INTAKE_INCREMENT_ID}),
-            _validate_public_intake_o1,
-        ),
-        "codex-demand-skill-plugin-o1": (
-            frozenset({"O1"}),
-            frozenset({_CODEX_SKILL_INCREMENT_ID}),
-            _validate_codex_skill_o1,
-        ),
-        "claude-demand-skill-plugin-o1-o3": (
-            frozenset({"O1", "O3"}),
-            frozenset({_CLAUDE_SKILL_INCREMENT_ID}),
-            _validate_claude_skill_o1_o3,
-        ),
-        "continuation-reconciliation-o2": (
-            frozenset({"O2"}),
-            frozenset({_CONTINUATION_INCREMENT_ID}),
-            _validate_continuation_reconciliation_o2,
-        ),
-        "codex-reference-calibration-o4": (
-            frozenset({"O4"}),
-            frozenset({_CODEX_CALIBRATION_INCREMENT_ID}),
-            _validate_codex_reference_calibration_o4,
-        ),
-        "portable-source-candidate-gate-deepseek-routed-o5": (
-            frozenset({"O5"}),
-            frozenset({_PORTABLE_O5_INCREMENT_ID}),
-            _validate_portable_source_candidate_gate_o5,
-        ),
-    }
+    {}
 )
 
 class _InvalidJson(ValueError):
@@ -4127,12 +4111,12 @@ def _historical_boundary_valid(
     ):
         _error(errors, "constitution historicalEvidenceBoundary is invalid")
     milestones = constitution.get("historicalMilestones")
-    if not isinstance(milestones, list) or len(milestones) != 1:
-        _error(errors, "constitution must retain exactly one historical milestone")
-    elif not _same_typed_value(milestones[0], EXPECTED_HISTORICAL_MILESTONE):
+    if not isinstance(milestones, list) or not _same_typed_value(
+        milestones, list(EXPECTED_HISTORICAL_MILESTONES)
+    ):
         _error(
             errors,
-            "constitution historical milestone must match the code-owned record",
+            "constitution historical milestones must match the code-owned records",
         )
     return len(errors) == before
 

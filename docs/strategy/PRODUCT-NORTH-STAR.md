@@ -80,7 +80,7 @@ bounded cleanup. It did not prove this North Star, broad user value, a
 software-engineering standard, cross-host behavior, production, or release
 publication.
 
-Current `v0.2` acceptance directly measures the missing product outcomes:
+Historical `v0.2` acceptance measured the following bounded calibration outcomes:
 
 - O1 — one goal-level natural real task completes the demand-to-capability
   closed loop with zero user capability-orchestration or code-and-conversation
@@ -97,6 +97,13 @@ Current `v0.2` acceptance directly measures the missing product outcomes:
   same-host second adapter is conformance evidence only and cannot pass O5.
   Only this outcome can establish the first bounded Agent-neutral portability
   claim.
+
+The current v1.0 program in `product/program.json` and
+`product/acceptance.json` is the finite terminal-product proof. It preserves
+v0.2 as historical evidence but requires sustained natural-task delivery,
+strict comparative burden reduction, live demand-driven capability lifecycle,
+proactive verified carrier transition, and reproducible live cross-host public
+release before the whole project can be called closed.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as

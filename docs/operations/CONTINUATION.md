@@ -15,18 +15,25 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `completed`. The public verifier should
+The current machine program is v1.0 and `ready`. The public verifier should
 report:
 
-- program status `completed`;
-- completion `accepted`;
-- O1-O5 true (`5/5` outcomes); O2 binds the exact public-intake, Codex
-  Skill-source, and continuation-reconciliation scenarios without
-  double-counting the similar Claude Skill source task;
+- program status `ready`;
+- completion `in-progress`;
+- O1-O5 false (`0/5` outcomes); no v0.2 evidence may promote them by inheritance;
 - G1-G4 true (`4/4` guardrails);
 - no active increment or work item.
 
-## Accepted O5 basis
+v0.2 remains an accepted bounded-calibration historical milestone at
+`0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`. The current critical path is the
+v1.0 terminal proposition in `product/acceptance.json`, especially sustained
+natural-task evidence, comparative burden reduction, live capability lifecycle,
+proactive carrier transition, and live cross-host release proof. The source task
+that reached 45 native compactions without a proactive handoff is current
+counterevidence for O4; this same-directory fork corrected the immediate carrier
+but does not retroactively pass O4.
+
+## Historical v0.2 accepted O5 basis
 
 The final registration fixed one independently useful read-only source-candidate
 gate on commit `48ef653`. Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude

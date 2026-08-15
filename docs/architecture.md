@@ -85,7 +85,7 @@ authority graph, criterion contracts, admitted evidence, human authority,
 process loss, and repository residue. It does not execute tasks, discover or
 install capabilities, route work, or operate a host adapter.
 
-O1 is verified by three accepted, task-bound results: the public-intake rewrite
+Historical v0.2 O1 was verified by three accepted, task-bound results: the public-intake rewrite
 and the uninstalled Codex and Claude task-facing Skill source packages. O2 uses
 three materially distinct scenarios, O3 binds their route choices, O4 accepts a
 bounded Codex reference-host calibration, and O5 binds one accepted matched
@@ -103,7 +103,7 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is completed after the public-intake, task-facing Codex and
+The historical v0.2 program completed after the public-intake, task-facing Codex and
 Claude Skill source deliveries, continuation-reconciliation implementation,
 bounded Codex reference-host calibration, and pre-registered O5 matched
 source-candidate gate. The first three support O1. A
@@ -120,7 +120,11 @@ human Codex-only claim. O5 adds one exact Codex CLI and distinct-host Claude
 Code/DeepSeek task pair. Both independently returned the same fact-grounded
 single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
-adapter/date claim.
+adapter/date claim. Those bindings remain immutable at the v0.2 revision and
+are not registered current v1.0 validators. v1.0 is `ready`, O1-O5 are planned,
+and its terminal criteria require sustained natural tasks, comparative burden
+reduction, a real live capability lifecycle, proactive verified carrier
+transition, and live reproducible cross-host release evidence.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
@@ -385,9 +389,11 @@ task-facing Skill and candidate-profile bytes beside one native `SessionStart`
 Hook and an isolated standard-library launcher. Claude Code's session-scoped
 `--plugin-dir` exposure avoids persistent installation; Skill discovery plus
 native input and plain-stdout context output differences remain behind the thin
-package and `harness/claude_reference.py`. The fixed host's strict manifest
-validation and offline semantic-parity checks pass, but no Claude model task,
-matched Codex pair, human equivalence judgment, or O5 evidence has occurred.
+package and `harness/claude_reference.py`. The fixed source package's strict
+manifest validation and offline semantic-parity checks pass. Historical v0.2
+later obtained one matched Codex plus Claude Code/DeepSeek source-gate pair and
+a bounded human equivalence judgment; that pair is not live installed-adapter
+behavior and does not satisfy current v1.0 O5.
 
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event

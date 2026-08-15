@@ -12,13 +12,16 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Research-stage status:** v0.2 has completed its machine-governed program and
-the repository verifier reports `completionState=accepted`: O1-O5 are verified
-(`5/5` outcomes) and G1-G4 pass (`4/4` guardrails). This is acceptance of the
-bounded research release contract, not a production, publication, universal
-portability, or persistently installed-adapter claim.
+**Current status:** v1.0 is the terminal-product proof program. The repository
+verifier reports `programStatus=ready`, `completionState=in-progress`, O1-O5
+`0/5`, and G1-G4 `4/4`. The project is therefore not closed. v0.2 remains an
+immutable accepted bounded-calibration milestone at revision
+`0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`; its `5/5` result cannot be inherited
+as proof of sustained real-task autonomy, proactive carrier management, live
+installed value, publication, production, or the constitution's terminal
+product proposition.
 
-O1 is supported by accepted public-intake, Codex Skill-source, and Claude
+The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
 Skill-source, and continuation-reconciliation scenarios without double-counting
 the similar host package deliveries. O3 binds the three observed route decisions
@@ -26,7 +29,7 @@ across native retention and finite source-bound discovery or adaptation. O4
 accepts the unchanged candidate.5 methodology and minimum profile only for the
 registered Codex 0.147.0 Windows cohort, including its honestly stopped case.
 
-O5 adds one pre-registered matched natural task on Codex CLI
+Historical v0.2 O5 adds one pre-registered matched natural task on Codex CLI
 0.147.0/gpt-5.6-sol and distinct-host Claude Code 2.1.233 routed to
 DeepSeek-V4-Pro through the official Anthropic-format endpoint. Both hosts
 independently returned the same useful `blocked` decision: the target Claude
@@ -111,7 +114,8 @@ The current repository provides:
 - a machine-readable [constitution](product/constitution.json) for purpose and
   fixed boundaries;
 - a [program](product/program.json) for the current causal work state;
-- explicit [v0.2 acceptance criteria](product/acceptance.json);
+- explicit terminal [v1.0 acceptance criteria](product/acceptance.json), with
+  all outcomes still planned;
 - the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
   accepted only for the bounded O4 Codex reference-host calibration; its source
   bytes retain the pre-calibration status header frozen by registration;
@@ -139,10 +143,12 @@ The current repository provides:
 - a fixed-source external-landscape review that narrows what the project may
   build instead of duplicating existing layers.
 
-It does not provide task execution, persistent capability installation,
-accepted live routing, or an accepted quality profile today. The adapters are
-not installed in user configuration. Passing repository checks and the stopped
-live mechanism result do not prove accepted user value.
+It does not provide a task runtime, persistent capability installation, or an
+accepted v1.0 live-routing result today. Candidate.5 has only the frozen,
+bounded v0.2 Codex calibration acceptance described above; it is not the final
+v1.0 profile or a general standard. The adapters are not installed in user
+configuration. Passing repository checks and historical receipts do not prove
+the terminal product result.
 
 ## Verify the repository
 
@@ -159,27 +165,25 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-## What v0.2 must prove
+## What v1.0 must prove
 
-- **O1 — one closed loop:** one natural goal-level task completes without the
-  user selecting, invoking, recovering, verifying, or cleaning the capability
-  route or choosing, operating, merging, archiving, or cleaning code and
-  conversation topology, and without a material collaboration-loss correction
-  such as fixing misunderstood intent, reopened decisions, unrequested work,
-  process bloat, residue, continuity failure, topology divergence, or a false
-  completion claim.
-- **O2 — repeated burden reduction:** at least three materially different
-  natural tasks repeat that zero-loss floor and beat a source-bound ad-hoc
-  baseline without losing task quality.
-- **O3 — demand-driven capability lifecycle:** both a no-gap/native case and a
-  real-gap/discovery case make bounded, evidence-backed route decisions and end
-  task-scoped exposure.
-- **O4 — calibrated methodology and quality profile:** the same pre-registered
-  profile evaluates accepted and failed real-task receipts on the Codex
-  reference host. It cannot claim Agent-neutral portability.
-- **O5 — bounded cross-host proof:** the same task and core semantics produce
-  accepted, equivalent outcomes on Codex and a distinct second Agent host or
-  runtime through thin adapters.
+- **O1 — sustained autonomous delivery:** a finite six-or-more natural-task
+  cohort covers the required scenario bands with accepted outcomes, zero user
+  capability/topology/context mechanics, and zero material collaboration loss.
+- **O2 — comparative burden reduction:** the same cohort strictly lowers total
+  and median material orchestration burden against eligible source-bound ad-hoc
+  baselines without compensating quality, authority, evidence, or residue loss.
+- **O3 — real capability lifecycle:** natural tasks cover healthy-route retain,
+  residual-gap discovery and governed live addition, disproportionate-route
+  rejection, and release or separately accepted persistence.
+- **O4 — proactive carrier lifecycle:** real work proves keep-current,
+  compact-and-reconcile, and verified same-goal conversation transition before
+  preventable loss; every necessary code split is reconciled and cleaned.
+- **O5 — live portable open delivery:** two matched live Codex/distinct-host
+  pairs include a useful completion and an honest stop or recovery, reproduce
+  from a clean checkout, and end with human acceptance of the versioned
+  profile, thin adapters, privacy disposition, claim ceiling, and exact public
+  release.
 
 For O1-O4, a natural task is a logical pre-registered demand-and-outcome unit,
 not a Codex sidebar task or thread. Sequential receipts may remain in one

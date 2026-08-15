@@ -17,7 +17,14 @@ increment names:
 Available tools, ecosystem novelty, inventory drift, a green fixture, or an
 interesting paper is not sufficient entry evidence.
 
-## Current v0.2 sequence
+## Current program and historical v0.2 sequence
+
+v1.0 is the current nonterminal terminal-product proof program. Its outcomes
+start at 0/5; v0.2 evidence remains immutable historical calibration and cannot
+be inherited. Current research enters only when a v1.0 causal increment binds a
+real uncertainty or failure. In particular, the 45-compaction source-task
+carrier failure is O4 counterevidence, not an automatic result or permission to
+build a generic context runtime.
 
 v0.2 has completed its machine-governed sequence. O1-O5 are verified through
 the accepted public-intake, task-facing Codex and Claude Skill source,
@@ -66,10 +73,11 @@ protocol. The stopped cases remain counterevidence against treating home
 isolation, one feature flag, or schema validity alone as sufficient capability
 and data-boundary proof.
 
-No current evidence proves the O2 cohort-level user-value reduction, an
-accepted methodology or quality profile, or cross-host behavior. No
-outcome-bearing A/B task should be
-manufactured merely to move the program.
+The v0.2 evidence proved only its bounded O2 cohort comparison, Codex-only O4
+profile calibration, and fixed O5 source-gate decision portability. It does not
+prove the stronger current v1.0 sustained cohort, proactive carrier behavior,
+live installed-adapter value, clean-checkout release, or terminal proposition.
+No outcome-bearing A/B task should be manufactured merely to move the program.
 
 Natural-task evidence is required for outcome-bearing experimentation, but its
 absence does not block the program. Bounded

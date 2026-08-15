@@ -158,6 +158,13 @@
       "revision": "be498f960c9e0587d355291fb24261c91e75cd77",
       "currentAuthority": false,
       "claimLimit": "repository-bound control evidence only; not terminal proposition, broad user value, software-engineering standard, cross-host, production, or publication proof"
+    },
+    {
+      "release": "v0.2",
+      "state": "accepted-bounded-calibration-milestone",
+      "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
+      "currentAuthority": false,
+      "claimLimit": "bounded O1-O5 calibration evidence for the fixed natural-task, Codex reference-host and matched source-gate cohorts only; not the constitution terminal proposition, sustained live capability and carrier orchestration, installed product value, universal portability, production, publication, or release proof"
     }
   ],
   "bootstrapGuards": [
