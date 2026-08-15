@@ -104,6 +104,7 @@ AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
                 "activeIncrementId",
                 "progressionPolicy",
                 "priorRelease",
+                "normativeProfileBinding",
                 "authorityBoundary",
                 "completionExpression",
                 "increments",
@@ -144,7 +145,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "bb826bcd3f05b44eae19abbf772f74806eccd68bf18eff1880039513e444dea9"
+    "e27986f75d3ce00da4c611a1c740e72309a5938e1c1071cbf7fa313b492ce0c2"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -186,8 +187,11 @@ REQUIRED_USER_AUTHORITY = {
     "new-trust",
     "new-account-or-data-boundary",
     "new-cost",
-    "publication",
-    "release",
+    "capability-installation-authorization",
+    "account-connection-authorization",
+    "persistent-activation-authorization",
+    "publication-authorization",
+    "release-authorization",
     "accountable-outcome-acceptance",
     "destructive-or-irreversible-action",
 }
@@ -196,14 +200,16 @@ AUTHORITY_BOUNDARY_FIELDS = {
     "agentOwnsWithinBoundedAuthority",
 }
 HUMAN_ONLY_OPERATIONS = {
-    "account-connection",
     "destructive-action",
     "irreversible-action",
     "new-account-or-data-boundary",
     "new-cost",
     "new-trust",
-    "publication",
-    "release",
+    "capability-installation-authorization",
+    "account-connection-authorization",
+    "persistent-activation-authorization",
+    "publication-authorization",
+    "release-authorization",
     "accountable-outcome-acceptance",
 }
 OPERATION_EFFECTS = {
@@ -221,6 +227,28 @@ OPERATION_EFFECTS = {
     "targeted-capability-discovery": "bounded-public-read",
     "capability-static-review": "local-read",
     "inactive-exact-acquisition": "bounded-local-write",
+    "same-goal-carrier-transition": "bounded-host-state-change",
+    "authorized-capability-installation": "bounded-local-write",
+    "authorized-account-connection": "bounded-external-write",
+    "authorized-persistent-activation": "bounded-host-state-change",
+    "authorized-publication-execution": "bounded-external-write",
+    "authorized-release-execution": "bounded-external-write",
+}
+NORMATIVE_PROFILE_BINDING_FIELDS = {
+    "state",
+    "profileIdentity",
+    "locator",
+    "sha256",
+    "cohortIdentity",
+    "frozenAtRevision",
+}
+UNFROZEN_NORMATIVE_PROFILE_BINDING = {
+    "state": "unfrozen",
+    "profileIdentity": None,
+    "locator": None,
+    "sha256": None,
+    "cohortIdentity": None,
+    "frozenAtRevision": None,
 }
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
@@ -243,7 +271,12 @@ INCREMENT_FIELDS = {
     "cleanupBoundary",
     "workItems",
 }
-TASK_REGISTRATION_BINDING_FIELDS = {"locator", "sha256"}
+TASK_REGISTRATION_BINDING_FIELDS = {
+    "locator",
+    "sha256",
+    "sourceRevision",
+    "measurementNotBefore",
+}
 TASK_REGISTRATION_FIELDS = {
     "schema",
     "id",
@@ -403,7 +436,43 @@ FORBIDDEN_AUTHORITY_PATTERNS = (
     re.compile(r"registry/curation[-]program[-]plan[.]json", re.IGNORECASE),
     re.compile(r"registry/program[-]acceptance[-]map[.]json", re.IGNORECASE),
 )
-CONVENTIONAL_RESIDUE_NAMES = {".tmp", "__pycache__"}
+CONVENTIONAL_RESIDUE_NAMES = {
+    ".tmp",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".coverage",
+    ".tox",
+    ".nox",
+    ".hypothesis",
+    ".ipynb_checkpoints",
+    ".ds_store",
+    "thumbs.db",
+}
+CONVENTIONAL_RESIDUE_SUFFIXES = (
+    ".pyc",
+    ".pyo",
+    ".log",
+    ".bak",
+    ".orig",
+    ".rej",
+)
+FROZEN_V02_PROFILE_ARTIFACT_SHA256 = MappingProxyType(
+    {
+        "docs/DEMAND-TO-CAPABILITY-PROFILE.md": (
+            "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a"
+        ),
+        "adapters/agent-autonomy-harness-codex/skills/"
+        "deliver-demand-driven-task/SKILL.md": (
+            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f"
+        ),
+        "adapters/agent-autonomy-harness-claude/skills/"
+        "deliver-demand-driven-task/SKILL.md": (
+            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f"
+        ),
+    }
+)
 EXPECTED_PROGRESSION_POLICY = {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -537,6 +606,29 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
     if cache is not None:
         cache[key] = result
     return result
+
+
+def _committed_blob(
+    root: Path, revision: str, locator: str, expected_sha256: str
+) -> bool:
+    if re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision) is None:
+        return False
+    if _evidence_git(root, "merge-base", "--is-ancestor", revision, "HEAD") is None:
+        return False
+    if _evidence_git(root, "diff", "--quiet", revision, "--", locator) is None:
+        return False
+    committed = _evidence_git(root, "show", f"{revision}:{locator}")
+    return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
+
+
+def _commit_instant(root: Path, revision: str) -> datetime | None:
+    raw = _evidence_git(root, "show", "-s", "--format=%cI", revision)
+    if raw is None:
+        return None
+    try:
+        return _rfc3339_instant(raw.decode("ascii").strip())
+    except UnicodeError:
+        return None
 
 
 class _InvalidJson(ValueError):
@@ -961,6 +1053,74 @@ def _supporting_documents_exist(
     return len(errors) == before
 
 
+def _frozen_v02_profile_artifacts_valid(root: Path, errors: list[str]) -> bool:
+    before = len(errors)
+    for relative, expected_sha256 in FROZEN_V02_PROFILE_ARTIFACT_SHA256.items():
+        candidate = _inside_root(root, relative, errors, "frozen v0.2 profile artifact")
+        if candidate is None:
+            continue
+        try:
+            raw = candidate.read_bytes()
+        except OSError as exc:
+            _error(
+                errors,
+                f"cannot read frozen v0.2 profile artifact {relative}: "
+                f"{exc.__class__.__name__}",
+            )
+            continue
+        if hashlib.sha256(raw).hexdigest() != expected_sha256:
+            _error(errors, f"frozen v0.2 profile artifact identity changed: {relative}")
+    return len(errors) == before
+
+
+def _normative_profile_binding_valid(
+    root: Path, program: dict[str, Any], errors: list[str]
+) -> bool:
+    before = len(errors)
+    binding = program.get("normativeProfileBinding")
+    if not isinstance(binding, dict) or set(binding) != NORMATIVE_PROFILE_BINDING_FIELDS:
+        _error(errors, "program normativeProfileBinding fields must match the code-owned schema")
+        return False
+    if binding.get("state") == "unfrozen":
+        if not _same_typed_value(binding, UNFROZEN_NORMATIVE_PROFILE_BINDING):
+            _error(errors, "unfrozen normative profile binding must contain only null identities")
+        return len(errors) == before
+    if binding.get("state") != "frozen":
+        _error(errors, "program normative profile binding state must be unfrozen or frozen")
+        return False
+    locator = _relative_locator(binding.get("locator"))
+    profile_path = PurePosixPath(locator) if locator is not None else None
+    profile_identity = binding.get("profileIdentity")
+    cohort_identity = binding.get("cohortIdentity")
+    expected_sha256 = binding.get("sha256")
+    revision = binding.get("frozenAtRevision")
+    if (
+        locator is None
+        or profile_path is None
+        or not profile_path.parts
+        or profile_path.parts[0] != "docs"
+        or locator == "docs/DEMAND-TO-CAPABILITY-PROFILE.md"
+        or not _nonempty_text(profile_identity)
+        or not _nonempty_text(cohort_identity)
+        or not isinstance(expected_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+        or not isinstance(revision, str)
+    ):
+        _error(errors, "frozen normative profile binding shape is invalid")
+        return False
+    candidate = _inside_root(root, locator, errors, "normative profile")
+    if candidate is None:
+        return False
+    try:
+        raw = candidate.read_bytes()
+    except OSError as exc:
+        _error(errors, f"cannot read normative profile {locator}: {exc.__class__.__name__}")
+        return False
+    if not _committed_blob(root, revision, locator, expected_sha256):
+        _error(errors, "frozen normative profile identity or source revision mismatch")
+    return len(errors) == before
+
+
 def _release_identity_valid(
     constitution: dict[str, Any],
     program: dict[str, Any],
@@ -1357,8 +1517,9 @@ def _task_registration_guardrail(
     root: Path,
     increment: dict[str, Any],
     criteria: Mapping[str, dict[str, Any]],
+    profile_binding: Mapping[str, Any],
     errors: list[str],
-) -> bool:
+) -> datetime | None:
     before = len(errors)
     increment_id = increment.get("id")
     mapped = _string_list(increment.get("acceptanceIds")) or []
@@ -1370,13 +1531,19 @@ def _task_registration_guardrail(
                 errors,
                 f"outcome-neutral increment {increment_id} must bind null taskRegistration",
             )
-        return len(errors) == before
+        return None
+    if profile_binding.get("state") != "frozen":
+        _error(
+            errors,
+            f"outcome-bearing increment {increment_id} requires a frozen normative profile",
+        )
+        return None
     if not isinstance(binding, dict) or set(binding) != TASK_REGISTRATION_BINDING_FIELDS:
         _error(
             errors,
             f"outcome-bearing increment {increment_id} requires an exact taskRegistration binding",
         )
-        return False
+        return None
     locator = _relative_locator(binding.get("locator"), allow_evidence=True)
     registration_path = PurePosixPath(locator) if locator is not None else None
     if (
@@ -1385,32 +1552,51 @@ def _task_registration_guardrail(
         or not registration_path.name.endswith("-registration.json")
     ):
         _error(errors, f"increment {increment_id} has invalid taskRegistration locator")
-        return False
+        return None
     candidate = _inside_root(root, locator, errors, "task registration")
     if candidate is None:
-        return False
+        return None
     try:
         raw = candidate.read_bytes()
     except OSError as exc:
         _error(errors, f"cannot read task registration {locator}: {exc.__class__.__name__}")
-        return False
+        return None
     expected_sha256 = binding.get("sha256")
     if (
         not isinstance(expected_sha256, str)
         or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
-        or hashlib.sha256(raw).hexdigest() != expected_sha256
     ):
         _error(errors, f"increment {increment_id} taskRegistration identity mismatch")
-        return False
+        return None
+    source_revision = binding.get("sourceRevision")
+    measurement_not_before = _rfc3339_instant(binding.get("measurementNotBefore"))
+    source_commit_at = (
+        _commit_instant(root, source_revision)
+        if isinstance(source_revision, str)
+        else None
+    )
+    if (
+        not isinstance(source_revision, str)
+        or not _committed_blob(root, source_revision, locator, expected_sha256)
+        or source_commit_at is None
+        or measurement_not_before is None
+        or source_commit_at > measurement_not_before
+    ):
+        _error(
+            errors,
+            f"increment {increment_id} taskRegistration was not committed before measurement",
+        )
+        return None
     registration = _load_json(candidate, f"task registration {locator}", errors)
     if set(registration) != TASK_REGISTRATION_FIELDS:
         _error(errors, f"task registration {locator} fields must match the code-owned schema")
-        return False
+        return None
     criterion_ids = _string_list(registration.get("criterionIds"))
     source_capture = registration.get("sourceCaptureEligibilityAndStopRule")
     acceptance_authority = registration.get("acceptanceAuthority")
     floors = registration.get("qualitySafetyEvidenceAndResidueFloors")
     values = registration.get("preRegistrationValues")
+    registered_at = _rfc3339_instant(registration.get("registeredAt"))
     expected_fields: set[str] = set()
     for criterion_id in mapped_outcomes:
         operationalization = criteria.get(criterion_id, {}).get("operationalization")
@@ -1426,13 +1612,17 @@ def _task_registration_guardrail(
         type(registration.get("schema")) is int
         and registration.get("schema") == 1
         and _nonempty_text(registration.get("id"))
-        and _rfc3339_instant(registration.get("registeredAt")) is not None
+        and registered_at is not None
+        and registered_at <= measurement_not_before
         and _nonempty_text(registration.get("taskIdentity"))
         and registration.get("incrementId") == increment_id
         and criterion_ids == mapped_outcomes
         and isinstance(values, dict)
         and set(values) == expected_fields
         and all(_substantive_registration_value(item) for item in values.values())
+        and values.get("normativeProfileIdentity")
+        == profile_binding.get("profileIdentity")
+        and values.get("cohortIdentity") == profile_binding.get("cohortIdentity")
         and all(
             _same_typed_value(values[field], registration[field])
             for field in TASK_REGISTRATION_VALUE_ALIASES & expected_fields
@@ -1463,25 +1653,41 @@ def _task_registration_guardrail(
     )
     if not shape_valid:
         _error(errors, f"task registration {locator} shape is invalid")
-    return len(errors) == before
+    return measurement_not_before if len(errors) == before else None
+
+
+def _task_registration_floors(
+    root: Path,
+    increments: list[dict[str, Any]],
+    criteria: Mapping[str, dict[str, Any]],
+    profile_binding: Mapping[str, Any],
+    errors: list[str],
+) -> dict[str, datetime]:
+    floors: dict[str, datetime] = {}
+    for increment in increments:
+        increment_id = increment.get("id")
+        floor = _task_registration_guardrail(
+            root, increment, criteria, profile_binding, errors
+        )
+        if isinstance(increment_id, str) and floor is not None:
+            floors[increment_id] = floor
+    return floors
 
 
 def _process_loss_guardrail(
     root: Path,
     increments: list[dict[str, Any]],
-    criteria: Mapping[str, dict[str, Any]],
     validated_work_outcomes: Mapping[str, set[str]],
     errors: list[str],
 ) -> bool:
     before = len(errors)
-    previous_correction_class: str | None = None
+    seen_correction_classes: set[str] = set()
     for increment in increments:
         state = increment.get("state")
         if state == "planned":
             continue
         budget = increment.get("processLossBudget")
         increment_id = increment.get("id")
-        _task_registration_guardrail(root, increment, criteria, errors)
         if not isinstance(budget, dict) or set(budget) != PROCESS_LOSS_FIELDS:
             _error(errors, f"increment {increment_id} requires the exact process-loss budget fields")
             continue
@@ -1496,6 +1702,8 @@ def _process_loss_guardrail(
                 _error(errors, f"process-loss budget {field} must be a non-negative integer")
         if budget.get("maxSameClassUserCorrectionBeforeStop") != 1:
             _error(errors, "same-class user correction budget must stop before recurrence")
+        if budget.get("maxMaterialUserCapabilityOrchestrationInterventions") != 0:
+            _error(errors, "material user capability orchestration intervention budget must be zero")
         neutral_budget = budget.get("maxConsecutiveOutcomeNeutralWorkItems")
         if neutral_budget not in {0, 1}:
             _error(errors, "outcome-neutral work budget must be zero or one")
@@ -1542,11 +1750,11 @@ def _process_loss_guardrail(
         if (
             isinstance(correction_class, str)
             and correction_class
-            and correction_class == previous_correction_class
+            and correction_class in seen_correction_classes
         ):
-            _error(errors, f"adjacent increments repeat correctionClass: {correction_class}")
+            _error(errors, f"increments repeat correctionClass: {correction_class}")
         if isinstance(correction_class, str) and correction_class:
-            previous_correction_class = correction_class
+            seen_correction_classes.add(correction_class)
 
         cleanup = increment.get("cleanupBoundary")
         if not isinstance(cleanup, dict) or set(cleanup) != CLEANUP_BOUNDARY_FIELDS:
@@ -1556,8 +1764,11 @@ def _process_loss_guardrail(
             )
             continue
         paths = cleanup.get("repositoryTemporaryPaths")
-        paths = _string_list(paths)
-        if paths is None:
+        if (
+            not isinstance(paths, list)
+            or not all(isinstance(item, str) and item.strip() for item in paths)
+            or len(paths) != len(set(paths))
+        ):
             _error(errors, f"increment {increment_id} requires exact repository cleanup paths")
             continue
         for raw in paths:
@@ -1574,6 +1785,15 @@ def _process_loss_guardrail(
 
 def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
     before = len(errors)
+
+    def conventional_directory(name: str) -> bool:
+        return name.casefold() in CONVENTIONAL_RESIDUE_NAMES
+
+    def conventional_file(name: str) -> bool:
+        folded = name.casefold()
+        return folded in CONVENTIONAL_RESIDUE_NAMES or folded.endswith(
+            CONVENTIONAL_RESIDUE_SUFFIXES
+        )
 
     def record_enumeration_error(error: OSError) -> None:
         _error(errors, "repository residue cannot be enumerated")
@@ -1597,16 +1817,16 @@ def _repository_residue_absent(root: Path, errors: list[str]) -> bool:
                 if relative == ".git" or relative.startswith(".git/"):
                     continue
                 if _link_or_reparse(candidate):
-                    if name.casefold() in CONVENTIONAL_RESIDUE_NAMES:
+                    if conventional_directory(name):
                         _error(errors, f"repository cleanup residue remains: {relative}")
                     continue
-                if name.casefold() in CONVENTIONAL_RESIDUE_NAMES:
+                if conventional_directory(name):
                     _error(errors, f"repository cleanup residue remains: {relative}")
                     continue
                 retained.append(name)
             directories[:] = retained
             for name in files:
-                if name.casefold() not in CONVENTIONAL_RESIDUE_NAMES:
+                if not conventional_file(name):
                     continue
                 candidate = current_path / name
                 try:
@@ -1625,6 +1845,7 @@ def _evidence_states(
     root: Path,
     criteria: dict[str, dict[str, Any]],
     work_bindings: Mapping[str, tuple[str, set[str], str]],
+    registration_floors: Mapping[str, datetime],
     errors: list[str],
 ) -> tuple[dict[str, bool], bool, dict[str, set[str]]]:
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
@@ -1688,6 +1909,8 @@ def _evidence_states(
                 and criterion_id in criterion_ids
                 and observed_at is not None
                 and _nonempty_text(increment_id)
+                and increment_id in registration_floors
+                and observed_at >= registration_floors[increment_id]
                 and _nonempty_text(work_id)
                 and work_binding is not None
                 and work_binding[0] == increment_id
@@ -1781,6 +2004,8 @@ def _verify_product(root: Path) -> dict[str, Any]:
     historical_boundary = _historical_boundary_valid(constitution, program, errors)
     capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
+    frozen_v02_profile = _frozen_v02_profile_artifacts_valid(root, errors)
+    normative_profile = _normative_profile_binding_valid(root, program, errors)
     criteria_before = len(errors)
     criteria = _criteria(acceptance, errors)
     criteria_valid = len(errors) == criteria_before
@@ -1797,6 +2022,8 @@ def _verify_product(root: Path) -> dict[str, Any]:
         and historical_boundary
         and capability_influence
         and supporting_documents
+        and frozen_v02_profile
+        and normative_profile
         and progression_policy
         and len(errors) == authority_before
     )
@@ -1812,13 +2039,25 @@ def _verify_product(root: Path) -> dict[str, Any]:
             mapped = _string_list(work.get("acceptanceIds")) or []
             work_state = work.get("state") if isinstance(work.get("state"), str) else ""
             work_bindings[work["id"]] = (increment_id, set(mapped), work_state)
+    registration_before = len(errors)
+    registration_floors = _task_registration_floors(
+        root,
+        increments,
+        criteria,
+        program.get("normativeProfileBinding")
+        if isinstance(program.get("normativeProfileBinding"), dict)
+        else {},
+        errors,
+    )
+    registrations_valid = len(errors) == registration_before
     evidence_states, evidence_valid, validated_work_outcomes = _evidence_states(
-        root, criteria, work_bindings, errors
+        root, criteria, work_bindings, registration_floors, errors
     )
     authority_guardrail = _authority_guardrail(program, all_work, errors)
-    process_guardrail = _process_loss_guardrail(
-        root, increments, criteria, validated_work_outcomes, errors
-    ) and graph_valid
+    process_loss_valid = _process_loss_guardrail(
+        root, increments, validated_work_outcomes, errors
+    )
+    process_guardrail = registrations_valid and process_loss_valid and graph_valid
 
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
     states.update(evidence_states)

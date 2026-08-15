@@ -13,16 +13,18 @@
       "name": "sustained goal-level autonomous delivery",
       "statement": "A finite stratified cohort of natural real tasks reaches named-human-accepted outcomes from goal-level demand while the Agent owns intent completion, capability and task-carrier choice, recovery, verification, release and cleanup mechanics.",
       "metric": "accepted natural tasks with zero user capability, code-or-conversation-topology, context-reconstruction, recovery, verification, release-mechanics or cleanup orchestration interventions and zero material collaboration-loss events",
-      "threshold": "at least six materially different accepted tasks covering new intake, existing-project continuation, long-context work, a residual capability gap, a consequential human gate, and an honest failure-or-recovery path; at least two tasks are outside Harness repository dogfooding and no task may be invented to exercise the Harness",
+      "threshold": "at least six materially different accepted tasks covering new intake from a user with no Harness, Codex-tooling or capability-route knowledge, existing-project continuation, long-context work, a residual capability gap, a consequential human gate, and an honest failure-or-recovery path; at least two tasks are outside Harness repository dogfooding, at least one outside-Harness task runs through the final reference adapter and is cross-bound into O5, and no task may be invented to exercise the Harness",
       "assessment": "planned",
       "operationalization": {
         "sampleUnit": "one goal-level natural task with immutable registration and task-bound result validation",
         "minimumSampleCount": 6,
         "comparisonDesign": "finite-stratified-natural-task-cohort",
         "preRegistrationFields": [
-          "registeredAt",
-          "taskIdentity",
-          "scenarioClass",
+        "registeredAt",
+        "taskIdentity",
+        "normativeProfileIdentity",
+        "cohortIdentity",
+        "scenarioClass",
           "repositoryOrDomainIdentity",
           "naturalDemandSource",
           "goalAndBoundaries",
@@ -42,7 +44,7 @@
           "materialCollaborationLossEvents",
           "residue"
         ],
-        "passRule": "Every registered task passes all floors, is accepted by the named accountable human, records zero prohibited user orchestration interventions and zero material collaboration-loss events, and the completed cohort satisfies every required scenario and outside-dogfood coverage band without substitution by fixtures or diagnostic tasks.",
+      "passRule": "Every registered task uses the program-frozen normative profile and cohort, passes all floors, is accepted by the named accountable human, records zero prohibited user orchestration interventions and zero material collaboration-loss events, and the completed cohort satisfies the zero-tool-knowledge first-run, required scenario, final-adapter and outside-dogfood coverage bands without substitution by fixtures or diagnostic tasks.",
         "falsifiers": [
           "the user must name, select, invoke or recover a capability or task carrier",
           "the user must reconstruct discoverable context, request verification, push, release mechanics or cleanup",
@@ -50,7 +52,7 @@
           "a task exists primarily to exercise or diagnose the Harness",
           "a quality, safety, evidence, authority or residue floor fails"
         ],
-        "humanAuthority": "The named accountable human supplies goals, domain judgment, new trust/cost/publication/release decisions and final outcome acceptance; those decisions are not counted as orchestration burden."
+      "humanAuthority": "The named accountable human supplies goals, domain judgment, exact new trust, cost, publication and release authorization, and final outcome acceptance; the Agent owns all authorized mechanics and those human decisions are not counted as orchestration burden."
       }
     },
     {
@@ -66,11 +68,15 @@
         "minimumSampleCount": 6,
         "comparisonDesign": "same-cohort-source-bound-ad-hoc-baselines",
         "preRegistrationFields": [
-          "registeredAt",
-          "taskIdentity",
-          "scenarioClass",
-          "baselineIdentityAndEligibility",
-          "baselineMatchingVariables",
+        "registeredAt",
+        "taskIdentity",
+        "normativeProfileIdentity",
+        "cohortIdentity",
+        "scenarioClass",
+        "baselineIdentityAndEligibility",
+        "baselineSelectionPriorityAndExclusionRule",
+        "baselineMatchingVariables",
+        "matchingToleranceAndMissingBaselineStopRule",
           "routeDeltaFields",
           "qualitySafetyEvidenceAndResidueFloors",
           "materialInterventionTaxonomy",
@@ -85,13 +91,14 @@
           "outcomeQualityAndIntentFidelity",
           "authorityEvidenceReversibilityAndResidue"
         ],
-        "passRule": "The frozen cohort and baseline eligibility checks independently show strict total and median burden reduction, zero Harness-path prohibited orchestration and collaboration-loss events, and no compensated floor failure; missing or incomparable baselines stop rather than pass.",
+      "passRule": "The program-frozen profile and cohort use the pre-registered baseline selection priority, exclusions, matching variables and tolerances before outcome observation; independent eligibility checks show strict total and median burden reduction, zero Harness-path prohibited orchestration and collaboration-loss events, and no compensated floor failure; a missing or incomparable highest-priority eligible baseline stops the sample rather than permitting a more favorable substitute or pass.",
         "falsifiers": [
           "any O1 task lacks a pre-registered eligible baseline",
           "the burden reduction is not strict in both total and median",
           "any task pays for burden reduction with a quality, authority, evidence, reversibility or residue regression",
           "the user must repair an Agent-owned capability, topology, context, recovery, verification or cleanup decision",
-          "missing data is imputed as success"
+        "missing data is imputed as success",
+        "a baseline is selected, excluded, rematched or replaced after Harness-path outcome observation"
         ],
         "humanAuthority": "The named accountable human judges task and baseline comparability, consequential quality and any legitimate authority decision; the Agent owns measurement, routing and mechanics."
       }
@@ -109,8 +116,10 @@
         "minimumSampleCount": 4,
         "comparisonDesign": "real-task-route-lifecycle-cohort",
         "preRegistrationFields": [
-          "registeredAt",
-          "taskIdentity",
+        "registeredAt",
+        "taskIdentity",
+        "normativeProfileIdentity",
+        "cohortIdentity",
           "observedAvailableRoutes",
           "residualGapOrNoGapEvidence",
           "sourceIdentityVersionLicenseMaturityAndReuseBoundary",
@@ -136,7 +145,7 @@
           "task exposure persists without net-value evidence and authority",
           "a route adds an unnecessary goal, input, deliverable, human round trip, authority, side effect or acceptance requirement"
         ],
-        "humanAuthority": "The user grants exact new trust, data, account, cost, installation, persistent activation and irreversible boundaries; the Agent owns observation, comparison, recommendation, mechanics and cleanup."
+      "humanAuthority": "The user grants exact new trust, data, account, cost, installation, persistent activation and irreversible authorization; the Agent owns observation, comparison, recommendation, authorized installation and account mechanics, activation, release, rollback and cleanup."
       }
     },
     {
@@ -145,15 +154,17 @@
       "name": "proactive code-and-conversation carrier lifecycle",
       "statement": "Across real long-running work, the Agent uses observable or explicitly unknown carrier-fitness signals to keep healthy carriers, reconcile native compaction, and perform a verified conversation transition before preventable context loss while owning any causally necessary code split and reconciliation.",
       "metric": "pre-registered carrier decisions and transitions with signal provenance, conservative unknown-signal rule, verified handoff state, topology reconciliation and zero user carrier-operation or context-reconstruction intervention",
-      "threshold": "at least four validated carrier decisions across natural tasks include a justified keep-current decision, a native compaction plus durable-state reconciliation, and a proactive verified same-goal conversation fork or handoff before material loss; code topology is explicitly assessed on every task and every causally necessary split is synchronized, merged or reconciled, released and cleaned; zero preventable context-loss or user topology intervention",
+      "threshold": "at least four validated carrier decisions across at least two materially different natural long-running tasks include a justified keep-current decision, a native compaction plus durable-state reconciliation, and a proactive verified same-goal conversation fork or handoff before material loss; code topology is explicitly assessed on every task and every causally necessary split is synchronized, merged or reconciled, released and cleaned; zero preventable context-loss or user topology intervention",
       "assessment": "planned",
       "operationalization": {
         "sampleUnit": "one material-checkpoint carrier-fitness decision or completed topology transition in a natural task",
         "minimumSampleCount": 4,
         "comparisonDesign": "predeclared-carrier-fitness-and-transition-cohort",
         "preRegistrationFields": [
-          "registeredAt",
-          "taskIdentity",
+        "registeredAt",
+        "taskIdentity",
+        "normativeProfileIdentity",
+        "cohortIdentity",
           "materialCheckpoint",
           "hostAndTaskCarrierSignals",
           "remainingCapacityState",
@@ -175,7 +186,7 @@
           "userTopologyOrContextInterventions",
           "materialContextLossEvents"
         ],
-        "passRule": "Every decision follows its frozen rule; the cohort contains keep, compact-and-reconcile and proactive verified conversation-transition evidence; any code split is causally necessary and fully reconciled; destination recovery is independently verified before source release; user topology/context interventions and material context-loss events are zero.",
+      "passRule": "Every decision uses the program-frozen normative profile and cohort and follows its frozen rule; at least two materially different long-running tasks jointly contain keep, compact-and-reconcile and proactive verified conversation-transition evidence; any code split is causally necessary and fully reconciled; destination recovery is independently verified before source release; user topology/context interventions and material context-loss events are zero.",
         "falsifiers": [
           "unknown remaining capacity is treated as proof that continuation is safe",
           "transition waits until material context loss or user complaint",
@@ -192,25 +203,31 @@
       "name": "live portable open product delivery",
       "statement": "A versioned methodology, open minimum quality-conformance profile and thin executable reference adapters produce equivalent useful closed-loop behavior on Codex and a distinct Agent host or runtime, are reproducible from the public repository, and are released only with explicit human authority.",
       "metric": "matched live cross-host task pairs plus clean-room source verification of the versioned profile, adapter activation, behavior, rollback, cleanup, package/release identity and bounded claims",
-      "threshold": "at least two pre-registered matched live pairs on Codex and one distinct host use the same normative profile through thin adapters, including at least one completed useful delivery and one honestly stopped or recovered case; both hosts pass equivalent mandatory floors with no silent fallback; a clean checkout reproduces verification and task-scoped activation/cleanup; a pre-closeout cross-dimensional counterexample audit has zero unresolved P0 or P1 findings and the exact temporary-process-artifact inventory is empty; the named human accepts the final profile, adapters, privacy disposition, claim ceiling and public release identity",
+      "threshold": "at least two pre-registered matched live pairs representing two distinct natural tasks and scenario classes on Codex and one distinct host use the program-frozen normative profile and cohort through thin adapters, including at least one outside-Harness O1 task through the final adapter, one completed useful delivery and one honestly stopped or recovered case; both hosts pass equivalent mandatory floors with no silent fallback; a clean checkout reproduces verification and task-scoped activation/cleanup; a pre-closeout cross-dimensional counterexample audit has zero unresolved P0 or P1 findings and the exact temporary-process-artifact inventory is empty; the named human accepts the final profile, adapters, privacy disposition, claim ceiling and exact candidate commit, tag and public release action; after that authorization the Agent creates and verifies the immutable local and remote tag against the same candidate commit without post-tag product mutation",
       "assessment": "planned",
       "operationalization": {
         "sampleUnit": "one matched natural-task pair executed live through Codex and a distinct Agent host or runtime",
         "minimumSampleCount": 2,
         "comparisonDesign": "same-task-live-matched-cross-host-pairs",
         "preRegistrationFields": [
-          "registeredAt",
-          "taskIdentity",
-          "normativeProfileIdentity",
-          "hostRuntimeModelAndAdapterIdentities",
+        "registeredAt",
+        "taskIdentity",
+        "normativeProfileIdentity",
+        "cohortIdentity",
+        "scenarioClass",
+        "o1CohortTaskBinding",
+        "hostRuntimeModelAndAdapterIdentities",
           "taskInputAndToolSurface",
           "equivalenceToleranceAndMandatoryFloors",
           "fallbackAndMissingDataRule",
           "activationRollbackReleaseAndCleanupBoundary",
           "cleanCheckoutReproductionProtocol",
           "preCloseoutAuditDimensionsAndSeverityRule",
-          "privacyAndPublicationBoundary",
-          "claimCeiling",
+        "privacyAndPublicationBoundary",
+        "releaseCandidateCommitAndTag",
+        "namedHumanReleaseAuthorizationRule",
+        "immutableTagPublicationAndVerificationProtocol",
+        "claimCeiling",
           "namedHumanAcceptor"
         ],
         "requiredMeasures": [
@@ -222,20 +239,24 @@
           "cleanCheckoutReproducibility",
           "preCloseoutCounterexampleAuditFindingsAndDisposition",
           "temporaryProcessArtifactInventoryAndCleanup",
-          "profileAndReleaseIdentity",
-          "privacyDispositionAndClaimLimits"
-        ],
-        "passRule": "Both matched pairs use the frozen common profile and registered host surfaces, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, pass a source-bound audit of product semantics, authority, user burden, capability lifecycle, code and conversation carriers, cross-host behavior, privacy and security, release reproducibility, and resource residue with zero unresolved P0/P1 findings, leave zero temporary process artifacts, and receive explicit named-human acceptance of the versioned product, privacy disposition, bounded claims and release/publication action.",
+        "profileAndReleaseIdentity",
+        "candidateCommitAndNamedHumanAuthorization",
+        "localAndRemoteImmutableTagTargets",
+        "postTagMutationCheck",
+        "privacyDispositionAndClaimLimits"
+      ],
+      "passRule": "Two distinct natural tasks and scenario classes use the program-frozen common profile and cohort through registered host surfaces, including the cross-bound outside-Harness O1 final-adapter task, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, pass a source-bound audit of product semantics, authority, user burden, capability lifecycle, code and conversation carriers, cross-host behavior, privacy and security, release reproducibility, and resource residue with zero unresolved P0/P1 findings, and leave zero temporary process artifacts. The final candidate commit, tag, privacy disposition and bounded claims are then accepted by the named human; the Agent performs the authorized publication and release mechanics, and the verifier proves that immutable local and public remote tag target the exact unchanged candidate commit with no post-tag product mutation.",
         "falsifiers": [
-          "the second path is the same Agent host or only source-level conformance",
+        "the second path is the same Agent host or only source-level conformance",
+        "the two matched pairs reuse the same task or scenario class",
           "no matched pair completes a useful live delivery",
           "host, model, adapter, task, tool surface, tolerance or profile changes after measurement begins",
           "a generic runtime, control plane, registry, wire protocol, identity or audit system becomes necessary product body without a proven residual gap",
           "clean-checkout reproduction, activation, rollback, release or cleanup fails",
           "a pre-closeout audit dimension is omitted, a P0 or P1 finding remains unresolved, or any temporary process artifact remains",
-          "privacy or publication authority is absent or claims exceed measured scope"
-        ],
-        "humanAuthority": "The named accountable human accepts equivalence, profile and adapter fitness, privacy treatment, claim ceiling and the exact publication/release action; the Agent owns preparation, verification, packaging, rollback and cleanup."
+        "privacy or publication authority is absent, authorized publication or release mechanics are returned to the user, tag targets differ from the accepted candidate commit, post-tag product mutation occurs, or claims exceed measured scope"
+      ],
+      "humanAuthority": "The named accountable human accepts equivalence, profile and adapter fitness, privacy treatment, claim ceiling, exact candidate commit, tag and publication/release authorization; after that decision the Agent owns publication and release execution, verification, packaging, rollback and cleanup."
       }
     },
     {
