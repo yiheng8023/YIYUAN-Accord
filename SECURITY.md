@@ -1,8 +1,9 @@
 # Security Policy
 
 Agent Autonomy Harness is a public, research-stage collaboration quality
-project. The current v0.2 tree contains a product-contract verifier, not a
-runtime or installable reference adapter.
+project. The current v1.0 terminal-proof tree contains a product-contract
+verifier and inactive reference-adapter source candidates, not a production
+runtime or released installable product.
 
 Treat every external capability, executable surface, instruction body,
 generated artifact, and runtime claim as untrusted until its applicable review

@@ -16,9 +16,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 单一 Agent 的“需求到能力”方法、最低质量要求和薄参考适配器，用来检验这类协作是否
 真的减少用户负担。
 
-**当前状态：**v1.0 是终极产品命题的证明工序。仓库验证器报告
-`programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4
-为 `4/4`，所以整个项目尚未收官。v0.2 在
+**当前状态：**v1.0 是终极产品命题的证明工序。在最近一个已完成因果检查点，仓库验证器
+仍报告 `completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；实时 program
+状态和 active increment 必须现场运行验证器读取。所以整个项目尚未收官。v0.2 在
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404` 仍是不可改写的有界校准里程碑；
 它的 `5/5` 不能继承为重复真实任务自治、主动载体管理、安装后价值、公开发布、生产或
 宪章终极命题已经成立的证据。
@@ -37,9 +37,9 @@ Claude Code 2.1.233/DeepSeek-V4-Pro 上执行。两端独立得到同一个有�
 Agent 清理，用户没有执行恢复或清理操作。
 
 Codex 与 Claude 候选仍只是未启用的薄 Skill-plus-Hook 源码投影，不新增 MCP、App、运行时、
-提供方管理器、提示拦截或产品权威，也没有长期安装或启用。当前 candidate.7 包身份只是在
-加入最终验证器后同步刷新两端启动器对 `harness/control.py` 的完整性针；O5 实测的
-candidate.6 树保持不变，实测价值不会转移给 candidate.7。CC Switch 3.19.2 在本次测量中
+提供方管理器、提示拦截或产品权威，也没有长期安装或启用。当前 candidate.7 包身份跟随
+两端启动器对当前 `harness/control.py` 的完整性针；历史 v0.2 O5 实测的 candidate.6 树保持
+不变，实测价值不会转移给 candidate.7。CC Switch 3.19.2 在本次测量中
 只提供可替换的 DeepSeek 静态设置，其代理运行时未启用；它不是可移植核心或运行时依赖。
 O5 证明的只是这个固定组合上的决策可移植性，不证明 2.1.232 适配器支持 Claude Code
 2.1.233，也不证明同厂模型、Anthropic 模型行为、长上下文一致性、安装后价值、发布、生产、

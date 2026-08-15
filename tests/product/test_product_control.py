@@ -3145,6 +3145,33 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_public_status_claims_match_the_terminal_v1_boundary(self) -> None:
+        security = (self.root / "SECURITY.md").read_text(encoding="utf-8")
+        research = (
+            self.root / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
+        ).read_text(encoding="utf-8")
+        readme = (self.root / "README.md").read_text(encoding="utf-8")
+        readme_zh = (self.root / "README.zh-CN.md").read_text(encoding="utf-8")
+        self.assertIn("current v1.0 terminal-proof tree", security)
+        self.assertNotIn("current v0.2 tree", security)
+        self.assertIn("complete six-or-more-task O1 cohort", research)
+        self.assertNotIn("At least three materially different accepted tasks", research)
+        self.assertIn("The project is therefore not closed", readme)
+        self.assertNotIn("programStatus=ready", readme)
+        self.assertIn("整个项目尚未收官", readme_zh)
+        self.assertNotIn("programStatus=ready", readme_zh)
+
+    def test_continuation_is_lean_navigation_not_static_authority(self) -> None:
+        continuation = (
+            self.root / "docs/operations/CONTINUATION.md"
+        ).read_text(encoding="utf-8")
+        self.assertLess(len(continuation), 8000)
+        self.assertIn("navigation aid, not product authority", continuation)
+        self.assertIn("This file grants none of those actions", continuation)
+        self.assertNotIn("The current task grants no authority", continuation)
+        self.assertNotIn("Historical v0.2 accepted O5 basis", continuation)
+        self.assertNotIn("45 native compactions", continuation)
+
     def test_empty_supporting_document_is_rejected(self) -> None:
         (self.root / "README.md").write_text("\n", encoding="utf-8")
         report = self.report()

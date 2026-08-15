@@ -158,8 +158,9 @@ decision-relevant routes; never manufacture a complete Cartesian matrix.
 
 For the burden-transfer result, compare prospective real-task receipts with a
 source-bound historical or matched ad-hoc baseline. No baseline means no claim
-of reduction. At least three materially different accepted tasks are required
-before O2 can pass.
+of reduction. The current v1.0 floor is the complete six-or-more-task O1 cohort,
+with each task bound to the pre-registered highest-priority eligible baseline;
+missing or incomparable baselines stop rather than pass.
 
 ## Capability boundary
 

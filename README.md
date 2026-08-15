@@ -12,9 +12,10 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.0 is the terminal-product proof program. The repository
-verifier reports `programStatus=ready`, `completionState=in-progress`, O1-O5
-`0/5`, and G1-G4 `4/4`. The project is therefore not closed. v0.2 remains an
+**Current status:** v1.0 is the terminal-product proof program. At the latest
+completed causal checkpoint, the repository verifier still reports
+`completionState=in-progress`, O1-O5 `0/5`, and G1-G4 `4/4`; run the verifier
+for the live program status and active increment. The project is therefore not closed. v0.2 remains an
 immutable accepted bounded-calibration milestone at revision
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`; its `5/5` result cannot be inherited
 as proof of sustained real-task autonomy, proactive carrier management, live
@@ -45,9 +46,9 @@ The Codex and Claude source candidates remain inactive thin Skill-plus-Hook
 projections over the same candidate.5 method. They add no MCP server, App,
 runtime, provider manager, prompt interception, or product authority and are not
 persistently installed or enabled. The current candidate.7 package identities
-only refresh both launchers' `harness/control.py` integrity pin after the final
-validator was added; the candidate.6 trees measured by O5 remain immutable, and
-no measured value is transferred to candidate.7. CC Switch 3.19.2 supplied replaceable static
+track both launchers' current `harness/control.py` integrity pin; the candidate.6
+trees measured by historical v0.2 O5 remain immutable, and no measured value is
+transferred to candidate.7. CC Switch 3.19.2 supplied replaceable static
 DeepSeek settings for the measured distinct host; its proxy runtime was off and
 it is neither portable-core nor runtime dependency. O5 proves decision
 portability only within the registered pair. It does not prove that the 2.1.232-

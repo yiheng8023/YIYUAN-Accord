@@ -121,8 +121,9 @@ Code/DeepSeek task pair. Both independently returned the same fact-grounded
 single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
 adapter/date claim. Those bindings remain immutable at the v0.2 revision and
-are not registered current v1.0 validators. v1.0 is `ready`, O1-O5 are planned,
-and its terminal criteria require sustained natural tasks, comparative burden
+are not registered current v1.0 validators. v1.0 remains nonterminal, O1-O5 are
+planned, and live program/active-increment state comes only from the verifier.
+Its terminal criteria require sustained natural tasks, comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
 transition, and live reproducible cross-host release evidence.
 Authorized product-plan delivery is real demand
