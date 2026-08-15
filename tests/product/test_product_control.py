@@ -344,7 +344,8 @@ class ProductControlTests(unittest.TestCase):
                     ".tmp",
                     "harness/__pycache__",
                     "tests/product/__pycache__",
-                ]
+                ],
+                "privateResourceDispositions": [],
             },
             "workItems": [
                 {
@@ -945,7 +946,10 @@ class ProductControlTests(unittest.TestCase):
             ).hexdigest(),
             control.EXPECTED_V1_COHORT_PROTOCOL_SHA256,
         )
-        self.assertIsNone(control.EXPECTED_V1_PROFILE_ARTIFACT_REVISION)
+        self.assertEqual(
+            control.EXPECTED_V1_PROFILE_ARTIFACT_REVISION,
+            "502c4ff7edfc6307ea5469bcb81089e13612a24a",
+        )
         self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_REVISION)
         self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_SHA256)
         self.assertIsNone(
@@ -4404,6 +4408,21 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn("invalid repository cleanup path: '../outside'", report["errors"])
+
+    def test_private_resource_disposition_must_be_public_safe_and_code_owned(self) -> None:
+        def expose_private_locator(value: dict) -> None:
+            self.activate_program(value)["cleanupBoundary"][
+                "privateResourceDispositions"
+            ] = [r"C:\\Users\\person\\.codex\\private-evidence.json"]
+
+        self.mutate("product/program.json", expose_private_locator)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current requires exact privacy-safe "
+            "private resource dispositions",
+            report["errors"],
+        )
 
     def test_bootstrap_authority_set_cannot_self_disable(self) -> None:
         def remove(value: dict) -> None:

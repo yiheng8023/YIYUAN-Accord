@@ -262,6 +262,7 @@ OPERATION_EFFECTS = {
     "authorized-capability-installation": "bounded-local-write",
     "authorized-account-connection": "bounded-external-write",
     "authorized-persistent-activation": "bounded-host-state-change",
+    "authorized-private-evidence-materialization": "bounded-local-write",
     "authorized-publication-execution": "bounded-external-write",
     "authorized-release-execution": "bounded-external-write",
 }
@@ -306,9 +307,10 @@ EXPECTED_V1_COHORT_PROTOCOL_LOCATOR = (
 EXPECTED_V1_COHORT_PROTOCOL_SHA256 = (
     "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83"
 )
-# Set to the immutable candidate artifact commit only after that commit exists.
-# A frozen binding is invalid while this remains null.
-EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = None
+# Immutable commit that contains the reviewed profile and cohort-protocol bytes.
+EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = (
+    "502c4ff7edfc6307ea5469bcb81089e13612a24a"
+)
 # The first frozen binding necessarily exists one commit before code can pin
 # its own revision and digest. A frozen program remains invalid until the next
 # commit sets both anchors, before any task registration is eligible.
@@ -554,7 +556,14 @@ WORK_ITEM_FIELDS = {
     "operationIds",
     "deliverables",
 }
-CLEANUP_BOUNDARY_FIELDS = {"repositoryTemporaryPaths"}
+CLEANUP_BOUNDARY_FIELDS = {
+    "repositoryTemporaryPaths",
+    "privateResourceDispositions",
+}
+ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
+    "v1-provisional-cohort-private-evidence:windows-user-protected;"
+    "retain-only-through-exact-authorization-or-delete-and-revoke"
+}
 PROGRAM_STATES = {"active", "ready", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 WORK_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
@@ -3012,6 +3021,21 @@ def _process_loss_guardrail(
             candidate = _inside_root(root, relative, errors, "cleanup path")
             if candidate is not None and not _path_entry_absent(candidate):
                 _error(errors, f"repository cleanup residue remains: {relative}")
+        private_dispositions = cleanup.get("privateResourceDispositions")
+        if (
+            not isinstance(private_dispositions, list)
+            or len(private_dispositions) != len(set(private_dispositions))
+            or not all(
+                isinstance(item, str)
+                and item in ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS
+                for item in private_dispositions
+            )
+        ):
+            _error(
+                errors,
+                f"increment {increment_id} requires exact privacy-safe private "
+                "resource dispositions",
+            )
     _repository_residue_absent(root, errors)
     return len(errors) == before
 
