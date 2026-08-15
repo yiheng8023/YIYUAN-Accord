@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-authority-proof-integrity",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,57 +80,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-authority-proof-integrity",
-      "state": "active",
-      "correctionClass": "terminal-authority-false-acceptance",
-      "observedProblem": "The v1 contract can mix normative methods across the cohort, cannot prove registration existed before measurement, conflates human release authorization with Agent-owned mechanics, and permits repeated scenarios to satisfy carrier and portability sample counts.",
-      "hypothesis": "A single machine-enforced profile/cohort binding, source-revision registration floor, authorization/execution split, anti-selection baseline rule, distinct-scenario requirements and two-stage immutable release protocol will make the terminal proof satisfiable without permitting false acceptance.",
-      "falsifier": "The verifier accepts an outcome registration while the profile is unfrozen or mismatched, accepts a registration not committed before measurement, lacks an Agent-owned exact-authorized terminal mechanic, or the acceptance contract can still satisfy O2, O4 or O5 through selected baselines or duplicate tasks.",
-      "stopCondition": "The canonical verifier and negative tests enforce the repaired contract, report G1-G4 passing with O1-O5 still 0/5, and no task registration, outcome evidence or temporary repository artifact is created.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": []
-      },
-      "workItems": [
-        {
-          "id": "work.v1-authority-proof-integrity",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "machine-enforced v1 authority and proof-integrity repair",
-            "negative regression tests"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
