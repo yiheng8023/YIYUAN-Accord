@@ -3217,9 +3217,10 @@ class ProductControlTests(unittest.TestCase):
 
     def test_repository_residue_enumeration_error_fails_closed(self) -> None:
         real_scandir = os.scandir
+        fixture_root = self.root.resolve()
 
         def unreadable_root(path):
-            if Path(path) == self.root:
+            if Path(path).resolve() == fixture_root:
                 raise PermissionError("fixture access denied")
             return real_scandir(path)
 
