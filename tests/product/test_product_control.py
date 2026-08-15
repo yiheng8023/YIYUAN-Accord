@@ -4777,7 +4777,7 @@ class ProductControlTests(unittest.TestCase):
                 return self.stream.fileno()
 
             def read(self, size: int = -1) -> bytes:
-                self.path.write_bytes(b'{"fixture":"mutate"}\n')
+                self.path.write_bytes(b'{"fixture":"mutated-longer"}\n')
                 return self.stream.read(size)
 
             def close(self) -> None:
