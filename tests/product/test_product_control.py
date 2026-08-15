@@ -4729,6 +4729,11 @@ class ProductControlTests(unittest.TestCase):
         ), patch(
             "harness.control._initial_authorization_opened_final_path",
             side_effect=lambda stream: str(source),
+        ), patch(
+            "harness.control._lock_initial_authorization_source",
+            return_value=control._WindowsOverlapped(),
+        ), patch(
+            "harness.control._unlock_initial_authorization_source",
         ):
             self.assertEqual(
                 control._read_stable_initial_authorization_snapshot(
@@ -4747,6 +4752,11 @@ class ProductControlTests(unittest.TestCase):
         ), patch(
             "harness.control._initial_authorization_opened_final_path",
             side_effect=lambda stream: str(replacement),
+        ), patch(
+            "harness.control._lock_initial_authorization_source",
+            return_value=control._WindowsOverlapped(),
+        ), patch(
+            "harness.control._unlock_initial_authorization_source",
         ):
             self.assertIsNone(
                 control._read_stable_initial_authorization_snapshot(
@@ -4780,6 +4790,11 @@ class ProductControlTests(unittest.TestCase):
         ), patch(
             "harness.control._initial_authorization_opened_final_path",
             side_effect=lambda stream: str(source),
+        ), patch(
+            "harness.control._lock_initial_authorization_source",
+            return_value=control._WindowsOverlapped(),
+        ), patch(
+            "harness.control._unlock_initial_authorization_source",
         ):
             self.assertIsNone(
                 control._read_stable_initial_authorization_snapshot(
@@ -4920,7 +4935,11 @@ class ProductControlTests(unittest.TestCase):
             EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT=(
                 target_commitment
             ),
-        ), patch("harness.control.ctypes.WinDLL", return_value=FakeAdvapi()):
+        ), patch("harness.control.os.name", "nt"), patch(
+            "harness.control.ctypes.WinDLL",
+            return_value=FakeAdvapi(),
+            create=True,
+        ):
             errors: list[str] = []
             self.assertTrue(
                 control._delete_initial_authorization_private_resource(
