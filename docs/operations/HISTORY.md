@@ -24,6 +24,18 @@ scorecards out of the current public tree without rewriting their history. The
 accepted v0.1 machine state and its event-specific verifier remain reproducible
 at `be498f960c9e0587d355291fb24261c91e75cd77`.
 
+The same current-tree privacy boundary now applies to 41 later historical
+evidence JSON files. They contained machine-local paths, host task and session
+identifiers, and credential-reference topology but were neither current v1
+authority nor current outcome evidence, so they were removed from the current
+index. The bounded v0.2 aggregate result, claim ceiling, and immutable revision
+remain recorded in `product/constitution.json` and `product/program.json` at
+`0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`. Public Git history and historical
+author email remain retrievable; preserving that history is an explicit human
+privacy disposition, not a claim of erasure. A bounded current-tree scan found
+no credential value, token, private-key material, or provider secret in the
+removed file class.
+
 The later user-executed cleanup removed the local ignored `legacy/` quarantine
 plus old bytecode caches; exact receipts preserve encountered PowerShell
 compatibility errors rather than claiming an error-free script run.
@@ -198,32 +210,30 @@ the exact trust entry removed, the empty cache root deleted, and the consumer
 configuration restored to its pre-measurement hash. The task adds no O1-O5
 credit and remains the honest candidate.5 stopped input for a later O4 cohort.
 Its content-addressed result is
-`product/evidence/codex-plugin-context-rollover-stopped-2026-08-14.json`.
+preserved only in public Git history at the fixed v0.2 revision.
 
 ## Later Codex dispatch counterexamples
 
 A later O5 source-candidate gate stopped before model execution. The exact
 target, 19-file public source snapshot, candidate.5 Skill/profile bytes,
 supported schema, host binary identities and isolated candidate.6 Codex plugin
-bytes passed their observed preflight portions. The parent then used the
-case-insensitive PowerShell variable `$home`, which collided with the read-only
-system `$HOME` value and created the authorized auth hardlink at the user-home
-root instead of the task root. The error was disclosed before either model
-call, the two hardlink names were verified without reading credential content,
-and the wrong link, isolated plugin, marketplace, snapshot and task root were
+bytes passed their observed preflight portions. A case-insensitive variable
+collision then materialized an authorized credential reference outside the
+task root. The error was disclosed before either model call, credential content
+was never read, and all task-created references and isolated resources were
 removed. The unnecessary cleanup approval and resulting date rollover consumed
-the registration and grant, add zero O1-O5 credit, and are retained at
-`product/evidence/portable-source-candidate-gate-preflight-stopped-2026-08-15.json`.
-The next registration keeps every host, model, profile, schema, equivalence,
-zero-loss and claim floor while adding exact task-path and two-name hardlink
-checks; it does not add a credential manager, runtime or product protocol.
+the registration and grant, add zero O1-O5 credit, and remain preserved only in
+public Git history at the fixed v0.2 revision. The next registration retained
+every host, model, profile, schema, equivalence, zero-loss and claim floor while
+adding exact task-root and credential-reference placement checks; it did not
+add a credential manager, runtime or product protocol.
 
 A fixed-source review then showed that an isolated `CODEX_HOME` did not
 isolate user-global Skills. An inapplicable code-review Skill selected
 unregistered parallel topology and the single Codex call timed out. The result
 was stopped, the conditional Claude call was skipped, and all exposure was
-removed. The counterexample is retained at
-`product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
+removed. The counterexample remains preserved only in public Git history at the
+fixed v0.2 revision.
 
 The parent dispatch boundary subsequently used Codex's native prompt rendering,
 exact per-invocation Skill configuration, and multi-agent feature control. A
@@ -232,8 +242,8 @@ new closeout-decision task proved that correction effective for its preflight:
 false. The immutable task still stopped before model generation because its
 structured-output schema used a constant without the explicit property type
 required by the service. No retry, substitution, Claude call, outcome credit,
-or residue followed. The exact result is
-`product/evidence/closeout-critical-path-stopped-2026-08-14.json`. This is
+or residue followed. The exact result remains preserved only in public Git
+history at the fixed v0.2 revision. This is
 host-compatibility counterevidence, not a reason to add a schema registry,
 runtime, or generic outcome validator.
 
@@ -244,8 +254,8 @@ the built-in `list_mcp_resources` tool remained available and enumerated 46
 ambient App plugin and Skill descriptors. The call crossed its registered
 capability and public-input boundary before producing a final result; the
 parent terminated it, skipped Claude/DeepSeek, and removed all temporary state.
-The exact zero-progress receipt is
-`product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json`.
+The exact zero-progress result remains preserved only in public Git history at
+the fixed v0.2 revision.
 This counterexample narrows future parent dispatch: inspect the entire model
 tool and resource surface, not only Skills and topology, and require an official
 stable per-call MCP/App suppression seam before another measured call. It does
@@ -261,8 +271,8 @@ capability-isolation boundary and that CC Switch is ambient input, not a Harness
 dependency. Because the no-thread probe could not prove the future
 model-visible enumeration primitive or its coexistence with required repository
 tools, the current measured route remains ineligible. The finite result is
-`product/evidence/codex-tool-surface-suppression-mechanism-2026-08-14.json` and
-adds zero O1-O5 credit.
+preserved only in public Git history at the fixed v0.2 revision and adds zero
+O1-O5 credit.
 
 ## Accepted continuation-reconciliation delivery
 

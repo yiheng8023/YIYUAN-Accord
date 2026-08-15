@@ -21,6 +21,10 @@ path.
 Private configuration, memory, bookmarks, account state, credentials, OAuth or
 session state, cookies, caches, and unsanitized local paths are outside the
 public license grant unless their owner separately sanitizes and releases them.
+Historical revisions may still contain material later removed from the current
+tree under this boundary. Retaining public Git history does not sanitize,
+license, or claim erasure of those historical bytes; current public release
+decisions must assess that residual retrievability explicitly.
 
 Contributions are accepted under the license applicable to their file class
 unless agreed otherwise before acceptance. Commercial use depends on the

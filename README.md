@@ -22,6 +22,12 @@ as proof of sustained real-task autonomy, proactive carrier management, live
 installed value, publication, production, or the constitution's terminal
 product proposition.
 
+The current tree does not materialize the 41 raw v0.2-era evidence JSON files
+that contained machine-local and host-session metadata. The fixed v0.2 revision
+and bounded aggregate claims remain; public Git history and historical author
+email remain retrievable under the explicit no-history-rewrite privacy
+disposition, so this is forward current-tree sanitization rather than erasure.
+
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
 Skill-source, and continuation-reconciliation scenarios without double-counting

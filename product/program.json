@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-public-evidence-privacy",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -89,5 +89,56 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-public-evidence-privacy",
+      "state": "active",
+      "correctionClass": "current-public-tree-materializes-private-runtime-identifiers",
+      "observedProblem": "The public current tree still materializes 41 historical evidence JSON files containing personal local paths, task and session identifiers, credential-file names and hardlink topology even though those files are not current v1 authority or outcome evidence; supporting documents also point readers to those current paths.",
+      "hypothesis": "Removing the raw historical evidence from the current tree, retaining only the immutable v0.2 revision and bounded aggregate claims, rewriting current-path references as explicit historical-revision references, and adding a focused public-evidence privacy regression can close forward exposure without rewriting public Git history or weakening future sanitized evidence support.",
+      "falsifier": "The repair rewrites or force-pushes history, changes the v0.2 milestone identity or claim, removes evidence needed by the current verifier, forbids future sanitized task evidence, leaves any scoped private runtime identifier in the current product/evidence tree, or claims that already-public history was erased.",
+      "stopCondition": "All 41 raw historical evidence JSON files are absent from the current tree; current documentation has no dead locator to them and records that public history and author email remain retrievable; a focused regression rejects local roots, host task/session/message identifiers, credential-file names and hardlink topology in future current-tree evidence while accepting sanitized evidence; canonical local and hosted verification pass with zero O1-O5 credit and no history rewrite.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-public-evidence-privacy",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup"
+          ],
+          "deliverables": [
+            "current-tree historical evidence removal",
+            "sanitized historical-revision documentation",
+            "public-evidence privacy regression",
+            "explicit retained-public-history risk"
+          ]
+        }
+      ]
+    }
+  ]
 }

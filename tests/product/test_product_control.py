@@ -8,6 +8,7 @@ from io import BytesIO, StringIO
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -724,6 +725,129 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["release"], "v0.2")
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
+
+    def test_current_public_evidence_excludes_private_runtime_identifiers(self) -> None:
+        path_patterns = (
+            re.compile(r"(?i)(?<![a-z0-9+.-])[a-z]:[\\/]"),
+            re.compile(r"(?i)(?:^|[\s\"'])/(?:users|home|tmp)/[^\s\"']+"),
+            re.compile(
+                r"(?i)(?:^|[\s\"'])(?:[\\/]{1,2})(?:users|home)[\\/]"
+            ),
+            re.compile(
+                r"(?i)(?:^|[\s\"'])\\\\[^\\/\s\"']+[\\/]"
+                r"(?:[a-z]\$[\\/])?(?:users|home)[\\/]"
+            ),
+            re.compile(r"(?i)(?:^|[\s\"'])/(?:private/)?var/folders/"),
+            re.compile(r"(?i)codex://threads/"),
+            re.compile(r"(?i)(?:auth|credentials)\.json"),
+            re.compile(
+                r"(?i)(?:^|[\\/])\.claude[\\/]"
+                r"(?:settings|settings\.local)\.json(?:$|[\s\"'])"
+            ),
+            re.compile(r"(?i)\bhardlink\b"),
+            re.compile(r"(?i)\bmsg_[a-z0-9_-]{8,}\b"),
+            re.compile(
+                r"(?i)\b(?:thread|session|message|event)_"
+                r"[a-z0-9][a-z0-9._:-]{7,}\b"
+            ),
+            re.compile(
+                r"(?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-"
+                r"[0-9a-f]{4}-[0-9a-f]{12}\b"
+            ),
+        )
+        private_id_fragments = ("thread", "session", "message", "event")
+        private_id_suffixes = ("id", "ids", "ref", "refs", "handle", "token")
+        private_key_pattern = re.compile(
+            r'(?i)"(?:thread|session|message|event)"\s*:'
+            r'|"[^"\\]*(?:thread|session|message|event)[^"\\]*'
+            r'(?:ids?|refs?|handle|token)"\s*:'
+        )
+
+        def findings(value: object, location: str = "$") -> list[str]:
+            result: list[str] = []
+            if isinstance(value, dict):
+                for key, item in value.items():
+                    folded = key.casefold()
+                    compact = re.sub(r"[^a-z0-9]", "", folded)
+                    if (
+                        compact in private_id_fragments
+                        and isinstance(item, str)
+                        and item
+                    ) or (
+                        any(fragment in compact for fragment in private_id_fragments)
+                        and compact.endswith(private_id_suffixes)
+                    ):
+                        result.append(f"{location}.{key}: private host identifier key")
+                    result.extend(findings(item, f"{location}.{key}"))
+            elif isinstance(value, list):
+                for index, item in enumerate(value):
+                    result.extend(findings(item, f"{location}[{index}]"))
+            elif isinstance(value, str):
+                for pattern in path_patterns:
+                    if pattern.search(value):
+                        result.append(f"{location}: {pattern.pattern}")
+                        break
+            return result
+
+        sanitized_control = {
+            "taskIdentity": "natural-task.public-example",
+            "source": {"identity": "sha256:" + ("a" * 64)},
+            "sessionDigest": "b" * 64,
+            "eventType": "SessionStart",
+            "reference": "https://example.com/tmp/reference",
+            "claimLimits": ["sanitized public evidence only"],
+        }
+        self.assertEqual(findings(sanitized_control), [])
+        for private_control in (
+            {"sourceThreadId": "01234567-89ab-4cde-8fab-0123456789ab"},
+            {"locator": "C:/Users/example/private-record.jsonl"},
+            {"locator": r"\Users\example\private-record.jsonl"},
+            {"locator": r"\\HOST\Users\example\private-record.jsonl"},
+            {"locator": r"\\HOST\C$\Users\example\private-record.jsonl"},
+            {"locator": "/home/example/private-record.jsonl"},
+            {"locator": "/private/var/folders/aa/private-record.jsonl"},
+            {"locator": "codex://threads/private"},
+            {"locator": "auth.json"},
+            {"locator": "~/.claude/settings.json"},
+            {"topology": "credential hardlink"},
+            {"locator": "msg_opaqueprivate123"},
+            {"locator": "session_01JPRIVATEHOSTVALUE"},
+            {"locator": "event_opaqueprivate123"},
+            {"session": "opaque-host-session"},
+            {"eventRef": "opaque-host-event"},
+        ):
+            self.assertTrue(findings(private_control), private_control)
+
+        violations: list[str] = []
+        evidence_root = ROOT / "product/evidence"
+        if evidence_root.exists():
+            self.assertFalse(control._link_or_reparse(evidence_root), evidence_root)
+        for path in sorted(evidence_root.rglob("*")):
+            self.assertFalse(control._link_or_reparse(path), path)
+            if path.is_dir():
+                continue
+            self.assertEqual(path.parent, evidence_root, path)
+            self.assertEqual(path.suffix, ".json", path)
+            raw = path.read_bytes()
+            self.assertLessEqual(len(raw), control.MAX_DOCUMENT_BYTES, path)
+            decoded = raw.decode("utf-8")
+            self.assertIsNone(private_key_pattern.search(decoded), path)
+            for pattern in path_patterns:
+                self.assertIsNone(pattern.search(decoded), f"{path}: {pattern.pattern}")
+
+            def unique_object(pairs: list[tuple[str, object]]) -> dict:
+                document: dict[str, object] = {}
+                for key, item in pairs:
+                    self.assertNotIn(key, document, f"duplicate key in {path}: {key}")
+                    document[key] = item
+                return document
+
+            document = json.loads(decoded, object_pairs_hook=unique_object)
+            violations.extend(
+                f"{path.relative_to(ROOT).as_posix()} {item}"
+                for item in findings(document)
+            )
+        self.assertEqual(violations[:20], [], f"private evidence remains: {violations[:20]}")
 
     def test_terminal_cohort_requires_proactive_context_lifecycle_coverage(
         self,

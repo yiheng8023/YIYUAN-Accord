@@ -319,8 +319,8 @@ home but still exposed a separate user-global code-review Skill. That Skill's
 workflow required parallel subagents even though the immutable source-gate task
 did not require a diff review or parallel topology. The carrier selected the
 larger route and timed out without a final result, so the attempt remains an
-honest stopped counterexample at
-`product/evidence/cross-host-source-gate-stopped-2026-08-14.json`.
+honest stopped counterexample preserved only in public Git history at the fixed
+v0.2 revision.
 
 The current native correction stays in the parent dispatch boundary. Codex
 0.147.0 can render the model-visible prompt through `codex debug prompt-input`,
@@ -342,8 +342,8 @@ preflight. It reduced 25 prompt-visible Skills to the single exact Harness Skill
 and verified all multi-agent feature states false, but the immutable
 structured-output schema used `const` without an explicit `type` on one
 property. The Codex service rejected it as `invalid_json_schema` before model
-generation. That stopped result is
-`product/evidence/closeout-critical-path-stopped-2026-08-14.json`. Future
+generation. That stopped result is preserved only in public Git history at the
+fixed v0.2 revision. Future
 one-call registrations must therefore bind a schema known to be accepted by the
 exact host, or a deterministic compatibility check when the host exposes one,
 before dispatch. General JSON Schema validity, prompt visibility, and feature
@@ -359,8 +359,7 @@ Skill descriptors from the isolated home. No specific connector or external
 data source was called, but the resource enumeration itself crossed the fixed
 capability and public-input boundary. The parent terminated the process,
 skipped the conditional distinct host, cleaned all task state, and retained the
-zero-progress receipt at
-`product/evidence/codex-context-carrier-boundary-stopped-2026-08-14.json`.
+zero-progress result only in public Git history at the fixed v0.2 revision.
 This proves that `skills.config` and multi-agent controls do not establish the
 whole model tool and data surface. A future measured dispatch must first bind
 and verify an official stable per-call restriction that removes ambient MCP/App
@@ -510,13 +509,12 @@ claimed.
 
 An authorized user-layer Hook edit was later present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native
-compaction. That stopped result is retained at
-`product/evidence/o1-codex-session-start-continuity-stopped-2026-08-14.json`
-and receives zero O1-O5 credit. The plugin projection corrects the packaging
-boundary and lets Codex own materialization; exact Hook trust and an app-owned
-runtime config reload remain part of the later activation gate. The inactive
-candidate and its offline tests do not claim that ingestion or live refresh
-has happened.
+compaction. That stopped result is preserved only in public Git history at the
+fixed v0.2 revision and receives zero O1-O5 credit. The plugin projection
+corrects the packaging boundary and lets Codex own materialization; exact Hook
+trust and an app-owned runtime config reload remain part of the later activation
+gate. The inactive candidate and its offline tests do not claim that ingestion
+or live refresh has happened.
 
 ## 5. Evidence and acceptance
 
