@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-carrier-lock-deadline",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -89,5 +89,48 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-carrier-lock-deadline",
+      "state": "active",
+      "correctionClass": "contended-carrier-lock-can-acquire-after-deadline",
+      "observedProblem": "Hosted Linux validation showed that a carrier writer waiting behind SessionEnd can acquire the directory lock after its bounded deadline when the scheduler resumes only after SessionEnd releases the lock, allowing the writer to recreate state after cleanup.",
+      "hypothesis": "Tracking whether acquisition was contended and rejecting plus releasing any acquisition completed after the deadline will preserve the finite wait boundary and prevent post-SessionEnd state recreation without weakening ordinary uncontended acquisition.",
+      "falsifier": "The repair can leave a lock directory behind, reject an uncontended first acquisition, allow a contended acquisition after the deadline, or make the concurrent lifecycle tests platform-dependent.",
+      "stopCondition": "A deterministic late-retry test proves that a contended acquisition after the deadline is released and rejected, the SessionEnd race cannot recreate state, canonical local verification passes, and the hosted three-platform workflow succeeds with zero O1-O5 credit and no adapter activation.",
+      "acceptanceIds": [
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-carrier-lock-deadline",
+          "state": "active",
+          "acceptanceIds": [
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification"
+          ],
+          "deliverables": [
+            "strict contended lock deadline",
+            "late-acquisition cleanup regression test",
+            "three-platform hosted validation"
+          ]
+        }
+      ]
+    }
+  ]
 }

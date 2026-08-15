@@ -205,11 +205,21 @@ def _remove_session_state(path: Path) -> bool:
 
 def _acquire_lock(path: Path) -> bool:
     deadline = time.monotonic() + LOCK_WAIT_SECONDS
+    contended = False
     while True:
+        if contended and time.monotonic() >= deadline:
+            return False
         try:
             path.mkdir(mode=0o700)
+            if contended and time.monotonic() >= deadline:
+                try:
+                    path.rmdir()
+                except OSError:
+                    pass
+                return False
             return True
         except FileExistsError:
+            contended = True
             try:
                 info = path.lstat()
                 if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or _is_reparse(info):

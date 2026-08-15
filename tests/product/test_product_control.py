@@ -1714,6 +1714,27 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("lock is unavailable", writer_output["systemMessage"])
         self.assertEqual(list(data_root.iterdir()), [])
 
+    def test_codex_carrier_lock_rejects_acquisition_completed_after_deadline(self) -> None:
+        script = CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"
+        spec = importlib.util.spec_from_file_location("codex_carrier_hook_deadline_test", script)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        lock_path = self.root / "late-carrier.lock"
+        lock_path.mkdir()
+
+        def release_while_waiting(_seconds: float) -> None:
+            lock_path.rmdir()
+
+        with patch.object(
+            module.time,
+            "monotonic",
+            side_effect=(100.0, 100.1, 100.2, 100.6),
+        ), patch.object(module.time, "sleep", side_effect=release_while_waiting):
+            self.assertFalse(module._acquire_lock(lock_path))
+        self.assertFalse(lock_path.exists())
+
     def test_codex_carrier_hook_fails_closed_on_malformed_or_unbounded_input(self) -> None:
         malformed = self.run_codex_carrier_hook({}, raw=b"not-json")
         self.assertEqual(malformed.returncode, 0, malformed.stderr.decode())
