@@ -112,7 +112,7 @@ class ProductControlTests(unittest.TestCase):
     def initialize_fixture_repository(self) -> str:
         if (self.root / ".git").is_dir():
             return subprocess.run(
-                ["git", "rev-parse", "HEAD"],
+                ["git", "rev-list", "--max-parents=0", "HEAD"],
                 cwd=self.root,
                 check=True,
                 capture_output=True,
@@ -122,6 +122,24 @@ class ProductControlTests(unittest.TestCase):
         fixture_profile.write_text(
             "# Fixture v1 normative profile\n",
             encoding="utf-8",
+        )
+        self.write_json(
+            "docs/FIXTURE-V1-COHORT-PROTOCOL.json",
+            {
+                "schema": 1,
+                "id": "cohort-protocol.fixture-v1",
+                "profileIdentity": "profile.fixture-v1",
+                "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+                "eligibilityRule": "all-predeclared-eligible-natural-tasks",
+                "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
+                "taskIdentityRule": "stable-source-bound-identity-before-measurement",
+                "strata": ["fixture-stratum"],
+                "enrollmentOrder": "strict-git-ancestry-first-eligible",
+                "stopRule": "earliest-prefix-satisfying-current-acceptance",
+                "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
+                "measurementEventRule": "task-bound-source-event-after-registration-required",
+                "claimLimits": ["fixture only"],
+            },
         )
         environment = os.environ.copy()
         environment.update(
@@ -134,7 +152,12 @@ class ProductControlTests(unittest.TestCase):
             ["git", "init", "--quiet"],
             ["git", "config", "user.name", "Harness Fixture"],
             ["git", "config", "user.email", "fixture@example.invalid"],
-            ["git", "add", "docs/FIXTURE-V1-PROFILE.md"],
+            [
+                "git",
+                "add",
+                "docs/FIXTURE-V1-PROFILE.md",
+                "docs/FIXTURE-V1-COHORT-PROTOCOL.json",
+            ],
             ["git", "commit", "--quiet", "-m", "fixture authority"],
         )
         for command in commands:
@@ -280,10 +303,20 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/program.json", add_mapping)
 
     def freeze_program_profile(self, program: dict) -> None:
+        if program["normativeProfileBinding"]["state"] == "frozen":
+            return
         profile_locator = "docs/FIXTURE-V1-PROFILE.md"
+        protocol_locator = "docs/FIXTURE-V1-COHORT-PROTOCOL.json"
         profile_revision = self.initialize_fixture_repository()
         profile_blob = subprocess.run(
             ["git", "show", f"{profile_revision}:{profile_locator}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        protocol_blob = subprocess.run(
+            ["git", "show", f"{profile_revision}:{protocol_locator}"],
             cwd=self.root,
             check=True,
             stdout=subprocess.PIPE,
@@ -294,11 +327,21 @@ class ProductControlTests(unittest.TestCase):
             "profileIdentity": "profile.fixture-v1",
             "locator": profile_locator,
             "sha256": hashlib.sha256(profile_blob).hexdigest(),
-            "cohortIdentity": "cohort.fixture-v1",
+            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "cohortProtocolLocator": protocol_locator,
+            "cohortProtocolSha256": hashlib.sha256(protocol_blob).hexdigest(),
             "frozenAtRevision": profile_revision,
         }
 
-    def bind_fixture_registration(self, program: dict, increment: dict) -> None:
+    def bind_fixture_registration(
+        self,
+        program: dict,
+        increment: dict,
+        *,
+        task_identity: str = "natural-task.fixture-current",
+        registration_id: str = "registration.fixture-current",
+        relative: str = "product/evidence/fixture-registration.json",
+    ) -> None:
         outcome_ids = sorted(
             set(increment["acceptanceIds"]) & {"O1", "O2", "O3", "O4", "O5"}
         )
@@ -325,17 +368,21 @@ class ProductControlTests(unittest.TestCase):
         losses = ["fixture material collaboration loss"]
         aliases = {
             "registeredAt": "2026-08-12T02:59:00+08:00",
-            "taskIdentity": "natural-task.fixture-current",
+            "taskIdentity": task_identity,
             "namedHumanAcceptor": "fixture reviewer",
             "qualitySafetyEvidenceAndResidueFloors": floors,
             "materialInterventionTaxonomy": interventions,
             "materialCollaborationLossTaxonomy": losses,
             "normativeProfileIdentity": "profile.fixture-v1",
-            "cohortIdentity": "cohort.fixture-v1",
+            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "profileSha256": program["normativeProfileBinding"]["sha256"],
+            "cohortProtocolSha256": program["normativeProfileBinding"][
+                "cohortProtocolSha256"
+            ],
         }
         registration = {
             "schema": 1,
-            "id": "registration.fixture-current",
+            "id": registration_id,
             "registeredAt": aliases["registeredAt"],
             "taskIdentity": aliases["taskIdentity"],
             "incrementId": increment["id"],
@@ -362,7 +409,6 @@ class ProductControlTests(unittest.TestCase):
             },
             "claimLimits": ["fixture task only"],
         }
-        relative = "product/evidence/fixture-registration.json"
         self.write_json(relative, registration)
         environment = os.environ.copy()
         environment.update(
@@ -413,6 +459,10 @@ class ProductControlTests(unittest.TestCase):
             "sha256": hashlib.sha256(committed_registration).hexdigest(),
             "sourceRevision": source_revision,
             "measurementNotBefore": "2026-08-12T02:59:00+08:00",
+            "profileSha256": program["normativeProfileBinding"]["sha256"],
+            "cohortProtocolSha256": program["normativeProfileBinding"][
+                "cohortProtocolSha256"
+            ],
         }
 
     def recommit_fixture_registration(self, program: dict) -> None:
@@ -433,7 +483,7 @@ class ProductControlTests(unittest.TestCase):
             stderr=subprocess.PIPE,
         )
         subprocess.run(
-            ["git", "commit", "--quiet", "-m", "revised fixture registration"],
+            ["git", "commit", "--quiet", "--amend", "--no-edit"],
             cwd=self.root,
             env=environment,
             check=True,
@@ -568,7 +618,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("proactive verified conversation-transition", o4["operationalization"]["passRule"])
         self.assertIn("before material loss", o4["threshold"])
 
-    def test_all_outcomes_bind_one_frozen_profile_and_cohort(self) -> None:
+    def test_all_outcomes_bind_one_frozen_profile_and_cohort_protocol(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
         for criterion_id in ("O1", "O2", "O3", "O4", "O5"):
@@ -577,7 +627,9 @@ class ProductControlTests(unittest.TestCase):
                     "preRegistrationFields"
                 ]
                 self.assertIn("normativeProfileIdentity", fields)
-                self.assertIn("cohortIdentity", fields)
+                self.assertIn("cohortProtocolIdentity", fields)
+                self.assertIn("profileSha256", fields)
+                self.assertIn("cohortProtocolSha256", fields)
 
     def test_terminal_contract_prevents_sample_selection_and_duplicate_tasks(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
@@ -2093,7 +2145,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_task_registration_profile_or_cohort_drift_fails_closed(self) -> None:
+    def test_task_registration_profile_or_cohort_protocol_drift_fails_closed(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
@@ -2104,7 +2156,9 @@ class ProductControlTests(unittest.TestCase):
         program = self.read_json("product/program.json")
         relative = "product/evidence/fixture-registration.json"
         registration = self.read_json(relative)
-        registration["preRegistrationValues"]["cohortIdentity"] = "cohort.drift"
+        registration["preRegistrationValues"]["cohortProtocolIdentity"] = (
+            "cohort-protocol.drift"
+        )
         self.write_json(relative, registration)
         self.recommit_fixture_registration(program)
         self.write_json("product/program.json", program)
@@ -2112,21 +2166,208 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
 
-    def test_task_registration_commit_must_precede_measurement_floor(self) -> None:
+    def test_registration_revision_must_strictly_descend_from_profile_freeze(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
             increment["workItems"][0]["acceptanceIds"].append("O1")
             self.bind_fixture_registration(value, increment)
-            increment["taskRegistration"]["measurementNotBefore"] = (
-                "2026-08-12T02:40:00+08:00"
-            )
+            value["normativeProfileBinding"]["frozenAtRevision"] = increment[
+                "taskRegistration"
+            ]["sourceRevision"]
 
         self.mutate("product/program.json", activate_o1)
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.fixture-current taskRegistration was not committed before measurement",
+            "increment increment.fixture-current taskRegistration must strictly descend from the frozen profile and cohort protocol",
+            report["errors"],
+        )
+
+    def test_registration_chronology_does_not_trust_git_commit_dates(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        original = control._evidence_git
+
+        def reject_commit_date_reads(root: Path, *args: str) -> bytes | None:
+            self.assertNotIn("--format=%cI", args)
+            self.assertNotIn("--format=%aI", args)
+            return original(root, *args)
+
+        with patch("harness.control._evidence_git", side_effect=reject_commit_date_reads):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+
+    def test_frozen_cohort_protocol_bytes_are_content_addressed(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        protocol = self.read_json("docs/FIXTURE-V1-COHORT-PROTOCOL.json")
+        protocol["stopRule"] = "post-selected favorable tasks only"
+        self.write_json("docs/FIXTURE-V1-COHORT-PROTOCOL.json", protocol)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "frozen cohort protocol identity or source revision mismatch",
+            report["errors"],
+        )
+
+    def test_initially_committed_postselection_protocol_is_rejected(self) -> None:
+        self.initialize_fixture_repository()
+        protocol_locator = "docs/FIXTURE-V1-COHORT-PROTOCOL.json"
+        protocol = self.read_json(protocol_locator)
+        protocol["stopRule"] = "post-selected favorable tasks only"
+        self.write_json(protocol_locator, protocol)
+        subprocess.run(
+            ["git", "add", protocol_locator],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "malicious cohort protocol"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        profile_locator = "docs/FIXTURE-V1-PROFILE.md"
+        profile_blob = subprocess.run(
+            ["git", "show", f"{revision}:{profile_locator}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        protocol_blob = subprocess.run(
+            ["git", "show", f"{revision}:{protocol_locator}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = {
+            "state": "frozen",
+            "profileIdentity": "profile.fixture-v1",
+            "locator": profile_locator,
+            "sha256": hashlib.sha256(profile_blob).hexdigest(),
+            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "cohortProtocolLocator": protocol_locator,
+            "cohortProtocolSha256": hashlib.sha256(protocol_blob).hexdigest(),
+            "frozenAtRevision": revision,
+        }
+        self.write_json("product/program.json", program)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn("frozen cohort protocol shape is invalid", report["errors"])
+
+    def test_duplicate_task_identity_across_outcome_increments_fails_closed(
+        self,
+    ) -> None:
+        def activate_two(value: dict) -> None:
+            first = self.ensure_increment(value, state="completed")
+            first["acceptanceIds"].append("O1")
+            first["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, first)
+            second = deepcopy(first)
+            second["id"] = "increment.fixture-second"
+            second["state"] = "active"
+            second["correctionClass"] = "fixture-second-correction"
+            second["workItems"][0]["id"] = "work.fixture-second"
+            second["workItems"][0]["state"] = "active"
+            value["increments"].append(second)
+            value["status"] = "active"
+            value["activeIncrementId"] = second["id"]
+            self.bind_fixture_registration(
+                value,
+                second,
+                task_identity="natural-task.fixture-current",
+                registration_id="registration.fixture-second",
+                relative="product/evidence/fixture-second-registration.json",
+            )
+
+        self.mutate("product/program.json", activate_two)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "taskIdentity natural-task.fixture-current is reused across outcome registrations",
+            report["errors"],
+        )
+
+    def test_postfreeze_registration_cannot_be_orphaned_or_deleted(self) -> None:
+        first_path = "product/evidence/fixture-registration.json"
+
+        def omit_first(value: dict) -> None:
+            first = self.ensure_increment(value, state="completed")
+            first["acceptanceIds"].append("O1")
+            first["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                first,
+                task_identity="natural-task.fixture-first",
+            )
+            second = deepcopy(first)
+            second["id"] = "increment.fixture-second"
+            second["state"] = "active"
+            second["correctionClass"] = "fixture-second-correction"
+            second["workItems"][0]["id"] = "work.fixture-second"
+            second["workItems"][0]["state"] = "active"
+            self.bind_fixture_registration(
+                value,
+                second,
+                task_identity="natural-task.fixture-second",
+                registration_id="registration.fixture-second",
+                relative="product/evidence/fixture-second-registration.json",
+            )
+            value["increments"] = [second]
+            value["status"] = "active"
+            value["activeIncrementId"] = second["id"]
+
+        self.mutate("product/program.json", omit_first)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "every post-freeze cohort registration artifact must bind exactly one outcome increment",
+            report["errors"],
+        )
+
+        (self.root / first_path).unlink()
+        subprocess.run(
+            ["git", "add", first_path],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "delete unfavorable registration"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "cohort registration artifacts are append-only and cannot be deleted, renamed or copied",
             report["errors"],
         )
 
@@ -2161,7 +2402,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "increment increment.fixture-current taskRegistration was not committed before measurement",
+            "increment increment.fixture-current taskRegistration identity or frozen-profile binding mismatch",
             report["errors"],
         )
 
@@ -3192,8 +3433,14 @@ class ProductControlTests(unittest.TestCase):
 
     def test_ready_program_cannot_report_accepted_with_all_outcomes_verified(self) -> None:
         outcome_ids = ["O1", "O2", "O3", "O4", "O5"]
-        for criterion_id in outcome_ids:
-            self.map_outcome_to_latest_work(criterion_id)
+
+        def map_all_outcomes(value: dict) -> None:
+            increment = self.ensure_increment(value, state="completed")
+            increment["acceptanceIds"].extend(outcome_ids)
+            increment["workItems"][0]["acceptanceIds"].extend(outcome_ids)
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", map_all_outcomes)
         evidence = self.evidence_document(criterion_ids=outcome_ids)
         self.write_json("product/evidence/all-outcomes.json", evidence)
 

@@ -63,10 +63,12 @@ Open exactly one increment with at most one active work item only after binding:
 
 Outcome-neutral repair binds `taskRegistration: null` and must leave the current
 graph at its stop. Outcome-bearing work additionally requires the program's new
-v1 normative profile and cohort to be frozen, an exact registration committed
-before its measurement floor, and a task-bound criterion-scoped code validator
-implemented before promotion. Never manufacture a task, baseline, receipt, or
-validator to create progress.
+v1 normative profile and prospective cohort protocol to be content-addressed in
+one prior freeze revision, an exact unique task registration in a later Git
+revision, and a task-bound criterion-scoped code validator that independently
+proves a source event occurred after registration before promotion. Git dates
+and self-reported timestamps are consistency fields, not chronology proof.
+Never manufacture a task, baseline, receipt, or validator to create progress.
 
 ## Authority and carrier transitions
 

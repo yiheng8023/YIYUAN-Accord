@@ -177,6 +177,16 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
+Before any v1.0 outcome measurement, the repository must freeze one
+content-addressed normative profile and one prospective cohort protocol. The
+protocol defines eligibility, task identity, strata, first-eligible enrollment,
+the earliest-prefix stop rule, missing-data behavior, measurement-event proof,
+and claim limits without naming future tasks. Every later task registration must
+be unique and descend from that freeze in Git history. Git ancestry proves only
+repository order: a task-bound validator must still prove the natural demand and
+the source event measured after registration. Commit dates and self-reported
+timestamps cannot supply that proof.
+
 ## What v1.0 must prove
 
 - **O1 — sustained autonomous delivery:** a finite six-or-more natural-task

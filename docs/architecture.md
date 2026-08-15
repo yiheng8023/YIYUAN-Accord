@@ -64,6 +64,17 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
+The future v1 measurement surface freezes a content-addressed normative profile
+and prospective cohort protocol before registrations. The protocol specifies
+eligibility, stable task identity, strata, first-eligible enrollment, the
+earliest-prefix stop rule, missing-data handling, source-event chronology and
+claim limits without pre-populating natural tasks. Bound registrations must use
+unique task identities and form a strict Git ancestry order after the freeze.
+That order proves committed-byte sequence only; each task-bound validator must
+independently establish that its real source event followed registration. Git
+dates and evidence timestamps are diagnostic consistency fields, not trusted
+chronology.
+
 Portfolio minima are eligibility predicates, not work generators. O3's
 reproducible-gap case and O4's rejected or stopped receipt count only when a
 bound natural task produces them without induced degradation. The Agent cannot

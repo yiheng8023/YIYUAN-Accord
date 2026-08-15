@@ -56,8 +56,14 @@ EXPECTED_PROGRAM_PURPOSE = (
 )
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
-    "G1-G4 passing count as progress. Documents, tests, inventories, fixtures, memberships, "
-    "research volume, and prior-release evidence are supporting inputs only."
+    "G1-G4 passing count as progress. Before any task measurement, one content-addressed "
+    "normative profile and prospective cohort protocol must be frozen; the realized cohort "
+    "is the earliest eligible registration prefix under that protocol, never a retrospectively "
+    "selected task roster. Git ancestry proves repository ordering only; every outcome requires "
+    "a task-bound validator to prove natural demand and a source-bound measurement event after "
+    "its immutable registration because Git dates and self-reported timestamps are not chronology "
+    "authority. Documents, tests, inventories, fixtures, memberships, research volume, and "
+    "prior-release evidence are supporting inputs only."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -148,7 +154,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "e27986f75d3ce00da4c611a1c740e72309a5938e1c1071cbf7fa313b492ce0c2"
+    "e4494ccbd16f29f0013ab05f7521661e3953616b4e6a2de5665595b013554619"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -242,7 +248,9 @@ NORMATIVE_PROFILE_BINDING_FIELDS = {
     "profileIdentity",
     "locator",
     "sha256",
-    "cohortIdentity",
+    "cohortProtocolIdentity",
+    "cohortProtocolLocator",
+    "cohortProtocolSha256",
     "frozenAtRevision",
 }
 UNFROZEN_NORMATIVE_PROFILE_BINDING = {
@@ -250,9 +258,37 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "profileIdentity": None,
     "locator": None,
     "sha256": None,
-    "cohortIdentity": None,
+    "cohortProtocolIdentity": None,
+    "cohortProtocolLocator": None,
+    "cohortProtocolSha256": None,
     "frozenAtRevision": None,
 }
+COHORT_PROTOCOL_FIELDS = {
+    "schema",
+    "id",
+    "profileIdentity",
+    "cohortProtocolIdentity",
+    "eligibilityRule",
+    "exclusionRule",
+    "taskIdentityRule",
+    "strata",
+    "enrollmentOrder",
+    "stopRule",
+    "failedOrMissingSampleDisposition",
+    "measurementEventRule",
+    "claimLimits",
+}
+EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
+    {
+        "eligibilityRule": "all-predeclared-eligible-natural-tasks",
+        "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
+        "taskIdentityRule": "stable-source-bound-identity-before-measurement",
+        "enrollmentOrder": "strict-git-ancestry-first-eligible",
+        "stopRule": "earliest-prefix-satisfying-current-acceptance",
+        "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
+        "measurementEventRule": "task-bound-source-event-after-registration-required",
+    }
+)
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
     "maxConsecutiveOutcomeNeutralWorkItems",
@@ -279,6 +315,8 @@ TASK_REGISTRATION_BINDING_FIELDS = {
     "sha256",
     "sourceRevision",
     "measurementNotBefore",
+    "profileSha256",
+    "cohortProtocolSha256",
 }
 TASK_REGISTRATION_FIELDS = {
     "schema",
@@ -793,14 +831,93 @@ def _committed_blob(
     return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
 
 
-def _commit_instant(root: Path, revision: str) -> datetime | None:
-    raw = _evidence_git(root, "show", "-s", "--format=%cI", revision)
+def _strict_git_ancestor(root: Path, ancestor: Any, descendant: Any) -> bool:
+    if (
+        not isinstance(ancestor, str)
+        or not isinstance(descendant, str)
+        or ancestor == descendant
+        or re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", ancestor) is None
+        or re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", descendant) is None
+    ):
+        return False
+    return (
+        _evidence_git(root, "merge-base", "--is-ancestor", ancestor, descendant)
+        is not None
+    )
+
+
+def _registration_added_at_revision(root: Path, revision: str, locator: str) -> bool:
+    raw = _evidence_git(
+        root,
+        "diff-tree",
+        "--root",
+        "--no-commit-id",
+        "--name-only",
+        "--diff-filter=A",
+        "-r",
+        revision,
+        "--",
+        locator,
+    )
     if raw is None:
-        return None
+        return False
     try:
-        return _rfc3339_instant(raw.decode("ascii").strip())
+        return raw.decode("utf-8").splitlines() == [locator]
     except UnicodeError:
+        return False
+
+
+def _registration_history_paths(
+    root: Path, frozen_at_revision: Any, errors: list[str]
+) -> set[str] | None:
+    if not isinstance(frozen_at_revision, str):
+        _error(errors, "cannot enumerate cohort registrations without a freeze revision")
         return None
+    raw = _evidence_git(
+        root,
+        "log",
+        "--format=",
+        "--name-status",
+        "-z",
+        f"{frozen_at_revision}..HEAD",
+        "--",
+        "product/evidence",
+    )
+    if raw is None:
+        _error(errors, "cohort registration history cannot be enumerated")
+        return None
+    tokens = raw.split(b"\0")
+    if tokens and tokens[-1] == b"":
+        tokens.pop()
+    paths: set[str] = set()
+    index = 0
+    try:
+        while index < len(tokens):
+            status = tokens[index].decode("ascii")
+            index += 1
+            path_count = 2 if status.startswith(("R", "C")) else 1
+            if index + path_count > len(tokens):
+                raise ValueError
+            changed = [tokens[index + offset].decode("utf-8") for offset in range(path_count)]
+            index += path_count
+            registration_paths = [
+                path
+                for path in changed
+                if PurePosixPath(path).parent == PurePosixPath("product/evidence")
+                and PurePosixPath(path).name.endswith("-registration.json")
+            ]
+            if not registration_paths:
+                continue
+            if status == "D" or status.startswith(("R", "C")):
+                _error(
+                    errors,
+                    "cohort registration artifacts are append-only and cannot be deleted, renamed or copied",
+                )
+            paths.update(registration_paths)
+    except (UnicodeError, ValueError):
+        _error(errors, "cohort registration history is malformed")
+        return None
+    return paths
 
 
 class _InvalidJson(ValueError):
@@ -1352,8 +1469,15 @@ def _normative_profile_binding_valid(
     locator = _relative_locator(binding.get("locator"))
     profile_path = PurePosixPath(locator) if locator is not None else None
     profile_identity = binding.get("profileIdentity")
-    cohort_identity = binding.get("cohortIdentity")
+    cohort_protocol_identity = binding.get("cohortProtocolIdentity")
+    cohort_protocol_locator = _relative_locator(binding.get("cohortProtocolLocator"))
+    cohort_protocol_path = (
+        PurePosixPath(cohort_protocol_locator)
+        if cohort_protocol_locator is not None
+        else None
+    )
     expected_sha256 = binding.get("sha256")
+    cohort_protocol_sha256 = binding.get("cohortProtocolSha256")
     revision = binding.get("frozenAtRevision")
     if (
         locator is None
@@ -1362,9 +1486,16 @@ def _normative_profile_binding_valid(
         or profile_path.parts[0] != "docs"
         or locator == "docs/DEMAND-TO-CAPABILITY-PROFILE.md"
         or not _nonempty_text(profile_identity)
-        or not _nonempty_text(cohort_identity)
+        or not _nonempty_text(cohort_protocol_identity)
+        or cohort_protocol_locator is None
+        or cohort_protocol_path is None
+        or not cohort_protocol_path.parts
+        or cohort_protocol_path.parts[0] != "docs"
+        or cohort_protocol_path.suffix != ".json"
         or not isinstance(expected_sha256, str)
         or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+        or not isinstance(cohort_protocol_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", cohort_protocol_sha256) is None
         or not isinstance(revision, str)
     ):
         _error(errors, "frozen normative profile binding shape is invalid")
@@ -1381,6 +1512,51 @@ def _normative_profile_binding_valid(
         or not _committed_blob(root, revision, locator, expected_sha256)
     ):
         _error(errors, "frozen normative profile identity or source revision mismatch")
+    protocol_candidate = _inside_root(
+        root, cohort_protocol_locator, errors, "cohort protocol"
+    )
+    if protocol_candidate is None:
+        return False
+    protocol_raw = _read_bounded_bytes(
+        protocol_candidate,
+        f"cohort protocol {cohort_protocol_locator}",
+        errors,
+    )
+    if protocol_raw is None:
+        return False
+    if (
+        hashlib.sha256(protocol_raw.replace(b"\r\n", b"\n")).hexdigest()
+        != cohort_protocol_sha256
+        or not _committed_blob(
+            root,
+            revision,
+            cohort_protocol_locator,
+            cohort_protocol_sha256,
+        )
+    ):
+        _error(errors, "frozen cohort protocol identity or source revision mismatch")
+        return len(errors) == before
+    protocol = _parse_json_object_bytes(
+        protocol_raw,
+        f"cohort protocol {cohort_protocol_locator}",
+        errors,
+    )
+    protocol_valid = (
+        set(protocol) == COHORT_PROTOCOL_FIELDS
+        and type(protocol.get("schema")) is int
+        and protocol.get("schema") == 1
+        and _nonempty_text(protocol.get("id"))
+        and protocol.get("profileIdentity") == profile_identity
+        and protocol.get("cohortProtocolIdentity") == cohort_protocol_identity
+        and all(
+            protocol.get(field) == expected
+            for field, expected in EXPECTED_COHORT_PROTOCOL_RULES.items()
+        )
+        and _string_list(protocol.get("strata")) is not None
+        and _string_list(protocol.get("claimLimits")) is not None
+    )
+    if not protocol_valid:
+        _error(errors, "frozen cohort protocol shape is invalid")
     return len(errors) == before
 
 
@@ -1782,7 +1958,7 @@ def _task_registration_guardrail(
     criteria: Mapping[str, dict[str, Any]],
     profile_binding: Mapping[str, Any],
     errors: list[str],
-) -> datetime | None:
+) -> tuple[datetime, str, str, str] | None:
     before = len(errors)
     increment_id = increment.get("id")
     mapped = _string_list(increment.get("acceptanceIds")) or []
@@ -1832,23 +2008,29 @@ def _task_registration_guardrail(
         return None
     source_revision = binding.get("sourceRevision")
     measurement_not_before = _rfc3339_instant(binding.get("measurementNotBefore"))
-    source_commit_at = (
-        _commit_instant(root, source_revision)
-        if isinstance(source_revision, str)
-        else None
-    )
+    profile_sha256 = binding.get("profileSha256")
+    cohort_protocol_sha256 = binding.get("cohortProtocolSha256")
+    frozen_at_revision = profile_binding.get("frozenAtRevision")
     if (
         not isinstance(source_revision, str)
         or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
         != expected_sha256
         or not _committed_blob(root, source_revision, locator, expected_sha256)
-        or source_commit_at is None
+        or not _registration_added_at_revision(root, source_revision, locator)
         or measurement_not_before is None
-        or source_commit_at > measurement_not_before
+        or profile_sha256 != profile_binding.get("sha256")
+        or cohort_protocol_sha256
+        != profile_binding.get("cohortProtocolSha256")
     ):
         _error(
             errors,
-            f"increment {increment_id} taskRegistration was not committed before measurement",
+            f"increment {increment_id} taskRegistration identity or frozen-profile binding mismatch",
+        )
+        return None
+    if not _strict_git_ancestor(root, frozen_at_revision, source_revision):
+        _error(
+            errors,
+            f"increment {increment_id} taskRegistration must strictly descend from the frozen profile and cohort protocol",
         )
         return None
     registration = _parse_json_object_bytes(raw, registration_label, errors)
@@ -1886,7 +2068,11 @@ def _task_registration_guardrail(
         and all(_substantive_registration_value(item) for item in values.values())
         and values.get("normativeProfileIdentity")
         == profile_binding.get("profileIdentity")
-        and values.get("cohortIdentity") == profile_binding.get("cohortIdentity")
+        and values.get("cohortProtocolIdentity")
+        == profile_binding.get("cohortProtocolIdentity")
+        and values.get("profileSha256") == profile_binding.get("sha256")
+        and values.get("cohortProtocolSha256")
+        == profile_binding.get("cohortProtocolSha256")
         and all(
             _same_typed_value(values[field], registration[field])
             for field in TASK_REGISTRATION_VALUE_ALIASES & expected_fields
@@ -1917,7 +2103,14 @@ def _task_registration_guardrail(
     )
     if not shape_valid:
         _error(errors, f"task registration {locator} shape is invalid")
-    return measurement_not_before if len(errors) == before else None
+    task_identity = registration.get("taskIdentity")
+    return (
+        (measurement_not_before, task_identity, source_revision, locator)
+        if len(errors) == before
+        and isinstance(task_identity, str)
+        and isinstance(source_revision, str)
+        else None
+    )
 
 
 def _task_registration_floors(
@@ -1928,13 +2121,41 @@ def _task_registration_floors(
     errors: list[str],
 ) -> dict[str, datetime]:
     floors: dict[str, datetime] = {}
+    task_identities: set[str] = set()
+    bound_registration_paths: set[str] = set()
+    prior_registration_revision: str | None = None
     for increment in increments:
         increment_id = increment.get("id")
-        floor = _task_registration_guardrail(
+        registration = _task_registration_guardrail(
             root, increment, criteria, profile_binding, errors
         )
-        if isinstance(increment_id, str) and floor is not None:
+        if isinstance(increment_id, str) and registration is not None:
+            floor, task_identity, source_revision, locator = registration
+            if task_identity in task_identities:
+                _error(
+                    errors,
+                    f"taskIdentity {task_identity} is reused across outcome registrations",
+                )
+            task_identities.add(task_identity)
+            if prior_registration_revision is not None and not _strict_git_ancestor(
+                root, prior_registration_revision, source_revision
+            ):
+                _error(
+                    errors,
+                    "outcome registration revisions must form one strict Git ancestry order",
+                )
+            prior_registration_revision = source_revision
+            bound_registration_paths.add(locator)
             floors[increment_id] = floor
+    if profile_binding.get("state") == "frozen":
+        history_paths = _registration_history_paths(
+            root, profile_binding.get("frozenAtRevision"), errors
+        )
+        if history_paths is not None and history_paths != bound_registration_paths:
+            _error(
+                errors,
+                "every post-freeze cohort registration artifact must bind exactly one outcome increment",
+            )
     return floors
 
 
