@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
+  "status": "completed",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -400,7 +400,7 @@
     },
     {
       "id": "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
-      "state": "active",
+      "state": "completed",
       "correctionClass": "route-distinct-host-through-existing-deepseek-projection",
       "observedProblem": "The stream-ready attempt deliberately excluded CC Switch and used an isolated first-party Claude credential, then stopped before Claude model generation. The user subsequently disclosed that the first-party Claude account is banned and corrected the live route: local Claude Code CLI, VS Code and desktop are already routed by CC Switch to DeepSeek and work. Read-only checks confirm CC Switch 3.19.2 currently projects the official DeepSeek Anthropic endpoint and deepseek-v4-pro[1M] into Claude settings while its own proxy runtime is off. A no-model isolation probe also showed that the real user configuration exposes 285 installed plugins, 247 enabled plugins and user-level MCP servers even with an empty enabledPlugins object and strict MCP flags; the probe's exact Claude process tree was stopped without repository residue. Treating the healthy external route as pollution and reusing the ambient configuration root both violate demand-driven route selection and task-scoped capability isolation.",
       "hypothesis": "The unchanged independently useful source-candidate gate can produce one eligible matched Codex and distinct-host result pair under candidate.5 if the parent reuses the existing CC Switch DeepSeek settings projection only as replaceable authentication/routing input, exposes it through one exact task-root settings hardlink without reading credential contents, isolates user .claude.json, disables every ambient plugin through a generated all-false overlay, loads only the Harness plugin, requires zero MCP, and retains bounded raw Claude error/result text before cleanup.",
@@ -436,7 +436,7 @@
       "workItems": [
         {
           "id": "work.v0.2.portable-source-candidate-gate-deepseek-routed",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": [
             "O5",
             "G1",

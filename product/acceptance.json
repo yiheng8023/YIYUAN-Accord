@@ -286,7 +286,10 @@
         ],
         "humanAuthority": "A named accountable human accepts both host outcomes, their equivalence, and the portability claim boundary."
       },
-      "assessment": "planned"
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/portable-source-candidate-gate-deepseek-routed-measured-2026-08-15.json"
+      ]
     },
     {
       "id": "G1",

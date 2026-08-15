@@ -872,6 +872,54 @@ _CODEX_CALIBRATION_CANONICAL_SOURCE_VALUES = MappingProxyType(
         ),
     }
 )
+_PORTABLE_O5_INCREMENT_ID = (
+    "increment.v0.2.portable-source-candidate-gate-deepseek-routed"
+)
+_PORTABLE_O5_WORK_ID = "work.v0.2.portable-source-candidate-gate-deepseek-routed"
+_PORTABLE_O5_RECEIPT = (
+    "product/evidence/portable-source-candidate-gate-deepseek-routed-"
+    "measured-2026-08-15.json"
+)
+_PORTABLE_O5_RECEIPT_SHA256 = (
+    "c771c4a5ec9fae2f1749d5e3cfb6d4a6797a7eae585d0de7b374652cd5d96142"
+)
+_PORTABLE_O5_RECEIPT_CANONICAL_SHA256 = (
+    "a46a3b51b2e4848cb173689e87aa32ce272e48ce9b5040f2cfe8aac43fc64a1f"
+)
+_PORTABLE_O5_RECEIPT_BLOB = "c08106e3980ebcf1d52fab33244697b9e495b23e"
+_PORTABLE_O5_REGISTRATION = (
+    "product/evidence/portable-source-candidate-gate-2026-08-15-"
+    "deepseek-routed-registration.json"
+)
+_PORTABLE_O5_REGISTRATION_SHA256 = (
+    "56d7740161a7cd92cc359d09a452afc47c0c05c6be1e741c4dcd55216a39d05c"
+)
+_PORTABLE_O5_REGISTRATION_COMMIT = "02ff5663c0491063043f853eaa4ba8d2cc417360"
+_PORTABLE_O5_REGISTRATION_PARENT = "2228c50a5cdecc660194fb30b4af262600384a58"
+_PORTABLE_O5_RESULT_COMMIT = "9081c3426f4899ce93cb27ea067ffe1eba13301d"
+_PORTABLE_O5_TARGET_COMMIT = "48ef653521d890999137499b4ad7a42c02a90842"
+_PORTABLE_O5_TARGET_TREE = "8a3e26f429c24d82f23d06376b525b520dfed5d8"
+_PORTABLE_O5_CODEX_STREAM_SHA256 = (
+    "5ddc8c465aebcfb3e0aca3bd85b22e9616baa3465ca5ab2daa777a9cb2c738c1"
+)
+_PORTABLE_O5_CODEX_FINAL_SHA256 = (
+    "bbba9f6319a4a9cf22118cca3f4c3e47306ca46afd8541961e1c61575bfe1bf2"
+)
+_PORTABLE_O5_CLAUDE_STREAM_SHA256 = (
+    "be130e9d4722b2a787499646803c7cd2ae419cde59b563dce07dbec743847695"
+)
+_PORTABLE_O5_CLAUDE_FINAL_SHA256 = (
+    "61a2ac6ccf1e8fc57c489fb0e909fb8658f0a1fe33372867ef929a20910bdfb0"
+)
+_PORTABLE_O5_EXECUTION_GRANT_SHA256 = (
+    "0fe852d0912da2c49549604c1fbf8ebf2c8fd737d4fdb71a58461a789f02b0fa"
+)
+_PORTABLE_O5_ACCEPTANCE_MESSAGE_SHA256 = (
+    "de147cf04b5462cd9bd234f78a4ddeee08abe456ba219ca5911e523c6da46b94"
+)
+_PORTABLE_O5_SOURCE_IDENTITY = (
+    "sha256:23cc0da08b01a9506df1a5e7c1076f14a37d68bad400ea48816aad7273b9607e"
+)
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...]], bytes | None] | None
 ] = ContextVar("harness_evidence_git_cache", default=None)
@@ -2911,23 +2959,58 @@ def _validate_codex_reference_calibration_o4_candidate(
     ):
         reject("intent, communication, or decision-completeness floor changed")
 
+    codex_payload_root = root / "adapters/agent-autonomy-harness-codex"
+    claude_payload_root = root / "adapters/agent-autonomy-harness-claude"
+    codex_payload_files = (
+        "hooks/hooks.json",
+        "scripts/session_start.py",
+        "skills/deliver-demand-driven-task/SKILL.md",
+        "skills/deliver-demand-driven-task/agents/openai.yaml",
+        "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+    )
+    claude_payload_files = (
+        "hooks/hooks.json",
+        "scripts/session_start.py",
+        "skills/deliver-demand-driven-task/SKILL.md",
+        "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+    )
     try:
         codex_package_version = _parse_json(
-            (
-                root
-                / "adapters/agent-autonomy-harness-codex/.codex-plugin/plugin.json"
-            ).read_text(encoding="utf-8")
+            (codex_payload_root / ".codex-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
         )["version"]
         claude_package_version = _parse_json(
-            (
-                root
-                / "adapters/agent-autonomy-harness-claude/.claude-plugin/plugin.json"
-            ).read_text(encoding="utf-8")
+            (claude_payload_root / ".claude-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
         )["version"]
+        codex_payload_identity = hashlib.sha256()
+        for relative in codex_payload_files:
+            codex_payload_identity.update(relative.encode())
+            codex_payload_identity.update(b"\0")
+            codex_payload_identity.update((codex_payload_root / relative).read_bytes())
+            codex_payload_identity.update(b"\0")
+        claude_payload_identity = hashlib.sha256()
+        for relative in claude_payload_files:
+            claude_payload_identity.update(relative.encode())
+            claude_payload_identity.update(b"\0")
+            claude_payload_identity.update((claude_payload_root / relative).read_bytes())
+            claude_payload_identity.update(b"\0")
+        expected_codex_package_version = (
+            "0.2.0-candidate.7+codex.payload-"
+            + codex_payload_identity.hexdigest()[:12]
+        )
+        expected_claude_package_version = (
+            "0.2.0-candidate.7+claude.payload-"
+            + claude_payload_identity.hexdigest()[:12]
+        )
     except (OSError, KeyError, TypeError, UnicodeError, _InvalidJson):
         reject("inactive projection integrity metadata is unavailable")
         codex_package_version = None
         claude_package_version = None
+        expected_codex_package_version = None
+        expected_claude_package_version = None
     integrity_refresh = reliability.get("inactiveProjectionIntegrityRefresh", {})
     if (
         reliability.get("acceptedReceiptValidatorsReexecuted") != 3
@@ -2951,14 +3034,12 @@ def _validate_codex_reference_calibration_o4_candidate(
             "harness/control.py, so both inactive launchers refreshed only their "
             "control.py integrity pin and payload identity"
         )
-        or integrity_refresh.get("codexPackageVersion") != codex_package_version
-        or integrity_refresh.get("claudePackageVersion") != claude_package_version
-        or not str(codex_package_version).startswith(
-            "0.2.0-candidate.6+codex.payload-"
-        )
-        or not str(claude_package_version).startswith(
-            "0.2.0-candidate.6+claude.payload-"
-        )
+        or integrity_refresh.get("codexPackageVersion")
+        != "0.2.0-candidate.6+codex.payload-ccd593e9fc43"
+        or integrity_refresh.get("claudePackageVersion")
+        != "0.2.0-candidate.6+claude.payload-0d96961b88b3"
+        or codex_package_version != expected_codex_package_version
+        or claude_package_version != expected_claude_package_version
         or integrity_refresh.get("evaluatedHistoricalPluginSnapshotsChanged")
         is not False
         or integrity_refresh.get("methodProfileSkillOrHookSemanticsChanged")
@@ -2968,7 +3049,11 @@ def _validate_codex_reference_calibration_o4_candidate(
         or "no value imputed"
         not in reliability.get("recoveryAndCallCostDataSource", "")
     ):
-        reject("reliability, recovery, time, or call-cost result changed")
+        reject(
+            "reliability, recovery, time, call-cost, or inactive package identity "
+            f"changed: current={codex_package_version}/{claude_package_version}; "
+            f"computed={expected_codex_package_version}/{expected_claude_package_version}"
+        )
 
     if (
         safety.get("acceptedReceiptMandatoryFloorsPass") is not True
@@ -3233,6 +3318,397 @@ def _validate_codex_reference_calibration_o4(
     )
 
 
+def _validate_portable_source_candidate_gate_o5(
+    document: dict[str, Any], criterion_id: str, root: Path, errors: list[str]
+) -> bool:
+    """Validate only the observed DeepSeek-routed matched O5 receipt."""
+
+    if criterion_id != "O5":
+        _error(errors, "portable source-candidate gate evidence used for non-O5 criterion")
+        return False
+    before = len(errors)
+
+    def reject(message: str) -> None:
+        _error(errors, f"portable source-candidate gate O5 evidence {message}")
+
+    expected_top_level = {
+        "schema",
+        "id",
+        "criterionIds",
+        "registration",
+        "taskIdentity",
+        "sourceThreadId",
+        "observedAt",
+        "incrementId",
+        "workItemId",
+        "state",
+        "eligibleForOutcomeProgress",
+        "outcomeProgress",
+        "source",
+        "result",
+        "authority",
+        "preflight",
+        "chronology",
+        "machineAssessment",
+        "humanJudgment",
+        "interventionAndLoss",
+        "safetyAndCleanup",
+        "claimLimits",
+        "validator",
+    }
+    canonical = json.dumps(
+        document, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    if (
+        set(document) != expected_top_level
+        or hashlib.sha256(canonical).hexdigest()
+        != _PORTABLE_O5_RECEIPT_CANONICAL_SHA256
+    ):
+        reject("exact accepted receipt content changed")
+        return False
+
+    try:
+        registration_ref = document["registration"]
+        source = document["source"]
+        result = document["result"]
+        authority = document["authority"]
+        grant = authority["grantRecord"]
+        decision = authority["decisionRecord"]
+        preflight = document["preflight"]
+        provider = preflight["deepSeekProvider"]
+        chronology = document["chronology"]
+        codex = chronology[3]
+        claude = chronology[4]
+        codex_final = codex["finalObject"]
+        claude_final = claude["finalObject"]
+        machine = document["machineAssessment"]
+        human = document["humanJudgment"]
+        human_record = human["decisionRecord"]
+        loss = document["interventionAndLoss"]
+        cleanup = document["safetyAndCleanup"]
+    except (IndexError, KeyError, TypeError):
+        reject("required measured structure is missing")
+        return False
+
+    required_response = (
+        "接受本次 Codex 与 Claude Code/DeepSeek 两个 blocked 结果均正确且有用；"
+        "接受二者归一后仅含同一项 P1 的等价判断，其中 "
+        "deepseek-v4-pro[1M]→deepseek-v4-pro[1m] 为无回退的大小写归一、"
+        "越出源目录的 Glob 已被拒绝且未暴露数据；接受仅限本次注册任务、"
+        "目标提交、宿主/模型/适配器与 2026-08-15 的有界 O5 可移植性声明。"
+    )
+    source_parts = (
+        _PORTABLE_O5_REGISTRATION_SHA256,
+        _PORTABLE_O5_EXECUTION_GRANT_SHA256,
+        _PORTABLE_O5_CODEX_STREAM_SHA256,
+        _PORTABLE_O5_CODEX_FINAL_SHA256,
+        _PORTABLE_O5_CLAUDE_STREAM_SHA256,
+        _PORTABLE_O5_CLAUDE_FINAL_SHA256,
+        _PORTABLE_O5_ACCEPTANCE_MESSAGE_SHA256,
+    )
+    source_identity = "sha256:" + hashlib.sha256(
+        ("\n".join(source_parts) + "\n").encode()
+    ).hexdigest()
+    if (
+        document["schema"] != 1
+        or document["id"]
+        != "result.portable-source-candidate-gate.deepseek-routed.measured.2026-08-15"
+        or document["taskIdentity"]
+        != "natural-task.2026-08-15.portable-source-candidate-gate-deepseek-routed"
+        or document["sourceThreadId"] != "019ffaa8-b44a-7bf2-97de-65875bceec33"
+        or document["observedAt"] != "2026-08-15T11:05:37.4237611+08:00"
+        or document["incrementId"] != _PORTABLE_O5_INCREMENT_ID
+        or document["workItemId"] != _PORTABLE_O5_WORK_ID
+        or document["criterionIds"] != ["O5"]
+        or document["state"] != "accepted"
+        or document["eligibleForOutcomeProgress"] is not True
+        or document["outcomeProgress"] != ["O5"]
+        or registration_ref
+        != {
+            "locator": _PORTABLE_O5_REGISTRATION,
+            "sha256": _PORTABLE_O5_REGISTRATION_SHA256,
+            "registeredCommit": _PORTABLE_O5_REGISTRATION_COMMIT,
+        }
+        or source
+        != {
+            "kind": "registered-matched-cross-host-real-task-measurement",
+            "locator": _PORTABLE_O5_REGISTRATION,
+            "identity": _PORTABLE_O5_SOURCE_IDENTITY,
+        }
+        or source_identity != _PORTABLE_O5_SOURCE_IDENTITY
+        or document["validator"]
+        != {
+            "kind": "portable-source-candidate-gate-deepseek-routed-o5",
+            "version": 1,
+            "state": "accepted",
+        }
+        or result.get("state") != "accepted"
+        or result.get("accepted") is not True
+        or result.get("referenceHostOutcome", {}).get("verdict") != "blocked"
+        or result.get("referenceHostOutcome", {}).get("acceptedCorrectAndUseful")
+        is not True
+        or result.get("distinctHostOutcome", {}).get("verdict") != "blocked"
+        or result.get("distinctHostOutcome", {}).get("acceptedCorrectAndUseful")
+        is not True
+        or result.get("normalizedEquivalenceAccepted") is not True
+        or result.get("boundedPortabilityClaimAccepted") is not True
+    ):
+        reject("task, source, result, or validator identity changed")
+
+    if (
+        authority.get("kind") != "named-accountable-human"
+        or authority.get("name") != "yiheng8023"
+        or authority.get("decision") != "accepted"
+        or authority.get("decidedAt") != "2026-08-15T03:15:57.895Z"
+        or authority.get("executionGrant")
+        != "同意本次 DeepSeek-routed 注册的精确执行授权。"
+        or grant.get("contentSha256") != _PORTABLE_O5_EXECUTION_GRANT_SHA256
+        or authority.get("codexModelCallsAttempted") != 1
+        or authority.get("codexModelCallsCompletedWithFinalObject") != 1
+        or authority.get("claudeModelCallsAttempted") != 1
+        or authority.get("claudeModelCallsCompletedWithFinalObject") != 1
+        or authority.get("parentRetryAttempted") is not False
+        or authority.get("substitutionAttempted") is not False
+        or authority.get("acceptedResponse") != required_response
+        or hashlib.sha256((required_response + "\n").encode()).hexdigest()
+        != _PORTABLE_O5_ACCEPTANCE_MESSAGE_SHA256
+        or decision.get("line") != 24268
+        or decision.get("id") != "msg_01a0036b-4947-7500-b46c-fced2b184fee"
+        or decision.get("recordedAt") != "2026-08-15T03:15:57.895Z"
+        or decision.get("contentSha256") != _PORTABLE_O5_ACCEPTANCE_MESSAGE_SHA256
+        or human.get("namedHumanAcceptor") != "yiheng8023"
+        or human.get("status") != "accepted"
+        or human_record.get("contentSha256")
+        != _PORTABLE_O5_ACCEPTANCE_MESSAGE_SHA256
+        or any(
+            human_record.get(field) is not True
+            for field in (
+                "acceptedReferenceHostOutcome",
+                "acceptedDistinctHostOutcome",
+                "acceptedNormalizedEquivalence",
+                "acceptedBoundedPortabilityClaim",
+            )
+        )
+    ):
+        reject("execution grant or named-human acceptance changed")
+
+    expected_events = [
+        "registration-committed-and-pushed",
+        "post-registration-execution-grant-recorded",
+        "source-package-route-isolation-and-hook-preflight-passed",
+        "single-codex-model-call-completed",
+        "single-claude-deepseek-model-call-completed",
+        "machine-equivalence-assessed",
+        "task-process-credential-and-filesystem-state-cleaned",
+    ]
+    codex_blockers = codex_final.get("blockers")
+    claude_blockers = claude_final.get("blockers")
+    normalized = machine.get("normalizedP0P1")
+    if (
+        [item.get("event") for item in chronology] != expected_events
+        or preflight.get("targetCommit") != _PORTABLE_O5_TARGET_COMMIT
+        or preflight.get("targetTree") != _PORTABLE_O5_TARGET_TREE
+        or preflight.get("allBlobIdentitiesMatched") is not True
+        or preflight.get("codexVersion") != "0.147.0"
+        or preflight.get("claudeVersion") != "2.1.233"
+        or preflight.get("ccSwitchVersion") != "3.19.2"
+        or preflight.get("credentialContentsReadHashedPrintedOrRecorded") is not False
+        or preflight.get("enabledAmbientClaudePlugins") != 0
+        or preflight.get("isolatedClaudeMcpServerCount") != 0
+        or provider.get("endpoint") != "https://api.deepseek.com/anthropic"
+        or provider.get("requestedModel") != "deepseek-v4-pro[1M]"
+        or provider.get("proxyRuntimeEnabled") is not False
+        or provider.get("autoFailoverEnabled") is not False
+        or codex.get("rawStreamSha256") != _PORTABLE_O5_CODEX_STREAM_SHA256
+        or codex.get("finalObjectSha256") != _PORTABLE_O5_CODEX_FINAL_SHA256
+        or codex.get("validEventCount") != 115
+        or codex.get("modelNetworkOrWriteCommands") != 0
+        or codex.get("providerRetryMarkers") != 0
+        or codex.get("requiredFactsRecovered") is not True
+        or claude.get("rawStreamSha256") != _PORTABLE_O5_CLAUDE_STREAM_SHA256
+        or claude.get("finalObjectSha256") != _PORTABLE_O5_CLAUDE_FINAL_SHA256
+        or claude.get("validEventCount") != 15959
+        or claude.get("requestedModel") != "deepseek-v4-pro[1M]"
+        or claude.get("reportedModel") != "deepseek-v4-pro[1m]"
+        or set(claude.get("modelUsage", {})) != {"deepseek-v4-pro[1m]"}
+        or claude.get("mcpServers") is not None
+        or claude.get("hookOutcome") != "success"
+        or codex_final.get("taskIdentity") != document["taskIdentity"]
+        or claude_final.get("taskIdentity") != document["taskIdentity"]
+        or codex_final.get("targetCommit") != _PORTABLE_O5_TARGET_COMMIT
+        or claude_final.get("targetCommit") != _PORTABLE_O5_TARGET_COMMIT
+        or codex_final.get("verdict") != "blocked"
+        or claude_final.get("verdict") != "blocked"
+        or not isinstance(codex_blockers, list)
+        or len(codex_blockers) != 1
+        or not isinstance(claude_blockers, list)
+        or len(claude_blockers) != 1
+        or any(
+            blocker[0].get("severity") != "P1"
+            or blocker[0].get("path") != "harness/claude_reference.py"
+            for blocker in (codex_blockers, claude_blockers)
+        )
+        or machine.get("hostResultsFactGrounded") is not True
+        or machine.get("verdictsEqual") is not True
+        or machine.get("normalizedP0P1Equal") is not True
+        or not isinstance(normalized, list)
+        or len(normalized) != 1
+        or normalized[0].get("severity") != "P1"
+        or normalized[0].get("path") != "harness/claude_reference.py"
+        or machine.get("routeIdentity", {}).get("fallbackObserved") is not False
+        or machine.get("capabilityBoundary", {}).get("deniedDataExposed") is not False
+        or machine.get("floorsPass") is not True
+    ):
+        reject("preflight, exact streams, model route, or normalized result changed")
+
+    forbidden_cleanup_truths = (
+        "repositoryMutationByModels",
+        "credentialContentsReadOrRecorded",
+        "persistentConsumerMutation",
+        "accountMutation",
+        "branchAdded",
+        "worktreeAdded",
+        "repositoryForkAdded",
+        "conversationForkCreated",
+        "publicationOrReleasePerformed",
+        "temporaryPluginRetained",
+        "temporaryHookTrustRetained",
+        "temporaryCredentialLinkRetained",
+        "taskOwnedProcessRetained",
+        "taskOwnedFilesystemResidueRetained",
+    )
+    if (
+        loss.get("boundedHumanTrustAndModelExecutionGrants") != 1
+        or loss.get("materialUserCapabilityOrTopologyInterventionsAfterGrant") != 0
+        or loss.get("materialCollaborationLossEventsAfterGrant") != 0
+        or loss.get("userRecoveryOrCleanupCommands") != 0
+        or any(cleanup.get(field) is not False for field in forbidden_cleanup_truths)
+        or cleanup.get("originalHostCredentialFilesPreserved") is not True
+    ):
+        reject("zero-loss, safety, or residue floor changed")
+
+    try:
+        receipt_raw = (root / _PORTABLE_O5_RECEIPT).read_bytes()
+        registration_raw = (root / _PORTABLE_O5_REGISTRATION).read_bytes()
+        registration = _parse_json(registration_raw.decode())
+    except (OSError, TypeError, UnicodeError, _InvalidJson):
+        reject("receipt or registration bytes are unavailable or invalid")
+        receipt_raw = None
+        registration_raw = None
+        registration = {}
+    if (
+        receipt_raw is None
+        or hashlib.sha256(receipt_raw).hexdigest() != _PORTABLE_O5_RECEIPT_SHA256
+        or registration_raw is None
+        or hashlib.sha256(registration_raw).hexdigest()
+        != _PORTABLE_O5_REGISTRATION_SHA256
+        or registration.get("taskIdentity") != document["taskIdentity"]
+        or registration.get("incrementId") != _PORTABLE_O5_INCREMENT_ID
+        or registration.get("criterionIds") != ["O5"]
+        or document["claimLimits"] != registration.get("claimLimits")
+    ):
+        reject("receipt, registration, or registered claim bytes changed")
+
+    registration_parent = _evidence_git(
+        root, "rev-parse", f"{_PORTABLE_O5_REGISTRATION_COMMIT}^"
+    )
+    committed_registration = _evidence_git(
+        root, "show", f"{_PORTABLE_O5_REGISTRATION_COMMIT}:{_PORTABLE_O5_REGISTRATION}"
+    )
+    committed_program = _evidence_git(
+        root, "show", f"{_PORTABLE_O5_REGISTRATION_COMMIT}:product/program.json"
+    )
+    committed_acceptance = _evidence_git(
+        root, "show", f"{_PORTABLE_O5_REGISTRATION_COMMIT}:product/acceptance.json"
+    )
+    result_parent = _evidence_git(root, "rev-parse", f"{_PORTABLE_O5_RESULT_COMMIT}^")
+    committed_receipt = _evidence_git(
+        root, "show", f"{_PORTABLE_O5_RESULT_COMMIT}:{_PORTABLE_O5_RECEIPT}"
+    )
+    receipt_blob = _evidence_git(
+        root, "rev-parse", f"{_PORTABLE_O5_RESULT_COMMIT}:{_PORTABLE_O5_RECEIPT}"
+    )
+    result_is_local = _evidence_git(
+        root, "merge-base", "--is-ancestor", _PORTABLE_O5_RESULT_COMMIT, "HEAD"
+    )
+    result_is_pushed = _evidence_git(
+        root, "merge-base", "--is-ancestor", _PORTABLE_O5_RESULT_COMMIT, "origin/main"
+    )
+    if (
+        registration_parent is None
+        or registration_parent.decode().strip() != _PORTABLE_O5_REGISTRATION_PARENT
+        or committed_registration is None
+        or hashlib.sha256(committed_registration).hexdigest()
+        != _PORTABLE_O5_REGISTRATION_SHA256
+        or result_parent is None
+        or result_parent.decode().strip() != _PORTABLE_O5_REGISTRATION_COMMIT
+        or committed_receipt is None
+        or hashlib.sha256(committed_receipt).hexdigest()
+        != _PORTABLE_O5_RECEIPT_SHA256
+        or receipt_blob is None
+        or receipt_blob.decode().strip() != _PORTABLE_O5_RECEIPT_BLOB
+        or result_is_local is None
+        or result_is_pushed is None
+    ):
+        reject("registration and accepted result were not immutably delivered in order")
+
+    try:
+        registered_program = _parse_json(committed_program.decode())
+        registered_increment = next(
+            item
+            for item in registered_program["increments"]
+            if item.get("id") == _PORTABLE_O5_INCREMENT_ID
+        )
+        registered_work = registered_increment["workItems"][0]
+        registered_acceptance = _parse_json(committed_acceptance.decode())
+        registered_o5 = next(
+            item for item in registered_acceptance["criteria"] if item.get("id") == "O5"
+        )
+    except (
+        AttributeError,
+        IndexError,
+        KeyError,
+        StopIteration,
+        TypeError,
+        UnicodeError,
+        _InvalidJson,
+    ):
+        reject("registered active program or O5 contract is unavailable")
+    else:
+        if (
+            registered_program.get("status") != "active"
+            or registered_program.get("activeIncrementId") != _PORTABLE_O5_INCREMENT_ID
+            or registered_increment.get("state") != "active"
+            or registered_increment.get("taskRegistration")
+            != {
+                "locator": _PORTABLE_O5_REGISTRATION,
+                "sha256": _PORTABLE_O5_REGISTRATION_SHA256,
+            }
+            or registered_work.get("id") != _PORTABLE_O5_WORK_ID
+            or registered_work.get("state") != "active"
+            or registered_o5.get("assessment") != "planned"
+            or "evidence" in registered_o5
+            or _criteria_contract_digest(registered_acceptance.get("criteria"))
+            != EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
+        ):
+            reject("registration did not precede measurement under the unchanged O5 contract")
+
+    target_tree = _evidence_git(root, "rev-parse", f"{_PORTABLE_O5_TARGET_COMMIT}^{{tree}}")
+    claude_source = _evidence_git(
+        root, "show", f"{_PORTABLE_O5_TARGET_COMMIT}:harness/claude_reference.py"
+    )
+    if (
+        target_tree is None
+        or target_tree.decode().strip() != _PORTABLE_O5_TARGET_TREE
+        or claude_source is None
+        or b'"version": "2.1.232"' not in claude_source
+        or b"2.1.233" in claude_source
+    ):
+        reject("target tree no longer independently grounds the shared P1 decision")
+
+    return len(errors) == before
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
     {
         "public-intake-zero-knowledge-o1": (
@@ -3259,6 +3735,11 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             frozenset({"O4"}),
             frozenset({_CODEX_CALIBRATION_INCREMENT_ID}),
             _validate_codex_reference_calibration_o4,
+        ),
+        "portable-source-candidate-gate-deepseek-routed-o5": (
+            frozenset({"O5"}),
+            frozenset({_PORTABLE_O5_INCREMENT_ID}),
+            _validate_portable_source_candidate_gate_o5,
         ),
     }
 )

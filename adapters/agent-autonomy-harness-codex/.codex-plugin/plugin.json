@@ -1,6 +1,6 @@
 {
   "name": "agent-autonomy-harness-codex",
-  "version": "0.2.0-candidate.6+codex.payload-ccd593e9fc43",
+  "version": "0.2.0-candidate.7+codex.payload-a98c0bf96091",
   "description": "Thin Codex projection for demand-driven task delivery and Harness authority continuity.",
   "author": {
     "name": "Agent Autonomy Harness contributors"

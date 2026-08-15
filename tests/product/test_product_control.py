@@ -352,25 +352,22 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_has_four_verified_outcomes_and_deepseek_routed_o5_work(
+    def test_current_v02_contract_is_accepted_with_deepseek_routed_o5_evidence(
         self,
     ) -> None:
         report = verify_product(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
-        )
-        self.assertEqual(report["completionState"], "in-progress")
-        self.assertEqual(report["outcomes"], {"verified": 4, "total": 5})
+        self.assertEqual(report["programStatus"], "completed")
+        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["completionState"], "accepted")
+        self.assertEqual(report["outcomes"], {"verified": 5, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
         self.assertTrue(report["criterionStates"]["O1"])
         self.assertTrue(report["criterionStates"]["O3"])
         self.assertTrue(report["criterionStates"]["O2"])
         self.assertTrue(report["criterionStates"]["O4"])
-        self.assertFalse(report["criterionStates"]["O5"])
+        self.assertTrue(report["criterionStates"]["O5"])
 
     def test_codex_reference_cohort_must_cross_context_lifecycle_boundary(
         self,
@@ -488,12 +485,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["release"], "v0.2")
-        self.assertEqual(report["programStatus"], "active")
-        self.assertEqual(
-            report["activeIncrement"],
-            "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
-        )
-        self.assertEqual(report["outcomes"], {"verified": 4, "total": 5})
+        self.assertEqual(report["programStatus"], "completed")
+        self.assertIsNone(report["activeIncrement"])
+        self.assertEqual(report["completionState"], "accepted")
+        self.assertEqual(report["outcomes"], {"verified": 5, "total": 5})
         self.assertTrue(report["valid"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
@@ -513,7 +508,7 @@ class ProductControlTests(unittest.TestCase):
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("v0.2: active, in-progress (4/5 outcomes)", completed.stdout)
+        self.assertIn("v0.2: completed, accepted (5/5 outcomes)", completed.stdout)
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -803,7 +798,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.6+codex.payload-"
+            "0.2.0-candidate.7+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -985,7 +980,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.6+claude.payload-"
+            "0.2.0-candidate.7+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
@@ -1740,6 +1735,7 @@ class ProductControlTests(unittest.TestCase):
                 "claude-demand-skill-plugin-o1-o3",
                 "continuation-reconciliation-o2",
                 "codex-reference-calibration-o4",
+                "portable-source-candidate-gate-deepseek-routed-o5",
             },
         )
         criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
@@ -1749,6 +1745,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             increments,
             frozenset({"increment.v0.2.public-intake-zero-knowledge"}),
+        )
+        self.assertTrue(callable(validator))
+
+        criteria, increments, validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "portable-source-candidate-gate-deepseek-routed-o5"
+        ]
+        self.assertEqual(criteria, frozenset({"O5"}))
+        self.assertEqual(
+            increments,
+            frozenset(
+                {"increment.v0.2.portable-source-candidate-gate-deepseek-routed"}
+            ),
         )
         self.assertTrue(callable(validator))
 
@@ -1997,6 +2005,48 @@ class ProductControlTests(unittest.TestCase):
                 candidate_errors: list[str] = []
                 self.assertFalse(
                     validator(candidate, "O4", ROOT, candidate_errors)
+                )
+                self.assertTrue(candidate_errors)
+
+    def test_portable_o5_validator_binds_exact_streams_route_denial_and_human_decision(
+        self,
+    ) -> None:
+        document = json.loads(
+            (
+                ROOT
+                / "product/evidence/portable-source-candidate-gate-deepseek-routed-measured-2026-08-15.json"
+            ).read_text(encoding="utf-8")
+        )
+        cache_token = control._EVIDENCE_GIT_CACHE.set({})
+        self.addCleanup(control._EVIDENCE_GIT_CACHE.reset, cache_token)
+        validator = SUPPORTED_EVIDENCE_VALIDATORS[
+            "portable-source-candidate-gate-deepseek-routed-o5"
+        ][2]
+        errors: list[str] = []
+        self.assertTrue(validator(document, "O5", ROOT, errors), errors)
+
+        mutations = {
+            "missing human decision": lambda value: value["authority"].__setitem__(
+                "decision", "pending"
+            ),
+            "different Codex stream": lambda value: value["chronology"][3].__setitem__(
+                "rawStreamSha256", "0" * 64
+            ),
+            "model fallback hidden": lambda value: value["machineAssessment"][
+                "routeIdentity"
+            ].__setitem__("fallbackObserved", True),
+            "denied data exposed": lambda value: value["machineAssessment"][
+                "capabilityBoundary"
+            ].__setitem__("deniedDataExposed", True),
+            "broadened claim": lambda value: value["claimLimits"].clear(),
+        }
+        for label, mutate_document in mutations.items():
+            with self.subTest(label=label):
+                candidate = deepcopy(document)
+                mutate_document(candidate)
+                candidate_errors: list[str] = []
+                self.assertFalse(
+                    validator(candidate, "O5", ROOT, candidate_errors)
                 )
                 self.assertTrue(candidate_errors)
 

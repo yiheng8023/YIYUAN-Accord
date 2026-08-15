@@ -86,9 +86,11 @@ process loss, and repository residue. It does not execute tasks, discover or
 install capabilities, route work, or operate a host adapter.
 
 O1 is verified by three accepted, task-bound results: the public-intake rewrite
-and the uninstalled Codex and Claude task-facing Skill source packages. O2, O4,
-and O5 remain false while O3 is true. A repository-authored JSON file alone cannot promote an
-outcome: every verified outcome requires a code-owned validator
+and the uninstalled Codex and Claude task-facing Skill source packages. O2 uses
+three materially distinct scenarios, O3 binds their route choices, O4 accepts a
+bounded Codex reference-host calibration, and O5 binds one accepted matched
+Codex plus Claude Code/DeepSeek decision pair. A repository-authored JSON file
+alone cannot promote an outcome: every verified outcome requires a code-owned validator
 scoped to the criterion and exact causal increment for the bound task
 evidence. Before measured execution, the increment freezes an immutable task
 registration containing every mapped criterion's required values, the task's
@@ -101,11 +103,10 @@ post-hoc checking, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
-The v0.2 program is active on one pre-registered O5 matched source-candidate
-gate after closing the
-public-intake, task-facing Codex and Claude Skill source deliveries, the
-continuation-reconciliation implementation, and the bounded Codex reference-
-host calibration. The first three support O1. A
+The v0.2 program is completed after the public-intake, task-facing Codex and
+Claude Skill source deliveries, continuation-reconciliation implementation,
+bounded Codex reference-host calibration, and pre-registered O5 matched
+source-candidate gate. The first three support O1. A
 criterion-scoped aggregate check supports O3 through one native-retain route
 and two finite official discovery or adaptation routes. O2 uses a different
 three-scenario cohort: public intake, Codex Skill source, and continuation
@@ -115,16 +116,20 @@ collaboration losses, and named-human acceptance. The similar Claude and Codex
 Skill deliveries are deliberately not double-counted. O4 applies the unchanged
 candidate.5 profile to those three accepted scenarios and one honestly stopped
 plugin-rollover case under fixed comparators, mandatory floors, and a named-
-human Codex-only claim. O1 through O4 are true; O5 remains false while the
-exact Codex CLI and distinct-host Claude Code pair awaits its separately
-authorized measured execution and human equivalence judgment.
+human Codex-only claim. O5 adds one exact Codex CLI and distinct-host Claude
+Code/DeepSeek task pair. Both independently returned the same fact-grounded
+single-P1 `blocked` decision, and the named human accepted both outcomes, their
+normalized equivalence, and only the pre-registered task/target/host/model/
+adapter/date claim.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
 the unchanged pre-registration, evidence, floors, and human-acceptance burden.
-The current verifier and inactive adapters are not a task runtime, installed-
-host behavior result, or cross-host proof; O4 accepts only the frozen
-candidate.5 Codex reference-host calibration.
+The current verifier and inactive adapters are not a task runtime or an
+installed-host behavior result. The cross-host evidence proves bounded decision
+portability for the registered O5 pair only; it does not establish adapter
+support for the newer carrier, production, publication, or universal
+portability.
 
 ### Continuity is reconciliation, not unlimited context
 

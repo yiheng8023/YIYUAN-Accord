@@ -12,97 +12,46 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Research-stage status:** the repository currently contains the product
-contract, acceptance model, deterministic verifier, an inactive Codex
-`SessionStart` reference adapter, an inactive thin Codex plugin source candidate
-with one task-facing Skill and that continuation Hook, a workspace discovery
-entry that exposes the projection as available without installing it,
-content-addressed stopped Codex results, and an inactive session-scoped Claude
-Code projection over the same continuation semantics. It does not contain an
-Agent runtime, a persistently installed or behavior-accepted adapter, or
-accepted cross-host proof.
+**Research-stage status:** v0.2 has completed its machine-governed program and
+the repository verifier reports `completionState=accepted`: O1-O5 are verified
+(`5/5` outcomes) and G1-G4 pass (`4/4` guardrails). This is acceptance of the
+bounded research release contract, not a production, publication, universal
+portability, or persistently installed-adapter claim.
 
-v0.2 is `active` on one pre-registered matched O5 source-candidate gate. O1
-through O4 are verified (`4/5` outcomes); O5 remains unverified. O1 is
-supported by the accepted public-intake, Codex Skill-source, and Claude
-Skill-source results. O3 binds
-those three route decisions across native retention and finite official
-discovery or adaptation. O2 instead binds the materially distinct
-public-intake, Codex Skill-source, and continuation-reconciliation scenarios;
-the similar Claude and Codex Skill deliveries are not double-counted. The
-accepted continuation result replaces a 6,301-character active-work projection
-that exceeded Codex's 4,096-character Hook limit with a bounded read-only
-authority, active-work, and Git reconciliation checkpoint. O4 applies the
-unchanged candidate.5 profile and scorecard to that exact three-scenario cohort
-plus one honestly stopped plugin-rollover case. The task-bound validator and
-named-human bounded judgment accept only this Codex 0.147.0 Windows reference-
-host calibration: aggregate registered user orchestration falls from 8 to 0,
-two accepted native-compaction crossings recover without user reconstruction,
-and the failed Hook-chronology floor remains failed. It does not verify O5,
-installed Hook value, general context management, release, or production. The
-program makes explicit that authorized product-plan delivery is real demand
-when the primary purpose is the deliverable, rather than exercising or
-diagnosing the Harness.
+O1 is supported by accepted public-intake, Codex Skill-source, and Claude
+Skill-source results. O2 uses the materially distinct public-intake, Codex
+Skill-source, and continuation-reconciliation scenarios without double-counting
+the similar host package deliveries. O3 binds the three observed route decisions
+across native retention and finite source-bound discovery or adaptation. O4
+accepts the unchanged candidate.5 methodology and minimum profile only for the
+registered Codex 0.147.0 Windows cohort, including its honestly stopped case.
 
-The active O5 task asks Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude
-Code 2.1.233 routed to the official DeepSeek Anthropic API and requested
-DeepSeek-V4-Pro `[1M]` model to perform the same independently useful, read-only
-source-candidate gate on exact commit `48ef653`, whose Claude adapter source
-still identifies 2.1.232. CC Switch 3.19.2 supplies the already-current static
-settings projection only; its proxy is off and it is neither the measured
-runtime nor a portable dependency. The registration freezes provider, endpoint,
-model, terms, cost, adapters, prompt, schema, capability isolation, equivalence,
-cleanup and claim boundaries before either model runs. The user's banned
-first-party Claude account is not used. No cross-host result, O5 progress,
-release, or completion is claimed yet.
+O5 adds one pre-registered matched natural task on Codex CLI
+0.147.0/gpt-5.6-sol and distinct-host Claude Code 2.1.233 routed to
+DeepSeek-V4-Pro through the official Anthropic-format endpoint. Both hosts
+independently returned the same useful `blocked` decision: the target Claude
+adapter source identifies 2.1.232 while the measured carrier is 2.1.233. The
+named human accepted both outcomes, their normalized single-P1 equivalence, and
+only the registered task/target/host/model/adapter/date claim. The reported
+`deepseek-v4-pro[1m]` spelling was the case-normalized form of the requested
+`deepseek-v4-pro[1M]`; no fallback was observed. One out-of-source Claude Glob
+was denied without data exposure. All temporary plugin, Hook, credential-link,
+process, and filesystem state was removed without user cleanup.
 
-The Codex source candidate projects the Codex-reference-calibrated candidate.5
-method through one concise
-implicitly invocable Skill; its Hook and the Claude projection only derive
-bounded continuation context from current repository authority. Neither host
-projection adds an MCP server, App, prompt interception, CC Switch dependency,
-runtime, or product authority. Neither is persistently installed or enabled.
-One temporary Codex continuity task delivered the expected Skill plus startup
-and post-compaction projections but stopped when required native Hook lifecycle
-records were unavailable. A later fixed-source review stopped before the
-conditional Claude call: an isolated `CODEX_HOME` still exposed an unrelated
-user-global code-review Skill, which selected an unregistered parallel route and
-the single Codex call timed out without a final result. A subsequent closeout
-decision task successfully excluded 24 non-Harness Skills and disabled
-multi-agent, but its immutable structured-output schema was rejected before
-model generation because one constant property lacked the explicit type
-required by the host. A later context-carrier decision passed that corrected
-schema and the same Skill and topology preflight, but the single Codex call then
-used the built-in `list_mcp_resources` surface and enumerated 46 ambient App
-plugin and Skill descriptors. That unregistered capability and data boundary
-triggered the fixed stop; the process was terminated and the conditional Claude
-call did not run. All task-created state was cleaned, and every stopped attempt
-counts as zero O1-O5 progress.
-
-Current Codex exposes task-scoped native controls for inspecting the
-model-visible prompt, disabling an exact Skill, and disabling multi-agent tools.
-For a future measured dispatch, the Agent—not the user—must inspect visible
-capabilities, reject only the causally inapplicable routes through per-invocation
-configuration, and fail closed when the intended capability and topology cannot
-be proven. The plugin does not override the user's broader capability inventory.
-The parent must also bind a schema that the exact host accepts before consuming
-the task's only allowed model call; general JSON Schema validity alone is not
-host-compatibility evidence. Prompt-visible Skill exclusion is likewise not a
-complete tool or data-boundary preflight: the current measured Codex route is
-ineligible until an official stable per-call seam can bound ambient MCP/App
-resources while retaining the required read-only repository operations. A
-subsequent no-auth, no-plugin, no-model Codex 0.147.0 app-server probe verified
-that `apps._default.enabled=false` is honored per process: it reported zero
-installed or callable Apps and zero MCP servers. The same isolated home still
-discovered 39 enabled Skills—33 from the replaceable CC Switch shared root and
-six Codex system Skills—so home isolation alone is not capability isolation and
-CC Switch is not a Harness dependency. The probe could not prove the later
-thread-specific model tool specification or repository-tool coexistence; future
-registrations must preflight those exact surfaces and constrain unauthorized
-resources, invocation, and effects rather than demand the absence of harmless
-host plumbing without causal need. This is a parent-dispatch constraint, not
-authority to add a generic capability manager or control plane. The verifier is
-the current machine-readable state source.
+The Codex and Claude source candidates remain inactive thin Skill-plus-Hook
+projections over the same candidate.5 method. They add no MCP server, App,
+runtime, provider manager, prompt interception, or product authority and are not
+persistently installed or enabled. The current candidate.7 package identities
+only refresh both launchers' `harness/control.py` integrity pin after the final
+validator was added; the candidate.6 trees measured by O5 remain immutable, and
+no measured value is transferred to candidate.7. CC Switch 3.19.2 supplied replaceable static
+DeepSeek settings for the measured distinct host; its proxy runtime was off and
+it is neither portable-core nor runtime dependency. O5 proves decision
+portability only within the registered pair. It does not prove that the 2.1.232-
+pinned adapter supports Claude Code 2.1.233, matching model vendors, Anthropic-
+model behavior, long-context parity, installed value, release publication,
+production, model superiority, or all-Agent portability. The verifier is the
+current machine-readable state source.
 
 ## The problem
 

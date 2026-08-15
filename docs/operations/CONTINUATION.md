@@ -15,50 +15,45 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `active` on
-`increment.v0.2.portable-source-candidate-gate-deepseek-routed`. The public
-verifier should report:
+The current machine program is v0.2 and `completed`. The public verifier should
+report:
 
-- program status `active`;
-- completion `in-progress`;
-- O1 through O4 true, with O5 false (`4/5` outcomes); O2 binds the
-  exact public-intake, Codex Skill-source, and continuation-reconciliation
-  scenarios without double-counting the similar Claude Skill source task;
+- program status `completed`;
+- completion `accepted`;
+- O1-O5 true (`5/5` outcomes); O2 binds the exact public-intake, Codex
+  Skill-source, and continuation-reconciliation scenarios without
+  double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- one active O5 increment and one active work item.
+- no active increment or work item.
 
-The active registration freezes the same independently useful, read-only
-source-candidate gate on exact commit `48ef653`, but corrects the distinct-host
-route rather than pretending the user has a healthy first-party Claude
-account. Codex remains exact CLI 0.147.0/gpt-5.6-sol. The distinct Agent runtime
-is Claude Code 2.1.233 using the official DeepSeek Anthropic API and requested
-DeepSeek-V4-Pro `[1M]` model at max effort. CC Switch 3.19.2 is the already
-current static settings projection; its proxy runtime is off, so it is a
-replaceable setup substrate rather than a product or runtime dependency. The
-target Claude adapter source remains pinned to 2.1.232 and both hosts must
-evaluate that mismatch. Equivalent fact-grounded blocked decisions remain
-eligible within the registered claim ceiling.
+## Accepted O5 basis
 
-The user reported that the first-party Claude account is banned and that local
-Claude Code CLI, VS Code and desktop use the working CC Switch/DeepSeek route.
-Read-only checks confirmed provider id, endpoint, requested model and token
-presence without reading the token. They also found 285 installed user plugins,
-247 enabled. A generated all-false overlay reduced enabled plugins to zero, but
-a no-model MCP diagnostic showed that reusing the user configuration root still
-loads user `.claude.json` servers despite strict MCP flags. That diagnostic
-started MCP health processes; its exact Claude process tree was terminated and
-no repository residue remains. The measured route therefore uses a separate
-`CLAUDE_CONFIG_DIR`, one temporary hardlink to the existing settings file, the
-all-false overlay, strict empty MCP and only the task-scoped Harness plugin.
-Credential-bearing settings contents may not be read, copied, hashed, printed
-or retained.
+The final registration fixed one independently useful read-only source-candidate
+gate on commit `48ef653`. Codex CLI 0.147.0/gpt-5.6-sol and distinct-host Claude
+Code 2.1.233 routed to DeepSeek-V4-Pro each ran once under the same task,
+candidate.5 semantics, registered adapters, isolation floors, equivalence rule,
+and claim ceiling. Both returned `blocked` and independently grounded the same
+single P1: `harness/claude_reference.py` pins 2.1.232 while the measured carrier
+is 2.1.233. The named human accepted both decisions as correct and useful,
+accepted their normalized equivalence, and accepted only the exact registered
+task/target/host/model/adapter/date portability boundary.
 
-Execution now requires one exact human grant for the Codex auth and Claude
-settings hardlinks, reviewed Hooks, public repository data transmission to
-OpenAI and DeepSeek, DeepSeek API cost and two conditional model calls. Both
-hosts then run once with 900-second limits and continuous capture, including
-bounded raw error/result text before cleanup. No outcome validator exists or
-should be prepared before an actual eligible pair.
+Claude reported only `deepseek-v4-pro[1m]`, the case-normalized spelling of the
+requested `[1M]` route; no fallback was observed. One attempted Glob of the
+isolated task parent was denied before data exposure. CC Switch 3.19.2 supplied
+only the already-current static DeepSeek settings and was not launched as a
+runtime. The parent retained no plugin, Hook trust, credential link, process,
+consumer mutation, task root, `.tmp`, branch, worktree, repository fork, or
+conversation fork. The task-bound O5 validator binds the immutable registration,
+delivered accepted receipt, exact stream and final-object identities, target
+source fact, route normalization, denial boundary, human decision, loss floors,
+cleanup, and claim limits. This proves decision portability for the registered
+pair only; it does not prove 2.1.233 adapter support, release, publication,
+production, installed value, matching-vendor behavior, model superiority, or
+universal portability. Adding that validator changed `harness/control.py`, so
+the current inactive candidate.7 packages refresh only their launcher integrity
+pin and payload identity. The candidate.6 trees evaluated by O5 remain fixed;
+candidate.7 has no imputed measured value.
 
 The earlier extended-carrier registration passed the full preflight. Codex
 completed in 241.677 seconds with 126 valid events and one schema-valid
@@ -138,8 +133,8 @@ boundaries, and recorded context-lifecycle evidence. It must not rerun the
 stopped task, induce another natural task, change a rule after results, add a
 model, host, carrier, consumer effect, manager, runtime, or protocol, or infer
 human acceptance. The task-bound validator and yiheng8023 accepted only the
-bounded methodology, applicability, comparison, and claim. O5 remains a
-separate cross-host gate.
+  bounded methodology, applicability, comparison, and claim. At that checkpoint,
+  O5 remained a separate cross-host gate.
 
 The one post-registration source-only evaluation is accepted. Its task-bound
 validator re-executes the three exact accepted

@@ -19,18 +19,17 @@ interesting paper is not sufficient entry evidence.
 
 ## Current v0.2 sequence
 
-v0.2 is active on one pre-registered O5 matched source-candidate gate after the
-accepted public-intake, task-facing Codex and Claude Skill source,
-continuation-reconciliation, and bounded Codex reference-host calibration
-results, the outcome-neutral context-carrier repairs, and content-addressed
-stopped Codex tasks. O1 through O4 are verified; O5 remains false pending the
-exact separately authorized Codex and distinct-host Claude Code executions,
-task-bound validation and human equivalence judgment. The tree contains exact
-task-bound validators for those outcomes,
-inactive Codex and Claude Code reference-adapter candidates, and stopped
-results, not a task runtime or accepted live installed-host behavior. Closed
-outcome-neutral work remains recoverable from Git rather than accumulating as
-a current queue.
+v0.2 has completed its machine-governed sequence. O1-O5 are verified through
+the accepted public-intake, task-facing Codex and Claude Skill source,
+continuation-reconciliation, bounded Codex reference-host calibration, and one
+pre-registered matched Codex plus Claude Code/DeepSeek task. The final pair
+produced equivalent accepted `blocked` decisions for the exact 2.1.232 source
+pin versus 2.1.233 carrier mismatch. Its task-bound validator and named-human
+judgment limit O5 to the fixed task, target, host/model/adapter identities, and
+date. The tree still contains inactive reference-adapter candidates and stopped
+counterevidence, not a task runtime, published release, production system, or
+accepted live installed-host behavior. Closed work remains recoverable from Git
+rather than accumulating as a current queue.
 
 The accepted continuation task is a real source delivery for the user's context
 and topology burden, not another model-dispatch experiment. Its immutable baseline measured
@@ -54,40 +53,18 @@ that result. A later natural task may use the actual serialized developer
 projection as a pre-registered host evidence surface, or a different
 authoritative API if one exists, but must fix that route before execution.
 
-Later tasks exposed three different pre-result failures. One isolated
-`CODEX_HOME` still admitted an unrelated user-global Skill that selected
-unregistered parallel topology and timed out. Task-scoped prompt inspection,
-exact Skill exclusions, and multi-agent disablement then contained that defect,
-but a subsequent immutable structured-output schema omitted the explicit type
-required by the Codex service and was rejected before model generation. Both
-registrations remain stopped, their conditional Claude calls are ineligible,
-and cleanup is complete. A future materially different task must bind both the
-prompt-visible capability boundary and an exact host-supported output shape
-before its single call; neither failure authorizes a retry, schema registry,
-runtime, or generic outcome validator.
-
-The next materially different context-carrier decision used the corrected
-schema and passed the exact Skill and multi-agent preflight, but its sole Codex
-call still had the built-in `list_mcp_resources` tool. The model used it and
-received 46 ambient App plugin and Skill descriptors, crossing the task's fixed
-capability and public-input boundary before a final result. The process was
-terminated, Claude was skipped, and cleanup completed. Future mechanism-only
-work may inspect only official stable per-call tool restriction seams and must
-stop if the required read-only repository operations cannot coexist with MCP
-and ambient App resource suppression. Do not create a generic manager,
-registry, runtime, or new outcome task to hide this counterexample.
-
-That finite mechanism lane is now closed. One exact Codex 0.147.0 app-server
-process, isolated and stripped of credentials, plugins, threads, turns, and
-model calls, honored `apps._default.enabled=false` and reported zero installed
-or callable Apps and zero MCP servers. It also discovered 39 enabled Skills—33
-from CC Switch and six from the Codex system root—so neither isolated home nor
-the App switch is a complete capability preflight. The probe did not prove the
-future thread-specific model tool surface or repository-tool coexistence; the
-current measured route remains ineligible and no follow-on task is queued.
-Future natural-task registration may use this App switch only with exact
-post-load Skill exclusion and independent pre-model verification of unauthorized
-resources, invocations, effects, and required repository tools.
+Later stopped tasks exposed distinct pre-result failures in Skill isolation,
+structured-output compatibility, ambient App/MCP visibility, authentication,
+input binding, host-version drift, time budget, and Claude stream arguments.
+Each stopped without retry or outcome credit and was cleaned. The accepted O5
+registration incorporated only the observed corrections: exact post-load Skill
+exclusion, App and MCP suppression, a host-supported schema, isolated
+configuration, explicit task input, current host identity, bounded capture, and
+the required Claude `--verbose` stream mode. Those corrections enabled the final
+pair without creating a generic manager, registry, runtime, or outcome-receipt
+protocol. The stopped cases remain counterevidence against treating home
+isolation, one feature flag, or schema validity alone as sufficient capability
+and data-boundary proof.
 
 No current evidence proves the O2 cohort-level user-value reduction, an
 accepted methodology or quality profile, or cross-host behavior. No
