@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-canonical-cohort-enrollment",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -89,5 +89,57 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-canonical-cohort-enrollment",
+      "state": "active",
+      "correctionClass": "cohort-registration-allows-arbitrary-task-and-scenario-identities",
+      "observedProblem": "Pre-freeze review reproduced a P1 enrollment defect: taskIdentity is accepted as any non-empty string and a frozen cohort protocol may declare any non-empty strata list. The same source task can therefore be relabeled and required O1/O5 scenario coverage can be avoided before task-bound validators or aggregate cohort checks run.",
+      "hypothesis": "A code-owned natural-task source-digest format, exact six-class scenario enumeration and exact protocol strata realization can remove free-form aliases and scenario invention at registration while leaving source-event recomputation to the future task-specific validator and leaving acceptance thresholds solely in product/acceptance.json.",
+      "falsifier": "The repair treats a digest-shaped self-report as proof of naturality or behavior, embeds future task sources, changes acceptance thresholds, accepts a noncanonical task identity or scenario, permits a frozen protocol with missing, extra, duplicated or reordered strata, or creates a registry, outcome receipt ecosystem or prebuilt result validator.",
+      "stopCondition": "Regression tests reject noncanonical task identities, unrecognized scenario classes and flexible protocol strata while accepting exact code-owned forms; existing zero-evidence planning remains valid; the program returns to ready and unfrozen with O1-O5 zero, canonical local and hosted checks pass, and no profile, registration, evidence or temporary residue is created.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-canonical-cohort-enrollment",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "canonical task identity guard",
+            "exact scenario class and protocol strata guards",
+            "alias and strata regressions"
+          ]
+        }
+      ]
+    }
+  ]
 }

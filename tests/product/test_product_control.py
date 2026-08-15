@@ -70,6 +70,10 @@ FIXTURE_INCREMENT_ID = "increment.fixture-current"
 FIXTURE_WORK_ID = "work.fixture-current"
 
 
+def fixture_task_identity(label: str) -> str:
+    return "natural-task.sha256:" + hashlib.sha256(label.encode("utf-8")).hexdigest()
+
+
 class ProductControlTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory()
@@ -110,7 +114,9 @@ class ProductControlTests(unittest.TestCase):
             registration.unlink()
         self.reset_acceptance_fixture()
 
-    def initialize_fixture_repository(self) -> str:
+    def initialize_fixture_repository(
+        self, *, protocol_strata: list[str] | None = None
+    ) -> str:
         if (self.root / ".git").is_dir():
             return subprocess.run(
                 ["git", "rev-list", "--max-parents=0", "HEAD"],
@@ -133,8 +139,12 @@ class ProductControlTests(unittest.TestCase):
                 "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
                 "eligibilityRule": "all-predeclared-eligible-natural-tasks",
                 "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
-                "taskIdentityRule": "stable-source-bound-identity-before-measurement",
-                "strata": ["fixture-stratum"],
+                "taskIdentityRule": "canonical-source-envelope-sha256-recomputed-by-task-validator",
+                "strata": (
+                    list(control.EXPECTED_COHORT_SCENARIO_CLASSES)
+                    if protocol_strata is None
+                    else protocol_strata
+                ),
                 "enrollmentOrder": "strict-git-ancestry-first-eligible",
                 "stopRule": "earliest-prefix-satisfying-current-acceptance",
                 "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
@@ -491,7 +501,8 @@ class ProductControlTests(unittest.TestCase):
         program: dict,
         increment: dict,
         *,
-        task_identity: str = "natural-task.fixture-current",
+        task_identity: str = fixture_task_identity("fixture-current"),
+        scenario_class: str = "zero-tool-knowledge-new-intake",
         registration_id: str = "registration.fixture-current",
         relative: str = "product/evidence/fixture-registration.json",
         commit_profile_binding: bool = True,
@@ -523,6 +534,7 @@ class ProductControlTests(unittest.TestCase):
         aliases = {
             "registeredAt": "2026-08-12T02:59:00+08:00",
             "taskIdentity": task_identity,
+            "scenarioClass": scenario_class,
             "namedHumanAcceptor": "fixture reviewer",
             "qualitySafetyEvidenceAndResidueFloors": floors,
             "materialInterventionTaxonomy": interventions,
@@ -825,7 +837,7 @@ class ProductControlTests(unittest.TestCase):
             return result
 
         sanitized_control = {
-            "taskIdentity": "natural-task.public-example",
+            "taskIdentity": fixture_task_identity("public-example"),
             "source": {"identity": "sha256:" + ("a" * 64)},
             "sessionDigest": "b" * 64,
             "eventType": "SessionStart",
@@ -2499,6 +2511,44 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_task_registration_rejects_noncanonical_task_identity(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                increment,
+                task_identity="natural-task.free-form-alias",
+            )
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json shape is invalid",
+            report["errors"],
+        )
+
+    def test_task_registration_rejects_unrecognized_scenario_class(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                increment,
+                scenario_class="favorable-post-hoc-scenario",
+            )
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json shape is invalid",
+            report["errors"],
+        )
+
     def test_task_registration_profile_or_cohort_protocol_drift_fails_closed(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
@@ -2740,6 +2790,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn("frozen cohort protocol shape is invalid", report["errors"])
 
+    def test_initially_committed_flexible_scenario_strata_are_rejected(self) -> None:
+        self.initialize_fixture_repository(protocol_strata=["favorable-fixture-stratum"])
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.write_json("product/program.json", program)
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn("frozen cohort protocol shape is invalid", report["errors"])
+
     def test_duplicate_task_identity_across_outcome_increments_fails_closed(
         self,
     ) -> None:
@@ -2760,7 +2819,7 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(
                 value,
                 second,
-                task_identity="natural-task.fixture-current",
+                task_identity=fixture_task_identity("fixture-current"),
                 registration_id="registration.fixture-second",
                 relative="product/evidence/fixture-second-registration.json",
             )
@@ -2769,7 +2828,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "taskIdentity natural-task.fixture-current is reused across outcome registrations",
+            f"taskIdentity {fixture_task_identity('fixture-current')} is reused across outcome registrations",
             report["errors"],
         )
 
@@ -2783,7 +2842,7 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(
                 value,
                 first,
-                task_identity="natural-task.fixture-first",
+                task_identity=fixture_task_identity("fixture-first"),
             )
             second = deepcopy(first)
             second["id"] = "increment.fixture-second"
@@ -2794,7 +2853,7 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(
                 value,
                 second,
-                task_identity="natural-task.fixture-second",
+                task_identity=fixture_task_identity("fixture-second"),
                 registration_id="registration.fixture-second",
                 relative="product/evidence/fixture-second-registration.json",
             )

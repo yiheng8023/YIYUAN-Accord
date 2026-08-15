@@ -284,11 +284,20 @@ COHORT_PROTOCOL_FIELDS = {
     "measurementEventRule",
     "claimLimits",
 }
+EXPECTED_COHORT_SCENARIO_CLASSES = (
+    "zero-tool-knowledge-new-intake",
+    "existing-project-continuation",
+    "long-context-work",
+    "residual-capability-gap",
+    "consequential-human-gate",
+    "honest-failure-or-recovery",
+)
+CANONICAL_TASK_IDENTITY_PATTERN = re.compile(r"natural-task\.sha256:[0-9a-f]{64}")
 EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
     {
         "eligibilityRule": "all-predeclared-eligible-natural-tasks",
         "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
-        "taskIdentityRule": "stable-source-bound-identity-before-measurement",
+        "taskIdentityRule": "canonical-source-envelope-sha256-recomputed-by-task-validator",
         "enrollmentOrder": "strict-git-ancestry-first-eligible",
         "stopRule": "earliest-prefix-satisfying-current-acceptance",
         "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
@@ -1680,7 +1689,7 @@ def _normative_profile_binding_valid(
             protocol.get(field) == expected
             for field, expected in EXPECTED_COHORT_PROTOCOL_RULES.items()
         )
-        and _string_list(protocol.get("strata")) is not None
+        and protocol.get("strata") == list(EXPECTED_COHORT_SCENARIO_CLASSES)
         and _string_list(protocol.get("claimLimits")) is not None
     )
     if not protocol_valid:
@@ -2232,7 +2241,9 @@ def _task_registration_guardrail(
         and _nonempty_text(registration.get("id"))
         and registered_at is not None
         and registered_at <= measurement_not_before
-        and _nonempty_text(registration.get("taskIdentity"))
+        and isinstance(registration.get("taskIdentity"), str)
+        and CANONICAL_TASK_IDENTITY_PATTERN.fullmatch(registration["taskIdentity"])
+        is not None
         and registration.get("incrementId") == increment_id
         and criterion_ids == mapped_outcomes
         and isinstance(values, dict)
@@ -2245,6 +2256,10 @@ def _task_registration_guardrail(
         and values.get("profileSha256") == profile_binding.get("sha256")
         and values.get("cohortProtocolSha256")
         == profile_binding.get("cohortProtocolSha256")
+        and (
+            "scenarioClass" not in expected_fields
+            or values.get("scenarioClass") in EXPECTED_COHORT_SCENARIO_CLASSES
+        )
         and all(
             _same_typed_value(values[field], registration[field])
             for field in TASK_REGISTRATION_VALUE_ALIASES & expected_fields
