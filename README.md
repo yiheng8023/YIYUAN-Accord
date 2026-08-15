@@ -28,6 +28,13 @@ and bounded aggregate claims remain; public Git history and historical author
 email remain retrievable under the explicit no-history-rewrite privacy
 disposition, so this is forward current-tree sanitization rather than erasure.
 
+A distinct [v1 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
+now co-locate the pre-measurement method, mandatory floors, baseline, carrier,
+cross-host, privacy/residue, and release semantics. They remain unbound
+candidates with zero registered tasks and zero outcome evidence until the
+program content-addresses both after review.
+
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
 Skill-source, and continuation-reconciliation scenarios without double-counting
@@ -132,6 +139,9 @@ The current repository provides:
 - the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
   accepted only for the bounded O4 Codex reference-host calibration; its source
   bytes retain the pre-calibration status header frozen by registration;
+- a distinct [v1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+  and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json),
+  both still unbound and carrying no task or outcome evidence;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - a legacy inactive, standard-library-only `SessionStart` repository seam that
@@ -183,8 +193,9 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-Before any v1.0 outcome measurement, the repository must freeze one
-content-addressed normative profile and one prospective cohort protocol. The
+Before any v1.0 outcome measurement, the repository must review and freeze the
+linked v1 candidate as one content-addressed normative profile and paired
+prospective cohort protocol. The
 protocol defines eligibility, task identity, strata, first-eligible enrollment,
 the earliest-prefix stop rule, missing-data behavior, measurement-event proof,
 and claim limits without naming future tasks. Every later task registration must

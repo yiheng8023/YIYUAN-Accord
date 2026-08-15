@@ -64,8 +64,11 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The future v1 measurement surface freezes a content-addressed normative profile
-and prospective cohort protocol before registrations. The protocol specifies
+The current tree contains an unbound
+[v1 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
+[prospective cohort protocol candidate](PROSPECTIVE-COHORT-PROTOCOL-V1.json).
+They carry zero task or outcome evidence. The future v1 measurement surface
+freezes their exact reviewed bytes before registrations. The protocol specifies
 eligibility, stable task identity, strata, first-eligible enrollment, the
 earliest-prefix stop rule, missing-data handling, source-event chronology and
 claim limits without pre-populating natural tasks. Bound registrations must use

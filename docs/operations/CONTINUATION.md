@@ -51,6 +51,11 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires live matched evidence through a distinct host or runtime.
 
+The current tree's `docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md` and
+`docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json` are reviewable pre-freeze
+candidates only. Their presence creates no product authority or outcome; use
+only `product/program.json` to determine whether exact bytes are bound.
+
 ## Starting one causal increment
 
 Open exactly one increment with at most one active work item only after binding:

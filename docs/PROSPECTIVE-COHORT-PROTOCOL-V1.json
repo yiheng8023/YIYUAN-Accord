@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "cohort-protocol.harness-v1.0-candidate.1",
+  "profileIdentity": "harness-demand-to-capability-v1.0-candidate.1",
+  "cohortProtocolIdentity": "harness-prospective-cohort-v1.0-candidate.1",
+  "eligibilityRule": "all-predeclared-eligible-natural-tasks",
+  "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
+  "taskIdentityRule": "canonical-source-envelope-sha256-recomputed-by-task-validator",
+  "strata": [
+    "zero-tool-knowledge-new-intake",
+    "existing-project-continuation",
+    "long-context-work",
+    "residual-capability-gap",
+    "consequential-human-gate",
+    "honest-failure-or-recovery"
+  ],
+  "enrollmentOrder": "strict-git-ancestry-first-eligible",
+  "stopRule": "earliest-prefix-satisfying-current-acceptance",
+  "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
+  "measurementEventRule": "task-bound-source-event-after-registration-required",
+  "claimLimits": [
+    "pre-freeze candidate until product/program.json binds the exact profile and protocol bytes",
+    "quantitative thresholds and terminal pass conditions remain exclusively in product/acceptance.json",
+    "a digest-shaped identity or well-formed registration is not naturality behavior value or floor evidence",
+    "task-specific source validators are added only after an eligible source appears and before measured execution",
+    "fixtures diagnostics retrospectives and tasks invented for Harness evaluation never count as outcome samples",
+    "no portability publication release production or superiority claim exists without O5 evidence and human authority"
+  ]
+}

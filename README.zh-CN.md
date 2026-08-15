@@ -27,6 +27,11 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 修订与有界聚合声明继续保留。按已确认的“不改写历史”隐私处置，公开 Git 历史和历史作者
 邮箱仍可检索，因此这是面向当前树和后续提交的脱敏，不是声称历史字节已被抹除。
 
+当前树已经形成一份独立的 [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+和[前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，把测量前方法、强制
+底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。二者仍未绑定，已登记任务和
+结果证据均为零；只有审阅完成并由 program 对两份精确字节做内容寻址后才会冻结。
+
 历史 v0.2 的 O1 由公开入口、Codex Skill 源码和 Claude Skill 源码三个已接受结果支持。O2 使用实质不同
 的公开入口、Codex Skill 源码和连续性对账场景，不重复计算相似的宿主包交付。O3 绑定三个
 真实路线决策。O4 只接受 candidate.5 方法与最低质量 profile 在 Codex 0.147.0 Windows
@@ -96,6 +101,9 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 明确且所有结果仍为 planned 的[v1.0 终态验收标准](product/acceptance.json)；
 - 一份在 v0.2 固定 Codex cohort 中获得有界接受、但其预注册状态字节保持冻结的
   [candidate.5 方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)；
+- 一份独立的 [v1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
+  [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，目前均未绑定，
+  不携带任何任务或结果证据；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
@@ -130,8 +138,8 @@ python -B -m unittest discover -s tests/product -v
 
 JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operations/CONTINUATION.md)。
 
-任何 v1.0 结果测量开始前，仓库必须先冻结一份内容寻址的规范 profile 和一份前瞻
-cohort 协议。该协议只预先规定资格、任务身份、分层、首个合格任务顺序纳入、最早前缀
+任何 v1.0 结果测量开始前，仓库必须先审阅并冻结上述 v1 候选，使其成为一份内容寻址的
+规范 profile 和配套前瞻 cohort 协议。该协议只预先规定资格、任务身份、分层、首个合格任务顺序纳入、最早前缀
 停止规则、缺失数据处理、测量事件证明和声明上限，不预填未来任务名单。后续每份任务
 注册必须身份唯一，并在 Git 历史上严格晚于这次冻结。Git 祖先关系只能证明仓库顺序；
 任务专属验证器仍须证明自然需求及注册后发生的来源事件，提交日期和自报时间戳不能充当
@@ -188,6 +196,7 @@ criterion 的预注册与验证负担时，才能同时支持多个 criterion，
 | 你的目的 | 对应文档 |
 | --- | --- |
 | 理解产品边界 | [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| 审阅尚未绑定的 v1 方法、底线与 cohort 实现 | [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)与[前瞻 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | 应用获得 v0.2 Codex 有界校准、但尚未满足 v1.0 的候选 profile | [需求到能力方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | 理解技术职责分离 | [架构](docs/architecture.md) |
 | 查看证明顺序与外部复用门槛 | [研究与验证计划](docs/strategy/RESEARCH-AND-POC-PLAN.md) |

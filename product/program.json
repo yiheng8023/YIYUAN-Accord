@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-profile-protocol-candidate",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -89,5 +89,58 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-profile-protocol-candidate",
+      "state": "active",
+      "correctionClass": "terminal-method-and-cohort-realization-not-yet-freezable",
+      "observedProblem": "The v1 acceptance contract requires one immutable normative profile and prospective cohort protocol before the first measured task, but the only method document is the frozen v0.2 candidate.5 calibration artifact and no distinct v1 protocol artifact exists. Baseline selection, carrier transitions, cross-host matching, privacy and residue closure, and two-stage release semantics are therefore not yet co-located in a candidate that can be reviewed and content-addressed without rewriting v0.2.",
+      "hypothesis": "A new pre-freeze v1 profile containing the ordered Agent method, mandatory floors and exact state-machine semantics, paired with one minimal machine-readable cohort realization protocol that references acceptance-owned thresholds, can make the next freeze reviewable without creating a runtime, receipt ecosystem, result validator or fourth authority.",
+      "falsifier": "The candidate edits or supersedes v0.2 evidence, copies acceptance thresholds into a competing source, invents outcome evidence or future tasks, treats a digest-shaped registration as proof, creates a registry/runtime/wire protocol, makes the user operate tools or topology, or leaves baseline, carrier, cross-host, privacy/residue or release semantics ambiguous before measurement.",
+      "stopCondition": "The distinct candidate profile and protocol are internally consistent with constitution, program, acceptance and code-owned enrollment rules; public status identifies them as unbound and zero-evidence; focused and canonical checks pass; the program returns to ready with normativeProfileBinding unfrozen and O1-O5 zero; no task registration, evidence or temporary residue is created.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-profile-protocol-candidate",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "v1 normative profile candidate",
+            "prospective cohort protocol candidate",
+            "pre-freeze semantic consistency checks",
+            "unbound public status"
+          ]
+        }
+      ]
+    }
+  ]
 }

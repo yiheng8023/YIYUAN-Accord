@@ -773,6 +773,48 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
+    def test_v1_profile_and_cohort_protocol_candidates_are_exact_and_unbound(self) -> None:
+        program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
+        self.assertEqual(program["normativeProfileBinding"]["state"], "unfrozen")
+        profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
+            encoding="utf-8"
+        )
+        protocol = json.loads(
+            (ROOT / "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertIn("Identity: `harness-demand-to-capability-v1.0-candidate.1`", profile)
+        self.assertIn("Status: pre-freeze candidate", profile)
+        for heading in (
+            "## Agent method",
+            "## Prospective registration",
+            "## Mandatory floors",
+            "## Baseline state machine",
+            "## Carrier and topology state machine",
+            "## Cross-host realization",
+            "## Evidence, privacy, and residue",
+            "## Publication and release state machine",
+            "## Claim ceiling",
+        ):
+            self.assertIn(heading, profile)
+        self.assertEqual(set(protocol), control.COHORT_PROTOCOL_FIELDS)
+        self.assertEqual(protocol["schema"], 1)
+        self.assertEqual(
+            protocol["profileIdentity"],
+            "harness-demand-to-capability-v1.0-candidate.1",
+        )
+        self.assertEqual(
+            protocol["cohortProtocolIdentity"],
+            "harness-prospective-cohort-v1.0-candidate.1",
+        )
+        self.assertEqual(
+            protocol["strata"], list(control.EXPECTED_COHORT_SCENARIO_CLASSES)
+        )
+        for field, expected in control.EXPECTED_COHORT_PROTOCOL_RULES.items():
+            self.assertEqual(protocol[field], expected)
+        self.assertTrue(protocol["claimLimits"])
+
     def test_current_public_evidence_excludes_private_runtime_identifiers(self) -> None:
         path_patterns = (
             re.compile(r"(?i)(?<![a-z0-9+.-])[a-z]:[\\/]"),
