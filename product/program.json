@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-prospective-freeze-chronology",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -89,56 +89,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-prospective-freeze-chronology",
-      "state": "active",
-      "correctionClass": "prospective-freeze-can-be-retrospectively-bound-after-registration",
-      "observedProblem": "Independent pre-freeze review reproduced a P1 authority defect: a task registration commit can precede the commit that changes program.normativeProfileBinding from unfrozen to frozen because the verifier proves only that the profile and cohort-protocol artifacts predate registration. A later program edit can therefore retrospectively label an already-registered task as prospective.",
-      "hypothesis": "Requiring every registration commit to have exactly one parent whose committed product/program.json contains the exact current frozen normativeProfileBinding can prove that the declared profile and cohort protocol were frozen before registration without trusting Git timestamps or creating a registry, runtime or behavioral outcome validator.",
-      "falsifier": "The repair trusts Git dates or self-reported time, accepts an artifact-then-registration-then-freeze history, accepts a merge registration or a parent program with an unfrozen or different binding, requires future task identities or outcome evidence, or changes any v0.2 artifact or claim.",
-      "stopCondition": "Regression tests reproduce and reject artifact-then-registration-then-retrospective-freeze history and merge-parent ambiguity; the legitimate artifact-then-frozen-program-then-registration order and planned zero-evidence state remain valid; the current program returns to ready and unfrozen with O1-O5 zero, canonical local and hosted checks pass, and no profile, task registration, evidence or temporary residue is created.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": []
-      },
-      "workItems": [
-        {
-          "id": "work.v1-prospective-freeze-chronology",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "prospective binding chronology guard",
-            "retrospective-freeze and merge-parent regressions"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
