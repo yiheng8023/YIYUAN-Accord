@@ -226,16 +226,18 @@ materializes the plugin and invalidates plugin consumers. Local Hook trust is
 not inferred from installation: exact trust plus app-owned user-config reload
 remains a separate activation condition.
 
-Reuse disposition: `adapters/agent-autonomy-harness-codex` is an inactive thin
-packaging projection with one task-facing Skill bound to the exact candidate.5
-profile now accepted only for the bounded Codex reference-host calibration,
-and one continuation Hook. The Skill supplies no MCP, App, runtime, state, or
-product authority. The Hook launcher discovers a containing Harness authority
-root from the native working directory and delegates to the repository-owned
-adapter only when the adapter and verifier bytes match the candidate's exact
-SHA-256 pins. It runs in Python isolated mode, neither copies the portable core
-into the plugin nor depends on CC Switch, and fails to a non-blocking no-op on
-runtime drift. The repository itself does not become a plugin.
+Historical reuse disposition: the candidate.7 Codex revision was an inactive
+thin package with one candidate.5 Skill and a repository-bound continuation
+launcher. Its exact Git revision remains the v0.2 evidence boundary. The
+current Codex source supersedes that launcher with an unbound v1 carrier-
+mechanism Hook: package-owned bytes accept bounded native lifecycle events,
+keep only bounded session-keyed counters under `PLUGIN_DATA`, clean the exact
+state on `SessionEnd`, and never load task-repository code or invoke Git. Its
+checked-in command is an absolute fail-closed sentinel until a trusted runtime
+is materialized under separate activation authority; measured activation also
+requires the frozen v1 profile binding.
+The Skill still supplies no MCP, App, runtime, or product authority, and the
+repository itself does not become a plugin.
 
 Goal-level demand continues to use Codex's native conversation path, where the
 host may implicitly select the Skill from its metadata. The candidate does not

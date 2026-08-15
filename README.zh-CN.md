@@ -36,10 +36,13 @@ Claude Code 2.1.233/DeepSeek-V4-Pro 上执行。两端独立得到同一个有�
 登记源目录的 Claude Glob 被拒绝且未暴露数据。临时插件、Hook、凭据链接、进程和文件均由
 Agent 清理，用户没有执行恢复或清理操作。
 
-Codex 与 Claude 候选仍只是未启用的薄 Skill-plus-Hook 源码投影，不新增 MCP、App、运行时、
-提供方管理器、提示拦截或产品权威，也没有长期安装或启用。当前 candidate.7 包身份跟随
-两端启动器对当前 `harness/control.py` 的完整性针；历史 v0.2 O5 实测的 candidate.6 树保持
-不变，实测价值不会转移给 candidate.7。CC Switch 3.19.2 在本次测量中
+历史 Codex 与 Claude candidate.7 修订仍只是未启用的薄 Skill-plus-Hook 投影，精确 Git
+修订就是证据边界，实测价值不会转移给后续源码。当前 Codex 树已经换成尚未绑定 profile
+的 v1 载体机制候选：包内 Hook 只保存有界的原生生命周期计数，不执行任务仓库代码；检入
+命令在绝对可信解释器被物化前失败关闭，测量性激活还必须绑定冻结 v1 profile。它没有安装
+或启用。Claude 树仍是历史
+candidate.7。两者都不新增 MCP、App、提供方管理器、提示拦截或产品权威。CC Switch 3.19.2
+在本次测量中
 只提供可替换的 DeepSeek 静态设置，其代理运行时未启用；它不是可移植核心或运行时依赖。
 O5 证明的只是这个固定组合上的决策可移植性，不证明 2.1.232 适配器支持 Claude Code
 2.1.233，也不证明同厂模型、Anthropic 模型行为、长上下文一致性、安装后价值、发布、生产、
@@ -89,11 +92,13 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 一份在 v0.2 固定 Codex cohort 中获得有界接受、但其预注册状态字节保持冻结的
   [candidate.5 方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
-- 一个只依赖 Python 标准库、尚未启用的 Codex `SessionStart` 适配器候选；它在启动、
+- 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
 - 一个尚未启用的 Codex 薄插件源码候选；其中一个任务级 Skill 投影仅获 v0.2 Codex
-  有界校准、尚未满足 v1.0 的方法，一个
-  Hook 封装接续适配器；工作区发现入口只将它标记为 `AVAILABLE`，不会安装、启用或信任它；
+  有界校准、尚未满足 v1.0 的方法；包内 Hook 只保存有界的压缩/清空计数并给出保守载体
+  决策，不执行任务仓库代码或 Git，可在非 Harness 仓库任务中工作。它在绑定绝对可信
+  运行时前故意不可激活，冻结 v1 profile 绑定完成前也不得用于测量；工作区发现入口只将
+  它标记为 `AVAILABLE`；
 - 一份内容寻址的 Codex 连续性停止结果：精确临时安装确实送达了 Skill 及启动/压缩两次
   投影，但缺失的原生 Hook 事件证据仍按强制底线判为失败，随后完整恢复消费者状态；
 - 一个尚未启用的 Claude Code Skill+Hook 薄投影；它复用同一候选方法，把宿主原生

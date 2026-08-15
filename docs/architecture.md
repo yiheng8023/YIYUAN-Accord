@@ -269,13 +269,16 @@ host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
 projection. It contains one concise, implicitly invocable task-facing Skill
-bound to the Codex-reference-calibrated candidate.5 profile, plus a `SessionStart` Hook and
-standard-library launcher for the repository-owned continuation adapter. It
-adds no MCP server, App, prompt interception, capability router, state store,
-or outcome validator. The launcher uses Python isolated mode, reads the adapter
-and verifier once, and executes only those same bytes after they match the exact
-hashes reviewed for that plugin version. An unknown or changed runtime is a
-non-blocking no-op rather than a new repository-code execution grant.
+still bound only to the historical Codex-reference-calibrated candidate.5
+profile, plus the inactive v1 carrier-mechanism Hook. The package-owned Hook
+uses Python isolated mode, accepts only bounded native lifecycle input, stores
+only bounded session-keyed compaction and clear counters in `PLUGIN_DATA`, and
+removes the exact state on `SessionEnd`. It does not load task-repository code,
+invoke Git, inspect prompts or transcripts, create threads, or validate
+outcomes. Its checked-in commands point to an absolute fail-closed
+unmaterialized interpreter sentinel; activation remains impossible until a
+separate authorized materialization binds a trusted absolute runtime. Measured
+activation additionally requires the program-frozen v1 profile binding.
 
 Codex 0.147.0 uses two complementary plugin-loading scopes. The dedicated
 `HooksOnly` startup path deliberately omits Skills, MCP servers, and Apps while
@@ -399,8 +402,8 @@ behavior and does not satisfy current v1.0 O5.
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event
 fires for startup, resume, clear, and compact, supplies the working directory
-and source, and can return additional model context. The candidate adapter in
-`harness/codex_reference.py` uses only that seam to project live authority and
+and source, and can return additional model context. The legacy repository-
+bound adapter in `harness/codex_reference.py` uses only that seam to project live authority and
 verifier state, exact active increment/work/registration/cleanup identities,
 and a shell-free read-only Git checkpoint. The checkpoint exposes branch or
 detached state, HEAD, upstream or absence, ahead/behind or unknown, worktree
@@ -409,7 +412,8 @@ diff content. The common projection has a 3,072-character budget inside the
 Codex Hook's 4,096-character limit; an over-budget full form degrades to an
 explicit hashed fallback rather than silent truncation. It ignores the supplied
 transcript and session fields, stores no session data, is a no-op outside the
-bound repository, and does not validate results or emit receipts.
+bound repository, and does not validate results or emit receipts. It remains a
+historical mechanism seam and is not the outside-Harness v1 plugin Hook.
 
 Goal-level demand still enters through Codex's normal native conversation
 path. Codex may implicitly select the task-facing Skill from its metadata; the

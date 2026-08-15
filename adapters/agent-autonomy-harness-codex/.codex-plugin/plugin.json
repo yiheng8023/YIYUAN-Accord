@@ -1,7 +1,7 @@
 {
   "name": "agent-autonomy-harness-codex",
-  "version": "0.2.0-candidate.7+codex.payload-cdc1548a4409",
-  "description": "Thin Codex projection for demand-driven task delivery and Harness authority continuity.",
+  "version": "1.0.0-carrier-mechanism.1+codex.payload-31249b8d66ff",
+  "description": "Inactive thin Codex projection candidate for demand-driven task delivery and bounded carrier lifecycle decisions.",
   "author": {
     "name": "Agent Autonomy Harness contributors"
   },
@@ -19,12 +19,13 @@
   "interface": {
     "displayName": "Agent Autonomy Harness for Codex",
     "shortDescription": "Delivers goals with demand-driven routing and continuity",
-    "longDescription": "A thin reference-host projection with one task-facing Skill for demand-driven delivery and one Hook for restoring current Harness authority after Codex startup, resume, clear, or compaction. It does not inspect prompts or transcripts, store session state, provide an MCP server, or validate outcomes.",
+    "longDescription": "An inactive thin reference-host projection candidate with one task-facing Skill and one bounded lifecycle Hook. The Hook stores only small session-keyed compaction counters under Codex plugin data, never reads prompts or transcripts or executes task-repository code, and remains fail-closed until trusted runtime and profile binding are materialized.",
     "developerName": "Agent Autonomy Harness contributors",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
-      "Read"
+      "Read",
+      "Local state"
     ],
     "websiteURL": "https://github.com/yiheng8023/agent-autonomy-harness",
     "defaultPrompt": [

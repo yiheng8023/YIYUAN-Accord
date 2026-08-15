@@ -1,15 +1,55 @@
 {
+  "description": "Unmaterialized v1 carrier mechanism candidate. Trusted activation must replace the absolute fail-closed interpreter sentinel.",
   "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/carrier_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\carrier_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "Observing carrier compaction risk"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/carrier_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\carrier_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "Reconciling carrier compaction state"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "python -I -B \"${PLUGIN_ROOT}/scripts/session_start.py\"",
-            "commandWindows": "python -I -B \"${PLUGIN_ROOT}/scripts/session_start.py\"",
-            "timeout": 15,
-            "statusMessage": "Restoring current Harness authority",
-            "additionalContextLimit": 4096
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/carrier_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\carrier_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "Restoring carrier decision context",
+            "additionalContextLimit": 1200
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/carrier_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\carrier_hook.py\"",
+            "timeout": 3,
+            "statusMessage": "Cleaning carrier session state"
           }
         ]
       }

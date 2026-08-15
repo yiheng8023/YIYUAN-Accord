@@ -42,13 +42,17 @@ only the registered task/target/host/model/adapter/date claim. The reported
 was denied without data exposure. All temporary plugin, Hook, credential-link,
 process, and filesystem state was removed without user cleanup.
 
-The Codex and Claude source candidates remain inactive thin Skill-plus-Hook
-projections over the same candidate.5 method. They add no MCP server, App,
-runtime, provider manager, prompt interception, or product authority and are not
-persistently installed or enabled. The current candidate.7 package identities
-track both launchers' current `harness/control.py` integrity pin; the candidate.6
-trees measured by historical v0.2 O5 remain immutable, and no measured value is
-transferred to candidate.7. CC Switch 3.19.2 supplied replaceable static
+The historical Codex and Claude candidate.7 revisions remain inactive thin
+Skill-plus-Hook projections over the same candidate.5 method. Their exact Git
+revisions remain the evidence boundary; no measured value transfers to later
+source. The current Codex tree is instead an unbound v1 carrier-mechanism
+candidate: its package-owned Hook records only bounded native lifecycle counters,
+does not execute task-repository code, and its checked-in command fails closed
+until an absolute trusted interpreter is materialized. Measured activation also
+requires the frozen v1 profile binding. It is not installed or enabled. The
+Claude tree remains the historical candidate.7 projection. Neither
+adds an MCP server, App, provider manager, prompt interception, or product
+authority. CC Switch 3.19.2 supplied replaceable static
 DeepSeek settings for the measured distinct host; its proxy runtime was off and
 it is neither portable-core nor runtime dependency. O5 proves decision
 portability only within the registered pair. It does not prove that the 2.1.232-
@@ -122,14 +126,18 @@ The current repository provides:
   bytes retain the pre-calibration status header frozen by registration;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
-- an inactive, standard-library-only Codex `SessionStart` adapter candidate
+- a legacy inactive, standard-library-only Codex `SessionStart` repository seam
   that projects a bounded current-authority, active-work, and read-only Git
   reconciliation checkpoint after startup, resume, clear, or compaction without
   reading prompt, transcript, session, diff, or dirty-path content or storing
   session state;
 - an inactive Codex plugin source candidate with one task-facing Skill for the
-  Codex-reference-calibrated method and one Hook that packages the continuation adapter, without
-  turning the repository or portable core into a plugin;
+  Codex-reference-calibrated method and one package-contained Hook for bounded
+  native compaction/clear state and conservative carrier decisions; it works
+  outside a Harness-shaped repository, never executes task-repository code or
+  Git, and remains deliberately unmaterialized until a trusted absolute runtime
+  is bound; it is not eligible for measured activation until the frozen v1
+  profile is also bound;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
 - one content-addressed stopped Codex continuity result showing that an exact

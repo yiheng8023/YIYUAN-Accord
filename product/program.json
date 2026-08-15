@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-codex-carrier-adapter-hardening",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -80,5 +80,53 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-codex-carrier-adapter-hardening",
+      "state": "active",
+      "correctionClass": "codex-carrier-adapter-unsafe",
+      "observedProblem": "The only Codex plugin source candidate resolves Python and Git through an untrusted task working directory, trusts Harness-shaped task repositories as executable authority, stores no bounded carrier-risk state, and cannot operate on an outside-Harness goal-level task.",
+      "hypothesis": "A package-contained standard-library Hook with bounded native lifecycle state, strict input/output limits, no task-repository code execution, exact session cleanup, and a fail-closed unmaterialized runtime binding can remove the known adapter security and continuity defects while remaining a thin inactive projection.",
+      "falsifier": "The safe source candidate requires prompt or transcript inspection, repository-controlled execution, a generic runtime or control plane, unbounded persistent state, or cannot fail closed before trusted runtime materialization and profile binding.",
+      "stopCondition": "The inactive Codex source candidate passes finite lifecycle, malformed-input, outside-Harness, state-bound, cleanup, executable-resolution and no-repository-execution tests; documentation states the remaining profile-binding and activation gates; no install, enablement, Hook trust, consumer mutation, outcome claim or repository residue remains.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": []
+      },
+      "workItems": [
+        {
+          "id": "work.v1-codex-carrier-adapter-hardening",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup"
+          ],
+          "deliverables": [
+            "inactive package-contained Codex carrier Hook source",
+            "negative and lifecycle mechanism tests",
+            "bounded activation and profile-binding boundary"
+          ]
+        }
+      ]
+    }
+  ]
 }

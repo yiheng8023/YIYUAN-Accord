@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 import hashlib
+import importlib.util
 from io import StringIO
 import json
 import os
@@ -10,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -500,6 +503,28 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
+    def run_codex_carrier_hook(
+        self, payload: object, *, plugin_data: Path | None = None, raw: bytes | None = None
+    ) -> subprocess.CompletedProcess[str]:
+        data_root = plugin_data or (self.root / "codex-plugin-data")
+        data_root.mkdir(parents=True, exist_ok=True)
+        environment = os.environ.copy()
+        environment["PLUGIN_DATA"] = str(data_root)
+        input_bytes = raw if raw is not None else json.dumps(payload).encode("utf-8")
+        return subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"),
+            ],
+            input=input_bytes,
+            capture_output=True,
+            check=False,
+            timeout=10,
+            env=environment,
+        )
+
     def claude_session_start_payload(self, *, source: str = "startup") -> dict:
         return {
             "session_id": "00000000-0000-4000-8000-000000000002",
@@ -928,7 +953,7 @@ class ProductControlTests(unittest.TestCase):
             {"continue": True, "suppressOutput": True},
         )
 
-    def test_codex_plugin_projection_is_thin_inactive_and_host_rooted(self) -> None:
+    def test_codex_plugin_projection_is_thin_inactive_and_fail_closed(self) -> None:
         manifest = json.loads(
             (CODEX_PLUGIN_ROOT / ".codex-plugin/plugin.json").read_text(
                 encoding="utf-8"
@@ -941,7 +966,7 @@ class ProductControlTests(unittest.TestCase):
         payload_identity = hashlib.sha256()
         payload_files = (
             "hooks/hooks.json",
-            "scripts/session_start.py",
+            "scripts/carrier_hook.py",
             "skills/deliver-demand-driven-task/SKILL.md",
             "skills/deliver-demand-driven-task/agents/openai.yaml",
             "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
@@ -953,7 +978,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.7+codex.payload-"
+            "1.0.0-carrier-mechanism.1+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -966,17 +991,30 @@ class ProductControlTests(unittest.TestCase):
                 "Tell me the result you want. I will own the capability route, continuity, verification, and cleanup."
             ],
         )
-        self.assertEqual(
-            manifest["interface"]["capabilities"], ["Interactive", "Read"]
-        )
+        self.assertEqual(manifest["interface"]["capabilities"], ["Interactive", "Read", "Local state"])
         self.assertNotIn("hooks", manifest)
-        handlers = hooks["hooks"]["SessionStart"]
-        self.assertEqual(len(handlers), 1)
-        command = handlers[0]["hooks"][0]
-        self.assertEqual(command["type"], "command")
-        self.assertIn("${PLUGIN_ROOT}", command["command"])
-        self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
-        self.assertIn(" -I ", command["command"])
+        self.assertEqual(set(hooks["hooks"]), {"PreCompact", "PostCompact", "SessionStart", "SessionEnd"})
+        for event, handlers in hooks["hooks"].items():
+            self.assertEqual(len(handlers), 1)
+            command = handlers[0]["hooks"][0]
+            self.assertEqual(command["type"], "command")
+            self.assertIn("${PLUGIN_ROOT}", command["command"])
+            self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
+            self.assertIn("/__AAH_UNMATERIALIZED__/python3", command["command"])
+            self.assertIn("C:\\__AAH_UNMATERIALIZED__\\python.exe", command["commandWindows"])
+            self.assertNotRegex(command["command"], r"(^|\s)(python|python3|git)(\s|$)")
+            self.assertNotRegex(command["commandWindows"], r"(^|\s)(python|python3|git)(\.exe)?(\s|$)")
+            self.assertLessEqual(command["timeout"], 5)
+            if event == "SessionStart":
+                self.assertLessEqual(command["additionalContextLimit"], 1200)
+            else:
+                self.assertNotIn("additionalContextLimit", command)
+        hook_source = (CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py").read_text(encoding="utf-8")
+        self.assertNotIn("import subprocess", hook_source)
+        self.assertNotIn("subprocess.run", hook_source)
+        self.assertNotIn("transcript_path", hook_source)
+        self.assertNotIn("find_harness_root", hook_source)
+        self.assertNotRegex(hook_source, r"[\"']git[\"']")
         self.assertNotIn(str(ROOT), json.dumps(hooks))
         candidate_text = "\n".join(
             path.read_text(encoding="utf-8")
@@ -1226,76 +1264,140 @@ class ProductControlTests(unittest.TestCase):
                 self.assertEqual(completed.returncode, 0, completed.stderr)
                 self.assertEqual(completed.stdout, "")
 
-    def test_codex_plugin_launcher_projects_from_nested_harness_cwd(self) -> None:
-        nested = self.root / "docs/nested"
-        nested.mkdir(parents=True)
-        payload = self.codex_session_start_payload(source="compact")
-        payload["cwd"] = str(nested)
-        completed = subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-B",
-                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
-            ],
-            input=json.dumps(payload),
-            capture_output=True,
-            text=True,
-            check=False,
-            timeout=30,
-        )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
-        output = json.loads(completed.stdout)
+    def test_codex_carrier_hook_works_outside_harness_and_never_exposes_input(self) -> None:
+        payload = self.codex_session_start_payload()
+        payload["cwd"] = str(self.root.parent / "ordinary-task")
+        payload["transcript_path"] = str(self.root / "private-transcript.jsonl")
+        completed = self.run_codex_carrier_hook(payload)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+        output_text = completed.stdout.decode()
+        output = json.loads(output_text)
         context = json.loads(output["hookSpecificOutput"]["additionalContext"])
-        self.assertEqual(context["adapter"], ADAPTER_ID)
-        self.assertEqual(context["event"]["source"], "compact")
-        self.assertNotIn("transcript_path", output["hookSpecificOutput"]["additionalContext"])
-        self.assertNotIn(payload["session_id"], completed.stdout)
+        self.assertEqual(context["profileBinding"], "unbound-mechanism-only")
+        self.assertEqual(context["remainingContextCapacity"], "unknown")
+        self.assertEqual(context["carrierRisk"], "observe-and-keep-only-while-task-risk-remains-low")
+        self.assertNotIn(payload["session_id"], output_text)
+        self.assertNotIn(payload["cwd"], output_text)
+        self.assertNotIn(payload["transcript_path"], output_text)
+        self.assertLessEqual(len(output_text), 3073)
 
-    def test_codex_plugin_launcher_is_noop_without_harness_authority(self) -> None:
-        payload = self.codex_session_start_payload()
-        payload["cwd"] = str(self.root.parent)
-        completed = subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-B",
-                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
-            ],
-            input=json.dumps(payload),
-            capture_output=True,
-            text=True,
-            check=False,
-            timeout=30,
-        )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(
-            json.loads(completed.stdout),
-            {"continue": True, "suppressOutput": True},
-        )
+    def test_codex_carrier_hook_counts_once_reconciles_and_cleans_session_state(self) -> None:
+        data_root = self.root / "carrier-data"
+        start = self.codex_session_start_payload()
+        first = self.run_codex_carrier_hook(start, plugin_data=data_root)
+        self.assertEqual(first.returncode, 0, first.stderr.decode())
 
-    def test_codex_plugin_launcher_rejects_unreviewed_runtime_bytes(self) -> None:
-        with (self.root / "harness/control.py").open("a", encoding="utf-8") as handle:
-            handle.write("\n# unreviewed runtime drift\n")
+        pre = {
+            **start,
+            "hook_event_name": "PreCompact",
+            "turn_id": "turn-1",
+            "trigger": "auto",
+        }
+        post = {**pre, "hook_event_name": "PostCompact"}
+        compact_start = {**start, "source": "compact"}
+        for payload in (pre, post, compact_start):
+            completed = self.run_codex_carrier_hook(payload, plugin_data=data_root)
+            self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+        first_context = json.loads(json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"])
+        self.assertEqual(first_context["compactionCount"], 1)
+        self.assertEqual(first_context["automaticCompactionCount"], 1)
+        self.assertEqual(first_context["carrierRisk"], "reconcile-durable-state-before-mutation")
+
+        second = {**pre, "turn_id": "turn-2"}
+        for payload in (second, {**second, "hook_event_name": "PostCompact"}, compact_start):
+            completed = self.run_codex_carrier_hook(payload, plugin_data=data_root)
+        second_context = json.loads(json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"])
+        self.assertEqual(second_context["compactionCount"], 2)
+        self.assertEqual(second_context["carrierRisk"], "transition-required-at-next-material-checkpoint")
+        state_files = list(data_root.glob("carrier-*.json"))
+        self.assertEqual(len(state_files), 1)
+        self.assertLessEqual(state_files[0].stat().st_size, 2048)
+        stale_temporary = state_files[0].with_name(f".{state_files[0].name}.stale.tmp")
+        stale_temporary.write_text("task-owned interrupted write", encoding="utf-8")
+
+        ended = {**start, "hook_event_name": "SessionEnd", "reason": "other"}
+        completed = self.run_codex_carrier_hook(ended, plugin_data=data_root)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+        self.assertEqual(list(data_root.iterdir()), [])
+
+    def test_codex_carrier_hook_serializes_concurrent_updates_and_session_end(self) -> None:
+        data_root = self.root / "concurrent-carrier-data"
+        start = self.codex_session_start_payload()
+        self.assertEqual(self.run_codex_carrier_hook(start, plugin_data=data_root).returncode, 0)
+        compact_events = [
+            {
+                **start,
+                "hook_event_name": "PreCompact",
+                "turn_id": f"concurrent-turn-{index}",
+                "trigger": "auto",
+            }
+            for index in range(8)
+        ]
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            results = list(
+                executor.map(
+                    lambda payload: self.run_codex_carrier_hook(payload, plugin_data=data_root),
+                    compact_events,
+                )
+            )
+        self.assertTrue(all(result.returncode == 0 for result in results))
+        compact_start = {**start, "source": "compact"}
+        observed = self.run_codex_carrier_hook(compact_start, plugin_data=data_root)
+        context = json.loads(json.loads(observed.stdout)["hookSpecificOutput"]["additionalContext"])
+        self.assertEqual(context["compactionCount"], 8)
+        self.assertEqual(context["automaticCompactionCount"], 8)
+
+        script = CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"
+        spec = importlib.util.spec_from_file_location("codex_carrier_hook_race_test", script)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        ended = {**start, "hook_event_name": "SessionEnd", "reason": "other"}
+        in_flight = {**compact_events[0], "turn_id": "end-race-turn"}
+        digest = hashlib.sha256(start["session_id"].encode("utf-8")).hexdigest()
+        lock_path = data_root / f"carrier-{digest}.lock"
+        with patch.dict(os.environ, {"PLUGIN_DATA": str(data_root)}):
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                end_future = executor.submit(module.handle, ended)
+                deadline = time.monotonic() + 1.0
+                while not lock_path.is_dir() and time.monotonic() < deadline:
+                    time.sleep(0.005)
+                self.assertTrue(lock_path.is_dir())
+                writer_future = executor.submit(module.handle, in_flight)
+                end_output = end_future.result(timeout=2)
+                writer_output = writer_future.result(timeout=2)
+        self.assertTrue(end_output["continue"])
+        self.assertFalse(writer_output["continue"])
+        self.assertIn("lock is unavailable", writer_output["systemMessage"])
+        self.assertEqual(list(data_root.iterdir()), [])
+
+    def test_codex_carrier_hook_fails_closed_on_malformed_or_unbounded_input(self) -> None:
+        malformed = self.run_codex_carrier_hook({}, raw=b"not-json")
+        self.assertEqual(malformed.returncode, 0, malformed.stderr.decode())
+        malformed_output = json.loads(malformed.stdout)
+        self.assertFalse(malformed_output["continue"])
+        self.assertIn("malformed", malformed_output["systemMessage"])
+
+        deeply_nested = self.run_codex_carrier_hook({}, raw=(b"[" * 1100) + b"0" + (b"]" * 1100))
+        self.assertEqual(deeply_nested.returncode, 0, deeply_nested.stderr.decode())
+        self.assertFalse(json.loads(deeply_nested.stdout)["continue"])
+
+        oversized = self.run_codex_carrier_hook({}, raw=b"x" * 65_537)
+        self.assertEqual(oversized.returncode, 0, oversized.stderr.decode())
+        output = json.loads(oversized.stdout)
+        self.assertFalse(output["continue"])
+        self.assertIn("fixed byte budget", output["systemMessage"])
+
         payload = self.codex_session_start_payload()
-        completed = subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-B",
-                str(CODEX_PLUGIN_ROOT / "scripts/session_start.py"),
-            ],
-            input=json.dumps(payload),
-            capture_output=True,
-            text=True,
-            check=False,
-            timeout=30,
-        )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(
-            json.loads(completed.stdout),
-            {"continue": True, "suppressOutput": True},
-        )
+        payload.update({"hook_event_name": "PreCompact", "trigger": "auto"})
+        missing_turn = self.run_codex_carrier_hook(payload)
+        output = json.loads(missing_turn.stdout)
+        self.assertFalse(output["continue"])
+        self.assertIn("turn identity", output["systemMessage"])
+
+        unsupported = self.run_codex_carrier_hook({**payload, "hook_event_name": "UnknownEvent"})
+        self.assertFalse(json.loads(unsupported.stdout)["continue"])
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
