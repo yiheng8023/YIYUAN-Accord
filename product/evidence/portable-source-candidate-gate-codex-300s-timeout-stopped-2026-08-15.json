@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.codex-300s-timeout-stopped.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-host-current-registration.json",
+    "sha256": "9b444b4a566c12871464eec343cb85c789ba8a0b8e49135df07d2e53ec71fd99",
+    "registeredCommit": "15395dd9eac306a4c23f9bf10ad15ddccfc88477"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-host-current",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The exact post-grant execution passed current Git, registration, date, target, Codex 0.147.0 and Claude 2.1.233 binary, credential-name, 19-file target snapshot, candidate.5 byte identity, schema, isolated authentication, canonical Codex plugin, one-visible-Skill, disabled App/MCP/multi-agent, strict Claude plugin and normalized dual-Hook preflights. The parent then started the one authorized Codex gpt-5.6-sol/high read-only ephemeral call. It produced no final-object file before the immutable 300-second parent timeout; the parent killed the full process tree and did not retry. Because the wrapper raised immediately after termination, its concurrently drained in-memory stdout was not serialized or hashed, making the incomplete call even less eligible. Claude was not started. The parent removed both task credential hardlinks and all 5,300 temporary files, restored each original credential as the sole hardlink name, and left no process, .tmp or Git residue. This result makes zero O1-O5 progress.",
+  "authority": {
+    "executionGrant": "同意本次 host-current 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 21758,
+      "id": "ctc_019f592550f72fc5016a7fac0ee8d081918ae0be24fcd78bd9",
+      "recordedAt": "2026-08-15T00:00:33.658Z",
+      "rawLineSha256": "832d7163731770c58cac796d9467ea41581dcf8f79b4dceee4635b7c7765dcc3",
+      "contentSha256": "6b14d252deab9f917b8bc87ed1af10c5cd9816f8ec3257787d6608e1a77dea57"
+    },
+    "codexCallsAuthorized": 1,
+    "codexCallsAttempted": 1,
+    "codexCallsCompletedWithFinalObject": 0,
+    "claudeCallsAuthorizedConditionalOnCodexSuccess": 1,
+    "claudeCallsAttempted": 0,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-on-codex-timeout"
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "15395dd9eac306a4c23f9bf10ad15ddccfc88477",
+      "aheadBehind": "0/0",
+      "registeredAt": "2026-08-15T07:52:16.5110466+08:00"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "ctc_019f592550f72fc5016a7fac0ee8d081918ae0be24fcd78bd9",
+      "recordedAt": "2026-08-15T00:00:33.658Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "pre-task-host-git-registration-and-credential-name-preflight-passed",
+      "headAndOriginMain": "15395dd9eac306a4c23f9bf10ad15ddccfc88477",
+      "registrationSha256": "9b444b4a566c12871464eec343cb85c789ba8a0b8e49135df07d2e53ec71fd99",
+      "codexVersion": "0.147.0",
+      "codexBinarySha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+      "claudeVersion": "2.1.233",
+      "claudeBinarySha256": "8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd"
+    },
+    {
+      "event": "source-schema-auth-and-package-preflight-passed",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+      "snapshotFileCount": 19,
+      "allBlobIdentitiesMatched": true,
+      "sourceReadOnly": true,
+      "commonSkillSha256": "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7",
+      "commonProfileSha256": "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+      "isolatedCodexAuthentication": "Logged in using ChatGPT",
+      "isolatedClaudeAuthentication": {
+        "loggedIn": true,
+        "authMethod": "claude.ai",
+        "apiProvider": "firstParty"
+      },
+      "codexInstalledFileCount": 6,
+      "allCodexInstalledFilesMatchedTargetGitBlobs": true,
+      "manifestRawDifference": "registered Windows CRLF materialization",
+      "manifestJsonSemanticsEqual": true
+    },
+    {
+      "event": "capability-and-adapter-preflight-passed",
+      "observedAt": "2026-08-15T08:09:30.8394181+08:00",
+      "initialSkillCount": 25,
+      "excludedNonHarnessSkillCount": 24,
+      "excludedPathSetSha256": "d6c40869414ffed4373ca8049f2079c524934829a542839ff79158d662c37c08",
+      "visibleSkillCount": 1,
+      "visibleSkill": "agent-autonomy-harness-codex:deliver-demand-driven-task",
+      "appsEnabled": false,
+      "multiAgentEnabled": false,
+      "multiAgentV2Enabled": false,
+      "isolatedMcpServerCount": 0,
+      "ambientAgentsMemoryGoalOrAppsContext": false,
+      "codexAdapter": "harness-codex-session-start-v0.2-candidate.1",
+      "claudeAdapter": "harness-claude-session-start-v0.2-candidate.2",
+      "repositoryCheckpointState": "unknown",
+      "normalizedHookSha256": "809535348cf75b7885af1d08396d79e32e3767951f3531ff40fcbe00199f3a7d",
+      "normalizedThinAdapterEquivalence": true,
+      "claudePluginStrictValidation": "PASS"
+    },
+    {
+      "event": "single-codex-call-started",
+      "dispatchRecordedAt": "2026-08-15T00:10:57.743Z",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "high",
+      "sandbox": "read-only",
+      "ephemeral": true,
+      "approvalPolicy": "never",
+      "promptAndSchemaExact": true
+    },
+    {
+      "event": "codex-call-timeout-stop",
+      "timeoutSeconds": 300,
+      "timeoutOutputRecordedAt": "2026-08-15T00:16:03.936Z",
+      "processTreeKilled": true,
+      "finalObjectFilePresent": false,
+      "rawStreamHashAvailable": false,
+      "reason": "parent wrapper raised before serializing the concurrently drained in-memory stream",
+      "retry": false,
+      "claudeStarted": false
+    },
+    {
+      "event": "task-process-credential-and-filesystem-state-cleaned",
+      "observedAt": "2026-08-15T08:25:26.9049873+08:00",
+      "taskFileCountBeforeCleanup": 5300,
+      "matchingProcessesAfterCleanup": 0,
+      "taskRootAbsent": true,
+      "tmpRootAbsent": true,
+      "originalCodexAuthHardlinkNames": [
+        "C:/Users/15521/.codex/auth.json"
+      ],
+      "originalClaudeCredentialHardlinkNames": [
+        "C:/Users/15521/.claude/.credentials.json"
+      ],
+      "credentialContentsReadHashedPrintedOrRecorded": false,
+      "gitClean": true,
+      "headAndOriginMain": "15395dd9eac306a4c23f9bf10ad15ddccfc88477",
+      "aheadBehind": "0/0"
+    }
+  ],
+  "falsifiersTriggered": [
+    "the exact Codex call exceeded the immutable 300-second carrier budget",
+    "no valid Codex final object or complete raw stream evidence exists",
+    "the conditional Claude call, cross-host comparison and named-human judgments did not occur"
+  ],
+  "causalFinding": {
+    "fact": "The exact gpt-5.6-sol/high read-only 19-file source gate had no final object after 300 seconds, while all preflight identities and capability boundaries passed.",
+    "inference": "The task, schema, host identity and capability isolation were not falsified. The registered 300-second carrier budget was empirically insufficient, and the parent timeout path also failed to serialize the partial drained stream before cleanup.",
+    "correction": "Do not retry this registration. A later immutable registration may preserve every task, host, model, source, adapter, schema, equivalence, quality and claim floor while extending each one-shot parent timeout to 900 seconds and requiring stream drain, hash and event-count capture before success or timeout handling."
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 1,
+    "lossEvents": [
+      "the parent's under-sized carrier budget consumed this exact grant and requires another bounded grant before any eligible model result"
+    ],
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "the source profile preflight initially named the wrong registered reference filename and was corrected from the immutable snapshot",
+      "two Codex plugin help probes used obsolete plural/install spellings before the live singular add interface was resolved",
+      "one PowerShell byte-array comparison and two PowerShell parsing forms were corrected before model cost",
+      "the timeout wrapper did not serialize its already drained partial stream before raising",
+      "exact cleanup of the 5,300-file isolated host root completed without user action"
+    ]
+  },
+  "safetyAndCleanup": {
+    "modelGenerationStarted": true,
+    "codexModelCallStarted": true,
+    "codexModelCallCompleted": false,
+    "claudeModelCallStarted": false,
+    "credentialContentsReadOrRecorded": false,
+    "repositoryMutationByModel": false,
+    "consumerMutationRetained": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryAuthLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimit": "This is one honestly stopped Codex-timeout execution of the host-current 2026-08-15 portable source-candidate registration. It proves only the observed preflights, one attempted timed-out Codex call, no final object, no Claude call and exact cleanup. It proves no host task outcome, no cross-host equivalence, no O5 progress, no release eligibility, no publication, no production readiness and no v0.2 completion."
+}
