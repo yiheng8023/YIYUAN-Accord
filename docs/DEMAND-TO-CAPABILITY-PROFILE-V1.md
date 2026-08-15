@@ -1,19 +1,20 @@
 # Demand-to-Capability Method and Minimum Quality Profile v1
 
-Identity: `harness-demand-to-capability-v1.0-candidate.1`
+Identity: `harness-demand-to-capability-v1.0-candidate.5`
 
 Status: pre-freeze candidate. It has no registered task, outcome evidence,
 portability proof, publication status, or release claim. It becomes normative
 only when `product/program.json` binds its exact bytes and the paired cohort
 protocol before the first measured task.
 
-`product/constitution.json` owns purpose and boundaries,
-`product/program.json` owns current state and bindings, and
-`product/acceptance.json` owns criteria and quantitative thresholds. This
-profile owns method and floor semantics. The paired cohort protocol owns
-prospective enrollment realization. A conflict stops measurement; this file
-cannot reinterpret acceptance or preserve a result by changing after
-registration.
+Only `product/constitution.json`, `product/program.json`,
+`product/acceptance.json`, and the verifier own product purpose, state,
+criteria, thresholds, and promotion. When the program content-addresses this
+profile and the paired cohort protocol, they become immutable subordinate
+conformance operands: they realize the acceptance-owned method, floors, and
+enrollment constraints but cannot add criteria, work, thresholds, authority,
+or state. A conflict invalidates measurement; neither operand can reinterpret
+acceptance or preserve a result by changing after registration.
 
 ## Agent method
 
@@ -40,9 +41,10 @@ identity.
    deliverable, human round trip, authority, side effect, or acceptance rule.
 4. **Register before measurement.** Apply the eligibility, identity,
    scenario, baseline, carrier, floor, evidence, claim, and stop rules below.
-   Commit one append-only registration after the profile binding and before
-   outcome-bearing execution. Complete when Git ancestry and content identity
-   prove both ordering constraints.
+   After the natural-demand event but before outcome-bearing execution, commit
+   one append-only registration. Complete when the source-native cursor proves
+   first eligibility, Git ancestry proves immutable registration, and no
+   measurement event has occurred.
 5. **Preview material effects.** Before each material mutation or external
    effect, bind expected state, human gate, reversibility or rollback, failure
    signal, recovery route, verification source, resource effect, continuity
@@ -59,10 +61,11 @@ identity.
    mechanics to the user. Complete when the outcome is verified or the task is
    honestly stopped with its failure state intact.
 8. **Validate the criterion.** Use the task-bound source validator selected
-   for the actual evidence serialization. It must recompute task identity,
-   prove post-registration measurement, and enforce every mapped criterion and
-   mandatory floor. Complete only on literal validator success; structure or
-   self-report alone never promotes an outcome.
+   for the actual evidence serialization. It must verify private demand-source
+   binding and deduplication, prove the natural-demand event preceded
+   registration and the measurement event followed it, and enforce every
+   mapped criterion and mandatory floor. Complete only on literal validator
+   success; structure or self-report alone never promotes an outcome.
 9. **Release and clean.** End task-scoped capability exposure and carriers
    unless separately accepted evidence authorizes persistence. Inventory and
    remove task-created repository, host, process, cache, credential-topology,
@@ -75,14 +78,53 @@ identity.
 
 ## Prospective registration
 
-### Eligibility and chronology
+### Enrollment surface, eligibility, and chronology
 
-At the first source event, before outcome-bearing execution, enroll a demand
-when all of these facts are true:
+The first commit that freezes the profile and protocol also binds exactly one
+source-native ordered conversation or intake carrier, its current source-native
+cursor, a random public surface identity, a random public key identity, and the
+fingerprint of one cohort-scoped private HMAC key. That commit alone is not an
+effective cohort activation. Before any natural demand can be eligible, a named
+human independently authorizes its exact revision, canonical complete binding
+digest, source surface, private-evidence boundary, and cleanup disposition in a
+source-native event. A code-owned source validator must prove that authorization,
+and the next commit pins the exact first-frozen revision, digest, and validator
+identity. A missing validator, unverifiable authorization, or any natural demand
+observed after the freeze commit but before authorization stops the cohort; it
+cannot be excluded or used to choose a replacement freeze. Discarding an
+unauthorized local freeze never starts the cohort, while an authorized freeze
+cannot be replaced. The authorized cursor is the cohort boundary: every earlier
+event is pre-activation and every later eligible natural demand must be enrolled.
+Activation cannot be delayed until a favorable demand is visible. Only the bound
+surface originates cohort demands; other hosts may execute an already registered
+task but cannot originate a new cohort task.
+
+A surface transition is serial and uses the same cohort key and ordering. A
+source-bound cause must occur before any demand is observed on the destination;
+the source's window from the preceding natural-demand cursor through its final
+cursor is closed, the destination activation and next cursor are verified, and
+the transition continues the same registration chain. The allowed causes are
+source unavailability, a source or host capacity boundary, or an authority
+boundary. A missing, post-demand, overlapping, key-changing, or unverifiable
+transition stops the cohort; it never creates a new sampling frame.
+
+For each prospective demand, the task-specific validator reads the complete
+authorized source-native event window from activation or the preceding
+registration cursor through the current natural-demand event. It applies the
+frozen eligibility rule to every event and proves no earlier eligible demand
+was omitted. An unavailable, mutable, ambiguous, or incomplete window stops
+cohort measurement; it cannot make the current or later demand favorably
+ineligible. This is source-bound validation, not a Harness event store, global
+log, or runtime.
+
+At the first eligible natural-demand event, before outcome-bearing execution,
+enroll a demand when all of these facts are true:
 
 - it is a user- or domain-originated goal, not a fixture, diagnostic probe,
   retrospective reconstruction, or task invented to exercise the Harness;
-- it occurred after the current profile and cohort protocol were frozen;
+- its natural-demand event occurred after source-verified authorization of the
+  exact profile/protocol freeze and surface activation, and before immutable
+  registration;
 - it has a bounded goal, an authorized next action, a named accountable human,
   and an independently inspectable source within the current trust and privacy
   boundary;
@@ -90,43 +132,69 @@ when all of these facts are true:
   applicable when a mapped criterion requires `scenarioClass`;
 - its canonical task identity has not already been enrolled.
 
-A pre-measurement source is ineligible only when one of those facts is false.
-Absence is decided from source state, not from a later result. Once committed,
-a registration remains in cohort order and cannot be excluded, renamed,
-replaced, or converted to a more favorable scenario. Failed, missing,
-incomparable, stopped, and rejected samples remain in place and fail closed as
-required by the mapped acceptance criterion.
+A pre-measurement demand is ineligible only when one of those source facts is
+false. Absence is decided from the complete source window, not from a later
+result. Once committed, a registration remains in cohort order and cannot be
+excluded, renamed, replaced, or converted to a more favorable scenario.
+Failed, missing, incomparable, stopped, and rejected samples remain in place
+and fail closed as required by the mapped acceptance criterion.
 
 The registration commit has one parent. That parent contains the exact frozen
 `normativeProfileBinding`; registration commits form one strict Git ancestry
-order. Git timestamps and self-reported times are descriptive only.
+order. Outcome-bearing execution creates a distinct task-bound measurement
+event only after that registration. Git timestamps and self-reported times are
+descriptive only.
 
 ### Canonical task identity
 
 The public identity has the form
-`natural-task.sha256:<64-lowercase-hex>`. The digest input is the UTF-8 bytes of
-this exact no-newline template, where each `<hex>` is 64 lowercase hexadecimal
-characters and `<kind>` matches `[a-z0-9][a-z0-9.-]{0,63}`:
+`natural-task.public-v1:<32-lowercase-hex>`. The Agent generates the 128 random
+bits with the host cryptographic random source at registration. The value is
+never derived from a goal, prompt, correction, source event, host identifier,
+or their hash.
 
-```text
-{"goalBoundaryIdentity":"sha256:<hex>","naturalDemandSourceIdentity":"sha256:<hex>","naturalDemandSourceKind":"<kind>","schema":1}
-```
+`naturalDemandEventAndPrivateBinding` binds the sanitized source kind and a
+public `hmac-sha256:<64-lowercase-hex>` commitment computed with the
+cohort-scoped 256-bit private key. The only message definition is the domain
+`agent-autonomy-harness/cohort-source-event/v1`, a zero delimiter, the bound
+public surface identity, a zero delimiter, and the exact source-native
+immutable event identity. Representations or canonical bytes cannot be
+selected per task, and equal local event identities on different surfaces do
+not collide. The freeze transaction binds the random
+public key identity and `sha256:<64-lowercase-hex>` fingerprint of that
+high-entropy key. Every registration copies both values. The key is never
+committed, logged, exposed to the task/model, rotated, substituted, or reused
+for another cohort. It remains private evidence inside the registered trust
+boundary for as long as the release maintains live source re-verifiability,
+under the named human's exact retention, access, expiry, revocation, and
+cleanup authority. The public tree records only a privacy-safe disposition and
+validator identity, never the key or private locator. Destruction has an exact
+receipt and revokes live source verifiability; it cannot preserve an accepted
+live-verification state. Unapproved retention, key loss, or destruction before
+the claim ends stops the cohort or release claim.
 
-The fields mean:
+`enrollmentSurfaceAndCursor` is a code-checked object containing the public
+surface and key identities, key fingerprint, fixed message rule and HMAC
+domain, the current window-start and natural-demand cursor commitments, the
+preceding registered task identity, and a `cohort-activation`, `none`, or
+`serial` transition record. `naturalDemandEventAndPrivateBinding` is a
+code-checked object containing the binding scheme, sanitized source kind,
+source commitment, message rule, and the same key identity and fingerprint.
+The first registration starts at the freeze-bound activation cursor. Every
+later same-surface registration starts at the preceding natural-demand cursor;
+a serial transition binds that preceding cursor, the source final cursor,
+destination activation, and allowed cause. Public structure proves continuity
+only. The task-specific validator still proves the private source, complete
+window, cause, and chronology.
 
-- `goalBoundaryIdentity`: `sha256:<64-lowercase-hex>` over the bound goal,
-  corrections available at registration, and authority boundary;
-- `naturalDemandSourceIdentity`: `sha256:<64-lowercase-hex>` over the original
-  source event bytes or an exact source-owned canonical representation;
-- `naturalDemandSourceKind`: the task-specific validator's fixed `<kind>`
-  token.
-
-No value in the template requires JSON escaping, numbers other than `schema`
-are absent, and the SHA-256 digest is taken over exactly those bytes. Public
-evidence stores the digest and sanitized descriptors, not private source
-bytes. Before promotion, the task-specific validator reads the authorized
-source, rebuilds the envelope, and proves the registration identity. A
-digest-shaped string is not evidence by itself.
+Before promotion, the task-specific validator reads the authorized source,
+recomputes the keyed commitment, compares it with every prior registration to
+reject duplicate source events, verifies the public random identifier is
+unique, and proves the cursor window and chronology. The public identifier and
+commitment are binding operands, not evidence of naturality, behavior, value,
+or floor success. Unsalted or unkeyed hashes of private or potentially
+low-entropy goals, prompts, corrections, locators, or source bytes are
+prohibited.
 
 ### Scenario realization
 
@@ -137,8 +205,8 @@ task-specific validator proves applicability. The exact classes are:
 
 | Class | Source-bound applicability |
 | --- | --- |
-| `zero-tool-knowledge-new-intake` | The demand starts a new goal and the user supplies no Harness, host-tooling, capability-route, topology, or invocation instructions. |
-| `existing-project-continuation` | The demand continues an artifact, repository, decision set, or task state that predates the source event. |
+| `zero-tool-knowledge-new-intake` | The demand starts a new goal and source-bound pre-measurement evidence accepted by the named human establishes that the user has no Harness, Codex-tooling, or capability-route knowledge and supplies no route, topology, or invocation instruction. Unknown knowledge is not eligible for this class. |
+| `existing-project-continuation` | The demand continues an artifact, repository, decision set, or task state that predates the natural-demand event. |
 | `long-context-work` | The observable task requires at least three material checkpoints, continuity across a native compaction, or recovery from an already long carrier. |
 | `residual-capability-gap` | Read-only route observation reproduces a gap after healthy native and already-authorized routes are assessed. |
 | `consequential-human-gate` | The bounded route predictably reaches a trust, account, data, cost, destructive, irreversible, publication, release, or accountable-judgment gate. |
@@ -189,9 +257,11 @@ skipped for a lower-priority baseline. No post-result rematching is permitted.
 Minimum matching variables are goal and boundaries, domain/repository start
 state, consequential gate, host/runtime/model, available capability and tool
 surface, trust/data/cost boundary, and time window. The registration supplies
-exact tolerances and exclusions for every variable. The task validator proves
-eligibility, matching, burden measures, mandatory floors, and the unchanged
-selection order from source evidence.
+exact tolerances and exclusions for every variable and binds the named
+accountable human's pre-measurement comparability decision plus its authorized
+source identity. The task validator verifies candidate priority, source facts,
+decision provenance, burden measures, mandatory floors, and the unchanged
+selection order; it does not replace the human comparability judgment.
 
 For both Harness and baseline routes, `routeDeltaFields` records whether the
 route adds a goal, user input, deliverable, human round trip, authority, side
@@ -211,17 +281,9 @@ transition, material checkpoints since compaction and since transition,
 reconciliation failures, truncation/omission signals, active causal delta, and
 destination capability.
 
-Use these conservative triggers:
-
-- with reliable numeric capacity, transition before the next material
-  mutation when remaining capacity is at or below 25 percent or cannot contain
-  the next bounded work unit plus reconciliation checkpoint;
-- with capacity `unknown`, transition before the next material mutation on the
-  second native compaction since the last verified transition, after one
-  compaction plus three later material checkpoints, after six material
-  checkpoints without any reliable capacity signal, or immediately on a
-  failed reconciliation, lost correction, missing causal state, or observable
-  truncation.
+Apply the exact quantitative transition triggers owned by O4 in
+`product/acceptance.json`. This profile defines how to act on an active trigger
+but does not copy, relax, or add an acceptance threshold.
 
 ### Decisions
 
@@ -273,25 +335,30 @@ checkout or persistent consumer mutation is not reproduction.
 
 ## Evidence, privacy, and residue
 
-After an eligible source appears and before measured execution, add only the
-criterion-scoped validator required by that actual source serialization. A
+After an eligible natural-demand event and before measured execution, add only
+the criterion-scoped validator required by that actual source serialization. A
 bounded read-only source probe may establish serialization, but cannot observe
 or encode the result. The validator must be code-owned, bound to the exact
-increment and criteria, recompute canonical task identity, prove the source
-event follows registration, enforce floors and criterion semantics, retain
-missing/failure state, and return literal `true`. A generic envelope, human
-decision, or well-formed result is insufficient without that validation.
+increment and criteria, verify the public task identity and private keyed
+source binding, prove freeze/activation then natural demand then registration
+then measurement chronology, prove the complete cursor window contains no
+omitted earlier eligible demand, enforce floors and criterion semantics,
+retain missing/failure state, and return literal `true`. A generic envelope,
+human decision, or well-formed result is insufficient without that validation.
 
-Public evidence contains sanitized source kinds, content identities, bounded
-facts, validator identity, human decision, and claim limits. It contains no
+Public evidence contains a random public task identity, the cohort-keyed HMAC
+commitment, sanitized source kinds, bounded facts, validator identity, human
+decision, and claim limits. The private HMAC key and uncommitted source
+identity remain inside the registered trust boundary and follow the registered
+retention/cleanup rule. Public evidence contains no
 secret or credential value; personal absolute path or user/home directory;
 private config or credential location; raw prompt, transcript, or source
 payload; account identity; thread, session, message, turn, event, or opaque
 host identifier; or credential/hardlink topology. When source proof must remain
-private, the public validator records a content identity and bounded verdict,
-not the private locator or bytes. The named human decides the public-history
-privacy disposition before release; deleting the current tree does not erase
-public Git history.
+private, the public validator records only the keyed commitment and bounded
+verdict, not the private locator, key, identity, or bytes. The named human
+decides the public-history privacy disposition before release; deleting the
+current tree does not erase public Git history.
 
 Task closeout inventories tracked, untracked, ignored, and empty repository
 paths; conventional caches, logs, backups, rejects, and temporary files;
@@ -335,7 +402,7 @@ the acceptance expression and this immutable release identity both hold.
 ## Claim ceiling
 
 Before freeze this file proves only that a reviewable method candidate exists.
-After freeze it can govern only prospectively registered tasks. General user
+After source-authorized activation it can govern only prospectively registered tasks. General user
 value, burden reduction, carrier quality, portability, cross-host equivalence,
 security, publication, release, production readiness, or superiority require
 the exact evidence and human authority in `product/acceptance.json`; no local

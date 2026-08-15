@@ -41,7 +41,8 @@
     "cohortProtocolIdentity": null,
     "cohortProtocolLocator": null,
     "cohortProtocolSha256": null,
-    "frozenAtRevision": null
+    "frozenAtRevision": null,
+    "cohortActivation": null
   },
   "terminalReleaseBinding": {
     "state": "unregistered",

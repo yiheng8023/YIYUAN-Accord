@@ -5,7 +5,7 @@
   "release": "v1.0",
   "program": "product/program.json",
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "progressRule": "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count as progress. Before any task measurement, one content-addressed normative profile and prospective cohort protocol must be frozen; the realized cohort is the earliest eligible registration prefix under that protocol, never a retrospectively selected task roster. Git ancestry proves repository ordering only; every outcome requires a task-bound validator to prove natural demand and a source-bound measurement event after its immutable registration because Git dates and self-reported timestamps are not chronology authority. Even after O1-O5 task evidence passes, completionState remains in-progress until the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 evidence set, named-human authorization in the local annotated tag, the identical public tag object and peeled commit, and no ignored or untracked repository residue; this is O5 release enforcement, not an additional outcome. Documents, tests, inventories, fixtures, memberships, research volume, and prior-release evidence are supporting inputs only.",
+  "progressRule": "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count as progress. Before any task measurement, one content-addressed normative profile and prospective cohort protocol must be frozen with the exact initial source-native enrollment surface, activation cursor and cohort key identity/fingerprint. The first frozen commit is not effective cohort activation by itself: before any natural demand can be eligible, a named human independently authorizes that exact revision, canonical complete binding digest, source surface, private-evidence boundary and cleanup disposition in a source-native event, and a code-owned source validator proves the authorization. The next commit pins that first-frozen revision, digest and validator identity. A missing or unverifiable authorization, a replaced authorized freeze, or any natural demand observed after the freeze commit but before authorization stops the cohort rather than being excluded. The realized cohort is the earliest eligible natural-demand-event prefix after authorized activation on that ordered enrollment surface, never a retrospectively selected task roster: each task-bound validator proves the complete source cursor window since activation or the preceding registration contains no omitted earlier eligible demand. A serial surface transition preserves the same key and cohort order, binds a source-native cause before any destination demand, closes the source cursor window and verifies the destination activation; otherwise the cohort stops. A natural-demand event occurs after authorized activation and before immutable registration; a distinct source-bound measurement event occurs after registration. Git ancestry proves repository and registration ordering only, while the authorization validator proves the independent first-freeze anchor and the task validator privately verifies the fixed source-message binding, deduplication, chronology and criterion semantics. Public task identities are unlinkable random identifiers, not unsalted hashes of private goals, prompts or source events. Even after O1-O5 task evidence passes, completionState remains in-progress until the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 evidence set, named-human authorization in the local annotated tag, the identical public tag object and peeled commit, and no ignored or untracked repository residue; this is O5 release enforcement, not an additional outcome. Documents, tests, inventories, fixtures, memberships, research volume, and prior-release evidence are supporting inputs only.",
   "criteria": [
     {
       "id": "O1",
@@ -22,6 +22,9 @@
         "preRegistrationFields": [
         "registeredAt",
         "taskIdentity",
+        "enrollmentSurfaceAndCursor",
+        "naturalDemandEventAndPrivateBinding",
+        "zeroToolKnowledgeEvidence",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
         "profileSha256",
@@ -46,7 +49,7 @@
           "materialCollaborationLossEvents",
           "residue"
         ],
-      "passRule": "Every registered task uses the program-frozen normative profile and prospective cohort protocol, binds a source event that the task-specific validator proves occurred after immutable registration, passes all floors, is accepted by the named accountable human, records zero prohibited user orchestration interventions and zero material collaboration-loss events, and the earliest eligible registration prefix satisfies the zero-tool-knowledge first-run, required scenario, final-adapter and outside-dogfood coverage bands without dropping, replacing or compensating for failures and without substitution by fixtures or diagnostic tasks.",
+      "passRule": "Every registered task uses the program-frozen normative profile, prospective cohort protocol and independently source-authorized initial enrollment activation; its task-specific validator proves a natural-demand event after authorized activation and before registration, a complete continuous source-native cursor window with no omitted earlier eligible demand, the fixed cohort key and source-message binding, deduplication, any pre-demand serial transition cause, and a distinct measurement event after registration. Every task passes all floors, is accepted by the named accountable human, records zero prohibited user orchestration interventions and zero material collaboration-loss events, and the earliest eligible registration prefix satisfies the source-bound no-Harness/Codex-tooling/capability-route-knowledge first-run, required scenario, final-adapter and outside-dogfood coverage bands without dropping, replacing or compensating for failures and without substitution by fixtures or diagnostic tasks; unknown user knowledge fails the zero-tool-knowledge band.",
         "falsifiers": [
           "the user must name, select, invoke or recover a capability or task carrier",
           "the user must reconstruct discoverable context, request verification, push, release mechanics or cleanup",
@@ -72,6 +75,8 @@
         "preRegistrationFields": [
         "registeredAt",
         "taskIdentity",
+        "enrollmentSurfaceAndCursor",
+        "naturalDemandEventAndPrivateBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
         "profileSha256",
@@ -81,6 +86,7 @@
         "baselineSelectionPriorityAndExclusionRule",
         "baselineMatchingVariables",
         "matchingToleranceAndMissingBaselineStopRule",
+          "namedHumanBaselineComparabilityDecision",
           "routeDeltaFields",
           "qualitySafetyEvidenceAndResidueFloors",
           "materialInterventionTaxonomy",
@@ -95,7 +101,7 @@
           "outcomeQualityAndIntentFidelity",
           "authorityEvidenceReversibilityAndResidue"
         ],
-      "passRule": "The program-frozen profile and prospective cohort protocol use the pre-registered baseline selection priority, exclusions, matching variables and tolerances before outcome observation; task-bound source events independently establish post-registration measurement, and eligibility checks show strict total and median burden reduction, zero Harness-path prohibited orchestration and collaboration-loss events, and no compensated floor failure; a missing or incomparable highest-priority eligible baseline remains in the realized prefix and stops the sample rather than permitting a more favorable substitute or pass.",
+      "passRule": "The program-frozen profile and prospective cohort protocol use the pre-registered baseline selection priority, exclusions, matching variables and tolerances before outcome observation; the registration binds a named accountable human's pre-measurement comparability decision and source identity, while the validator verifies provenance and computation without replacing that judgment. Task-bound measurement events independently establish post-registration measurement, and eligibility checks show strict total and median burden reduction, zero Harness-path prohibited orchestration and collaboration-loss events, and no compensated floor failure; a missing or incomparable highest-priority eligible baseline remains in the realized prefix and stops the sample rather than permitting a more favorable substitute or pass.",
         "falsifiers": [
           "any O1 task lacks a pre-registered eligible baseline",
           "the burden reduction is not strict in both total and median",
@@ -122,6 +128,8 @@
         "preRegistrationFields": [
         "registeredAt",
         "taskIdentity",
+        "enrollmentSurfaceAndCursor",
+        "naturalDemandEventAndPrivateBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
         "profileSha256",
@@ -160,7 +168,7 @@
       "name": "proactive code-and-conversation carrier lifecycle",
       "statement": "Across real long-running work, the Agent uses observable or explicitly unknown carrier-fitness signals to keep healthy carriers, reconcile native compaction, and perform a verified conversation transition before preventable context loss while owning any causally necessary code split and reconciliation.",
       "metric": "pre-registered carrier decisions and transitions with signal provenance, conservative unknown-signal rule, verified handoff state, topology reconciliation and zero user carrier-operation or context-reconstruction intervention",
-      "threshold": "at least four validated carrier decisions across at least two materially different natural long-running tasks include a justified keep-current decision, a native compaction plus durable-state reconciliation, and a proactive verified same-goal conversation fork or handoff before material loss; code topology is explicitly assessed on every task and every causally necessary split is synchronized, merged or reconciled, released and cleaned; zero preventable context-loss or user topology intervention",
+      "threshold": "at least four validated carrier decisions across at least two materially different natural long-running tasks include a justified keep-current decision, a native compaction plus durable-state reconciliation, and a proactive verified same-goal conversation fork or handoff before material loss; code topology is explicitly assessed on every task and every causally necessary split is synchronized, merged or reconciled, released and cleaned; zero preventable context-loss or user topology intervention. Before the next material mutation, transition when reliable remaining capacity is at or below 25 percent or cannot contain the next bounded work unit plus reconciliation; when capacity is unknown, transition on the second native compaction since the last verified transition, one compaction plus three later material checkpoints, six material checkpoints without a reliable capacity signal, or immediately on failed reconciliation, lost correction, missing causal state or observable truncation.",
       "assessment": "planned",
       "operationalization": {
         "sampleUnit": "one material-checkpoint carrier-fitness decision or completed topology transition in a natural task",
@@ -169,6 +177,8 @@
         "preRegistrationFields": [
         "registeredAt",
         "taskIdentity",
+        "enrollmentSurfaceAndCursor",
+        "naturalDemandEventAndPrivateBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
         "profileSha256",
@@ -194,7 +204,7 @@
           "userTopologyOrContextInterventions",
           "materialContextLossEvents"
         ],
-      "passRule": "Every decision uses the program-frozen normative profile and prospective cohort protocol and follows its frozen rule; task-bound source events independently establish post-registration measurement; at least two materially different long-running tasks jointly contain keep, compact-and-reconcile and proactive verified conversation-transition evidence; any code split is causally necessary and fully reconciled; destination recovery is independently verified before source release; user topology/context interventions and material context-loss events are zero.",
+      "passRule": "Every decision uses the program-frozen normative profile and prospective cohort protocol and follows the acceptance-owned quantitative triggers without profile-level relaxation; task-bound measurement events independently establish post-registration measurement; at least two materially different long-running tasks jointly contain keep, compact-and-reconcile and proactive verified conversation-transition evidence; any code split is causally necessary and fully reconciled; destination recovery is independently verified before source release; user topology/context interventions and material context-loss events are zero.",
         "falsifiers": [
           "unknown remaining capacity is treated as proof that continuation is safe",
           "transition waits until material context loss or user complaint",
@@ -220,6 +230,8 @@
         "preRegistrationFields": [
         "registeredAt",
         "taskIdentity",
+        "enrollmentSurfaceAndCursor",
+        "naturalDemandEventAndPrivateBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
         "profileSha256",
@@ -249,13 +261,14 @@
           "cleanCheckoutReproducibility",
           "preCloseoutCounterexampleAuditFindingsAndDisposition",
           "temporaryProcessArtifactInventoryAndCleanup",
+          "cohortPrivateKeyDispositionRetentionAuthorityAndRevocationRule",
         "profileAndReleaseIdentity",
         "candidateCommitAndNamedHumanAuthorization",
         "localAndRemoteImmutableTagTargets",
         "postTagMutationCheck",
         "privacyDispositionAndClaimLimits"
       ],
-      "passRule": "Two distinct natural tasks and scenario classes use the program-frozen common profile and prospective cohort protocol through registered host surfaces, including the cross-bound outside-Harness O1 final-adapter task, bind independently verified post-registration source events, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, pass a source-bound audit of product semantics, authority, user burden, capability lifecycle, code and conversation carriers, cross-host behavior, privacy and security, release reproducibility, and resource residue with zero unresolved P0/P1 findings, and leave zero temporary process artifacts. The final candidate commit, tag, privacy disposition and bounded claims are then accepted by the named human; the Agent performs the authorized publication and release mechanics, and the verifier proves that immutable local and public remote tag target the exact unchanged candidate commit with no post-tag product mutation.",
+      "passRule": "Two distinct natural tasks and scenario classes use the program-frozen common profile and prospective cohort protocol through registered host surfaces, including the cross-bound outside-Harness O1 final-adapter task, bind independently verified post-registration measurement events, satisfy equivalence and every mandatory floor without fallback or missing-data promotion, cover a useful completion and an honest stop or recovery, reproduce from a clean checkout, pass a source-bound audit of product semantics, authority, user burden, capability lifecycle, code and conversation carriers, cross-host behavior, privacy and security, release reproducibility, and resource residue with zero unresolved P0/P1 findings, and leave zero temporary process artifacts. The cohort key remains private retained evidence only under the named human's exact privacy, access, retention, expiry, revocation and cleanup disposition for as long as live source re-verifiability is claimed; destruction requires an exact receipt and revokes current live verifiability rather than preserving acceptance. The final candidate commit, tag, privacy disposition and bounded claims are then accepted by the named human; the Agent performs the authorized publication and release mechanics, and the verifier proves that immutable local and public remote tag target the exact unchanged candidate commit with no post-tag product mutation.",
         "falsifiers": [
         "the second path is the same Agent host or only source-level conformance",
         "the two matched pairs reuse the same task or scenario class",
@@ -291,7 +304,7 @@
       "id": "G3",
       "class": "guardrail",
       "name": "independent lean current authority",
-      "statement": "The constitution, current program, current acceptance contract and verifier remain the only product authority; historical releases, supporting documents, Skills, Hooks, plugins and external ecosystems cannot promote state or turn the Harness into a runtime or control plane.",
+      "statement": "The constitution, current program, current acceptance contract and verifier remain the only product authority; a program-bound profile and cohort protocol are immutable subordinate conformance operands and cannot add criteria, thresholds, work or authority or promote state. Historical releases, supporting documents, Skills, Hooks, plugins and external ecosystems likewise cannot promote state or turn the Harness into a runtime or control plane.",
       "metric": "code-owned authority identity, historical-boundary, supporting-document and capability-influence validation",
       "threshold": "one valid current authority graph, bounded historical milestones, no parallel product plan and no forbidden product-body expansion",
       "assessment": "computed"

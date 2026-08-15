@@ -67,14 +67,31 @@ within any single criterion.
 The current tree contains an unbound
 [v1 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol candidate](PROSPECTIVE-COHORT-PROTOCOL-V1.json).
-They carry zero task or outcome evidence. The future v1 measurement surface
-freezes their exact reviewed bytes before registrations. The protocol specifies
-eligibility, stable task identity, strata, first-eligible enrollment, the
-earliest-prefix stop rule, missing-data handling, source-event chronology and
-claim limits without pre-populating natural tasks. Bound registrations must use
-unique task identities and form a strict Git ancestry order after the freeze.
-That order proves committed-byte sequence only; each task-bound validator must
-independently establish that its real source event followed registration. Git
+They carry zero task or outcome evidence and remain subordinate conformance
+operands rather than product authority. The future v1 measurement surface
+first freezes their exact reviewed bytes and binds the exact initial
+source-native ordered enrollment surface, activation cursor, and cohort key
+identity and fingerprint. That commit is only a provisional boundary: before
+eligible demand, a named human authorizes its exact revision, complete binding
+digest, source surface, private-evidence boundary, and cleanup disposition in a
+source-native event. The next commit pins those values and a code-owned source
+validator; any demand between freeze and authorization stops the cohort. The protocol specifies
+eligibility, random public task identity with fixed private keyed source-message binding, strata, first-eligible enrollment,
+the earliest-prefix stop rule, missing-data handling, distinct natural-demand
+and measurement-event chronology, and claim limits without pre-populating
+natural tasks. Bound registrations must use unique task identities and form a
+strict Git ancestry order after the freeze. That order proves committed-byte
+sequence only; each task-bound validator must independently establish a
+complete source cursor with no omitted earlier eligible demand, natural demand
+before registration, and measurement afterward. Serial source transitions keep
+the key and cohort order, close the source window, and verify destination
+activation from a pre-demand source-bound cause or stop the cohort. The first
+freeze is effective activation only after its independent authorization source
+validator succeeds. While live
+source re-verifiability is claimed, the private key and private source evidence
+remain available only under the named human's exact privacy, access, retention,
+expiry, revocation, and cleanup disposition. Key destruction requires an exact
+receipt and revokes live verifiability rather than preserving acceptance. Git
 dates and evidence timestamps are diagnostic consistency fields, not trusted
 chronology.
 

@@ -195,14 +195,31 @@ The JSON report is the current state surface. See the
 
 Before any v1.0 outcome measurement, the repository must review and freeze the
 linked v1 candidate as one content-addressed normative profile and paired
-prospective cohort protocol. The
-protocol defines eligibility, task identity, strata, first-eligible enrollment,
-the earliest-prefix stop rule, missing-data behavior, measurement-event proof,
-and claim limits without naming future tasks. Every later task registration must
-be unique and descend from that freeze in Git history. Git ancestry proves only
-repository order: a task-bound validator must still prove the natural demand and
-the source event measured after registration. Commit dates and self-reported
-timestamps cannot supply that proof.
+prospective cohort protocol. The first frozen commit binds the exact initial
+source-native ordered enrollment surface, activation cursor, and cohort key
+identity/fingerprint, but does not activate the cohort by itself. Before any
+eligible demand, a named human must authorize that exact revision, complete
+binding digest, source surface, private-evidence boundary, and cleanup
+disposition in an independently verifiable source event; the next commit pins
+the revision, digest, and code-owned authorization validator. A demand observed
+between freeze and authorization stops the cohort instead of being omitted.
+The protocol defines eligibility, privacy-safe random public task identity plus a fixed
+private keyed source-message binding, strata, first-eligible enrollment, the
+earliest-prefix stop rule, missing-data behavior, distinct natural-demand and
+measurement-event proof, and claim limits without naming future tasks. Every
+later task registration must be unique and descend from that freeze in Git
+history. A source transition preserves the same key and cohort order and must
+prove a source-native cause before destination demand, close the source cursor,
+and verify destination activation; otherwise the cohort stops. Git ancestry
+proves only repository order: a task-bound validator must prove the complete
+source cursor has no omitted earlier eligible demand, the natural-demand event
+occurred before registration, and a distinct measurement event occurred
+afterward. While live source re-verifiability is claimed, the private key and
+private source evidence remain available only under the named human's exact
+privacy, access, retention, expiry, revocation, and cleanup disposition.
+Destroying the key requires an exact receipt and revokes live verifiability; it
+cannot preserve acceptance. Commit dates and self-reported timestamps cannot
+supply chronology proof.
 
 Terminal publication is deliberately two-stage. The immutable candidate tree
 predeclares a semantic-version tag, the fixed public HTTPS remote and the exact

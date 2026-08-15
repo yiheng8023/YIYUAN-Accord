@@ -58,6 +58,8 @@ AUTHORITY_FILES = (
     "SUPPORT.md",
     "SUPPORT.zh-CN.md",
     "docs/DEMAND-TO-CAPABILITY-PROFILE.md",
+    "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
+    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
@@ -71,7 +73,10 @@ FIXTURE_WORK_ID = "work.fixture-current"
 
 
 def fixture_task_identity(label: str) -> str:
-    return "natural-task.sha256:" + hashlib.sha256(label.encode("utf-8")).hexdigest()
+    return (
+        "natural-task.public-v1:"
+        + hashlib.sha256(label.encode("utf-8")).hexdigest()[:32]
+    )
 
 
 class ProductControlTests(unittest.TestCase):
@@ -125,33 +130,10 @@ class ProductControlTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
             ).stdout.strip()
-        fixture_profile = self.root / "docs/FIXTURE-V1-PROFILE.md"
-        fixture_profile.write_text(
-            "# Fixture v1 normative profile\n",
-            encoding="utf-8",
-        )
-        self.write_json(
-            "docs/FIXTURE-V1-COHORT-PROTOCOL.json",
-            {
-                "schema": 1,
-                "id": "cohort-protocol.fixture-v1",
-                "profileIdentity": "profile.fixture-v1",
-                "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
-                "eligibilityRule": "all-predeclared-eligible-natural-tasks",
-                "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
-                "taskIdentityRule": "canonical-source-envelope-sha256-recomputed-by-task-validator",
-                "strata": (
-                    list(control.EXPECTED_COHORT_SCENARIO_CLASSES)
-                    if protocol_strata is None
-                    else protocol_strata
-                ),
-                "enrollmentOrder": "strict-git-ancestry-first-eligible",
-                "stopRule": "earliest-prefix-satisfying-current-acceptance",
-                "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
-                "measurementEventRule": "task-bound-source-event-after-registration-required",
-                "claimLimits": ["fixture only"],
-            },
-        )
+        if protocol_strata is not None:
+            protocol = self.read_json("docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json")
+            protocol["strata"] = protocol_strata
+            self.write_json("docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json", protocol)
         environment = os.environ.copy()
         environment.update(
             {
@@ -167,8 +149,9 @@ class ProductControlTests(unittest.TestCase):
             [
                 "git",
                 "add",
-                "docs/FIXTURE-V1-PROFILE.md",
-                "docs/FIXTURE-V1-COHORT-PROTOCOL.json",
+                "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
+                "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
+                "product/program.json",
             ],
             ["git", "commit", "--quiet", "-m", "fixture authority"],
         )
@@ -207,7 +190,81 @@ class ProductControlTests(unittest.TestCase):
         self.write_json(relative, value)
 
     def report(self) -> dict:
-        return verify_product(self.root)
+        if not (self.root / ".git").is_dir():
+            with patch(
+                "harness.control._normative_profile_binding_history_valid",
+                return_value=True,
+            ):
+                return verify_product(self.root)
+        floor = subprocess.run(
+            ["git", "rev-list", "--max-parents=0", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        initial_binding_revision: str | None = None
+        initial_binding_sha256: str | None = None
+        binding_revisions = subprocess.run(
+            [
+                "git",
+                "log",
+                "--first-parent",
+                "--reverse",
+                "--format=%H",
+                "--",
+                "product/program.json",
+            ],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.splitlines()
+        for revision in binding_revisions:
+            historical_program = json.loads(
+                subprocess.run(
+                    ["git", "show", f"{revision}:product/program.json"],
+                    cwd=self.root,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout
+            )
+            binding = historical_program.get("normativeProfileBinding")
+            if isinstance(binding, dict) and binding.get("state") == "frozen":
+                initial_binding_revision = revision
+                initial_binding_sha256 = hashlib.sha256(
+                    json.dumps(
+                        binding,
+                        ensure_ascii=False,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ).encode("utf-8")
+                ).hexdigest()
+                break
+        initial_authorization_validator_id = (
+            "fixture-initial-binding-authorization"
+            if initial_binding_revision is not None
+            else None
+        )
+        authorization_validators = dict(
+            control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS
+        )
+        authorization_validators["fixture-initial-binding-authorization"] = (
+            lambda document, root, errors: True
+        )
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
+            EXPECTED_V1_INITIAL_BINDING_REVISION=initial_binding_revision,
+            EXPECTED_V1_INITIAL_BINDING_SHA256=initial_binding_sha256,
+            EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=(
+                initial_authorization_validator_id
+            ),
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS=authorization_validators,
+        ):
+            return verify_product(self.root)
 
     def evidence_document(
         self,
@@ -436,8 +493,8 @@ class ProductControlTests(unittest.TestCase):
     ) -> None:
         if program["normativeProfileBinding"]["state"] == "frozen":
             return
-        profile_locator = "docs/FIXTURE-V1-PROFILE.md"
-        protocol_locator = "docs/FIXTURE-V1-COHORT-PROTOCOL.json"
+        profile_locator = "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md"
+        protocol_locator = "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json"
         profile_revision = self.initialize_fixture_repository()
         profile_blob = subprocess.run(
             ["git", "show", f"{profile_revision}:{profile_locator}"],
@@ -455,13 +512,23 @@ class ProductControlTests(unittest.TestCase):
         ).stdout
         program["normativeProfileBinding"] = {
             "state": "frozen",
-            "profileIdentity": "profile.fixture-v1",
+            "profileIdentity": control.EXPECTED_V1_PROFILE_IDENTITY,
             "locator": profile_locator,
             "sha256": hashlib.sha256(profile_blob).hexdigest(),
-            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "cohortProtocolIdentity": control.EXPECTED_V1_COHORT_PROTOCOL_IDENTITY,
             "cohortProtocolLocator": protocol_locator,
             "cohortProtocolSha256": hashlib.sha256(protocol_blob).hexdigest(),
             "frozenAtRevision": profile_revision,
+            "cohortActivation": {
+                "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
+                "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
+                "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
+                "keyFingerprint": "sha256:" + "4" * 64,
+                "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+                "hmacDomain": control.EXPECTED_HMAC_DOMAIN,
+                "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
+                "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
+            },
         }
         if commit_binding:
             self.write_json("product/program.json", program)
@@ -531,6 +598,62 @@ class ProductControlTests(unittest.TestCase):
         }
         interventions = ["fixture material intervention"]
         losses = ["fixture material collaboration loss"]
+        activation = program["normativeProfileBinding"]["cohortActivation"]
+        prior_registration: dict | None = None
+        for prior_increment in program["increments"]:
+            prior_binding = prior_increment.get("taskRegistration")
+            if prior_increment is increment:
+                break
+            if isinstance(prior_binding, dict):
+                prior_registration = self.read_json(prior_binding["locator"])
+        if prior_registration is None:
+            cursor_start = activation["activationCursorCommitment"]
+            previous_task = "cohort-activation"
+            transition = {
+                "state": "cohort-activation",
+                "sourceSurfaceIdentity": "none",
+                "sourceWindowStartCommitment": cursor_start,
+                "sourceFinalCursorCommitment": cursor_start,
+                "cause": "source-authorized-first-freeze-activation",
+            }
+        else:
+            prior_enrollment = prior_registration["preRegistrationValues"][
+                "enrollmentSurfaceAndCursor"
+            ]
+            cursor_start = prior_enrollment["naturalDemandCursorCommitment"]
+            previous_task = prior_registration["taskIdentity"]
+            transition = {
+                "state": "none",
+                "sourceSurfaceIdentity": activation["surfaceIdentity"],
+                "sourceWindowStartCommitment": cursor_start,
+                "sourceFinalCursorCommitment": cursor_start,
+                "cause": "none",
+            }
+        natural_cursor = "hmac-sha256:" + hashlib.sha256(
+            ("fixture-cursor|" + registration_id).encode("utf-8")
+        ).hexdigest()
+        source_commitment = "hmac-sha256:" + hashlib.sha256(
+            ("fixture-source|" + registration_id).encode("utf-8")
+        ).hexdigest()
+        enrollment_surface_and_cursor = {
+            "surfaceIdentity": activation["surfaceIdentity"],
+            "cohortKeyIdentity": activation["keyIdentity"],
+            "cohortKeyFingerprint": activation["keyFingerprint"],
+            "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+            "hmacDomain": control.EXPECTED_HMAC_DOMAIN,
+            "cursorWindowStartCommitment": cursor_start,
+            "naturalDemandCursorCommitment": natural_cursor,
+            "previousRegistrationTaskIdentity": previous_task,
+            "surfaceTransition": transition,
+        }
+        natural_demand_private_binding = {
+            "bindingScheme": control.EXPECTED_PRIVATE_BINDING_SCHEME,
+            "sourceKind": "fixture-source",
+            "sourceCommitment": source_commitment,
+            "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+            "cohortKeyIdentity": activation["keyIdentity"],
+            "cohortKeyFingerprint": activation["keyFingerprint"],
+        }
         aliases = {
             "registeredAt": "2026-08-12T02:59:00+08:00",
             "taskIdentity": task_identity,
@@ -539,8 +662,10 @@ class ProductControlTests(unittest.TestCase):
             "qualitySafetyEvidenceAndResidueFloors": floors,
             "materialInterventionTaxonomy": interventions,
             "materialCollaborationLossTaxonomy": losses,
-            "normativeProfileIdentity": "profile.fixture-v1",
-            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "enrollmentSurfaceAndCursor": enrollment_surface_and_cursor,
+            "naturalDemandEventAndPrivateBinding": natural_demand_private_binding,
+            "normativeProfileIdentity": control.EXPECTED_V1_PROFILE_IDENTITY,
+            "cohortProtocolIdentity": control.EXPECTED_V1_COHORT_PROTOCOL_IDENTITY,
             "profileSha256": program["normativeProfileBinding"]["sha256"],
             "cohortProtocolSha256": program["normativeProfileBinding"][
                 "cohortProtocolSha256"
@@ -568,9 +693,12 @@ class ProductControlTests(unittest.TestCase):
             "materialInterventionTaxonomy": interventions,
             "materialCollaborationLossTaxonomy": losses,
             "sourceCaptureEligibilityAndStopRule": {
-                "measurementStartsAfter": "the committed registration binding",
-                "eligibleSources": ["fixture source after registration"],
-                "ineligibleSources": ["fixture source before registration"],
+                "enrollmentSurfaceRule": "single-active-source-native-ordered-carrier",
+                "cursorWindowStartsAfter": "surface-activation-or-prior-registration",
+                "naturalDemandObservedBefore": "immutable-registration",
+                "measurementStartsAfter": "immutable-registration",
+                "eligibleSources": ["fixture natural demand after freeze"],
+                "ineligibleSources": ["fixture diagnostic source"],
                 "stopRule": "stop on any fixture floor failure",
             },
             "claimLimits": ["fixture task only"],
@@ -631,8 +759,12 @@ class ProductControlTests(unittest.TestCase):
             ],
         }
 
-    def recommit_fixture_registration(self, program: dict) -> None:
-        relative = program["increments"][0]["taskRegistration"]["locator"]
+    def recommit_fixture_registration(
+        self, program: dict, *, increment_index: int = 0
+    ) -> None:
+        relative = program["increments"][increment_index]["taskRegistration"][
+            "locator"
+        ]
         environment = os.environ.copy()
         environment.update(
             {
@@ -670,7 +802,7 @@ class ProductControlTests(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).stdout
-        binding = program["increments"][0]["taskRegistration"]
+        binding = program["increments"][increment_index]["taskRegistration"]
         binding["sha256"] = hashlib.sha256(committed).hexdigest()
         binding["sourceRevision"] = revision
 
@@ -720,6 +852,13 @@ class ProductControlTests(unittest.TestCase):
             "source": source,
         }
 
+    def render_codex_fixture_context(self, payload: dict) -> str | None:
+        with patch(
+            "harness.control._normative_profile_binding_history_valid",
+            return_value=True,
+        ):
+            return render_session_start_context(self.root, payload)
+
     def run_codex_carrier_hook(
         self, payload: object, *, plugin_data: Path | None = None, raw: bytes | None = None
     ) -> subprocess.CompletedProcess[str]:
@@ -752,6 +891,13 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
+    def render_claude_fixture_context(self, payload: dict) -> str | None:
+        with patch(
+            "harness.control._normative_profile_binding_history_valid",
+            return_value=True,
+        ):
+            return render_claude_session_start_context(self.root, payload)
+
     def test_current_v10_contract_is_valid_nonterminal_and_preserves_v02_history(
         self,
     ) -> None:
@@ -776,6 +922,7 @@ class ProductControlTests(unittest.TestCase):
     def test_v1_profile_and_cohort_protocol_candidates_are_exact_and_unbound(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
         self.assertEqual(program["normativeProfileBinding"]["state"], "unfrozen")
+        self.assertIsNone(program["normativeProfileBinding"]["cohortActivation"])
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
             encoding="utf-8"
         )
@@ -784,8 +931,26 @@ class ProductControlTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        self.assertIn("Identity: `harness-demand-to-capability-v1.0-candidate.1`", profile)
+        self.assertIn("Identity: `harness-demand-to-capability-v1.0-candidate.5`", profile)
         self.assertIn("Status: pre-freeze candidate", profile)
+        self.assertEqual(
+            hashlib.sha256(profile.encode("utf-8")).hexdigest(),
+            control.EXPECTED_V1_PROFILE_SHA256,
+        )
+        self.assertEqual(
+            hashlib.sha256(
+                (ROOT / "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json")
+                .read_bytes()
+                .replace(b"\r\n", b"\n")
+            ).hexdigest(),
+            control.EXPECTED_V1_COHORT_PROTOCOL_SHA256,
+        )
+        self.assertIsNone(control.EXPECTED_V1_PROFILE_ARTIFACT_REVISION)
+        self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_REVISION)
+        self.assertIsNone(control.EXPECTED_V1_INITIAL_BINDING_SHA256)
+        self.assertIsNone(
+            control.EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        )
         for heading in (
             "## Agent method",
             "## Prospective registration",
@@ -802,11 +967,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(protocol["schema"], 1)
         self.assertEqual(
             protocol["profileIdentity"],
-            "harness-demand-to-capability-v1.0-candidate.1",
+            "harness-demand-to-capability-v1.0-candidate.5",
         )
         self.assertEqual(
             protocol["cohortProtocolIdentity"],
-            "harness-prospective-cohort-v1.0-candidate.1",
+            "harness-prospective-cohort-v1.0-candidate.5",
         )
         self.assertEqual(
             protocol["strata"], list(control.EXPECTED_COHORT_SCENARIO_CLASSES)
@@ -961,6 +1126,78 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIn("cohortProtocolIdentity", fields)
                 self.assertIn("profileSha256", fields)
                 self.assertIn("cohortProtocolSha256", fields)
+                self.assertIn("enrollmentSurfaceAndCursor", fields)
+                self.assertIn("naturalDemandEventAndPrivateBinding", fields)
+
+    def test_prospective_contract_closes_authority_chronology_privacy_and_judgment(self) -> None:
+        acceptance = self.read_json("product/acceptance.json")
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+        profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
+            encoding="utf-8"
+        )
+        protocol = json.loads(
+            (ROOT / "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        self.assertIn("subordinate conformance operands", criteria["G3"]["statement"])
+        self.assertNotIn("profile owns method", profile)
+        self.assertIn("immutable subordinate", profile)
+        self.assertIn(
+            "zeroToolKnowledgeEvidence",
+            criteria["O1"]["operationalization"]["preRegistrationFields"],
+        )
+        self.assertIn(
+            "unknown user knowledge",
+            criteria["O1"]["operationalization"]["passRule"],
+        )
+        self.assertIn(
+            "namedHumanBaselineComparabilityDecision",
+            criteria["O2"]["operationalization"]["preRegistrationFields"],
+        )
+        self.assertIn(
+            "without replacing that judgment",
+            criteria["O2"]["operationalization"]["passRule"],
+        )
+        self.assertIn("natural-demand event", acceptance["progressRule"])
+        self.assertIn("measurement event", acceptance["progressRule"])
+        self.assertIn("no omitted earlier eligible demand", acceptance["progressRule"])
+        self.assertIn("not effective cohort activation by itself", acceptance["progressRule"])
+        self.assertIn("code-owned source validator", acceptance["progressRule"])
+        self.assertIn(
+            "after the freeze commit but before authorization stops",
+            acceptance["progressRule"],
+        )
+        self.assertIn("Unsalted or unkeyed hashes", profile)
+        self.assertIn("exposed to the task/model", profile)
+        self.assertIn("revokes live source verifiability", profile)
+        self.assertIn("25 percent", criteria["O4"]["threshold"])
+        self.assertIn("second native compaction", criteria["O4"]["threshold"])
+        self.assertNotIn("25 percent", profile)
+        self.assertNotIn("second native compaction", profile)
+        self.assertEqual(
+            protocol["taskIdentityRule"],
+            "random-public-id-cohort-keyed-hmac-source-binding-validator-dedup",
+        )
+        self.assertEqual(
+            protocol["enrollmentSurfaceRule"],
+            "single-active-source-native-ordered-carrier",
+        )
+        self.assertEqual(
+            protocol["activationRule"],
+            "first-freeze-binding-then-source-verified-exact-human-authorization-before-demand",
+        )
+        self.assertEqual(protocol["sourceMessageRule"], control.EXPECTED_SOURCE_MESSAGE_RULE)
+        self.assertEqual(protocol["hmacDomain"], control.EXPECTED_HMAC_DOMAIN)
+        self.assertEqual(
+            protocol["naturalDemandEventRule"],
+            "source-native-event-after-authorized-activation-before-registration-required",
+        )
+        self.assertEqual(
+            protocol["measurementEventRule"],
+            "task-bound-measurement-event-after-registration-required",
+        )
 
     def test_terminal_contract_prevents_sample_selection_and_duplicate_tasks(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
@@ -1254,7 +1491,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
-        context = render_session_start_context(self.root, payload)
+        context = self.render_codex_fixture_context(payload)
         self.assertIsNotNone(context)
         projection = json.loads(context)
         live_program = json.loads(
@@ -1295,8 +1532,8 @@ class ProductControlTests(unittest.TestCase):
 
     def test_codex_session_start_adapter_projects_exact_active_increment(self) -> None:
         self.mutate("product/program.json", self.activate_program)
-        context = render_session_start_context(
-            self.root, self.codex_session_start_payload(source="compact")
+        context = self.render_codex_fixture_context(
+            self.codex_session_start_payload(source="compact")
         )
         projection = json.loads(context)
         self.assertEqual(projection["nextRoute"], "continue-current-active-increment")
@@ -1315,8 +1552,8 @@ class ProductControlTests(unittest.TestCase):
                 increment[field] = field + ":" + ("x" * 10000)
 
         self.mutate("product/program.json", activate_long_work)
-        context = render_session_start_context(
-            self.root, self.codex_session_start_payload(source="compact")
+        context = self.render_codex_fixture_context(
+            self.codex_session_start_payload(source="compact")
         )
         projection = json.loads(context)
         self.assertEqual(projection["currentWork"]["state"], "active")
@@ -1359,8 +1596,8 @@ class ProductControlTests(unittest.TestCase):
 
     def test_common_projection_defers_git_to_trusted_agent_boundary(self) -> None:
         with patch("subprocess.run", side_effect=AssertionError("must not execute")):
-            context = render_session_start_context(
-                self.root, self.codex_session_start_payload(source="compact")
+            context = self.render_codex_fixture_context(
+                self.codex_session_start_payload(source="compact")
             )
         checkpoint = json.loads(context)["repositoryCheckpoint"]
         self.assertEqual(checkpoint["state"], "unknown")
@@ -1393,8 +1630,8 @@ class ProductControlTests(unittest.TestCase):
             "product/program.json",
             lambda value: value.__setitem__("completionExpression", "true"),
         )
-        context = render_session_start_context(
-            self.root, self.codex_session_start_payload(source="compact")
+        context = self.render_codex_fixture_context(
+            self.codex_session_start_payload(source="compact")
         )
         projection = json.loads(context)
         self.assertFalse(projection["verification"]["valid"])
@@ -1619,13 +1856,13 @@ class ProductControlTests(unittest.TestCase):
         self,
     ) -> None:
         codex = json.loads(
-            render_session_start_context(
-                self.root, self.codex_session_start_payload(source="compact")
+            self.render_codex_fixture_context(
+                self.codex_session_start_payload(source="compact")
             )
         )
         claude = json.loads(
-            render_claude_session_start_context(
-                self.root, self.claude_session_start_payload(source="compact")
+            self.render_claude_fixture_context(
+                self.claude_session_start_payload(source="compact")
             )
         )
         self.assertEqual(claude["adapter"], CLAUDE_ADAPTER_ID)
@@ -1668,8 +1905,8 @@ class ProductControlTests(unittest.TestCase):
     def test_claude_reference_adapter_supports_native_continuity_events(self) -> None:
         for source in ("startup", "resume", "clear", "compact"):
             with self.subTest(source=source):
-                context = render_claude_session_start_context(
-                    self.root, self.claude_session_start_payload(source=source)
+                context = self.render_claude_fixture_context(
+                    self.claude_session_start_payload(source=source)
                 )
                 projection = json.loads(context)
                 self.assertEqual(
@@ -2561,7 +2798,7 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(
                 value,
                 increment,
-                task_identity="natural-task.free-form-alias",
+                task_identity="natural-task.sha256:" + "a" * 64,
             )
 
         self.mutate("product/program.json", activate_o1)
@@ -2571,6 +2808,29 @@ class ProductControlTests(unittest.TestCase):
             "task registration product/evidence/fixture-registration.json shape is invalid",
             report["errors"],
         )
+
+    def test_task_registration_binds_exact_enrollment_cursor_chronology(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        registration["sourceCaptureEligibilityAndStopRule"][
+            "cursorWindowStartsAfter"
+        ] = "post-result favorable cursor"
+        self.write_json(relative, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
 
     def test_task_registration_rejects_unrecognized_scenario_class(self) -> None:
         def activate_o1(value: dict) -> None:
@@ -2747,14 +3007,398 @@ class ProductControlTests(unittest.TestCase):
         self.mutate("product/program.json", activate_o1)
         original = control._evidence_git
 
-        def reject_commit_date_reads(root: Path, *args: str) -> bytes | None:
+        def reject_commit_date_reads(
+            root: Path, *args: str, **kwargs: object
+        ) -> bytes | None:
             self.assertNotIn("--format=%cI", args)
             self.assertNotIn("--format=%aI", args)
-            return original(root, *args)
+            return original(root, *args, **kwargs)
 
         with patch("harness.control._evidence_git", side_effect=reject_commit_date_reads):
             report = self.report()
         self.assertTrue(report["valid"], report["errors"])
+
+    def test_frozen_profile_binding_cannot_return_to_unfrozen(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        program["normativeProfileBinding"] = deepcopy(
+            control.UNFROZEN_NORMATIVE_PROFILE_BINDING
+        )
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "reset frozen profile"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        report = self.report()
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "frozen normative profile binding cannot return to unfrozen",
+            report["errors"],
+        )
+
+    def test_frozen_profile_binding_cannot_move_history_floor(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        marker = self.root / "docs/FIXTURE-LATER-REVISION.md"
+        marker.write_text("# Later fixture revision\n", encoding="utf-8")
+        subprocess.run(
+            ["git", "add", "docs/FIXTURE-LATER-REVISION.md"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "later fixture revision"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        later_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        program["normativeProfileBinding"]["frozenAtRevision"] = later_revision
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "move frozen history floor"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        report = self.report()
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "frozen normative profile binding cannot be changed or re-frozen",
+            report["errors"],
+        )
+
+    def test_normative_binding_fails_when_fixed_history_floor_is_unavailable(self) -> None:
+        self.initialize_fixture_repository()
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION="f" * 40,
+            EXPECTED_V1_PROFILE_ARTIFACT_REVISION="f" * 40,
+        ):
+            report = verify_product(self.root)
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "normative profile binding history floor is unavailable",
+            report["errors"],
+        )
+
+    def test_uncommitted_first_freeze_fails_closed(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program, commit_binding=False)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "frozen normative profile binding must exist in committed first-parent history",
+            report["errors"],
+        )
+
+    def test_first_freeze_requires_independent_human_source_authorization(self) -> None:
+        floor = self.initialize_fixture_repository()
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        binding_sha256 = hashlib.sha256(
+            json.dumps(
+                program["normativeProfileBinding"],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
+            EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
+            EXPECTED_V1_INITIAL_BINDING_SHA256=binding_sha256,
+            EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=None,
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={},
+        ):
+            report = verify_product(self.root)
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "initial frozen normative profile binding has no code-owned source authorization validator",
+            report["errors"],
+        )
+
+    def test_binding_authorizer_cannot_clear_history_errors(self) -> None:
+        floor = self.initialize_fixture_repository()
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        binding_sha256 = hashlib.sha256(
+            json.dumps(
+                program["normativeProfileBinding"],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        replacement = self.read_json("product/program.json")
+        replacement["normativeProfileBinding"]["cohortActivation"][
+            "surfaceIdentity"
+        ] = "enrollment-surface.public-v1:" + "9" * 32
+        self.write_json("product/program.json", replacement)
+        validator_called = False
+
+        def malicious_authorizer(document, root, errors):
+            nonlocal validator_called
+            validator_called = True
+            errors.clear()
+            return True
+
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
+            EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
+            EXPECTED_V1_INITIAL_BINDING_SHA256=binding_sha256,
+            EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=(
+                "fixture-malicious-binding-authorizer"
+            ),
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
+                "fixture-malicious-binding-authorizer": malicious_authorizer
+            },
+        ):
+            report = verify_product(self.root)
+
+        self.assertFalse(report["valid"])
+        self.assertFalse(validator_called)
+        self.assertIn(
+            "current normative profile binding differs from the first frozen binding",
+            report["errors"],
+        )
+
+    def test_side_branch_freeze_cannot_poison_canonical_first_parent(self) -> None:
+        self.initialize_fixture_repository()
+        base_branch = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        subprocess.run(
+            ["git", "switch", "--quiet", "-c", "fixture-side-freeze"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        subprocess.run(
+            ["git", "switch", "--quiet", base_branch],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "merge",
+                "--quiet",
+                "--no-ff",
+                "-s",
+                "ours",
+                "fixture-side-freeze",
+                "-m",
+                "merge side freeze without adopting it",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        report = self.report()
+
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(
+            self.read_json("product/program.json")["normativeProfileBinding"]["state"],
+            "unfrozen",
+        )
+
+    def test_dropped_first_freeze_cannot_be_replaced_with_a_new_activation(self) -> None:
+        floor = self.initialize_fixture_repository()
+        base_branch = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        subprocess.run(
+            ["git", "switch", "--quiet", "-c", "fixture-first-freeze"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        first_program = self.read_json("product/program.json")
+        self.freeze_program_profile(first_program)
+        first_freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        first_binding_sha256 = hashlib.sha256(
+            json.dumps(
+                first_program["normativeProfileBinding"],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+
+        subprocess.run(
+            ["git", "switch", "--quiet", base_branch],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        replacement_program = self.read_json("product/program.json")
+        self.freeze_program_profile(replacement_program, commit_binding=False)
+        replacement_program["normativeProfileBinding"]["cohortActivation"][
+            "surfaceIdentity"
+        ] = "enrollment-surface.public-v1:" + "9" * 32
+        self.write_json("product/program.json", replacement_program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "replacement freeze fixture"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
+            EXPECTED_V1_INITIAL_BINDING_REVISION=first_freeze_revision,
+            EXPECTED_V1_INITIAL_BINDING_SHA256=first_binding_sha256,
+            EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=(
+                "fixture-initial-binding-authorization"
+            ),
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
+                "fixture-initial-binding-authorization": (
+                    lambda document, root, errors: document.get("revision")
+                    == first_freeze_revision
+                    and document.get("bindingSha256") == first_binding_sha256
+                )
+            },
+        ):
+            report = verify_product(self.root)
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "initial frozen normative profile binding is not code-pinned to canonical history",
+            report["errors"],
+        )
+
+    def test_normative_binding_history_has_a_finite_revision_bound(self) -> None:
+        self.initialize_fixture_repository()
+        for index in range(3):
+            program_path = self.root / "product/program.json"
+            program_path.write_text(
+                program_path.read_text(encoding="utf-8").rstrip()
+                + (" " * (index + 1))
+                + "\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                ["git", "add", "product/program.json"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                ["git", "commit", "--quiet", "-m", f"fixture program format {index}"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        floor = subprocess.run(
+            ["git", "rev-list", "--max-parents=0", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        with patch.multiple(
+            control,
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            MAX_NORMATIVE_BINDING_HISTORY_REVISIONS=2,
+        ):
+            report = verify_product(self.root)
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "normative profile binding history exceeds its inspection bound",
+            report["errors"],
+        )
 
     def test_frozen_cohort_protocol_bytes_are_content_addressed(self) -> None:
         def activate_o1(value: dict) -> None:
@@ -2764,9 +3408,9 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(value, increment)
 
         self.mutate("product/program.json", activate_o1)
-        protocol = self.read_json("docs/FIXTURE-V1-COHORT-PROTOCOL.json")
+        protocol = self.read_json("docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json")
         protocol["stopRule"] = "post-selected favorable tasks only"
-        self.write_json("docs/FIXTURE-V1-COHORT-PROTOCOL.json", protocol)
+        self.write_json("docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json", protocol)
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
@@ -2776,7 +3420,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_initially_committed_postselection_protocol_is_rejected(self) -> None:
         self.initialize_fixture_repository()
-        protocol_locator = "docs/FIXTURE-V1-COHORT-PROTOCOL.json"
+        protocol_locator = "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json"
         protocol = self.read_json(protocol_locator)
         protocol["stopRule"] = "post-selected favorable tasks only"
         self.write_json(protocol_locator, protocol)
@@ -2801,7 +3445,7 @@ class ProductControlTests(unittest.TestCase):
             capture_output=True,
             text=True,
         ).stdout.strip()
-        profile_locator = "docs/FIXTURE-V1-PROFILE.md"
+        profile_locator = "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md"
         profile_blob = subprocess.run(
             ["git", "show", f"{revision}:{profile_locator}"],
             cwd=self.root,
@@ -2819,18 +3463,31 @@ class ProductControlTests(unittest.TestCase):
         program = self.read_json("product/program.json")
         program["normativeProfileBinding"] = {
             "state": "frozen",
-            "profileIdentity": "profile.fixture-v1",
+            "profileIdentity": control.EXPECTED_V1_PROFILE_IDENTITY,
             "locator": profile_locator,
             "sha256": hashlib.sha256(profile_blob).hexdigest(),
-            "cohortProtocolIdentity": "cohort-protocol.fixture-v1",
+            "cohortProtocolIdentity": control.EXPECTED_V1_COHORT_PROTOCOL_IDENTITY,
             "cohortProtocolLocator": protocol_locator,
             "cohortProtocolSha256": hashlib.sha256(protocol_blob).hexdigest(),
             "frozenAtRevision": revision,
+            "cohortActivation": {
+                "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
+                "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
+                "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
+                "keyFingerprint": "sha256:" + "4" * 64,
+                "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+                "hmacDomain": control.EXPECTED_HMAC_DOMAIN,
+                "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
+                "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
+            },
         }
         self.write_json("product/program.json", program)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("frozen cohort protocol shape is invalid", report["errors"])
+        self.assertIn(
+            "frozen normative profile binding is not the code-owned v1 candidate",
+            report["errors"],
+        )
 
     def test_initially_committed_flexible_scenario_strata_are_rejected(self) -> None:
         self.initialize_fixture_repository(protocol_strata=["favorable-fixture-stratum"])
@@ -2839,7 +3496,11 @@ class ProductControlTests(unittest.TestCase):
         self.write_json("product/program.json", program)
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("frozen cohort protocol shape is invalid", report["errors"])
+        self.assertIn(
+            "code-owned v1 candidate artifact identity changed: "
+            "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
+            report["errors"],
+        )
 
     def test_duplicate_task_identity_across_outcome_increments_fails_closed(
         self,
@@ -2872,6 +3533,121 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             f"taskIdentity {fixture_task_identity('fixture-current')} is reused across outcome registrations",
             report["errors"],
+        )
+
+    def test_task_registration_rejects_cohort_key_rotation(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        values = registration["preRegistrationValues"]
+        rotated = "cohort-key.public-v1:" + "9" * 32
+        values["enrollmentSurfaceAndCursor"]["cohortKeyIdentity"] = rotated
+        values["naturalDemandEventAndPrivateBinding"]["cohortKeyIdentity"] = rotated
+        self.write_json(relative, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
+
+    def test_registration_chain_rejects_cursor_gap(self) -> None:
+        def activate_two(value: dict) -> None:
+            first = self.ensure_increment(value, state="completed")
+            first["acceptanceIds"].append("O1")
+            first["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                first,
+                task_identity=fixture_task_identity("fixture-first"),
+            )
+            second = deepcopy(first)
+            second["id"] = "increment.fixture-second"
+            second["state"] = "active"
+            second["correctionClass"] = "fixture-second-correction"
+            second["workItems"][0]["id"] = "work.fixture-second"
+            second["workItems"][0]["state"] = "active"
+            value["increments"].append(second)
+            value["status"] = "active"
+            value["activeIncrementId"] = second["id"]
+            self.bind_fixture_registration(
+                value,
+                second,
+                task_identity=fixture_task_identity("fixture-second"),
+                registration_id="registration.fixture-second",
+                relative="product/evidence/fixture-second-registration.json",
+            )
+
+        self.mutate("product/program.json", activate_two)
+        baseline_program = self.read_json("product/program.json")
+        second_path = "product/evidence/fixture-second-registration.json"
+
+        second = self.read_json(second_path)
+        enrollment = second["preRegistrationValues"]["enrollmentSurfaceAndCursor"]
+        gap = "hmac-sha256:" + "8" * 64
+        enrollment["cursorWindowStartCommitment"] = gap
+        enrollment["surfaceTransition"]["sourceWindowStartCommitment"] = gap
+        enrollment["surfaceTransition"]["sourceFinalCursorCommitment"] = gap
+        self.write_json(second_path, second)
+        gap_program = deepcopy(baseline_program)
+        self.recommit_fixture_registration(gap_program, increment_index=1)
+        self.write_json("product/program.json", gap_program)
+        gap_report = self.report()
+        self.assertIn("outcome registration cursor chain is discontinuous", gap_report["errors"])
+
+    def test_registration_chain_rejects_duplicate_private_source(self) -> None:
+        def activate_two(value: dict) -> None:
+            first = self.ensure_increment(value, state="completed")
+            first["acceptanceIds"].append("O1")
+            first["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                first,
+                task_identity=fixture_task_identity("fixture-first"),
+            )
+            second = deepcopy(first)
+            second["id"] = "increment.fixture-second"
+            second["state"] = "active"
+            second["correctionClass"] = "fixture-second-correction"
+            second["workItems"][0]["id"] = "work.fixture-second"
+            second["workItems"][0]["state"] = "active"
+            value["increments"].append(second)
+            value["status"] = "active"
+            value["activeIncrementId"] = second["id"]
+            self.bind_fixture_registration(
+                value,
+                second,
+                task_identity=fixture_task_identity("fixture-second"),
+                registration_id="registration.fixture-second",
+                relative="product/evidence/fixture-second-registration.json",
+            )
+
+        self.mutate("product/program.json", activate_two)
+        baseline_program = self.read_json("product/program.json")
+        first = self.read_json("product/evidence/fixture-registration.json")
+        second_path = "product/evidence/fixture-second-registration.json"
+        second = self.read_json(second_path)
+        second["preRegistrationValues"]["naturalDemandEventAndPrivateBinding"][
+            "sourceCommitment"
+        ] = first["preRegistrationValues"]["naturalDemandEventAndPrivateBinding"][
+            "sourceCommitment"
+        ]
+        self.write_json(second_path, second)
+        duplicate_program = baseline_program
+        self.recommit_fixture_registration(duplicate_program, increment_index=1)
+        self.write_json("product/program.json", duplicate_program)
+        duplicate_report = self.report()
+        self.assertIn(
+            "private natural-demand source commitment is reused",
+            duplicate_report["errors"],
         )
 
     def test_postfreeze_registration_cannot_be_orphaned_or_deleted(self) -> None:
@@ -4073,13 +4849,15 @@ class ProductControlTests(unittest.TestCase):
             unverified_authorization["errors"],
         )
 
-        def project_public_tag(root: Path, *args: str) -> bytes | None:
+        def project_public_tag(
+            root: Path, *args: str, **kwargs: object
+        ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
                 return (
                     f"{tag_object}\trefs/tags/v1.0.0\n"
                     f"{head}\trefs/tags/v1.0.0^{{}}\n"
                 ).encode("ascii")
-            return original(root, *args)
+            return original(root, *args, **kwargs)
 
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
@@ -4096,13 +4874,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(accepted["terminalReleaseState"], "published-verified")
         self.assertTrue(accepted["criterionStates"]["O5"])
 
-        def project_mismatched_public_tag(root: Path, *args: str) -> bytes | None:
+        def project_mismatched_public_tag(
+            root: Path, *args: str, **kwargs: object
+        ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
                 return (
                     f"{'0' * len(tag_object)}\trefs/tags/v1.0.0\n"
                     f"{head}\trefs/tags/v1.0.0^{{}}\n"
                 ).encode("ascii")
-            return original(root, *args)
+            return original(root, *args, **kwargs)
 
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",

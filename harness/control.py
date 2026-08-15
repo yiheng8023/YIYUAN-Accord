@@ -58,12 +58,28 @@ EXPECTED_PROGRAM_PURPOSE = (
 EXPECTED_PROGRESS_RULE = (
     "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
     "G1-G4 passing count as progress. Before any task measurement, one content-addressed "
-    "normative profile and prospective cohort protocol must be frozen; the realized cohort "
-    "is the earliest eligible registration prefix under that protocol, never a retrospectively "
-    "selected task roster. Git ancestry proves repository ordering only; every outcome requires "
-    "a task-bound validator to prove natural demand and a source-bound measurement event after "
-    "its immutable registration because Git dates and self-reported timestamps are not chronology "
-    "authority. Even after O1-O5 task evidence passes, completionState remains in-progress until "
+    "normative profile and prospective cohort protocol must be frozen with the exact initial "
+    "source-native enrollment surface, activation cursor and cohort key identity/fingerprint. The "
+    "first frozen commit is not effective cohort activation by itself: before any natural demand can "
+    "be eligible, a named human independently authorizes that exact revision, canonical complete "
+    "binding digest, source surface, private-evidence boundary and cleanup disposition in a source-native "
+    "event, and a code-owned source validator proves the authorization. The next commit pins that "
+    "first-frozen revision, digest and validator identity. A missing or unverifiable authorization, a "
+    "replaced authorized freeze, or any natural demand observed after the freeze commit but before "
+    "authorization stops the cohort rather than being excluded. The realized cohort is the earliest "
+    "eligible natural-demand-event prefix after authorized activation on that ordered enrollment surface, "
+    "never a retrospectively selected task roster: each task-bound validator proves the complete source "
+    "cursor window since activation or the preceding registration contains no omitted earlier eligible "
+    "demand. A serial surface "
+    "transition preserves the same key and cohort order, binds a source-native cause before any "
+    "destination demand, closes the source cursor window and verifies the destination activation; "
+    "otherwise the cohort stops. A natural-demand event occurs after authorized activation and before "
+    "immutable registration; a distinct source-bound measurement event occurs after registration. Git "
+    "ancestry proves repository and registration ordering only, while the authorization validator proves "
+    "the independent first-freeze anchor and the task validator privately verifies the fixed source-message "
+    "binding, deduplication, chronology and criterion semantics. Public task identities are unlinkable "
+    "random identifiers, not unsalted hashes of private goals, prompts or source events. "
+    "Even after O1-O5 task evidence passes, completionState remains in-progress until "
     "the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 "
     "evidence set, named-human authorization in the local annotated tag, the identical public tag "
     "object and peeled commit, and no ignored or untracked repository residue; this is O5 release "
@@ -160,7 +176,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "e4494ccbd16f29f0013ab05f7521661e3953616b4e6a2de5665595b013554619"
+    "a3375554599d25159b37f02fbd0d804a1d5d91a1b3f5a09541d94fca88f499d2"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -258,6 +274,7 @@ NORMATIVE_PROFILE_BINDING_FIELDS = {
     "cohortProtocolLocator",
     "cohortProtocolSha256",
     "frozenAtRevision",
+    "cohortActivation",
 }
 UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "state": "unfrozen",
@@ -268,7 +285,66 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "cohortProtocolLocator": None,
     "cohortProtocolSha256": None,
     "frozenAtRevision": None,
+    "cohortActivation": None,
 }
+NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
+    "d805d051f36ad43d8fce96e257ec80210ec31820"
+)
+MAX_NORMATIVE_BINDING_HISTORY_REVISIONS = 64
+MAX_NORMATIVE_BINDING_HISTORY_BYTES = 4 * 1_048_576
+EXPECTED_V1_PROFILE_IDENTITY = "harness-demand-to-capability-v1.0-candidate.5"
+EXPECTED_V1_PROFILE_LOCATOR = "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md"
+EXPECTED_V1_PROFILE_SHA256 = (
+    "c737d2614a602acdab1f66e29b5f0f957ccb142ef26bb5b5d946131e7dd5484e"
+)
+EXPECTED_V1_COHORT_PROTOCOL_IDENTITY = (
+    "harness-prospective-cohort-v1.0-candidate.5"
+)
+EXPECTED_V1_COHORT_PROTOCOL_LOCATOR = (
+    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json"
+)
+EXPECTED_V1_COHORT_PROTOCOL_SHA256 = (
+    "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83"
+)
+# Set to the immutable candidate artifact commit only after that commit exists.
+# A frozen binding is invalid while this remains null.
+EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = None
+# The first frozen binding necessarily exists one commit before code can pin
+# its own revision and digest. A frozen program remains invalid until the next
+# commit sets both anchors, before any task registration is eligible.
+EXPECTED_V1_INITIAL_BINDING_REVISION: str | None = None
+EXPECTED_V1_INITIAL_BINDING_SHA256: str | None = None
+# The first frozen commit is not effective cohort activation until a named
+# human independently authorizes its exact revision and canonical binding
+# digest through a source that this code-owned validator can verify.
+EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+COHORT_ACTIVATION_FIELDS = {
+    "surfaceIdentity",
+    "activationCursorCommitment",
+    "keyIdentity",
+    "keyFingerprint",
+    "sourceMessageRule",
+    "hmacDomain",
+    "surfaceTransitionRule",
+    "keyRetentionRule",
+}
+EXPECTED_SOURCE_MESSAGE_RULE = (
+    "domain-surface-source-native-immutable-event-identity-v1"
+)
+EXPECTED_HMAC_DOMAIN = "agent-autonomy-harness/cohort-source-event/v1"
+EXPECTED_SURFACE_TRANSITION_RULE = (
+    "pre-demand-causal-trigger-source-final-cursor-destination-verified-or-stop"
+)
+EXPECTED_KEY_RETENTION_RULE = (
+    "retain-private-evidence-through-live-claim-or-destroy-and-revoke-verifiability"
+)
+PUBLIC_SURFACE_IDENTITY_PATTERN = re.compile(
+    r"enrollment-surface\.public-v1:[0-9a-f]{32}"
+)
+PUBLIC_COHORT_KEY_IDENTITY_PATTERN = re.compile(
+    r"cohort-key\.public-v1:[0-9a-f]{32}"
+)
+SHA256_COMMITMENT_PATTERN = re.compile(r"(?:hmac-)?sha256:[0-9a-f]{64}")
 COHORT_PROTOCOL_FIELDS = {
     "schema",
     "id",
@@ -278,6 +354,14 @@ COHORT_PROTOCOL_FIELDS = {
     "exclusionRule",
     "taskIdentityRule",
     "strata",
+    "enrollmentSurfaceRule",
+    "activationRule",
+    "enrollmentCursorRule",
+    "sourceMessageRule",
+    "hmacDomain",
+    "surfaceTransitionRule",
+    "keyRetentionRule",
+    "naturalDemandEventRule",
     "enrollmentOrder",
     "stopRule",
     "failedOrMissingSampleDisposition",
@@ -292,16 +376,26 @@ EXPECTED_COHORT_SCENARIO_CLASSES = (
     "consequential-human-gate",
     "honest-failure-or-recovery",
 )
-CANONICAL_TASK_IDENTITY_PATTERN = re.compile(r"natural-task\.sha256:[0-9a-f]{64}")
+CANONICAL_TASK_IDENTITY_PATTERN = re.compile(
+    r"natural-task\.public-v1:[0-9a-f]{32}"
+)
 EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
     {
-        "eligibilityRule": "all-predeclared-eligible-natural-tasks",
-        "exclusionRule": "predeclared-only-no-postmeasurement-exclusion",
-        "taskIdentityRule": "canonical-source-envelope-sha256-recomputed-by-task-validator",
-        "enrollmentOrder": "strict-git-ancestry-first-eligible",
+        "eligibilityRule": "all-eligible-demands-after-source-verified-first-freeze-authorization",
+        "exclusionRule": "source-fact-only-no-postmeasurement-exclusion",
+        "taskIdentityRule": "random-public-id-cohort-keyed-hmac-source-binding-validator-dedup",
+        "enrollmentSurfaceRule": "single-active-source-native-ordered-carrier",
+        "activationRule": "first-freeze-binding-then-source-verified-exact-human-authorization-before-demand",
+        "enrollmentCursorRule": "activation-or-prior-registration-cursor-no-eligible-gap",
+        "sourceMessageRule": EXPECTED_SOURCE_MESSAGE_RULE,
+        "hmacDomain": EXPECTED_HMAC_DOMAIN,
+        "surfaceTransitionRule": EXPECTED_SURFACE_TRANSITION_RULE,
+        "keyRetentionRule": EXPECTED_KEY_RETENTION_RULE,
+        "naturalDemandEventRule": "source-native-event-after-authorized-activation-before-registration-required",
+        "enrollmentOrder": "source-native-cursor-then-strict-git-registration-ancestry",
         "stopRule": "earliest-prefix-satisfying-current-acceptance",
         "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
-        "measurementEventRule": "task-bound-source-event-after-registration-required",
+        "measurementEventRule": "task-bound-measurement-event-after-registration-required",
     }
 )
 TERMINAL_RELEASE_BINDING_FIELDS = {
@@ -402,10 +496,47 @@ TASK_REGISTRATION_FIELDS = {
     "claimLimits",
 }
 SOURCE_CAPTURE_FIELDS = {
+    "enrollmentSurfaceRule",
+    "cursorWindowStartsAfter",
+    "naturalDemandObservedBefore",
     "measurementStartsAfter",
     "eligibleSources",
     "ineligibleSources",
     "stopRule",
+}
+ENROLLMENT_SURFACE_AND_CURSOR_FIELDS = {
+    "surfaceIdentity",
+    "cohortKeyIdentity",
+    "cohortKeyFingerprint",
+    "sourceMessageRule",
+    "hmacDomain",
+    "cursorWindowStartCommitment",
+    "naturalDemandCursorCommitment",
+    "previousRegistrationTaskIdentity",
+    "surfaceTransition",
+}
+SURFACE_TRANSITION_FIELDS = {
+    "state",
+    "sourceSurfaceIdentity",
+    "sourceWindowStartCommitment",
+    "sourceFinalCursorCommitment",
+    "cause",
+}
+NATURAL_DEMAND_PRIVATE_BINDING_FIELDS = {
+    "bindingScheme",
+    "sourceKind",
+    "sourceCommitment",
+    "sourceMessageRule",
+    "cohortKeyIdentity",
+    "cohortKeyFingerprint",
+}
+EXPECTED_PRIVATE_BINDING_SCHEME = "cohort-keyed-hmac-sha256-v1"
+SOURCE_KIND_PATTERN = re.compile(r"[a-z0-9][a-z0-9.-]{0,63}")
+ALLOWED_SURFACE_TRANSITION_CAUSES = {
+    "source-unavailable",
+    "source-capacity-boundary",
+    "host-capacity-boundary",
+    "authority-boundary",
 }
 ACCEPTANCE_AUTHORITY_FIELDS = {"locator", "criteriaContractSha256"}
 TASK_REGISTRATION_VALUE_ALIASES = {
@@ -710,7 +841,7 @@ SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
 ] = MappingProxyType({})
 
 _EVIDENCE_GIT_CACHE: ContextVar[
-    dict[tuple[str, tuple[str, ...]], bytes | None] | None
+    dict[tuple[str, tuple[str, ...], bytes | None, int], bytes | None] | None
 ] = ContextVar("harness_evidence_git_cache", default=None)
 
 _VERIFICATION_READ_BUDGET: ContextVar[dict[str, Any] | None] = ContextVar(
@@ -718,11 +849,24 @@ _VERIFICATION_READ_BUDGET: ContextVar[dict[str, Any] | None] = ContextVar(
 )
 
 
-def _evidence_git(root: Path, *arguments: str) -> bytes | None:
+def _evidence_git(
+    root: Path,
+    *arguments: str,
+    stdin_data: bytes | None = None,
+    max_output_bytes: int = MAX_GIT_OUTPUT_BYTES,
+) -> bytes | None:
     cache = _EVIDENCE_GIT_CACHE.get()
-    key = (str(root.resolve(strict=False)), arguments)
+    key = (str(root.resolve(strict=False)), arguments, stdin_data, max_output_bytes)
     if cache is not None and key in cache:
         return cache[key]
+    if (
+        not isinstance(max_output_bytes, int)
+        or isinstance(max_output_bytes, bool)
+        or max_output_bytes < 0
+        or max_output_bytes > MAX_VERIFICATION_TOTAL_BYTES
+        or (stdin_data is not None and len(stdin_data) > MAX_GIT_OUTPUT_BYTES)
+    ):
+        return None
     executable = shutil.which("git")
     if executable is None:
         result = None
@@ -868,7 +1012,7 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
             ],
             cwd=process_cwd,
             env=environment,
-            stdin=subprocess.DEVNULL,
+            stdin=subprocess.PIPE if stdin_data is not None else subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
         )
@@ -876,11 +1020,19 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
         timer.daemon = True
         timer.start()
         try:
+            if stdin_data is not None:
+                process_stdin = getattr(process, "stdin", None)
+                if process_stdin is None:
+                    result = None
+                    stop_process()
+                else:
+                    process_stdin.write(stdin_data)
+                    process_stdin.close()
             if process.stdout is None:
                 result = None
             else:
-                raw = process.stdout.read(MAX_GIT_OUTPUT_BYTES + 1)
-                if len(raw) > MAX_GIT_OUTPUT_BYTES:
+                raw = process.stdout.read(max_output_bytes + 1)
+                if len(raw) > max_output_bytes:
                     stop_process()
                     result = None
                 else:
@@ -889,6 +1041,9 @@ def _evidence_git(root: Path, *arguments: str) -> bytes | None:
             timer.cancel()
             stop_process()
             process.wait()
+            process_stdin = getattr(process, "stdin", None)
+            if process_stdin is not None and not process_stdin.closed:
+                process_stdin.close()
             if process.stdout is not None:
                 process.stdout.close()
     except (OSError, subprocess.SubprocessError):
@@ -928,6 +1083,205 @@ def _committed_blob(
         return False
     committed = _evidence_git(root, "show", f"{revision}:{locator}")
     return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
+
+
+def _normative_profile_binding_history_valid(
+    root: Path, current_binding: Mapping[str, Any], errors: list[str]
+) -> bool:
+    """Reject reset, re-freeze, history truncation, or side-lineage poisoning."""
+
+    before = len(errors)
+    inside_worktree = _evidence_git(root, "rev-parse", "--is-inside-work-tree")
+    if inside_worktree is None:
+        _error(errors, "normative profile binding history cannot be verified")
+        return False
+    history_floor_available = (
+        _evidence_git(
+            root,
+            "merge-base",
+            "--is-ancestor",
+            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION,
+            "HEAD",
+        )
+        is not None
+    )
+    if not history_floor_available:
+        _error(errors, "normative profile binding history floor is unavailable")
+        return False
+    revisions_raw = _evidence_git(
+        root,
+        "log",
+        "--first-parent",
+        "--topo-order",
+        "--reverse",
+        f"--max-count={MAX_NORMATIVE_BINDING_HISTORY_REVISIONS + 1}",
+        "--format=%H",
+        f"{NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION}..HEAD",
+        "--",
+        "product/program.json",
+    )
+    if revisions_raw is None:
+        _error(errors, "normative profile binding history cannot be enumerated")
+        return False
+    try:
+        revisions = revisions_raw.decode("ascii").splitlines()
+    except UnicodeError:
+        _error(errors, "normative profile binding history cannot be enumerated")
+        return False
+    if len(revisions) > MAX_NORMATIVE_BINDING_HISTORY_REVISIONS:
+        _error(errors, "normative profile binding history exceeds its inspection bound")
+        return False
+    revisions.insert(0, NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION)
+    if any(
+        re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision) is None
+        for revision in revisions
+    ):
+        _error(errors, "normative profile binding history contains an invalid revision")
+        return False
+    batch_request = b"".join(
+        f"{revision}:product/program.json\n".encode("ascii")
+        for revision in revisions
+    )
+    batch_raw = _evidence_git(
+        root,
+        "cat-file",
+        "--batch",
+        stdin_data=batch_request,
+        max_output_bytes=MAX_NORMATIVE_BINDING_HISTORY_BYTES,
+    )
+    if batch_raw is None:
+        _error(errors, "normative profile binding history cannot be inspected")
+        return False
+    expected_program_id = f"harness-product-program-{CURRENT_RELEASE}"
+    first_frozen: dict[str, Any] | None = None
+    first_frozen_revision: str | None = None
+    binding_history_started = False
+    cursor = 0
+    for revision in revisions:
+        header_end = batch_raw.find(b"\n", cursor)
+        if header_end < 0:
+            _error(errors, "normative profile binding history cannot be inspected")
+            return False
+        header = batch_raw[cursor:header_end].split()
+        cursor = header_end + 1
+        try:
+            object_size = int(header[2].decode("ascii")) if len(header) == 3 else -1
+        except (UnicodeError, ValueError):
+            object_size = -1
+        if (
+            len(header) != 3
+            or header[1] != b"blob"
+            or object_size < 0
+            or object_size > MAX_DOCUMENT_BYTES
+            or cursor + object_size >= len(batch_raw)
+            or batch_raw[cursor + object_size : cursor + object_size + 1] != b"\n"
+        ):
+            _error(errors, "normative profile binding history cannot be inspected")
+            return False
+        program_raw = batch_raw[cursor : cursor + object_size]
+        cursor += object_size + 1
+        historical_program = _parse_json_object_bytes(
+            program_raw,
+            f"historical product/program.json at {revision}",
+            errors,
+        )
+        if historical_program.get("id") != expected_program_id:
+            continue
+        historical_binding = historical_program.get("normativeProfileBinding")
+        if not isinstance(historical_binding, dict) or set(
+            historical_binding
+        ) != NORMATIVE_PROFILE_BINDING_FIELDS:
+            if binding_history_started:
+                _error(errors, "v1 normative profile binding history is incomplete")
+                return False
+            continue
+        binding_history_started = True
+        if historical_binding.get("state") == "frozen":
+            if first_frozen is None:
+                first_frozen = dict(historical_binding)
+                first_frozen_revision = revision
+            elif not _same_typed_value(historical_binding, first_frozen):
+                _error(errors, "frozen normative profile binding cannot be changed or re-frozen")
+                return False
+        elif historical_binding.get("state") == "unfrozen":
+            if first_frozen is not None:
+                _error(errors, "frozen normative profile binding cannot return to unfrozen")
+                return False
+        else:
+            _error(errors, "v1 normative profile binding history contains an invalid state")
+            return False
+    if cursor != len(batch_raw):
+        _error(errors, "normative profile binding history cannot be inspected")
+        return False
+    if current_binding.get("state") == "frozen" and first_frozen is None:
+        _error(errors, "frozen normative profile binding must exist in committed first-parent history")
+    if first_frozen is not None and not _same_typed_value(current_binding, first_frozen):
+        _error(errors, "current normative profile binding differs from the first frozen binding")
+    if current_binding.get("state") == "frozen" and first_frozen is not None:
+        initial_revision = EXPECTED_V1_INITIAL_BINDING_REVISION
+        initial_sha256 = EXPECTED_V1_INITIAL_BINDING_SHA256
+        canonical_binding = json.dumps(
+            first_frozen,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        canonical_sha256 = hashlib.sha256(canonical_binding).hexdigest()
+        anchor_is_valid = (
+            isinstance(initial_revision, str)
+            and re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", initial_revision)
+            is not None
+            and isinstance(initial_sha256, str)
+            and re.fullmatch(r"[0-9a-f]{64}", initial_sha256) is not None
+            and first_frozen_revision == initial_revision
+            and _evidence_git(
+                root, "merge-base", "--is-ancestor", initial_revision, "HEAD"
+            )
+            is not None
+            and canonical_sha256 == initial_sha256
+        )
+        if not anchor_is_valid:
+            _error(
+                errors,
+                "initial frozen normative profile binding is not code-pinned to canonical history",
+            )
+        elif len(errors) == before:
+            validator_id = EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+            authorization_evaluator = (
+                SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(validator_id)
+                if isinstance(validator_id, str)
+                else None
+            )
+            if authorization_evaluator is None:
+                _error(
+                    errors,
+                    "initial frozen normative profile binding has no code-owned source authorization validator",
+                )
+            else:
+                authorization_document = {
+                    "kind": "initial-normative-profile-binding-authorization",
+                    "revision": initial_revision,
+                    "bindingSha256": initial_sha256,
+                }
+                authorization_errors: list[str] = []
+                try:
+                    authorization_verified = authorization_evaluator(
+                        authorization_document, root, authorization_errors
+                    )
+                except Exception as exc:
+                    _error(
+                        authorization_errors,
+                        "initial frozen normative profile binding authorization validator failed closed: "
+                        f"{exc.__class__.__name__}",
+                    )
+                else:
+                    if authorization_verified is not True:
+                        _error(
+                            authorization_errors,
+                            "initial frozen normative profile binding authorization source was not independently verified",
+                        )
+                errors.extend(authorization_errors)
+    return len(errors) == before
 
 
 def _strict_git_ancestor(root: Path, ancestor: Any, descendant: Any) -> bool:
@@ -1588,6 +1942,54 @@ def _frozen_v02_profile_artifacts_valid(root: Path, errors: list[str]) -> bool:
     return len(errors) == before
 
 
+def _cohort_activation_valid(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == COHORT_ACTIVATION_FIELDS
+        and isinstance(value.get("surfaceIdentity"), str)
+        and PUBLIC_SURFACE_IDENTITY_PATTERN.fullmatch(value["surfaceIdentity"])
+        is not None
+        and isinstance(value.get("activationCursorCommitment"), str)
+        and SHA256_COMMITMENT_PATTERN.fullmatch(value["activationCursorCommitment"])
+        is not None
+        and value["activationCursorCommitment"].startswith("hmac-sha256:")
+        and isinstance(value.get("keyIdentity"), str)
+        and PUBLIC_COHORT_KEY_IDENTITY_PATTERN.fullmatch(value["keyIdentity"])
+        is not None
+        and isinstance(value.get("keyFingerprint"), str)
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", value["keyFingerprint"])
+        is not None
+        and value.get("sourceMessageRule") == EXPECTED_SOURCE_MESSAGE_RULE
+        and value.get("hmacDomain") == EXPECTED_HMAC_DOMAIN
+        and value.get("surfaceTransitionRule")
+        == EXPECTED_SURFACE_TRANSITION_RULE
+        and value.get("keyRetentionRule") == EXPECTED_KEY_RETENTION_RULE
+    )
+
+
+def _v1_candidate_artifacts_valid(root: Path, errors: list[str]) -> bool:
+    before = len(errors)
+    expected = (
+        (EXPECTED_V1_PROFILE_LOCATOR, EXPECTED_V1_PROFILE_SHA256),
+        (
+            EXPECTED_V1_COHORT_PROTOCOL_LOCATOR,
+            EXPECTED_V1_COHORT_PROTOCOL_SHA256,
+        ),
+    )
+    for locator, digest in expected:
+        candidate = _inside_root(root, locator, errors, "v1 candidate artifact")
+        if candidate is None:
+            continue
+        raw = _read_bounded_bytes(candidate, f"v1 candidate artifact {locator}", errors)
+        if (
+            raw is not None
+            and hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
+            != digest
+        ):
+            _error(errors, f"code-owned v1 candidate artifact identity changed: {locator}")
+    return len(errors) == before
+
+
 def _normative_profile_binding_valid(
     root: Path, program: dict[str, Any], errors: list[str]
 ) -> bool:
@@ -1596,6 +1998,8 @@ def _normative_profile_binding_valid(
     if not isinstance(binding, dict) or set(binding) != NORMATIVE_PROFILE_BINDING_FIELDS:
         _error(errors, "program normativeProfileBinding fields must match the code-owned schema")
         return False
+    _v1_candidate_artifacts_valid(root, errors)
+    _normative_profile_binding_history_valid(root, binding, errors)
     if binding.get("state") == "unfrozen":
         if not _same_typed_value(binding, UNFROZEN_NORMATIVE_PROFILE_BINDING):
             _error(errors, "unfrozen normative profile binding must contain only null identities")
@@ -1604,38 +2008,24 @@ def _normative_profile_binding_valid(
         _error(errors, "program normative profile binding state must be unfrozen or frozen")
         return False
     locator = _relative_locator(binding.get("locator"))
-    profile_path = PurePosixPath(locator) if locator is not None else None
     profile_identity = binding.get("profileIdentity")
     cohort_protocol_identity = binding.get("cohortProtocolIdentity")
     cohort_protocol_locator = _relative_locator(binding.get("cohortProtocolLocator"))
-    cohort_protocol_path = (
-        PurePosixPath(cohort_protocol_locator)
-        if cohort_protocol_locator is not None
-        else None
-    )
     expected_sha256 = binding.get("sha256")
     cohort_protocol_sha256 = binding.get("cohortProtocolSha256")
     revision = binding.get("frozenAtRevision")
     if (
-        locator is None
-        or profile_path is None
-        or not profile_path.parts
-        or profile_path.parts[0] != "docs"
-        or locator == "docs/DEMAND-TO-CAPABILITY-PROFILE.md"
-        or not _nonempty_text(profile_identity)
-        or not _nonempty_text(cohort_protocol_identity)
-        or cohort_protocol_locator is None
-        or cohort_protocol_path is None
-        or not cohort_protocol_path.parts
-        or cohort_protocol_path.parts[0] != "docs"
-        or cohort_protocol_path.suffix != ".json"
-        or not isinstance(expected_sha256, str)
-        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
-        or not isinstance(cohort_protocol_sha256, str)
-        or re.fullmatch(r"[0-9a-f]{64}", cohort_protocol_sha256) is None
-        or not isinstance(revision, str)
+        locator != EXPECTED_V1_PROFILE_LOCATOR
+        or profile_identity != EXPECTED_V1_PROFILE_IDENTITY
+        or expected_sha256 != EXPECTED_V1_PROFILE_SHA256
+        or cohort_protocol_identity != EXPECTED_V1_COHORT_PROTOCOL_IDENTITY
+        or cohort_protocol_locator != EXPECTED_V1_COHORT_PROTOCOL_LOCATOR
+        or cohort_protocol_sha256 != EXPECTED_V1_COHORT_PROTOCOL_SHA256
+        or EXPECTED_V1_PROFILE_ARTIFACT_REVISION is None
+        or revision != EXPECTED_V1_PROFILE_ARTIFACT_REVISION
+        or not _cohort_activation_valid(binding.get("cohortActivation"))
     ):
-        _error(errors, "frozen normative profile binding shape is invalid")
+        _error(errors, "frozen normative profile binding is not the code-owned v1 candidate")
         return False
     candidate = _inside_root(root, locator, errors, "normative profile")
     if candidate is None:
@@ -2120,13 +2510,113 @@ def _authority_guardrail(
     return len(errors) == before
 
 
+def _registration_cohort_values_valid(
+    values: Mapping[str, Any], activation: Mapping[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any]] | None:
+    enrollment = values.get("enrollmentSurfaceAndCursor")
+    private_binding = values.get("naturalDemandEventAndPrivateBinding")
+    if (
+        not isinstance(enrollment, dict)
+        or set(enrollment) != ENROLLMENT_SURFACE_AND_CURSOR_FIELDS
+        or not isinstance(private_binding, dict)
+        or set(private_binding) != NATURAL_DEMAND_PRIVATE_BINDING_FIELDS
+    ):
+        return None
+    transition = enrollment.get("surfaceTransition")
+    if not isinstance(transition, dict) or set(transition) != SURFACE_TRANSITION_FIELDS:
+        return None
+    surface_identity = enrollment.get("surfaceIdentity")
+    key_identity = enrollment.get("cohortKeyIdentity")
+    key_fingerprint = enrollment.get("cohortKeyFingerprint")
+    cursor_start = enrollment.get("cursorWindowStartCommitment")
+    natural_cursor = enrollment.get("naturalDemandCursorCommitment")
+    prior_task = enrollment.get("previousRegistrationTaskIdentity")
+    common_valid = (
+        isinstance(surface_identity, str)
+        and PUBLIC_SURFACE_IDENTITY_PATTERN.fullmatch(surface_identity) is not None
+        and isinstance(key_identity, str)
+        and PUBLIC_COHORT_KEY_IDENTITY_PATTERN.fullmatch(key_identity) is not None
+        and key_identity == activation.get("keyIdentity")
+        and isinstance(key_fingerprint, str)
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", key_fingerprint) is not None
+        and key_fingerprint == activation.get("keyFingerprint")
+        and enrollment.get("sourceMessageRule") == EXPECTED_SOURCE_MESSAGE_RULE
+        and enrollment.get("hmacDomain") == EXPECTED_HMAC_DOMAIN
+        and isinstance(cursor_start, str)
+        and re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", cursor_start) is not None
+        and isinstance(natural_cursor, str)
+        and re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", natural_cursor) is not None
+        and natural_cursor != cursor_start
+        and isinstance(prior_task, str)
+        and (
+            prior_task == "cohort-activation"
+            or CANONICAL_TASK_IDENTITY_PATTERN.fullmatch(prior_task) is not None
+        )
+        and private_binding.get("bindingScheme") == EXPECTED_PRIVATE_BINDING_SCHEME
+        and isinstance(private_binding.get("sourceKind"), str)
+        and SOURCE_KIND_PATTERN.fullmatch(private_binding["sourceKind"]) is not None
+        and isinstance(private_binding.get("sourceCommitment"), str)
+        and re.fullmatch(
+            r"hmac-sha256:[0-9a-f]{64}", private_binding["sourceCommitment"]
+        )
+        is not None
+        and private_binding.get("sourceMessageRule") == EXPECTED_SOURCE_MESSAGE_RULE
+        and private_binding.get("cohortKeyIdentity") == key_identity
+        and private_binding.get("cohortKeyFingerprint") == key_fingerprint
+    )
+    state = transition.get("state")
+    if not common_valid or state not in {"cohort-activation", "none", "serial"}:
+        return None
+    if state == "cohort-activation":
+        transition_valid = (
+            surface_identity == activation.get("surfaceIdentity")
+            and cursor_start == activation.get("activationCursorCommitment")
+            and prior_task == "cohort-activation"
+            and transition.get("sourceSurfaceIdentity") == "none"
+            and transition.get("sourceWindowStartCommitment")
+            == activation.get("activationCursorCommitment")
+            and transition.get("sourceFinalCursorCommitment")
+            == activation.get("activationCursorCommitment")
+            and transition.get("cause")
+            == "source-authorized-first-freeze-activation"
+        )
+    elif state == "none":
+        transition_valid = (
+            transition.get("sourceSurfaceIdentity") == surface_identity
+            and transition.get("sourceWindowStartCommitment") == cursor_start
+            and transition.get("sourceFinalCursorCommitment") == cursor_start
+            and transition.get("cause") == "none"
+        )
+    else:
+        source_surface = transition.get("sourceSurfaceIdentity")
+        transition_valid = (
+            isinstance(source_surface, str)
+            and PUBLIC_SURFACE_IDENTITY_PATTERN.fullmatch(source_surface) is not None
+            and source_surface != surface_identity
+            and isinstance(transition.get("sourceWindowStartCommitment"), str)
+            and re.fullmatch(
+                r"hmac-sha256:[0-9a-f]{64}",
+                transition["sourceWindowStartCommitment"],
+            )
+            is not None
+            and isinstance(transition.get("sourceFinalCursorCommitment"), str)
+            and re.fullmatch(
+                r"hmac-sha256:[0-9a-f]{64}",
+                transition["sourceFinalCursorCommitment"],
+            )
+            is not None
+            and transition.get("cause") in ALLOWED_SURFACE_TRANSITION_CAUSES
+        )
+    return (dict(enrollment), dict(private_binding)) if transition_valid else None
+
+
 def _task_registration_guardrail(
     root: Path,
     increment: dict[str, Any],
     criteria: Mapping[str, dict[str, Any]],
     profile_binding: Mapping[str, Any],
     errors: list[str],
-) -> tuple[datetime, str, str, str] | None:
+) -> tuple[datetime, str, str, str, dict[str, Any], dict[str, Any]] | None:
     before = len(errors)
     increment_id = increment.get("id")
     mapped = _string_list(increment.get("acceptanceIds")) or []
@@ -2235,6 +2725,15 @@ def _task_registration_guardrail(
             _error(errors, f"task registration {locator} cannot resolve {criterion_id}")
             continue
         expected_fields.update(required)
+    cohort_values = (
+        _registration_cohort_values_valid(
+            values,
+            profile_binding["cohortActivation"],
+        )
+        if isinstance(values, dict)
+        and isinstance(profile_binding.get("cohortActivation"), dict)
+        else None
+    )
     shape_valid = (
         type(registration.get("schema")) is int
         and registration.get("schema") == 1
@@ -2249,6 +2748,7 @@ def _task_registration_guardrail(
         and isinstance(values, dict)
         and set(values) == expected_fields
         and all(_substantive_registration_value(item) for item in values.values())
+        and cohort_values is not None
         and values.get("normativeProfileIdentity")
         == profile_binding.get("profileIdentity")
         and values.get("cohortProtocolIdentity")
@@ -2282,7 +2782,14 @@ def _task_registration_guardrail(
         and _string_list(registration.get("materialCollaborationLossTaxonomy")) is not None
         and isinstance(source_capture, dict)
         and set(source_capture) == SOURCE_CAPTURE_FIELDS
-        and _nonempty_text(source_capture.get("measurementStartsAfter"))
+        and source_capture.get("enrollmentSurfaceRule")
+        == EXPECTED_COHORT_PROTOCOL_RULES["enrollmentSurfaceRule"]
+        and source_capture.get("cursorWindowStartsAfter")
+        == "surface-activation-or-prior-registration"
+        and source_capture.get("naturalDemandObservedBefore")
+        == "immutable-registration"
+        and source_capture.get("measurementStartsAfter")
+        == "immutable-registration"
         and _string_list(source_capture.get("eligibleSources")) is not None
         and _string_list(source_capture.get("ineligibleSources")) is not None
         and _nonempty_text(source_capture.get("stopRule"))
@@ -2292,10 +2799,18 @@ def _task_registration_guardrail(
         _error(errors, f"task registration {locator} shape is invalid")
     task_identity = registration.get("taskIdentity")
     return (
-        (measurement_not_before, task_identity, source_revision, locator)
+        (
+            measurement_not_before,
+            task_identity,
+            source_revision,
+            locator,
+            cohort_values[0],
+            cohort_values[1],
+        )
         if len(errors) == before
         and isinstance(task_identity, str)
         and isinstance(source_revision, str)
+        and cohort_values is not None
         else None
     )
 
@@ -2309,21 +2824,40 @@ def _task_registration_floors(
 ) -> dict[str, datetime]:
     floors: dict[str, datetime] = {}
     task_identities: set[str] = set()
+    source_commitments: set[str] = set()
+    natural_demand_cursors: set[str] = set()
     bound_registration_paths: set[str] = set()
     prior_registration_revision: str | None = None
+    prior_task_identity: str | None = None
+    prior_enrollment: dict[str, Any] | None = None
     for increment in increments:
         increment_id = increment.get("id")
         registration = _task_registration_guardrail(
             root, increment, criteria, profile_binding, errors
         )
         if isinstance(increment_id, str) and registration is not None:
-            floor, task_identity, source_revision, locator = registration
+            (
+                floor,
+                task_identity,
+                source_revision,
+                locator,
+                enrollment,
+                private_binding,
+            ) = registration
             if task_identity in task_identities:
                 _error(
                     errors,
                     f"taskIdentity {task_identity} is reused across outcome registrations",
                 )
             task_identities.add(task_identity)
+            source_commitment = private_binding["sourceCommitment"]
+            natural_cursor = enrollment["naturalDemandCursorCommitment"]
+            if source_commitment in source_commitments:
+                _error(errors, "private natural-demand source commitment is reused")
+            source_commitments.add(source_commitment)
+            if natural_cursor in natural_demand_cursors:
+                _error(errors, "natural-demand cursor commitment is reused")
+            natural_demand_cursors.add(natural_cursor)
             if prior_registration_revision is not None and not _strict_git_ancestor(
                 root, prior_registration_revision, source_revision
             ):
@@ -2331,7 +2865,34 @@ def _task_registration_floors(
                     errors,
                     "outcome registration revisions must form one strict Git ancestry order",
                 )
+            transition = enrollment["surfaceTransition"]
+            if prior_enrollment is None:
+                if transition["state"] != "cohort-activation":
+                    _error(errors, "first outcome registration must descend from cohort activation")
+            else:
+                prior_cursor = prior_enrollment["naturalDemandCursorCommitment"]
+                if enrollment["previousRegistrationTaskIdentity"] != prior_task_identity:
+                    _error(errors, "outcome registration chain skips its prior task identity")
+                if transition["state"] == "none":
+                    if (
+                        enrollment["surfaceIdentity"]
+                        != prior_enrollment["surfaceIdentity"]
+                        or enrollment["cursorWindowStartCommitment"] != prior_cursor
+                        or transition["sourceWindowStartCommitment"] != prior_cursor
+                    ):
+                        _error(errors, "outcome registration cursor chain is discontinuous")
+                elif transition["state"] == "serial":
+                    if (
+                        transition["sourceSurfaceIdentity"]
+                        != prior_enrollment["surfaceIdentity"]
+                        or transition["sourceWindowStartCommitment"] != prior_cursor
+                    ):
+                        _error(errors, "surface transition does not continue the prior cohort cursor")
+                else:
+                    _error(errors, "cohort activation cannot recur after the first registration")
             prior_registration_revision = source_revision
+            prior_task_identity = task_identity
+            prior_enrollment = enrollment
             bound_registration_paths.add(locator)
             floors[increment_id] = floor
     if profile_binding.get("state") == "frozen":

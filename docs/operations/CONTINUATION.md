@@ -69,10 +69,24 @@ Open exactly one increment with at most one active work item only after binding:
 Outcome-neutral repair binds `taskRegistration: null` and must leave the current
 graph at its stop. Outcome-bearing work additionally requires the program's new
 v1 normative profile and prospective cohort protocol to be content-addressed in
-one prior freeze revision, an exact unique task registration in a later Git
+one prior first-freeze revision that also binds the exact initial source-native
+surface, activation cursor and cohort key identity/fingerprint. Before eligible
+demand, a named human must authorize that exact revision, complete binding
+digest, source surface, private-evidence boundary and cleanup disposition in a
+source-native event; a code-owned source validator and the next commit pin that
+authorization. Any demand between freeze and authorization stops the cohort.
+Only then may an exact unique task registration in a later Git
 revision, and a task-bound criterion-scoped code validator that independently
-proves a source event occurred after registration before promotion. Git dates
-and self-reported timestamps are consistency fields, not chronology proof.
+proves one complete source-native enrollment cursor, no omitted earlier
+eligible demand, a natural-demand event before registration, private keyed
+source binding and deduplication, any same-key pre-demand serial surface
+transition, and a distinct measurement event after registration before
+promotion. While live source re-verifiability is claimed, the key and private
+source evidence remain available only under the named human's exact privacy,
+access, retention, expiry, revocation, and cleanup disposition. Destruction
+requires an exact receipt and revokes live verifiability rather than preserving
+acceptance. Git dates and self-reported timestamps are consistency fields, not
+chronology proof.
 Never manufacture a task, baseline, receipt, or validator to create progress.
 
 Terminal publication is two-stage: commit one clean candidate with a candidate
