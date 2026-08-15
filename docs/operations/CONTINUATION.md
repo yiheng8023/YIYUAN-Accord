@@ -15,43 +15,50 @@ Read these files first:
 - `product/program.json`
 - `product/acceptance.json`
 
-The current machine program is v0.2 and `ready` with no active increment. The
-public verifier should report:
+The current machine program is v0.2 and `active` on
+`increment.v0.2.portable-source-candidate-gate-deepseek-routed`. The public
+verifier should report:
 
-- program status `ready`;
+- program status `active`;
 - completion `in-progress`;
 - O1 through O4 true, with O5 false (`4/5` outcomes); O2 binds the
   exact public-intake, Codex Skill-source, and continuation-reconciliation
   scenarios without double-counting the similar Claude Skill source task;
 - G1-G4 true (`4/4` guardrails);
-- zero active increments and zero active work items.
+- one active O5 increment and one active work item.
 
-The closed stream-ready registration froze one independently useful read-only
-source-candidate gate on exact commit `48ef653`. Codex CLI
-0.147.0/gpt-5.6-sol completed once and returned a parent-confirmed P1: the live
-distinct-host carrier was Claude Code 2.1.233 while the target Claude adapter
-source remained pinned to 2.1.232. The conditional Claude invocation included
-the host-required `--verbose` argument and its SessionStart Hook succeeded, but
-it returned an error before any model token or tool call and produced no
-structured task result. The parent retained seven valid stream events and
-their hash but only hashed, rather than retained, the exact error-result text.
-Consequently the exact pre-model cause is unknown and the registered evidence
-floor failed. Ambient custom endpoint settings are not the measured cause on
-current evidence because the call excluded all setting sources and relevant
-process-environment overrides. A stale or remotely invalid account credential,
-unresolved organization, entitlement or another remote validation failure is
-only a hypothesis. The no-retry rule stopped the pair. Both credential links,
-8,575 temporary files and the task root were removed without user action; Git
-remained clean. This execution adds zero O1-O5 credit and has left the current
-graph.
+The active registration freezes the same independently useful, read-only
+source-candidate gate on exact commit `48ef653`, but corrects the distinct-host
+route rather than pretending the user has a healthy first-party Claude
+account. Codex remains exact CLI 0.147.0/gpt-5.6-sol. The distinct Agent runtime
+is Claude Code 2.1.233 using the official DeepSeek Anthropic API and requested
+DeepSeek-V4-Pro `[1M]` model at max effort. CC Switch 3.19.2 is the already
+current static settings projection; its proxy runtime is off, so it is a
+replaceable setup substrate rather than a product or runtime dependency. The
+target Claude adapter source remains pinned to 2.1.232 and both hosts must
+evaluate that mismatch. Equivalent fact-grounded blocked decisions remain
+eligible within the registered claim ceiling.
 
-The next safe route first needs a separate human decision for any Claude Code
-account refresh. Before a later O5 dispatch, remote/auth readiness must be
-re-established as far as the native host allows and the parent capture path
-must retain bounded raw error text before cleanup. Only a later immutable
-registration and new exact execution grant can authorize another matched pair;
-no outcome validator exists or should be prepared before an actual eligible
-pair.
+The user reported that the first-party Claude account is banned and that local
+Claude Code CLI, VS Code and desktop use the working CC Switch/DeepSeek route.
+Read-only checks confirmed provider id, endpoint, requested model and token
+presence without reading the token. They also found 285 installed user plugins,
+247 enabled. A generated all-false overlay reduced enabled plugins to zero, but
+a no-model MCP diagnostic showed that reusing the user configuration root still
+loads user `.claude.json` servers despite strict MCP flags. That diagnostic
+started MCP health processes; its exact Claude process tree was terminated and
+no repository residue remains. The measured route therefore uses a separate
+`CLAUDE_CONFIG_DIR`, one temporary hardlink to the existing settings file, the
+all-false overlay, strict empty MCP and only the task-scoped Harness plugin.
+Credential-bearing settings contents may not be read, copied, hashed, printed
+or retained.
+
+Execution now requires one exact human grant for the Codex auth and Claude
+settings hardlinks, reviewed Hooks, public repository data transmission to
+OpenAI and DeepSeek, DeepSeek API cost and two conditional model calls. Both
+hosts then run once with 900-second limits and continuous capture, including
+bounded raw error/result text before cleanup. No outcome validator exists or
+should be prepared before an actual eligible pair.
 
 The earlier extended-carrier registration passed the full preflight. Codex
 completed in 241.677 seconds with 126 valid events and one schema-valid
@@ -72,17 +79,17 @@ Codex gpt-5.6-sol/high call produced no final object before the exact
 was not started. The timeout wrapper also failed to serialize its partial
 in-memory event stream before raising. Both credential links, 5,300 temporary
 files and the task root were removed without user action; Git remained clean.
-The active registration changes only the observed carrier budget and capture
-path, not the task, models, source, method, quality floor or claim ceiling.
+A later registration changed only the observed carrier budget and capture
+path, not the task, source, method, quality floor or claim ceiling.
 
 The preceding input-bound registration stopped before creating task state or
 starting either model. The default Claude executable was already 2.1.233 at
 07:22 local time, before that registration froze stale 2.1.232 evidence at
 07:31. Substituting the new host or acquiring an old one was outside its exact
 scope. The grant and both unused call allowances are consumed; no credential
-link, plugin state or task root was created. The active registration binds the
-live executable and makes the carrier-versus-source version mismatch an
-identical decision input rather than hiding it.
+link, plugin state or task root was created. A later registration bound the live
+executable and made the carrier-versus-source version mismatch an identical
+decision input rather than hiding it.
 
 The preceding auth-isolated registration stopped before either model call after
 source, credential, authentication, package, minimum capability and dual-Hook
@@ -92,7 +99,7 @@ constrained only an arbitrary string. Returning the registered value would have
 required a guess. The exact grant and unused conditional model allowances are
 therefore consumed; both model-call counts are zero, and all task credential
 links, plugin state, processes and temporary roots were removed without user
-cleanup. The active registration changes only the missing input binding and
+cleanup. A later registration changed only the missing input binding and
 already observed host-mechanical facts while preserving every result and claim
 floor.
 

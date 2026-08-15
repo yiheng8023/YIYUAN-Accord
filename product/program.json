@@ -6,8 +6,8 @@
   "purpose": "Prove the open Agent-neutral demand-driven human-Agent collaboration quality harness through goal-level natural-task dogfooding, dynamic capability, task-topology, and context-carrier lifecycle arbitration, an accepted methodology and open quality-conformance profile, and thin cross-host reference adapters that reuse sufficient external protocol, runtime, identity, audit, provenance, and evaluation layers.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -394,6 +394,72 @@
           ],
           "deliverables": [
             "one task-bound Codex reference-host calibration of the immutable candidate.5 methodology and minimum profile over the exact three accepted O2 scenarios plus one exact stopped case, with fixed comparator and external-reuse evidence, strict bounded claim limits, named-human judgment, and no O5 promotion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v0.2.portable-source-candidate-gate-deepseek-routed",
+      "state": "active",
+      "correctionClass": "route-distinct-host-through-existing-deepseek-projection",
+      "observedProblem": "The stream-ready attempt deliberately excluded CC Switch and used an isolated first-party Claude credential, then stopped before Claude model generation. The user subsequently disclosed that the first-party Claude account is banned and corrected the live route: local Claude Code CLI, VS Code and desktop are already routed by CC Switch to DeepSeek and work. Read-only checks confirm CC Switch 3.19.2 currently projects the official DeepSeek Anthropic endpoint and deepseek-v4-pro[1M] into Claude settings while its own proxy runtime is off. A no-model isolation probe also showed that the real user configuration exposes 285 installed plugins, 247 enabled plugins and user-level MCP servers even with an empty enabledPlugins object and strict MCP flags; the probe's exact Claude process tree was stopped without repository residue. Treating the healthy external route as pollution and reusing the ambient configuration root both violate demand-driven route selection and task-scoped capability isolation.",
+      "hypothesis": "The unchanged independently useful source-candidate gate can produce one eligible matched Codex and distinct-host result pair under candidate.5 if the parent reuses the existing CC Switch DeepSeek settings projection only as replaceable authentication/routing input, exposes it through one exact task-root settings hardlink without reading credential contents, isolates user .claude.json, disables every ambient plugin through a generated all-false overlay, loads only the Harness plugin, requires zero MCP, and retains bounded raw Claude error/result text before cleanup.",
+      "falsifier": "The date, target, Codex, Claude Code or CC Switch executable identity, current provider id, official endpoint, requested or reported model, adapter trees, shared prompt/schema, tool surface, Skill/profile, Hook projection, equivalence or claim boundary drifts; the CC Switch route requires its proxy runtime or becomes product authority; the settings or auth hardlink escapes exact containment or has any name other than original plus task link; credential-bearing contents are read, hashed, copied, printed, recorded or sent; any user .claude.json, ambient Skill/plugin/MCP/connector, web, extra tool, subagent, model write, fallback or unrelated data appears; DeepSeek terms, cost or public-data authority is absent; a host is rejected, exceeds 900 seconds, retries or lacks a valid fact-checked final object; raw bounded error/result text, stream identity, reported model or mandatory evidence is lost; normalized P0/P1 blockers or verdicts differ; cleanup or another mandatory floor fails; a material user intervention or collaboration-loss event occurs after grant; or yiheng8023 rejects either result, equivalence or the bounded claim.",
+      "stopCondition": "After this immutable registration and active binding are committed and pushed, obtain one exact human grant for the Codex auth hardlink, Claude settings hardlink, reviewed Hooks, public repository data transmission to OpenAI and DeepSeek, DeepSeek API cost and two conditional model calls. Recheck every registered identity before task state, build and preflight the isolated roots, require zero enabled ambient Claude plugins and zero MCP servers, then run Codex once and only if eligible run Claude Code/DeepSeek once, each with continuous capture and a 900-second timeout. Stop successfully only when both exact streams and outputs pass independent fact checks, equivalence, all safety and cleanup floors, an actual-stream-bound minimal O5 validator, canonical verification, Git delivery and yiheng8023's named outcome/equivalence/claim judgment. Stop honestly on the first falsifier without retry, substitution, tolerance change or reuse of any consumed grant.",
+      "acceptanceIds": [
+        "O5",
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": {
+        "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-deepseek-routed-registration.json",
+        "sha256": "56d7740161a7cd92cc359d09a452afc47c0c05c6be1e741c4dcd55216a39d05c"
+      },
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__",
+          "adapters/agent-autonomy-harness-codex/scripts/__pycache__",
+          "adapters/agent-autonomy-harness-claude/scripts/__pycache__"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v0.2.portable-source-candidate-gate-deepseek-routed",
+          "state": "active",
+          "acceptanceIds": [
+            "O5",
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push",
+            "installed-authorized-capability-use",
+            "targeted-capability-discovery",
+            "capability-static-review",
+            "bounded-consumer-configuration-after-explicit-grant"
+          ],
+          "deliverables": [
+            "one accepted matched Codex and Claude Code/DeepSeek source-candidate gate receipt under the exact task, target, provider/model, thin adapters, equivalence tolerance and claim ceiling, or one honestly stopped and fully cleaned counterexample"
           ]
         }
       ]
