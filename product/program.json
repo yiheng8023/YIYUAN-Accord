@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-cohort-freeze-chronology",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -82,54 +82,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-cohort-freeze-chronology",
-      "state": "active",
-      "correctionClass": "outcome-cohort-selection-and-chronology-unbound",
-      "observedProblem": "The future v1 cohort can currently be represented by a mutable label, duplicate natural-task identities are not rejected across outcome increments, and contributor-controlled Git timestamps are treated as proof that registration preceded measurement; those paths could permit post-selection, task reuse or backdated registration once task-bound validators exist.",
-      "hypothesis": "A content-addressed prospective cohort protocol, Git-ancestry ordering from the frozen profile and protocol to every registration, global task-identity uniqueness, and an explicit requirement that task-bound validators prove real measurement-event ordering can close the generic bypasses without pre-registering unknown future tasks or creating an outcome validator, registry or runtime.",
-      "falsifier": "The repair requires inventing future tasks, freezing a task roster before natural demand exists, treating Git dates as trusted time, or adding a generic receipt ecosystem rather than a lean premeasurement contract and fail-closed core checks.",
-      "stopCondition": "The unfrozen binding remains empty; a future frozen binding must content-address one profile and one prospective cohort protocol; every outcome registration is a unique descendant of that freeze and binds both digests; Git dates no longer establish chronology; acceptance requires task-bound source evidence for real measurement order; focused bypass tests and canonical verification pass with zero O1-O5 credit.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": []
-      },
-      "workItems": [
-        {
-          "id": "work.v1-cohort-freeze-chronology",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup"
-          ],
-          "deliverables": [
-            "content-addressed prospective cohort protocol binding",
-            "ancestry-based registration chronology gate",
-            "cross-increment task identity uniqueness gate",
-            "negative verifier regression tests"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
