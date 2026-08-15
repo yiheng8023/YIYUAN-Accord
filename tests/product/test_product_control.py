@@ -352,7 +352,7 @@ class ProductControlTests(unittest.TestCase):
             "model": "claude-test",
         }
 
-    def test_current_v02_contract_has_four_verified_outcomes_and_extended_carrier_o5_work(
+    def test_current_v02_contract_has_four_verified_outcomes_and_stream_ready_o5_work(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -361,7 +361,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["programStatus"], "active")
         self.assertEqual(
             report["activeIncrement"],
-            "increment.v0.2.portable-source-candidate-gate-extended-carrier",
+            "increment.v0.2.portable-source-candidate-gate-stream-ready",
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 4, "total": 5})
@@ -491,7 +491,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["programStatus"], "active")
         self.assertEqual(
             report["activeIncrement"],
-            "increment.v0.2.portable-source-candidate-gate-extended-carrier",
+            "increment.v0.2.portable-source-candidate-gate-stream-ready",
         )
         self.assertEqual(report["outcomes"], {"verified": 4, "total": 5})
         self.assertTrue(report["valid"])

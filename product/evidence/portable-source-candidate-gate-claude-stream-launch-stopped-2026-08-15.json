@@ -1,0 +1,194 @@
+{
+  "schema": 1,
+  "id": "result.portable-source-candidate-gate.claude-stream-launch-stopped.2026-08-15",
+  "criterionIds": [
+    "O5"
+  ],
+  "registration": {
+    "locator": "product/evidence/portable-source-candidate-gate-2026-08-15-extended-carrier-registration.json",
+    "sha256": "b00b2a5243ba45f95581efb47df734e6c2f54c4155f1e7266fc70398c2b6a981",
+    "registeredCommit": "1d87cf5f132e54dc717d34045e7213dcfebb5c96"
+  },
+  "taskIdentity": "natural-task.2026-08-15.portable-source-candidate-gate-extended-carrier",
+  "sourceThreadId": "019ffaa8-b44a-7bf2-97de-65875bceec33",
+  "state": "stopped",
+  "eligibleForOutcomeProgress": false,
+  "outcomeProgress": [],
+  "result": "The exact post-grant execution passed current Git, registration, date, target, host, credential-name, 19-file target snapshot, candidate.5 byte identity, schema, isolated authentication, canonical Codex plugin, one-visible-Skill, disabled App/MCP/multi-agent, strict Claude plugin and normalized dual-Hook preflights. The one authorized Codex gpt-5.6-sol/high read-only call then completed in 241.677 seconds with 126 valid events, a schema-valid blocked object and a fact-grounded P1 carrier/source identity mismatch. Parent checks confirmed the target source pins Claude Code 2.1.232 while the registered carrier is 2.1.233. After releasing the Codex credential link, the parent invoked the registered Claude stream-json route. Claude Code rejected the local argument combination in 3.020 seconds before model contact because stream-json with print mode also requires --verbose. The process produced zero events, empty stdout, no session id and no final object. The registration's once-only and no-retry stop rule prohibited a corrected invocation. The parent removed both task credential links and all 5,559 temporary files, restored each original credential as the sole hardlink name, and left no process, .tmp or Git residue. No cross-host pair or O5 progress exists.",
+  "authority": {
+    "executionGrant": "同意本次 extended-carrier 注册的精确执行授权。",
+    "grantRecord": {
+      "locator": "C:/Users/15521/.codex/sessions/2026/08/13/rollout-2026-08-13T18-26-28-019ffaa8-b44a-7bf2-97de-65875bceec33.jsonl",
+      "line": 22094,
+      "id": "msg_01a002df-252a-7440-8614-42d0ef6c08a2",
+      "recordedAt": "2026-08-15T00:42:53.61Z",
+      "rawLineSha256": "0ff8119a41ff2581ca83952e6c36d81a0e6ca216ccb6fc6d9ba87f5d5efd15b7",
+      "contentSha256": "68c38c6a7acc331cf0e26edf14c2ca28d274ecdbb61e9921bd24d8ba49bc478b",
+      "normalizedTextSha256": "a4b730774fceff9ef5d4aa3c8446bef9b4db0126cd6aa09c18e272090776a65f"
+    },
+    "codexModelCallsAuthorized": 1,
+    "codexModelCallsAttempted": 1,
+    "codexModelCallsCompletedWithFinalObject": 1,
+    "claudeModelCallsAuthorizedConditionalOnCodexEligibility": 1,
+    "claudeLauncherInvocationsAttempted": 1,
+    "claudeModelCallsStarted": 0,
+    "parentRetryAttempted": false,
+    "substitutionAttempted": false,
+    "outcomeAcceptanceRequested": false,
+    "outcomeAcceptance": "not-applicable-stopped-before-distinct-host-model-call"
+  },
+  "chronology": [
+    {
+      "event": "registration-committed-and-pushed",
+      "commit": "1d87cf5f132e54dc717d34045e7213dcfebb5c96",
+      "aheadBehind": "0/0"
+    },
+    {
+      "event": "post-registration-execution-grant-recorded",
+      "recordId": "msg_01a002df-252a-7440-8614-42d0ef6c08a2",
+      "recordedAt": "2026-08-15T00:42:53.61Z",
+      "localDate": "2026-08-15"
+    },
+    {
+      "event": "source-schema-auth-package-capability-and-adapter-preflight-passed",
+      "targetCommit": "48ef653521d890999137499b4ad7a42c02a90842",
+      "targetTree": "8a3e26f429c24d82f23d06376b525b520dfed5d8",
+      "snapshotFileCount": 19,
+      "allBlobIdentitiesMatched": true,
+      "sourceReadOnly": true,
+      "commonSkillSha256": "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7",
+      "commonProfileSha256": "1630f188f5f924fcba7f19b8431b48eac2e4a3ca6d37a5bc99cc1df085d4995a",
+      "codexVersion": "0.147.0",
+      "codexBinarySha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+      "claudeVersion": "2.1.233",
+      "claudeBinarySha256": "8ae35d41252b02a7b747097ececf368b6872fab93ca104832b99a8ec5942fabd",
+      "isolatedCodexAuthentication": "Logged in using ChatGPT",
+      "isolatedClaudeAuthentication": {
+        "loggedIn": true,
+        "authMethod": "claude.ai",
+        "apiProvider": "firstParty"
+      },
+      "codexInstalledFileCount": 6,
+      "allCodexInstalledFilesMatchedTargetGitBlobs": true,
+      "initialCodexSkillCount": 25,
+      "excludedNonHarnessSkillCount": 24,
+      "excludedPathSetSha256": "d9654765700e984b52d90b68195ef4987d368420c512f6b0b03c24d62ee9b0df",
+      "visibleCodexSkill": "agent-autonomy-harness-codex:deliver-demand-driven-task",
+      "appsMcpAndMultiAgentDisabled": true,
+      "codexAdapter": "harness-codex-session-start-v0.2-candidate.1",
+      "claudeAdapter": "harness-claude-session-start-v0.2-candidate.2",
+      "repositoryCheckpointState": "unknown",
+      "normalizedHookSha256": "809535348cf75b7885af1d08396d79e32e3767951f3531ff40fcbe00199f3a7d",
+      "normalizedThinAdapterEquivalence": true,
+      "claudePluginStrictValidation": "PASS"
+    },
+    {
+      "event": "single-codex-model-call-completed",
+      "startedAt": "2026-08-15T08:51:28.4962223+08:00",
+      "endedAt": "2026-08-15T08:55:30.1732398+08:00",
+      "durationSeconds": 241.677,
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "high",
+      "sandbox": "read-only",
+      "exitCode": 0,
+      "eventLineCount": 126,
+      "validEventCount": 126,
+      "invalidEventLineCount": 0,
+      "rawStreamSha256": "fe97a415bdc801e432b846800185e3544a23d5089e67e9fee6c57d7c1fd97d60",
+      "stderrSha256": "c7d718ebaca6c4ba2c390166dc400f308da5b47c45babe50c71054e1af6b4997",
+      "finalObjectSha256": "0cef9b192248de12095484b3529881454c1d7f3e953bb6a31442e6e2dff397a2",
+      "verdict": "blocked",
+      "validatedBlocker": {
+        "id": "AAH-SCG-P1-001",
+        "severity": "P1",
+        "fact": "harness/claude_reference.py at the target pins 2.1.232 while this registration fixes the distinct-host carrier at 2.1.233",
+        "parentFactCheck": "confirmed"
+      },
+      "usage": {
+        "inputTokens": 664346,
+        "cachedInputTokens": 563456,
+        "outputTokens": 10775,
+        "reasoningOutputTokens": 5593
+      }
+    },
+    {
+      "event": "claude-local-stream-launch-rejected-before-model",
+      "startedAt": "2026-08-15T09:00:40.8667121+08:00",
+      "endedAt": "2026-08-15T09:00:43.8862955+08:00",
+      "durationSeconds": 3.02,
+      "exitCode": 1,
+      "stderr": "Error: When using --print, --output-format=stream-json requires --verbose",
+      "stderrSha256": "feb1740346a5db353a734dd0eed0a277c2e772aa11b7bad480afe3a0256c0d25",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "eventLineCount": 0,
+      "sessionIdPresent": false,
+      "finalObjectPresent": false,
+      "modelCallStarted": false,
+      "retry": false
+    },
+    {
+      "event": "task-process-credential-and-filesystem-state-cleaned",
+      "observedAt": "2026-08-15T09:02:44.4924037+08:00",
+      "taskFileCountBeforeCleanup": 5559,
+      "matchingProcessesAfterCleanup": 0,
+      "taskRootAbsent": true,
+      "tmpRootAbsent": true,
+      "originalCodexAuthHardlinkNames": [
+        "C:/Users/15521/.codex/auth.json"
+      ],
+      "originalClaudeCredentialHardlinkNames": [
+        "C:/Users/15521/.claude/.credentials.json"
+      ],
+      "credentialContentsReadHashedPrintedOrRecorded": false,
+      "gitClean": true,
+      "headAndOriginMain": "1d87cf5f132e54dc717d34045e7213dcfebb5c96",
+      "aheadBehind": "0/0"
+    }
+  ],
+  "falsifiersTriggered": [
+    "the registered Claude stream-json launcher omitted the host-required --verbose flag and exited before a distinct-host model call",
+    "the once-only and no-retry rule makes a corrected invocation under this registration ineligible",
+    "no Claude final object, cross-host equivalence or named-human outcome judgment exists"
+  ],
+  "causalFinding": {
+    "fact": "Claude Code 2.1.233 requires --verbose when --print and --output-format=stream-json are combined; the exact registered invocation did not include it and produced no model event.",
+    "inference": "The registered public data, host, model, credential, tool, adapter, method, timeout and output-schema boundaries were not falsified. The remaining defect is one local carrier argument required to expose the already registered event stream.",
+    "correction": "Do not retry this registration. A later immutable registration may preserve every substantive task and acceptance value while adding only --verbose to the Claude invocation, and must repeat both hosts under the new registration before any O5 claim."
+  },
+  "interventionAndLoss": {
+    "boundedHumanTrustAndModelExecutionGrants": 1,
+    "materialUserCapabilityOrTopologyInterventionsAfterGrant": 0,
+    "materialCollaborationLossEventsAfterGrant": 1,
+    "lossEvents": [
+      "the parent's incomplete Claude CLI preflight consumed this exact registration and requires one new bounded grant before a matched pair can exist"
+    ],
+    "userRecoveryOrCleanupCommands": 0,
+    "parentProcessCosts": [
+      "one output-schema empty-MCP assertion was corrected before credential exposure",
+      "the full Codex call completed and yielded useful single-host counterevidence but cannot count as O5 without the registered pair",
+      "the Claude launcher omitted a host-required stream-json verbosity flag that should have been caught before the registered execution",
+      "exact cleanup of the 5,559-file isolated host root completed without user action"
+    ]
+  },
+  "safetyAndCleanup": {
+    "codexModelCallStarted": true,
+    "codexModelCallCompleted": true,
+    "claudeLauncherStarted": true,
+    "claudeModelCallStarted": false,
+    "credentialContentsReadOrRecorded": false,
+    "repositoryMutationByModel": false,
+    "consumerMutationRetained": false,
+    "branchAdded": false,
+    "worktreeAdded": false,
+    "repositoryForkAdded": false,
+    "conversationForkCreated": false,
+    "publicationOrReleasePerformed": false,
+    "temporaryPluginRetained": false,
+    "temporaryHookTrustRetained": false,
+    "temporaryAuthLinkRetained": false,
+    "taskOwnedProcessRetained": false,
+    "taskOwnedFilesystemResidueRetained": false,
+    "originalHostCredentialFilesPreserved": true
+  },
+  "claimLimit": "This is one honestly stopped extended-carrier execution. It proves the registered preflights, one bounded Codex blocked source decision, one Claude local launcher rejection before model contact and exact cleanup. It proves no Claude task outcome, no cross-host equivalence, no O5 progress, no release eligibility, no publication, no production readiness and no v0.2 completion."
+}
