@@ -70,9 +70,12 @@ authorization, carries no prior task, result, cursor or ordering state, and
 cannot be restarted again. Hosted runners corroborate the remaining contract
 only and cannot restore or prove a revoked local authorization. The current
 program now carries the one permitted successor freeze under fresh public
-identities, but its revision, digest and source validator are intentionally
-unpinned pending the second independent exact authorization; enrollment remains
-inactive.
+identities at revision `8e8e76b` and canonical digest `d2cf0cd`. Its second
+independent exact authorization and complete zero-demand source window are now
+verified by the code-owned successor validator. A current-user S4U one-time
+expiry cleanup task is installed at the authorized deadline and passed an
+early no-delete access probe. Enrollment is active, but no natural task is
+registered and O1-O5 remain 0/5.
 
 ## Starting one causal increment
 

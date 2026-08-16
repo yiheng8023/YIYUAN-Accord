@@ -33,9 +33,13 @@ and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.
 co-locate the pre-measurement method, mandatory floors, baseline, carrier,
 cross-host, privacy/residue, and release semantics. The program binds their
 exact frozen bytes. The first zero-task cohort remains revoked and carries no
-outcome evidence; the program now contains one fresh successor freeze, but its
-revision, digest and source validator are deliberately unpinned until a second
-independent exact authorization, so enrollment remains inactive.
+outcome evidence. One fresh successor freeze at revision `8e8e76b` and canonical
+binding digest `d2cf0cd` has received its second independent exact
+authorization. The code-owned validator binds its protected evidence to the
+complete revocation-to-authorization source window with zero intervening
+eligible demand, and an exact S4U one-time expiry cleanup trigger is installed.
+The successor is therefore the active enrollment generation; it still contains
+no task registration or outcome evidence.
 
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
@@ -241,9 +245,11 @@ fail closed without destruction, from confirmed binding or content failure,
 which retains exact deletion and absence checking. No eligible natural task
 had been registered, so no O1-O5 result evidence was lost and O1-O5 remain
 0/5. The revoked generation cannot resume. A fresh successor binding now uses
-new public surface, cursor and key identities, but remains unactivated until
+new public surface, cursor and key identities, and remained unactivated until
 its exact revision, canonical digest and source window receive independent
-human authorization and code pinning. The candidate file's internal `pre-freeze candidate` label is
+human authorization and code pinning. That authorization and pinning are now
+complete for successor revision `8e8e76b`; no eligible post-activation natural
+demand has yet been registered. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,
 is the current binding state. Hosted runners corroborate the remaining
 contract only and cannot restore or prove a revoked local authorization.
@@ -260,8 +266,8 @@ The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
 The terminal-release validator entry remains intentionally absent until a real
 authorization carrier and trust boundary are selected for the final candidate;
-the registry currently contains only the bounded initial-freeze source
-validator described above.
+the registry currently contains only the bounded initial-freeze and successor-freeze
+source validators described above; neither is an outcome validator.
 
 ## What v1.0 must prove
 

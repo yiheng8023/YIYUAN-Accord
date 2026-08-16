@@ -30,9 +30,11 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 当前树已经形成一份独立的 [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 和[前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，把测量前方法、强制
 底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。program 已绑定二者的精确
-冻结字节。首个零任务 cohort 仍为撤销状态且没有结果证据；program 现在已经包含一个全新
-successor freeze，但在第二次独立精确授权前，其 revision、digest 与来源验证器故意保持
-未固定，因此 enrollment 仍未启用。
+冻结字节。首个零任务 cohort 仍为撤销状态且没有结果证据。全新 successor freeze 位于
+revision `8e8e76b`，规范 binding digest 为 `d2cf0cd`，现已获得第二次独立精确授权。
+代码所有的验证器已把受保护证据绑定到完整的撤销至授权来源窗口，并证明其中没有夹入合格
+自然需求；精确的 S4U 一次性到期清理触发器也已安装。successor 因而成为当前 enrollment
+generation，但仍没有任务注册或结果证据。
 
 历史 v0.2 的 O1 由公开入口、Codex Skill 源码和 Claude Skill 源码三个已接受结果支持。O2 使用实质不同
 的公开入口、Codex Skill 源码和连续性对账场景，不重复计算相似的宿主包交付。O3 绑定三个
@@ -166,8 +168,9 @@ program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`�
 删除并复核了精确受保护资源，当前实时来源可验证性已经撤销。验证器现在会把瞬时
 不可用或并发变化与确定性 binding/内容失败分开：前者只失败关闭、不得删除，后者仍精确删除并
 复核缺失。此前没有任何合格自然任务完成注册，因此没有丢失 O1-O5 结果证据，O1-O5 仍为 0/5；
-已撤销 generation 不能恢复。全新 successor binding 已使用新的公开来源面、游标和密钥身份，
-但在其精确 revision、规范 digest 与来源窗口获得独立人类授权并由代码固定前仍未激活。
+已撤销 generation 不能恢复。全新 successor binding 已使用新的公开来源面、游标和密钥身份；
+其精确 revision、规范 digest 与来源窗口现已获得独立人类授权并由代码固定，且激活后尚未出现
+已注册的合格自然需求。
 候选文件内部的
 `pre-freeze candidate` 是冻结字节的一部分；当前绑定状态只以 `product/program.json` 为准。
 托管 runner 只能佐证其余契约，不能恢复或证明已撤销的本地授权。
@@ -180,7 +183,7 @@ untracked 残留、本地注释 tag 指向 `HEAD`，且公开 tag object 与 pee
 整个项目仍是进行中。
 tag 中自报的人名和时间戳永远不能单独通过；必须由代码所有的验证器独立验证所绑定的
 授权来源。最终候选的真实授权载体与信任边界确定前，终态发布验证器条目仍故意保持为空；
-当前注册表只有上述有界首冻来源验证器。
+当前注册表只有上述有界首冻与 successor freeze 来源验证器；二者都不是结果验证器。
 
 ## v1.0 必须证明什么
 

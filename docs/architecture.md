@@ -83,9 +83,15 @@ to `frozen`. Because it had zero registrations, the program may open exactly
 one distinct successor generation only after a source-verified no-eligible-demand
 window, with a fresh activation, private key and independent exact authorization.
 The successor inherits no task, result, cursor or ordering state and cannot be
-restarted again. `product/program.json` now carries that fresh successor freeze,
-but its revision, canonical digest and source validator remain code-unpinned
-until a second independent exact authorization, so it cannot admit enrollment.
+restarted again. `product/program.json` now carries that fresh successor freeze
+at revision `8e8e76b` and canonical digest `d2cf0cd`. A second independent
+source-native authorization has been bound by the code-owned Windows validator
+to the complete predecessor-revocation, restart-grant and authorization window,
+which contains no intervening eligible demand. An exact current-user S4U
+one-time expiry task is installed and code-checked; it can run without an
+interactive session and its pre-expiry no-delete probe succeeded. The successor
+can now admit enrollment, but no natural task is registered and O1-O5 remain
+0/5.
 Transient source unavailability or concurrent change now fails closed without
 destruction, while a confirmed schema, binding or content failure retains exact
 deletion. Diagnostics never contain the raw target, root, event, key or source

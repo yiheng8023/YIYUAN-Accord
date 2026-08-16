@@ -24,10 +24,12 @@ import re
 import shutil
 import stat
 import subprocess
+import sys
 import tempfile
 from threading import Timer
 from types import MappingProxyType
 from typing import Any, Callable, Mapping
+import xml.etree.ElementTree as ET
 
 
 PRODUCT_ID = "agent-autonomy-harness"
@@ -332,9 +334,18 @@ EXPECTED_V1_INITIAL_BINDING_SHA256: str | None = (
 # successor generation. The revoked freeze remains immutable; these anchors
 # stay unavailable until a later commit contains and independently authorizes
 # the successor freeze.
-EXPECTED_V1_SUCCESSOR_BINDING_REVISION: str | None = None
-EXPECTED_V1_SUCCESSOR_BINDING_SHA256: str | None = None
-EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+EXPECTED_V1_SUCCESSOR_BINDING_REVISION: str | None = (
+    "8e8e76ba65db8f625792aed7dfb9180790433459"
+)
+EXPECTED_V1_SUCCESSOR_BINDING_SHA256: str | None = (
+    "d2cf0cdce692fb06bf59bc1002d8b6036b6d1ee79ac6a86c27c74358f157dbfa"
+)
+SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID = (
+    "codex-windows-source-native-successor-freeze-authorization-v1"
+)
+EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = (
+    SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID
+)
 EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION = (
     "179d52eb8c46b55f1ee778eb6e9daf7622ae85d4"
 )
@@ -357,10 +368,26 @@ EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = (
 INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
     2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
 )
+SUCCESSOR_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
+    2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
+)
+SUCCESSOR_EXPIRY_TASK_NAME = "AgentAutonomyHarness-v1-successor-expiry"
+SUCCESSOR_EXPIRY_TASK_START_BOUNDARY = "2026-12-31T23:59:59+08:00"
+SUCCESSOR_EXPIRY_TASK_ARGUMENTS = (
+    "-B -m harness expire-successor-cohort-private-evidence"
+)
+MAX_SUCCESSOR_EXPIRY_TASK_XML_BYTES = 1_048_576
 NONDESTRUCTIVE_INITIAL_AUTHORIZATION_SOURCE_FAILURES = frozenset(
     {
         "initial binding authorization source event is unavailable",
         "initial binding authorization source event changed during validation",
+    }
+)
+NONDESTRUCTIVE_SUCCESSOR_AUTHORIZATION_SOURCE_FAILURES = frozenset(
+    {
+        "successor binding authorization source event is unavailable",
+        "successor binding authorization source event changed during validation",
+        "successor binding authorization expiry cleanup trigger is unavailable",
     }
 )
 EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT = (
@@ -368,6 +395,9 @@ EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT = (
 )
 EXPECTED_INITIAL_BINDING_AUTHORIZATION_MESSAGE_SHA256 = (
     "9cb3002787034afb2df433256481d4a2bcaf907a0607f2ee4ccc497e84e09b58"
+)
+EXPECTED_SUCCESSOR_BINDING_AUTHORIZATION_MESSAGE_SHA256 = (
+    "d8c840e7bc223a79bcba1d6481a0090f219f7bb678e44d8226f13aabcce9944f"
 )
 INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN = (
     "agent-autonomy-harness/private-credential-target/v1"
@@ -380,6 +410,24 @@ INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
 )
 INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
     "agent-autonomy-harness/first-freeze-source-window/v1"
+)
+SUCCESSOR_AUTHORIZATION_TARGET_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-private-credential-target/v1"
+)
+SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-private-source-root/v1"
+)
+SUCCESSOR_PREDECESSOR_RECORD_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-predecessor-revocation-record/v1"
+)
+SUCCESSOR_RESTART_EVENT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-restart-grant-event/v1"
+)
+SUCCESSOR_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-freeze-authorization-event/v1"
+)
+SUCCESSOR_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
+    "agent-autonomy-harness/successor-freeze-authorization-window/v1"
 )
 INITIAL_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1/*"
 SUCCESSOR_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1-successor/*"
@@ -398,6 +446,36 @@ EXPECTED_INITIAL_AUTHORIZATION_EVENT_COMMITMENT: str | None = (
 EXPECTED_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT: str | None = (
     "hmac-sha256:309ae590a3686d2a35238fa62b84e5eb3350951801edfbd8a4d092cdfced481f"
 )
+EXPECTED_SUCCESSOR_AUTHORIZATION_KEY_FINGERPRINT = (
+    "sha256:bf96b012d3a6c59a9f8cb6f4636cdf5a4860ed5fbdc1d4dbbccd093d11173e52"
+)
+EXPECTED_SUCCESSOR_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT = (
+    "hmac-sha256:6765986f4d7255eafc72a48e0e4d21e04982cd1b65ad9bf2f0a11ecf7145284d"
+)
+EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_COMMITMENT = (
+    "hmac-sha256:eb280179356cc09f61d771929a96861c5729392544dbb945b64adc9f77b333bd"
+)
+EXPECTED_SUCCESSOR_PREDECESSOR_RECORD_COMMITMENT = (
+    "hmac-sha256:6615c6b3cb8688c8a10a8c714a55cf5cfcf5f935ec07f75a3d17ac23666cf884"
+)
+EXPECTED_SUCCESSOR_RESTART_EVENT_COMMITMENT = (
+    "hmac-sha256:22588b47b3f213cc7583825783553b8236875908f87a7b7f5c374d9892506e0c"
+)
+EXPECTED_SUCCESSOR_AUTHORIZATION_EVENT_COMMITMENT = (
+    "hmac-sha256:56d02ba7d713b52086ee294efa96c280978b281dd80bb3989799b1e2fbf03fc4"
+)
+EXPECTED_SUCCESSOR_AUTHORIZATION_WINDOW_COMMITMENT = (
+    "hmac-sha256:14edd891420cfad6510f735d1203fb142b84f26929b5455b103610164d7bb759"
+)
+EXPECTED_SUCCESSOR_SURFACE_IDENTITY = (
+    "enrollment-surface.public-v1:56369773375e42299d33351024f7be64"
+)
+EXPECTED_SUCCESSOR_ACTIVATION_CURSOR_COMMITMENT = (
+    "hmac-sha256:2eec98cf28f6a1e01ed4d73258045f0bb1097e3ba9f6ef7cdf60a2672ed6d35c"
+)
+EXPECTED_SUCCESSOR_KEY_IDENTITY = (
+    "cohort-key.public-v1:55020ba1e3bd4a9cbefc23f167f0a13b"
+)
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
     "kind",
@@ -410,6 +488,25 @@ INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "sourceRollout",
     "sourceEventIdentity",
     "sourceEventTimestamp",
+    "disposition",
+}
+SUCCESSOR_BINDING_PRIVATE_EVIDENCE_FIELDS = {
+    "schema",
+    "kind",
+    "surfaceIdentity",
+    "activationCursorCommitment",
+    "keyIdentity",
+    "keyFingerprint",
+    "keyBase64",
+    "sourceKind",
+    "sourceRollout",
+    "sourceEventIdentity",
+    "sourceEventTimestamp",
+    "authorizationEventIdentity",
+    "authorizationEventTimestamp",
+    "predecessorRevocationRecordIdentity",
+    "predecessorRevocationRecordTimestamp",
+    "predecessorRevocationRevision",
     "disposition",
 }
 MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES = 16_384
@@ -659,7 +756,10 @@ CLEANUP_BOUNDARY_FIELDS = {
 ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
     "v1-cohort-private-evidence:windows-user-protected;"
     "retain-through-accepted-or-stopped-no-later-than-2026-12-31T23:59:59+08:00;"
-    "delete-and-revoke-on-withdrawal-expiry-stop-or-validation-failure"
+    "delete-and-revoke-on-withdrawal-expiry-stop-or-validation-failure",
+    "v1-successor-expiry-trigger:windows-current-user-s4u;"
+    "one-time-2026-12-31T23:59:59+08:00;"
+    "remove-on-accepted-stopped-or-private-resource-destruction",
 }
 PROGRAM_STATES = {"active", "ready", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
@@ -980,11 +1080,15 @@ def _initial_authorization_json_object(pairs: list[tuple[str, Any]]) -> dict[str
     return value
 
 
-def _read_initial_authorization_private_evidence(
+def _read_cohort_authorization_private_evidence(
+    credential_filter: str,
+    expected_fields: set[str],
+    generation_label: str,
     errors: list[str],
 ) -> tuple[dict[str, Any], str] | None:
+    diagnostic = f"{generation_label} authorization private source"
     if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
-        _error(errors, "initial binding authorization private source is unavailable")
+        _error(errors, f"{diagnostic} is unavailable")
         return None
     try:
         advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
@@ -1002,7 +1106,7 @@ def _read_initial_authorization_private_evidence(
         count = ctypes.c_uint32()
         credentials = ctypes.c_void_p()
         available = enumerate_credentials(
-            INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+            credential_filter,
             0,
             ctypes.byref(count),
             ctypes.byref(credentials),
@@ -1010,13 +1114,13 @@ def _read_initial_authorization_private_evidence(
         if not available or not credentials.value:
             if credentials.value:
                 free_credentials(credentials)
-            _error(errors, "initial binding authorization private source is unavailable")
+            _error(errors, f"{diagnostic} is unavailable")
             return None
         try:
             if count.value != 1:
                 _error(
                     errors,
-                    "initial binding authorization private source is unavailable",
+                    f"{diagnostic} is unavailable",
                 )
                 return None
             credential_array = ctypes.cast(
@@ -1033,11 +1137,11 @@ def _read_initial_authorization_private_evidence(
                 > MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES
                 or not credential.credential_blob
             ):
-                _error(errors, "initial binding authorization private source is invalid")
+                _error(errors, f"{diagnostic} is invalid")
                 return None
             target_name = ctypes.wstring_at(credential.target_name)
             if not target_name:
-                _error(errors, "initial binding authorization private source is invalid")
+                _error(errors, f"{diagnostic} is invalid")
                 return None
             raw = ctypes.string_at(
                 credential.credential_blob,
@@ -1060,12 +1164,34 @@ def _read_initial_authorization_private_evidence(
         RecursionError,
         json.JSONDecodeError,
     ):
-        _error(errors, "initial binding authorization private source is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
-    if not isinstance(value, dict) or set(value) != INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS:
-        _error(errors, "initial binding authorization private source is invalid")
+    if not isinstance(value, dict) or set(value) != expected_fields:
+        _error(errors, f"{diagnostic} is invalid")
         return None
     return value, target_name
+
+
+def _read_initial_authorization_private_evidence(
+    errors: list[str],
+) -> tuple[dict[str, Any], str] | None:
+    return _read_cohort_authorization_private_evidence(
+        INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+        INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS,
+        "initial binding",
+        errors,
+    )
+
+
+def _read_successor_authorization_private_evidence(
+    errors: list[str],
+) -> tuple[dict[str, Any], str] | None:
+    return _read_cohort_authorization_private_evidence(
+        SUCCESSOR_AUTHORIZATION_CREDENTIAL_FILTER,
+        SUCCESSOR_BINDING_PRIVATE_EVIDENCE_FIELDS,
+        "successor binding",
+        errors,
+    )
 
 
 def _cohort_authorization_private_resource_absent(
@@ -1146,19 +1272,81 @@ def _initial_authorization_bytes_hmac(
     return "hmac-sha256:" + hmac.new(key, message, hashlib.sha256).hexdigest()
 
 
-def _initial_authorization_credential_target_valid(
-    target_name: str, key: bytes | bytearray, errors: list[str]
+def _cohort_authorization_credential_target_valid(
+    target_name: str,
+    key: bytes | bytearray,
+    domain: str,
+    expected: str | None,
+    generation_label: str,
+    errors: list[str],
 ) -> bool:
-    expected = EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT
     commitment = _initial_authorization_string_hmac(
         key,
-        INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+        domain,
         target_name,
     )
     if expected is None or not hmac.compare_digest(commitment, expected):
-        _error(errors, "initial binding authorization private source identity is invalid")
+        _error(
+            errors,
+            f"{generation_label} authorization private source identity is invalid",
+        )
         return False
     return True
+
+
+def _initial_authorization_credential_target_valid(
+    target_name: str, key: bytes | bytearray, errors: list[str]
+) -> bool:
+    return _cohort_authorization_credential_target_valid(
+        target_name,
+        key,
+        INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+        EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT,
+        "initial binding",
+        errors,
+    )
+
+
+def _successor_authorization_credential_target_valid(
+    target_name: str, key: bytes | bytearray, errors: list[str]
+) -> bool:
+    return _cohort_authorization_credential_target_valid(
+        target_name,
+        key,
+        SUCCESSOR_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+        EXPECTED_SUCCESSOR_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT,
+        "successor binding",
+        errors,
+    )
+
+
+def _successor_authorization_private_resource_identity_valid(
+    resource: tuple[dict[str, Any], str], errors: list[str]
+) -> bool:
+    private_evidence, target_name = resource
+    encoded_key = private_evidence.get("keyBase64")
+    if not isinstance(encoded_key, str):
+        _error(errors, "successor binding authorization private source is invalid")
+        return False
+    try:
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, "successor binding authorization private source is invalid")
+        return False
+    try:
+        if len(key) != 32 or not hmac.compare_digest(
+            "sha256:" + hashlib.sha256(key).hexdigest(),
+            EXPECTED_SUCCESSOR_AUTHORIZATION_KEY_FINGERPRINT,
+        ):
+            _error(errors, "successor binding authorization private source is invalid")
+            return False
+        return _successor_authorization_credential_target_valid(
+            target_name,
+            key,
+            errors,
+        )
+    finally:
+        key[:] = b"\0" * len(key)
 
 
 def _windows_system_drive() -> str | None:
@@ -1192,16 +1380,20 @@ def _windows_drive_is_fixed(drive: str) -> bool:
         return False
 
 
-def _initial_authorization_source_locator_parts(
+def _cohort_authorization_source_locator_parts(
     source_locator: str,
     key: bytes | bytearray,
+    domain: str,
+    expected_root: str | None,
+    generation_label: str,
     errors: list[str],
 ) -> tuple[str, str] | None:
+    diagnostic = f"{generation_label} authorization source event"
     try:
         pure = PureWindowsPath(source_locator)
         normalized = str(pure)
     except (TypeError, ValueError):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
     relative_parts = pure.parts[1:]
     if (
@@ -1215,7 +1407,7 @@ def _initial_authorization_source_locator_parts(
         or pure.suffix.casefold() != ".jsonl"
         or len(pure.parents) < 4
     ):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
     day_root = pure.parent
     month_root = day_root.parent
@@ -1228,7 +1420,7 @@ def _initial_authorization_source_locator_parts(
         or source_root.name.casefold() != "sessions"
         or source_root.parent.name.casefold() != ".codex"
     ):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
     system_drive = _windows_system_drive()
     if (
@@ -1236,20 +1428,49 @@ def _initial_authorization_source_locator_parts(
         or pure.drive.casefold() != system_drive.casefold()
         or not _windows_drive_is_fixed(system_drive)
     ):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
-    expected_root = EXPECTED_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT
     root_commitment = _initial_authorization_string_hmac(
         key,
-        INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+        domain,
         str(source_root).casefold(),
     )
     if expected_root is None or not hmac.compare_digest(
         root_commitment, expected_root
     ):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
     return normalized, str(source_root)
+
+
+def _initial_authorization_source_locator_parts(
+    source_locator: str,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> tuple[str, str] | None:
+    return _cohort_authorization_source_locator_parts(
+        source_locator,
+        key,
+        INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+        EXPECTED_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
+        "initial binding",
+        errors,
+    )
+
+
+def _successor_authorization_source_locator_parts(
+    source_locator: str,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> tuple[str, str] | None:
+    return _cohort_authorization_source_locator_parts(
+        source_locator,
+        key,
+        SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+        EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
+        "successor binding",
+        errors,
+    )
 
 
 def _open_initial_authorization_source(path: Path):
@@ -1411,12 +1632,15 @@ def _read_stable_initial_authorization_snapshot(
     source_path: Path,
     authorized_root: str,
     errors: list[str],
+    *,
+    generation_label: str = "initial binding",
 ) -> bytes | None:
+    diagnostic = f"{generation_label} authorization source event"
     try:
         source_stat = source_path.lstat()
         parent_stats = [parent.lstat() for parent in source_path.parents[:-1]]
     except (OSError, ValueError):
-        _error(errors, "initial binding authorization source event is unavailable")
+        _error(errors, f"{diagnostic} is unavailable")
         return None
     reparse_flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
     if (
@@ -1429,11 +1653,11 @@ def _read_stable_initial_authorization_snapshot(
             for parent_stat in parent_stats
         )
     ):
-        _error(errors, "initial binding authorization source event is invalid")
+        _error(errors, f"{diagnostic} is invalid")
         return None
     stream = _open_initial_authorization_source(source_path)
     if stream is None:
-        _error(errors, "initial binding authorization source event is unavailable")
+        _error(errors, f"{diagnostic} is unavailable")
         return None
     locked: _WindowsOverlapped | None = None
     opened_size = 0
@@ -1452,7 +1676,7 @@ def _read_stable_initial_authorization_snapshot(
                 == normalized_root
             )
         except (OSError, ValueError):
-            _error(errors, "initial binding authorization source event is unavailable")
+            _error(errors, f"{diagnostic} is unavailable")
             return None
         if (
             not stat.S_ISREG(opened_stat.st_mode)
@@ -1465,25 +1689,25 @@ def _read_stable_initial_authorization_snapshot(
             or normalized_final != normalized_source
             or not inside_root
         ):
-            _error(errors, "initial binding authorization source event is invalid")
+            _error(errors, f"{diagnostic} is invalid")
             return None
         opened_size = opened_stat.st_size
         locked = _lock_initial_authorization_source(stream, opened_size)
         if locked is None:
-            _error(errors, "initial binding authorization source event is unavailable")
+            _error(errors, f"{diagnostic} is unavailable")
             return None
         try:
             snapshot = stream.read(opened_stat.st_size + 1)
             final_stat = os.fstat(stream.fileno())
         except OSError:
-            _error(errors, "initial binding authorization source event is unavailable")
+            _error(errors, f"{diagnostic} is unavailable")
             return None
         if (
             len(snapshot) != opened_stat.st_size
             or _initial_authorization_file_state(opened_stat)
             != _initial_authorization_file_state(final_stat)
         ):
-            _error(errors, "initial binding authorization source event changed during validation")
+            _error(errors, f"{diagnostic} changed during validation")
             return None
         return snapshot
     finally:
@@ -1771,39 +1995,384 @@ def _initial_authorization_event_window_valid(
         key[:] = b"\0" * len(key)
 
 
-def _delete_initial_authorization_private_resource(
-    resource: tuple[dict[str, Any], str],
-    trigger: str,
+def _source_event_instant(value: Any) -> datetime | None:
+    if not isinstance(value, str) or RFC3339.fullmatch(value) is None:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(
+            timezone.utc
+        )
+    except ValueError:
+        return None
+
+
+def _successor_authorization_snapshot_valid(
+    private_evidence: Mapping[str, Any],
+    snapshot: bytes,
+    key: bytes | bytearray,
     errors: list[str],
 ) -> bool:
-    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
-        _error(errors, "initial binding authorization private evidence trigger is invalid")
+    restart_identity = private_evidence.get("sourceEventIdentity")
+    restart_timestamp = private_evidence.get("sourceEventTimestamp")
+    authorization_identity = private_evidence.get("authorizationEventIdentity")
+    authorization_timestamp = private_evidence.get("authorizationEventTimestamp")
+    predecessor_identity = private_evidence.get("predecessorRevocationRecordIdentity")
+    predecessor_timestamp = private_evidence.get("predecessorRevocationRecordTimestamp")
+    surface_identity = private_evidence.get("surfaceIdentity")
+    restart_instant = _source_event_instant(restart_timestamp)
+    authorization_instant = _source_event_instant(authorization_timestamp)
+    predecessor_instant = _source_event_instant(predecessor_timestamp)
+    uuid_pattern = (
+        r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-"
+        r"[0-9a-f]{4}-[0-9a-f]{12}"
+    )
+    if (
+        not isinstance(restart_identity, str)
+        or re.fullmatch(uuid_pattern, restart_identity) is None
+        or not isinstance(authorization_identity, str)
+        or re.fullmatch(uuid_pattern, authorization_identity) is None
+        or restart_identity == authorization_identity
+        or not isinstance(predecessor_identity, str)
+        or re.fullmatch(r"call_[A-Za-z0-9]{16,128}", predecessor_identity) is None
+        or not isinstance(surface_identity, str)
+        or predecessor_instant is None
+        or restart_instant is None
+        or authorization_instant is None
+        or not predecessor_instant <= restart_instant <= authorization_instant
+        or not isinstance(snapshot, bytes)
+        or not snapshot
+        or len(snapshot) > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
+    ):
+        _error(errors, "successor binding authorization source event is invalid")
         return False
-    private_evidence, target_name = resource
+
+    predecessor_start: int | None = None
+    predecessor_end: int | None = None
+    restart_found = False
+    record_count = 0
+    cursor = 0
+    stream = BytesIO(snapshot)
+    while cursor < len(snapshot):
+        line = stream.readline(MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES + 1)
+        if not line:
+            break
+        line_start = cursor
+        cursor += len(line)
+        record_count += 1
+        if (
+            record_count > MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS
+            or len(line) > MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES
+        ):
+            _error(
+                errors,
+                "successor binding authorization source event exceeds its finite bounds",
+            )
+            return False
+        try:
+            event = json.loads(
+                line,
+                object_pairs_hook=_initial_authorization_json_object,
+                parse_constant=lambda constant: (_ for _ in ()).throw(
+                    ValueError(f"non-finite source event value: {constant}")
+                ),
+            )
+        except (
+            UnicodeError,
+            ValueError,
+            TypeError,
+            RecursionError,
+            json.JSONDecodeError,
+        ):
+            _error(errors, "successor binding authorization source event is invalid")
+            return False
+        if not isinstance(event, dict):
+            continue
+        payload = event.get("payload")
+        if not isinstance(payload, dict):
+            continue
+        if (
+            event.get("type") == "response_item"
+            and payload.get("type") == "custom_tool_call_output"
+            and payload.get("call_id") == predecessor_identity
+            and event.get("timestamp") == predecessor_timestamp
+        ):
+            if (
+                predecessor_start is not None
+                or not hmac.compare_digest(
+                    _initial_authorization_bytes_hmac(
+                        key,
+                        SUCCESSOR_PREDECESSOR_RECORD_HMAC_DOMAIN,
+                        line,
+                    ),
+                    EXPECTED_SUCCESSOR_PREDECESSOR_RECORD_COMMITMENT,
+                )
+            ):
+                _error(
+                    errors,
+                    "successor predecessor revocation source record is invalid",
+                )
+                return False
+            predecessor_start = line_start
+            predecessor_end = cursor
+            continue
+        if (
+            event.get("type") != "event_msg"
+            or payload.get("type") != "user_message"
+            or predecessor_start is None
+        ):
+            continue
+        event_identity = payload.get("client_id")
+        event_message = payload.get("message")
+        event_timestamp = event.get("timestamp")
+        if not isinstance(event_identity, str) or not isinstance(event_message, str):
+            _error(errors, "successor binding authorization source event is invalid")
+            return False
+        normalized_message = event_message.rstrip("\r\n")
+        if not restart_found:
+            if (
+                event_identity != restart_identity
+                or _source_event_instant(event_timestamp) != restart_instant
+                or normalized_message != "同意重启 cohort。"
+            ):
+                _error(
+                    errors,
+                    "natural demand appeared before the successor restart grant",
+                )
+                return False
+            restart_commitment = _initial_authorization_string_hmac(
+                key,
+                SUCCESSOR_RESTART_EVENT_HMAC_DOMAIN,
+                surface_identity,
+                predecessor_identity,
+                restart_identity,
+                restart_instant.isoformat().replace("+00:00", "Z"),
+                normalized_message,
+            )
+            if not hmac.compare_digest(
+                restart_commitment,
+                EXPECTED_SUCCESSOR_RESTART_EVENT_COMMITMENT,
+            ):
+                _error(errors, "successor restart grant source event is invalid")
+                return False
+            restart_found = True
+            continue
+        message_sha256 = hashlib.sha256(
+            normalized_message.encode("utf-8")
+        ).hexdigest()
+        if (
+            event_identity != authorization_identity
+            or _source_event_instant(event_timestamp) != authorization_instant
+            or not hmac.compare_digest(
+                message_sha256,
+                EXPECTED_SUCCESSOR_BINDING_AUTHORIZATION_MESSAGE_SHA256,
+            )
+        ):
+            _error(
+                errors,
+                "natural demand appeared before exact successor-freeze authorization",
+            )
+            return False
+        authorization_commitment = _initial_authorization_string_hmac(
+            key,
+            SUCCESSOR_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+            surface_identity,
+            predecessor_identity,
+            restart_identity,
+            authorization_identity,
+            authorization_instant.isoformat().replace("+00:00", "Z"),
+            normalized_message,
+        )
+        if predecessor_end is None:
+            _error(errors, "successor predecessor revocation source record is invalid")
+            return False
+        authorization_window_commitment = _initial_authorization_bytes_hmac(
+            key,
+            SUCCESSOR_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+            snapshot[predecessor_start:cursor],
+        )
+        if (
+            not hmac.compare_digest(
+                authorization_commitment,
+                EXPECTED_SUCCESSOR_AUTHORIZATION_EVENT_COMMITMENT,
+            )
+            or not hmac.compare_digest(
+                authorization_window_commitment,
+                EXPECTED_SUCCESSOR_AUTHORIZATION_WINDOW_COMMITMENT,
+            )
+        ):
+            _error(errors, "successor binding authorization source event is invalid")
+            return False
+        return True
+    _error(
+        errors,
+        "successor frozen normative profile binding authorization source was not independently verified",
+    )
+    return False
+
+
+def _successor_authorization_event_window_valid(
+    private_evidence: Mapping[str, Any],
+    authorization_document: Mapping[str, Any],
+    errors: list[str],
+    *,
+    credential_target_name: str | None = None,
+) -> bool:
+    expected_document = {
+        "kind": "successor-normative-profile-binding-authorization",
+        "revision": EXPECTED_V1_SUCCESSOR_BINDING_REVISION,
+        "bindingSha256": EXPECTED_V1_SUCCESSOR_BINDING_SHA256,
+        "predecessorRevocationRevision": (
+            EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+        ),
+        "predecessorRevocationBindingSha256": (
+            EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256
+        ),
+        "sourceWindowRule": EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE,
+    }
+    if authorization_document != expected_document:
+        _error(
+            errors,
+            "successor binding authorization document does not match the frozen binding",
+        )
+        return False
+    expected_public = {
+        "schema": 1,
+        "kind": "agent-autonomy-harness-v1-successor-cohort-private-evidence",
+        "surfaceIdentity": EXPECTED_SUCCESSOR_SURFACE_IDENTITY,
+        "activationCursorCommitment": (
+            EXPECTED_SUCCESSOR_ACTIVATION_CURSOR_COMMITMENT
+        ),
+        "keyIdentity": EXPECTED_SUCCESSOR_KEY_IDENTITY,
+        "keyFingerprint": EXPECTED_SUCCESSOR_AUTHORIZATION_KEY_FINGERPRINT,
+        "sourceKind": "codex-rollout-user-event-v1",
+        "predecessorRevocationRevision": (
+            EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+        ),
+        "disposition": (
+            "authorized-retain-through-v1-accepted-or-stopped-no-later-than-"
+            "2026-12-31T23:59:59+08:00-delete-and-revoke-on-withdrawal-expiry-"
+            "stop-or-validation-failure"
+        ),
+    }
+    if type(private_evidence.get("schema")) is not int or any(
+        private_evidence.get(key) != item for key, item in expected_public.items()
+    ):
+        _error(
+            errors,
+            "successor binding authorization private source does not match the frozen activation",
+        )
+        return False
+    source_locator = private_evidence.get("sourceRollout")
     encoded_key = private_evidence.get("keyBase64")
-    if not isinstance(encoded_key, str):
-        _error(errors, "initial binding authorization private source is invalid")
+    restart_identity = private_evidence.get("sourceEventIdentity")
+    if (
+        not isinstance(source_locator, str)
+        or not isinstance(encoded_key, str)
+        or not isinstance(restart_identity, str)
+    ):
+        _error(errors, "successor binding authorization private source is invalid")
         return False
     try:
         key = bytearray(base64.b64decode(encoded_key, validate=True))
     except (ValueError, TypeError):
-        _error(errors, "initial binding authorization private source is invalid")
+        _error(errors, "successor binding authorization private source is invalid")
+        return False
+    try:
+        if len(key) != 32:
+            _error(errors, "successor binding authorization private source is invalid")
+            return False
+        fingerprint = "sha256:" + hashlib.sha256(key).hexdigest()
+        activation_message = (
+            EXPECTED_HMAC_DOMAIN
+            + "\0"
+            + EXPECTED_SUCCESSOR_SURFACE_IDENTITY
+            + "\0"
+            + restart_identity
+        ).encode("utf-8")
+        activation_commitment = "hmac-sha256:" + hmac.new(
+            key, activation_message, hashlib.sha256
+        ).hexdigest()
+        if not hmac.compare_digest(
+            fingerprint,
+            EXPECTED_SUCCESSOR_AUTHORIZATION_KEY_FINGERPRINT,
+        ) or not hmac.compare_digest(
+            activation_commitment,
+            EXPECTED_SUCCESSOR_ACTIVATION_CURSOR_COMMITMENT,
+        ):
+            _error(
+                errors,
+                "successor binding authorization private source does not match the frozen activation",
+            )
+            return False
+        if credential_target_name is None or not _successor_authorization_credential_target_valid(
+            credential_target_name,
+            key,
+            errors,
+        ):
+            return False
+        locator_parts = _successor_authorization_source_locator_parts(
+            source_locator,
+            key,
+            errors,
+        )
+        if locator_parts is None:
+            return False
+        source_path_text, authorized_root = locator_parts
+        snapshot = _read_stable_initial_authorization_snapshot(
+            Path(source_path_text),
+            authorized_root,
+            errors,
+            generation_label="successor binding",
+        )
+        if snapshot is None:
+            return False
+        return _successor_authorization_snapshot_valid(
+            private_evidence,
+            snapshot,
+            key,
+            errors,
+        )
+    finally:
+        key[:] = b"\0" * len(key)
+
+
+def _delete_cohort_authorization_private_resource(
+    resource: tuple[dict[str, Any], str],
+    trigger: str,
+    expected_key_fingerprint: str,
+    target_validator: Callable[[str, bytes | bytearray, list[str]], bool],
+    generation_label: str,
+    errors: list[str],
+) -> bool:
+    diagnostic = f"{generation_label} authorization private"
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(errors, f"{diagnostic} evidence trigger is invalid")
+        return False
+    private_evidence, target_name = resource
+    encoded_key = private_evidence.get("keyBase64")
+    if not isinstance(encoded_key, str):
+        _error(errors, f"{diagnostic} source is invalid")
+        return False
+    try:
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, f"{diagnostic} source is invalid")
         return False
     try:
         if len(key) != 32 or not hmac.compare_digest(
             "sha256:" + hashlib.sha256(key).hexdigest(),
-            EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
-        ) or not _initial_authorization_credential_target_valid(
+            expected_key_fingerprint,
+        ) or not target_validator(
             target_name,
             key,
             errors,
         ):
-            _error(errors, "initial binding authorization private source is invalid")
+            _error(errors, f"{diagnostic} source is invalid")
             return False
     finally:
         key[:] = b"\0" * len(key)
     if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
-        _error(errors, "initial binding authorization private source is unavailable")
+        _error(errors, f"{diagnostic} source is unavailable")
         return False
     try:
         advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
@@ -1825,7 +2394,7 @@ def _delete_initial_authorization_private_resource(
         deleted = delete_credential(target_name, 1, 0)
         delete_error = ctypes.get_last_error()
         if not deleted and delete_error != 1168:
-            _error(errors, "initial binding authorization private evidence cleanup failed")
+            _error(errors, f"{diagnostic} evidence cleanup failed")
             return False
         credential = ctypes.c_void_p()
         ctypes.set_last_error(0)
@@ -1834,21 +2403,54 @@ def _delete_initial_authorization_private_resource(
         if remains:
             if credential.value:
                 free_credential(credential)
-            _error(errors, "initial binding authorization private evidence cleanup failed")
+            _error(errors, f"{diagnostic} evidence cleanup failed")
             return False
         if credential.value:
             free_credential(credential)
         if read_error != 1168:
-            _error(errors, "initial binding authorization private evidence cleanup failed")
+            _error(errors, f"{diagnostic} evidence cleanup failed")
             return False
     except (OSError, ValueError, TypeError):
-        _error(errors, "initial binding authorization private evidence cleanup failed")
+        _error(errors, f"{diagnostic} evidence cleanup failed")
         return False
     _error(
         errors,
-        f"initial binding authorization private evidence destruction verified after {trigger}",
+        f"{diagnostic} evidence destruction verified after {trigger}",
     )
     return True
+
+
+def _delete_initial_authorization_private_resource(
+    resource: tuple[dict[str, Any], str],
+    trigger: str,
+    errors: list[str],
+) -> bool:
+    return _delete_cohort_authorization_private_resource(
+        resource,
+        trigger,
+        EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+        _initial_authorization_credential_target_valid,
+        "initial binding",
+        errors,
+    )
+
+
+def _delete_successor_authorization_private_resource(
+    resource: tuple[dict[str, Any], str],
+    trigger: str,
+    errors: list[str],
+) -> bool:
+    deleted = _delete_cohort_authorization_private_resource(
+        resource,
+        trigger,
+        EXPECTED_SUCCESSOR_AUTHORIZATION_KEY_FINGERPRINT,
+        _successor_authorization_credential_target_valid,
+        "successor binding",
+        errors,
+    )
+    if not deleted:
+        return False
+    return _remove_successor_expiry_cleanup_trigger(errors)
 
 
 def _revoke_initial_authorization_private_evidence(
@@ -1862,6 +2464,19 @@ def _revoke_initial_authorization_private_evidence(
     if resource is None:
         return False
     return _delete_initial_authorization_private_resource(resource, trigger, errors)
+
+
+def _revoke_successor_authorization_private_evidence(
+    trigger: str,
+    errors: list[str],
+) -> bool:
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(errors, "successor binding authorization private evidence trigger is invalid")
+        return False
+    resource = _read_successor_authorization_private_evidence(errors)
+    if resource is None:
+        return False
+    return _delete_successor_authorization_private_resource(resource, trigger, errors)
 
 
 def _utc_now() -> datetime:
@@ -1927,6 +2542,337 @@ def _validate_initial_binding_authorization(
     return True
 
 
+def _successor_expiry_task_definition_valid(
+    task: ET.Element,
+    expected_python: Path,
+    expected_root: Path,
+    errors: list[str],
+) -> bool:
+    def elements(local_name: str) -> list[ET.Element]:
+        return [
+            item
+            for item in task.iter()
+            if item.tag.rsplit("}", 1)[-1] == local_name
+        ]
+
+    executions = elements("Exec")
+    time_triggers = elements("TimeTrigger")
+    commands = elements("Command")
+    arguments = elements("Arguments")
+    working_directories = elements("WorkingDirectory")
+    start_boundaries = elements("StartBoundary")
+    repetitions = elements("Repetition")
+    logon_types = elements("LogonType")
+    start_when_available = elements("StartWhenAvailable")
+    execution_time_limits = elements("ExecutionTimeLimit")
+    multiple_instance_policies = elements("MultipleInstancesPolicy")
+    if (
+        len(executions) != 1
+        or len(time_triggers) != 1
+        or len(commands) != 1
+        or len(arguments) != 1
+        or len(working_directories) != 1
+        or len(start_boundaries) != 1
+        or len(logon_types) != 1
+        or len(start_when_available) != 1
+        or len(execution_time_limits) != 1
+        or len(multiple_instance_policies) != 1
+        or repetitions
+        or not isinstance(commands[0].text, str)
+        or _normalized_native_path(commands[0].text)
+        != _normalized_native_path(expected_python)
+        or arguments[0].text != SUCCESSOR_EXPIRY_TASK_ARGUMENTS
+        or not isinstance(working_directories[0].text, str)
+        or _normalized_native_path(working_directories[0].text)
+        != _normalized_native_path(expected_root)
+        or start_boundaries[0].text != SUCCESSOR_EXPIRY_TASK_START_BOUNDARY
+        or logon_types[0].text != "S4U"
+        or start_when_available[0].text != "true"
+        or execution_time_limits[0].text != "PT5M"
+        or multiple_instance_policies[0].text != "IgnoreNew"
+    ):
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger is invalid",
+        )
+        return False
+    return True
+
+
+def _trusted_windows_schtasks_executable() -> Path | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return None
+    try:
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        get_system_directory = kernel32.GetSystemDirectoryW
+        get_system_directory.argtypes = [ctypes.c_wchar_p, ctypes.c_uint32]
+        get_system_directory.restype = ctypes.c_uint32
+        buffer = ctypes.create_unicode_buffer(32_768)
+        length = get_system_directory(buffer, len(buffer))
+        if length == 0 or length >= len(buffer):
+            raise OSError("system directory unavailable")
+        system_directory = Path(buffer.value).resolve(strict=True)
+        executable = (system_directory / "schtasks.exe").resolve(strict=True)
+        executable_metadata = executable.lstat()
+        if (
+            executable.parent != system_directory
+            or not stat.S_ISREG(executable_metadata.st_mode)
+            or _link_or_reparse(executable)
+        ):
+            raise OSError("untrusted expiry trigger executable")
+    except (OSError, RuntimeError, ValueError):
+        return None
+    return executable
+
+
+def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bool:
+    executable = _trusted_windows_schtasks_executable()
+    try:
+        expected_python = Path(sys.executable).resolve(strict=True)
+        expected_root = root.resolve(strict=True)
+        if (
+            executable is None
+            or not stat.S_ISREG(expected_python.lstat().st_mode)
+            or _link_or_reparse(expected_python)
+        ):
+            raise OSError("untrusted expiry trigger runtime")
+    except (OSError, RuntimeError, ValueError):
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger is unavailable",
+        )
+        return False
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.casefold() in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+    }
+    process: subprocess.Popen[bytes] | None = None
+
+    def stop_process() -> None:
+        if process is None:
+            return
+        try:
+            if process.poll() is None:
+                process.kill()
+        except OSError:
+            pass
+
+    try:
+        process = subprocess.Popen(
+            [
+                str(executable),
+                "/Query",
+                "/TN",
+                SUCCESSOR_EXPIRY_TASK_NAME,
+                "/XML",
+            ],
+            cwd=expected_root,
+            env=environment,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+        timer = Timer(10, stop_process)
+        timer.daemon = True
+        timer.start()
+        try:
+            if process.stdout is None:
+                stop_process()
+                output = b""
+            else:
+                try:
+                    output = process.stdout.read(
+                        MAX_SUCCESSOR_EXPIRY_TASK_XML_BYTES + 1
+                    )
+                finally:
+                    process.stdout.close()
+            return_code = process.wait()
+        finally:
+            timer.cancel()
+    except (OSError, ValueError, subprocess.SubprocessError):
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger is unavailable",
+        )
+        return False
+    if return_code != 0 or not output or len(output) > MAX_SUCCESSOR_EXPIRY_TASK_XML_BYTES:
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger is unavailable",
+        )
+        return False
+    try:
+        task = ET.fromstring(output.decode("utf-16"))
+    except (ET.ParseError, UnicodeError, ValueError):
+        try:
+            task = ET.fromstring(output.decode("utf-8-sig"))
+        except (ET.ParseError, UnicodeError, ValueError):
+            _error(
+                errors,
+                "successor binding authorization expiry cleanup trigger is invalid",
+            )
+            return False
+    return _successor_expiry_task_definition_valid(
+        task,
+        expected_python,
+        expected_root,
+        errors,
+    )
+
+
+def _remove_successor_expiry_cleanup_trigger(errors: list[str]) -> bool:
+    executable = _trusted_windows_schtasks_executable()
+    if executable is None:
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger removal failed",
+        )
+        return False
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.casefold() in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+    }
+    common = {
+        "cwd": executable.parent,
+        "env": environment,
+        "stdin": subprocess.DEVNULL,
+        "stdout": subprocess.DEVNULL,
+        "stderr": subprocess.DEVNULL,
+        "timeout": 10,
+        "creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        "check": False,
+    }
+    try:
+        before = subprocess.run(
+            [str(executable), "/Query", "/TN", SUCCESSOR_EXPIRY_TASK_NAME],
+            **common,
+        )
+        if before.returncode != 0:
+            raise OSError("expiry trigger is unavailable")
+        removed = subprocess.run(
+            [
+                str(executable),
+                "/Delete",
+                "/TN",
+                SUCCESSOR_EXPIRY_TASK_NAME,
+                "/F",
+            ],
+            **common,
+        )
+        after = subprocess.run(
+            [str(executable), "/Query", "/TN", SUCCESSOR_EXPIRY_TASK_NAME],
+            **common,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger removal failed",
+        )
+        return False
+    if removed.returncode != 0 or after.returncode == 0:
+        _error(
+            errors,
+            "successor binding authorization expiry cleanup trigger removal failed",
+        )
+        return False
+    _error(
+        errors,
+        "successor binding authorization expiry cleanup trigger removal verified",
+    )
+    return True
+
+
+def _validate_successor_binding_authorization(
+    authorization_document: dict[str, Any], root: Path, errors: list[str]
+) -> bool:
+    expected_document = {
+        "kind": "successor-normative-profile-binding-authorization",
+        "revision": EXPECTED_V1_SUCCESSOR_BINDING_REVISION,
+        "bindingSha256": EXPECTED_V1_SUCCESSOR_BINDING_SHA256,
+        "predecessorRevocationRevision": (
+            EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+        ),
+        "predecessorRevocationBindingSha256": (
+            EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256
+        ),
+        "sourceWindowRule": EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE,
+    }
+    if authorization_document != expected_document:
+        _error(
+            errors,
+            "successor binding authorization document does not match the frozen binding",
+        )
+        return False
+    if _utc_now() > SUCCESSOR_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _revoke_successor_authorization_private_evidence("expiry", errors)
+        _error(
+            errors,
+            "successor binding authorization private evidence retention has expired",
+        )
+        return False
+    resource = _read_successor_authorization_private_evidence(errors)
+    if resource is None:
+        return False
+    private_evidence, target_name = resource
+    validation_errors: list[str] = []
+    valid = _successor_authorization_event_window_valid(
+        private_evidence,
+        authorization_document,
+        validation_errors,
+        credential_target_name=target_name,
+    )
+    if valid and not validation_errors:
+        valid = _successor_expiry_cleanup_trigger_valid(root, validation_errors)
+    if not valid or validation_errors:
+        nondestructive_source_failure = (
+            not valid
+            and bool(validation_errors)
+            and all(
+                item in NONDESTRUCTIVE_SUCCESSOR_AUTHORIZATION_SOURCE_FAILURES
+                for item in validation_errors
+            )
+        )
+        errors.extend(validation_errors)
+        if not nondestructive_source_failure:
+            _delete_successor_authorization_private_resource(
+                resource,
+                "validation-failure",
+                errors,
+            )
+        return False
+    if _utc_now() > SUCCESSOR_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _delete_successor_authorization_private_resource(resource, "expiry", errors)
+        _error(
+            errors,
+            "successor binding authorization private evidence retention has expired",
+        )
+        return False
+    return True
+
+
+def expire_successor_authorization_private_evidence(errors: list[str]) -> bool:
+    resource = _read_successor_authorization_private_evidence(errors)
+    if resource is None:
+        absence_errors: list[str] = []
+        if _successor_authorization_private_resource_absent(absence_errors):
+            return _remove_successor_expiry_cleanup_trigger(errors)
+        errors.extend(absence_errors)
+        return False
+    if not _successor_authorization_private_resource_identity_valid(resource, errors):
+        return False
+    if _utc_now() < SUCCESSOR_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _error(errors, "successor binding authorization expiry cleanup is not due")
+        return False
+    return _delete_successor_authorization_private_resource(
+        resource,
+        "expiry",
+        errors,
+    )
+
+
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
@@ -1935,7 +2881,10 @@ SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     {
         INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: (
             _validate_initial_binding_authorization
-        )
+        ),
+        SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID: (
+            _validate_successor_binding_authorization
+        ),
     }
 )
 

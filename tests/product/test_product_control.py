@@ -123,7 +123,10 @@ class ProductControlTests(unittest.TestCase):
             os.environ.get("GITHUB_ACTIONS") == "true"
             and report.get("valid") is False
             and report.get("errors")
-            == ["initial binding authorization private source is unavailable"]
+            in (
+                ["initial binding authorization private source is unavailable"],
+                ["successor binding authorization private source is unavailable"],
+            )
             and report.get("criterionStates", {}).get("G3") is False
         )
 
@@ -1058,13 +1061,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
-    def test_v1_profile_and_cohort_protocol_are_exact_and_source_revoked(self) -> None:
+    def test_v1_profile_and_cohort_protocol_are_exact_and_successor_is_frozen(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
         binding = program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "revoked")
+        self.assertEqual(binding["state"], "frozen")
         self.assertEqual(
             binding["cohortActivation"]["surfaceIdentity"],
-            "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
+            control.EXPECTED_SUCCESSOR_SURFACE_IDENTITY,
         )
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
             encoding="utf-8"
@@ -1106,6 +1109,22 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIn(
             control.INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS,
+        )
+        self.assertEqual(
+            control.EXPECTED_V1_SUCCESSOR_BINDING_REVISION,
+            "8e8e76ba65db8f625792aed7dfb9180790433459",
+        )
+        self.assertEqual(
+            control.EXPECTED_V1_SUCCESSOR_BINDING_SHA256,
+            "d2cf0cdce692fb06bf59bc1002d8b6036b6d1ee79ac6a86c27c74358f157dbfa",
+        )
+        self.assertEqual(
+            control.EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            control.SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
+        )
+        self.assertIn(
+            control.SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
             control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS,
         )
         for heading in (
@@ -1657,7 +1676,10 @@ class ProductControlTests(unittest.TestCase):
             os.environ.get("GITHUB_ACTIONS") == "true"
             and completed.returncode == 1
             and completed.stderr.strip()
-            == "ERROR: initial binding authorization private source is unavailable"
+            in {
+                "ERROR: initial binding authorization private source is unavailable",
+                "ERROR: successor binding authorization private source is unavailable",
+            }
         )
         self.assertTrue(
             completed.returncode == 0 or hosted_source_unavailable,
@@ -3250,6 +3272,9 @@ class ProductControlTests(unittest.TestCase):
 
         with patch(
             "harness.control._initial_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._successor_authorization_private_resource_absent",
             return_value=True,
         ):
             report = self.report()
@@ -5374,6 +5399,361 @@ class ProductControlTests(unittest.TestCase):
                     )
                 )
                 delete.assert_called_once_with(resource, trigger, errors)
+
+    def test_successor_authorization_snapshot_binds_complete_zero_demand_window(
+        self,
+    ) -> None:
+        key = b"s" * 32
+        predecessor_identity = "call_0123456789ABCDEF"
+        restart_identity = "11111111-1111-4111-8111-111111111111"
+        authorization_identity = "22222222-2222-4222-8222-222222222222"
+        predecessor_timestamp = "2026-08-16T00:00:00Z"
+        restart_timestamp = "2026-08-16T00:00:01Z"
+        authorization_timestamp = "2026-08-16T00:00:02Z"
+        authorization_message = "fixture exact successor authorization"
+        surface = "enrollment-surface.public-v1:fixture"
+        private_evidence = {
+            "surfaceIdentity": surface,
+            "predecessorRevocationRecordIdentity": predecessor_identity,
+            "predecessorRevocationRecordTimestamp": predecessor_timestamp,
+            "sourceEventIdentity": restart_identity,
+            "sourceEventTimestamp": restart_timestamp,
+            "authorizationEventIdentity": authorization_identity,
+            "authorizationEventTimestamp": authorization_timestamp,
+        }
+
+        def encoded(event: dict) -> bytes:
+            return (
+                json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
+            ).encode("utf-8")
+
+        predecessor = encoded(
+            {
+                "timestamp": predecessor_timestamp,
+                "type": "response_item",
+                "payload": {
+                    "type": "custom_tool_call_output",
+                    "call_id": predecessor_identity,
+                    "output": {"type": "computer_initialize_state", "id": "fixture"},
+                },
+            }
+        )
+        restart = encoded(
+            {
+                "timestamp": restart_timestamp,
+                "type": "event_msg",
+                "payload": {
+                    "type": "user_message",
+                    "client_id": restart_identity,
+                    "message": "同意重启 cohort。",
+                },
+            }
+        )
+        authorization = encoded(
+            {
+                "timestamp": authorization_timestamp,
+                "type": "event_msg",
+                "payload": {
+                    "type": "user_message",
+                    "client_id": authorization_identity,
+                    "message": authorization_message,
+                },
+            }
+        )
+        snapshot = predecessor + restart + authorization
+        patches = {
+            "EXPECTED_SUCCESSOR_PREDECESSOR_RECORD_COMMITMENT": (
+                fixture_private_bytes_hmac(
+                    key,
+                    control.SUCCESSOR_PREDECESSOR_RECORD_HMAC_DOMAIN,
+                    predecessor,
+                )
+            ),
+            "EXPECTED_SUCCESSOR_RESTART_EVENT_COMMITMENT": fixture_private_hmac(
+                key,
+                control.SUCCESSOR_RESTART_EVENT_HMAC_DOMAIN,
+                surface,
+                predecessor_identity,
+                restart_identity,
+                restart_timestamp,
+                "同意重启 cohort。",
+            ),
+            "EXPECTED_SUCCESSOR_BINDING_AUTHORIZATION_MESSAGE_SHA256": (
+                hashlib.sha256(authorization_message.encode("utf-8")).hexdigest()
+            ),
+            "EXPECTED_SUCCESSOR_AUTHORIZATION_EVENT_COMMITMENT": (
+                fixture_private_hmac(
+                    key,
+                    control.SUCCESSOR_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+                    surface,
+                    predecessor_identity,
+                    restart_identity,
+                    authorization_identity,
+                    authorization_timestamp,
+                    authorization_message,
+                )
+            ),
+            "EXPECTED_SUCCESSOR_AUTHORIZATION_WINDOW_COMMITMENT": (
+                fixture_private_bytes_hmac(
+                    key,
+                    control.SUCCESSOR_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+                    snapshot,
+                )
+            ),
+        }
+        with patch.multiple(control, **patches):
+            errors: list[str] = []
+            self.assertTrue(
+                control._successor_authorization_snapshot_valid(
+                    private_evidence,
+                    snapshot,
+                    bytearray(key),
+                    errors,
+                ),
+                errors,
+            )
+
+            inserted = encoded(
+                {
+                    "timestamp": "2026-08-16T00:00:01.500000Z",
+                    "type": "event_msg",
+                    "payload": {
+                        "type": "user_message",
+                        "client_id": "33333333-3333-4333-8333-333333333333",
+                        "message": "an intervening demand",
+                    },
+                }
+            )
+            errors = []
+            self.assertFalse(
+                control._successor_authorization_snapshot_valid(
+                    private_evidence,
+                    predecessor + restart + inserted + authorization,
+                    bytearray(key),
+                    errors,
+                )
+            )
+            self.assertIn(
+                "natural demand appeared before exact successor-freeze authorization",
+                errors,
+            )
+
+            changed_predecessor = predecessor.replace(b"fixture", b"changed")
+            errors = []
+            self.assertFalse(
+                control._successor_authorization_snapshot_valid(
+                    private_evidence,
+                    changed_predecessor + restart + authorization,
+                    bytearray(key),
+                    errors,
+                )
+            )
+
+    def test_successor_authorization_failure_policy_and_expiry_cleanup(self) -> None:
+        document = {
+            "kind": "successor-normative-profile-binding-authorization",
+            "revision": control.EXPECTED_V1_SUCCESSOR_BINDING_REVISION,
+            "bindingSha256": control.EXPECTED_V1_SUCCESSOR_BINDING_SHA256,
+            "predecessorRevocationRevision": (
+                control.EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+            ),
+            "predecessorRevocationBindingSha256": (
+                control.EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256
+            ),
+            "sourceWindowRule": (
+                control.EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE
+            ),
+        }
+        resource = (
+            {"fixture": "private"},
+            "AgentAutonomyHarness/v1-successor/exact",
+        )
+        before_expiry = datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc)
+        after_expiry = datetime(2026, 12, 31, 16, 0, 0, tzinfo=timezone.utc)
+
+        for diagnostic in sorted(
+            control.NONDESTRUCTIVE_SUCCESSOR_AUTHORIZATION_SOURCE_FAILURES
+        ):
+            with self.subTest(diagnostic=diagnostic), patch(
+                "harness.control._utc_now", return_value=before_expiry
+            ), patch(
+                "harness.control._read_successor_authorization_private_evidence",
+                return_value=resource,
+            ), patch(
+                "harness.control._successor_authorization_event_window_valid",
+                side_effect=lambda *args, **kwargs: (
+                    args[2].append(diagnostic) or False
+                ),
+            ), patch(
+                "harness.control._delete_successor_authorization_private_resource",
+            ) as delete:
+                errors: list[str] = []
+                self.assertFalse(
+                    control._validate_successor_binding_authorization(
+                        document,
+                        self.root,
+                        errors,
+                    )
+                )
+                self.assertEqual(errors, [diagnostic])
+                delete.assert_not_called()
+
+        with patch(
+            "harness.control._utc_now", return_value=before_expiry
+        ), patch(
+            "harness.control._read_successor_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._successor_authorization_event_window_valid",
+            return_value=False,
+        ), patch(
+            "harness.control._delete_successor_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors = []
+            self.assertFalse(
+                control._validate_successor_binding_authorization(
+                    document,
+                    self.root,
+                    errors,
+                )
+            )
+            delete.assert_called_once_with(resource, "validation-failure", errors)
+
+        with patch(
+            "harness.control._utc_now", return_value=before_expiry
+        ), patch(
+            "harness.control._read_successor_authorization_private_evidence",
+            return_value=resource,
+        ) as read, patch(
+            "harness.control._successor_authorization_private_resource_identity_valid",
+            return_value=True,
+        ):
+            errors = []
+            self.assertFalse(
+                control.expire_successor_authorization_private_evidence(errors)
+            )
+            read.assert_called_once()
+
+        with patch(
+            "harness.control._utc_now", return_value=after_expiry
+        ), patch(
+            "harness.control._read_successor_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._successor_authorization_private_resource_identity_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._delete_successor_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors = []
+            self.assertTrue(
+                control.expire_successor_authorization_private_evidence(errors)
+            )
+            delete.assert_called_once_with(resource, "expiry", errors)
+
+        with patch(
+            "harness.control._utc_now", return_value=after_expiry
+        ), patch(
+            "harness.control._read_successor_authorization_private_evidence",
+            return_value=None,
+        ), patch(
+            "harness.control._successor_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._remove_successor_expiry_cleanup_trigger",
+            return_value=True,
+        ) as remove:
+            errors = []
+            self.assertTrue(
+                control.expire_successor_authorization_private_evidence(errors)
+            )
+            remove.assert_called_once_with(errors)
+
+    def test_successor_expiry_trigger_definition_is_exact_and_s4u(self) -> None:
+        expected_python = self.root / "python.exe"
+        expected_root = self.root
+
+        def task_xml(logon_type: str = "S4U", arguments: str | None = None):
+            return control.ET.fromstring(
+                f"""
+                <Task>
+                  <Triggers><TimeTrigger><StartBoundary>{control.SUCCESSOR_EXPIRY_TASK_START_BOUNDARY}</StartBoundary></TimeTrigger></Triggers>
+                  <Principals><Principal><LogonType>{logon_type}</LogonType></Principal></Principals>
+                  <Settings>
+                    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+                    <StartWhenAvailable>true</StartWhenAvailable>
+                    <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
+                  </Settings>
+                  <Actions><Exec>
+                    <Command>{expected_python}</Command>
+                    <Arguments>{arguments or control.SUCCESSOR_EXPIRY_TASK_ARGUMENTS}</Arguments>
+                    <WorkingDirectory>{expected_root}</WorkingDirectory>
+                  </Exec></Actions>
+                </Task>
+                """
+            )
+
+        errors: list[str] = []
+        self.assertTrue(
+            control._successor_expiry_task_definition_valid(
+                task_xml(),
+                expected_python,
+                expected_root,
+                errors,
+            ),
+            errors,
+        )
+        for invalid in (
+            task_xml(logon_type="InteractiveToken"),
+            task_xml(arguments="-B -m harness verify"),
+        ):
+            errors = []
+            self.assertFalse(
+                control._successor_expiry_task_definition_valid(
+                    invalid,
+                    expected_python,
+                    expected_root,
+                    errors,
+                )
+            )
+            self.assertEqual(
+                errors,
+                ["successor binding authorization expiry cleanup trigger is invalid"],
+            )
+
+    def test_successor_expiry_trigger_removal_is_exact_and_verified(self) -> None:
+        executable = Path(r"C:\Windows\System32\schtasks.exe")
+        results = [
+            SimpleNamespace(returncode=0),
+            SimpleNamespace(returncode=0),
+            SimpleNamespace(returncode=1),
+        ]
+        with patch(
+            "harness.control._trusted_windows_schtasks_executable",
+            return_value=executable,
+        ), patch(
+            "harness.control.subprocess.run",
+            side_effect=results,
+        ) as run:
+            errors: list[str] = []
+            self.assertTrue(
+                control._remove_successor_expiry_cleanup_trigger(errors),
+                errors,
+            )
+        self.assertEqual(run.call_count, 3)
+        self.assertEqual(
+            run.call_args_list[1].args[0],
+            [
+                str(executable),
+                "/Delete",
+                "/TN",
+                control.SUCCESSOR_EXPIRY_TASK_NAME,
+                "/F",
+            ],
+        )
+        self.assertTrue(any("removal verified" in item for item in errors))
 
     def test_revoked_private_resource_absence_is_code_verified(self) -> None:
         last_error = {"value": 0}
