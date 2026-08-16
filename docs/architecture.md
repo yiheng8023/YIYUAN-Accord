@@ -67,8 +67,7 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `active`, has one outcome-neutral product-form and
-cross-operating-system terminal-alignment increment, and has one
+The current v1.1 program is `ready`, has no active increment, and has one
 source-authorized, code-pinned frozen `normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
