@@ -1767,6 +1767,9 @@ class ProductControlTests(unittest.TestCase):
             return_value=advapi32,
             create=True,
         ), patch(
+            "harness.control.ctypes.set_last_error",
+            create=True,
+        ), patch(
             "harness.control._current_initial_authorization_private_resource_identity_valid",
             return_value=True,
         ), patch(
