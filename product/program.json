@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v1-successor-cohort-freeze",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -100,5 +100,63 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v1-successor-cohort-freeze",
+      "state": "active",
+      "correctionClass": "authorized-zero-outcome-successor-cohort-materialization",
+      "observedProblem": "The first v1 cohort is immutably revoked with zero task registrations and its private resource absent; after the one-successor mechanism passed local and three-platform checks, the named human explicitly authorized restarting the cohort, but no fresh activation or private evidence exists yet.",
+      "hypothesis": "If the source-native window from the exact predecessor-revocation record through the restart grant contains only the bound Harness authorization event, and the Agent creates fresh random surface, cursor and key identities in one isolated Windows-user-protected resource before committing a successor freeze whose code anchors remain unavailable, then the successor can be presented for independent exact authorization without inheriting evidence, exposing private locators or activating measurement early.",
+      "falsifier": "Stop and delete the new exact resource if the predecessor boundary or restart grant is not unique and source-verifiable, any eligible natural demand occurs in the window, an old activation field or private resource is reused, protected write/readback or bounded cleanup cannot be verified, private source data enters the public tree or diagnostics, the freeze can validate before later code pinning and independent authorization, or any task/result state is carried forward.",
+      "stopCondition": "Stop at the human gate after one fresh private resource is written and read back under the accepted retention disposition, one unactivated successor binding is committed with all new activation identities and no task registration, the verifier fails closed only because successor revision/digest/validator anchors are intentionally unavailable, and the exact public revision, canonical binding digest and surface identity are reported for a second independent named-human authorization.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": [
+          "v1-cohort-private-evidence:windows-user-protected;retain-through-accepted-or-stopped-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-validation-failure"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v1-successor-cohort-freeze",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "authorized-private-evidence-materialization",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one fresh Windows-user-protected successor cohort resource",
+            "one unactivated successor freeze commit",
+            "exact public revision digest and surface authorization handoff"
+          ]
+        }
+      ]
+    }
+  ]
 }
