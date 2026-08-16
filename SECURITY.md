@@ -1,9 +1,11 @@
 # Security Policy
 
 Agent Autonomy Harness is a public, research-stage collaboration quality
-project. The ready v1.1 environment-attribution tree contains a product-contract
+project. The current v1.1 environment-attribution tree contains a product-contract
 verifier, immutable stopped v1.0 history, and inactive reference-adapter source
-candidates, not a production runtime or released installable product.
+candidates, not a production runtime or released installable product. Its
+code-pinned v1.1 profile and cohort-protocol candidates are pre-freeze text/data
+inputs only; they do not install, execute, activate a cohort, or grant authority.
 The current module exposes no executable v1.0 credential or Scheduled Task
 cleanup entrypoint; those retired mechanics are historical at revision
 `910ac01`.

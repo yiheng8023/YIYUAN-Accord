@@ -64,6 +64,8 @@ AUTHORITY_FILES = (
     "docs/DEMAND-TO-CAPABILITY-PROFILE.md",
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
     "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
+    "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md",
+    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
@@ -1206,6 +1208,7 @@ class ProductControlTests(unittest.TestCase):
             control.EXPECTED_V1_PROFILE_ARTIFACT_REVISION,
             "502c4ff7edfc6307ea5469bcb81089e13612a24a",
         )
+
         self.assertEqual(
             control.EXPECTED_V1_INITIAL_BINDING_REVISION,
             "d19d2fb9da0883a44eec887eca4072e70a93f8d7",
@@ -1266,6 +1269,97 @@ class ProductControlTests(unittest.TestCase):
         for field, expected in control.EXPECTED_COHORT_PROTOCOL_RULES.items():
             self.assertEqual(protocol[field], expected)
         self.assertTrue(protocol["claimLimits"])
+
+    def test_v11_profile_candidate_is_distinct_adaptive_and_non_authoritative(self) -> None:
+        program = self.read_json("product/program.json")
+        profile_path = ROOT / control.EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR
+        protocol_path = (
+            ROOT / control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
+        )
+        profile_bytes = profile_path.read_bytes().replace(b"\r\n", b"\n")
+        protocol_bytes = protocol_path.read_bytes().replace(b"\r\n", b"\n")
+        profile = profile_bytes.decode("utf-8")
+        profile_flat = " ".join(profile.split())
+        protocol = json.loads(protocol_bytes)
+
+        self.assertEqual(
+            program["normativeProfileBinding"],
+            control.UNFROZEN_NORMATIVE_PROFILE_BINDING,
+        )
+        self.assertEqual(
+            hashlib.sha256(profile_bytes).hexdigest(),
+            control.EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256,
+        )
+        self.assertEqual(
+            hashlib.sha256(protocol_bytes).hexdigest(),
+            control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256,
+        )
+        candidate_errors: list[str] = []
+        self.assertTrue(
+            control._current_profile_candidate_artifacts_valid(
+                ROOT, candidate_errors
+            ),
+            candidate_errors,
+        )
+        self.assertIn(control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY, profile)
+        self.assertIn("Status: pre-freeze candidate", profile)
+        self.assertIn("not a static capability ceiling", profile_flat)
+        self.assertIn("current suitable official or maintained source", profile_flat)
+        self.assertIn("technically or authoritatively human-only", profile_flat)
+        self.assertIn("install, configure, enable", profile_flat)
+        self.assertIn("disable, downgrade, roll back, retire", profile_flat)
+        self.assertIn("verifier enforces those authorities", profile_flat)
+        self.assertEqual(protocol["schema"], 1)
+        self.assertEqual(
+            protocol["profileIdentity"],
+            control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
+        )
+        self.assertEqual(
+            protocol["cohortProtocolIdentity"],
+            control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
+        )
+        self.assertIn("starting-manifest", protocol["environmentAttributionRule"])
+        self.assertIn("current-source", protocol["versionResolutionRule"])
+        self.assertIn("human-only", protocol["humanInterventionRule"])
+        self.assertNotIn("strata", protocol)
+        self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
+        criteria = self.read_json("product/acceptance.json")["criteria"][:5]
+        self.assertFalse(any(item["assessment"] == "verified" for item in criteria))
+
+    def test_v11_profile_candidate_identity_cannot_drift_before_freeze(self) -> None:
+        protocol_relative = control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
+        protocol = self.read_json(protocol_relative)
+        protocol["versionResolutionRule"] = "execute latest without resolving it"
+        self.write_json(protocol_relative, protocol)
+
+        errors: list[str] = []
+        valid = control._current_profile_candidate_artifacts_valid(
+            self.root, errors
+        )
+
+        self.assertFalse(valid)
+        self.assertTrue(self.report()["criterionStates"]["G3"])
+        self.assertIn(
+            "code-owned current profile candidate artifact identity changed: "
+            + protocol_relative,
+            errors,
+        )
+
+    def test_v11_profile_candidate_cannot_disappear_before_freeze(self) -> None:
+        profile_relative = control.EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR
+        (self.root / profile_relative).unlink()
+
+        errors: list[str] = []
+        valid = control._current_profile_candidate_artifacts_valid(
+            self.root, errors
+        )
+
+        self.assertFalse(valid)
+        self.assertTrue(self.report()["criterionStates"]["G3"])
+        self.assertIn(
+            "missing current profile candidate artifact " + profile_relative,
+            errors,
+        )
 
     def test_v10_stopped_authority_bytes_are_code_pinned(self) -> None:
         errors: list[str] = []
@@ -7192,17 +7286,19 @@ class ProductControlTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         readme_zh = (self.root / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn("ready v1.1 environment-attribution tree", security)
+        self.assertIn("current v1.1 environment-attribution tree", security)
         self.assertNotIn("current v0.2 tree", security)
         self.assertIn("observed-native-minimum", research)
         self.assertIn("user-configured", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
         self.assertIn("terminal proposition", readme)
-        self.assertIn("programStatus=ready", readme)
+        self.assertIn("programStatus=active", readme)
+        self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme)
         self.assertIn("v1.0", readme)
         self.assertIn("stopped", readme)
         self.assertIn("宪章终极命题尚未成立", readme_zh)
-        self.assertIn("programStatus=ready", readme_zh)
+        self.assertIn("programStatus=active", readme_zh)
+        self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme_zh)
         self.assertIn("v1.0", readme_zh)
         self.assertIn("停止", readme_zh)
         for document in (readme, research):

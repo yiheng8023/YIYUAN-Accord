@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v11-adaptive-profile-candidate",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -96,5 +96,56 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v11-adaptive-profile-candidate",
+      "state": "active",
+      "correctionClass": "adaptive-initial-environment-profile-candidate",
+      "observedProblem": "The v1.1 acceptance authority now treats the starting environment as evidence rather than a permanent capability ceiling and requires dynamic current-source resolution, attributed lifecycle changes and minimal guided human-only action, but the current program has no distinct content-addressed v1.1 method and cohort-protocol candidate that realizes those semantics without reusing the contradictory stopped v1.0 operands.",
+      "hypothesis": "A separate pre-freeze v1.1 profile and cohort-protocol candidate, code-pinned only for review integrity and documented as subordinate zero-outcome input, can make the adaptive initial-environment contract reviewable without activating a cohort, changing consumer configuration, inheriting v1.0 state or adding acceptance authority.",
+      "falsifier": "Stop and remove the candidate if it copies or adds acceptance thresholds, becomes a fifth product authority, treats the initial environment as a static ceiling, permanently locks one external version, hides task-time configuration or capability deltas, transfers supported Agent work to the user, activates or installs a route, inherits v1.0 cohort state, promotes any O1-O5 result, or cannot be held byte-identical by code-owned review checks and tests.",
+      "stopCondition": "Stop after one distinct v1.1 profile candidate and one paired cohort-protocol candidate are code-pinned for review without becoming a verifier authority prerequisite, public supporting documents consistently identify them as pre-freeze and non-authoritative, drift and deletion fail candidate-integrity tests, canonical and product tests pass with O1-O5 still 0/5 and the normative binding still unfrozen, no consumer or private resource is touched, and this outcome-neutral increment is removed from the current graph.",
+      "acceptanceIds": [
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v11-adaptive-profile-candidate",
+          "state": "active",
+          "acceptanceIds": [
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one distinct pre-freeze v1.1 method and minimum-quality profile candidate",
+            "one paired pre-freeze v1.1 prospective cohort protocol candidate",
+            "one code-owned candidate integrity seam with public status alignment"
+          ]
+        }
+      ]
+    }
+  ]
 }

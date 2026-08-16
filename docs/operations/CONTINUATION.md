@@ -51,8 +51,12 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires live matched evidence through a distinct host or runtime.
 
-v1.1 is the current ready environment-attribution program, with no active
-increment, O1-O5 at 0/5, and an `unfrozen` normative profile binding. v1.0 is
+v1.1 is the current environment-attribution program, with O1-O5 at 0/5 and an
+`unfrozen` normative profile binding. The code-pinned
+`harness-demand-to-capability-v1.1-candidate.1` profile and paired
+`harness-prospective-cohort-v1.1-candidate.1` protocol are pre-freeze subordinate
+review inputs only: they grant no activation, task, result, installation, or
+authority. v1.0 is
 immutable stopped history at revision `910ac01`: both authorized zero-task
 generations are revoked, the successor protected resource and exact task were
 deleted, and no profile binding, cohort, authorization, ordering state, task or
@@ -85,9 +89,9 @@ Open exactly one increment with at most one active work item only after binding:
 - exact cleanup boundary and operations.
 
 Outcome-neutral repair binds `taskRegistration: null` and must leave the current
-graph at its stop. Outcome-bearing work additionally requires a new
-program-selected and environment-attributed normative profile and prospective
-cohort protocol to be bound in the
+graph at its stop. Outcome-bearing work additionally requires a reviewed current
+candidate to be program-selected and bound as the environment-attributed
+normative profile and prospective cohort protocol in the
 current cohort generation's prior freeze revision, which also binds the exact source-native
 surface, activation cursor and cohort key identity/fingerprint. Before eligible
 demand, a named human must authorize that exact revision, complete binding

@@ -19,10 +19,15 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.1 is the ready zero-outcome environment-attributed terminal-product proof.
+v1.1 is the zero-outcome environment-attributed terminal-product proof; one
+bounded outcome-neutral candidate-integrity increment is currently active.
 Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
 and v1.0 remains an immutable stopped attempt, neither of which can be
-inherited. Further research enters product work only when the current machine
+inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
+candidate now make the adaptive starting-environment, current-source resolution,
+attributed lifecycle and minimal guided human-only-action method reviewable, but
+remain pre-freeze subordinate inputs with no activation, task or outcome claim.
+Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
 build a generic context runtime.
@@ -83,7 +88,7 @@ live installed-adapter value, clean-checkout release, or terminal proposition.
 No outcome-bearing A/B task should be manufactured merely to move the program.
 
 Natural-task evidence is required for outcome-bearing experimentation. Its
-absence does not block the ready v1.1 program and does not authorize fabricated
+absence does not block the nonterminal v1.1 program and does not authorize fabricated
 measurement. Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair remain Agent-owned lanes that do not

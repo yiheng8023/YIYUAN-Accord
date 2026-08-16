@@ -64,7 +64,8 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and keeps
+The current v1.1 program has one bounded outcome-neutral candidate-integrity
+increment active and keeps
 `normativeProfileBinding` deliberately `unfrozen`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
@@ -120,9 +121,11 @@ restoration stops the pair; it is never normalized away after a result.
 Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
 
-Before outcome measurement, a new v1.1 profile and cohort protocol must be
-selected, content-addressed, frozen, and independently authorized under that
-environment contract. Their source-native eligibility, privacy-preserving task
+The tree now contains one code-pinned pre-freeze v1.1 profile and paired cohort-
+protocol candidate under that environment contract. Before outcome measurement
+they must still be selected, content-addressed, frozen, and independently
+authorized; their current presence is not activation or authority. Their
+source-native eligibility, privacy-preserving task
 identity, first-eligible ordering, chronology, retention and cleanup controls
 must be code-validated before any natural task can enter the cohort. Git dates
 and evidence timestamps remain diagnostic consistency fields, not trusted

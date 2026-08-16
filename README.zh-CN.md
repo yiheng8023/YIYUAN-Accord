@@ -16,8 +16,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 单一 Agent 的“需求到能力”方法、最低质量要求和薄参考适配器，用来检验这类协作是否
 真的减少用户负担。
 
-**当前状态：**v1.1 是已就绪但非终态的环境归因工序。仓库验证器报告
-`programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；
+**当前状态：**v1.1 是非终态的环境归因工序；当前仅有一个有界、结果中性的候选完整性
+increment 处于 active。仓库验证器报告 `programStatus=active`、
+`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404` 仍是不可改写的有界校准里程碑；
@@ -113,6 +114,10 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 一份独立且已冻结的历史 [v1.0 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
   [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，已作为从属 operand
   保留，但不携带任何任务或结果证据；
+- 一份独立且由代码固定字节的[未冻结 v1.1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
+  与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，用于承载当前动态
+  环境归因和必要人工干预语义；它们仍只是从属审查输入，没有冻结、激活、任务、结果、
+  安装或自身权威；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
@@ -129,7 +134,8 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 针对公开验证入口的产品测试；
 - 固定来源的外部方案审查，用来缩小自研边界，避免重复造轮子。
 
-仓库目前不提供任务运行时、持久能力安装或已经验收的 v1.1 实时路由结果。candidate.5
+仓库目前不提供任务运行时、持久能力安装或已经验收的 v1.1 实时路由结果。未冻结的
+v1.1 候选不是当前规范 binding，也没有任何结果证据。candidate.5
 仅有上述 v0.2 Codex 有界校准，不是最终 v1.1 profile 或普适标准。适配器没有安装进
 用户配置；仓库验证通过和历史收据都不能证明终极产品结果。
 
@@ -165,7 +171,8 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 Harness 仓库中继承项目 AGENTS.md 或适配器。历史证据只能分为环境无关、环境绑定或失效，
 不得继承结果信用。
 
-随后仓库必须选择并绑定一份全新的内容寻址规范 profile 和配套前瞻 cohort 协议；v1.0
+仓库现在已有一组由代码固定字节的未冻结 v1.1 profile 与配套前瞻 cohort 协议候选；它们
+仍须经过审查、选择、内容寻址冻结和独立授权后，才能成为当前规范 binding。v1.0
 的 profile、协议、授权、cohort、注册和顺序状态不得复用。每个获准 cohort generation 的冻结提交绑定精确的初始源原生有序纳入面、
 激活游标与 cohort 密钥身份/指纹，但它本身不激活 cohort。任何合格需求出现前，具名人类
 必须在可独立验证的来源事件中授权该精确 revision、完整 binding digest、来源面、私域

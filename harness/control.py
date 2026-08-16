@@ -333,6 +333,24 @@ EXPECTED_V1_COHORT_PROTOCOL_LOCATOR = (
 EXPECTED_V1_COHORT_PROTOCOL_SHA256 = (
     "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83"
 )
+EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY = (
+    "harness-demand-to-capability-v1.1-candidate.1"
+)
+EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR = (
+    "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md"
+)
+EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256 = (
+    "55ebd54e5783713542c8ae8e6b1fea1c122e83881e0873ccfa60bd4c92a6458c"
+)
+EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY = (
+    "harness-prospective-cohort-v1.1-candidate.1"
+)
+EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR = (
+    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json"
+)
+EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
+    "3f40b79243199a562c94b92f940e09ed3781d247ce03ab63dcd2848b5974f7fc"
+)
 # Immutable commit that contains the reviewed profile and cohort-protocol bytes.
 EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = (
     "502c4ff7edfc6307ea5469bcb81089e13612a24a"
@@ -4499,6 +4517,44 @@ def _v1_candidate_artifacts_valid(root: Path, errors: list[str]) -> bool:
             != digest
         ):
             _error(errors, f"code-owned v1 candidate artifact identity changed: {locator}")
+    return len(errors) == before
+
+
+# Review-time integrity seam only. A pre-freeze candidate is not product
+# authority and therefore must not become a verifier prerequisite until the
+# program explicitly freezes and binds it through _normative_profile_binding_valid.
+def _current_profile_candidate_artifacts_valid(
+    root: Path, errors: list[str]
+) -> bool:
+    before = len(errors)
+    expected = (
+        (
+            EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR,
+            EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256,
+        ),
+        (
+            EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR,
+            EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256,
+        ),
+    )
+    for locator, digest in expected:
+        candidate = _inside_root(
+            root, locator, errors, "current profile candidate artifact"
+        )
+        if candidate is None:
+            continue
+        raw = _read_bounded_bytes(
+            candidate, f"current profile candidate artifact {locator}", errors
+        )
+        if (
+            raw is not None
+            and hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
+            != digest
+        ):
+            _error(
+                errors,
+                f"code-owned current profile candidate artifact identity changed: {locator}",
+            )
     return len(errors) == before
 
 

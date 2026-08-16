@@ -12,8 +12,9 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program. The repository verifier reports `programStatus=ready`,
+**Current status:** v1.1 is the nonterminal environment-attribution program;
+one bounded outcome-neutral candidate-integrity increment is currently active.
+The repository verifier reports `programStatus=active`,
 `completionState=in-progress`, O1-O5 `0/5`, and G1-G4 `4/4`; run the verifier
 for live truth. The constitution's terminal proposition remains open. v1.0 is
 an immutable stopped zero-outcome attempt at revision `910ac01`; none of its
@@ -155,6 +156,11 @@ The current repository provides:
 - a distinct historical frozen [v1.0 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
   and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json),
   retained as stopped subordinate inputs but carrying no task or outcome evidence;
+- a separate code-pinned [pre-freeze v1.1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
+  and [paired cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)
+  that realize the current adaptive environment and human-intervention contract;
+  they remain subordinate review inputs with no freeze, activation, task, result,
+  installation, or authority of their own;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - a legacy inactive, standard-library-only `SessionStart` repository seam that
@@ -185,7 +191,8 @@ The current repository provides:
   build instead of duplicating existing layers.
 
 It does not provide a task runtime, persistent capability installation, or an
-accepted v1.1 live-routing result today. Candidate.5 has only the frozen,
+accepted v1.1 live-routing result today. The pre-freeze v1.1 candidates are not
+the final normative binding and carry zero outcome evidence. Candidate.5 has only the frozen,
 bounded v0.2 Codex calibration acceptance described above; it is not the final
 v1.1 profile or a general standard. The adapters are not installed in user
 configuration. Passing repository checks and historical receipts do not prove
@@ -235,8 +242,10 @@ A without-Harness baseline cannot run inside the Harness repository and inherit
 its project guidance. Historical items are classified as environment-independent,
 environment-bound, or invalidated; none inherit outcome credit.
 
-The repository must then select and bind one new content-addressed normative
-profile and paired prospective cohort protocol. The v1.0 profile, protocol,
+The repository now carries one code-pinned pre-freeze v1.1 profile and paired
+prospective cohort-protocol candidate. They must still be reviewed, selected,
+content-addressed, frozen, and independently authorized before becoming the
+current normative binding. The v1.0 profile, protocol,
 authorization, cohort, registration and ordering state cannot be reused. Each
 permitted cohort generation's frozen commit binds the exact initial
 source-native ordered enrollment surface, activation cursor, and cohort key

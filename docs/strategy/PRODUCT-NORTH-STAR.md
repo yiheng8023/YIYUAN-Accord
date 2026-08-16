@@ -105,8 +105,9 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   claim.
 
 The current v1.1 program in `product/program.json` and
-`product/acceptance.json` is a ready, zero-outcome environment-attributed
-terminal-product proof. It preserves v0.2 as bounded historical calibration and
+`product/acceptance.json` is a zero-outcome environment-attributed terminal-
+product proof with one bounded outcome-neutral candidate-integrity increment
+currently active. It preserves v0.2 as bounded historical calibration and
 v1.0 as an immutable stopped zero-outcome attempt. Current evidence must
 preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,
@@ -123,6 +124,11 @@ the claim stays observational. The initial state is not a static capability
 ceiling. Observed-native-minimum
 and user-configured evidence are separate strata, and unobservable state
 remains unknown.
+
+The current tree also contains one code-pinned pre-freeze v1.1 method/profile
+and paired prospective cohort-protocol candidate. They express the adaptive
+route and human-intervention method for review, but remain subordinate, unfrozen,
+inactive, and unable to contribute outcome or authority by presence alone.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as
