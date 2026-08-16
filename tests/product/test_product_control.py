@@ -8609,6 +8609,13 @@ class ProductControlTests(unittest.TestCase):
 
         tag_object = self.create_terminal_fixture_tag(evidence_digest, head)
         original = control._evidence_git
+        expected_remote_args = (
+            "ls-remote",
+            "--tags",
+            control.EXPECTED_PUBLIC_REMOTE,
+            "refs/tags/v1.1.0",
+            "refs/tags/v1.1.0^{}",
+        )
 
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
@@ -8625,6 +8632,7 @@ class ProductControlTests(unittest.TestCase):
             root: Path, *args: str, **kwargs: object
         ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
+                self.assertEqual(args, expected_remote_args)
                 return (
                     f"{tag_object}\trefs/tags/v1.1.0\n"
                     f"{head}\trefs/tags/v1.1.0^{{}}\n"
@@ -8650,6 +8658,7 @@ class ProductControlTests(unittest.TestCase):
             root: Path, *args: str, **kwargs: object
         ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
+                self.assertEqual(args, expected_remote_args)
                 return (
                     f"{'0' * len(tag_object)}\trefs/tags/v1.1.0\n"
                     f"{head}\trefs/tags/v1.1.0^{{}}\n"
@@ -8672,6 +8681,80 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             "public terminal tag object or peeled commit does not match locally",
             mismatched["errors"],
+        )
+
+    def test_git_ls_remote_requires_both_exact_annotated_tag_patterns(self) -> None:
+        head = self.initialize_fixture_repository()
+        tag = "v-protocol-check"
+        tag_ref = f"refs/tags/{tag}"
+        subprocess.run(
+            ["git", "tag", "-a", tag, "-m", "protocol check"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        tag_object = subprocess.run(
+            ["git", "rev-parse", tag_ref],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        with tempfile.TemporaryDirectory(dir=self.root.parent) as temporary:
+            remote = Path(temporary) / "remote.git"
+            subprocess.run(
+                ["git", "init", "--bare", "--quiet", str(remote)],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                ["git", "push", "--quiet", str(remote), tag_ref],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            single = subprocess.run(
+                [
+                    "git",
+                    "-c",
+                    "protocol.file.allow=always",
+                    "ls-remote",
+                    "--tags",
+                    str(remote),
+                    tag_ref,
+                ],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).stdout
+            paired = subprocess.run(
+                [
+                    "git",
+                    "-c",
+                    "protocol.file.allow=always",
+                    "ls-remote",
+                    "--tags",
+                    str(remote),
+                    tag_ref,
+                    f"{tag_ref}^{{}}",
+                ],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).stdout
+        self.assertEqual(single, f"{tag_object}\t{tag_ref}\n".encode("ascii"))
+        self.assertEqual(
+            paired,
+            (
+                f"{tag_object}\t{tag_ref}\n"
+                f"{head}\t{tag_ref}^{{}}\n"
+            ).encode("ascii"),
         )
 
     def test_terminal_candidate_rejects_untracked_or_ignored_residue(self) -> None:

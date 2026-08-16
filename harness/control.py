@@ -7950,6 +7950,7 @@ def _terminal_release_gate(
         "--tags",
         EXPECTED_PUBLIC_REMOTE,
         tag_ref,
+        f"{tag_ref}^{{}}",
     )
     if remote_raw is None:
         _error(errors, "public terminal tag cannot be verified")
