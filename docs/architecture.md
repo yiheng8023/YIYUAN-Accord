@@ -67,8 +67,9 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and has one
-source-authorized, code-pinned frozen `normativeProfileBinding`. The
+The current v1.1 program is `active`, has one outcome-neutral terminal-release
+authorization-scope alignment increment, and has one source-authorized,
+code-pinned frozen `normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -156,6 +157,11 @@ actual final authorization carrier and trust boundary are known. The only curren
 human-authorization registry entry is the active v1.1 first-freeze source
 validator. Its execution-specific anchors are code-pinned, but it cannot
 promote an outcome.
+The current annotation format structurally binds cross-host and cross-OS
+equivalence, portable semantics, the conformance contract, adaptive
+projections, privacy, exact tested host/OS/runtime/virtualization scope, claim
+ceiling, candidate, tag, and public release. A predecessor profile-and-adapter
+scope fails before any source validator can promote it.
 
 Portfolio minima are eligibility predicates, not work generators. O3's
 reproducible-gap case and O4's rejected or stopped receipt count only when a

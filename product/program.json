@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v11-terminal-release-scope-alignment",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,5 +105,62 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v11-terminal-release-scope-alignment",
+      "state": "active",
+      "correctionClass": "terminal-release-authorization-scope-alignment",
+      "observedProblem": "Current O5 requires the named human to accept cross-host and cross-operating-system equivalence, conformance-contract and adaptive-projection fitness, privacy treatment, exact tested operating-system scope and bounded claims, but the code-owned terminal tag annotation still fixes acceptedScope to the predecessor normative-profile and thin-reference-adapters vocabulary under the old v1 format. A weak source validator could therefore let terminal acceptance omit current form and operating-system scope, while a strict validator could not express the current acceptance contract.",
+      "hypothesis": "Versioning the terminal authorization annotation and replacing its exact code-owned acceptedScope with the current O5 human-authority dimensions will make the final release gate reject predecessor scope and require current form-neutral and bounded cross-operating-system authorization without changing outcome thresholds, cohort state, private evidence or release mechanics.",
+      "falsifier": "Stop or revise if the repair adds a new outcome, threshold, human decision, publication action or release artifact; prebuilds a task outcome or terminal source validator; changes the frozen profile, cohort protocol, environment-attribution contract or cohort authorization; accepts the predecessor scope under the new format; or causes any current O1-O5 progress.",
+      "stopCondition": "Stop after the code-owned terminal annotation format and acceptedScope exactly cover current O5 equivalence, portable semantics, conformance contract, adaptive projections, privacy, tested host/OS/runtime/virtualization scope, claim ceiling, candidate, tag and public release; predecessor scope is rejected in a focused regression; verifier and full product tests pass with O1-O5 at 0/5; all task-created residue is absent; and this outcome-neutral increment exits the current graph.",
+      "acceptanceIds": [
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": [
+          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
+          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v11-terminal-release-scope-alignment",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one versioned current terminal authorization annotation format",
+            "one exact form-neutral and cross-operating-system accepted scope",
+            "one predecessor-scope fail-closed regression",
+            "consistent terminal release documentation and adapter runtime pin"
+          ]
+        }
+      ]
+    }
+  ]
 }

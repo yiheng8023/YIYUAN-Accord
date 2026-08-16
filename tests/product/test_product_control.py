@@ -614,7 +614,13 @@ class ProductControlTests(unittest.TestCase):
         ).stdout.strip()
         return outcome_ids, evidence_digest.hexdigest(), head
 
-    def create_terminal_fixture_tag(self, evidence_digest: str, head: str) -> str:
+    def create_terminal_fixture_tag(
+        self,
+        evidence_digest: str,
+        head: str,
+        *,
+        accepted_scope: list[str] | None = None,
+    ) -> str:
         annotation = {
             "schema": 1,
             "format": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
@@ -640,7 +646,11 @@ class ProductControlTests(unittest.TestCase):
                     "version": 1,
                 },
             },
-            "acceptedScope": control.EXPECTED_TERMINAL_RELEASE_SCOPE,
+            "acceptedScope": (
+                control.EXPECTED_TERMINAL_RELEASE_SCOPE
+                if accepted_scope is None
+                else accepted_scope
+            ),
         }
         subprocess.run(
             [
@@ -8462,6 +8472,60 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             "terminal completion requires a predeclared release candidate binding",
             report["errors"],
+        )
+
+    def test_terminal_authorization_rejects_predecessor_product_scope(self) -> None:
+        _, evidence_digest, head = self.configure_terminal_candidate()
+        predecessor_scope = [
+            "normative-profile",
+            "thin-reference-adapters",
+            "privacy-disposition",
+            "claim-ceiling",
+            "candidate-commit",
+            "annotated-tag",
+            "public-release",
+        ]
+        self.create_terminal_fixture_tag(
+            evidence_digest,
+            head,
+            accepted_scope=predecessor_scope,
+        )
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
+            {
+                "fixture-human-authorization-validator": (
+                    lambda annotation, root, errors: True
+                )
+            },
+        ):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertIn(
+            "terminal tag annotation authorization is invalid", report["errors"]
+        )
+        self.assertEqual(
+            control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
+            "harness-release-authorization-v2",
+        )
+        self.assertEqual(
+            control.EXPECTED_TERMINAL_RELEASE_SCOPE,
+            [
+                "cross-host-and-cross-operating-system-equivalence",
+                "portable-collaboration-semantics",
+                "minimum-quality-and-evidence-conformance-contract",
+                "adaptive-thin-reference-projections",
+                "privacy-disposition",
+                "tested-host-operating-system-runtime-and-virtualization-scope",
+                "claim-ceiling",
+                "candidate-commit",
+                "annotated-tag",
+                "public-release",
+            ],
         )
 
     def test_terminal_candidate_waits_for_tag_then_accepts_exact_public_identity(

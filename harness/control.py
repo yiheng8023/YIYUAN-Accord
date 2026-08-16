@@ -843,16 +843,19 @@ TERMINAL_RELEASE_AUTHORITY_SOURCE_FIELDS = {
 }
 TERMINAL_RELEASE_AUTHORITY_VALIDATOR_FIELDS = {"kind", "version"}
 EXPECTED_TERMINAL_RELEASE_SCOPE = [
-    "normative-profile",
-    "thin-reference-adapters",
+    "cross-host-and-cross-operating-system-equivalence",
+    "portable-collaboration-semantics",
+    "minimum-quality-and-evidence-conformance-contract",
+    "adaptive-thin-reference-projections",
     "privacy-disposition",
+    "tested-host-operating-system-runtime-and-virtualization-scope",
     "claim-ceiling",
     "candidate-commit",
     "annotated-tag",
     "public-release",
 ]
 EXPECTED_PUBLIC_REMOTE = "https://github.com/yiheng8023/agent-autonomy-harness.git"
-TERMINAL_RELEASE_ANNOTATION_FORMAT = "harness-release-authorization-v1"
+TERMINAL_RELEASE_ANNOTATION_FORMAT = "harness-release-authorization-v2"
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
     "maxConsecutiveOutcomeNeutralWorkItems",
