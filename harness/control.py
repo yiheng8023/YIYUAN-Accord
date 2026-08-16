@@ -807,6 +807,8 @@ TERMINAL_RELEASE_BINDING_FIELDS = {
     "publicRemote",
     "annotationFormat",
     "o5EvidenceSetSha256",
+    "authorizationValidator",
+    "authorizationSourcePolicy",
 }
 UNREGISTERED_TERMINAL_RELEASE_BINDING = {
     "state": "unregistered",
@@ -814,7 +816,32 @@ UNREGISTERED_TERMINAL_RELEASE_BINDING = {
     "publicRemote": None,
     "annotationFormat": None,
     "o5EvidenceSetSha256": None,
+    "authorizationValidator": None,
+    "authorizationSourcePolicy": None,
 }
+TERMINAL_AUTHORIZATION_VALIDATOR_BINDING_FIELDS = {
+    "kind",
+    "version",
+    "locator",
+    "revision",
+    "sha256",
+}
+TERMINAL_AUTHORIZATION_SOURCE_POLICY_FIELDS = {
+    "sourceKind",
+    "publicIdentityScheme",
+    "commitmentScheme",
+    "privateLocatorRule",
+}
+EXPECTED_TERMINAL_AUTHORIZATION_PUBLIC_IDENTITY_SCHEME = "random-public-id-v1"
+EXPECTED_TERMINAL_AUTHORIZATION_COMMITMENT_SCHEME = (
+    "source-private-keyed-hmac-sha256-v1"
+)
+EXPECTED_TERMINAL_AUTHORIZATION_PRIVATE_LOCATOR_RULE = (
+    "code-owned-validator-private-only-never-public"
+)
+TERMINAL_PUBLIC_AUTHORIZATION_IDENTITY_PATTERN = re.compile(
+    r"terminal-authorization\.public-v1:[0-9a-f]{32}"
+)
 TERMINAL_RELEASE_ANNOTATION_FIELDS = {
     "schema",
     "format",
@@ -837,9 +864,8 @@ TERMINAL_RELEASE_AUTHORITY_FIELDS = {
 }
 TERMINAL_RELEASE_AUTHORITY_SOURCE_FIELDS = {
     "kind",
-    "locator",
-    "identity",
-    "payloadSha256",
+    "publicIdentity",
+    "commitment",
 }
 TERMINAL_RELEASE_AUTHORITY_VALIDATOR_FIELDS = {"kind", "version"}
 EXPECTED_TERMINAL_RELEASE_SCOPE = [
@@ -1444,6 +1470,7 @@ HumanAuthorizationValidator = Callable[
     [dict[str, Any], Path, list[str]],
     bool,
 ]
+TerminalAuthorizationValidatorSpec = tuple[str, HumanAuthorizationValidator]
 
 
 class _WindowsCredentialFileTime(ctypes.Structure):
@@ -4297,6 +4324,9 @@ SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
         )
     }
 )
+SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
+    str, TerminalAuthorizationValidatorSpec
+] = MappingProxyType({})
 
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...], bytes | None, int], bytes | None] | None
@@ -6227,7 +6257,7 @@ def _normative_profile_binding_valid(
 
 
 def _terminal_release_binding_valid(
-    program: dict[str, Any], errors: list[str]
+    root: Path, program: dict[str, Any], errors: list[str]
 ) -> bool:
     before = len(errors)
     binding = program.get("terminalReleaseBinding")
@@ -6240,6 +6270,8 @@ def _terminal_release_binding_valid(
         return len(errors) == before
     tag = binding.get("tag")
     expected_prefix = f"{program.get('release')}."
+    authorization_validator = binding.get("authorizationValidator")
+    authorization_source_policy = binding.get("authorizationSourcePolicy")
     if (
         binding.get("state") != "candidate"
         or program.get("status") != "completed"
@@ -6252,8 +6284,92 @@ def _terminal_release_binding_valid(
         or not isinstance(binding.get("o5EvidenceSetSha256"), str)
         or re.fullmatch(r"[0-9a-f]{64}", binding["o5EvidenceSetSha256"])
         is None
+        or not isinstance(authorization_validator, dict)
+        or set(authorization_validator)
+        != TERMINAL_AUTHORIZATION_VALIDATOR_BINDING_FIELDS
+        or not isinstance(authorization_source_policy, dict)
+        or set(authorization_source_policy)
+        != TERMINAL_AUTHORIZATION_SOURCE_POLICY_FIELDS
     ):
         _error(errors, "terminal release candidate binding shape is invalid")
+        return len(errors) == before
+    validator_kind = authorization_validator.get("kind")
+    validator_version = authorization_validator.get("version")
+    validator_locator = _relative_locator(authorization_validator.get("locator"))
+    validator_revision = authorization_validator.get("revision")
+    validator_sha256 = authorization_validator.get("sha256")
+    validator_path = (
+        PurePosixPath(validator_locator) if validator_locator is not None else None
+    )
+    validator_spec = (
+        SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS.get(validator_kind)
+        if isinstance(validator_kind, str)
+        else None
+    )
+    current_revision_raw = _evidence_git(root, "rev-parse", "--verify", "HEAD")
+    try:
+        current_revision = (
+            current_revision_raw.decode("ascii").strip()
+            if current_revision_raw is not None
+            else ""
+        )
+    except UnicodeError:
+        current_revision = ""
+    validator_identity_valid = (
+        isinstance(validator_kind, str)
+        and SOURCE_KIND_PATTERN.fullmatch(validator_kind) is not None
+        and type(validator_version) is int
+        and validator_version == 1
+        and validator_path is not None
+        and validator_path.parent == PurePosixPath("harness")
+        and validator_path.suffix == ".py"
+        and validator_path.name.startswith("terminal_authorization_validator_")
+        and isinstance(validator_revision, str)
+        and isinstance(validator_sha256, str)
+        and re.fullmatch(r"[0-9a-f]{64}", validator_sha256) is not None
+        and validator_spec is not None
+        and validator_locator == validator_spec[0]
+        and _strict_git_ancestor(root, validator_revision, current_revision)
+        and _committed_blob(
+            root,
+            validator_revision,
+            validator_locator,
+            validator_sha256,
+        )
+    )
+    current_validator = (
+        _inside_root(root, validator_locator, errors, "terminal authorization validator")
+        if validator_locator is not None
+        else None
+    )
+    current_validator_bytes = (
+        _read_bounded_bytes(
+            current_validator,
+            f"terminal authorization validator {validator_locator}",
+            errors,
+        )
+        if current_validator is not None
+        else None
+    )
+    if (
+        not validator_identity_valid
+        or current_validator_bytes is None
+        or hashlib.sha256(current_validator_bytes.replace(b"\r\n", b"\n")).hexdigest()
+        != validator_sha256
+    ):
+        _error(errors, "terminal authorization validator identity is not prebound")
+    if not (
+        isinstance(authorization_source_policy.get("sourceKind"), str)
+        and SOURCE_KIND_PATTERN.fullmatch(authorization_source_policy["sourceKind"])
+        is not None
+        and authorization_source_policy.get("publicIdentityScheme")
+        == EXPECTED_TERMINAL_AUTHORIZATION_PUBLIC_IDENTITY_SCHEME
+        and authorization_source_policy.get("commitmentScheme")
+        == EXPECTED_TERMINAL_AUTHORIZATION_COMMITMENT_SCHEME
+        and authorization_source_policy.get("privateLocatorRule")
+        == EXPECTED_TERMINAL_AUTHORIZATION_PRIVATE_LOCATOR_RULE
+    ):
+        _error(errors, "terminal authorization source policy is invalid")
     return len(errors) == before
 
 
@@ -7880,6 +7996,8 @@ def _terminal_release_gate(
     authorization_validator = (
         authority.get("validator") if isinstance(authority, dict) else None
     )
+    bound_authorization_validator = binding.get("authorizationValidator")
+    authorization_source_policy = binding.get("authorizationSourcePolicy")
     annotation_valid = (
         set(annotation) == TERMINAL_RELEASE_ANNOTATION_FIELDS
         and type(annotation.get("schema")) is int
@@ -7900,13 +8018,17 @@ def _terminal_release_gate(
         and isinstance(authorization_source, dict)
         and set(authorization_source)
         == TERMINAL_RELEASE_AUTHORITY_SOURCE_FIELDS
-        and all(
-            _nonempty_text(authorization_source.get(field))
-            for field in ("kind", "locator", "identity")
+        and isinstance(authorization_source_policy, dict)
+        and authorization_source.get("kind")
+        == authorization_source_policy.get("sourceKind")
+        and isinstance(authorization_source.get("publicIdentity"), str)
+        and TERMINAL_PUBLIC_AUTHORIZATION_IDENTITY_PATTERN.fullmatch(
+            authorization_source["publicIdentity"]
         )
-        and isinstance(authorization_source.get("payloadSha256"), str)
+        is not None
+        and isinstance(authorization_source.get("commitment"), str)
         and re.fullmatch(
-            r"[0-9a-f]{64}", authorization_source["payloadSha256"]
+            r"hmac-sha256:[0-9a-f]{64}", authorization_source["commitment"]
         )
         is not None
         and isinstance(authorization_validator, dict)
@@ -7915,6 +8037,11 @@ def _terminal_release_gate(
         and _nonempty_text(authorization_validator.get("kind"))
         and type(authorization_validator.get("version")) is int
         and authorization_validator.get("version") == 1
+        and isinstance(bound_authorization_validator, dict)
+        and authorization_validator.get("kind")
+        == bound_authorization_validator.get("kind")
+        and authorization_validator.get("version")
+        == bound_authorization_validator.get("version")
         and _same_typed_value(
             annotation.get("acceptedScope"), EXPECTED_TERMINAL_RELEASE_SCOPE
         )
@@ -7923,15 +8050,16 @@ def _terminal_release_gate(
         _error(errors, "terminal tag annotation authorization is invalid")
         return False, "invalid"
     validator_kind = authorization_validator["kind"]
-    authorization_evaluator = SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(
+    authorization_spec = SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS.get(
         validator_kind
     )
-    if authorization_evaluator is None:
+    if authorization_spec is None:
         _error(
             errors,
             f"terminal human authorization has no code-owned source validator: {validator_kind}",
         )
         return False, "invalid"
+    _, authorization_evaluator = authorization_spec
     try:
         authorization_verified = authorization_evaluator(annotation, root, errors)
     except Exception as exc:
@@ -8028,7 +8156,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
     frozen_v02_profile = _frozen_v02_profile_artifacts_valid(root, errors)
     normative_profile = _normative_profile_binding_valid(root, program, errors)
-    terminal_release_binding = _terminal_release_binding_valid(program, errors)
+    terminal_release_binding = _terminal_release_binding_valid(root, program, errors)
     criteria_before = len(errors)
     criteria = _criteria(acceptance, errors)
     criteria_valid = len(errors) == criteria_before

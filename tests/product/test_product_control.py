@@ -495,6 +495,14 @@ class ProductControlTests(unittest.TestCase):
             )
         }
 
+    def terminal_authorization_registry(self, validator) -> dict:
+        return {
+            "fixture-human-authorization-validator": (
+                "harness/terminal_authorization_validator_fixture.py",
+                validator,
+            )
+        }
+
     def increment_fixture(self, *, state: str = "planned") -> dict:
         work_state = "completed" if state == "completed" else "planned"
         return {
@@ -582,6 +590,41 @@ class ProductControlTests(unittest.TestCase):
         )
         evidence_digest.update(b"\0")
         if bind_release:
+            validator_relative = "harness/terminal_authorization_validator_fixture.py"
+            validator_path = self.root / validator_relative
+            validator_path.parent.mkdir(parents=True, exist_ok=True)
+            validator_path.write_text(
+                "def validate_terminal_authorization():\n    return True\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                ["git", "add", validator_relative],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            subprocess.run(
+                ["git", "commit", "--quiet", "-m", "fixture terminal validator"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            validator_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            validator_bytes = subprocess.run(
+                ["git", "show", f"{validator_revision}:{validator_relative}"],
+                cwd=self.root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).stdout
             program = self.read_json("product/program.json")
             program["terminalReleaseBinding"] = {
                 "state": "candidate",
@@ -589,6 +632,19 @@ class ProductControlTests(unittest.TestCase):
                 "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
                 "annotationFormat": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
                 "o5EvidenceSetSha256": evidence_digest.hexdigest(),
+                "authorizationValidator": {
+                    "kind": "fixture-human-authorization-validator",
+                    "version": 1,
+                    "locator": validator_relative,
+                    "revision": validator_revision,
+                    "sha256": hashlib.sha256(validator_bytes).hexdigest(),
+                },
+                "authorizationSourcePolicy": {
+                    "sourceKind": "fixture-trusted-user-event",
+                    "publicIdentityScheme": control.EXPECTED_TERMINAL_AUTHORIZATION_PUBLIC_IDENTITY_SCHEME,
+                    "commitmentScheme": control.EXPECTED_TERMINAL_AUTHORIZATION_COMMITMENT_SCHEME,
+                    "privateLocatorRule": control.EXPECTED_TERMINAL_AUTHORIZATION_PRIVATE_LOCATOR_RULE,
+                },
             }
             self.write_json("product/program.json", program)
         subprocess.run(
@@ -620,6 +676,8 @@ class ProductControlTests(unittest.TestCase):
         head: str,
         *,
         accepted_scope: list[str] | None = None,
+        authorization_source: dict | None = None,
+        authorization_validator_kind: str = "fixture-human-authorization-validator",
     ) -> str:
         annotation = {
             "schema": 1,
@@ -635,14 +693,19 @@ class ProductControlTests(unittest.TestCase):
                 "name": "fixture reviewer",
                 "decision": "authorized",
                 "decidedAt": "2026-08-15T12:00:00+08:00",
-                "source": {
-                    "kind": "fixture-trusted-user-event",
-                    "locator": "fixture://authorization/1",
-                    "identity": "fixture-authorization-1",
-                    "payloadSha256": "f" * 64,
-                },
+                "source": (
+                    {
+                        "kind": "fixture-trusted-user-event",
+                        "publicIdentity": (
+                            "terminal-authorization.public-v1:" + "e" * 32
+                        ),
+                        "commitment": "hmac-sha256:" + "f" * 64,
+                    }
+                    if authorization_source is None
+                    else authorization_source
+                ),
                 "validator": {
-                    "kind": "fixture-human-authorization-validator",
+                    "kind": authorization_validator_kind,
                     "version": 1,
                 },
             },
@@ -8556,12 +8619,10 @@ class ProductControlTests(unittest.TestCase):
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
         ), patch(
-            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
-            {
-                "fixture-human-authorization-validator": (
-                    lambda annotation, root, errors: True
-                )
-            },
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            self.terminal_authorization_registry(
+                lambda annotation, root, errors: True
+            ),
         ):
             report = self.report()
         self.assertFalse(report["valid"])
@@ -8589,6 +8650,62 @@ class ProductControlTests(unittest.TestCase):
             ],
         )
 
+    def test_terminal_authorization_rejects_public_private_source_locator(self) -> None:
+        _, evidence_digest, head = self.configure_terminal_candidate()
+        self.create_terminal_fixture_tag(
+            evidence_digest,
+            head,
+            authorization_source={
+                "kind": "fixture-trusted-user-event",
+                "locator": "C:/Users/private/session.jsonl",
+                "identity": "session_private",
+                "payloadSha256": "f" * 64,
+            },
+        )
+        validator = lambda document, criterion_id, root, errors: True
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            self.terminal_authorization_registry(
+                lambda annotation, root, errors: True
+            ),
+        ):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "terminal tag annotation authorization is invalid", report["errors"]
+        )
+
+    def test_terminal_tag_cannot_select_a_different_authorization_validator(self) -> None:
+        _, evidence_digest, head = self.configure_terminal_candidate()
+        self.create_terminal_fixture_tag(
+            evidence_digest,
+            head,
+            authorization_validator_kind="fixture-weaker-validator",
+        )
+        validator = lambda document, criterion_id, root, errors: True
+        terminal_registry = self.terminal_authorization_registry(
+            lambda annotation, root, errors: True
+        )
+        terminal_registry["fixture-weaker-validator"] = (
+            "harness/terminal_authorization_validator_fixture.py",
+            lambda annotation, root, errors: True,
+        )
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            terminal_registry,
+        ):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "terminal tag annotation authorization is invalid", report["errors"]
+        )
+
     def test_terminal_candidate_waits_for_tag_then_accepts_exact_public_identity(
         self,
     ) -> None:
@@ -8597,6 +8714,11 @@ class ProductControlTests(unittest.TestCase):
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            self.terminal_authorization_registry(
+                lambda annotation, root, errors: True
+            ),
         ):
             pending = self.report()
         self.assertTrue(pending["valid"], pending["errors"])
@@ -8624,7 +8746,7 @@ class ProductControlTests(unittest.TestCase):
             unverified_authorization = self.report()
         self.assertFalse(unverified_authorization["valid"])
         self.assertIn(
-            "terminal human authorization has no code-owned source validator: fixture-human-authorization-validator",
+            "terminal authorization validator identity is not prebound",
             unverified_authorization["errors"],
         )
 
@@ -8643,8 +8765,10 @@ class ProductControlTests(unittest.TestCase):
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
         ), patch(
-            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
-            {"fixture-human-authorization-validator": lambda annotation, root, errors: True},
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            self.terminal_authorization_registry(
+                lambda annotation, root, errors: True
+            ),
         ), patch(
             "harness.control._evidence_git", side_effect=project_public_tag
         ):
@@ -8669,8 +8793,10 @@ class ProductControlTests(unittest.TestCase):
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
         ), patch(
-            "harness.control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS",
-            {"fixture-human-authorization-validator": lambda annotation, root, errors: True},
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            self.terminal_authorization_registry(
+                lambda annotation, root, errors: True
+            ),
         ), patch(
             "harness.control._evidence_git",
             side_effect=project_mismatched_public_tag,
@@ -8760,11 +8886,17 @@ class ProductControlTests(unittest.TestCase):
     def test_terminal_candidate_rejects_untracked_or_ignored_residue(self) -> None:
         self.configure_terminal_candidate()
         validator = lambda document, criterion_id, root, errors: True
+        terminal_registry = self.terminal_authorization_registry(
+            lambda annotation, root, errors: True
+        )
         extra_file = self.root / "scratch-output"
         extra_file.write_text("residue", encoding="utf-8")
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            terminal_registry,
         ):
             file_report = self.report()
         self.assertFalse(file_report["valid"])
@@ -8779,6 +8911,9 @@ class ProductControlTests(unittest.TestCase):
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            terminal_registry,
         ):
             directory_report = self.report()
         self.assertFalse(directory_report["valid"])
@@ -8796,6 +8931,9 @@ class ProductControlTests(unittest.TestCase):
         with patch(
             "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
             self.validator_registry(validator),
+        ), patch(
+            "harness.control.SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS",
+            terminal_registry,
         ):
             ignored_report = self.report()
         self.assertFalse(ignored_report["valid"])

@@ -12,12 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
+**Current status:** v1.1 is the active, nonterminal environment-attribution
+program with one outcome-neutral terminal-authorization trust-and-public-privacy
+increment. Its exact candidate.1 profile and cohort
 protocol are frozen, independently source-authorized, and code-pinned to the
 first-freeze revision `5ce2773`; no natural task has yet been registered. On
 the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`programStatus=active`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
 `4/4`; run the verifier for live truth. A hosted runner without that protected
 source fails closed at G3 and corroborates only the non-private contract
 boundary. The constitution's terminal proposition remains open. v1.0 is
@@ -332,6 +333,11 @@ never reached that gate, so it cannot now progress to `accepted`. Any future
 release must bind its own terminal route through the next current authority.
 The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
+The clean candidate prebinds that validator's kind, version, repository
+locator, prior revision and digest plus the public-source policy before any tag
+exists. The public tag carries only a random public authorization identity and
+a keyed commitment; private source locators and raw event identities remain
+inside the validator's protected source boundary.
 The current annotation format also fixes the accepted scope to cross-host and
 cross-OS equivalence, portable collaboration semantics, the minimum quality and
 evidence-conformance contract, adaptive thin projections, privacy, the exact

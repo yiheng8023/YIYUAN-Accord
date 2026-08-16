@@ -17,10 +17,11 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.1 是 ready 但非终态的环境归因工序，当前没有 active increment。
+**当前状态：**v1.1 是 active 但非终态的环境归因工序，当前唯一 active increment 正在
+闭合终态人类授权验证路径与公开 tag 的私密来源边界。
 candidate.1 profile 与 cohort 协议的精确字节已冻结、获得独立来源授权，并由代码固定到
 首冻 revision `5ce2773`；尚无自然任务完成注册。在获授权的 Windows 来源上，仓库验证器
-报告 `programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
+报告 `programStatus=active`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
 `4/4`；缺少该受保护来源的托管 runner 会在 G3 失败关闭，只佐证非私密契约边界。
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
@@ -227,6 +228,9 @@ tag 中自报的人名和时间戳永远不能单独通过；必须由代码所�
 successor freeze 来源验证器。当前注册表已有一个已激活且由代码固定的 v1.1 首冻来源授权
 验证器；它核验精确 revision、binding digest、公开激活身份、受保护来源窗口和清理触发器，
 但不是结果验证器。
+未来 clean candidate 必须在 tag 创建前绑定 terminal 验证器的 kind、version、仓库 locator、
+先行 revision 与 digest，以及公开来源政策。公开 tag 只允许随机 public identity 与 keyed
+commitment；私密来源 locator 和原始事件身份只能留在验证器的受保护来源边界内。
 当前终态 annotation 格式还会结构性绑定跨宿主/跨 OS 等价性、可移植协作语义、符合性
 契约、自适应投影、隐私、精确实测宿主/OS/运行时/虚拟化范围、声明上限、候选、tag 与公开
 发布；旧的 profile/adapter 范围不能通过。
