@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-terminal-authorization-trust-privacy",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -107,65 +107,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-terminal-authorization-trust-privacy",
-      "state": "active",
-      "correctionClass": "terminal-human-authorization-trust-and-public-privacy",
-      "observedProblem": "The terminal candidate does not prebind the exact code-owned human-authorization validator or source trust policy, so a later public tag can choose a weaker registered validator after the candidate is fixed. The public tag annotation also accepts an arbitrary source locator, identity and unsalted payload digest, allowing local paths, credential targets, session identifiers or guessable private event material to be published while the gate remains structurally valid.",
-      "hypothesis": "Binding the terminal validator kind, version, committed code locator, revision and digest plus a public-source policy in the candidate, requiring the tag to reuse that validator, and replacing public locator fields with a random public identity and keyed commitment will close post-candidate validator selection and private-source disclosure without implementing the final source validator early.",
-      "falsifier": "Stop or revise if the repair prebuilds or selects the final terminal source validator, publishes a private locator or raw source identity, weakens named-human verification, adds a new acceptance threshold or human action, changes frozen cohort state, performs a release, creates outcome evidence, or produces any O1-O5 progress.",
-      "stopCondition": "Stop after an unregistered binding remains null; every candidate prebinds one exact committed code-owned terminal validator and source policy before tag creation; tag annotations can contain only a random public identity and keyed commitment and must reuse the candidate validator; predecessor locator-bearing tags and validator mismatch fail closed; verifier and full product tests pass with O1-O5 at 0/5; residue is absent; and this outcome-neutral increment exits the graph.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
-          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v11-terminal-authorization-trust-privacy",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "candidate-bound exact terminal authorization validator identity",
-            "candidate-bound public-safe source policy",
-            "opaque public source identity and keyed commitment annotation schema",
-            "validator-mismatch and locator-bearing-tag fail-closed regressions",
-            "consistent public status and adapter runtime pin"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
