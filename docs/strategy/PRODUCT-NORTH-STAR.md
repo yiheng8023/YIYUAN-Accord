@@ -40,9 +40,12 @@ research breadth, and green fixtures are not substitutes for that result.
 
 ## Fixed product boundary
 
-The durable product form consists of a demand-to-capability collaboration
-methodology, an open minimum quality-conformance profile, and executable
-reference adapters. Its portable core consists of:
+The durable result consists of portable demand-to-outcome collaboration
+semantics, an open minimum quality and evidence-conformance contract, and
+adaptive thin reference projections. Methodology, documentation, CLI, API,
+Skill, plugin, MCP, Hook, adapter, package, service, or another carrier is a
+non-exhaustive delivery shape selected by demand and host fitness. The portable
+core consists of:
 
 1. testable quality requirements for goal-level demand, authority, capability
    observation, gap assessment, routing, task-topology selection,
@@ -105,13 +108,14 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   claim.
 
 The current v1.1 program in `product/program.json` and
-`product/acceptance.json` is a ready, zero-outcome environment-attributed
+`product/acceptance.json` is an active, zero-outcome environment-attributed
 terminal-product proof. It preserves v0.2 as bounded historical calibration and
 v1.0 as an immutable stopped zero-outcome attempt. Current evidence must
 preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,
-proactive verified carrier transition, and reproducible live cross-host public
-release before the whole project can be called closed. Host, model, provider,
+proactive verified carrier transition, and reproducible live cross-host and
+cross-operating-system public release before the whole project can be called
+closed. Host, model, provider,
 instructions, account policy, configuration, Skills, plugins, Apps, MCP, Hooks,
 memory, managers, operating system, runtime, and tool/resource surfaces are
 explicit variables. Harness-specific value estimates use pre-registered
@@ -124,10 +128,19 @@ ceiling. Observed-native-minimum
 and user-configured evidence are separate strata, and unobservable state
 remains unknown.
 
-The current tree also contains one code-pinned pre-freeze v1.1 method/profile
-and paired prospective cohort-protocol candidate. They express the adaptive
-route and human-intervention method for review, but remain subordinate, unfrozen,
-inactive, and unable to contribute outcome or authority by presence alone.
+Terminal O5 spans at least two operating-system families and includes at least
+one matched pair whose host units run across that boundary. Each unit binds the
+exact OS family/version, runtime, host relationship, and virtualization or
+compatibility identity. OS-specific authorization, protected storage,
+execution, rollback, cleanup, and evidence remain replaceable edge mechanisms;
+WSL2 is Linux hosted by Windows, not bare-metal Linux or macOS evidence, and no
+claim exceeds the tested combinations.
+
+The current tree also contains one code-pinned v1.1 method/profile and paired
+prospective cohort-protocol candidate. They express the adaptive route and
+human-intervention method as a subordinate, source-authorized frozen normative
+binding. The binding has no registered natural task and contributes no outcome,
+installation, publication, or terminal acceptance by presence alone.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as

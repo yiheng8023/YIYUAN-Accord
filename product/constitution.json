@@ -7,12 +7,12 @@
   "productForm": {
     "identity": "open-agent-neutral-demand-driven-human-agent-collaboration-quality-harness",
     "durableOutputs": [
-      "methodology",
-      "open-quality-conformance-profile",
-      "executable-reference-adapter"
+      "portable-demand-to-outcome-collaboration-semantics",
+      "open-minimum-quality-evidence-and-conformance-contract",
+      "adaptive-thin-reference-projections"
     ],
-    "portableCore": "testable-demand-authority-capability-task-topology-and-context-carrier-lifecycle-evidence-acceptance-and-burden-semantics",
-    "referenceDelivery": "codex-first-reference-slice-then-distinct-host-portability-proof"
+    "portableCore": "delivery-form-and-operating-system-neutral-testable-demand-authority-capability-task-topology-and-context-carrier-lifecycle-evidence-acceptance-and-burden-semantics",
+    "referenceDelivery": "codex-first-reference-slice-then-distinct-host-and-operating-system-portability-proof"
   },
   "collaborationModel": {
     "userContributions": [
@@ -81,7 +81,9 @@
     "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
     "conversation-carrier fitness is Agent-owned: use source-bound observable host and task signals to keep the current carrier only while it remains safe, choose native compaction or a verified handoff before preventable quality or capacity loss, and when reliable signals are unavailable record that limit and apply a conservative pre-declared transition rule rather than making the user guess",
     "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; at each decision dynamically resolve the current suitable official or maintained source from a bounded as-of source and bind the exact execution version, commit, or package identity, license or applicable terms, maturity, and reuse boundary; never make one historical version a universal lock or execute an unresolved moving target; new implementation requires an evidenced residual semantic gap",
-    "reference-host calibration cannot establish Agent-neutral portability; a distinct-host O5 proof is required",
+    "reference-host calibration or one operating-system family cannot establish Agent-neutral portability; O5 requires distinct-host and bounded cross-operating-system proof",
+    "durable product results are defined by portable collaboration, evidence, and conformance semantics; methodology, documentation, CLI, API, Skill, plugin, MCP, Hook, adapter, package, service, or another carrier is a non-exhaustive adaptive projection chosen by demand and host fitness rather than mandatory product body",
+    "operating-system-specific installation, authorization, protected storage, execution, rollback, cleanup, and evidence mechanisms are replaceable adapter concerns rather than portable core; portability claims name only tested operating-system families, versions, virtualization boundaries, and host or runtime combinations and never imply universal operating-system support",
     "host, model, provider, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
     "Harness-specific value is estimated only through pre-registered matched comparisons with the same task-relevant starting environment and authority-and-available-source envelope, in which exact Harness activation is the only planned initial route and configuration difference; later Agent-selected or human-authorized capability and configuration changes are treatment-mediated lifecycle deltas that must be attributed rather than normalized away; unavoidable task differences remain explicit matching variables and limit the claim, so observational evidence is not mislabeled as single-variable causation; observed-native-minimum and user-configured evidence remain distinct and unknown or unobservable environment state is retained as unknown rather than assumed absent",
     "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
@@ -92,6 +94,8 @@
     "module and Skill shape",
     "capability discovery source and query strategy",
     "host and manager adapter sequence",
+    "delivery form and projection shape",
+    "operating-system-specific adapter and evidence mechanism",
     "task carrier topology and host primitive",
     "native, official, reviewed external, composed, or authored capability choice",
     "current source and exact execution-version resolution",

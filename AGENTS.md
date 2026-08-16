@@ -2,9 +2,12 @@
 
 This repository is the product authority for an open, Agent-neutral,
 demand-driven human-Agent collaboration quality harness. Its durable product
-target is a methodology, an open minimum quality-conformance profile, and thin
-executable reference adapters that reuse sufficient external protocol, runtime,
-identity, evidence, and evaluation layers.
+target is portable demand-to-outcome collaboration semantics, an open minimum
+quality and evidence-conformance contract, and adaptive thin reference
+projections that reuse sufficient external protocol, runtime, identity,
+evidence, and evaluation layers. Methodology, documentation, CLI, API, Skill,
+plugin, MCP, Hook, adapter, package, service, or another carrier is a
+non-exhaustive delivery shape, not mandatory product body.
 
 ## Current authority
 
@@ -153,6 +156,14 @@ matched observational evidence, and keep observed-native-minimum separate from
 user-configured evidence. Count all human actions in burden; classify a
 source-bound unavoidable human-only step separately from a prohibited transfer
 of Agent-owned work, which remains zero.
+
+Treat the operating system, virtualization or compatibility boundary, and
+OS-specific authorization, protected storage, execution, rollback, cleanup,
+and evidence path as explicit adapter variables. Resolve current supported
+routes at task time and bind exact tested identities; do not lock one host
+version or claim universal OS support. WSL is a Linux environment hosted by
+Windows and must be recorded as such rather than represented as bare-metal
+Linux or as macOS evidence.
 
 Before applying a capability route, compare whether it adds a goal, input,
 deliverable, human round trip, authority, side effect, or acceptance

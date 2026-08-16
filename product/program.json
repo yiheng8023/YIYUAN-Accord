@@ -3,11 +3,11 @@
   "id": "harness-product-program-v1.1",
   "productId": "agent-autonomy-harness",
   "release": "v1.1",
-  "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
+  "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v11-form-and-cross-os-terminal-alignment",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,5 +105,62 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v11-form-and-cross-os-terminal-alignment",
+      "state": "active",
+      "correctionClass": "form-and-cross-os-terminal-authority-alignment",
+      "observedProblem": "The current constitution pins the Harness's durable results to three artifact forms, while O5 requires a distinct host or runtime but can pass without any live operating-system-family difference. The terminal proposition can therefore be accepted while treating methodology, profile and adapter as an exhaustive product form and without proving that portable semantics survive an operating-system boundary.",
+      "hypothesis": "Defining durable results by portable collaboration, evidence and conformance semantics; treating CLI, Skill, plugin, adapter and later delivery shapes as non-exhaustive adaptive projections; and requiring the O5 pair set to span at least two operating-system families with at least one live cross-OS pair will align terminal proof with the constitution-level proposition. Exact host, OS, virtualization and version identities plus bounded claim ceilings will prevent WSL or any tested platform from being generalized into universal support, while the already authorized cohort remains valid because no task has been registered and the frozen profile and protocol defer thresholds and environment strata to current acceptance authority.",
+      "falsifier": "Stop or revise if the change turns the Harness into an Agent runtime or control plane; requires one delivery shape, operating system or fixed host version as portable core; treats WSL as bare-metal Linux or as macOS evidence; claims universal operating-system support; changes the frozen v1.1 profile, cohort protocol, environment-attribution contract or private-source authorization; fabricates a natural task or outcome; permits same-OS-only evidence to pass O5; or makes current O1-O5 progress nonzero.",
+      "stopCondition": "Stop after constitution, program, acceptance, verifier, tests and public documents define form-neutral durable semantics, adaptive non-exhaustive projections and a bounded live cross-OS O5 proof with exact environment identity and claim ceiling; the frozen cohort remains valid with no task registrations and O1-O5 at 0/5; focused and full product checks pass; task-created residue is absent; and this outcome-neutral increment exits the current graph.",
+      "acceptanceIds": [
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": [
+          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
+          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v11-form-and-cross-os-terminal-alignment",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "form-neutral durable-result and adaptive-projection authority",
+            "bounded cross-operating-system O5 criterion and claim ceiling",
+            "code-owned exact contract validation and focused regressions",
+            "consistent public product and current-state explanation"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -12,12 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
+**Current status:** v1.1 is the active, nonterminal environment-attribution
+program with one outcome-neutral product-form and cross-operating-system
+terminal-alignment increment. Its exact candidate.1 profile and cohort
 protocol are frozen, independently source-authorized, and code-pinned to the
 first-freeze revision `5ce2773`; no natural task has yet been registered. On
 the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`programStatus=active`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
 `4/4`; run the verifier for live truth. A hosted runner without that protected
 source fails closed at G3 and corroborates only the non-private contract
 boundary. The constitution's terminal proposition remains open. v1.0 is
@@ -135,14 +136,21 @@ This is the product target, not a claim about current runtime behavior.
 
 | The Harness owns | The Harness reuses | The Harness does not become |
 | --- | --- | --- |
-| A demand-to-capability collaboration methodology | Healthy Agent-native behavior | A universal Agent runtime |
-| An open minimum quality-conformance profile | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
+| Portable demand-to-outcome collaboration semantics | Healthy Agent-native behavior | A universal Agent runtime |
+| An open minimum quality and evidence-conformance contract | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
 | Measures for user burden, outcome quality, authority, evidence, recovery, context-carrier fitness and transition, code and conversation task-topology lifecycle, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, Git, and host task primitives | A new wire protocol, context monitor, Git or task manager, identity system, or audit format without a proven residual gap |
-| Thin reference adapters that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
+| Adaptive thin reference projections that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
 
 Codex is the first reference host because it is a strong, practical test bed.
 Codex-specific configuration remains outside the portable product core. A
-distinct second host is required before any cross-host claim can pass.
+distinct second host is required before any cross-host claim can pass. Terminal
+O5 also requires the live pair set to span at least two operating-system
+families and at least one pair to cross that boundary. Every claim names only
+the tested host, OS/version, runtime, and virtualization or compatibility
+relationship; WSL2 may supply bounded Linux evidence hosted by Windows, but it
+is not bare-metal Linux or macOS proof. CLI, API, Skill, plugin, MCP, Hook,
+adapter, package, service, and later carriers remain non-exhaustive adaptive
+delivery shapes rather than the product definition.
 
 ## What exists today
 
@@ -361,12 +369,14 @@ its code-owned deadline, and removes only that resource and trigger when due.
   preventable loss; every necessary code split is reconciled and cleaned.
 - **O5 — live portable open delivery:** two matched live Codex/distinct-host
   pairs jointly cover observed-native-minimum and user-configured, include a
-  useful completion and an honest stop or recovery, reproduce
-  from a clean checkout, pass the pre-closeout cross-dimensional counterexample
+  useful completion and an honest stop or recovery, span at least two
+  operating-system families with at least one cross-OS pair, bind exact OS and
+  virtualization identities, reproduce from a clean checkout on every claimed
+  OS family, pass the pre-closeout cross-dimensional counterexample
   audit with zero unresolved P0/P1 findings and zero temporary process artifacts,
-  and end with human acceptance of the versioned
-  profile, thin adapters, privacy disposition, claim ceiling, and exact public
-  release.
+  and end with human acceptance of the versioned conformance contract,
+  adaptive thin projections, privacy disposition, exact tested OS scope, claim
+  ceiling, and exact public release.
 
 One-execution means one run per pre-registered task-host unit. O5 deliberately
 runs each matched task once on each host as portability replication; it does not

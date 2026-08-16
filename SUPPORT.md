@@ -4,12 +4,14 @@ Community support is best effort.
 
 This repository accepts questions and reports about:
 
-- the Harness methodology and open minimum quality-conformance profile;
+- the Harness portable collaboration semantics and open minimum quality and
+  evidence-conformance contract;
 - the product-contract verifier and documentation;
 - source, license, and public reproduction evidence;
 - demand-driven capability routing and user-burden evaluation;
 - lifecycle and cleanup semantics; and
-- thin reference adapters.
+- adaptive thin reference projections across bounded host and operating-system
+  combinations.
 
 ## Start with what you need
 

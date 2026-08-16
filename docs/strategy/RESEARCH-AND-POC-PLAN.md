@@ -19,7 +19,9 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.1 is the ready zero-outcome environment-attributed terminal-product proof.
+v1.1 is the active zero-outcome environment-attributed terminal-product proof;
+its sole current increment aligns form-neutral durable results and bounded
+cross-operating-system terminal proof before the first task registration.
 Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
 and v1.0 remains an immutable stopped attempt, neither of which can be
 inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
@@ -206,7 +208,11 @@ official changes between tasks are freshly resolved and rebound.
 
 Each natural task-host unit runs once in its pre-registered arm. O5 cross-host
 replication is pre-registered portability evidence, not same-host treatment
-replay. Comparators use a
+replay. The terminal pair set also spans at least two operating-system families
+and includes one pair whose two host units cross that boundary, with exact OS,
+runtime, host relationship and virtualization identities and a claim ceiling
+limited to the tested combinations. WSL2 is recorded as Linux hosted by Windows,
+not as bare-metal Linux or macOS evidence. Comparators use a
 pre-registered comparable historical or independent natural task; live replay
 exists only for a task whose consequences are reversible and separately
 authorized, never merely to fill the matrix. A without-Harness baseline runs in
@@ -382,11 +388,13 @@ treating a generic collaboration protocol, runtime, catalog, gateway, human or
 tool schema, identity layer, policy engine, audit/provenance format, or
 benchmark suite as unexamined product novelty; it does not prove every external
 layer sufficient. The remaining hypothesis is narrower and explicitly
-falsifiable: a thin Agent-neutral methodology and open quality-conformance
-profile can measurably transfer goal-to-capability orchestration burden from the
-user while preserving accepted outcome quality, accountable authority,
-task-scoped exposure release and cleanup, evidence integrity, continuity, and
-equivalent semantics across replaceable hosts and external layers.
+falsifiable: portable Agent-neutral collaboration semantics, an open minimum
+quality and evidence-conformance contract, and adaptive thin projections can
+measurably transfer goal-to-capability orchestration burden from the user while
+preserving accepted outcome quality, accountable authority, task-scoped
+exposure release and cleanup, evidence integrity, continuity, and equivalent
+semantics across replaceable delivery forms, hosts, operating systems, and
+external layers.
 
 No fixed source reviewed here currently proves that whole proposition. That is
 not a novelty claim. A maintained implementation with matched, source-bound

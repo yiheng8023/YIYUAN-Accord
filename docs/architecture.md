@@ -1,10 +1,13 @@
 # Architecture
 
 Agent Autonomy Harness is an open, Agent-neutral, demand-driven human-Agent
-collaboration quality harness. Its durable outputs are a demand-to-capability
-collaboration methodology, an open minimum quality-conformance profile, and
-executable reference adapters. It has one testable portable product contract,
-one common read-only continuation projection, and replaceable host edges.
+collaboration quality harness. Its durable results are portable
+demand-to-outcome collaboration semantics, an open minimum quality and
+evidence-conformance contract, and adaptive thin reference projections. It has
+one testable portable product contract, one common read-only continuation
+projection, and replaceable host and operating-system edges. Methodology,
+documentation, CLI, API, Skill, plugin, MCP, Hook, adapter, package, service,
+or another carrier is a non-exhaustive projection, not the product boundary.
 
 ```text
 user goal + domain facts + bounded authority
@@ -64,7 +67,8 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and has one
+The current v1.1 program is `active`, has one outcome-neutral product-form and
+cross-operating-system terminal-alignment increment, and has one
 source-authorized, code-pinned frozen `normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
@@ -105,8 +109,13 @@ Harness repository guidance, so it runs in a neutral workspace or real target
 repository with the same task-inherent non-Harness guidance as its comparator.
 Each natural task-host unit runs once in one pre-registered arm. O5's same-task
 cross-host pair is pre-registered portability replication, not same-host
-treatment replay. The pre-task state is a starting condition, not a static
-capability ceiling. After demand reveals need, the Agent may adapt under the
+treatment replay. The O5 pair set must also span at least two operating-system
+families, with at least one pair executing its two host units across that
+boundary. Each unit binds the exact OS family/version, runtime, host
+relationship and virtualization or compatibility boundary. WSL2 is Linux
+hosted by Windows, not bare-metal Linux or macOS evidence, and no tested pair
+implies universal OS support. The pre-task state is a starting condition, not
+a static capability ceiling. After demand reveals need, the Agent may adapt under the
 registered authority: it performs every supported authorized mechanic, while
 any technically or authoritatively human-only action is reduced to the smallest
 exact step, guided, and verified before work resumes. All human actions remain
@@ -215,7 +224,8 @@ live program state comes only from the verifier. v1.1 must
 prospectively preserve or strengthen the criteria requiring sustained natural
 tasks, same-environment comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
-transition, and live reproducible cross-host release evidence.
+transition, and live reproducible cross-host and cross-operating-system release
+evidence.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without
@@ -367,8 +377,11 @@ authority. A second host must implement the same portable semantics through
 its own thin adapter; a Codex projection cannot prove cross-Agent behavior.
 Codex-first is the reference-adapter sequence, not a core dependency.
 
-The repository as a whole is not a plugin. The portable methodology, quality
-profile, evidence semantics, and acceptance remain manager- and host-neutral.
+The repository as a whole is not a plugin. Portable collaboration semantics,
+quality and evidence-conformance rules, and acceptance remain delivery-form-,
+manager-, host-, and operating-system-neutral. OS-specific authorization,
+protected storage, execution, rollback, cleanup, and evidence paths stay in
+replaceable projections or evidence mechanisms.
 `harness/continuation.py` derives the common bounded reconciliation projection;
 host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.

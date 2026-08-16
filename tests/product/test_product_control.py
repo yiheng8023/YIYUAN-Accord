@@ -4434,6 +4434,83 @@ class ProductControlTests(unittest.TestCase):
                     self.root / "product/constitution.json",
                 )
 
+    def test_product_form_and_o5_keep_delivery_shape_and_os_claims_bounded(
+        self,
+    ) -> None:
+        constitution = self.read_json("product/constitution.json")
+        acceptance = self.read_json("product/acceptance.json")
+        product_form = constitution["productForm"]
+        durable_outputs = product_form["durableOutputs"]
+
+        self.assertEqual(product_form, control.EXPECTED_PRODUCT_FORM)
+        self.assertEqual(
+            durable_outputs,
+            [
+                "portable-demand-to-outcome-collaboration-semantics",
+                "open-minimum-quality-evidence-and-conformance-contract",
+                "adaptive-thin-reference-projections",
+            ],
+        )
+        for delivery_shape in (
+            "methodology",
+            "cli",
+            "skill",
+            "plugin",
+            "mcp",
+            "adapter",
+            "service",
+        ):
+            self.assertNotIn(delivery_shape, durable_outputs)
+        self.assertIn(
+            "delivery-form-and-operating-system-neutral",
+            product_form["portableCore"],
+        )
+        self.assertIn(
+            "delivery form and projection shape", constitution["adaptiveSurfaces"]
+        )
+        self.assertIn(
+            "operating-system-specific adapter and evidence mechanism",
+            constitution["adaptiveSurfaces"],
+        )
+
+        o5 = next(item for item in acceptance["criteria"] if item["id"] == "O5")
+        operationalization = o5["operationalization"]
+        self.assertEqual(
+            operationalization["comparisonDesign"],
+            "same-task-live-matched-cross-host-pairs-with-bounded-cross-operating-system-coverage",
+        )
+        self.assertIn(
+            "at least two distinct operating-system families", o5["threshold"]
+        )
+        self.assertIn(
+            "two host units execute on different operating-system families",
+            o5["threshold"],
+        )
+        self.assertIn(
+            "virtualized environment is represented as bare-metal", o5["threshold"]
+        )
+        self.assertIn("cannot imply universal support", o5["threshold"])
+        self.assertIn(
+            "operatingSystemFamilyVersionHostRelationshipAndVirtualizationIdentities",
+            operationalization["preRegistrationFields"],
+        )
+        self.assertIn(
+            "crossOperatingSystemBehaviorAndBoundedClaimCeiling",
+            operationalization["requiredMeasures"],
+        )
+
+        environment_digest = hashlib.sha256(
+            json.dumps(
+                acceptance["environmentAttribution"],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        self.assertEqual(
+            environment_digest, control.EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        )
+
     def test_fixed_invariants_and_bootstrap_guards_cannot_self_disable(self) -> None:
         variants = (
             (

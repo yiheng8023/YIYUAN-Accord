@@ -33,11 +33,10 @@ named-human authority.
 
 ## Stable product boundary
 
-The Harness is an open, Agent-neutral, demand-driven human-Agent collaboration
-quality harness. Its durable outputs are a methodology, an open minimum
-quality-conformance profile, and thin executable reference adapters. It is not
-an Agent runtime, capability catalog or manager, generic control plane, wire
-protocol, identity system, or universal audit log.
+The Harness is an open, Agent-neutral, demand-driven collaboration quality
+harness. Its portable collaboration, evidence, and conformance semantics are
+form- and OS-neutral; carriers and OS mechanisms are adaptive edges. It is not
+a runtime, catalog, control plane, wire protocol, identity system, or audit log.
 
 The user supplies goal-level demand, domain facts and judgment, exact boundary
 authorization, corrections, and accountable final acceptance. The Agent owns
@@ -49,10 +48,11 @@ must remain distinct.
 v0.2 is an immutable bounded calibration milestone only. Its candidate.5
 profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex-first is the proof order, not a portable-core dependency;
-current O5 requires live matched evidence through a distinct host or runtime.
+current O5 requires distinct-host and cross-OS live evidence; exact tested
+environment identity bounds the claim.
 
-v1.1 is the current ready environment-attribution program, with no active
-increment and O1-O5 at 0/5. Its exact
+v1.1 is active with one form-and-cross-OS alignment increment and O1-O5 at 0/5.
+Its exact
 `harness-demand-to-capability-v1.1-candidate.1` profile and paired
 `harness-prospective-cohort-v1.1-candidate.1` protocol form the source-authorized,
 code-pinned frozen normative binding at first-freeze revision `5ce2773`. This
