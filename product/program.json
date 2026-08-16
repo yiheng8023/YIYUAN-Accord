@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-live-source-carrier-release-guard",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,59 +105,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-live-source-carrier-release-guard",
-      "state": "active",
-      "correctionClass": "live-source-carrier-release-guard",
-      "observedProblem": "After a verified same-goal O4 transition, archiving the source Codex task moved its source-native rollout outside the exact authorized root. The protected v1.1 cohort resource and commitments remained intact, but the canonical verifier changed from valid to current-source-unavailable until the source task was unarchived. Current machine output does not tell the Agent that this source carrier remains a live-verification dependency and is not yet releasable.",
-      "hypothesis": "A small code-owned derived carrier-release state in the verifier and continuation projection, plus an explicit pre-archive invariant, will make the existing live-source retention dependency visible before Agent-owned archive or release mechanics without adding a runtime, moving private evidence, weakening source validation or changing any O1-O5 threshold.",
-      "falsifier": "Stop or revise if the state exposes a source path, event, credential identity or private value; treats an invalid or unknown authority graph as release-safe; permits archive while the current v1.1 binding is frozen and live source re-verifiability is claimed; blocks release after the binding is validly unfrozen or revoked; requires a new host runtime or persistent monitor; changes the frozen profile/protocol or any acceptance threshold; or fails to reproduce the observed archive-then-unavailable condition in a bounded regression.",
-      "stopCondition": "Stop after the verifier and thin continuation projection derive a privacy-safe fail-closed source-carrier release state, repository guidance requires that preflight before archive or release, tests prove frozen and invalid states retain the carrier while valid unbound or revoked states allow release, the canonical verifier and full product suite pass with O1-O5 still 0/5, the existing protected resource and expiry trigger remain valid and unchanged, all probe residue is absent, and this outcome-neutral increment exits the current graph.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
-          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v11-live-source-carrier-release-guard",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one privacy-safe code-owned source-carrier release preflight state",
-            "one thin continuation projection of that state before carrier cleanup",
-            "focused regressions for frozen, invalid, unfrozen and revoked release decisions"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
