@@ -16,11 +16,10 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 单一 Agent 的“需求到能力”方法、最低质量要求和薄参考适配器，用来检验这类协作是否
 真的减少用户负担。
 
-**当前状态：**v1.1 是 active 且非终态的环境归因工序。当前唯一的 outcome-neutral G2/G4
-增量正在闭合任务验证器的预测量时序缺口，不计 O1-O5 进展。
+**当前状态：**v1.1 是已就绪但非终态的环境归因工序，当前没有 active increment。
 candidate.1 profile 与 cohort 协议的精确字节已冻结、获得独立来源授权，并由代码固定到
 首冻 revision `5ce2773`；尚无自然任务完成注册。在获授权的 Windows 来源上，仓库验证器
-报告 `programStatus=active`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
+报告 `programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
 `4/4`；缺少该受保护来源的托管 runner 会在 G3 失败关闭，只佐证非私密契约边界。
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在

@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-premeasurement-task-validator-binding",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,60 +105,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-premeasurement-task-validator-binding",
-      "state": "active",
-      "correctionClass": "premeasurement-task-validator-chronology-guard",
-      "observedProblem": "The frozen v1.1 protocol requires a task-bound source validator to exist and prove source-window, chronology, environment and criterion semantics before outcome-bearing execution, but the current machine contract binds no validator identity or code revision in taskRegistration and invokes the task validator only later while verifying completed outcome evidence. A validator added after measured execution can therefore satisfy the structural verifier without proving prospective control.",
-      "hypothesis": "Binding one code-owned task validator identity, committed locator, revision and digest in every outcome taskRegistration, invoking its preregistration callback before the registration becomes valid, and requiring completed evidence to reuse that exact validator identity will fail closed on missing, late or drifting validators without creating a generic outcome validator or changing frozen outcome thresholds.",
-      "falsifier": "Stop or revise if the repair prebuilds a general result validator; permits a validator revision that is not a strict ancestor of the immutable registration; loads arbitrary repository code dynamically; lets a task callback clear core verifier errors; accepts a different validator identity at evidence time; changes the frozen profile, cohort protocol or O1-O5 thresholds; exposes private source material; or makes the current empty outcome cohort appear to progress.",
-      "stopCondition": "Stop after the code-owned taskRegistration schema binds and verifies one committed task-specific validator before measurement, the preregistration callback executes fail-closed during registration validation, evidence must reuse the bound identity, focused negative regressions cover missing, late, drifting, mismatched and malicious callbacks, the canonical verifier and full product suite pass with O1-O5 still 0/5, all task-created residue is absent, and this outcome-neutral increment exits the current graph.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
-          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v11-premeasurement-task-validator-binding",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one exact taskRegistration validator identity and committed-code binding",
-            "one fail-closed preregistration validator invocation before measurement",
-            "one evidence-time same-validator identity guard",
-            "focused chronology, drift, mismatch and callback-isolation regressions"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
