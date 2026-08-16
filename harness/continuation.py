@@ -168,6 +168,11 @@ def _serialize_bounded(projection: dict[str, Any]) -> str:
             )
             if isinstance(projection.get("verification"), dict)
             else None,
+            "sourceCarrierRelease": projection.get("verification", {}).get(
+                "sourceCarrierRelease"
+            )
+            if isinstance(projection.get("verification"), dict)
+            else None,
         },
         "repositoryCheckpoint": projection.get("repositoryCheckpoint"),
         "currentWork": _safe_current_work(projection.get("currentWork")),
@@ -233,6 +238,7 @@ def render_continuation_context(
             ),
             "completionState": report.get("completionState"),
             "criterionStates": report.get("criterionStates"),
+            "sourceCarrierRelease": report.get("sourceCarrierRelease"),
             "diagnosticCount": len(report.get("errors", [])),
             "diagnosticSha256": hashlib.sha256(
                 json.dumps(
@@ -287,6 +293,7 @@ def render_continuation_context(
         "compare-repository-checkpoint",
         "reconcile-active-work-registration-and-cleanup",
         "confirm-human-gates-and-required-verification",
+        "confirm-source-carrier-release-preflight-before-archive-or-release",
     ]
     projection["remainingContextCapacity"] = "unknown"
     return _serialize_bounded(projection)

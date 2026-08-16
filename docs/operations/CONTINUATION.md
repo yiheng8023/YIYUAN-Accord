@@ -51,8 +51,8 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires live matched evidence through a distinct host or runtime.
 
-v1.1 is the current ready environment-attribution program, with no active
-increment and O1-O5 at 0/5. Its exact
+v1.1 is the current active environment-attribution program with one
+outcome-neutral carrier-release guard repair and O1-O5 at 0/5. Its exact
 `harness-demand-to-capability-v1.1-candidate.1` profile and paired
 `harness-prospective-cohort-v1.1-candidate.1` protocol form the source-authorized,
 code-pinned frozen normative binding at first-freeze revision `5ce2773`. This
@@ -138,5 +138,8 @@ Preserve a healthy current checkout and conversation by default. At material
 checkpoints, use available host and task signals to keep, compact, fork, or
 handoff before preventable loss. When remaining capacity is unknown, apply the
 pre-registered conservative rule. Verify destination recovery before releasing
-the source; reconcile conclusions and clean any causally necessary branch,
-worktree, repository fork, or conversation carrier.
+the source, and require verifier `sourceCarrierRelease.allowed=true` before
+archive or release; this clears only the live-evidence dependency, not other
+checks. False or unknown retains the source after handoff;
+never relocate evidence to bypass the guard. Reconcile conclusions and clean
+any causally necessary topology.

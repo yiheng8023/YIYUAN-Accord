@@ -1172,6 +1172,28 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
+        if hosted_unavailable:
+            self.assertEqual(
+                report["sourceCarrierRelease"],
+                {
+                    "allowed": False,
+                    "state": "unknown-stop-before-release",
+                    "reason": "authority-verification-failed",
+                    "scope": "live-cohort-source-dependency-only",
+                },
+            )
+        else:
+            self.assertEqual(
+                report["sourceCarrierRelease"],
+                {
+                    "allowed": False,
+                    "state": "retain-live-source-verification",
+                    "reason": (
+                        "frozen-cohort-source-remains-required-for-live-verifiability"
+                    ),
+                    "scope": "live-cohort-source-dependency-only",
+                },
+            )
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(
             report["guardrails"],
@@ -1494,7 +1516,14 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(live_program["increments"], [])
+        for increment in live_program["increments"]:
+            self.assertEqual(
+                increment["cleanupBoundary"]["privateResourceDispositions"],
+                [
+                    control.CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
+                    control.CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
+                ],
+            )
         frozen_program = json.loads(
             subprocess.run(
                 [
@@ -2950,6 +2979,62 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(report["valid"], not hosted_unavailable, report["errors"])
 
+    def test_source_carrier_release_preflight_fails_closed_and_tracks_binding(self) -> None:
+        frozen = {"normativeProfileBinding": {"state": "frozen"}}
+        self.assertEqual(
+            control._source_carrier_release_preflight(frozen, True),
+            {
+                "allowed": False,
+                "state": "retain-live-source-verification",
+                "reason": (
+                    "frozen-cohort-source-remains-required-for-live-verifiability"
+                ),
+                "scope": "live-cohort-source-dependency-only",
+            },
+        )
+        for state in ("unfrozen", "revoked"):
+            with self.subTest(state=state):
+                self.assertEqual(
+                    control._source_carrier_release_preflight(
+                        {"normativeProfileBinding": {"state": state}}, True
+                    ),
+                    {
+                        "allowed": True,
+                        "state": "release-eligible",
+                        "reason": "no-live-frozen-cohort-source-dependency",
+                        "scope": "live-cohort-source-dependency-only",
+                    },
+                )
+        self.assertEqual(
+            control._source_carrier_release_preflight(frozen, False),
+            {
+                "allowed": False,
+                "state": "unknown-stop-before-release",
+                "reason": "authority-verification-failed",
+                "scope": "live-cohort-source-dependency-only",
+            },
+        )
+
+    def test_missing_live_source_blocks_carrier_release(self) -> None:
+        errors: list[str] = []
+        snapshot = control._read_stable_initial_authorization_snapshot(
+            self.root / "absent-live-source.jsonl",
+            str(self.root),
+            errors,
+            generation_label="current v1.1 binding",
+        )
+        self.assertIsNone(snapshot)
+        self.assertEqual(
+            errors,
+            ["current v1.1 binding authorization source event is unavailable"],
+        )
+        self.assertFalse(
+            control._source_carrier_release_preflight(
+                {"normativeProfileBinding": {"state": "frozen"}},
+                authority_valid=False,
+            )["allowed"]
+        )
+
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
         token = control._EVIDENCE_GIT_CACHE.set({})
         try:
@@ -3189,6 +3274,19 @@ class ProductControlTests(unittest.TestCase):
             ],
         )
         self.assertEqual(projection["remainingContextCapacity"], "unknown")
+        self.assertEqual(
+            projection["verification"]["sourceCarrierRelease"],
+            {
+                "allowed": True,
+                "state": "release-eligible",
+                "reason": "no-live-frozen-cohort-source-dependency",
+                "scope": "live-cohort-source-dependency-only",
+            },
+        )
+        self.assertIn(
+            "confirm-source-carrier-release-preflight-before-archive-or-release",
+            projection["beforeMutation"],
+        )
         self.assertEqual(projection["repositoryCheckpoint"]["state"], "unknown")
         self.assertEqual(projection["projectionBudget"]["characters"], len(context))
         self.assertLessEqual(len(context), 3072)
@@ -3315,6 +3413,15 @@ class ProductControlTests(unittest.TestCase):
         )
         projection = json.loads(context)
         self.assertFalse(projection["verification"]["valid"])
+        self.assertEqual(
+            projection["verification"]["sourceCarrierRelease"],
+            {
+                "allowed": False,
+                "state": "unknown-stop-before-release",
+                "reason": "authority-verification-failed",
+                "scope": "live-cohort-source-dependency-only",
+            },
+        )
         self.assertEqual(
             projection["nextRoute"], "repair-current-authority-before-product-mutation"
         )
@@ -8287,12 +8394,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("user-configured", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
         self.assertIn("terminal proposition", readme)
-        self.assertIn("programStatus=ready", readme)
+        live_status = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )["status"]
+        self.assertIn(f"programStatus={live_status}", readme)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme)
         self.assertIn("v1.0", readme)
         self.assertIn("stopped", readme)
         self.assertIn("宪章终极命题尚未成立", readme_zh)
-        self.assertIn("programStatus=ready", readme_zh)
+        self.assertIn(f"programStatus={live_status}", readme_zh)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme_zh)
         self.assertIn("v1.0", readme_zh)
         self.assertIn("停止", readme_zh)
@@ -8317,9 +8427,11 @@ class ProductControlTests(unittest.TestCase):
         continuation = (
             self.root / "docs/operations/CONTINUATION.md"
         ).read_text(encoding="utf-8")
-        self.assertLess(len(continuation), 8000)
+        self.assertLess(len(continuation), 8200)
         self.assertIn("navigation aid, not product authority", continuation)
         self.assertIn("This file grants none of those actions", continuation)
+        self.assertIn("sourceCarrierRelease", continuation)
+        self.assertIn("sourceCarrierRelease.allowed=true", continuation)
         self.assertNotIn("The current task grants no authority", continuation)
         self.assertNotIn("Historical v0.2 accepted O5 basis", continuation)
         self.assertNotIn("45 native compactions", continuation)

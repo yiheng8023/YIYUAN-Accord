@@ -64,8 +64,9 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and has one
-source-authorized, code-pinned frozen `normativeProfileBinding`. The
+The current v1.1 program is `active` with one outcome-neutral carrier-release
+guard repair and one source-authorized, code-pinned frozen
+`normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -280,6 +281,17 @@ goal divergence and new trust, data, cost, destructive, irreversible, release,
 or publication decisions; the user does not decide whether to continue, fork,
 open a new task, merge, archive, or clean when that route is safely discoverable
 inside existing authority.
+
+Destination verification and source release are separate checks. A source
+conversation may still hold source-native bytes required to re-verify a frozen
+cohort authorization. The verifier therefore derives a privacy-safe
+`sourceCarrierRelease` preflight without exposing the carrier path or private
+event: frozen live verification retains the source, invalid or unknown state
+fails closed, and only a valid unbound or revoked binding clears this one
+dependency. The result is necessary but not sufficient for release; topology,
+authority, reconciliation and cleanup remain separate. This is a lifecycle
+guard for Agent-owned archive mechanics, not a transcript
+monitor, session store, or conversation runtime.
 
 This is a quality-contract lifecycle, not a generic Git manager, task manager,
 conversation wire protocol, or cross-host synchronization runtime. Each host's

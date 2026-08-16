@@ -12,12 +12,12 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
-protocol are frozen, independently source-authorized, and code-pinned to the
-first-freeze revision `5ce2773`; no natural task has yet been registered. On
+**Current status:** v1.1 is a nonterminal environment-attribution program with
+one active outcome-neutral carrier-release guard repair. Its exact candidate.1
+profile and cohort protocol are frozen, independently source-authorized, and
+code-pinned to the first-freeze revision `5ce2773`; no natural task has yet been registered. On
 the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`programStatus=active`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
 `4/4`; run the verifier for live truth. A hosted runner without that protected
 source fails closed at G3 and corroborates only the non-private contract
 boundary. The constitution's terminal proposition remains open. v1.0 is
@@ -166,7 +166,9 @@ The current repository provides:
   their exact bytes are now the source-authorized frozen normative binding, but
   they still carry no task, result, installation, or authority of their own;
 - a standard-library-only verifier that rejects invalid authority, evidence,
-  work graphs, and repository residue;
+  work graphs, and repository residue, and derives a privacy-safe
+  `sourceCarrierRelease` preflight so an Agent does not archive a conversation
+  that still carries live cohort source evidence;
 - a legacy inactive, standard-library-only `SessionStart` repository seam that
   projects bounded code-owned authority and verifier state after startup,
   resume, clear, or compaction without reading prompt, transcript, or session

@@ -7757,6 +7757,40 @@ def _terminal_release_gate(
     return True, "published-verified"
 
 
+def _source_carrier_release_preflight(
+    program: Mapping[str, Any], authority_valid: bool
+) -> dict[str, Any]:
+    if not authority_valid:
+        return {
+            "allowed": False,
+            "state": "unknown-stop-before-release",
+            "reason": "authority-verification-failed",
+            "scope": "live-cohort-source-dependency-only",
+        }
+    binding = program.get("normativeProfileBinding")
+    binding_state = binding.get("state") if isinstance(binding, dict) else None
+    if binding_state == "frozen":
+        return {
+            "allowed": False,
+            "state": "retain-live-source-verification",
+            "reason": "frozen-cohort-source-remains-required-for-live-verifiability",
+            "scope": "live-cohort-source-dependency-only",
+        }
+    if binding_state in {"unfrozen", "revoked"}:
+        return {
+            "allowed": True,
+            "state": "release-eligible",
+            "reason": "no-live-frozen-cohort-source-dependency",
+            "scope": "live-cohort-source-dependency-only",
+        }
+    return {
+        "allowed": False,
+        "state": "unknown-stop-before-release",
+        "reason": "binding-state-is-not-release-safe",
+        "scope": "live-cohort-source-dependency-only",
+    }
+
+
 def _verify_product(root: Path) -> dict[str, Any]:
     """Verify the current release contract and return a JSON-serializable report."""
 
@@ -7880,6 +7914,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
         and terminal_release_verified
     )
     valid = not errors and guardrails_pass
+    source_carrier_release = _source_carrier_release_preflight(program, valid)
     return {
         "productId": PRODUCT_ID,
         "release": program.get("release"),
@@ -7893,6 +7928,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
             else "in-progress"
         ),
         "terminalReleaseState": terminal_release_state,
+        "sourceCarrierRelease": source_carrier_release,
         "activeIncrement": program.get("activeIncrementId"),
         "outcomes": {
             "verified": sum(bool(states[item]) for item in OUTCOME_IDS),
@@ -7923,6 +7959,12 @@ def verify_product(root: Path) -> dict[str, Any]:
                 "valid": False,
                 "completionState": "in-progress",
                 "terminalReleaseState": "invalid",
+                "sourceCarrierRelease": {
+                    "allowed": False,
+                    "state": "unknown-stop-before-release",
+                    "reason": "authority-verification-failed",
+                    "scope": "live-cohort-source-dependency-only",
+                },
                 "activeIncrement": None,
                 "outcomes": {"verified": 0, "total": len(OUTCOME_IDS)},
                 "guardrails": {"passed": 0, "total": len(GUARDRAIL_IDS)},

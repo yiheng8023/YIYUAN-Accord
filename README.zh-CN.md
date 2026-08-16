@@ -16,10 +16,10 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 单一 Agent 的“需求到能力”方法、最低质量要求和薄参考适配器，用来检验这类协作是否
 真的减少用户负担。
 
-**当前状态：**v1.1 是已就绪但非终态的环境归因工序，当前没有 active increment。
+**当前状态：**v1.1 是非终态的环境归因工序，当前有一个 outcome-neutral 的载体释放防护修复 increment。
 candidate.1 profile 与 cohort 协议的精确字节已冻结、获得独立来源授权，并由代码固定到
 首冻 revision `5ce2773`；尚无自然任务完成注册。在获授权的 Windows 来源上，仓库验证器
-报告 `programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
+报告 `programStatus=active`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
 `4/4`；缺少该受保护来源的托管 runner 会在 G3 失败关闭，只佐证非私密契约边界。
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
@@ -120,7 +120,8 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
   与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，用于承载当前动态
   环境归因和必要人工干预语义；其精确字节现已成为来源授权的冻结规范 binding，但仍没有
   任务、结果、安装或自身权威；
-- 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
+- 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留，并派生隐私安全的
+  `sourceCarrierRelease` 预检，防止 Agent 归档仍承载 live cohort 来源证据的对话；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
 - 一个尚未启用的 Codex 薄插件源码候选；其中一个任务级 Skill 投影仅获 v0.2 Codex

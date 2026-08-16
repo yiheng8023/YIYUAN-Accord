@@ -88,6 +88,16 @@ reconciliation, archive or release, and cleanup. Ask only when the topology
 would represent a real goal divergence or cross a new authority, trust, data,
 cost, destructive, or irreversible boundary.
 
+Before archiving or releasing a source conversation carrier, inspect the
+current verifier's `sourceCarrierRelease` preflight. This field covers only the
+live cohort source-evidence dependency and is necessary, not sufficient, for
+release. A verified destination does not make the source releasable when its
+carrier still contains source-native
+evidence required for a live cohort claim. `allowed=false`, an unknown state, or
+an invalid authority graph means retain the source carrier and repair or revoke
+the evidence dependency first; never move private source data to bypass the
+guard.
+
 Use already-installed, already-authorized, healthy capabilities proactively
 when they materially improve a bound task. Within a bound task or complete
 portfolio-curation contract, the Agent may perform coverage analysis, targeted
