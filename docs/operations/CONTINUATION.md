@@ -68,7 +68,11 @@ opened only after the source proves no eligible demand occurred after revocation
 it uses a fresh activation, identities, private key and independent exact
 authorization, carries no prior task, result, cursor or ordering state, and
 cannot be restarted again. Hosted runners corroborate the remaining contract
-only and cannot restore or prove a revoked local authorization.
+only and cannot restore or prove a revoked local authorization. The current
+program now carries the one permitted successor freeze under fresh public
+identities, but its revision, digest and source validator are intentionally
+unpinned pending the second independent exact authorization; enrollment remains
+inactive.
 
 ## Starting one causal increment
 

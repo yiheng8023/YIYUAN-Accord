@@ -83,7 +83,9 @@ to `frozen`. Because it had zero registrations, the program may open exactly
 one distinct successor generation only after a source-verified no-eligible-demand
 window, with a fresh activation, private key and independent exact authorization.
 The successor inherits no task, result, cursor or ordering state and cannot be
-restarted again.
+restarted again. `product/program.json` now carries that fresh successor freeze,
+but its revision, canonical digest and source validator remain code-unpinned
+until a second independent exact authorization, so it cannot admit enrollment.
 Transient source unavailability or concurrent change now fails closed without
 destruction, while a confirmed schema, binding or content failure retains exact
 deletion. Diagnostics never contain the raw target, root, event, key or source

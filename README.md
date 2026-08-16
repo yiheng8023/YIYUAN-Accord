@@ -32,9 +32,10 @@ A distinct [v1 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
 co-locate the pre-measurement method, mandatory floors, baseline, carrier,
 cross-host, privacy/residue, and release semantics. The program binds their
-exact frozen bytes, but the first zero-task cohort is now revoked and carries
-no outcome evidence; enrollment remains inactive until a separately anchored
-and authorized successor generation exists.
+exact frozen bytes. The first zero-task cohort remains revoked and carries no
+outcome evidence; the program now contains one fresh successor freeze, but its
+revision, digest and source validator are deliberately unpinned until a second
+independent exact authorization, so enrollment remains inactive.
 
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
@@ -239,8 +240,10 @@ separates transient unavailability or concurrent change, which must
 fail closed without destruction, from confirmed binding or content failure,
 which retains exact deletion and absence checking. No eligible natural task
 had been registered, so no O1-O5 result evidence was lost and O1-O5 remain
-0/5. The revoked generation cannot resume; enrollment requires the separately
-frozen and independently authorized one-time successor described above. The candidate file's internal `pre-freeze candidate` label is
+0/5. The revoked generation cannot resume. A fresh successor binding now uses
+new public surface, cursor and key identities, but remains unactivated until
+its exact revision, canonical digest and source window receive independent
+human authorization and code pinning. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,
 is the current binding state. Hosted runners corroborate the remaining
 contract only and cannot restore or prove a revoked local authorization.
