@@ -4,14 +4,18 @@ Agent Autonomy Harness is a public, research-stage collaboration quality
 project. The current v1.1 environment-attribution tree contains a product-contract
 verifier, immutable stopped v1.0 history, and inactive reference-adapter source
 candidates, not a production runtime or released installable product. Its
-code-pinned v1.1 profile and cohort-protocol candidates are pre-freeze text/data
-inputs only; they do not install, execute, activate a cohort, or grant authority.
+code-pinned v1.1 profile and cohort protocol are the independently
+source-authorized frozen normative binding at first-freeze revision `5ce2773`.
+That binding activates prospective enrollment only; it does not install a
+product, register a task, prove an outcome, or grant publication authority.
 The current module exposes no executable v1.0 credential or Scheduled Task
 cleanup entrypoint; those retired mechanics are historical at revision
-`910ac01`. It contains one v1.1-only expiry command and one first-freeze source
-validator, but all execution-specific anchors are unset. The live unfrozen path
-does not read a private source, and the command cannot delete an unbound resource
-or act before its code-owned expiry. No v1.1 credential or task currently exists.
+`910ac01`. The exact v1.1 protected source and one-time S4U expiry task exist
+only under the current Windows-user authorization and are not an installable
+product or runtime. The code-pinned source validator may read only that exact
+protected resource and fails closed when it is unavailable; the repository
+contains commitments, not private values. The expiry command is bound to the
+exact resource and task and cannot act before its code-owned deadline.
 
 Treat every external capability, executable surface, instruction body,
 generated artifact, and runtime claim as untrusted until its applicable review

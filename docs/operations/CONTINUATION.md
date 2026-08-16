@@ -52,11 +52,12 @@ byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires live matched evidence through a distinct host or runtime.
 
 v1.1 is the current ready environment-attribution program, with no active
-increment, O1-O5 at 0/5, and an `unfrozen` normative profile binding. The code-pinned
+increment and O1-O5 at 0/5. Its exact
 `harness-demand-to-capability-v1.1-candidate.1` profile and paired
-`harness-prospective-cohort-v1.1-candidate.1` protocol are pre-freeze subordinate
-review inputs only: they grant no activation, task, result, installation, or
-authority. v1.0 is
+`harness-prospective-cohort-v1.1-candidate.1` protocol form the source-authorized,
+code-pinned frozen normative binding at first-freeze revision `5ce2773`. This
+grants cohort enrollment under the acceptance-owned rules, not a task, result,
+installation, outcome or terminal claim. v1.0 is
 immutable stopped history at revision `910ac01`: both authorized zero-task
 generations are revoked, the successor protected resource and exact task were
 deleted, and no profile binding, cohort, authorization, ordering state, task or
@@ -122,8 +123,9 @@ commit, or any ignored/untracked repository residue fails closed.
 Do not treat the tag's human name or time as authorization proof. The final
 candidate must bind a real authorization source and its code-owned source
 validator; the terminal release-authorization registry entry remains absent
-until that exact carrier is selected. The separate inactive v1.1 first-freeze
-source validator cannot authorize publication or promote an outcome.
+until that exact carrier is selected. The active v1.1 first-freeze source
+validator authorizes only cohort activation; it cannot authorize publication
+or promote an outcome.
 
 ## Authority and carrier transitions
 

@@ -23,9 +23,12 @@ v1.1 is the ready zero-outcome environment-attributed terminal-product proof.
 Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
 and v1.0 remains an immutable stopped attempt, neither of which can be
 inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
-candidate now make the adaptive starting-environment, current-source resolution,
-attributed lifecycle and minimal guided human-only-action method reviewable, but
-remain pre-freeze subordinate inputs with no activation, task or outcome claim.
+candidate make the adaptive starting-environment, current-source resolution,
+attributed lifecycle and minimal guided human-only-action method reviewable.
+Their exact bytes are now the independently source-authorized frozen normative
+binding at first-freeze revision `5ce2773`; this activates prospective
+enrollment but carries no task, outcome, installation, publication or terminal
+claim.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to

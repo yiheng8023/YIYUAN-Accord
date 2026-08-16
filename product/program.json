@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-provisional-first-freeze",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,64 +105,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-provisional-first-freeze",
-      "state": "active",
-      "correctionClass": "authorized-v11-provisional-first-freeze-not-materialized",
-      "observedProblem": "The named human has now supplied the exact code-generated v1.1 materialization grant in the bound source, but the current program remains unfrozen, no current v1.1 protected cohort resource or exact expiry trigger has been materialized, and the code-owned process boundary cannot yet represent the granted v1.1-specific retention and cleanup disposition without reusing stopped v1.0 labels.",
-      "hypothesis": "One new random current-user-protected v1.1 resource, one exact current-user S4U expiry trigger, and one provisional first-freeze binding that exposes only privacy-safe identities and commitments can establish the authorized pre-activation boundary while keeping all execution-specific authorization anchors unset and all O1-O5 outcomes false until the separately source-verified activation grant.",
-      "falsifier": "Stop, delete the exact task-created resource and trigger, and revoke the route if the materialization grant is not the unique exact current source event; any private key, event identity, timestamp, rollout or credential locator enters Git, logs or user-visible output; a v1.0 identity or resource is reused; the trigger differs from the exact one-time current-user S4U definition; any eligible natural demand is read or counted; the cohort becomes effective without the separate exact activation authorization and next code pin; or cleanup cannot be independently verified.",
-      "stopCondition": "Stop after the exact grant source is verified, one new random protected resource and exact one-time expiry trigger are materialized and independently validated, the reviewed current profile and protocol are committed as a provisional frozen binding with privacy-safe activation identities only, the code still rejects activation with unset authorization anchors, canonical and product checks pass with O1-O5 at 0/5, the finite increment exits the current graph, both commits are pushed, and the exact next activation-authorization text is reported for the named human without exposing private source data.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
-          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v11-provisional-first-freeze",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "authorized-private-evidence-materialization"
-          ],
-          "deliverables": [
-            "one new random current-user-protected v1.1 provisional cohort resource",
-            "one exact current-user S4U one-time expiry trigger",
-            "one privacy-safe provisional first-freeze binding awaiting separate exact activation authorization"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

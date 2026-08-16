@@ -128,6 +128,9 @@ class ProductControlTests(unittest.TestCase):
             in (
                 ["initial binding authorization private source is unavailable"],
                 ["successor binding authorization private source is unavailable"],
+                [
+                    "current v1.1 binding authorization private source is unavailable"
+                ],
             )
             and report.get("criterionStates", {}).get("G3") is False
         )
@@ -1158,13 +1161,22 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertTrue(report["valid"], report["errors"])
+        hosted_unavailable = self.hosted_private_authorization_source_is_unavailable(
+            report
+        )
+        if hosted_unavailable:
+            self.assertFalse(report["valid"])
+        else:
+            self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["release"], "v1.1")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
+        self.assertEqual(
+            report["guardrails"],
+            {"passed": 3 if hosted_unavailable else 4, "total": 4},
+        )
         self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
         constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
         v02 = constitution["historicalMilestones"][-2]
@@ -1177,19 +1189,43 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("zero-outcome", v10["state"])
         self.assertIn("can be inherited", v10["claimLimit"])
         self.assertEqual(live_program["priorRelease"]["release"], "v1.0")
-        self.assertEqual(live_program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        binding = live_program["normativeProfileBinding"]
+        self.assertEqual(binding["state"], "frozen")
+        self.assertEqual(
+            binding["profileIdentity"],
+            control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
+        )
+        self.assertEqual(
+            binding["cohortProtocolIdentity"],
+            control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
+        )
+        self.assertEqual(
+            binding["cohortActivation"]["surfaceIdentity"],
+            control.EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY,
+        )
+        self.assertEqual(
+            binding["cohortActivation"]["activationCursorCommitment"],
+            control.EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT,
+        )
+        self.assertEqual(
+            binding["cohortActivation"]["keyIdentity"],
+            control.EXPECTED_CURRENT_INITIAL_KEY_IDENTITY,
+        )
+        self.assertEqual(
+            binding["cohortActivation"]["keyFingerprint"],
+            control.EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+        )
         self.assertTrue(control.CURRENT_PROFILE_FREEZE_ENABLED)
         self.assertEqual(
             set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
             {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
         )
-        self.assertIsNone(
-            control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        self.assertEqual(
+            control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
         )
 
     def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
-        program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
-        self.assertEqual(program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
             encoding="utf-8"
         )
@@ -1292,9 +1328,15 @@ class ProductControlTests(unittest.TestCase):
         profile_flat = " ".join(profile.split())
         protocol = json.loads(protocol_bytes)
 
+        binding = program["normativeProfileBinding"]
+        self.assertEqual(binding["state"], "frozen")
         self.assertEqual(
-            program["normativeProfileBinding"],
-            control.UNFROZEN_NORMATIVE_PROFILE_BINDING,
+            binding["profileIdentity"],
+            control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
+        )
+        self.assertEqual(
+            binding["cohortProtocolIdentity"],
+            control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
         )
         self.assertEqual(
             hashlib.sha256(profile_bytes).hexdigest(),
@@ -1413,17 +1455,31 @@ class ProductControlTests(unittest.TestCase):
     def test_v11_authorizer_is_registered_but_unfrozen_state_never_reads_private_source(
         self,
     ) -> None:
+        floor = self.initialize_fixture_repository()
+        binding = self.read_json("product/program.json")["normativeProfileBinding"]
         self.assertEqual(
             set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
             {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
         )
-        with patch(
-            "harness.control._read_current_initial_authorization_private_evidence",
-            side_effect=AssertionError("unfrozen verifier read private source"),
-        ) as private_read:
-            report = verify_product(ROOT)
-        self.assertTrue(report["valid"], report["errors"])
-        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
+        with (
+            patch.multiple(
+                control,
+                CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            ),
+            patch(
+                "harness.control._read_current_initial_authorization_private_evidence",
+                side_effect=AssertionError("unfrozen verifier read private source"),
+            ) as private_read,
+        ):
+            errors: list[str] = []
+            self.assertTrue(
+                control._current_normative_profile_binding_history_valid(
+                    self.root,
+                    binding,
+                    errors,
+                ),
+                errors,
+            )
         private_read.assert_not_called()
 
     def test_v11_materialization_dispositions_are_exact_and_code_owned(self) -> None:
@@ -1438,7 +1494,24 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        cleanup = live_program["increments"][0]["cleanupBoundary"]
+        self.assertEqual(live_program["increments"], [])
+        frozen_program = json.loads(
+            subprocess.run(
+                [
+                    "git",
+                    "show",
+                    (
+                        control.EXPECTED_CURRENT_INITIAL_BINDING_REVISION
+                        + ":product/program.json"
+                    ),
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
+        cleanup = frozen_program["increments"][0]["cleanupBoundary"]
         self.assertEqual(
             cleanup["privateResourceDispositions"],
             [
@@ -1450,7 +1523,11 @@ class ProductControlTests(unittest.TestCase):
     def test_v11_authorizer_fails_before_private_read_with_unset_or_wrong_boundary(
         self,
     ) -> None:
-        with patch(
+        with patch.multiple(
+            control,
+            EXPECTED_CURRENT_INITIAL_BINDING_REVISION=None,
+            EXPECTED_CURRENT_INITIAL_BINDING_SHA256=None,
+        ), patch(
             "harness.control._read_current_initial_authorization_private_evidence"
         ) as private_read:
             errors: list[str] = []
@@ -2855,7 +2932,14 @@ class ProductControlTests(unittest.TestCase):
         completed = self.run_cli(root=ROOT)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
-        self.assertEqual(completed.returncode, 0, completed.stderr)
+        hosted_unavailable = self.hosted_private_authorization_source_is_unavailable(
+            report
+        )
+        self.assertEqual(
+            completed.returncode,
+            2 if hosted_unavailable else 0,
+            completed.stderr,
+        )
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
@@ -2864,7 +2948,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["valid"], not hosted_unavailable, report["errors"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
         token = control._EVIDENCE_GIT_CACHE.set({})

@@ -64,8 +64,8 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and keeps
-`normativeProfileBinding` deliberately `unfrozen`. The
+The current v1.1 program is `ready`, has no active increment, and has one
+source-authorized, code-pinned frozen `normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -120,11 +120,13 @@ restoration stops the pair; it is never normalized away after a result.
 Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
 
-The tree now contains one code-pinned pre-freeze v1.1 profile and paired cohort-
-protocol candidate under that environment contract. Before outcome measurement
-they must still be selected, content-addressed, frozen, and independently
-authorized; their current presence is not activation or authority. Their
-source-native eligibility, privacy-preserving task
+The tree now contains one code-pinned v1.1 profile and paired cohort protocol as
+the frozen normative binding under that environment contract. Revision
+`5ce2773`, its canonical digest, public activation identities, protected source
+window, retention disposition and exact S4U expiry task were independently
+authorized and code-validated before any eligible demand. This activation is
+not an outcome or terminal acceptance. Their source-native eligibility,
+privacy-preserving task
 identity, first-eligible ordering, chronology, retention and cleanup controls
 must be code-validated before any natural task can enter the cohort. Git dates
 and evidence timestamps remain diagnostic consistency fields, not trusted
@@ -143,9 +145,9 @@ An annotation's claimed human name and time are not authority proof. Terminal
 acceptance additionally dispatches a code-owned validator for the annotation's
 bound authorization source; that terminal validator remains absent until the
 actual final authorization carrier and trust boundary are known. The only current
-human-authorization registry entry is the inactive v1.1 first-freeze source
-validator, whose execution-specific anchors remain unset and which cannot promote
-an outcome.
+human-authorization registry entry is the active v1.1 first-freeze source
+validator. Its execution-specific anchors are code-pinned, but it cannot
+promote an outcome.
 
 Portfolio minima are eligibility predicates, not work generators. O3's
 reproducible-gap case and O4's rejected or stopped receipt count only when a

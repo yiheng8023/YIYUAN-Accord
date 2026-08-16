@@ -17,8 +17,10 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 真的减少用户负担。
 
 **当前状态：**v1.1 是已就绪但非终态的环境归因工序，当前没有 active increment。
-仓库验证器报告 `programStatus=ready`、
-`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；
+candidate.1 profile 与 cohort 协议的精确字节已冻结、获得独立来源授权，并由代码固定到
+首冻 revision `5ce2773`；尚无自然任务完成注册。在获授权的 Windows 来源上，仓库验证器
+报告 `programStatus=ready`、`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为
+`4/4`；缺少该受保护来源的托管 runner 会在 G3 失败关闭，只佐证非私密契约边界。
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404` 仍是不可改写的有界校准里程碑；
@@ -32,7 +34,7 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 当前树保留一份历史 [v1.0 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 和[前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，把测量前方法、强制
 底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。其精确冻结字节只作为 v1.0
-历史输入保留；v1.1 program 的 binding 明确为 `unfrozen`，不能把它们复用成当前 cohort。
+历史输入保留；当前另行冻结的 v1.1 binding 没有复用它们。
 两个零任务 v1.0 cohort generation 现均已撤销且没有结果证据。唯一允许的
 successor freeze 位于 revision `8e8e76b`，规范 binding digest 为 `d2cf0cd`，曾获得第二次
 独立精确授权；但后续验证器变更顺序错误，按已授权的确定性失败处置删除了其受保护证据和
@@ -114,10 +116,10 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 一份独立且已冻结的历史 [v1.0 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
   [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，已作为从属 operand
   保留，但不携带任何任务或结果证据；
-- 一份独立且由代码固定字节的[未冻结 v1.1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
+- 一份独立且由代码固定字节的[v1.1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
   与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，用于承载当前动态
-  环境归因和必要人工干预语义；它们仍只是从属审查输入，没有冻结、激活、任务、结果、
-  安装或自身权威；
+  环境归因和必要人工干预语义；其精确字节现已成为来源授权的冻结规范 binding，但仍没有
+  任务、结果、安装或自身权威；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
@@ -134,8 +136,8 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 针对公开验证入口的产品测试；
 - 固定来源的外部方案审查，用来缩小自研边界，避免重复造轮子。
 
-仓库目前不提供任务运行时、持久能力安装或已经验收的 v1.1 实时路由结果。未冻结的
-v1.1 候选不是当前规范 binding，也没有任何结果证据。candidate.5
+仓库目前不提供任务运行时、持久能力安装或已经验收的 v1.1 实时路由结果。已获来源授权的
+冻结 v1.1 binding 仍没有任何结果证据，也不等于终态验收。candidate.5
 仅有上述 v0.2 Codex 有界校准，不是最终 v1.1 profile 或普适标准。适配器没有安装进
 用户配置；仓库验证通过和历史收据都不能证明终极产品结果。
 
@@ -171,13 +173,16 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 Harness 仓库中继承项目 AGENTS.md 或适配器。历史证据只能分为环境无关、环境绑定或失效，
 不得继承结果信用。
 
-仓库现在已有一组由代码固定字节的未冻结 v1.1 profile 与配套前瞻 cohort 协议候选；它们
-仍须经过审查、选择、内容寻址冻结和独立授权后，才能成为当前规范 binding。v1.0
-的 profile、协议、授权、cohort、注册和顺序状态不得复用。每个获准 cohort generation 的冻结提交绑定精确的初始源原生有序纳入面、
+仓库现在已有一组由代码固定字节的 v1.1 profile 与配套前瞻 cohort 协议，作为当前冻结
+规范 binding。首冻 revision `5ce2773`、规范 digest、精确来源原生纳入面、激活游标、cohort
+密钥身份/指纹、受保护来源窗口、保留处置和一次性 S4U 到期任务均已在任何合格需求前获得
+独立授权并由代码验证。v1.0 的 profile、协议、授权、cohort、注册和顺序状态没有被复用。
+每个获准 cohort generation 的冻结提交绑定精确的初始源原生有序纳入面、
 激活游标与 cohort 密钥身份/指纹，但它本身不激活 cohort。任何合格需求出现前，具名人类
 必须在可独立验证的来源事件中授权该精确 revision、完整 binding digest、来源面、私域
-证据边界和清理处置；下一提交再固定 revision、digest 与代码所有的授权验证器。冻结后、
-授权前若出现自然需求，cohort 必须停止，不能把它漏掉后继续。场景与环境覆盖仍由验收权威
+证据边界和清理处置；下一提交再固定 revision、digest 与代码所有的授权验证器。本次 v1.1
+已完成这一冻结→独立授权→代码固定序列，验证窗口中没有夹入自然需求。冻结后、授权前若
+出现自然需求，cohort 必须停止，不能把它漏掉后继续。场景与环境覆盖仍由验收权威
 独占。该协议只预先规定资格、隐私安全的随机公开任务身份与固定的私域密钥来源消息绑定、首个
 合格任务顺序纳入、最早前缀停止规则、缺失数据处理、自然需求事件与测量事件的分离证明及声明上限，不预填未来任务
 名单。后续每份任务注册必须身份唯一，并在 Git 历史上严格晚于这次冻结。Git 祖先关系
@@ -212,12 +217,12 @@ program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`�
 必须由下一份当前机器权威重新绑定。
 tag 中自报的人名和时间戳永远不能单独通过；必须由代码所有的验证器独立验证所绑定的
 授权来源。在 v1.0 revision 中，终态发布验证器条目保持为空，注册表只有上述有界首冻与
-successor freeze 来源验证器。当前注册表已有一个未激活的 v1.1 首冻来源授权验证器；其执行
-专属 revision、digest、来源面、密钥和私密来源承诺仍为空，所以未冻结 program 不读取私密
-证据，任何提前 activation 都会失败关闭。它不是结果验证器。
+successor freeze 来源验证器。当前注册表已有一个已激活且由代码固定的 v1.1 首冻来源授权
+验证器；它核验精确 revision、binding digest、公开激活身份、受保护来源窗口和清理触发器，
+但不是结果验证器。
 v1.1 模块不再提供可执行的 v1.0 凭据或计划任务清理入口；该历史行为只从已固定的
-`910ac01` revision 恢复。另有一个 v1.1 专属到期命令，但在未来精确 freeze、独立人类来源
-授权、受保护资源和一次性任务均分别获得授权、物化并由代码固定前保持惰性。
+`910ac01` revision 恢复。v1.1 专属到期命令现只绑定当前精确受保护资源与一次性 S4U 任务，
+在代码固定的到期时间前不可执行，到期时也只能删除该资源和触发器。
 
 ## v1.1 验收要求
 
