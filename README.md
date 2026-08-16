@@ -30,10 +30,11 @@ disposition, so this is forward current-tree sanitization rather than erasure.
 
 A distinct [v1 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
-now co-locate the pre-measurement method, mandatory floors, baseline, carrier,
-cross-host, privacy/residue, and release semantics. They remain unbound
-candidates with zero registered tasks and zero outcome evidence until the
-program content-addresses both after review.
+co-locate the pre-measurement method, mandatory floors, baseline, carrier,
+cross-host, privacy/residue, and release semantics. The program binds their
+exact frozen bytes, but the first zero-task cohort is now revoked and carries
+no outcome evidence; enrollment remains inactive until a separately anchored
+and authorized successor generation exists.
 
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
@@ -58,11 +59,12 @@ process, and filesystem state was removed without user cleanup.
 The historical Codex and Claude candidate.7 revisions remain inactive thin
 Skill-plus-Hook projections over the same candidate.5 method. Their exact Git
 revisions remain the evidence boundary; no measured value transfers to later
-source. The current Codex tree is instead an unbound v1 carrier-mechanism
+source. The current Codex tree is instead an inactive v1 carrier-mechanism
 candidate: its package-owned Hook records only bounded native lifecycle counters,
 does not execute task-repository code, and its checked-in command fails closed
 until an absolute trusted interpreter is materialized. Measured activation also
-requires the frozen v1 profile binding. It is not installed or enabled. The
+requires a currently live, independently authorized cohort generation under the
+frozen v1 profile. It is not installed or enabled. The
 current Claude candidate.7 lineage now also has bounded input and a fail-closed
 unmaterialized interpreter command, but still loads only exact-hash reviewed
 repository runtime bytes and is not a live v1 carrier implementation. Neither
@@ -139,9 +141,9 @@ The current repository provides:
 - the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
   accepted only for the bounded O4 Codex reference-host calibration; its source
   bytes retain the pre-calibration status header frozen by registration;
-- a distinct [v1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+- a distinct frozen [v1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
   and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json),
-  both still unbound and carrying no task or outcome evidence;
+  bound as subordinate operands but carrying no task or outcome evidence;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - a legacy inactive, standard-library-only `SessionStart` repository seam that
@@ -193,9 +195,9 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-Before any v1.0 outcome measurement, the repository must review and freeze the
-linked v1 candidate as one content-addressed normative profile and paired
-prospective cohort protocol. The first frozen commit binds the exact initial
+Before any v1.0 outcome measurement, the repository must bind the reviewed v1
+candidate as one content-addressed normative profile and paired prospective
+cohort protocol. Each permitted cohort generation's frozen commit binds the exact initial
 source-native ordered enrollment surface, activation cursor, and cohort key
 identity/fingerprint, but does not activate the cohort by itself. Before any
 eligible demand, a named human must authorize that exact revision, complete
@@ -218,8 +220,13 @@ afterward. While live source re-verifiability is claimed, the private key and
 private source evidence remain available only under the named human's exact
 privacy, access, retention, expiry, revocation, and cleanup disposition.
 Destroying the key requires an exact receipt and revokes live verifiability; it
-cannot preserve acceptance. Commit dates and self-reported timestamps cannot
-supply chronology proof.
+cannot preserve acceptance. A revoked authorized freeze remains immutable
+stopped history. Because the first generation had zero registrations, one
+fresh successor generation may be opened only if a source-verified window also
+shows no eligible demand after revocation. It must use a new activation cursor,
+surface and key identities, private key, and exact independent authorization;
+it inherits no task, result, cursor or ordering state, and cannot be restarted
+again. Commit dates and self-reported timestamps cannot supply chronology proof.
 
 The program froze candidate.5 and its cohort protocol at artifact revision
 `502c4ff`, first-freeze revision `d19d2fb`, and canonical binding digest
@@ -232,8 +239,8 @@ separates transient unavailability or concurrent change, which must
 fail closed without destruction, from confirmed binding or content failure,
 which retains exact deletion and absence checking. No eligible natural task
 had been registered, so no O1-O5 result evidence was lost and O1-O5 remain
-0/5. A fresh cohort activation and independent human authorization are required
-before enrollment resumes. The candidate file's internal `pre-freeze candidate` label is
+0/5. The revoked generation cannot resume; enrollment requires the separately
+frozen and independently authorized one-time successor described above. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,
 is the current binding state. Hosted runners corroborate the remaining
 contract only and cannot restore or prove a revoked local authorization.

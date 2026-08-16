@@ -231,13 +231,14 @@ remains a separate activation condition.
 Historical reuse disposition: the candidate.7 Codex revision was an inactive
 thin package with one candidate.5 Skill and a repository-bound continuation
 launcher. Its exact Git revision remains the v0.2 evidence boundary. The
-current Codex source supersedes that launcher with an unbound v1 carrier-
+current Codex source supersedes that launcher with an inactive v1 carrier-
 mechanism Hook: package-owned bytes accept bounded native lifecycle events,
 keep only bounded session-keyed counters under `PLUGIN_DATA`, clean the exact
 state on `SessionEnd`, and never load task-repository code or invoke Git. Its
 checked-in command is an absolute fail-closed sentinel until a trusted runtime
 is materialized under separate activation authority; measured activation also
-requires the frozen v1 profile binding.
+requires a currently live, independently authorized cohort generation under
+the frozen v1 profile.
 The Skill still supplies no MCP, App, runtime, or product authority, and the
 repository itself does not become a plugin.
 

@@ -68,9 +68,15 @@ EXPECTED_PROGRESS_RULE = (
     "binding digest, source surface, private-evidence boundary and cleanup disposition in a source-native "
     "event, and a code-owned source validator proves the authorization. The next commit pins that "
     "first-frozen revision, digest and validator identity. A missing or unverifiable authorization, a "
-    "replaced authorized freeze, or any natural demand observed after the freeze commit but before "
-    "authorization stops the cohort rather than being excluded. The realized cohort is the earliest "
-    "eligible natural-demand-event prefix after authorized activation on that ordered enrollment surface, "
+    "rewritten or omitted authorized freeze, or any natural demand observed after the freeze commit but "
+    "before authorization stops that cohort rather than being excluded. A terminally revoked cohort "
+    "remains immutable stopped history. Only when it has zero task registrations and a source-verified "
+    "window proves no eligible natural demand occurred after revocation may the program open one fresh "
+    "successor cohort generation under the unchanged profile and protocol; it uses a new activation cursor, "
+    "surface and key identities, private key, and independent exact-freeze authorization, carries no prior "
+    "registration, result, or ordering state, and any second successor attempt stops the program. The "
+    "realized outcome cohort is the earliest eligible natural-demand-event prefix after the current "
+    "generation's authorized activation on its ordered enrollment surface, "
     "never a retrospectively selected task roster: each task-bound validator proves the complete source "
     "cursor window since activation or the preceding registration contains no omitted earlier eligible "
     "demand. A serial surface "
@@ -322,6 +328,23 @@ EXPECTED_V1_INITIAL_BINDING_REVISION: str | None = (
 EXPECTED_V1_INITIAL_BINDING_SHA256: str | None = (
     "ee4ba7a16f15bba78efbefce1022ac6180d1c7e40e800011348df5ae21ab0eb7"
 )
+# A terminally revoked zero-outcome cohort may be followed by exactly one fresh
+# successor generation. The revoked freeze remains immutable; these anchors
+# stay unavailable until a later commit contains and independently authorizes
+# the successor freeze.
+EXPECTED_V1_SUCCESSOR_BINDING_REVISION: str | None = None
+EXPECTED_V1_SUCCESSOR_BINDING_SHA256: str | None = None
+EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION = (
+    "179d52eb8c46b55f1ee778eb6e9daf7622ae85d4"
+)
+EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256 = (
+    "cfdc4f596e0bcf689496ce37867f95764089c5046eca9328c5291fce342a45ca"
+)
+EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE = (
+    "complete-source-native-window-after-predecessor-revocation-through-"
+    "successor-authorization-no-eligible-demand-v1"
+)
 # The first frozen commit is not effective cohort activation until a named
 # human independently authorizes its exact revision and canonical binding
 # digest through a source that this code-owned validator can verify.
@@ -359,6 +382,7 @@ INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
     "agent-autonomy-harness/first-freeze-source-window/v1"
 )
 INITIAL_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1/*"
+SUCCESSOR_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1-successor/*"
 # These privacy-safe commitments are materialized from the already-authorized
 # protected source during this bounded repair. Until then, the live validator
 # fails closed rather than accepting an unbound private resource or event.
@@ -1044,7 +1068,9 @@ def _read_initial_authorization_private_evidence(
     return value, target_name
 
 
-def _initial_authorization_private_resource_absent(errors: list[str]) -> bool:
+def _cohort_authorization_private_resource_absent(
+    credential_filter: str, generation_label: str, errors: list[str]
+) -> bool:
     if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
         return True
     try:
@@ -1064,7 +1090,7 @@ def _initial_authorization_private_resource_absent(errors: list[str]) -> bool:
         credentials = ctypes.c_void_p()
         ctypes.set_last_error(0)
         available = enumerate_credentials(
-            INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+            credential_filter,
             0,
             ctypes.byref(count),
             ctypes.byref(credentials),
@@ -1073,15 +1099,37 @@ def _initial_authorization_private_resource_absent(errors: list[str]) -> bool:
         if credentials.value:
             free_credentials(credentials)
         if available or count.value != 0:
-            _error(errors, "revoked initial binding private resource still exists")
+            _error(errors, f"revoked {generation_label} private resource still exists")
             return False
         if enumerate_error != 1168:
-            _error(errors, "revoked initial binding private resource absence is unverifiable")
+            _error(
+                errors,
+                f"revoked {generation_label} private resource absence is unverifiable",
+            )
             return False
     except (OSError, ValueError, TypeError):
-        _error(errors, "revoked initial binding private resource absence is unverifiable")
+        _error(
+            errors,
+            f"revoked {generation_label} private resource absence is unverifiable",
+        )
         return False
     return True
+
+
+def _initial_authorization_private_resource_absent(errors: list[str]) -> bool:
+    return _cohort_authorization_private_resource_absent(
+        INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+        "initial binding",
+        errors,
+    )
+
+
+def _successor_authorization_private_resource_absent(errors: list[str]) -> bool:
+    return _cohort_authorization_private_resource_absent(
+        SUCCESSOR_AUTHORIZATION_CREDENTIAL_FILTER,
+        "successor binding",
+        errors,
+    )
 
 
 def _initial_authorization_string_hmac(
@@ -2136,6 +2184,96 @@ def _committed_blob(
     return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
 
 
+def _binding_matches_generation(
+    candidate: Mapping[str, Any], frozen: Mapping[str, Any]
+) -> bool:
+    return candidate.get("state") in {"frozen", "revoked"} and all(
+        _same_typed_value(candidate.get(field), value)
+        for field, value in frozen.items()
+        if field != "state"
+    )
+
+
+def _successor_binding_preserves_profile(
+    first_frozen: Mapping[str, Any], successor_frozen: Mapping[str, Any]
+) -> bool:
+    first_activation = first_frozen.get("cohortActivation")
+    successor_activation = successor_frozen.get("cohortActivation")
+    return (
+        successor_frozen.get("state") == "frozen"
+        and all(
+            _same_typed_value(successor_frozen.get(field), value)
+            for field, value in first_frozen.items()
+            if field not in {"state", "cohortActivation"}
+        )
+        and isinstance(first_activation, dict)
+        and isinstance(successor_activation, dict)
+        and all(
+            not _same_typed_value(successor_activation.get(field), first_activation.get(field))
+            for field in {
+                "surfaceIdentity",
+                "activationCursorCommitment",
+                "keyIdentity",
+                "keyFingerprint",
+            }
+        )
+    )
+
+
+def _binding_authorization_valid(
+    root: Path,
+    label: str,
+    document_kind: str,
+    revision: str,
+    binding_sha256: str,
+    validator_id: str | None,
+    errors: list[str],
+    *,
+    source_window_boundary: Mapping[str, Any] | None = None,
+) -> bool:
+    before = len(errors)
+    authorization_evaluator = (
+        SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(validator_id)
+        if isinstance(validator_id, str)
+        else None
+    )
+    if authorization_evaluator is None:
+        _error(
+            errors,
+            f"{label} frozen normative profile binding has no code-owned source authorization validator",
+        )
+        return False
+    authorization_document = {
+        "kind": document_kind,
+        "revision": revision,
+        "bindingSha256": binding_sha256,
+    }
+    if source_window_boundary is not None:
+        if any(field in authorization_document for field in source_window_boundary):
+            _error(errors, f"{label} authorization source window boundary is invalid")
+            return False
+        authorization_document.update(source_window_boundary)
+    authorization_errors: list[str] = []
+    try:
+        authorization_verified = authorization_evaluator(
+            authorization_document, root, authorization_errors
+        )
+    except Exception as exc:
+        _error(
+            authorization_errors,
+            f"{label} frozen normative profile binding authorization validator failed closed: "
+            f"{exc.__class__.__name__}",
+        )
+    else:
+        if authorization_verified is not True and not authorization_errors:
+            _error(
+                authorization_errors,
+                f"{label} frozen normative profile binding authorization source was not independently verified",
+            )
+    errors.extend(authorization_errors)
+    return len(errors) == before
+
+
 def _normative_profile_binding_history_valid(
     root: Path, current_binding: Mapping[str, Any], errors: list[str]
 ) -> bool:
@@ -2206,8 +2344,15 @@ def _normative_profile_binding_history_valid(
     expected_program_id = f"harness-product-program-{CURRENT_RELEASE}"
     first_frozen: dict[str, Any] | None = None
     first_frozen_revision: str | None = None
+    active_frozen: dict[str, Any] | None = None
+    successor_frozen: dict[str, Any] | None = None
+    successor_frozen_revision: str | None = None
+    predecessor_revoked: dict[str, Any] | None = None
+    predecessor_revoked_revision: str | None = None
     binding_history_started = False
-    revoked_seen = False
+    generation = 0
+    revoked = False
+    prior_registration_seen = False
     cursor = 0
     for revision in revisions:
         header_end = batch_raw.find(b"\n", cursor)
@@ -2247,60 +2392,122 @@ def _normative_profile_binding_history_valid(
                 _error(errors, "v1 normative profile binding history is incomplete")
                 return False
             continue
+        historical_increments = historical_program.get("increments")
+        if not isinstance(historical_increments, list):
+            _error(errors, "v1 normative profile binding history has invalid increments")
+            return False
+        if any(
+            isinstance(increment, dict)
+            and increment.get("taskRegistration") is not None
+            for increment in historical_increments
+        ):
+            prior_registration_seen = True
         binding_history_started = True
-        if historical_binding.get("state") == "frozen":
-            if revoked_seen:
-                _error(errors, "revoked normative profile binding cannot return to frozen")
-                return False
-            if first_frozen is None:
-                first_frozen = dict(historical_binding)
-                first_frozen_revision = revision
-            elif not _same_typed_value(historical_binding, first_frozen):
-                _error(errors, "frozen normative profile binding cannot be changed or re-frozen")
-                return False
-        elif historical_binding.get("state") == "revoked":
-            if first_frozen is None or any(
-                not _same_typed_value(historical_binding.get(field), value)
-                for field, value in first_frozen.items()
-                if field != "state"
-            ):
-                _error(errors, "revoked normative profile binding must preserve the first freeze")
-                return False
-            revoked_seen = True
-        elif historical_binding.get("state") == "unfrozen":
-            if first_frozen is not None:
+        binding_state = historical_binding.get("state")
+        if binding_state == "unfrozen":
+            if generation != 0:
                 _error(errors, "frozen normative profile binding cannot return to unfrozen")
                 return False
-        else:
-            _error(errors, "v1 normative profile binding history contains an invalid state")
-            return False
+            continue
+        if binding_state == "frozen":
+            if generation == 0:
+                first_frozen = dict(historical_binding)
+                first_frozen_revision = revision
+                active_frozen = first_frozen
+                generation = 1
+                revoked = False
+                continue
+            if not revoked:
+                if active_frozen is None or not _same_typed_value(
+                    historical_binding, active_frozen
+                ):
+                    _error(errors, "frozen normative profile binding changed within a generation")
+                    return False
+                continue
+            if (
+                generation != 1
+                or first_frozen is None
+                or successor_frozen is not None
+                or prior_registration_seen
+                or not _successor_binding_preserves_profile(
+                    first_frozen, historical_binding
+                )
+            ):
+                _error(
+                    errors,
+                    "successor cohort generation violates its single zero-outcome boundary",
+                )
+                return False
+            successor_frozen = dict(historical_binding)
+            successor_frozen_revision = revision
+            active_frozen = successor_frozen
+            generation = 2
+            revoked = False
+            continue
+        if binding_state == "revoked":
+            if active_frozen is None or not _binding_matches_generation(
+                historical_binding, active_frozen
+            ):
+                _error(errors, "revoked normative profile binding must preserve its active generation")
+                return False
+            if not revoked and generation == 1:
+                predecessor_revoked = dict(historical_binding)
+                predecessor_revoked_revision = revision
+            revoked = True
+            continue
+        _error(errors, "v1 normative profile binding history contains an invalid state")
+        return False
     if cursor != len(batch_raw):
         _error(errors, "normative profile binding history cannot be inspected")
         return False
-    if current_binding.get("state") in {"frozen", "revoked"} and first_frozen is None:
-        _error(errors, "frozen normative profile binding must exist in committed first-parent history")
+
+    current_state = current_binding.get("state")
+    if current_state == "unfrozen":
+        if generation != 0:
+            _error(errors, "frozen normative profile binding cannot return to unfrozen")
+    elif current_state == "frozen":
+        if generation == 0:
+            _error(errors, "frozen normative profile binding must exist in committed first-parent history")
+        elif revoked:
+            if (
+                generation != 1
+                or first_frozen is None
+                or successor_frozen is not None
+                or prior_registration_seen
+                or not _successor_binding_preserves_profile(first_frozen, current_binding)
+            ):
+                _error(
+                    errors,
+                    "successor cohort generation violates its single zero-outcome boundary",
+                )
+            else:
+                successor_frozen = dict(current_binding)
+                active_frozen = successor_frozen
+                generation = 2
+                revoked = False
+        elif active_frozen is None or not _same_typed_value(
+            current_binding, active_frozen
+        ):
+            _error(errors, "current normative profile binding differs from its active generation")
+    elif current_state == "revoked":
+        if active_frozen is None or not _binding_matches_generation(
+            current_binding, active_frozen
+        ):
+            _error(errors, "revoked normative profile binding must preserve its active generation")
+        revoked = True
+    else:
+        _error(errors, "v1 normative profile binding history contains an invalid state")
+
     if first_frozen is not None:
-        if current_binding.get("state") == "frozen" and not _same_typed_value(
-            current_binding, first_frozen
-        ):
-            _error(errors, "current normative profile binding differs from the first frozen binding")
-        elif current_binding.get("state") == "revoked" and any(
-            not _same_typed_value(current_binding.get(field), value)
-            for field, value in first_frozen.items()
-            if field != "state"
-        ):
-            _error(errors, "revoked normative profile binding must preserve the first freeze")
-    if current_binding.get("state") in {"frozen", "revoked"} and first_frozen is not None:
         initial_revision = EXPECTED_V1_INITIAL_BINDING_REVISION
         initial_sha256 = EXPECTED_V1_INITIAL_BINDING_SHA256
-        canonical_binding = json.dumps(
+        canonical_initial = json.dumps(
             first_frozen,
             ensure_ascii=False,
             sort_keys=True,
             separators=(",", ":"),
         ).encode("utf-8")
-        canonical_sha256 = hashlib.sha256(canonical_binding).hexdigest()
-        anchor_is_valid = (
+        initial_anchor_valid = (
             isinstance(initial_revision, str)
             and re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", initial_revision)
             is not None
@@ -2311,49 +2518,95 @@ def _normative_profile_binding_history_valid(
                 root, "merge-base", "--is-ancestor", initial_revision, "HEAD"
             )
             is not None
-            and canonical_sha256 == initial_sha256
+            and hashlib.sha256(canonical_initial).hexdigest() == initial_sha256
         )
-        if not anchor_is_valid:
+        if not initial_anchor_valid:
             _error(
                 errors,
                 "initial frozen normative profile binding is not code-pinned to canonical history",
             )
-        elif current_binding.get("state") == "frozen" and len(errors) == before:
-            validator_id = EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
-            authorization_evaluator = (
-                SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(validator_id)
-                if isinstance(validator_id, str)
-                else None
+        elif generation == 1 and not revoked and len(errors) == before:
+            _binding_authorization_valid(
+                root,
+                "initial",
+                "initial-normative-profile-binding-authorization",
+                initial_revision,
+                initial_sha256,
+                EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+                errors,
             )
-            if authorization_evaluator is None:
-                _error(
-                    errors,
-                    "initial frozen normative profile binding has no code-owned source authorization validator",
-                )
-            else:
-                authorization_document = {
-                    "kind": "initial-normative-profile-binding-authorization",
-                    "revision": initial_revision,
-                    "bindingSha256": initial_sha256,
-                }
-                authorization_errors: list[str] = []
-                try:
-                    authorization_verified = authorization_evaluator(
-                        authorization_document, root, authorization_errors
-                    )
-                except Exception as exc:
-                    _error(
-                        authorization_errors,
-                        "initial frozen normative profile binding authorization validator failed closed: "
-                        f"{exc.__class__.__name__}",
-                    )
-                else:
-                    if authorization_verified is not True and not authorization_errors:
-                        _error(
-                            authorization_errors,
-                            "initial frozen normative profile binding authorization source was not independently verified",
-                        )
-                errors.extend(authorization_errors)
+
+    if generation == 2 and successor_frozen is not None:
+        successor_revision = EXPECTED_V1_SUCCESSOR_BINDING_REVISION
+        successor_sha256 = EXPECTED_V1_SUCCESSOR_BINDING_SHA256
+        canonical_successor = json.dumps(
+            successor_frozen,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        canonical_predecessor_revoked = (
+            json.dumps(
+                predecessor_revoked,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            if predecessor_revoked is not None
+            else None
+        )
+        successor_anchor_valid = (
+            isinstance(successor_revision, str)
+            and re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", successor_revision)
+            is not None
+            and isinstance(successor_sha256, str)
+            and re.fullmatch(r"[0-9a-f]{64}", successor_sha256) is not None
+            and successor_frozen_revision == successor_revision
+            and predecessor_revoked_revision
+            == EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+            and canonical_predecessor_revoked is not None
+            and hashlib.sha256(canonical_predecessor_revoked).hexdigest()
+            == EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256
+            and _evidence_git(
+                root, "merge-base", "--is-ancestor", successor_revision, "HEAD"
+            )
+            is not None
+            and _evidence_git(
+                root,
+                "merge-base",
+                "--is-ancestor",
+                EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION,
+                successor_revision,
+            )
+            is not None
+            and hashlib.sha256(canonical_successor).hexdigest() == successor_sha256
+        )
+        if not successor_anchor_valid:
+            _error(
+                errors,
+                "successor cohort binding is not code-pinned to canonical history",
+            )
+        elif not revoked and len(errors) == before:
+            _binding_authorization_valid(
+                root,
+                "successor",
+                "successor-normative-profile-binding-authorization",
+                successor_revision,
+                successor_sha256,
+                EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
+                errors,
+                source_window_boundary={
+                    "predecessorRevocationRevision": (
+                        EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION
+                    ),
+                    "predecessorRevocationBindingSha256": (
+                        EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256
+                    ),
+                    "sourceWindowRule": (
+                        EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE
+                    ),
+                },
+            )
     return len(errors) == before
 
 
@@ -3158,8 +3411,16 @@ def _normative_profile_binding_valid(
     )
     if not protocol_valid:
         _error(errors, "frozen cohort protocol shape is invalid")
-    if binding_state == "revoked":
+    current_activation = binding.get("cohortActivation")
+    is_successor_generation = (
+        isinstance(current_activation, dict)
+        and current_activation.get("keyFingerprint")
+        != EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT
+    )
+    if binding_state == "revoked" or is_successor_generation:
         _initial_authorization_private_resource_absent(errors)
+    if binding_state == "revoked" and is_successor_generation:
+        _successor_authorization_private_resource_absent(errors)
     return len(errors) == before
 
 

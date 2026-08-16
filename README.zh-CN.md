@@ -29,8 +29,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 
 当前树已经形成一份独立的 [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 和[前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，把测量前方法、强制
-底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。二者仍未绑定，已登记任务和
-结果证据均为零；只有审阅完成并由 program 对两份精确字节做内容寻址后才会冻结。
+底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。program 已绑定二者的精确
+冻结字节，但首个零任务 cohort 已撤销且没有结果证据；只有另行锚定并授权 successor
+generation 后才能恢复 enrollment。
 
 历史 v0.2 的 O1 由公开入口、Codex Skill 源码和 Claude Skill 源码三个已接受结果支持。O2 使用实质不同
 的公开入口、Codex Skill 源码和连续性对账场景，不重复计算相似的宿主包交付。O3 绑定三个
@@ -46,9 +47,10 @@ Claude Code 2.1.233/DeepSeek-V4-Pro 上执行。两端独立得到同一个有�
 Agent 清理，用户没有执行恢复或清理操作。
 
 历史 Codex 与 Claude candidate.7 修订仍只是未启用的薄 Skill-plus-Hook 投影，精确 Git
-修订就是证据边界，实测价值不会转移给后续源码。当前 Codex 树已经换成尚未绑定 profile
-的 v1 载体机制候选：包内 Hook 只保存有界的原生生命周期计数，不执行任务仓库代码；检入
-命令在绝对可信解释器被物化前失败关闭，测量性激活还必须绑定冻结 v1 profile。它没有安装
+修订就是证据边界，实测价值不会转移给后续源码。当前 Codex 树已经换成未启用的 v1
+载体机制候选：包内 Hook 只保存有界的原生生命周期计数，不执行任务仓库代码；检入命令在
+绝对可信解释器被物化前失败关闭，测量性激活还必须存在冻结 v1 profile 下当前有效且独立
+授权的 cohort generation。它没有安装
 或启用。当前 Claude candidate.7 血统也已加入有界输入和未物化解释器失败关闭，但仍只会
 装载精确哈希审阅过的仓库运行时代码，并不是已运行的 v1 载体实现。两者都不新增 MCP、
 App、提供方管理器、提示拦截或产品权威。CC Switch 3.19.2
@@ -101,9 +103,9 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
 - 明确且所有结果仍为 planned 的[v1.0 终态验收标准](product/acceptance.json)；
 - 一份在 v0.2 固定 Codex cohort 中获得有界接受、但其预注册状态字节保持冻结的
   [candidate.5 方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)；
-- 一份独立的 [v1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
-  [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，目前均未绑定，
-  不携带任何任务或结果证据；
+- 一份独立且已冻结的 [v1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
+  [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，已作为从属 operand
+  绑定，但不携带任何任务或结果证据；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
   恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
@@ -138,8 +140,8 @@ python -B -m unittest discover -s tests/product -v
 
 JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operations/CONTINUATION.md)。
 
-任何 v1.0 结果测量开始前，仓库必须先审阅并冻结上述 v1 候选，使其成为一份内容寻址的
-规范 profile 和配套前瞻 cohort 协议。首个冻结提交绑定精确的初始源原生有序纳入面、
+任何 v1.0 结果测量开始前，仓库必须把已审阅的 v1 候选绑定为一份内容寻址的规范 profile
+和配套前瞻 cohort 协议。每个获准 cohort generation 的冻结提交绑定精确的初始源原生有序纳入面、
 激活游标与 cohort 密钥身份/指纹，但它本身不激活 cohort。任何合格需求出现前，具名人类
 必须在可独立验证的来源事件中授权该精确 revision、完整 binding digest、来源面、私域
 证据边界和清理处置；下一提交再固定 revision、digest 与代码所有的授权验证器。冻结后、
@@ -152,7 +154,10 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 来源游标没有漏掉更早的合格需求、自然需求事件先于注册且独立测量事件晚于注册。只要仍
 声明可实时复验来源，私钥和私域来源证据就只能依照具名人类明确接受的隐私、访问、保留、
 到期、撤销与清理处置留存。销毁密钥必须留下精确凭据，并会撤销实时可复验状态，不能在
-销毁后继续保留验收声明；提交日期和自报时间戳不能充当时序证明。
+销毁后继续保留验收声明。已撤销的授权 freeze 必须作为不可变停止历史保留。首个 generation
+因为零注册任务，只有在来源验证窗口同时证明撤销后未出现合格自然需求时，才允许打开一次
+全新的 successor generation；它必须使用新的激活游标、来源面/密钥身份、私钥和精确独立授权，
+不得继承任务、结果、游标或顺序状态，也不得再次重启。提交日期和自报时间戳不能充当时序证明。
 
 program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`、首冻 revision
 `d19d2fb` 和规范 binding digest `ee4ba7a`，且具名人类的精确授权已从绑定的 Codex 来源独立验证。
@@ -160,7 +165,8 @@ program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`�
 删除并复核了精确受保护资源，当前实时来源可验证性已经撤销。验证器现在会把瞬时
 不可用或并发变化与确定性 binding/内容失败分开：前者只失败关闭、不得删除，后者仍精确删除并
 复核缺失。此前没有任何合格自然任务完成注册，因此没有丢失 O1-O5 结果证据，O1-O5 仍为 0/5；
-恢复 enrollment 前必须重新建立 cohort activation 并取得独立人类授权。候选文件内部的
+已撤销 generation 不能恢复；恢复 enrollment 必须使用上述另行冻结并独立授权的一次性
+successor。候选文件内部的
 `pre-freeze candidate` 是冻结字节的一部分；当前绑定状态只以 `product/program.json` 为准。
 托管 runner 只能佐证其余契约，不能恢复或证明已撤销的本地授权。
 
@@ -216,7 +222,7 @@ criterion 的预注册与验证负担时，才能同时支持多个 criterion，
 | 你的目的 | 对应文档 |
 | --- | --- |
 | 理解产品边界 | [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md) |
-| 审阅尚未绑定的 v1 方法、底线与 cohort 实现 | [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)与[前瞻 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
+| 审阅已冻结的 v1 方法、底线与当前 cohort 生命周期 | [v1 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)与[前瞻 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | 应用获得 v0.2 Codex 有界校准、但尚未满足 v1.0 的候选 profile | [需求到能力方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | 理解技术职责分离 | [架构](docs/architecture.md) |
 | 查看证明顺序与外部复用门槛 | [研究与验证计划](docs/strategy/RESEARCH-AND-POC-PLAN.md) |

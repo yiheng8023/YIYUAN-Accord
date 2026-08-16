@@ -215,7 +215,7 @@ class ProductControlTests(unittest.TestCase):
         callback(value)
         self.write_json(relative, value)
 
-    def report(self) -> dict:
+    def report(self, *, bind_successor: bool = True) -> dict:
         if not (self.root / ".git").is_dir():
             with patch(
                 "harness.control._normative_profile_binding_history_valid",
@@ -231,6 +231,11 @@ class ProductControlTests(unittest.TestCase):
         ).stdout.strip()
         initial_binding_revision: str | None = None
         initial_binding_sha256: str | None = None
+        successor_binding_revision: str | None = None
+        successor_binding_sha256: str | None = None
+        predecessor_revocation_revision: str | None = None
+        predecessor_revocation_binding_sha256: str | None = None
+        revoked_seen = False
         binding_revisions = subprocess.run(
             [
                 "git",
@@ -257,17 +262,37 @@ class ProductControlTests(unittest.TestCase):
                 ).stdout
             )
             binding = historical_program.get("normativeProfileBinding")
-            if isinstance(binding, dict) and binding.get("state") == "frozen":
+            if not isinstance(binding, dict):
+                continue
+            if binding.get("state") == "revoked":
+                if not revoked_seen:
+                    predecessor_revocation_revision = revision
+                    predecessor_revocation_binding_sha256 = hashlib.sha256(
+                        json.dumps(
+                            binding,
+                            ensure_ascii=False,
+                            sort_keys=True,
+                            separators=(",", ":"),
+                        ).encode("utf-8")
+                    ).hexdigest()
+                revoked_seen = True
+                continue
+            if binding.get("state") != "frozen":
+                continue
+            binding_sha256 = hashlib.sha256(
+                json.dumps(
+                    binding,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest()
+            if initial_binding_revision is None:
                 initial_binding_revision = revision
-                initial_binding_sha256 = hashlib.sha256(
-                    json.dumps(
-                        binding,
-                        ensure_ascii=False,
-                        sort_keys=True,
-                        separators=(",", ":"),
-                    ).encode("utf-8")
-                ).hexdigest()
-                break
+                initial_binding_sha256 = binding_sha256
+            elif revoked_seen and successor_binding_revision is None:
+                successor_binding_revision = revision
+                successor_binding_sha256 = binding_sha256
         initial_authorization_validator_id = (
             "fixture-initial-binding-authorization"
             if initial_binding_revision is not None
@@ -279,6 +304,17 @@ class ProductControlTests(unittest.TestCase):
         authorization_validators["fixture-initial-binding-authorization"] = (
             lambda document, root, errors: True
         )
+        authorization_validators["fixture-successor-binding-authorization"] = (
+            lambda document, root, errors: document
+            == {
+                "kind": "successor-normative-profile-binding-authorization",
+                "revision": successor_binding_revision,
+                "bindingSha256": successor_binding_sha256,
+                "predecessorRevocationRevision": predecessor_revocation_revision,
+                "predecessorRevocationBindingSha256": predecessor_revocation_binding_sha256,
+                "sourceWindowRule": control.EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE,
+            }
+        )
         with patch.multiple(
             control,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
@@ -287,6 +323,23 @@ class ProductControlTests(unittest.TestCase):
             EXPECTED_V1_INITIAL_BINDING_SHA256=initial_binding_sha256,
             EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=(
                 initial_authorization_validator_id
+            ),
+            EXPECTED_V1_SUCCESSOR_BINDING_REVISION=(
+                successor_binding_revision if bind_successor else None
+            ),
+            EXPECTED_V1_SUCCESSOR_BINDING_SHA256=(
+                successor_binding_sha256 if bind_successor else None
+            ),
+            EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID=(
+                "fixture-successor-binding-authorization"
+                if bind_successor and successor_binding_revision is not None
+                else None
+            ),
+            EXPECTED_V1_PREDECESSOR_REVOCATION_REVISION=(
+                predecessor_revocation_revision
+            ),
+            EXPECTED_V1_PREDECESSOR_REVOCATION_BINDING_SHA256=(
+                predecessor_revocation_binding_sha256
             ),
             SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS=authorization_validators,
         ):
@@ -589,6 +642,59 @@ class ProductControlTests(unittest.TestCase):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 )
+
+    def revoke_program_profile(self, program: dict, message: str = "revoke fixture cohort") -> None:
+        program["normativeProfileBinding"]["state"] = "revoked"
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", message],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+    def start_successor_program_cohort(
+        self, program: dict, *, reuse_activation_fields: tuple[str, ...] = ()
+    ) -> None:
+        binding = program["normativeProfileBinding"]
+        self.assertEqual(binding["state"], "revoked")
+        prior_activation = deepcopy(binding["cohortActivation"])
+        binding["state"] = "frozen"
+        binding["cohortActivation"] = {
+            "surfaceIdentity": "enrollment-surface.public-v1:" + "5" * 32,
+            "activationCursorCommitment": "hmac-sha256:" + "6" * 64,
+            "keyIdentity": "cohort-key.public-v1:" + "7" * 32,
+            "keyFingerprint": "sha256:" + "8" * 64,
+            "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+            "hmacDomain": control.EXPECTED_HMAC_DOMAIN,
+            "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
+            "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
+        }
+        for field in reuse_activation_fields:
+            binding["cohortActivation"][field] = prior_activation[field]
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "start successor fixture cohort"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
 
     def bind_fixture_registration(
         self,
@@ -1220,6 +1326,12 @@ class ProductControlTests(unittest.TestCase):
             "after the freeze commit but before authorization stops",
             acceptance["progressRule"],
         )
+        self.assertIn("immutable stopped history", acceptance["progressRule"])
+        self.assertIn("zero task registrations", acceptance["progressRule"])
+        self.assertIn("no eligible natural demand occurred after revocation", acceptance["progressRule"])
+        self.assertIn("one fresh successor cohort generation", acceptance["progressRule"])
+        self.assertIn("carries no prior registration, result, or ordering state", acceptance["progressRule"])
+        self.assertIn("any second successor attempt stops", acceptance["progressRule"])
         self.assertIn("Unsalted or unkeyed hashes", profile)
         self.assertIn("exposed to the task/model", profile)
         self.assertIn("revokes live source verifiability", profile)
@@ -3116,7 +3228,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_revoked_profile_preserves_first_freeze_and_cannot_reactivate(self) -> None:
+    def test_revoked_profile_preserves_first_freeze_and_rejects_same_activation(self) -> None:
         program = self.read_json("product/program.json")
         self.freeze_program_profile(program)
         program["normativeProfileBinding"]["state"] = "revoked"
@@ -3162,7 +3274,160 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "revoked normative profile binding cannot return to frozen",
+            "successor cohort generation violates its single zero-outcome boundary",
+            report["errors"],
+        )
+
+    def test_revoked_zero_outcome_profile_can_start_one_successor_cohort(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(program)
+
+        report = self.report(bind_successor=False)
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort binding is not code-pinned to canonical history",
+            report["errors"],
+        )
+
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+
+    def test_successor_cohort_rejects_any_prior_registration(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        program["increments"] = [{"taskRegistration": {"fixture": "prior"}}]
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "record fixture registration"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        program["increments"] = []
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(program)
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort generation violates its single zero-outcome boundary",
+            report["errors"],
+        )
+
+    def test_successor_cohort_rejects_reused_private_key_identity(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(
+            program,
+            reuse_activation_fields=("keyIdentity", "keyFingerprint"),
+        )
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort generation violates its single zero-outcome boundary",
+            report["errors"],
+        )
+
+    def test_successor_cohort_rejects_reused_surface_identity(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(
+            program,
+            reuse_activation_fields=("surfaceIdentity",),
+        )
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort generation violates its single zero-outcome boundary",
+            report["errors"],
+        )
+
+    def test_successor_cohort_rejects_reused_activation_cursor(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(
+            program,
+            reuse_activation_fields=("activationCursorCommitment",),
+        )
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort generation violates its single zero-outcome boundary",
+            report["errors"],
+        )
+
+    def test_active_successor_requires_predecessor_private_resource_absence(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(program)
+
+        def predecessor_present(errors: list[str]) -> bool:
+            errors.append("fixture predecessor resource still exists")
+            return False
+
+        with patch(
+            "harness.control._initial_authorization_private_resource_absent",
+            side_effect=predecessor_present,
+        ) as predecessor_absent:
+            report = self.report()
+
+        self.assertFalse(report["valid"])
+        predecessor_absent.assert_called_once()
+
+    def test_revoked_successor_requires_its_private_resource_absence(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(program)
+        self.revoke_program_profile(program, "revoke successor fixture cohort")
+
+        def successor_present(errors: list[str]) -> bool:
+            errors.append("fixture successor resource still exists")
+            return False
+
+        with patch(
+            "harness.control._initial_authorization_private_resource_absent",
+            return_value=True,
+        ) as predecessor_absent, patch(
+            "harness.control._successor_authorization_private_resource_absent",
+            side_effect=successor_present,
+            create=True,
+        ) as successor_absent:
+            report = self.report()
+
+        self.assertFalse(report["valid"])
+        predecessor_absent.assert_called_once()
+        successor_absent.assert_called_once()
+
+    def test_successor_cohort_generation_is_single_use(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        self.revoke_program_profile(program)
+        self.start_successor_program_cohort(program)
+        self.revoke_program_profile(program, "revoke restarted fixture cohort")
+        self.start_successor_program_cohort(program)
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "successor cohort generation violates its single zero-outcome boundary",
             report["errors"],
         )
 
@@ -3213,7 +3478,7 @@ class ProductControlTests(unittest.TestCase):
 
         self.assertFalse(report["valid"])
         self.assertIn(
-            "frozen normative profile binding cannot be changed or re-frozen",
+            "frozen normative profile binding changed within a generation",
             report["errors"],
         )
 
@@ -3332,7 +3597,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertFalse(validator_called)
         self.assertIn(
-            "current normative profile binding differs from the first frozen binding",
+            "current normative profile binding differs from its active generation",
             report["errors"],
         )
 

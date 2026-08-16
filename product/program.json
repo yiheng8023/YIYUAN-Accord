@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-revoked-cohort-single-restart-path",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -100,56 +100,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-revoked-cohort-single-restart-path",
-      "state": "active",
-      "correctionClass": "revoked-zero-outcome-cohort-has-no-authorized-restart-path",
-      "observedProblem": "The verifier correctly preserves the first v1 binding as revoked after exact resource destruction, but it makes that state permanently terminal even though no natural task or O1-O5 evidence was ever registered; a new exact human grant therefore cannot create a fresh prospective activation without weakening or bypassing history checks.",
-      "hypothesis": "If binding history permits exactly one second freeze only after a committed exact revocation, only while zero prior task registrations exist, with unchanged profile and cohort-protocol identities and a different activation, and still requires new code-pinned revision, digest and independent source authorization, then the cohort can recover without carrying evidence forward or creating a generic reset mechanism.",
-      "falsifier": "Stop if profile or protocol bytes can change, any prior registration or result can survive into the restart, a second freeze can become effective before new independent authorization, more than one restart is possible, the old key or source can be reused, or the route becomes a generic generation manager.",
-      "stopCondition": "Stop after code and history-sequence regressions admit only one unactivated second freeze under the exact constraints, reject every authorization or evidence bypass, leave all new private constants unmaterialized, and return the program to revoked ready with zero O1-O5 progress.",
-      "acceptanceIds": [
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v1-revoked-cohort-single-restart-path",
-          "state": "active",
-          "acceptanceIds": [
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "single zero-outcome cohort restart history rule",
-            "new freeze authorization anchors defaulting to unavailable",
-            "restart bypass regression coverage"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

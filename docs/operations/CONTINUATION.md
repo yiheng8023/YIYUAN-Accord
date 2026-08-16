@@ -62,10 +62,13 @@ and absence-checked the exact protected resource and revoked current live
 verifiability. The verifier now separates transient unavailability or
 concurrent change, which fails closed without destruction, from confirmed
 binding or content failure, which retains exact deletion and absence
-verification. No natural task had been registered, so O1-O5 remain 0/5; a
-fresh activation and independent human authorization are required before
-enrollment resumes. Hosted runners corroborate the remaining contract only and
-cannot restore or prove a revoked local authorization.
+verification. No natural task had been registered, so O1-O5 remain 0/5. The
+revoked generation cannot resume. Exactly one successor generation may be
+opened only after the source proves no eligible demand occurred after revocation;
+it uses a fresh activation, identities, private key and independent exact
+authorization, carries no prior task, result, cursor or ordering state, and
+cannot be restarted again. Hosted runners corroborate the remaining contract
+only and cannot restore or prove a revoked local authorization.
 
 ## Starting one causal increment
 
@@ -78,9 +81,9 @@ Open exactly one increment with at most one active work item only after binding:
 - exact cleanup boundary and operations.
 
 Outcome-neutral repair binds `taskRegistration: null` and must leave the current
-graph at its stop. Outcome-bearing work additionally requires the program's new
-v1 normative profile and prospective cohort protocol to be content-addressed in
-one prior first-freeze revision that also binds the exact initial source-native
+graph at its stop. Outcome-bearing work additionally requires the program's
+frozen v1 normative profile and prospective cohort protocol to be bound in the
+current cohort generation's prior freeze revision, which also binds the exact source-native
 surface, activation cursor and cohort key identity/fingerprint. Before eligible
 demand, a named human must authorize that exact revision, complete binding
 digest, source surface, private-evidence boundary and cleanup disposition in a

@@ -77,8 +77,13 @@ source root, source-native authorization event and complete finite prefix. On
 2026-08-16 a transient source-unavailable result was incorrectly treated as
 definitive validation failure, so the exact protected resource was deleted and
 absence-checked under the failure disposition. `product/program.json` now
-retains the immutable first freeze as `revoked`; that state verifies resource
-absence, cannot admit outcome registration, and cannot return to `frozen`.
+retains the immutable first freeze as `revoked`; that generation verifies
+resource absence, cannot admit outcome registration, and cannot itself return
+to `frozen`. Because it had zero registrations, the program may open exactly
+one distinct successor generation only after a source-verified no-eligible-demand
+window, with a fresh activation, private key and independent exact authorization.
+The successor inherits no task, result, cursor or ordering state and cannot be
+restarted again.
 Transient source unavailability or concurrent change now fails closed without
 destruction, while a confirmed schema, binding or content failure retains exact
 deletion. Diagnostics never contain the raw target, root, event, key or source
