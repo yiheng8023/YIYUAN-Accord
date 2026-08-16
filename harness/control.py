@@ -1,9 +1,10 @@
 """Historical-event-neutral product-contract verification for the Harness.
 
-The verifier owns current authority shape, causal-program invariants, evidence
-admission, human authority, and bounded process loss. Historical release event
-validators live at their accepted Git revisions; they are not carried forward
-as current product authority.
+The verifier enforces current authority shape, causal-program invariants,
+evidence admission, human authority, and bounded process loss. The constitution,
+program, and acceptance contract remain product authority. Historical release
+event validators live at their accepted Git revisions; they are not carried
+forward as current product authority.
 """
 
 from __future__ import annotations
@@ -199,7 +200,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "a1b21a3e05bed19159773dba94865d0b76dff0792e401c2d28aed529102ff8be"
+    "5d5d8abc3bf28d919ecc8afa549e910ec13989269e165c44b1aa42a84e202041"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -340,7 +341,7 @@ EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR = (
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md"
 )
 EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256 = (
-    "55ebd54e5783713542c8ae8e6b1fea1c122e83881e0873ccfa60bd4c92a6458c"
+    "536096507101be97bd08921b194c6188ca0569bf0dec6a68d0baffc55f0189d0"
 )
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY = (
     "harness-prospective-cohort-v1.1-candidate.1"

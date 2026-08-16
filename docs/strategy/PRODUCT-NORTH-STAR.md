@@ -105,9 +105,8 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   claim.
 
 The current v1.1 program in `product/program.json` and
-`product/acceptance.json` is a zero-outcome environment-attributed terminal-
-product proof with one bounded outcome-neutral candidate-integrity increment
-currently active. It preserves v0.2 as bounded historical calibration and
+`product/acceptance.json` is a ready, zero-outcome environment-attributed
+terminal-product proof. It preserves v0.2 as bounded historical calibration and
 v1.0 as an immutable stopped zero-outcome attempt. Current evidence must
 preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,

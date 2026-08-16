@@ -181,7 +181,7 @@ process, carrier, branch, worktree, fork, handoff, and authorized external
 temporary state. Remove only task-owned resources. Persistence needs separate
 net-value evidence and human authority. Terminal publication still follows the
 two-stage human-authorization then Agent-execution state machine owned by the
-current acceptance contract and verifier.
+current acceptance contract and enforced by the verifier.
 
 ## Claim ceiling
 

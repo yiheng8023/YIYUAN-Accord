@@ -363,8 +363,8 @@
       "id": "G3",
       "class": "guardrail",
       "name": "independent lean current authority",
-      "statement": "The constitution, current program, current acceptance contract and verifier remain the only product authority; environment attribution is acceptance-owned, while environment manifests, a program-bound profile and cohort protocol are immutable subordinate evidence or conformance operands and cannot add criteria, thresholds, work or authority or promote state. Historical releases, supporting documents, Skills, Hooks, plugins and external ecosystems likewise cannot promote state or turn the Harness into a runtime or control plane.",
-      "metric": "code-owned authority identity, environment-attribution, historical-boundary, supporting-document and capability-influence validation",
+      "statement": "The constitution, current program and current acceptance contract remain the only product authority; the verifier only enforces their code-owned shape and derives state from them. Environment attribution is acceptance-owned, while environment manifests, a program-bound profile and cohort protocol are immutable subordinate evidence or conformance operands and cannot add criteria, thresholds, work or authority or promote state. Historical releases, supporting documents, Skills, Hooks, plugins and external ecosystems likewise cannot promote state or turn the Harness into a runtime or control plane.",
+      "metric": "verifier-enforced authority identity, environment-attribution, historical-boundary, supporting-document and capability-influence validation",
       "threshold": "one valid current authority graph, bounded historical milestones, no parallel product plan and no forbidden product-body expansion",
       "assessment": "computed"
     },

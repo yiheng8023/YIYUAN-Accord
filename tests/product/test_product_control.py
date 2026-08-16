@@ -1361,6 +1361,23 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
+    def test_v11_product_authority_remains_the_three_machine_jsons(self) -> None:
+        acceptance = self.read_json("product/acceptance.json")
+        g3 = next(item for item in acceptance["criteria"] if item["id"] == "G3")
+
+        self.assertIn(
+            "constitution, current program and current acceptance contract "
+            "remain the only product authority",
+            g3["statement"],
+        )
+        self.assertIn("verifier only enforces", g3["statement"])
+        self.assertNotIn("contract and verifier remain", g3["statement"])
+        self.assertEqual(
+            control._criteria_contract_digest(acceptance["criteria"]),
+            control.EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256,
+        )
+        self.assertIn("The verifier enforces current authority shape", control.__doc__)
+
     def test_v10_stopped_authority_bytes_are_code_pinned(self) -> None:
         errors: list[str] = []
         self.assertTrue(control._v10_historical_authority_valid(ROOT, errors), errors)
@@ -7292,12 +7309,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("user-configured", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
         self.assertIn("terminal proposition", readme)
-        self.assertIn("programStatus=active", readme)
+        self.assertIn("programStatus=ready", readme)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme)
         self.assertIn("v1.0", readme)
         self.assertIn("stopped", readme)
         self.assertIn("宪章终极命题尚未成立", readme_zh)
-        self.assertIn("programStatus=active", readme_zh)
+        self.assertIn("programStatus=ready", readme_zh)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme_zh)
         self.assertIn("v1.0", readme_zh)
         self.assertIn("停止", readme_zh)

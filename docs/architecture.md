@@ -64,8 +64,7 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program has one bounded outcome-neutral candidate-integrity
-increment active and keeps
+The current v1.1 program is `ready`, has no active increment, and keeps
 `normativeProfileBinding` deliberately `unfrozen`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact

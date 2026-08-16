@@ -16,8 +16,8 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它要�
 单一 Agent 的“需求到能力”方法、最低质量要求和薄参考适配器，用来检验这类协作是否
 真的减少用户负担。
 
-**当前状态：**v1.1 是非终态的环境归因工序；当前仅有一个有界、结果中性的候选完整性
-increment 处于 active。仓库验证器报告 `programStatus=active`、
+**当前状态：**v1.1 是已就绪但非终态的环境归因工序，当前没有 active increment。
+仓库验证器报告 `programStatus=ready`、
 `completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；
 实时状态仍应现场运行验证器读取。宪章终极命题尚未成立。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在

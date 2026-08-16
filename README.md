@@ -12,9 +12,8 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the nonterminal environment-attribution program;
-one bounded outcome-neutral candidate-integrity increment is currently active.
-The repository verifier reports `programStatus=active`,
+**Current status:** v1.1 is the ready, nonterminal environment-attribution
+program with no active increment. The repository verifier reports `programStatus=ready`,
 `completionState=in-progress`, O1-O5 `0/5`, and G1-G4 `4/4`; run the verifier
 for live truth. The constitution's terminal proposition remains open. v1.0 is
 an immutable stopped zero-outcome attempt at revision `910ac01`; none of its
