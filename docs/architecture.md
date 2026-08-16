@@ -67,8 +67,9 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and has one
-source-authorized, code-pinned frozen `normativeProfileBinding`. The
+The current v1.1 program is `active`, has one outcome-neutral O5 phase-semantics
+alignment increment, and has one source-authorized, code-pinned frozen
+`normativeProfileBinding`. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -235,6 +236,13 @@ tasks, same-environment comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
 transition, and live reproducible cross-host and cross-operating-system release
 evidence.
+Per-OS clean-checkout evidence covers public non-private contract checks and
+task-scoped projection activation, rollback and cleanup. Cross-OS behavior is
+validated by the task-bound O5 validator; live private-source terminal
+verification remains on the explicitly authorized evidence-holder surface and
+is not a portability claim. O5 pre-registration binds candidate/tag derivation
+and no-mutation semantics, while the exact commit and tag are fixed only at the
+later terminal candidate and human authorization gate.
 Authorized product-plan delivery is real demand
 when its primary purpose is the required deliverable rather than exercising or
 diagnosing the Harness; this does not make the task outcome-eligible without

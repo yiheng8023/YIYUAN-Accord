@@ -51,7 +51,8 @@ byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires distinct-host and cross-OS live evidence; exact tested
 environment identity bounds the claim.
 
-v1.1 is ready with no active increment and O1-O5 at 0/5. Its exact
+v1.1 is active with one O5 phase-semantics alignment increment and O1-O5 at
+0/5. Its exact
 `harness-demand-to-capability-v1.1-candidate.1` profile and paired
 `harness-prospective-cohort-v1.1-candidate.1` protocol form the source-authorized,
 code-pinned frozen normative binding at first-freeze revision `5ce2773`. This

@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v11-o5-phase-semantics",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -107,5 +107,64 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v11-o5-phase-semantics",
+      "state": "active",
+      "correctionClass": "o5-premeasurement-terminal-and-cross-os-verification-phase-separation",
+      "observedProblem": "O5 currently names an exact release candidate commit and tag as a pre-registration field even though the candidate must include later task evidence, making exact premeasurement binding causally impossible or inviting a vague placeholder. It also says every claimed operating-system family reproduces verification from a clean checkout while live G3 re-verification intentionally depends on a Windows protected source, so the text can be read as requiring impossible private-source replication or overclaiming full accepted verification on other systems.",
+      "hypothesis": "Renaming the pre-registration field to an exact candidate-and-tag derivation rule and separating evidence-holder terminal re-verification from per-OS public contract plus task-scoped mechanism reproduction will preserve the same O5 threshold while making both phases machine-expressible and claims accurately bounded.",
+      "falsifier": "Stop or revise if the repair permits post-result tag or candidate cherry-picking, weakens clean-checkout or cross-OS behavior evidence, copies private cohort evidence to another operating system, implies non-Windows live G3 verification, changes cohort sample thresholds or human authority, creates a task validator before a natural O5 task, performs a release, or produces any O1-O5 progress.",
+      "stopCondition": "Stop after O5 pre-registration binds an immutable candidate/tag derivation and no-mutation rule rather than an unknowable exact commit; terminal exact commit/tag remain bound only in the candidate and human release gate; each claimed OS must reproduce public non-private contract checks and task-scoped activation/rollback/cleanup while the authorized evidence-holder surface alone performs live private-source terminal re-verification; cross-OS behavior remains task-validator evidence; criteria digest, verifier, docs and full tests align at O1-O5 0/5; residue is absent; and this increment exits the graph.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": [
+          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
+          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v11-o5-phase-semantics",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "premeasurement release candidate and tag derivation rule",
+            "evidence-holder private verification boundary",
+            "per-operating-system public and task-scoped clean-checkout rule",
+            "updated criteria digest, public documentation and regressions"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -3112,10 +3112,14 @@ class ProductControlTests(unittest.TestCase):
         acceptance = self.read_json("product/acceptance.json")
         o5 = next(item for item in acceptance["criteria"] if item["id"] == "O5")
         fields = o5["operationalization"]["preRegistrationFields"]
-        self.assertIn("releaseCandidateCommitAndTag", fields)
+        self.assertIn("releaseCandidateAndTagDerivationRule", fields)
+        self.assertNotIn("releaseCandidateCommitAndTag", fields)
         self.assertIn("namedHumanReleaseAuthorizationRule", fields)
         self.assertIn("immutableTagPublicationAndVerificationProtocol", fields)
         self.assertIn("no post-tag product mutation", o5["operationalization"]["passRule"])
+        self.assertIn(
+            "not an unknowable future commit", o5["operationalization"]["passRule"]
+        )
 
     def test_task_topology_lifecycle_is_agent_owned(self) -> None:
         constitution = self.read_json("product/constitution.json")
@@ -4570,6 +4574,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             "crossOperatingSystemBehaviorAndBoundedClaimCeiling",
             operationalization["requiredMeasures"],
+        )
+        self.assertIn(
+            "privateSourceVerificationHolderAndPublicCrossOperatingSystemReproduction",
+            operationalization["requiredMeasures"],
+        )
+        self.assertIn("public non-private contract checks", o5["threshold"])
+        self.assertIn(
+            "authorized evidence-holder surface", o5["operationalization"]["passRule"]
+        )
+        self.assertIn(
+            "cross-operating-system behavior is proven by task-bound validators",
+            o5["threshold"],
         )
 
         environment_digest = hashlib.sha256(

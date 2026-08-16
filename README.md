@@ -12,12 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
+**Current status:** v1.1 is the active, nonterminal environment-attribution
+program with one outcome-neutral O5 phase-semantics alignment increment. Its
+exact candidate.1 profile and cohort
 protocol are frozen, independently source-authorized, and code-pinned to the
 first-freeze revision `5ce2773`; no natural task has yet been registered. On
 the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`programStatus=active`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
 `4/4`; run the verifier for live truth. A hosted runner without that protected
 source fails closed at G3 and corroborates only the non-private contract
 boundary. The constitution's terminal proposition remains open. v1.0 is
@@ -380,12 +381,18 @@ its code-owned deadline, and removes only that resource and trigger when due.
   pairs jointly cover observed-native-minimum and user-configured, include a
   useful completion and an honest stop or recovery, span at least two
   operating-system families with at least one cross-OS pair, bind exact OS and
-  virtualization identities, reproduce from a clean checkout on every claimed
-  OS family, pass the pre-closeout cross-dimensional counterexample
+  virtualization identities, reproduce public contract checks and task-scoped
+  activation/rollback/cleanup from a clean checkout on every claimed OS family,
+  keep live private-source terminal verification on its authorized evidence-
+  holder surface, and pass the pre-closeout cross-dimensional counterexample
   audit with zero unresolved P0/P1 findings and zero temporary process artifacts,
   and end with human acceptance of the versioned conformance contract,
   adaptive thin projections, privacy disposition, exact tested OS scope, claim
   ceiling, and exact public release.
+
+O5 pre-registration binds the deterministic candidate/tag derivation and
+no-mutation rule, not an unknowable future commit. The exact candidate and tag
+are fixed later by the clean terminal candidate and named-human release gate.
 
 One-execution means one run per pre-registered task-host unit. O5 deliberately
 runs each matched task once on each host as portability replication; it does not
