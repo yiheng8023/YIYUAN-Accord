@@ -221,24 +221,22 @@ Destroying the key requires an exact receipt and revokes live verifiability; it
 cannot preserve acceptance. Commit dates and self-reported timestamps cannot
 supply chronology proof.
 
-The current program has now frozen candidate.5 and its cohort protocol at
-artifact revision `502c4ff`, first-freeze revision `d19d2fb`, and canonical
-binding digest `ee4ba7a`. The named human authorized that exact binding in the
-bound Codex source, and the code-owned Windows source validator verifies
-privacy-safe commitments for the exact protected resource, system-local source
-root, source-native authorization event and complete locked user-event prefix.
-It rejects path substitution or concurrent mutation, rechecks the hard expiry
-before success, and deletes plus rechecks the exact resource on the authorized
-withdrawal, expiry, stop or validation-failure route without exposing private
-identities. No eligible natural
-task has yet been registered, so O1-O5 remain 0/5 and the program remains
-`in-progress`. The candidate file's internal `pre-freeze candidate` label is
+The program froze candidate.5 and its cohort protocol at artifact revision
+`502c4ff`, first-freeze revision `d19d2fb`, and canonical binding digest
+`ee4ba7a`; the exact named-human authorization was independently verified from
+the bound Codex source. On 2026-08-16, however, a transient source-unavailable
+result was incorrectly classified as definitive validation failure. The
+validator consequently deleted and absence-checked the exact protected
+resource, revoking current live source verifiability. The verifier now
+separates transient unavailability or concurrent change, which must
+fail closed without destruction, from confirmed binding or content failure,
+which retains exact deletion and absence checking. No eligible natural task
+had been registered, so no O1-O5 result evidence was lost and O1-O5 remain
+0/5. A fresh cohort activation and independent human authorization are required
+before enrollment resumes. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,
-is the current binding state. Hosted runners do not possess the authorized
-private source: CI accepts only the exact unavailable-source diagnostic while
-testing the remaining contract, and does not claim live authorization or an
-outcome. The canonical live verifier remains strict on the authorized Windows
-source host.
+is the current binding state. Hosted runners corroborate the remaining
+contract only and cannot restore or prove a revoked local authorization.
 
 Terminal publication is deliberately two-stage. The immutable candidate tree
 predeclares a semantic-version tag, the fixed public HTTPS remote and the exact

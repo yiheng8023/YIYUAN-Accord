@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v1-private-source-transient-failure-safety",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -34,7 +34,7 @@
     "currentAuthority": false
   },
   "normativeProfileBinding": {
-    "state": "frozen",
+    "state": "revoked",
     "profileIdentity": "harness-demand-to-capability-v1.0-candidate.5",
     "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
     "sha256": "c737d2614a602acdab1f66e29b5f0f957ccb142ef26bb5b5d946131e7dd5484e",
@@ -100,58 +100,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v1-private-source-transient-failure-safety",
-      "state": "active",
-      "correctionClass": "transient-private-source-unavailability-triggers-irreversible-deletion",
-      "observedProblem": "A live canonical verification observed the authorized source event as temporarily unavailable; the validator classified that recoverable access failure as validation-failure, deleted and absence-checked the exact protected cohort resource, and revoked live verifiability.",
-      "hypothesis": "If private-source validation isolates transient source unavailability or concurrent change from definitive schema, binding or content failure, then verification can fail closed without deleting on a recoverable access condition while preserving exact deletion for confirmed validation failure.",
-      "falsifier": "Stop if an unavailable or concurrently changing source can still trigger deletion, a definitive private binding or content failure can avoid deletion, error accumulation lets a callback change the classification, private identifiers enter diagnostics, or the repair attempts to recreate the revoked resource without new human authority.",
-      "stopCondition": "Stop after task-bound regressions prove transient source failures never invoke deletion and definitive failures still do, the full product tests pass under the documented unavailable-source boundary, no private resource is recreated, and the program returns to ready with zero O1-O5 progress.",
-      "acceptanceIds": [
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxMaterialUserCapabilityOrchestrationInterventions": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1-cohort-private-evidence:windows-user-protected;retain-through-accepted-or-stopped-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-validation-failure"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v1-private-source-transient-failure-safety",
-          "state": "active",
-          "acceptanceIds": [
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "fail-closed non-destructive transient source classification",
-            "definitive validation-failure deletion preservation",
-            "task-bound transient and definitive failure regressions"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

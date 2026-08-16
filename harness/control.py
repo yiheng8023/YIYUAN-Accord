@@ -334,6 +334,12 @@ EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = (
 INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
     2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
 )
+NONDESTRUCTIVE_INITIAL_AUTHORIZATION_SOURCE_FAILURES = frozenset(
+    {
+        "initial binding authorization source event is unavailable",
+        "initial binding authorization source event changed during validation",
+    }
+)
 EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT = (
     "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3"
 )
@@ -352,6 +358,7 @@ INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
 INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
     "agent-autonomy-harness/first-freeze-source-window/v1"
 )
+INITIAL_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1/*"
 # These privacy-safe commitments are materialized from the already-authorized
 # protected source during this bounded repair. Until then, the live validator
 # fails closed rather than accepting an unbound private resource or event.
@@ -971,7 +978,7 @@ def _read_initial_authorization_private_evidence(
         count = ctypes.c_uint32()
         credentials = ctypes.c_void_p()
         available = enumerate_credentials(
-            "AgentAutonomyHarness/v1/*",
+            INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
             0,
             ctypes.byref(count),
             ctypes.byref(credentials),
@@ -1035,6 +1042,46 @@ def _read_initial_authorization_private_evidence(
         _error(errors, "initial binding authorization private source is invalid")
         return None
     return value, target_name
+
+
+def _initial_authorization_private_resource_absent(errors: list[str]) -> bool:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return True
+    try:
+        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
+        enumerate_credentials = advapi32.CredEnumerateW
+        enumerate_credentials.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+            ctypes.POINTER(ctypes.c_uint32),
+            ctypes.POINTER(ctypes.c_void_p),
+        ]
+        enumerate_credentials.restype = ctypes.c_int
+        free_credentials = advapi32.CredFree
+        free_credentials.argtypes = [ctypes.c_void_p]
+        free_credentials.restype = None
+        count = ctypes.c_uint32()
+        credentials = ctypes.c_void_p()
+        ctypes.set_last_error(0)
+        available = enumerate_credentials(
+            INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+            0,
+            ctypes.byref(count),
+            ctypes.byref(credentials),
+        )
+        enumerate_error = ctypes.get_last_error()
+        if credentials.value:
+            free_credentials(credentials)
+        if available or count.value != 0:
+            _error(errors, "revoked initial binding private resource still exists")
+            return False
+        if enumerate_error != 1168:
+            _error(errors, "revoked initial binding private resource absence is unverifiable")
+            return False
+    except (OSError, ValueError, TypeError):
+        _error(errors, "revoked initial binding private resource absence is unverifiable")
+        return False
+    return True
 
 
 def _initial_authorization_string_hmac(
@@ -1777,7 +1824,6 @@ def _validate_initial_binding_authorization(
     authorization_document: dict[str, Any], root: Path, errors: list[str]
 ) -> bool:
     del root
-    before = len(errors)
     if authorization_document != {
         "kind": "initial-normative-profile-binding-authorization",
         "revision": EXPECTED_V1_INITIAL_BINDING_REVISION,
@@ -1799,18 +1845,29 @@ def _validate_initial_binding_authorization(
     if resource is None:
         return False
     private_evidence, target_name = resource
+    validation_errors: list[str] = []
     valid = _initial_authorization_event_window_valid(
         private_evidence,
         authorization_document,
-        errors,
+        validation_errors,
         credential_target_name=target_name,
     )
-    if not valid or len(errors) != before:
-        _delete_initial_authorization_private_resource(
-            resource,
-            "validation-failure",
-            errors,
+    if not valid or validation_errors:
+        nondestructive_source_failure = (
+            not valid
+            and bool(validation_errors)
+            and all(
+                item in NONDESTRUCTIVE_INITIAL_AUTHORIZATION_SOURCE_FAILURES
+                for item in validation_errors
+            )
         )
+        errors.extend(validation_errors)
+        if not nondestructive_source_failure:
+            _delete_initial_authorization_private_resource(
+                resource,
+                "validation-failure",
+                errors,
+            )
         return False
     if _utc_now() > INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
         _delete_initial_authorization_private_resource(resource, "expiry", errors)
@@ -2150,6 +2207,7 @@ def _normative_profile_binding_history_valid(
     first_frozen: dict[str, Any] | None = None
     first_frozen_revision: str | None = None
     binding_history_started = False
+    revoked_seen = False
     cursor = 0
     for revision in revisions:
         header_end = batch_raw.find(b"\n", cursor)
@@ -2191,12 +2249,24 @@ def _normative_profile_binding_history_valid(
             continue
         binding_history_started = True
         if historical_binding.get("state") == "frozen":
+            if revoked_seen:
+                _error(errors, "revoked normative profile binding cannot return to frozen")
+                return False
             if first_frozen is None:
                 first_frozen = dict(historical_binding)
                 first_frozen_revision = revision
             elif not _same_typed_value(historical_binding, first_frozen):
                 _error(errors, "frozen normative profile binding cannot be changed or re-frozen")
                 return False
+        elif historical_binding.get("state") == "revoked":
+            if first_frozen is None or any(
+                not _same_typed_value(historical_binding.get(field), value)
+                for field, value in first_frozen.items()
+                if field != "state"
+            ):
+                _error(errors, "revoked normative profile binding must preserve the first freeze")
+                return False
+            revoked_seen = True
         elif historical_binding.get("state") == "unfrozen":
             if first_frozen is not None:
                 _error(errors, "frozen normative profile binding cannot return to unfrozen")
@@ -2207,11 +2277,20 @@ def _normative_profile_binding_history_valid(
     if cursor != len(batch_raw):
         _error(errors, "normative profile binding history cannot be inspected")
         return False
-    if current_binding.get("state") == "frozen" and first_frozen is None:
+    if current_binding.get("state") in {"frozen", "revoked"} and first_frozen is None:
         _error(errors, "frozen normative profile binding must exist in committed first-parent history")
-    if first_frozen is not None and not _same_typed_value(current_binding, first_frozen):
-        _error(errors, "current normative profile binding differs from the first frozen binding")
-    if current_binding.get("state") == "frozen" and first_frozen is not None:
+    if first_frozen is not None:
+        if current_binding.get("state") == "frozen" and not _same_typed_value(
+            current_binding, first_frozen
+        ):
+            _error(errors, "current normative profile binding differs from the first frozen binding")
+        elif current_binding.get("state") == "revoked" and any(
+            not _same_typed_value(current_binding.get(field), value)
+            for field, value in first_frozen.items()
+            if field != "state"
+        ):
+            _error(errors, "revoked normative profile binding must preserve the first freeze")
+    if current_binding.get("state") in {"frozen", "revoked"} and first_frozen is not None:
         initial_revision = EXPECTED_V1_INITIAL_BINDING_REVISION
         initial_sha256 = EXPECTED_V1_INITIAL_BINDING_SHA256
         canonical_binding = json.dumps(
@@ -2239,7 +2318,7 @@ def _normative_profile_binding_history_valid(
                 errors,
                 "initial frozen normative profile binding is not code-pinned to canonical history",
             )
-        elif len(errors) == before:
+        elif current_binding.get("state") == "frozen" and len(errors) == before:
             validator_id = EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
             authorization_evaluator = (
                 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS.get(validator_id)
@@ -2998,8 +3077,9 @@ def _normative_profile_binding_valid(
         if not _same_typed_value(binding, UNFROZEN_NORMATIVE_PROFILE_BINDING):
             _error(errors, "unfrozen normative profile binding must contain only null identities")
         return len(errors) == before
-    if binding.get("state") != "frozen":
-        _error(errors, "program normative profile binding state must be unfrozen or frozen")
+    binding_state = binding.get("state")
+    if binding_state not in {"frozen", "revoked"}:
+        _error(errors, "program normative profile binding state must be unfrozen, frozen or revoked")
         return False
     locator = _relative_locator(binding.get("locator"))
     profile_identity = binding.get("profileIdentity")
@@ -3078,6 +3158,8 @@ def _normative_profile_binding_valid(
     )
     if not protocol_valid:
         _error(errors, "frozen cohort protocol shape is invalid")
+    if binding_state == "revoked":
+        _initial_authorization_private_resource_absent(errors)
     return len(errors) == before
 
 

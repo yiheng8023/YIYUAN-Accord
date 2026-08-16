@@ -71,19 +71,19 @@ through `product/program.json`. The immutable artifact revision is `502c4ff`,
 the first frozen binding revision is `d19d2fb`, and its canonical digest begins
 `ee4ba7a`. These subordinate conformance operands still carry zero task or
 outcome evidence and do not become product authority. A named human authorized
-that exact binding in the frozen Codex source before any eligible demand; the
-next code revision pins the revision, digest, private-evidence disposition and
-one code-owned Windows source validator. That validator binds privacy-safe
-commitments for the exact Credential Manager target, the system-local Codex
-source root, the source-native authorization event and its complete raw cursor
-prefix. It opens only the bound local file object, locks the finite prefix while
-copying it to a private snapshot, rechecks file identity and the hard expiry,
-and provides one exact-target deletion route for withdrawal, expiry,
-stop or validation failure. Diagnostics never contain the raw target, root,
-event, key or source locator. It also rejects any demand between freeze and
-authorization. The private source is intentionally absent from hosted runners,
-which can corroborate only the non-private contract and the exact unavailable-
-source boundary. The protocol specifies
+that exact binding in the frozen Codex source before any eligible demand, and a
+code-owned Windows validator independently verified the exact target, local
+source root, source-native authorization event and complete finite prefix. On
+2026-08-16 a transient source-unavailable result was incorrectly treated as
+definitive validation failure, so the exact protected resource was deleted and
+absence-checked under the failure disposition. `product/program.json` now
+retains the immutable first freeze as `revoked`; that state verifies resource
+absence, cannot admit outcome registration, and cannot return to `frozen`.
+Transient source unavailability or concurrent change now fails closed without
+destruction, while a confirmed schema, binding or content failure retains exact
+deletion. Diagnostics never contain the raw target, root, event, key or source
+locator. Hosted runners can corroborate the non-private revoked contract but
+cannot restore or prove local authorization. The protocol specifies
 eligibility, random public task identity with fixed private keyed source-message binding, strata, first-eligible enrollment,
 the earliest-prefix stop rule, missing-data handling, distinct natural-demand
 and measurement-event chronology, and claim limits without pre-populating

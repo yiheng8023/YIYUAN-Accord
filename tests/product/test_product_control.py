@@ -952,10 +952,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
-    def test_v1_profile_and_cohort_protocol_are_exact_and_source_authorized(self) -> None:
+    def test_v1_profile_and_cohort_protocol_are_exact_and_source_revoked(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
         binding = program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "frozen")
+        self.assertEqual(binding["state"], "revoked")
         self.assertEqual(
             binding["cohortActivation"]["surfaceIdentity"],
             "enrollment-surface.public-v1:f0e705cf4cc54e13afdc993442811187",
@@ -1538,6 +1538,9 @@ class ProductControlTests(unittest.TestCase):
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
+        live_program = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )
         hosted_source_unavailable = (
             os.environ.get("GITHUB_ACTIONS") == "true"
             and completed.returncode == 1
@@ -1547,9 +1550,6 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(
             completed.returncode == 0 or hosted_source_unavailable,
             completed.stderr,
-        )
-        live_program = json.loads(
-            (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
         if not hosted_source_unavailable:
             self.assertIn(
@@ -3113,6 +3113,56 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertIn(
             "frozen normative profile binding cannot return to unfrozen",
+            report["errors"],
+        )
+
+    def test_revoked_profile_preserves_first_freeze_and_cannot_reactivate(self) -> None:
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        program["normativeProfileBinding"]["state"] = "revoked"
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "revoke fixture cohort"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        with patch(
+            "harness.control._initial_authorization_private_resource_absent",
+            return_value=True,
+        ):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+
+        program["normativeProfileBinding"]["state"] = "frozen"
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "reactivate fixture cohort"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "revoked normative profile binding cannot return to frozen",
             report["errors"],
         )
 
@@ -4886,6 +4936,77 @@ class ProductControlTests(unittest.TestCase):
             )
             delete.assert_not_called()
 
+    def test_initial_authorization_transient_source_failure_is_non_destructive(
+        self,
+    ) -> None:
+        document = {
+            "kind": "initial-normative-profile-binding-authorization",
+            "revision": control.EXPECTED_V1_INITIAL_BINDING_REVISION,
+            "bindingSha256": control.EXPECTED_V1_INITIAL_BINDING_SHA256,
+        }
+        resource = ({"fixture": "private"}, "AgentAutonomyHarness/v1/exact")
+
+        for diagnostic in sorted(
+            control.NONDESTRUCTIVE_INITIAL_AUTHORIZATION_SOURCE_FAILURES
+        ):
+            with self.subTest(diagnostic=diagnostic), patch(
+                "harness.control._utc_now",
+                return_value=datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc),
+            ), patch(
+                "harness.control._read_initial_authorization_private_evidence",
+                return_value=resource,
+            ), patch(
+                "harness.control._initial_authorization_event_window_valid",
+                side_effect=lambda *args, **kwargs: (
+                    args[2].append(diagnostic) or False
+                ),
+            ), patch(
+                "harness.control._delete_initial_authorization_private_resource",
+            ) as delete:
+                errors: list[str] = []
+                self.assertFalse(
+                    control._validate_initial_binding_authorization(
+                        document,
+                        self.root,
+                        errors,
+                    )
+                )
+                self.assertEqual(errors, [diagnostic])
+                delete.assert_not_called()
+
+    def test_initial_authorization_unclassified_failure_remains_destructive(
+        self,
+    ) -> None:
+        document = {
+            "kind": "initial-normative-profile-binding-authorization",
+            "revision": control.EXPECTED_V1_INITIAL_BINDING_REVISION,
+            "bindingSha256": control.EXPECTED_V1_INITIAL_BINDING_SHA256,
+        }
+        resource = ({"fixture": "private"}, "AgentAutonomyHarness/v1/exact")
+
+        with patch(
+            "harness.control._utc_now",
+            return_value=datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc),
+        ), patch(
+            "harness.control._read_initial_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._initial_authorization_event_window_valid",
+            return_value=False,
+        ), patch(
+            "harness.control._delete_initial_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors: list[str] = []
+            self.assertFalse(
+                control._validate_initial_binding_authorization(
+                    document,
+                    self.root,
+                    errors,
+                )
+            )
+            delete.assert_called_once_with(resource, "validation-failure", errors)
+
     def test_initial_authorization_deletion_uses_exact_target_and_safe_receipt(
         self,
     ) -> None:
@@ -4988,6 +5109,85 @@ class ProductControlTests(unittest.TestCase):
                     )
                 )
                 delete.assert_called_once_with(resource, trigger, errors)
+
+    def test_revoked_private_resource_absence_is_code_verified(self) -> None:
+        last_error = {"value": 0}
+
+        def set_last_error(value: int) -> int:
+            previous = last_error["value"]
+            last_error["value"] = value
+            return previous
+
+        def get_last_error() -> int:
+            return last_error["value"]
+
+        class FakeFunction:
+            def __init__(self, callback) -> None:
+                self.callback = callback
+                self.argtypes = None
+                self.restype = None
+
+            def __call__(self, *args):
+                return self.callback(*args)
+
+        def absent(*args) -> int:
+            del args
+            control.ctypes.set_last_error(1168)
+            return 0
+
+        class AbsentAdvapi:
+            CredEnumerateW = FakeFunction(absent)
+            CredFree = FakeFunction(lambda value: None)
+
+        class PresentAdvapi:
+            CredEnumerateW = FakeFunction(lambda *args: 1)
+            CredFree = FakeFunction(lambda value: None)
+
+        common_patches = (
+            patch.object(control, "os", SimpleNamespace(name="nt")),
+            patch(
+                "harness.control.ctypes.set_last_error",
+                side_effect=set_last_error,
+                create=True,
+            ),
+            patch(
+                "harness.control.ctypes.get_last_error",
+                side_effect=get_last_error,
+                create=True,
+            ),
+        )
+        with common_patches[0], common_patches[1], common_patches[2], patch(
+            "harness.control.ctypes.WinDLL",
+            return_value=AbsentAdvapi(),
+            create=True,
+        ):
+            errors: list[str] = []
+            self.assertTrue(
+                control._initial_authorization_private_resource_absent(errors),
+                errors,
+            )
+
+        with patch.object(control, "os", SimpleNamespace(name="nt")), patch(
+            "harness.control.ctypes.set_last_error",
+            side_effect=set_last_error,
+            create=True,
+        ), patch(
+            "harness.control.ctypes.get_last_error",
+            side_effect=get_last_error,
+            create=True,
+        ), patch(
+            "harness.control.ctypes.WinDLL",
+            return_value=PresentAdvapi(),
+            create=True,
+        ):
+            errors = []
+            self.assertFalse(
+                control._initial_authorization_private_resource_absent(errors)
+            )
+            self.assertEqual(
+                errors,
+                ["revoked initial binding private resource still exists"],
+            )
 
     def test_bootstrap_authority_set_cannot_self_disable(self) -> None:
         def remove(value: dict) -> None:
