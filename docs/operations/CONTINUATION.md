@@ -99,9 +99,9 @@ demand, a named human must authorize that exact revision, complete binding
 digest, source surface, private-evidence boundary and cleanup disposition in a
 source-native event; a code-owned source validator and the next commit pin that
 authorization. Any demand between freeze and authorization stops the cohort.
-Only then may an exact unique task registration in a later Git
-revision, and a task-bound criterion-scoped code validator that independently
-proves one complete source-native enrollment cursor, no omitted earlier
+Only then may a Git revision bind registration plus validator
+identity, locator, earlier revision, and digest. Its preregistration check must
+pass before measurement; evidence reuses that identity. The validator proves the source cursor, no omitted earlier
 eligible demand, a natural-demand event before registration, private keyed
 source binding and deduplication, any same-key pre-demand serial surface
 transition, and a distinct measurement event after registration before

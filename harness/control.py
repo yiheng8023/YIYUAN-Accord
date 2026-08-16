@@ -877,6 +877,14 @@ TASK_REGISTRATION_BINDING_FIELDS = {
     "measurementNotBefore",
     "profileSha256",
     "cohortProtocolSha256",
+    "preMeasurementValidator",
+}
+PRE_MEASUREMENT_VALIDATOR_BINDING_FIELDS = {
+    "kind",
+    "version",
+    "locator",
+    "revision",
+    "sha256",
 }
 TASK_REGISTRATION_FIELDS = {
     "schema",
@@ -893,6 +901,7 @@ TASK_REGISTRATION_FIELDS = {
     "materialCollaborationLossTaxonomy",
     "sourceCaptureEligibilityAndStopRule",
     "claimLimits",
+    "preMeasurementValidator",
 }
 SOURCE_CAPTURE_FIELDS = {
     "enrollmentSurfaceRule",
@@ -1407,7 +1416,18 @@ EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
 EvidenceValidatorSpec = tuple[
     frozenset[str],
     frozenset[str],
+    str,
     EvidenceValidator,
+]
+PreMeasurementValidator = Callable[
+    [dict[str, Any], dict[str, Any], tuple[str, ...], Path, list[str]],
+    bool,
+]
+PreMeasurementValidatorSpec = tuple[
+    frozenset[str],
+    frozenset[str],
+    str,
+    PreMeasurementValidator,
 ]
 HumanAuthorizationValidator = Callable[
     [dict[str, Any], Path, list[str]],
@@ -2484,7 +2504,7 @@ def _current_initial_materialization_authorization_message() -> str:
 
 def _current_initial_activation_authorization_message(
     authorization_document: Mapping[str, Any],
-) -> str | None:
+) -> tuple[str, str] | None:
     values = {
         "kind": authorization_document.get("kind"),
         "revision": authorization_document.get("revision"),
@@ -4254,6 +4274,9 @@ def expire_current_initial_authorization_private_evidence(
 
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
+SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
+    str, PreMeasurementValidatorSpec
+] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
 ] = MappingProxyType(
@@ -6835,13 +6858,136 @@ def _environment_attribution_binding_valid(
     )
 
 
+def _pre_measurement_validator_binding_valid(
+    root: Path,
+    increment: dict[str, Any],
+    registration: dict[str, Any],
+    source_revision: str,
+    mapped_outcomes: list[str],
+    value: Any,
+    errors: list[str],
+) -> str | None:
+    before = len(errors)
+    increment_id = increment.get("id")
+    if not isinstance(value, dict) or set(value) != PRE_MEASUREMENT_VALIDATOR_BINDING_FIELDS:
+        _error(
+            errors,
+            f"increment {increment_id} requires an exact preMeasurementValidator binding",
+        )
+        return None
+    kind = value.get("kind")
+    version = value.get("version")
+    locator = _relative_locator(value.get("locator"))
+    revision = value.get("revision")
+    expected_sha256 = value.get("sha256")
+    validator_path = PurePosixPath(locator) if locator is not None else None
+    if (
+        not isinstance(kind, str)
+        or SOURCE_KIND_PATTERN.fullmatch(kind) is None
+        or type(version) is not int
+        or version != 1
+        or validator_path is None
+        or validator_path.parent != PurePosixPath("harness")
+        or validator_path.suffix != ".py"
+        or not validator_path.name.startswith("task_validator_")
+        or not isinstance(revision, str)
+        or not isinstance(expected_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+    ):
+        _error(
+            errors,
+            f"increment {increment_id} preMeasurementValidator identity is invalid",
+        )
+        return None
+    spec = SUPPORTED_PRE_MEASUREMENT_VALIDATORS.get(kind)
+    if spec is None:
+        _error(
+            errors,
+            f"increment {increment_id} has no code-owned pre-measurement validator: {kind}",
+        )
+        return None
+    supported_criteria, supported_increments, expected_locator, validator = spec
+    if locator != expected_locator:
+        _error(
+            errors,
+            f"increment {increment_id} pre-measurement validator locator is not code-owned: {kind}",
+        )
+    if not set(mapped_outcomes) <= supported_criteria:
+        _error(
+            errors,
+            f"increment {increment_id} outcomes are not supported by pre-measurement validator: {kind}",
+        )
+    if increment_id not in supported_increments:
+        _error(
+            errors,
+            f"pre-measurement validator is not bound to increment {increment_id}: {kind}",
+        )
+    if not _strict_git_ancestor(root, revision, source_revision):
+        _error(
+            errors,
+            f"increment {increment_id} pre-measurement validator must be committed before task registration",
+        )
+    candidate = _inside_root(root, locator, errors, "pre-measurement validator")
+    current = (
+        _read_bounded_bytes(
+            candidate,
+            f"pre-measurement validator {locator}",
+            errors,
+        )
+        if candidate is not None
+        else None
+    )
+    if (
+        current is None
+        or hashlib.sha256(current.replace(b"\r\n", b"\n")).hexdigest()
+        != expected_sha256
+        or not _committed_blob(root, revision, locator, expected_sha256)
+    ):
+        _error(
+            errors,
+            f"increment {increment_id} pre-measurement validator code identity has drifted",
+        )
+    if len(errors) != before:
+        return None
+    validator_errors: list[str] = []
+    try:
+        result = validator(
+            json.loads(json.dumps(registration)),
+            json.loads(json.dumps(increment)),
+            tuple(mapped_outcomes),
+            root,
+            validator_errors,
+        )
+    except Exception as exc:  # fail closed at the registration seam
+        _error(
+            validator_errors,
+            f"increment {increment_id} pre-measurement validator failed closed: {exc.__class__.__name__}",
+        )
+        result = False
+    if result is not True:
+        _error(
+            validator_errors,
+            f"increment {increment_id} pre-measurement validator did not return true: {kind}",
+        )
+    errors.extend(validator_errors)
+    return (kind, locator) if result is True and not validator_errors else None
+
+
 def _task_registration_guardrail(
     root: Path,
     increment: dict[str, Any],
     criteria: Mapping[str, dict[str, Any]],
     profile_binding: Mapping[str, Any],
     errors: list[str],
-) -> tuple[datetime, str, str, str, dict[str, Any], dict[str, Any]] | None:
+) -> tuple[
+    datetime,
+    str,
+    str,
+    str,
+    dict[str, Any],
+    dict[str, Any],
+    tuple[str, str],
+] | None:
     before = len(errors)
     increment_id = increment.get("id")
     mapped = _string_list(increment.get("acceptanceIds")) or []
@@ -7036,9 +7182,24 @@ def _task_registration_guardrail(
         and _string_list(source_capture.get("ineligibleSources")) is not None
         and _nonempty_text(source_capture.get("stopRule"))
         and _string_list(registration.get("claimLimits")) is not None
+        and _same_typed_value(
+            registration.get("preMeasurementValidator"),
+            binding.get("preMeasurementValidator"),
+        )
     )
     if not shape_valid:
         _error(errors, f"task registration {locator} shape is invalid")
+    validator_binding = None
+    if len(errors) == before:
+        validator_binding = _pre_measurement_validator_binding_valid(
+            root,
+            increment,
+            registration,
+            source_revision,
+            mapped_outcomes,
+            registration.get("preMeasurementValidator"),
+            errors,
+        )
     task_identity = registration.get("taskIdentity")
     return (
         (
@@ -7048,11 +7209,13 @@ def _task_registration_guardrail(
             locator,
             cohort_values[0],
             cohort_values[1],
+            validator_binding,
         )
         if len(errors) == before
         and isinstance(task_identity, str)
         and isinstance(source_revision, str)
         and cohort_values is not None
+        and isinstance(validator_binding, tuple)
         else None
     )
 
@@ -7063,8 +7226,9 @@ def _task_registration_floors(
     criteria: Mapping[str, dict[str, Any]],
     profile_binding: Mapping[str, Any],
     errors: list[str],
-) -> dict[str, datetime]:
+) -> tuple[dict[str, datetime], dict[str, tuple[str, str]]]:
     floors: dict[str, datetime] = {}
+    validator_bindings: dict[str, tuple[str, str]] = {}
     task_identities: set[str] = set()
     source_commitments: set[str] = set()
     natural_demand_cursors: set[str] = set()
@@ -7085,6 +7249,7 @@ def _task_registration_floors(
                 locator,
                 enrollment,
                 private_binding,
+                validator_binding,
             ) = registration
             if task_identity in task_identities:
                 _error(
@@ -7137,6 +7302,7 @@ def _task_registration_floors(
             prior_enrollment = enrollment
             bound_registration_paths.add(locator)
             floors[increment_id] = floor
+            validator_bindings[increment_id] = validator_binding
     if profile_binding.get("state") == "frozen":
         history_paths = _registration_history_paths(
             root, profile_binding.get("frozenAtRevision"), errors
@@ -7146,7 +7312,7 @@ def _task_registration_floors(
                 errors,
                 "every post-freeze cohort registration artifact must bind exactly one outcome increment",
             )
-    return floors
+    return floors, validator_bindings
 
 
 def _process_loss_guardrail(
@@ -7332,6 +7498,7 @@ def _evidence_states(
     criteria: dict[str, dict[str, Any]],
     work_bindings: Mapping[str, tuple[str, set[str], str]],
     registration_floors: Mapping[str, datetime],
+    registration_validator_bindings: Mapping[str, tuple[str, str]],
     errors: list[str],
 ) -> tuple[dict[str, bool], bool, dict[str, set[str]]]:
     states = {criterion_id: False for criterion_id in EXPECTED_CRITERION_IDS}
@@ -7445,7 +7612,32 @@ def _evidence_states(
                 _error(errors, f"criterion {criterion_id} has no code-owned evidence validator: {validator_kind}")
                 valid = False
                 continue
-            supported_criteria, supported_increments, evidence_validator = validator_spec
+            registered_validator_binding = registration_validator_bindings.get(increment_id)
+            if (
+                registered_validator_binding is None
+                or validator_kind != registered_validator_binding[0]
+            ):
+                _error(
+                    errors,
+                    f"criterion {criterion_id} evidence validator does not reuse the "
+                    f"pre-measurement validator bound to increment {increment_id}",
+                )
+                valid = False
+                continue
+            (
+                supported_criteria,
+                supported_increments,
+                validator_locator,
+                evidence_validator,
+            ) = validator_spec
+            if validator_locator != registered_validator_binding[1]:
+                _error(
+                    errors,
+                    f"criterion {criterion_id} evidence validator code locator does not "
+                    f"reuse the pre-measurement binding: {validator_kind}",
+                )
+                valid = False
+                continue
             if criterion_id not in supported_criteria:
                 _error(
                     errors,
@@ -7461,19 +7653,31 @@ def _evidence_states(
                 )
                 valid = False
                 continue
+            validator_errors: list[str] = []
             try:
-                validator_result = evidence_validator(document, criterion_id, root, errors)
+                validator_result = evidence_validator(
+                    document,
+                    criterion_id,
+                    root,
+                    validator_errors,
+                )
                 if validator_result is not True:
                     _error(
-                        errors,
+                        validator_errors,
                         f"criterion {criterion_id} evidence validator did not return true: {relative}",
                     )
                     valid = False
-                else:
+                elif not validator_errors:
                     criterion_work_ids.add(work_id)
             except Exception as exc:  # fail closed at the public verifier seam
-                _error(errors, f"criterion {criterion_id} evidence validator failed closed: {exc.__class__.__name__}")
+                _error(
+                    validator_errors,
+                    f"criterion {criterion_id} evidence validator failed closed: {exc.__class__.__name__}",
+                )
                 valid = False
+            if validator_errors:
+                valid = False
+                errors.extend(validator_errors)
         states[criterion_id] = valid
         if valid:
             for work_id in criterion_work_ids:
@@ -7846,7 +8050,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
             work_state = work.get("state") if isinstance(work.get("state"), str) else ""
             work_bindings[work["id"]] = (increment_id, set(mapped), work_state)
     registration_before = len(errors)
-    registration_floors = _task_registration_floors(
+    registration_floors, registration_validator_bindings = _task_registration_floors(
         root,
         increments,
         criteria,
@@ -7857,7 +8061,12 @@ def _verify_product(root: Path) -> dict[str, Any]:
     )
     registrations_valid = len(errors) == registration_before
     evidence_states, evidence_valid, validated_work_outcomes = _evidence_states(
-        root, criteria, work_bindings, registration_floors, errors
+        root,
+        criteria,
+        work_bindings,
+        registration_floors,
+        registration_validator_bindings,
+        errors,
     )
     authority_guardrail = _authority_guardrail(program, all_work, errors)
     process_loss_valid = _process_loss_guardrail(

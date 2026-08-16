@@ -179,12 +179,16 @@ alone cannot promote an outcome: every verified outcome requires a code-owned va
 scoped to the criterion and exact causal increment for the bound task
 evidence. Before measured execution, the increment freezes an immutable task
 registration containing every mapped criterion's required values, the task's
-source-capture eligibility and stop rule, floors, and claim limit. A
-task-specific validator may implement previously unknown source serialization
-after the event, but no outcome can be promoted unless that validator binds the
-registration identity and chronology, enforces its unchanged rules, and passes
-the exact evidence and completed causal binding. This permits source-grounded
-post-hoc checking, not post-hoc rule changes. A generic self-report schema could
+source-capture eligibility and stop rule, floors, and claim limit. The same
+registration binds a code-owned task-specific validator identity, committed
+locator, earlier revision, and digest. The registration seam executes that
+validator's preregistration check fail-closed, and later outcome evidence must
+reuse the exact identity. A task-specific validator may implement a newly
+observed source serialization only before the measurement event; it cannot be
+added or changed after the result. It must bind source-window, environment,
+registration identity and chronology, enforce its unchanged rules, and pass the
+exact evidence and completed causal binding. This permits later replay of a
+prebound check, not post-hoc rule changes. A generic self-report schema could
 validate only its own structure, not naturalness, source truth, behavior, or
 value.
 
@@ -626,12 +630,16 @@ decisions, unrequested work, unnecessary process, residue or context recovery,
 and false completion correction.
 
 Before measured execution, every outcome-bearing increment also binds one
-canonical `product/evidence/*-registration.json` by raw-byte SHA-256. The
+canonical `product/evidence/*-registration.json` by raw-byte SHA-256 and one
+task-specific, code-owned validator by identity, committed locator, strictly
+earlier revision, and digest. The registration seam executes the validator's
+preregistration callback fail-closed, and later evidence must reuse that exact
+identity. The
 registration must cover the union of the mapped criteria's current
 `preRegistrationFields`, the current acceptance-contract identity, source
 eligibility, mandatory task floors, loss taxonomies, named human, stop rule,
-and claim limits. The content address detects current registration drift. A
-later task-bound validator must still prove that the committed binding preceded
-eligible execution and bind the observation chronology; the registration is
+and claim limits. The content addresses detect registration or validator drift.
+The bound validator must prove that the committed binding preceded eligible
+execution and bind the observation chronology; the registration is
 not product authority, result evidence, or an outcome validator. Outcome-neutral
 increments bind `null` rather than manufacture a task.

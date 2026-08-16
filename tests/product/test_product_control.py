@@ -39,7 +39,11 @@ from harness.codex_reference import (  # noqa: E402
     render_session_start_context,
     session_start_hook_output,
 )
-from harness.control import SUPPORTED_EVIDENCE_VALIDATORS, verify_product  # noqa: E402
+from harness.control import (  # noqa: E402
+    SUPPORTED_EVIDENCE_VALIDATORS,
+    SUPPORTED_PRE_MEASUREMENT_VALIDATORS,
+    verify_product,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -223,7 +227,12 @@ class ProductControlTests(unittest.TestCase):
         callback(value)
         self.write_json(relative, value)
 
-    def report(self, *, bind_successor: bool = True) -> dict:
+    def report(
+        self,
+        *,
+        bind_successor: bool = True,
+        auto_bind_task_validators: bool = True,
+    ) -> dict:
         if not (self.root / ".git").is_dir():
             with patch.multiple(
                 control,
@@ -334,6 +343,51 @@ class ProductControlTests(unittest.TestCase):
                 "sourceWindowRule": control.EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_WINDOW_RULE,
             }
         )
+        pre_measurement_validators = dict(
+            control.SUPPORTED_PRE_MEASUREMENT_VALIDATORS
+        )
+        externally_bound_pre_measurement_kinds = set(pre_measurement_validators)
+        current_program = self.read_json("product/program.json")
+        for increment in current_program.get("increments", []):
+            if not isinstance(increment, dict):
+                continue
+            registration_binding = increment.get("taskRegistration")
+            validator_binding = (
+                registration_binding.get("preMeasurementValidator")
+                if isinstance(registration_binding, dict)
+                else None
+            )
+            kind = validator_binding.get("kind") if isinstance(validator_binding, dict) else None
+            locator = (
+                validator_binding.get("locator")
+                if isinstance(validator_binding, dict)
+                else None
+            )
+            increment_id = increment.get("id")
+            mapped = set(increment.get("acceptanceIds", [])) & {
+                "O1",
+                "O2",
+                "O3",
+                "O4",
+                "O5",
+            }
+            if (
+                auto_bind_task_validators
+                and isinstance(kind, str)
+                and isinstance(locator, str)
+                and isinstance(increment_id, str)
+                and kind not in externally_bound_pre_measurement_kinds
+            ):
+                existing = pre_measurement_validators.get(kind)
+                existing_criteria = existing[0] if existing is not None else frozenset()
+                existing_increments = existing[1] if existing is not None else frozenset()
+                existing_locator = existing[2] if existing is not None else locator
+                pre_measurement_validators[kind] = (
+                    existing_criteria | frozenset(mapped),
+                    existing_increments | frozenset({increment_id}),
+                    existing_locator,
+                    lambda registration, increment, criteria, root, errors: True,
+                )
         with patch.multiple(
             control,
             CURRENT_PROFILE_FREEZE_ENABLED=True,
@@ -368,6 +422,7 @@ class ProductControlTests(unittest.TestCase):
                 predecessor_revocation_binding_sha256
             ),
             SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS=authorization_validators,
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS=pre_measurement_validators,
         ):
             return verify_product(self.root)
 
@@ -400,8 +455,8 @@ class ProductControlTests(unittest.TestCase):
             "validator": {"kind": validator_kind, "version": 1},
         }
 
-    @staticmethod
     def validator_registry(
+        self,
         validator,
         *,
         criterion_ids: frozenset[str] | None = None,
@@ -417,10 +472,25 @@ class ProductControlTests(unittest.TestCase):
             if increment_ids is not None
             else frozenset({FIXTURE_INCREMENT_ID})
         )
+        program = self.read_json("product/program.json")
+        locator = "harness/task_validator_fixture.py"
+        for increment in program.get("increments", []):
+            binding = increment.get("taskRegistration")
+            validator_binding = (
+                binding.get("preMeasurementValidator")
+                if isinstance(binding, dict)
+                else None
+            )
+            if isinstance(validator_binding, dict) and isinstance(
+                validator_binding.get("locator"), str
+            ):
+                locator = validator_binding["locator"]
+                break
         return {
             "test-validator": (
                 supported_criteria,
                 supported_increments,
+                locator,
                 validator,
             )
         }
@@ -741,6 +811,64 @@ class ProductControlTests(unittest.TestCase):
             increment["taskRegistration"] = None
             return
         self.freeze_program_profile(program, commit_binding=commit_profile_binding)
+        validator_relative = "harness/task_validator_fixture.py"
+        validator_path = self.root / validator_relative
+        validator_path.parent.mkdir(parents=True, exist_ok=True)
+        validator_path.write_text(
+            "def preregistered_task_validator():\n    return True\n",
+            encoding="utf-8",
+        )
+        validator_environment = os.environ.copy()
+        validator_environment.update(
+            {
+                "GIT_AUTHOR_DATE": "2026-08-12T02:56:00+08:00",
+                "GIT_COMMITTER_DATE": "2026-08-12T02:56:00+08:00",
+            }
+        )
+        subprocess.run(
+            ["git", "add", validator_relative],
+            cwd=self.root,
+            env=validator_environment,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        validator_staged = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", validator_relative],
+            cwd=self.root,
+            env=validator_environment,
+            check=False,
+        )
+        if validator_staged.returncode != 0:
+            subprocess.run(
+                ["git", "commit", "--quiet", "-m", "fixture task validator"],
+                cwd=self.root,
+                env=validator_environment,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        validator_revision = subprocess.run(
+            ["git", "log", "-1", "--format=%H", "--", validator_relative],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        committed_validator = subprocess.run(
+            ["git", "show", f"{validator_revision}:{validator_relative}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        pre_measurement_validator_binding = {
+            "kind": "test-validator",
+            "version": 1,
+            "locator": validator_relative,
+            "revision": validator_revision,
+            "sha256": hashlib.sha256(committed_validator).hexdigest(),
+        }
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
         fields = {
@@ -954,6 +1082,7 @@ class ProductControlTests(unittest.TestCase):
                 "stopRule": "stop on any fixture floor failure",
             },
             "claimLimits": ["fixture task only"],
+            "preMeasurementValidator": pre_measurement_validator_binding,
         }
         self.write_json(relative, registration)
         environment = os.environ.copy()
@@ -1009,6 +1138,7 @@ class ProductControlTests(unittest.TestCase):
             "cohortProtocolSha256": program["normativeProfileBinding"][
                 "cohortProtocolSha256"
             ],
+            "preMeasurementValidator": pre_measurement_validator_binding,
         }
 
     def recommit_fixture_registration(
@@ -4167,7 +4297,7 @@ class ProductControlTests(unittest.TestCase):
         }
         errors: list[str] = []
         states, valid, _ = control._evidence_states(
-            self.root, criteria, {}, {}, errors
+            self.root, criteria, {}, {}, {}, errors
         )
         self.assertFalse(valid)
         self.assertFalse(states["O1"])
@@ -5981,6 +6111,241 @@ class ProductControlTests(unittest.TestCase):
 
     def test_current_release_has_no_prebuilt_outcome_validators(self) -> None:
         self.assertEqual(set(SUPPORTED_EVIDENCE_VALIDATORS), set())
+        self.assertEqual(set(SUPPORTED_PRE_MEASUREMENT_VALIDATORS), set())
+
+    def test_outcome_registration_requires_code_owned_pre_measurement_validator(
+        self,
+    ) -> None:
+        def register(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", register)
+        report = self.report(auto_bind_task_validators=False)
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current has no code-owned "
+            "pre-measurement validator: test-validator",
+            report["errors"],
+        )
+
+    def test_program_cannot_post_bind_a_different_pre_measurement_validator(
+        self,
+    ) -> None:
+        def register(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", register)
+        program = self.read_json("product/program.json")
+        program["increments"][0]["taskRegistration"]["preMeasurementValidator"][
+            "kind"
+        ] = "late-validator"
+        self.write_json("product/program.json", program)
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json shape is invalid",
+            report["errors"],
+        )
+
+    def test_pre_measurement_validator_must_precede_registration_and_not_drift(
+        self,
+    ) -> None:
+        def register(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", register)
+        baseline = self.read_json("product/program.json")
+        binding = baseline["increments"][0]["taskRegistration"]
+        registration = self.read_json(binding["locator"])
+        registration["preMeasurementValidator"]["revision"] = "0" * 40
+        binding["preMeasurementValidator"] = deepcopy(
+            registration["preMeasurementValidator"]
+        )
+        self.write_json(binding["locator"], registration)
+        self.recommit_fixture_registration(baseline)
+        self.write_json("product/program.json", baseline)
+        late = self.report()
+        self.assertFalse(late["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current pre-measurement validator must be "
+            "committed before task registration",
+            late["errors"],
+        )
+
+        validator_revision = subprocess.run(
+            [
+                "git",
+                "log",
+                "-1",
+                "--format=%H",
+                "--",
+                binding["preMeasurementValidator"]["locator"],
+            ],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        registration = self.read_json(binding["locator"])
+        registration["preMeasurementValidator"]["revision"] = validator_revision
+        binding["preMeasurementValidator"] = deepcopy(
+            registration["preMeasurementValidator"]
+        )
+        self.write_json(binding["locator"], registration)
+        self.recommit_fixture_registration(baseline)
+        self.write_json("product/program.json", baseline)
+        validator_path = self.root / binding["preMeasurementValidator"]["locator"]
+        validator_path.write_text("def drifted():\n    return False\n", encoding="utf-8")
+        drifted = self.report()
+        self.assertFalse(drifted["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current pre-measurement validator code "
+            "identity has drifted",
+            drifted["errors"],
+        )
+
+    def test_pre_measurement_validator_fails_closed_and_cannot_clear_core_errors(
+        self,
+    ) -> None:
+        def register(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", register)
+        program = self.read_json("product/program.json")
+        validator_binding = program["increments"][0]["taskRegistration"][
+            "preMeasurementValidator"
+        ]
+        spec_prefix = (
+            frozenset({"O1"}),
+            frozenset({FIXTURE_INCREMENT_ID}),
+            validator_binding["locator"],
+        )
+        with patch(
+            "harness.control.SUPPORTED_PRE_MEASUREMENT_VALIDATORS",
+            {"test-validator": (*spec_prefix, lambda *args: False)},
+        ):
+            rejected = self.report()
+        self.assertFalse(rejected["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current pre-measurement validator did not "
+            "return true: test-validator",
+            rejected["errors"],
+        )
+
+        called = False
+
+        def malicious(*args: object) -> bool:
+            nonlocal called
+            called = True
+            errors = args[-1]
+            assert isinstance(errors, list)
+            errors.clear()
+            return True
+
+        program["increments"][0]["taskRegistration"]["preMeasurementValidator"][
+            "locator"
+        ] = "harness/not_task_validator.py"
+        registration_locator = program["increments"][0]["taskRegistration"]["locator"]
+        registration = self.read_json(registration_locator)
+        registration["preMeasurementValidator"][
+            "locator"
+        ] = "harness/not_task_validator.py"
+        self.write_json(registration_locator, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+        with patch(
+            "harness.control.SUPPORTED_PRE_MEASUREMENT_VALIDATORS",
+            {"test-validator": (*spec_prefix, malicious)},
+        ):
+            invalid = self.report()
+        self.assertFalse(invalid["criterionStates"]["G4"])
+        self.assertFalse(called)
+        self.assertIn(
+            "increment increment.fixture-current preMeasurementValidator identity is invalid",
+            invalid["errors"],
+        )
+
+    def test_evidence_must_reuse_registered_pre_measurement_validator_identity(
+        self,
+    ) -> None:
+        self.map_outcome_to_latest_work("O1")
+        evidence = self.evidence_document(
+            criterion_ids=["O1"], validator_kind="different-validator"
+        )
+        self.write_json("product/evidence/bound.json", evidence)
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            {
+                "different-validator": (
+                    frozenset({"O1"}),
+                    frozenset({FIXTURE_INCREMENT_ID}),
+                    "harness/task_validator_fixture.py",
+                    lambda document, criterion_id, root, errors: True,
+                )
+            },
+        ):
+            report = self.report()
+        self.assertFalse(report["criterionStates"]["O1"])
+        self.assertIn(
+            "criterion O1 evidence validator does not reuse the pre-measurement "
+            "validator bound to increment increment.fixture-current",
+            report["errors"],
+        )
+
+    def test_evidence_validator_cannot_clear_core_verifier_errors(self) -> None:
+        self.map_outcome_to_latest_work("O1")
+        self.write_json(
+            "product/evidence/bound.json",
+            self.evidence_document(criterion_ids=["O1"]),
+        )
+
+        def promote(value: dict) -> None:
+            criterion = next(item for item in value["criteria"] if item["id"] == "O1")
+            criterion["assessment"] = "verified"
+            criterion["evidence"] = ["product/evidence/bound.json"]
+
+        self.mutate("product/acceptance.json", promote)
+        self.mutate(
+            "product/program.json",
+            lambda value: value["progressionPolicy"].__setitem__(
+                "readyState", "invalid-fixture-value"
+            ),
+        )
+        called = False
+
+        def malicious(document, criterion_id, root, errors) -> bool:
+            nonlocal called
+            called = True
+            errors.clear()
+            return True
+
+        with patch(
+            "harness.control.SUPPORTED_EVIDENCE_VALIDATORS",
+            self.validator_registry(malicious),
+        ):
+            report = self.report()
+        self.assertTrue(called)
+        self.assertFalse(report["valid"])
+        self.assertIn("program progressionPolicy is invalid", report["errors"])
 
     def test_active_increment_id_must_match(self) -> None:
         def mismatch(value: dict) -> None:

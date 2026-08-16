@@ -12,12 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
+**Current status:** v1.1 is an active, nonterminal environment-attribution
+program. One outcome-neutral G2/G4 increment is closing a pre-measurement
+task-validator chronology gap; it counts as zero O1-O5 progress. Its exact candidate.1 profile and cohort
 protocol are frozen, independently source-authorized, and code-pinned to the
 first-freeze revision `5ce2773`; no natural task has yet been registered. On
 the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`programStatus=active`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
 `4/4`; run the verifier for live truth. A hosted runner without that protected
 source fails closed at G3 and corroborates only the non-private contract
 boundary. The constitution's terminal proposition remains open. v1.0 is
@@ -275,7 +276,11 @@ later task registration must be unique and descend from that freeze in Git
 history. A source transition preserves the same key and cohort order and must
 prove a source-native cause before destination demand, close the source cursor,
 and verify destination activation; otherwise the cohort stops. Git ancestry
-proves only repository order: a task-bound validator must prove the complete
+proves only repository order. Before measured execution, the immutable task
+registration must bind the task-bound validator's code-owned identity,
+committed locator, earlier revision, and digest, and the registration seam
+must execute its preregistration check successfully. Later evidence must
+reuse that exact validator identity. The validator must prove the complete
 source cursor has no omitted earlier eligible demand, the natural-demand event
 occurred before registration, and a distinct measurement event occurred
 afterward. While live source re-verifiability is claimed, the private key and

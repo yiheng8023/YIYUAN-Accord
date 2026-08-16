@@ -35,6 +35,11 @@ trigger replanning; lack of acceptance authority does not erase observed loss.
 - Use `python -B -m harness verify --root . --json` and
   `python -B -m unittest discover -s tests/product -v` as the current product
   verification seam.
+- Before outcome-bearing execution, bind the task-specific code validator's
+  identity, committed locator, earlier revision, and digest in the immutable
+  task registration; require the registration seam to pass its preregistration
+  callback, and reuse the same validator identity for later outcome evidence.
+  A validator added or changed after measurement cannot validate that task.
 - Treat user descriptions as authoritative intent and judgment, not as an
   exhaustive fact inventory. Proactively inspect, detect omissions, disclose
   assumptions, seek counterexamples, reconcile evidence, and supplement
