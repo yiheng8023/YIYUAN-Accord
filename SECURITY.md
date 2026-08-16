@@ -8,7 +8,10 @@ code-pinned v1.1 profile and cohort-protocol candidates are pre-freeze text/data
 inputs only; they do not install, execute, activate a cohort, or grant authority.
 The current module exposes no executable v1.0 credential or Scheduled Task
 cleanup entrypoint; those retired mechanics are historical at revision
-`910ac01`.
+`910ac01`. It contains one v1.1-only expiry command and one first-freeze source
+validator, but all execution-specific anchors are unset. The live unfrozen path
+does not read a private source, and the command cannot delete an unbound resource
+or act before its code-owned expiry. No v1.1 credential or task currently exists.
 
 Treat every external capability, executable surface, instruction body,
 generated artifact, and runtime claim as untrusted until its applicable review

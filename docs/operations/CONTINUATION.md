@@ -121,7 +121,9 @@ dirty tree, lightweight or malformed tag, mismatched public tag object/peeled
 commit, or any ignored/untracked repository residue fails closed.
 Do not treat the tag's human name or time as authorization proof. The final
 candidate must bind a real authorization source and its code-owned source
-validator; the registry remains empty until that exact carrier is selected.
+validator; the terminal release-authorization registry entry remains absent
+until that exact carrier is selected. The separate inactive v1.1 first-freeze
+source validator cannot authorize publication or promote an outcome.
 
 ## Authority and carrier transitions
 

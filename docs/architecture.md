@@ -141,8 +141,11 @@ self-reference loop while keeping release authorization separate from Agent-
 owned mechanics.
 An annotation's claimed human name and time are not authority proof. Terminal
 acceptance additionally dispatches a code-owned validator for the annotation's
-bound authorization source; the registry remains empty until the actual final
-authorization carrier and trust boundary are known.
+bound authorization source; that terminal validator remains absent until the
+actual final authorization carrier and trust boundary are known. The only current
+human-authorization registry entry is the inactive v1.1 first-freeze source
+validator, whose execution-specific anchors remain unset and which cannot promote
+an outcome.
 
 Portfolio minima are eligibility predicates, not work generators. O3's
 reproducible-gap case and O4's rejected or stopped receipt count only when a

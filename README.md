@@ -254,10 +254,11 @@ binding digest, source surface, private-evidence boundary, and cleanup
 disposition in an independently verifiable source event; the next commit pins
 the revision, digest, and code-owned authorization validator. A demand observed
 between freeze and authorization stops the cohort instead of being omitted.
-The protocol defines eligibility, privacy-safe random public task identity plus a fixed
-private keyed source-message binding, strata, first-eligible enrollment, the
-earliest-prefix stop rule, missing-data behavior, distinct natural-demand and
-measurement-event proof, and claim limits without naming future tasks. Every
+Scenario and environment coverage remain acceptance-owned. The protocol defines
+eligibility, privacy-safe random public task identity plus a fixed private keyed
+source-message binding, first-eligible enrollment, the earliest-prefix stop rule,
+missing-data behavior, distinct natural-demand and measurement-event proof, and
+claim limits without naming future tasks. Every
 later task registration must be unique and descend from that freeze in Git
 history. A source transition preserves the same key and cohort order and must
 prove a source-native cause before destination demand, close the source cursor,
@@ -310,12 +311,16 @@ The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
 At the v1.0 revision, the terminal-release validator entry remained absent and
 the registry contained only the bounded initial-freeze and successor-freeze
-source validators described above. The current v1.1 authorization registry is
-empty until a new exact profile, source and trust boundary are selected; none
-of these validators is an outcome validator.
+source validators described above. The current registry contains one inactive
+v1.1 first-freeze source-authorization validator. Its execution-specific revision,
+digest, surface, key, and private-source commitments remain unset, so the unfrozen
+program never reads private evidence and any attempted activation fails closed.
+It is not an outcome validator.
 The v1.0 credential and Scheduled Task cleanup entrypoint is not executable from
-the v1.1 module; its historical behavior remains recoverable only from the
-pinned `910ac01` revision.
+the v1.1 module; its historical behavior remains recoverable only from the pinned
+`910ac01` revision. A separate v1.1-only expiry command is present but inert until
+an exact future freeze, independent human source authorization, protected resource,
+and one-time task are all separately authorized, materialized, and code-pinned.
 
 ## What v1.1 requires
 

@@ -19,7 +19,7 @@ import tempfile
 import time
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1179,7 +1179,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(live_program["priorRelease"]["release"], "v1.0")
         self.assertEqual(live_program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
         self.assertTrue(control.CURRENT_PROFILE_FREEZE_ENABLED)
-        self.assertEqual(dict(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS), {})
+        self.assertEqual(
+            set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
+            {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
+        )
+        self.assertIsNone(
+            control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        )
 
     def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
@@ -1353,6 +1359,456 @@ class ProductControlTests(unittest.TestCase):
             },
         }
 
+    def current_authorization_anchors(self) -> dict:
+        return {
+            "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": "a" * 40,
+            "EXPECTED_CURRENT_INITIAL_BINDING_SHA256": "b" * 64,
+            "EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID": (
+                control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+            ),
+            "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT": (
+                "sha256:" + "c" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT": (
+                "hmac-sha256:" + "f" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT": (
+                "hmac-sha256:" + "1" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT": (
+                "hmac-sha256:" + "2" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT": (
+                "hmac-sha256:" + "3" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT": (
+                "hmac-sha256:" + "4" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY": (
+                "enrollment-surface.public-v1:" + "5" * 32
+            ),
+            "EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT": (
+                "hmac-sha256:" + "6" * 64
+            ),
+            "EXPECTED_CURRENT_INITIAL_KEY_IDENTITY": (
+                "cohort-key.public-v1:" + "7" * 32
+            ),
+        }
+
+    def current_authorization_document(self) -> dict:
+        return {
+            "kind": "v1.1-normative-profile-binding-authorization",
+            "revision": "a" * 40,
+            "bindingSha256": "b" * 64,
+            "environmentAttributionContractSha256": (
+                control.EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+            ),
+            "environmentManifestBoundary": (
+                control.EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+            ),
+        }
+
+    def test_v11_authorizer_is_registered_but_unfrozen_state_never_reads_private_source(
+        self,
+    ) -> None:
+        self.assertEqual(
+            set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
+            {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
+        )
+        with patch(
+            "harness.control._read_current_initial_authorization_private_evidence",
+            side_effect=AssertionError("unfrozen verifier read private source"),
+        ) as private_read:
+            report = verify_product(ROOT)
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
+        private_read.assert_not_called()
+
+    def test_v11_authorizer_fails_before_private_read_with_unset_or_wrong_boundary(
+        self,
+    ) -> None:
+        with patch(
+            "harness.control._read_current_initial_authorization_private_evidence"
+        ) as private_read:
+            errors: list[str] = []
+            self.assertFalse(
+                control._validate_current_initial_binding_authorization(
+                    {
+                        "kind": "v1.1-normative-profile-binding-authorization",
+                        "revision": None,
+                        "bindingSha256": None,
+                        "environmentAttributionContractSha256": (
+                            control.EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+                        ),
+                        "environmentManifestBoundary": (
+                            control.EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+                        ),
+                    },
+                    ROOT,
+                    errors,
+                )
+            )
+        self.assertIn(
+            "current v1.1 binding authorization anchors are unavailable",
+            errors,
+        )
+        private_read.assert_not_called()
+
+        with patch.multiple(control, **self.current_authorization_anchors()), patch(
+            "harness.control._read_current_initial_authorization_private_evidence"
+        ) as private_read:
+            document = self.current_authorization_document()
+            document["environmentManifestBoundary"] = "ambient-or-post-hoc"
+            errors = []
+            self.assertFalse(
+                control._validate_current_initial_binding_authorization(
+                    document,
+                    ROOT,
+                    errors,
+                )
+            )
+        self.assertEqual(
+            errors,
+            [
+                "current v1.1 binding authorization document does not match the frozen binding"
+            ],
+        )
+        private_read.assert_not_called()
+
+    def test_v11_authorizer_rejects_v10_private_evidence_before_source_access(
+        self,
+    ) -> None:
+        old_private_evidence = {
+            field: "historical-v1"
+            for field in control.INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS
+        }
+        old_private_evidence["schema"] = 1
+        with patch.multiple(control, **self.current_authorization_anchors()), patch(
+            "harness.control._current_initial_authorization_source_locator_parts"
+        ) as source_access:
+            errors: list[str] = []
+            self.assertFalse(
+                control._current_initial_authorization_event_window_valid(
+                    old_private_evidence,
+                    self.current_authorization_document(),
+                    errors,
+                    credential_target_name="AgentAutonomyHarness/v1/historical",
+                )
+            )
+        self.assertEqual(
+            errors,
+            [
+                "current v1.1 binding authorization private source does not match the frozen activation"
+            ],
+        )
+        source_access.assert_not_called()
+
+    def test_v11_authorization_snapshot_binds_complete_pre_activation_window(
+        self,
+    ) -> None:
+        key = b"k" * 32
+        source_identity = "11111111-1111-4111-8111-111111111111"
+        authorization_identity = "22222222-2222-4222-8222-222222222222"
+        source_timestamp = "2026-08-16T01:00:00Z"
+        authorization_timestamp = "2026-08-16T01:05:00Z"
+        document = self.current_authorization_document()
+        anchors = self.current_authorization_anchors()
+        surface = anchors["EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY"]
+        with patch.multiple(control, **anchors):
+            materialization_message = (
+                control._current_initial_materialization_authorization_message()
+            )
+            authorization_message = (
+                control._current_initial_activation_authorization_message(document)
+            )
+        self.assertIsInstance(authorization_message, str)
+        source_event = {
+            "timestamp": source_timestamp,
+            "type": "event_msg",
+            "payload": {
+                "type": "user_message",
+                "client_id": source_identity,
+                "message": materialization_message,
+            },
+        }
+        authorization_event = {
+            "timestamp": authorization_timestamp,
+            "type": "event_msg",
+            "payload": {
+                "type": "user_message",
+                "client_id": authorization_identity,
+                "message": authorization_message,
+            },
+        }
+        snapshot = (
+            json.dumps(source_event, separators=(",", ":"))
+            + "\n"
+            + json.dumps(authorization_event, separators=(",", ":"))
+            + "\n"
+        ).encode("utf-8")
+        anchors.update(
+            {
+                "EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT": (
+                    control._initial_authorization_string_hmac(
+                        key,
+                        control.CURRENT_INITIAL_MATERIALIZATION_EVENT_HMAC_DOMAIN,
+                        surface,
+                        source_identity,
+                        source_timestamp,
+                        materialization_message,
+                    )
+                ),
+                "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT": (
+                    control._initial_authorization_string_hmac(
+                        key,
+                        control.CURRENT_INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+                        surface,
+                        document["kind"],
+                        document["revision"],
+                        document["bindingSha256"],
+                        document["environmentAttributionContractSha256"],
+                        document["environmentManifestBoundary"],
+                        authorization_identity,
+                        authorization_timestamp,
+                        authorization_message,
+                    )
+                ),
+                "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT": (
+                    control._initial_authorization_bytes_hmac(
+                        key,
+                        control.CURRENT_INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+                        snapshot,
+                    )
+                ),
+            }
+        )
+        private_evidence = {
+            "surfaceIdentity": surface,
+            "sourceEventIdentity": source_identity,
+            "sourceEventTimestamp": source_timestamp,
+            "authorizationEventIdentity": authorization_identity,
+            "authorizationEventTimestamp": authorization_timestamp,
+        }
+        with patch.multiple(control, **anchors):
+            errors: list[str] = []
+            self.assertTrue(
+                control._current_initial_authorization_snapshot_valid(
+                    private_evidence,
+                    document,
+                    snapshot,
+                    key,
+                    errors,
+                ),
+                errors,
+            )
+            intervening = {
+                "timestamp": "2026-08-16T01:03:00Z",
+                "type": "event_msg",
+                "payload": {
+                    "type": "user_message",
+                    "client_id": "33333333-3333-4333-8333-333333333333",
+                    "message": "unrelated natural demand",
+                },
+            }
+            interrupted_snapshot = (
+                json.dumps(source_event, separators=(",", ":"))
+                + "\n"
+                + json.dumps(intervening, separators=(",", ":"))
+                + "\n"
+                + json.dumps(authorization_event, separators=(",", ":"))
+                + "\n"
+            ).encode("utf-8")
+            errors = []
+            self.assertFalse(
+                control._current_initial_authorization_snapshot_valid(
+                    private_evidence,
+                    document,
+                    interrupted_snapshot,
+                    key,
+                    errors,
+                )
+            )
+        self.assertEqual(
+            errors,
+            [
+                "natural demand appeared before exact current v1.1 first-freeze authorization"
+            ],
+        )
+
+    def test_v11_authorizer_preserves_transient_source_and_deletes_deterministic_failure(
+        self,
+    ) -> None:
+        resource = (
+            {"fixture": "private"},
+            "AgentAutonomyHarness/v1.1/exact-fixture",
+        )
+        before_expiry = datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc)
+        for diagnostic in sorted(
+            control.NONDESTRUCTIVE_CURRENT_INITIAL_AUTHORIZATION_SOURCE_FAILURES
+        ):
+            with self.subTest(diagnostic=diagnostic), patch.multiple(
+                control,
+                **self.current_authorization_anchors(),
+            ), patch(
+                "harness.control._utc_now",
+                return_value=before_expiry,
+            ), patch(
+                "harness.control._read_current_initial_authorization_private_evidence",
+                return_value=resource,
+            ), patch(
+                "harness.control._current_initial_authorization_event_window_valid",
+                side_effect=lambda *args, **kwargs: (
+                    args[2].append(diagnostic) or False
+                ),
+            ), patch(
+                "harness.control._delete_current_initial_authorization_private_resource"
+            ) as delete:
+                errors: list[str] = []
+                self.assertFalse(
+                    control._validate_current_initial_binding_authorization(
+                        self.current_authorization_document(),
+                        ROOT,
+                        errors,
+                    )
+                )
+                self.assertEqual(errors, [diagnostic])
+                delete.assert_not_called()
+
+        with patch.multiple(
+            control,
+            **self.current_authorization_anchors(),
+        ), patch(
+            "harness.control._utc_now",
+            return_value=before_expiry,
+        ), patch(
+            "harness.control._read_current_initial_authorization_private_evidence",
+            return_value=resource,
+        ), patch(
+            "harness.control._current_initial_authorization_event_window_valid",
+            side_effect=lambda *args, **kwargs: (
+                args[2].append(
+                    "current v1.1 binding authorization source event is invalid"
+                )
+                or False
+            ),
+        ), patch(
+            "harness.control._delete_current_initial_authorization_private_resource",
+            return_value=True,
+        ) as delete:
+            errors = []
+            self.assertFalse(
+                control._validate_current_initial_binding_authorization(
+                    self.current_authorization_document(),
+                    ROOT,
+                    errors,
+                )
+            )
+            delete.assert_called_once_with(
+                resource,
+                "validation-failure",
+                ROOT,
+                errors,
+            )
+
+    def test_v11_expiry_cleanup_not_due_does_not_read_private_source(self) -> None:
+        with patch(
+            "harness.control._utc_now",
+            return_value=datetime(2026, 12, 31, 15, 59, 58, tzinfo=timezone.utc),
+        ), patch(
+            "harness.control._read_current_initial_authorization_private_evidence"
+        ) as private_read:
+            errors: list[str] = []
+            self.assertFalse(
+                control.expire_current_initial_authorization_private_evidence(
+                    ROOT,
+                    errors,
+                )
+            )
+        self.assertEqual(
+            errors,
+            ["current v1.1 binding authorization expiry cleanup is not due"],
+        )
+        private_read.assert_not_called()
+
+        with patch(
+            "harness.control._utc_now",
+            return_value=datetime(2026, 12, 31, 16, 0, 0, tzinfo=timezone.utc),
+        ), patch(
+            "harness.control._read_current_initial_authorization_private_evidence",
+            return_value=None,
+        ), patch(
+            "harness.control._current_initial_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._remove_current_initial_expiry_cleanup_trigger",
+            return_value=True,
+        ) as remove_trigger:
+            errors = []
+            self.assertTrue(
+                control.expire_current_initial_authorization_private_evidence(
+                    ROOT,
+                    errors,
+                ),
+                errors,
+            )
+        remove_trigger.assert_called_once_with(ROOT, errors)
+
+    def test_v11_current_private_cleanup_deletes_only_verified_exact_resource(
+        self,
+    ) -> None:
+        resource = (
+            {"fixture": "private"},
+            "AgentAutonomyHarness/v1.1/exact-fixture",
+        )
+        advapi32 = MagicMock()
+        advapi32.CredDeleteW.return_value = 1
+        with patch.object(control.os, "name", "nt"), patch(
+            "harness.control.ctypes.WinDLL",
+            return_value=advapi32,
+            create=True,
+        ), patch(
+            "harness.control._current_initial_authorization_private_resource_identity_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._current_initial_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._remove_current_initial_expiry_cleanup_trigger",
+            return_value=True,
+        ) as remove_trigger:
+            errors: list[str] = []
+            self.assertTrue(
+                control._delete_current_initial_authorization_private_resource(
+                    resource,
+                    "expiry",
+                    ROOT,
+                    errors,
+                ),
+                errors,
+            )
+        advapi32.CredDeleteW.assert_called_once_with(resource[1], 1, 0)
+        remove_trigger.assert_called_once_with(ROOT, errors)
+
+        advapi32 = MagicMock()
+        with patch.object(control.os, "name", "nt"), patch(
+            "harness.control.ctypes.WinDLL",
+            return_value=advapi32,
+            create=True,
+        ), patch(
+            "harness.control._current_initial_authorization_private_resource_identity_valid",
+            return_value=False,
+        ):
+            errors = []
+            self.assertFalse(
+                control._delete_current_initial_authorization_private_resource(
+                    resource,
+                    "validation-failure",
+                    ROOT,
+                    errors,
+                )
+            )
+        advapi32.CredDeleteW.assert_not_called()
+
     def test_v11_frozen_material_accepts_only_the_exact_current_candidate(self) -> None:
         binding = self.current_profile_binding()
         errors: list[str] = []
@@ -1425,6 +1881,113 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
+    def test_v11_freeze_authorization_anchors_match_all_activation_identities(
+        self,
+    ) -> None:
+        floor = self.initialize_fixture_repository()
+        binding = self.current_profile_binding()
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = binding
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture current v1.1 freeze"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        binding_sha256 = hashlib.sha256(
+            json.dumps(
+                binding,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        activation = binding["cohortActivation"]
+        anchors = self.current_authorization_anchors()
+        anchors.update(
+            {
+                "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": freeze_revision,
+                "EXPECTED_CURRENT_INITIAL_BINDING_SHA256": binding_sha256,
+                "EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY": activation[
+                    "surfaceIdentity"
+                ],
+                "EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT": activation[
+                    "activationCursorCommitment"
+                ],
+                "EXPECTED_CURRENT_INITIAL_KEY_IDENTITY": activation["keyIdentity"],
+                "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT": activation[
+                    "keyFingerprint"
+                ],
+            }
+        )
+        validator_called = False
+
+        def validator(document, root, errors):
+            nonlocal validator_called
+            validator_called = True
+            return True
+
+        with patch.multiple(
+            control,
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
+                control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: validator
+            },
+            **anchors,
+        ):
+            errors: list[str] = []
+            self.assertTrue(
+                control._current_normative_profile_binding_history_valid(
+                    self.root,
+                    binding,
+                    errors,
+                ),
+                errors,
+            )
+        self.assertTrue(validator_called)
+
+        validator_called = False
+        anchors["EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY"] = (
+            "enrollment-surface.public-v1:" + "9" * 32
+        )
+        with patch.multiple(
+            control,
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
+                control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: validator
+            },
+            **anchors,
+        ):
+            errors = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root,
+                    binding,
+                    errors,
+                )
+            )
+        self.assertEqual(
+            errors,
+            ["current v1.1 binding authorization anchors are unavailable"],
+        )
+        self.assertFalse(validator_called)
+
     def test_v11_revocation_cannot_open_a_successor_generation(self) -> None:
         floor = self.initialize_fixture_repository()
         first = self.current_profile_binding()
@@ -1496,6 +2059,35 @@ class ProductControlTests(unittest.TestCase):
             "revoked v1.1 cohort cannot open a successor generation",
             errors,
         )
+
+    def test_v11_revoked_state_requires_private_resource_and_trigger_absence(
+        self,
+    ) -> None:
+        binding = self.current_profile_binding()
+        binding["state"] = "revoked"
+        program = self.read_json("product/program.json")
+        program["status"] = "stopped"
+        program["normativeProfileBinding"] = binding
+        with patch(
+            "harness.control._current_profile_binding_material_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._current_normative_profile_binding_history_valid",
+            return_value=True,
+        ), patch(
+            "harness.control._current_initial_authorization_private_resource_absent",
+            return_value=True,
+        ) as private_absent, patch(
+            "harness.control._current_initial_expiry_cleanup_trigger_absent",
+            return_value=True,
+        ) as trigger_absent:
+            errors: list[str] = []
+            self.assertTrue(
+                control._normative_profile_binding_valid(ROOT, program, errors),
+                errors,
+            )
+        private_absent.assert_called_once_with(errors)
+        trigger_absent.assert_called_once_with(errors)
 
     def test_v11_profile_candidate_identity_cannot_drift_before_freeze(self) -> None:
         protocol_relative = control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
@@ -2689,6 +3281,35 @@ class ProductControlTests(unittest.TestCase):
             json.loads(stdout.getvalue()),
             {"continue": True, "suppressOutput": True},
         )
+
+    def test_current_v11_expiry_cli_is_bounded_and_reports_not_due(self) -> None:
+        arguments = [
+            "python -m harness",
+            "expire-current-cohort-private-evidence",
+            "--root",
+            str(self.root),
+        ]
+        stdout = StringIO()
+        stderr = StringIO()
+
+        def not_due(root, errors):
+            self.assertEqual(root, self.root)
+            errors.append("current v1.1 binding authorization expiry cleanup is not due")
+            return False
+
+        with (
+            patch.object(sys, "argv", arguments),
+            patch(
+                "harness.__main__.expire_current_initial_authorization_private_evidence",
+                side_effect=not_due,
+            ),
+            patch("sys.stdout", new=stdout),
+            patch("sys.stderr", new=stderr),
+        ):
+            returncode = cli_main()
+        self.assertEqual(returncode, 4)
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertIn("expiry cleanup is not due", stderr.getvalue())
 
     def test_codex_plugin_projection_is_thin_inactive_and_fail_closed(self) -> None:
         manifest = json.loads(
@@ -6217,8 +6838,6 @@ class ProductControlTests(unittest.TestCase):
             delete.assert_called_once_with(resource, "validation-failure", errors)
 
     def test_v11_initial_private_cleanup_route_is_not_executable(self) -> None:
-        source = (ROOT / "harness/control.py").read_text(encoding="utf-8")
-        self.assertNotIn("CredDeleteW", source)
         errors: list[str] = []
         with patch("harness.control.ctypes.WinDLL", create=True) as win_dll:
             self.assertFalse(
@@ -6552,6 +7171,32 @@ class ProductControlTests(unittest.TestCase):
             ),
             errors,
         )
+        current_task = task_xml(arguments=control.CURRENT_INITIAL_EXPIRY_TASK_ARGUMENTS)
+        errors = []
+        self.assertTrue(
+            control._current_initial_expiry_task_definition_valid(
+                current_task,
+                expected_python,
+                expected_root,
+                expected_user_sid,
+                errors,
+            ),
+            errors,
+        )
+        errors = []
+        self.assertFalse(
+            control._current_initial_expiry_task_definition_valid(
+                task_xml(),
+                expected_python,
+                expected_root,
+                expected_user_sid,
+                errors,
+            )
+        )
+        self.assertEqual(
+            errors,
+            ["current v1.1 binding authorization expiry cleanup trigger is invalid"],
+        )
         for invalid in (
             task_xml(logon_type="InteractiveToken"),
             task_xml(arguments="-B -m harness verify"),
@@ -6588,8 +7233,6 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_v11_successor_expiry_trigger_removal_is_not_executable(self) -> None:
-        source = (ROOT / "harness/control.py").read_text(encoding="utf-8")
-        self.assertNotIn('"/Delete"', source)
         with patch("harness.control.subprocess.run") as run:
             errors: list[str] = []
             self.assertFalse(

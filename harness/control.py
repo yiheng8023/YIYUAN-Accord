@@ -365,6 +365,17 @@ EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION = (
 EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID = (
+    "codex-windows-source-native-first-freeze-authorization-v1.1"
+)
+CURRENT_INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC = datetime(
+    2026, 12, 31, 15, 59, 59, tzinfo=timezone.utc
+)
+CURRENT_INITIAL_EXPIRY_TASK_NAME = "AgentAutonomyHarness-v1.1-expiry"
+CURRENT_INITIAL_EXPIRY_TASK_START_BOUNDARY = "2026-12-31T23:59:59+08:00"
+CURRENT_INITIAL_EXPIRY_TASK_ARGUMENTS = (
+    "-B -m harness expire-current-cohort-private-evidence"
+)
 # Immutable commit that contains the reviewed profile and cohort-protocol bytes.
 EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = (
     "502c4ff7edfc6307ea5469bcb81089e13612a24a"
@@ -437,6 +448,13 @@ NONDESTRUCTIVE_SUCCESSOR_AUTHORIZATION_SOURCE_FAILURES = frozenset(
         "successor binding authorization expiry cleanup trigger is unavailable",
     }
 )
+NONDESTRUCTIVE_CURRENT_INITIAL_AUTHORIZATION_SOURCE_FAILURES = frozenset(
+    {
+        "current v1.1 binding authorization source event is unavailable",
+        "current v1.1 binding authorization source event changed during validation",
+        "current v1.1 binding authorization expiry cleanup trigger is unavailable",
+    }
+)
 EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT = (
     "sha256:6d0edc4c500afdb7cc3a3e35a5805b2187feb8fb7958c90f0a21e4101721a0e3"
 )
@@ -476,8 +494,24 @@ SUCCESSOR_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
 SUCCESSOR_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
     "agent-autonomy-harness/successor-freeze-authorization-window/v1"
 )
+CURRENT_INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN = (
+    "agent-autonomy-harness/private-credential-target/v1.1"
+)
+CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/private-source-root/v1.1"
+)
+CURRENT_INITIAL_MATERIALIZATION_EVENT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/materialization-grant-event/v1.1"
+)
+CURRENT_INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN = (
+    "agent-autonomy-harness/first-freeze-authorization-event/v1.1"
+)
+CURRENT_INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN = (
+    "agent-autonomy-harness/first-freeze-source-window/v1.1"
+)
 INITIAL_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1/*"
 SUCCESSOR_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1-successor/*"
+CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_FILTER = "AgentAutonomyHarness/v1.1/*"
 # These privacy-safe commitments are materialized from the already-authorized
 # protected source during this bounded repair. Until then, the live validator
 # fails closed rather than accepting an unbound private resource or event.
@@ -523,6 +557,24 @@ EXPECTED_SUCCESSOR_ACTIVATION_CURSOR_COMMITMENT = (
 EXPECTED_SUCCESSOR_KEY_IDENTITY = (
     "cohort-key.public-v1:55020ba1e3bd4a9cbefc23f167f0a13b"
 )
+EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT: str | None = None
+EXPECTED_CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY: str | None = None
+EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT: str | None = None
+EXPECTED_CURRENT_INITIAL_KEY_IDENTITY: str | None = None
+EXPECTED_CURRENT_INITIAL_PRIVATE_EVIDENCE_DISPOSITION = (
+    "authorized-retain-through-live-v1.1-claim-no-later-than-"
+    "2026-12-31T23:59:59+08:00-delete-and-revoke-on-withdrawal-expiry-"
+    "stop-or-deterministic-validation-failure"
+)
+EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY = (
+    "task-specific-pre-registration-manifests-under-current-acceptance-contract-"
+    "no-cohort-global-static-manifest"
+)
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
     "kind",
@@ -554,6 +606,24 @@ SUCCESSOR_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "predecessorRevocationRecordIdentity",
     "predecessorRevocationRecordTimestamp",
     "predecessorRevocationRevision",
+    "disposition",
+}
+CURRENT_INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
+    "schema",
+    "kind",
+    "surfaceIdentity",
+    "activationCursorCommitment",
+    "keyIdentity",
+    "keyFingerprint",
+    "keyBase64",
+    "sourceKind",
+    "sourceRollout",
+    "sourceEventIdentity",
+    "sourceEventTimestamp",
+    "authorizationEventIdentity",
+    "authorizationEventTimestamp",
+    "environmentAttributionContractSha256",
+    "environmentManifestBoundary",
     "disposition",
 }
 MAX_INITIAL_AUTHORIZATION_CREDENTIAL_BYTES = 16_384
@@ -1471,6 +1541,17 @@ def _read_successor_authorization_private_evidence(
     )
 
 
+def _read_current_initial_authorization_private_evidence(
+    errors: list[str],
+) -> tuple[dict[str, Any], str] | None:
+    return _read_cohort_authorization_private_evidence(
+        CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+        CURRENT_INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS,
+        "current v1.1 binding",
+        errors,
+    )
+
+
 def _cohort_authorization_private_resource_absent(
     credential_filter: str, generation_label: str, errors: list[str]
 ) -> bool:
@@ -1535,6 +1616,16 @@ def _successor_authorization_private_resource_absent(errors: list[str]) -> bool:
     )
 
 
+def _current_initial_authorization_private_resource_absent(
+    errors: list[str],
+) -> bool:
+    return _cohort_authorization_private_resource_absent(
+        CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_FILTER,
+        "current v1.1 binding",
+        errors,
+    )
+
+
 def _initial_authorization_string_hmac(
     key: bytes | bytearray, domain: str, *parts: str
 ) -> str:
@@ -1595,6 +1686,54 @@ def _successor_authorization_credential_target_valid(
         "successor binding",
         errors,
     )
+
+
+def _current_initial_authorization_credential_target_valid(
+    target_name: str, key: bytes | bytearray, errors: list[str]
+) -> bool:
+    return _cohort_authorization_credential_target_valid(
+        target_name,
+        key,
+        CURRENT_INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT,
+        "current v1.1 binding",
+        errors,
+    )
+
+
+def _current_initial_authorization_private_resource_identity_valid(
+    resource: tuple[dict[str, Any], str], errors: list[str]
+) -> bool:
+    private_evidence, target_name = resource
+    encoded_key = private_evidence.get("keyBase64")
+    if not isinstance(encoded_key, str):
+        _error(errors, "current v1.1 binding authorization private source is invalid")
+        return False
+    try:
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, "current v1.1 binding authorization private source is invalid")
+        return False
+    try:
+        expected_fingerprint = EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT
+        if (
+            len(key) != 32
+            or not isinstance(expected_fingerprint, str)
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", expected_fingerprint) is None
+            or not hmac.compare_digest(
+                "sha256:" + hashlib.sha256(key).hexdigest(),
+                expected_fingerprint,
+            )
+        ):
+            _error(errors, "current v1.1 binding authorization private source is invalid")
+            return False
+        return _current_initial_authorization_credential_target_valid(
+            target_name,
+            key,
+            errors,
+        )
+    finally:
+        key[:] = b"\0" * len(key)
 
 
 def _successor_authorization_private_resource_identity_valid(
@@ -1746,6 +1885,21 @@ def _successor_authorization_source_locator_parts(
         SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
         EXPECTED_SUCCESSOR_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
         "successor binding",
+        errors,
+    )
+
+
+def _current_initial_authorization_source_locator_parts(
+    source_locator: str,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> tuple[str, str] | None:
+    return _cohort_authorization_source_locator_parts(
+        source_locator,
+        key,
+        CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_HMAC_DOMAIN,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
+        "current v1.1 binding",
         errors,
     )
 
@@ -2272,6 +2426,407 @@ def _initial_authorization_event_window_valid(
         key[:] = b"\0" * len(key)
 
 
+def _current_initial_materialization_authorization_message() -> str:
+    return (
+        "正式授权 Agent 在当前 Windows 用户保护存储中创建仅用于 Agent Autonomy "
+        "Harness v1.1 cohort 的新随机私密资源，并安装仅针对该精确资源的一次性到期"
+        "清理触发器；triggerIdentity="
+        + CURRENT_INITIAL_EXPIRY_TASK_NAME
+        + "@"
+        + CURRENT_INITIAL_EXPIRY_TASK_START_BOUNDARY
+        + "；环境归因合同 SHA-256="
+        + EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        + "；环境清单边界="
+        + EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+        + "；私密证据处置="
+        + EXPECTED_CURRENT_INITIAL_PRIVATE_EVIDENCE_DISPOSITION
+        + "；本次仅允许提交 provisional first-freeze binding，不授权激活 cohort、读取或"
+        "计入自然任务、安装 Harness 插件或发布；禁止公开私钥、原始事件、会话路径或"
+        "凭据定位。"
+    )
+
+
+def _current_initial_activation_authorization_message(
+    authorization_document: Mapping[str, Any],
+) -> str | None:
+    values = {
+        "kind": authorization_document.get("kind"),
+        "revision": authorization_document.get("revision"),
+        "bindingSha256": authorization_document.get("bindingSha256"),
+        "environmentAttributionContractSha256": authorization_document.get(
+            "environmentAttributionContractSha256"
+        ),
+        "environmentManifestBoundary": authorization_document.get(
+            "environmentManifestBoundary"
+        ),
+        "surfaceIdentity": EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY,
+        "activationCursorCommitment": (
+            EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT
+        ),
+        "keyIdentity": EXPECTED_CURRENT_INITIAL_KEY_IDENTITY,
+        "keyFingerprint": EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+    }
+    if any(not isinstance(item, str) for item in values.values()):
+        return None
+    return (
+        "正式授权 Agent Autonomy Harness v1.1 cohort activation：kind="
+        + values["kind"]
+        + "；revision="
+        + values["revision"]
+        + "；bindingSha256="
+        + values["bindingSha256"]
+        + "；environmentAttributionContractSha256="
+        + values["environmentAttributionContractSha256"]
+        + "；environmentManifestBoundary="
+        + values["environmentManifestBoundary"]
+        + "；surfaceIdentity="
+        + values["surfaceIdentity"]
+        + "；sourceKind=codex-rollout-user-event-v1"
+        + "；activationCursorCommitment="
+        + values["activationCursorCommitment"]
+        + "；keyIdentity="
+        + values["keyIdentity"]
+        + "；keyFingerprint="
+        + values["keyFingerprint"]
+        + "；privateEvidenceDisposition="
+        + EXPECTED_CURRENT_INITIAL_PRIVATE_EVIDENCE_DISPOSITION
+        + "；允许代码拥有的验证器仅从当前 Windows 用户保护存储读取该精确 v1.1 "
+        "私密资源，核验本次 materialization grant 至本授权事件之间的完整来源窗口、"
+        "零遗漏合格自然需求、环境边界、事件连续性和清理约束；禁止公开私钥、原始事件、"
+        "会话路径或凭据定位。"
+    )
+
+
+def _current_initial_authorization_snapshot_valid(
+    private_evidence: Mapping[str, Any],
+    authorization_document: Mapping[str, Any],
+    snapshot: bytes,
+    key: bytes | bytearray,
+    errors: list[str],
+) -> bool:
+    source_identity = private_evidence.get("sourceEventIdentity")
+    source_timestamp = private_evidence.get("sourceEventTimestamp")
+    authorization_identity = private_evidence.get("authorizationEventIdentity")
+    authorization_timestamp = private_evidence.get("authorizationEventTimestamp")
+    surface_identity = private_evidence.get("surfaceIdentity")
+    source_instant = _source_event_instant(source_timestamp)
+    authorization_instant = _source_event_instant(authorization_timestamp)
+    if (
+        not isinstance(source_identity, str)
+        or not isinstance(authorization_identity, str)
+        or source_identity == authorization_identity
+        or re.fullmatch(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            source_identity,
+        )
+        is None
+        or re.fullmatch(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            authorization_identity,
+        )
+        is None
+        or source_instant is None
+        or authorization_instant is None
+        or authorization_instant < source_instant
+        or not isinstance(surface_identity, str)
+        or not isinstance(snapshot, bytes)
+        or not snapshot
+        or len(snapshot) > MAX_INITIAL_AUTHORIZATION_SOURCE_BYTES
+    ):
+        _error(errors, "current v1.1 binding authorization source event is invalid")
+        return False
+
+    expected_materialization_message = (
+        _current_initial_materialization_authorization_message()
+    )
+    expected_authorization_message = (
+        _current_initial_activation_authorization_message(authorization_document)
+    )
+    if expected_authorization_message is None:
+        _error(errors, "current v1.1 binding authorization anchors are unavailable")
+        return False
+
+    source_found = False
+    authorization_found = False
+    record_count = 0
+    cursor = 0
+    stream = BytesIO(snapshot)
+    while cursor < len(snapshot):
+        line = stream.readline(MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES + 1)
+        if not line:
+            break
+        cursor += len(line)
+        record_count += 1
+        if (
+            record_count > MAX_INITIAL_AUTHORIZATION_SOURCE_RECORDS
+            or len(line) > MAX_INITIAL_AUTHORIZATION_SOURCE_LINE_BYTES
+        ):
+            _error(
+                errors,
+                "current v1.1 binding authorization source event exceeds its finite bounds",
+            )
+            return False
+        try:
+            event = json.loads(
+                line,
+                object_pairs_hook=_initial_authorization_json_object,
+                parse_constant=lambda constant: (_ for _ in ()).throw(
+                    ValueError(f"non-finite source event value: {constant}")
+                ),
+            )
+        except (
+            UnicodeError,
+            ValueError,
+            TypeError,
+            RecursionError,
+            json.JSONDecodeError,
+        ):
+            _error(errors, "current v1.1 binding authorization source event is invalid")
+            return False
+        if not isinstance(event, dict) or event.get("type") != "event_msg":
+            continue
+        payload = event.get("payload")
+        if not isinstance(payload, dict) or payload.get("type") != "user_message":
+            continue
+        event_identity = payload.get("client_id")
+        event_message = payload.get("message")
+        event_timestamp = event.get("timestamp")
+        if not isinstance(event_identity, str) or not isinstance(event_message, str):
+            _error(errors, "current v1.1 binding authorization source event is invalid")
+            return False
+        event_instant = _source_event_instant(event_timestamp)
+        normalized_message = event_message.rstrip("\r\n")
+        if event_identity == source_identity:
+            if (
+                source_found
+                or authorization_found
+                or event_instant != source_instant
+                or not hmac.compare_digest(
+                    normalized_message.encode("utf-8"),
+                    expected_materialization_message.encode("utf-8"),
+                )
+            ):
+                _error(
+                    errors,
+                    "current v1.1 binding materialization source event is invalid",
+                )
+                return False
+            source_found = True
+            continue
+        if not source_found:
+            continue
+        if event_identity != authorization_identity:
+            _error(
+                errors,
+                "natural demand appeared before exact current v1.1 first-freeze authorization",
+            )
+            return False
+        if (
+            authorization_found
+            or event_instant != authorization_instant
+            or not hmac.compare_digest(
+                normalized_message.encode("utf-8"),
+                expected_authorization_message.encode("utf-8"),
+            )
+        ):
+            _error(errors, "current v1.1 binding authorization source event is invalid")
+            return False
+        authorization_found = True
+        canonical_timestamp = authorization_instant.isoformat().replace(
+            "+00:00", "Z"
+        )
+        materialization_commitment = _initial_authorization_string_hmac(
+            key,
+            CURRENT_INITIAL_MATERIALIZATION_EVENT_HMAC_DOMAIN,
+            surface_identity,
+            source_identity,
+            source_instant.isoformat().replace("+00:00", "Z"),
+            expected_materialization_message,
+        )
+        authorization_commitment = _initial_authorization_string_hmac(
+            key,
+            CURRENT_INITIAL_AUTHORIZATION_EVENT_HMAC_DOMAIN,
+            surface_identity,
+            authorization_document["kind"],
+            authorization_document["revision"],
+            authorization_document["bindingSha256"],
+            authorization_document["environmentAttributionContractSha256"],
+            authorization_document["environmentManifestBoundary"],
+            authorization_identity,
+            canonical_timestamp,
+            normalized_message,
+        )
+        window_commitment = _initial_authorization_bytes_hmac(
+            key,
+            CURRENT_INITIAL_AUTHORIZATION_WINDOW_HMAC_DOMAIN,
+            snapshot[:cursor],
+        )
+        if (
+            EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT is None
+            or EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT is None
+            or EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT is None
+            or not hmac.compare_digest(
+                materialization_commitment,
+                EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT,
+            )
+            or not hmac.compare_digest(
+                authorization_commitment,
+                EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT,
+            )
+            or not hmac.compare_digest(
+                window_commitment,
+                EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT,
+            )
+        ):
+            _error(errors, "current v1.1 binding authorization source event is invalid")
+            return False
+        return True
+
+    _error(
+        errors,
+        "current v1.1 frozen normative profile binding authorization source was not independently verified",
+    )
+    return False
+
+
+def _current_initial_authorization_event_window_valid(
+    private_evidence: Mapping[str, Any],
+    authorization_document: Mapping[str, Any],
+    errors: list[str],
+    *,
+    credential_target_name: str | None = None,
+) -> bool:
+    expected_public = {
+        "schema": 1,
+        "kind": "agent-autonomy-harness-v1.1-provisional-cohort-private-evidence",
+        "surfaceIdentity": EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY,
+        "activationCursorCommitment": (
+            EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT
+        ),
+        "keyIdentity": EXPECTED_CURRENT_INITIAL_KEY_IDENTITY,
+        "keyFingerprint": EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+        "sourceKind": "codex-rollout-user-event-v1",
+        "environmentAttributionContractSha256": (
+            EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        ),
+        "environmentManifestBoundary": (
+            EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+        ),
+        "disposition": EXPECTED_CURRENT_INITIAL_PRIVATE_EVIDENCE_DISPOSITION,
+    }
+    required_anchors = (
+        EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY,
+        EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_KEY_IDENTITY,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT,
+    )
+    if any(not isinstance(item, str) for item in required_anchors):
+        _error(errors, "current v1.1 binding authorization anchors are unavailable")
+        return False
+    if (
+        type(private_evidence.get("schema")) is not int
+        or any(private_evidence.get(key) != item for key, item in expected_public.items())
+        or authorization_document.get("environmentAttributionContractSha256")
+        != EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        or authorization_document.get("environmentManifestBoundary")
+        != EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+    ):
+        _error(
+            errors,
+            "current v1.1 binding authorization private source does not match the frozen activation",
+        )
+        return False
+    source_identity = private_evidence.get("sourceEventIdentity")
+    source_timestamp = private_evidence.get("sourceEventTimestamp")
+    authorization_identity = private_evidence.get("authorizationEventIdentity")
+    authorization_timestamp = private_evidence.get("authorizationEventTimestamp")
+    source_locator = private_evidence.get("sourceRollout")
+    encoded_key = private_evidence.get("keyBase64")
+    if (
+        not isinstance(source_identity, str)
+        or not isinstance(source_timestamp, str)
+        or not isinstance(authorization_identity, str)
+        or not isinstance(authorization_timestamp, str)
+        or not isinstance(source_locator, str)
+        or not isinstance(encoded_key, str)
+    ):
+        _error(errors, "current v1.1 binding authorization private source is invalid")
+        return False
+    try:
+        key = bytearray(base64.b64decode(encoded_key, validate=True))
+    except (ValueError, TypeError):
+        _error(errors, "current v1.1 binding authorization private source is invalid")
+        return False
+    try:
+        if len(key) != 32:
+            _error(errors, "current v1.1 binding authorization private source is invalid")
+            return False
+        fingerprint = "sha256:" + hashlib.sha256(key).hexdigest()
+        activation_message = (
+            EXPECTED_CURRENT_HMAC_DOMAIN
+            + "\0"
+            + expected_public["surfaceIdentity"]
+            + "\0"
+            + source_identity
+        ).encode("utf-8")
+        commitment = "hmac-sha256:" + hmac.new(
+            key,
+            activation_message,
+            hashlib.sha256,
+        ).hexdigest()
+        if not hmac.compare_digest(
+            fingerprint,
+            expected_public["keyFingerprint"],
+        ) or not hmac.compare_digest(
+            commitment,
+            expected_public["activationCursorCommitment"],
+        ):
+            _error(
+                errors,
+                "current v1.1 binding authorization private source does not match the frozen activation",
+            )
+            return False
+        if (
+            credential_target_name is None
+            or not _current_initial_authorization_credential_target_valid(
+                credential_target_name,
+                key,
+                errors,
+            )
+        ):
+            return False
+        locator_parts = _current_initial_authorization_source_locator_parts(
+            source_locator,
+            key,
+            errors,
+        )
+        if locator_parts is None:
+            return False
+        source_path_text, authorized_root = locator_parts
+        snapshot = _read_stable_initial_authorization_snapshot(
+            Path(source_path_text),
+            authorized_root,
+            errors,
+            generation_label="current v1.1 binding",
+        )
+        if snapshot is None:
+            return False
+        return _current_initial_authorization_snapshot_valid(
+            private_evidence,
+            authorization_document,
+            snapshot,
+            key,
+            errors,
+        )
+    finally:
+        key[:] = b"\0" * len(key)
+
+
 def _source_event_instant(value: Any) -> datetime | None:
     if not isinstance(value, str) or RFC3339.fullmatch(value) is None:
         return None
@@ -2688,6 +3243,70 @@ def _revoke_successor_authorization_private_evidence(
     return _delete_successor_authorization_private_resource(resource, trigger, errors)
 
 
+def _delete_current_initial_authorization_private_resource(
+    resource: tuple[dict[str, Any], str],
+    trigger: str,
+    root: Path,
+    errors: list[str],
+) -> bool:
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(
+            errors,
+            "current v1.1 binding authorization private evidence trigger is invalid",
+        )
+        return False
+    if not _current_initial_authorization_private_resource_identity_valid(
+        resource,
+        errors,
+    ):
+        return False
+    _, target_name = resource
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        _error(errors, "current v1.1 binding authorization private cleanup is unavailable")
+        return False
+    try:
+        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
+        delete_credential = advapi32.CredDeleteW
+        delete_credential.argtypes = [ctypes.c_wchar_p, ctypes.c_uint32, ctypes.c_uint32]
+        delete_credential.restype = ctypes.c_int
+        ctypes.set_last_error(0)
+        deleted = delete_credential(target_name, 1, 0)
+    except (OSError, ValueError, TypeError):
+        deleted = 0
+    if not deleted:
+        _error(errors, "current v1.1 binding authorization private cleanup failed")
+        return False
+    absence_errors: list[str] = []
+    if not _current_initial_authorization_private_resource_absent(absence_errors):
+        errors.extend(absence_errors)
+        return False
+    if not _remove_current_initial_expiry_cleanup_trigger(root, errors):
+        return False
+    return True
+
+
+def _revoke_current_initial_authorization_private_evidence(
+    trigger: str,
+    root: Path,
+    errors: list[str],
+) -> bool:
+    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
+        _error(
+            errors,
+            "current v1.1 binding authorization private evidence trigger is invalid",
+        )
+        return False
+    resource = _read_current_initial_authorization_private_evidence(errors)
+    if resource is None:
+        return False
+    return _delete_current_initial_authorization_private_resource(
+        resource,
+        trigger,
+        root,
+        errors,
+    )
+
+
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -2751,11 +3370,14 @@ def _validate_initial_binding_authorization(
     return True
 
 
-def _successor_expiry_task_definition_valid(
+def _expiry_task_definition_valid(
     task: ET.Element,
     expected_python: Path,
     expected_root: Path,
     expected_user_sid: str,
+    expected_arguments: str,
+    expected_start_boundary: str,
+    diagnostic: str,
     errors: list[str],
 ) -> bool:
     def local_name(item: ET.Element) -> str:
@@ -2889,11 +3511,11 @@ def _successor_expiry_task_definition_valid(
         or not isinstance(commands[0].text, str)
         or _normalized_native_path(commands[0].text)
         != _normalized_native_path(expected_python)
-        or arguments[0].text != SUCCESSOR_EXPIRY_TASK_ARGUMENTS
+        or arguments[0].text != expected_arguments
         or not isinstance(working_directories[0].text, str)
         or _normalized_native_path(working_directories[0].text)
         != _normalized_native_path(expected_root)
-        or start_boundaries[0].text != SUCCESSOR_EXPIRY_TASK_START_BOUNDARY
+        or start_boundaries[0].text != expected_start_boundary
         or logon_types[0].text != "S4U"
         or start_when_available[0].text != "true"
         or execution_time_limits[0].text != "PT5M"
@@ -2901,10 +3523,48 @@ def _successor_expiry_task_definition_valid(
     ):
         _error(
             errors,
-            "successor binding authorization expiry cleanup trigger is invalid",
+            f"{diagnostic} authorization expiry cleanup trigger is invalid",
         )
         return False
     return True
+
+
+def _successor_expiry_task_definition_valid(
+    task: ET.Element,
+    expected_python: Path,
+    expected_root: Path,
+    expected_user_sid: str,
+    errors: list[str],
+) -> bool:
+    return _expiry_task_definition_valid(
+        task,
+        expected_python,
+        expected_root,
+        expected_user_sid,
+        SUCCESSOR_EXPIRY_TASK_ARGUMENTS,
+        SUCCESSOR_EXPIRY_TASK_START_BOUNDARY,
+        "successor binding",
+        errors,
+    )
+
+
+def _current_initial_expiry_task_definition_valid(
+    task: ET.Element,
+    expected_python: Path,
+    expected_root: Path,
+    expected_user_sid: str,
+    errors: list[str],
+) -> bool:
+    return _expiry_task_definition_valid(
+        task,
+        expected_python,
+        expected_root,
+        expected_user_sid,
+        CURRENT_INITIAL_EXPIRY_TASK_ARGUMENTS,
+        CURRENT_INITIAL_EXPIRY_TASK_START_BOUNDARY,
+        "current v1.1 binding",
+        errors,
+    )
 
 
 def _current_windows_user_sid() -> str | None:
@@ -3009,7 +3669,13 @@ def _trusted_windows_schtasks_executable() -> Path | None:
     return executable
 
 
-def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bool:
+def _expiry_cleanup_trigger_valid(
+    root: Path,
+    task_name: str,
+    task_definition_validator: Callable[[ET.Element, Path, Path, str, list[str]], bool],
+    diagnostic: str,
+    errors: list[str],
+) -> bool:
     executable = _trusted_windows_schtasks_executable()
     current_user_sid = _current_windows_user_sid()
     try:
@@ -3025,7 +3691,7 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
     except (OSError, RuntimeError, ValueError):
         _error(
             errors,
-            "successor binding authorization expiry cleanup trigger is unavailable",
+            f"{diagnostic} authorization expiry cleanup trigger is unavailable",
         )
         return False
     environment = {
@@ -3050,7 +3716,7 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
                 str(executable),
                 "/Query",
                 "/TN",
-                SUCCESSOR_EXPIRY_TASK_NAME,
+                task_name,
                 "/XML",
             ],
             cwd=expected_root,
@@ -3080,13 +3746,13 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
     except (OSError, ValueError, subprocess.SubprocessError):
         _error(
             errors,
-            "successor binding authorization expiry cleanup trigger is unavailable",
+            f"{diagnostic} authorization expiry cleanup trigger is unavailable",
         )
         return False
     if return_code != 0 or not output or len(output) > MAX_SUCCESSOR_EXPIRY_TASK_XML_BYTES:
         _error(
             errors,
-            "successor binding authorization expiry cleanup trigger is unavailable",
+            f"{diagnostic} authorization expiry cleanup trigger is unavailable",
         )
         return False
     try:
@@ -3097,16 +3763,166 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
         except (ET.ParseError, UnicodeError, ValueError):
             _error(
                 errors,
-                "successor binding authorization expiry cleanup trigger is invalid",
+                f"{diagnostic} authorization expiry cleanup trigger is invalid",
             )
             return False
-    return _successor_expiry_task_definition_valid(
+    return task_definition_validator(
         task,
         expected_python,
         expected_root,
         current_user_sid,
         errors,
     )
+
+
+def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bool:
+    return _expiry_cleanup_trigger_valid(
+        root,
+        SUCCESSOR_EXPIRY_TASK_NAME,
+        _successor_expiry_task_definition_valid,
+        "successor binding",
+        errors,
+    )
+
+
+def _current_initial_expiry_cleanup_trigger_valid(
+    root: Path, errors: list[str]
+) -> bool:
+    return _expiry_cleanup_trigger_valid(
+        root,
+        CURRENT_INITIAL_EXPIRY_TASK_NAME,
+        _current_initial_expiry_task_definition_valid,
+        "current v1.1 binding",
+        errors,
+    )
+
+
+def _remove_current_initial_expiry_cleanup_trigger(
+    root: Path, errors: list[str]
+) -> bool:
+    validation_errors: list[str] = []
+    if not _current_initial_expiry_cleanup_trigger_valid(root, validation_errors):
+        errors.extend(validation_errors)
+        return False
+    executable = _trusted_windows_schtasks_executable()
+    try:
+        expected_root = root.resolve(strict=True)
+    except (OSError, RuntimeError, ValueError):
+        expected_root = None
+    if executable is None or expected_root is None:
+        _error(
+            errors,
+            "current v1.1 binding authorization expiry cleanup trigger removal is unavailable",
+        )
+        return False
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.casefold() in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+    }
+    try:
+        removed = subprocess.run(
+            [
+                str(executable),
+                "/Delete",
+                "/TN",
+                CURRENT_INITIAL_EXPIRY_TASK_NAME,
+                "/F",
+            ],
+            cwd=expected_root,
+            env=environment,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+            check=False,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        _error(
+            errors,
+            "current v1.1 binding authorization expiry cleanup trigger removal is unavailable",
+        )
+        return False
+    if removed.returncode != 0:
+        _error(
+            errors,
+            "current v1.1 binding authorization expiry cleanup trigger removal failed",
+        )
+        return False
+    post_errors: list[str] = []
+    if _current_initial_expiry_cleanup_trigger_valid(root, post_errors):
+        _error(
+            errors,
+            "current v1.1 binding authorization expiry cleanup trigger still exists",
+        )
+        return False
+    if post_errors != [
+        "current v1.1 binding authorization expiry cleanup trigger is unavailable"
+    ]:
+        errors.extend(post_errors)
+        return False
+    return True
+
+
+def _current_initial_expiry_cleanup_trigger_absent(errors: list[str]) -> bool:
+    executable = _trusted_windows_schtasks_executable()
+    if executable is None:
+        _error(
+            errors,
+            "revoked current v1.1 expiry cleanup trigger absence is unverifiable",
+        )
+        return False
+    try:
+        task_root = (executable.parent / "Tasks").resolve(strict=True)
+        task_root_metadata = task_root.lstat()
+        if not stat.S_ISDIR(task_root_metadata.st_mode) or _link_or_reparse(task_root):
+            raise OSError("untrusted task root")
+        task_path = task_root / CURRENT_INITIAL_EXPIRY_TASK_NAME
+        task_path.lstat()
+    except FileNotFoundError:
+        task_path_absent = True
+    except (OSError, RuntimeError, ValueError):
+        _error(
+            errors,
+            "revoked current v1.1 expiry cleanup trigger absence is unverifiable",
+        )
+        return False
+    else:
+        task_path_absent = False
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.casefold() in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+    }
+    try:
+        queried = subprocess.run(
+            [
+                str(executable),
+                "/Query",
+                "/TN",
+                CURRENT_INITIAL_EXPIRY_TASK_NAME,
+                "/XML",
+            ],
+            cwd=task_root,
+            env=environment,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+            check=False,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        _error(
+            errors,
+            "revoked current v1.1 expiry cleanup trigger absence is unverifiable",
+        )
+        return False
+    if not task_path_absent or queried.returncode == 0:
+        _error(errors, "revoked current v1.1 expiry cleanup trigger still exists")
+        return False
+    return True
 
 
 def _remove_successor_expiry_cleanup_trigger(errors: list[str]) -> bool:
@@ -3185,10 +4001,183 @@ def _validate_successor_binding_authorization(
     return True
 
 
+def _current_initial_authorization_anchors_valid(
+    activation: Mapping[str, Any] | None,
+    errors: list[str],
+) -> bool:
+    expected_surface = EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY
+    expected_cursor = EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT
+    expected_key_identity = EXPECTED_CURRENT_INITIAL_KEY_IDENTITY
+    expected_fingerprint = EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT
+    hmac_commitments = (
+        expected_cursor,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_SOURCE_ROOT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_MATERIALIZATION_EVENT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_EVENT_COMMITMENT,
+        EXPECTED_CURRENT_INITIAL_AUTHORIZATION_WINDOW_COMMITMENT,
+    )
+    valid = (
+        isinstance(EXPECTED_CURRENT_INITIAL_BINDING_REVISION, str)
+        and re.fullmatch(
+            r"[0-9a-f]{40}|[0-9a-f]{64}",
+            EXPECTED_CURRENT_INITIAL_BINDING_REVISION,
+        )
+        is not None
+        and isinstance(EXPECTED_CURRENT_INITIAL_BINDING_SHA256, str)
+        and re.fullmatch(
+            r"[0-9a-f]{64}",
+            EXPECTED_CURRENT_INITIAL_BINDING_SHA256,
+        )
+        is not None
+        and EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        == CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID
+        and isinstance(expected_surface, str)
+        and PUBLIC_SURFACE_IDENTITY_PATTERN.fullmatch(expected_surface) is not None
+        and isinstance(expected_key_identity, str)
+        and PUBLIC_COHORT_KEY_IDENTITY_PATTERN.fullmatch(expected_key_identity)
+        is not None
+        and isinstance(expected_fingerprint, str)
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", expected_fingerprint) is not None
+        and all(
+            isinstance(item, str)
+            and re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", item) is not None
+            for item in hmac_commitments
+        )
+    )
+    if activation is not None:
+        valid = valid and all(
+            activation.get(field) == expected
+            for field, expected in {
+                "surfaceIdentity": expected_surface,
+                "activationCursorCommitment": expected_cursor,
+                "keyIdentity": expected_key_identity,
+                "keyFingerprint": expected_fingerprint,
+            }.items()
+        )
+    if not valid:
+        _error(errors, "current v1.1 binding authorization anchors are unavailable")
+        return False
+    return True
+
+
+def _validate_current_initial_binding_authorization(
+    authorization_document: dict[str, Any], root: Path, errors: list[str]
+) -> bool:
+    expected_document = {
+        "kind": "v1.1-normative-profile-binding-authorization",
+        "revision": EXPECTED_CURRENT_INITIAL_BINDING_REVISION,
+        "bindingSha256": EXPECTED_CURRENT_INITIAL_BINDING_SHA256,
+        "environmentAttributionContractSha256": (
+            EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        ),
+        "environmentManifestBoundary": (
+            EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+        ),
+    }
+    if authorization_document != expected_document:
+        _error(
+            errors,
+            "current v1.1 binding authorization document does not match the frozen binding",
+        )
+        return False
+    if not _current_initial_authorization_anchors_valid(None, errors):
+        return False
+    if _utc_now() > CURRENT_INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _revoke_current_initial_authorization_private_evidence(
+            "expiry",
+            root,
+            errors,
+        )
+        _error(
+            errors,
+            "current v1.1 binding authorization private evidence retention has expired",
+        )
+        return False
+    resource = _read_current_initial_authorization_private_evidence(errors)
+    if resource is None:
+        return False
+    private_evidence, target_name = resource
+    validation_errors: list[str] = []
+    valid = _current_initial_authorization_event_window_valid(
+        private_evidence,
+        authorization_document,
+        validation_errors,
+        credential_target_name=target_name,
+    )
+    if valid and not validation_errors:
+        valid = _current_initial_expiry_cleanup_trigger_valid(root, validation_errors)
+    if not valid or validation_errors:
+        nondestructive_source_failure = (
+            not valid
+            and bool(validation_errors)
+            and all(
+                item in NONDESTRUCTIVE_CURRENT_INITIAL_AUTHORIZATION_SOURCE_FAILURES
+                for item in validation_errors
+            )
+        )
+        errors.extend(validation_errors)
+        if not nondestructive_source_failure:
+            _delete_current_initial_authorization_private_resource(
+                resource,
+                "validation-failure",
+                root,
+                errors,
+            )
+        return False
+    if _utc_now() > CURRENT_INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _delete_current_initial_authorization_private_resource(
+            resource,
+            "expiry",
+            root,
+            errors,
+        )
+        _error(
+            errors,
+            "current v1.1 binding authorization private evidence retention has expired",
+        )
+        return False
+    return True
+
+
+def expire_current_initial_authorization_private_evidence(
+    root: Path, errors: list[str]
+) -> bool:
+    if _utc_now() < CURRENT_INITIAL_BINDING_AUTHORIZATION_EXPIRY_UTC:
+        _error(errors, "current v1.1 binding authorization expiry cleanup is not due")
+        return False
+    read_errors: list[str] = []
+    resource = _read_current_initial_authorization_private_evidence(read_errors)
+    if resource is None:
+        absence_errors: list[str] = []
+        if _current_initial_authorization_private_resource_absent(absence_errors):
+            return _remove_current_initial_expiry_cleanup_trigger(root, errors)
+        errors.extend(read_errors)
+        errors.extend(absence_errors)
+        return False
+    if not _current_initial_authorization_private_resource_identity_valid(
+        resource,
+        errors,
+    ):
+        return False
+    return _delete_current_initial_authorization_private_resource(
+        resource,
+        "expiry",
+        root,
+        errors,
+    )
+
+
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
-] = MappingProxyType({})
+] = MappingProxyType(
+    {
+        CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: (
+            _validate_current_initial_binding_authorization
+        )
+    }
+)
 
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...], bytes | None, int], bytes | None] | None
@@ -4066,6 +5055,13 @@ def _current_normative_profile_binding_history_valid(
                 errors,
                 "initial v1.1 frozen binding is not code-pinned to canonical history",
             )
+        elif not _current_initial_authorization_anchors_valid(
+            first_frozen.get("cohortActivation")
+            if isinstance(first_frozen.get("cohortActivation"), dict)
+            else None,
+            errors,
+        ):
+            pass
         elif current_state == "frozen" and allow_authorization and not errors:
             _binding_authorization_valid(
                 root,
@@ -4075,6 +5071,14 @@ def _current_normative_profile_binding_history_valid(
                 anchor_sha256,
                 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
                 errors,
+                source_window_boundary={
+                    "environmentAttributionContractSha256": (
+                        EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+                    ),
+                    "environmentManifestBoundary": (
+                        EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
+                    ),
+                },
             )
     return len(errors) == before
 
@@ -4989,10 +5993,8 @@ def _normative_profile_binding_valid(
         if binding_state == "revoked":
             if program.get("status") != "stopped":
                 _error(errors, "revoked v1.1 cohort requires a stopped program")
-            _error(
-                errors,
-                "revoked v1.1 private resource absence validator is not registered",
-            )
+            _current_initial_authorization_private_resource_absent(errors)
+            _current_initial_expiry_cleanup_trigger_absent(errors)
         elif binding_state == "frozen":
             if program.get("status") == "stopped":
                 _error(errors, "stopped v1.1 program requires its only cohort to be revoked")

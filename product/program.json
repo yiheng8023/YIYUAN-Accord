@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-freeze-authorization-validator",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -96,60 +96,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-freeze-authorization-validator",
-      "state": "active",
-      "correctionClass": "current-freeze-source-authorization-mechanism",
-      "observedProblem": "The current verifier can now recognize and irreversibly pin the reviewed v1.1 profile and cohort-protocol binding, but the current human-authorization validator identity and registry remain unavailable and every existing private-source validator is bound to stopped v1.0 generations. A v1.1 freeze would therefore fail closed even after an exact independent human authorization, while reusing the v1.0 private resource would violate the current authority and environment boundary.",
-      "hypothesis": "A dedicated inactive v1.1 first-freeze authorization validator contract, with a distinct current-user protected-resource namespace, versioned source commitments, exact retention and revocation semantics, and null execution-specific anchors until a later authorized freeze, can make the current activation route verifiable without reading or creating private evidence, activating a cohort, or weakening the freeze chronology.",
-      "falsifier": "Stop and remove the mechanism if it reuses a v1.0 credential, source event, commitment or activation identity; accepts an authorization before an exact committed freeze; reads or creates a private resource while the v1.1 binding is unfrozen; embeds a private locator or value in public state; permits a missing, ambiguous, changed, expired or post-revocation source to pass; performs cohort activation; adds an acceptance threshold; or cannot remain fail-closed with all execution-specific anchors unset.",
-      "stopCondition": "Stop after one exact v1.1-only authorization validator seam and protected-resource lifecycle contract are code-owned, unit tests prove v1.0 reuse, unset anchors, malformed private evidence, source drift, expiry and revocation fail closed, the live unfrozen program performs no private read and remains valid with O1-O5 at 0/5, canonical and product tests pass, no private resource or consumer is created or changed, all task-created residue is removed, and this outcome-neutral increment exits the current graph.",
-      "acceptanceIds": [
-        "G1",
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v11-freeze-authorization-validator",
-          "state": "active",
-          "acceptanceIds": [
-            "G1",
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "one inactive v1.1-only first-freeze source-authorization validator contract",
-            "one fail-closed current-user protected-resource lifecycle seam with unset execution anchors",
-            "focused regression coverage proving no v1.0 reuse, no unfrozen private read and no cohort activation"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

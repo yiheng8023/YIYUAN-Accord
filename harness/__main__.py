@@ -6,7 +6,10 @@ from pathlib import Path
 import sys
 
 from .codex_reference import session_start_hook_output
-from .control import verify_product
+from .control import (
+    expire_current_initial_authorization_private_evidence,
+    verify_product,
+)
 
 MAX_HOOK_INPUT_CHARACTERS = 65_536
 
@@ -29,6 +32,10 @@ def main() -> int:
     verify_parser.add_argument("--json", action="store_true")
     codex_parser = subparsers.add_parser("codex-session-start")
     codex_parser.add_argument("--root", type=Path, default=Path.cwd())
+    expiry_parser = subparsers.add_parser(
+        "expire-current-cohort-private-evidence"
+    )
+    expiry_parser.add_argument("--root", type=Path, default=Path.cwd())
     args = parser.parse_args()
 
     if args.command == "codex-session-start":
@@ -41,6 +48,23 @@ def main() -> int:
             )
         )
         return 0
+
+    if args.command == "expire-current-cohort-private-evidence":
+        errors: list[str] = []
+        if expire_current_initial_authorization_private_evidence(
+            args.root,
+            errors,
+        ):
+            print("current v1.1 cohort private evidence expiry cleanup verified")
+            return 0
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return (
+            4
+            if errors
+            == ["current v1.1 binding authorization expiry cleanup is not due"]
+            else 3
+        )
 
     report = verify_product(args.root)
     if args.json:
