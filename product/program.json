@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v11-terminal-tag-remote-query",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,62 +105,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v11-terminal-tag-remote-query",
-      "state": "active",
-      "correctionClass": "terminal-annotated-tag-remote-protocol-repair",
-      "observedProblem": "The terminal gate queries the public remote with only the exact annotated tag ref but then requires both the tag object and its peeled commit ref. Git ls-remote returns only the requested exact ref, so a real annotated GitHub tag cannot satisfy the current comparison even when local and remote objects are correct; mocked tests currently synthesize the missing peeled line.",
-      "hypothesis": "Querying the exact ordinary and peeled tag refs together, while retaining the exact two-entry comparison, will make a legitimate annotated remote tag verifiable and keep mismatched or extra remote identities fail-closed.",
-      "falsifier": "Stop or revise if the repair relaxes the exact remote/tag/object/peeled-commit identity, changes publication authority or performs a release, requires network access in the deterministic regression, alters frozen cohort or acceptance thresholds, creates outcome evidence, or produces any O1-O5 progress.",
-      "stopCondition": "Stop after the terminal gate requests both exact tag refs, a real local bare-remote protocol regression proves Git returns the tag object and peeled commit only when both patterns are requested, existing mismatch regressions remain fail-closed, verifier and full product tests pass with O1-O5 at 0/5, all task-created residue is absent, and this outcome-neutral increment exits the graph.",
-      "acceptanceIds": [
-        "G2",
-        "G3",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [],
-        "privateResourceDispositions": [
-          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
-          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v11-terminal-tag-remote-query",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G3",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "causal-planning",
-            "local-verification",
-            "progress-accounting",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "exact ordinary-and-peeled remote tag query",
-            "local bare-remote Git protocol regression",
-            "preserved remote identity mismatch rejection",
-            "consistent public status and adapter runtime pin"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
