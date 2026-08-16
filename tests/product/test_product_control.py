@@ -1279,7 +1279,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(protocol["claimLimits"])
 
     def test_v11_profile_candidate_is_distinct_adaptive_and_non_authoritative(self) -> None:
-        program = self.read_json("product/program.json")
+        program = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )
         profile_path = ROOT / control.EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR
         protocol_path = (
             ROOT / control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
@@ -1423,6 +1425,27 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         private_read.assert_not_called()
+
+    def test_v11_materialization_dispositions_are_exact_and_code_owned(self) -> None:
+        self.assertIn(
+            control.CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
+            control.ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS,
+        )
+        self.assertIn(
+            control.CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
+            control.ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS,
+        )
+        live_program = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )
+        cleanup = live_program["increments"][0]["cleanupBoundary"]
+        self.assertEqual(
+            cleanup["privateResourceDispositions"],
+            [
+                control.CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
+                control.CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
+            ],
+        )
 
     def test_v11_authorizer_fails_before_private_read_with_unset_or_wrong_boundary(
         self,

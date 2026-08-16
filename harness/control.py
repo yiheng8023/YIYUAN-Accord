@@ -575,6 +575,16 @@ EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY = (
     "task-specific-pre-registration-manifests-under-current-acceptance-contract-"
     "no-cohort-global-static-manifest"
 )
+CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION = (
+    "v1.1-cohort-private-evidence:windows-current-user-protected;"
+    "retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;"
+    "delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure"
+)
+CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION = (
+    "v1.1-expiry-trigger:windows-current-user-s4u;"
+    "one-time-2026-12-31T23:59:59+08:00;"
+    "remove-on-private-resource-destruction-or-expiry"
+)
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
     "kind",
@@ -948,6 +958,8 @@ ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
     "v1-successor-expiry-trigger:windows-current-user-s4u;"
     "one-time-2026-12-31T23:59:59+08:00;"
     "remove-on-accepted-stopped-or-private-resource-destruction",
+    CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
+    CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
 }
 PROGRAM_STATES = {"active", "ready", "stopped", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
