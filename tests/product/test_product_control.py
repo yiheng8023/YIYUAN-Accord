@@ -937,8 +937,8 @@ class ProductControlTests(unittest.TestCase):
             "surfaceIdentity": activation["surfaceIdentity"],
             "cohortKeyIdentity": activation["keyIdentity"],
             "cohortKeyFingerprint": activation["keyFingerprint"],
-            "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
-            "hmacDomain": control.EXPECTED_HMAC_DOMAIN,
+            "sourceMessageRule": activation["sourceMessageRule"],
+            "hmacDomain": activation["hmacDomain"],
             "cursorWindowStartCommitment": cursor_start,
             "naturalDemandCursorCommitment": natural_cursor,
             "previousRegistrationTaskIdentity": previous_task,
@@ -948,7 +948,7 @@ class ProductControlTests(unittest.TestCase):
             "bindingScheme": control.EXPECTED_PRIVATE_BINDING_SCHEME,
             "sourceKind": "fixture-source",
             "sourceCommitment": source_commitment,
-            "sourceMessageRule": control.EXPECTED_SOURCE_MESSAGE_RULE,
+            "sourceMessageRule": activation["sourceMessageRule"],
             "cohortKeyIdentity": activation["keyIdentity"],
             "cohortKeyFingerprint": activation["keyFingerprint"],
         }
@@ -4864,6 +4864,67 @@ class ProductControlTests(unittest.TestCase):
 
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
+
+    def test_current_registration_uses_frozen_v11_source_domain(self) -> None:
+        activation = {
+            "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
+            "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
+            "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
+            "keyFingerprint": "sha256:" + "4" * 64,
+            "sourceMessageRule": control.EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
+            "hmacDomain": control.EXPECTED_CURRENT_HMAC_DOMAIN,
+            "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
+            "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
+        }
+        cursor_start = activation["activationCursorCommitment"]
+        values = {
+            "enrollmentSurfaceAndCursor": {
+                "surfaceIdentity": activation["surfaceIdentity"],
+                "cohortKeyIdentity": activation["keyIdentity"],
+                "cohortKeyFingerprint": activation["keyFingerprint"],
+                "sourceMessageRule": activation["sourceMessageRule"],
+                "hmacDomain": activation["hmacDomain"],
+                "cursorWindowStartCommitment": cursor_start,
+                "naturalDemandCursorCommitment": "hmac-sha256:" + "a" * 64,
+                "previousRegistrationTaskIdentity": "cohort-activation",
+                "surfaceTransition": {
+                    "state": "cohort-activation",
+                    "sourceSurfaceIdentity": "none",
+                    "sourceWindowStartCommitment": cursor_start,
+                    "sourceFinalCursorCommitment": cursor_start,
+                    "cause": "source-authorized-first-freeze-activation",
+                },
+            },
+            "naturalDemandEventAndPrivateBinding": {
+                "bindingScheme": control.EXPECTED_PRIVATE_BINDING_SCHEME,
+                "sourceKind": "codex-rollout-user-event-v1",
+                "sourceCommitment": "hmac-sha256:" + "b" * 64,
+                "sourceMessageRule": activation["sourceMessageRule"],
+                "cohortKeyIdentity": activation["keyIdentity"],
+                "cohortKeyFingerprint": activation["keyFingerprint"],
+            },
+        }
+        self.assertNotEqual(
+            activation["sourceMessageRule"], control.EXPECTED_SOURCE_MESSAGE_RULE
+        )
+        self.assertNotEqual(activation["hmacDomain"], control.EXPECTED_HMAC_DOMAIN)
+        self.assertIsNotNone(
+            control._registration_cohort_values_valid(values, activation)
+        )
+
+        predecessor_values = deepcopy(values)
+        predecessor_values["enrollmentSurfaceAndCursor"][
+            "sourceMessageRule"
+        ] = control.EXPECTED_SOURCE_MESSAGE_RULE
+        predecessor_values["enrollmentSurfaceAndCursor"][
+            "hmacDomain"
+        ] = control.EXPECTED_HMAC_DOMAIN
+        predecessor_values["naturalDemandEventAndPrivateBinding"][
+            "sourceMessageRule"
+        ] = control.EXPECTED_SOURCE_MESSAGE_RULE
+        self.assertIsNone(
+            control._registration_cohort_values_valid(predecessor_values, activation)
+        )
 
     def test_task_registration_rejects_unrecognized_scenario_class(self) -> None:
         def activate_o1(value: dict) -> None:

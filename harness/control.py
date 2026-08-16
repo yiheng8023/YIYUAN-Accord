@@ -6686,8 +6686,9 @@ def _registration_cohort_values_valid(
         and isinstance(key_fingerprint, str)
         and re.fullmatch(r"sha256:[0-9a-f]{64}", key_fingerprint) is not None
         and key_fingerprint == activation.get("keyFingerprint")
-        and enrollment.get("sourceMessageRule") == EXPECTED_SOURCE_MESSAGE_RULE
-        and enrollment.get("hmacDomain") == EXPECTED_HMAC_DOMAIN
+        and enrollment.get("sourceMessageRule")
+        == activation.get("sourceMessageRule")
+        and enrollment.get("hmacDomain") == activation.get("hmacDomain")
         and isinstance(cursor_start, str)
         and re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", cursor_start) is not None
         and isinstance(natural_cursor, str)
@@ -6706,7 +6707,8 @@ def _registration_cohort_values_valid(
             r"hmac-sha256:[0-9a-f]{64}", private_binding["sourceCommitment"]
         )
         is not None
-        and private_binding.get("sourceMessageRule") == EXPECTED_SOURCE_MESSAGE_RULE
+        and private_binding.get("sourceMessageRule")
+        == activation.get("sourceMessageRule")
         and private_binding.get("cohortKeyIdentity") == key_identity
         and private_binding.get("cohortKeyFingerprint") == key_fingerprint
     )
@@ -7182,7 +7184,7 @@ def _task_registration_guardrail(
         and isinstance(source_capture, dict)
         and set(source_capture) == SOURCE_CAPTURE_FIELDS
         and source_capture.get("enrollmentSurfaceRule")
-        == EXPECTED_COHORT_PROTOCOL_RULES["enrollmentSurfaceRule"]
+        == EXPECTED_CURRENT_COHORT_PROTOCOL_RULES["enrollmentSurfaceRule"]
         and source_capture.get("cursorWindowStartsAfter")
         == "surface-activation-or-prior-registration"
         and source_capture.get("naturalDemandObservedBefore")

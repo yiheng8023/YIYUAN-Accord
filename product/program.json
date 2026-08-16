@@ -6,8 +6,8 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v11-registration-domain-alignment",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
@@ -105,5 +105,62 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v11-registration-domain-alignment",
+      "state": "active",
+      "correctionClass": "current-cohort-registration-domain-alignment",
+      "observedProblem": "The current frozen v1.1 cohort activation and protocol use the v1.1 source-message rule and HMAC domain, but the code-owned task-registration guard still compares enrollment and private-binding values with predecessor v1 constants. A legitimate first v1.1 registration would therefore fail while predecessor v1 values could pass, and fixture helpers currently reproduce the wrong domain.",
+      "hypothesis": "Making registration validation derive the source-message rule and HMAC domain from the already-validated frozen activation, and making the current source-capture rule use the current protocol binding, will accept only the authorized v1.1 domain without hard-coding a future version or changing the frozen cohort.",
+      "falsifier": "Stop or revise if the repair changes frozen profile or protocol bytes, restarts or reauthorizes the cohort, creates a natural task or result validator, weakens registration chronology or deduplication, accepts predecessor v1 values against the current activation, changes an outcome threshold, or produces any O1-O5 progress.",
+      "stopCondition": "Stop after current v1.1 registration cohort values pass, predecessor v1 values fail against the current activation, the fixture route no longer masks the mismatch, canonical verifier and full product tests pass with O1-O5 at 0/5, all task-created residue is absent, and this outcome-neutral increment exits the current graph.",
+      "acceptanceIds": [
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [],
+        "privateResourceDispositions": [
+          "v1.1-cohort-private-evidence:windows-current-user-protected;retain-through-live-v1.1-claim-no-later-than-2026-12-31T23:59:59+08:00;delete-and-revoke-on-withdrawal-expiry-stop-or-deterministic-validation-failure",
+          "v1.1-expiry-trigger:windows-current-user-s4u;one-time-2026-12-31T23:59:59+08:00;remove-on-private-resource-destruction-or-expiry"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v11-registration-domain-alignment",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "version-neutral registration validation bound to the frozen activation",
+            "current-v1.1-pass and predecessor-v1-fail regressions",
+            "current protocol source-capture alignment",
+            "consistent public status and adapter runtime pin"
+          ]
+        }
+      ]
+    }
+  ]
 }

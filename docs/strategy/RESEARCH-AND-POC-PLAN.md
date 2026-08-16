@@ -19,9 +19,9 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.1 is the ready zero-outcome environment-attributed terminal-product proof;
-terminal release authorization is aligned with the already-bound form-neutral
-and cross-operating-system O5 scope before the first task registration.
+v1.1 is the active zero-outcome environment-attributed terminal-product proof;
+its sole current increment aligns task registration with the already-authorized
+v1.1 cohort source-message rule and HMAC domain.
 Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
 and v1.0 remains an immutable stopped attempt, neither of which can be
 inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
