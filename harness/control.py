@@ -313,10 +313,13 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "frozenAtRevision": None,
     "cohortActivation": None,
 }
-CURRENT_PROFILE_FREEZE_ENABLED = False
+CURRENT_PROFILE_FREEZE_ENABLED = True
 _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY = False
 NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
     "910ac016f1e5963450e3cfc46f5056ab0a6b04d7"
+)
+CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
+    "d05bb43a445a60a9f6b409dfd60620b954ed6af2"
 )
 MAX_NORMATIVE_BINDING_HISTORY_REVISIONS = 64
 MAX_NORMATIVE_BINDING_HISTORY_BYTES = 4 * 1_048_576
@@ -352,6 +355,16 @@ EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR = (
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
     "3f40b79243199a562c94b92f940e09ed3781d247ce03ab63dcd2848b5974f7fc"
 )
+EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION = (
+    "d1bc7ea2063455f1930a5fcddbe6ed6707643c0c"
+)
+# A first v1.1 freeze is committed before its own revision and canonical
+# binding digest can be pinned by the next code revision. Until those anchors
+# and an independent source validator are registered, any attempted frozen
+# program fails closed while the live unfrozen program remains valid.
+EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
+EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
+EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
 # Immutable commit that contains the reviewed profile and cohort-protocol bytes.
 EXPECTED_V1_PROFILE_ARTIFACT_REVISION: str | None = (
     "502c4ff7edfc6307ea5469bcb81089e13612a24a"
@@ -561,6 +574,10 @@ EXPECTED_SOURCE_MESSAGE_RULE = (
     "domain-surface-source-native-immutable-event-identity-v1"
 )
 EXPECTED_HMAC_DOMAIN = "agent-autonomy-harness/cohort-source-event/v1"
+EXPECTED_CURRENT_SOURCE_MESSAGE_RULE = (
+    "domain-surface-source-native-immutable-event-identity-v1.1"
+)
+EXPECTED_CURRENT_HMAC_DOMAIN = "agent-autonomy-harness/cohort-source-event/v1.1"
 EXPECTED_SURFACE_TRANSITION_RULE = (
     "pre-demand-causal-trigger-source-final-cursor-destination-verified-or-stop"
 )
@@ -597,6 +614,32 @@ COHORT_PROTOCOL_FIELDS = {
     "measurementEventRule",
     "claimLimits",
 }
+CURRENT_COHORT_PROTOCOL_FIELDS = {
+    "schema",
+    "id",
+    "profileIdentity",
+    "cohortProtocolIdentity",
+    "eligibilityRule",
+    "exclusionRule",
+    "taskIdentityRule",
+    "scenarioCoverageRule",
+    "enrollmentSurfaceRule",
+    "activationRule",
+    "enrollmentCursorRule",
+    "sourceMessageRule",
+    "hmacDomain",
+    "surfaceTransitionRule",
+    "keyRetentionRule",
+    "environmentAttributionRule",
+    "versionResolutionRule",
+    "humanInterventionRule",
+    "naturalDemandEventRule",
+    "enrollmentOrder",
+    "stopRule",
+    "failedOrMissingSampleDisposition",
+    "measurementEventRule",
+    "claimLimits",
+}
 EXPECTED_COHORT_SCENARIO_CLASSES = (
     "zero-tool-knowledge-new-intake",
     "existing-project-continuation",
@@ -620,6 +663,29 @@ EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
         "hmacDomain": EXPECTED_HMAC_DOMAIN,
         "surfaceTransitionRule": EXPECTED_SURFACE_TRANSITION_RULE,
         "keyRetentionRule": EXPECTED_KEY_RETENTION_RULE,
+        "naturalDemandEventRule": "source-native-event-after-authorized-activation-before-registration-required",
+        "enrollmentOrder": "source-native-cursor-then-strict-git-registration-ancestry",
+        "stopRule": "earliest-prefix-satisfying-current-acceptance",
+        "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
+        "measurementEventRule": "task-bound-measurement-event-after-registration-required",
+    }
+)
+EXPECTED_CURRENT_COHORT_PROTOCOL_RULES = MappingProxyType(
+    {
+        "eligibilityRule": "all-eligible-demands-after-source-verified-current-freeze-authorization",
+        "exclusionRule": "source-fact-only-no-postmeasurement-exclusion",
+        "taskIdentityRule": "random-public-id-cohort-keyed-hmac-source-binding-validator-dedup",
+        "scenarioCoverageRule": "current-acceptance-owned-no-protocol-defined-scenario-or-environment-strata",
+        "enrollmentSurfaceRule": "single-active-source-native-ordered-carrier",
+        "activationRule": "current-freeze-binding-then-source-verified-exact-human-authorization-before-demand",
+        "enrollmentCursorRule": "activation-or-prior-registration-cursor-no-eligible-gap",
+        "sourceMessageRule": EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
+        "hmacDomain": EXPECTED_CURRENT_HMAC_DOMAIN,
+        "surfaceTransitionRule": EXPECTED_SURFACE_TRANSITION_RULE,
+        "keyRetentionRule": EXPECTED_KEY_RETENTION_RULE,
+        "environmentAttributionRule": "bind-current-acceptance-contract-starting-manifest-authority-source-envelope-and-task-time-deltas",
+        "versionResolutionRule": "per-decision-current-source-exact-execution-identity-before-use-or-stop",
+        "humanInterventionRule": "record-all-human-actions-zero-prohibited-agent-work-transfer-minimal-guided-verified-human-only",
         "naturalDemandEventRule": "source-native-event-after-authorized-activation-before-registration-required",
         "enrollmentOrder": "source-native-cursor-then-strict-git-registration-ancestry",
         "stopRule": "earliest-prefix-satisfying-current-acceptance",
@@ -3798,6 +3864,221 @@ def _normative_profile_binding_history_valid(
     return len(errors) == before
 
 
+def _current_normative_profile_binding_history_valid(
+    root: Path,
+    current_binding: Mapping[str, Any],
+    errors: list[str],
+    *,
+    allow_authorization: bool = True,
+) -> bool:
+    """Enforce one irreversible v1.1 generation from the current authority floor."""
+
+    before = len(errors)
+    inside_worktree = _evidence_git(root, "rev-parse", "--is-inside-work-tree")
+    if inside_worktree is None:
+        _error(errors, "current normative profile binding history cannot be verified")
+        return False
+    if (
+        _evidence_git(
+            root,
+            "merge-base",
+            "--is-ancestor",
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION,
+            "HEAD",
+        )
+        is None
+    ):
+        _error(errors, "current normative profile binding history floor is unavailable")
+        return False
+    revisions_raw = _evidence_git(
+        root,
+        "log",
+        "--first-parent",
+        "--topo-order",
+        "--reverse",
+        f"--max-count={MAX_NORMATIVE_BINDING_HISTORY_REVISIONS + 1}",
+        "--format=%H",
+        f"{CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION}..HEAD",
+        "--",
+        "product/program.json",
+    )
+    if revisions_raw is None:
+        _error(errors, "current normative profile binding history cannot be enumerated")
+        return False
+    try:
+        revisions = revisions_raw.decode("ascii").splitlines()
+    except UnicodeError:
+        _error(errors, "current normative profile binding history cannot be enumerated")
+        return False
+    if len(revisions) > MAX_NORMATIVE_BINDING_HISTORY_REVISIONS:
+        _error(errors, "current normative profile binding history exceeds its inspection bound")
+        return False
+    revisions.insert(0, CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION)
+    if any(
+        re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision) is None
+        for revision in revisions
+    ):
+        _error(errors, "current normative profile binding history contains an invalid revision")
+        return False
+    batch_request = b"".join(
+        f"{revision}:product/program.json\n".encode("ascii")
+        for revision in revisions
+    )
+    batch_raw = _evidence_git(
+        root,
+        "cat-file",
+        "--batch",
+        stdin_data=batch_request,
+        max_output_bytes=MAX_NORMATIVE_BINDING_HISTORY_BYTES,
+    )
+    if batch_raw is None:
+        _error(errors, "current normative profile binding history cannot be inspected")
+        return False
+
+    expected_program_id = f"harness-product-program-{CURRENT_RELEASE}"
+    first_frozen: dict[str, Any] | None = None
+    first_frozen_revision: str | None = None
+    binding_history_started = False
+    revoked = False
+    cursor = 0
+    for revision in revisions:
+        header_end = batch_raw.find(b"\n", cursor)
+        if header_end < 0:
+            _error(errors, "current normative profile binding history cannot be inspected")
+            return False
+        header = batch_raw[cursor:header_end].split()
+        cursor = header_end + 1
+        try:
+            object_size = int(header[2].decode("ascii")) if len(header) == 3 else -1
+        except (UnicodeError, ValueError):
+            object_size = -1
+        if (
+            len(header) != 3
+            or header[1] != b"blob"
+            or object_size < 0
+            or object_size > MAX_DOCUMENT_BYTES
+            or cursor + object_size >= len(batch_raw)
+            or batch_raw[cursor + object_size : cursor + object_size + 1] != b"\n"
+        ):
+            _error(errors, "current normative profile binding history cannot be inspected")
+            return False
+        program_raw = batch_raw[cursor : cursor + object_size]
+        cursor += object_size + 1
+        historical_program = _parse_json_object_bytes(
+            program_raw,
+            f"historical product/program.json at {revision}",
+            errors,
+        )
+        if historical_program.get("id") != expected_program_id:
+            if binding_history_started:
+                _error(errors, "v1.1 normative profile binding history is incomplete")
+                return False
+            continue
+        historical_binding = historical_program.get("normativeProfileBinding")
+        if not isinstance(historical_binding, dict) or set(
+            historical_binding
+        ) != NORMATIVE_PROFILE_BINDING_FIELDS:
+            if binding_history_started:
+                _error(errors, "v1.1 normative profile binding history is incomplete")
+                return False
+            continue
+        binding_history_started = True
+        binding_state = historical_binding.get("state")
+        if binding_state == "unfrozen":
+            if first_frozen is not None:
+                _error(errors, "frozen v1.1 normative profile binding cannot return to unfrozen")
+                return False
+            continue
+        if binding_state == "frozen":
+            if first_frozen is None:
+                first_frozen = dict(historical_binding)
+                first_frozen_revision = revision
+                revoked = False
+                continue
+            if revoked:
+                _error(errors, "revoked v1.1 cohort cannot open a successor generation")
+                return False
+            if not _same_typed_value(historical_binding, first_frozen):
+                _error(errors, "frozen v1.1 normative profile binding changed")
+                return False
+            continue
+        if binding_state == "revoked":
+            if first_frozen is None or not _binding_matches_generation(
+                historical_binding, first_frozen
+            ):
+                _error(errors, "revoked v1.1 binding must preserve its only generation")
+                return False
+            revoked = True
+            continue
+        _error(errors, "v1.1 normative profile binding history contains an invalid state")
+        return False
+    if cursor != len(batch_raw):
+        _error(errors, "current normative profile binding history cannot be inspected")
+        return False
+
+    current_state = current_binding.get("state")
+    if current_state == "unfrozen":
+        if first_frozen is not None:
+            _error(errors, "frozen v1.1 normative profile binding cannot return to unfrozen")
+    elif current_state == "frozen":
+        if first_frozen is None:
+            _error(
+                errors,
+                "frozen v1.1 normative profile binding must exist in committed first-parent history",
+            )
+        elif revoked:
+            _error(errors, "revoked v1.1 cohort cannot open a successor generation")
+        elif not _same_typed_value(current_binding, first_frozen):
+            _error(errors, "current v1.1 binding differs from its only generation")
+    elif current_state == "revoked":
+        if first_frozen is None or not _binding_matches_generation(
+            current_binding, first_frozen
+        ):
+            _error(errors, "revoked v1.1 binding must preserve its only generation")
+        revoked = True
+    else:
+        _error(errors, "v1.1 normative profile binding history contains an invalid state")
+
+    if first_frozen is not None:
+        canonical = json.dumps(
+            first_frozen,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        anchor_revision = EXPECTED_CURRENT_INITIAL_BINDING_REVISION
+        anchor_sha256 = EXPECTED_CURRENT_INITIAL_BINDING_SHA256
+        anchor_valid = (
+            isinstance(anchor_revision, str)
+            and re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", anchor_revision)
+            is not None
+            and isinstance(anchor_sha256, str)
+            and re.fullmatch(r"[0-9a-f]{64}", anchor_sha256) is not None
+            and first_frozen_revision == anchor_revision
+            and _evidence_git(
+                root, "merge-base", "--is-ancestor", anchor_revision, "HEAD"
+            )
+            is not None
+            and hashlib.sha256(canonical).hexdigest() == anchor_sha256
+        )
+        if not anchor_valid:
+            _error(
+                errors,
+                "initial v1.1 frozen binding is not code-pinned to canonical history",
+            )
+        elif current_state == "frozen" and allow_authorization and not errors:
+            _binding_authorization_valid(
+                root,
+                "current v1.1",
+                "v1.1-normative-profile-binding-authorization",
+                anchor_revision,
+                anchor_sha256,
+                EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+                errors,
+            )
+    return len(errors) == before
+
+
 def _strict_git_ancestor(root: Path, ancestor: Any, descendant: Any) -> bool:
     if (
         not isinstance(ancestor, str)
@@ -4498,6 +4779,31 @@ def _cohort_activation_valid(value: Any) -> bool:
     )
 
 
+def _current_cohort_activation_valid(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == COHORT_ACTIVATION_FIELDS
+        and isinstance(value.get("surfaceIdentity"), str)
+        and PUBLIC_SURFACE_IDENTITY_PATTERN.fullmatch(value["surfaceIdentity"])
+        is not None
+        and isinstance(value.get("activationCursorCommitment"), str)
+        and SHA256_COMMITMENT_PATTERN.fullmatch(value["activationCursorCommitment"])
+        is not None
+        and value["activationCursorCommitment"].startswith("hmac-sha256:")
+        and isinstance(value.get("keyIdentity"), str)
+        and PUBLIC_COHORT_KEY_IDENTITY_PATTERN.fullmatch(value["keyIdentity"])
+        is not None
+        and isinstance(value.get("keyFingerprint"), str)
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", value["keyFingerprint"])
+        is not None
+        and value.get("sourceMessageRule") == EXPECTED_CURRENT_SOURCE_MESSAGE_RULE
+        and value.get("hmacDomain") == EXPECTED_CURRENT_HMAC_DOMAIN
+        and value.get("surfaceTransitionRule")
+        == EXPECTED_SURFACE_TRANSITION_RULE
+        and value.get("keyRetentionRule") == EXPECTED_KEY_RETENTION_RULE
+    )
+
+
 def _v1_candidate_artifacts_valid(root: Path, errors: list[str]) -> bool:
     before = len(errors)
     expected = (
@@ -4559,6 +4865,97 @@ def _current_profile_candidate_artifacts_valid(
     return len(errors) == before
 
 
+def _current_profile_binding_material_valid(
+    root: Path, binding: Mapping[str, Any], errors: list[str]
+) -> bool:
+    before = len(errors)
+    state = binding.get("state")
+    locator = _relative_locator(binding.get("locator"))
+    profile_identity = binding.get("profileIdentity")
+    profile_sha256 = binding.get("sha256")
+    protocol_identity = binding.get("cohortProtocolIdentity")
+    protocol_locator = _relative_locator(binding.get("cohortProtocolLocator"))
+    protocol_sha256 = binding.get("cohortProtocolSha256")
+    artifact_revision = binding.get("frozenAtRevision")
+    if (
+        state not in {"frozen", "revoked"}
+        or profile_identity != EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY
+        or locator != EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR
+        or profile_sha256 != EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256
+        or protocol_identity
+        != EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY
+        or protocol_locator
+        != EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
+        or protocol_sha256
+        != EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256
+        or artifact_revision != EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION
+        or not _current_cohort_activation_valid(binding.get("cohortActivation"))
+    ):
+        _error(errors, "frozen normative profile binding is not the code-owned v1.1 candidate")
+        return False
+
+    profile_path = _inside_root(root, locator, errors, "v1.1 normative profile")
+    if profile_path is None:
+        return False
+    profile_raw = _read_bounded_bytes(
+        profile_path, f"v1.1 normative profile {locator}", errors
+    )
+    if profile_raw is None:
+        return False
+    if (
+        hashlib.sha256(profile_raw.replace(b"\r\n", b"\n")).hexdigest()
+        != profile_sha256
+        or not _committed_blob(root, artifact_revision, locator, profile_sha256)
+    ):
+        _error(errors, "frozen v1.1 normative profile identity or source revision mismatch")
+
+    protocol_path = _inside_root(
+        root, protocol_locator, errors, "v1.1 cohort protocol"
+    )
+    if protocol_path is None:
+        return False
+    protocol_raw = _read_bounded_bytes(
+        protocol_path,
+        f"v1.1 cohort protocol {protocol_locator}",
+        errors,
+    )
+    if protocol_raw is None:
+        return False
+    if (
+        hashlib.sha256(protocol_raw.replace(b"\r\n", b"\n")).hexdigest()
+        != protocol_sha256
+        or not _committed_blob(
+            root,
+            artifact_revision,
+            protocol_locator,
+            protocol_sha256,
+        )
+    ):
+        _error(errors, "frozen v1.1 cohort protocol identity or source revision mismatch")
+        return len(errors) == before
+    protocol = _parse_json_object_bytes(
+        protocol_raw,
+        f"v1.1 cohort protocol {protocol_locator}",
+        errors,
+    )
+    protocol_valid = (
+        set(protocol) == CURRENT_COHORT_PROTOCOL_FIELDS
+        and type(protocol.get("schema")) is int
+        and protocol.get("schema") == 1
+        and _nonempty_text(protocol.get("id"))
+        and protocol.get("profileIdentity") == profile_identity
+        and protocol.get("cohortProtocolIdentity") == protocol_identity
+        and all(
+            protocol.get(field) == expected
+            for field, expected in EXPECTED_CURRENT_COHORT_PROTOCOL_RULES.items()
+        )
+        and _string_list(protocol.get("claimLimits")) is not None
+    )
+    if not protocol_valid:
+        _error(errors, "frozen v1.1 cohort protocol shape is invalid")
+    return len(errors) == before
+
+
 def _normative_profile_binding_valid(
     root: Path, program: dict[str, Any], errors: list[str]
 ) -> bool:
@@ -4567,22 +4964,43 @@ def _normative_profile_binding_valid(
     if not isinstance(binding, dict) or set(binding) != NORMATIVE_PROFILE_BINDING_FIELDS:
         _error(errors, "program normativeProfileBinding fields must match the code-owned schema")
         return False
-    if program.get("status") == "stopped":
-        _error(errors, "v1.1 current program cannot be stopped")
+    binding_state = binding.get("state")
     if binding.get("state") == "unfrozen":
-        _normative_profile_binding_history_valid(root, binding, errors)
+        if _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY:
+            _normative_profile_binding_history_valid(root, binding, errors)
+        else:
+            _current_normative_profile_binding_history_valid(root, binding, errors)
         if not _same_typed_value(binding, UNFROZEN_NORMATIVE_PROFILE_BINDING):
             _error(errors, "unfrozen normative profile binding must contain only null identities")
+        if program.get("status") == "stopped":
+            _error(errors, "stopped v1.1 program requires its only cohort to be revoked")
         return len(errors) == before
     if not CURRENT_PROFILE_FREEZE_ENABLED:
         _error(errors, "current normative profile freeze is not enabled")
         return False
     if not _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY:
-        _error(errors, "v1.1 normative profile freeze mechanism is not registered")
-        return False
+        material_valid = _current_profile_binding_material_valid(root, binding, errors)
+        _current_normative_profile_binding_history_valid(
+            root,
+            binding,
+            errors,
+            allow_authorization=material_valid and not errors,
+        )
+        if binding_state == "revoked":
+            if program.get("status") != "stopped":
+                _error(errors, "revoked v1.1 cohort requires a stopped program")
+            _error(
+                errors,
+                "revoked v1.1 private resource absence validator is not registered",
+            )
+        elif binding_state == "frozen":
+            if program.get("status") == "stopped":
+                _error(errors, "stopped v1.1 program requires its only cohort to be revoked")
+        else:
+            _error(errors, "program normative profile binding state must be unfrozen, frozen or revoked")
+        return len(errors) == before
     _normative_profile_binding_history_valid(root, binding, errors)
     _v1_candidate_artifacts_valid(root, errors)
-    binding_state = binding.get("state")
     if binding_state not in {"frozen", "revoked"}:
         _error(errors, "program normative profile binding state must be unfrozen, frozen or revoked")
         return False

@@ -1105,6 +1105,7 @@ class ProductControlTests(unittest.TestCase):
         with patch.multiple(
             control,
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
         ):
             return render_session_start_context(self.root, payload)
@@ -1145,6 +1146,7 @@ class ProductControlTests(unittest.TestCase):
         with patch.multiple(
             control,
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
         ):
             return render_claude_session_start_context(self.root, payload)
@@ -1176,7 +1178,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("can be inherited", v10["claimLimit"])
         self.assertEqual(live_program["priorRelease"]["release"], "v1.0")
         self.assertEqual(live_program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
-        self.assertFalse(control.CURRENT_PROFILE_FREEZE_ENABLED)
+        self.assertTrue(control.CURRENT_PROFILE_FREEZE_ENABLED)
         self.assertEqual(dict(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS), {})
 
     def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
@@ -1310,6 +1312,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("disable, downgrade, roll back, retire", profile_flat)
         self.assertIn("verifier enforces those authorities", profile_flat)
         self.assertEqual(protocol["schema"], 1)
+        self.assertEqual(set(protocol), control.CURRENT_COHORT_PROTOCOL_FIELDS)
         self.assertEqual(
             protocol["profileIdentity"],
             control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
@@ -1323,8 +1326,176 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("human-only", protocol["humanInterventionRule"])
         self.assertNotIn("strata", protocol)
         self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
+        for field, expected in control.EXPECTED_CURRENT_COHORT_PROTOCOL_RULES.items():
+            self.assertEqual(protocol[field], expected)
         criteria = self.read_json("product/acceptance.json")["criteria"][:5]
         self.assertFalse(any(item["assessment"] == "verified" for item in criteria))
+
+    def current_profile_binding(self) -> dict:
+        return {
+            "state": "frozen",
+            "profileIdentity": control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
+            "locator": control.EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR,
+            "sha256": control.EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256,
+            "cohortProtocolIdentity": control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
+            "cohortProtocolLocator": control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR,
+            "cohortProtocolSha256": control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256,
+            "frozenAtRevision": control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
+            "cohortActivation": {
+                "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
+                "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
+                "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
+                "keyFingerprint": "sha256:" + "4" * 64,
+                "sourceMessageRule": control.EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
+                "hmacDomain": control.EXPECTED_CURRENT_HMAC_DOMAIN,
+                "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
+                "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
+            },
+        }
+
+    def test_v11_frozen_material_accepts_only_the_exact_current_candidate(self) -> None:
+        binding = self.current_profile_binding()
+        errors: list[str] = []
+        self.assertTrue(
+            control._current_profile_binding_material_valid(ROOT, binding, errors),
+            errors,
+        )
+
+        binding["profileIdentity"] = control.EXPECTED_V1_PROFILE_IDENTITY
+        errors = []
+        self.assertFalse(
+            control._current_profile_binding_material_valid(ROOT, binding, errors)
+        )
+        self.assertIn(
+            "frozen normative profile binding is not the code-owned v1.1 candidate",
+            errors,
+        )
+
+    def test_v11_uncommitted_freeze_and_unpinned_freeze_fail_closed(self) -> None:
+        floor = self.initialize_fixture_repository()
+        binding = self.current_profile_binding()
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = binding
+        self.write_json("product/program.json", program)
+
+        with patch.object(
+            control,
+            "CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION",
+            floor,
+        ):
+            errors: list[str] = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn(
+            "frozen v1.1 normative profile binding must exist in committed first-parent history",
+            errors,
+        )
+
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture v1.1 freeze"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        with patch.multiple(
+            control,
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            EXPECTED_CURRENT_INITIAL_BINDING_REVISION=None,
+            EXPECTED_CURRENT_INITIAL_BINDING_SHA256=None,
+        ):
+            errors = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn(
+            "initial v1.1 frozen binding is not code-pinned to canonical history",
+            errors,
+        )
+
+    def test_v11_revocation_cannot_open_a_successor_generation(self) -> None:
+        floor = self.initialize_fixture_repository()
+        first = self.current_profile_binding()
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = first
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture v1.1 freeze"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        program["normativeProfileBinding"] = {**first, "state": "revoked"}
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture v1.1 revoke"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        successor = deepcopy(first)
+        successor["cohortActivation"]["surfaceIdentity"] = (
+            "enrollment-surface.public-v1:" + "5" * 32
+        )
+        program["normativeProfileBinding"] = successor
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture forbidden successor"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        with patch.object(
+            control,
+            "CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION",
+            floor,
+        ):
+            errors: list[str] = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, successor, errors
+                )
+            )
+        self.assertIn(
+            "revoked v1.1 cohort cannot open a successor generation",
+            errors,
+        )
 
     def test_v11_profile_candidate_identity_cannot_drift_before_freeze(self) -> None:
         protocol_relative = control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
@@ -1561,13 +1732,13 @@ class ProductControlTests(unittest.TestCase):
             control,
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=False,
-            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "v1.1 normative profile freeze mechanism is not registered",
+            "frozen normative profile binding is not the code-owned v1.1 candidate",
             report["errors"],
         )
 
@@ -1584,7 +1755,10 @@ class ProductControlTests(unittest.TestCase):
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
-        self.assertIn("v1.1 current program cannot be stopped", report["errors"])
+        self.assertIn(
+            "stopped v1.1 program requires its only cohort to be revoked",
+            report["errors"],
+        )
 
     def test_environment_attribution_contract_cannot_drift(self) -> None:
         self.mutate(
@@ -4199,14 +4373,13 @@ class ProductControlTests(unittest.TestCase):
         self.initialize_fixture_repository()
         with patch.multiple(
             control,
-            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION="f" * 40,
-            EXPECTED_V1_PROFILE_ARTIFACT_REVISION="f" * 40,
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION="f" * 40,
         ):
             report = verify_product(self.root)
 
         self.assertFalse(report["valid"])
         self.assertIn(
-            "normative profile binding history floor is unavailable",
+            "current normative profile binding history floor is unavailable",
             report["errors"],
         )
 
@@ -4543,14 +4716,14 @@ class ProductControlTests(unittest.TestCase):
         ).stdout.strip()
         with patch.multiple(
             control,
-            NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             MAX_NORMATIVE_BINDING_HISTORY_REVISIONS=2,
         ):
             report = verify_product(self.root)
 
         self.assertFalse(report["valid"])
         self.assertIn(
-            "normative profile binding history exceeds its inspection bound",
+            "current normative profile binding history exceeds its inspection bound",
             report["errors"],
         )
 
@@ -6875,7 +7048,10 @@ class ProductControlTests(unittest.TestCase):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
         self.assertEqual(report["completionState"], "in-progress")
-        self.assertIn("v1.1 current program cannot be stopped", report["errors"])
+        self.assertIn(
+            "stopped v1.1 program requires its only cohort to be revoked",
+            report["errors"],
+        )
 
     def test_obsolete_paused_program_state_is_rejected(self) -> None:
         self.mutate(
