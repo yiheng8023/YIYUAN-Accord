@@ -58,6 +58,11 @@ search surface, runtime, identity or authorization system, governance kernel,
 audit or provenance format, or evaluation mechanism influences a route, bind
 its exact source identity, version or commit, license or applicable terms,
 maturity, and reuse boundary through a source-bound as-of landscape check.
+Resolve the current suitable official or maintained source at each decision;
+bind the exact execution identity for that task, but do not turn one historical
+version into a permanent global lock. An unresolved mutable label such as
+`latest`, or material drift during execution, requires re-registration or an
+honest stop.
 Reuse or adapt a
 sufficient existing layer; compose only when integration is the remaining
 need; author only when evidence isolates a repeatable residual semantic gap.
@@ -91,7 +96,12 @@ isolated inactive `.tmp/` pool; a task-time discovery must also bind the actual
 capability gap. Planned gates are preconditions, not grants. Installation,
 enablement, accounts/OAuth, meaningful cost, execution, consumer projection,
 persistent activation, and new trust or data boundaries require a scoped user
-grant for the exact work and operations.
+grant for the exact work and operations. After demand reveals a need, the Agent
+performs every supported authorized mechanic. If the host or authority boundary
+reserves an action to the human, the Agent identifies it, explains and requests
+only the smallest exact step, verifies the resulting state, and resumes; it
+does not make the user discover the route, variable, syntax, recovery path, or
+cleanup.
 
 Do not infer installation, enablement, account connection, model dispatch,
 consumer mutation, publication, release, destructive cleanup, or a new trust
@@ -111,6 +121,23 @@ disproportionately process-heavy route.
 Capability catalogs and discovery channels are adaptive sources, not product
 authority. Do not turn one catalog, provider, host, manager, or current
 installation into the portable core or a standing user-learning requirement.
+
+Treat host/client version, model and provider, account or managed policy,
+instruction chain, consumer configuration, rules, Skills, plugins, Apps, MCP,
+Hooks, memory, managers, operating system, runtime, and tool/resource surfaces
+as explicit evaluation variables. Never assume another user shares the current
+maintainer's presets or that an unobservable surface is absent. For a measured
+Harness-effect comparison, follow the acceptance-owned environment contract:
+compare only pre-registered matched tasks with the same starting environment
+and authority-and-available-source envelope, make exact Harness activation the
+only planned initial route/configuration difference, and record later
+Agent-selected or human-authorized changes as treatment-mediated lifecycle
+deltas. The initial state is a starting condition, not a static capability
+ceiling. Keep unavoidable task differences explicit, limit the claim to
+matched observational evidence, and keep observed-native-minimum separate from
+user-configured evidence. Count all human actions in burden; classify a
+source-bound unavoidable human-only step separately from a prohibited transfer
+of Agent-owned work, which remains zero.
 
 Before applying a capability route, compare whether it adds a goal, input,
 deliverable, human round trip, authority, side effect, or acceptance

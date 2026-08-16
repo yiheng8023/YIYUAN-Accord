@@ -31,6 +31,9 @@ and manage capabilities, choose or operate code and conversation topology,
 recover from drift, merge work or conclusions, verify completion, archive or
 release carriers, and clean resources, without reducing intent fidelity,
 evidence quality, reversibility, or human control.
+Technically or authoritatively unavoidable human-only actions remain legitimate,
+but the Agent must detect the need, minimize and guide the exact step, verify it,
+and count it separately from prohibited transfer of Agent-owned work.
 
 Code volume, document count, test count, candidate count, inventory exposure,
 research breadth, and green fixtures are not substitutes for that result.
@@ -66,7 +69,10 @@ a collaboration wire protocol, generic human-tool schema, runtime, identity
 system, audit log, or provenance format. Before building any protocol, registry,
 gateway, search surface, runtime, governance kernel, evidence format, or
 evaluation mechanism, compare current source-bound external implementations by
-fixed version or commit, licence or applicable terms, maturity, and actual boundary. Reuse or thinly
+a bounded as-of source and bind the exact execution version, commit, or package
+identity, licence or applicable terms, maturity, and actual boundary. Re-resolve
+current suitable sources per decision rather than locking one historical version
+across tasks or executing an unresolved moving target. Reuse or thinly
 adapt a sufficient layer, compose only for an integration gap, and author only
 for a repeatable residual semantic gap. Owning more stack is not independence;
 preserving the quality contract across replaceable layers is.
@@ -98,13 +104,25 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   Only this outcome can establish the first bounded Agent-neutral portability
   claim.
 
-The v1.0 program in `product/program.json` and `product/acceptance.json` is a
-stopped zero-outcome terminal-product proof attempt. It preserves v0.2 as
-historical evidence, while any new current program must preserve or strengthen
-the requirements for sustained natural-task delivery,
+The current v1.1 program in `product/program.json` and
+`product/acceptance.json` is a ready, zero-outcome environment-attributed
+terminal-product proof. It preserves v0.2 as bounded historical calibration and
+v1.0 as an immutable stopped zero-outcome attempt. Current evidence must
+preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,
 proactive verified carrier transition, and reproducible live cross-host public
-release before the whole project can be called closed.
+release before the whole project can be called closed. Host, model, provider,
+instructions, account policy, configuration, Skills, plugins, Apps, MCP, Hooks,
+memory, managers, operating system, runtime, and tool/resource surfaces are
+explicit variables. Harness-specific value estimates use pre-registered
+matched tasks with the same starting environment and authority-and-available-
+source envelope; exact Harness activation is the only planned initial route/
+configuration difference. Later Agent-selected or human-authorized changes are
+attributed lifecycle deltas, unavoidable task differences remain explicit, and
+the claim stays observational. The initial state is not a static capability
+ceiling. Observed-native-minimum
+and user-configured evidence are separate strata, and unobservable state
+remains unknown.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as
@@ -158,7 +176,11 @@ evidence. A demonstrated gap triggers targeted comparison and governed
 addition; it is not treated as a reason to stop work or demand that the user
 design the tool route. Task-time discovery binds that gap and uses an isolated,
 finite, cleaned review pool; portfolio discovery binds the complete curation
-contract. Neither path silently grants live mutation.
+contract. Neither path silently grants live mutation. After authorization, the
+Agent performs every supported installation, configuration, activation,
+disablement, downgrade, rollback, retirement, release, and cleanup mechanic. A
+host-only human step is minimal, guided, verified, and retained in burden
+evidence.
 
 ## World-class quality target
 

@@ -17,13 +17,13 @@ increment names:
 Available tools, ecosystem novelty, inventory drift, a green fixture, or an
 interesting paper is not sufficient entry evidence.
 
-## Current program and historical v0.2 sequence
+## Current program and historical sequence
 
-v1.0 is a stopped zero-outcome terminal-product proof attempt. Its outcomes
-remain 0/5; v0.2 evidence remains immutable historical calibration and cannot
-be inherited. The stopped program cannot open another increment. Further
-research can enter product work only after one new current machine authority
-binds a causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
+v1.1 is the ready zero-outcome environment-attributed terminal-product proof.
+Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
+and v1.0 remains an immutable stopped attempt, neither of which can be
+inherited. Further research enters product work only when the current machine
+authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
 build a generic context runtime.
 
@@ -83,8 +83,8 @@ live installed-adapter value, clean-checkout release, or terminal proposition.
 No outcome-bearing A/B task should be manufactured merely to move the program.
 
 Natural-task evidence is required for outcome-bearing experimentation. Its
-absence does not block a live program, but it cannot reopen this stopped v1.0
-program. Under a new current authority, bounded
+absence does not block the ready v1.1 program and does not authorize fabricated
+measurement. Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
@@ -121,8 +121,14 @@ order:
    gap case that performs finite source-bound discovery through a channel not
    embedded as portable-core authority. Keep ecosystem breadth outside user
    cognition and standing context; end task exposure when the need ends, then
-   retain inactive, justify persistent activation, merge, replace, retire, or
-   expire each admitted route.
+   retain inactive, install/configure/enable/use only after the necessary grant,
+   disable, downgrade, roll back, justify persistent activation, merge, replace,
+   retire, or expire each admitted route. At each decision resolve the current
+   suitable official or maintained source from bounded as-of evidence and bind
+   the exact execution identity; do not lock one historical version across tasks
+   or execute an unresolved moving target. The Agent performs every supported
+   authorized mechanic. A technically or authoritatively human-only step is
+   minimal, guided, verified, and separately counted in burden evidence.
 4. **Methodology and open minimum quality-conformance profile.** Calibrate the
    same pre-registered candidate on the Codex reference host from repeated real
    behavior. Bind existing protocol, allocation, runtime,
@@ -161,10 +167,45 @@ portability, production, or release. Use the axes to sample risk and compare
 decision-relevant routes; never manufacture a complete Cartesian matrix.
 
 For the burden-transfer result, compare prospective real-task receipts with a
-source-bound historical or matched ad-hoc baseline. No baseline means no claim
-of reduction. The stopped v1.0 floor was the complete six-or-more-task O1 cohort,
-with each task bound to the pre-registered highest-priority eligible baseline;
-missing or incomparable baselines stop rather than pass.
+source-bound historical or matched ad-hoc baseline in the same environment
+class, starting task-relevant environment manifest, and authority-and-available-
+source envelope. Exact Harness activation is the only planned initial route/
+configuration difference; later Agent-selected or human-authorized capability
+and configuration changes are attributed lifecycle deltas. Unavoidable task
+differences remain pre-registered matching variables, so the claim is a bounded
+matched observational estimate rather than single-variable causation. The
+starting environment is not a static capability ceiling: task-time adaptation is
+allowed only through the pre-registered authority, source-resolution,
+human-intervention, lifecycle, attribution, and cleanup rules. No baseline means
+no claim of reduction. The v1.1 floor remains the complete
+six-or-more-task O1 cohort, with
+each task bound to the pre-registered highest-priority eligible baseline;
+missing, drifted or incomparable baselines stop rather than pass.
+
+### Environment attribution
+
+The current acceptance contract separates `observed-native-minimum` from
+`user-configured`. It does not treat this maintainer's `config.toml`, global
+`AGENTS.md`, CC Switch links, installed Skills, plugins, Apps, MCP servers,
+Hooks, memory, provider route, account policy or host version as universal
+defaults. The minimum stratum excludes discoverable user-global influence but
+records system, developer, built-in, account, managed, administrator and
+unobservable state as retained or unknown. The configured stratum freezes the
+actual task-relevant starting manifest and authority/source envelope. Neither
+stratum freezes task-time behavior: governed capability or configuration changes
+are attributed lifecycle deltas. A mutable or unresolved starting dependency,
+including an unbound `@latest` package, narrows the claim or stops the pair;
+official changes between tasks are freshly resolved and rebound.
+
+Each natural task-host unit runs once in its pre-registered arm. O5 cross-host
+replication is pre-registered portability evidence, not same-host treatment
+replay. Comparators use a
+pre-registered comparable historical or independent natural task; live replay
+exists only for a task whose consequences are reversible and separately
+authorized, never merely to fill the matrix. A without-Harness baseline runs in
+a neutral workspace or real target repository and cannot inherit this
+repository's Harness-specific guidance. Historical evidence is classified as
+environment-independent, environment-bound or invalidated before reuse.
 
 ## Capability boundary
 
@@ -179,9 +220,12 @@ Catalogs, providers, search surfaces, and discovery channels are adaptive
 source inputs, not product authority or a user prerequisite. Portfolio
 curation may use a finite inactive review pool under a complete
 curation contract. Task-time discovery additionally binds the concrete task
-gap. Installation, enablement, account connection, paid service use, live
-execution, consumer projection, persistent activation, and Hook enablement are
-separate state transitions.
+gap. Installation, configuration, enablement, account connection, paid service
+use, live execution, consumer projection, disablement, downgrade, rollback,
+retirement, persistent activation, and Hook enablement are separate state
+transitions. Human authority over a transition is not permission to return
+supported mechanics to the user; a host-reserved action receives minimal exact
+guidance and post-verification.
 
 Codex-specific self-authored control Skills, when present in a separately
 governed consumer projection, are provisional host packaging rather than the
@@ -240,7 +284,7 @@ state on `SessionEnd`, and never load task-repository code or invoke Git. Its
 checked-in command is an absolute fail-closed sentinel until a trusted runtime
 is materialized under separate activation authority; measured activation also
 requires a currently live, independently authorized cohort generation under
-the frozen v1 profile.
+the new environment-attributed v1.1 profile.
 The Skill still supplies no MCP, App, runtime, or product authority, and the
 repository itself does not become a plugin.
 

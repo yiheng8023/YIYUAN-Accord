@@ -3,7 +3,7 @@
   "id": "harness-product-constitution-v1",
   "productId": "agent-autonomy-harness",
   "purpose": "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality harness that transfers capability observation, discovery, selection, bounded setup and task-scoped dispatch, task-topology selection and reconciliation, context-carrier fitness and transition, recovery, verification, release, and cleanup burden from the user to the Agent while preserving human authority over goals, domain judgment, trust, cost, and irreversible effects.",
-  "successDefinition": "Across repeated real tasks entered at the goal level, a user can provide ideas, domain facts, bounded authorization, corrections, and accountable final judgment without needing to know, select, invoke, or manage the underlying Agent, capability ecosystem, code and conversation topology, or context lifecycle; the Agent observes available capability and conversation-carrier fitness, discovers beyond its current view only for an evidenced gap, dispatches the smallest sufficient route and task carrier, transitions before preventable context loss, and returns accepted outcomes with fewer material orchestration interventions than an ad-hoc path.",
+  "successDefinition": "Across repeated real tasks entered at the goal level, a user can provide ideas, domain facts, bounded authorization, corrections, any technically or authoritatively unavoidable human-only action under exact Agent guidance, and accountable final judgment without needing to discover, select, invoke, or manage the underlying Agent, capability ecosystem, code and conversation topology, or context lifecycle; the Agent observes available capability and conversation-carrier fitness, discovers beyond its current view only for an evidenced gap, dispatches the smallest sufficient route and task carrier, performs every supported authorized mechanic, guides and verifies any unavoidable human-only step, transitions before preventable context loss, and returns accepted outcomes with fewer material orchestration interventions than an ad-hoc path.",
   "productForm": {
     "identity": "open-agent-neutral-demand-driven-human-agent-collaboration-quality-harness",
     "durableOutputs": [
@@ -19,6 +19,7 @@
       "ideas-and-goals",
       "domain-facts-and-judgment",
       "bounded-authorization",
+      "technically-or-authoritatively-unavoidable-human-only-action-under-exact-agent-guidance",
       "corrections",
       "accountable-final-judgment"
     ],
@@ -27,6 +28,7 @@
       "available-capability-observation-and-gap-detection",
       "source-bounded-targeted-capability-discovery",
       "capability-selection-and-task-scoped-dispatch",
+      "human-only-action-detection-minimal-guidance-and-post-verification",
       "task-topology-selection-reconciliation-merge-release-and-cleanup",
       "context-carrier-fitness-observation-and-proactive-transition",
       "bounded-setup-and-execution",
@@ -75,11 +77,13 @@
     "capability discovery sources and query strategies are adaptive inputs and no fixed channel can become product authority",
     "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
     "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
-    "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
+    "capability lifecycle is demand-driven from the observed starting state rather than capped by it: evaluate healthy native and already-authorized routes first, add or change only for an evidenced residual gap, perform every supported authorized mechanic, guide and verify only technically or authoritatively unavoidable human steps, and disable, downgrade, roll back, retire, release, or separately justify persistence when need or fitness changes",
     "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
     "conversation-carrier fitness is Agent-owned: use source-bound observable host and task signals to keep the current carrier only while it remains safe, choose native compaction or a verified handoff before preventable quality or capacity loss, and when reliable signals are unavailable record that limit and apply a conservative pre-declared transition rule rather than making the user guess",
-    "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; bind each decision-relevant external substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; new implementation requires an evidenced residual semantic gap",
+    "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; at each decision dynamically resolve the current suitable official or maintained source from a bounded as-of source and bind the exact execution version, commit, or package identity, license or applicable terms, maturity, and reuse boundary; never make one historical version a universal lock or execute an unresolved moving target; new implementation requires an evidenced residual semantic gap",
     "reference-host calibration cannot establish Agent-neutral portability; a distinct-host O5 proof is required",
+    "host, model, provider, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
+    "Harness-specific value is estimated only through pre-registered matched comparisons with the same task-relevant starting environment and authority-and-available-source envelope, in which exact Harness activation is the only planned initial route and configuration difference; later Agent-selected or human-authorized capability and configuration changes are treatment-mediated lifecycle deltas that must be attributed rather than normalized away; unavoidable task differences remain explicit matching variables and limit the claim, so observational evidence is not mislabeled as single-variable causation; observed-native-minimum and user-configured evidence remain distinct and unknown or unobservable environment state is retained as unknown rather than assumed absent",
     "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
     "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
     "unsupported host behavior is reported rather than simulated"
@@ -90,6 +94,7 @@
     "host and manager adapter sequence",
     "task carrier topology and host primitive",
     "native, official, reviewed external, composed, or authored capability choice",
+    "current source and exact execution-version resolution",
     "experiment design",
     "delivery order inside the active causal increment"
   ],
@@ -165,6 +170,13 @@
       "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
       "currentAuthority": false,
       "claimLimit": "bounded O1-O5 calibration evidence for the fixed natural-task, Codex reference-host and matched source-gate cohorts only; not the constitution terminal proposition, sustained live capability and carrier orchestration, installed product value, universal portability, production, publication, or release proof"
+    },
+    {
+      "release": "v1.0",
+      "state": "stopped-zero-outcome-terminal-proof-attempt",
+      "revision": "910ac016f1e5963450e3cfc46f5056ab0a6b04d7",
+      "currentAuthority": false,
+      "claimLimit": "stopped after two independently authorized but zero-registration cohort generations; O1-O5 remain zero, the revoked cohort and private-evidence cleanup are historical facts only, and no profile binding, cohort state, task result, outcome, environment assumption, or completion claim can be inherited by a later release"
     }
   ],
   "bootstrapGuards": [

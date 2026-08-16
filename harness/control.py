@@ -34,7 +34,7 @@ import xml.etree.ElementTree as ET
 
 PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
-CURRENT_RELEASE = "v1.0"
+CURRENT_RELEASE = "v1.1"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
     "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality "
@@ -46,56 +46,67 @@ EXPECTED_PRODUCT_PURPOSE = (
 )
 EXPECTED_SUCCESS_DEFINITION = (
     "Across repeated real tasks entered at the goal level, a user can provide ideas, "
-    "domain facts, bounded authorization, corrections, and accountable final judgment "
-    "without needing to know, select, invoke, or manage the underlying Agent, capability "
+    "domain facts, bounded authorization, corrections, any technically or authoritatively "
+    "unavoidable human-only action under exact Agent guidance, and accountable final judgment "
+    "without needing to discover, select, invoke, or manage the underlying Agent, capability "
     "ecosystem, code and conversation topology, or context lifecycle; the Agent observes available capability "
     "and conversation-carrier fitness, discovers beyond its current view only for an evidenced gap, dispatches the smallest "
-    "sufficient route and task carrier, transitions before preventable context loss, and returns accepted outcomes with fewer material orchestration interventions "
+    "sufficient route and task carrier, performs every supported authorized mechanic, guides and verifies "
+    "any unavoidable human-only step, transitions before preventable context loss, and returns accepted outcomes with fewer material orchestration interventions "
     "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the constitution's terminal product proposition through a finite repeated-natural-task "
-    "cohort: sustained goal-level delivery, lower user orchestration burden than source-bound "
-    "ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host "
-    "open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot "
-    "satisfy this program by inheritance."
+    "Prove the constitution's terminal product proposition through an environment-attributed "
+    "finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration "
+    "burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and "
+    "carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable "
+    "bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; "
+    "neither can satisfy this program by inheritance."
 )
 EXPECTED_PROGRESS_RULE = (
-    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with "
-    "G1-G4 passing count as progress. Before any task measurement, one content-addressed "
-    "normative profile and prospective cohort protocol must be frozen with the exact initial "
-    "source-native enrollment surface, activation cursor and cohort key identity/fingerprint. The "
-    "first frozen commit is not effective cohort activation by itself: before any natural demand can "
-    "be eligible, a named human independently authorizes that exact revision, canonical complete "
-    "binding digest, source surface, private-evidence boundary and cleanup disposition in a source-native "
-    "event, and a code-owned source validator proves the authorization. The next commit pins that "
-    "first-frozen revision, digest and validator identity. A missing or unverifiable authorization, a "
-    "rewritten or omitted authorized freeze, or any natural demand observed after the freeze commit but "
-    "before authorization stops that cohort rather than being excluded. A terminally revoked cohort "
-    "remains immutable stopped history. Only when it has zero task registrations and a source-verified "
-    "window proves no eligible natural demand occurred after revocation may the program open one fresh "
-    "successor cohort generation under the unchanged profile and protocol; it uses a new activation cursor, "
-    "surface and key identities, private key, and independent exact-freeze authorization, carries no prior "
-    "registration, result, or ordering state, and any second successor attempt stops the program. The "
-    "realized outcome cohort is the earliest eligible natural-demand-event prefix after the current "
-    "generation's authorized activation on its ordered enrollment surface, "
-    "never a retrospectively selected task roster: each task-bound validator proves the complete source "
-    "cursor window since activation or the preceding registration contains no omitted earlier eligible "
-    "demand. A serial surface "
-    "transition preserves the same key and cohort order, binds a source-native cause before any "
-    "destination demand, closes the source cursor window and verifies the destination activation; "
-    "otherwise the cohort stops. A natural-demand event occurs after authorized activation and before "
-    "immutable registration; a distinct source-bound measurement event occurs after registration. Git "
-    "ancestry proves repository and registration ordering only, while the authorization validator proves "
-    "the independent first-freeze anchor and the task validator privately verifies the fixed source-message "
-    "binding, deduplication, chronology and criterion semantics. Public task identities are unlinkable "
-    "random identifiers, not unsalted hashes of private goals, prompts or source events. "
-    "Even after O1-O5 task evidence passes, completionState remains in-progress until "
-    "the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 "
-    "evidence set, named-human authorization in the local annotated tag, the identical public tag "
-    "object and peeled commit, and no ignored or untracked repository residue; this is O5 release "
-    "enforcement, not an additional outcome. Documents, tests, inventories, fixtures, memberships, "
-    "research volume, and prior-release evidence are supporting inputs only."
+    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing "
+    "count as progress. Every O1-O5 registration binds the acceptance-owned environment attribution "
+    "contract, one fixed task-relevant pre-task environment manifest, one initial authority-and-available-"
+    "source envelope, one environment class, one treatment arm and the exact Harness activation delta if "
+    "present. Each natural task-host execution unit runs "
+    "once in its pre-registered arm; a unit is not replayed merely to manufacture a comparison, while "
+    "O5's pre-registered cross-host pair is required portability replication rather than same-host "
+    "treatment replay. Harness-specific value estimates compare only pre-registered matched tasks "
+    "within the same environment class, starting manifest and authority-and-available-source envelope; exact "
+    "Harness activation is the only planned initial route and configuration difference, while later Agent-"
+    "selected or human-authorized capability and configuration changes are recorded as treatment-mediated "
+    "lifecycle deltas. Unavoidable task differences remain explicit matching variables, and the claim cannot "
+    "be stronger than prospective matched observational evidence. Observed-native-minimum excludes discoverable "
+    "user-global influence at the starting boundary but is not a static capability ceiling; user-configured "
+    "freezes the actual relevant starting environment. In either class, the Agent dynamically adapts after "
+    "demand under the registered authority, source-resolution, human-intervention and lifecycle rules. Before "
+    "any acquisition or execution, each decision resolves the then-current suitable official or maintained source "
+    "from bounded as-of evidence and binds an exact execution identity; unresolved mutable labels and material "
+    "mid-execution drift require re-registration or honest stop rather than a permanent version lock or silent "
+    "substitution. Before any task measurement, "
+    "a new content-addressed normative profile and prospective cohort protocol must be selected and frozen "
+    "under the current environment attribution contract. The freeze commit is not effective cohort "
+    "activation by itself: before any natural demand can be eligible, a named human independently authorizes "
+    "the exact revision, complete binding digest, environment manifest boundary, source surface, private-"
+    "evidence boundary and cleanup disposition in a source-native event, and a code-owned source validator "
+    "proves that authorization. A natural demand observed after the freeze commit but before authorization "
+    "stops v1.1 rather than being excluded. Any revoked v1.1 cohort stops this release and cannot open a "
+    "successor or restart. v1.0 profile, cohort, authorization, registration, outcome and ordering state are "
+    "immutable stopped history and cannot be reused. The realized cohort is the earliest eligible natural-"
+    "demand-event prefix after authorized activation, never a retrospectively selected roster: each task-"
+    "bound validator proves the complete source cursor window since activation or the preceding registration "
+    "contains no omitted earlier eligible demand. A natural-demand event occurs after "
+    "authorized activation and before immutable registration; a distinct source-bound measurement event "
+    "occurs after registration. Git ancestry proves repository ordering only, while source validators "
+    "privately prove independent authorization, complete source windows, deduplication, chronology, "
+    "environment identity and criterion semantics. Public task identities are unlinkable random "
+    "identifiers, not unsalted hashes of private goals, prompts or source events. Even after O1-O5 task "
+    "evidence passes, completionState remains in-progress until the code-owned terminal release gate "
+    "verifies a clean exact candidate, its predeclared O5 evidence set, named-human authorization in the "
+    "local annotated tag, the identical public tag object and peeled commit, and no ignored or untracked "
+    "repository residue; this is O5 release enforcement, not an additional outcome. Documents, tests, "
+    "inventories, fixtures, memberships, research volume, prior-release evidence and environment "
+    "manifests are supporting inputs only."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -161,6 +172,7 @@ AUTHORITY_TOP_LEVEL_FIELDS = MappingProxyType(
                 "program",
                 "completionExpression",
                 "progressRule",
+                "environmentAttribution",
                 "criteria",
             }
         ),
@@ -187,7 +199,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "a3375554599d25159b37f02fbd0d804a1d5d91a1b3f5a09541d94fca88f499d2"
+    "a1b21a3e05bed19159773dba94865d0b76dff0792e401c2d28aed529102ff8be"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -264,6 +276,7 @@ OPERATION_EFFECTS = {
     "git-commit": "bounded-local-write",
     "git-push": "bounded-external-write",
     "installed-authorized-capability-use": "bounded-capability-use",
+    "human-only-action-guidance-and-post-verification": "local-read",
     "bounded-consumer-configuration-after-explicit-grant": "bounded-local-write",
     "coverage-analysis": "local-read",
     "targeted-capability-discovery": "bounded-public-read",
@@ -299,8 +312,10 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "frozenAtRevision": None,
     "cohortActivation": None,
 }
+CURRENT_PROFILE_FREEZE_ENABLED = False
+_LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY = False
 NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
-    "d805d051f36ad43d8fce96e257ec80210ec31820"
+    "910ac016f1e5963450e3cfc46f5056ab0a6b04d7"
 )
 MAX_NORMATIVE_BINDING_HISTORY_REVISIONS = 64
 MAX_NORMATIVE_BINDING_HISTORY_BYTES = 4 * 1_048_576
@@ -648,7 +663,7 @@ TERMINAL_RELEASE_ANNOTATION_FORMAT = "harness-release-authorization-v1"
 PROCESS_LOSS_FIELDS = {
     "maxSameClassUserCorrectionBeforeStop",
     "maxConsecutiveOutcomeNeutralWorkItems",
-    "maxMaterialUserCapabilityOrchestrationInterventions",
+    "maxProhibitedAgentWorkTransfers",
     "stopOnAuthorityOrIrreversibleIncident",
     "stopOnUnboundedResidue",
 }
@@ -724,6 +739,24 @@ NATURAL_DEMAND_PRIVATE_BINDING_FIELDS = {
     "sourceMessageRule",
     "cohortKeyIdentity",
     "cohortKeyFingerprint",
+}
+ENVIRONMENT_ATTRIBUTION_BINDING_FIELDS = {
+    "contractSha256",
+    "environmentClass",
+    "treatmentArm",
+    "manifestLocator",
+    "manifestRevision",
+    "manifestSha256",
+    "harnessActivationDelta",
+}
+HARNESS_ACTIVATION_DELTA_FIELDS = {
+    "state",
+    "packageIdentity",
+    "packageSha256",
+    "activationIdentity",
+    "activationSha256",
+    "taskExposureIdentity",
+    "taskExposureSha256",
 }
 EXPECTED_PRIVATE_BINDING_SCHEME = "cohort-keyed-hmac-sha256-v1"
 SOURCE_KIND_PATTERN = re.compile(r"[a-z0-9][a-z0-9.-]{0,63}")
@@ -803,6 +836,7 @@ EXPECTED_COLLABORATION_MODEL = {
         "ideas-and-goals",
         "domain-facts-and-judgment",
         "bounded-authorization",
+        "technically-or-authoritatively-unavoidable-human-only-action-under-exact-agent-guidance",
         "corrections",
         "accountable-final-judgment",
     ],
@@ -811,6 +845,7 @@ EXPECTED_COLLABORATION_MODEL = {
         "available-capability-observation-and-gap-detection",
         "source-bounded-targeted-capability-discovery",
         "capability-selection-and-task-scoped-dispatch",
+        "human-only-action-detection-minimal-guidance-and-post-verification",
         "task-topology-selection-reconciliation-merge-release-and-cleanup",
         "context-carrier-fitness-observation-and-proactive-transition",
         "bounded-setup-and-execution",
@@ -842,11 +877,13 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "capability discovery sources and query strategies are adaptive inputs and no fixed channel can become product authority",
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
-        "capability lifecycle is demand-driven: evaluate healthy native and already-authorized routes first, add only for an evidenced residual gap, and end task-scoped exposure when the need ends unless continued activation proves net value",
+        "capability lifecycle is demand-driven from the observed starting state rather than capped by it: evaluate healthy native and already-authorized routes first, add or change only for an evidenced residual gap, perform every supported authorized mechanic, guide and verify only technically or authoritatively unavoidable human steps, and disable, downgrade, roll back, retire, release, or separately justify persistence when need or fitness changes",
         "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
         "conversation-carrier fitness is Agent-owned: use source-bound observable host and task signals to keep the current carrier only while it remains safe, choose native compaction or a verified handoff before preventable quality or capacity loss, and when reliable signals are unavailable record that limit and apply a conservative pre-declared transition rule rather than making the user guess",
-        "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; bind each decision-relevant external substrate to an exact source identity, version or commit, license or applicable terms, maturity, and reuse boundary; new implementation requires an evidenced residual semantic gap",
+        "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; at each decision dynamically resolve the current suitable official or maintained source from a bounded as-of source and bind the exact execution version, commit, or package identity, license or applicable terms, maturity, and reuse boundary; never make one historical version a universal lock or execute an unresolved moving target; new implementation requires an evidenced residual semantic gap",
         "reference-host calibration cannot establish Agent-neutral portability; a distinct-host O5 proof is required",
+        "host, model, provider, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
+        "Harness-specific value is estimated only through pre-registered matched comparisons with the same task-relevant starting environment and authority-and-available-source envelope, in which exact Harness activation is the only planned initial route and configuration difference; later Agent-selected or human-authorized capability and configuration changes are treatment-mediated lifecycle deltas that must be attributed rather than normalized away; unavoidable task differences remain explicit matching variables and limit the claim, so observational evidence is not mislabeled as single-variable causation; observed-native-minimum and user-configured evidence remain distinct and unknown or unobservable environment state is retained as unknown rather than assumed absent",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
         "unsupported host behavior is reported rather than simulated",
@@ -859,6 +896,7 @@ EXPECTED_ADAPTIVE_SURFACES = frozenset(
         "host and manager adapter sequence",
         "task carrier topology and host primitive",
         "native, official, reviewed external, composed, or authored capability choice",
+        "current source and exact execution-version resolution",
         "experiment design",
         "delivery order inside the active causal increment",
     }
@@ -952,6 +990,22 @@ EXPECTED_PROGRESSION_POLICY = {
         "behavior-or-value-claim",
     ],
     "historicalFailureRole": "counterevidence-and-replanning-input-only",
+    "environmentAttributionDisposition": (
+        "acceptance-owned-observed-native-minimum-and-user-configured-strata-with-"
+        "preregistered-matched-starting-environment-and-attributed-task-time-adaptation"
+    ),
+    "taskTimeAdaptationDisposition": (
+        "pretask-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-"
+        "and-records-lifecycle-deltas"
+    ),
+    "humanOnlyActionDisposition": (
+        "agent-detects-minimizes-guides-and-verifies-unavoidable-user-step-while-"
+        "prohibited-agent-work-transfer-remains-zero"
+    ),
+    "versionResolutionDisposition": (
+        "resolve-current-suitable-source-per-decision-bind-exact-execution-identity-and-"
+        "stop-on-unresolved-moving-target-or-material-drift"
+    ),
     "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
     "userMustNotInventTasks": True,
 }
@@ -998,9 +1052,9 @@ EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY = {
     "mayTriggerReplanning": True,
 }
 EXPECTED_PRIOR_RELEASE = {
-    "release": "v0.2",
-    "state": "accepted-bounded-calibration-milestone",
-    "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
+    "release": "v1.0",
+    "state": "stopped-zero-outcome-terminal-proof-attempt",
+    "revision": "910ac016f1e5963450e3cfc46f5056ab0a6b04d7",
     "currentAuthority": False,
 }
 EXPECTED_HISTORICAL_MILESTONES = (
@@ -1016,7 +1070,10 @@ EXPECTED_HISTORICAL_MILESTONES = (
         ),
     },
     {
-        **EXPECTED_PRIOR_RELEASE,
+        "release": "v0.2",
+        "state": "accepted-bounded-calibration-milestone",
+        "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
+        "currentAuthority": False,
         "claimLimit": (
             "bounded O1-O5 calibration evidence for the fixed natural-task, Codex "
             "reference-host and matched source-gate cohorts only; not the constitution "
@@ -1025,7 +1082,134 @@ EXPECTED_HISTORICAL_MILESTONES = (
             "or release proof"
         ),
     },
+    {
+        **EXPECTED_PRIOR_RELEASE,
+        "claimLimit": (
+            "stopped after two independently authorized but zero-registration cohort "
+            "generations; O1-O5 remain zero, the revoked cohort and private-evidence cleanup "
+            "are historical facts only, and no profile binding, cohort state, task result, "
+            "outcome, environment assumption, or completion claim can be inherited by a later "
+            "release"
+        ),
+    },
 )
+EXPECTED_V10_AUTHORITY_BLOBS = MappingProxyType(
+    {
+        "product/program.json": (
+            "200d98cbf1dce8a8199ac43563413bb04f4ac880b11bd6dd153f34040a7f5f7a"
+        ),
+        "product/acceptance.json": (
+            "97835e30913c4219558433f1aee12fa4837bc7cee2a1fe19538260e935622963"
+        ),
+    }
+)
+EXPECTED_ENVIRONMENT_ATTRIBUTION = {
+    "scope": "all O1-O5 registrations, measurements, comparisons, adapter claims and release evidence",
+    "environmentClasses": ["observed-native-minimum", "user-configured"],
+    "treatmentArms": ["without-harness", "with-exact-harness"],
+    "assignmentRule": (
+        "each natural task-host execution unit runs once in one pre-registered arm; no same-host "
+        "treatment replay merely for measurement, O5 cross-host replication is pre-registered "
+        "portability evidence, and a paired baseline must be a pre-registered comparable historical "
+        "or independent natural task"
+    ),
+    "comparisonRule": (
+        "compare only pre-registered matched tasks within the same environment class, fixed task-relevant "
+        "starting manifest and initial authority-and-available-source envelope; exact Harness package and "
+        "activation identity is the only planned initial route and configuration difference, while later "
+        "capability and configuration changes are attributed treatment-mediated lifecycle deltas; unavoidable "
+        "task differences remain explicit matching variables, the evidence is prospective matched observational "
+        "rather than single-variable causal, and cross-class differences cannot be claimed as Harness effects"
+    ),
+    "initialStateRule": (
+        "the committed pre-task manifest and initial authority-and-available-source envelope define the "
+        "starting condition, not a static capability ceiling; task-time Agent-selected or human-authorized "
+        "changes are recorded as treatment-mediated lifecycle deltas rather than erased, normalized away or "
+        "mislabeled as baseline contamination"
+    ),
+    "observedNativeMinimumRule": (
+        "exclude discoverable user-global instructions, configuration, rules, Skills, plugins, Apps, "
+        "MCP, Hooks, memory and provider overrides at the starting boundary; task-inherent project guidance is allowed only "
+        "when identical and non-Harness in both arms; system, developer, built-in, account, "
+        "administrator and unobservable state is retained-or-unknown; after demand, governed task-time adaptation remains allowed and attributable"
+    ),
+    "userConfiguredRule": (
+        "freeze the actual task-relevant user starting environment before assignment; after demand, governed "
+        "task-time adaptation remains allowed and attributable; mutable, unresolved, unavailable or drifting "
+        "starting components narrow the claim or stop the pair and cannot be normalized away after observing a result"
+    ),
+    "neutralWorkspaceRule": (
+        "a without-Harness baseline cannot inherit Harness repository guidance, adapters or consumer "
+        "projection; use a neutral workspace or the real target repository with identical task-inherent "
+        "non-Harness guidance in both arms"
+    ),
+    "taskTimeAdaptationRule": (
+        "after demand reveals need, the Agent uses a healthy already-authorized route or, before execution, "
+        "binds an immutable decision record covering the residual gap, current source resolution, authority "
+        "class, planned lifecycle action, rollback and cleanup; the Agent performs every supported authorized "
+        "mechanic, while a technically or authoritatively human-only action is reduced to the smallest exact "
+        "step, explained without requiring route knowledge, and verified before resuming"
+    ),
+    "versionResolutionRule": (
+        "at each decision resolve the current suitable official or maintained source from a bounded as-of source "
+        "and bind the exact version, commit or package identity before acquisition or execution; use current "
+        "evidence, not one historical version across tasks, never execute an unresolved mutable label "
+        "such as latest, and on material mid-execution drift re-register or honestly stop"
+    ),
+    "lifecycleRule": (
+        "retain, install, configure, enable, use, disable, downgrade, rollback, retire or persist a route only "
+        "by current need, evidence and authority; end task-scoped exposure when the need ends unless persistence "
+        "has separate net-value evidence and authorization, then verify the final or restored state and cleanup"
+    ),
+    "humanInterventionRule": (
+        "distinguish a technically or authoritatively unavoidable human-only decision or host action from a "
+        "prohibited transfer of Agent-owned work; the former must be source-bound, minimal, explicitly guided "
+        "and post-verified, while the user never has to discover or name the route, configuration variable, "
+        "syntax, recovery or cleanup and the Agent performs every supported authorized mechanic"
+    ),
+    "burdenRule": (
+        "record all human actions and round trips in total burden, classify legitimate human-only actions "
+        "separately from prohibited Agent-work transfers, require zero prohibited transfers, and do not hide "
+        "excessive or avoidable human-only interaction from O2 comparison"
+    ),
+    "manifestFields": [
+        "host-client-and-version",
+        "model-provider-and-reasoning",
+        "account-managed-and-administrator-requirements-presence",
+        "system-developer-and-built-in-state-observed-or-unknown",
+        "cwd-repository-and-project-instruction-chain",
+        "configuration-layers-profiles-and-overrides",
+        "rules-skills-plugins-apps-mcp-hooks-memory-and-managers",
+        "operating-system-runtime-tool-and-resource-surface",
+        "initial-authority-and-available-source-envelope",
+        "exact-harness-package-activation-and-task-exposure-delta",
+        "capture-time-source-identities-fingerprint-and-drift-check",
+    ],
+    "historicalEvidenceRule": (
+        "classify every reused historical item as environment-independent, environment-bound or "
+        "invalidated; no prior outcome, cohort membership or environment assumption is inherited"
+    ),
+    "driftRule": (
+        "missing starting identity, mutable unbound dependencies, unknown material contamination, unregistered "
+        "lifecycle drift or restoration failure stops the affected pair without replacement or success imputation; "
+        "an official update between tasks is re-resolved and rebound rather than treated as permanent version drift"
+    ),
+    "humanAuthority": (
+        "The user authorizes access to private configuration or authentication state, protected backup, "
+        "reset or restoration, a new OS account or trust boundary, installation, publication and "
+        "irreversible effects, and performs a technically or authoritatively unavoidable host action only "
+        "under minimal exact Agent guidance; the Agent owns need detection, recommendation, every supported "
+        "authorized mechanic, post-action verification, restoration verification and exact cleanup."
+    ),
+}
+EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256 = hashlib.sha256(
+    json.dumps(
+        EXPECTED_ENVIRONMENT_ATTRIBUTION,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+).hexdigest()
 
 
 EvidenceValidator = Callable[[dict[str, Any], str, Path, list[str]], bool]
@@ -2352,80 +2536,12 @@ def _delete_cohort_authorization_private_resource(
     generation_label: str,
     errors: list[str],
 ) -> bool:
-    diagnostic = f"{generation_label} authorization private"
-    if trigger not in {"withdrawal", "expiry", "stop", "validation-failure"}:
-        _error(errors, f"{diagnostic} evidence trigger is invalid")
-        return False
-    private_evidence, target_name = resource
-    encoded_key = private_evidence.get("keyBase64")
-    if not isinstance(encoded_key, str):
-        _error(errors, f"{diagnostic} source is invalid")
-        return False
-    try:
-        key = bytearray(base64.b64decode(encoded_key, validate=True))
-    except (ValueError, TypeError):
-        _error(errors, f"{diagnostic} source is invalid")
-        return False
-    try:
-        if len(key) != 32 or not hmac.compare_digest(
-            "sha256:" + hashlib.sha256(key).hexdigest(),
-            expected_key_fingerprint,
-        ) or not target_validator(
-            target_name,
-            key,
-            errors,
-        ):
-            _error(errors, f"{diagnostic} source is invalid")
-            return False
-    finally:
-        key[:] = b"\0" * len(key)
-    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
-        _error(errors, f"{diagnostic} source is unavailable")
-        return False
-    try:
-        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
-        delete_credential = advapi32.CredDeleteW
-        delete_credential.argtypes = [ctypes.c_wchar_p, ctypes.c_uint32, ctypes.c_uint32]
-        delete_credential.restype = ctypes.c_int
-        read_credential = advapi32.CredReadW
-        read_credential.argtypes = [
-            ctypes.c_wchar_p,
-            ctypes.c_uint32,
-            ctypes.c_uint32,
-            ctypes.POINTER(ctypes.c_void_p),
-        ]
-        read_credential.restype = ctypes.c_int
-        free_credential = advapi32.CredFree
-        free_credential.argtypes = [ctypes.c_void_p]
-        free_credential.restype = None
-        ctypes.set_last_error(0)
-        deleted = delete_credential(target_name, 1, 0)
-        delete_error = ctypes.get_last_error()
-        if not deleted and delete_error != 1168:
-            _error(errors, f"{diagnostic} evidence cleanup failed")
-            return False
-        credential = ctypes.c_void_p()
-        ctypes.set_last_error(0)
-        remains = read_credential(target_name, 1, 0, ctypes.byref(credential))
-        read_error = ctypes.get_last_error()
-        if remains:
-            if credential.value:
-                free_credential(credential)
-            _error(errors, f"{diagnostic} evidence cleanup failed")
-            return False
-        if credential.value:
-            free_credential(credential)
-        if read_error != 1168:
-            _error(errors, f"{diagnostic} evidence cleanup failed")
-            return False
-    except (OSError, ValueError, TypeError):
-        _error(errors, f"{diagnostic} evidence cleanup failed")
-        return False
+    del resource, trigger, expected_key_fingerprint, target_validator
     _error(
         errors,
-        f"{diagnostic} evidence destruction verified after {trigger}",
+        f"{generation_label} authorization private cleanup is historical and unavailable in v1.1",
     )
-    return True
+    return False
 
 
 def _delete_initial_authorization_private_resource(
@@ -2909,66 +3025,11 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
 
 
 def _remove_successor_expiry_cleanup_trigger(errors: list[str]) -> bool:
-    executable = _trusted_windows_schtasks_executable()
-    if executable is None:
-        _error(
-            errors,
-            "successor binding authorization expiry cleanup trigger removal failed",
-        )
-        return False
-    environment = {
-        key: value
-        for key, value in os.environ.items()
-        if key.casefold() in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
-    }
-    common = {
-        "cwd": executable.parent,
-        "env": environment,
-        "stdin": subprocess.DEVNULL,
-        "stdout": subprocess.DEVNULL,
-        "stderr": subprocess.DEVNULL,
-        "timeout": 10,
-        "creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0),
-        "check": False,
-    }
-    try:
-        before = subprocess.run(
-            [str(executable), "/Query", "/TN", SUCCESSOR_EXPIRY_TASK_NAME],
-            **common,
-        )
-        if before.returncode != 0:
-            raise OSError("expiry trigger is unavailable")
-        removed = subprocess.run(
-            [
-                str(executable),
-                "/Delete",
-                "/TN",
-                SUCCESSOR_EXPIRY_TASK_NAME,
-                "/F",
-            ],
-            **common,
-        )
-        after = subprocess.run(
-            [str(executable), "/Query", "/TN", SUCCESSOR_EXPIRY_TASK_NAME],
-            **common,
-        )
-    except (OSError, ValueError, subprocess.SubprocessError):
-        _error(
-            errors,
-            "successor binding authorization expiry cleanup trigger removal failed",
-        )
-        return False
-    if removed.returncode != 0 or after.returncode == 0:
-        _error(
-            errors,
-            "successor binding authorization expiry cleanup trigger removal failed",
-        )
-        return False
     _error(
         errors,
-        "successor binding authorization expiry cleanup trigger removal verified",
+        "successor binding authorization expiry cleanup trigger removal is historical and unavailable in v1.1",
     )
-    return True
+    return False
 
 
 def _validate_successor_binding_authorization(
@@ -3039,39 +3100,10 @@ def _validate_successor_binding_authorization(
     return True
 
 
-def expire_successor_authorization_private_evidence(errors: list[str]) -> bool:
-    resource = _read_successor_authorization_private_evidence(errors)
-    if resource is None:
-        absence_errors: list[str] = []
-        if _successor_authorization_private_resource_absent(absence_errors):
-            return _remove_successor_expiry_cleanup_trigger(errors)
-        errors.extend(absence_errors)
-        return False
-    if not _successor_authorization_private_resource_identity_valid(resource, errors):
-        return False
-    if _utc_now() < SUCCESSOR_BINDING_AUTHORIZATION_EXPIRY_UTC:
-        _error(errors, "successor binding authorization expiry cleanup is not due")
-        return False
-    return _delete_successor_authorization_private_resource(
-        resource,
-        "expiry",
-        errors,
-    )
-
-
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
-] = MappingProxyType(
-    {
-        INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: (
-            _validate_initial_binding_authorization
-        ),
-        SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID: (
-            _validate_successor_binding_authorization
-        ),
-    }
-)
+] = MappingProxyType({})
 
 _EVIDENCE_GIT_CACHE: ContextVar[
     dict[tuple[str, tuple[str, ...], bytes | None, int], bytes | None] | None
@@ -3517,6 +3549,9 @@ def _normative_profile_binding_history_valid(
             errors,
         )
         if historical_program.get("id") != expected_program_id:
+            if binding_history_started:
+                _error(errors, "v1 normative profile binding history is incomplete")
+                return False
             continue
         historical_binding = historical_program.get("normativeProfileBinding")
         if not isinstance(historical_binding, dict) or set(
@@ -4320,8 +4355,24 @@ def _authority_identity_valid(
     return len(errors) == before
 
 
+def _v10_historical_authority_valid(root: Path, errors: list[str]) -> bool:
+    before = len(errors)
+    for locator, expected_sha256 in EXPECTED_V10_AUTHORITY_BLOBS.items():
+        if not _committed_blob(
+            root,
+            EXPECTED_PRIOR_RELEASE["revision"],
+            locator,
+            expected_sha256,
+        ):
+            _error(errors, f"v1.0 historical authority identity changed: {locator}")
+    return len(errors) == before
+
+
 def _historical_boundary_valid(
-    constitution: dict[str, Any], program: dict[str, Any], errors: list[str]
+    root: Path,
+    constitution: dict[str, Any],
+    program: dict[str, Any],
+    errors: list[str],
 ) -> bool:
     before = len(errors)
     prior = program.get("priorRelease")
@@ -4343,6 +4394,7 @@ def _historical_boundary_valid(
             errors,
             "constitution historical milestones must match the code-owned records",
         )
+    _v10_historical_authority_valid(root, errors)
     return len(errors) == before
 
 
@@ -4458,12 +4510,21 @@ def _normative_profile_binding_valid(
     if not isinstance(binding, dict) or set(binding) != NORMATIVE_PROFILE_BINDING_FIELDS:
         _error(errors, "program normativeProfileBinding fields must match the code-owned schema")
         return False
-    _v1_candidate_artifacts_valid(root, errors)
-    _normative_profile_binding_history_valid(root, binding, errors)
+    if program.get("status") == "stopped":
+        _error(errors, "v1.1 current program cannot be stopped")
     if binding.get("state") == "unfrozen":
+        _normative_profile_binding_history_valid(root, binding, errors)
         if not _same_typed_value(binding, UNFROZEN_NORMATIVE_PROFILE_BINDING):
             _error(errors, "unfrozen normative profile binding must contain only null identities")
         return len(errors) == before
+    if not CURRENT_PROFILE_FREEZE_ENABLED:
+        _error(errors, "current normative profile freeze is not enabled")
+        return False
+    if not _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY:
+        _error(errors, "v1.1 normative profile freeze mechanism is not registered")
+        return False
+    _normative_profile_binding_history_valid(root, binding, errors)
+    _v1_candidate_artifacts_valid(root, errors)
     binding_state = binding.get("state")
     if binding_state not in {"frozen", "revoked"}:
         _error(errors, "program normative profile binding state must be unfrozen, frozen or revoked")
@@ -4698,6 +4759,10 @@ def _release_identity_valid(
         != EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256
     ):
         _error(errors, "acceptance criteria contract identity is invalid")
+    if not _same_typed_value(
+        acceptance.get("environmentAttribution"), EXPECTED_ENVIRONMENT_ATTRIBUTION
+    ):
+        _error(errors, "acceptance environmentAttribution is invalid")
     return len(errors) == before
 
 
@@ -5095,6 +5160,119 @@ def _registration_cohort_values_valid(
     return (dict(enrollment), dict(private_binding)) if transition_valid else None
 
 
+def _environment_attribution_binding_valid(
+    root: Path,
+    value: Any,
+    source_revision: str,
+    registered_at: datetime | None,
+) -> bool:
+    if not isinstance(value, dict) or set(value) != ENVIRONMENT_ATTRIBUTION_BINDING_FIELDS:
+        return False
+    environment_class = value.get("environmentClass")
+    treatment_arm = value.get("treatmentArm")
+    locator = _relative_locator(value.get("manifestLocator"), allow_evidence=True)
+    revision = value.get("manifestRevision")
+    expected_sha256 = value.get("manifestSha256")
+    activation_delta = value.get("harnessActivationDelta")
+    if (
+        value.get("contractSha256") != EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
+        or environment_class
+        not in EXPECTED_ENVIRONMENT_ATTRIBUTION["environmentClasses"]
+        or treatment_arm not in EXPECTED_ENVIRONMENT_ATTRIBUTION["treatmentArms"]
+        or locator is None
+        or re.fullmatch(
+            r"product/evidence/environment-manifests/[a-z0-9][a-z0-9._-]{0,127}\.json",
+            locator,
+        )
+        is None
+        or not isinstance(revision, str)
+        or not isinstance(source_revision, str)
+        or not _strict_git_ancestor(root, revision, source_revision)
+        or not isinstance(expected_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+        or not _committed_blob(root, revision, locator, expected_sha256)
+        or not isinstance(activation_delta, dict)
+        or set(activation_delta) != HARNESS_ACTIVATION_DELTA_FIELDS
+    ):
+        return False
+    if treatment_arm == "without-harness":
+        activation_valid = activation_delta == {
+            "state": "absent",
+            "packageIdentity": "none",
+            "packageSha256": "none",
+            "activationIdentity": "none",
+            "activationSha256": "none",
+            "taskExposureIdentity": "none",
+            "taskExposureSha256": "none",
+        }
+    else:
+        activation_valid = (
+            activation_delta.get("state") == "active"
+            and all(
+                _nonempty_text(activation_delta.get(field))
+                for field in (
+                    "packageIdentity",
+                    "activationIdentity",
+                    "taskExposureIdentity",
+                )
+            )
+            and all(
+                isinstance(activation_delta.get(field), str)
+                and re.fullmatch(r"[0-9a-f]{64}", activation_delta[field])
+                is not None
+                for field in (
+                    "packageSha256",
+                    "activationSha256",
+                    "taskExposureSha256",
+                )
+            )
+        )
+    if not activation_valid:
+        return False
+    raw = _evidence_git(root, "show", f"{revision}:{locator}")
+    if raw is None:
+        return False
+    manifest_errors: list[str] = []
+    manifest = _parse_json_object_bytes(
+        raw,
+        f"environment manifest {locator} at {revision}",
+        manifest_errors,
+    )
+    if manifest_errors:
+        return False
+    expected_manifest_fields = {
+        "schema",
+        "environmentClass",
+        "treatmentArm",
+        "capturedAt",
+        *EXPECTED_ENVIRONMENT_ATTRIBUTION["manifestFields"],
+    }
+    captured_at = (
+        _rfc3339_instant(manifest.get("capturedAt"))
+        if isinstance(manifest, dict)
+        else None
+    )
+    return (
+        isinstance(manifest, dict)
+        and set(manifest) == expected_manifest_fields
+        and type(manifest.get("schema")) is int
+        and manifest.get("schema") == 1
+        and manifest.get("environmentClass") == environment_class
+        and manifest.get("treatmentArm") == treatment_arm
+        and captured_at is not None
+        and registered_at is not None
+        and captured_at <= registered_at
+        and all(
+            _substantive_registration_value(manifest.get(field))
+            for field in EXPECTED_ENVIRONMENT_ATTRIBUTION["manifestFields"]
+        )
+        and _same_typed_value(
+            manifest.get("exact-harness-package-activation-and-task-exposure-delta"),
+            activation_delta,
+        )
+    )
+
+
 def _task_registration_guardrail(
     root: Path,
     increment: dict[str, Any],
@@ -5219,6 +5397,22 @@ def _task_registration_guardrail(
         and isinstance(profile_binding.get("cohortActivation"), dict)
         else None
     )
+    environment_binding_valid = (
+        _environment_attribution_binding_valid(
+            root,
+            values.get("environmentAttributionBinding"),
+            source_revision,
+            registered_at,
+        )
+        if isinstance(values, dict)
+        and "environmentAttributionBinding" in expected_fields
+        else False
+    )
+    if not environment_binding_valid:
+        _error(
+            errors,
+            f"task registration {locator} environment attribution binding is invalid",
+        )
     shape_valid = (
         type(registration.get("schema")) is int
         and registration.get("schema") == 1
@@ -5234,6 +5428,7 @@ def _task_registration_guardrail(
         and set(values) == expected_fields
         and all(_substantive_registration_value(item) for item in values.values())
         and cohort_values is not None
+        and environment_binding_valid
         and values.get("normativeProfileIdentity")
         == profile_binding.get("profileIdentity")
         and values.get("cohortProtocolIdentity")
@@ -5412,7 +5607,7 @@ def _process_loss_guardrail(
         integer_fields = (
             "maxSameClassUserCorrectionBeforeStop",
             "maxConsecutiveOutcomeNeutralWorkItems",
-            "maxMaterialUserCapabilityOrchestrationInterventions",
+            "maxProhibitedAgentWorkTransfers",
         )
         for field in integer_fields:
             value = budget.get(field)
@@ -5420,8 +5615,8 @@ def _process_loss_guardrail(
                 _error(errors, f"process-loss budget {field} must be a non-negative integer")
         if budget.get("maxSameClassUserCorrectionBeforeStop") != 1:
             _error(errors, "same-class user correction budget must stop before recurrence")
-        if budget.get("maxMaterialUserCapabilityOrchestrationInterventions") != 0:
-            _error(errors, "material user capability orchestration intervention budget must be zero")
+        if budget.get("maxProhibitedAgentWorkTransfers") != 0:
+            _error(errors, "prohibited Agent-work transfer budget must be zero")
         neutral_budget = budget.get("maxConsecutiveOutcomeNeutralWorkItems")
         if neutral_budget not in {0, 1}:
             _error(errors, "outcome-neutral work budget must be zero or one")
@@ -6014,7 +6209,7 @@ def _verify_product(root: Path) -> dict[str, Any]:
     )
 
     release_identity = _release_identity_valid(constitution, program, acceptance, errors)
-    historical_boundary = _historical_boundary_valid(constitution, program, errors)
+    historical_boundary = _historical_boundary_valid(root, constitution, program, errors)
     capability_influence = _capability_influence_valid(constitution, errors)
     supporting_documents = _supporting_documents_exist(root, constitution, errors)
     frozen_v02_profile = _frozen_v02_profile_artifacts_valid(root, errors)

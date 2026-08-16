@@ -356,3 +356,36 @@ frozen v1.0 contract permits no second successor. The binding is therefore
 revoked, the current v1.0 program is stopped, and its zero-outcome failure is
 retained as counterevidence. The failure does not alter v0.2's bounded accepted
 milestone and contributes zero O1-O5 progress.
+
+## v1.1 environment-attribution authority
+
+The v1.0 stop exposed a broader causal defect: the proof route had treated one
+maintainer's Codex configuration, global instructions, CC Switch-linked Skills,
+installed plugins, Apps, MCP servers, memory, account/model route, and host
+version as ambient conditions rather than explicit evaluation variables. That
+would make a later green cohort unable to distinguish Harness value from user
+presets and unable to generalize to a user who starts elsewhere.
+
+v1.1 therefore starts at zero with no active increment and an unfrozen profile
+binding. Its acceptance authority separates `observed-native-minimum` from
+`user-configured` and matches each comparison on the pre-task manifest plus
+initial authority-and-available-source envelope. Exact Harness activation is
+the only planned initial route/configuration difference; the starting state is
+not a capability ceiling. Later Agent-selected or human-authorized changes are
+attributed lifecycle deltas, all human actions remain visible in burden, and an
+unavoidable human-only step is distinguished from prohibited transfer of
+Agent-owned work. Current suitable sources are resolved per decision and bound
+to exact execution identities rather than one permanently locked version or an
+unresolved moving target. Unavoidable task differences remain explicit and the
+claim observational; same-host treatment replay merely for measurement remains
+forbidden, and unobservable state remains unknown rather than absent. The stopped v1.0 program and
+acceptance bytes are pinned at revision `910ac01`; no v1.0 profile, cohort,
+authorization, registration, ordering state, result or outcome transfers.
+Protected backup, authentication reuse, user-environment reset/restoration, new
+OS identity and Harness installation remain future exact human gates, not
+implicit effects of this authority migration.
+
+The same migration removes the callable v1.0 private-evidence expiry entrypoint
+and permanently disables its credential and Scheduled Task deletion helpers in
+the v1.1 module. Historical cleanup behavior is retained only by the exact
+`910ac01` revision pin; it is not a current consumer capability.

@@ -51,31 +51,28 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires live matched evidence through a distinct host or runtime.
 
-The current tree's `docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md` and
-`docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json` retain their candidate labels as
-frozen bytes, but `product/program.json` now binds them at artifact revision
-`502c4ff`, first-freeze revision `d19d2fb`, and canonical binding digest
-`ee4ba7a`, and the bound Codex source independently proved the exact named-human
-authorization. On 2026-08-16 a transient source-unavailable result was
-incorrectly promoted to definitive validation failure, so the validator deleted
-and absence-checked the exact protected resource and revoked current live
-verifiability. The verifier now separates transient unavailability or
-concurrent change, which fails closed without destruction, from confirmed
-binding or content failure, which retains exact deletion and absence
-verification. No natural task had been registered, so O1-O5 remain 0/5. The
-revoked generation cannot resume. Exactly one successor generation may be
-opened only after the source proves no eligible demand occurred after revocation;
-it uses a fresh activation, identities, private key and independent exact
-authorization, carries no prior task, result, cursor or ordering state, and
-cannot be restarted again. Hosted runners corroborate the remaining contract
-only and cannot restore or prove a revoked local authorization. The one
-permitted successor freeze used fresh public identities at revision `8e8e76b`
-and canonical digest `d2cf0cd`, and its second independent exact authorization
-initially verified. A later validator-ordering error evaluated the old
-battery-blocked Scheduled Task before replacing it, invoked the already-bound
-deterministic-failure cleanup, and deleted both the successor protected resource
-and exact task. Enrollment is no longer active; v1.0 is stopped with no task
-registration and O1-O5 at 0/5. Do not recreate or restart that generation.
+v1.1 is the current ready environment-attribution program, with no active
+increment, O1-O5 at 0/5, and an `unfrozen` normative profile binding. v1.0 is
+immutable stopped history at revision `910ac01`: both authorized zero-task
+generations are revoked, the successor protected resource and exact task were
+deleted, and no profile binding, cohort, authorization, ordering state, task or
+result may be reconstructed or inherited.
+
+Every O1-O5 registration binds its environment class, pre-task manifest,
+initial authority/source envelope, arm, and exact Harness activation. Each
+task-host unit runs once; O5 cross-host replication is not same-host replay.
+Compare matched same-class starting conditions with Harness as the only planned
+initial difference. Attribute later Agent-selected or human-authorized changes
+as lifecycle deltas; keep task differences explicit and cross-class observations
+descriptive. Minimum excludes discoverable user-global influence at start while
+system, developer, built-in, account, managed and unknown state stays retained
+or unknown. A baseline cannot inherit Harness repository guidance; unbound drift
+stops the pair. Private configuration or authentication, environment reset, a
+new OS account, or installation remains a human gate. After a grant the Agent
+performs supported mechanics; a host-only step is minimal, guided and verified.
+Resolve the current suitable official or maintained source per decision and bind
+its exact execution identity; never globally lock one historical version or run
+an unresolved moving target. This navigation file grants none of those actions.
 
 ## Starting one causal increment
 
@@ -88,8 +85,9 @@ Open exactly one increment with at most one active work item only after binding:
 - exact cleanup boundary and operations.
 
 Outcome-neutral repair binds `taskRegistration: null` and must leave the current
-graph at its stop. Outcome-bearing work additionally requires the program's
-frozen v1 normative profile and prospective cohort protocol to be bound in the
+graph at its stop. Outcome-bearing work additionally requires a new
+program-selected and environment-attributed normative profile and prospective
+cohort protocol to be bound in the
 current cohort generation's prior freeze revision, which also binds the exact source-native
 surface, activation cursor and cohort key identity/fingerprint. Before eligible
 demand, a named human must authorize that exact revision, complete binding

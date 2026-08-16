@@ -64,55 +64,68 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current tree binds the exact bytes of the
-[v1 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
-[prospective cohort protocol candidate](PROSPECTIVE-COHORT-PROTOCOL-V1.json)
-through `product/program.json`. The immutable artifact revision is `502c4ff`,
-the first frozen binding revision is `d19d2fb`, and its canonical digest begins
-`ee4ba7a`. These subordinate conformance operands still carry zero task or
-outcome evidence and do not become product authority. A named human authorized
-that exact binding in the frozen Codex source before any eligible demand, and a
-code-owned Windows validator independently verified the exact target, local
-source root, source-native authorization event and complete finite prefix. On
-2026-08-16 a transient source-unavailable result was incorrectly treated as
-definitive validation failure, so the exact protected resource was deleted and
-absence-checked under the failure disposition. `product/program.json` now
-retains the immutable first freeze as `revoked`; that generation verifies
-resource absence, cannot admit outcome registration, and cannot itself return
-to `frozen`. Because it had zero registrations, the program may open exactly
-one distinct successor generation only after a source-verified no-eligible-demand
-window, with a fresh activation, private key and independent exact authorization.
-The successor inherits no task, result, cursor or ordering state and cannot be
-restarted again. It was frozen at revision `8e8e76b` with canonical digest
-`d2cf0cd`, and its independent source authorization initially passed. During a
-later validator-hardening slice, however, the Agent applied the stricter task
-definition check before replacing the installed battery-blocked expiry task.
-That deterministic rejection invoked the authorized failure disposition and
-deleted both the exact protected resource and task. No natural task had been
-registered, O1-O5 remain 0/5, and v1.0 is now stopped rather than reconstructing
-the single permitted successor.
-Transient source unavailability or concurrent change now fails closed without
-destruction, while a confirmed schema, binding or content failure retains exact
-deletion. Diagnostics never contain the raw target, root, event, key or source
-locator. Hosted runners can corroborate the non-private revoked contract but
-cannot restore or prove local authorization. The protocol specifies
-eligibility, random public task identity with fixed private keyed source-message binding, strata, first-eligible enrollment,
-the earliest-prefix stop rule, missing-data handling, distinct natural-demand
-and measurement-event chronology, and claim limits without pre-populating
-natural tasks. Bound registrations must use unique task identities and form a
-strict Git ancestry order after the freeze. That order proves committed-byte
-sequence only; each task-bound validator must independently establish a
-complete source cursor with no omitted earlier eligible demand, natural demand
-before registration, and measurement afterward. Serial source transitions keep
-the key and cohort order, close the source window, and verify destination
-activation from a pre-demand source-bound cause or stop the cohort. The first
-freeze is effective activation only after its independent authorization source
-validator succeeds. While live
-source re-verifiability is claimed, the private key and private source evidence
-remain available only under the named human's exact privacy, access, retention,
-expiry, revocation, and cleanup disposition. Key destruction requires an exact
-receipt and revokes live verifiability rather than preserving acceptance. Git
-dates and evidence timestamps are diagnostic consistency fields, not trusted
+The current v1.1 program is `ready`, has no active increment, and keeps
+`normativeProfileBinding` deliberately `unfrozen`. The
+[v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
+[prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
+historical inputs only. v1.0 froze two independently authorized generations,
+registered no natural task, produced O1-O5 0/5, and stopped after deterministic
+cleanup removed the successor protected resource and exact expiry task. The
+verifier pins the exact v1.0 program and acceptance bytes at revision
+`910ac01`; no later release may reuse that profile binding, cohort state,
+authorization, task identity, ordering state, result or outcome.
+
+v1.1 makes environment attribution part of the acceptance authority rather
+than a supporting-document convention. Every future O1-O5 registration binds
+one pre-task manifest, one initial authority-and-available-source envelope, one
+of two environment classes, one treatment arm, and the exact Harness activation
+delta if present:
+
+```text
+observed-native-minimum: exclude discoverable user-global influence at start;
+                         retain system/built-in/account/managed/unknown state
+user-configured:         freeze the actual relevant user starting environment
+
+within-class comparison: matched starting manifest + authority/source envelope;
+                         exact Harness activation is the only planned initial
+                         route/configuration difference
+task-time adaptation:    attribute Agent-selected or human-authorized lifecycle
+                         deltas instead of treating start state as a ceiling
+claim ceiling:            matched observational, not single-variable causal
+cross-class comparison:   descriptive only, never a Harness effect
+```
+
+The manifest covers host/client version, model/provider/reasoning, account and
+managed requirements, observed-or-unknown system/developer/built-in state,
+working directory and instruction chain, configuration layers, rules, Skills,
+plugins, Apps, MCP, Hooks, memory, managers, OS/runtime/tool/resource surface,
+the initial authority-and-available-source envelope, and exact Harness package/
+activation. A without-Harness baseline cannot inherit
+Harness repository guidance, so it runs in a neutral workspace or real target
+repository with the same task-inherent non-Harness guidance as its comparator.
+Each natural task-host unit runs once in one pre-registered arm. O5's same-task
+cross-host pair is pre-registered portability replication, not same-host
+treatment replay. The pre-task state is a starting condition, not a static
+capability ceiling. After demand reveals need, the Agent may adapt under the
+registered authority: it performs every supported authorized mechanic, while
+any technically or authoritatively human-only action is reduced to the smallest
+exact step, guided, and verified before work resumes. All human actions remain
+visible in burden evidence; only transfer of Agent-owned work is prohibited.
+Each decision resolves the current suitable official or maintained source from
+bounded as-of evidence and binds the exact execution version, commit, or package
+identity. A historical version is not a global lock, an unresolved moving target
+cannot execute, and material mid-execution drift requires re-registration or an
+honest stop. Missing starting identity, unregistered lifecycle drift, or failed
+restoration stops the pair; it is never normalized away after a result.
+Historical evidence is explicitly environment-independent, environment-bound,
+or invalidated before reuse and never inherits outcome credit.
+
+Before outcome measurement, a new v1.1 profile and cohort protocol must be
+selected, content-addressed, frozen, and independently authorized under that
+environment contract. Their source-native eligibility, privacy-preserving task
+identity, first-eligible ordering, chronology, retention and cleanup controls
+must be code-validated before any natural task can enter the cohort. Git dates
+and evidence timestamps remain diagnostic consistency fields, not trusted
 chronology.
 
 Terminal release is an external-state transition over one immutable candidate,
@@ -186,10 +199,10 @@ Code/DeepSeek task pair. Both independently returned the same fact-grounded
 single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
 adapter/date claim. Those bindings remain immutable at the v0.2 revision and
-are not registered current v1.0 validators. v1.0 is stopped with O1-O5 at 0/5;
-live program state comes only from the verifier. Any successor release must
+are not registered current v1.1 validators. v1.0 is stopped with O1-O5 at 0/5;
+live program state comes only from the verifier. v1.1 must
 prospectively preserve or strengthen the criteria requiring sustained natural
-tasks, comparative burden
+tasks, same-environment comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
 transition, and live reproducible cross-host release evidence.
 Authorized product-plan delivery is real demand
@@ -283,8 +296,9 @@ Implementation follows the same residual-gap rule across layers. Collaboration
 protocols, human-allocation patterns, registries, gateways, tool search,
 runtimes, identity and authorization, audit and provenance formats, governance
 kernels, and evaluation systems are first treated as external substrate. A
-source-bound as-of landscape check records exact version or commit, licence or
-applicable terms, maturity, and reuse boundary before deciding whether to
+source-bound as-of landscape check resolves the then-current suitable official
+or maintained source and records the exact execution version, commit, or package
+identity, licence or applicable terms, maturity, and reuse boundary before deciding whether to
 reuse, thinly adapt, compose, or author. The reference adapters own only the missing portable quality
 semantics and integration needed to preserve the Harness contract; duplicating
 a sufficient external layer is a failed route decision, not product
@@ -298,7 +312,10 @@ component has one lifecycle owner.
 Healthy installed and authorized capabilities may be used proactively for a
 bound task. Installation, enablement, account connection, new data or trust,
 meaningful cost, consumer mutation, publication, and release remain separate
-authority transitions.
+authority transitions. Once authorized, the Agent owns every supported mechanic;
+when host policy reserves an action to the human, the Agent supplies the minimal
+exact instruction and verifies the resulting state rather than transferring
+discovery, route design, recovery, or cleanup.
 
 `AGENTS.md` remains execution guidance. Skills and Hooks are advisory inputs,
 self-authored Skills are replaceable host projections, and the peripheral
@@ -344,7 +361,8 @@ invoke Git, inspect prompts or transcripts, create threads, or validate
 outcomes. Its checked-in commands point to an absolute fail-closed
 unmaterialized interpreter sentinel; activation remains impossible until a
 separate authorized materialization binds a trusted absolute runtime. Measured
-activation additionally requires the program-frozen v1 profile binding.
+activation additionally requires a new current program-frozen,
+environment-attributed profile binding.
 
 Codex 0.147.0 uses two complementary plugin-loading scopes. The dedicated
 `HooksOnly` startup path deliberately omits Skills, MCP servers, and Apps while
@@ -544,7 +562,7 @@ tool contract additionally proves that an Agent can fork the calling thread in
 the same directory and that only completed history is copied; therefore the
 Agent must transmit and independently verify the active handoff delta before
 source release. The exact conservative risk threshold belongs in the new
-program-frozen v1 profile before measured work. This feasibility decision is
+current program-frozen profile before measured work. This feasibility decision is
 mechanism-only: no Hook has been installed or enabled and no O1-O5 result is
 claimed.
 

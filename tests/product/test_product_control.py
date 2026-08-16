@@ -220,9 +220,12 @@ class ProductControlTests(unittest.TestCase):
 
     def report(self, *, bind_successor: bool = True) -> dict:
         if not (self.root / ".git").is_dir():
-            with patch(
-                "harness.control._normative_profile_binding_history_valid",
-                return_value=True,
+            with patch.multiple(
+                control,
+                CURRENT_PROFILE_FREEZE_ENABLED=True,
+                _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
+                _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+                _v10_historical_authority_valid=lambda root, errors: True,
             ):
                 return verify_product(self.root)
         floor = subprocess.run(
@@ -328,6 +331,9 @@ class ProductControlTests(unittest.TestCase):
         )
         with patch.multiple(
             control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
+            _v10_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=initial_binding_revision,
@@ -429,7 +435,7 @@ class ProductControlTests(unittest.TestCase):
             "processLossBudget": {
                 "maxSameClassUserCorrectionBeforeStop": 1,
                 "maxConsecutiveOutcomeNeutralWorkItems": 1,
-                "maxMaterialUserCapabilityOrchestrationInterventions": 0,
+                "maxProhibitedAgentWorkTransfers": 0,
                 "stopOnAuthorityOrIrreversibleIncident": True,
                 "stopOnUnboundedResidue": True,
             },
@@ -504,7 +510,7 @@ class ProductControlTests(unittest.TestCase):
             program = self.read_json("product/program.json")
             program["terminalReleaseBinding"] = {
                 "state": "candidate",
-                "tag": "v1.0.0",
+                "tag": "v1.1.0",
                 "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
                 "annotationFormat": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
                 "o5EvidenceSetSha256": evidence_digest.hexdigest(),
@@ -538,9 +544,9 @@ class ProductControlTests(unittest.TestCase):
             "schema": 1,
             "format": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
             "productId": "agent-autonomy-harness",
-            "release": "v1.0",
+            "release": "v1.1",
             "candidateRevision": head,
-            "tag": "v1.0.0",
+            "tag": "v1.1.0",
             "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
             "o5EvidenceSetSha256": evidence_digest,
             "authority": {
@@ -566,7 +572,7 @@ class ProductControlTests(unittest.TestCase):
                 "git",
                 "tag",
                 "-a",
-                "v1.0.0",
+                "v1.1.0",
                 "-m",
                 json.dumps(annotation, separators=(",", ":")),
             ],
@@ -576,7 +582,7 @@ class ProductControlTests(unittest.TestCase):
             stderr=subprocess.PIPE,
         )
         return subprocess.run(
-            ["git", "rev-parse", "refs/tags/v1.0.0"],
+            ["git", "rev-parse", "refs/tags/v1.1.0"],
             cwd=self.root,
             check=True,
             capture_output=True,
@@ -721,6 +727,7 @@ class ProductControlTests(unittest.TestCase):
         registration_id: str = "registration.fixture-current",
         relative: str = "product/evidence/fixture-registration.json",
         commit_profile_binding: bool = True,
+        environment_manifest_schema: object = 1,
     ) -> None:
         outcome_ids = sorted(
             set(increment["acceptanceIds"]) & {"O1", "O2", "O3", "O4", "O5"}
@@ -802,6 +809,97 @@ class ProductControlTests(unittest.TestCase):
             "cohortKeyIdentity": activation["keyIdentity"],
             "cohortKeyFingerprint": activation["keyFingerprint"],
         }
+        harness_activation_delta = {
+            "state": "active",
+            "packageIdentity": "fixture-harness-package-v1",
+            "packageSha256": "a" * 64,
+            "activationIdentity": "fixture-harness-activation-v1",
+            "activationSha256": "b" * 64,
+            "taskExposureIdentity": "fixture-task-exposure-v1",
+            "taskExposureSha256": "c" * 64,
+        }
+        manifest_relative = (
+            "product/evidence/environment-manifests/fixture-"
+            + hashlib.sha256(registration_id.encode("utf-8")).hexdigest()[:16]
+            + ".json"
+        )
+        manifest = {
+            "schema": environment_manifest_schema,
+            "environmentClass": "user-configured",
+            "treatmentArm": "with-exact-harness",
+            "capturedAt": "2026-08-12T02:57:00+08:00",
+            **{
+                field: f"fixture fixed value for {field}"
+                for field in control.EXPECTED_ENVIRONMENT_ATTRIBUTION[
+                    "manifestFields"
+                ]
+            },
+        }
+        manifest[
+            "exact-harness-package-activation-and-task-exposure-delta"
+        ] = harness_activation_delta
+        self.write_json(manifest_relative, manifest)
+        manifest_environment = os.environ.copy()
+        manifest_environment.update(
+            {
+                "GIT_AUTHOR_DATE": "2026-08-12T02:57:00+08:00",
+                "GIT_COMMITTER_DATE": "2026-08-12T02:57:00+08:00",
+            }
+        )
+        subprocess.run(
+            ["git", "add", manifest_relative],
+            cwd=self.root,
+            env=manifest_environment,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        manifest_staged = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", manifest_relative],
+            cwd=self.root,
+            env=manifest_environment,
+            check=False,
+        )
+        if manifest_staged.returncode != 0:
+            subprocess.run(
+                ["git", "commit", "--quiet", "-m", "fixture environment manifest"],
+                cwd=self.root,
+                env=manifest_environment,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            manifest_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        else:
+            manifest_revision = subprocess.run(
+                ["git", "log", "-1", "--format=%H", "--", manifest_relative],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        committed_manifest = subprocess.run(
+            ["git", "show", f"{manifest_revision}:{manifest_relative}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        environment_attribution_binding = {
+            "contractSha256": control.EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256,
+            "environmentClass": "user-configured",
+            "treatmentArm": "with-exact-harness",
+            "manifestLocator": manifest_relative,
+            "manifestRevision": manifest_revision,
+            "manifestSha256": hashlib.sha256(committed_manifest).hexdigest(),
+            "harnessActivationDelta": harness_activation_delta,
+        }
         aliases = {
             "registeredAt": "2026-08-12T02:59:00+08:00",
             "taskIdentity": task_identity,
@@ -812,6 +910,7 @@ class ProductControlTests(unittest.TestCase):
             "materialCollaborationLossTaxonomy": losses,
             "enrollmentSurfaceAndCursor": enrollment_surface_and_cursor,
             "naturalDemandEventAndPrivateBinding": natural_demand_private_binding,
+            "environmentAttributionBinding": environment_attribution_binding,
             "normativeProfileIdentity": control.EXPECTED_V1_PROFILE_IDENTITY,
             "cohortProtocolIdentity": control.EXPECTED_V1_COHORT_PROTOCOL_IDENTITY,
             "profileSha256": program["normativeProfileBinding"]["sha256"],
@@ -1001,9 +1100,10 @@ class ProductControlTests(unittest.TestCase):
         }
 
     def render_codex_fixture_context(self, payload: dict) -> str | None:
-        with patch(
-            "harness.control._normative_profile_binding_history_valid",
-            return_value=True,
+        with patch.multiple(
+            control,
+            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _v10_historical_authority_valid=lambda root, errors: True,
         ):
             return render_session_start_context(self.root, payload)
 
@@ -1040,47 +1140,46 @@ class ProductControlTests(unittest.TestCase):
         }
 
     def render_claude_fixture_context(self, payload: dict) -> str | None:
-        with patch(
-            "harness.control._normative_profile_binding_history_valid",
-            return_value=True,
+        with patch.multiple(
+            control,
+            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _v10_historical_authority_valid=lambda root, errors: True,
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v10_contract_is_valid_stopped_and_preserves_v02_history(
+    def test_current_v11_contract_is_valid_ready_and_preserves_prior_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        hosted_source_unavailable = (
-            self.hosted_private_authorization_source_is_unavailable(report)
-        )
-        self.assertTrue(report["valid"] or hosted_source_unavailable, report["errors"])
-        self.assertEqual(report["release"], "v1.0")
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["release"], "v1.1")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(report["completionState"], "stopped")
+        self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertEqual(
-            report["guardrails"],
-            {"passed": 3 if hosted_source_unavailable else 4, "total": 4},
-        )
+        self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
         self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
         constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
-        v02 = constitution["historicalMilestones"][-1]
+        v02 = constitution["historicalMilestones"][-2]
         self.assertEqual(v02["release"], "v0.2")
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
+        v10 = constitution["historicalMilestones"][-1]
+        self.assertEqual(v10["release"], "v1.0")
+        self.assertEqual(v10["revision"], "910ac016f1e5963450e3cfc46f5056ab0a6b04d7")
+        self.assertIn("zero-outcome", v10["state"])
+        self.assertIn("can be inherited", v10["claimLimit"])
+        self.assertEqual(live_program["priorRelease"]["release"], "v1.0")
+        self.assertEqual(live_program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        self.assertFalse(control.CURRENT_PROFILE_FREEZE_ENABLED)
+        self.assertEqual(dict(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS), {})
 
-    def test_v1_profile_and_cohort_protocol_are_exact_and_successor_is_revoked(self) -> None:
+    def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
-        binding = program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "revoked")
-        self.assertEqual(
-            binding["cohortActivation"]["surfaceIdentity"],
-            control.EXPECTED_SUCCESSOR_SURFACE_IDENTITY,
-        )
+        self.assertEqual(program["normativeProfileBinding"], control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
             encoding="utf-8"
         )
@@ -1119,7 +1218,7 @@ class ProductControlTests(unittest.TestCase):
             control.EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
             control.INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
         )
-        self.assertIn(
+        self.assertNotIn(
             control.INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
             control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS,
         )
@@ -1135,7 +1234,7 @@ class ProductControlTests(unittest.TestCase):
             control.EXPECTED_V1_SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
             control.SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
         )
-        self.assertIn(
+        self.assertNotIn(
             control.SUCCESSOR_BINDING_AUTHORIZATION_VALIDATOR_ID,
             control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS,
         )
@@ -1167,6 +1266,393 @@ class ProductControlTests(unittest.TestCase):
         for field, expected in control.EXPECTED_COHORT_PROTOCOL_RULES.items():
             self.assertEqual(protocol[field], expected)
         self.assertTrue(protocol["claimLimits"])
+
+    def test_v10_stopped_authority_bytes_are_code_pinned(self) -> None:
+        errors: list[str] = []
+        self.assertTrue(control._v10_historical_authority_valid(ROOT, errors), errors)
+
+        committed_blob = control._committed_blob
+
+        def drifted(root: Path, revision: str, locator: str, digest: str) -> bool:
+            if locator == "product/acceptance.json":
+                return False
+            return committed_blob(root, revision, locator, digest)
+
+        errors = []
+        with patch("harness.control._committed_blob", side_effect=drifted):
+            self.assertFalse(control._v10_historical_authority_valid(ROOT, errors))
+        self.assertIn(
+            "v1.0 historical authority identity changed: product/acceptance.json",
+            errors,
+        )
+
+    def test_v11_environment_attribution_is_acceptance_owned_and_cross_criterion(self) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        contract = acceptance["environmentAttribution"]
+        self.assertEqual(
+            contract["environmentClasses"],
+            ["observed-native-minimum", "user-configured"],
+        )
+        self.assertEqual(
+            contract["treatmentArms"],
+            ["without-harness", "with-exact-harness"],
+        )
+        self.assertIn("task-host execution unit runs once", contract["assignmentRule"])
+        self.assertIn("matched observational", contract["comparisonRule"])
+        self.assertIn("retained-or-unknown", contract["observedNativeMinimumRule"])
+        self.assertIn("Harness repository guidance", contract["neutralWorkspaceRule"])
+        self.assertIn("environment-independent", contract["historicalEvidenceRule"])
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+        for criterion_id in ("O1", "O2", "O3", "O4", "O5"):
+            self.assertIn(
+                "environmentAttributionBinding",
+                criteria[criterion_id]["operationalization"]["preRegistrationFields"],
+            )
+        self.assertIn("same environment class", criteria["O2"]["threshold"])
+        self.assertIn("observed-native-minimum", criteria["O5"]["threshold"])
+        self.assertIn("user-configured", criteria["O5"]["threshold"])
+
+    def test_v11_initial_environment_is_a_starting_state_not_a_static_ceiling(self) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        contract = acceptance["environmentAttribution"]
+
+        self.assertIn("starting condition", contract["initialStateRule"])
+        self.assertIn("treatment-mediated lifecycle deltas", contract["initialStateRule"])
+        self.assertIn("authority-and-available-source envelope", contract["comparisonRule"])
+        self.assertIn("before execution", contract["taskTimeAdaptationRule"])
+        self.assertIn("smallest exact step", contract["taskTimeAdaptationRule"])
+        self.assertIn("verified before resuming", contract["taskTimeAdaptationRule"])
+        self.assertIn(
+            "initial-authority-and-available-source-envelope",
+            contract["manifestFields"],
+        )
+
+    def test_v11_resolves_current_capability_identity_per_decision(self) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        rule = acceptance["environmentAttribution"]["versionResolutionRule"]
+
+        self.assertIn("current suitable official or maintained source", rule)
+        self.assertIn("bounded as-of source", rule)
+        self.assertIn("exact version, commit or package identity", rule)
+        self.assertIn("not one historical version across tasks", rule)
+        self.assertIn("unresolved mutable label", rule)
+        self.assertIn("re-register or honestly stop", rule)
+
+    def test_v11_distinguishes_human_only_actions_from_agent_work_transfer(self) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        contract = acceptance["environmentAttribution"]
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+
+        self.assertIn("technically or authoritatively unavoidable", contract["humanInterventionRule"])
+        self.assertIn("prohibited transfer of Agent-owned work", contract["humanInterventionRule"])
+        self.assertIn("all human actions", contract["burdenRule"])
+        self.assertIn("legitimate human-only", contract["burdenRule"])
+        self.assertIn("prohibited Agent-work transfers", contract["burdenRule"])
+        self.assertIn("zero prohibited", criteria["O1"]["metric"])
+        self.assertIn("legitimate human-only", criteria["O1"]["metric"])
+        self.assertIn("total human actions", criteria["O2"]["metric"])
+        self.assertIn("human-only", criteria["O2"]["metric"])
+        self.assertIn("prohibited Agent-work transfers", criteria["O2"]["metric"])
+
+    def test_v11_capability_lifecycle_covers_guidance_and_retirement(self) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        o3 = next(item for item in acceptance["criteria"] if item["id"] == "O3")
+        lifecycle_rule = acceptance["environmentAttribution"]["lifecycleRule"]
+
+        for verb in (
+            "install",
+            "configure",
+            "enable",
+            "disable",
+            "downgrade",
+            "rollback",
+            "retire",
+            "persist",
+        ):
+            self.assertIn(verb, lifecycle_rule)
+        self.assertIn("dynamicSourceResolutionAndDecisionRecordRule", o3["operationalization"]["preRegistrationFields"])
+        self.assertIn("resolvedSourceIdentityVersionCommitTermsMaturityAndAsOf", o3["operationalization"]["requiredMeasures"])
+        self.assertIn("taskTimeLifecycleDeltasAndFinalDisposition", o3["operationalization"]["requiredMeasures"])
+        self.assertIn("humanOnlyActionsGuidanceAndVerification", o3["operationalization"]["requiredMeasures"])
+
+        program = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )
+        progression = program["progressionPolicy"]
+        self.assertIn("starting-state", progression["taskTimeAdaptationDisposition"])
+        self.assertIn("guides-and-verifies", progression["humanOnlyActionDisposition"])
+        self.assertIn("resolve-current-suitable-source", progression["versionResolutionDisposition"])
+
+    def test_v11_rejects_v10_frozen_or_revoked_binding_reuse(self) -> None:
+        old_program = json.loads(
+            subprocess.run(
+                [
+                    "git",
+                    "show",
+                    "910ac016f1e5963450e3cfc46f5056ab0a6b04d7:product/program.json",
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__(
+                "normativeProfileBinding", old_program["normativeProfileBinding"]
+            ),
+        )
+        with patch.multiple(
+            control,
+            CURRENT_PROFILE_FREEZE_ENABLED=False,
+            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _v10_historical_authority_valid=lambda root, errors: True,
+        ):
+            report = verify_product(self.root)
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "current normative profile freeze is not enabled",
+            report["errors"],
+        )
+
+    def test_v11_freeze_flag_cannot_activate_legacy_v10_mechanism(self) -> None:
+        old_program = json.loads(
+            subprocess.run(
+                [
+                    "git",
+                    "show",
+                    "910ac016f1e5963450e3cfc46f5056ab0a6b04d7:product/program.json",
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__(
+                "normativeProfileBinding", old_program["normativeProfileBinding"]
+            ),
+        )
+        with patch.multiple(
+            control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=False,
+            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _v10_historical_authority_valid=lambda root, errors: True,
+        ):
+            report = verify_product(self.root)
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "v1.1 normative profile freeze mechanism is not registered",
+            report["errors"],
+        )
+
+    def test_v11_freeze_flag_cannot_stop_an_unfrozen_program(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__("status", "stopped"),
+        )
+        with patch.multiple(
+            control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=False,
+            _v10_historical_authority_valid=lambda root, errors: True,
+        ):
+            report = verify_product(self.root)
+        self.assertFalse(report["valid"])
+        self.assertIn("v1.1 current program cannot be stopped", report["errors"])
+
+    def test_environment_attribution_contract_cannot_drift(self) -> None:
+        self.mutate(
+            "product/acceptance.json",
+            lambda value: value["environmentAttribution"].__setitem__(
+                "assignmentRule", "repeat one task until every arm passes"
+            ),
+        )
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G3"])
+        self.assertIn("acceptance environmentAttribution is invalid", report["errors"])
+
+    def test_task_registration_rejects_placeholder_environment_binding(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        registration["preRegistrationValues"]["environmentAttributionBinding"] = (
+            "fixture placeholder"
+        )
+        self.write_json(relative, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json environment attribution binding is invalid",
+            report["errors"],
+        )
+
+    def test_task_registration_rejects_environment_arm_or_manifest_mismatch(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        environment_binding = registration["preRegistrationValues"][
+            "environmentAttributionBinding"
+        ]
+        environment_binding["treatmentArm"] = "without-harness"
+        environment_binding["manifestSha256"] = "d" * 64
+        self.write_json(relative, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json environment attribution binding is invalid",
+            report["errors"],
+        )
+
+    def test_task_registration_rejects_ambiguous_environment_manifest_json(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        registration_relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(registration_relative)
+        environment_binding = registration["preRegistrationValues"][
+            "environmentAttributionBinding"
+        ]
+        manifest_relative = environment_binding["manifestLocator"]
+        manifest = self.read_json(manifest_relative)
+        ambiguous = json.dumps(manifest, ensure_ascii=False, indent=2).replace(
+            '"schema": 1,', '"schema": 1,\n  "schema": 1,', 1
+        ) + "\n"
+        (self.root / manifest_relative).write_text(ambiguous, encoding="utf-8")
+        (self.root / registration_relative).unlink()
+        subprocess.run(
+            ["git", "add", manifest_relative, registration_relative],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "ambiguous environment manifest"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        manifest_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        committed_manifest = subprocess.run(
+            ["git", "show", f"{manifest_revision}:{manifest_relative}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        environment_binding["manifestRevision"] = manifest_revision
+        environment_binding["manifestSha256"] = hashlib.sha256(
+            committed_manifest
+        ).hexdigest()
+        self.write_json(registration_relative, registration)
+        subprocess.run(
+            ["git", "add", registration_relative],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "bind ambiguous manifest"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        registration_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        committed_registration = subprocess.run(
+            ["git", "show", f"{registration_revision}:{registration_relative}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        binding = program["increments"][0]["taskRegistration"]
+        binding["sourceRevision"] = registration_revision
+        binding["sha256"] = hashlib.sha256(committed_registration).hexdigest()
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json environment attribution binding is invalid",
+            report["errors"],
+        )
+
+    def test_task_registration_rejects_boolean_environment_manifest_schema(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(
+                value,
+                increment,
+                environment_manifest_schema=True,
+            )
+
+        self.mutate("product/program.json", activate_o1)
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "task registration product/evidence/fixture-registration.json environment attribution binding is invalid",
+            report["errors"],
+        )
 
     def test_current_public_evidence_excludes_private_runtime_identifiers(self) -> None:
         path_patterns = (
@@ -1329,7 +1815,10 @@ class ProductControlTests(unittest.TestCase):
             )
         )
 
-        self.assertIn("subordinate conformance operands", criteria["G3"]["statement"])
+        self.assertIn(
+            "subordinate evidence or conformance operands",
+            criteria["G3"]["statement"],
+        )
         self.assertNotIn("profile owns method", profile)
         self.assertIn("immutable subordinate", profile)
         self.assertIn(
@@ -1354,15 +1843,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("not effective cohort activation by itself", acceptance["progressRule"])
         self.assertIn("code-owned source validator", acceptance["progressRule"])
         self.assertIn(
-            "after the freeze commit but before authorization stops",
+            "after the freeze commit but before authorization stops v1.1",
             acceptance["progressRule"],
         )
         self.assertIn("immutable stopped history", acceptance["progressRule"])
-        self.assertIn("zero task registrations", acceptance["progressRule"])
-        self.assertIn("no eligible natural demand occurred after revocation", acceptance["progressRule"])
-        self.assertIn("one fresh successor cohort generation", acceptance["progressRule"])
-        self.assertIn("carries no prior registration, result, or ordering state", acceptance["progressRule"])
-        self.assertIn("any second successor attempt stops", acceptance["progressRule"])
+        self.assertIn("cannot open a successor or restart", acceptance["progressRule"])
+        self.assertIn("environment manifest boundary", acceptance["progressRule"])
         self.assertIn("Unsalted or unkeyed hashes", profile)
         self.assertIn("exposed to the task/model", profile)
         self.assertIn("revokes live source verifiability", profile)
@@ -1466,23 +1952,16 @@ class ProductControlTests(unittest.TestCase):
         completed = self.run_cli(root=ROOT)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
-        hosted_source_unavailable = (
-            self.hosted_private_authorization_source_is_unavailable(report)
-        )
-        self.assertEqual(
-            completed.returncode,
-            1 if hosted_source_unavailable else 0,
-            completed.stderr,
-        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(report["release"], "v1.0")
+        self.assertEqual(report["release"], "v1.1")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(report["completionState"], "stopped")
+        self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertTrue(report["valid"] or hosted_source_unavailable, report["errors"])
+        self.assertTrue(report["valid"], report["errors"])
 
     def test_evidence_git_cache_is_bounded_to_one_verification_context(self) -> None:
         token = control._EVIDENCE_GIT_CACHE.set({})
@@ -1580,7 +2059,7 @@ class ProductControlTests(unittest.TestCase):
                     "ls-remote",
                     "--tags",
                     control.EXPECTED_PUBLIC_REMOTE,
-                    "refs/tags/v1.0.0",
+                    "refs/tags/v1.1.0",
                 ),
                 b"",
             )
@@ -1684,24 +2163,11 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        hosted_source_unavailable = (
-            os.environ.get("GITHUB_ACTIONS") == "true"
-            and completed.returncode == 1
-            and completed.stderr.strip()
-            in {
-                "ERROR: initial binding authorization private source is unavailable",
-                "ERROR: successor binding authorization private source is unavailable",
-            }
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertIn(
+            f"v1.1: {live_program['status']}, in-progress (0/5 outcomes)",
+            completed.stdout,
         )
-        self.assertTrue(
-            completed.returncode == 0 or hosted_source_unavailable,
-            completed.stderr,
-        )
-        if not hosted_source_unavailable:
-            self.assertIn(
-                f"v1.0: {live_program['status']}, stopped (0/5 outcomes)",
-                completed.stdout,
-            )
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
@@ -2467,7 +2933,7 @@ class ProductControlTests(unittest.TestCase):
         )
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("program id must be harness-product-program-v1.0", report["errors"])
+        self.assertIn("program id must be harness-product-program-v1.1", report["errors"])
 
     def test_coordinated_release_rename_cannot_self_promote(self) -> None:
         def rename_program(value: dict) -> None:
@@ -2483,7 +2949,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn("program release must be v1.0", report["errors"])
+        self.assertIn("program release must be v1.1", report["errors"])
 
     def test_authority_json_rejects_duplicate_keys_and_nonfinite_constants(self) -> None:
         path = self.root / "product" / "program.json"
@@ -3104,6 +3570,52 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_registration_revision_must_be_in_canonical_head_history(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        side_revision = program["increments"][0]["taskRegistration"][
+            "sourceRevision"
+        ]
+        canonical_revision = subprocess.run(
+            ["git", "rev-parse", f"{side_revision}^"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        subprocess.run(
+            ["git", "restore", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "switch", "--quiet", "--detach", canonical_revision],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.write_json(relative, registration)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current taskRegistration identity or frozen-profile binding mismatch",
+            report["errors"],
+        )
+
     def test_registration_parent_must_already_contain_frozen_binding(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
@@ -3149,61 +3661,114 @@ class ProductControlTests(unittest.TestCase):
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
             increment["workItems"][0]["acceptanceIds"].append("O1")
-            self.freeze_program_profile(value)
-            base_branch = subprocess.run(
-                ["git", "branch", "--show-current"],
-                cwd=self.root,
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
-            subprocess.run(
-                ["git", "switch", "--quiet", "-c", "fixture-merge-parent"],
-                cwd=self.root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            marker = self.root / "docs/FIXTURE-MERGE-PARENT.md"
-            marker.write_text("fixture merge parent\n", encoding="utf-8")
-            subprocess.run(
-                ["git", "add", "docs/FIXTURE-MERGE-PARENT.md"],
-                cwd=self.root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            subprocess.run(
-                ["git", "commit", "--quiet", "-m", "fixture merge parent"],
-                cwd=self.root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            subprocess.run(
-                ["git", "switch", "--quiet", base_branch],
-                cwd=self.root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            subprocess.run(
-                [
-                    "git",
-                    "merge",
-                    "--quiet",
-                    "--no-ff",
-                    "--no-commit",
-                    "fixture-merge-parent",
-                ],
-                cwd=self.root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
             self.bind_fixture_registration(value, increment)
 
         self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        manifest_revision = registration["preRegistrationValues"][
+            "environmentAttributionBinding"
+        ]["manifestRevision"]
+        subprocess.run(
+            ["git", "restore", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "switch",
+                "--quiet",
+                "-c",
+                "fixture-merge-parent",
+                manifest_revision,
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        marker = self.root / "docs/FIXTURE-MERGE-PARENT.md"
+        marker.write_text("fixture merge parent\n", encoding="utf-8")
+        subprocess.run(
+            ["git", "add", "docs/FIXTURE-MERGE-PARENT.md"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "fixture merge parent"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "switch",
+                "--quiet",
+                "-c",
+                "fixture-merge-base",
+                manifest_revision,
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "merge",
+                "--quiet",
+                "--no-ff",
+                "--no-commit",
+                "fixture-merge-parent",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.write_json(relative, registration)
+        subprocess.run(
+            ["git", "add", relative],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "ambiguous registration merge"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        source_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        committed_registration = subprocess.run(
+            ["git", "show", f"{source_revision}:{relative}"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        binding = program["increments"][0]["taskRegistration"]
+        binding["sourceRevision"] = source_revision
+        binding["sha256"] = hashlib.sha256(committed_registration).hexdigest()
+        self.write_json("product/program.json", program)
+
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
@@ -3534,6 +4099,55 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
+    def test_binding_history_cannot_hide_transition_behind_foreign_program_id(self) -> None:
+        self.initialize_fixture_repository()
+        program = self.read_json("product/program.json")
+        self.freeze_program_profile(program)
+        frozen = self.read_json("product/program.json")
+
+        foreign = deepcopy(frozen)
+        foreign["id"] = "foreign-program"
+        foreign["normativeProfileBinding"]["state"] = "revoked"
+        self.write_json("product/program.json", foreign)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "hide fixture revocation"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        self.write_json("product/program.json", frozen)
+        subprocess.run(
+            ["git", "add", "product/program.json"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "restore fixture program id"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        report = self.report()
+
+        self.assertFalse(report["valid"])
+        self.assertIn(
+            "v1 normative profile binding history is incomplete",
+            report["errors"],
+        )
+
     def test_uncommitted_first_freeze_fails_closed(self) -> None:
         program = self.read_json("product/program.json")
         self.freeze_program_profile(program, commit_binding=False)
@@ -3569,6 +4183,9 @@ class ProductControlTests(unittest.TestCase):
 
         with patch.multiple(
             control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
+            _v10_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
@@ -3618,6 +4235,9 @@ class ProductControlTests(unittest.TestCase):
 
         with patch.multiple(
             control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
+            _v10_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
@@ -3753,6 +4373,9 @@ class ProductControlTests(unittest.TestCase):
 
         with patch.multiple(
             control,
+            CURRENT_PROFILE_FREEZE_ENABLED=True,
+            _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
+            _v10_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=first_freeze_revision,
@@ -4520,17 +5143,17 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_material_user_capability_orchestration_budget_is_always_zero(self) -> None:
+    def test_prohibited_agent_work_transfer_budget_is_always_zero(self) -> None:
         def loosen(value: dict) -> None:
             self.activate_program(value)["processLossBudget"][
-                "maxMaterialUserCapabilityOrchestrationInterventions"
+                "maxProhibitedAgentWorkTransfers"
             ] = 1
 
         self.mutate("product/program.json", loosen)
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "material user capability orchestration intervention budget must be zero",
+            "prohibited Agent-work transfer budget must be zero",
             report["errors"],
         )
 
@@ -5309,89 +5932,25 @@ class ProductControlTests(unittest.TestCase):
             )
             delete.assert_called_once_with(resource, "validation-failure", errors)
 
-    def test_initial_authorization_deletion_uses_exact_target_and_safe_receipt(
-        self,
-    ) -> None:
-        key = b"d" * 32
-        target_name = "AgentAutonomyHarness/v1/delete-fixture"
-        target_commitment = fixture_private_hmac(
-            key,
-            control.INITIAL_AUTHORIZATION_TARGET_HMAC_DOMAIN,
-            target_name,
-        )
-        calls: list[str] = []
-        last_error = {"value": 0}
-
-        def set_last_error(value: int) -> int:
-            previous = last_error["value"]
-            last_error["value"] = value
-            return previous
-
-        def get_last_error() -> int:
-            return last_error["value"]
-
-        class FakeFunction:
-            def __init__(self, callback) -> None:
-                self.callback = callback
-                self.argtypes = None
-                self.restype = None
-
-            def __call__(self, *args):
-                return self.callback(*args)
-
-        def delete(target: str, credential_type: int, flags: int) -> int:
-            self.assertEqual((credential_type, flags), (1, 0))
-            calls.append(target)
-            return 1
-
-        def read(target: str, credential_type: int, flags: int, output) -> int:
-            self.assertEqual(target, target_name)
-            self.assertEqual((credential_type, flags), (1, 0))
-            del output
-            control.ctypes.set_last_error(1168)
-            return 0
-
-        class FakeAdvapi:
-            CredDeleteW = FakeFunction(delete)
-            CredReadW = FakeFunction(read)
-            CredFree = FakeFunction(lambda value: None)
-
-        resource = (
-            {"keyBase64": base64.b64encode(key).decode("ascii")},
-            target_name,
-        )
-        with patch.multiple(
-            control,
-            EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT=(
-                "sha256:" + hashlib.sha256(key).hexdigest()
-            ),
-            EXPECTED_INITIAL_AUTHORIZATION_CREDENTIAL_TARGET_COMMITMENT=(
-                target_commitment
-            ),
-        ), patch.object(control, "os", SimpleNamespace(name="nt")), patch(
-            "harness.control.ctypes.WinDLL",
-            return_value=FakeAdvapi(),
-            create=True,
-        ), patch(
-            "harness.control.ctypes.set_last_error",
-            side_effect=set_last_error,
-            create=True,
-        ), patch(
-            "harness.control.ctypes.get_last_error",
-            side_effect=get_last_error,
-            create=True,
-        ):
-            errors: list[str] = []
-            self.assertTrue(
+    def test_v11_initial_private_cleanup_route_is_not_executable(self) -> None:
+        source = (ROOT / "harness/control.py").read_text(encoding="utf-8")
+        self.assertNotIn("CredDeleteW", source)
+        errors: list[str] = []
+        with patch("harness.control.ctypes.WinDLL", create=True) as win_dll:
+            self.assertFalse(
                 control._delete_initial_authorization_private_resource(
-                    resource,
+                    ({"fixture": "private"}, "historical-target"),
                     "validation-failure",
                     errors,
                 )
             )
-        self.assertEqual(calls, [target_name])
-        self.assertTrue(any("destruction verified" in item for item in errors))
-        self.assertTrue(all(target_name not in item for item in errors))
+        win_dll.assert_not_called()
+        self.assertEqual(
+            errors,
+            [
+                "initial binding authorization private cleanup is historical and unavailable in v1.1"
+            ],
+        )
 
     def test_initial_authorization_stop_and_withdrawal_use_cleanup_route(self) -> None:
         resource = ({"fixture": "private"}, "AgentAutonomyHarness/v1/exact")
@@ -5632,56 +6191,23 @@ class ProductControlTests(unittest.TestCase):
             )
             delete.assert_called_once_with(resource, "validation-failure", errors)
 
-        with patch(
-            "harness.control._utc_now", return_value=before_expiry
-        ), patch(
-            "harness.control._read_successor_authorization_private_evidence",
-            return_value=resource,
-        ) as read, patch(
-            "harness.control._successor_authorization_private_resource_identity_valid",
-            return_value=True,
-        ):
-            errors = []
-            self.assertFalse(
-                control.expire_successor_authorization_private_evidence(errors)
+        self.assertFalse(
+            hasattr(control, "expire_successor_authorization_private_evidence")
+        )
+        errors = []
+        self.assertFalse(
+            control._delete_successor_authorization_private_resource(
+                resource,
+                "expiry",
+                errors,
             )
-            read.assert_called_once()
-
-        with patch(
-            "harness.control._utc_now", return_value=after_expiry
-        ), patch(
-            "harness.control._read_successor_authorization_private_evidence",
-            return_value=resource,
-        ), patch(
-            "harness.control._successor_authorization_private_resource_identity_valid",
-            return_value=True,
-        ), patch(
-            "harness.control._delete_successor_authorization_private_resource",
-            return_value=True,
-        ) as delete:
-            errors = []
-            self.assertTrue(
-                control.expire_successor_authorization_private_evidence(errors)
-            )
-            delete.assert_called_once_with(resource, "expiry", errors)
-
-        with patch(
-            "harness.control._utc_now", return_value=after_expiry
-        ), patch(
-            "harness.control._read_successor_authorization_private_evidence",
-            return_value=None,
-        ), patch(
-            "harness.control._successor_authorization_private_resource_absent",
-            return_value=True,
-        ), patch(
-            "harness.control._remove_successor_expiry_cleanup_trigger",
-            return_value=True,
-        ) as remove:
-            errors = []
-            self.assertTrue(
-                control.expire_successor_authorization_private_evidence(errors)
-            )
-            remove.assert_called_once_with(errors)
+        )
+        self.assertEqual(
+            errors,
+            [
+                "successor binding authorization private cleanup is historical and unavailable in v1.1"
+            ],
+        )
 
     def test_successor_expiry_trigger_definition_is_exact_and_s4u(self) -> None:
         expected_python = self.root / "python.exe"
@@ -5777,37 +6303,21 @@ class ProductControlTests(unittest.TestCase):
                 ["successor binding authorization expiry cleanup trigger is invalid"],
             )
 
-    def test_successor_expiry_trigger_removal_is_exact_and_verified(self) -> None:
-        executable = Path(r"C:\Windows\System32\schtasks.exe")
-        results = [
-            SimpleNamespace(returncode=0),
-            SimpleNamespace(returncode=0),
-            SimpleNamespace(returncode=1),
-        ]
-        with patch(
-            "harness.control._trusted_windows_schtasks_executable",
-            return_value=executable,
-        ), patch(
-            "harness.control.subprocess.run",
-            side_effect=results,
-        ) as run:
+    def test_v11_successor_expiry_trigger_removal_is_not_executable(self) -> None:
+        source = (ROOT / "harness/control.py").read_text(encoding="utf-8")
+        self.assertNotIn('"/Delete"', source)
+        with patch("harness.control.subprocess.run") as run:
             errors: list[str] = []
-            self.assertTrue(
-                control._remove_successor_expiry_cleanup_trigger(errors),
-                errors,
+            self.assertFalse(
+                control._remove_successor_expiry_cleanup_trigger(errors)
             )
-        self.assertEqual(run.call_count, 3)
+        run.assert_not_called()
         self.assertEqual(
-            run.call_args_list[1].args[0],
+            errors,
             [
-                str(executable),
-                "/Delete",
-                "/TN",
-                control.SUCCESSOR_EXPIRY_TASK_NAME,
-                "/F",
+                "successor binding authorization expiry cleanup trigger removal is historical and unavailable in v1.1"
             ],
         )
-        self.assertTrue(any("removal verified" in item for item in errors))
 
     def test_revoked_private_resource_absence_is_code_verified(self) -> None:
         last_error = {"value": 0}
@@ -6240,67 +6750,21 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"]["verified"], 0)
 
-    def test_terminally_revoked_program_reports_stopped(self) -> None:
-        def stop(value: dict) -> None:
-            value["status"] = "stopped"
-            value["activeIncrementId"] = None
-            value["increments"] = []
-            value["normativeProfileBinding"] = json.loads(
-                (ROOT / "product/program.json").read_text(encoding="utf-8")
-            )["normativeProfileBinding"]
-            value["normativeProfileBinding"]["state"] = "revoked"
-
-        self.mutate("product/program.json", stop)
-        with patch("harness.control._committed_blob", return_value=True), patch(
-            "harness.control._initial_authorization_private_resource_absent",
-            return_value=True,
-        ), patch(
-            "harness.control._successor_authorization_private_resource_absent",
-            return_value=True,
+    def test_v11_cannot_reuse_v10_terminal_state(self) -> None:
+        self.mutate(
+            "product/program.json",
+            lambda value: value.__setitem__("status", "stopped"),
+        )
+        with patch.multiple(
+            control,
+            CURRENT_PROFILE_FREEZE_ENABLED=False,
+            _normative_profile_binding_history_valid=lambda root, binding, errors: True,
+            _v10_historical_authority_valid=lambda root, errors: True,
         ):
-            report = self.report()
-        self.assertTrue(report["valid"], report["errors"])
-        self.assertEqual(report["programStatus"], "stopped")
-        self.assertEqual(report["completionState"], "stopped")
-        self.assertEqual(report["outcomes"]["verified"], 0)
-
-    def test_stopped_state_is_bound_to_revoked_successor_generation(self) -> None:
-        live_binding = json.loads(
-            (ROOT / "product/program.json").read_text(encoding="utf-8")
-        )["normativeProfileBinding"]
-
-        def set_state(status: str, binding_state: str) -> None:
-            def mutate(value: dict) -> None:
-                value["status"] = status
-                value["activeIncrementId"] = None
-                value["increments"] = []
-                value["normativeProfileBinding"] = deepcopy(live_binding)
-                value["normativeProfileBinding"]["state"] = binding_state
-
-            self.mutate("product/program.json", mutate)
-
-        with patch("harness.control._committed_blob", return_value=True), patch(
-            "harness.control._initial_authorization_private_resource_absent",
-            return_value=True,
-        ), patch(
-            "harness.control._successor_authorization_private_resource_absent",
-            return_value=True,
-        ):
-            set_state("ready", "revoked")
-            ready = self.report()
-            self.assertFalse(ready["valid"])
-            self.assertIn(
-                "revoked successor cohort requires a stopped program",
-                ready["errors"],
-            )
-
-            set_state("stopped", "frozen")
-            stopped = self.report()
-            self.assertFalse(stopped["valid"])
-            self.assertIn(
-                "stopped program requires a revoked successor cohort",
-                stopped["errors"],
-            )
+            report = verify_product(self.root)
+        self.assertFalse(report["valid"])
+        self.assertEqual(report["completionState"], "in-progress")
+        self.assertIn("v1.1 current program cannot be stopped", report["errors"])
 
     def test_obsolete_paused_program_state_is_rejected(self) -> None:
         self.mutate(
@@ -6399,8 +6863,8 @@ class ProductControlTests(unittest.TestCase):
         ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
                 return (
-                    f"{tag_object}\trefs/tags/v1.0.0\n"
-                    f"{head}\trefs/tags/v1.0.0^{{}}\n"
+                    f"{tag_object}\trefs/tags/v1.1.0\n"
+                    f"{head}\trefs/tags/v1.1.0^{{}}\n"
                 ).encode("ascii")
             return original(root, *args, **kwargs)
 
@@ -6424,8 +6888,8 @@ class ProductControlTests(unittest.TestCase):
         ) -> bytes | None:
             if args[:2] == ("ls-remote", "--tags"):
                 return (
-                    f"{'0' * len(tag_object)}\trefs/tags/v1.0.0\n"
-                    f"{head}\trefs/tags/v1.0.0^{{}}\n"
+                    f"{'0' * len(tag_object)}\trefs/tags/v1.1.0\n"
+                    f"{head}\trefs/tags/v1.1.0^{{}}\n"
                 ).encode("ascii")
             return original(root, *args, **kwargs)
 
@@ -6721,21 +7185,34 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_public_status_claims_match_the_terminal_v1_boundary(self) -> None:
+    def test_public_status_claims_match_the_v11_environment_attribution_boundary(self) -> None:
         security = (self.root / "SECURITY.md").read_text(encoding="utf-8")
         research = (
             self.root / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
         ).read_text(encoding="utf-8")
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         readme_zh = (self.root / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn("stopped v1.0 terminal-proof tree", security)
+        self.assertIn("ready v1.1 environment-attribution tree", security)
         self.assertNotIn("current v0.2 tree", security)
-        self.assertIn("complete six-or-more-task O1 cohort", research)
+        self.assertIn("observed-native-minimum", research)
+        self.assertIn("user-configured", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
         self.assertIn("terminal proposition", readme)
-        self.assertNotIn("programStatus=ready", readme)
+        self.assertIn("programStatus=ready", readme)
+        self.assertIn("v1.0", readme)
+        self.assertIn("stopped", readme)
         self.assertIn("宪章终极命题尚未成立", readme_zh)
-        self.assertNotIn("programStatus=ready", readme_zh)
+        self.assertIn("programStatus=ready", readme_zh)
+        self.assertIn("v1.0", readme_zh)
+        self.assertIn("停止", readme_zh)
+        for document in (readme, research):
+            self.assertIn("starting", document.lower())
+            self.assertIn("not a static capability ceiling", document)
+            self.assertIn("unresolved moving target", document)
+            self.assertIn("human-only", document)
+        self.assertIn("起始条件", readme_zh)
+        self.assertIn("移动目标", readme_zh)
+        self.assertIn("人类专属", readme_zh)
 
     def test_hosted_validation_has_finite_ref_scoped_resource_limits(self) -> None:
         workflow = (self.root / ".github/workflows/validate.yml").read_text(

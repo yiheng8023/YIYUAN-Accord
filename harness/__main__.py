@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 
 from .codex_reference import session_start_hook_output
-from .control import expire_successor_authorization_private_evidence, verify_product
+from .control import verify_product
 
 MAX_HOOK_INPUT_CHARACTERS = 65_536
 
@@ -29,7 +29,6 @@ def main() -> int:
     verify_parser.add_argument("--json", action="store_true")
     codex_parser = subparsers.add_parser("codex-session-start")
     codex_parser.add_argument("--root", type=Path, default=Path.cwd())
-    subparsers.add_parser("expire-successor-cohort-private-evidence")
     args = parser.parse_args()
 
     if args.command == "codex-session-start":
@@ -42,20 +41,6 @@ def main() -> int:
             )
         )
         return 0
-
-    if args.command == "expire-successor-cohort-private-evidence":
-        errors: list[str] = []
-        if expire_successor_authorization_private_evidence(errors):
-            print("successor cohort private evidence expiry cleanup verified")
-            return 0
-        for error in errors:
-            print(f"ERROR: {error}", file=sys.stderr)
-        return (
-            4
-            if errors
-            == ["successor binding authorization expiry cleanup is not due"]
-            else 3
-        )
 
     report = verify_product(args.root)
     if args.json:

@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "id": "harness-product-program-v1.0",
+  "id": "harness-product-program-v1.1",
   "productId": "agent-autonomy-harness",
-  "release": "v1.0",
-  "purpose": "Prove the constitution's terminal product proposition through a finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and cannot satisfy this program by inheritance.",
+  "release": "v1.1",
+  "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "stopped",
+  "status": "ready",
   "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
@@ -24,34 +24,29 @@
       "behavior-or-value-claim"
     ],
     "historicalFailureRole": "counterevidence-and-replanning-input-only",
+    "environmentAttributionDisposition": "acceptance-owned-observed-native-minimum-and-user-configured-strata-with-preregistered-matched-starting-environment-and-attributed-task-time-adaptation",
+    "taskTimeAdaptationDisposition": "pretask-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-and-records-lifecycle-deltas",
+    "humanOnlyActionDisposition": "agent-detects-minimizes-guides-and-verifies-unavoidable-user-step-while-prohibited-agent-work-transfer-remains-zero",
+    "versionResolutionDisposition": "resolve-current-suitable-source-per-decision-bind-exact-execution-identity-and-stop-on-unresolved-moving-target-or-material-drift",
     "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
     "userMustNotInventTasks": true
   },
   "priorRelease": {
-    "release": "v0.2",
-    "state": "accepted-bounded-calibration-milestone",
-    "revision": "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
+    "release": "v1.0",
+    "state": "stopped-zero-outcome-terminal-proof-attempt",
+    "revision": "910ac016f1e5963450e3cfc46f5056ab0a6b04d7",
     "currentAuthority": false
   },
   "normativeProfileBinding": {
-    "state": "revoked",
-    "profileIdentity": "harness-demand-to-capability-v1.0-candidate.5",
-    "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md",
-    "sha256": "c737d2614a602acdab1f66e29b5f0f957ccb142ef26bb5b5d946131e7dd5484e",
-    "cohortProtocolIdentity": "harness-prospective-cohort-v1.0-candidate.5",
-    "cohortProtocolLocator": "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
-    "cohortProtocolSha256": "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83",
-    "frozenAtRevision": "502c4ff7edfc6307ea5469bcb81089e13612a24a",
-    "cohortActivation": {
-      "surfaceIdentity": "enrollment-surface.public-v1:56369773375e42299d33351024f7be64",
-      "activationCursorCommitment": "hmac-sha256:2eec98cf28f6a1e01ed4d73258045f0bb1097e3ba9f6ef7cdf60a2672ed6d35c",
-      "keyIdentity": "cohort-key.public-v1:55020ba1e3bd4a9cbefc23f167f0a13b",
-      "keyFingerprint": "sha256:bf96b012d3a6c59a9f8cb6f4636cdf5a4860ed5fbdc1d4dbbccd093d11173e52",
-      "sourceMessageRule": "domain-surface-source-native-immutable-event-identity-v1",
-      "hmacDomain": "agent-autonomy-harness/cohort-source-event/v1",
-      "surfaceTransitionRule": "pre-demand-causal-trigger-source-final-cursor-destination-verified-or-stop",
-      "keyRetentionRule": "retain-private-evidence-through-live-claim-or-destroy-and-revoke-verifiability"
-    }
+    "state": "unfrozen",
+    "profileIdentity": null,
+    "locator": null,
+    "sha256": null,
+    "cohortProtocolIdentity": null,
+    "cohortProtocolLocator": null,
+    "cohortProtocolSha256": null,
+    "frozenAtRevision": null,
+    "cohortActivation": null
   },
   "terminalReleaseBinding": {
     "state": "unregistered",
@@ -85,6 +80,7 @@
       "git-commit",
       "git-push",
       "installed-authorized-capability-use",
+      "human-only-action-guidance-and-post-verification",
       "bounded-consumer-configuration-after-explicit-grant",
       "coverage-analysis",
       "targeted-capability-discovery",

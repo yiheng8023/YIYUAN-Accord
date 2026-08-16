@@ -12,11 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** the v1.0 terminal-product proof program is stopped. The
-repository verifier reports `completionState=stopped`, O1-O5 `0/5`, and G1-G4
-`4/4`; run the verifier for live truth. The constitution's terminal proposition
-remains open and requires a new prospective authority contract before measured
-work can resume. v0.2 remains an
+**Current status:** v1.1 is the ready, nonterminal environment-attribution
+program. The repository verifier reports `programStatus=ready`,
+`completionState=in-progress`, O1-O5 `0/5`, and G1-G4 `4/4`; run the verifier
+for live truth. The constitution's terminal proposition remains open. v1.0 is
+an immutable stopped zero-outcome attempt at revision `910ac01`; none of its
+profile binding, cohort state, authorization, or results can be inherited.
+v0.2 remains an
 immutable accepted bounded-calibration milestone at revision
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`; its `5/5` result cannot be inherited
 as proof of sustained real-task autonomy, proactive carrier management, live
@@ -29,11 +31,12 @@ and bounded aggregate claims remain; public Git history and historical author
 email remain retrievable under the explicit no-history-rewrite privacy
 disposition, so this is forward current-tree sanitization rather than erasure.
 
-A distinct [v1 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+A historical [v1.0 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
 co-locate the pre-measurement method, mandatory floors, baseline, carrier,
-cross-host, privacy/residue, and release semantics. The program binds their
-exact frozen bytes. Both zero-task v1.0 cohort generations are now revoked and
+cross-host, privacy/residue, and release semantics. Their exact frozen bytes
+remain v1.0 historical inputs; the v1.1 program binding is deliberately
+`unfrozen` and cannot reuse them as its current cohort. Both zero-task v1.0 cohort generations are now revoked and
 carry no outcome evidence. The one permitted successor freeze at revision
 `8e8e76b` and canonical binding digest `d2cf0cd` received independent exact
 authorization, but a later validator-ordering failure deleted its protected
@@ -67,8 +70,8 @@ source. The current Codex tree is instead an inactive v1 carrier-mechanism
 candidate: its package-owned Hook records only bounded native lifecycle counters,
 does not execute task-repository code, and its checked-in command fails closed
 until an absolute trusted interpreter is materialized. Measured activation also
-requires a currently live, independently authorized cohort generation under the
-frozen v1 profile. It is not installed or enabled. The
+requires a future currently live, independently authorized v1.1 cohort under a
+new environment-attributed profile binding. It is not installed or enabled. The
 current Claude candidate.7 lineage now also has bounded input and a fail-closed
 unmaterialized interpreter command, but still loads only exact-hash reviewed
 repository runtime bytes and is not a live v1 carrier implementation. Neither
@@ -104,7 +107,8 @@ The target behavior is that the Agent:
 
 1. understands the desired result and the publication boundary;
 2. checks whether its healthy, authorized native capabilities are sufficient;
-3. discovers or adds an external capability only if a real gap remains;
+3. discovers, installs, configures, enables, downgrades, disables, rolls back,
+   retires, or persists a capability only as current need and authority justify;
 4. stays in the current task and checkout by default, creating a branch,
    worktree, repository fork, conversation fork, or new task only when
    isolation, parallelism, host capacity, or an authority boundary requires it;
@@ -112,8 +116,10 @@ The target behavior is that the Agent:
    native compaction or verified handoff before preventable context loss;
 6. owns synchronization, code merge or conclusion reconciliation, archive or
    release, and cleanup for any such carrier;
-7. asks the user only for missing facts, consequential judgment, or new
-   authority—not for tool names or invocation syntax;
+7. asks the user only for missing facts, consequential judgment, new authority,
+   or a technically reserved host action; in the last case it gives the smallest
+   exact step and verifies it afterward, never asking for tool discovery or
+   invocation design;
 8. executes, recovers, verifies, releases task-scoped capability exposure, and
    removes task-created residue;
 9. returns the result and its evidence for accountable human judgment.
@@ -140,14 +146,15 @@ The current repository provides:
 - a machine-readable [constitution](product/constitution.json) for purpose and
   fixed boundaries;
 - a [program](product/program.json) for the current causal work state;
-- explicit terminal [v1.0 acceptance criteria](product/acceptance.json), with
-  all outcomes still planned;
+- explicit terminal [v1.1 acceptance criteria](product/acceptance.json), with
+  observed-native-minimum and user-configured environment strata and all
+  outcomes still planned;
 - the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
   accepted only for the bounded O4 Codex reference-host calibration; its source
   bytes retain the pre-calibration status header frozen by registration;
-- a distinct frozen [v1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
+- a distinct historical frozen [v1.0 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
   and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json),
-  bound as subordinate operands but carrying no task or outcome evidence;
+  retained as stopped subordinate inputs but carrying no task or outcome evidence;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue;
 - a legacy inactive, standard-library-only `SessionStart` repository seam that
@@ -178,9 +185,9 @@ The current repository provides:
   build instead of duplicating existing layers.
 
 It does not provide a task runtime, persistent capability installation, or an
-accepted v1.0 live-routing result today. Candidate.5 has only the frozen,
+accepted v1.1 live-routing result today. Candidate.5 has only the frozen,
 bounded v0.2 Codex calibration acceptance described above; it is not the final
-v1.0 profile or a general standard. The adapters are not installed in user
+v1.1 profile or a general standard. The adapters are not installed in user
 configuration. Passing repository checks and historical receipts do not prove
 the terminal product result.
 
@@ -199,9 +206,39 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-Before any v1.0 outcome measurement, the repository must bind the reviewed v1
-candidate as one content-addressed normative profile and paired prospective
-cohort protocol. Each permitted cohort generation's frozen commit binds the exact initial
+Before any v1.1 outcome measurement, every O1-O5 registration must bind the
+acceptance-owned environment attribution contract. The two declared strata are
+`observed-native-minimum` and `user-configured`; each natural task-host unit runs
+once in one pre-registered arm, and Harness-specific value estimates compare
+only pre-registered matched tasks within the same stratum, starting task-relevant
+environment manifest, and authority-and-available-source envelope. The exact
+Harness package and activation is the only planned initial route/configuration
+difference; later Agent-selected or human-authorized capability and configuration
+changes are attributed treatment-mediated lifecycle deltas. Unavoidable task
+differences stay explicit, so this is bounded matched observational evidence
+rather than a single-variable causal experiment. “Minimum” does
+not mean an unknowable pristine host: discoverable user-global instructions,
+configuration, Skills, plugins, Apps, MCP, Hooks, rules, memory, and provider
+overrides are excluded, while system, developer, built-in, account, managed,
+administrator, and unobservable state remains explicitly retained or unknown.
+It is a starting condition, not a static capability ceiling: after demand reveals
+a gap, the Agent may adapt under the registered authority and lifecycle rules.
+At each decision it resolves the current suitable official or maintained source
+from bounded as-of evidence and binds the exact execution version, commit, or
+package identity. It neither locks one historical version across tasks nor runs
+an unresolved moving target such as `latest`; material in-run drift requires
+re-registration or an honest stop. The Agent performs every supported authorized
+mechanic. A technically or authoritatively unavoidable human-only action is
+minimal, precisely guided, post-verified, and counted in burden separately from
+a prohibited transfer of Agent-owned work.
+A without-Harness baseline cannot run inside the Harness repository and inherit
+its project guidance. Historical items are classified as environment-independent,
+environment-bound, or invalidated; none inherit outcome credit.
+
+The repository must then select and bind one new content-addressed normative
+profile and paired prospective cohort protocol. The v1.0 profile, protocol,
+authorization, cohort, registration and ordering state cannot be reused. Each
+permitted cohort generation's frozen commit binds the exact initial
 source-native ordered enrollment surface, activation cursor, and cohort key
 identity/fingerprint, but does not activate the cohort by itself. Before any
 eligible demand, a named human must authorize that exact revision, complete
@@ -255,7 +292,7 @@ part of the frozen bytes; `product/program.json`, not that historical label,
 is the current binding state. Hosted runners corroborate the remaining
 contract only and cannot restore or prove a revoked local authorization.
 
-v1.0 required two-stage terminal publication: an immutable candidate tree would
+The historical v1.0 contract required two-stage terminal publication: an immutable candidate tree would
 predeclare a semantic-version tag, public remote and O5 evidence-set digest;
 after named-human authorization, the Agent would create the annotated tag and
 verify the identical public object and peeled commit. The stopped v1.0 cohort
@@ -263,31 +300,49 @@ never reached that gate, so it cannot now progress to `accepted`. Any future
 release must bind its own terminal route through the next current authority.
 The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
-The v1.0 terminal-release validator entry remained absent; its registry contains
-only the bounded initial-freeze and successor-freeze source validators described
-above, neither of which is an outcome validator.
+At the v1.0 revision, the terminal-release validator entry remained absent and
+the registry contained only the bounded initial-freeze and successor-freeze
+source validators described above. The current v1.1 authorization registry is
+empty until a new exact profile, source and trust boundary are selected; none
+of these validators is an outcome validator.
+The v1.0 credential and Scheduled Task cleanup entrypoint is not executable from
+the v1.1 module; its historical behavior remains recoverable only from the
+pinned `910ac01` revision.
 
-## What v1.0 required
+## What v1.1 requires
 
 - **O1 — sustained autonomous delivery:** a finite six-or-more natural-task
-  cohort covers the required scenario bands with accepted outcomes, zero user
-  capability/topology/context mechanics, and zero material collaboration loss.
+  cohort covers the required scenario bands and both environment strata with
+  accepted outcomes, zero prohibited transfer of Agent-owned capability,
+  topology, or context work, and zero material collaboration loss. Any
+  unavoidable human-only step is minimal, guided, verified, and recorded.
 - **O2 — comparative burden reduction:** the same cohort strictly lowers total
-  and median material orchestration burden against eligible source-bound ad-hoc
-  baselines without compensating quality, authority, evidence, or residue loss.
+  and median material orchestration burden against eligible pre-registered,
+  source-bound ad-hoc baselines with the same starting environment and authority
+  envelope. Exact Harness activation is the only planned initial difference;
+  later lifecycle deltas and unavoidable task differences remain matching
+  variables. All human actions count in burden, legitimate human-only actions
+  stay separate from prohibited Agent-work transfers, and no quality, authority,
+  evidence, or residue loss can compensate.
 - **O3 — real capability lifecycle:** natural tasks cover healthy-route retain,
-  residual-gap discovery and governed live addition, disproportionate-route
-  rejection, and release or separately accepted persistence.
+  current-source resolution, residual-gap discovery, governed installation or
+  configuration, enable/use, disproportionate-route rejection or downgrade,
+  disable/rollback/retirement, and release or separately accepted persistence.
 - **O4 — proactive carrier lifecycle:** real work proves keep-current,
   compact-and-reconcile, and verified same-goal conversation transition before
   preventable loss; every necessary code split is reconciled and cleaned.
 - **O5 — live portable open delivery:** two matched live Codex/distinct-host
-  pairs include a useful completion and an honest stop or recovery, reproduce
+  pairs jointly cover observed-native-minimum and user-configured, include a
+  useful completion and an honest stop or recovery, reproduce
   from a clean checkout, pass the pre-closeout cross-dimensional counterexample
   audit with zero unresolved P0/P1 findings and zero temporary process artifacts,
   and end with human acceptance of the versioned
   profile, thin adapters, privacy disposition, claim ceiling, and exact public
   release.
+
+One-execution means one run per pre-registered task-host unit. O5 deliberately
+runs each matched task once on each host as portability replication; it does not
+replay one host/treatment arm to manufacture a favorable comparison.
 
 For O1-O4, a natural task is a logical pre-registered demand-and-outcome unit,
 not a Codex sidebar task or thread. Sequential receipts may remain in one
@@ -319,6 +374,7 @@ process/resource loss are mandatory guardrails, not substitutes for outcomes.
 | Need | Document |
 | --- | --- |
 | Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| Inspect the stopped v1.0 profile and cohort history | [v1.0 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md) and [prospective cohort protocol](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | Apply the bounded Codex-reference-calibrated candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | Understand the technical separation of concerns | [Architecture](docs/architecture.md) |
 | Inspect the proof sequence and external reuse gate | [Research and proof plan](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
