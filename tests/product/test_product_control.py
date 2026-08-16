@@ -2937,7 +2937,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             completed.returncode,
-            2 if hosted_unavailable else 0,
+            1 if hosted_unavailable else 0,
             completed.stderr,
         )
         live_program = json.loads(
@@ -3147,14 +3147,27 @@ class ProductControlTests(unittest.TestCase):
 
     def test_plain_cli_exposes_program_and_completion_states(self) -> None:
         completed = self.run_cli(json_output=False, root=ROOT)
+        report = verify_product(ROOT)
+        hosted_unavailable = self.hosted_private_authorization_source_is_unavailable(
+            report
+        )
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(
+            completed.returncode,
+            1 if hosted_unavailable else 0,
+            completed.stderr,
+        )
         self.assertIn(
             f"v1.1: {live_program['status']}, in-progress (0/5 outcomes)",
             completed.stdout,
         )
+        if hosted_unavailable:
+            self.assertEqual(
+                completed.stderr.strip(),
+                "ERROR: current v1.1 binding authorization private source is unavailable",
+            )
 
     def test_codex_session_start_adapter_projects_live_authority(self) -> None:
         payload = self.codex_session_start_payload(source="resume")
