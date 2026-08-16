@@ -3437,6 +3437,39 @@ def _expiry_task_definition_valid(
         if len(settings_containers) == 1
         else []
     )
+    exact_authoring_shape = (
+        len(time_trigger_fields) == 2
+        and set(time_trigger_fields) == {"StartBoundary", "Enabled"}
+        and len(principal_fields) == 3
+        and set(principal_fields) == {"UserId", "LogonType", "RunLevel"}
+        and len(settings_fields) == 7
+        and set(settings_fields)
+        == {
+            "MultipleInstancesPolicy",
+            "DisallowStartIfOnBatteries",
+            "StopIfGoingOnBatteries",
+            "RunOnlyIfNetworkAvailable",
+            "StartWhenAvailable",
+            "Enabled",
+            "ExecutionTimeLimit",
+        }
+    )
+    windows_canonical_export_shape = (
+        len(time_trigger_fields) == 1
+        and time_trigger_fields == ["StartBoundary"]
+        and len(principal_fields) == 2
+        and set(principal_fields) == {"UserId", "LogonType"}
+        and len(settings_fields) == 6
+        and set(settings_fields)
+        == {
+            "MultipleInstancesPolicy",
+            "DisallowStartIfOnBatteries",
+            "StopIfGoingOnBatteries",
+            "StartWhenAvailable",
+            "IdleSettings",
+            "ExecutionTimeLimit",
+        }
+    )
     commands = elements("Command")
     arguments = elements("Arguments")
     working_directories = elements("WorkingDirectory")
@@ -3461,6 +3494,14 @@ def _expiry_task_definition_valid(
     disallow_on_battery = elements("DisallowStartIfOnBatteries")
     stop_on_battery = elements("StopIfGoingOnBatteries")
     require_network = elements("RunOnlyIfNetworkAvailable")
+    idle_settings = elements("IdleSettings")
+    idle_fields = (
+        [local_name(item) for item in idle_settings[0]]
+        if len(idle_settings) == 1
+        else []
+    )
+    stop_on_idle_end = elements("StopOnIdleEnd")
+    restart_on_idle = elements("RestartOnIdle")
     delayed_or_bounded = [
         *elements("Delay"),
         *elements("RandomDelay"),
@@ -3477,23 +3518,9 @@ def _expiry_task_definition_valid(
         or local_name(action_children[0]) != "Exec"
         or len(principal_children) != 1
         or local_name(principal_children[0]) != "Principal"
-        or len(time_trigger_fields) != 2
-        or set(time_trigger_fields) != {"StartBoundary", "Enabled"}
+        or not (exact_authoring_shape or windows_canonical_export_shape)
         or len(execution_fields) != 3
         or set(execution_fields) != {"Command", "Arguments", "WorkingDirectory"}
-        or len(principal_fields) != 3
-        or set(principal_fields) != {"UserId", "LogonType", "RunLevel"}
-        or len(settings_fields) != 7
-        or set(settings_fields)
-        != {
-            "MultipleInstancesPolicy",
-            "DisallowStartIfOnBatteries",
-            "StopIfGoingOnBatteries",
-            "RunOnlyIfNetworkAvailable",
-            "StartWhenAvailable",
-            "Enabled",
-            "ExecutionTimeLimit",
-        }
         or len(executions) != 1
         or len(time_triggers) != 1
         or len(commands) != 1
@@ -3506,18 +3533,40 @@ def _expiry_task_definition_valid(
         or len(multiple_instance_policies) != 1
         or len(user_ids) != 1
         or user_ids[0].text != expected_user_sid
-        or len(run_levels) != 1
-        or run_levels[0].text != "LeastPrivilege"
-        or len(settings_enabled) != 1
-        or settings_enabled[0].text != "true"
-        or len(trigger_enabled) != 1
-        or trigger_enabled[0].text != "true"
+        or (
+            exact_authoring_shape
+            and (
+                len(run_levels) != 1
+                or run_levels[0].text != "LeastPrivilege"
+                or len(settings_enabled) != 1
+                or settings_enabled[0].text != "true"
+                or len(trigger_enabled) != 1
+                or trigger_enabled[0].text != "true"
+                or len(require_network) != 1
+                or require_network[0].text != "false"
+                or idle_settings
+            )
+        )
+        or (
+            windows_canonical_export_shape
+            and (
+                run_levels
+                or settings_enabled
+                or trigger_enabled
+                or require_network
+                or len(idle_settings) != 1
+                or len(idle_fields) != 2
+                or set(idle_fields) != {"StopOnIdleEnd", "RestartOnIdle"}
+                or len(stop_on_idle_end) != 1
+                or stop_on_idle_end[0].text != "true"
+                or len(restart_on_idle) != 1
+                or restart_on_idle[0].text != "false"
+            )
+        )
         or len(disallow_on_battery) != 1
         or disallow_on_battery[0].text != "false"
         or len(stop_on_battery) != 1
         or stop_on_battery[0].text != "false"
-        or len(require_network) != 1
-        or require_network[0].text != "false"
         or delayed_or_bounded
         or repetitions
         or not isinstance(commands[0].text, str)

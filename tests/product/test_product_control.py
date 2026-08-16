@@ -7153,6 +7153,9 @@ class ProductControlTests(unittest.TestCase):
             disallow_on_battery: str = "false",
             stop_on_battery: str = "false",
             include_battery_settings: bool = True,
+            canonical_windows_export: bool = False,
+            idle_stop: str = "true",
+            idle_restart: str = "false",
             extra_settings: str = "",
             extra_trigger: str = "",
             extra_action: str = "",
@@ -7163,17 +7166,33 @@ class ProductControlTests(unittest.TestCase):
                 if include_battery_settings
                 else ""
             )
+            trigger_enabled = "" if canonical_windows_export else "<Enabled>true</Enabled>"
+            principal_run_level = (
+                "" if canonical_windows_export else f"<RunLevel>{run_level}</RunLevel>"
+            )
+            settings_defaults = (
+                (
+                    "<IdleSettings>"
+                    f"<StopOnIdleEnd>{idle_stop}</StopOnIdleEnd>"
+                    f"<RestartOnIdle>{idle_restart}</RestartOnIdle>"
+                    "</IdleSettings>"
+                )
+                if canonical_windows_export
+                else (
+                    "<RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>"
+                    f"<Enabled>{enabled}</Enabled>"
+                )
+            )
             return control.ET.fromstring(
                 f"""
                 <Task>
-                  <Triggers><TimeTrigger><StartBoundary>{control.SUCCESSOR_EXPIRY_TASK_START_BOUNDARY}</StartBoundary><Enabled>true</Enabled></TimeTrigger>{extra_trigger}</Triggers>
-                  <Principals><Principal><UserId>{user_sid}</UserId><LogonType>{logon_type}</LogonType><RunLevel>{run_level}</RunLevel></Principal></Principals>
+                  <Triggers><TimeTrigger><StartBoundary>{control.SUCCESSOR_EXPIRY_TASK_START_BOUNDARY}</StartBoundary>{trigger_enabled}</TimeTrigger>{extra_trigger}</Triggers>
+                  <Principals><Principal><UserId>{user_sid}</UserId><LogonType>{logon_type}</LogonType>{principal_run_level}</Principal></Principals>
                   <Settings>
                     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
                     {battery_settings}
-                    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
                     <StartWhenAvailable>true</StartWhenAvailable>
-                    <Enabled>{enabled}</Enabled>
+                    {settings_defaults}
                     <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
                     {extra_settings}
                   </Settings>
@@ -7190,6 +7209,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(
             control._successor_expiry_task_definition_valid(
                 task_xml(),
+                expected_python,
+                expected_root,
+                expected_user_sid,
+                errors,
+            ),
+            errors,
+        )
+        errors = []
+        self.assertTrue(
+            control._successor_expiry_task_definition_valid(
+                task_xml(canonical_windows_export=True),
                 expected_python,
                 expected_root,
                 expected_user_sid,
@@ -7232,6 +7262,12 @@ class ProductControlTests(unittest.TestCase):
             task_xml(disallow_on_battery="true"),
             task_xml(stop_on_battery="true"),
             task_xml(include_battery_settings=False),
+            task_xml(canonical_windows_export=True, idle_stop="false"),
+            task_xml(canonical_windows_export=True, idle_restart="true"),
+            task_xml(
+                canonical_windows_export=True,
+                extra_settings="<RunOnlyIfNetworkAvailable>true</RunOnlyIfNetworkAvailable>",
+            ),
             task_xml(extra_settings="<RunOnlyIfIdle>true</RunOnlyIfIdle>"),
             task_xml(
                 extra_settings=(
