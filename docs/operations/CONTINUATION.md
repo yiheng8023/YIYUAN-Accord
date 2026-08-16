@@ -68,14 +68,14 @@ opened only after the source proves no eligible demand occurred after revocation
 it uses a fresh activation, identities, private key and independent exact
 authorization, carries no prior task, result, cursor or ordering state, and
 cannot be restarted again. Hosted runners corroborate the remaining contract
-only and cannot restore or prove a revoked local authorization. The current
-program now carries the one permitted successor freeze under fresh public
-identities at revision `8e8e76b` and canonical digest `d2cf0cd`. Its second
-independent exact authorization and complete zero-demand source window are now
-verified by the code-owned successor validator. A current-user S4U one-time
-expiry cleanup task is installed at the authorized deadline and passed an
-early no-delete access probe. Enrollment is active, but no natural task is
-registered and O1-O5 remain 0/5.
+only and cannot restore or prove a revoked local authorization. The one
+permitted successor freeze used fresh public identities at revision `8e8e76b`
+and canonical digest `d2cf0cd`, and its second independent exact authorization
+initially verified. A later validator-ordering error evaluated the old
+battery-blocked Scheduled Task before replacing it, invoked the already-bound
+deterministic-failure cleanup, and deleted both the successor protected resource
+and exact task. Enrollment is no longer active; v1.0 is stopped with no task
+registration and O1-O5 at 0/5. Do not recreate or restart that generation.
 
 ## Starting one causal increment
 

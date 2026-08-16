@@ -234,6 +234,7 @@ class ProductControlTests(unittest.TestCase):
         ).stdout.strip()
         initial_binding_revision: str | None = None
         initial_binding_sha256: str | None = None
+        initial_key_fingerprint: str | None = None
         successor_binding_revision: str | None = None
         successor_binding_sha256: str | None = None
         predecessor_revocation_revision: str | None = None
@@ -293,6 +294,13 @@ class ProductControlTests(unittest.TestCase):
             if initial_binding_revision is None:
                 initial_binding_revision = revision
                 initial_binding_sha256 = binding_sha256
+                activation = binding.get("cohortActivation")
+                initial_key_fingerprint = (
+                    activation.get("keyFingerprint")
+                    if isinstance(activation, dict)
+                    and isinstance(activation.get("keyFingerprint"), str)
+                    else None
+                )
             elif revoked_seen and successor_binding_revision is None:
                 successor_binding_revision = revision
                 successor_binding_sha256 = binding_sha256
@@ -326,6 +334,10 @@ class ProductControlTests(unittest.TestCase):
             EXPECTED_V1_INITIAL_BINDING_SHA256=initial_binding_sha256,
             EXPECTED_V1_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID=(
                 initial_authorization_validator_id
+            ),
+            EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT=(
+                initial_key_fingerprint
+                or control.EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT
             ),
             EXPECTED_V1_SUCCESSOR_BINDING_REVISION=(
                 successor_binding_revision if bind_successor else None
@@ -1034,7 +1046,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v10_contract_is_valid_nonterminal_and_preserves_v02_history(
+    def test_current_v10_contract_is_valid_stopped_and_preserves_v02_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1048,7 +1060,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.0")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(report["completionState"], "in-progress")
+        self.assertEqual(report["completionState"], "stopped")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertEqual(
             report["guardrails"],
@@ -1061,10 +1073,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
 
-    def test_v1_profile_and_cohort_protocol_are_exact_and_successor_is_frozen(self) -> None:
+    def test_v1_profile_and_cohort_protocol_are_exact_and_successor_is_revoked(self) -> None:
         program = json.loads((ROOT / "product/program.json").read_text(encoding="utf-8"))
         binding = program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "frozen")
+        self.assertEqual(binding["state"], "revoked")
         self.assertEqual(
             binding["cohortActivation"]["surfaceIdentity"],
             control.EXPECTED_SUCCESSOR_SURFACE_IDENTITY,
@@ -1468,7 +1480,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.0")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(report["completionState"], "in-progress")
+        self.assertEqual(report["completionState"], "stopped")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
         self.assertTrue(report["valid"] or hosted_source_unavailable, report["errors"])
 
@@ -1687,7 +1699,7 @@ class ProductControlTests(unittest.TestCase):
         )
         if not hosted_source_unavailable:
             self.assertIn(
-                f"v1.0: {live_program['status']}, in-progress (0/5 outcomes)",
+                f"v1.0: {live_program['status']}, stopped (0/5 outcomes)",
                 completed.stdout,
             )
 
@@ -5674,23 +5686,47 @@ class ProductControlTests(unittest.TestCase):
     def test_successor_expiry_trigger_definition_is_exact_and_s4u(self) -> None:
         expected_python = self.root / "python.exe"
         expected_root = self.root
+        expected_user_sid = "S-1-5-21-111111111-222222222-333333333-1001"
 
-        def task_xml(logon_type: str = "S4U", arguments: str | None = None):
+        def task_xml(
+            *,
+            logon_type: str = "S4U",
+            arguments: str | None = None,
+            user_sid: str = expected_user_sid,
+            run_level: str = "LeastPrivilege",
+            enabled: str = "true",
+            disallow_on_battery: str = "false",
+            stop_on_battery: str = "false",
+            include_battery_settings: bool = True,
+            extra_settings: str = "",
+            extra_trigger: str = "",
+            extra_action: str = "",
+        ):
+            battery_settings = (
+                f"<DisallowStartIfOnBatteries>{disallow_on_battery}</DisallowStartIfOnBatteries>"
+                f"<StopIfGoingOnBatteries>{stop_on_battery}</StopIfGoingOnBatteries>"
+                if include_battery_settings
+                else ""
+            )
             return control.ET.fromstring(
                 f"""
                 <Task>
-                  <Triggers><TimeTrigger><StartBoundary>{control.SUCCESSOR_EXPIRY_TASK_START_BOUNDARY}</StartBoundary></TimeTrigger></Triggers>
-                  <Principals><Principal><LogonType>{logon_type}</LogonType></Principal></Principals>
+                  <Triggers><TimeTrigger><StartBoundary>{control.SUCCESSOR_EXPIRY_TASK_START_BOUNDARY}</StartBoundary><Enabled>true</Enabled></TimeTrigger>{extra_trigger}</Triggers>
+                  <Principals><Principal><UserId>{user_sid}</UserId><LogonType>{logon_type}</LogonType><RunLevel>{run_level}</RunLevel></Principal></Principals>
                   <Settings>
                     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+                    {battery_settings}
+                    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
                     <StartWhenAvailable>true</StartWhenAvailable>
+                    <Enabled>{enabled}</Enabled>
                     <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
+                    {extra_settings}
                   </Settings>
                   <Actions><Exec>
                     <Command>{expected_python}</Command>
                     <Arguments>{arguments or control.SUCCESSOR_EXPIRY_TASK_ARGUMENTS}</Arguments>
                     <WorkingDirectory>{expected_root}</WorkingDirectory>
-                  </Exec></Actions>
+                  </Exec>{extra_action}</Actions>
                 </Task>
                 """
             )
@@ -5701,6 +5737,7 @@ class ProductControlTests(unittest.TestCase):
                 task_xml(),
                 expected_python,
                 expected_root,
+                expected_user_sid,
                 errors,
             ),
             errors,
@@ -5708,6 +5745,22 @@ class ProductControlTests(unittest.TestCase):
         for invalid in (
             task_xml(logon_type="InteractiveToken"),
             task_xml(arguments="-B -m harness verify"),
+            task_xml(user_sid="S-1-5-18"),
+            task_xml(run_level="HighestAvailable"),
+            task_xml(enabled="false"),
+            task_xml(disallow_on_battery="true"),
+            task_xml(stop_on_battery="true"),
+            task_xml(include_battery_settings=False),
+            task_xml(extra_settings="<RunOnlyIfIdle>true</RunOnlyIfIdle>"),
+            task_xml(
+                extra_settings=(
+                    "<RestartOnFailure><Interval>PT1M</Interval><Count>99</Count>"
+                    "</RestartOnFailure>"
+                )
+            ),
+            task_xml(extra_settings="<AllowHardTerminate>false</AllowHardTerminate>"),
+            task_xml(extra_trigger="<BootTrigger><Enabled>true</Enabled></BootTrigger>"),
+            task_xml(extra_action="<ComHandler><ClassId>fixture</ClassId></ComHandler>"),
         ):
             errors = []
             self.assertFalse(
@@ -5715,6 +5768,7 @@ class ProductControlTests(unittest.TestCase):
                     invalid,
                     expected_python,
                     expected_root,
+                    expected_user_sid,
                     errors,
                 )
             )
@@ -6186,6 +6240,68 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"]["verified"], 0)
 
+    def test_terminally_revoked_program_reports_stopped(self) -> None:
+        def stop(value: dict) -> None:
+            value["status"] = "stopped"
+            value["activeIncrementId"] = None
+            value["increments"] = []
+            value["normativeProfileBinding"] = json.loads(
+                (ROOT / "product/program.json").read_text(encoding="utf-8")
+            )["normativeProfileBinding"]
+            value["normativeProfileBinding"]["state"] = "revoked"
+
+        self.mutate("product/program.json", stop)
+        with patch("harness.control._committed_blob", return_value=True), patch(
+            "harness.control._initial_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._successor_authorization_private_resource_absent",
+            return_value=True,
+        ):
+            report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["programStatus"], "stopped")
+        self.assertEqual(report["completionState"], "stopped")
+        self.assertEqual(report["outcomes"]["verified"], 0)
+
+    def test_stopped_state_is_bound_to_revoked_successor_generation(self) -> None:
+        live_binding = json.loads(
+            (ROOT / "product/program.json").read_text(encoding="utf-8")
+        )["normativeProfileBinding"]
+
+        def set_state(status: str, binding_state: str) -> None:
+            def mutate(value: dict) -> None:
+                value["status"] = status
+                value["activeIncrementId"] = None
+                value["increments"] = []
+                value["normativeProfileBinding"] = deepcopy(live_binding)
+                value["normativeProfileBinding"]["state"] = binding_state
+
+            self.mutate("product/program.json", mutate)
+
+        with patch("harness.control._committed_blob", return_value=True), patch(
+            "harness.control._initial_authorization_private_resource_absent",
+            return_value=True,
+        ), patch(
+            "harness.control._successor_authorization_private_resource_absent",
+            return_value=True,
+        ):
+            set_state("ready", "revoked")
+            ready = self.report()
+            self.assertFalse(ready["valid"])
+            self.assertIn(
+                "revoked successor cohort requires a stopped program",
+                ready["errors"],
+            )
+
+            set_state("stopped", "frozen")
+            stopped = self.report()
+            self.assertFalse(stopped["valid"])
+            self.assertIn(
+                "stopped program requires a revoked successor cohort",
+                stopped["errors"],
+            )
+
     def test_obsolete_paused_program_state_is_rejected(self) -> None:
         self.mutate(
             "product/program.json",
@@ -6195,7 +6311,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertIn(
-            "program status must be active, ready, or completed",
+            "program status must be active, ready, stopped, or completed",
             report["errors"],
         )
 
@@ -6452,7 +6568,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "only a ready program may have an empty current increment graph",
+            "only a ready or stopped program may have an empty current increment graph",
             report["errors"],
         )
 
@@ -6612,13 +6728,13 @@ class ProductControlTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         readme_zh = (self.root / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn("current v1.0 terminal-proof tree", security)
+        self.assertIn("stopped v1.0 terminal-proof tree", security)
         self.assertNotIn("current v0.2 tree", security)
         self.assertIn("complete six-or-more-task O1 cohort", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
-        self.assertIn("The project is therefore not closed", readme)
+        self.assertIn("terminal proposition", readme)
         self.assertNotIn("programStatus=ready", readme)
-        self.assertIn("整个项目尚未收官", readme_zh)
+        self.assertIn("宪章终极命题尚未成立", readme_zh)
         self.assertNotIn("programStatus=ready", readme_zh)
 
     def test_hosted_validation_has_finite_ref_scoped_resource_limits(self) -> None:

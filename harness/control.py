@@ -761,7 +761,7 @@ ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
     "one-time-2026-12-31T23:59:59+08:00;"
     "remove-on-accepted-stopped-or-private-resource-destruction",
 }
-PROGRAM_STATES = {"active", "ready", "completed"}
+PROGRAM_STATES = {"active", "ready", "stopped", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 WORK_STATES = {"planned", "active", "completed", "cancelled", "stopped"}
 TERMINAL_STATES = {"completed", "cancelled", "stopped"}
@@ -1059,6 +1059,14 @@ class _WindowsCredential(ctypes.Structure):
         ("target_alias", ctypes.c_void_p),
         ("user_name", ctypes.c_void_p),
     ]
+
+
+class _WindowsSidAndAttributes(ctypes.Structure):
+    _fields_ = [("sid", ctypes.c_void_p), ("attributes", ctypes.c_uint32)]
+
+
+class _WindowsTokenUser(ctypes.Structure):
+    _fields_ = [("user", _WindowsSidAndAttributes)]
 
 
 class _WindowsOverlapped(ctypes.Structure):
@@ -2546,8 +2554,12 @@ def _successor_expiry_task_definition_valid(
     task: ET.Element,
     expected_python: Path,
     expected_root: Path,
+    expected_user_sid: str,
     errors: list[str],
 ) -> bool:
+    def local_name(item: ET.Element) -> str:
+        return item.tag.rsplit("}", 1)[-1]
+
     def elements(local_name: str) -> list[ET.Element]:
         return [
             item
@@ -2555,8 +2567,41 @@ def _successor_expiry_task_definition_valid(
             if item.tag.rsplit("}", 1)[-1] == local_name
         ]
 
+    trigger_containers = elements("Triggers")
+    action_containers = elements("Actions")
+    principal_containers = elements("Principals")
+    settings_containers = elements("Settings")
+    trigger_children = (
+        list(trigger_containers[0]) if len(trigger_containers) == 1 else []
+    )
+    action_children = (
+        list(action_containers[0]) if len(action_containers) == 1 else []
+    )
+    principal_children = (
+        list(principal_containers[0]) if len(principal_containers) == 1 else []
+    )
     executions = elements("Exec")
     time_triggers = elements("TimeTrigger")
+    time_trigger_fields = (
+        [local_name(item) for item in time_triggers[0]]
+        if len(time_triggers) == 1
+        else []
+    )
+    execution_fields = (
+        [local_name(item) for item in executions[0]]
+        if len(executions) == 1
+        else []
+    )
+    principal_fields = (
+        [local_name(item) for item in principal_children[0]]
+        if len(principal_children) == 1
+        else []
+    )
+    settings_fields = (
+        [local_name(item) for item in settings_containers[0]]
+        if len(settings_containers) == 1
+        else []
+    )
     commands = elements("Command")
     arguments = elements("Arguments")
     working_directories = elements("WorkingDirectory")
@@ -2566,8 +2611,55 @@ def _successor_expiry_task_definition_valid(
     start_when_available = elements("StartWhenAvailable")
     execution_time_limits = elements("ExecutionTimeLimit")
     multiple_instance_policies = elements("MultipleInstancesPolicy")
+    user_ids = elements("UserId")
+    run_levels = elements("RunLevel")
+    settings_enabled = (
+        [item for item in settings_containers[0] if local_name(item) == "Enabled"]
+        if len(settings_containers) == 1
+        else []
+    )
+    trigger_enabled = (
+        [item for item in time_triggers[0] if local_name(item) == "Enabled"]
+        if len(time_triggers) == 1
+        else []
+    )
+    disallow_on_battery = elements("DisallowStartIfOnBatteries")
+    stop_on_battery = elements("StopIfGoingOnBatteries")
+    require_network = elements("RunOnlyIfNetworkAvailable")
+    delayed_or_bounded = [
+        *elements("Delay"),
+        *elements("RandomDelay"),
+        *elements("EndBoundary"),
+    ]
     if (
-        len(executions) != 1
+        len(trigger_containers) != 1
+        or len(action_containers) != 1
+        or len(principal_containers) != 1
+        or len(settings_containers) != 1
+        or len(trigger_children) != 1
+        or local_name(trigger_children[0]) != "TimeTrigger"
+        or len(action_children) != 1
+        or local_name(action_children[0]) != "Exec"
+        or len(principal_children) != 1
+        or local_name(principal_children[0]) != "Principal"
+        or len(time_trigger_fields) != 2
+        or set(time_trigger_fields) != {"StartBoundary", "Enabled"}
+        or len(execution_fields) != 3
+        or set(execution_fields) != {"Command", "Arguments", "WorkingDirectory"}
+        or len(principal_fields) != 3
+        or set(principal_fields) != {"UserId", "LogonType", "RunLevel"}
+        or len(settings_fields) != 7
+        or set(settings_fields)
+        != {
+            "MultipleInstancesPolicy",
+            "DisallowStartIfOnBatteries",
+            "StopIfGoingOnBatteries",
+            "RunOnlyIfNetworkAvailable",
+            "StartWhenAvailable",
+            "Enabled",
+            "ExecutionTimeLimit",
+        }
+        or len(executions) != 1
         or len(time_triggers) != 1
         or len(commands) != 1
         or len(arguments) != 1
@@ -2577,6 +2669,21 @@ def _successor_expiry_task_definition_valid(
         or len(start_when_available) != 1
         or len(execution_time_limits) != 1
         or len(multiple_instance_policies) != 1
+        or len(user_ids) != 1
+        or user_ids[0].text != expected_user_sid
+        or len(run_levels) != 1
+        or run_levels[0].text != "LeastPrivilege"
+        or len(settings_enabled) != 1
+        or settings_enabled[0].text != "true"
+        or len(trigger_enabled) != 1
+        or trigger_enabled[0].text != "true"
+        or len(disallow_on_battery) != 1
+        or disallow_on_battery[0].text != "false"
+        or len(stop_on_battery) != 1
+        or stop_on_battery[0].text != "false"
+        or len(require_network) != 1
+        or require_network[0].text != "false"
+        or delayed_or_bounded
         or repetitions
         or not isinstance(commands[0].text, str)
         or _normalized_native_path(commands[0].text)
@@ -2597,6 +2704,82 @@ def _successor_expiry_task_definition_valid(
         )
         return False
     return True
+
+
+def _current_windows_user_sid() -> str | None:
+    if os.name != "nt" or not hasattr(ctypes, "WinDLL"):
+        return None
+    token = ctypes.c_void_p()
+    sid_text = ctypes.c_wchar_p()
+    try:
+        kernel32 = ctypes.WinDLL("Kernel32.dll", use_last_error=True)
+        advapi32 = ctypes.WinDLL("Advapi32.dll", use_last_error=True)
+        get_current_process = kernel32.GetCurrentProcess
+        get_current_process.restype = ctypes.c_void_p
+        close_handle = kernel32.CloseHandle
+        close_handle.argtypes = [ctypes.c_void_p]
+        close_handle.restype = ctypes.c_int
+        local_free = kernel32.LocalFree
+        local_free.argtypes = [ctypes.c_void_p]
+        local_free.restype = ctypes.c_void_p
+        open_process_token = advapi32.OpenProcessToken
+        open_process_token.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.POINTER(ctypes.c_void_p),
+        ]
+        open_process_token.restype = ctypes.c_int
+        get_token_information = advapi32.GetTokenInformation
+        get_token_information.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.c_void_p,
+            ctypes.c_uint32,
+            ctypes.POINTER(ctypes.c_uint32),
+        ]
+        get_token_information.restype = ctypes.c_int
+        convert_sid = advapi32.ConvertSidToStringSidW
+        convert_sid.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_wchar_p)]
+        convert_sid.restype = ctypes.c_int
+        if not open_process_token(get_current_process(), 0x0008, ctypes.byref(token)):
+            return None
+        size = ctypes.c_uint32()
+        get_token_information(token, 1, None, 0, ctypes.byref(size))
+        if size.value == 0 or size.value > 65_536:
+            return None
+        buffer = ctypes.create_string_buffer(size.value)
+        if not get_token_information(
+            token,
+            1,
+            buffer,
+            size.value,
+            ctypes.byref(size),
+        ):
+            return None
+        token_user = ctypes.cast(
+            buffer,
+            ctypes.POINTER(_WindowsTokenUser),
+        ).contents
+        if not token_user.user.sid or not convert_sid(
+            token_user.user.sid,
+            ctypes.byref(sid_text),
+        ):
+            return None
+        value = sid_text.value
+        return value if isinstance(value, str) and value.startswith("S-1-") else None
+    except (OSError, ValueError, TypeError):
+        return None
+    finally:
+        if sid_text:
+            try:
+                kernel32.LocalFree(ctypes.cast(sid_text, ctypes.c_void_p))
+            except (NameError, OSError, ValueError):
+                pass
+        if token.value:
+            try:
+                kernel32.CloseHandle(token)
+            except (NameError, OSError, ValueError):
+                pass
 
 
 def _trusted_windows_schtasks_executable() -> Path | None:
@@ -2627,11 +2810,13 @@ def _trusted_windows_schtasks_executable() -> Path | None:
 
 def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bool:
     executable = _trusted_windows_schtasks_executable()
+    current_user_sid = _current_windows_user_sid()
     try:
         expected_python = Path(sys.executable).resolve(strict=True)
         expected_root = root.resolve(strict=True)
         if (
             executable is None
+            or current_user_sid is None
             or not stat.S_ISREG(expected_python.lstat().st_mode)
             or _link_or_reparse(expected_python)
         ):
@@ -2718,6 +2903,7 @@ def _successor_expiry_cleanup_trigger_valid(root: Path, errors: list[str]) -> bo
         task,
         expected_python,
         expected_root,
+        current_user_sid,
         errors,
     )
 
@@ -2871,7 +3057,6 @@ def expire_successor_authorization_private_evidence(errors: list[str]) -> bool:
         "expiry",
         errors,
     )
-
 
 
 SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
@@ -4366,6 +4551,17 @@ def _normative_profile_binding_valid(
         and current_activation.get("keyFingerprint")
         != EXPECTED_INITIAL_AUTHORIZATION_KEY_FINGERPRINT
     )
+    program_state = program.get("status")
+    if (
+        binding_state == "revoked"
+        and is_successor_generation
+        and program_state != "stopped"
+    ):
+        _error(errors, "revoked successor cohort requires a stopped program")
+    if program_state == "stopped" and not (
+        binding_state == "revoked" and is_successor_generation
+    ):
+        _error(errors, "stopped program requires a revoked successor cohort")
     if binding_state == "revoked" or is_successor_generation:
         _initial_authorization_private_resource_absent(errors)
     if binding_state == "revoked" and is_successor_generation:
@@ -4638,9 +4834,12 @@ def _program_graph(
     increments = _objects(program.get("increments"), "program increments", errors)
     program_state = program.get("status")
     if not isinstance(program_state, str) or program_state not in PROGRAM_STATES:
-        _error(errors, "program status must be active, ready, or completed")
-    if not increments and program_state != "ready":
-        _error(errors, "only a ready program may have an empty current increment graph")
+        _error(errors, "program status must be active, ready, stopped, or completed")
+    if not increments and program_state not in {"ready", "stopped"}:
+        _error(
+            errors,
+            "only a ready or stopped program may have an empty current increment graph",
+        )
     active_increment_id = program.get("activeIncrementId")
     active_increments: list[dict[str, Any]] = []
     all_work: list[dict[str, Any]] = []
@@ -4732,7 +4931,7 @@ def _program_graph(
             _error(errors, "activeIncrementId must identify the active increment")
     elif active_increment_id is not None or active_increments:
         _error(errors, f"{program_state} program must have no active increment")
-    if program_state in {"ready", "completed"} and any(
+    if program_state in {"ready", "stopped", "completed"} and any(
         not isinstance(increment.get("state"), str)
         or increment.get("state") not in TERMINAL_STATES
         for increment in increments
@@ -5929,7 +6128,13 @@ def _verify_product(root: Path) -> dict[str, Any]:
         "release": program.get("release"),
         "programStatus": program.get("status"),
         "valid": valid,
-        "completionState": "accepted" if accepted else "in-progress",
+        "completionState": (
+            "accepted"
+            if accepted
+            else "stopped"
+            if program.get("status") == "stopped" and valid
+            else "in-progress"
+        ),
         "terminalReleaseState": terminal_release_state,
         "activeIncrement": program.get("activeIncrementId"),
         "outcomes": {

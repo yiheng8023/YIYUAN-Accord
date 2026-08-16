@@ -12,10 +12,11 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.0 is the terminal-product proof program. At the latest
-completed causal checkpoint, the repository verifier still reports
-`completionState=in-progress`, O1-O5 `0/5`, and G1-G4 `4/4`; run the verifier
-for the live program status and active increment. The project is therefore not closed. v0.2 remains an
+**Current status:** the v1.0 terminal-product proof program is stopped. The
+repository verifier reports `completionState=stopped`, O1-O5 `0/5`, and G1-G4
+`4/4`; run the verifier for live truth. The constitution's terminal proposition
+remains open and requires a new prospective authority contract before measured
+work can resume. v0.2 remains an
 immutable accepted bounded-calibration milestone at revision
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`; its `5/5` result cannot be inherited
 as proof of sustained real-task autonomy, proactive carrier management, live
@@ -32,14 +33,12 @@ A distinct [v1 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
 co-locate the pre-measurement method, mandatory floors, baseline, carrier,
 cross-host, privacy/residue, and release semantics. The program binds their
-exact frozen bytes. The first zero-task cohort remains revoked and carries no
-outcome evidence. One fresh successor freeze at revision `8e8e76b` and canonical
-binding digest `d2cf0cd` has received its second independent exact
-authorization. The code-owned validator binds its protected evidence to the
-complete revocation-to-authorization source window with zero intervening
-eligible demand, and an exact S4U one-time expiry cleanup trigger is installed.
-The successor is therefore the active enrollment generation; it still contains
-no task registration or outcome evidence.
+exact frozen bytes. Both zero-task v1.0 cohort generations are now revoked and
+carry no outcome evidence. The one permitted successor freeze at revision
+`8e8e76b` and canonical binding digest `d2cf0cd` received independent exact
+authorization, but a later validator-ordering failure deleted its protected
+evidence and expiry task under the authorized deterministic-failure cleanup
+rule. The generation cannot be reconstructed or restarted honestly.
 
 The historical v0.2 O1 is supported by accepted public-intake, Codex Skill-source, and Claude
 Skill-source results. O2 uses the materially distinct public-intake, Codex
@@ -244,32 +243,31 @@ separates transient unavailability or concurrent change, which must
 fail closed without destruction, from confirmed binding or content failure,
 which retains exact deletion and absence checking. No eligible natural task
 had been registered, so no O1-O5 result evidence was lost and O1-O5 remain
-0/5. The revoked generation cannot resume. A fresh successor binding now uses
-new public surface, cursor and key identities, and remained unactivated until
-its exact revision, canonical digest and source window receive independent
-human authorization and code pinning. That authorization and pinning are now
-complete for successor revision `8e8e76b`; no eligible post-activation natural
-demand has yet been registered. The candidate file's internal `pre-freeze candidate` label is
+0/5. The revoked generation cannot resume. A fresh successor binding used new
+public surface, cursor and key identities and received exact authorization and
+code pinning at revision `8e8e76b`. During later lifecycle-validator hardening,
+the Agent validated the old Scheduled Task definition before replacing it; the
+new rule correctly rejected its battery-blocked settings and therefore invoked
+the already-authorized deterministic-failure cleanup. The protected successor
+resource and exact task were deleted, so v1.0 is stopped rather than silently
+restarted. The candidate file's internal `pre-freeze candidate` label is
 part of the frozen bytes; `product/program.json`, not that historical label,
 is the current binding state. Hosted runners corroborate the remaining
 contract only and cannot restore or prove a revoked local authorization.
 
-Terminal publication is deliberately two-stage. The immutable candidate tree
-predeclares a semantic-version tag, the fixed public HTTPS remote and the exact
-O5 evidence-set digest. A named human authorizes that candidate and release;
-the Agent then creates an annotated JSON authorization tag without changing the
-candidate. `completionState=accepted` additionally requires a clean candidate
-checkout, no ignored or untracked residue, an annotated local tag over `HEAD`,
-and the identical public tag object and peeled commit. Until that post-grant
-verification succeeds, O5 remains false and the project remains in progress.
+v1.0 required two-stage terminal publication: an immutable candidate tree would
+predeclare a semantic-version tag, public remote and O5 evidence-set digest;
+after named-human authorization, the Agent would create the annotated tag and
+verify the identical public object and peeled commit. The stopped v1.0 cohort
+never reached that gate, so it cannot now progress to `accepted`. Any future
+release must bind its own terminal route through the next current authority.
 The tag's human name and timestamp are never sufficient by themselves: a
 code-owned validator must independently verify the bound authorization source.
-The terminal-release validator entry remains intentionally absent until a real
-authorization carrier and trust boundary are selected for the final candidate;
-the registry currently contains only the bounded initial-freeze and successor-freeze
-source validators described above; neither is an outcome validator.
+The v1.0 terminal-release validator entry remained absent; its registry contains
+only the bounded initial-freeze and successor-freeze source validators described
+above, neither of which is an outcome validator.
 
-## What v1.0 must prove
+## What v1.0 required
 
 - **O1 — sustained autonomous delivery:** a finite six-or-more natural-task
   cohort covers the required scenario bands with accepted outcomes, zero user

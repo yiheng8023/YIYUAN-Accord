@@ -19,10 +19,11 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical v0.2 sequence
 
-v1.0 is the current nonterminal terminal-product proof program. Its outcomes
-start at 0/5; v0.2 evidence remains immutable historical calibration and cannot
-be inherited. Current research enters only when a v1.0 causal increment binds a
-real uncertainty or failure. In particular, the 45-compaction source-task
+v1.0 is a stopped zero-outcome terminal-product proof attempt. Its outcomes
+remain 0/5; v0.2 evidence remains immutable historical calibration and cannot
+be inherited. The stopped program cannot open another increment. Further
+research can enter product work only after one new current machine authority
+binds a causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
 build a generic context runtime.
 
@@ -77,12 +78,13 @@ and data-boundary proof.
 
 The v0.2 evidence proved only its bounded O2 cohort comparison, Codex-only O4
 profile calibration, and fixed O5 source-gate decision portability. It does not
-prove the stronger current v1.0 sustained cohort, proactive carrier behavior,
+prove a stronger sustained cohort, proactive carrier behavior,
 live installed-adapter value, clean-checkout release, or terminal proposition.
 No outcome-bearing A/B task should be manufactured merely to move the program.
 
-Natural-task evidence is required for outcome-bearing experimentation, but its
-absence does not block the program. Bounded
+Natural-task evidence is required for outcome-bearing experimentation. Its
+absence does not block a live program, but it cannot reopen this stopped v1.0
+program. Under a new current authority, bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
@@ -160,7 +162,7 @@ decision-relevant routes; never manufacture a complete Cartesian matrix.
 
 For the burden-transfer result, compare prospective real-task receipts with a
 source-bound historical or matched ad-hoc baseline. No baseline means no claim
-of reduction. The current v1.0 floor is the complete six-or-more-task O1 cohort,
+of reduction. The stopped v1.0 floor was the complete six-or-more-task O1 cohort,
 with each task bound to the pre-registered highest-priority eligible baseline;
 missing or incomparable baselines stop rather than pass.
 

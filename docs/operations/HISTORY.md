@@ -339,3 +339,20 @@ distinct product. Existing implementations are replaceable substrate. Only an
 evidenced residual semantic or integration gap can justify new Harness code.
 The fixed-source follow-up additionally invalidates a generic human-tool schema,
 collaboration wire, audit log, or decision-provenance format as product novelty.
+
+## Stopped v1.0 successor cohort
+
+The single permitted v1.0 successor generation was stopped before any O1-O5
+task registration or result. During a mechanism-hardening slice, the Agent
+tightened the code-owned Scheduled Task validator before replacing the already
+installed expiry task. The next canonical verification therefore classified
+the old battery-blocked task definition as a deterministic validation failure
+and executed the user's previously authorized failure disposition: it deleted
+the exact successor protected credential and removed the exact one-time task.
+
+The deleted cohort key was not recoverable from the bounded private task logs.
+Recreating it under the same generation would fabricate continuity, while the
+frozen v1.0 contract permits no second successor. The binding is therefore
+revoked, the current v1.0 program is stopped, and its zero-outcome failure is
+retained as counterevidence. The failure does not alter v0.2's bounded accepted
+milestone and contributes zero O1-O5 progress.

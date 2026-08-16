@@ -83,15 +83,14 @@ to `frozen`. Because it had zero registrations, the program may open exactly
 one distinct successor generation only after a source-verified no-eligible-demand
 window, with a fresh activation, private key and independent exact authorization.
 The successor inherits no task, result, cursor or ordering state and cannot be
-restarted again. `product/program.json` now carries that fresh successor freeze
-at revision `8e8e76b` and canonical digest `d2cf0cd`. A second independent
-source-native authorization has been bound by the code-owned Windows validator
-to the complete predecessor-revocation, restart-grant and authorization window,
-which contains no intervening eligible demand. An exact current-user S4U
-one-time expiry task is installed and code-checked; it can run without an
-interactive session and its pre-expiry no-delete probe succeeded. The successor
-can now admit enrollment, but no natural task is registered and O1-O5 remain
-0/5.
+restarted again. It was frozen at revision `8e8e76b` with canonical digest
+`d2cf0cd`, and its independent source authorization initially passed. During a
+later validator-hardening slice, however, the Agent applied the stricter task
+definition check before replacing the installed battery-blocked expiry task.
+That deterministic rejection invoked the authorized failure disposition and
+deleted both the exact protected resource and task. No natural task had been
+registered, O1-O5 remain 0/5, and v1.0 is now stopped rather than reconstructing
+the single permitted successor.
 Transient source unavailability or concurrent change now fails closed without
 destruction, while a confirmed schema, binding or content failure retains exact
 deletion. Diagnostics never contain the raw target, root, event, key or source
@@ -187,9 +186,10 @@ Code/DeepSeek task pair. Both independently returned the same fact-grounded
 single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
 adapter/date claim. Those bindings remain immutable at the v0.2 revision and
-are not registered current v1.0 validators. v1.0 remains nonterminal, O1-O5 are
-planned, and live program/active-increment state comes only from the verifier.
-Its terminal criteria require sustained natural tasks, comparative burden
+are not registered current v1.0 validators. v1.0 is stopped with O1-O5 at 0/5;
+live program state comes only from the verifier. Any successor release must
+prospectively preserve or strengthen the criteria requiring sustained natural
+tasks, comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
 transition, and live reproducible cross-host release evidence.
 Authorized product-plan delivery is real demand
@@ -462,7 +462,7 @@ package and `harness/claude_reference.py`. The fixed source package's strict
 manifest validation and offline semantic-parity checks pass. Historical v0.2
 later obtained one matched Codex plus Claude Code/DeepSeek source-gate pair and
 a bounded human equivalence judgment; that pair is not live installed-adapter
-behavior and does not satisfy current v1.0 O5.
+behavior and did not satisfy the stopped v1.0 O5 contract.
 
 For the Codex reference host, reuse the host's lifecycle event before inventing
 a Harness-owned continuation protocol. The fixed v0.147.0 `SessionStart` event

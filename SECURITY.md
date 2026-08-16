@@ -1,7 +1,7 @@
 # Security Policy
 
 Agent Autonomy Harness is a public, research-stage collaboration quality
-project. The current v1.0 terminal-proof tree contains a product-contract
+project. The stopped v1.0 terminal-proof tree contains a product-contract
 verifier and inactive reference-adapter source candidates, not a production
 runtime or released installable product.
 
