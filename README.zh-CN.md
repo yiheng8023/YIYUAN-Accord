@@ -17,8 +17,8 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 在完成“有限产品交付”与“持续 field validation”分离以及 Codex
-参考投影减法后处于 `ready`，没有 active 增量。仓库验证器报告 `programStatus=ready`、
+**当前状态：**v1.2 当前仅为已授权的精确 profile-freeze 序列处于 `active`。此前已完成
+“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
 `completionState=in-progress`、
 O1-O5 为 `0/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
@@ -33,8 +33,9 @@ v1.2 binding 不能只靠 Git 内容自行冻结。当前未启用的闸门要�
 allowed-signers 字节与指纹；之后用该 key 签署的 provisional first-parent commit 只能修改
 精确 normative binding，最后再由后续代码固定该 revision 与
 canonical binding digest。签名只证明预先选定 key 的持有与内容完整性，不能制造或替代
-人类授权；在 freeze commit 中才首次引入的 key 会被拒绝。目前没有提交 signer 材料，也
-没有取得签名权限；该闸门不激活 cohort、不产生结果信用，也不授权安装或 release。
+人类授权；在 freeze commit 中才首次引入的 key 会被拒绝。当前已取得精确签名授权并预绑定
+公开安全的 signer；binding 仍保持 unfrozen，直到后续 binding-only 签名提交和代码 pin
+通过验证。该闸门不激活 cohort、不产生结果信用，也不授权安装或 release。
 
 v1.1 仍是固定在 revision `5ae71bb` 的不可恢复零结果停止尝试。来源绑定的私密窗口审计证明，
 其激活后的首个真实产品交付需求在不可变注册前已经得到结果型协助；唯一 generation 已撤销，

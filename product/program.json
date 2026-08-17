@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-profile-freeze-execution",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -100,5 +100,62 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v12-profile-freeze-execution",
+      "state": "active",
+      "correctionClass": "current-release-exact-profile-freeze-execution",
+      "observedProblem": "The exact v1.2 profile and protocol binding is confirmed and the inactive verifier seam is ready, but the binding remains unfrozen until the newly authorized public signer is prebound, the binding-only commit is signed, and a later commit pins that signed revision and canonical digest.",
+      "hypothesis": "A public-key trust root committed before the freeze, followed by one exact binding-only Git SSH signed commit and one later code-pin commit, will make the human-authorized v1.2 profile binding immutable without private-key exposure, cohort activation, outcome promotion or terminal-release authority.",
+      "falsifier": "The signer bytes or fingerprint differ from the exact grant; the signer is introduced by the freeze commit; the signed commit changes anything other than the normative binding; Git cannot verify the signature; the private key is read, copied, output or committed; the final verifier is invalid; or any O1-O5 or terminal release state advances.",
+      "stopCondition": "The exact signer is prebound in an ancestor commit, the sole signed provisional commit changes only the normative binding, a later commit code-pins its revision and canonical digest, the verifier reports valid with a frozen v1.2 binding and zero O1-O5 progress, the program returns ready, main is pushed, and no task-created residue remains.",
+      "acceptanceIds": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-profile-freeze-execution",
+          "state": "active",
+          "acceptanceIds": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "git-commit",
+            "git-push",
+            "authorized-publication-execution"
+          ],
+          "deliverables": [
+            "one prebound public signer trust root",
+            "one binding-only signed provisional freeze commit",
+            "one later immutable freeze pin"
+          ]
+        }
+      ]
+    }
+  ]
 }
