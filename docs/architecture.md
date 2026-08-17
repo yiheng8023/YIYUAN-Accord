@@ -106,7 +106,8 @@ claim ceiling:            matched observational, not single-variable causal
 cross-class comparison:   descriptive only, never a Harness effect
 ```
 
-The manifest covers host/client version, model/provider/reasoning, account and
+The manifest covers host/client version, model/provider/reasoning effort and
+delegation or routing state, account and
 managed requirements, observed-or-unknown system/developer/built-in state,
 working directory and instruction chain, configuration layers, rules, Skills,
 plugins, Apps, MCP, Hooks, memory, managers, OS/runtime/tool/resource surface,
@@ -133,6 +134,26 @@ identity. A historical version is not a global lock, an unresolved moving target
 cannot execute, and material mid-execution drift requires re-registration or an
 honest stop. Missing starting identity, unregistered lifecycle drift, or failed
 restoration stops the pair; it is never normalized away after a result.
+
+Model and reasoning control follows the same subtraction rule as every other
+capability. If the host can select a sufficient model, provider, reasoning
+effort, or subagent route adaptively, the Harness observes and attributes that
+native decision rather than replacing it. A task-scoped override, delegation,
+carrier transition, or fallback is justified only by material quality, risk,
+latency, cost, or failure evidence. Where the host exposes no safe control, the
+Agent strengthens verification, degrades, escalates, narrows the claim, or
+stops; it does not make the user discover a model menu. Exact execution
+identity belongs in task evidence, while a current model name, benchmark, or
+reasoning level never becomes portable-core authority.
+
+The same boundary applies to human-Agent shortfalls. A report, taxonomy,
+mapping, or implemented mechanism is subordinate evidence rather than proof of
+coverage. A material applicable risk needs a sufficient native, official,
+maintained external, accountable domain, or smallest residual Harness control
+and proportionate prevention, detection, recovery, degradation, escalation, or
+claim limitation. Unknown and unresolved risk remains visible and limits the
+claim; the runtime is not expanded into a catalog-shaped universal control
+plane.
 Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
 

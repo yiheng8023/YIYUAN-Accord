@@ -2640,6 +2640,76 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("guides-and-verifies", progression["humanOnlyActionDisposition"])
         self.assertIn("resolve-current-suitable-source", progression["versionResolutionDisposition"])
 
+    def test_v12_prefers_native_reasoning_routes_and_only_residual_shortfall_controls(
+        self,
+    ) -> None:
+        acceptance = json.loads(
+            (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
+        )
+        constitution = json.loads(
+            (ROOT / "product/constitution.json").read_text(encoding="utf-8")
+        )
+        contract = acceptance["environmentAttribution"]
+        criteria = {item["id"]: item for item in acceptance["criteria"]}
+
+        self.assertIn(
+            "model-provider-reasoning-effort-delegation-and-routing-state",
+            contract["manifestFields"],
+        )
+        self.assertIn("host-native adaptive model", contract["taskTimeAdaptationRule"])
+        self.assertIn("without imposing a Harness router", contract["taskTimeAdaptationRule"])
+        self.assertIn("quality, latency, cost or failure", contract["taskTimeAdaptationRule"])
+        self.assertIn("narrows the claim or honestly stops", contract["taskTimeAdaptationRule"])
+        self.assertIn("switch model, provider, reasoning effort", contract["lifecycleRule"])
+        self.assertIn("do not turn a current model", contract["lifecycleRule"])
+
+        shortfall_rule = contract["shortfallResolutionRule"]
+        self.assertIn("is not a solved shortfall", shortfall_rule)
+        self.assertIn("first reuse a sufficient native", shortfall_rule)
+        self.assertIn("evidenced residual semantic gap", shortfall_rule)
+        self.assertIn("narrow the claim or stop", shortfall_rule)
+        self.assertIn("Do not run or persist a complete shortfall checklist", shortfall_rule)
+
+        self.assertIn("does not create a Harness router", criteria["O3"]["statement"])
+        self.assertIn("reasoning-effort mismatch", " ".join(criteria["O3"]["operationalization"]["falsifiers"]))
+        self.assertIn(
+            "not cleared by reference",
+            criteria["O1"]["operationalization"]["passRule"],
+        )
+        self.assertTrue(
+            any(
+                "shortfall evidence is not coverage by reference" in invariant
+                for invariant in constitution["fixedInvariants"]
+            )
+        )
+        self.assertIn(
+            "model-provider-reasoning-effort-and-delegation route",
+            constitution["adaptiveSurfaces"],
+        )
+
+        research = (ROOT / "docs/strategy/RESEARCH-AND-POC-PLAN.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("YIYUAN-CALIBRATION@e060a08f05361cb4cc9a67be050236cdbbde1de5", research)
+        self.assertIn("5b2bb49446c43b5d41bdd14fa6a844abefb7c1cc", research)
+        self.assertIn("Reference, classification, admission, and implementation", research)
+        for source_slice in (f"SG-{index:02d}" for index in range(1, 13)):
+            self.assertIn(f"| {source_slice} ", research)
+
+    def test_v12_shortfall_reference_cannot_be_promoted_to_solution(self) -> None:
+        self.mutate(
+            "product/acceptance.json",
+            lambda value: value["environmentAttribution"].__setitem__(
+                "shortfallResolutionRule",
+                "referenced means solved",
+            ),
+        )
+
+        report = self.report()
+
+        self.assertFalse(report["valid"])
+        self.assertIn("acceptance environmentAttribution is invalid", report["errors"])
+
     def test_v11_rejects_v10_frozen_or_revoked_binding_reuse(self) -> None:
         old_program = json.loads(
             subprocess.run(

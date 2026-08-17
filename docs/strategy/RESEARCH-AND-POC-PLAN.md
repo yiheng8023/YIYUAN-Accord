@@ -381,6 +381,60 @@ substitute:
 | [Agentlas OS v1.2 source at `8b3f8bc`](https://github.com/agentlas-ai/Agentlas-OS/tree/8b3f8bcffdfc57bf4991ed6e43d153d9230ea186), Apache-2.0 | Natural-language intake, bounded clarification, capability and role routing, portable packages, multi-host adapters, permissions, memory, receipts, and governed skill promotion make it the strongest full-substitute hypothesis in this cohort | Evaluate it as a possible route or substrate, not dismiss it as “just another runtime.” The fixed source also requires installation and host configuration, offers an optional global router and background runtime update, and contains an evaluation design and schemas but no public benchmark result files. It becomes a full substitute only if matched evidence also shows lower user orchestration burden, accepted outcomes, task-scoped release and cleanup, and equivalent cross-host value without an additional Harness profile. |
 | [NIST AI 800-2 Initial Public Draft, January 2026](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.800-2.ipd.pdf) and the [NIST Agentic AI evaluation-probes page updated 2026-05-05](https://www.nist.gov/programs-projects/building-evaluation-probes-agentic-ai), under [NIST public-information and Technical Series terms](https://www.nist.gov/copyrights-disclaimers) | Treats host/provider, agent scaffolding, context compression, instructions, tools, execution environment, budgets, and stopping conditions as explicit evaluation settings; requires grading to match the stated rules; and permits strict source-grounded probes during execution or post-hoc | Reuse the separation between a fixed evaluation protocol and later source-grounded scoring. Freeze one immutable task registration before execution, but implement unknown host serialization in a task-bound validator before promotion; the validator must bind the registration identity and chronology. This does not permit changing the rubric after results, replacing human acceptance, or treating the draft as a complete Harness standard. |
 
+### Human-AI shortfall solution disposition
+
+The current shared shortfall input is the non-authoritative custody package at
+[`YIYUAN-CALIBRATION@e060a08f05361cb4cc9a67be050236cdbbde1de5/common/human-ai-collaboration-shortfalls`](https://github.com/yiheng8023/YIYUAN-CALIBRATION/tree/e060a08f05361cb4cc9a67be050236cdbbde1de5/common/human-ai-collaboration-shortfalls).
+Its manifest Git blob is `5b2bb49446c43b5d41bdd14fa6a844abefb7c1cc`.
+The source's `STM-01..26` and `P1..P24` counts describe this revision's
+historical inventory, not permanent acceptance thresholds. The source remains
+the unique shared custody; this repository retains only its own bounded
+solution, rejection, implementation, and verification disposition.
+
+Reference, classification, admission, and implementation are not synonyms for
+solution or verification. The source's twelve `SG-*` routing slices provide a
+compact crosswalk for every current `STM-*` and `P*` item without copying the
+fifty-row corpus into this repository or running it as a checklist on every
+task:
+
+| Source slice | Minimum sufficient resolution route in this product | Current v1.2 evidence state and claim boundary |
+| --- | --- | --- |
+| SG-01 intent/source/context | Reuse native intent understanding; apply goal, source, omission, authority, and compound-unit semantics only where the task exposes ambiguity | Contract specified; real-task outcome unverified |
+| SG-02 transition/continuity | Reuse native compaction, fork, handoff, task, and Git primitives; add only thin source-bound fitness and destination-verification projections | Mechanism candidates exist; proactive v1.2 behavior unverified |
+| SG-03 premise/risk challenge | Reuse native reasoning plus current source and accountable domain review; escalate or stop when competence or stakes exceed the available lane | No universal challenge algorithm; task behavior unverified |
+| SG-04 capability/routing | Preserve sufficient native tool, model, provider, reasoning-effort, delegation, and lifecycle routing; use official or maintained external capability next; author only for a reproducible residual semantic gap | O3 contract specified; no Harness model router; v1.2 outcome unverified |
+| SG-05 authority/reversibility | Reuse host sandbox, approval, credential, and transaction controls; Harness binds human decision rights, minimum guidance, rollback, revocation, and claim limits | Repository mechanism checks exist; real effects unverified |
+| SG-06 evidence/provenance | Reuse direct sources, deterministic artifact checks, CI, domain review, and accountable judgment; bind proof strength to the exact claim | Code-owned verifier exists; task/domain sufficiency remains claim-specific |
+| SG-07 closure/readiness | Use criterion-specific outcome acceptance and the two-stage immutable release gate; local green or polished artifacts cannot close the product | Mechanism implemented; v1.2 terminal evidence absent |
+| SG-08 human review/competence | Keep real veto, accessible evidence, and domain-professional authority outside automation; the Agent detects, minimizes, explains, and verifies the unavoidable human step | Allocation contract specified; competence cannot be replaced by Harness |
+| SG-09 portability/evaluation | Use environment strata, semantic near-miss checks, task-bound validators, and distinct-host/cross-OS O5 evidence instead of assuming strong-model or one-host behavior generalizes | Evaluation contract specified; O5 remains zero |
+| SG-10 feedback/retirement | Turn material recurrence or counterevidence into one causal correction, regression, replan, downgrade, or retirement decision; do not create a generic monitoring runtime or make every anecdote permanent | Process-loss guard exists; production learning loop unverified and claim-limited |
+| SG-11 governance/privacy | Use the three machine authorities, exact source/version binding, public/private separation, revocation, cleanup, and release verification; external custody never becomes product authority | Repository mechanism checks exist; cross-repository effectiveness unverified |
+| SG-12 proportionality/control cost | Prefer silent native fast paths, require a residual gap for additions, measure user burden, latency, cost, false-positive loss, and maintenance rent, then remove controls whose net value is not supported | O2/O3/G4 contract specified; comparative v1.2 evidence absent |
+
+For any current or later shortfall, a row is sufficient only when the concrete
+task uses an effective native, official, maintained external, accountable
+domain, or smallest residual Harness control and obtains proportionate
+prevention, detection, recovery, degradation, escalation, or claim-limitation
+evidence. If no such route is observable or available, the task claim narrows
+or stops. A new source or counterexample reopens only the affected decision; it
+does not authorize a new universal module.
+
+Model and reasoning selection is a current example of that subtraction rule.
+The [official Codex subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+states that an unpinned Codex route can balance intelligence, speed, and price,
+and lets task agents use different model and reasoning settings. The
+[official OpenAI model guidance](https://developers.openai.com/api/docs/guides/latest-model)
+recommends choosing reasoning effort intentionally and comparing representative
+work rather than assuming the largest setting is always best. On 2026-08-17 the
+reference environment reported `codex-cli 0.147.0`; that is bounded observation,
+not a portable version lock. Each real task re-resolves the current host/model/
+provider/reasoning surface. A sufficient native decision is retained; material
+quality, risk, latency, cost, or failure evidence may justify a supported
+task-scoped override, delegation, carrier transition, fallback, stronger
+verification, degradation, escalation, or honest stop. The Harness does not
+invent a separate model router.
+
 Adjacent fixed observations remain discovery and falsifier leads rather than
 decision-eligible members of the cohort:
 

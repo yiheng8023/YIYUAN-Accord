@@ -129,9 +129,12 @@ Imagine a user says:
 The target behavior is that the Agent:
 
 1. understands the desired result and the publication boundary;
-2. checks whether its healthy, authorized native capabilities are sufficient;
-3. discovers, installs, configures, enables, downgrades, disables, rolls back,
-   retires, or persists a capability only as current need and authority justify;
+2. checks whether its healthy, authorized native capabilities are sufficient,
+   including native adaptive model, provider, reasoning-effort, and delegation
+   selection;
+3. preserves a sufficient native route, and discovers, installs, configures,
+   switches, escalates, de-escalates, disables, rolls back, retires, or persists
+   another route only as current need, evidence, and authority justify;
 4. stays in the current task and checkout by default, creating a branch,
    worktree, repository fork, conversation fork, or new task only when
    isolation, parallelism, host capacity, or an authority boundary requires it;
@@ -149,13 +152,22 @@ The target behavior is that the Agent:
 
 This is the product target, not a claim about current runtime behavior.
 
+A known collaboration shortfall is not solved because a report names it or a
+control is implemented. For a material task risk, the Harness first reuses a
+sufficient native, official, maintained external, or accountable domain
+control. It adds only the smallest evidenced residual mechanism and requires
+task-relevant prevention, detection, recovery, degradation, escalation, or
+claim limitation. If the risk remains unresolved or unobservable, the claim
+narrows or the route stops. The Harness does not run a fifty-item checklist on
+every task or build a model router where the host already adapts sufficiently.
+
 ## What belongs to the Harness
 
 | The Harness owns | The Harness reuses | The Harness does not become |
 | --- | --- | --- |
 | Portable demand-to-outcome collaboration semantics | Healthy Agent-native behavior | A universal Agent runtime |
 | An open minimum quality and evidence-conformance contract | Tool and Agent protocols such as MCP, A2A, or CHAP when suitable | A fixed capability catalog or marketplace |
-| Measures for user burden, outcome quality, authority, evidence, recovery, context-carrier fitness and transition, code and conversation task-topology lifecycle, resource lifecycle, and cleanup | Existing discovery, identity, authorization, audit, provenance, Git, and host task primitives | A new wire protocol, context monitor, Git or task manager, identity system, or audit format without a proven residual gap |
+| Measures for user burden, outcome quality, authority, evidence, recovery, context-carrier fitness and transition, code and conversation task-topology lifecycle, resource lifecycle, model/provider/reasoning route fitness, and cleanup | Existing discovery, identity, authorization, native model/reasoning/delegation routing, audit, provenance, Git, and host task primitives | A new wire protocol, model router, context monitor, Git or task manager, identity system, or audit format without a proven residual gap |
 | Adaptive thin reference projections that test the same semantics on real hosts | Maintained external implementations with source, version, license or terms, maturity, and boundary recorded | A replacement for human goals, domain judgment, consent, or final accountability |
 
 Codex is the first reference host because it is a strong, practical test bed.

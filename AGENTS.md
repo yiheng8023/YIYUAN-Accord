@@ -61,6 +61,16 @@ Prefer healthy native/runtime capability, then suitable official capability,
 then a reviewed maintained external implementation, then composition. Author
 only for an evidenced residual gap.
 
+Treat model, provider, reasoning effort, and delegation as adaptive capability
+routes, not a Harness-owned router or a user curriculum. Preserve sufficient
+host-native selection when it is healthy. Intervene only when task risk,
+quality, latency, cost, or failure evidence makes a mismatch material; then use
+a supported task-scoped override, delegation, carrier transition, fallback,
+stronger verification, degradation, escalation, or honest stop. Bind the
+effective execution identity and lifecycle delta, but never make a current
+model label, reasoning level, provider, or benchmark permanent product
+authority.
+
 Before a product-layer protocol, human-allocation model, registry, gateway,
 search surface, runtime, identity or authorization system, governance kernel,
 audit or provenance format, or evaluation mechanism influences a route, bind
@@ -140,7 +150,7 @@ Capability catalogs and discovery channels are adaptive sources, not product
 authority. Do not turn one catalog, provider, host, manager, or current
 installation into the portable core or a standing user-learning requirement.
 
-Treat host/client version, model and provider, account or managed policy,
+Treat host/client version, model, provider and reasoning effort, account or managed policy,
 instruction chain, consumer configuration, rules, Skills, plugins, Apps, MCP,
 Hooks, memory, managers, operating system, runtime, and tool/resource surfaces
 as explicit evaluation variables. Never assume another user shares the current

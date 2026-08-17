@@ -74,9 +74,12 @@ EXPECTED_PROGRESS_RULE = (
     "required portability replication, not a same-host replay, and Harness-specific value claims remain no "
     "stronger than prospective same-environment matched observational evidence. Observed-native-minimum and "
     "user-configured are starting conditions rather than static capability ceilings: after demand, the Agent "
-    "may adapt capabilities, configuration, models, providers and online or local execution only through "
-    "current source resolution, minimum-sufficient routing, bounded authority, attributed lifecycle deltas, "
-    "verification, rollback and cleanup. Before any task measurement, a new content-addressed profile and "
+    "may adapt capabilities, configuration, models, providers, reasoning effort, delegation and online or "
+    "local execution only through current source resolution, minimum-sufficient native-first routing, bounded "
+    "authority, attributed lifecycle deltas, verification, rollback and cleanup. Referenced, classified, "
+    "admitted or implemented collaboration-shortfall evidence is not a solution or coverage claim without "
+    "task-relevant control and verification; unresolved material risk narrows the claim or stops the affected "
+    "path. Before any task measurement, a new content-addressed profile and "
     "cohort protocol must be frozen and independently source-authorized under the current environment contract. "
     "Before model processing, every submitted source event on the active enrollment surface must receive a "
     "privacy-safe private capture and a pending resolution identity; before outcome-bearing execution or "
@@ -187,7 +190,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "cba7bdcf44c9e10b46665a153c8b9cfde4fa19c12356ab9c5a2d0a9c5440b292"
+    "d8912f9e0ced9c6c5e8006b4e9ded34dabae08aca9c468a2de553f829c09faab"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -1094,14 +1097,15 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "capability discovery sources and query strategies are adaptive inputs and no fixed channel can become product authority",
         "user-installed ecosystem breadth is legitimate user freedom and is not a failure explanation",
         "task-time capability and metadata exposure is minimal even when the available portfolio is broad",
-        "capability lifecycle is demand-driven from the observed starting state rather than capped by it: evaluate healthy native and already-authorized routes first, add or change only for an evidenced residual gap, perform every supported authorized mechanic, guide and verify only technically or authoritatively unavoidable human steps, and disable, downgrade, roll back, retire, release, or separately justify persistence when need or fitness changes",
+        "capability lifecycle is demand-driven from the observed starting state rather than capped by it: evaluate healthy native and already-authorized routes first, including host-native adaptive model, provider, reasoning-effort and delegation selection; add or change only for an evidenced residual gap, perform every supported authorized mechanic, guide and verify only technically or authoritatively unavoidable human steps, and escalate, de-escalate, disable, downgrade, roll back, retire, release, or separately justify persistence when need or fitness changes",
         "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
         "conversation-carrier fitness is Agent-owned: use source-bound observable host and task signals to keep the current carrier only while it remains safe, choose native compaction or a verified handoff before preventable quality or capacity loss, and when reliable signals are unavailable record that limit and apply a conservative pre-declared transition rule rather than making the user guess",
         "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; at each decision dynamically resolve the current suitable official or maintained source from a bounded as-of source and bind the exact execution version, commit, or package identity, license or applicable terms, maturity, and reuse boundary; never make one historical version a universal lock or execute an unresolved moving target; new implementation requires an evidenced residual semantic gap",
+        "known or newly observed human-Agent collaboration shortfall evidence is not coverage by reference, classification, admission, or implementation alone: for each material applicable risk, reuse a sufficient native, official, maintained external, or accountable domain control before the smallest evidenced Harness residual; require prevention, detection, recovery, degradation, escalation, or claim-limitation evidence proportionate to the risk, and narrow the claim or stop when the risk remains unresolved or unobservable rather than manufacturing a catalog-shaped mechanism",
         "reference-host calibration or one operating-system family cannot establish Agent-neutral portability; O5 requires distinct-host and bounded cross-operating-system proof",
         "durable product results are defined by portable collaboration, evidence, and conformance semantics; methodology, documentation, CLI, API, Skill, plugin, MCP, Hook, adapter, package, service, or another carrier is a non-exhaustive adaptive projection chosen by demand and host fitness rather than mandatory product body",
         "operating-system-specific installation, authorization, protected storage, execution, rollback, cleanup, and evidence mechanisms are replaceable adapter concerns rather than portable core; portability claims name only tested operating-system families, versions, virtualization boundaries, and host or runtime combinations and never imply universal operating-system support",
-        "host, model, provider, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
+        "host, model, provider, reasoning effort, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
         "Harness-specific value is estimated only through pre-registered matched comparisons with the same task-relevant starting environment and authority-and-available-source envelope, in which exact Harness activation is the only planned initial route and configuration difference; later Agent-selected or human-authorized capability and configuration changes are treatment-mediated lifecycle deltas that must be attributed rather than normalized away; unavoidable task differences remain explicit matching variables and limit the claim, so observational evidence is not mislabeled as single-variable causation; observed-native-minimum and user-configured evidence remain distinct and unknown or unobservable environment state is retained as unknown rather than assumed absent",
         "claims and authority transitions are zero-trust while safe reversible work uses bounded default autonomy",
         "memory, consumer projections, historical evidence, and installed payloads cannot become current product authority by existing",
@@ -1117,6 +1121,7 @@ EXPECTED_ADAPTIVE_SURFACES = frozenset(
         "operating-system-specific adapter and evidence mechanism",
         "task carrier topology and host primitive",
         "native, official, reviewed external, composed, or authored capability choice",
+        "model-provider-reasoning-effort-and-delegation route",
         "current source and exact execution-version resolution",
         "experiment design",
         "delivery order inside the active causal increment",
@@ -1218,6 +1223,10 @@ EXPECTED_PROGRESSION_POLICY = {
     "taskTimeAdaptationDisposition": (
         "pretask-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-"
         "and-records-lifecycle-deltas"
+    ),
+    "shortfallResolutionDisposition": (
+        "reference-and-classification-are-not-solutions-native-or-external-first-"
+        "residual-only-unresolved-risk-narrows-or-stops"
     ),
     "humanOnlyActionDisposition": (
         "agent-detects-minimizes-guides-and-verifies-unavoidable-user-step-while-"
@@ -1394,14 +1403,28 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
         "non-Harness guidance in both arms"
     ),
     "taskTimeAdaptationRule": (
-        "after demand reveals need, the Agent uses a healthy already-authorized route or, before execution, "
-        "binds an immutable decision record covering the residual gap, current source resolution, authority "
-        "class, planned lifecycle action, rollback and cleanup; online AI is the normal route, while local, "
-        "edge or offline execution is a demand-triggered minimum-sufficient degradation or data-locality route "
-        "rather than a mandatory product line, and recovery to an online route is reconciled and attributed; "
-        "the Agent performs every supported authorized mechanic, while a technically or authoritatively human-"
-        "only action is reduced to the smallest exact step, explained without requiring route knowledge, and "
-        "verified before resuming"
+        "after demand reveals need, the Agent preserves a sufficient healthy already-authorized route, "
+        "including host-native adaptive model, provider, reasoning-effort and delegation selection, without "
+        "imposing a Harness router or fixed model matrix; when task risk, quality, latency, cost or failure "
+        "evidence shows a material mismatch, the Agent uses a supported task-scoped override, delegation, "
+        "carrier transition or fallback, or binds an immutable decision record before execution covering the "
+        "residual gap, current source resolution, authority class, planned lifecycle action, rollback and "
+        "cleanup; if no safe control is observable or available, the Agent adapts verification, degrades, "
+        "escalates, narrows the claim or honestly stops rather than making the user discover the route. Online "
+        "AI is the normal route, while local, edge or offline execution is a demand-triggered minimum-sufficient "
+        "degradation or data-locality route rather than a mandatory product line, and recovery to an online "
+        "route is reconciled and attributed; the Agent performs every supported authorized mechanic, while a "
+        "technically or authoritatively human-only action is reduced to the smallest exact step, explained "
+        "without requiring route knowledge, and verified before resuming"
+    ),
+    "shortfallResolutionRule": (
+        "a research report, taxonomy, catalog entry, reference, admission or implementation is not a solved "
+        "shortfall or coverage proof. For each material applicable or newly observed collaboration risk that "
+        "can change the task route or claim, first reuse a sufficient native, official, maintained external or "
+        "accountable domain control; add a Harness-specific mechanism only for an evidenced residual semantic "
+        "gap; bind proportionate prevention, detection, recovery, degradation, escalation or claim-limitation "
+        "and its verification, and narrow the claim or stop when the risk remains unresolved or unobservable. "
+        "Do not run or persist a complete shortfall checklist when no task-bound risk makes it decision-relevant"
     ),
     "versionResolutionRule": (
         "at each decision resolve the current suitable official or maintained source from a bounded as-of source "
@@ -1410,11 +1433,13 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
         "such as latest, and on material mid-execution drift re-register or honestly stop"
     ),
     "lifecycleRule": (
-        "retain, install, configure, enable, use, switch between online and local or edge execution, degrade, "
-        "restore, disable, downgrade, rollback, retire or persist a route only by current need, evidence and "
-        "authority; preserve the same quality, privacy, safety, evidence and human-authority floors across route "
-        "changes, end task-scoped exposure when the need ends unless persistence has separate net-value evidence "
-        "and authorization, then verify the final or restored state and cleanup"
+        "retain, install, configure, enable, use, switch model, provider, reasoning effort, delegation, online "
+        "or local or edge execution, escalate, de-escalate, degrade, restore, disable, downgrade, rollback, "
+        "retire or persist a route only by current need, evidence and authority; prefer sufficient host-native "
+        "adaptation and do not turn a current model, provider, reasoning level or benchmark into a permanent "
+        "route lock; preserve the same quality, privacy, safety, evidence and human-authority floors across "
+        "route changes, end task-scoped exposure when the need ends unless persistence has separate net-value "
+        "evidence and authorization, then verify the final or restored state and cleanup"
     ),
     "humanInterventionRule": (
         "distinguish a technically or authoritatively unavoidable human-only decision or host action from a "
@@ -1429,7 +1454,7 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
     ),
     "manifestFields": [
         "host-client-and-version",
-        "model-provider-and-reasoning",
+        "model-provider-reasoning-effort-delegation-and-routing-state",
         "account-managed-and-administrator-requirements-presence",
         "system-developer-and-built-in-state-observed-or-unknown",
         "cwd-repository-and-project-instruction-chain",

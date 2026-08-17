@@ -115,7 +115,7 @@ preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,
 proactive verified carrier transition, and reproducible live cross-host and
 cross-operating-system public release before the whole project can be called
-closed. Host, model, provider,
+closed. Host, model, provider, reasoning effort, delegation,
 instructions, account policy, configuration, Skills, plugins, Apps, MCP, Hooks,
 memory, managers, operating system, runtime, and tool/resource surfaces are
 explicit variables. Harness-specific value estimates use pre-registered
@@ -128,6 +128,17 @@ ceiling. Observed-native-minimum
 and user-configured evidence are separate strata, and unobservable state
 remains unknown.
 
+Those variables are governed by subtraction rather than by a Harness-owned
+router. A sufficient host-native model, provider, reasoning-effort, delegation,
+tool, or carrier decision is retained and attributed. Task evidence may justify
+a supported override, escalation, de-escalation, fallback, stronger
+verification, or honest stop, but a current model label or benchmark does not
+become product authority. Likewise, a human-Agent shortfall report or taxonomy
+is only adaptive evidence: a material applicable risk needs an effective
+native, official, maintained external, accountable domain, or smallest residual
+Harness control plus proportionate verification. Reference or implementation
+alone is not a solution, and unresolved risk limits the claim.
+
 Terminal O5 spans at least two operating-system families and includes at least
 one matched pair whose host units run across that boundary. Each unit binds the
 exact OS family/version, runtime, host relationship, and virtualization or
@@ -136,11 +147,11 @@ execution, rollback, cleanup, and evidence remain replaceable edge mechanisms;
 WSL2 is Linux hosted by Windows, not bare-metal Linux or macOS evidence, and no
 claim exceeds the tested combinations.
 
-The current tree also contains one code-pinned v1.1 method/profile and paired
-prospective cohort-protocol candidate. They express the adaptive route and
-human-intervention method as a subordinate, source-authorized frozen normative
-binding. The binding has no registered natural task and contributes no outcome,
-installation, publication, or terminal acceptance by presence alone.
+The current tree retains historical profile/protocol source and code-owned
+v1.1 stopped/revoked identities so that past evidence cannot be rewritten. The
+current v1.2 binding is unfrozen. No historical or candidate artifact
+contributes outcome, installation, publication, or terminal acceptance by
+presence alone.
 
 The four guardrails—human authority, zero-trust claims, lean independent
 authority, and bounded process/resource loss—are mandatory but do not count as
