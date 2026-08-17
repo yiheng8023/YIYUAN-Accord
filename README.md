@@ -12,14 +12,17 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` after completing
-`increment.v12-o1-lifecycle-suite` and committing then removing the
-outcome-neutral O2 seam, replay and native-to-public projection-builder slices
-from the current graph. Its exact prior revision immutably registered
+**Current status:** v1.2 is `active` on the single outcome-neutral
+`increment.v12-o2-preregistration-assets` after completing
+`increment.v12-o1-lifecycle-suite`. The earlier O2 seam, replay and
+native-to-public projection-builder slices remain committed history outside
+the current graph. The active slice binds only exact controlled goals, a
+public-safe starting environment and one source-bound unavailable stop before
+any O2 registration, installation or execution. Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=ready`,
+`programStatus=active`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without

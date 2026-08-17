@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_ready_with_bounded_o1_and_o2_builder(
+    def test_current_v12_contract_is_valid_with_active_o2_preregistration_assets(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1322,12 +1322,19 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(len(live_program["increments"]), 1)
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-o2-preregistration-assets",
+        )
+        self.assertEqual(len(live_program["increments"]), 2)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
+        )
+        self.assertEqual(live_program["increments"][1]["taskRegistration"], None)
+        self.assertEqual(
+            live_program["increments"][1]["acceptanceIds"], ["G2", "G4"]
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
@@ -3358,18 +3365,43 @@ class ProductControlTests(unittest.TestCase):
             evidence_root,
             evidence_root / "environment-manifests",
         }
+        controlled_o2_goal_artifacts = {
+            evidence_root
+            / "o2-codex-reference-artifacts"
+            / f"{slug}-goal.txt"
+            for slug in (
+                "simple-native-no-op",
+                "nontrivial-goal-intake",
+                "human-authority-boundary",
+                "failure-recovery-and-cleanup",
+            )
+        }
+        allowed_o2_support_artifacts = controlled_o2_goal_artifacts | {
+            evidence_root
+            / "o2-codex-reference-artifacts"
+            / "user-configured-unavailable-stop.json"
+        }
         for path in sorted(evidence_root.rglob("*")):
             self.assertFalse(control._link_or_reparse(path), path)
             if path.is_dir():
                 continue
-            self.assertIn(path.parent, allowed_evidence_parents, path)
-            self.assertEqual(path.suffix, ".json", path)
+            self.assertTrue(
+                path.parent in allowed_evidence_parents
+                or path in allowed_o2_support_artifacts,
+                path,
+            )
+            self.assertTrue(
+                path.suffix == ".json" or path in controlled_o2_goal_artifacts,
+                path,
+            )
             raw = path.read_bytes()
             self.assertLessEqual(len(raw), control.MAX_DOCUMENT_BYTES, path)
             decoded = raw.decode("utf-8")
             self.assertIsNone(private_key_pattern.search(decoded), path)
             for pattern in path_patterns:
                 self.assertIsNone(pattern.search(decoded), f"{path}: {pattern.pattern}")
+            if path in controlled_o2_goal_artifacts:
+                continue
 
             def unique_object(pairs: list[tuple[str, object]]) -> dict:
                 document: dict[str, object] = {}
@@ -3384,6 +3416,29 @@ class ProductControlTests(unittest.TestCase):
                 for item in findings(document)
             )
         self.assertEqual(violations[:20], [], f"private evidence remains: {violations[:20]}")
+
+    def test_o2_controlled_goal_artifacts_have_reproducible_lf_bytes(self) -> None:
+        goal_paths = [
+            f"product/evidence/o2-codex-reference-artifacts/{slug}-goal.txt"
+            for slug in (
+                "simple-native-no-op",
+                "nontrivial-goal-intake",
+                "human-authority-boundary",
+                "failure-recovery-and-cleanup",
+            )
+        ]
+        result = subprocess.run(
+            ["git", "check-attr", "eol", "--", *goal_paths],
+            cwd=ROOT,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        self.assertEqual(
+            result.stdout.splitlines(),
+            [f"{path}: eol: lf" for path in goal_paths],
+        )
 
     def test_terminal_cohort_requires_proactive_context_lifecycle_coverage(
         self,

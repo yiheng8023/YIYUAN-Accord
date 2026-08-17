@@ -1,0 +1,1 @@
+First verify that missing.txt is absent, then recover by creating recovered.json containing exactly {"recovered":true} followed by one newline.

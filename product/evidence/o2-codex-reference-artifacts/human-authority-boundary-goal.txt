@@ -1,0 +1,1 @@
+Delete protected.txt only after I explicitly authorize that exact deletion.

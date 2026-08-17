@@ -52,11 +52,13 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is `ready` with O1 at 1/5. The O2 seam, replay, and exact native-to-public
-parser are outcome-neutral committed history outside the current graph; O2 is
-false. Its frozen
-candidate.2 binding and O1 registration precede the accepted 12/12 controlled
-result. The O1 suite is the only accepted outcome validator.
+v1.2 is `active` on the outcome-neutral
+`increment.v12-o2-preregistration-assets`, with O1 at 1/5. It commits only four
+controlled goals, a public-safe starting environment and a source-bound
+unavailable stop before O2 registration, installation or execution. Earlier O2
+mechanism slices are committed history outside the graph; O2 remains false.
+The frozen candidate.2 binding and O1 registration precede its accepted 12/12
+controlled result; the O1 suite is the only accepted outcome validator.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain
 their pre-freeze label only as part of the frozen bytes:
 they separate finite delivery from later field validation and cover the
@@ -66,15 +68,11 @@ limitation. They create no result or proof. The Codex source has been reduced
 to one implicit v1.2 Skill with no Hook, MCP, App, private capture state,
 external interpreter, or persistent runtime; O2 still requires a live,
 controllable installed or task-scoped application.
-v1.1 is stopped at
-revision `5ae71bb`: its first real post-activation product demand crossed the
-outcome boundary before registration, so retrospective registration is forbidden
-and the exact private resource and trigger were deleted. v1.2 inherits none of
-that binding or evidence. v1.0 is
-immutable stopped history at revision `910ac01`: both authorized zero-task
-generations are revoked, the successor protected resource and exact task were
-deleted, and no profile binding, cohort, authorization, ordering state, task or
-result may be reconstructed or inherited.
+v1.1 is stopped at revision `5ae71bb`: its first post-activation demand crossed
+the outcome boundary before registration, so retrospective registration is
+forbidden and its private resource and trigger were deleted. v1.0 is immutable
+stopped history at `910ac01`. v1.2 inherits no binding, task, or evidence from
+either generation.
 
 Every O1-O5 controlled scenario or later field unit binds its exact profile and
 protocol, evidence class, starting environment, initial authority/source

@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o2-preregistration-assets",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -164,6 +164,58 @@
           "deliverables": [
             "immutable O1 lifecycle-suite registration",
             "content-addressed twelve-slice observation and independently replayed evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o2-preregistration-assets",
+      "state": "active",
+      "correctionClass": "o2-preregistration-starting-truth-binding",
+      "observedProblem": "O2 has an earlier task-specific validator, pure public projection builder, exact package candidate, corrected named-human installation grant and live isolated device-auth state, but its four controlled goals, observed-native-minimum starting manifest and source-bound user-configured unavailable stop are not yet committed. No immutable O2 registration can therefore bind the complete starting truth before installation or execution.",
+      "hypothesis": "One outcome-neutral slice can commit only the four exact goal texts, one public-safe observed-native-minimum manifest and one source-bound user-configured unavailable-stop artifact, content-address the authorized package and earlier validator/builder identities, and leave installation, model execution and outcome evidence untouched so the next strict descendant can form an immutable registration.",
+      "falsifier": "The slice installs or activates the plugin, invokes Codex execution or a model, copies or exposes existing user configuration or credentials, records an absolute private locator or raw native event, changes the frozen profile or acceptance threshold, creates result evidence, binds the wrong package digest, adds a generic runtime or leaves repository temporary residue.",
+      "stopCondition": "The exact goal, environment and stop artifacts are committed in public-safe form; their bytes and the corrected package, validator and projection-builder identities pass focused checks; canonical verification remains valid with O1 true and O2 false; no plugin is installed and no controlled scenario has executed; the increment then exits the current graph before immutable O2 registration.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o2-preregistration-assets",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "four exact controlled O2 goal artifacts",
+            "public-safe observed-native-minimum environment manifest",
+            "source-bound user-configured unavailable-stop artifact"
           ]
         }
       ]

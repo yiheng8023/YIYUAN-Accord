@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "environmentClass": "observed-native-minimum",
+  "treatmentArm": "with-exact-harness",
+  "capturedAt": "2026-08-18T01:14:05.7666150+08:00",
+  "host-client-and-version": {
+    "operatingSystem": "Microsoft Windows 11 Professional 10.0.26200 build 26200 x64",
+    "python": "CPython 3.14.6",
+    "git": "2.55.0.windows.3",
+    "codexCli": "0.147.0"
+  },
+  "model-provider-reasoning-effort-delegation-and-routing-state": {
+    "state": "not-yet-executed-at-capture",
+    "model": "runtime-selected-and-not-predeclared",
+    "provider": "OpenAI-through-current-ChatGPT-account",
+    "reasoningEffort": "runtime-selected-and-not-predeclared",
+    "delegation": "none-planned-for-four-controlled-scenarios",
+    "routingOverride": "none",
+    "unobservable": "retain-as-unknown-if-native-Codex-JSONL-does-not-expose-the-effective-value"
+  },
+  "account-managed-and-administrator-requirements-presence": {
+    "account": "official-device-auth-present-in-private-isolated-state-not-publicly-committed",
+    "managedPolicy": "not-observed-and-not-assumed-absent",
+    "administrator": "not-required-for-the-declared-local-plugin-and-task-route"
+  },
+  "system-developer-and-built-in-state-observed-or-unknown": {
+    "system": "Windows-family-and-version-observed; other host state retained as unknown",
+    "developer": "host-supplied instructions are not inspectable and remain unknown",
+    "builtIn": "Codex-0.147.0-native-plugin-exec-and-filesystem-surfaces",
+    "unobservable": "retained-as-unknown-and-not-claimed-absent"
+  },
+  "cwd-repository-and-project-instruction-chain": {
+    "captureCwd": "repository-root-relative",
+    "scenarioCwd": "fresh-private-isolated-task-root-outside-the-repository",
+    "repositoryRevisionAtCapture": "dd1e28d0d60348d743738befc2dc5d342a685e92",
+    "productAuthority": [
+      "product/constitution.json",
+      "product/program.json",
+      "product/acceptance.json"
+    ],
+    "instructionBoundary": "repository-AGENTS-governs-orchestration-but-is-not-copied-into-scenario-task-roots; only-the-exact-plugin-Skill-may-be-added-after-registration"
+  },
+  "configuration-layers-profiles-and-overrides": {
+    "codexHome": "fresh-isolated-no-copied-user-state",
+    "configToml": "absent-at-capture",
+    "profiles": "absent-at-capture",
+    "explicitOverrides": "none-at-capture",
+    "otherUserConfiguration": "not-read-not-loaded-not-assumed-absent-outside-the-isolated-boundary"
+  },
+  "rules-skills-plugins-apps-mcp-hooks-memory-and-managers": {
+    "rules": "absent-in-isolated-starting-state",
+    "skills": "absent-in-isolated-starting-state",
+    "plugins": "native-plugin-list-reported-installed-empty-and-available-empty",
+    "appsMcpHooksMemoryManagers": "absent-in-isolated-starting-state",
+    "userGlobalSurfaces": "not-copied-not-read-not-loaded"
+  },
+  "operating-system-runtime-tool-and-resource-surface": {
+    "operatingSystemFamily": "Windows",
+    "operatingSystemVersion": "10.0.26200",
+    "virtualization": "none-observed-for-this-process",
+    "runtime": "Codex CLI 0.147.0 plus native Windows PowerShell execution surface",
+    "tool": "official-Codex-device-auth-plugin-and-exec-commands",
+    "resourceBoundary": "one-private-isolated-Codex-home-and-four-fresh-task-roots; exact-private-locators-excluded-from-public-evidence"
+  },
+  "initial-authority-and-available-source-envelope": {
+    "authority": "named-human-authorized-isolated-device-auth-exact-package-installation-controlled-execution-and-cleanup",
+    "source": "Codex-0.147.0-native-plugin-list-and-exec-JSONL-plus-task-owned-filesystem",
+    "separateGate": "protected.txt-deletion-requires-one-later-exact-human-grant-after-the-pregrant-stop",
+    "excluded": "current-user-configuration-mutation-existing-credential-use-publication-release-and-claims-beyond-the-controlled-Windows-Codex-suite"
+  },
+  "exact-harness-package-activation-and-exposure-delta": {
+    "state": "active",
+    "packageIdentity": "agent-autonomy-harness@9fe1f81a8ba9ce369af1aa3f519c14feae093914",
+    "packageSha256": "625c67dc8b3355b93614c7a85321c0ac0514c423ffd6888f7c899cf038f302d5",
+    "activationIdentity": "codex-plugin-add-local-marketplace",
+    "activationSha256": "625c67dc8b3355b93614c7a85321c0ac0514c423ffd6888f7c899cf038f302d5",
+    "taskExposureIdentity": "deliver-demand-driven-outcome",
+    "taskExposureSha256": "cb6ac77c07973aa68533f15e0c999308ecb68ebe43b11b78f2a8f74500257536"
+  },
+  "capture-time-source-identities-fingerprint-and-drift-check": {
+    "controlRevision": "0342ea6f2a6fd2a2982cb9c152dd2b67e883d2ea",
+    "controlSha256": "3616057dfbee5301eff8b5d3cfdc7a8188664ff10f8528ee223d50056fb27b8c",
+    "validatorRevision": "dd1e28d0d60348d743738befc2dc5d342a685e92",
+    "validatorSha256": "2767b6657d2c7d25285e549ad0a21d6c972abf7f0c3dff1b181e99cd3a8dac97",
+    "projectionBuilderRevision": "13ff439f56531149e6f8e429c713059e56c7a26e",
+    "projectionBuilderSha256": "3ff9248b637e01f055919ad8d6ca1def0517fc8376c50f3aa76957399271d2bc",
+    "packageRevision": "9fe1f81a8ba9ce369af1aa3f519c14feae093914",
+    "packageSha256": "625c67dc8b3355b93614c7a85321c0ac0514c423ffd6888f7c899cf038f302d5",
+    "driftCheck": "registration-must-bind-this-exact-committed-manifest-and-every-material-drift-stops-or-re-registers-before-execution"
+  }
+}
