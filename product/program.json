@@ -39,14 +39,14 @@
     "currentAuthority": false
   },
   "normativeProfileBinding": {
-    "state": "unfrozen",
-    "profileIdentity": null,
-    "locator": null,
-    "sha256": null,
-    "cohortProtocolIdentity": null,
-    "cohortProtocolLocator": null,
-    "cohortProtocolSha256": null,
-    "frozenAtRevision": null,
+    "state": "frozen",
+    "profileIdentity": "harness-demand-to-outcome-v1.2-candidate.2",
+    "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
+    "sha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+    "cohortProtocolIdentity": "harness-controlled-conformance-v1.2-candidate.2",
+    "cohortProtocolLocator": "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json",
+    "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+    "frozenAtRevision": "de5dbc42fb1e265a720bb26808a31d03d032e602",
     "cohortActivation": null
   },
   "terminalReleaseBinding": {
