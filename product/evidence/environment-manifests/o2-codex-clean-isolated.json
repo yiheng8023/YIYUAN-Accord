@@ -2,7 +2,7 @@
   "schema": 1,
   "environmentClass": "observed-native-minimum",
   "treatmentArm": "with-exact-harness",
-  "capturedAt": "2026-08-18T02:24:39.5478460+08:00",
+  "capturedAt": "2026-08-18T02:35:27.4291893+08:00",
   "host-client-and-version": {
     "operatingSystem": "Microsoft Windows 11 Professional 10.0.26200 build 26200 x64",
     "python": "CPython 3.14.6",
@@ -32,7 +32,7 @@
   "cwd-repository-and-project-instruction-chain": {
     "captureCwd": "repository-root-relative",
     "scenarioCwd": "fresh-private-isolated-task-root-outside-the-repository",
-    "repositoryRevisionAtCapture": "9d030d369c1eda620816d4109ed7cbdb5e5f75fd",
+    "repositoryRevisionAtCapture": "1ee0c35cd499533c893386076e509352c1197491",
     "productAuthority": [
       "product/constitution.json",
       "product/program.json",
@@ -80,8 +80,8 @@
   "capture-time-source-identities-fingerprint-and-drift-check": {
     "controlRevision": "9d030d369c1eda620816d4109ed7cbdb5e5f75fd",
     "controlSha256": "4168dfa811590125661df73d589eaa40f2b4dcdf85e523e30f226fe2876869cf",
-    "validatorRevision": "dd1e28d0d60348d743738befc2dc5d342a685e92",
-    "validatorSha256": "2767b6657d2c7d25285e549ad0a21d6c972abf7f0c3dff1b181e99cd3a8dac97",
+    "validatorRevision": "1ee0c35cd499533c893386076e509352c1197491",
+    "validatorSha256": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e",
     "projectionBuilderRevision": "13ff439f56531149e6f8e429c713059e56c7a26e",
     "projectionBuilderSha256": "3ff9248b637e01f055919ad8d6ca1def0517fc8376c50f3aa76957399271d2bc",
     "packageRevision": "9fe1f81a8ba9ce369af1aa3f519c14feae093914",
