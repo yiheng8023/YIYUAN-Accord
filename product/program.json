@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o1-lifecycle-suite-validator-seam",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -100,57 +100,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v12-o1-lifecycle-suite-validator-seam",
-      "state": "active",
-      "correctionClass": "o1-lifecycle-suite-validator-chronology",
-      "observedProblem": "O1 requires twelve distinct fixed-source lifecycle dispositions with exercised controlled effects, while the current verifier intentionally has no outcome validator; executing or recording any scenario before a task-specific validator is committed would make the evidence post-hoc, and closing twelve unpromoted fragment increments would violate the bounded process-loss rule.",
-      "hypothesis": "One task-specific deep module with only the existing registration and evidence validator interfaces, plus a local-substitutable controlled probe, can bind all twelve source slices before execution, reject mapping or self-report as proof, replay observable verifier effects, and avoid creating a generic runtime, evidence service or new authority layer.",
-      "falsifier": "The module accepts fewer than SG-01 through SG-12 exactly once, trusts receipt assertions or test counts without replaying observable effects, permits a route without a bounded unsupported disposition, depends on post-measurement code, changes the frozen profile or protocol, or exposes a reusable runtime or evidence schema beyond this exact O1 suite.",
-      "stopCondition": "The exact O1 suite probe and validator interfaces are committed before registration, focused tests prove fail-closed registration and evidence behavior through those interfaces, the canonical verifier remains valid with O1 still false, and this outcome-neutral increment leaves the current graph with no task-created residue.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o1-lifecycle-suite-validator-seam",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "task-specific O1 lifecycle-suite probe and validator interfaces",
-            "registration and evidence fail-closed regression coverage"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }

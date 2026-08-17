@@ -67,8 +67,7 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` on the bounded
-`increment.v12-o1-lifecycle-suite-validator-seam` and O1-O5 remain at 0/5.
+The current v1.2 program is `ready` with no active increment and O1-O5 at 0/5.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
 canonical digest `31dafe95`, and the tree contains the distinct, code-pinned candidate.2
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
