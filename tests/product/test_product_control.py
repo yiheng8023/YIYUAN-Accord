@@ -48,6 +48,13 @@ from harness.task_validator_o1_lifecycle_suite import (  # noqa: E402
     validate_evidence as validate_o1_lifecycle_evidence,
     validate_registration as validate_o1_lifecycle_registration,
 )
+from harness.task_validator_o2_codex_reference import (  # noqa: E402
+    INCREMENT_ID as O2_CODEX_INCREMENT_ID,
+    VALIDATOR_KIND as O2_CODEX_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O2_CODEX_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o2_codex_evidence,
+    validate_registration as validate_o2_codex_registration,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -63,6 +70,7 @@ AUTHORITY_FILES = (
     "harness/continuation.py",
     "harness/control.py",
     "harness/task_validator_o1_lifecycle_suite.py",
+    "harness/task_validator_o2_codex_reference.py",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
@@ -1302,7 +1310,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_ready_with_bounded_o1_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_active_o2_seam_with_bounded_o1_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1313,13 +1321,20 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(len(live_program["increments"]), 1)
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-o2-codex-reference-validator-seam",
+        )
+        self.assertEqual(len(live_program["increments"]), 2)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
         )
+        o2_seam = live_program["increments"][1]
+        self.assertEqual(o2_seam["state"], "active")
+        self.assertEqual(o2_seam["acceptanceIds"], ["G2", "G4"])
+        self.assertIsNone(o2_seam["taskRegistration"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],
@@ -6383,22 +6398,28 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_current_release_has_only_the_pre_measurement_o1_suite_validator(self) -> None:
-        expected_prefix = (
+    def test_current_release_has_only_the_pre_measurement_o1_and_o2_validators(self) -> None:
+        o1_expected_prefix = (
             frozenset({"O1"}),
             frozenset({O1_LIFECYCLE_INCREMENT_ID}),
             O1_LIFECYCLE_VALIDATOR_LOCATOR,
         )
+        o2_expected_prefix = (
+            frozenset({"O2"}),
+            frozenset({O2_CODEX_INCREMENT_ID}),
+            O2_CODEX_VALIDATOR_LOCATOR,
+        )
         self.assertEqual(
-            set(SUPPORTED_EVIDENCE_VALIDATORS), {O1_LIFECYCLE_VALIDATOR_KIND}
+            set(SUPPORTED_EVIDENCE_VALIDATORS),
+            {O1_LIFECYCLE_VALIDATOR_KIND, O2_CODEX_VALIDATOR_KIND},
         )
         self.assertEqual(
             set(SUPPORTED_PRE_MEASUREMENT_VALIDATORS),
-            {O1_LIFECYCLE_VALIDATOR_KIND},
+            {O1_LIFECYCLE_VALIDATOR_KIND, O2_CODEX_VALIDATOR_KIND},
         )
         self.assertEqual(
             SUPPORTED_EVIDENCE_VALIDATORS[O1_LIFECYCLE_VALIDATOR_KIND][:-1],
-            expected_prefix,
+            o1_expected_prefix,
         )
         self.assertIs(
             SUPPORTED_EVIDENCE_VALIDATORS[O1_LIFECYCLE_VALIDATOR_KIND][-1],
@@ -6406,11 +6427,27 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             SUPPORTED_PRE_MEASUREMENT_VALIDATORS[O1_LIFECYCLE_VALIDATOR_KIND][:-1],
-            expected_prefix,
+            o1_expected_prefix,
         )
         self.assertIs(
             SUPPORTED_PRE_MEASUREMENT_VALIDATORS[O1_LIFECYCLE_VALIDATOR_KIND][-1],
             validate_o1_lifecycle_registration,
+        )
+        self.assertEqual(
+            SUPPORTED_EVIDENCE_VALIDATORS[O2_CODEX_VALIDATOR_KIND][:-1],
+            o2_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_EVIDENCE_VALIDATORS[O2_CODEX_VALIDATOR_KIND][-1],
+            validate_o2_codex_evidence,
+        )
+        self.assertEqual(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[O2_CODEX_VALIDATOR_KIND][:-1],
+            o2_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[O2_CODEX_VALIDATOR_KIND][-1],
+            validate_o2_codex_registration,
         )
 
     def test_outcome_registration_requires_code_owned_pre_measurement_validator(

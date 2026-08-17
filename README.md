@@ -12,12 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` after completing the single
-`increment.v12-o1-lifecycle-suite`. Its exact prior revision immutably registered
+**Current status:** v1.2 has completed
+`increment.v12-o1-lifecycle-suite` and now has one active, outcome-neutral O2
+validator-seam increment. Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=ready`,
+`programStatus=active`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
@@ -25,10 +26,13 @@ turning the shortfall corpus into a feature backlog or requiring a natural-task
 cohort for release. Their exact candidate bytes are code-pinned but the profile
 binding is frozen by the exact signed revision `3e81686` and canonical digest
 `31dafe95`; it carries no cohort activation or outcome credit. One task-specific
-O1 lifecycle-suite validator and exact observed-native-minimum environment
+accepted O1 lifecycle-suite validator and exact observed-native-minimum environment
 manifest were committed before the current public-safe registration. No current
 private source, natural-demand enrollment, O2-O5 result evidence,
-terminal authorization validator, installed plugin, or project-level acceptance exists. The Codex source has been reduced to
+terminal authorization validator, installed plugin, or project-level acceptance exists.
+The active slice has added only a strictly pre-registration, evidence-fail-closed
+O2 validator seam; it cannot install or execute the candidate and cannot
+promote O2. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
 interpreter, or persistent runtime. Installation, persistent activation,
 publication, and release remain separate human gates.
