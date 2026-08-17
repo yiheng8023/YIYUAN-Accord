@@ -17,7 +17,12 @@ pre-response enrollment repair that followed the v1.1 stop is retained in Git
 and in an inactive source candidate, without inheriting that cohort or installing
 a runtime. The repository verifier reports `programStatus=ready`,
 `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
-`4/4`; run it for live truth. The current profile binding is unfrozen and no
+`4/4`; run it for live truth. The tree contains a code-pinned, pre-freeze v1.2
+profile and paired protocol candidate that make pre-response enrollment,
+dynamic environment and context adaptation, and Agent-owned process-drift
+correction reviewable without creating a monitor or runtime. The current
+profile binding is still unfrozen, so this is not evidence that self-correction
+or any other outcome works in real tasks, and no
 cohort, private source, result validator, terminal authorization validator,
 installed plugin, or outcome is active. The inactive Codex candidate now uses
 `UserPromptSubmit` only to create a keyed pre-model source commitment and
@@ -202,6 +207,13 @@ The current repository provides:
   that preserve the stopped v1.1 adaptive environment and human-intervention contract;
   their exact bytes are a revoked historical normative binding and
   they still carry no task, result, installation, or authority of their own;
+- a distinct current, code-pinned, still-unfrozen
+  [v1.2 collaboration profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)
+  and [pre-response cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json)
+  that realize dynamic native-first routing, context-variable adaptation,
+  continuous Agent-owned drift correction, cross-OS claim limits, and current
+  terminal privacy semantics without adding acceptance thresholds or outcome
+  credit;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue, and derives a privacy-safe
   `sourceCarrierRelease` preflight so an Agent does not archive a conversation
@@ -291,7 +303,18 @@ A without-Harness baseline cannot run inside the Harness repository and inherit
 its project guidance. Historical items are classified as environment-independent,
 environment-bound, or invalidated; none inherit outcome credit.
 
-The repository now carries one code-pinned v1.1 profile and paired prospective
+The repository now also carries a distinct code-pinned v1.2 pre-freeze profile
+and paired prospective cohort protocol. They are subordinate review candidates,
+not an active binding: no v1.2 artifact revision, cohort activation, private
+source, task registration, or outcome has been authorized or inherited. Their
+continuous-correction semantics require the Agent to reconcile the bound goal,
+later corrections, authority, causal and expected state, evidence, carrier
+fitness, and resource disposition at material checkpoints; material process
+drift stops further effects and triggers recovery, the smallest authorized
+correction, and re-verification. Whether that behavior is sustained remains an
+O1-O5 real-task question, not a document or test claim.
+
+The repository retains one code-pinned v1.1 profile and paired prospective
 cohort protocol as a revoked historical normative binding. The first-freeze
 revision `5ce2773`, canonical binding digest, exact source-native enrollment
 surface, activation cursor, cohort key identity/fingerprint, protected-source
@@ -436,6 +459,7 @@ process/resource loss are mandatory guardrails, not substitutes for outcomes.
 | Need | Document |
 | --- | --- |
 | Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| Review the current unfrozen v1.2 method and enrollment contract | [v1.2 collaboration profile](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and [pre-response cohort protocol](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json) |
 | Inspect the stopped v1.0 profile and cohort history | [v1.0 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md) and [prospective cohort protocol](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | Apply the bounded Codex-reference-calibrated candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | Understand the technical separation of concerns | [Architecture](docs/architecture.md) |

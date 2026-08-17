@@ -19,9 +19,13 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready with no active increment; the bounded pre-response enrollment-
+v1.2 is ready with no active increment; the pre-response enrollment-
 capture repair remains inactive source and Git history, and O1-O5 stay at 0/5.
-Its profile binding remains unfrozen and it inherits
+Its profile binding remains unfrozen, while a distinct code-pinned v1.2
+pre-freeze profile and paired protocol now make pre-response resolution,
+dynamic environment/context adaptation, Agent-owned continuous correction,
+cross-OS claim limits, and terminal privacy semantics reviewable without
+creating product authority, activation, or outcome credit. It inherits
 no cohort, authorization, registration, result, or outcome. v1.1 is a stopped
 zero-outcome environment-attributed terminal-product attempt; O5 had separated
 premeasurement derivation, per-OS public and task-scoped reproduction, and
@@ -34,9 +38,9 @@ Their exact bytes remain an independently source-authorized but revoked
 historical binding at first-freeze revision `5ce2773`. The first
 post-activation real product demand received outcome-bearing assistance before
 registration, so v1.1 stopped without retrospective evidence and cannot resume.
-The current increment tests whether Codex's native `UserPromptSubmit` seam can
-provide privacy-safe pre-model source capture and bounded mandatory-resolution
-context without being misrepresented as complete tool or output enforcement.
+The inactive Codex `UserPromptSubmit` seam remains a bounded source candidate
+for privacy-safe pre-model capture and mandatory-resolution context; it is not
+misrepresented as complete tool or output enforcement and is not installed.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to

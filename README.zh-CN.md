@@ -20,8 +20,10 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 **当前状态：**v1.2 已回到 `ready`，没有 active causal increment。针对 v1.1 停止原因的
 有界“响应前纳入”修复保留在 Git 和未启用源码候选中，但不继承旧 cohort，也不安装运行时。
 仓库验证器报告 `programStatus=ready`、
-`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`。当前 profile binding
-尚未冻结，当前人类授权与结果验证器注册表为空，也没有激活 cohort、私密来源、插件或结果。
+`completionState=in-progress`、O1-O5 为 `0/5`、G1-G4 为 `4/4`。当前树已有一组由代码固定、
+但尚未冻结的 v1.2 profile 与协议候选，用于审阅响应前纳入、动态环境/上下文适配和 Agent
+自主纠偏语义；它没有新建监控器或运行时，也不证明真实任务中的纠偏已经成立。当前 profile
+binding 仍未冻结，当前人类授权与结果验证器注册表为空，也没有激活 cohort、私密来源、插件或结果。
 Codex 的未启用候选现在只通过 `UserPromptSubmit` 在模型处理前生成带密钥的来源承诺和有界
 待登记上下文；它不声称能扣住所有用户可见输出或拦截 hosted tools。安装、Hook 信任、私密
 密钥物化、profile 冻结和 cohort 激活仍是彼此独立的人类闸门。
@@ -138,6 +140,11 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
   与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，保留停止的 v1.1
   动态环境归因和必要人工干预语义；其精确字节是已撤销的历史规范 binding，仍没有
   任务、结果、安装或自身权威；
+- 一组独立、当前、由代码固定但仍未冻结的
+  [v1.2 协作 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)与
+  [响应前 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json)，把原生优先的动态
+  路由、上下文变量适配、Agent 自主持续纠偏、跨 OS 声明边界和当前终态隐私语义落到可审阅
+  从属 operand 中，但不增加验收阈值或结果信用；
 - 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留，并派生隐私安全的
   `sourceCarrierRelease` 预检，防止 Agent 归档仍承载 live cohort 来源证据的对话；
 - 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
@@ -196,7 +203,13 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 Harness 仓库中继承项目 AGENTS.md 或适配器。历史证据只能分为环境无关、环境绑定或失效，
 不得继承结果信用。
 
-仓库现在保留一组由代码固定字节的 v1.1 profile 与配套前瞻 cohort 协议，作为已撤销的
+仓库现在另有一组由代码固定但仍未冻结的 v1.2 profile 与前瞻 cohort 协议。它们只是从属
+审阅候选：尚未绑定 v1.2 制品 revision、激活 cohort、物化私密来源、登记任务或产生结果，也
+没有继承前代状态。其持续纠偏语义要求 Agent 在材料检查点对齐目标、后续修正、权威、因果与
+预期状态、证据、载体健康和资源处置；发现材料性流程漂移时先停止副作用，再恢复、做最小授权
+修正并重新验证。但这种行为是否能持续成立仍须由 O1-O5 真实任务证明，不能由文档或测试代替。
+
+仓库继续保留一组由代码固定字节的 v1.1 profile 与配套前瞻 cohort 协议，作为已撤销的
 历史规范 binding。首冻 revision `5ce2773`、规范 digest、精确来源原生纳入面、激活游标、
 cohort 密钥身份/指纹、受保护来源窗口、保留处置和一次性 S4U 到期任务曾获得独立授权并由
 代码验证；v1.0 的 profile、协议、授权、cohort、注册和顺序状态没有被复用。
@@ -296,6 +309,7 @@ criterion 的预注册与验证负担时，才能同时支持多个 criterion，
 | 你的目的 | 对应文档 |
 | --- | --- |
 | 理解产品边界 | [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md) |
+| 审阅当前未冻结的 v1.2 方法与纳入契约 | [v1.2 协作 profile](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)与[响应前 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json) |
 | 审阅已停止 v1.0 的冻结方法、底线与 cohort 历史 | [v1.0 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)与[前瞻 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | 应用获得 v0.2 Codex 有界校准、但尚未满足 v1.1 的候选 profile | [需求到能力方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | 理解技术职责分离 | [架构](docs/architecture.md) |

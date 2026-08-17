@@ -70,7 +70,12 @@ within any single criterion.
 The current v1.2 program is `ready` with O1-O5 at 0/5 and no active increment.
 Its bounded pre-response enrollment-capture repair is retained as inactive
 source and Git history. Its `normativeProfileBinding` is
-unfrozen, its current human-authorization and outcome-validator registries are
+unfrozen, but the tree now contains a distinct code-pinned v1.2 pre-freeze
+[collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
+[cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.2.json). They make the current
+pre-response, dynamic-environment, continuous-correction, form/OS, privacy, and
+terminal semantics reviewable while adding no authority, threshold, activation,
+or result. Current human-authorization and outcome-validator registries are
 empty, and no cohort is active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
@@ -156,6 +161,16 @@ claim; the runtime is not expanded into a catalog-shaped universal control
 plane.
 Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
+
+The v1.2 profile treats correction as an execution responsibility rather than
+a user-operated review phase. At material checkpoints, the Agent reconciles the
+bound goal and subsequent corrections, current authority, settled decisions,
+causal and expected state, observed evidence, carrier fitness, and resource
+disposition. Material execution or process drift stops further effects,
+preserves evidence, recovers or rolls back, applies the smallest authorized
+correction, and re-verifies. Human goal changes, domain judgment, new authority,
+and final acceptance remain human inputs. This is a subordinate method
+candidate, not a generic monitor or proof that the behavior already works.
 
 The tree now contains one code-pinned v1.1 profile and paired cohort protocol as
 a revoked historical normative binding under that environment contract. Revision

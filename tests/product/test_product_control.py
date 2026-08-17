@@ -70,6 +70,8 @@ AUTHORITY_FILES = (
     "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json",
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md",
     "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json",
+    "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
+    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
@@ -1541,7 +1543,7 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(protocol[field], expected)
         self.assertTrue(protocol["claimLimits"])
 
-    def test_v11_profile_artifacts_are_distinct_and_v12_does_not_reuse_binding(self) -> None:
+    def test_v12_profile_artifacts_are_distinct_and_do_not_reuse_v11_binding(self) -> None:
         program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
@@ -1573,11 +1575,11 @@ class ProductControlTests(unittest.TestCase):
         )
         historical_binding = historical_program["normativeProfileBinding"]
         self.assertEqual(historical_binding["state"], "revoked")
-        self.assertEqual(
+        self.assertNotEqual(
             historical_binding["profileIdentity"],
             control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
         )
-        self.assertEqual(
+        self.assertNotEqual(
             historical_binding["cohortProtocolIdentity"],
             control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
         )
@@ -1603,6 +1605,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("technically or authoritatively human-only", profile_flat)
         self.assertIn("install, configure, enable", profile_flat)
         self.assertIn("disable, downgrade, roll back, retire", profile_flat)
+        self.assertIn("Operate, reconcile, and self-correct", profile)
+        self.assertIn("stop further effects", profile_flat)
+        self.assertIn("needing the user to reassert", profile_flat)
+        self.assertIn("context-window size", profile_flat)
+        self.assertIn("canonical structured serialization", profile_flat)
+        self.assertIn("JSON is still inert", profile)
+        self.assertIn("only for the residual host action", profile_flat)
         self.assertIn("verifier enforces those authorities", profile_flat)
         self.assertEqual(protocol["schema"], 1)
         self.assertEqual(set(protocol), control.CURRENT_COHORT_PROTOCOL_FIELDS)
@@ -1617,8 +1626,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("starting-manifest", protocol["environmentAttributionRule"])
         self.assertIn("current-source", protocol["versionResolutionRule"])
         self.assertIn("human-only", protocol["humanInterventionRule"])
+        self.assertIn("before-model-processing", protocol["preResponseCaptureRule"])
+        self.assertIn("before-outcome-work", protocol["preResponseResolutionRule"])
+        self.assertIn("no-user-visible-outcome", protocol["hostCompletionBarrierRule"])
+        self.assertIn("stop-recover-minimal-correct-reverify", protocol["selfCorrectionRule"])
         self.assertNotIn("strata", protocol)
         self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
+        self.assertEqual(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION, None)
+        self.assertEqual(
+            control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
+            None,
+        )
         for field, expected in control.EXPECTED_CURRENT_COHORT_PROTOCOL_RULES.items():
             self.assertEqual(protocol[field], expected)
         criteria = self.read_json("product/acceptance.json")["criteria"][:5]
@@ -1748,8 +1766,8 @@ class ProductControlTests(unittest.TestCase):
                     "git",
                     "show",
                     (
-                        control.EXPECTED_CURRENT_INITIAL_BINDING_REVISION
-                        + ":product/program.json"
+                        "5ce27730b982d3c78ed50d006f78ff0eea45d4a9"
+                        ":product/program.json"
                     ),
                 ],
                 cwd=ROOT,
@@ -2159,11 +2177,14 @@ class ProductControlTests(unittest.TestCase):
             )
         advapi32.CredDeleteW.assert_not_called()
 
-    def test_v11_frozen_material_accepts_only_the_exact_current_candidate(self) -> None:
+    def test_v12_frozen_material_waits_for_pinned_artifact_revision(self) -> None:
         binding = self.current_profile_binding()
         errors: list[str] = []
-        self.assertTrue(
-            control._current_profile_binding_material_valid(ROOT, binding, errors),
+        self.assertFalse(
+            control._current_profile_binding_material_valid(ROOT, binding, errors)
+        )
+        self.assertIn(
+            "frozen v1.2 normative profile identity or source revision mismatch",
             errors,
         )
 
@@ -2173,7 +2194,7 @@ class ProductControlTests(unittest.TestCase):
             control._current_profile_binding_material_valid(ROOT, binding, errors)
         )
         self.assertIn(
-            "frozen normative profile binding is not the code-owned v1.1 candidate",
+            "frozen normative profile binding is not the code-owned v1.2 candidate",
             errors,
         )
 
@@ -2196,7 +2217,7 @@ class ProductControlTests(unittest.TestCase):
                 )
             )
         self.assertIn(
-            "frozen v1.1 normative profile binding must exist in committed first-parent history",
+            "frozen current normative profile binding must exist in committed first-parent history",
             errors,
         )
 
@@ -2227,7 +2248,7 @@ class ProductControlTests(unittest.TestCase):
                 )
             )
         self.assertIn(
-            "initial v1.1 frozen binding is not code-pinned to canonical history",
+            "initial current frozen binding is not code-pinned to canonical history",
             errors,
         )
 
@@ -2406,7 +2427,7 @@ class ProductControlTests(unittest.TestCase):
                 )
             )
         self.assertIn(
-            "revoked v1.1 cohort cannot open a successor generation",
+            "revoked current cohort cannot open a successor generation",
             errors,
         )
 
@@ -2775,7 +2796,7 @@ class ProductControlTests(unittest.TestCase):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "frozen normative profile binding is not the code-owned v1.1 candidate",
+            "frozen normative profile binding is not the code-owned v1.2 candidate",
             report["errors"],
         )
 
@@ -2794,7 +2815,7 @@ class ProductControlTests(unittest.TestCase):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
         self.assertIn(
-            "stopped v1.1 program requires its only cohort to be revoked",
+            "stopped current program requires its only cohort to be revoked",
             report["errors"],
         )
 
@@ -5175,7 +5196,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
 
-    def test_current_registration_uses_frozen_v11_source_domain(self) -> None:
+    def test_current_registration_uses_v12_domain_and_rejects_predecessors(self) -> None:
         activation = {
             "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
             "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
@@ -5222,19 +5243,30 @@ class ProductControlTests(unittest.TestCase):
             control._registration_cohort_values_valid(values, activation)
         )
 
-        predecessor_values = deepcopy(values)
-        predecessor_values["enrollmentSurfaceAndCursor"][
-            "sourceMessageRule"
-        ] = control.EXPECTED_SOURCE_MESSAGE_RULE
-        predecessor_values["enrollmentSurfaceAndCursor"][
-            "hmacDomain"
-        ] = control.EXPECTED_HMAC_DOMAIN
-        predecessor_values["naturalDemandEventAndPrivateBinding"][
-            "sourceMessageRule"
-        ] = control.EXPECTED_SOURCE_MESSAGE_RULE
-        self.assertIsNone(
-            control._registration_cohort_values_valid(predecessor_values, activation)
+        predecessors = (
+            (
+                "domain-surface-source-native-immutable-event-identity-v1.1",
+                "agent-autonomy-harness/cohort-source-event/v1.1",
+            ),
+            (control.EXPECTED_SOURCE_MESSAGE_RULE, control.EXPECTED_HMAC_DOMAIN),
         )
+        for source_rule, hmac_domain in predecessors:
+            with self.subTest(source_rule=source_rule):
+                predecessor_values = deepcopy(values)
+                predecessor_values["enrollmentSurfaceAndCursor"][
+                    "sourceMessageRule"
+                ] = source_rule
+                predecessor_values["enrollmentSurfaceAndCursor"][
+                    "hmacDomain"
+                ] = hmac_domain
+                predecessor_values["naturalDemandEventAndPrivateBinding"][
+                    "sourceMessageRule"
+                ] = source_rule
+                self.assertIsNone(
+                    control._registration_cohort_values_valid(
+                        predecessor_values, activation
+                    )
+                )
 
     def test_task_registration_rejects_unrecognized_scenario_class(self) -> None:
         def activate_o1(value: dict) -> None:
@@ -8785,7 +8817,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertIn(
-            "stopped v1.1 program requires its only cohort to be revoked",
+            "stopped current program requires its only cohort to be revoked",
             report["errors"],
         )
 
@@ -9438,11 +9470,15 @@ class ProductControlTests(unittest.TestCase):
         )["status"]
         self.assertIn(f"programStatus={live_status}", readme)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme)
+        self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.2.md", readme)
+        self.assertIn("continuous-correction", readme)
         self.assertIn("v1.0", readme)
         self.assertIn("stopped", readme)
         self.assertIn("宪章终极命题尚未成立", readme_zh)
         self.assertIn(f"programStatus={live_status}", readme_zh)
         self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.1.md", readme_zh)
+        self.assertIn("DEMAND-TO-CAPABILITY-PROFILE-V1.2.md", readme_zh)
+        self.assertIn("持续纠偏", readme_zh)
         self.assertIn("v1.0", readme_zh)
         self.assertIn("停止", readme_zh)
         for document in (readme, research):

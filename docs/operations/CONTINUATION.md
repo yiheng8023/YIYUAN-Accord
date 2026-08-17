@@ -51,8 +51,11 @@ byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires distinct-host and cross-OS live evidence; exact tested
 environment identity bounds the claim.
 
-v1.2 is ready with O1-O5 at 0/5, an unfrozen profile, empty current validator
-registries, and no active increment. Its inactive
+v1.2 is ready with O1-O5 at 0/5, an unfrozen binding, empty current validator
+registries, and no active increment. Its v1.2
+profile/protocol pair is pre-freeze only: no activation, outcome, or proof. It
+binds dynamic adaptation and Agent-owned reconcile/recover/correct/reverify;
+human goal, domain, authority and final acceptance stay human. The inactive
 Codex `UserPromptSubmit` candidate creates keyed source commitments and bounded
 mandatory-resolution context before model processing; it is neither installed
 nor a complete output or hosted-tool interception boundary. v1.1 is stopped at
