@@ -52,8 +52,7 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is active on `increment.v12-o1-environment-manifest-chronology`, O1-O5
-remain at 0/5, and the
+v1.2 is ready with no active increment, O1-O5 remain at 0/5, and the
 profile binding is frozen by signed revision `3e81686` and canonical digest
 `31dafe95`. The current result-validator registries contain only the exact
 pre-measurement O1 lifecycle-suite validator and no task registration or result.

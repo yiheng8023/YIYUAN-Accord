@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o1-environment-manifest-chronology",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -100,56 +100,5 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
-    {
-      "id": "increment.v12-o1-environment-manifest-chronology",
-      "state": "active",
-      "correctionClass": "o1-environment-manifest-chronology",
-      "observedProblem": "The code-owned registration guard requires a task-specific environment manifest at a strict ancestor of the registration revision, while no current v1.2 environment manifest exists; registering O1 without that earlier exact starting-state record would either fail closed or invite post-result attribution.",
-      "hypothesis": "One observed-native-minimum manifest limited to the deterministic Windows, Python, Git and exact Harness module exposure used by the controlled O1 suite can bind the starting environment before registration without reading user-global configuration, activating a plugin, invoking a model or creating a static capability ceiling.",
-      "falsifier": "The manifest copies private paths or consumer credentials, assumes user-global instructions or ecosystem state, claims a plugin or model execution that did not occur, uses an unresolved moving identity, carries a result or outcome claim, differs from the exact Harness activation delta later bound by registration, or persists any task-created residue outside the declared repository boundary.",
-      "stopCondition": "The task-specific manifest is committed before any O1 registration, contains the exact current environment-contract fields and content identities with no outcome result, the canonical verifier remains valid with O1 false, and this outcome-neutral increment exits the current graph with no task-created residue.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o1-environment-manifest-chronology",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "task-specific pre-registration observed-native-minimum environment manifest"
-          ]
-        }
-      ]
-    }
-  ]
+  "increments": []
 }
