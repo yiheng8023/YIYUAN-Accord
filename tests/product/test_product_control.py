@@ -1536,7 +1536,7 @@ class ProductControlTests(unittest.TestCase):
         criteria = self.read_json("product/acceptance.json")["criteria"][:5]
         self.assertFalse(any(item["assessment"] == "verified" for item in criteria))
 
-    def current_profile_binding(self) -> dict:
+    def current_v12_profile_binding(self) -> dict:
         return {
             "state": "frozen",
             "profileIdentity": control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
@@ -1546,16 +1546,7 @@ class ProductControlTests(unittest.TestCase):
             "cohortProtocolLocator": control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR,
             "cohortProtocolSha256": control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256,
             "frozenAtRevision": control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
-            "cohortActivation": {
-                "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
-                "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
-                "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
-                "keyFingerprint": "sha256:" + "4" * 64,
-                "sourceMessageRule": control.EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
-                "hmacDomain": control.EXPECTED_CURRENT_HMAC_DOMAIN,
-                "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
-                "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
-            },
+            "cohortActivation": None,
         }
 
     def current_authorization_anchors(self) -> dict:
@@ -2072,8 +2063,7 @@ class ProductControlTests(unittest.TestCase):
         advapi32.CredDeleteW.assert_not_called()
 
     def test_v12_frozen_material_accepts_only_the_pinned_candidate_revision(self) -> None:
-        binding = self.current_profile_binding()
-        binding["cohortActivation"] = None
+        binding = self.current_v12_profile_binding()
         errors: list[str] = []
         self.assertTrue(
             control._current_profile_binding_material_valid(ROOT, binding, errors),
@@ -2094,8 +2084,7 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
-        binding = self.current_profile_binding()
-        binding["cohortActivation"] = None
+        binding = self.current_v12_profile_binding()
         binding["profileIdentity"] = control.EXPECTED_V1_PROFILE_IDENTITY
         errors = []
         self.assertFalse(
@@ -2114,9 +2103,9 @@ class ProductControlTests(unittest.TestCase):
             )
         )
 
-    def test_v11_uncommitted_freeze_and_unpinned_freeze_fail_closed(self) -> None:
+    def test_v12_uncommitted_freeze_and_unpinned_freeze_fail_closed(self) -> None:
         floor = self.initialize_fixture_repository()
-        binding = self.current_profile_binding()
+        binding = self.current_v12_profile_binding()
         program = self.read_json("product/program.json")
         program["normativeProfileBinding"] = binding
         self.write_json("product/program.json", program)
@@ -2172,8 +2161,7 @@ class ProductControlTests(unittest.TestCase):
         self,
     ) -> None:
         floor = self.initialize_fixture_repository()
-        binding = self.current_profile_binding()
-        binding["cohortActivation"] = None
+        binding = self.current_v12_profile_binding()
         program = self.read_json("product/program.json")
         program["normativeProfileBinding"] = binding
         self.write_json("product/program.json", program)
@@ -2221,6 +2209,10 @@ class ProductControlTests(unittest.TestCase):
                 "harness.control._binding_authorization_valid",
                 side_effect=AssertionError("v1.2 public freeze consulted private authorizer"),
             ) as private_authorizer,
+            patch(
+                "harness.control._current_public_freeze_signature_valid",
+                return_value=True,
+            ) as public_signature,
         ):
             errors: list[str] = []
             self.assertTrue(
@@ -2233,10 +2225,372 @@ class ProductControlTests(unittest.TestCase):
             )
         private_anchors.assert_not_called()
         private_authorizer.assert_not_called()
+        public_signature.assert_called_once_with(
+            self.root, freeze_revision, binding, errors
+        )
 
-    def test_v11_revocation_cannot_open_a_successor_generation(self) -> None:
+    def test_v12_public_freeze_requires_exact_allowed_signer_and_signed_commit(
+        self,
+    ) -> None:
         floor = self.initialize_fixture_repository()
-        first = self.current_profile_binding()
+        key_path = self.root / "fixture-v12-freeze-signing-key"
+        subprocess.run(
+            [
+                "ssh-keygen",
+                "-q",
+                "-t",
+                "ed25519",
+                "-N",
+                "",
+                "-f",
+                str(key_path),
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        public_fields = key_path.with_suffix(".pub").read_text(
+            encoding="ascii"
+        ).split()
+        allowed_signers = (
+            self.root
+            / control.EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR
+        )
+        allowed_signers.parent.mkdir(parents=True, exist_ok=True)
+        allowed_signers.write_bytes(
+            (
+                control.EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL
+                + " "
+                + public_fields[0]
+                + " "
+                + public_fields[1]
+                + "\n"
+            ).encode("ascii")
+        )
+        subprocess.run(
+            [
+                "git",
+                "add",
+                control.EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR,
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "-m", "prebind fixture v1.2 signer"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        binding = self.current_v12_profile_binding()
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = binding
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            [
+                "git",
+                "add",
+                "product/program.json",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "gpg.format=ssh",
+                "-c",
+                f"user.signingkey={key_path}",
+                "commit",
+                "--quiet",
+                "-S",
+                "-m",
+                "signed fixture v1.2 freeze",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        binding_sha256 = hashlib.sha256(
+            json.dumps(
+                binding,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        allowed_signers_sha256 = hashlib.sha256(
+            allowed_signers.read_bytes()
+        ).hexdigest()
+        key_blob = base64.b64decode(public_fields[1], validate=True)
+        key_fingerprint = (
+            "SHA256:"
+            + base64.b64encode(hashlib.sha256(key_blob).digest())
+            .decode("ascii")
+            .rstrip("=")
+        )
+        anchors = {
+            "CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION": floor,
+            "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": freeze_revision,
+            "EXPECTED_CURRENT_INITIAL_BINDING_SHA256": binding_sha256,
+            "EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_SHA256": (
+                allowed_signers_sha256
+            ),
+            "EXPECTED_CURRENT_INITIAL_BINDING_SIGNING_KEY_FINGERPRINT": (
+                key_fingerprint
+            ),
+        }
+        with patch.multiple(control, **anchors):
+            errors: list[str] = []
+            self.assertTrue(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                ),
+                errors,
+            )
+
+        with patch.multiple(
+            control,
+            **{
+                **anchors,
+                "EXPECTED_CURRENT_INITIAL_BINDING_SIGNING_KEY_FINGERPRINT": (
+                    "SHA256:" + "A" * 43
+                ),
+            },
+        ):
+            errors = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn(
+            "current v1.2 public freeze signer identity is invalid", errors
+        )
+
+        subprocess.run(
+            ["git", "commit", "--quiet", "--amend", "--no-gpg-sign", "--no-edit"],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        unsigned_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        with patch.multiple(
+            control,
+            **{
+                **anchors,
+                "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": unsigned_revision,
+            },
+        ):
+            errors = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn(
+            "current v1.2 public freeze commit signature is invalid", errors
+        )
+
+        allowed_signers.write_bytes(
+            (
+                control.EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL
+                + ' namespaces="git" '
+                + public_fields[0]
+                + " "
+                + public_fields[1]
+                + "\n"
+            ).encode("ascii")
+        )
+        subprocess.run(
+            [
+                "git",
+                "add",
+                control.EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR,
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "gpg.format=ssh",
+                "-c",
+                f"user.signingkey={key_path}",
+                "commit",
+                "--quiet",
+                "--amend",
+                "-S",
+                "--no-edit",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        option_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        option_sha256 = hashlib.sha256(allowed_signers.read_bytes()).hexdigest()
+        with patch.multiple(
+            control,
+            **{
+                **anchors,
+                "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": option_revision,
+                "EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_SHA256": (
+                    option_sha256
+                ),
+            },
+        ):
+            errors = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn("current v1.2 public freeze commit scope is not exact", errors)
+
+    def test_v12_public_freeze_rejects_self_bootstrapped_signer(self) -> None:
+        floor = self.initialize_fixture_repository()
+        key_path = self.root / "fixture-v12-self-bootstrap-key"
+        subprocess.run(
+            [
+                "ssh-keygen",
+                "-q",
+                "-t",
+                "ed25519",
+                "-N",
+                "",
+                "-f",
+                str(key_path),
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        public_fields = key_path.with_suffix(".pub").read_text(
+            encoding="ascii"
+        ).split()
+        allowed_signers = (
+            self.root
+            / control.EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR
+        )
+        allowed_signers.parent.mkdir(parents=True, exist_ok=True)
+        allowed_signers.write_bytes(
+            (
+                control.EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL
+                + " "
+                + public_fields[0]
+                + " "
+                + public_fields[1]
+                + "\n"
+            ).encode("ascii")
+        )
+        binding = self.current_v12_profile_binding()
+        program = self.read_json("product/program.json")
+        program["normativeProfileBinding"] = binding
+        self.write_json("product/program.json", program)
+        subprocess.run(
+            [
+                "git",
+                "add",
+                "product/program.json",
+                control.EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR,
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "gpg.format=ssh",
+                "-c",
+                f"user.signingkey={key_path}",
+                "commit",
+                "--quiet",
+                "-S",
+                "-m",
+                "self-bootstrapped fixture v1.2 freeze",
+            ],
+            cwd=self.root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        freeze_revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        key_blob = base64.b64decode(public_fields[1], validate=True)
+        anchors = {
+            "CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION": floor,
+            "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": freeze_revision,
+            "EXPECTED_CURRENT_INITIAL_BINDING_SHA256": hashlib.sha256(
+                json.dumps(
+                    binding,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest(),
+            "EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_SHA256": (
+                hashlib.sha256(allowed_signers.read_bytes()).hexdigest()
+            ),
+            "EXPECTED_CURRENT_INITIAL_BINDING_SIGNING_KEY_FINGERPRINT": (
+                "SHA256:"
+                + base64.b64encode(hashlib.sha256(key_blob).digest())
+                .decode("ascii")
+                .rstrip("=")
+            ),
+        }
+        with patch.multiple(control, **anchors):
+            errors: list[str] = []
+            self.assertFalse(
+                control._current_normative_profile_binding_history_valid(
+                    self.root, binding, errors
+                )
+            )
+        self.assertIn("current v1.2 public freeze commit scope is not exact", errors)
+
+    def test_v12_revocation_cannot_reopen_its_generation(self) -> None:
+        floor = self.initialize_fixture_repository()
+        first = self.current_v12_profile_binding()
         program = self.read_json("product/program.json")
         program["normativeProfileBinding"] = first
         self.write_json("product/program.json", program)
@@ -2271,9 +2625,6 @@ class ProductControlTests(unittest.TestCase):
             stderr=subprocess.PIPE,
         )
         successor = deepcopy(first)
-        successor["cohortActivation"]["surfaceIdentity"] = (
-            "enrollment-surface.public-v1:" + "5" * 32
-        )
         program["normativeProfileBinding"] = successor
         self.write_json("product/program.json", program)
         subprocess.run(
@@ -2309,8 +2660,7 @@ class ProductControlTests(unittest.TestCase):
     def test_v12_revoked_state_does_not_consult_v11_private_resource_or_trigger(
         self,
     ) -> None:
-        binding = self.current_profile_binding()
-        binding["cohortActivation"] = None
+        binding = self.current_v12_profile_binding()
         binding["state"] = "revoked"
         program = self.read_json("product/program.json")
         program["status"] = "stopped"

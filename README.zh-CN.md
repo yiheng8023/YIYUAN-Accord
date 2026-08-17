@@ -28,6 +28,14 @@ Skill，不含 Hook、MCP、App、私密捕获状态、外部解释器或持久�
 公开发布和 release 仍是彼此独立的人类闸门。
 宪章终极命题尚未成立。
 
+v1.2 binding 不能只靠 Git 内容自行冻结。当前未启用的闸门要求：先由具名人类通过独立的
+精确授权选定一把 SSH key，再提交前置 trust-root commit，固定公开安全的单 key
+allowed-signers 字节与指纹；之后用该 key 签署的 provisional first-parent commit 只能修改
+精确 normative binding，最后再由后续代码固定该 revision 与
+canonical binding digest。签名只证明预先选定 key 的持有与内容完整性，不能制造或替代
+人类授权；在 freeze commit 中才首次引入的 key 会被拒绝。目前没有提交 signer 材料，也
+没有取得签名权限；该闸门不激活 cohort、不产生结果信用，也不授权安装或 release。
+
 v1.1 仍是固定在 revision `5ae71bb` 的不可恢复零结果停止尝试。来源绑定的私密窗口审计证明，
 其激活后的首个真实产品交付需求在不可变注册前已经得到结果型协助；唯一 generation 已撤销，
 精确受保护资源与一次性到期触发器已删除，不能补登记、恢复或继承。v1.0 是固定在 revision

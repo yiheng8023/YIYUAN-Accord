@@ -202,6 +202,20 @@ actual final authorization carrier and trust boundary are known. The current
 v1.2 human-authorization registry is empty. The v1.1 first-freeze source
 validator and its execution-specific anchors exist only at the pinned stopped
 revision and cannot promote a current outcome.
+The separate v1.2 profile-freeze seam does not reuse that registry or a private
+source. A separate exact named-human grant must first select the signing key and
+authorize its use for this binding. An earlier trust-root commit then pins the
+exact single-key allowed-signers bytes and public fingerprint. The provisional
+first-parent binding commit carries a Git SSH signature and may change only the
+normative binding from the exact unfrozen state; a later commit code-pins its
+revision and canonical binding digest. The signature is a key-possession and
+content-integrity carrier, not an independent source of human intent.
+Verification uses the trusted Git executable and a trusted host `ssh-keygen`
+against a temporary copy of the already validated public signer bytes;
+unsigned, wrong-key, option-bearing, mutable, side-lineage, mixed-scope,
+self-introduced-signer or self-pinned bindings fail closed. The private key never
+enters repository state, and profile-freeze authority cannot stand in for
+terminal release authorization.
 Before a terminal candidate can be valid, it must bind one exact committed
 terminal-authorization validator and a public-source policy. A later tag must
 reuse that validator and may expose only a random public identity plus a keyed

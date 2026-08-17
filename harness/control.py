@@ -349,14 +349,23 @@ EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
 EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
     "de5dbc42fb1e265a720bb26808a31d03d032e602"
 )
-# The v1.2 candidate is intentionally unbound until a provisional first-parent
-# commit records the exact public binding and a later commit pins that revision
-# plus its canonical digest. This binding seam carries no cohort activation or
-# private source dependency. None of the stopped natural-task anchors can be
-# inherited.
+# The v1.2 candidate is intentionally unbound. A separate exact human grant and
+# earlier trust-root commit must first pin one public signer. A later signed,
+# single-parent commit may change only the normative binding, after which one
+# more commit pins that revision plus its canonical digest. This seam carries
+# no cohort activation or private source dependency. None of the stopped
+# natural-task anchors can be inherited.
 EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
+EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL = (
+    "agent-autonomy-harness-v1.2-profile-freeze"
+)
+EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR = (
+    "product/authorizations/v1.2-profile-freeze.allowed_signers"
+)
+EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_SHA256: str | None = None
+EXPECTED_CURRENT_INITIAL_BINDING_SIGNING_KEY_FINGERPRINT: str | None = None
 CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID = (
     "codex-windows-source-native-first-freeze-authorization-v1.1"
 )
@@ -4467,7 +4476,15 @@ def _evidence_git(
         key: value
         for key, value in os.environ.items()
         if key.casefold()
-        in {"systemroot", "windir", "path", "pathext", "temp", "tmp"}
+        in {
+            "systemroot",
+            "windir",
+            "path",
+            "pathext",
+            "temp",
+            "tmp",
+            "programdata",
+        }
     }
     environment.update(
         {
@@ -4604,6 +4621,232 @@ def _committed_blob(
         return False
     committed = _evidence_git(root, "show", f"{revision}:{locator}")
     return committed is not None and hashlib.sha256(committed).hexdigest() == expected_sha256
+
+
+def _trusted_ssh_keygen_executable() -> Path | None:
+    executable = shutil.which("ssh-keygen")
+    if executable is None:
+        return None
+    try:
+        candidate = Path(executable).resolve(strict=True)
+        metadata = candidate.lstat()
+    except (OSError, RuntimeError):
+        return None
+    if (
+        candidate.name.casefold() not in {"ssh-keygen", "ssh-keygen.exe"}
+        or not stat.S_ISREG(metadata.st_mode)
+        or _link_or_reparse(candidate)
+    ):
+        return None
+    if os.name == "nt":
+        system_directory = ctypes.create_unicode_buffer(32_768)
+        system_length = ctypes.windll.kernel32.GetSystemDirectoryW(
+            system_directory, len(system_directory)
+        )
+        if not 0 < system_length < len(system_directory):
+            return None
+        try:
+            system_root = Path(system_directory.value).resolve(strict=True)
+            candidate.relative_to(system_root)
+        except (OSError, RuntimeError, ValueError):
+            return None
+        return candidate
+    trusted = {
+        Path("/usr/bin/ssh-keygen"),
+        Path("/usr/local/bin/ssh-keygen"),
+        Path("/opt/homebrew/bin/ssh-keygen"),
+        Path("/opt/local/bin/ssh-keygen"),
+    }
+    return candidate if candidate in trusted else None
+
+
+def _current_public_freeze_signature_valid(
+    root: Path,
+    revision: Any,
+    binding: Mapping[str, Any],
+    errors: list[str],
+) -> bool:
+    before = len(errors)
+    locator = EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_LOCATOR
+    expected_sha256 = EXPECTED_CURRENT_INITIAL_BINDING_ALLOWED_SIGNERS_SHA256
+    expected_fingerprint = (
+        EXPECTED_CURRENT_INITIAL_BINDING_SIGNING_KEY_FINGERPRINT
+    )
+    if (
+        not isinstance(revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision) is None
+        or not isinstance(expected_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+        or not isinstance(expected_fingerprint, str)
+        or re.fullmatch(r"SHA256:[A-Za-z0-9+/]{43}", expected_fingerprint) is None
+    ):
+        _error(errors, "current v1.2 public freeze signer anchors are unavailable")
+        return False
+    parents_raw = _evidence_git(root, "rev-list", "--parents", "-n", "1", revision)
+    try:
+        ancestry = (
+            parents_raw.decode("ascii").strip().split()
+            if parents_raw is not None
+            else []
+        )
+    except UnicodeError:
+        ancestry = []
+    if len(ancestry) != 2 or ancestry[0] != revision:
+        _error(errors, "current v1.2 public freeze commit is not single-parent")
+        return False
+    parent_revision = ancestry[1]
+    changed_raw = _evidence_git(
+        root,
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "-z",
+        "--no-renames",
+        "-r",
+        parent_revision,
+        revision,
+        "--",
+    )
+    try:
+        changed_paths = (
+            [
+                item.decode("utf-8")
+                for item in changed_raw.split(b"\0")
+                if item
+            ]
+            if changed_raw is not None
+            else []
+        )
+    except UnicodeError:
+        changed_paths = []
+    if changed_paths != ["product/program.json"]:
+        _error(errors, "current v1.2 public freeze commit scope is not exact")
+        return False
+
+    historical_programs: list[dict[str, Any]] = []
+    for program_revision, label in (
+        (parent_revision, "parent"),
+        (revision, "signed"),
+    ):
+        program_object = f"{program_revision}:product/program.json"
+        raw_size = _evidence_git(root, "cat-file", "-s", program_object)
+        try:
+            object_size = (
+                int(raw_size.decode("ascii").strip())
+                if raw_size is not None
+                else -1
+            )
+        except (UnicodeError, ValueError):
+            object_size = -1
+        if object_size < 0 or object_size > MAX_DOCUMENT_BYTES:
+            _error(errors, f"current v1.2 public freeze {label} program is unavailable")
+            return False
+        program_raw = _evidence_git(root, "show", program_object)
+        if program_raw is None or len(program_raw) != object_size:
+            _error(errors, f"current v1.2 public freeze {label} program is unavailable")
+            return False
+        historical_programs.append(
+            _parse_json_object_bytes(
+                program_raw,
+                f"current v1.2 public freeze {label} product/program.json",
+                errors,
+            )
+        )
+    parent_program, signed_program = historical_programs
+    parent_binding = parent_program.get("normativeProfileBinding")
+    signed_binding = signed_program.get("normativeProfileBinding")
+    parent_without_binding = dict(parent_program)
+    signed_without_binding = dict(signed_program)
+    parent_without_binding.pop("normativeProfileBinding", None)
+    signed_without_binding.pop("normativeProfileBinding", None)
+    if (
+        not _same_typed_value(parent_binding, UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        or not _same_typed_value(signed_binding, dict(binding))
+        or not _same_typed_value(parent_without_binding, signed_without_binding)
+    ):
+        _error(errors, "current v1.2 public freeze program transition is not exact")
+        return False
+    allowed_signers = _inside_root(
+        root,
+        locator,
+        errors,
+        "current v1.2 public freeze allowed-signers file",
+    )
+    if allowed_signers is None:
+        return False
+    raw = _read_bounded_bytes(
+        allowed_signers,
+        "current v1.2 public freeze allowed-signers file",
+        errors,
+    )
+    if raw is None:
+        return False
+    if (
+        hashlib.sha256(raw).hexdigest() != expected_sha256
+        or not _committed_blob(root, parent_revision, locator, expected_sha256)
+        or not _committed_blob(root, revision, locator, expected_sha256)
+    ):
+        _error(
+            errors,
+            "current v1.2 public freeze signer trust root was not prebound",
+        )
+        return False
+    try:
+        text = raw.decode("ascii")
+    except UnicodeError:
+        text = ""
+    fields = text.strip().split()
+    key_blob: bytes | None = None
+    if (
+        len(fields) == 3
+        and fields[0] == EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL
+        and re.fullmatch(r"ssh-[a-z0-9-]+", fields[1]) is not None
+        and text == " ".join(fields) + "\n"
+    ):
+        try:
+            key_blob = base64.b64decode(fields[2], validate=True)
+        except (ValueError, TypeError):
+            key_blob = None
+    fingerprint = (
+        "SHA256:"
+        + base64.b64encode(hashlib.sha256(key_blob).digest())
+        .decode("ascii")
+        .rstrip("=")
+        if key_blob is not None
+        else None
+    )
+    if fingerprint != expected_fingerprint:
+        _error(errors, "current v1.2 public freeze signer identity is invalid")
+        return False
+    ssh_keygen = _trusted_ssh_keygen_executable()
+    if ssh_keygen is None:
+        _error(errors, "trusted ssh-keygen is unavailable for public freeze verification")
+        return False
+    try:
+        with tempfile.TemporaryDirectory(
+            prefix="harness-public-freeze-signers-"
+        ) as temporary:
+            verified_signers = Path(temporary) / "allowed_signers"
+            verified_signers.write_bytes(raw)
+            verified = _evidence_git(
+                root,
+                "-c",
+                "gpg.format=ssh",
+                "-c",
+                f"gpg.ssh.allowedSignersFile={verified_signers}",
+                "-c",
+                f"gpg.ssh.program={ssh_keygen}",
+                "-c",
+                "gpg.minTrustLevel=fully",
+                "verify-commit",
+                "--raw",
+                revision,
+            )
+    except OSError:
+        verified = None
+    if verified is None:
+        _error(errors, "current v1.2 public freeze commit signature is invalid")
+    return len(errors) == before
 
 
 def _binding_matches_generation(
@@ -5235,6 +5478,10 @@ def _current_normative_profile_binding_history_valid(
                 errors,
                 "initial current frozen binding is not code-pinned to canonical history",
             )
+        elif not _current_public_freeze_signature_valid(
+            root, anchor_revision, first_frozen, errors
+        ):
+            pass
     return len(errors) == before
 
 

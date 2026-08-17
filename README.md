@@ -29,6 +29,17 @@ interpreter, or persistent runtime. Installation, persistent activation,
 publication, and release remain separate human gates.
 The constitution's terminal product proposition has not been established.
 
+The v1.2 binding cannot be frozen by Git content alone. Its inactive staged
+gate requires a separate exact named-human grant selecting one SSH key, then a
+prior trust-root commit that pins its public-safe single-key allowed-signers
+bytes and fingerprint, a provisional signed first-parent commit whose only
+change is the exact normative binding, and a later code pin of that revision and
+canonical binding digest. The signature proves possession and integrity for the
+preselected key; it does not manufacture or replace the human grant. A key first
+introduced by the freeze commit is rejected. No signer material has been
+committed and no signing authority has been granted; this gate carries no cohort
+activation, outcome credit, installation, or release authority.
+
 v1.1 remains an immutable stopped zero-outcome attempt at revision `5ae71bb`.
 A source-bound private-window audit established that its first post-activation
 real product-delivery demand received outcome-bearing assistance before
