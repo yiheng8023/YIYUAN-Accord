@@ -13,6 +13,9 @@ cleanup entrypoint; those retired mechanics are historical at revision
 `910ac01`. The exact v1.1 protected source and one-time S4U expiry task were
 deleted under the authorized deterministic-failure disposition. The repository
 contains commitments, not private values; no live private cohort source remains.
+A non-Windows verifier cannot inspect the retired Windows Scheduled Task and
+therefore fails closed rather than treating repository text as proof of its
+absence.
 
 Treat every external capability, executable surface, instruction body,
 generated artifact, and runtime claim as untrusted until its applicable review

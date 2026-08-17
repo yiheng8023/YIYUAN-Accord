@@ -21,6 +21,9 @@ its only generation is revoked, and the exact protected resource and one-time
 expiry trigger have been deleted under the authorized deterministic-failure
 disposition. The repository verifier reports `programStatus=stopped`,
 `completionState=stopped`, O1-O5 `0/5`, and G1-G4 `4/4`; run it for live truth.
+A non-Windows hosted runner cannot independently inspect absence of the retired
+Windows Scheduled Task and therefore fails closed at G3 while corroborating the
+remaining public contract; that is not evidence that the task still exists.
 The constitution's terminal proposition remains open and requires a later
 machine-authority program rather than a v1.1 restart. v1.0 is
 an immutable stopped zero-outcome attempt at revision `910ac01`; none of its

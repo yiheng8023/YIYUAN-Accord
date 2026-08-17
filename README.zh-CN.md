@@ -22,7 +22,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 结果型协助。因此不能补登记，也不能挑选更晚任务继续；唯一 cohort generation 已撤销，
 精确受保护资源与一次性到期触发器已按此前授权的确定性失败处置删除。仓库验证器报告
 `programStatus=stopped`、`completionState=stopped`、O1-O5 为 `0/5`、G1-G4 为 `4/4`；
-实时状态仍应现场运行验证器读取。宪章终极命题尚未成立，后续只能由新的机器权威 program
+实时状态仍应现场运行验证器读取。非 Windows 托管 runner 无法独立检查已退役 Windows
+计划任务确实不存在，因此会在 G3 失败关闭，同时仅佐证其余公开契约；这不证明任务仍存在。
+宪章终极命题尚未成立，后续只能由新的机器权威 program
 继续，不能重启 v1.1。v1.0 是固定在 revision
 `910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
 `0dbcb0af34197e5c35c75d69a1aeacf4fd91b404` 仍是不可改写的有界校准里程碑；
