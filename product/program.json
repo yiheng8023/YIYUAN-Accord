@@ -110,10 +110,25 @@
       "falsifier": "Registration is post-hoc, does not bind the exact accepted mapping or environment, reclassifies a slice, permits implementation or prose as proof, executes a scenario before the registration binding is valid, fails any controlled effect or independent replay, promotes controlled evidence into comparative burden, broad effectiveness, distinct-Agent or untested-platform claims, requires a new ungranted side effect, or leaves task-created residue.",
       "stopCondition": "The immutable registration strictly precedes measurement; all twelve registered controlled scenarios and independent replay pass under the exact validator and environment binding; the named human accepts the bounded O1 result; O1 is verified without expanding its claim ceiling; the increment closes and all task-created temporary resources are absent.",
       "acceptanceIds": [
+        "O1",
         "G2",
         "G4"
       ],
-      "taskRegistration": null,
+      "taskRegistration": {
+        "locator": "product/evidence/o1-lifecycle-suite-registration.json",
+        "sha256": "49d86c326007ecb4ab0720f4cc0e8309437716c94136268f2120ee8e46a51416",
+        "sourceRevision": "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
+        "measurementNotBefore": "2026-08-17T20:58:17+08:00",
+        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+        "preMeasurementValidator": {
+          "kind": "o1-lifecycle-suite-validator-v1",
+          "version": 1,
+          "locator": "harness/task_validator_o1_lifecycle_suite.py",
+          "revision": "fef3d5ab24ede56bdaec3458a679bcd54170dba3",
+          "sha256": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a"
+        }
+      },
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
         "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -134,6 +149,7 @@
           "id": "work.v12-o1-lifecycle-suite",
           "state": "active",
           "acceptanceIds": [
+            "O1",
             "G2",
             "G4"
           ],

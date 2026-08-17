@@ -56,7 +56,7 @@ v1.2 is active only on `increment.v12-o1-lifecycle-suite`; O1-O5 remain 0/5.
 The profile binding is frozen by signed revision `3e81686` and canonical digest
 `31dafe95`. The current result-validator registries contain only the exact
 pre-measurement O1 lifecycle-suite validator. Its public-safe registration is
-not yet bound for measurement, and no result exists.
+bound from an exact prior revision for measurement, and no result exists.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain
 their pre-freeze label only as part of the frozen bytes:
 they separate finite delivery from later field validation and cover the

@@ -1302,7 +1302,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_active_registration_stage_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_active_o1_registration_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1320,7 +1320,8 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(len(live_program["increments"]), 1)
         self.assertEqual(
-            live_program["increments"][0]["taskRegistration"], None
+            live_program["increments"][0]["taskRegistration"]["sourceRevision"],
+            "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
