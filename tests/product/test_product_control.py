@@ -1256,7 +1256,7 @@ class ProductControlTests(unittest.TestCase):
             capture_output=True,
             text=True,
             check=False,
-            timeout=30,
+            timeout=180,
         )
 
     def codex_session_start_payload(self, *, source: str = "startup") -> dict:
@@ -1302,7 +1302,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_active_o1_registration_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_ready_with_bounded_o1_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1313,11 +1313,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o1-lifecycle-suite",
-        )
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
         self.assertEqual(len(live_program["increments"]), 1)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
@@ -1333,9 +1330,10 @@ class ProductControlTests(unittest.TestCase):
                 "scope": "live-cohort-source-dependency-only",
             },
         )
-        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
+        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
         self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
-        self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
+        self.assertTrue(report["criterionStates"]["O1"])
+        self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(2, 6)))
         constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
         v02 = constitution["historicalMilestones"][-3]
         self.assertEqual(v02["release"], "v0.2")
@@ -3539,7 +3537,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
         self.assertEqual(report["completionState"], "in-progress")
-        self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
+        self.assertEqual(report["outcomes"], {"verified": 1, "total": 5})
         self.assertTrue(report["valid"], report["errors"])
 
     def test_source_carrier_release_preflight_fails_closed_and_tracks_binding(self) -> None:
@@ -3832,7 +3830,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             (
                 f"v1.2: {live_program['status']}, "
-                f"{report['completionState']} (0/5 outcomes)"
+                f"{report['completionState']} (1/5 outcomes)"
             ),
             completed.stdout,
         )

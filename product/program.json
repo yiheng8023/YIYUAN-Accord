@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o1-lifecycle-suite",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -103,7 +103,7 @@
   "increments": [
     {
       "id": "increment.v12-o1-lifecycle-suite",
-      "state": "active",
+      "state": "completed",
       "correctionClass": "o1-lifecycle-suite-controlled-coverage",
       "observedProblem": "O1 requires one non-duplicative disposition for every fixed SG-01 through SG-12 source slice with controlled evidence for each claimed effect. The exact validator and observed-native-minimum environment manifest now strictly precede registration, and the named human has accepted the applicability, accountable-domain boundary and bounded claim ceiling, but no immutable task registration or measured result exists.",
       "hypothesis": "One immutable pre-measurement registration can bind the accepted twelve-slice mapping, exact source custody, environment, validator, safety floors and claim exclusions before any controlled execution; after a separate activation commit, the same task-specific validator can exercise and independently replay all twelve observable verifier effects without installing a plugin, invoking a model, manufacturing natural demand or creating a generic evidence runtime.",
@@ -147,7 +147,7 @@
       "workItems": [
         {
           "id": "work.v12-o1-lifecycle-suite",
-          "state": "active",
+          "state": "completed",
           "acceptanceIds": [
             "O1",
             "G2",

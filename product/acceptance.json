@@ -53,7 +53,10 @@
       "statement": "The product uses the current shared shortfall corpus and historical counterexamples to cover the material human-AI collaboration chain with minimum sufficient controls or honest residual dispositions, without converting the research taxonomy into a feature backlog.",
       "metric": "verified lifecycle coverage across every current SG-01 through SG-12 slice and the intake, premise, route, authority, execution, evidence, correction, transition, closure, feedback, governance and retirement phases",
       "threshold": "all twelve source slices at the bound custody revision have one non-duplicative product disposition and every material lifecycle phase is covered; each applicable point retains sufficient evolving native behavior, reuses a suitable official, maintained external or accountable-domain control, adds only the smallest evidenced residual Harness control, or explicitly degrades, escalates, stops or limits the claim; every claimed control effect has controlled evidence; zero point is promoted by reference, prose or implementation alone, and no bespoke mechanism or static perfect score is required where a smaller honest disposition suffices",
-      "assessment": "planned",
+      "assessment": "verified",
+      "evidence": [
+        "product/evidence/o1-lifecycle-suite-accepted.json"
+      ],
       "operationalization": {
         "sampleUnit": "one SG-01 through SG-12 source slice and its product-specific control disposition",
         "minimumSampleCount": 12,

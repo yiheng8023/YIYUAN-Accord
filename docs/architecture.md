@@ -67,11 +67,10 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` on the single
-`increment.v12-o1-lifecycle-suite` and O1-O5 remain at 0/5. Its first stage
-contains the immutable public-safe O1 registration, and the program binds that
-exact prior revision. A 12/12 controlled observation is captured; O1 remains
-false until independent replay and named-human result acceptance.
+The current v1.2 program is `ready` after completing
+`increment.v12-o1-lifecycle-suite`; O1-O5 are at 1/5. The immutable public-safe
+O1 registration strictly precedes its content-addressed 12/12 observation,
+independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
 canonical digest `31dafe95`, and the tree contains the distinct, code-pinned candidate.2
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
@@ -81,8 +80,8 @@ collaboration lifecycle through minimum sufficient native reuse, external or
 domain reuse, residual Harness control, or explicit degradation, escalation,
 stop, or claim limitation. They add no authority, threshold, binding, or
 result. The current human-authorization registry is empty; the outcome registries
-contain only the exact pre-measurement O1 lifecycle-suite validator. The exact
-O1 registration has one controlled observation but no accepted result. No private
+contain only the exact pre-measurement O1 lifecycle-suite validator. Its exact
+registration and accepted controlled result verify O1 only. No private
 natural-demand cohort is required or active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
