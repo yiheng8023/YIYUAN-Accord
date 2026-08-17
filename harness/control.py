@@ -1182,13 +1182,16 @@ FROZEN_V02_PROFILE_ARTIFACT_SHA256 = MappingProxyType(
         ),
         "adapters/agent-autonomy-harness-codex/skills/"
         "deliver-demand-driven-task/SKILL.md": (
-            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f"
+            "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7"
         ),
         "adapters/agent-autonomy-harness-claude/skills/"
         "deliver-demand-driven-task/SKILL.md": (
-            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f"
+            "e1fd84ac1985672a5bd9a402a8789d8dae296e9ce007f1b1401ff200156404d7"
         ),
     }
+)
+FROZEN_V02_PROFILE_ARTIFACT_REVISION = (
+    "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404"
 )
 EXPECTED_PROGRESSION_POLICY = {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
@@ -5937,16 +5940,16 @@ def _supporting_documents_exist(
 def _frozen_v02_profile_artifacts_valid(root: Path, errors: list[str]) -> bool:
     before = len(errors)
     for relative, expected_sha256 in FROZEN_V02_PROFILE_ARTIFACT_SHA256.items():
-        candidate = _inside_root(root, relative, errors, "frozen v0.2 profile artifact")
-        if candidate is None:
-            continue
-        raw = _read_bounded_bytes(
-            candidate, f"frozen v0.2 profile artifact {relative}", errors
-        )
-        if raw is None:
-            continue
-        if hashlib.sha256(raw).hexdigest() != expected_sha256:
-            _error(errors, f"frozen v0.2 profile artifact identity changed: {relative}")
+        if not _committed_blob(
+            root,
+            FROZEN_V02_PROFILE_ARTIFACT_REVISION,
+            relative,
+            expected_sha256,
+        ):
+            _error(
+                errors,
+                f"frozen v0.2 historical profile artifact is unavailable or changed: {relative}",
+            )
     return len(errors) == before
 
 

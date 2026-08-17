@@ -1,7 +1,7 @@
 {
   "name": "agent-autonomy-harness-codex",
-  "version": "1.1.0-enrollment-mechanism.1+codex.payload-8738d8d286ad",
-  "description": "Inactive thin Codex projection candidate for demand-driven task delivery, pre-response enrollment capture, and bounded carrier lifecycle decisions.",
+  "version": "1.2.0-conformance-candidate.1+codex.payload-707d3bb49a1d",
+  "description": "Thin Codex reference candidate for demand-driven task delivery through one implicit Skill and native host capabilities.",
   "author": {
     "name": "Agent Autonomy Harness contributors"
   },
@@ -12,21 +12,20 @@
     "agent-autonomy",
     "demand-driven",
     "task-delivery",
-    "enrollment",
+    "collaboration-lifecycle",
     "continuity",
-    "session-start"
+    "self-correction"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Agent Autonomy Harness for Codex",
     "shortDescription": "Delivers goals with demand-driven routing and continuity",
-    "longDescription": "An inactive thin reference-host projection candidate with one task-facing Skill, one bounded carrier Hook, and one pre-response enrollment-capture Hook. The enrollment Hook reads the submitted prompt only in memory, stores and emits keyed commitments rather than raw prompt or session identity, deletes derived session state at SessionEnd, executes no task-repository code, and does not claim complete tool or user-visible-output interception. Both Hooks remain fail-closed until a trusted runtime, exact Hook trust, an authorized private cohort key, and a future profile binding are materialized.",
+    "longDescription": "A pre-release thin reference-host projection with one implicit task-facing Skill. It relies on current Codex-native capability, authorization, compaction, model, delegation and conversation-topology surfaces; it adds no MCP, App, command Hook, private capture state, external interpreter or persistent runtime. Controlled application evidence must still prove whether those native surfaces are sufficient before any residual control is added.",
     "developerName": "Agent Autonomy Harness contributors",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
-      "Read",
-      "Local state"
+      "Read"
     ],
     "websiteURL": "https://github.com/yiheng8023/agent-autonomy-harness",
     "defaultPrompt": [

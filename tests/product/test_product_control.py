@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import base64
-from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import hmac
-import importlib.util
 from io import BytesIO, StringIO
 import json
 import os
@@ -16,7 +14,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import MagicMock, patch
@@ -77,7 +74,6 @@ AUTHORITY_FILES = (
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
     "docs/operations/CONTINUATION.md",
     "docs/operations/HISTORY.md",
-    "adapters/agent-autonomy-harness-codex/skills/deliver-demand-driven-task/SKILL.md",
     "adapters/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
 )
 FIXTURE_INCREMENT_ID = "increment.fixture-current"
@@ -251,6 +247,7 @@ class ProductControlTests(unittest.TestCase):
                 _normative_profile_binding_history_valid=lambda root, binding, errors: True,
                 _v10_historical_authority_valid=lambda root, errors: True,
                 _v11_historical_authority_valid=lambda root, errors: True,
+                _frozen_v02_profile_artifacts_valid=lambda root, errors: True,
             ):
                 return verify_product(self.root)
         floor = subprocess.run(
@@ -405,6 +402,7 @@ class ProductControlTests(unittest.TestCase):
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
             _v10_historical_authority_valid=lambda root, errors: True,
             _v11_historical_authority_valid=lambda root, errors: True,
+            _frozen_v02_profile_artifacts_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=initial_binding_revision,
@@ -1271,64 +1269,9 @@ class ProductControlTests(unittest.TestCase):
             _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
             _v11_historical_authority_valid=lambda root, errors: True,
+            _frozen_v02_profile_artifacts_valid=lambda root, errors: True,
         ):
             return render_session_start_context(self.root, payload)
-
-    def run_codex_carrier_hook(
-        self, payload: object, *, plugin_data: Path | None = None, raw: bytes | None = None
-    ) -> subprocess.CompletedProcess[str]:
-        data_root = plugin_data or (self.root / "codex-plugin-data")
-        data_root.mkdir(parents=True, exist_ok=True)
-        environment = os.environ.copy()
-        environment["PLUGIN_DATA"] = str(data_root)
-        input_bytes = raw if raw is not None else json.dumps(payload).encode("utf-8")
-        return subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-B",
-                str(CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"),
-            ],
-            input=input_bytes,
-            capture_output=True,
-            check=False,
-            timeout=10,
-            env=environment,
-        )
-
-    def codex_user_prompt_payload(self, *, prompt: str = "Build the requested result.") -> dict:
-        return {
-            "session_id": "00000000-0000-4000-8000-000000000001",
-            "transcript_path": str(self.root / "must-not-be-read.jsonl"),
-            "cwd": str(self.root),
-            "hook_event_name": "UserPromptSubmit",
-            "turn_id": "00000000-0000-4000-8000-000000000011",
-            "prompt": prompt,
-            "model": "gpt-test",
-            "permission_mode": "default",
-        }
-
-    def run_codex_enrollment_hook(
-        self, payload: object, *, plugin_data: Path | None = None, raw: bytes | None = None
-    ) -> subprocess.CompletedProcess[str]:
-        data_root = plugin_data or (self.root / "codex-enrollment-plugin-data")
-        data_root.mkdir(parents=True, exist_ok=True)
-        environment = os.environ.copy()
-        environment["PLUGIN_DATA"] = str(data_root)
-        input_bytes = raw if raw is not None else json.dumps(payload).encode("utf-8")
-        return subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-B",
-                str(CODEX_PLUGIN_ROOT / "scripts/enrollment_hook.py"),
-            ],
-            input=input_bytes,
-            capture_output=True,
-            check=False,
-            timeout=10,
-            env=environment,
-        )
 
     def claude_session_start_payload(self, *, source: str = "startup") -> dict:
         return {
@@ -1347,6 +1290,7 @@ class ProductControlTests(unittest.TestCase):
             _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
             _v11_historical_authority_valid=lambda root, errors: True,
+            _frozen_v02_profile_artifacts_valid=lambda root, errors: True,
         ):
             return render_claude_session_start_context(self.root, payload)
 
@@ -3828,24 +3772,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(stdout.getvalue(), "")
         self.assertIn("expiry cleanup is not due", stderr.getvalue())
 
-    def test_codex_plugin_projection_is_thin_inactive_and_fail_closed(self) -> None:
+    def test_codex_plugin_projection_is_thin_native_first_and_runtime_free(self) -> None:
         manifest = json.loads(
             (CODEX_PLUGIN_ROOT / ".codex-plugin/plugin.json").read_text(
                 encoding="utf-8"
             )
         )
-        hooks = json.loads(
-            (CODEX_PLUGIN_ROOT / "hooks/hooks.json").read_text(encoding="utf-8")
-        )
         self.assertEqual(manifest["name"], "agent-autonomy-harness-codex")
         payload_identity = hashlib.sha256()
         payload_files = (
-            "hooks/hooks.json",
-            "scripts/carrier_hook.py",
-            "scripts/enrollment_hook.py",
-            "skills/deliver-demand-driven-task/SKILL.md",
-            "skills/deliver-demand-driven-task/agents/openai.yaml",
-            "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
+            "skills/deliver-demand-driven-outcome/SKILL.md",
+            "skills/deliver-demand-driven-outcome/agents/openai.yaml",
+            "skills/deliver-demand-driven-outcome/references/demand-to-capability-profile.md",
         )
         for relative in payload_files:
             payload_identity.update(relative.encode("utf-8"))
@@ -3854,7 +3792,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "1.1.0-enrollment-mechanism.1+codex.payload-"
+            "1.2.0-conformance-candidate.1+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -3867,36 +3805,11 @@ class ProductControlTests(unittest.TestCase):
                 "Tell me the result you want. I will own the capability route, continuity, verification, and cleanup."
             ],
         )
-        self.assertEqual(manifest["interface"]["capabilities"], ["Interactive", "Read", "Local state"])
+        self.assertEqual(manifest["interface"]["capabilities"], ["Interactive", "Read"])
         self.assertNotIn("hooks", manifest)
-        self.assertEqual(
-            set(hooks["hooks"]),
-            {"UserPromptSubmit", "PreCompact", "PostCompact", "SessionStart", "SessionEnd"},
-        )
-        for event, handlers in hooks["hooks"].items():
-            self.assertEqual(len(handlers), 2 if event == "SessionEnd" else 1)
-            for handler in handlers:
-                command = handler["hooks"][0]
-                self.assertEqual(command["type"], "command")
-                self.assertIn("${PLUGIN_ROOT}", command["command"])
-                self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
-                self.assertIn("/__AAH_UNMATERIALIZED__/python3", command["command"])
-                self.assertIn("C:\\__AAH_UNMATERIALIZED__\\python.exe", command["commandWindows"])
-                self.assertNotRegex(command["command"], r"(^|\s)(python|python3|git)(\s|$)")
-                self.assertNotRegex(command["commandWindows"], r"(^|\s)(python|python3|git)(\.exe)?(\s|$)")
-                self.assertLessEqual(command["timeout"], 5)
-                if event in {"SessionStart", "UserPromptSubmit"}:
-                    self.assertLessEqual(command["additionalContextLimit"], 1200)
-                else:
-                    self.assertNotIn("additionalContextLimit", command)
-        for script in ("carrier_hook.py", "enrollment_hook.py"):
-            hook_source = (CODEX_PLUGIN_ROOT / "scripts" / script).read_text(encoding="utf-8")
-            self.assertNotIn("import subprocess", hook_source)
-            self.assertNotIn("subprocess.run", hook_source)
-            self.assertNotIn("transcript_path", hook_source)
-            self.assertNotIn("find_harness_root", hook_source)
-            self.assertNotRegex(hook_source, r"[\"']git[\"']")
-        self.assertNotIn(str(ROOT), json.dumps(hooks))
+        self.assertFalse((CODEX_PLUGIN_ROOT / "hooks/hooks.json").exists())
+        self.assertFalse((CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py").exists())
+        self.assertFalse((CODEX_PLUGIN_ROOT / "scripts/enrollment_hook.py").exists())
         candidate_text = "\n".join(
             path.read_text(encoding="utf-8")
             for path in (
@@ -3906,128 +3819,9 @@ class ProductControlTests(unittest.TestCase):
         ).lower()
         self.assertNotIn("cc switch", candidate_text)
 
-    def test_codex_enrollment_hook_blocks_without_authorized_key(self) -> None:
-        payload = self.codex_user_prompt_payload(prompt="private goal that must not leak")
-        completed = self.run_codex_enrollment_hook(payload)
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
-        output = json.loads(completed.stdout)
-        self.assertEqual(output["decision"], "block")
-        rendered = completed.stdout.decode("utf-8")
-        self.assertNotIn(payload["prompt"], rendered)
-        self.assertNotIn(payload["session_id"], rendered)
-        self.assertNotIn(payload["transcript_path"], rendered)
-
-    def test_codex_enrollment_hook_captures_keyed_chain_without_raw_prompt(self) -> None:
-        data_root = self.root / "codex-enrollment-private-data"
-        data_root.mkdir()
-        key_path = data_root / "enrollment-cohort-key.v1.2.bin"
-        key_path.write_bytes(b"k" * 32)
-        payload = self.codex_user_prompt_payload(prompt="private natural demand alpha")
-
-        first = self.run_codex_enrollment_hook(payload, plugin_data=data_root)
-        self.assertEqual(first.returncode, 0, first.stderr.decode())
-        first_output = json.loads(first.stdout)
-        self.assertTrue(first_output["continue"])
-        projection = json.loads(
-            first_output["hookSpecificOutput"]["additionalContext"]
-        )
-        self.assertEqual(projection["event"], "UserPromptSubmit")
-        self.assertEqual(projection["captureSequence"], 1)
-        self.assertRegex(projection["turnIdentity"], r"^hmac-sha256:[0-9a-f]{64}$")
-        self.assertRegex(projection["sourceCommitment"], r"^hmac-sha256:[0-9a-f]{64}$")
-        self.assertIn("Before any outcome-bearing", projection["agentRoute"])
-        self.assertIn("not proof", projection["claimBoundary"])
-
-        state_files = list(data_root.glob("enrollment-*.json"))
-        self.assertEqual(len(state_files), 1)
-        state_text = state_files[0].read_text(encoding="utf-8")
-        unkeyed_session_digest = hashlib.sha256(
-            payload["session_id"].encode("utf-8")
-        ).hexdigest()
-        self.assertNotIn(unkeyed_session_digest, state_files[0].name)
-        self.assertNotIn(unkeyed_session_digest, state_text)
-        self.assertNotIn(unkeyed_session_digest, first.stdout.decode("utf-8"))
-        for private_value in (
-            payload["prompt"],
-            payload["session_id"],
-            payload["turn_id"],
-            payload["transcript_path"],
-        ):
-            self.assertNotIn(private_value, state_text)
-            self.assertNotIn(private_value, first.stdout.decode("utf-8"))
-        state = json.loads(state_text)
-        self.assertRegex(
-            state["sessionCommitment"], r"^hmac-sha256:[0-9a-f]{64}$"
-        )
-        self.assertEqual(len(state["events"]), 1)
-
-        duplicate = self.run_codex_enrollment_hook(payload, plugin_data=data_root)
-        duplicate_projection = json.loads(
-            json.loads(duplicate.stdout)["hookSpecificOutput"]["additionalContext"]
-        )
-        self.assertEqual(duplicate_projection, projection)
-        self.assertEqual(
-            len(json.loads(state_files[0].read_text(encoding="utf-8"))["events"]),
-            1,
-        )
-
-        changed_same_turn = self.run_codex_enrollment_hook(
-            {**payload, "prompt": "different prompt under the same turn"},
-            plugin_data=data_root,
-        )
-        self.assertEqual(json.loads(changed_same_turn.stdout)["decision"], "block")
-
-        second_payload = {
-            **payload,
-            "turn_id": "00000000-0000-4000-8000-000000000012",
-            "prompt": "private natural demand beta",
-        }
-        second = self.run_codex_enrollment_hook(second_payload, plugin_data=data_root)
-        second_projection = json.loads(
-            json.loads(second.stdout)["hookSpecificOutput"]["additionalContext"]
-        )
-        self.assertEqual(second_projection["captureSequence"], 2)
-        self.assertNotEqual(
-            second_projection["sourceCommitment"], projection["sourceCommitment"]
-        )
-
-        ended = self.run_codex_enrollment_hook(
-            {
-                **payload,
-                "hook_event_name": "SessionEnd",
-                "reason": "other",
-            },
-            plugin_data=data_root,
-        )
-        self.assertTrue(json.loads(ended.stdout)["continue"])
-        self.assertFalse(state_files[0].exists())
-        self.assertTrue(key_path.exists())
-        self.assertEqual(list(data_root.glob("*.lock")), [])
-        self.assertEqual(list(data_root.glob(".*.tmp")), [])
-
-    def test_codex_enrollment_hook_rejects_malformed_or_oversized_input(self) -> None:
-        malformed = self.run_codex_enrollment_hook({}, raw=b"not-json")
-        self.assertEqual(json.loads(malformed.stdout)["decision"], "block")
-        duplicate = self.run_codex_enrollment_hook(
-            {},
-            raw=(
-                b'{"hook_event_name":"UserPromptSubmit",'
-                b'"hook_event_name":"SessionEnd"}'
-            ),
-        )
-        self.assertEqual(json.loads(duplicate.stdout)["decision"], "block")
-        nonfinite = self.run_codex_enrollment_hook(
-            {}, raw=b'{"hook_event_name":NaN}'
-        )
-        self.assertEqual(json.loads(nonfinite.stdout)["decision"], "block")
-        oversized = self.run_codex_enrollment_hook(
-            {}, raw=b"{" + b"x" * 65_536
-        )
-        self.assertEqual(json.loads(oversized.stdout)["decision"], "block")
-
     def test_codex_plugin_skill_is_implicit_thin_and_profile_bound(self) -> None:
         skill_root = (
-            CODEX_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
+            CODEX_PLUGIN_ROOT / "skills/deliver-demand-driven-outcome"
         )
         skill = (skill_root / "SKILL.md").read_text(encoding="utf-8")
         interface = (skill_root / "agents/openai.yaml").read_text(
@@ -4042,12 +3836,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("do not use for simple conversation", skill.lower())
         self.assertIn("read\n`references/demand-to-capability-profile.md` completely", skill)
         self.assertIn("Do not teach or expose capability", skill)
-        self.assertIn("treat unavailable capacity as\n   unknown", skill)
+        self.assertIn("Treat remaining\n   capacity as unknown", skill)
         self.assertIn("allow_implicit_invocation: true", interface)
         self.assertNotIn("dependencies:", interface)
         self.assertEqual(
             projected_profile,
-            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE.md").read_bytes(),
+            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md").read_bytes(),
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / ".mcp.json").exists())
         self.assertFalse((CODEX_PLUGIN_ROOT / ".app.json").exists())
@@ -4194,14 +3988,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertLessEqual(command["timeout"], 5)
         self.assertNotIn(str(ROOT), json.dumps(hooks))
 
-    def test_claude_plugin_skill_reuses_exact_implicit_common_method(self) -> None:
-        codex_skill_root = CODEX_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
+    def test_claude_plugin_skill_preserves_its_exact_historical_method(self) -> None:
         claude_skill_root = CLAUDE_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
         claude_skill = (claude_skill_root / "SKILL.md").read_text(encoding="utf-8")
 
         self.assertEqual(
-            (claude_skill_root / "SKILL.md").read_bytes(),
-            (codex_skill_root / "SKILL.md").read_bytes(),
+            hashlib.sha256((claude_skill_root / "SKILL.md").read_bytes()).hexdigest(),
+            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f",
         )
         self.assertEqual(
             (
@@ -4283,162 +4076,6 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertEqual(completed.stdout, "")
-
-    def test_codex_carrier_hook_works_outside_harness_and_never_exposes_input(self) -> None:
-        payload = self.codex_session_start_payload()
-        payload["cwd"] = str(self.root.parent / "ordinary-task")
-        payload["transcript_path"] = str(self.root / "private-transcript.jsonl")
-        completed = self.run_codex_carrier_hook(payload)
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
-        output_text = completed.stdout.decode()
-        output = json.loads(output_text)
-        context = json.loads(output["hookSpecificOutput"]["additionalContext"])
-        self.assertEqual(context["profileBinding"], "unbound-mechanism-only")
-        self.assertEqual(context["remainingContextCapacity"], "unknown")
-        self.assertEqual(context["carrierRisk"], "observe-and-keep-only-while-task-risk-remains-low")
-        self.assertNotIn(payload["session_id"], output_text)
-        self.assertNotIn(payload["cwd"], output_text)
-        self.assertNotIn(payload["transcript_path"], output_text)
-        self.assertLessEqual(len(output_text), 3073)
-
-    def test_codex_carrier_hook_counts_once_reconciles_and_cleans_session_state(self) -> None:
-        data_root = self.root / "carrier-data"
-        start = self.codex_session_start_payload()
-        first = self.run_codex_carrier_hook(start, plugin_data=data_root)
-        self.assertEqual(first.returncode, 0, first.stderr.decode())
-
-        pre = {
-            **start,
-            "hook_event_name": "PreCompact",
-            "turn_id": "turn-1",
-            "trigger": "auto",
-        }
-        post = {**pre, "hook_event_name": "PostCompact"}
-        compact_start = {**start, "source": "compact"}
-        for payload in (pre, post, compact_start):
-            completed = self.run_codex_carrier_hook(payload, plugin_data=data_root)
-            self.assertEqual(completed.returncode, 0, completed.stderr.decode())
-        first_context = json.loads(json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"])
-        self.assertEqual(first_context["compactionCount"], 1)
-        self.assertEqual(first_context["automaticCompactionCount"], 1)
-        self.assertEqual(first_context["carrierRisk"], "reconcile-durable-state-before-mutation")
-
-        second = {**pre, "turn_id": "turn-2"}
-        for payload in (second, {**second, "hook_event_name": "PostCompact"}, compact_start):
-            completed = self.run_codex_carrier_hook(payload, plugin_data=data_root)
-        second_context = json.loads(json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"])
-        self.assertEqual(second_context["compactionCount"], 2)
-        self.assertEqual(second_context["carrierRisk"], "transition-required-at-next-material-checkpoint")
-        state_files = list(data_root.glob("carrier-*.json"))
-        self.assertEqual(len(state_files), 1)
-        self.assertLessEqual(state_files[0].stat().st_size, 2048)
-        stale_temporary = state_files[0].with_name(f".{state_files[0].name}.stale.tmp")
-        stale_temporary.write_text("task-owned interrupted write", encoding="utf-8")
-
-        ended = {**start, "hook_event_name": "SessionEnd", "reason": "other"}
-        completed = self.run_codex_carrier_hook(ended, plugin_data=data_root)
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
-        self.assertEqual(list(data_root.iterdir()), [])
-
-    def test_codex_carrier_hook_serializes_concurrent_updates_and_session_end(self) -> None:
-        data_root = self.root / "concurrent-carrier-data"
-        start = self.codex_session_start_payload()
-        self.assertEqual(self.run_codex_carrier_hook(start, plugin_data=data_root).returncode, 0)
-        compact_events = [
-            {
-                **start,
-                "hook_event_name": "PreCompact",
-                "turn_id": f"concurrent-turn-{index}",
-                "trigger": "auto",
-            }
-            for index in range(8)
-        ]
-        with ThreadPoolExecutor(max_workers=8) as executor:
-            results = list(
-                executor.map(
-                    lambda payload: self.run_codex_carrier_hook(payload, plugin_data=data_root),
-                    compact_events,
-                )
-            )
-        self.assertTrue(all(result.returncode == 0 for result in results))
-        compact_start = {**start, "source": "compact"}
-        observed = self.run_codex_carrier_hook(compact_start, plugin_data=data_root)
-        context = json.loads(json.loads(observed.stdout)["hookSpecificOutput"]["additionalContext"])
-        self.assertEqual(context["compactionCount"], 8)
-        self.assertEqual(context["automaticCompactionCount"], 8)
-
-        script = CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"
-        spec = importlib.util.spec_from_file_location("codex_carrier_hook_race_test", script)
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        ended = {**start, "hook_event_name": "SessionEnd", "reason": "other"}
-        in_flight = {**compact_events[0], "turn_id": "end-race-turn"}
-        digest = hashlib.sha256(start["session_id"].encode("utf-8")).hexdigest()
-        lock_path = data_root / f"carrier-{digest}.lock"
-        with patch.dict(os.environ, {"PLUGIN_DATA": str(data_root)}):
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                end_future = executor.submit(module.handle, ended)
-                deadline = time.monotonic() + 1.0
-                while not lock_path.is_dir() and time.monotonic() < deadline:
-                    time.sleep(0.005)
-                self.assertTrue(lock_path.is_dir())
-                writer_future = executor.submit(module.handle, in_flight)
-                end_output = end_future.result(timeout=2)
-                writer_output = writer_future.result(timeout=2)
-        self.assertTrue(end_output["continue"])
-        self.assertFalse(writer_output["continue"])
-        self.assertIn("lock is unavailable", writer_output["systemMessage"])
-        self.assertEqual(list(data_root.iterdir()), [])
-
-    def test_codex_carrier_lock_rejects_acquisition_completed_after_deadline(self) -> None:
-        script = CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py"
-        spec = importlib.util.spec_from_file_location("codex_carrier_hook_deadline_test", script)
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        lock_path = self.root / "late-carrier.lock"
-        lock_path.mkdir()
-
-        def release_while_waiting(_seconds: float) -> None:
-            lock_path.rmdir()
-
-        with patch.object(
-            module.time,
-            "monotonic",
-            side_effect=(100.0, 100.1, 100.2, 100.6),
-        ), patch.object(module.time, "sleep", side_effect=release_while_waiting):
-            self.assertFalse(module._acquire_lock(lock_path))
-        self.assertFalse(lock_path.exists())
-
-    def test_codex_carrier_hook_fails_closed_on_malformed_or_unbounded_input(self) -> None:
-        malformed = self.run_codex_carrier_hook({}, raw=b"not-json")
-        self.assertEqual(malformed.returncode, 0, malformed.stderr.decode())
-        malformed_output = json.loads(malformed.stdout)
-        self.assertFalse(malformed_output["continue"])
-        self.assertIn("malformed", malformed_output["systemMessage"])
-
-        deeply_nested = self.run_codex_carrier_hook({}, raw=(b"[" * 1100) + b"0" + (b"]" * 1100))
-        self.assertEqual(deeply_nested.returncode, 0, deeply_nested.stderr.decode())
-        self.assertFalse(json.loads(deeply_nested.stdout)["continue"])
-
-        oversized = self.run_codex_carrier_hook({}, raw=b"x" * 65_537)
-        self.assertEqual(oversized.returncode, 0, oversized.stderr.decode())
-        output = json.loads(oversized.stdout)
-        self.assertFalse(output["continue"])
-        self.assertIn("fixed byte budget", output["systemMessage"])
-
-        payload = self.codex_session_start_payload()
-        payload.update({"hook_event_name": "PreCompact", "trigger": "auto"})
-        missing_turn = self.run_codex_carrier_hook(payload)
-        output = json.loads(missing_turn.stdout)
-        self.assertFalse(output["continue"])
-        self.assertIn("turn identity", output["systemMessage"])
-
-        unsupported = self.run_codex_carrier_hook({**payload, "hook_event_name": "UnknownEvent"})
-        self.assertFalse(json.loads(unsupported.stdout)["continue"])
 
     def test_plain_cli_sends_errors_to_stderr(self) -> None:
         self.mutate(
@@ -4826,15 +4463,25 @@ class ProductControlTests(unittest.TestCase):
                     self.root / "product/constitution.json",
                 )
 
-    def test_frozen_v02_profile_artifact_bytes_cannot_drift(self) -> None:
+    def test_frozen_v02_profile_artifacts_are_bound_to_historical_revision(self) -> None:
+        errors: list[str] = []
+        self.assertEqual(
+            control.FROZEN_V02_PROFILE_ARTIFACT_REVISION,
+            "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404",
+        )
+        self.assertTrue(
+            control._frozen_v02_profile_artifacts_valid(ROOT, errors), errors
+        )
         relative = "docs/DEMAND-TO-CAPABILITY-PROFILE.md"
-        with (self.root / relative).open("a", encoding="utf-8") as handle:
-            handle.write("\nunauthorized profile drift\n")
-        report = self.report()
-        self.assertFalse(report["criterionStates"]["G3"])
+        with patch.object(control, "_committed_blob", return_value=False):
+            errors = []
+            self.assertFalse(
+                control._frozen_v02_profile_artifacts_valid(ROOT, errors)
+            )
         self.assertIn(
-            f"frozen v0.2 profile artifact identity changed: {relative}",
-            report["errors"],
+            "frozen v0.2 historical profile artifact is unavailable or changed: "
+            + relative,
+            errors,
         )
 
     def test_code_owned_policy_booleans_cannot_be_replaced_by_integers(self) -> None:

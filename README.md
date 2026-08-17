@@ -13,8 +13,9 @@ and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
 **Current status:** v1.2 is `ready` with no active increment after separating
-finite product delivery from continuing field validation. The repository
-verifier reports `programStatus=ready`, `completionState=in-progress`, O1-O5
+finite product delivery from continuing field validation and reducing the Codex
+reference projection. The repository verifier reports `programStatus=ready`,
+`completionState=in-progress`, O1-O5
 `0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
 turning the shortfall corpus into a feature backlog or requiring a natural-task
@@ -22,11 +23,10 @@ cohort for release. Their exact candidate bytes are code-pinned but the profile
 binding remains unfrozen; they are subordinate candidates and carry no
 outcome credit. No current private source, natural-demand enrollment,
 criterion-scoped result validator, terminal authorization validator, installed
-plugin, or accepted outcome exists. The inactive Codex source still contains
-earlier enrollment experiments; those are not the current v1.2 evidence route
-and must be simplified or replaced before live Codex O2 work. Installation,
-Hook trust, persistent activation, publication, and release remain separate
-human gates.
+plugin, or accepted outcome exists. The Codex source has been reduced to
+one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
+interpreter, or persistent runtime. Installation, persistent activation,
+publication, and release remain separate human gates.
 The constitution's terminal product proposition has not been established.
 
 v1.1 remains an immutable stopped zero-outcome attempt at revision `5ae71bb`.
@@ -86,18 +86,14 @@ process, and filesystem state was removed without user cleanup.
 The historical Codex and Claude candidate.7 revisions remain inactive thin
 Skill-plus-Hook projections over the same candidate.5 method. Their exact Git
 revisions remain the evidence boundary; no measured value transfers to later
-source. The current Codex tree is instead an inactive v1.2 projection candidate:
-one package-owned Hook records bounded native lifecycle counters, while a
-separate `UserPromptSubmit` Hook reads the submitted prompt only in memory and
-stores or emits keyed commitments rather than raw prompt or session identity.
-Derived capture state is removed at `SessionEnd`; the separately authorized
-cohort key is not materialized by the source candidate. Neither Hook executes
-task-repository code, and their checked-in commands fail closed until an
-absolute trusted interpreter is materialized. The capture Hook is an evidence
-and attention seam, not proof of registration or universal output/tool blocking.
-Measured activation requires a future independently authorized cohort and new
-environment-attributed profile binding. It is not installed or enabled. The
-current Claude candidate.7 lineage now also has bounded input and a fail-closed
+source. The current Codex tree instead contains a pre-release v1.2 projection
+candidate with one implicitly invocable Skill bound to the candidate.2 method.
+It deliberately adds no command Hook, prompt capture, MCP, App, private state,
+external interpreter, or persistent runtime; current Codex-native capability,
+authorization, compaction, model, delegation, and conversation topology are the
+initial route. Controlled O2/O4 scenarios must falsify or support that sufficiency
+before a residual Hook can return. It is not installed or enabled. The current
+Claude candidate.7 lineage still has bounded input and a fail-closed
 unmaterialized interpreter command, but still loads only exact-hash reviewed
 repository runtime bytes and is not a live v1 carrier implementation. Neither
 adds an MCP server, App, provider manager, or product authority; only the Codex
@@ -222,19 +218,17 @@ The current repository provides:
   content or storing session state; active-work identity is hashed, raw
   diagnostics are excluded, and repository state remains explicitly unknown
   until the Agent observes it through a trusted native execution boundary;
-- an inactive Codex plugin source candidate with one task-facing Skill and
-  package-contained lifecycle/capture experiments; it works outside a
-  Harness-shaped repository and does not execute task-repository code or Git,
-  but it is not the accepted v1.2 application and remains deliberately
-  unmaterialized. The current controlled-conformance route requires the final
-  O2 package to retain only an evidenced residual host delta and prove exact
-  activation, rollback, removal, and cleanup;
+- a pre-release Codex plugin source candidate with one implicitly invocable
+  v1.2 task-facing Skill and no Hook, MCP, App, private capture state, external
+  interpreter, or persistent runtime. It starts from current native Codex
+  behavior; controlled evidence must prove exact activation, recovery,
+  rollback, removal, and cleanup and may justify a later residual only if this
+  smaller route fails;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
-- one content-addressed stopped Codex continuity result showing that an exact
-  temporary install delivered the Skill and both startup and compact
-  projections, while preserving the missing native Hook-event evidence as a
-  failed mandatory floor and restoring all consumer state afterward;
+- one historical content-addressed stopped Codex continuity result showing
+  that an exact temporary Hook experiment did not satisfy its native-event
+  evidence floor and restored all consumer state afterward;
 - an inactive Claude Code Skill-plus-Hook projection that reuses the same
   candidate method, translates native `SessionStart` input and plain-stdout
   context output into repository-owned continuation semantics, and can be

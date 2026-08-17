@@ -39,10 +39,11 @@ Their exact bytes remain an independently source-authorized but revoked
 historical binding at first-freeze revision `5ce2773`. The first
 post-activation real product demand received outcome-bearing assistance before
 registration, so v1.1 stopped without retrospective evidence and cannot resume.
-The inactive Codex source retains earlier `UserPromptSubmit` enrollment
-experiments only as unaccepted implementation input; they are not the current
-v1.2 evidence route and must be removed or reduced unless live O2 evidence
-isolates a residual host need.
+The current Codex source retires the earlier `UserPromptSubmit` enrollment
+experiment because it is not the v1.2 evidence route and adds prompt, secret,
+state, interpreter, trust and cleanup surfaces without a current residual gap.
+Git history retains the experiment as counterevidence. A later O2/O4 controlled
+failure may justify a newly bounded residual, but cannot reactivate it by default.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
@@ -301,14 +302,11 @@ remains a separate activation condition.
 Historical reuse disposition: the candidate.7 Codex revision was an inactive
 thin package with one candidate.5 Skill and a repository-bound continuation
 launcher. Its exact Git revision remains the v0.2 evidence boundary. The
-current Codex source contains inactive v1.2 lifecycle and `UserPromptSubmit`
-capture experiments and a fail-closed runtime sentinel. They do not load task-
-repository code or invoke Git, but the old natural-demand enrollment purpose is
-no longer the current delivery route. Before O2, the package must be reduced to
-the smallest live-host residual supported by controlled evidence, then prove
-ordinary goal entry, exact activation, authority preservation, recovery,
-rollback, removal, and cleanup. Stopped v1.1 cannot supply current evidence.
-The Skill still supplies no MCP, App, runtime, or product authority, and the
+current Codex source is instead a v1.2 Skill-only candidate with no Hook, MCP,
+App, capture state, interpreter, runtime sentinel, or persistent runtime. O2
+must still prove ordinary goal entry, exact activation, authority preservation,
+recovery, rollback, removal, and cleanup. A controlled failure must precede any
+new residual host control. Stopped v1.1 cannot supply current evidence, and the
 repository itself does not become a plugin.
 
 Goal-level demand continues to use Codex's native conversation path, where the
@@ -319,10 +317,10 @@ behavior; scenario registration and outcome validation stay code-owned and
 criterion-scoped.
 
 The current user Hook configuration remains empty. Plugin installation,
-enablement, exact Hook trust, and live runtime measurement are separate
-consumer transitions and stay off until a scoped grant authorizes reversible
-behavior evidence. The package and its offline checks do not prove live Skill
-selection or Hook execution. The accepted Codex source-delivery task
+enablement, and live runtime measurement are separate consumer transitions and
+stay off until a scoped grant authorizes reversible behavior evidence. The
+package and its offline checks do not prove live Skill selection or continuous
+correction. The accepted historical Codex source-delivery task
 contributes one O1 receipt and one bounded discovery route decision. It cannot
 promote live behavior, repeated burden reduction, methodology calibration, or
 portability.

@@ -434,25 +434,23 @@ replaceable projections or evidence mechanisms.
 host modules validate native event envelopes and supply only adapter identity,
 host substrate metadata, and output translation.
 `adapters/agent-autonomy-harness-codex` is a replaceable Codex distribution
-projection. It contains one concise, implicitly invocable task-facing Skill
-still bound only to the historical Codex-reference-calibrated candidate.5
-profile, plus the inactive v1 carrier-mechanism Hook. The package-owned Hook
-uses Python isolated mode, accepts only bounded native lifecycle input, stores
-only bounded session-keyed compaction and clear counters in `PLUGIN_DATA`, and
-removes the exact state on `SessionEnd`. It does not load task-repository code,
-invoke Git, inspect prompts or transcripts, create threads, or validate
-outcomes. Its checked-in commands point to an absolute fail-closed
-unmaterialized interpreter sentinel; activation remains impossible until a
-separate authorized materialization binds a trusted absolute runtime. Measured
-activation additionally requires a new current program-frozen,
-environment-attributed profile binding.
+projection. Its current pre-release v1.2 candidate contains one concise,
+implicitly invocable task-facing Skill and the exact candidate.2 profile bytes.
+It has no command Hook, MCP, App, prompt capture, private state, external
+interpreter, or persistent runtime. Current Codex-native authorization,
+capability, model, delegation, compaction, and conversation-topology surfaces
+are the initial application route. This is a minimum hypothesis, not evidence
+that every lifecycle obligation is already satisfied: controlled O2/O4
+scenarios must either prove the exact behavior or isolate a repeatable residual
+gap before any Hook or other projection is added.
 
-Codex 0.147.0 uses two complementary plugin-loading scopes. The dedicated
+Codex 0.147.0 historically exposed two complementary plugin-loading scopes. The dedicated
 `HooksOnly` startup path deliberately omits Skills, MCP servers, and Apps while
 preloading Hooks. Normal `AllCapabilities` loading discovers the same legacy
 plugin's declared `skills/` path and loads its Skill inventory. A plugin that
-contains both the Skill and Hook therefore does not strand the Skill behind the
-Hook-only preload path.
+contained both the Skill and Hook without stranding the Skill behind the
+Hook-only preload path. That feasibility fact no longer makes a Hook part of
+the current package.
 
 `CODEX_HOME` bounds Codex configuration, authentication, plugin cache, and
 session state; it is not by itself an authority boundary for every user-global
@@ -595,31 +593,24 @@ operations preflight blob size and stream stdout through the same hard byte
 ceiling before caching. These mechanism limits are guardrails, not outcome or
 installed-host evidence.
 
-Goal-level demand still enters through Codex's normal native conversation path.
-Codex may implicitly select the task-facing Skill from its metadata. The v1.1
-missed-registration failure now supplies causal necessity for an inactive
-`UserPromptSubmit` capture candidate: it reads the submitted prompt only in
-memory before model processing, commits a cohort-keyed turn/prompt/chain identity
-under `PLUGIN_DATA`, and returns bounded developer context requiring registration
-or a source-bound exclusion before outcome-bearing work. It never emits or stores
-the raw prompt, session id, turn id, transcript path, or credential locator, and
-its derived session state is removed at `SessionEnd`; the separately authorized
-cohort key is retained or destroyed only under a future cohort disposition.
-This is an evidence and attention seam, not a claim that Codex withholds streamed
-text or that local tool Hooks cover hosted and specialized tools. Those limits
-must remain explicit in any measured route.
+Goal-level demand still enters through Codex's normal native conversation path,
+where Codex may implicitly select the task-facing Skill from its metadata. The
+v1.1 `UserPromptSubmit` capture experiment is retired from current source because
+finite v1.2 delivery does not require natural-demand enrollment and the extra
+prompt access, secret, state, interpreter, trust, failure, and cleanup surfaces
+have no current causal necessity. Its code and tests remain recoverable from Git
+history only; no current package behavior or claim inherits them.
 
-The plugin source candidates remain inactive. Installation, enablement, and
-exact Hook trust are separate consumer transitions requiring explicit authority
-and reversible behavior evidence. The accepted source deliveries establish
-only bounded package results plus the exact O3 route lifecycle cohort; they
-cannot establish live Skill triggering, Hook behavior, repeated burden
-reduction, methodology calibration, or cross-host portability.
+The plugin source candidates remain uninstalled. Installation and enablement
+are separate consumer transitions requiring explicit authority and reversible
+behavior evidence. Source validation cannot establish live Skill triggering,
+continuous correction, repeated burden reduction, methodology calibration, or
+cross-host portability.
 
-### Codex v1 carrier feasibility boundary
+### Historical carrier-Hook feasibility and current retirement boundary
 
-The v1 carrier route is feasible as a thin host projection, but it is not the
-current candidate. Codex 0.147.0 exposes native `PreCompact`, `PostCompact`,
+The earlier carrier Hook was feasible as a thin host projection, but it is not
+the current candidate. Codex 0.147.0 exposed native `PreCompact`, `PostCompact`,
 `SessionStart`, and `SessionEnd` events with a session identity; compact events
 identify automatic versus manual compaction, plugin Hooks receive a stable
 installed-package root and writable plugin-data root, and the host exposes a
@@ -653,18 +644,20 @@ tool contract additionally proves that an Agent can fork the calling thread in
 the same directory and that only completed history is copied; therefore the
 Agent must transmit and independently verify the active handoff delta before
 source release. The exact conservative risk threshold belongs in the new
-current program-frozen profile before measured work. This feasibility decision is
-mechanism-only: no Hook has been installed or enabled and no O1-O5 result is
-claimed.
+current program-frozen profile before measured work. This feasibility decision
+was mechanism-only: no Hook was accepted as current product behavior and no
+O1-O5 result follows. The current Skill-only candidate deliberately tests the
+smaller native-first route. If controlled compaction or same-goal transition
+scenarios falsify it, the residual design must be rebound to current official
+host facts and added no broader than the observed gap.
 
-An authorized user-layer Hook edit was later present and trusted on disk but
+Historically, an authorized user-layer Hook edit was present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native
 compaction. That stopped result is preserved only in public Git history at the
-fixed v0.2 revision and receives zero O1-O5 credit. The plugin projection
-corrects the packaging boundary and lets Codex own materialization; exact Hook
-trust and an app-owned runtime config reload remain part of the later activation
-gate. The inactive candidate and its offline tests do not claim that ingestion
-or live refresh has happened.
+fixed v0.2 revision and receives zero O1-O5 credit. It tested a packaging
+boundary rather than proving live correction. That stopped experiment does not
+require the current package to retain a Hook, and its offline tests do not
+promote current behavior.
 
 ## 5. Evidence and acceptance
 

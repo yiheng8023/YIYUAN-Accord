@@ -21,7 +21,7 @@ AUTHORITY_PATHS = (
     "product/acceptance.json",
 )
 PINNED_RUNTIME_SHA256 = {
-    "harness/control.py": "56114804bad61f97567ff210402afd0b973bf84b5d086f23849ecd7172cd1765",
+    "harness/control.py": "96d7d5e0db5364b3c3934e563f04952253edce452196825555d44ea4a26ca83f",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }

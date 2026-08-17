@@ -58,9 +58,10 @@ candidate.2 profile and controlled-conformance protocol are pre-freeze only:
 they separate finite delivery from later field validation and cover the
 collaboration lifecycle through sufficient native behavior, suitable reuse,
 smallest residual control, or explicit degradation, escalation, stop, or claim
-limitation. They create no result or proof. The inactive Codex source still
-contains older enrollment experiments but is neither installed nor the current
-v1.2 evidence path; O2 requires a reduced, live, controllable application.
+limitation. They create no result or proof. The Codex source has been reduced
+to one implicit v1.2 Skill with no Hook, MCP, App, private capture state,
+external interpreter, or persistent runtime; O2 still requires a live,
+controllable installed or task-scoped application.
 v1.1 is stopped at
 revision `5ae71bb`: its first real post-activation product demand crossed the
 outcome boundary before registration, so retrospective registration is forbidden
