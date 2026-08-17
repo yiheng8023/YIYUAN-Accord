@@ -216,9 +216,9 @@ unsigned, wrong-key, option-bearing, mutable, side-lineage, mixed-scope,
 self-introduced-signer or self-pinned bindings fail closed. The private key never
 enters repository state, and profile-freeze authority cannot stand in for
 terminal release authorization.
-The exact v1.2 signing grant has now selected and prebound the public signer;
-the binding remains unfrozen until the later binding-only signature and code
-pin both validate.
+The exact v1.2 signing grant selected and prebound the public signer; signed
+revision `3e81686` changed only the normative binding and the later code pin now
+validates its canonical digest. No cohort activation or outcome follows.
 Before a terminal candidate can be valid, it must bind one exact committed
 terminal-authorization validator and a public-source policy. A later tag must
 reuse that validator and may expose only a random public identity plus a keyed

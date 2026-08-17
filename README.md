@@ -12,16 +12,16 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` only for the authorized exact profile-freeze
-sequence after separating finite product delivery from continuing field
-validation and reducing the Codex reference projection. The repository verifier reports `programStatus=active`,
+**Current status:** v1.2 is `ready` with no active increment after completing the
+authorized exact profile freeze, separating finite product delivery from
+continuing field validation, and reducing the Codex reference projection. The repository verifier reports `programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
 turning the shortfall corpus into a feature backlog or requiring a natural-task
 cohort for release. Their exact candidate bytes are code-pinned but the profile
-binding remains unfrozen; they are subordinate candidates and carry no
-outcome credit. No current private source, natural-demand enrollment,
+binding is frozen by the exact signed revision `3e81686` and canonical digest
+`31dafe95`; it carries no cohort activation or outcome credit. No current private source, natural-demand enrollment,
 criterion-scoped result validator, terminal authorization validator, installed
 plugin, or accepted outcome exists. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
@@ -36,11 +36,10 @@ bytes and fingerprint, a provisional signed first-parent commit whose only
 change is the exact normative binding, and a later code pin of that revision and
 canonical binding digest. The signature proves possession and integrity for the
 preselected key; it does not manufacture or replace the human grant. A key first
-introduced by the freeze commit is rejected. The exact signing grant has now
-been received and its public-safe signer is prebound; the binding remains
-unfrozen until the later signed binding-only commit and code pin validate. This
-gate carries no cohort activation, outcome credit, installation, or release
-authority.
+introduced by the freeze commit is rejected. The exact signing grant, prebound
+public-safe signer, binding-only signed revision, and later code pin now validate.
+This freeze carries no cohort activation, outcome credit, installation, or
+release authority.
 
 v1.1 remains an immutable stopped zero-outcome attempt at revision `5ae71bb`.
 A source-bound private-window audit established that its first post-activation

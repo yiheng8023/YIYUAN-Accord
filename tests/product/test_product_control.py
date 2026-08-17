@@ -1338,8 +1338,16 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("outcome-bearing assistance", v11["claimLimit"])
         self.assertEqual(live_program["priorRelease"]["release"], "v1.1")
         binding = live_program["normativeProfileBinding"]
-        self.assertEqual(binding, control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
-        self.assertFalse(control.CURRENT_PROFILE_FREEZE_ENABLED)
+        self.assertEqual(binding, self.current_v12_profile_binding())
+        self.assertTrue(control.CURRENT_PROFILE_FREEZE_ENABLED)
+        self.assertEqual(
+            control.EXPECTED_CURRENT_INITIAL_BINDING_REVISION,
+            "3e816863846135618299aa196f607c9f42e1f51f",
+        )
+        self.assertEqual(
+            control.EXPECTED_CURRENT_INITIAL_BINDING_SHA256,
+            "31dafe95aedab17d5fa1252c804e9a60179dbcf6f5b6014b52c3889646feff7d",
+        )
         self.assertEqual(dict(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS), {})
 
     def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
@@ -1446,7 +1454,7 @@ class ProductControlTests(unittest.TestCase):
         protocol = json.loads(protocol_bytes)
 
         binding = program["normativeProfileBinding"]
-        self.assertEqual(binding, control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        self.assertEqual(binding, self.current_v12_profile_binding())
         historical_program = json.loads(
             subprocess.run(
                 [
@@ -3516,7 +3524,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["valid"], report["errors"])
 
     def test_source_carrier_release_preflight_fails_closed_and_tracks_binding(self) -> None:
-        frozen = {"normativeProfileBinding": {"state": "frozen"}}
+        frozen = {
+            "normativeProfileBinding": {
+                "state": "frozen",
+                "cohortActivation": {"source": "fixture-live-source"},
+            }
+        }
         self.assertEqual(
             control._source_carrier_release_preflight(frozen, True),
             {
@@ -3525,6 +3538,23 @@ class ProductControlTests(unittest.TestCase):
                 "reason": (
                     "frozen-cohort-source-remains-required-for-live-verifiability"
                 ),
+                "scope": "live-cohort-source-dependency-only",
+            },
+        )
+        self.assertEqual(
+            control._source_carrier_release_preflight(
+                {
+                    "normativeProfileBinding": {
+                        "state": "frozen",
+                        "cohortActivation": None,
+                    }
+                },
+                True,
+            ),
+            {
+                "allowed": True,
+                "state": "release-eligible",
+                "reason": "no-live-frozen-cohort-source-dependency",
                 "scope": "live-cohort-source-dependency-only",
             },
         )

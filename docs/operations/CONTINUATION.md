@@ -62,9 +62,8 @@ limitation. They create no result or proof. The Codex source has been reduced
 to one implicit v1.2 Skill with no Hook, MCP, App, private capture state,
 external interpreter, or persistent runtime; O2 still requires a live,
 controllable installed or task-scoped application.
-v1.2 freeze is active only for the exact authorized sequence: the public signer
-is prebound before a binding-only signed commit and later pin. No v1.1 state is
-inherited.
+v1.2 binding is frozen by exact signed revision `3e81686` and a later code pin;
+the signer was prebound, no cohort is active, and no v1.1 state is inherited.
 v1.1 is stopped at
 revision `5ae71bb`: its first real post-activation product demand crossed the
 outcome boundary before registration, so retrospective registration is forbidden

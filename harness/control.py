@@ -304,7 +304,7 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "frozenAtRevision": None,
     "cohortActivation": None,
 }
-CURRENT_PROFILE_FREEZE_ENABLED = False
+CURRENT_PROFILE_FREEZE_ENABLED = True
 _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY = False
 NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
     "910ac016f1e5963450e3cfc46f5056ab0a6b04d7"
@@ -355,8 +355,12 @@ EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
 # more commit pins that revision plus its canonical digest. This seam carries
 # no cohort activation or private source dependency. None of the stopped
 # natural-task anchors can be inherited.
-EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
-EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
+EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = (
+    "3e816863846135618299aa196f607c9f42e1f51f"
+)
+EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = (
+    "31dafe95aedab17d5fa1252c804e9a60179dbcf6f5b6014b52c3889646feff7d"
+)
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SIGNER_PRINCIPAL = (
     "agent-autonomy-harness-v1.2-profile-freeze"
@@ -8328,14 +8332,19 @@ def _source_carrier_release_preflight(
         }
     binding = program.get("normativeProfileBinding")
     binding_state = binding.get("state") if isinstance(binding, dict) else None
-    if binding_state == "frozen":
+    cohort_activation = (
+        binding.get("cohortActivation") if isinstance(binding, dict) else None
+    )
+    if binding_state == "frozen" and cohort_activation is not None:
         return {
             "allowed": False,
             "state": "retain-live-source-verification",
             "reason": "frozen-cohort-source-remains-required-for-live-verifiability",
             "scope": "live-cohort-source-dependency-only",
         }
-    if binding_state in {"unfrozen", "revoked"}:
+    if binding_state in {"unfrozen", "revoked"} or (
+        binding_state == "frozen" and cohort_activation is None
+    ):
         return {
             "allowed": True,
             "state": "release-eligible",
