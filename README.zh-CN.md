@@ -17,13 +17,13 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成精确授权的 profile freeze，现处于 `ready`，没有 active 增量。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
+**当前状态：**v1.2 已完成精确授权的 profile freeze，现以
+`increment.v12-o1-lifecycle-suite-validator-seam` 这一有界增量处于 `active`。
+此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
 `completionState=in-progress`、
 O1-O5 为 `0/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
-精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation 或结果信用。当前没有私密来源、自然需求纳入、criterion-scoped 结果
-验证器、终态授权验证器、已安装插件或已接受结果。Codex 源码已经缩减为一个隐式 v1.2
+精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation 或结果信用。当前正在注册之前提交唯一任务专属的 O1 生命周期套件验证器；没有私密来源、自然需求纳入、任务注册、结果证据、终态授权验证器、已安装插件或已接受结果。Codex 源码已经缩减为一个隐式 v1.2
 Skill，不含 Hook、MCP、App、私密捕获状态、外部解释器或持久运行时。安装、持久激活、
 公开发布和 release 仍是彼此独立的人类闸门。
 宪章终极命题尚未成立。
@@ -148,7 +148,7 @@ Codex 是第一个参考宿主，因为它适合作为高水平、可落地的�
   与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，保留停止的 v1.1
   动态环境归因和必要人工干预语义；其精确字节是已撤销的历史规范 binding，仍没有
   任务、结果、安装或自身权威；
-- 一组独立、当前、由代码所有但仍未冻结的
+- 一组独立、当前、由代码所有且已精确冻结的
   [v1.2 协作 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)与
   [受控符合性协议候选](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json)，把有限交付与后续
   field evidence 分开，以最小充分处置覆盖协作全生命周期，并把原生优先动态路由、上下文变量
@@ -209,8 +209,9 @@ JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operati
 Harness 仓库中继承项目 AGENTS.md 或适配器。历史证据只能分为环境无关、环境绑定或失效，
 不得继承结果信用。
 
-仓库现在另有一组仍未冻结的 v1.2 profile 与受控符合性协议。它们只是从属审阅候选：尚未
-绑定 v1.2 制品 revision、登记场景、产生结果或继承前代状态。其生命周期语义要求 Agent 用
+仓库现在另有一组 v1.2 profile 与受控符合性协议。文件内部的 pre-freeze candidate 标签是
+冻结字节的一部分；`product/program.json` 已通过签名 revision `3e81686` 与 canonical digest
+`31dafe95` 绑定这些精确字节。当前尚未登记场景、产生结果或继承前代状态。其生命周期语义要求 Agent 用
 充分原生能力、合适复用、最小残余控制，或明确降级、升级、停止和声明收窄，覆盖入口、前提
 挑战、路线/权威选择、副作用、证据、纠偏、恢复、转场、收尾、反馈、治理和退役。受控证据
 只能证明这些有界效果；自然任务与跨 Agent field 声明是独立、非交付阻塞的后续证据。
@@ -248,7 +249,7 @@ program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`�
 必须由下一份当前机器权威重新绑定。
 tag 中自报的人名和时间戳永远不能单独通过；必须由代码所有的验证器独立验证所绑定的
 授权来源。在 v1.0 revision 中，终态发布验证器条目保持为空，注册表只有上述有界首冻与
-successor freeze 来源验证器。当前 v1.2 的人类授权和结果验证器注册表均为空；v1.1 首冻
+successor freeze 来源验证器。当前 v1.2 的人类授权验证器注册表仍为空；结果注册表只含注册前提交的精确 O1 生命周期套件验证器，尚无注册或结果；v1.1 首冻
 来源验证器及其执行锚只存在于已固定的停止 revision，不能提升当前状态。
 未来 clean candidate 必须在 tag 创建前绑定 terminal 验证器的 kind、version、仓库 locator、
 先行 revision 与 digest，以及公开来源政策。公开 tag 只允许随机 public identity 与 keyed

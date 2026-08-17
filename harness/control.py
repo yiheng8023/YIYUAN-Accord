@@ -32,6 +32,14 @@ from types import MappingProxyType
 from typing import Any, Callable, Mapping
 import xml.etree.ElementTree as ET
 
+from .task_validator_o1_lifecycle_suite import (
+    INCREMENT_ID as O1_LIFECYCLE_INCREMENT_ID,
+    VALIDATOR_KIND as O1_LIFECYCLE_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O1_LIFECYCLE_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o1_lifecycle_evidence,
+    validate_registration as validate_o1_lifecycle_registration,
+)
+
 
 PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
@@ -4364,10 +4372,28 @@ def expire_current_initial_authorization_private_evidence(
     )
 
 
-SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType({})
+SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProxyType(
+    {
+        O1_LIFECYCLE_VALIDATOR_KIND: (
+            frozenset({"O1"}),
+            frozenset({O1_LIFECYCLE_INCREMENT_ID}),
+            O1_LIFECYCLE_VALIDATOR_LOCATOR,
+            validate_o1_lifecycle_evidence,
+        )
+    }
+)
 SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
     str, PreMeasurementValidatorSpec
-] = MappingProxyType({})
+] = MappingProxyType(
+    {
+        O1_LIFECYCLE_VALIDATOR_KIND: (
+            frozenset({"O1"}),
+            frozenset({O1_LIFECYCLE_INCREMENT_ID}),
+            O1_LIFECYCLE_VALIDATOR_LOCATOR,
+            validate_o1_lifecycle_registration,
+        )
+    }
+)
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
 ] = MappingProxyType({})

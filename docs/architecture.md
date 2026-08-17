@@ -67,17 +67,19 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `ready` with no active increment and O1-O5 at 0/5.
-Its `normativeProfileBinding` is unfrozen, and the tree contains a distinct,
-code-pinned candidate.2 pre-freeze
+The current v1.2 program is `active` on the bounded
+`increment.v12-o1-lifecycle-suite-validator-seam` and O1-O5 remain at 0/5.
+Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
+canonical digest `31dafe95`, and the tree contains the distinct, code-pinned candidate.2
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
 [controlled-conformance protocol](CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json).
 They separate finite delivery from later field validation and cover the
 collaboration lifecycle through minimum sufficient native reuse, external or
 domain reuse, residual Harness control, or explicit degradation, escalation,
 stop, or claim limitation. They add no authority, threshold, binding, or
-result. Current human-authorization and outcome-validator registries are empty,
-and no private natural-demand cohort is required or active. v1.1 remains stopped history: its only
+result. The current human-authorization registry is empty; the outcome registries
+contain only the exact pre-measurement O1 lifecycle-suite validator and no task
+registration or result. No private natural-demand cohort is required or active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
 demand received outcome-bearing assistance before immutable registration. The

@@ -12,18 +12,20 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` with no active increment after completing the
-authorized exact profile freeze, separating finite product delivery from
-continuing field validation, and reducing the Codex reference projection. The repository verifier reports `programStatus=ready`,
+**Current status:** v1.2 is `active` on the bounded
+`increment.v12-o1-lifecycle-suite-validator-seam` after completing the authorized
+exact profile freeze, separating finite product delivery from continuing field
+validation, and reducing the Codex reference projection. The repository verifier reports `programStatus=active`,
 `completionState=in-progress`, O1-O5
 `0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
 turning the shortfall corpus into a feature backlog or requiring a natural-task
 cohort for release. Their exact candidate bytes are code-pinned but the profile
 binding is frozen by the exact signed revision `3e81686` and canonical digest
-`31dafe95`; it carries no cohort activation or outcome credit. No current private source, natural-demand enrollment,
-criterion-scoped result validator, terminal authorization validator, installed
-plugin, or accepted outcome exists. The Codex source has been reduced to
+`31dafe95`; it carries no cohort activation or outcome credit. One task-specific
+O1 lifecycle-suite validator is being committed before registration; no current
+private source, natural-demand enrollment, task registration, outcome evidence,
+terminal authorization validator, installed plugin, or accepted outcome exists. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
 interpreter, or persistent runtime. Installation, persistent activation,
 publication, and release remain separate human gates.
@@ -212,7 +214,7 @@ The current repository provides:
   that preserve the stopped v1.1 adaptive environment and human-intervention contract;
   their exact bytes are a revoked historical normative binding and
   they still carry no task, result, installation, or authority of their own;
-- a distinct current, code-owned, still-unfrozen
+- a distinct current, code-owned and exactly frozen
   [v1.2 collaboration profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)
   and [controlled-conformance protocol candidate](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json)
   that separate finite delivery from later field evidence, cover the full
@@ -305,10 +307,12 @@ A without-Harness baseline cannot run inside the Harness repository and inherit
 its project guidance. Historical items are classified as environment-independent,
 environment-bound, or invalidated; none inherit outcome credit.
 
-The repository now also carries a distinct v1.2 pre-freeze profile and paired
-controlled-conformance protocol. They are subordinate review candidates, not
-an active binding: no v1.2 artifact revision, scenario registration, result, or
-outcome has been authorized or inherited. Their lifecycle semantics require the
+The repository now also carries a distinct v1.2 profile and paired
+controlled-conformance protocol. Their files retain the pre-freeze candidate
+label as part of the frozen bytes, while `product/program.json` binds those exact
+bytes through signed revision `3e81686` and canonical digest `31dafe95`. No v1.2
+scenario registration, result, or outcome has been authorized or inherited.
+Their lifecycle semantics require the
 Agent to cover intake, premise challenge, route and authority choice, effects,
 evidence, correction, recovery, transition, closure, feedback, governance, and
 retirement through sufficient native behavior, suitable reuse, the smallest
@@ -378,8 +382,9 @@ tested host/OS/runtime/virtualization scope, bounded claims, candidate, tag, and
 public release; the predecessor profile/adapter-only scope cannot pass.
 At the v1.0 revision, the terminal-release validator entry remained absent and
 the registry contained only the bounded initial-freeze and successor-freeze
-source validators described above. The current v1.2 human-authorization and
-outcome-validator registries are empty; the v1.1 source-authorization validator
+source validators described above. The current v1.2 human-authorization registry
+remains empty; the outcome registries contain only the exact pre-measurement O1
+lifecycle-suite validator and carry no registration or result. The v1.1 source-authorization validator
 and its execution-specific anchors are available only from the pinned stopped
 revision. No historical validator can promote current state.
 The v1.0 credential and Scheduled Task cleanup entrypoint is not executable from

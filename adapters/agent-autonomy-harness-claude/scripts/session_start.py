@@ -21,7 +21,8 @@ AUTHORITY_PATHS = (
     "product/acceptance.json",
 )
 PINNED_RUNTIME_SHA256 = {
-    "harness/control.py": "f61f587930565f73e15702b0cd4397a8659d3b72f0767230bbb3c1ec9d7bee41",
+    "harness/task_validator_o1_lifecycle_suite.py": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a",
+    "harness/control.py": "88006df63141c21a648a5296e4aef2d58c468688a75500c21e778b6cb2f2f209",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }
@@ -80,7 +81,7 @@ def _load_reference_module(root: Path, sources: dict[str, bytes]) -> ModuleType:
     package.__path__ = [str(root / "harness")]  # type: ignore[attr-defined]
     package.__package__ = package_name
     sys.modules[package_name] = package
-    for module in ("control", "continuation"):
+    for module in ("task_validator_o1_lifecycle_suite", "control", "continuation"):
         _load_module(
             f"{package_name}.{module}",
             root / f"harness/{module}.py",
