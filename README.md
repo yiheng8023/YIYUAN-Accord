@@ -12,10 +12,10 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` with no active increment after completing the
-authorized exact profile freeze, separating finite product delivery from
-continuing field validation, and reducing the Codex reference projection. The
-repository verifier reports `programStatus=ready`,
+**Current status:** v1.2 is `active` on the bounded
+`increment.v12-o1-environment-manifest-chronology` after completing the authorized
+exact profile freeze, separating finite product delivery from continuing field
+validation, and reducing the Codex reference projection. The repository verifier reports `programStatus=active`,
 `completionState=in-progress`, O1-O5
 `0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
@@ -23,7 +23,8 @@ turning the shortfall corpus into a feature backlog or requiring a natural-task
 cohort for release. Their exact candidate bytes are code-pinned but the profile
 binding is frozen by the exact signed revision `3e81686` and canonical digest
 `31dafe95`; it carries no cohort activation or outcome credit. One task-specific
-O1 lifecycle-suite validator was committed before any registration; no current
+O1 lifecycle-suite validator was committed before any registration; its exact
+observed-native-minimum environment manifest is now being committed before registration. No current
 private source, natural-demand enrollment, task registration, outcome evidence,
 terminal authorization validator, installed plugin, or accepted outcome exists. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external

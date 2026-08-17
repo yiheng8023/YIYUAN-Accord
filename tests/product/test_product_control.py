@@ -1302,7 +1302,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_ready_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_active_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1313,9 +1313,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(live_program["increments"], [])
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-o1-environment-manifest-chronology",
+        )
+        self.assertEqual(len(live_program["increments"]), 1)
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],
@@ -3340,11 +3343,15 @@ class ProductControlTests(unittest.TestCase):
         evidence_root = ROOT / "product/evidence"
         if evidence_root.exists():
             self.assertFalse(control._link_or_reparse(evidence_root), evidence_root)
+        allowed_evidence_parents = {
+            evidence_root,
+            evidence_root / "environment-manifests",
+        }
         for path in sorted(evidence_root.rglob("*")):
             self.assertFalse(control._link_or_reparse(path), path)
             if path.is_dir():
                 continue
-            self.assertEqual(path.parent, evidence_root, path)
+            self.assertIn(path.parent, allowed_evidence_parents, path)
             self.assertEqual(path.suffix, ".json", path)
             raw = path.read_bytes()
             self.assertLessEqual(len(raw), control.MAX_DOCUMENT_BYTES, path)

@@ -17,12 +17,13 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成精确授权的 profile freeze，现处于 `ready`，没有 active 增量。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
+**当前状态：**v1.2 已完成精确授权的 profile freeze，现以
+`increment.v12-o1-environment-manifest-chronology` 这一有界增量处于 `active`。
+此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
 `completionState=in-progress`、
 O1-O5 为 `0/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
-精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation 或结果信用。唯一任务专属的 O1 生命周期套件验证器已先于任何注册提交；没有私密来源、自然需求纳入、任务注册、结果证据、终态授权验证器、已安装插件或已接受结果。Codex 源码已经缩减为一个隐式 v1.2
+精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation 或结果信用。唯一任务专属的 O1 生命周期套件验证器已先于任何注册提交；当前正在注册之前提交其精确 observed-native-minimum 环境清单；没有私密来源、自然需求纳入、任务注册、结果证据、终态授权验证器、已安装插件或已接受结果。Codex 源码已经缩减为一个隐式 v1.2
 Skill，不含 Hook、MCP、App、私密捕获状态、外部解释器或持久运行时。安装、持久激活、
 公开发布和 release 仍是彼此独立的人类闸门。
 宪章终极命题尚未成立。
