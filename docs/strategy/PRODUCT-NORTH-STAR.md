@@ -107,10 +107,10 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   Only this outcome can establish the first bounded Agent-neutral portability
   claim.
 
-The current v1.1 program in `product/program.json` and
+The current v1.2 program in `product/program.json` and
 `product/acceptance.json` is a ready, zero-outcome environment-attributed
 terminal-product proof. It preserves v0.2 as bounded historical calibration and
-v1.0 as an immutable stopped zero-outcome attempt. Current evidence must
+v1.0/v1.1 as immutable stopped zero-outcome attempts. Current evidence must
 preserve or strengthen the requirements for sustained natural-task delivery,
 strict comparative burden reduction, live demand-driven capability lifecycle,
 proactive verified carrier transition, and reproducible live cross-host and

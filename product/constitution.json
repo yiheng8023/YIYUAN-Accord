@@ -181,6 +181,13 @@
       "revision": "910ac016f1e5963450e3cfc46f5056ab0a6b04d7",
       "currentAuthority": false,
       "claimLimit": "stopped after two independently authorized but zero-registration cohort generations; O1-O5 remain zero, the revoked cohort and private-evidence cleanup are historical facts only, and no profile binding, cohort state, task result, outcome, environment assumption, or completion claim can be inherited by a later release"
+    },
+    {
+      "release": "v1.1",
+      "state": "stopped-zero-outcome-missed-enrollment-attempt",
+      "revision": "5ae71bbdd43c0c5dd5a0e120e508bccf9dd9464c",
+      "currentAuthority": false,
+      "claimLimit": "stopped after the first post-activation real product-delivery demand received outcome-bearing assistance before immutable task registration; O1-O5 remain zero, the revoked cohort and exact private-resource cleanup are historical facts only, and no profile binding, cohort state, task result, outcome, environment assumption, or completion claim can be inherited by a later release"
     }
   ],
   "bootstrapGuards": [

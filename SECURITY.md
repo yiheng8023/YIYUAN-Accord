@@ -1,21 +1,24 @@
 # Security Policy
 
 Agent Autonomy Harness is a public, research-stage collaboration quality
-project. The current v1.1 environment-attribution tree contains a product-contract
+project. The current v1.2 environment-attribution tree contains a product-contract
 verifier, immutable stopped v1.0 and v1.1 history, and inactive reference-adapter
 source candidates, not a production runtime or released installable product.
-Its code-pinned v1.1 profile and cohort protocol are a revoked historical
+Its current profile binding is unfrozen and its human-authorization and outcome-
+validator registries are empty. The code-pinned v1.1 profile and cohort protocol are a revoked historical
 binding at first-freeze revision `5ce2773`. A private source-window audit found
 that real product demand received outcome-bearing assistance before task
 registration, so the cohort stopped with zero outcomes and cannot resume.
-The current module exposes no executable v1.0 credential or Scheduled Task
+The current v1.2 enrollment Hook candidate reads a submitted prompt only in
+memory to derive keyed commitments, never emits or stores the raw prompt,
+session/turn identity, transcript path, or credential locator, and deletes its
+derived session state at `SessionEnd`. It requires a separately authorized
+private cohort key and remains unmaterialized and inactive; it is not a complete
+tool or user-visible-output enforcement boundary. The current module exposes no executable v1.0 credential or Scheduled Task
 cleanup entrypoint; those retired mechanics are historical at revision
 `910ac01`. The exact v1.1 protected source and one-time S4U expiry task were
 deleted under the authorized deterministic-failure disposition. The repository
 contains commitments, not private values; no live private cohort source remains.
-A non-Windows verifier cannot inspect the retired Windows Scheduled Task and
-therefore fails closed rather than treating repository text as proof of its
-absence.
 
 Treat every external capability, executable surface, instruction body,
 generated artifact, and runtime claim as untrusted until its applicable review

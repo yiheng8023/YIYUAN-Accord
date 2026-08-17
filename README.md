@@ -12,20 +12,28 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is an immutable stopped zero-outcome attempt. A
-source-bound private-window audit established that the first post-activation
-non-authority user event was real Harness product-delivery demand and received
-outcome-bearing assistance before any immutable task registration. The cohort
-cannot be repaired by retrospective registration or by selecting a later task:
-its only generation is revoked, and the exact protected resource and one-time
-expiry trigger have been deleted under the authorized deterministic-failure
-disposition. The repository verifier reports `programStatus=stopped`,
-`completionState=stopped`, O1-O5 `0/5`, and G1-G4 `4/4`; run it for live truth.
-A non-Windows hosted runner cannot independently inspect absence of the retired
-Windows Scheduled Task and therefore fails closed at G3 while corroborating the
-remaining public contract; that is not evidence that the task still exists.
-The constitution's terminal proposition remains open and requires a later
-machine-authority program rather than a v1.1 restart. v1.0 is
+**Current status:** v1.2 is ready with no active causal increment. The bounded
+pre-response enrollment repair that followed the v1.1 stop is retained in Git
+and in an inactive source candidate, without inheriting that cohort or installing
+a runtime. The repository verifier reports `programStatus=ready`,
+`completionState=in-progress`, O1-O5 `0/5`, and G1-G4
+`4/4`; run it for live truth. The current profile binding is unfrozen and no
+cohort, private source, result validator, terminal authorization validator,
+installed plugin, or outcome is active. The inactive Codex candidate now uses
+`UserPromptSubmit` only to create a keyed pre-model source commitment and
+bounded mandatory-resolution context; it does not claim to withhold all
+user-visible output or intercept hosted tools. Installation, Hook trust,
+private-key materialization, profile freeze, and cohort activation remain
+separate human gates.
+The constitution's terminal product proposition has not been established.
+
+v1.1 remains an immutable stopped zero-outcome attempt at revision `5ae71bb`.
+A source-bound private-window audit established that its first post-activation
+real product-delivery demand received outcome-bearing assistance before
+immutable task registration. Its only generation is revoked, and the exact
+protected resource and one-time expiry trigger were deleted under the authorized
+deterministic-failure disposition. It cannot be repaired, resumed, or inherited.
+v1.0 is
 an immutable stopped zero-outcome attempt at revision `910ac01`; none of its
 profile binding, cohort state, authorization, or results can be inherited.
 v0.2 remains an
@@ -76,18 +84,22 @@ process, and filesystem state was removed without user cleanup.
 The historical Codex and Claude candidate.7 revisions remain inactive thin
 Skill-plus-Hook projections over the same candidate.5 method. Their exact Git
 revisions remain the evidence boundary; no measured value transfers to later
-source. The current Codex tree is instead an inactive v1 carrier-mechanism
-candidate: its package-owned Hook records only bounded native lifecycle counters,
-does not execute task-repository code, and its checked-in command fails closed
-until an absolute trusted interpreter is materialized. Measured activation also
-requires a future live, independently authorized cohort under a later
-machine-authority program and a new environment-attributed profile binding. It
-is not installed or enabled. The
+source. The current Codex tree is instead an inactive v1.2 projection candidate:
+one package-owned Hook records bounded native lifecycle counters, while a
+separate `UserPromptSubmit` Hook reads the submitted prompt only in memory and
+stores or emits keyed commitments rather than raw prompt or session identity.
+Derived capture state is removed at `SessionEnd`; the separately authorized
+cohort key is not materialized by the source candidate. Neither Hook executes
+task-repository code, and their checked-in commands fail closed until an
+absolute trusted interpreter is materialized. The capture Hook is an evidence
+and attention seam, not proof of registration or universal output/tool blocking.
+Measured activation requires a future independently authorized cohort and new
+environment-attributed profile binding. It is not installed or enabled. The
 current Claude candidate.7 lineage now also has bounded input and a fail-closed
 unmaterialized interpreter command, but still loads only exact-hash reviewed
 repository runtime bytes and is not a live v1 carrier implementation. Neither
-adds an MCP server, App, provider manager, prompt interception, or product
-authority. CC Switch 3.19.2 supplied replaceable static
+adds an MCP server, App, provider manager, or product authority; only the Codex
+candidate has the bounded keyed pre-model capture described above. CC Switch 3.19.2 supplied replaceable static
 DeepSeek settings for the measured distinct host; its proxy runtime was off and
 it is neither portable-core nor runtime dependency. O5 proves decision
 portability only within the registered pair. It does not prove that the 2.1.232-
@@ -164,7 +176,7 @@ The current repository provides:
 - a machine-readable [constitution](product/constitution.json) for purpose and
   fixed boundaries;
 - a [program](product/program.json) for the current causal work state;
-- explicit terminal [v1.1 acceptance criteria](product/acceptance.json), with
+- explicit terminal [v1.2 acceptance criteria](product/acceptance.json), with
   observed-native-minimum and user-configured environment strata and all
   outcomes still planned;
 - the exact [candidate.5 methodology and minimum quality profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md),
@@ -175,8 +187,8 @@ The current repository provides:
   retained as stopped subordinate inputs but carrying no task or outcome evidence;
 - a separate code-pinned [v1.1 method/profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
   and [paired cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)
-  that realize the current adaptive environment and human-intervention contract;
-  their exact bytes are now the source-authorized frozen normative binding, but
+  that preserve the stopped v1.1 adaptive environment and human-intervention contract;
+  their exact bytes are a revoked historical normative binding and
   they still carry no task, result, installation, or authority of their own;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue, and derives a privacy-safe
@@ -188,13 +200,14 @@ The current repository provides:
   content or storing session state; active-work identity is hashed, raw
   diagnostics are excluded, and repository state remains explicitly unknown
   until the Agent observes it through a trusted native execution boundary;
-- an inactive Codex plugin source candidate with one task-facing Skill for the
-  Codex-reference-calibrated method and one package-contained Hook for bounded
-  native compaction/clear state and conservative carrier decisions; it works
+- an inactive Codex plugin source candidate with one task-facing Skill, one
+  package-contained Hook for bounded native compaction/clear state and
+  conservative carrier decisions, and one keyed pre-response enrollment-capture
+  Hook with explicit enforcement claim ceilings; it works
   outside a Harness-shaped repository, never executes task-repository code or
   Git, and remains deliberately unmaterialized until a trusted absolute runtime
-  is bound; it is not eligible for measured activation until the frozen v1
-  profile is also bound;
+  is bound; it is not eligible for measured activation until a new v1.2 profile,
+  cohort protocol, private source and exact Hook trust are independently bound;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
 - one content-addressed stopped Codex continuity result showing that an exact
@@ -210,11 +223,11 @@ The current repository provides:
   build instead of duplicating existing layers.
 
 It does not provide a task runtime, persistent capability installation, or an
-accepted v1.1 live-routing result today. The revoked v1.1 binding carries zero
+accepted v1.2 live-routing result today. The revoked v1.1 binding carries zero
 outcome evidence and is not terminal acceptance.
 Candidate.5 has only the frozen,
 bounded v0.2 Codex calibration acceptance described above; it is not the final
-v1.1 profile or a general standard. The adapters are not installed in user
+v1.2 profile or a general standard. The adapters are not installed in user
 configuration. Passing repository checks and historical receipts do not prove
 the terminal product result.
 
@@ -233,7 +246,7 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-Before any v1.1 outcome measurement, every O1-O5 registration must bind the
+Before any v1.2 outcome measurement, every O1-O5 registration must bind the
 acceptance-owned environment attribution contract. The two declared strata are
 `observed-native-minimum` and `user-configured`; each natural task-host unit runs
 once in one pre-registered arm, and Harness-specific value estimates compare
@@ -255,7 +268,11 @@ from bounded as-of evidence and binds the exact execution version, commit, or
 package identity. It neither locks one historical version across tasks nor runs
 an unresolved moving target such as `latest`; material in-run drift requires
 re-registration or an honest stop. The Agent performs every supported authorized
-mechanic. A technically or authoritatively unavoidable human-only action is
+mechanic. Online AI is the normal route, but privacy, availability, latency,
+cost, edge execution, or provider failure may make a bounded local/offline route
+the minimum sufficient choice; degradation, recovery, reconciliation, and
+cleanup retain the same floors and remain attributed lifecycle deltas. A
+technically or authoritatively unavoidable human-only action is
 minimal, precisely guided, post-verified, and counted in burden separately from
 a prohibited transfer of Agent-owned work.
 A without-Harness baseline cannot run inside the Harness repository and inherit
@@ -324,18 +341,17 @@ tested host/OS/runtime/virtualization scope, bounded claims, candidate, tag, and
 public release; the predecessor profile/adapter-only scope cannot pass.
 At the v1.0 revision, the terminal-release validator entry remained absent and
 the registry contained only the bounded initial-freeze and successor-freeze
-source validators described above. The current registry retains the code-pinned
-v1.1 first-freeze source-authorization validator as inactive stopped-history
-machinery. It verified the exact revision, binding digest, public activation
-identities, protected source window and cleanup trigger; it is not an outcome
-validator.
+source validators described above. The current v1.2 human-authorization and
+outcome-validator registries are empty; the v1.1 source-authorization validator
+and its execution-specific anchors are available only from the pinned stopped
+revision. No historical validator can promote current state.
 The v1.0 credential and Scheduled Task cleanup entrypoint is not executable from
 the v1.1 module; its historical behavior remains recoverable only from the pinned
 `910ac01` revision. The separate v1.1-only expiry command remains structurally
 bound to the retired exact identity, but the protected resource and one-time
 S4U task are now absent.
 
-## What v1.1 requires
+## What v1.2 requires
 
 - **O1 — sustained autonomous delivery:** a finite six-or-more natural-task
   cohort covers the required scenario bands and both environment strata with

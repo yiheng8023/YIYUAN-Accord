@@ -67,12 +67,16 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `stopped` with O1-O5 at 0/5. Its only
-source-authorized, code-pinned `normativeProfileBinding` is revoked after a
+The current v1.2 program is `ready` with O1-O5 at 0/5 and no active increment.
+Its bounded pre-response enrollment-capture repair is retained as inactive
+source and Git history. Its `normativeProfileBinding` is
+unfrozen, its current human-authorization and outcome-validator registries are
+empty, and no cohort is active. v1.1 remains stopped history: its only
+source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
 demand received outcome-bearing assistance before immutable registration. The
 exact protected resource and expiry trigger are absent; v1.1 cannot resume or
-open a successor. The
+be inherited by v1.2. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -82,7 +86,7 @@ verifier pins the exact v1.0 program and acceptance bytes at revision
 `910ac01`; no later release may reuse that profile binding, cohort state,
 authorization, task identity, ordering state, result or outcome.
 
-v1.1 makes environment attribution part of the acceptance authority rather
+v1.2 retains environment attribution as acceptance authority rather
 than a supporting-document convention. Every future O1-O5 registration binds
 one pre-task manifest, one initial authority-and-available-source envelope, one
 of two environment classes, one treatment arm, and the exact Harness activation
@@ -157,10 +161,10 @@ owned mechanics.
 An annotation's claimed human name and time are not authority proof. Terminal
 acceptance additionally dispatches a code-owned validator for the annotation's
 bound authorization source; that terminal validator remains absent until the
-actual final authorization carrier and trust boundary are known. The only current
-human-authorization registry entry is the inactive historical v1.1 first-freeze
-source validator. Its execution-specific anchors remain code-pinned, but the
-revoked binding cannot promote an outcome.
+actual final authorization carrier and trust boundary are known. The current
+v1.2 human-authorization registry is empty. The v1.1 first-freeze source
+validator and its execution-specific anchors exist only at the pinned stopped
+revision and cannot promote a current outcome.
 Before a terminal candidate can be valid, it must bind one exact committed
 terminal-authorization validator and a public-source policy. A later tag must
 reuse that validator and may expose only a random public identity plus a keyed
@@ -233,8 +237,8 @@ Code/DeepSeek task pair. Both independently returned the same fact-grounded
 single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
 adapter/date claim. Those bindings remain immutable at the v0.2 revision and
-are not registered current v1.1 validators. v1.0 is stopped with O1-O5 at 0/5;
-live program state comes only from the verifier. v1.1 must
+are not registered current v1.2 validators. v1.0 and v1.1 are stopped with
+O1-O5 at 0/5; live program state comes only from the verifier. v1.2 must
 prospectively preserve or strengthen the criteria requiring sustained natural
 tasks, same-environment comparative burden
 reduction, a real live capability lifecycle, proactive verified carrier
@@ -568,11 +572,19 @@ operations preflight blob size and stream stdout through the same hard byte
 ceiling before caching. These mechanism limits are guardrails, not outcome or
 installed-host evidence.
 
-Goal-level demand still enters through Codex's normal native conversation
-path. Codex may implicitly select the task-facing Skill from its metadata; the
-Hook does not intercept or classify prompts. Using `UserPromptSubmit` would add
-raw-prompt access and turn-blocking authority without causal necessity, so it is
-not part of the candidate.
+Goal-level demand still enters through Codex's normal native conversation path.
+Codex may implicitly select the task-facing Skill from its metadata. The v1.1
+missed-registration failure now supplies causal necessity for an inactive
+`UserPromptSubmit` capture candidate: it reads the submitted prompt only in
+memory before model processing, commits a cohort-keyed turn/prompt/chain identity
+under `PLUGIN_DATA`, and returns bounded developer context requiring registration
+or a source-bound exclusion before outcome-bearing work. It never emits or stores
+the raw prompt, session id, turn id, transcript path, or credential locator, and
+its derived session state is removed at `SessionEnd`; the separately authorized
+cohort key is retained or destroyed only under a future cohort disposition.
+This is an evidence and attention seam, not a claim that Codex withholds streamed
+text or that local tool Hooks cover hosted and specialized tools. Those limits
+must remain explicit in any measured route.
 
 The plugin source candidates remain inactive. Installation, enablement, and
 exact Hook trust are separate consumer transitions requiring explicit authority

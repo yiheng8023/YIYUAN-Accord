@@ -19,18 +19,24 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.1 is a stopped zero-outcome environment-attributed terminal-product attempt;
-O5 now separates premeasurement derivation, per-OS public and task-scoped
-reproduction, and evidence-holder terminal private verification.
-Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
-and v1.0 remains an immutable stopped attempt, neither of which can be
-inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
+v1.2 is ready with no active increment; the bounded pre-response enrollment-
+capture repair remains inactive source and Git history, and O1-O5 stay at 0/5.
+Its profile binding remains unfrozen and it inherits
+no cohort, authorization, registration, result, or outcome. v1.1 is a stopped
+zero-outcome environment-attributed terminal-product attempt; O5 had separated
+premeasurement derivation, per-OS public and task-scoped reproduction, and
+evidence-holder terminal private verification. v0.2 evidence remains immutable
+bounded calibration, while v1.0 and v1.1 remain immutable stopped attempts that
+cannot be inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
 candidate make the adaptive starting-environment, current-source resolution,
 attributed lifecycle and minimal guided human-only-action method reviewable.
 Their exact bytes remain an independently source-authorized but revoked
 historical binding at first-freeze revision `5ce2773`. The first
 post-activation real product demand received outcome-bearing assistance before
 registration, so v1.1 stopped without retrospective evidence and cannot resume.
+The current increment tests whether Codex's native `UserPromptSubmit` seam can
+provide privacy-safe pre-model source capture and bounded mandatory-resolution
+context without being misrepresented as complete tool or output enforcement.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
@@ -291,21 +297,28 @@ remains a separate activation condition.
 Historical reuse disposition: the candidate.7 Codex revision was an inactive
 thin package with one candidate.5 Skill and a repository-bound continuation
 launcher. Its exact Git revision remains the v0.2 evidence boundary. The
-current Codex source supersedes that launcher with an inactive v1 carrier-
-mechanism Hook: package-owned bytes accept bounded native lifecycle events,
-keep only bounded session-keyed counters under `PLUGIN_DATA`, clean the exact
-state on `SessionEnd`, and never load task-repository code or invoke Git. Its
+current Codex source supersedes that launcher with an inactive v1.2 projection:
+one Hook accepts bounded native lifecycle events and keeps only bounded
+session-keyed counters under `PLUGIN_DATA`; another uses `UserPromptSubmit` to
+derive cohort-keyed turn, prompt and chain commitments before model processing,
+returns bounded registration-resolution context, and removes its derived state
+on `SessionEnd`. Neither loads task-repository code or invokes Git. The
+enrollment Hook never emits or stores the raw prompt, session or turn identity,
+transcript path, or credential locator, and it explicitly does not claim
+complete streamed-output withholding or hosted-tool interception. Its
 checked-in command is an absolute fail-closed sentinel until a trusted runtime
 is materialized under separate activation authority; measured activation also
-requires a future live, independently authorized cohort generation under a new
-current machine-authority program; stopped v1.1 cannot supply it.
+requires a future live, independently authorized v1.2 cohort generation;
+stopped v1.1 cannot supply it.
 The Skill still supplies no MCP, App, runtime, or product authority, and the
 repository itself does not become a plugin.
 
 Goal-level demand continues to use Codex's native conversation path, where the
-host may implicitly select the Skill from its metadata. The candidate does not
-use `UserPromptSubmit`: raw-prompt access and turn-blocking authority are
-unnecessary and would enlarge the data and trust boundary.
+host may implicitly select the Skill from its metadata. v1.1's missed natural
+demand now makes pre-model source capture causally necessary, but the Hook reads
+the prompt only transiently to produce keyed commitments and cannot classify it
+or promote evidence. Eligibility, registration chronology, exclusions and
+outcomes remain task-bound validator responsibilities.
 
 The current user Hook configuration remains empty. Plugin installation,
 enablement, exact Hook trust, and live runtime measurement are separate

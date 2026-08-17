@@ -35,7 +35,7 @@ import xml.etree.ElementTree as ET
 
 PRODUCT_ID = "agent-autonomy-harness"
 CONSTITUTION_ID = "harness-product-constitution-v1"
-CURRENT_RELEASE = "v1.1"
+CURRENT_RELEASE = "v1.2"
 COMPLETION_EXPRESSION = "O1 && O2 && O3 && O4 && O5"
 EXPECTED_PRODUCT_PURPOSE = (
     "Provide an open, Agent-neutral, demand-driven human-Agent collaboration quality "
@@ -57,58 +57,41 @@ EXPECTED_SUCCESS_DEFINITION = (
     "than an ad-hoc path."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the constitution's terminal product proposition through an environment-attributed "
-    "finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration "
-    "burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and "
-    "carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. "
-    "v0.2 remains an immutable "
-    "bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; "
-    "neither can satisfy this program by inheritance."
+    "Prove the constitution's terminal product proposition through a pre-response-enrollment-"
+    "controlled, environment-attributed finite repeated-natural-task cohort: sustained goal-level "
+    "delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc "
+    "baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-"
+    "operating-system open reference delivery. v0.2 remains an immutable bounded calibration "
+    "milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can "
+    "satisfy this program by inheritance."
 )
 EXPECTED_PROGRESS_RULE = (
-    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing "
-    "count as progress. Every O1-O5 registration binds the acceptance-owned environment attribution "
-    "contract, one fixed task-relevant pre-task environment manifest, one initial authority-and-available-"
-    "source envelope, one environment class, one treatment arm and the exact Harness activation delta if "
-    "present. Each natural task-host execution unit runs "
-    "once in its pre-registered arm; a unit is not replayed merely to manufacture a comparison, while "
-    "O5's pre-registered cross-host pair is required portability replication rather than same-host "
-    "treatment replay. Harness-specific value estimates compare only pre-registered matched tasks "
-    "within the same environment class, starting manifest and authority-and-available-source envelope; exact "
-    "Harness activation is the only planned initial route and configuration difference, while later Agent-"
-    "selected or human-authorized capability and configuration changes are recorded as treatment-mediated "
-    "lifecycle deltas. Unavoidable task differences remain explicit matching variables, and the claim cannot "
-    "be stronger than prospective matched observational evidence. Observed-native-minimum excludes discoverable "
-    "user-global influence at the starting boundary but is not a static capability ceiling; user-configured "
-    "freezes the actual relevant starting environment. In either class, the Agent dynamically adapts after "
-    "demand under the registered authority, source-resolution, human-intervention and lifecycle rules. Before "
-    "any acquisition or execution, each decision resolves the then-current suitable official or maintained source "
-    "from bounded as-of evidence and binds an exact execution identity; unresolved mutable labels and material "
-    "mid-execution drift require re-registration or honest stop rather than a permanent version lock or silent "
-    "substitution. Before any task measurement, "
-    "a new content-addressed normative profile and prospective cohort protocol must be selected and frozen "
-    "under the current environment attribution contract. The freeze commit is not effective cohort "
-    "activation by itself: before any natural demand can be eligible, a named human independently authorizes "
-    "the exact revision, complete binding digest, environment manifest boundary, source surface, private-"
-    "evidence boundary and cleanup disposition in a source-native event, and a code-owned source validator "
-    "proves that authorization. A natural demand observed after the freeze commit but before authorization "
-    "stops v1.1 rather than being excluded. Any revoked v1.1 cohort stops this release and cannot open a "
-    "successor or restart. v1.0 profile, cohort, authorization, registration, outcome and ordering state are "
-    "immutable stopped history and cannot be reused. The realized cohort is the earliest eligible natural-"
-    "demand-event prefix after authorized activation, never a retrospectively selected roster: each task-"
-    "bound validator proves the complete source cursor window since activation or the preceding registration "
-    "contains no omitted earlier eligible demand. A natural-demand event occurs after "
-    "authorized activation and before immutable registration; a distinct source-bound measurement event "
-    "occurs after registration. Git ancestry proves repository ordering only, while source validators "
-    "privately prove independent authorization, complete source windows, deduplication, chronology, "
-    "environment identity and criterion semantics. Public task identities are unlinkable random "
-    "identifiers, not unsalted hashes of private goals, prompts or source events. Even after O1-O5 task "
-    "evidence passes, completionState remains in-progress until the code-owned terminal release gate "
-    "verifies a clean exact candidate, its predeclared O5 evidence set, named-human authorization in the "
-    "local annotated tag, the identical public tag object and peeled commit, and no ignored or untracked "
-    "repository residue; this is O5 release enforcement, not an additional outcome. Documents, tests, "
-    "inventories, fixtures, memberships, research volume, prior-release evidence and environment "
-    "manifests are supporting inputs only."
+    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count "
+    "as progress. Every O1-O5 registration binds the acceptance-owned environment contract, one committed "
+    "task-relevant starting manifest and authority-and-available-source envelope, one environment class and "
+    "treatment arm, the exact Harness activation delta if present, and one privacy-safe pre-response source-"
+    "capture resolution. Each task-host unit runs once in its pre-registered arm; O5 cross-host execution is "
+    "required portability replication, not a same-host replay, and Harness-specific value claims remain no "
+    "stronger than prospective same-environment matched observational evidence. Observed-native-minimum and "
+    "user-configured are starting conditions rather than static capability ceilings: after demand, the Agent "
+    "may adapt capabilities, configuration, models, providers and online or local execution only through "
+    "current source resolution, minimum-sufficient routing, bounded authority, attributed lifecycle deltas, "
+    "verification, rollback and cleanup. Before any task measurement, a new content-addressed profile and "
+    "cohort protocol must be frozen and independently source-authorized under the current environment contract. "
+    "Before model processing, every submitted source event on the active enrollment surface must receive a "
+    "privacy-safe private capture and a pending resolution identity; before outcome-bearing execution or "
+    "completion, that event must resolve to an immutable eligible-task registration or a narrow source-bound "
+    "exclusion. Missing capture, unresolved eligibility, user-visible outcome text before the host completion "
+    "barrier, uncontained hosted-tool bypass, late registration or omitted earlier demand stops the affected "
+    "cohort rather than becoming a retrospective exclusion. The realized cohort is the earliest eligible "
+    "natural-demand prefix, failures remain in place, public identities are unlinkable random identifiers, and "
+    "source validators privately prove complete windows, chronology, deduplication, environment identity and "
+    "criterion semantics. v1.0 and v1.1 profile, cohort, authorization, registration, outcome and ordering state "
+    "are immutable stopped history and cannot be reused. Even after O1-O5 evidence passes, completionState "
+    "remains in-progress until the code-owned terminal release gate verifies the clean exact candidate, "
+    "predeclared O5 evidence set, named-human authorization, identical public annotated tag object and peeled "
+    "commit, and empty ignored and untracked residue. Documents, tests, inventories, fixtures, research volume, "
+    "prior-release evidence and environment manifests remain supporting inputs only."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -204,7 +187,7 @@ OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "28ab2e135fc89bab2e895d9b1fc1bb1f386525f1f4481147cad9bc6a9428ae52"
+    "cba7bdcf44c9e10b46665a153c8b9cfde4fa19c12356ab9c5a2d0a9c5440b292"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -318,13 +301,13 @@ UNFROZEN_NORMATIVE_PROFILE_BINDING = {
     "frozenAtRevision": None,
     "cohortActivation": None,
 }
-CURRENT_PROFILE_FREEZE_ENABLED = True
+CURRENT_PROFILE_FREEZE_ENABLED = False
 _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY = False
 NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
     "910ac016f1e5963450e3cfc46f5056ab0a6b04d7"
 )
 CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION = (
-    "d05bb43a445a60a9f6b409dfd60620b954ed6af2"
+    "5ae71bbdd43c0c5dd5a0e120e508bccf9dd9464c"
 )
 MAX_NORMATIVE_BINDING_HISTORY_REVISIONS = 64
 MAX_NORMATIVE_BINDING_HISTORY_BYTES = 4 * 1_048_576
@@ -1289,10 +1272,16 @@ EXPECTED_HISTORICAL_EVIDENCE_BOUNDARY = {
     "counterevidenceInput": True,
     "mayTriggerReplanning": True,
 }
-EXPECTED_PRIOR_RELEASE = {
+EXPECTED_V10_RELEASE = {
     "release": "v1.0",
     "state": "stopped-zero-outcome-terminal-proof-attempt",
     "revision": "910ac016f1e5963450e3cfc46f5056ab0a6b04d7",
+    "currentAuthority": False,
+}
+EXPECTED_PRIOR_RELEASE = {
+    "release": "v1.1",
+    "state": "stopped-zero-outcome-missed-enrollment-attempt",
+    "revision": "5ae71bbdd43c0c5dd5a0e120e508bccf9dd9464c",
     "currentAuthority": False,
 }
 EXPECTED_HISTORICAL_MILESTONES = (
@@ -1321,13 +1310,23 @@ EXPECTED_HISTORICAL_MILESTONES = (
         ),
     },
     {
-        **EXPECTED_PRIOR_RELEASE,
+        **EXPECTED_V10_RELEASE,
         "claimLimit": (
             "stopped after two independently authorized but zero-registration cohort "
             "generations; O1-O5 remain zero, the revoked cohort and private-evidence cleanup "
             "are historical facts only, and no profile binding, cohort state, task result, "
             "outcome, environment assumption, or completion claim can be inherited by a later "
             "release"
+        ),
+    },
+    {
+        **EXPECTED_PRIOR_RELEASE,
+        "claimLimit": (
+            "stopped after the first post-activation real product-delivery demand received "
+            "outcome-bearing assistance before immutable task registration; O1-O5 remain zero, "
+            "the revoked cohort and exact private-resource cleanup are historical facts only, "
+            "and no profile binding, cohort state, task result, outcome, environment assumption, "
+            "or completion claim can be inherited by a later release"
         ),
     },
 )
@@ -1338,6 +1337,19 @@ EXPECTED_V10_AUTHORITY_BLOBS = MappingProxyType(
         ),
         "product/acceptance.json": (
             "97835e30913c4219558433f1aee12fa4837bc7cee2a1fe19538260e935622963"
+        ),
+    }
+)
+EXPECTED_V11_AUTHORITY_BLOBS = MappingProxyType(
+    {
+        "product/program.json": (
+            "46569b58bcf62d365aa60e88abd723c6a4df4f94c159f935a7b9048b487a4226"
+        ),
+        "product/acceptance.json": (
+            "cab4a0751116eefc22927a6a591be3b020cb15576afb0e3161d22a57e550d6c9"
+        ),
+        "harness/control.py": (
+            "de577c8b01629cf03266a785c4436bf2cd27e99c39f107cdc770c9f9c86be155"
         ),
     }
 )
@@ -1384,9 +1396,12 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
     "taskTimeAdaptationRule": (
         "after demand reveals need, the Agent uses a healthy already-authorized route or, before execution, "
         "binds an immutable decision record covering the residual gap, current source resolution, authority "
-        "class, planned lifecycle action, rollback and cleanup; the Agent performs every supported authorized "
-        "mechanic, while a technically or authoritatively human-only action is reduced to the smallest exact "
-        "step, explained without requiring route knowledge, and verified before resuming"
+        "class, planned lifecycle action, rollback and cleanup; online AI is the normal route, while local, "
+        "edge or offline execution is a demand-triggered minimum-sufficient degradation or data-locality route "
+        "rather than a mandatory product line, and recovery to an online route is reconciled and attributed; "
+        "the Agent performs every supported authorized mechanic, while a technically or authoritatively human-"
+        "only action is reduced to the smallest exact step, explained without requiring route knowledge, and "
+        "verified before resuming"
     ),
     "versionResolutionRule": (
         "at each decision resolve the current suitable official or maintained source from a bounded as-of source "
@@ -1395,9 +1410,11 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
         "such as latest, and on material mid-execution drift re-register or honestly stop"
     ),
     "lifecycleRule": (
-        "retain, install, configure, enable, use, disable, downgrade, rollback, retire or persist a route only "
-        "by current need, evidence and authority; end task-scoped exposure when the need ends unless persistence "
-        "has separate net-value evidence and authorization, then verify the final or restored state and cleanup"
+        "retain, install, configure, enable, use, switch between online and local or edge execution, degrade, "
+        "restore, disable, downgrade, rollback, retire or persist a route only by current need, evidence and "
+        "authority; preserve the same quality, privacy, safety, evidence and human-authority floors across route "
+        "changes, end task-scoped exposure when the need ends unless persistence has separate net-value evidence "
+        "and authorization, then verify the final or restored state and cleanup"
     ),
     "humanInterventionRule": (
         "distinguish a technically or authoritatively unavoidable human-only decision or host action from a "
@@ -4318,13 +4335,7 @@ SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
 ] = MappingProxyType({})
 SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, HumanAuthorizationValidator
-] = MappingProxyType(
-    {
-        CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: (
-            _validate_current_initial_binding_authorization
-        )
-    }
-)
+] = MappingProxyType({})
 SUPPORTED_TERMINAL_HUMAN_AUTHORIZATION_VALIDATORS: Mapping[
     str, TerminalAuthorizationValidatorSpec
 ] = MappingProxyType({})
@@ -5814,11 +5825,24 @@ def _v10_historical_authority_valid(root: Path, errors: list[str]) -> bool:
     for locator, expected_sha256 in EXPECTED_V10_AUTHORITY_BLOBS.items():
         if not _committed_blob(
             root,
-            EXPECTED_PRIOR_RELEASE["revision"],
+            EXPECTED_V10_RELEASE["revision"],
             locator,
             expected_sha256,
         ):
             _error(errors, f"v1.0 historical authority identity changed: {locator}")
+    return len(errors) == before
+
+
+def _v11_historical_authority_valid(root: Path, errors: list[str]) -> bool:
+    before = len(errors)
+    for locator, expected_sha256 in EXPECTED_V11_AUTHORITY_BLOBS.items():
+        if not _committed_blob(
+            root,
+            EXPECTED_PRIOR_RELEASE["revision"],
+            locator,
+            expected_sha256,
+        ):
+            _error(errors, f"v1.1 historical authority identity changed: {locator}")
     return len(errors) == before
 
 
@@ -5849,6 +5873,7 @@ def _historical_boundary_valid(
             "constitution historical milestones must match the code-owned records",
         )
     _v10_historical_authority_valid(root, errors)
+    _v11_historical_authority_valid(root, errors)
     return len(errors) == before
 
 

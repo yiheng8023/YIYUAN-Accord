@@ -248,6 +248,7 @@ class ProductControlTests(unittest.TestCase):
                 _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
                 _normative_profile_binding_history_valid=lambda root, binding, errors: True,
                 _v10_historical_authority_valid=lambda root, errors: True,
+                _v11_historical_authority_valid=lambda root, errors: True,
             ):
                 return verify_product(self.root)
         floor = subprocess.run(
@@ -401,6 +402,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=initial_binding_revision,
@@ -634,9 +636,10 @@ class ProductControlTests(unittest.TestCase):
                 stderr=subprocess.PIPE,
             ).stdout
             program = self.read_json("product/program.json")
+            terminal_tag = f"{control.CURRENT_RELEASE}.0"
             program["terminalReleaseBinding"] = {
                 "state": "candidate",
-                "tag": "v1.1.0",
+                "tag": terminal_tag,
                 "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
                 "annotationFormat": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
                 "o5EvidenceSetSha256": evidence_digest.hexdigest(),
@@ -691,9 +694,9 @@ class ProductControlTests(unittest.TestCase):
             "schema": 1,
             "format": control.TERMINAL_RELEASE_ANNOTATION_FORMAT,
             "productId": "agent-autonomy-harness",
-            "release": "v1.1",
+            "release": control.CURRENT_RELEASE,
             "candidateRevision": head,
-            "tag": "v1.1.0",
+            "tag": f"{control.CURRENT_RELEASE}.0",
             "publicRemote": control.EXPECTED_PUBLIC_REMOTE,
             "o5EvidenceSetSha256": evidence_digest,
             "authority": {
@@ -728,7 +731,7 @@ class ProductControlTests(unittest.TestCase):
                 "git",
                 "tag",
                 "-a",
-                "v1.1.0",
+                f"{control.CURRENT_RELEASE}.0",
                 "-m",
                 json.dumps(annotation, separators=(",", ":")),
             ],
@@ -738,7 +741,7 @@ class ProductControlTests(unittest.TestCase):
             stderr=subprocess.PIPE,
         )
         return subprocess.run(
-            ["git", "rev-parse", "refs/tags/v1.1.0"],
+            ["git", "rev-parse", f"refs/tags/{control.CURRENT_RELEASE}.0"],
             cwd=self.root,
             check=True,
             capture_output=True,
@@ -1321,6 +1324,7 @@ class ProductControlTests(unittest.TestCase):
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
             _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             return render_session_start_context(self.root, payload)
 
@@ -1346,6 +1350,40 @@ class ProductControlTests(unittest.TestCase):
             env=environment,
         )
 
+    def codex_user_prompt_payload(self, *, prompt: str = "Build the requested result.") -> dict:
+        return {
+            "session_id": "00000000-0000-4000-8000-000000000001",
+            "transcript_path": str(self.root / "must-not-be-read.jsonl"),
+            "cwd": str(self.root),
+            "hook_event_name": "UserPromptSubmit",
+            "turn_id": "00000000-0000-4000-8000-000000000011",
+            "prompt": prompt,
+            "model": "gpt-test",
+            "permission_mode": "default",
+        }
+
+    def run_codex_enrollment_hook(
+        self, payload: object, *, plugin_data: Path | None = None, raw: bytes | None = None
+    ) -> subprocess.CompletedProcess[str]:
+        data_root = plugin_data or (self.root / "codex-enrollment-plugin-data")
+        data_root.mkdir(parents=True, exist_ok=True)
+        environment = os.environ.copy()
+        environment["PLUGIN_DATA"] = str(data_root)
+        input_bytes = raw if raw is not None else json.dumps(payload).encode("utf-8")
+        return subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(CODEX_PLUGIN_ROOT / "scripts/enrollment_hook.py"),
+            ],
+            input=input_bytes,
+            capture_output=True,
+            check=False,
+            timeout=10,
+            env=environment,
+        )
+
     def claude_session_start_payload(self, *, source: str = "startup") -> dict:
         return {
             "session_id": "00000000-0000-4000-8000-000000000002",
@@ -1362,99 +1400,57 @@ class ProductControlTests(unittest.TestCase):
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
             _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v11_contract_is_valid_stopped_and_preserves_prior_history(
+    def test_current_v12_contract_is_valid_ready_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        hosted_unavailable = self.hosted_private_authorization_source_is_unavailable(
-            report
-        )
-        self.assertEqual(report["valid"], not hosted_unavailable, report["errors"])
-        self.assertEqual(report["release"], "v1.1")
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
+        self.assertEqual(live_program["increments"], [])
+        self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
-            report["completionState"],
-            "in-progress" if hosted_unavailable else "stopped",
+            report["sourceCarrierRelease"],
+            {
+                "allowed": True,
+                "state": "release-eligible",
+                "reason": "no-live-frozen-cohort-source-dependency",
+                "scope": "live-cohort-source-dependency-only",
+            },
         )
-        if hosted_unavailable:
-            self.assertEqual(
-                report["sourceCarrierRelease"],
-                {
-                    "allowed": False,
-                    "state": "unknown-stop-before-release",
-                    "reason": "authority-verification-failed",
-                    "scope": "live-cohort-source-dependency-only",
-                },
-            )
-        else:
-            self.assertEqual(
-                report["sourceCarrierRelease"],
-                {
-                    "allowed": True,
-                    "state": "release-eligible",
-                    "reason": "no-live-frozen-cohort-source-dependency",
-                    "scope": "live-cohort-source-dependency-only",
-                },
-            )
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertEqual(
-            report["guardrails"],
-            {"passed": 3 if hosted_unavailable else 4, "total": 4},
-        )
+        self.assertEqual(report["guardrails"], {"passed": 4, "total": 4})
         self.assertTrue(all(not report["criterionStates"][f"O{i}"] for i in range(1, 6)))
         constitution = json.loads((ROOT / "product/constitution.json").read_text(encoding="utf-8"))
-        v02 = constitution["historicalMilestones"][-2]
+        v02 = constitution["historicalMilestones"][-3]
         self.assertEqual(v02["release"], "v0.2")
         self.assertEqual(v02["revision"], "0dbcb0af34197e5c35c75d69a1aeacf4fd91b404")
         self.assertIn("not the constitution terminal proposition", v02["claimLimit"])
-        v10 = constitution["historicalMilestones"][-1]
+        v10 = constitution["historicalMilestones"][-2]
         self.assertEqual(v10["release"], "v1.0")
         self.assertEqual(v10["revision"], "910ac016f1e5963450e3cfc46f5056ab0a6b04d7")
         self.assertIn("zero-outcome", v10["state"])
         self.assertIn("can be inherited", v10["claimLimit"])
-        self.assertEqual(live_program["priorRelease"]["release"], "v1.0")
+        v11 = constitution["historicalMilestones"][-1]
+        self.assertEqual(v11["release"], "v1.1")
+        self.assertEqual(v11["revision"], "5ae71bbdd43c0c5dd5a0e120e508bccf9dd9464c")
+        self.assertIn("missed-enrollment", v11["state"])
+        self.assertIn("outcome-bearing assistance", v11["claimLimit"])
+        self.assertEqual(live_program["priorRelease"]["release"], "v1.1")
         binding = live_program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "revoked")
-        self.assertEqual(
-            binding["profileIdentity"],
-            control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
-        )
-        self.assertEqual(
-            binding["cohortProtocolIdentity"],
-            control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
-        )
-        self.assertEqual(
-            binding["cohortActivation"]["surfaceIdentity"],
-            control.EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY,
-        )
-        self.assertEqual(
-            binding["cohortActivation"]["activationCursorCommitment"],
-            control.EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT,
-        )
-        self.assertEqual(
-            binding["cohortActivation"]["keyIdentity"],
-            control.EXPECTED_CURRENT_INITIAL_KEY_IDENTITY,
-        )
-        self.assertEqual(
-            binding["cohortActivation"]["keyFingerprint"],
-            control.EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT,
-        )
-        self.assertTrue(control.CURRENT_PROFILE_FREEZE_ENABLED)
-        self.assertEqual(
-            set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
-            {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
-        )
-        self.assertEqual(
-            control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
-            control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
-        )
+        self.assertEqual(binding, control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        self.assertFalse(control.CURRENT_PROFILE_FREEZE_ENABLED)
+        self.assertEqual(dict(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS), {})
 
     def test_v10_profile_and_cohort_protocol_remain_exact_historical_inputs(self) -> None:
         profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
@@ -1545,7 +1541,7 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(protocol[field], expected)
         self.assertTrue(protocol["claimLimits"])
 
-    def test_v11_profile_candidate_is_distinct_adaptive_and_non_authoritative(self) -> None:
+    def test_v11_profile_artifacts_are_distinct_and_v12_does_not_reuse_binding(self) -> None:
         program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
@@ -1560,13 +1556,29 @@ class ProductControlTests(unittest.TestCase):
         protocol = json.loads(protocol_bytes)
 
         binding = program["normativeProfileBinding"]
-        self.assertEqual(binding["state"], "revoked")
+        self.assertEqual(binding, control.UNFROZEN_NORMATIVE_PROFILE_BINDING)
+        historical_program = json.loads(
+            subprocess.run(
+                [
+                    "git",
+                    "show",
+                    control.EXPECTED_PRIOR_RELEASE["revision"]
+                    + ":product/program.json",
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
+        historical_binding = historical_program["normativeProfileBinding"]
+        self.assertEqual(historical_binding["state"], "revoked")
         self.assertEqual(
-            binding["profileIdentity"],
+            historical_binding["profileIdentity"],
             control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY,
         )
         self.assertEqual(
-            binding["cohortProtocolIdentity"],
+            historical_binding["cohortProtocolIdentity"],
             control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY,
         )
         self.assertEqual(
@@ -1683,14 +1695,14 @@ class ProductControlTests(unittest.TestCase):
             ),
         }
 
-    def test_v11_authorizer_is_registered_but_unfrozen_state_never_reads_private_source(
+    def test_v12_authorizer_registry_is_empty_and_unfrozen_state_never_reads_private_source(
         self,
     ) -> None:
         floor = self.initialize_fixture_repository()
         binding = self.read_json("product/program.json")["normativeProfileBinding"]
         self.assertEqual(
             set(control.SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS),
-            {control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID},
+            set(),
         )
         with (
             patch.multiple(
@@ -1728,10 +1740,7 @@ class ProductControlTests(unittest.TestCase):
         for increment in live_program["increments"]:
             self.assertEqual(
                 increment["cleanupBoundary"]["privateResourceDispositions"],
-                [
-                    control.CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
-                    control.CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
-                ],
+                [],
             )
         frozen_program = json.loads(
             subprocess.run(
@@ -2409,7 +2418,11 @@ class ProductControlTests(unittest.TestCase):
         program = self.read_json("product/program.json")
         program["status"] = "stopped"
         program["normativeProfileBinding"] = binding
-        with patch(
+        with patch.object(
+            control,
+            "CURRENT_PROFILE_FREEZE_ENABLED",
+            True,
+        ), patch(
             "harness.control._current_profile_binding_material_valid",
             return_value=True,
         ), patch(
@@ -2465,7 +2478,7 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
-    def test_v11_product_authority_remains_the_three_machine_jsons(self) -> None:
+    def test_v12_product_authority_remains_the_three_machine_jsons(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
         g3 = next(item for item in acceptance["criteria"] if item["id"] == "G3")
 
@@ -2501,7 +2514,26 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
-    def test_v11_environment_attribution_is_acceptance_owned_and_cross_criterion(self) -> None:
+    def test_v11_stopped_authority_bytes_are_code_pinned(self) -> None:
+        errors: list[str] = []
+        self.assertTrue(control._v11_historical_authority_valid(ROOT, errors), errors)
+
+        committed_blob = control._committed_blob
+
+        def drifted(root: Path, revision: str, locator: str, digest: str) -> bool:
+            if locator == "harness/control.py":
+                return False
+            return committed_blob(root, revision, locator, digest)
+
+        errors = []
+        with patch("harness.control._committed_blob", side_effect=drifted):
+            self.assertFalse(control._v11_historical_authority_valid(ROOT, errors))
+        self.assertIn(
+            "v1.1 historical authority identity changed: harness/control.py",
+            errors,
+        )
+
+    def test_v12_environment_attribution_is_acceptance_owned_and_cross_criterion(self) -> None:
         acceptance = json.loads(
             (ROOT / "product/acceptance.json").read_text(encoding="utf-8")
         )
@@ -2633,6 +2665,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=False,
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
@@ -2667,6 +2700,7 @@ class ProductControlTests(unittest.TestCase):
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=False,
             _current_normative_profile_binding_history_valid=lambda root, binding, errors, **kwargs: True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
@@ -2685,6 +2719,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=False,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
@@ -3055,18 +3090,15 @@ class ProductControlTests(unittest.TestCase):
             "without replacing that judgment",
             criteria["O2"]["operationalization"]["passRule"],
         )
-        self.assertIn("natural-demand event", acceptance["progressRule"])
-        self.assertIn("measurement event", acceptance["progressRule"])
-        self.assertIn("no omitted earlier eligible demand", acceptance["progressRule"])
-        self.assertIn("not effective cohort activation by itself", acceptance["progressRule"])
-        self.assertIn("code-owned source validator", acceptance["progressRule"])
-        self.assertIn(
-            "after the freeze commit but before authorization stops v1.1",
-            acceptance["progressRule"],
-        )
+        self.assertIn("submitted source event", acceptance["progressRule"])
+        self.assertIn("Before model processing", acceptance["progressRule"])
+        self.assertIn("pre-response source-capture resolution", acceptance["progressRule"])
+        self.assertIn("omitted earlier demand", acceptance["progressRule"])
+        self.assertIn("independently source-authorized", acceptance["progressRule"])
+        self.assertIn("source validators privately prove", acceptance["progressRule"])
         self.assertIn("immutable stopped history", acceptance["progressRule"])
-        self.assertIn("cannot open a successor or restart", acceptance["progressRule"])
-        self.assertIn("environment manifest boundary", acceptance["progressRule"])
+        self.assertIn("cannot be reused", acceptance["progressRule"])
+        self.assertIn("committed task-relevant starting manifest", acceptance["progressRule"])
         self.assertIn("Unsalted or unkeyed hashes", profile)
         self.assertIn("exposed to the task/model", profile)
         self.assertIn("revokes live source verifiability", profile)
@@ -3174,26 +3206,16 @@ class ProductControlTests(unittest.TestCase):
         completed = self.run_cli(root=ROOT)
         self.assertNotIn("Traceback", completed.stderr)
         report = json.loads(completed.stdout)
-        hosted_unavailable = self.hosted_private_authorization_source_is_unavailable(
-            report
-        )
-        self.assertEqual(
-            completed.returncode,
-            1 if hosted_unavailable else 0,
-            completed.stderr,
-        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(report["release"], "v1.1")
+        self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(
-            report["completionState"],
-            "in-progress" if hosted_unavailable else "stopped",
-        )
+        self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(report["outcomes"], {"verified": 0, "total": 5})
-        self.assertEqual(report["valid"], not hosted_unavailable, report["errors"])
+        self.assertTrue(report["valid"], report["errors"])
 
     def test_source_carrier_release_preflight_fails_closed_and_tracks_binding(self) -> None:
         frozen = {"normativeProfileBinding": {"state": "frozen"}}
@@ -3462,7 +3484,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIn(
             (
-                f"v1.1: {live_program['status']}, "
+                f"v1.2: {live_program['status']}, "
                 f"{report['completionState']} (0/5 outcomes)"
             ),
             completed.stdout,
@@ -3776,6 +3798,7 @@ class ProductControlTests(unittest.TestCase):
         payload_files = (
             "hooks/hooks.json",
             "scripts/carrier_hook.py",
+            "scripts/enrollment_hook.py",
             "skills/deliver-demand-driven-task/SKILL.md",
             "skills/deliver-demand-driven-task/agents/openai.yaml",
             "skills/deliver-demand-driven-task/references/demand-to-capability-profile.md",
@@ -3787,7 +3810,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "1.0.0-carrier-mechanism.1+codex.payload-"
+            "1.1.0-enrollment-mechanism.1+codex.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CODEX_PLUGIN_ROOT / "plugin.json").exists())
@@ -3802,28 +3825,33 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(manifest["interface"]["capabilities"], ["Interactive", "Read", "Local state"])
         self.assertNotIn("hooks", manifest)
-        self.assertEqual(set(hooks["hooks"]), {"PreCompact", "PostCompact", "SessionStart", "SessionEnd"})
+        self.assertEqual(
+            set(hooks["hooks"]),
+            {"UserPromptSubmit", "PreCompact", "PostCompact", "SessionStart", "SessionEnd"},
+        )
         for event, handlers in hooks["hooks"].items():
-            self.assertEqual(len(handlers), 1)
-            command = handlers[0]["hooks"][0]
-            self.assertEqual(command["type"], "command")
-            self.assertIn("${PLUGIN_ROOT}", command["command"])
-            self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
-            self.assertIn("/__AAH_UNMATERIALIZED__/python3", command["command"])
-            self.assertIn("C:\\__AAH_UNMATERIALIZED__\\python.exe", command["commandWindows"])
-            self.assertNotRegex(command["command"], r"(^|\s)(python|python3|git)(\s|$)")
-            self.assertNotRegex(command["commandWindows"], r"(^|\s)(python|python3|git)(\.exe)?(\s|$)")
-            self.assertLessEqual(command["timeout"], 5)
-            if event == "SessionStart":
-                self.assertLessEqual(command["additionalContextLimit"], 1200)
-            else:
-                self.assertNotIn("additionalContextLimit", command)
-        hook_source = (CODEX_PLUGIN_ROOT / "scripts/carrier_hook.py").read_text(encoding="utf-8")
-        self.assertNotIn("import subprocess", hook_source)
-        self.assertNotIn("subprocess.run", hook_source)
-        self.assertNotIn("transcript_path", hook_source)
-        self.assertNotIn("find_harness_root", hook_source)
-        self.assertNotRegex(hook_source, r"[\"']git[\"']")
+            self.assertEqual(len(handlers), 2 if event == "SessionEnd" else 1)
+            for handler in handlers:
+                command = handler["hooks"][0]
+                self.assertEqual(command["type"], "command")
+                self.assertIn("${PLUGIN_ROOT}", command["command"])
+                self.assertIn("${PLUGIN_ROOT}", command["commandWindows"])
+                self.assertIn("/__AAH_UNMATERIALIZED__/python3", command["command"])
+                self.assertIn("C:\\__AAH_UNMATERIALIZED__\\python.exe", command["commandWindows"])
+                self.assertNotRegex(command["command"], r"(^|\s)(python|python3|git)(\s|$)")
+                self.assertNotRegex(command["commandWindows"], r"(^|\s)(python|python3|git)(\.exe)?(\s|$)")
+                self.assertLessEqual(command["timeout"], 5)
+                if event in {"SessionStart", "UserPromptSubmit"}:
+                    self.assertLessEqual(command["additionalContextLimit"], 1200)
+                else:
+                    self.assertNotIn("additionalContextLimit", command)
+        for script in ("carrier_hook.py", "enrollment_hook.py"):
+            hook_source = (CODEX_PLUGIN_ROOT / "scripts" / script).read_text(encoding="utf-8")
+            self.assertNotIn("import subprocess", hook_source)
+            self.assertNotIn("subprocess.run", hook_source)
+            self.assertNotIn("transcript_path", hook_source)
+            self.assertNotIn("find_harness_root", hook_source)
+            self.assertNotRegex(hook_source, r"[\"']git[\"']")
         self.assertNotIn(str(ROOT), json.dumps(hooks))
         candidate_text = "\n".join(
             path.read_text(encoding="utf-8")
@@ -3833,6 +3861,125 @@ class ProductControlTests(unittest.TestCase):
             )
         ).lower()
         self.assertNotIn("cc switch", candidate_text)
+
+    def test_codex_enrollment_hook_blocks_without_authorized_key(self) -> None:
+        payload = self.codex_user_prompt_payload(prompt="private goal that must not leak")
+        completed = self.run_codex_enrollment_hook(payload)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+        output = json.loads(completed.stdout)
+        self.assertEqual(output["decision"], "block")
+        rendered = completed.stdout.decode("utf-8")
+        self.assertNotIn(payload["prompt"], rendered)
+        self.assertNotIn(payload["session_id"], rendered)
+        self.assertNotIn(payload["transcript_path"], rendered)
+
+    def test_codex_enrollment_hook_captures_keyed_chain_without_raw_prompt(self) -> None:
+        data_root = self.root / "codex-enrollment-private-data"
+        data_root.mkdir()
+        key_path = data_root / "enrollment-cohort-key.v1.2.bin"
+        key_path.write_bytes(b"k" * 32)
+        payload = self.codex_user_prompt_payload(prompt="private natural demand alpha")
+
+        first = self.run_codex_enrollment_hook(payload, plugin_data=data_root)
+        self.assertEqual(first.returncode, 0, first.stderr.decode())
+        first_output = json.loads(first.stdout)
+        self.assertTrue(first_output["continue"])
+        projection = json.loads(
+            first_output["hookSpecificOutput"]["additionalContext"]
+        )
+        self.assertEqual(projection["event"], "UserPromptSubmit")
+        self.assertEqual(projection["captureSequence"], 1)
+        self.assertRegex(projection["turnIdentity"], r"^hmac-sha256:[0-9a-f]{64}$")
+        self.assertRegex(projection["sourceCommitment"], r"^hmac-sha256:[0-9a-f]{64}$")
+        self.assertIn("Before any outcome-bearing", projection["agentRoute"])
+        self.assertIn("not proof", projection["claimBoundary"])
+
+        state_files = list(data_root.glob("enrollment-*.json"))
+        self.assertEqual(len(state_files), 1)
+        state_text = state_files[0].read_text(encoding="utf-8")
+        unkeyed_session_digest = hashlib.sha256(
+            payload["session_id"].encode("utf-8")
+        ).hexdigest()
+        self.assertNotIn(unkeyed_session_digest, state_files[0].name)
+        self.assertNotIn(unkeyed_session_digest, state_text)
+        self.assertNotIn(unkeyed_session_digest, first.stdout.decode("utf-8"))
+        for private_value in (
+            payload["prompt"],
+            payload["session_id"],
+            payload["turn_id"],
+            payload["transcript_path"],
+        ):
+            self.assertNotIn(private_value, state_text)
+            self.assertNotIn(private_value, first.stdout.decode("utf-8"))
+        state = json.loads(state_text)
+        self.assertRegex(
+            state["sessionCommitment"], r"^hmac-sha256:[0-9a-f]{64}$"
+        )
+        self.assertEqual(len(state["events"]), 1)
+
+        duplicate = self.run_codex_enrollment_hook(payload, plugin_data=data_root)
+        duplicate_projection = json.loads(
+            json.loads(duplicate.stdout)["hookSpecificOutput"]["additionalContext"]
+        )
+        self.assertEqual(duplicate_projection, projection)
+        self.assertEqual(
+            len(json.loads(state_files[0].read_text(encoding="utf-8"))["events"]),
+            1,
+        )
+
+        changed_same_turn = self.run_codex_enrollment_hook(
+            {**payload, "prompt": "different prompt under the same turn"},
+            plugin_data=data_root,
+        )
+        self.assertEqual(json.loads(changed_same_turn.stdout)["decision"], "block")
+
+        second_payload = {
+            **payload,
+            "turn_id": "00000000-0000-4000-8000-000000000012",
+            "prompt": "private natural demand beta",
+        }
+        second = self.run_codex_enrollment_hook(second_payload, plugin_data=data_root)
+        second_projection = json.loads(
+            json.loads(second.stdout)["hookSpecificOutput"]["additionalContext"]
+        )
+        self.assertEqual(second_projection["captureSequence"], 2)
+        self.assertNotEqual(
+            second_projection["sourceCommitment"], projection["sourceCommitment"]
+        )
+
+        ended = self.run_codex_enrollment_hook(
+            {
+                **payload,
+                "hook_event_name": "SessionEnd",
+                "reason": "other",
+            },
+            plugin_data=data_root,
+        )
+        self.assertTrue(json.loads(ended.stdout)["continue"])
+        self.assertFalse(state_files[0].exists())
+        self.assertTrue(key_path.exists())
+        self.assertEqual(list(data_root.glob("*.lock")), [])
+        self.assertEqual(list(data_root.glob(".*.tmp")), [])
+
+    def test_codex_enrollment_hook_rejects_malformed_or_oversized_input(self) -> None:
+        malformed = self.run_codex_enrollment_hook({}, raw=b"not-json")
+        self.assertEqual(json.loads(malformed.stdout)["decision"], "block")
+        duplicate = self.run_codex_enrollment_hook(
+            {},
+            raw=(
+                b'{"hook_event_name":"UserPromptSubmit",'
+                b'"hook_event_name":"SessionEnd"}'
+            ),
+        )
+        self.assertEqual(json.loads(duplicate.stdout)["decision"], "block")
+        nonfinite = self.run_codex_enrollment_hook(
+            {}, raw=b'{"hook_event_name":NaN}'
+        )
+        self.assertEqual(json.loads(nonfinite.stdout)["decision"], "block")
+        oversized = self.run_codex_enrollment_hook(
+            {}, raw=b"{" + b"x" * 65_536
+        )
+        self.assertEqual(json.loads(oversized.stdout)["decision"], "block")
 
     def test_codex_plugin_skill_is_implicit_thin_and_profile_bound(self) -> None:
         skill_root = (
@@ -4290,7 +4437,7 @@ class ProductControlTests(unittest.TestCase):
         )
         report = self.report()
         self.assertFalse(report["valid"])
-        self.assertIn("program id must be harness-product-program-v1.1", report["errors"])
+        self.assertIn("program id must be harness-product-program-v1.2", report["errors"])
 
     def test_coordinated_release_rename_cannot_self_promote(self) -> None:
         def rename_program(value: dict) -> None:
@@ -4306,7 +4453,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertFalse(report["criterionStates"]["G3"])
-        self.assertIn("program release must be v1.1", report["errors"])
+        self.assertIn("program release must be v1.2", report["errors"])
 
     def test_authority_json_rejects_duplicate_keys_and_nonfinite_constants(self) -> None:
         path = self.root / "product" / "program.json"
@@ -5692,6 +5839,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
@@ -5744,6 +5892,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=freeze_revision,
@@ -5882,6 +6031,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=True,
             _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY=True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
             NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
             EXPECTED_V1_PROFILE_ARTIFACT_REVISION=floor,
             EXPECTED_V1_INITIAL_BINDING_REVISION=first_freeze_revision,
@@ -8559,6 +8709,7 @@ class ProductControlTests(unittest.TestCase):
             CURRENT_PROFILE_FREEZE_ENABLED=False,
             _normative_profile_binding_history_valid=lambda root, binding, errors: True,
             _v10_historical_authority_valid=lambda root, errors: True,
+            _v11_historical_authority_valid=lambda root, errors: True,
         ):
             report = verify_product(self.root)
         self.assertFalse(report["valid"])
@@ -8765,8 +8916,8 @@ class ProductControlTests(unittest.TestCase):
             "ls-remote",
             "--tags",
             control.EXPECTED_PUBLIC_REMOTE,
-            "refs/tags/v1.1.0",
-            "refs/tags/v1.1.0^{}",
+            f"refs/tags/{control.CURRENT_RELEASE}.0",
+            f"refs/tags/{control.CURRENT_RELEASE}.0^{{}}",
         )
 
         with patch(
@@ -8786,8 +8937,8 @@ class ProductControlTests(unittest.TestCase):
             if args[:2] == ("ls-remote", "--tags"):
                 self.assertEqual(args, expected_remote_args)
                 return (
-                    f"{tag_object}\trefs/tags/v1.1.0\n"
-                    f"{head}\trefs/tags/v1.1.0^{{}}\n"
+                    f"{tag_object}\trefs/tags/{control.CURRENT_RELEASE}.0\n"
+                    f"{head}\trefs/tags/{control.CURRENT_RELEASE}.0^{{}}\n"
                 ).encode("ascii")
             return original(root, *args, **kwargs)
 
@@ -8814,8 +8965,8 @@ class ProductControlTests(unittest.TestCase):
             if args[:2] == ("ls-remote", "--tags"):
                 self.assertEqual(args, expected_remote_args)
                 return (
-                    f"{'0' * len(tag_object)}\trefs/tags/v1.1.0\n"
-                    f"{head}\trefs/tags/v1.1.0^{{}}\n"
+                    f"{'0' * len(tag_object)}\trefs/tags/{control.CURRENT_RELEASE}.0\n"
+                    f"{head}\trefs/tags/{control.CURRENT_RELEASE}.0^{{}}\n"
                 ).encode("ascii")
             return original(root, *args, **kwargs)
 
@@ -9199,19 +9350,19 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_public_status_claims_match_the_v11_environment_attribution_boundary(self) -> None:
+    def test_public_status_claims_match_the_v12_environment_attribution_boundary(self) -> None:
         security = (self.root / "SECURITY.md").read_text(encoding="utf-8")
         research = (
             self.root / "docs/strategy/RESEARCH-AND-POC-PLAN.md"
         ).read_text(encoding="utf-8")
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         readme_zh = (self.root / "README.zh-CN.md").read_text(encoding="utf-8")
-        self.assertIn("current v1.1 environment-attribution tree", security)
+        self.assertIn("current v1.2 environment-attribution tree", security)
         self.assertNotIn("current v0.2 tree", security)
         self.assertIn("observed-native-minimum", research)
         self.assertIn("user-configured", research)
         self.assertNotIn("At least three materially different accepted tasks", research)
-        self.assertIn("terminal proposition", readme)
+        self.assertIn("terminal product proposition", " ".join(readme.split()))
         live_status = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )["status"]

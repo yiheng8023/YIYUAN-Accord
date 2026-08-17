@@ -51,15 +51,15 @@ byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires distinct-host and cross-OS live evidence; exact tested
 environment identity bounds the claim.
 
-v1.1 is stopped with O1-O5 at 0/5. Its exact
-`harness-demand-to-capability-v1.1-candidate.1` profile and paired
-`harness-prospective-cohort-v1.1-candidate.1` protocol form a revoked historical
-binding at first-freeze revision `5ce2773`. A private source-window audit proved
-that the first post-activation real product demand received outcome-bearing
-assistance before immutable registration. Retrospective registration and later
-sample selection are forbidden; the exact protected resource and expiry trigger
-were deleted, and v1.1 cannot resume or open a successor. Continuation of the
-constitution-level goal requires a later machine-authority program. v1.0 is
+v1.2 is ready with O1-O5 at 0/5, an unfrozen profile, empty current validator
+registries, and no active increment. Its inactive
+Codex `UserPromptSubmit` candidate creates keyed source commitments and bounded
+mandatory-resolution context before model processing; it is neither installed
+nor a complete output or hosted-tool interception boundary. v1.1 is stopped at
+revision `5ae71bb`: its first real post-activation product demand crossed the
+outcome boundary before registration, so retrospective registration is forbidden
+and the exact private resource and trigger were deleted. v1.2 inherits none of
+that binding or evidence. v1.0 is
 immutable stopped history at revision `910ac01`: both authorized zero-task
 generations are revoked, the successor protected resource and exact task were
 deleted, and no profile binding, cohort, authorization, ordering state, task or

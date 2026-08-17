@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "id": "harness-product-acceptance-v1.1",
+  "id": "harness-product-acceptance-v1.2",
   "productId": "agent-autonomy-harness",
-  "release": "v1.1",
+  "release": "v1.2",
   "program": "product/program.json",
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "progressRule": "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count as progress. Every O1-O5 registration binds the acceptance-owned environment attribution contract, one fixed task-relevant pre-task environment manifest, one initial authority-and-available-source envelope, one environment class, one treatment arm and the exact Harness activation delta if present. Each natural task-host execution unit runs once in its pre-registered arm; a unit is not replayed merely to manufacture a comparison, while O5's pre-registered cross-host pair is required portability replication rather than same-host treatment replay. Harness-specific value estimates compare only pre-registered matched tasks within the same environment class, starting manifest and authority-and-available-source envelope; exact Harness activation is the only planned initial route and configuration difference, while later Agent-selected or human-authorized capability and configuration changes are recorded as treatment-mediated lifecycle deltas. Unavoidable task differences remain explicit matching variables, and the claim cannot be stronger than prospective matched observational evidence. Observed-native-minimum excludes discoverable user-global influence at the starting boundary but is not a static capability ceiling; user-configured freezes the actual relevant starting environment. In either class, the Agent dynamically adapts after demand under the registered authority, source-resolution, human-intervention and lifecycle rules. Before any acquisition or execution, each decision resolves the then-current suitable official or maintained source from bounded as-of evidence and binds an exact execution identity; unresolved mutable labels and material mid-execution drift require re-registration or honest stop rather than a permanent version lock or silent substitution. Before any task measurement, a new content-addressed normative profile and prospective cohort protocol must be selected and frozen under the current environment attribution contract. The freeze commit is not effective cohort activation by itself: before any natural demand can be eligible, a named human independently authorizes the exact revision, complete binding digest, environment manifest boundary, source surface, private-evidence boundary and cleanup disposition in a source-native event, and a code-owned source validator proves that authorization. A natural demand observed after the freeze commit but before authorization stops v1.1 rather than being excluded. Any revoked v1.1 cohort stops this release and cannot open a successor or restart. v1.0 profile, cohort, authorization, registration, outcome and ordering state are immutable stopped history and cannot be reused. The realized cohort is the earliest eligible natural-demand-event prefix after authorized activation, never a retrospectively selected roster: each task-bound validator proves the complete source cursor window since activation or the preceding registration contains no omitted earlier eligible demand. A natural-demand event occurs after authorized activation and before immutable registration; a distinct source-bound measurement event occurs after registration. Git ancestry proves repository ordering only, while source validators privately prove independent authorization, complete source windows, deduplication, chronology, environment identity and criterion semantics. Public task identities are unlinkable random identifiers, not unsalted hashes of private goals, prompts or source events. Even after O1-O5 task evidence passes, completionState remains in-progress until the code-owned terminal release gate verifies a clean exact candidate, its predeclared O5 evidence set, named-human authorization in the local annotated tag, the identical public tag object and peeled commit, and no ignored or untracked repository residue; this is O5 release enforcement, not an additional outcome. Documents, tests, inventories, fixtures, memberships, research volume, prior-release evidence and environment manifests are supporting inputs only.",
+  "progressRule": "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count as progress. Every O1-O5 registration binds the acceptance-owned environment contract, one committed task-relevant starting manifest and authority-and-available-source envelope, one environment class and treatment arm, the exact Harness activation delta if present, and one privacy-safe pre-response source-capture resolution. Each task-host unit runs once in its pre-registered arm; O5 cross-host execution is required portability replication, not a same-host replay, and Harness-specific value claims remain no stronger than prospective same-environment matched observational evidence. Observed-native-minimum and user-configured are starting conditions rather than static capability ceilings: after demand, the Agent may adapt capabilities, configuration, models, providers and online or local execution only through current source resolution, minimum-sufficient routing, bounded authority, attributed lifecycle deltas, verification, rollback and cleanup. Before any task measurement, a new content-addressed profile and cohort protocol must be frozen and independently source-authorized under the current environment contract. Before model processing, every submitted source event on the active enrollment surface must receive a privacy-safe private capture and a pending resolution identity; before outcome-bearing execution or completion, that event must resolve to an immutable eligible-task registration or a narrow source-bound exclusion. Missing capture, unresolved eligibility, user-visible outcome text before the host completion barrier, uncontained hosted-tool bypass, late registration or omitted earlier demand stops the affected cohort rather than becoming a retrospective exclusion. The realized cohort is the earliest eligible natural-demand prefix, failures remain in place, public identities are unlinkable random identifiers, and source validators privately prove complete windows, chronology, deduplication, environment identity and criterion semantics. v1.0 and v1.1 profile, cohort, authorization, registration, outcome and ordering state are immutable stopped history and cannot be reused. Even after O1-O5 evidence passes, completionState remains in-progress until the code-owned terminal release gate verifies the clean exact candidate, predeclared O5 evidence set, named-human authorization, identical public annotated tag object and peeled commit, and empty ignored and untracked residue. Documents, tests, inventories, fixtures, research volume, prior-release evidence and environment manifests remain supporting inputs only.",
   "environmentAttribution": {
     "scope": "all O1-O5 registrations, measurements, comparisons, adapter claims and release evidence",
     "environmentClasses": [
@@ -22,9 +22,9 @@
     "observedNativeMinimumRule": "exclude discoverable user-global instructions, configuration, rules, Skills, plugins, Apps, MCP, Hooks, memory and provider overrides at the starting boundary; task-inherent project guidance is allowed only when identical and non-Harness in both arms; system, developer, built-in, account, administrator and unobservable state is retained-or-unknown; after demand, governed task-time adaptation remains allowed and attributable",
     "userConfiguredRule": "freeze the actual task-relevant user starting environment before assignment; after demand, governed task-time adaptation remains allowed and attributable; mutable, unresolved, unavailable or drifting starting components narrow the claim or stop the pair and cannot be normalized away after observing a result",
     "neutralWorkspaceRule": "a without-Harness baseline cannot inherit Harness repository guidance, adapters or consumer projection; use a neutral workspace or the real target repository with identical task-inherent non-Harness guidance in both arms",
-    "taskTimeAdaptationRule": "after demand reveals need, the Agent uses a healthy already-authorized route or, before execution, binds an immutable decision record covering the residual gap, current source resolution, authority class, planned lifecycle action, rollback and cleanup; the Agent performs every supported authorized mechanic, while a technically or authoritatively human-only action is reduced to the smallest exact step, explained without requiring route knowledge, and verified before resuming",
+    "taskTimeAdaptationRule": "after demand reveals need, the Agent uses a healthy already-authorized route or, before execution, binds an immutable decision record covering the residual gap, current source resolution, authority class, planned lifecycle action, rollback and cleanup; online AI is the normal route, while local, edge or offline execution is a demand-triggered minimum-sufficient degradation or data-locality route rather than a mandatory product line, and recovery to an online route is reconciled and attributed; the Agent performs every supported authorized mechanic, while a technically or authoritatively human-only action is reduced to the smallest exact step, explained without requiring route knowledge, and verified before resuming",
     "versionResolutionRule": "at each decision resolve the current suitable official or maintained source from a bounded as-of source and bind the exact version, commit or package identity before acquisition or execution; use current evidence, not one historical version across tasks, never execute an unresolved mutable label such as latest, and on material mid-execution drift re-register or honestly stop",
-    "lifecycleRule": "retain, install, configure, enable, use, disable, downgrade, rollback, retire or persist a route only by current need, evidence and authority; end task-scoped exposure when the need ends unless persistence has separate net-value evidence and authorization, then verify the final or restored state and cleanup",
+    "lifecycleRule": "retain, install, configure, enable, use, switch between online and local or edge execution, degrade, restore, disable, downgrade, rollback, retire or persist a route only by current need, evidence and authority; preserve the same quality, privacy, safety, evidence and human-authority floors across route changes, end task-scoped exposure when the need ends unless persistence has separate net-value evidence and authorization, then verify the final or restored state and cleanup",
     "humanInterventionRule": "distinguish a technically or authoritatively unavoidable human-only decision or host action from a prohibited transfer of Agent-owned work; the former must be source-bound, minimal, explicitly guided and post-verified, while the user never has to discover or name the route, configuration variable, syntax, recovery or cleanup and the Agent performs every supported authorized mechanic",
     "burdenRule": "record all human actions and round trips in total burden, classify legitimate human-only actions separately from prohibited Agent-work transfers, require zero prohibited transfers, and do not hide excessive or avoidable human-only interaction from O2 comparison",
     "manifestFields": [
@@ -62,6 +62,7 @@
         "taskIdentity",
         "enrollmentSurfaceAndCursor",
         "naturalDemandEventAndPrivateBinding",
+        "preResponseEnrollmentResolution",
         "environmentAttributionBinding",
         "taskTimeAdaptationAndHumanOnlyActionPolicy",
         "zeroToolKnowledgeEvidence",
@@ -121,6 +122,7 @@
         "taskIdentity",
         "enrollmentSurfaceAndCursor",
         "naturalDemandEventAndPrivateBinding",
+        "preResponseEnrollmentResolution",
         "environmentAttributionBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
@@ -179,6 +181,7 @@
         "taskIdentity",
         "enrollmentSurfaceAndCursor",
         "naturalDemandEventAndPrivateBinding",
+        "preResponseEnrollmentResolution",
         "environmentAttributionBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
@@ -235,6 +238,7 @@
         "taskIdentity",
         "enrollmentSurfaceAndCursor",
         "naturalDemandEventAndPrivateBinding",
+        "preResponseEnrollmentResolution",
         "environmentAttributionBinding",
         "normativeProfileIdentity",
         "cohortProtocolIdentity",
@@ -290,6 +294,7 @@
           "taskIdentity",
           "enrollmentSurfaceAndCursor",
           "naturalDemandEventAndPrivateBinding",
+          "preResponseEnrollmentResolution",
           "environmentAttributionBinding",
           "normativeProfileIdentity",
           "cohortProtocolIdentity",
@@ -359,9 +364,9 @@
       "id": "G2",
       "class": "guardrail",
       "name": "zero-trust claims and evidence",
-      "statement": "No task, host, environment effect, behavior, value, portability, release or terminal claim advances without task-bound criterion-scoped validation and sufficient named-human authority.",
-      "metric": "environment identity, evidence, validator, chronology, claim-limit and authority integrity",
-      "threshold": "all verified claims pass current code-owned validators; planned outcomes remain false; missing or stale evidence fails closed",
+      "statement": "No task, host, environment effect, behavior, value, portability, release or terminal claim advances without privacy-safe pre-response source capture, an immutable eligible-task registration before outcome-bearing work, task-bound criterion-scoped validation and sufficient named-human authority.",
+      "metric": "pre-response capture and resolution, environment identity, evidence, validator, chronology, claim-limit and authority integrity",
+      "threshold": "every active-surface source event is captured before model processing and resolves before outcome-bearing execution or completion; unresolved, bypassed, late, missing or stale evidence fails closed, while planned outcomes remain false",
       "assessment": "computed"
     },
     {
@@ -377,9 +382,9 @@
       "id": "G4",
       "class": "guardrail",
       "name": "bounded process and resource loss",
-      "statement": "Each causal increment has one active work item at most, finite stopping, correction and neutral-work budgets, task-bound registrations only when outcome-bearing, and exact cleanup; known historical loss remains counterevidence rather than being erased by a new release, and final acceptance additionally requires a cross-dimensional counterexample audit and empty temporary-process-artifact inventory.",
-      "metric": "current causal graph, correction recurrence, outcome-neutral work, task registration, residue and cleanup validation, plus the O5-bound pre-closeout audit and temporary artifact inventory",
-      "threshold": "zero invalid graph state, repeated same-class correction, unbounded neutral work, fabricated registration, undeclared residue or cleanup failure; terminal acceptance also requires zero unresolved P0/P1 audit findings and zero temporary process artifacts",
+      "statement": "Each causal increment has one active work item at most, finite stopping, correction and neutral-work budgets, task-bound registrations only when outcome-bearing, no unresolved pre-response enrollment state, and exact cleanup; known historical loss remains counterevidence rather than being erased by a new release, and final acceptance additionally requires a cross-dimensional counterexample audit and empty temporary-process-artifact inventory.",
+      "metric": "current causal graph, correction recurrence, outcome-neutral work, pre-response enrollment resolution, task registration, residue and cleanup validation, plus the O5-bound pre-closeout audit and temporary artifact inventory",
+      "threshold": "zero invalid graph state, repeated same-class correction, unbounded neutral work, missing capture, unresolved or fabricated registration, undeclared residue or cleanup failure; terminal acceptance also requires zero unresolved P0/P1 audit findings and zero temporary process artifacts",
       "assessment": "computed"
     }
   ]

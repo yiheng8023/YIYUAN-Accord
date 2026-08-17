@@ -1,6 +1,20 @@
 {
-  "description": "Unmaterialized v1 carrier mechanism candidate. Trusted activation must replace the absolute fail-closed interpreter sentinel.",
+  "description": "Unmaterialized v1.2 carrier and pre-response enrollment-capture mechanism candidate. Trusted activation must replace the absolute fail-closed interpreter sentinel and separately materialize the authorized private cohort key.",
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/enrollment_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\enrollment_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "Capturing privacy-safe enrollment identity",
+            "additionalContextLimit": 1200
+          }
+        ]
+      }
+    ],
     "PreCompact": [
       {
         "hooks": [
@@ -50,6 +64,17 @@
             "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\carrier_hook.py\"",
             "timeout": 3,
             "statusMessage": "Cleaning carrier session state"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/__AAH_UNMATERIALIZED__/python3 -I -B \"${PLUGIN_ROOT}/scripts/enrollment_hook.py\"",
+            "commandWindows": "\"C:\\__AAH_UNMATERIALIZED__\\python.exe\" -I -B \"${PLUGIN_ROOT}\\scripts\\enrollment_hook.py\"",
+            "timeout": 3,
+            "statusMessage": "Cleaning enrollment session state"
           }
         ]
       }
