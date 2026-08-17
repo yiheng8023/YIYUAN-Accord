@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v12-o2-preregistration-assets",
+  "activeIncrementId": "increment.v12-o2-private-disposition-repair",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -169,13 +169,13 @@
       ]
     },
     {
-      "id": "increment.v12-o2-preregistration-assets",
+      "id": "increment.v12-o2-private-disposition-repair",
       "state": "active",
-      "correctionClass": "o2-preregistration-starting-truth-binding",
-      "observedProblem": "O2 has an earlier task-specific validator, pure public projection builder, exact package candidate, corrected named-human installation grant and live isolated device-auth state, but its four controlled goals, observed-native-minimum starting manifest and source-bound user-configured unavailable stop are not yet committed. No immutable O2 registration can therefore bind the complete starting truth before installation or execution.",
-      "hypothesis": "One outcome-neutral slice can commit only the four exact goal texts, one public-safe observed-native-minimum manifest and one source-bound user-configured unavailable-stop artifact, content-address the authorized package and earlier validator/builder identities, and leave installation, model execution and outcome evidence untouched so the next strict descendant can form an immutable registration.",
-      "falsifier": "The slice installs or activates the plugin, invokes Codex execution or a model, copies or exposes existing user configuration or credentials, records an absolute private locator or raw native event, changes the frozen profile or acceptance threshold, creates result evidence, binds the wrong package digest, adds a generic runtime or leaves repository temporary residue.",
-      "stopCondition": "The exact goal, environment and stop artifacts are committed in public-safe form; their bytes and the corrected package, validator and projection-builder identities pass focused checks; canonical verification remains valid with O1 true and O2 false; no plugin is installed and no controlled scenario has executed; the increment then exits the current graph before immutable O2 registration.",
+      "correctionClass": "o2-private-resource-disposition-authority-defect-repair",
+      "observedProblem": "The O2 preregistration starting assets are now committed, but the code-owned cleanup seam accepts only historical v1 and v1.1 private-resource dispositions. A future O2 outcome increment therefore cannot truthfully bind the already authorized v1.2 isolated Codex home and task-root lifecycle without either failing G4 or misusing a revoked cohort disposition.",
+      "hypothesis": "One exact public-safe v1.2 O2 disposition can describe only the authorized Windows-current-user isolated Codex environment, bounded suite retention and delete-on-close, withdrawal, expiry or deterministic-failure lifecycle; adding that single literal to the code-owned allowlist and proving exact acceptance plus drift rejection closes the authority defect without exposing a locator or changing any acceptance threshold.",
+      "falsifier": "The repair accepts a near-match, wildcard, private locator, legacy cohort substitution or unrelated resource class; changes frozen profile, protocol or acceptance semantics; reads, deletes or relocates the live isolated resource; installs or executes the plugin; creates outcome evidence; or leaves repository residue.",
+      "stopCondition": "A public validation test fails before the repair, then passes only for the one exact v1.2 O2 disposition while a drifted value remains rejected; canonical verification stays valid with O1 true and O2 false; no private resource is read or changed; the repair is committed and exits the current graph before immutable O2 registration.",
       "acceptanceIds": [
         "G2",
         "G4"
@@ -198,7 +198,7 @@
       },
       "workItems": [
         {
-          "id": "work.v12-o2-preregistration-assets",
+          "id": "work.v12-o2-private-disposition-repair",
           "state": "active",
           "acceptanceIds": [
             "G2",
@@ -213,9 +213,8 @@
             "git-push"
           ],
           "deliverables": [
-            "four exact controlled O2 goal artifacts",
-            "public-safe observed-native-minimum environment manifest",
-            "source-bound user-configured unavailable-stop artifact"
+            "one exact public-safe v1.2 O2 private-resource disposition",
+            "canonical validation seam accepting only that exact lifecycle value and rejecting drift"
           ]
         }
       ]

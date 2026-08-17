@@ -53,10 +53,11 @@ byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
 v1.2 is `active` on the outcome-neutral
-`increment.v12-o2-preregistration-assets`, with O1 at 1/5. It commits only four
-controlled goals, a public-safe starting environment and a source-bound
-unavailable stop before O2 registration, installation or execution. Earlier O2
-mechanism slices are committed history outside the graph; O2 remains false.
+`increment.v12-o2-private-disposition-repair`, with O1 at 1/5. O2 starting
+assets are committed; the active slice adds only one exact public-safe cleanup
+disposition for the authorized isolated Codex environment before registration.
+It cannot install or execute the package. Earlier O2 mechanism slices are
+committed history outside the graph; O2 remains false.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
 controlled result; the O1 suite is the only accepted outcome validator.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain

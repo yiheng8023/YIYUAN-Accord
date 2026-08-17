@@ -17,10 +17,10 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite`，当前只有一个结果中性的
-`increment.v12-o2-preregistration-assets` 处于 `active`；它仅在任何 O2 注册、安装和执行之前
-绑定四个精确目标、公开安全起始环境与一个来源绑定的不可用停止。更早的 O2 验证器缝、
-公开观察回放和原生到公开投影构建切片均保留在 Git 历史且已移出当前图。
+**当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite` 并提交 O2 预注册起始资产；当前只有
+一个结果中性的 `increment.v12-o2-private-disposition-repair` 处于 `active`。它仅为已授权的
+隔离 Codex 环境增加一个公开安全、精确匹配的清理处置值，使后续 O2 注册无需错用已撤销的
+旧 cohort 语义；该切片不能安装或执行软件包。更早的 O2 机制切片均保留在 Git 历史且已移出当前图。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
 此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、

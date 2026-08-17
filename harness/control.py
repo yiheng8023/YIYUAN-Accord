@@ -627,6 +627,12 @@ CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION = (
     "one-time-2026-12-31T23:59:59+08:00;"
     "remove-on-private-resource-destruction-or-expiry"
 )
+V12_O2_ISOLATED_ENVIRONMENT_PROGRAM_DISPOSITION = (
+    "v1.2-o2-isolated-codex-environment:windows-current-user-private;"
+    "retain-only-through-authorized-o2-controlled-suite-no-later-than-"
+    "2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-"
+    "or-deterministic-validation-failure"
+)
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
     "kind",
@@ -1038,6 +1044,7 @@ ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
     "remove-on-accepted-stopped-or-private-resource-destruction",
     CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
     CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
+    V12_O2_ISOLATED_ENVIRONMENT_PROGRAM_DISPOSITION,
 }
 PROGRAM_STATES = {"active", "ready", "stopped", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}

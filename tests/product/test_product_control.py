@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_active_o2_preregistration_assets(
+    def test_current_v12_contract_is_valid_with_active_o2_disposition_repair(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1325,7 +1325,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(live_program["status"], "active")
         self.assertEqual(
             live_program["activeIncrementId"],
-            "increment.v12-o2-preregistration-assets",
+            "increment.v12-o2-private-disposition-repair",
         )
         self.assertEqual(len(live_program["increments"]), 2)
         self.assertEqual(
@@ -7347,6 +7347,43 @@ class ProductControlTests(unittest.TestCase):
             "increment increment.fixture-current requires exact privacy-safe "
             "private resource dispositions",
             report["errors"],
+        )
+
+    def test_v12_o2_isolated_environment_disposition_is_exact_and_code_owned(
+        self,
+    ) -> None:
+        expected = (
+            "v1.2-o2-isolated-codex-environment:windows-current-user-private;"
+            "retain-only-through-authorized-o2-controlled-suite-no-later-than-"
+            "2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-"
+            "or-deterministic-validation-failure"
+        )
+        self.assertEqual(
+            control.V12_O2_ISOLATED_ENVIRONMENT_PROGRAM_DISPOSITION,
+            expected,
+        )
+
+        def bind_exact(value: dict) -> None:
+            self.activate_program(value)["cleanupBoundary"][
+                "privateResourceDispositions"
+            ] = [expected]
+
+        self.mutate("product/program.json", bind_exact)
+        exact_report = self.report()
+        self.assertTrue(exact_report["criterionStates"]["G4"], exact_report["errors"])
+
+        def drift(value: dict) -> None:
+            self.activate_program(value)["cleanupBoundary"][
+                "privateResourceDispositions"
+            ] = [expected + "-drift"]
+
+        self.mutate("product/program.json", drift)
+        drift_report = self.report()
+        self.assertFalse(drift_report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current requires exact privacy-safe "
+            "private resource dispositions",
+            drift_report["errors"],
         )
 
     def test_initial_binding_private_source_rejects_boolean_schema_alias(self) -> None:

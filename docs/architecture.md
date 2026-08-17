@@ -68,11 +68,11 @@ may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
 The current v1.2 program is `active` on the single outcome-neutral
-`increment.v12-o2-preregistration-assets` after completing
-`increment.v12-o1-lifecycle-suite`; the earlier O2 seam, replay and
-native-to-public projection-builder slices are committed history outside the
-current graph. The active slice binds only preregistration starting truth and
-cannot install, execute or promote O2. O1-O5 are at 1/5. The immutable public-safe
+`increment.v12-o2-private-disposition-repair` after completing
+`increment.v12-o1-lifecycle-suite` and committing O2 preregistration starting
+truth. Earlier O2 mechanism slices are committed history outside the current
+graph. The active slice adds only one exact public-safe isolated-environment
+cleanup disposition and cannot install, execute or promote O2. O1-O5 are at 1/5. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
