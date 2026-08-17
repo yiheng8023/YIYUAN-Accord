@@ -108,44 +108,47 @@ Historical `v0.2` acceptance measured the following bounded calibration outcomes
   claim.
 
 The current v1.2 program in `product/program.json` and
-`product/acceptance.json` is a ready, zero-outcome environment-attributed
-terminal-product proof. It preserves v0.2 as bounded historical calibration and
-v1.0/v1.1 as immutable stopped zero-outcome attempts. Current evidence must
-preserve or strengthen the requirements for sustained natural-task delivery,
-strict comparative burden reduction, live demand-driven capability lifecycle,
-proactive verified carrier transition, and reproducible live cross-host and
-cross-operating-system public release before the whole project can be called
-closed. Host, model, provider, reasoning effort, delegation,
+`product/acceptance.json` is an active, zero-outcome finite-product delivery
+program. It preserves v0.2 as bounded historical calibration and v1.0/v1.1 as
+immutable stopped zero-outcome attempts. Current release evidence must prove
+full-chain minimum-quality coverage, a live usable Codex reference application,
+adaptive route and self-correction behavior, clean bounded reproduction, and
+an exact public release. Natural-task burden reduction, broad effectiveness,
+distinct-Agent equivalence, and untested-platform behavior remain continuing
+field-validation claims rather than delivery prerequisites. Host, model,
+provider, reasoning effort, delegation,
 instructions, account policy, configuration, Skills, plugins, Apps, MCP, Hooks,
 memory, managers, operating system, runtime, and tool/resource surfaces are
 explicit variables. Harness-specific value estimates use pre-registered
 matched tasks with the same starting environment and authority-and-available-
-source envelope; exact Harness activation is the only planned initial route/
-configuration difference. Later Agent-selected or human-authorized changes are
-attributed lifecycle deltas, unavoidable task differences remain explicit, and
-the claim stays observational. The initial state is not a static capability
-ceiling. Observed-native-minimum
-and user-configured evidence are separate strata, and unobservable state
-remains unknown.
+source envelope; they are never inferred from controlled scenarios. Controlled
+delivery units instead bind one expected invariant or counterexample and prove
+only that bounded effect. Later Agent-selected or human-authorized changes are
+attributed lifecycle deltas, unavoidable field-task differences remain
+explicit, and the claim stays observational. The initial state is not a static
+capability ceiling. Observed-native-minimum and user-configured evidence are
+separate strata, and unobservable state remains unknown.
 
 Those variables are governed by subtraction rather than by a Harness-owned
 router. A sufficient host-native model, provider, reasoning-effort, delegation,
 tool, or carrier decision is retained and attributed. Task evidence may justify
 a supported override, escalation, de-escalation, fallback, stronger
 verification, or honest stop, but a current model label or benchmark does not
-become product authority. Likewise, a human-Agent shortfall report or taxonomy
-is only adaptive evidence: a material applicable risk needs an effective
-native, official, maintained external, accountable domain, or smallest residual
-Harness control plus proportionate verification. Reference or implementation
-alone is not a solution, and unresolved risk limits the claim.
+become product authority. Likewise, the human-Agent shortfall corpus is a
+requirements and counterexample source rather than a feature backlog. The
+product covers the material lifecycle from intake through retirement; each
+point retains sufficient native behavior, reuses a suitable external or domain
+control, adds the smallest residual Harness control, or explicitly degrades,
+escalates, stops, or limits the claim. Reference or implementation alone is not
+verified coverage. A static perfect score is neither required nor credible for
+continuously improving Agents.
 
-Terminal O5 spans at least two operating-system families and includes at least
-one matched pair whose host units run across that boundary. Each unit binds the
-exact OS family/version, runtime, host relationship, and virtualization or
-compatibility identity. OS-specific authorization, protected storage,
-execution, rollback, cleanup, and evidence remain replaceable edge mechanisms;
-WSL2 is Linux hosted by Windows, not bare-metal Linux or macOS evidence, and no
-claim exceeds the tested combinations.
+Terminal O5 reproduces the public contract and applicable package lifecycle on
+clean Windows and Windows-hosted WSL Linux checkouts, keeps hosted macOS CI
+separate from live application evidence, and limits live behavior to the exact
+tested Codex environment. OS-specific authorization, execution, rollback,
+cleanup, and evidence remain replaceable edge mechanisms; WSL is not bare-metal
+Linux or macOS evidence, and no claim exceeds the tested combinations.
 
 The current tree retains historical profile/protocol source and code-owned
 v1.1 stopped/revoked identities so that past evidence cannot be rewritten. The

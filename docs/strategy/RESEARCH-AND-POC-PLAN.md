@@ -19,14 +19,15 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready with no active increment; the pre-response enrollment-
-capture repair remains inactive source and Git history, and O1-O5 stay at 0/5.
-Its profile binding remains unfrozen, while a distinct code-pinned v1.2
-pre-freeze profile and paired protocol now make pre-response resolution,
-dynamic environment/context adaptation, Agent-owned continuous correction,
-cross-OS claim limits, and terminal privacy semantics reviewable without
-creating product authority, activation, or outcome credit. It inherits
-no cohort, authorization, registration, result, or outcome. v1.1 is a stopped
+v1.2 has one active authority-repair increment and O1-O5 remain 0/5. Its
+profile binding is unfrozen, while a distinct candidate.2 profile and
+controlled-conformance protocol separate finite delivery from later field
+validation, cover the collaboration lifecycle through minimum sufficient
+dispositions, and keep dynamic environment/context adaptation, Agent-owned
+continuous correction, and bounded release claims reviewable without creating
+product authority, activation, or outcome credit. They require no private
+natural-demand cohort and inherit no prior authorization, registration, result,
+or outcome. v1.1 is a stopped
 zero-outcome environment-attributed terminal-product attempt; O5 had separated
 premeasurement derivation, per-OS public and task-scoped reproduction, and
 evidence-holder terminal private verification. v0.2 evidence remains immutable
@@ -38,9 +39,10 @@ Their exact bytes remain an independently source-authorized but revoked
 historical binding at first-freeze revision `5ce2773`. The first
 post-activation real product demand received outcome-bearing assistance before
 registration, so v1.1 stopped without retrospective evidence and cannot resume.
-The inactive Codex `UserPromptSubmit` seam remains a bounded source candidate
-for privacy-safe pre-model capture and mandatory-resolution context; it is not
-misrepresented as complete tool or output enforcement and is not installed.
+The inactive Codex source retains earlier `UserPromptSubmit` enrollment
+experiments only as unaccepted implementation input; they are not the current
+v1.2 evidence route and must be removed or reduced unless live O2 evidence
+isolates a residual host need.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
@@ -101,14 +103,14 @@ prove a stronger sustained cohort, proactive carrier behavior,
 live installed-adapter value, clean-checkout release, or terminal proposition.
 No outcome-bearing A/B task should be manufactured merely to move the program.
 
-Natural-task evidence is required for outcome-bearing experimentation. v1.1
-cannot accept new work after its prospective-order failure; a later program may
-continue only through new machine authority and cannot inherit v1.1 evidence.
-Bounded
-retrospective counterexample analysis, portfolio curation, mechanism-only
-validation, and authority-defect repair remain Agent-owned lanes that do not
-require an invented user task and count as zero O1-O5 progress. Historical
-failures are non-authoritative counterevidence and may trigger replanning.
+Natural-task evidence is required only for the corresponding real-world
+effectiveness, comparative burden, or cross-Agent field claim. It is not a
+finite-delivery prerequisite. Controlled scenarios, historical counterexamples,
+fault injection, clean-host reproduction, and live Codex application evidence
+may prove only their registered mechanism, exact-host, recovery, lifecycle, or
+release claims. v1.1 cannot accept new work after its prospective-order failure
+and contributes no current outcome credit. Historical failures are
+non-authoritative counterevidence and may trigger replanning.
 
 The completed O1-O4 sequence bound one vertical Codex reference slice in this
 order:
@@ -217,19 +219,16 @@ are attributed lifecycle deltas. A mutable or unresolved starting dependency,
 including an unbound `@latest` package, narrows the claim or stops the pair;
 official changes between tasks are freshly resolved and rebound.
 
-Each natural task-host unit runs once in its pre-registered arm. O5 cross-host
-replication is pre-registered portability evidence, not same-host treatment
-replay. The terminal pair set also spans at least two operating-system families
-and includes one pair whose two host units cross that boundary, with exact OS,
-runtime, host relationship and virtualization identities and a claim ceiling
-limited to the tested combinations. WSL2 is recorded as Linux hosted by Windows,
-not as bare-metal Linux or macOS evidence. Comparators use a
-pre-registered comparable historical or independent natural task; live replay
-exists only for a task whose consequences are reversible and separately
-authorized, never merely to fill the matrix. A without-Harness baseline runs in
-a neutral workspace or real target repository and cannot inherit this
-repository's Harness-specific guidance. Historical evidence is classified as
-environment-independent, environment-bound or invalidated before reuse.
+Each controlled scenario binds one exact starting manifest, declared route,
+expected invariant or counterexample, evidence class, validator, and cleanup
+boundary. Repetition is allowed only for a different registered fault,
+configuration, lifecycle, host, or recovery condition and never becomes an
+independent natural task. Current O5 uses clean Windows and Windows-hosted WSL
+Linux public checks, hosted macOS CI as CI-only, and one exact live Codex scope.
+Any later Harness-effect comparison requires separately registered matched
+field evidence. A without-Harness comparison cannot inherit this repository's
+Harness-specific guidance. Historical evidence is classified as environment-
+independent, environment-bound, or invalidated before reuse.
 
 ## Capability boundary
 
@@ -254,9 +253,10 @@ guidance and post-verification.
 Codex-specific self-authored control Skills, when present in a separately
 governed consumer projection, are provisional host packaging rather than the
 portable core. Their functional roles may survive while their packaging is
-simplified, merged, replaced, or retired. Hook stays off unless repeated
-natural-task evidence isolates a recall gap and a reversible A/B proves net
-benefit.
+simplified, merged, replaced, or retired. A Hook remains absent unless live
+host evidence isolates a residual event or lifecycle gap and controlled
+activation, failure, rollback, removal, and cleanup demonstrate bounded net
+benefit; no natural-task quota is needed to test that exact mechanism.
 
 ### Codex reference-host continuity seam
 
@@ -301,28 +301,22 @@ remains a separate activation condition.
 Historical reuse disposition: the candidate.7 Codex revision was an inactive
 thin package with one candidate.5 Skill and a repository-bound continuation
 launcher. Its exact Git revision remains the v0.2 evidence boundary. The
-current Codex source supersedes that launcher with an inactive v1.2 projection:
-one Hook accepts bounded native lifecycle events and keeps only bounded
-session-keyed counters under `PLUGIN_DATA`; another uses `UserPromptSubmit` to
-derive cohort-keyed turn, prompt and chain commitments before model processing,
-returns bounded registration-resolution context, and removes its derived state
-on `SessionEnd`. Neither loads task-repository code or invokes Git. The
-enrollment Hook never emits or stores the raw prompt, session or turn identity,
-transcript path, or credential locator, and it explicitly does not claim
-complete streamed-output withholding or hosted-tool interception. Its
-checked-in command is an absolute fail-closed sentinel until a trusted runtime
-is materialized under separate activation authority; measured activation also
-requires a future live, independently authorized v1.2 cohort generation;
-stopped v1.1 cannot supply it.
+current Codex source contains inactive v1.2 lifecycle and `UserPromptSubmit`
+capture experiments and a fail-closed runtime sentinel. They do not load task-
+repository code or invoke Git, but the old natural-demand enrollment purpose is
+no longer the current delivery route. Before O2, the package must be reduced to
+the smallest live-host residual supported by controlled evidence, then prove
+ordinary goal entry, exact activation, authority preservation, recovery,
+rollback, removal, and cleanup. Stopped v1.1 cannot supply current evidence.
 The Skill still supplies no MCP, App, runtime, or product authority, and the
 repository itself does not become a plugin.
 
 Goal-level demand continues to use Codex's native conversation path, where the
-host may implicitly select the Skill from its metadata. v1.1's missed natural
-demand now makes pre-model source capture causally necessary, but the Hook reads
-the prompt only transiently to produce keyed commitments and cannot classify it
-or promote evidence. Eligibility, registration chronology, exclusions and
-outcomes remain task-bound validator responsibilities.
+host may implicitly select a Skill from its metadata. The current contract does
+not assume that pre-model source capture is necessary. Any retained Hook must
+first demonstrate a residual host event gap and remain narrower than native
+behavior; scenario registration and outcome validation stay code-owned and
+criterion-scoped.
 
 The current user Hook configuration remains empty. Plugin installation,
 enablement, exact Hook trust, and live runtime measurement are separate

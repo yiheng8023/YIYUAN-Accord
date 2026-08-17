@@ -71,7 +71,7 @@ AUTHORITY_FILES = (
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md",
     "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json",
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
-    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json",
+    "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json",
     "docs/architecture.md",
     "docs/strategy/PRODUCT-NORTH-STAR.md",
     "docs/strategy/RESEARCH-AND-POC-PLAN.md",
@@ -86,7 +86,7 @@ FIXTURE_WORK_ID = "work.fixture-current"
 
 def fixture_task_identity(label: str) -> str:
     return (
-        "natural-task.public-v1:"
+        "conformance-unit.public-v1:"
         + hashlib.sha256(label.encode("utf-8")).hexdigest()[:32]
     )
 
@@ -972,62 +972,6 @@ class ProductControlTests(unittest.TestCase):
         }
         interventions = ["fixture material intervention"]
         losses = ["fixture material collaboration loss"]
-        activation = program["normativeProfileBinding"]["cohortActivation"]
-        prior_registration: dict | None = None
-        for prior_increment in program["increments"]:
-            prior_binding = prior_increment.get("taskRegistration")
-            if prior_increment is increment:
-                break
-            if isinstance(prior_binding, dict):
-                prior_registration = self.read_json(prior_binding["locator"])
-        if prior_registration is None:
-            cursor_start = activation["activationCursorCommitment"]
-            previous_task = "cohort-activation"
-            transition = {
-                "state": "cohort-activation",
-                "sourceSurfaceIdentity": "none",
-                "sourceWindowStartCommitment": cursor_start,
-                "sourceFinalCursorCommitment": cursor_start,
-                "cause": "source-authorized-first-freeze-activation",
-            }
-        else:
-            prior_enrollment = prior_registration["preRegistrationValues"][
-                "enrollmentSurfaceAndCursor"
-            ]
-            cursor_start = prior_enrollment["naturalDemandCursorCommitment"]
-            previous_task = prior_registration["taskIdentity"]
-            transition = {
-                "state": "none",
-                "sourceSurfaceIdentity": activation["surfaceIdentity"],
-                "sourceWindowStartCommitment": cursor_start,
-                "sourceFinalCursorCommitment": cursor_start,
-                "cause": "none",
-            }
-        natural_cursor = "hmac-sha256:" + hashlib.sha256(
-            ("fixture-cursor|" + registration_id).encode("utf-8")
-        ).hexdigest()
-        source_commitment = "hmac-sha256:" + hashlib.sha256(
-            ("fixture-source|" + registration_id).encode("utf-8")
-        ).hexdigest()
-        enrollment_surface_and_cursor = {
-            "surfaceIdentity": activation["surfaceIdentity"],
-            "cohortKeyIdentity": activation["keyIdentity"],
-            "cohortKeyFingerprint": activation["keyFingerprint"],
-            "sourceMessageRule": activation["sourceMessageRule"],
-            "hmacDomain": activation["hmacDomain"],
-            "cursorWindowStartCommitment": cursor_start,
-            "naturalDemandCursorCommitment": natural_cursor,
-            "previousRegistrationTaskIdentity": previous_task,
-            "surfaceTransition": transition,
-        }
-        natural_demand_private_binding = {
-            "bindingScheme": control.EXPECTED_PRIVATE_BINDING_SCHEME,
-            "sourceKind": "fixture-source",
-            "sourceCommitment": source_commitment,
-            "sourceMessageRule": activation["sourceMessageRule"],
-            "cohortKeyIdentity": activation["keyIdentity"],
-            "cohortKeyFingerprint": activation["keyFingerprint"],
-        }
         harness_activation_delta = {
             "state": "active",
             "packageIdentity": "fixture-harness-package-v1",
@@ -1055,7 +999,7 @@ class ProductControlTests(unittest.TestCase):
             },
         }
         manifest[
-            "exact-harness-package-activation-and-task-exposure-delta"
+            "exact-harness-package-activation-and-exposure-delta"
         ] = harness_activation_delta
         self.write_json(manifest_relative, manifest)
         manifest_environment = os.environ.copy()
@@ -1127,8 +1071,6 @@ class ProductControlTests(unittest.TestCase):
             "qualitySafetyEvidenceAndResidueFloors": floors,
             "materialInterventionTaxonomy": interventions,
             "materialCollaborationLossTaxonomy": losses,
-            "enrollmentSurfaceAndCursor": enrollment_surface_and_cursor,
-            "naturalDemandEventAndPrivateBinding": natural_demand_private_binding,
             "environmentAttributionBinding": environment_attribution_binding,
             "normativeProfileIdentity": control.EXPECTED_V1_PROFILE_IDENTITY,
             "cohortProtocolIdentity": control.EXPECTED_V1_COHORT_PROTOCOL_IDENTITY,
@@ -1158,13 +1100,15 @@ class ProductControlTests(unittest.TestCase):
             "qualitySafetyEvidenceAndResidueFloors": floors,
             "materialInterventionTaxonomy": interventions,
             "materialCollaborationLossTaxonomy": losses,
-            "sourceCaptureEligibilityAndStopRule": {
-                "enrollmentSurfaceRule": "single-active-source-native-ordered-carrier",
-                "cursorWindowStartsAfter": "surface-activation-or-prior-registration",
-                "naturalDemandObservedBefore": "immutable-registration",
-                "measurementStartsAfter": "immutable-registration",
-                "eligibleSources": ["fixture natural demand after freeze"],
-                "ineligibleSources": ["fixture diagnostic source"],
+            "scenarioEvidenceAndStopRule": {
+                "evidenceClass": "controlled-live-host",
+                "startingTruthBoundBefore": "immutable-registration",
+                "executionStartsAfter": "immutable-registration",
+                "expectedInvariantOrCounterexample": "fixture controlled invariant",
+                "failureDisposition": (
+                    "retain failure, stop unsupported claims, and do not replace "
+                    "missing evidence"
+                ),
                 "stopRule": "stop on any fixture floor failure",
             },
             "claimLimits": ["fixture task only"],
@@ -1406,7 +1350,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_ready_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_active_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1417,9 +1361,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(live_program["increments"], [])
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-delivery-field-validation-separation",
+        )
+        self.assertEqual(len(live_program["increments"]), 1)
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],
@@ -1601,19 +1548,22 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(control.EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY, profile)
         self.assertIn("Status: pre-freeze candidate", profile)
         self.assertIn("not a static capability ceiling", profile_flat)
-        self.assertIn("current suitable official or maintained source", profile_flat)
+        self.assertIn("Resolve version-sensitive sources", profile)
         self.assertIn("technically or authoritatively human-only", profile_flat)
-        self.assertIn("install, configure, enable", profile_flat)
-        self.assertIn("disable, downgrade, roll back, retire", profile_flat)
-        self.assertIn("Operate, reconcile, and self-correct", profile)
+        self.assertIn("simplified, disabled, or retired", profile_flat)
+        self.assertIn("Operate and reconcile continuously", profile)
         self.assertIn("stop further effects", profile_flat)
-        self.assertIn("needing the user to reassert", profile_flat)
-        self.assertIn("context-window size", profile_flat)
-        self.assertIn("canonical structured serialization", profile_flat)
+        self.assertIn("context capacity", profile_flat)
+        self.assertIn("structured machine contract", profile_flat)
         self.assertIn("JSON is still inert", profile)
         self.assertIn("only for the residual host action", profile_flat)
+        self.assertIn("not a feature backlog", profile_flat)
+        self.assertIn("not mean every risk is eliminated", profile_flat)
+        self.assertIn("Natural tasks may later", profile)
+        self.assertIn("not a product-delivery prerequisite", profile_flat)
+        self.assertIn("No private source-capture key", profile)
         self.assertIn("verifier enforces those authorities", profile_flat)
-        self.assertEqual(protocol["schema"], 1)
+        self.assertEqual(protocol["schema"], 2)
         self.assertEqual(set(protocol), control.CURRENT_COHORT_PROTOCOL_FIELDS)
         self.assertEqual(
             protocol["profileIdentity"],
@@ -1626,16 +1576,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("starting-manifest", protocol["environmentAttributionRule"])
         self.assertIn("current-source", protocol["versionResolutionRule"])
         self.assertIn("human-only", protocol["humanInterventionRule"])
-        self.assertIn("before-model-processing", protocol["preResponseCaptureRule"])
-        self.assertIn("before-outcome-work", protocol["preResponseResolutionRule"])
-        self.assertIn("no-user-visible-outcome", protocol["hostCompletionBarrierRule"])
+        self.assertIn("no-invented-natural-demand", protocol["scenarioEligibilityRule"])
+        self.assertIn("before-outcome-bearing-execution", protocol["registrationRule"])
+        self.assertIn("remain-distinct", protocol["evidenceClassRule"])
         self.assertIn("stop-recover-minimal-correct-reverify", protocol["selfCorrectionRule"])
         self.assertNotIn("strata", protocol)
         self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
-        self.assertEqual(
-            control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
-            "209c1f096939452995de83351bf183b58518bbf0",
-        )
+        self.assertIsNone(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION)
         self.assertEqual(
             control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
             None,
@@ -2183,10 +2130,14 @@ class ProductControlTests(unittest.TestCase):
     def test_v12_frozen_material_accepts_only_the_pinned_candidate_revision(self) -> None:
         binding = self.current_profile_binding()
         errors: list[str] = []
-        self.assertTrue(
-            control._current_profile_binding_material_valid(ROOT, binding, errors),
+        self.assertFalse(
+            control._current_profile_binding_material_valid(ROOT, binding, errors)
+        )
+        self.assertIn(
+            "frozen normative profile binding is not the code-owned v1.2 candidate",
             errors,
         )
+        self.assertIsNone(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION)
 
         binding["frozenAtRevision"] = "f" * 40
         errors = []
@@ -2587,8 +2538,8 @@ class ProductControlTests(unittest.TestCase):
             ["without-harness", "with-exact-harness"],
         )
         self.assertIn("task-host execution unit runs once", contract["assignmentRule"])
-        self.assertIn("matched observational", contract["comparisonRule"])
-        self.assertIn("retained-or-unknown", contract["observedNativeMinimumRule"])
+        self.assertIn("matched field evidence", contract["comparisonRule"])
+        self.assertIn("present or unknown", contract["observedNativeMinimumRule"])
         self.assertIn("Harness repository guidance", contract["neutralWorkspaceRule"])
         self.assertIn("environment-independent", contract["historicalEvidenceRule"])
         criteria = {item["id"]: item for item in acceptance["criteria"]}
@@ -2597,9 +2548,10 @@ class ProductControlTests(unittest.TestCase):
                 "environmentAttributionBinding",
                 criteria[criterion_id]["operationalization"]["preRegistrationFields"],
             )
-        self.assertIn("same environment class", criteria["O2"]["threshold"])
-        self.assertIn("observed-native-minimum", criteria["O5"]["threshold"])
-        self.assertIn("user-configured", criteria["O5"]["threshold"])
+        self.assertIn("clean isolated Codex environment", criteria["O2"]["threshold"])
+        self.assertIn("declared user-configured environment", criteria["O2"]["threshold"])
+        self.assertIn("clean Windows checkout", criteria["O5"]["threshold"])
+        self.assertIn("hosted macOS CI", criteria["O5"]["threshold"])
 
     def test_v11_initial_environment_is_a_starting_state_not_a_static_ceiling(self) -> None:
         acceptance = json.loads(
@@ -2610,9 +2562,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("starting condition", contract["initialStateRule"])
         self.assertIn("treatment-mediated lifecycle deltas", contract["initialStateRule"])
         self.assertIn("authority-and-available-source envelope", contract["comparisonRule"])
-        self.assertIn("before execution", contract["taskTimeAdaptationRule"])
-        self.assertIn("smallest exact step", contract["taskTimeAdaptationRule"])
-        self.assertIn("verified before resuming", contract["taskTimeAdaptationRule"])
+        self.assertIn("supported task-scoped override", contract["taskTimeAdaptationRule"])
+        self.assertIn("smallest exact step", contract["humanInterventionRule"])
+        self.assertIn("verifies the result", contract["humanInterventionRule"])
         self.assertIn(
             "initial-authority-and-available-source-envelope",
             contract["manifestFields"],
@@ -2624,10 +2576,10 @@ class ProductControlTests(unittest.TestCase):
         )
         rule = acceptance["environmentAttribution"]["versionResolutionRule"]
 
-        self.assertIn("current suitable official or maintained source", rule)
+        self.assertIn("current suitable official or maintained bounded as-of source", rule)
         self.assertIn("bounded as-of source", rule)
         self.assertIn("exact version, commit or package identity", rule)
-        self.assertIn("not one historical version across tasks", rule)
+        self.assertIn("do not lock one historical version across tasks", rule)
         self.assertIn("unresolved mutable label", rule)
         self.assertIn("re-register or honestly stop", rule)
 
@@ -2642,12 +2594,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("prohibited transfer of Agent-owned work", contract["humanInterventionRule"])
         self.assertIn("all human actions", contract["burdenRule"])
         self.assertIn("legitimate human-only", contract["burdenRule"])
-        self.assertIn("prohibited Agent-work transfers", contract["burdenRule"])
-        self.assertIn("zero prohibited", criteria["O1"]["metric"])
-        self.assertIn("legitimate human-only", criteria["O1"]["metric"])
-        self.assertIn("total human actions", criteria["O2"]["metric"])
-        self.assertIn("human-only", criteria["O2"]["metric"])
-        self.assertIn("prohibited Agent-work transfers", criteria["O2"]["metric"])
+        self.assertIn("prohibited transfers", contract["burdenRule"])
+        self.assertIn("zero prohibited transfer", criteria["G1"]["threshold"])
+        self.assertIn("human-only step", criteria["G1"]["threshold"])
+        self.assertIn("authorityStopAndResume", criteria["O2"]["operationalization"]["requiredMeasures"])
+        self.assertIn(
+            "The user grants exact Codex installation",
+            criteria["O2"]["operationalization"]["humanAuthority"],
+        )
 
     def test_v11_capability_lifecycle_covers_guidance_and_retirement(self) -> None:
         acceptance = json.loads(
@@ -2667,10 +2621,11 @@ class ProductControlTests(unittest.TestCase):
             "persist",
         ):
             self.assertIn(verb, lifecycle_rule)
-        self.assertIn("dynamicSourceResolutionAndDecisionRecordRule", o3["operationalization"]["preRegistrationFields"])
-        self.assertIn("resolvedSourceIdentityVersionCommitTermsMaturityAndAsOf", o3["operationalization"]["requiredMeasures"])
-        self.assertIn("taskTimeLifecycleDeltasAndFinalDisposition", o3["operationalization"]["requiredMeasures"])
-        self.assertIn("humanOnlyActionsGuidanceAndVerification", o3["operationalization"]["requiredMeasures"])
+        self.assertIn("availableNativeAndAuthorizedRoutes", o3["operationalization"]["preRegistrationFields"])
+        self.assertIn("sourceVersionAuthorityRollbackAndCleanup", o3["operationalization"]["preRegistrationFields"])
+        self.assertIn("effectiveModelProviderReasoningDelegationAndExecutionIdentity", o3["operationalization"]["requiredMeasures"])
+        self.assertIn("humanOnlyVersusAgentOwnedAction", o3["operationalization"]["requiredMeasures"])
+        self.assertIn("rollbackRetirementAndResidue", o3["operationalization"]["requiredMeasures"])
 
         program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
@@ -2713,7 +2668,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("does not create a Harness router", criteria["O3"]["statement"])
         self.assertIn("reasoning-effort mismatch", " ".join(criteria["O3"]["operationalization"]["falsifiers"]))
         self.assertIn(
-            "not cleared by reference",
+            "source presence, mapping text, code existence or test count alone fails",
             criteria["O1"]["operationalization"]["passRule"],
         )
         self.assertTrue(
@@ -3146,10 +3101,10 @@ class ProductControlTests(unittest.TestCase):
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
         o4 = criteria["O4"]
-        self.assertIn("remainingCapacityState", o4["operationalization"]["preRegistrationFields"])
-        self.assertIn("unknownSignalConservativeRule", o4["operationalization"]["preRegistrationFields"])
-        self.assertIn("proactive verified conversation-transition", o4["operationalization"]["passRule"])
-        self.assertIn("before material loss", o4["threshold"])
+        self.assertIn("startingAuthorityGoalAndCarrierState", o4["operationalization"]["preRegistrationFields"])
+        self.assertIn("carrierSignalProvenanceAndUnknownRule", o4["operationalization"]["requiredMeasures"])
+        self.assertIn("destinationVerificationBeforeSourceRelease", o4["operationalization"]["requiredMeasures"])
+        self.assertIn("native compaction recovery", o4["threshold"])
 
     def test_all_outcomes_bind_one_frozen_profile_and_cohort_protocol(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
@@ -3163,91 +3118,61 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIn("cohortProtocolIdentity", fields)
                 self.assertIn("profileSha256", fields)
                 self.assertIn("cohortProtocolSha256", fields)
-                self.assertIn("enrollmentSurfaceAndCursor", fields)
-                self.assertIn("naturalDemandEventAndPrivateBinding", fields)
+                self.assertNotIn("enrollmentSurfaceAndCursor", fields)
+                self.assertNotIn("naturalDemandEventAndPrivateBinding", fields)
 
-    def test_prospective_contract_closes_authority_chronology_privacy_and_judgment(self) -> None:
+    def test_controlled_conformance_separates_delivery_from_field_validation(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
-        profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md").read_text(
+        profile = (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md").read_text(
             encoding="utf-8"
         )
         protocol = json.loads(
-            (ROOT / "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json").read_text(
+            (ROOT / "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json").read_text(
                 encoding="utf-8"
             )
         )
 
         self.assertIn(
-            "subordinate evidence or conformance operands",
+            "subordinate operands or evidence",
             criteria["G3"]["statement"],
         )
-        self.assertNotIn("profile owns method", profile)
         self.assertIn("immutable subordinate", profile)
         self.assertIn(
-            "zeroToolKnowledgeEvidence",
+            "lifecyclePhaseApplicabilityAndOwner",
             criteria["O1"]["operationalization"]["preRegistrationFields"],
         )
         self.assertIn(
-            "unknown user knowledge",
+            "sufficient native or external reuse",
             criteria["O1"]["operationalization"]["passRule"],
         )
-        self.assertIn(
-            "namedHumanBaselineComparabilityDecision",
-            criteria["O2"]["operationalization"]["preRegistrationFields"],
-        )
-        self.assertIn(
-            "without replacing that judgment",
-            criteria["O2"]["operationalization"]["passRule"],
-        )
-        self.assertIn("submitted source event", acceptance["progressRule"])
-        self.assertIn("Before model processing", acceptance["progressRule"])
-        self.assertIn("pre-response source-capture resolution", acceptance["progressRule"])
-        self.assertIn("omitted earlier demand", acceptance["progressRule"])
-        self.assertIn("independently source-authorized", acceptance["progressRule"])
-        self.assertIn("source validators privately prove", acceptance["progressRule"])
+        self.assertIn("Natural tasks are optional", acceptance["progressRule"])
+        self.assertIn("not require a bespoke Harness mechanism", acceptance["progressRule"])
         self.assertIn("immutable stopped history", acceptance["progressRule"])
-        self.assertIn("cannot be reused", acceptance["progressRule"])
-        self.assertIn("committed task-relevant starting manifest", acceptance["progressRule"])
-        self.assertIn("Unsalted or unkeyed hashes", profile)
-        self.assertIn("exposed to the task/model", profile)
-        self.assertIn("revokes live source verifiability", profile)
-        self.assertIn("25 percent", criteria["O4"]["threshold"])
-        self.assertIn("second native compaction", criteria["O4"]["threshold"])
-        self.assertNotIn("25 percent", profile)
-        self.assertNotIn("second native compaction", profile)
+        self.assertIn("No private source-capture key", profile)
+        self.assertIn("not a feature backlog", profile)
+        self.assertIn("or a static perfect score", acceptance["progressRule"])
         self.assertEqual(
-            protocol["taskIdentityRule"],
-            "random-public-id-cohort-keyed-hmac-source-binding-validator-dedup",
+            protocol["scenarioEligibilityRule"],
+            "acceptance-mapped-controlled-or-field-unit-with-no-invented-natural-demand",
         )
         self.assertEqual(
-            protocol["enrollmentSurfaceRule"],
-            "single-active-source-native-ordered-carrier",
+            protocol["registrationRule"],
+            "committed-criterion-scoped-registration-and-validator-before-outcome-bearing-execution",
         )
-        self.assertEqual(
-            protocol["activationRule"],
-            "first-freeze-binding-then-source-verified-exact-human-authorization-before-demand",
-        )
-        self.assertEqual(protocol["sourceMessageRule"], control.EXPECTED_SOURCE_MESSAGE_RULE)
-        self.assertEqual(protocol["hmacDomain"], control.EXPECTED_HMAC_DOMAIN)
-        self.assertEqual(
-            protocol["naturalDemandEventRule"],
-            "source-native-event-after-authorized-activation-before-registration-required",
-        )
-        self.assertEqual(
-            protocol["measurementEventRule"],
-            "task-bound-measurement-event-after-registration-required",
-        )
+        self.assertIn("later-separate-field-evidence", protocol["fieldValidationRule"])
+        self.assertNotIn("preResponseCaptureRule", protocol)
+        self.assertNotIn("hmacDomain", protocol)
 
     def test_terminal_contract_prevents_sample_selection_and_duplicate_tasks(self) -> None:
         acceptance = self.read_json("product/acceptance.json")
         criteria = {item["id"]: item for item in acceptance["criteria"]}
         o2 = criteria["O2"]["operationalization"]
-        self.assertIn("baselineSelectionPriorityAndExclusionRule", o2["preRegistrationFields"])
-        self.assertIn("matchingToleranceAndMissingBaselineStopRule", o2["preRegistrationFields"])
-        self.assertIn("more favorable substitute", o2["passRule"])
-        self.assertIn("at least two materially different", criteria["O4"]["threshold"])
-        self.assertIn("two distinct natural tasks", criteria["O5"]["threshold"])
+        self.assertIn("scenarioIdentityAndClass", o2["preRegistrationFields"])
+        self.assertIn("exactCodexVersionAndEnvironmentClass", o2["preRegistrationFields"])
+        self.assertGreaterEqual(o2["minimumSampleCount"], 4)
+        self.assertIn("cannot be represented as independent natural tasks", acceptance["environmentAttribution"]["assignmentRule"])
+        self.assertIn("comparative real-task value", criteria["O5"]["threshold"])
 
     def test_terminal_release_protocol_separates_authorization_and_execution(self) -> None:
         program = self.read_json("product/program.json")
@@ -3285,10 +3210,17 @@ class ProductControlTests(unittest.TestCase):
             )
         )
         o4 = criteria["O4"]
-        self.assertIn("code-and-conversation carrier lifecycle", o4["name"])
-        self.assertIn("codeTopologyDecisionAndCausalNeed", o4["operationalization"]["preRegistrationFields"])
-        self.assertIn("mergeOrConclusionReconciliation", o4["operationalization"]["requiredMeasures"])
-        self.assertIn("any code split is causally necessary", o4["operationalization"]["passRule"])
+        self.assertEqual(o4["name"], "continuous self-correction and carrier control")
+        self.assertIn("code topology", o4["metric"])
+        self.assertIn(
+            "startingAuthorityGoalAndCarrierState",
+            o4["operationalization"]["preRegistrationFields"],
+        )
+        self.assertIn(
+            "destinationVerificationBeforeSourceRelease",
+            o4["operationalization"]["requiredMeasures"],
+        )
+        self.assertIn("destination or final-state reconciliation", o4["operationalization"]["passRule"])
 
     def test_context_carrier_fitness_and_transition_is_agent_owned(self) -> None:
         constitution = self.read_json("product/constitution.json")
@@ -3306,11 +3238,11 @@ class ProductControlTests(unittest.TestCase):
             )
         )
         o4 = criteria["O4"]["operationalization"]
-        self.assertIn("hostAndTaskCarrierSignals", o4["preRegistrationFields"])
-        self.assertIn("unknownSignalConservativeRule", o4["preRegistrationFields"])
-        self.assertIn("decisionBeforeOrAfterRiskBoundary", o4["requiredMeasures"])
-        self.assertIn("materialContextLossEvents", o4["requiredMeasures"])
-        self.assertIn("before source release", o4["passRule"])
+        self.assertIn("startingAuthorityGoalAndCarrierState", o4["preRegistrationFields"])
+        self.assertIn("carrierSignalProvenanceAndUnknownRule", o4["requiredMeasures"])
+        self.assertIn("divergenceDetectionBeforeFurtherMaterialEffect", o4["requiredMeasures"])
+        self.assertIn("destinationVerificationBeforeSourceRelease", o4["requiredMeasures"])
+        self.assertIn("destination or final-state reconciliation", o4["passRule"])
 
     def test_public_cli_reports_the_same_contract(self) -> None:
         completed = self.run_cli(root=ROOT)
@@ -4825,39 +4757,28 @@ class ProductControlTests(unittest.TestCase):
         operationalization = o5["operationalization"]
         self.assertEqual(
             operationalization["comparisonDesign"],
-            "same-task-live-matched-cross-host-pairs-with-bounded-cross-operating-system-coverage",
+            "clean-release-reproduction-and-bounded-portability",
         )
+        self.assertIn("clean Windows checkout", o5["threshold"])
+        self.assertIn("Windows-hosted WSL Linux checkout", o5["threshold"])
+        self.assertIn("hosted macOS CI", o5["threshold"])
+        self.assertIn("exact tested host", o5["threshold"])
+        self.assertIn("distinct-Agent equivalence", o5["threshold"])
         self.assertIn(
-            "at least two distinct operating-system families", o5["threshold"]
-        )
-        self.assertIn(
-            "two host units execute on different operating-system families",
-            o5["threshold"],
-        )
-        self.assertIn(
-            "virtualized environment is represented as bare-metal", o5["threshold"]
-        )
-        self.assertIn("cannot imply universal support", o5["threshold"])
-        self.assertIn(
-            "operatingSystemFamilyVersionHostRelationshipAndVirtualizationIdentities",
+            "environmentAndOperatingSystemIdentity",
             operationalization["preRegistrationFields"],
         )
         self.assertIn(
-            "crossOperatingSystemBehaviorAndBoundedClaimCeiling",
+            "WindowsWslAndHostedMacEvidenceSeparation",
             operationalization["requiredMeasures"],
         )
         self.assertIn(
-            "privateSourceVerificationHolderAndPublicCrossOperatingSystemReproduction",
+            "exactLiveCodexScope",
             operationalization["requiredMeasures"],
         )
         self.assertIn("public non-private contract checks", o5["threshold"])
-        self.assertIn(
-            "authorized evidence-holder surface", o5["operationalization"]["passRule"]
-        )
-        self.assertIn(
-            "cross-operating-system behavior is proven by task-bound validators",
-            o5["threshold"],
-        )
+        self.assertIn("named-human authorization", o5["operationalization"]["passRule"])
+        self.assertIn("hosted macOS as CI-only", o5["operationalization"]["passRule"])
 
         environment_digest = hashlib.sha256(
             json.dumps(
@@ -5070,7 +4991,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["valid"])
         self.assertIn(
-            "criterion O2 minimumSampleCount must be at least 6",
+            "criterion O2 minimumSampleCount must be at least 4",
             report["errors"],
         )
 
@@ -5192,7 +5113,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_task_registration_binds_exact_enrollment_cursor_chronology(self) -> None:
+    def test_task_registration_binds_execution_after_immutable_registration(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
@@ -5203,9 +5124,9 @@ class ProductControlTests(unittest.TestCase):
         program = self.read_json("product/program.json")
         relative = "product/evidence/fixture-registration.json"
         registration = self.read_json(relative)
-        registration["sourceCaptureEligibilityAndStopRule"][
-            "cursorWindowStartsAfter"
-        ] = "post-result favorable cursor"
+        registration["scenarioEvidenceAndStopRule"][
+            "executionStartsAfter"
+        ] = "post-result favorable registration"
         self.write_json(relative, registration)
         self.recommit_fixture_registration(program)
         self.write_json("product/program.json", program)
@@ -5215,79 +5136,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
 
-    def test_current_registration_uses_v12_domain_and_rejects_predecessors(self) -> None:
-        activation = {
-            "surfaceIdentity": "enrollment-surface.public-v1:" + "1" * 32,
-            "activationCursorCommitment": "hmac-sha256:" + "2" * 64,
-            "keyIdentity": "cohort-key.public-v1:" + "3" * 32,
-            "keyFingerprint": "sha256:" + "4" * 64,
-            "sourceMessageRule": control.EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
-            "hmacDomain": control.EXPECTED_CURRENT_HMAC_DOMAIN,
-            "surfaceTransitionRule": control.EXPECTED_SURFACE_TRANSITION_RULE,
-            "keyRetentionRule": control.EXPECTED_KEY_RETENTION_RULE,
-        }
-        cursor_start = activation["activationCursorCommitment"]
-        values = {
-            "enrollmentSurfaceAndCursor": {
-                "surfaceIdentity": activation["surfaceIdentity"],
-                "cohortKeyIdentity": activation["keyIdentity"],
-                "cohortKeyFingerprint": activation["keyFingerprint"],
-                "sourceMessageRule": activation["sourceMessageRule"],
-                "hmacDomain": activation["hmacDomain"],
-                "cursorWindowStartCommitment": cursor_start,
-                "naturalDemandCursorCommitment": "hmac-sha256:" + "a" * 64,
-                "previousRegistrationTaskIdentity": "cohort-activation",
-                "surfaceTransition": {
-                    "state": "cohort-activation",
-                    "sourceSurfaceIdentity": "none",
-                    "sourceWindowStartCommitment": cursor_start,
-                    "sourceFinalCursorCommitment": cursor_start,
-                    "cause": "source-authorized-first-freeze-activation",
-                },
-            },
-            "naturalDemandEventAndPrivateBinding": {
-                "bindingScheme": control.EXPECTED_PRIVATE_BINDING_SCHEME,
-                "sourceKind": "codex-rollout-user-event-v1",
-                "sourceCommitment": "hmac-sha256:" + "b" * 64,
-                "sourceMessageRule": activation["sourceMessageRule"],
-                "cohortKeyIdentity": activation["keyIdentity"],
-                "cohortKeyFingerprint": activation["keyFingerprint"],
-            },
-        }
-        self.assertNotEqual(
-            activation["sourceMessageRule"], control.EXPECTED_SOURCE_MESSAGE_RULE
-        )
-        self.assertNotEqual(activation["hmacDomain"], control.EXPECTED_HMAC_DOMAIN)
-        self.assertIsNotNone(
-            control._registration_cohort_values_valid(values, activation)
-        )
-
-        predecessors = (
-            (
-                "domain-surface-source-native-immutable-event-identity-v1.1",
-                "agent-autonomy-harness/cohort-source-event/v1.1",
-            ),
-            (control.EXPECTED_SOURCE_MESSAGE_RULE, control.EXPECTED_HMAC_DOMAIN),
-        )
-        for source_rule, hmac_domain in predecessors:
-            with self.subTest(source_rule=source_rule):
-                predecessor_values = deepcopy(values)
-                predecessor_values["enrollmentSurfaceAndCursor"][
-                    "sourceMessageRule"
-                ] = source_rule
-                predecessor_values["enrollmentSurfaceAndCursor"][
-                    "hmacDomain"
-                ] = hmac_domain
-                predecessor_values["naturalDemandEventAndPrivateBinding"][
-                    "sourceMessageRule"
-                ] = source_rule
-                self.assertIsNone(
-                    control._registration_cohort_values_valid(
-                        predecessor_values, activation
-                    )
-                )
-
-    def test_task_registration_rejects_unrecognized_scenario_class(self) -> None:
+    def test_current_registration_rejects_natural_task_identity(self) -> None:
         def activate_o1(value: dict) -> None:
             increment = self.activate_program(value)
             increment["acceptanceIds"].append("O1")
@@ -5295,7 +5144,7 @@ class ProductControlTests(unittest.TestCase):
             self.bind_fixture_registration(
                 value,
                 increment,
-                scenario_class="favorable-post-hoc-scenario",
+                task_identity="natural-task.public-v1:" + "a" * 32,
             )
 
         self.mutate("product/program.json", activate_o1)
@@ -5305,6 +5154,28 @@ class ProductControlTests(unittest.TestCase):
             "task registration product/evidence/fixture-registration.json shape is invalid",
             report["errors"],
         )
+
+    def test_task_registration_rejects_unrecognized_evidence_class(self) -> None:
+        def activate_o1(value: dict) -> None:
+            increment = self.activate_program(value)
+            increment["acceptanceIds"].append("O1")
+            increment["workItems"][0]["acceptanceIds"].append("O1")
+            self.bind_fixture_registration(value, increment)
+
+        self.mutate("product/program.json", activate_o1)
+        program = self.read_json("product/program.json")
+        relative = "product/evidence/fixture-registration.json"
+        registration = self.read_json(relative)
+        registration["scenarioEvidenceAndStopRule"]["evidenceClass"] = (
+            "favorable-post-hoc-scenario"
+        )
+        self.write_json(relative, registration)
+        self.recommit_fixture_registration(program)
+        self.write_json("product/program.json", program)
+
+        report = self.report()
+        self.assertFalse(report["criterionStates"]["G4"])
+        self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
 
     def test_task_registration_profile_or_cohort_protocol_drift_fails_closed(self) -> None:
         def activate_o1(value: dict) -> None:
@@ -6355,121 +6226,6 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_task_registration_rejects_cohort_key_rotation(self) -> None:
-        def activate_o1(value: dict) -> None:
-            increment = self.activate_program(value)
-            increment["acceptanceIds"].append("O1")
-            increment["workItems"][0]["acceptanceIds"].append("O1")
-            self.bind_fixture_registration(value, increment)
-
-        self.mutate("product/program.json", activate_o1)
-        program = self.read_json("product/program.json")
-        relative = "product/evidence/fixture-registration.json"
-        registration = self.read_json(relative)
-        values = registration["preRegistrationValues"]
-        rotated = "cohort-key.public-v1:" + "9" * 32
-        values["enrollmentSurfaceAndCursor"]["cohortKeyIdentity"] = rotated
-        values["naturalDemandEventAndPrivateBinding"]["cohortKeyIdentity"] = rotated
-        self.write_json(relative, registration)
-        self.recommit_fixture_registration(program)
-        self.write_json("product/program.json", program)
-
-        report = self.report()
-
-        self.assertFalse(report["criterionStates"]["G4"])
-        self.assertIn(f"task registration {relative} shape is invalid", report["errors"])
-
-    def test_registration_chain_rejects_cursor_gap(self) -> None:
-        def activate_two(value: dict) -> None:
-            first = self.ensure_increment(value, state="completed")
-            first["acceptanceIds"].append("O1")
-            first["workItems"][0]["acceptanceIds"].append("O1")
-            self.bind_fixture_registration(
-                value,
-                first,
-                task_identity=fixture_task_identity("fixture-first"),
-            )
-            second = deepcopy(first)
-            second["id"] = "increment.fixture-second"
-            second["state"] = "active"
-            second["correctionClass"] = "fixture-second-correction"
-            second["workItems"][0]["id"] = "work.fixture-second"
-            second["workItems"][0]["state"] = "active"
-            value["increments"].append(second)
-            value["status"] = "active"
-            value["activeIncrementId"] = second["id"]
-            self.bind_fixture_registration(
-                value,
-                second,
-                task_identity=fixture_task_identity("fixture-second"),
-                registration_id="registration.fixture-second",
-                relative="product/evidence/fixture-second-registration.json",
-            )
-
-        self.mutate("product/program.json", activate_two)
-        baseline_program = self.read_json("product/program.json")
-        second_path = "product/evidence/fixture-second-registration.json"
-
-        second = self.read_json(second_path)
-        enrollment = second["preRegistrationValues"]["enrollmentSurfaceAndCursor"]
-        gap = "hmac-sha256:" + "8" * 64
-        enrollment["cursorWindowStartCommitment"] = gap
-        enrollment["surfaceTransition"]["sourceWindowStartCommitment"] = gap
-        enrollment["surfaceTransition"]["sourceFinalCursorCommitment"] = gap
-        self.write_json(second_path, second)
-        gap_program = deepcopy(baseline_program)
-        self.recommit_fixture_registration(gap_program, increment_index=1)
-        self.write_json("product/program.json", gap_program)
-        gap_report = self.report()
-        self.assertIn("outcome registration cursor chain is discontinuous", gap_report["errors"])
-
-    def test_registration_chain_rejects_duplicate_private_source(self) -> None:
-        def activate_two(value: dict) -> None:
-            first = self.ensure_increment(value, state="completed")
-            first["acceptanceIds"].append("O1")
-            first["workItems"][0]["acceptanceIds"].append("O1")
-            self.bind_fixture_registration(
-                value,
-                first,
-                task_identity=fixture_task_identity("fixture-first"),
-            )
-            second = deepcopy(first)
-            second["id"] = "increment.fixture-second"
-            second["state"] = "active"
-            second["correctionClass"] = "fixture-second-correction"
-            second["workItems"][0]["id"] = "work.fixture-second"
-            second["workItems"][0]["state"] = "active"
-            value["increments"].append(second)
-            value["status"] = "active"
-            value["activeIncrementId"] = second["id"]
-            self.bind_fixture_registration(
-                value,
-                second,
-                task_identity=fixture_task_identity("fixture-second"),
-                registration_id="registration.fixture-second",
-                relative="product/evidence/fixture-second-registration.json",
-            )
-
-        self.mutate("product/program.json", activate_two)
-        baseline_program = self.read_json("product/program.json")
-        first = self.read_json("product/evidence/fixture-registration.json")
-        second_path = "product/evidence/fixture-second-registration.json"
-        second = self.read_json(second_path)
-        second["preRegistrationValues"]["naturalDemandEventAndPrivateBinding"][
-            "sourceCommitment"
-        ] = first["preRegistrationValues"]["naturalDemandEventAndPrivateBinding"][
-            "sourceCommitment"
-        ]
-        self.write_json(second_path, second)
-        duplicate_program = baseline_program
-        self.recommit_fixture_registration(duplicate_program, increment_index=1)
-        self.write_json("product/program.json", duplicate_program)
-        duplicate_report = self.report()
-        self.assertIn(
-            "private natural-demand source commitment is reused",
-            duplicate_report["errors"],
-        )
-
     def test_postfreeze_registration_cannot_be_orphaned_or_deleted(self) -> None:
         first_path = "product/evidence/fixture-registration.json"
 
@@ -6503,7 +6259,7 @@ class ProductControlTests(unittest.TestCase):
         report = self.report()
         self.assertFalse(report["criterionStates"]["G4"])
         self.assertIn(
-            "every post-freeze cohort registration artifact must bind exactly one outcome increment",
+            "every post-freeze conformance registration artifact must bind exactly one outcome increment",
             report["errors"],
         )
 
@@ -9507,7 +9263,7 @@ class ProductControlTests(unittest.TestCase):
             self.assertIn("human-only", document)
         self.assertIn("起始条件", readme_zh)
         self.assertIn("移动目标", readme_zh)
-        self.assertIn("人类专属", readme_zh)
+        self.assertIn("只能由人完成", readme_zh)
 
     def test_hosted_validation_has_finite_ref_scoped_resource_limits(self) -> None:
         workflow = (self.root / ".github/workflows/validate.yml").read_text(

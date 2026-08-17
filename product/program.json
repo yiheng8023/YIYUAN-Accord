@@ -3,15 +3,15 @@
   "id": "harness-product-program-v1.2",
   "productId": "agent-autonomy-harness",
   "release": "v1.2",
-  "purpose": "Prove the constitution's terminal product proposition through a pre-response-enrollment-controlled, environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
+  "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-delivery-field-validation-separation",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
-    "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
-    "boundProductDeliveryDemandDisposition": "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-deliverable-rather-than-exercising-or-diagnosing-the-harness",
+    "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
+    "boundProductDeliveryDemandDisposition": "authorized-product-delivery-work-is-registered-as-implementation-or-controlled-conformance-not-mislabeled-natural-demand",
     "agentOwnedWithoutInventedUserTask": [
       "retrospective-counterexample-analysis",
       "bounded-portfolio-curation",
@@ -19,17 +19,17 @@
       "authority-defect-repair"
     ],
     "naturalTaskRequiredFor": [
-      "outcome-verification",
-      "task-time-capability-activation",
-      "behavior-or-value-claim"
+      "real-world-effectiveness-claim",
+      "comparative-user-burden-reduction-claim",
+      "cross-agent-field-equivalence-claim"
     ],
     "historicalFailureRole": "counterevidence-and-replanning-input-only",
-    "environmentAttributionDisposition": "acceptance-owned-observed-native-minimum-and-user-configured-strata-with-preregistered-matched-starting-environment-and-attributed-task-time-adaptation",
-    "taskTimeAdaptationDisposition": "pretask-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-and-records-lifecycle-deltas",
+    "environmentAttributionDisposition": "acceptance-owned-observed-native-minimum-and-user-configured-conformance-strata-with-exact-starting-environment-and-attributed-runtime-adaptation",
+    "taskTimeAdaptationDisposition": "scenario-or-field-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-and-records-lifecycle-deltas",
     "shortfallResolutionDisposition": "reference-and-classification-are-not-solutions-native-or-external-first-residual-only-unresolved-risk-narrows-or-stops",
     "humanOnlyActionDisposition": "agent-detects-minimizes-guides-and-verifies-unavoidable-user-step-while-prohibited-agent-work-transfer-remains-zero",
     "versionResolutionDisposition": "resolve-current-suitable-source-per-decision-bind-exact-execution-identity-and-stop-on-unresolved-moving-target-or-material-drift",
-    "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
+    "outcomeClaimBoundary": "O1-O5-prove-finite-product-delivery-only-field-effect-claims-require-later-field-evidence",
     "userMustNotInventTasks": true
   },
   "priorRelease": {
@@ -100,5 +100,59 @@
     ]
   },
   "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": []
+  "increments": [
+    {
+      "id": "increment.v12-delivery-field-validation-separation",
+      "state": "active",
+      "correctionClass": "product-authority-critical-path-repair",
+      "observedProblem": "The current terminal expression requires a user-supplied repeated natural-task cohort even though no natural tasks are presently available, leaves the shared human-AI shortfall corpus at reference-only status, and permits no project closeout until external demand appears while the Codex projection remains inactive.",
+      "hypothesis": "Separating finite product-delivery acceptance from later field-effect validation, while requiring full-chain minimum-quality coverage, evidence-backed native reuse or residual controls, honest unsupported boundaries and a live Codex reference application, will make closeout finite without promoting controlled evidence into real-world value claims or turning the shortfall corpus into a maximalist feature backlog.",
+      "falsifier": "The revised contract still requires a natural task for completion, equates lifecycle coverage with bespoke implementation or a static perfect score, permits documentation or fixtures alone to prove a control effect, permits acceptance without a working Codex application, or claims real-task burden reduction, cross-Agent equivalence, or broad effectiveness without corresponding field evidence.",
+      "stopCondition": "The constitution, program, acceptance, verifier, tests, profile/protocol candidates, and public documentation consistently distinguish finite Codex-operational product delivery from non-gating future field validation, with no private cohort activation or stale natural-task completion path.",
+      "acceptanceIds": [
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-delivery-field-validation-separation",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G3",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "causal-planning",
+            "local-verification",
+            "progress-accounting",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "one consistent finite delivery acceptance contract with non-gating field validation"
+          ]
+        }
+      ]
+    }
+  ]
 }

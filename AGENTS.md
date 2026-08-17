@@ -48,12 +48,13 @@ trigger replanning; lack of acceptance authority does not erase observed loss.
   assumptions, seek counterexamples, reconcile evidence, and supplement
   coverage inside the bound task.
 - A `ready` program with no active increment is nonterminal and open to the
-  next causally justified increment. Absence of a natural task gates outcome
-  verification and behavior or value claims; it does not complete or block the
-  program. Bounded retrospective counterexample analysis, portfolio curation,
-  mechanism-only validation, and authority-defect repair remain available
-  when an observed problem and finite stop exist, count as zero O1-O5
-  progress, and must not require the user to invent work.
+  next causally justified increment. Absence of a natural task gates only the
+  corresponding real-world effectiveness, comparative burden, or cross-Agent
+  field claim; it does not gate finite product delivery and must never cause
+  the user to invent work. Controlled conformance, historical counterexamples,
+  fault injection, portfolio curation, mechanism validation, and authority-
+  defect repair may advance only the delivery or guardrail claim they directly
+  prove and cannot be promoted into absent field evidence.
 
 ## Capability and authority boundary
 

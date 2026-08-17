@@ -12,24 +12,20 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is ready with no active causal increment. The bounded
-pre-response enrollment repair that followed the v1.1 stop is retained in Git
-and in an inactive source candidate, without inheriting that cohort or installing
-a runtime. The repository verifier reports `programStatus=ready`,
-`completionState=in-progress`, O1-O5 `0/5`, and G1-G4
-`4/4`; run it for live truth. The tree contains a code-pinned, pre-freeze v1.2
-profile and paired protocol candidate that make pre-response enrollment,
-dynamic environment and context adaptation, and Agent-owned process-drift
-correction reviewable without creating a monitor or runtime. The current
-profile binding is still unfrozen, so this is not evidence that self-correction
-or any other outcome works in real tasks, and no
-cohort, private source, result validator, terminal authorization validator,
-installed plugin, or outcome is active. The inactive Codex candidate now uses
-`UserPromptSubmit` only to create a keyed pre-model source commitment and
-bounded mandatory-resolution context; it does not claim to withhold all
-user-visible output or intercept hosted tools. Installation, Hook trust,
-private-key materialization, profile freeze, and cohort activation remain
-separate human gates.
+**Current status:** v1.2 has one active authority-repair increment that separates
+finite product delivery from continuing field validation. The repository
+verifier reports `programStatus=active`, `completionState=in-progress`, O1-O5
+`0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
+and controlled-conformance protocol cover the collaboration lifecycle without
+turning the shortfall corpus into a feature backlog or requiring a natural-task
+cohort for release. They are still unfrozen subordinate candidates and carry no
+outcome credit. No current private source, natural-demand enrollment,
+criterion-scoped result validator, terminal authorization validator, installed
+plugin, or accepted outcome exists. The inactive Codex source still contains
+earlier enrollment experiments; those are not the current v1.2 evidence route
+and must be simplified or replaced before live Codex O2 work. Installation,
+Hook trust, persistent activation, publication, and release remain separate
+human gates.
 The constitution's terminal product proposition has not been established.
 
 v1.1 remains an immutable stopped zero-outcome attempt at revision `5ae71bb`.
@@ -207,13 +203,14 @@ The current repository provides:
   that preserve the stopped v1.1 adaptive environment and human-intervention contract;
   their exact bytes are a revoked historical normative binding and
   they still carry no task, result, installation, or authority of their own;
-- a distinct current, code-pinned, still-unfrozen
+- a distinct current, code-owned, still-unfrozen
   [v1.2 collaboration profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)
-  and [pre-response cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json)
-  that realize dynamic native-first routing, context-variable adaptation,
-  continuous Agent-owned drift correction, cross-OS claim limits, and current
-  terminal privacy semantics without adding acceptance thresholds or outcome
-  credit;
+  and [controlled-conformance protocol candidate](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json)
+  that separate finite delivery from later field evidence, cover the full
+  collaboration lifecycle through minimum sufficient dispositions, and realize
+  dynamic native-first routing, context-variable adaptation, continuous-correction
+  control owned by the Agent, and bounded release claims without adding acceptance
+  thresholds or outcome credit;
 - a standard-library-only verifier that rejects invalid authority, evidence,
   work graphs, and repository residue, and derives a privacy-safe
   `sourceCarrierRelease` preflight so an Agent does not archive a conversation
@@ -224,14 +221,13 @@ The current repository provides:
   content or storing session state; active-work identity is hashed, raw
   diagnostics are excluded, and repository state remains explicitly unknown
   until the Agent observes it through a trusted native execution boundary;
-- an inactive Codex plugin source candidate with one task-facing Skill, one
-  package-contained Hook for bounded native compaction/clear state and
-  conservative carrier decisions, and one keyed pre-response enrollment-capture
-  Hook with explicit enforcement claim ceilings; it works
-  outside a Harness-shaped repository, never executes task-repository code or
-  Git, and remains deliberately unmaterialized until a trusted absolute runtime
-  is bound; it is not eligible for measured activation until a new v1.2 profile,
-  cohort protocol, private source and exact Hook trust are independently bound;
+- an inactive Codex plugin source candidate with one task-facing Skill and
+  package-contained lifecycle/capture experiments; it works outside a
+  Harness-shaped repository and does not execute task-repository code or Git,
+  but it is not the accepted v1.2 application and remains deliberately
+  unmaterialized. The current controlled-conformance route requires the final
+  O2 package to retain only an evidenced residual host delta and prove exact
+  activation, rollback, removal, and cleanup;
 - a workspace-scoped Codex marketplace entry that exposes only that projection
   as `AVAILABLE`; discovery does not install, enable, or trust it;
 - one content-addressed stopped Codex continuity result showing that an exact
@@ -270,18 +266,17 @@ python -B -m unittest discover -s tests/product -v
 The JSON report is the current state surface. See the
 [continuation guide](docs/operations/CONTINUATION.md) for the work boundary.
 
-Before any v1.2 outcome measurement, every O1-O5 registration must bind the
-acceptance-owned environment attribution contract. The two declared strata are
-`observed-native-minimum` and `user-configured`; each natural task-host unit runs
-once in one pre-registered arm, and Harness-specific value estimates compare
-only pre-registered matched tasks within the same stratum, starting task-relevant
-environment manifest, and authority-and-available-source envelope. The exact
-Harness package and activation is the only planned initial route/configuration
-difference; later Agent-selected or human-authorized capability and configuration
-changes are attributed treatment-mediated lifecycle deltas. Unavoidable task
-differences stay explicit, so this is bounded matched observational evidence
-rather than a single-variable causal experiment. “Minimum” does
-not mean an unknowable pristine host: discoverable user-global instructions,
+Before any v1.2 outcome-bearing execution, every controlled scenario or later
+field unit must bind the acceptance-owned environment contract, exact profile
+and protocol identity, starting manifest, expected invariant or counterexample,
+criterion-scoped validator, lifecycle boundary, and claim ceiling. The two
+declared strata are `observed-native-minimum` and `user-configured`. Controlled
+repetitions are permitted only for distinct pre-registered faults,
+configurations, lifecycle states, hosts, or recovery conditions; they are never
+represented as independent natural tasks. A mechanism claim compares expected
+and observed behavior. A Harness-effect or burden claim additionally requires
+later matched field evidence and is not inferred from controlled scenarios.
+“Minimum” does not mean an unknowable pristine host: discoverable user-global instructions,
 configuration, Skills, plugins, Apps, MCP, Hooks, rules, memory, and provider
 overrides are excluded, while system, developer, built-in, account, managed,
 administrator, and unobservable state remains explicitly retained or unknown.
@@ -303,16 +298,16 @@ A without-Harness baseline cannot run inside the Harness repository and inherit
 its project guidance. Historical items are classified as environment-independent,
 environment-bound, or invalidated; none inherit outcome credit.
 
-The repository now also carries a distinct code-pinned v1.2 pre-freeze profile
-and paired prospective cohort protocol. They are subordinate review candidates,
-not an active binding: no v1.2 artifact revision, cohort activation, private
-source, task registration, or outcome has been authorized or inherited. Their
-continuous-correction semantics require the Agent to reconcile the bound goal,
-later corrections, authority, causal and expected state, evidence, carrier
-fitness, and resource disposition at material checkpoints; material process
-drift stops further effects and triggers recovery, the smallest authorized
-correction, and re-verification. Whether that behavior is sustained remains an
-O1-O5 real-task question, not a document or test claim.
+The repository now also carries a distinct v1.2 pre-freeze profile and paired
+controlled-conformance protocol. They are subordinate review candidates, not
+an active binding: no v1.2 artifact revision, scenario registration, result, or
+outcome has been authorized or inherited. Their lifecycle semantics require the
+Agent to cover intake, premise challenge, route and authority choice, effects,
+evidence, correction, recovery, transition, closure, feedback, governance, and
+retirement through sufficient native behavior, suitable reuse, the smallest
+residual control, or explicit degradation, escalation, stop, or claim limit.
+Controlled evidence can prove only those bounded effects; natural-task and
+cross-Agent field claims remain separate and non-gating for finite delivery.
 
 The repository retains one code-pinned v1.1 profile and paired prospective
 cohort protocol as a revoked historical normative binding. The first-freeze
@@ -388,56 +383,43 @@ S4U task are now absent.
 
 ## What v1.2 requires
 
-- **O1 — sustained autonomous delivery:** a finite six-or-more natural-task
-  cohort covers the required scenario bands and both environment strata with
-  accepted outcomes, zero prohibited transfer of Agent-owned capability,
-  topology, or context work, and zero material collaboration loss. Any
-  unavoidable human-only step is minimal, guided, verified, and recorded.
-- **O2 — comparative burden reduction:** the same cohort strictly lowers total
-  and median material orchestration burden against eligible pre-registered,
-  source-bound ad-hoc baselines with the same starting environment and authority
-  envelope. Exact Harness activation is the only planned initial difference;
-  later lifecycle deltas and unavoidable task differences remain matching
-  variables. All human actions count in burden, legitimate human-only actions
-  stay separate from prohibited Agent-work transfers, and no quality, authority,
-  evidence, or residue loss can compensate.
-- **O3 — real capability lifecycle:** natural tasks cover healthy-route retain,
-  current-source resolution, residual-gap discovery, governed installation or
-  configuration, enable/use, disproportionate-route rejection or downgrade,
-  disable/rollback/retirement, and release or separately accepted persistence.
-- **O4 — proactive carrier lifecycle:** real work proves keep-current,
-  compact-and-reconcile, and verified same-goal conversation transition before
-  preventable loss; every necessary code split is reconciled and cleaned.
-- **O5 — live portable open delivery:** two matched live Codex/distinct-host
-  pairs jointly cover observed-native-minimum and user-configured, include a
-  useful completion and an honest stop or recovery, span at least two
-  operating-system families with at least one cross-OS pair, bind exact OS and
-  virtualization identities, reproduce public contract checks and task-scoped
-  activation/rollback/cleanup from a clean checkout on every claimed OS family,
-  keep live private-source terminal verification on its authorized evidence-
-  holder surface, and pass the pre-closeout cross-dimensional counterexample
-  audit with zero unresolved P0/P1 findings and zero temporary process artifacts,
-  and end with human acceptance of the versioned conformance contract,
-  adaptive thin projections, privacy disposition, exact tested OS scope, claim
-  ceiling, and exact public release.
+- **O1 — full-chain lifecycle coverage:** all current SG-01 through SG-12
+  requirements slices and every material collaboration phase receive a bounded
+  disposition: sufficient evolving native behavior, suitable external or
+  accountable-domain reuse, the smallest residual Harness control, or explicit
+  degradation, escalation, stop, or claim limitation. Every claimed control
+  effect is exercised; mapping or implementation presence alone cannot pass.
+- **O2 — usable Codex reference application:** the exact candidate operates in
+  live Codex controlled scenarios from ordinary goal-level entry, stays silent
+  on sufficient native paths, preserves human authority, handles failure, and
+  proves rollback, removal, and cleanup. Source, mocks, or an inactive plugin
+  cannot pass.
+- **O3 — adaptive route lifecycle:** controlled decisions cover keep-native,
+  supported model/provider/reasoning/delegation adaptation, unavailable or
+  drifting controls, source-bound residual capability, online/local degradation
+  where applicable, and release or retirement without a permanent router,
+  catalog, version, provider, model, or operating-system lock.
+- **O4 — continuous self-correction and carrier control:** historical and
+  fault-injected counterexamples exercise repeated-correction detection,
+  instruction conflict, effect mismatch, topology/residue reconciliation,
+  compaction recovery, and proactive verified same-goal transition without
+  transferring recovery or cleanup to the user.
+- **O5 — open reproducible bounded release:** clean Windows and Windows-hosted
+  WSL Linux checkouts reproduce the public contract and applicable package
+  lifecycle; hosted macOS CI remains CI-only unless separately exercised; live
+  Codex claims stay within the exact tested environment; no controlled evidence
+  is promoted into real-task value or cross-Agent proof; zero P0/P1 and residue
+  plus exact named-human authorization precede one immutable public tag.
 
 O5 pre-registration binds the deterministic candidate/tag derivation and
 no-mutation rule, not an unknowable future commit. The exact candidate and tag
 are fixed later by the clean terminal candidate and named-human release gate.
 
-One-execution means one run per pre-registered task-host unit. O5 deliberately
-runs each matched task once on each host as portability replication; it does not
-replay one host/treatment arm to manufacture a favorable comparison.
-
-For O1-O4, a natural task is a logical pre-registered demand-and-outcome unit,
-not a Codex sidebar task or thread. Sequential receipts may remain in one
-healthy host task, and one receipt may support more than one criterion only
-when it independently meets each criterion's pre-registration and validation
-burden. It cannot be counted twice toward one criterion's sample minimum.
-An authorized product-plan delivery is already real demand when its primary
-purpose is the needed deliverable; the excluded case is a task created mainly
-to exercise or diagnose the Harness. This distinction does not waive
-pre-registration, evidence, floors, or named-human acceptance.
+Natural tasks remain valuable later field evidence. They are not required for
+release and must not be manufactured, selected, or reconstructed to improve a
+completion score. Comparative burden, broad effectiveness, distinct-Agent
+equivalence, and untested-platform claims remain unverified until corresponding
+field evidence exists.
 
 Human authority, zero-trust evidence, lean independent authority, and bounded
 process/resource loss are mandatory guardrails, not substitutes for outcomes.
@@ -459,7 +441,7 @@ process/resource loss are mandatory guardrails, not substitutes for outcomes.
 | Need | Document |
 | --- | --- |
 | Understand the product boundary | [Product North Star](docs/strategy/PRODUCT-NORTH-STAR.md) |
-| Review the current unfrozen v1.2 method and enrollment contract | [v1.2 collaboration profile](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and [pre-response cohort protocol](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json) |
+| Review the current unfrozen v1.2 method and controlled evidence contract | [v1.2 collaboration profile](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and [controlled-conformance protocol](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json) |
 | Inspect the stopped v1.0 profile and cohort history | [v1.0 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md) and [prospective cohort protocol](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
 | Apply the bounded Codex-reference-calibrated candidate profile | [Demand-to-capability profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
 | Understand the technical separation of concerns | [Architecture](docs/architecture.md) |

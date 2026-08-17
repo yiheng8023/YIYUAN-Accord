@@ -1,283 +1,214 @@
 # Demand-to-Outcome Collaboration Method and Minimum Quality Profile v1.2
 
-Identity: `harness-demand-to-outcome-v1.2-candidate.1`
+Identity: `harness-demand-to-outcome-v1.2-candidate.2`
 
-Status: pre-freeze candidate. It has no cohort activation, task registration,
-outcome evidence, portability proof, publication status, or release claim.
+Status: pre-freeze candidate. It has no conformance registration, accepted
+outcome, installation proof, field-effect claim, publication status, or release
+claim.
 
 Only `product/constitution.json`, `product/program.json`, and
-`product/acceptance.json` own product purpose, state, criteria, thresholds,
-and promotion. The verifier enforces those authorities but does not become
-another one. If the program later content-addresses this profile and its paired
+`product/acceptance.json` own product purpose, state, criteria, thresholds, and
+promotion. The verifier enforces those authorities but is not another product
+authority. If the program later content-addresses this profile and its paired
 protocol, they become immutable subordinate conformance operands. They cannot
 add work, authority, criteria, thresholds, or state, and any conflict fails
 closed.
 
-## Agent method
+## Product-delivery and field-validation boundary
 
-Apply this sequence to one logical user goal. A conversation, branch,
-worktree, repository fork, host session, adapter, model, capability,
-configuration, operating system, or delivery form is a carrier or route, not
-the task identity.
+The finite product result is an open machine-checkable collaboration contract
+plus an operational Codex reference application. Delivery evidence may prove
+bounded control behavior, exact-host operation, installation, rollback,
+cleanup, reproducibility, and release. It cannot prove comparative real-task
+burden reduction, broad effectiveness, distinct-Agent equivalence, or behavior
+on an untested operating system.
 
-1. **Capture before response.** On an authorized active enrollment surface,
-   create the protocol-defined privacy-safe private capture and pending
-   resolution identity before model processing. Before outcome-bearing work or
-   user-visible completion, resolve the event to an immutable eligible-task
-   registration or a narrow source-fact exclusion. A missing capture,
-   unresolved event, late registration, or uncontained hosted-tool bypass
-   stops the cohort path.
-2. **Bind demand and corrections.** Resolve the goal, interaction mode,
-   domain facts, omissions, settled decisions, corrections, boundaries,
-   accountable human, and retained gates. Ask only for a condition that
-   changes the next safe action and cannot be discovered read-only.
-3. **Bind the starting environment.** Before task execution, record the
-   acceptance-owned environment class, task-relevant pre-task manifest,
-   initial authority-and-available-source envelope, treatment arm, and exact
-   Harness activation delta. The starting state is evidence, not a static
-   capability ceiling.
-4. **Observe routes and carriers.** Inspect healthy native and already-
-   authorized capability, current host/model/provider/reasoning/delegation
-   controls, code and conversation carriers, repository state, source evidence,
-   and observable context fitness. Retain unknown states as unknown and keep
+Natural tasks may later strengthen, falsify, or narrow those field-effect
+claims. They are not a product-delivery prerequisite and must never be invented,
+induced, or reconstructed merely to complete the release.
+
+## Collaboration lifecycle method
+
+Apply this sequence to one logical user goal. A conversation, branch, worktree,
+repository fork, host session, adapter, model, capability, configuration,
+operating system, or delivery form is a carrier or route, not the goal itself.
+
+1. **Bind the goal and current phase.** Resolve the user's goal, domain facts,
+   interaction mode, omissions, settled decisions, corrections, boundaries,
+   accountable human, retained gates, current lifecycle phase, and exit
+   condition. Ask only for a condition that changes the next safe action and
+   cannot be discovered read-only.
+2. **Bind the actual environment.** Observe the host, account and managed
+   policy, instruction chain, model/provider/reasoning/delegation state,
+   capability surfaces, configuration, operating system, runtime, code and
+   conversation topology, context signals, authority envelope, and unknowns.
+   The starting state is evidence, not a static capability ceiling.
+3. **Challenge material premises.** Check whether the requested route, stated
+   cause, scope, success condition, risk posture, or phase assumption conflicts
+   with direct evidence. Preserve legitimate human judgment while surfacing
+   decision-changing alternatives, omissions, and uncertainty.
+4. **Observe before adding.** Prefer a sufficient healthy native route, then a
+   suitable official capability, then a reviewed maintained external route,
+   then composition. Author only for a repeatable residual semantic gap. Keep
    ecosystem breadth outside the user's cognitive path.
-5. **Choose and bind the smallest current route.** Prefer sufficient healthy
-   native behavior, then official capability, then reviewed maintained
-   external capability, then composition, and author only for a repeatable
-   residual semantic gap. Resolve the current suitable official or maintained
-   source per decision and bind the exact execution identity before acquisition
-   or use. Do not lock a
-   historical model, version, context size, provider, operating system,
-   projection, or benchmark into the portable method.
-6. **Register before outcome-bearing execution.** Bind the natural demand,
-   pre-response resolution, starting environment, adaptive route policy,
-   human-action boundary, carrier rule, floors, evidence source, stop rule,
-   and claim ceiling through the paired protocol and current acceptance
-   contract.
-7. **Preview effects and allocate action.** Before each material effect, bind
+5. **Select the minimum sufficient route.** Resolve version-sensitive sources
+   at the decision time and bind the exact execution identity. Select or
+   recommend model, provider, reasoning, delegation, online/local execution,
+   capability, and carrier changes by current quality, risk, latency, cost,
+   availability, and reversibility rather than a permanent ranking.
+6. **Register before outcome-bearing execution.** Bind the controlled scenario
+   or later field unit, starting environment, expected invariant or
+   counterexample, route decision, human-action boundary, evidence class,
+   validator, stop rule, cleanup, and claim ceiling through the paired
+   protocol. A registration cannot turn a fixture into a natural task.
+7. **Preview effects and allocate action.** For every material effect, bind
    expected state, authority class, reversibility, failure signal, recovery,
    verification, resource effect, continuity, and cleanup. The Agent performs
    every supported authorized mechanic. A technically or authoritatively
    human-only action is reduced to the smallest exact step, explained without
-   requiring route knowledge, and verified before work resumes.
-8. **Operate, reconcile, and self-correct.** At every material checkpoint and
-   after every material effect, reconcile the current goal and corrections,
-   product and task authority, settled decisions, causal state, expected and
-   observed state, evidence and claim boundary, carrier fitness, and resource
-   disposition. When execution or process drift is material, stop further
-   effects, preserve evidence, recover or roll back the affected state, apply
-   the smallest authorized correction, and re-verify before resuming. A
-   legitimate human change to goal, domain judgment, authority, trust, cost,
-   or acceptance remains a human decision and triggers bounded replanning; it
-   is not silently overridden as drift.
-9. **Validate, release, and clean.** Use the task-bound criterion-scoped
-   validator selected for the actual source serialization. End task exposure
-   unless persistence has separate net-value evidence and authority. Verify
-   the final or restored environment and remove task-owned residue.
-10. **Return accountable judgment.** Lead with the result, material risks,
-    limits, failures, evidence boundary, human-only actions, remaining gates,
-    and bounded claim. The named human accepts or rejects the outcome without
-    being asked to discover or operate the Agent's route.
+   requiring route knowledge, and post-verified.
+8. **Operate and reconcile continuously.** At material checkpoints and after
+   material effects, compare the current goal and corrections, authority,
+   expected and observed state, evidence and claim boundary, carrier fitness,
+   resource state, and lifecycle phase. On material drift, stop further
+   effects, preserve evidence, recover or roll back, apply the smallest
+   authorized correction, and re-verify before resuming.
+9. **Validate, transition, and release.** Use the registered criterion-scoped
+   validator for the actual evidence source. Verify the destination before
+   releasing a source carrier. End task exposure unless persistence has
+   separate value evidence and authority. Verify the final or restored state
+   and remove task-owned residue.
+10. **Return accountable judgment and learn.** Lead with the result, evidence,
+    material risk, limits, failure, remaining gate, and bounded claim. Record
+    reusable counterevidence and lifecycle lessons without converting history,
+    memory, or documentation into authority. The named human accepts or rejects
+    the outcome and any consequential next phase.
 
-## Environment attribution and dynamic adaptation
+## Full-chain coverage without a maximalist product
 
-The environment contract is owned by `product/acceptance.json`. This profile
-does not redefine its strata, sample counts, comparisons, carrier triggers, or
-pass thresholds. It realizes these rules:
+The current fixed shortfall corpus is a requirements and counterexample source,
+not a feature backlog. The product covers the collaboration chain from intake,
+context and referent binding through premise challenge, capability and carrier
+selection, authority, execution, evidence, correction, recovery, closure,
+feedback, governance, and retirement.
 
-- `observed-native-minimum` removes discoverable user-global influence at the
-  starting boundary while retaining system, developer, built-in, account,
-  managed, administrator, and unobservable state as retained or unknown;
-- `user-configured` records the actual task-relevant starting environment;
-- matched comparisons use the same starting environment class, manifest, and
-  authority-and-available-source envelope; exact Harness activation is the
-  only planned initial route or configuration difference;
-- later Agent-selected or human-authorized capability and configuration
-  changes remain visible as attributed lifecycle deltas;
-- context-window size, automatic-compaction behavior, remaining capacity,
-  signal reliability, host policy, and user changes are observed variables,
-  not product presets. Use a reliable current signal when available; otherwise
-  retain `unknown` and use the current acceptance-owned conservative carrier
-  rule;
-- model, provider, reasoning effort, delegation, online, local, and edge
-  routes are likewise observed and dynamically selected. Preserve sufficient
-  native adaptation; add a Harness control only for an evidenced residual gap;
-- retain, install, configure, enable, use, escalate, de-escalate, disable,
-  downgrade, roll back, retire, release, or persist a route only when current
-  need, evidence, authority, verification, and cleanup support that lifecycle
-  state;
-- online AI is the ordinary route. Local or offline execution is a bounded
-  demand-triggered degradation, privacy, resilience, or data-locality route,
-  followed by attributed reconciliation when returning online;
-- official or maintained sources are freshly resolved per decision and bound
-  to an exact execution identity; an update between tasks may be rebound,
-  while an unresolved mutable label or material in-run drift stops;
-- every human action and round trip remains visible in burden evidence;
-  legitimate human-only decisions or host actions are classified separately
-  from prohibited transfer of Agent-owned work, which remains zero;
-- the Agent never requires the user to discover or name a route, product,
-  configuration variable, source channel, invocation syntax, recovery path,
-  or cleanup path.
+For each material lifecycle point, the product records exactly one bounded
+disposition:
 
-A changing task route gets an immutable decision record after its residual gap
-is observed and before acquisition or execution. The record binds source as-of
-evidence, exact execution identity, causal necessity, added route deltas,
-authority class, intended lifecycle action, rollback, verification, cleanup,
-and any smallest human-only step. A task validator later proves chronology and
-observed deltas; this profile is not a model router, capability registry,
-context monitor, transcript store, or runtime.
+- sufficient healthy native behavior is retained and the Harness adds nothing;
+- a suitable official, maintained external, or accountable domain control is
+  reused with its exact boundary;
+- the smallest repeatable residual gap receives a thin Harness control; or
+- the point is unavailable, unobservable, disproportionate, or unsupported, so
+  the route degrades, escalates, stops, or narrows its claim.
 
-## Continuous correction and loss containment
+Coverage means no material lifecycle point disappears silently. It does not
+mean every risk is eliminated, every source recommendation becomes a feature,
+or every possible Agent reaches a static perfect score. A control that no
+longer adds value because native capability improved is simplified, disabled,
+or retired. This is a minimum quality profile and a safety net, not a maximum
+capability catalog, universal runtime, or substitute for evolving Agents.
 
-Correction is part of delivery, not a closing ceremony. At material
-checkpoints the Agent compares current execution with the bound goal,
-subsequent user corrections, current product and task authority, settled
-decisions, expected state, observed evidence, and the claim being prepared.
-The checkpoint may be realized by healthy host-native reasoning, repository
-truth, a thin projection, or a task-bound validator; no universal daemon or
-fixed prompt is required.
+The fixed `YIYUAN-CALIBRATION` custody revision supplies the current SG-01
+through SG-12 slices and counterexamples. Their consumer states remain
+distinct: referenced, admitted, implemented, and verified. Mapping text,
+implementation existence, or test count cannot promote a slice to verified.
+The acceptance contract owns which coverage and evidence are sufficient for
+the release.
 
-Four cases remain distinct:
+## Dynamic environment and route adaptation
 
-- a new human goal, domain judgment, authorization, or accountable acceptance
-  changes the route and is incorporated through bounded replanning;
-- an Agent execution or process drift is contained, recovered, minimally
-  corrected, and re-verified without asking the user to supervise the process;
-- an unavailable fact or real authority boundary produces one minimal,
-  precisely guided human step followed by Agent verification;
-- missing evidence, unsafe recovery, repeated same-class loss, or an
-  unresolved material risk narrows the claim or stops the path.
+`observed-native-minimum` and `user-configured` are evidence strata, not assumed
+universal presets. Model, provider, reasoning effort, delegation, context
+capacity, compaction, account policy, rules, Skills, plugins, Apps, MCP, Hooks,
+memory, managers, operating system, runtime, and tool/resource surfaces remain
+observed variables. An unavailable or unreliable signal remains `unknown`.
 
-The Agent must not reopen a settled decision, repeat a correction, disguise a
-process asset as an outcome, continue after a failed reconciliation, or call a
-bounded milestone project completion. A user's valid correction remains an
-authoritative input and is never counted as avoidable burden; needing the user
-to reassert an already-bound correction is material collaboration loss.
+Use a reliable current host signal when available. Otherwise apply the
+registered conservative rule. A user or official update may change a variable
+between or during tasks; material drift is rebound or causes an honest stop.
+No historical model, context size, benchmark, provider, package, operating
+system, or catalog becomes a permanent routing rule.
 
-## Prospective cohort realization
+Online AI is the ordinary route. Local or offline execution is a bounded,
+demand-triggered privacy, resilience, data-locality, or degradation route and
+is reconciled when returning online. If a host supplies sufficient native
+routing, delegation, context management, or lifecycle behavior, the Harness
+does not replace it. If the host lacks an observable or supported control, the
+Agent recommends the smallest human action or narrows the claim instead of
+pretending it can intervene.
 
-The paired protocol owns source-native enrollment order, pre-response capture
-and resolution, privacy-safe task identity, keyed private source binding,
-deduplication, completion-barrier behavior, transition continuity, and
-fail-closed missing-sample handling. The current acceptance contract owns
-scenario coverage, quantitative thresholds, comparison requirements, carrier
-triggers, cross-host and cross-operating-system counts, and terminal
-conditions.
+## Controlled conformance and later field evidence
 
-An eligible natural demand is user- or domain-originated work, not a fixture,
-diagnostic, retrospective reconstruction, or task invented to exercise the
-Harness. The source event is captured before model processing after
-independently authorized cohort activation. Its eligibility resolution and,
-when eligible, immutable registration precede outcome-bearing execution. A
-distinct measurement event occurs after registration. A complete source-native
-cursor window proves that no earlier eligible demand was omitted. Failed,
-missing, stopped, rejected, or incomparable samples remain in cohort order and
-cannot be replaced.
+The paired protocol owns content-addressed scenario identity, registration
+chronology, environment binding, evidence-class separation, failure retention,
+and claim limits. The acceptance contract owns scenario coverage, counts,
+pass thresholds, host and operating-system requirements, and terminal state.
 
-Public task identities are random and unlinkable. Private source-event binding
-uses the protocol's cohort-scoped key, v1.2 domain, surface identity, and
-immutable source-native event identity. The key, raw source, private locator,
-prompt, transcript, account identity, and host/session identifiers never enter
-public evidence. Loss, substitution, unauthorized retention, premature
-destruction, unverifiable source continuity, or user-visible completion before
-the host barrier resolves the event stops the live claim.
+A controlled scenario starts from committed truth and binds one invariant,
+counterexample, fault, lifecycle pressure, or clean-host condition before the
+outcome-bearing execution. The criterion-scoped validator is committed and
+bound before execution and independently checks the claimed effect, recovery,
+rollback, cleanup, and evidence class. Failed, stopped, unsupported, or missing
+results remain visible and cannot be replaced by a favorable replay.
 
-## Mandatory floors
+A later field observation uses a separate identity and evidence class. It may
+be a natural task, but it never inherits release credit merely because the
+product is installed. Comparative or cross-Agent claims require the matched
+field evidence named by the current acceptance contract at the time of that
+claim.
 
-Every applicable floor passes independently. No weighting, compensation,
-success imputation, or favorable `not-applicable` is allowed.
+No private source-capture key, enrollment cursor, pre-response message hook, or
+cohort-wide natural-demand surveillance is required for finite product
+delivery. If future field research needs private source continuity, it requires
+separate product authority, human authorization, minimization, retention, and
+cleanup and cannot retroactively alter release evidence.
 
-| Floor | Minimum semantic condition |
-| --- | --- |
-| Outcome quality and safety | The registered goal passes its domain quality and safety checks; process artifacts are not the result. |
-| Intent, mode, completeness, and communication | The Agent follows the current goal, corrections, interaction mode, settled decisions, and decision-relevant facts, alternatives, risks, unknowns, and evidence before avoidable follow-up. |
-| User orchestration | All human actions are recorded. Prohibited transfer of supported Agent-owned capability, configuration, carrier, recovery, verification, release, correction, or cleanup work is zero. An unavoidable human-only action is source-bound, minimal, guided, and post-verified. |
-| Collaboration loss | Accepted work has zero material intent or mode correction, omission, repeated correction, reopened decision, unrequested work, avoidable round trip or process, user-restored resource or context, orphaned carrier, or corrected false claim. |
-| Capability minimality and lifecycle | Observation precedes discovery; each addition or change has a residual gap, current source resolution, exact identity, authority, lifecycle disposition, rollback, and cleanup. |
-| Carrier and topology lifecycle | Every code or conversation decision has observed fitness, causal need, identity, ownership, synchronization, reconciliation, release, and cleanup; host-only actions follow the human-only rule. |
-| Proactive risk, correction, and recovery | Every material effect has expected state, gate, drift check, rollback, failure signal, recovery, verification, resource, continuity, and cleanup controls; material drift is contained and corrected before resuming. |
-| Human authority | The Agent does not infer goals, judgment, trust, account or data, cost, installation, persistence, publication, release, destructive, irreversible, or final-acceptance authority. |
-| Evidence and claims | Evidence is task-bound, source-bound, chronological, validator-enforced, human-accepted, and limited to registered task, environment, host, route, profile, exact execution identity, and as-of scope. |
-| Privacy, resources, and residue | Private sources remain inside the authorized boundary; public evidence is sanitized; task-owned exposure, processes, caches, credentials, carriers, temporary roots, and repository residue are absent or separately accepted at closeout. |
+## Codex reference application
 
-## Baseline, carrier, form, and cross-host rules
+The Codex projection is a thin operational application of this contract, not
+the portable product core. It must be installable or task-scoped in a declared
+Codex environment, enter through an ordinary goal-level conversation, remain
+silent on a sufficient native path, expose only a necessary residual delta,
+preserve native authorization, verify failure and recovery, and support exact
+rollback, removal, and cleanup.
 
-O2 baseline selection and human comparability judgment happen before Harness-
-path outcome observation. Matching uses the starting environment manifest and
-authority/source envelope plus the acceptance-required task variables. Both
-routes record later lifecycle deltas and every human action. Missing or
-incomparable highest-priority evidence stops; post-result rematching, replay,
-and favorable replacement are forbidden.
-
-Carrier decisions use the exact O4 triggers in `product/acceptance.json`; this
-profile adds no threshold. Context size or compaction settings may change at
-any time and are rebound as observed environment state. The Agent keeps a
-healthy carrier, reconciles native compaction, or completes a destination-
-verified transition before preventable loss. Failed reconciliation or lost
-correction stops material effects immediately. If host policy reserves an
-authorization or action, ask only for the minimum exact step and verify the
-destination before source release.
-
-Portable product meaning is independent of methodology document, CLI, API,
-Skill, plugin, MCP, Hook, service, operating system, or another delivery form.
-Use only the adaptive projection needed by the task and host. Operating-system-
-specific installation, authorization, protected storage, execution, rollback,
-cleanup, and evidence stay at the replaceable edge.
-
-Use one canonical structured serialization for identities, state, fields, and
-other machine-checkable constraints when a host can consume it directly. A
-schema-validated JSON contract can therefore bypass a prose-only projection;
-human-readable method text explains meaning but cannot duplicate or promote
-machine authority. JSON is still inert: it cannot itself capture a host event,
-grant authority, execute an effect, protect a secret, or clean resources. Add
-a Skill, Hook, MCP server, plugin, API, or other adapter only for the residual
-host action the structured contract cannot perform, and keep that projection
-content-addressed and minimal.
-
-O5 host pairs bind semantically equivalent starting manifests,
-authority/source envelopes, adaptation semantics, task input,
-profile/protocol, adapter, host/runtime/model, exact operating-system and
-virtualization relationship, tool surface, tolerance, fallback, rollback, and
-cleanup boundaries. Host-native mechanics and resolved capability names may
-differ only inside the registered equivalence tolerance. Public non-private
-checks and task-scoped projection lifecycle reproduce on every claimed
-operating-system family; private live source verification remains only on its
-authorized evidence-holder. No missing evidence, fallback, silent version
-change, source-only conformance, or universal operating-system claim is
-promoted.
+A structured machine contract may bypass a prose-only translation layer when
+the host can consume it directly. JSON is still inert: it cannot observe a host
+event, make a judgment, execute an effect, protect a secret, or clean a
+resource. Skill, Hook, plugin, MCP, API, or another adapter is added only for
+the residual host action the structured contract cannot perform.
 
 ## Evidence, privacy, residue, and release
 
-After an eligible demand and before outcome-bearing execution, add only the
-criterion-scoped validator required by that actual evidence source. A generic
-envelope, structural receipt, document, test, manifest, or human assertion is
-not outcome proof. The validator proves pre-response capture and resolution,
-source binding, complete enrollment window, chronology, starting environment,
-route-decision timing, exact execution identities, task-time deltas, action
-allocation, correction and recovery, floors, cleanup, and criterion semantics.
+Evidence is source-bound, chronological, environment-bound, content-addressed,
+criterion-scoped, and no broader than the behavior directly observed. A generic
+receipt, document, manifest, fixture, test count, exit code, or human assertion
+is not outcome proof. Visual, stateful, exported, or externally applied results
+must be checked at the semantic effect boundary, not merely at the command
+boundary.
 
-Task closeout inventories tracked, untracked, ignored, and empty repository
-paths; task-created configuration, plugin, Skill, Hook, MCP, cache, credential,
-process, carrier, branch, worktree, fork, handoff, and authorized external
-temporary state. Remove only task-owned resources. Persistence needs separate
-net-value evidence and human authority.
+Closeout inventories tracked, untracked, ignored, and empty repository paths;
+task-created configuration, process, cache, credential, plugin, Skill, Hook,
+MCP, carrier, branch, worktree, fork, handoff, and authorized external state.
+Remove only task-owned resources. Persistence requires separate current value
+evidence and human authority.
 
 Terminal publication follows the two-stage state machine owned by the current
-acceptance contract. The immutable candidate prebinds the exact code-owned
-authorization validator and public-safe source policy. A named human then
-authorizes the exact candidate, evidence set, tested host and operating-system
-scope, privacy disposition, claim ceiling, tag, and public release. The Agent
-performs publication and verifies the identical local and remote annotated tag
-object and peeled candidate commit with no post-tag product mutation. Public
-tag data never exposes a private locator, event, prompt, session, credential
-target, or guessable raw-source digest.
+acceptance contract. The immutable candidate prebinds a public-safe code-owned
+authorization validator. A named human authorizes the exact candidate,
+evidence set, tested Codex and operating-system scope, privacy disposition,
+claim ceiling, tag, and public release. The Agent performs the authorized
+mechanics and verifies the identical local and remote annotated tag object and
+peeled candidate commit with no post-tag product mutation.
 
 ## Claim ceiling
 
 Before freeze, this file proves only that a reviewable v1.2 method candidate
-exists. After a future independently authorized freeze, it can govern only
-prospectively captured and enrolled tasks. It cannot inherit v0.2 outcomes or
-v1.0 or v1.1 cohort state, and it cannot prove user value, burden reduction,
-self-correction quality, carrier quality, portability, security, publication,
-release, production readiness, universal operating-system support, or project
-completion without the exact current acceptance evidence and human authority.
+exists. After a future content-addressed binding it can govern only the
+registered controlled evidence and later field evidence that name it. It cannot
+inherit v0.2 outcomes or v1.0/v1.1 cohort state. It cannot prove comparative
+real-task burden reduction, broad effectiveness, distinct-Agent equivalence,
+untested operating-system behavior, publication, release, production readiness,
+or project completion without the exact current acceptance evidence and human
+authority.

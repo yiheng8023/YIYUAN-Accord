@@ -46,55 +46,58 @@ EXPECTED_PRODUCT_PURPOSE = (
     "trust, cost, and irreversible effects."
 )
 EXPECTED_SUCCESS_DEFINITION = (
-    "Across repeated real tasks entered at the goal level, a user can provide ideas, "
-    "domain facts, bounded authorization, corrections, any technically or authoritatively "
-    "unavoidable human-only action under exact Agent guidance, and accountable final judgment "
-    "without needing to discover, select, invoke, or manage the underlying Agent, capability "
-    "ecosystem, code and conversation topology, or context lifecycle; the Agent observes available capability "
-    "and conversation-carrier fitness, discovers beyond its current view only for an evidenced gap, dispatches the smallest "
-    "sufficient route and task carrier, performs every supported authorized mechanic, guides and verifies "
-    "any unavoidable human-only step, transitions before preventable context loss, and returns accepted outcomes with fewer material orchestration interventions "
-    "than an ad-hoc path."
+    "A finite accepted release provides an open machine-checkable collaboration contract and a "
+    "usable Codex reference application that cover the material human-AI collaboration lifecycle "
+    "from goal and context binding through premise challenge, route and carrier choice, authority, "
+    "execution, evidence, correction, recovery, transition, closure, feedback, release and "
+    "retirement. At each material point the product retains sufficient evolving native behavior, "
+    "reuses a suitable external or accountable-domain control, supplies only the smallest "
+    "residual Harness control, or degrades, escalates, stops or narrows its claim. A user can "
+    "enter at the goal level while the Agent owns supported capability, model, reasoning, code "
+    "and conversation carrier, recovery, verification, release, and cleanup mechanics under "
+    "preserved human authority. Controlled conformance, historical counterexamples, fault "
+    "injection, clean installation, rollback, and release evidence must prove every delivery "
+    "claim; later natural-task and distinct-Agent evidence may strengthen, falsify, or extend "
+    "field-effect claims but is not a prerequisite for finite product delivery, and no absent "
+    "field evidence may be implied. Completion means bounded minimum-quality coverage and honest "
+    "residuals, not a static perfect score or duplicated substitute for continuously improving "
+    "Agents."
 )
 EXPECTED_PROGRAM_PURPOSE = (
-    "Prove the constitution's terminal product proposition through a pre-response-enrollment-"
-    "controlled, environment-attributed finite repeated-natural-task cohort: sustained goal-level "
-    "delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc "
-    "baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-"
-    "operating-system open reference delivery. v0.2 remains an immutable bounded calibration "
-    "milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can "
-    "satisfy this program by inheritance."
+    "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage "
+    "across the material human-AI collaboration lifecycle, is actually installable and usable on "
+    "Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced "
+    "residual gaps, survives controlled historical and adversarial counterexamples, and is "
+    "reproducible and releasable with explicit human authority. The current shortfall corpus is a "
+    "requirements and counterexample source rather than a feature backlog; coverage permits "
+    "sufficient native or external reuse and honest degradation, escalation, stop or claim "
+    "limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-"
+    "task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and "
+    "untested operating-system behavior remain continuing field-validation claims rather than "
+    "release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, "
+    "while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this "
+    "program by inheritance."
 )
 EXPECTED_PROGRESS_RULE = (
-    "Only accepted real-task outcomes O1-O5 in a currently valid authority graph with G1-G4 passing count "
-    "as progress. Every O1-O5 registration binds the acceptance-owned environment contract, one committed "
-    "task-relevant starting manifest and authority-and-available-source envelope, one environment class and "
-    "treatment arm, the exact Harness activation delta if present, and one privacy-safe pre-response source-"
-    "capture resolution. Each task-host unit runs once in its pre-registered arm; O5 cross-host execution is "
-    "required portability replication, not a same-host replay, and Harness-specific value claims remain no "
-    "stronger than prospective same-environment matched observational evidence. Observed-native-minimum and "
-    "user-configured are starting conditions rather than static capability ceilings: after demand, the Agent "
-    "may adapt capabilities, configuration, models, providers, reasoning effort, delegation and online or "
-    "local execution only through current source resolution, minimum-sufficient native-first routing, bounded "
-    "authority, attributed lifecycle deltas, verification, rollback and cleanup. Referenced, classified, "
-    "admitted or implemented collaboration-shortfall evidence is not a solution or coverage claim without "
-    "task-relevant control and verification; unresolved material risk narrows the claim or stops the affected "
-    "path. Before any task measurement, a new content-addressed profile and "
-    "cohort protocol must be frozen and independently source-authorized under the current environment contract. "
-    "Before model processing, every submitted source event on the active enrollment surface must receive a "
-    "privacy-safe private capture and a pending resolution identity; before outcome-bearing execution or "
-    "completion, that event must resolve to an immutable eligible-task registration or a narrow source-bound "
-    "exclusion. Missing capture, unresolved eligibility, user-visible outcome text before the host completion "
-    "barrier, uncontained hosted-tool bypass, late registration or omitted earlier demand stops the affected "
-    "cohort rather than becoming a retrospective exclusion. The realized cohort is the earliest eligible "
-    "natural-demand prefix, failures remain in place, public identities are unlinkable random identifiers, and "
-    "source validators privately prove complete windows, chronology, deduplication, environment identity and "
-    "criterion semantics. v1.0 and v1.1 profile, cohort, authorization, registration, outcome and ordering state "
-    "are immutable stopped history and cannot be reused. Even after O1-O5 evidence passes, completionState "
-    "remains in-progress until the code-owned terminal release gate verifies the clean exact candidate, "
-    "predeclared O5 evidence set, named-human authorization, identical public annotated tag object and peeled "
-    "commit, and empty ignored and untracked residue. Documents, tests, inventories, fixtures, research volume, "
-    "prior-release evidence and environment manifests remain supporting inputs only."
+    "Only verified finite product-delivery outcomes O1-O5 in a valid authority graph with G1-G4 "
+    "passing count as release progress. Release acceptance requires bounded minimum-quality "
+    "coverage across the material collaboration lifecycle, evidence-backed native or external "
+    "reuse or the smallest residual control at applicable points, honest unsupported boundaries, "
+    "an actually installable and usable Codex reference application, controlled adaptive-"
+    "capability and self-correction evidence, clean reproducibility, and explicit human release "
+    "authority. It does not require a bespoke Harness mechanism for every shortfall or a static "
+    "perfect score. Documentation, taxonomy membership, implementation claims, fixture shape, "
+    "test count, and research volume cannot prove an outcome by themselves. Controlled conformance "
+    "and historical or fault-injected counterexamples may prove bounded implementation, "
+    "prevention, detection, recovery, degradation, escalation, claim limitation, exact-host "
+    "operation, rollback, and cleanup; they cannot prove comparative real-task burden reduction, "
+    "broad real-world effectiveness, distinct-Agent equivalence, or behavior on an untested "
+    "operating system. Natural tasks are optional continuing field-validation inputs, never a "
+    "release-completion prerequisite and never something the user must manufacture. When field "
+    "evidence later exists, it must preserve exact environment, host, model, provider, reasoning, "
+    "configuration, authority, source, and lifecycle attribution and may strengthen, falsify or "
+    "narrow the accepted claim without retroactively rewriting release evidence. v1.0 and v1.1 "
+    "cohort state remains immutable stopped history and is not inherited."
 )
 OUTCOME_IDS = {"O1", "O2", "O3", "O4", "O5"}
 GUARDRAIL_IDS = {"G1", "G2", "G3", "G4"}
@@ -178,19 +181,16 @@ OUTCOME_OPERATIONALIZATION_FIELDS = {
 }
 OUTCOME_OPERATIONALIZATION_BASELINES = MappingProxyType(
     {
-        "O1": (6, "finite-stratified-natural-task-cohort"),
-        "O2": (6, "same-cohort-source-bound-ad-hoc-baselines"),
-        "O3": (4, "real-task-route-lifecycle-cohort"),
-        "O4": (4, "predeclared-carrier-fitness-and-transition-cohort"),
-        "O5": (
-            2,
-            "same-task-live-matched-cross-host-pairs-with-bounded-cross-operating-system-coverage",
-        ),
+        "O1": (12, "fixed-source-lifecycle-coverage-and-control-conformance"),
+        "O2": (4, "live-codex-reference-controlled-scenario-suite"),
+        "O3": (6, "adaptive-route-lifecycle-controlled-scenarios"),
+        "O4": (6, "historical-and-fault-injected-self-correction-scenarios"),
+        "O5": (3, "clean-release-reproduction-and-bounded-portability"),
     }
 )
 CRITERION_CONTRACT_BASE_FIELDS = CRITERION_BASE_FIELDS - {"assessment"}
 EXPECTED_CURRENT_CRITERIA_CONTRACT_SHA256 = (
-    "d8912f9e0ced9c6c5e8006b4e9ded34dabae08aca9c468a2de553f829c09faab"
+    "c90197006a028f78c6f7be29a7884ccc447e3c6e606c558b6527df465187095b"
 )
 BOOTSTRAP_REQUIRED_AUTHORITY = {
     "product/constitution.json",
@@ -329,30 +329,28 @@ EXPECTED_V1_COHORT_PROTOCOL_SHA256 = (
     "73b637fbe11267c621a0f37093814586a4f5aaf0b366ab972f8bc32d0c9b2f83"
 )
 EXPECTED_CURRENT_PROFILE_CANDIDATE_IDENTITY = (
-    "harness-demand-to-outcome-v1.2-candidate.1"
+    "harness-demand-to-outcome-v1.2-candidate.2"
 )
 EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR = (
     "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md"
 )
 EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256 = (
-    "927296c186bfd0834fdb44ca67db72cbd4eed0a09120fcc817aee73c95f3fb18"
+    "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5"
 )
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_IDENTITY = (
-    "harness-prospective-cohort-v1.2-candidate.1"
+    "harness-controlled-conformance-v1.2-candidate.2"
 )
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR = (
-    "docs/PROSPECTIVE-COHORT-PROTOCOL-V1.2.json"
+    "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
 )
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
-    "c80e7265702e9a4962adb0f4f2601829d2096b0c2d142cc5123d82fb97bd2c78"
+    "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303"
 )
-EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
-    "209c1f096939452995de83351bf183b58518bbf0"
-)
-# The v1.2 candidate's immutable artifact revision is code-pinned, but it still
-# cannot freeze. A distinct source-authorized materialization/freeze slice must
-# pin its own canonical binding and validator. None of the stopped v1.1 anchors
-# can be inherited.
+EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = None
+# The v1.2 candidate is intentionally unbound until a later commit pins these
+# exact candidate.2 bytes and a distinct conformance-binding slice establishes
+# its non-private registration mechanism. None of the stopped natural-task
+# cohort anchors can be inherited.
 EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
@@ -708,29 +706,19 @@ CURRENT_COHORT_PROTOCOL_FIELDS = {
     "id",
     "profileIdentity",
     "cohortProtocolIdentity",
-    "eligibilityRule",
-    "exclusionRule",
-    "taskIdentityRule",
+    "scenarioEligibilityRule",
+    "scenarioIdentityRule",
+    "registrationRule",
+    "chronologyRule",
+    "evidenceClassRule",
     "scenarioCoverageRule",
-    "enrollmentSurfaceRule",
-    "activationRule",
-    "enrollmentCursorRule",
-    "preResponseCaptureRule",
-    "preResponseResolutionRule",
-    "hostCompletionBarrierRule",
-    "sourceMessageRule",
-    "hmacDomain",
-    "surfaceTransitionRule",
-    "keyRetentionRule",
     "environmentAttributionRule",
     "versionResolutionRule",
     "humanInterventionRule",
     "selfCorrectionRule",
-    "naturalDemandEventRule",
-    "enrollmentOrder",
-    "stopRule",
-    "failedOrMissingSampleDisposition",
-    "measurementEventRule",
+    "fieldValidationRule",
+    "failureDisposition",
+    "releaseRule",
     "claimLimits",
 }
 EXPECTED_COHORT_SCENARIO_CLASSES = (
@@ -743,6 +731,9 @@ EXPECTED_COHORT_SCENARIO_CLASSES = (
 )
 CANONICAL_TASK_IDENTITY_PATTERN = re.compile(
     r"natural-task\.public-v1:[0-9a-f]{32}"
+)
+CURRENT_WORK_UNIT_IDENTITY_PATTERN = re.compile(
+    r"(?:conformance|field)-unit\.public-v1:[0-9a-f]{32}"
 )
 EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
     {
@@ -765,29 +756,19 @@ EXPECTED_COHORT_PROTOCOL_RULES = MappingProxyType(
 )
 EXPECTED_CURRENT_COHORT_PROTOCOL_RULES = MappingProxyType(
     {
-        "eligibilityRule": "all-eligible-demands-after-source-verified-current-freeze-authorization",
-        "exclusionRule": "source-fact-only-no-postmeasurement-exclusion",
-        "taskIdentityRule": "random-public-id-cohort-keyed-hmac-source-binding-validator-dedup",
-        "scenarioCoverageRule": "current-acceptance-owned-no-protocol-defined-scenario-or-environment-strata",
-        "enrollmentSurfaceRule": "single-active-source-native-ordered-carrier",
-        "activationRule": "current-freeze-binding-then-source-verified-exact-human-authorization-before-demand",
-        "enrollmentCursorRule": "activation-or-prior-resolution-cursor-no-eligible-gap",
-        "preResponseCaptureRule": "privacy-safe-private-capture-and-pending-resolution-before-model-processing",
-        "preResponseResolutionRule": "eligible-registration-or-narrow-source-fact-exclusion-before-outcome-work-or-completion",
-        "hostCompletionBarrierRule": "no-user-visible-outcome-completion-until-current-source-event-resolution-is-immutable",
-        "sourceMessageRule": EXPECTED_CURRENT_SOURCE_MESSAGE_RULE,
-        "hmacDomain": EXPECTED_CURRENT_HMAC_DOMAIN,
-        "surfaceTransitionRule": EXPECTED_SURFACE_TRANSITION_RULE,
-        "keyRetentionRule": EXPECTED_KEY_RETENTION_RULE,
-        "environmentAttributionRule": "bind-current-acceptance-contract-starting-manifest-authority-source-envelope-and-task-time-deltas",
+        "scenarioEligibilityRule": "acceptance-mapped-controlled-or-field-unit-with-no-invented-natural-demand",
+        "scenarioIdentityRule": "content-addressed-public-scenario-identity-with-source-bound-private-details-kept-outside-public-evidence",
+        "registrationRule": "committed-criterion-scoped-registration-and-validator-before-outcome-bearing-execution",
+        "chronologyRule": "starting-truth-then-registration-then-execution-then-evidence-then-acceptance",
+        "evidenceClassRule": "controlled-live-host-hosted-ci-historical-counterexample-and-field-observation-remain-distinct",
+        "scenarioCoverageRule": "current-acceptance-owned-no-protocol-defined-count-threshold-or-platform-claim",
+        "environmentAttributionRule": "bind-current-acceptance-contract-starting-manifest-authority-source-envelope-route-and-lifecycle-deltas",
         "versionResolutionRule": "per-decision-current-source-exact-execution-identity-before-use-or-stop",
-        "humanInterventionRule": "record-all-human-actions-zero-prohibited-agent-work-transfer-minimal-guided-verified-human-only",
+        "humanInterventionRule": "record-human-actions-zero-prohibited-agent-work-transfer-minimal-guided-verified-human-only-step",
         "selfCorrectionRule": "material-checkpoint-goal-correction-authority-expected-observed-evidence-reconcile-stop-recover-minimal-correct-reverify",
-        "naturalDemandEventRule": "source-native-event-after-authorized-activation-captured-before-model-processing-and-resolved-before-registration-or-exclusion",
-        "enrollmentOrder": "source-native-cursor-then-pre-response-resolution-then-strict-git-registration-ancestry",
-        "stopRule": "earliest-prefix-satisfying-current-acceptance",
-        "failedOrMissingSampleDisposition": "retain-fail-closed-no-replacement",
-        "measurementEventRule": "task-bound-measurement-event-after-registration-required",
+        "fieldValidationRule": "natural-task-comparative-burden-cross-agent-and-untested-platform-claims-require-later-separate-field-evidence",
+        "failureDisposition": "retain-failure-stop-unsupported-and-missing-evidence-no-favorable-replacement",
+        "releaseRule": "finite-delivery-may-use-controlled-evidence-but-terminal-release-never-implies-absent-field-effect-claims",
     }
 )
 TERMINAL_RELEASE_BINDING_FIELDS = {
@@ -921,18 +902,25 @@ TASK_REGISTRATION_FIELDS = {
     "qualitySafetyEvidenceAndResidueFloors",
     "materialInterventionTaxonomy",
     "materialCollaborationLossTaxonomy",
-    "sourceCaptureEligibilityAndStopRule",
+    "scenarioEvidenceAndStopRule",
     "claimLimits",
     "preMeasurementValidator",
 }
-SOURCE_CAPTURE_FIELDS = {
-    "enrollmentSurfaceRule",
-    "cursorWindowStartsAfter",
-    "naturalDemandObservedBefore",
-    "measurementStartsAfter",
-    "eligibleSources",
-    "ineligibleSources",
+SCENARIO_EVIDENCE_FIELDS = {
+    "evidenceClass",
+    "startingTruthBoundBefore",
+    "executionStartsAfter",
+    "expectedInvariantOrCounterexample",
+    "failureDisposition",
     "stopRule",
+}
+ALLOWED_SCENARIO_EVIDENCE_CLASSES = {
+    "controlled-live-host",
+    "controlled-hosted-ci",
+    "controlled-historical-counterexample",
+    "controlled-fault-injection",
+    "controlled-clean-reproduction",
+    "field-observation",
 }
 ENROLLMENT_SURFACE_AND_CURSOR_FIELDS = {
     "surfaceIdentity",
@@ -1038,7 +1026,7 @@ EXPECTED_PLANNING_MODEL = {
         "falsifier",
         "correction class",
         "mapped acceptance criteria",
-        "content-addressed task registration for outcome-bearing work",
+        "content-addressed implementation or conformance-scenario registration for outcome-bearing work",
         "finite stop condition",
         "process-loss budget",
         "cleanup boundary",
@@ -1085,7 +1073,7 @@ EXPECTED_PRODUCT_FORM = {
         "adaptive-thin-reference-projections",
     ],
     "portableCore": "delivery-form-and-operating-system-neutral-testable-demand-authority-capability-task-topology-and-context-carrier-lifecycle-evidence-acceptance-and-burden-semantics",
-    "referenceDelivery": "codex-first-reference-slice-then-distinct-host-and-operating-system-portability-proof",
+    "referenceDelivery": "codex-operational-reference-release-with-portable-contract-and-later-field-validation",
 }
 EXPECTED_FIXED_INVARIANTS = frozenset(
     {
@@ -1103,8 +1091,9 @@ EXPECTED_FIXED_INVARIANTS = frozenset(
         "task topology is demand-driven: preserve the current healthy carrier by default; create a branch, worktree, repository fork, conversation fork, or new task only for source-bound causal necessity; the Agent owns identity, synchronization, merge or reconciliation, archive or release, and cleanup while the user retains goal, authority, trust, cost, and irreversible decisions",
         "conversation-carrier fitness is Agent-owned: use source-bound observable host and task signals to keep the current carrier only while it remains safe, choose native compaction or a verified handoff before preventable quality or capacity loss, and when reliable signals are unavailable record that limit and apply a conservative pre-declared transition rule rather than making the user guess",
         "reuse or adapt sufficient external collaboration protocols, human-allocation research, runtimes, discovery, identity, governance, provenance, and evaluation capability before composition or authoring; at each decision dynamically resolve the current suitable official or maintained source from a bounded as-of source and bind the exact execution version, commit, or package identity, license or applicable terms, maturity, and reuse boundary; never make one historical version a universal lock or execute an unresolved moving target; new implementation requires an evidenced residual semantic gap",
-        "known or newly observed human-Agent collaboration shortfall evidence is not coverage by reference, classification, admission, or implementation alone: for each material applicable risk, reuse a sufficient native, official, maintained external, or accountable domain control before the smallest evidenced Harness residual; require prevention, detection, recovery, degradation, escalation, or claim-limitation evidence proportionate to the risk, and narrow the claim or stop when the risk remains unresolved or unobservable rather than manufacturing a catalog-shaped mechanism",
-        "reference-host calibration or one operating-system family cannot establish Agent-neutral portability; O5 requires distinct-host and bounded cross-operating-system proof",
+        "known or newly observed human-Agent collaboration shortfall evidence is not coverage by reference, classification, admission, or implementation alone: cover the material collaboration lifecycle rather than turning a source taxonomy into a feature backlog; at each applicable point reuse a sufficient native, official, maintained external, or accountable domain control before the smallest evidenced Harness residual, or explicitly degrade, escalate, stop or limit the claim when the risk is unresolved, unobservable or disproportionate; simplify or retire a Harness control when evolving native capability makes it redundant",
+        "one operational reference host proves only its exact bounded host behavior; Agent-neutral semantics require form-neutral conformance, while cross-Agent or broader operating-system behavior remains unclaimed until corresponding field evidence exists",
+        "finite product-delivery acceptance and continuing field-effect validation are separate: controlled evidence may prove implementation, safety, recovery, reproducibility, and exact-host operation but cannot prove real-task burden reduction, broad effectiveness, or cross-Agent equivalence",
         "durable product results are defined by portable collaboration, evidence, and conformance semantics; methodology, documentation, CLI, API, Skill, plugin, MCP, Hook, adapter, package, service, or another carrier is a non-exhaustive adaptive projection chosen by demand and host fitness rather than mandatory product body",
         "operating-system-specific installation, authorization, protected storage, execution, rollback, cleanup, and evidence mechanisms are replaceable adapter concerns rather than portable core; portability claims name only tested operating-system families, versions, virtualization boundaries, and host or runtime combinations and never imply universal operating-system support",
         "host, model, provider, reasoning effort, system and developer instructions, account and managed policy, consumer configuration, AGENTS.md, rules, Skills, plugins, Apps, MCP, Hooks, memory, managers, operating system, runtime, and tool or resource surfaces are explicit evaluation variables rather than universal user defaults",
@@ -1201,10 +1190,12 @@ FROZEN_V02_PROFILE_ARTIFACT_SHA256 = MappingProxyType(
 )
 EXPECTED_PROGRESSION_POLICY = {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
-    "noNaturalTaskDisposition": "outcome-gate-not-program-completion-or-blocker",
+    "noNaturalTaskDisposition": (
+        "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand"
+    ),
     "boundProductDeliveryDemandDisposition": (
-        "authorized-product-plan-delivery-is-real-demand-when-its-primary-purpose-is-the-"
-        "deliverable-rather-than-exercising-or-diagnosing-the-harness"
+        "authorized-product-delivery-work-is-registered-as-implementation-or-controlled-"
+        "conformance-not-mislabeled-natural-demand"
     ),
     "agentOwnedWithoutInventedUserTask": [
         "retrospective-counterexample-analysis",
@@ -1213,18 +1204,18 @@ EXPECTED_PROGRESSION_POLICY = {
         "authority-defect-repair",
     ],
     "naturalTaskRequiredFor": [
-        "outcome-verification",
-        "task-time-capability-activation",
-        "behavior-or-value-claim",
+        "real-world-effectiveness-claim",
+        "comparative-user-burden-reduction-claim",
+        "cross-agent-field-equivalence-claim",
     ],
     "historicalFailureRole": "counterevidence-and-replanning-input-only",
     "environmentAttributionDisposition": (
-        "acceptance-owned-observed-native-minimum-and-user-configured-strata-with-"
-        "preregistered-matched-starting-environment-and-attributed-task-time-adaptation"
+        "acceptance-owned-observed-native-minimum-and-user-configured-conformance-strata-"
+        "with-exact-starting-environment-and-attributed-runtime-adaptation"
     ),
     "taskTimeAdaptationDisposition": (
-        "pretask-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-"
-        "and-records-lifecycle-deltas"
+        "scenario-or-field-manifest-is-starting-state-agent-executes-supported-authorized-"
+        "mechanics-and-records-lifecycle-deltas"
     ),
     "shortfallResolutionDisposition": (
         "reference-and-classification-are-not-solutions-native-or-external-first-"
@@ -1238,7 +1229,9 @@ EXPECTED_PROGRESSION_POLICY = {
         "resolve-current-suitable-source-per-decision-bind-exact-execution-identity-and-"
         "stop-on-unresolved-moving-target-or-material-drift"
     ),
-    "outcomeClaimBoundary": "O1-O5-require-current-acceptance-evidence",
+    "outcomeClaimBoundary": (
+        "O1-O5-prove-finite-product-delivery-only-field-effect-claims-require-later-field-evidence"
+    ),
     "userMustNotInventTasks": True,
 }
 EXPECTED_CAPABILITY_INFLUENCE_BOUNDARY = {
@@ -1365,94 +1358,86 @@ EXPECTED_V11_AUTHORITY_BLOBS = MappingProxyType(
     }
 )
 EXPECTED_ENVIRONMENT_ATTRIBUTION = {
-    "scope": "all O1-O5 registrations, measurements, comparisons, adapter claims and release evidence",
+    "scope": "all O1-O5 implementation registrations, controlled scenarios, host claims, field observations and release evidence",
     "environmentClasses": ["observed-native-minimum", "user-configured"],
     "treatmentArms": ["without-harness", "with-exact-harness"],
     "assignmentRule": (
-        "each natural task-host execution unit runs once in one pre-registered arm; no same-host "
-        "treatment replay merely for measurement, O5 cross-host replication is pre-registered "
-        "portability evidence, and a paired baseline must be a pre-registered comparable historical "
-        "or independent natural task"
+        "each registered task-host execution unit runs once against one exact starting environment "
+        "and one declared route; controlled repetitions require different pre-registered fault, "
+        "configuration, lifecycle, host, or recovery identities and cannot be represented as "
+        "independent natural tasks"
     ),
     "comparisonRule": (
-        "compare only pre-registered matched tasks within the same environment class, fixed task-relevant "
-        "starting manifest and initial authority-and-available-source envelope; exact Harness package and "
-        "activation identity is the only planned initial route and configuration difference, while later "
-        "capability and configuration changes are attributed treatment-mediated lifecycle deltas; unavoidable "
-        "task differences remain explicit matching variables, the evidence is prospective matched observational "
-        "rather than single-variable causal, and cross-class differences cannot be claimed as Harness effects"
+        "a release mechanism claim compares expected and observed behavior against its pre-registered "
+        "invariant or counterexample; a Harness-effect or user-burden claim additionally requires later "
+        "matched field evidence within the same environment class and authority-and-available-source "
+        "envelope and is not inferred from controlled scenarios"
     ),
     "initialStateRule": (
-        "the committed pre-task manifest and initial authority-and-available-source envelope define the "
-        "starting condition, not a static capability ceiling; task-time Agent-selected or human-authorized "
-        "changes are recorded as treatment-mediated lifecycle deltas rather than erased, normalized away or "
-        "mislabeled as baseline contamination"
+        "the committed scenario or field manifest and initial authority-and-available-source envelope "
+        "define the starting condition rather than a static capability ceiling; later Agent-selected or "
+        "human-authorized changes remain treatment-mediated lifecycle deltas attributed to the exact route"
     ),
     "observedNativeMinimumRule": (
         "exclude discoverable user-global instructions, configuration, rules, Skills, plugins, Apps, "
-        "MCP, Hooks, memory and provider overrides at the starting boundary; task-inherent project guidance is allowed only "
-        "when identical and non-Harness in both arms; system, developer, built-in, account, "
-        "administrator and unobservable state is retained-or-unknown; after demand, governed task-time adaptation remains allowed and attributable"
+        "MCP, Hooks, memory and provider overrides at the starting boundary; retain system, developer, "
+        "built-in, account, administrator and unobservable state as present or unknown; add only the "
+        "exact Harness delta under test"
     ),
     "userConfiguredRule": (
-        "freeze the actual task-relevant user starting environment before assignment; after demand, governed "
-        "task-time adaptation remains allowed and attributable; mutable, unresolved, unavailable or drifting "
-        "starting components narrow the claim or stop the pair and cannot be normalized away after observing a result"
+        "freeze the actual relevant user starting environment before a controlled or field execution; "
+        "mutable, unresolved, unavailable or drifting components narrow the claim or stop the affected "
+        "unit rather than being normalized away"
     ),
     "neutralWorkspaceRule": (
-        "a without-Harness baseline cannot inherit Harness repository guidance, adapters or consumer "
-        "projection; use a neutral workspace or the real target repository with identical task-inherent "
-        "non-Harness guidance in both arms"
+        "a without-Harness comparison cannot inherit Harness repository guidance, adapters or consumer "
+        "projection; controlled tests may instead use an explicit expected invariant when a matched "
+        "comparison is neither necessary nor claimed"
     ),
     "taskTimeAdaptationRule": (
-        "after demand reveals need, the Agent preserves a sufficient healthy already-authorized route, "
-        "including host-native adaptive model, provider, reasoning-effort and delegation selection, without "
-        "imposing a Harness router or fixed model matrix; when task risk, quality, latency, cost or failure "
-        "evidence shows a material mismatch, the Agent uses a supported task-scoped override, delegation, "
-        "carrier transition or fallback, or binds an immutable decision record before execution covering the "
-        "residual gap, current source resolution, authority class, planned lifecycle action, rollback and "
-        "cleanup; if no safe control is observable or available, the Agent adapts verification, degrades, "
-        "escalates, narrows the claim or honestly stops rather than making the user discover the route. Online "
-        "AI is the normal route, while local, edge or offline execution is a demand-triggered minimum-sufficient "
-        "degradation or data-locality route rather than a mandatory product line, and recovery to an online "
-        "route is reconciled and attributed; the Agent performs every supported authorized mechanic, while a "
-        "technically or authoritatively human-only action is reduced to the smallest exact step, explained "
-        "without requiring route knowledge, and verified before resuming"
+        "preserve a sufficient healthy native route, including host-native adaptive model, provider, "
+        "reasoning-effort and delegation selection, without imposing a Harness router; change it only "
+        "for observed quality, latency, cost or failure evidence, including material risk or availability "
+        "change, through a supported task-scoped override or a source-bound residual route with rollback "
+        "and cleanup; if no safe observable control exists, strengthen verification or degrade and "
+        "escalate while the Agent narrows the claim or honestly stops"
     ),
     "shortfallResolutionRule": (
-        "a research report, taxonomy, catalog entry, reference, admission or implementation is not a solved "
-        "shortfall or coverage proof. For each material applicable or newly observed collaboration risk that "
-        "can change the task route or claim, first reuse a sufficient native, official, maintained external or "
-        "accountable domain control; add a Harness-specific mechanism only for an evidenced residual semantic "
-        "gap; bind proportionate prevention, detection, recovery, degradation, escalation or claim-limitation "
-        "and its verification, and narrow the claim or stop when the risk remains unresolved or unobservable. "
-        "Do not run or persist a complete shortfall checklist when no task-bound risk makes it decision-relevant"
+        "bind the exact current YIYUAN-CALIBRATION shortfall custody revision as non-authoritative "
+        "requirements and counterexample input. Each SG-01 through SG-12 slice is not a solved shortfall "
+        "and is not a feature backlog; use the slices to test coverage from intake through operation, "
+        "transition, feedback and retirement. At every material point first reuse a sufficient native "
+        "behavior, then suitable official or maintained external or accountable-domain capability, and "
+        "author only the smallest control for an evidenced residual semantic gap; otherwise explicitly "
+        "degrade, escalate, narrow the claim or stop. Record applicability, owner, evidence and lifecycle "
+        "for that bounded disposition. Reference, classification, admission, prose or implementation alone "
+        "is not verified coverage. Do not run or persist a complete shortfall checklist, bespoke mechanism "
+        "or static perfect score where a smaller honest disposition suffices"
     ),
     "versionResolutionRule": (
-        "at each decision resolve the current suitable official or maintained source from a bounded as-of source "
-        "and bind the exact version, commit or package identity before acquisition or execution; use current "
-        "evidence, not one historical version across tasks, never execute an unresolved mutable label "
-        "such as latest, and on material mid-execution drift re-register or honestly stop"
+        "resolve the current suitable official or maintained bounded as-of source at each materially "
+        "version-sensitive decision and bind the exact version, commit or package identity; do not lock "
+        "one historical version across tasks or treat an unresolved mutable label as evidence, and "
+        "re-register or honestly stop on material drift"
     ),
     "lifecycleRule": (
-        "retain, install, configure, enable, use, switch model, provider, reasoning effort, delegation, online "
-        "or local or edge execution, escalate, de-escalate, degrade, restore, disable, downgrade, rollback, "
-        "retire or persist a route only by current need, evidence and authority; prefer sufficient host-native "
-        "adaptation and do not turn a current model, provider, reasoning level or benchmark into a permanent "
-        "route lock; preserve the same quality, privacy, safety, evidence and human-authority floors across "
-        "route changes, end task-scoped exposure when the need ends unless persistence has separate net-value "
-        "evidence and authorization, then verify the final or restored state and cleanup"
+        "install, configure, enable, use, switch, escalate, de-escalate, degrade, restore, disable, "
+        "downgrade, roll back with verified rollback, retire or persist a route only by current need, "
+        "evidence and authority; switch model, provider, reasoning effort or delegation only through a "
+        "supported observable route; do not turn a current model, provider, manager or operating system "
+        "into a permanent core assumption; prefer sufficient native capability, keep task exposure "
+        "minimal, verify the final or restored state, and remove task-owned residue"
     ),
     "humanInterventionRule": (
-        "distinguish a technically or authoritatively unavoidable human-only decision or host action from a "
-        "prohibited transfer of Agent-owned work; the former must be source-bound, minimal, explicitly guided "
-        "and post-verified, while the user never has to discover or name the route, configuration variable, "
-        "syntax, recovery or cleanup and the Agent performs every supported authorized mechanic"
+        "distinguish a human-owned goal, domain, trust, cost, installation, publication, release or "
+        "irreversible decision and a technically or authoritatively unavoidable host-only action from "
+        "prohibited transfer of Agent-owned work; the Agent detects the need, requests or guides only the "
+        "smallest exact step, performs every supported authorized mechanic, and verifies the result"
     ),
     "burdenRule": (
-        "record all human actions and round trips in total burden, classify legitimate human-only actions "
-        "separately from prohibited Agent-work transfers, require zero prohibited transfers, and do not hide "
-        "excessive or avoidable human-only interaction from O2 comparison"
+        "controlled scenarios verify that prohibited transfers are absent from the designed route but do "
+        "not prove comparative real-task burden reduction; every later field study counts all human actions "
+        "and round trips and separately classifies legitimate human-only actions"
     ),
     "manifestFields": [
         "host-client-and-version",
@@ -1464,24 +1449,24 @@ EXPECTED_ENVIRONMENT_ATTRIBUTION = {
         "rules-skills-plugins-apps-mcp-hooks-memory-and-managers",
         "operating-system-runtime-tool-and-resource-surface",
         "initial-authority-and-available-source-envelope",
-        "exact-harness-package-activation-and-task-exposure-delta",
+        "exact-harness-package-activation-and-exposure-delta",
         "capture-time-source-identities-fingerprint-and-drift-check",
     ],
     "historicalEvidenceRule": (
-        "classify every reused historical item as environment-independent, environment-bound or "
-        "invalidated; no prior outcome, cohort membership or environment assumption is inherited"
+        "historical failures and prior tasks are admissible as environment-independent counterexamples "
+        "or regression inputs, or as explicitly environment-bound field observations, never as fabricated "
+        "current natural tasks or inherited outcome credit"
     ),
     "driftRule": (
-        "missing starting identity, mutable unbound dependencies, unknown material contamination, unregistered "
-        "lifecycle drift or restoration failure stops the affected pair without replacement or success imputation; "
-        "an official update between tasks is re-resolved and rebound rather than treated as permanent version drift"
+        "missing starting identity, mutable unbound dependencies, unknown material contamination, "
+        "unregistered lifecycle drift, or restoration failure stops or narrows the affected claim; "
+        "official updates are re-resolved rather than treated as permanent product locks"
     ),
     "humanAuthority": (
-        "The user authorizes access to private configuration or authentication state, protected backup, "
-        "reset or restoration, a new OS account or trust boundary, installation, publication and "
-        "irreversible effects, and performs a technically or authoritatively unavoidable host action only "
-        "under minimal exact Agent guidance; the Agent owns need detection, recommendation, every supported "
-        "authorized mechanic, post-action verification, restoration verification and exact cleanup."
+        "The user owns product direction, consequential domain judgment, new trust, account, data, cost, "
+        "installation, persistent activation, publication, release and irreversible decisions and "
+        "accountable final acceptance. The Agent owns need detection, recommendation, every supported "
+        "authorized mechanic, verification, rollback and exact cleanup."
     ),
 }
 EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256 = hashlib.sha256(
@@ -6097,8 +6082,9 @@ def _current_profile_binding_material_valid(
         != EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
         or protocol_sha256
         != EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256
+        or EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION is None
         or artifact_revision != EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION
-        or not _current_cohort_activation_valid(binding.get("cohortActivation"))
+        or binding.get("cohortActivation") is not None
     ):
         _error(errors, "frozen normative profile binding is not the code-owned v1.2 candidate")
         return False
@@ -6125,7 +6111,7 @@ def _current_profile_binding_material_valid(
         return False
     protocol_raw = _read_bounded_bytes(
         protocol_path,
-        f"v1.2 cohort protocol {protocol_locator}",
+        f"v1.2 conformance protocol {protocol_locator}",
         errors,
     )
     if protocol_raw is None:
@@ -6140,17 +6126,17 @@ def _current_profile_binding_material_valid(
             protocol_sha256,
         )
     ):
-        _error(errors, "frozen v1.2 cohort protocol identity or source revision mismatch")
+        _error(errors, "frozen v1.2 conformance protocol identity or source revision mismatch")
         return len(errors) == before
     protocol = _parse_json_object_bytes(
         protocol_raw,
-        f"v1.2 cohort protocol {protocol_locator}",
+        f"v1.2 conformance protocol {protocol_locator}",
         errors,
     )
     protocol_valid = (
         set(protocol) == CURRENT_COHORT_PROTOCOL_FIELDS
         and type(protocol.get("schema")) is int
-        and protocol.get("schema") == 1
+        and protocol.get("schema") == 2
         and _nonempty_text(protocol.get("id"))
         and protocol.get("profileIdentity") == profile_identity
         and protocol.get("cohortProtocolIdentity") == protocol_identity
@@ -6161,7 +6147,7 @@ def _current_profile_binding_material_valid(
         and _string_list(protocol.get("claimLimits")) is not None
     )
     if not protocol_valid:
-        _error(errors, "frozen v1.2 cohort protocol shape is invalid")
+        _error(errors, "frozen v1.2 conformance protocol shape is invalid")
     return len(errors) == before
 
 
@@ -7037,7 +7023,7 @@ def _environment_attribution_binding_valid(
             for field in EXPECTED_ENVIRONMENT_ATTRIBUTION["manifestFields"]
         )
         and _same_typed_value(
-            manifest.get("exact-harness-package-activation-and-task-exposure-delta"),
+            manifest.get("exact-harness-package-activation-and-exposure-delta"),
             activation_delta,
         )
     )
@@ -7169,8 +7155,7 @@ def _task_registration_guardrail(
     str,
     str,
     str,
-    dict[str, Any],
-    dict[str, Any],
+    str,
     tuple[str, str],
 ] | None:
     before = len(errors)
@@ -7265,7 +7250,7 @@ def _task_registration_guardrail(
         _error(errors, f"task registration {locator} fields must match the code-owned schema")
         return None
     criterion_ids = _string_list(registration.get("criterionIds"))
-    source_capture = registration.get("sourceCaptureEligibilityAndStopRule")
+    scenario_evidence = registration.get("scenarioEvidenceAndStopRule")
     acceptance_authority = registration.get("acceptanceAuthority")
     floors = registration.get("qualitySafetyEvidenceAndResidueFloors")
     values = registration.get("preRegistrationValues")
@@ -7281,15 +7266,6 @@ def _task_registration_guardrail(
             _error(errors, f"task registration {locator} cannot resolve {criterion_id}")
             continue
         expected_fields.update(required)
-    cohort_values = (
-        _registration_cohort_values_valid(
-            values,
-            profile_binding["cohortActivation"],
-        )
-        if isinstance(values, dict)
-        and isinstance(profile_binding.get("cohortActivation"), dict)
-        else None
-    )
     environment_binding_valid = (
         _environment_attribution_binding_valid(
             root,
@@ -7313,14 +7289,13 @@ def _task_registration_guardrail(
         and registered_at is not None
         and registered_at <= measurement_not_before
         and isinstance(registration.get("taskIdentity"), str)
-        and CANONICAL_TASK_IDENTITY_PATTERN.fullmatch(registration["taskIdentity"])
+        and CURRENT_WORK_UNIT_IDENTITY_PATTERN.fullmatch(registration["taskIdentity"])
         is not None
         and registration.get("incrementId") == increment_id
         and criterion_ids == mapped_outcomes
         and isinstance(values, dict)
         and set(values) == expected_fields
         and all(_substantive_registration_value(item) for item in values.values())
-        and cohort_values is not None
         and environment_binding_valid
         and values.get("normativeProfileIdentity")
         == profile_binding.get("profileIdentity")
@@ -7353,19 +7328,19 @@ def _task_registration_guardrail(
         )
         and _string_list(registration.get("materialInterventionTaxonomy")) is not None
         and _string_list(registration.get("materialCollaborationLossTaxonomy")) is not None
-        and isinstance(source_capture, dict)
-        and set(source_capture) == SOURCE_CAPTURE_FIELDS
-        and source_capture.get("enrollmentSurfaceRule")
-        == EXPECTED_CURRENT_COHORT_PROTOCOL_RULES["enrollmentSurfaceRule"]
-        and source_capture.get("cursorWindowStartsAfter")
-        == "surface-activation-or-prior-registration"
-        and source_capture.get("naturalDemandObservedBefore")
+        and isinstance(scenario_evidence, dict)
+        and set(scenario_evidence) == SCENARIO_EVIDENCE_FIELDS
+        and scenario_evidence.get("evidenceClass")
+        in ALLOWED_SCENARIO_EVIDENCE_CLASSES
+        and scenario_evidence.get("startingTruthBoundBefore")
         == "immutable-registration"
-        and source_capture.get("measurementStartsAfter")
+        and scenario_evidence.get("executionStartsAfter")
         == "immutable-registration"
-        and _string_list(source_capture.get("eligibleSources")) is not None
-        and _string_list(source_capture.get("ineligibleSources")) is not None
-        and _nonempty_text(source_capture.get("stopRule"))
+        and _nonempty_text(
+            scenario_evidence.get("expectedInvariantOrCounterexample")
+        )
+        and _nonempty_text(scenario_evidence.get("failureDisposition"))
+        and _nonempty_text(scenario_evidence.get("stopRule"))
         and _string_list(registration.get("claimLimits")) is not None
         and _same_typed_value(
             registration.get("preMeasurementValidator"),
@@ -7392,14 +7367,13 @@ def _task_registration_guardrail(
             task_identity,
             source_revision,
             locator,
-            cohort_values[0],
-            cohort_values[1],
+            scenario_evidence["evidenceClass"],
             validator_binding,
         )
         if len(errors) == before
         and isinstance(task_identity, str)
         and isinstance(source_revision, str)
-        and cohort_values is not None
+        and isinstance(scenario_evidence, dict)
         and isinstance(validator_binding, tuple)
         else None
     )
@@ -7415,12 +7389,8 @@ def _task_registration_floors(
     floors: dict[str, datetime] = {}
     validator_bindings: dict[str, tuple[str, str]] = {}
     task_identities: set[str] = set()
-    source_commitments: set[str] = set()
-    natural_demand_cursors: set[str] = set()
     bound_registration_paths: set[str] = set()
     prior_registration_revision: str | None = None
-    prior_task_identity: str | None = None
-    prior_enrollment: dict[str, Any] | None = None
     for increment in increments:
         increment_id = increment.get("id")
         registration = _task_registration_guardrail(
@@ -7432,8 +7402,7 @@ def _task_registration_floors(
                 task_identity,
                 source_revision,
                 locator,
-                enrollment,
-                private_binding,
+                _evidence_class,
                 validator_binding,
             ) = registration
             if task_identity in task_identities:
@@ -7442,14 +7411,6 @@ def _task_registration_floors(
                     f"taskIdentity {task_identity} is reused across outcome registrations",
                 )
             task_identities.add(task_identity)
-            source_commitment = private_binding["sourceCommitment"]
-            natural_cursor = enrollment["naturalDemandCursorCommitment"]
-            if source_commitment in source_commitments:
-                _error(errors, "private natural-demand source commitment is reused")
-            source_commitments.add(source_commitment)
-            if natural_cursor in natural_demand_cursors:
-                _error(errors, "natural-demand cursor commitment is reused")
-            natural_demand_cursors.add(natural_cursor)
             if prior_registration_revision is not None and not _strict_git_ancestor(
                 root, prior_registration_revision, source_revision
             ):
@@ -7457,34 +7418,7 @@ def _task_registration_floors(
                     errors,
                     "outcome registration revisions must form one strict Git ancestry order",
                 )
-            transition = enrollment["surfaceTransition"]
-            if prior_enrollment is None:
-                if transition["state"] != "cohort-activation":
-                    _error(errors, "first outcome registration must descend from cohort activation")
-            else:
-                prior_cursor = prior_enrollment["naturalDemandCursorCommitment"]
-                if enrollment["previousRegistrationTaskIdentity"] != prior_task_identity:
-                    _error(errors, "outcome registration chain skips its prior task identity")
-                if transition["state"] == "none":
-                    if (
-                        enrollment["surfaceIdentity"]
-                        != prior_enrollment["surfaceIdentity"]
-                        or enrollment["cursorWindowStartCommitment"] != prior_cursor
-                        or transition["sourceWindowStartCommitment"] != prior_cursor
-                    ):
-                        _error(errors, "outcome registration cursor chain is discontinuous")
-                elif transition["state"] == "serial":
-                    if (
-                        transition["sourceSurfaceIdentity"]
-                        != prior_enrollment["surfaceIdentity"]
-                        or transition["sourceWindowStartCommitment"] != prior_cursor
-                    ):
-                        _error(errors, "surface transition does not continue the prior cohort cursor")
-                else:
-                    _error(errors, "cohort activation cannot recur after the first registration")
             prior_registration_revision = source_revision
-            prior_task_identity = task_identity
-            prior_enrollment = enrollment
             bound_registration_paths.add(locator)
             floors[increment_id] = floor
             validator_bindings[increment_id] = validator_binding
@@ -7495,7 +7429,7 @@ def _task_registration_floors(
         if history_paths is not None and history_paths != bound_registration_paths:
             _error(
                 errors,
-                "every post-freeze cohort registration artifact must bind exactly one outcome increment",
+                "every post-freeze conformance registration artifact must bind exactly one outcome increment",
             )
     return floors, validator_bindings
 

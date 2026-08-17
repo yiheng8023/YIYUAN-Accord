@@ -1,0 +1,33 @@
+{
+  "schema": 2,
+  "id": "conformance-protocol.harness-v1.2-candidate.2",
+  "profileIdentity": "harness-demand-to-outcome-v1.2-candidate.2",
+  "cohortProtocolIdentity": "harness-controlled-conformance-v1.2-candidate.2",
+  "scenarioEligibilityRule": "acceptance-mapped-controlled-or-field-unit-with-no-invented-natural-demand",
+  "scenarioIdentityRule": "content-addressed-public-scenario-identity-with-source-bound-private-details-kept-outside-public-evidence",
+  "registrationRule": "committed-criterion-scoped-registration-and-validator-before-outcome-bearing-execution",
+  "chronologyRule": "starting-truth-then-registration-then-execution-then-evidence-then-acceptance",
+  "evidenceClassRule": "controlled-live-host-hosted-ci-historical-counterexample-and-field-observation-remain-distinct",
+  "scenarioCoverageRule": "current-acceptance-owned-no-protocol-defined-count-threshold-or-platform-claim",
+  "environmentAttributionRule": "bind-current-acceptance-contract-starting-manifest-authority-source-envelope-route-and-lifecycle-deltas",
+  "versionResolutionRule": "per-decision-current-source-exact-execution-identity-before-use-or-stop",
+  "humanInterventionRule": "record-human-actions-zero-prohibited-agent-work-transfer-minimal-guided-verified-human-only-step",
+  "selfCorrectionRule": "material-checkpoint-goal-correction-authority-expected-observed-evidence-reconcile-stop-recover-minimal-correct-reverify",
+  "fieldValidationRule": "natural-task-comparative-burden-cross-agent-and-untested-platform-claims-require-later-separate-field-evidence",
+  "failureDisposition": "retain-failure-stop-unsupported-and-missing-evidence-no-favorable-replacement",
+  "releaseRule": "finite-delivery-may-use-controlled-evidence-but-terminal-release-never-implies-absent-field-effect-claims",
+  "claimLimits": [
+    "pre-freeze candidate until product/program.json binds the exact v1.2 profile and protocol bytes",
+    "product/acceptance.json exclusively owns coverage counts thresholds host requirements and terminal conditions",
+    "the fixed collaboration-shortfall corpus is a requirements and counterexample source rather than a feature backlog or product authority",
+    "each material lifecycle point resolves to sufficient native reuse bounded external or domain reuse smallest residual Harness control or explicit degradation escalation stop or claim limitation",
+    "controlled evidence may prove bounded mechanism exact-host installation rollback cleanup reproducibility and release claims only",
+    "natural tasks are optional later field-validation inputs and are never manufactured or required for finite delivery",
+    "comparative burden broad effectiveness distinct-Agent equivalence and untested operating-system claims require corresponding later field evidence",
+    "host model provider reasoning delegation context configuration ecosystem operating-system runtime and tool state remain observed variables rather than protocol presets",
+    "a sufficient evolving native capability causes the Harness route to remain absent shrink or retire",
+    "every outcome-bearing execution uses a precommitted criterion-scoped validator for the actual evidence source",
+    "fixtures tests manifests documentation implementation presence and exit-zero signals cannot prove semantic outcome effects by themselves",
+    "no publication release production universal-platform superiority or project-completion claim exists without current acceptance evidence and human authority"
+  ]
+}

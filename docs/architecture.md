@@ -60,23 +60,24 @@ bind demand and authority -> observe available capability -> assess the gap
 -> emit a bounded receipt or continue
 ```
 
-The natural-task receipt is a logical goal-level demand and accountable outcome
-unit, not a host conversation or sidebar-thread unit. Multiple sequential
-receipts may remain in one healthy host task. One receipt may be eligible for
-multiple criteria only when each criterion's pre-registration, measures,
-validator, and human authority independently pass; it remains one sample
-within any single criterion.
+The current v1.2 delivery unit is a content-addressed controlled scenario,
+clean-host reproduction, or exact live Codex unit. A later natural task is a
+separate field-observation class. It may strengthen or falsify a field claim,
+but is neither manufactured nor required for finite delivery. One evidence unit
+may support more than one criterion only when each criterion's registration,
+measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `ready` with O1-O5 at 0/5 and no active increment.
-Its bounded pre-response enrollment-capture repair is retained as inactive
-source and Git history. Its `normativeProfileBinding` is
-unfrozen, but the tree now contains a distinct code-pinned v1.2 pre-freeze
+The current v1.2 program is `active` with O1-O5 at 0/5 under one bounded
+authority-repair increment. Its `normativeProfileBinding` is unfrozen, and the
+tree contains a distinct candidate.2 pre-freeze
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
-[cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.2.json). They make the current
-pre-response, dynamic-environment, continuous-correction, form/OS, privacy, and
-terminal semantics reviewable while adding no authority, threshold, activation,
-or result. Current human-authorization and outcome-validator registries are
-empty, and no cohort is active. v1.1 remains stopped history: its only
+[controlled-conformance protocol](CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json).
+They separate finite delivery from later field validation and cover the
+collaboration lifecycle through minimum sufficient native reuse, external or
+domain reuse, residual Harness control, or explicit degradation, escalation,
+stop, or claim limitation. They add no authority, threshold, binding, or
+result. Current human-authorization and outcome-validator registries are empty,
+and no private natural-demand cohort is required or active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
 demand received outcome-bearing assistance before immutable registration. The
@@ -91,24 +92,24 @@ verifier pins the exact v1.0 program and acceptance bytes at revision
 `910ac01`; no later release may reuse that profile binding, cohort state,
 authorization, task identity, ordering state, result or outcome.
 
-v1.2 retains environment attribution as acceptance authority rather
-than a supporting-document convention. Every future O1-O5 registration binds
-one pre-task manifest, one initial authority-and-available-source envelope, one
-of two environment classes, one treatment arm, and the exact Harness activation
-delta if present:
+v1.2 retains environment attribution as acceptance authority rather than a
+supporting-document convention. Every O1-O5 controlled scenario or later field
+unit binds one starting manifest, one initial authority-and-available-source
+envelope, one environment class, one declared route, and the exact Harness
+activation delta if present:
 
 ```text
 observed-native-minimum: exclude discoverable user-global influence at start;
                          retain system/built-in/account/managed/unknown state
 user-configured:         freeze the actual relevant user starting environment
 
-within-class comparison: matched starting manifest + authority/source envelope;
-                         exact Harness activation is the only planned initial
-                         route/configuration difference
+controlled comparison:  registered expected invariant or counterexample
+field-effect claim:      later matched starting manifest + authority/source
+                         envelope; controlled evidence alone is insufficient
 task-time adaptation:    attribute Agent-selected or human-authorized lifecycle
                          deltas instead of treating start state as a ceiling
-claim ceiling:            matched observational, not single-variable causal
-cross-class comparison:   descriptive only, never a Harness effect
+claim ceiling:           exact controlled effect or matched observational field
+                         evidence, never a stronger causal claim
 ```
 
 The manifest covers host/client version, model/provider/reasoning effort and
@@ -117,17 +118,14 @@ managed requirements, observed-or-unknown system/developer/built-in state,
 working directory and instruction chain, configuration layers, rules, Skills,
 plugins, Apps, MCP, Hooks, memory, managers, OS/runtime/tool/resource surface,
 the initial authority-and-available-source envelope, and exact Harness package/
-activation. A without-Harness baseline cannot inherit
-Harness repository guidance, so it runs in a neutral workspace or real target
-repository with the same task-inherent non-Harness guidance as its comparator.
-Each natural task-host unit runs once in one pre-registered arm. O5's same-task
-cross-host pair is pre-registered portability replication, not same-host
-treatment replay. The O5 pair set must also span at least two operating-system
-families, with at least one pair executing its two host units across that
-boundary. Each unit binds the exact OS family/version, runtime, host
-relationship and virtualization or compatibility boundary. WSL2 is Linux
-hosted by Windows, not bare-metal Linux or macOS evidence, and no tested pair
-implies universal OS support. The pre-task state is a starting condition, not
+activation. A without-Harness comparison cannot inherit Harness repository
+guidance. Controlled repetitions are allowed only for distinct registered
+fault, configuration, lifecycle, host, or recovery conditions and cannot be
+reported as independent natural tasks. Current O5 requires clean Windows and
+Windows-hosted WSL Linux public checks, hosted macOS CI kept distinct from live
+application evidence, and one exact live Codex scope. WSL is not bare-metal
+Linux or macOS evidence, and no tested environment implies universal OS
+support. The starting state is a condition, not
 a static capability ceiling. After demand reveals need, the Agent may adapt under the
 registered authority: it performs every supported authorized mechanic, while
 any technically or authoritatively human-only action is reduced to the smallest
@@ -151,14 +149,17 @@ stops; it does not make the user discover a model menu. Exact execution
 identity belongs in task evidence, while a current model name, benchmark, or
 reasoning level never becomes portable-core authority.
 
-The same boundary applies to human-Agent shortfalls. A report, taxonomy,
-mapping, or implemented mechanism is subordinate evidence rather than proof of
-coverage. A material applicable risk needs a sufficient native, official,
-maintained external, accountable domain, or smallest residual Harness control
-and proportionate prevention, detection, recovery, degradation, escalation, or
-claim limitation. Unknown and unresolved risk remains visible and limits the
-claim; the runtime is not expanded into a catalog-shaped universal control
-plane.
+The same boundary applies to human-Agent shortfalls. The fixed research corpus
+is a requirements and counterexample source, not a feature backlog. Coverage
+spans intake, context and referent binding, premise challenge, route and carrier
+selection, authority, execution, evidence, correction, recovery, transition,
+closure, feedback, governance, and retirement. At each material point the
+product retains sufficient native behavior, reuses an official, maintained
+external, or accountable-domain control, adds the smallest residual Harness
+control, or explicitly degrades, escalates, stops, or limits its claim. A
+report, taxonomy, mapping, or implemented mechanism is not verified coverage,
+and a static perfect score is neither required nor credible while Agents keep
+evolving.
 Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
 
@@ -212,12 +213,12 @@ projections, privacy, exact tested host/OS/runtime/virtualization scope, claim
 ceiling, candidate, tag, and public release. A predecessor profile-and-adapter
 scope fails before any source validator can promote it.
 
-Portfolio minima are eligibility predicates, not work generators. O3's
-reproducible-gap case and O4's rejected or stopped receipt count only when a
-bound natural task produces them without induced degradation. The Agent cannot
-disable a healthy capability, stage a failure, split or relabel one demand, or
-invent a task to fill a cohort; the affected criterion remains false until an
-eligible case occurs.
+Acceptance coverage is a release predicate, not a work generator. Controlled
+fault injection and historical counterexamples are permitted only for the
+bounded mechanism, recovery, correction, or lifecycle claim they directly
+test. They cannot be relabeled as natural demand or field value. The Agent does
+not disable a healthy route merely to justify a Harness addition; sufficient
+native behavior is a passing minimum-delta disposition.
 
 The portable layer owns testable quality semantics, not host commands or wire
 primitives. It defines required
@@ -238,22 +239,17 @@ and the uninstalled Codex and Claude task-facing Skill source packages. O2 uses
 three materially distinct scenarios, O3 binds their route choices, O4 accepts a
 bounded Codex reference-host calibration, and O5 binds one accepted matched
 Codex plus Claude Code/DeepSeek decision pair. A repository-authored JSON file
-alone cannot promote an outcome: every verified outcome requires a code-owned validator
-scoped to the criterion and exact causal increment for the bound task
-evidence. Before measured execution, the increment freezes an immutable task
-registration containing every mapped criterion's required values, the task's
-source-capture eligibility and stop rule, floors, and claim limit. The same
-registration binds a code-owned task-specific validator identity, committed
-locator, earlier revision, and digest. The registration seam executes that
-validator's preregistration check fail-closed, and later outcome evidence must
-reuse the exact identity. A task-specific validator may implement a newly
-observed source serialization only before the measurement event; it cannot be
-added or changed after the result. It must bind source-window, environment,
-registration identity and chronology, enforce its unchanged rules, and pass the
-exact evidence and completed causal binding. This permits later replay of a
-prebound check, not post-hoc rule changes. A generic self-report schema could
-validate only its own structure, not naturalness, source truth, behavior, or
-value.
+alone cannot promote an outcome: every current verified outcome requires a
+code-owned validator scoped to the criterion, evidence class, exact causal
+increment, and registered scenario or field unit. Before outcome-bearing
+execution, the registration binds starting truth, expected invariant or
+counterexample, environment, route and authority, validator identity and
+earlier committed digest, stop and cleanup rules, and claim ceiling. Later
+evidence must reuse that identity. A validator may support a newly observed
+source serialization only before execution; it cannot be added or weakened
+after the result. A generic self-report schema validates at most its own
+structure, not a semantic effect, field naturalness, value, recovery, or
+cleanup.
 
 The historical v0.2 program completed after the public-intake, task-facing Codex and
 Claude Skill source deliveries, continuation-reconciliation implementation,
@@ -274,23 +270,14 @@ single-P1 `blocked` decision, and the named human accepted both outcomes, their
 normalized equivalence, and only the pre-registered task/target/host/model/
 adapter/date claim. Those bindings remain immutable at the v0.2 revision and
 are not registered current v1.2 validators. v1.0 and v1.1 are stopped with
-O1-O5 at 0/5; live program state comes only from the verifier. v1.2 must
-prospectively preserve or strengthen the criteria requiring sustained natural
-tasks, same-environment comparative burden
-reduction, a real live capability lifecycle, proactive verified carrier
-transition, and live reproducible cross-host and cross-operating-system release
-evidence.
-Per-OS clean-checkout evidence covers public non-private contract checks and
-task-scoped projection activation, rollback and cleanup. Cross-OS behavior is
-validated by the task-bound O5 validator; live private-source terminal
-verification remains on the explicitly authorized evidence-holder surface and
-is not a portability claim. O5 pre-registration binds candidate/tag derivation
-and no-mutation semantics, while the exact commit and tag are fixed only at the
-later terminal candidate and human authorization gate.
-Authorized product-plan delivery is real demand
-when its primary purpose is the required deliverable rather than exercising or
-diagnosing the Harness; this does not make the task outcome-eligible without
-the unchanged pre-registration, evidence, floors, and human-acceptance burden.
+O1-O5 at 0/5; live program state comes only from the verifier. v1.2 instead
+requires full-chain lifecycle coverage, a live usable Codex application,
+adaptive route and self-correction scenarios, clean bounded reproduction, and
+an exact public release. Natural-task burden, broad effectiveness, distinct-
+Agent equivalence, and untested-platform behavior remain later field claims.
+O5 pre-registration binds candidate/tag derivation and no-mutation semantics,
+while the exact commit and tag are fixed only at the later terminal candidate
+and human authorization gate.
 The current verifier and inactive adapters are not a task runtime or an
 installed-host behavior result. The cross-host evidence proves bounded decision
 portability for the registered O5 pair only; it does not establish adapter
@@ -704,12 +691,10 @@ stops, and exact repository cleanup paths. Planned increments and work items are
 stored as a future queue: bind the next item only when it becomes current. A
 closed outcome-neutral increment leaves the current graph and remains
 recoverable from Git; a completed increment stays current only while
-validator-accepted outcome evidence needs its exact causal identity. Actual
-process loss must be measured by task-bound O1/O2 receipts. Their acceptance
-contract separately rejects both capability-orchestration intervention and
-material collaboration-loss events such as intent correction, reopened
-decisions, unrequested work, unnecessary process, residue or context recovery,
-and false completion correction.
+validator-accepted outcome evidence needs its exact causal identity. Controlled
+scenarios may verify that the designed route does not transfer Agent-owned work
+or repeat known collaboration-loss classes, but only later field evidence can
+support comparative burden or broad user-value claims.
 
 Before measured execution, every outcome-bearing increment also binds one
 canonical `product/evidence/*-registration.json` by raw-byte SHA-256 and one
@@ -718,10 +703,11 @@ earlier revision, and digest. The registration seam executes the validator's
 preregistration callback fail-closed, and later evidence must reuse that exact
 identity. The
 registration must cover the union of the mapped criteria's current
-`preRegistrationFields`, the current acceptance-contract identity, source
-eligibility, mandatory task floors, loss taxonomies, named human, stop rule,
-and claim limits. The content addresses detect registration or validator drift.
-The bound validator must prove that the committed binding preceded eligible
-execution and bind the observation chronology; the registration is
-not product authority, result evidence, or an outcome validator. Outcome-neutral
-increments bind `null` rather than manufacture a task.
+`preRegistrationFields`, current acceptance identity, evidence class, starting
+environment, expected invariant or counterexample, named human authority where
+required, stop and cleanup rules, and claim limits. Content addresses detect
+registration or validator drift. The bound validator must prove that the
+committed binding preceded outcome-bearing execution and bind the observation
+chronology; the registration is not product authority or result evidence.
+Outcome-neutral increments bind `null` rather than manufacture a task or
+scenario.

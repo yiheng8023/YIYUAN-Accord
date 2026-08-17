@@ -28,8 +28,10 @@ python -B -m unittest discover -s tests/product -v
 Do not infer completion, active work, authorization, release state, or remote
 convergence from this document. A historical release or passing test suite
 cannot promote current O1-O5. The project closes only when the current machine
-completion expression is accepted with its required real-task evidence and
-named-human authority.
+completion expression is accepted with its required controlled, exact-host,
+reproducibility and release evidence plus named-human authority. Later field
+claims still require their corresponding natural-task or distinct-Agent
+evidence and cannot be implied by release acceptance.
 
 ## Stable product boundary
 
@@ -47,18 +49,19 @@ must remain distinct.
 
 v0.2 is an immutable bounded calibration milestone only. Its candidate.5
 profile and measured adapters cannot become the v1 product by inheritance or
-byte rewriting. Codex-first is the proof order, not a portable-core dependency;
-current O5 requires distinct-host and cross-OS live evidence; exact tested
-environment identity bounds the claim.
+byte rewriting. Codex is the first operational reference, not a portable-core
+dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is ready with O1-O5 at 0/5, an unfrozen binding, empty current validator
-registries, and no active increment. Its v1.2
-profile/protocol pair is pre-freeze only: no activation, outcome, or proof. It
-binds dynamic adaptation and Agent-owned reconcile/recover/correct/reverify;
-human goal, domain, authority and final acceptance stay human. The inactive
-Codex `UserPromptSubmit` candidate creates keyed source commitments and bounded
-mandatory-resolution context before model processing; it is neither installed
-nor a complete output or hosted-tool interception boundary. v1.1 is stopped at
+v1.2 is active with O1-O5 at 0/5 under one authority-repair increment, an
+unfrozen profile binding, and empty current result-validator registries. Its
+candidate.2 profile and controlled-conformance protocol are pre-freeze only:
+they separate finite delivery from later field validation and cover the
+collaboration lifecycle through sufficient native behavior, suitable reuse,
+smallest residual control, or explicit degradation, escalation, stop, or claim
+limitation. They create no result or proof. The inactive Codex source still
+contains older enrollment experiments but is neither installed nor the current
+v1.2 evidence path; O2 requires a reduced, live, controllable application.
+v1.1 is stopped at
 revision `5ae71bb`: its first real post-activation product demand crossed the
 outcome boundary before registration, so retrospective registration is forbidden
 and the exact private resource and trigger were deleted. v1.2 inherits none of
@@ -68,16 +71,16 @@ generations are revoked, the successor protected resource and exact task were
 deleted, and no profile binding, cohort, authorization, ordering state, task or
 result may be reconstructed or inherited.
 
-Every O1-O5 registration binds its environment class, pre-task manifest,
-initial authority/source envelope, arm, and exact Harness activation. Each
-task-host unit runs once; O5 cross-host replication is not same-host replay.
-Compare matched same-class starting conditions with Harness as the only planned
-initial difference. Attribute later Agent-selected or human-authorized changes
-as lifecycle deltas; keep task differences explicit and cross-class observations
-descriptive. Minimum excludes discoverable user-global influence at start while
-system, developer, built-in, account, managed and unknown state stays retained
-or unknown. A baseline cannot inherit Harness repository guidance; unbound drift
-stops the pair. Private configuration or authentication, environment reset, a
+Every O1-O5 controlled scenario or later field unit binds its exact profile and
+protocol, evidence class, starting environment, initial authority/source
+envelope, declared route, expected invariant or counterexample, validator,
+cleanup, and claim ceiling. Controlled repetitions cover distinct registered
+conditions and never become independent natural tasks. Controlled evidence
+cannot prove comparative burden, broad effectiveness, distinct-Agent
+equivalence, or untested platforms. Minimum excludes discoverable user-global
+influence at start while system, developer, built-in, account, managed and
+unknown state stays retained or unknown. Unbound drift stops or narrows the
+unit. Private configuration or authentication, environment reset, a
 new OS account, or installation remains a human gate. After a grant the Agent
 performs supported mechanics; a host-only step is minimal, guided and verified.
 Resolve the current suitable official or maintained source per decision and bind
@@ -95,23 +98,16 @@ Open exactly one increment with at most one active work item only after binding:
 - exact cleanup boundary and operations.
 
 Outcome-neutral repair binds `taskRegistration: null` and leaves the graph at
-its stop. Outcome-bearing work requires a reviewed candidate bound as the
-environment-attributed profile and cohort protocol in the generation's prior
-freeze revision, with its exact source surface, activation cursor and cohort
-key identity/fingerprint. Before eligible
-demand, a named human must authorize that exact revision, complete binding
-digest, source surface, private-evidence boundary and cleanup disposition in a
-source-native event; a code-owned source validator and the next commit pin that
-authorization. Any demand between freeze and authorization stops the cohort.
-Only then may a Git revision bind registration and its earlier code-owned
-validator. Preregistration must pass before measurement; evidence reuses that
-identity. The validator proves cursor continuity, no omitted earlier eligible
-demand, private keyed deduplication, allowed serial surface transition, and a
-distinct post-registration measurement. Live re-verifiability retains the key
-and private source only under the human's exact disposition. Destruction needs
-an exact receipt and revokes live verifiability. Git dates and self-reported
-times do not prove chronology.
-Never manufacture a task, baseline, receipt, or validator to create progress.
+its stop. Outcome-bearing work first binds the reviewed profile and controlled-
+conformance protocol by exact committed bytes. Then one content-addressed
+registration binds the mapped acceptance fields, evidence class, starting
+truth, expected invariant or counterexample, route and authority, an earlier
+committed criterion-scoped validator, stop and cleanup rules, and claim ceiling.
+Preregistration passes before execution; later evidence reuses the exact
+identity. Failed, stopped, unsupported, or missing results remain visible and
+cannot be replaced. Natural tasks use a later field-evidence route only when
+they actually occur. Never manufacture a task, scenario, baseline, receipt, or
+validator to create progress.
 
 Terminal publication is two-stage: commit one clean candidate with a candidate
 `terminalReleaseBinding`, report its exact `HEAD`, tag, public HTTPS remote and
