@@ -292,6 +292,7 @@ OPERATION_EFFECTS = {
     "authorized-account-connection": "bounded-external-write",
     "authorized-persistent-activation": "bounded-host-state-change",
     "authorized-private-evidence-materialization": "bounded-local-write",
+    "authorized-private-evidence-cleanup": "bounded-local-delete",
     "authorized-publication-execution": "bounded-external-write",
     "authorized-release-execution": "bounded-external-write",
 }

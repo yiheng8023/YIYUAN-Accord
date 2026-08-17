@@ -51,12 +51,15 @@ byte rewriting. Codex-first is the proof order, not a portable-core dependency;
 current O5 requires distinct-host and cross-OS live evidence; exact tested
 environment identity bounds the claim.
 
-v1.1 is ready with no active increment and O1-O5 at 0/5. Its exact
+v1.1 is stopped with O1-O5 at 0/5. Its exact
 `harness-demand-to-capability-v1.1-candidate.1` profile and paired
-`harness-prospective-cohort-v1.1-candidate.1` protocol form the source-authorized,
-code-pinned frozen normative binding at first-freeze revision `5ce2773`. This
-grants cohort enrollment under the acceptance-owned rules, not a task, result,
-installation, outcome or terminal claim. v1.0 is
+`harness-prospective-cohort-v1.1-candidate.1` protocol form a revoked historical
+binding at first-freeze revision `5ce2773`. A private source-window audit proved
+that the first post-activation real product demand received outcome-bearing
+assistance before immutable registration. Retrospective registration and later
+sample selection are forbidden; the exact protected resource and expiry trigger
+were deleted, and v1.1 cannot resume or open a successor. Continuation of the
+constitution-level goal requires a later machine-authority program. v1.0 is
 immutable stopped history at revision `910ac01`: both authorized zero-task
 generations are revoked, the successor protected resource and exact task were
 deleted, and no profile binding, cohort, authorization, ordering state, task or
@@ -88,28 +91,23 @@ Open exactly one increment with at most one active work item only after binding:
 - finite stop and process-loss budgets;
 - exact cleanup boundary and operations.
 
-Outcome-neutral repair binds `taskRegistration: null` and must leave the current
-graph at its stop. Outcome-bearing work additionally requires a reviewed current
-candidate to be program-selected and bound as the environment-attributed
-normative profile and prospective cohort protocol in the
-current cohort generation's prior freeze revision, which also binds the exact source-native
-surface, activation cursor and cohort key identity/fingerprint. Before eligible
+Outcome-neutral repair binds `taskRegistration: null` and leaves the graph at
+its stop. Outcome-bearing work requires a reviewed candidate bound as the
+environment-attributed profile and cohort protocol in the generation's prior
+freeze revision, with its exact source surface, activation cursor and cohort
+key identity/fingerprint. Before eligible
 demand, a named human must authorize that exact revision, complete binding
 digest, source surface, private-evidence boundary and cleanup disposition in a
 source-native event; a code-owned source validator and the next commit pin that
 authorization. Any demand between freeze and authorization stops the cohort.
-Only then may a Git revision bind registration plus validator
-identity, locator, earlier revision, and digest. Its preregistration check must
-pass before measurement; evidence reuses that identity. The validator proves the source cursor, no omitted earlier
-eligible demand, a natural-demand event before registration, private keyed
-source binding and deduplication, any same-key pre-demand serial surface
-transition, and a distinct measurement event after registration before
-promotion. While live source re-verifiability is claimed, the key and private
-source evidence remain available only under the named human's exact privacy,
-access, retention, expiry, revocation, and cleanup disposition. Destruction
-requires an exact receipt and revokes live verifiability rather than preserving
-acceptance. Git dates and self-reported timestamps are consistency fields, not
-chronology proof.
+Only then may a Git revision bind registration and its earlier code-owned
+validator. Preregistration must pass before measurement; evidence reuses that
+identity. The validator proves cursor continuity, no omitted earlier eligible
+demand, private keyed deduplication, allowed serial surface transition, and a
+distinct post-registration measurement. Live re-verifiability retains the key
+and private source only under the human's exact disposition. Destruction needs
+an exact receipt and revokes live verifiability. Git dates and self-reported
+times do not prove chronology.
 Never manufacture a task, baseline, receipt, or validator to create progress.
 
 Terminal publication is two-stage: commit one clean candidate with a candidate
@@ -122,9 +120,9 @@ commit, or any ignored/untracked repository residue fails closed.
 Do not treat the tag's human name or time as authorization proof. The final
 candidate must bind a real authorization source and its code-owned source
 validator; the terminal release-authorization registry entry remains absent
-until that exact carrier is selected. The active v1.1 first-freeze source
-validator authorizes only cohort activation; it cannot authorize publication
-or promote an outcome.
+until that exact carrier is selected. The historical v1.1 first-freeze source
+validator authorized only the now-revoked cohort activation; it cannot
+authorize publication or promote an outcome.
 
 ## Authority and carrier transitions
 

@@ -12,15 +12,17 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.1 is the ready, nonterminal environment-attribution
-program with no active increment. Its exact candidate.1 profile and cohort
-protocol are frozen, independently source-authorized, and code-pinned to the
-first-freeze revision `5ce2773`; no natural task has yet been registered. On
-the authorized Windows source, the repository verifier reports
-`programStatus=ready`, `completionState=in-progress`, O1-O5 `0/5`, and G1-G4
-`4/4`; run the verifier for live truth. A hosted runner without that protected
-source fails closed at G3 and corroborates only the non-private contract
-boundary. The constitution's terminal proposition remains open. v1.0 is
+**Current status:** v1.1 is an immutable stopped zero-outcome attempt. A
+source-bound private-window audit established that the first post-activation
+non-authority user event was real Harness product-delivery demand and received
+outcome-bearing assistance before any immutable task registration. The cohort
+cannot be repaired by retrospective registration or by selecting a later task:
+its only generation is revoked, and the exact protected resource and one-time
+expiry trigger have been deleted under the authorized deterministic-failure
+disposition. The repository verifier reports `programStatus=stopped`,
+`completionState=stopped`, O1-O5 `0/5`, and G1-G4 `4/4`; run it for live truth.
+The constitution's terminal proposition remains open and requires a later
+machine-authority program rather than a v1.1 restart. v1.0 is
 an immutable stopped zero-outcome attempt at revision `910ac01`; none of its
 profile binding, cohort state, authorization, or results can be inherited.
 v0.2 remains an
@@ -40,7 +42,7 @@ A historical [v1.0 profile candidate](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
 and [prospective cohort protocol candidate](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)
 co-locate the pre-measurement method, mandatory floors, baseline, carrier,
 cross-host, privacy/residue, and release semantics. Their exact frozen bytes
-remain v1.0 historical inputs; the separately frozen v1.1 binding does not
+remain v1.0 historical inputs; the separately frozen and now revoked v1.1 binding does not
 reuse them. Both zero-task v1.0 cohort generations are now revoked and
 carry no outcome evidence. The one permitted successor freeze at revision
 `8e8e76b` and canonical binding digest `d2cf0cd` received independent exact
@@ -75,8 +77,9 @@ source. The current Codex tree is instead an inactive v1 carrier-mechanism
 candidate: its package-owned Hook records only bounded native lifecycle counters,
 does not execute task-repository code, and its checked-in command fails closed
 until an absolute trusted interpreter is materialized. Measured activation also
-requires a future currently live, independently authorized v1.1 cohort under a
-new environment-attributed profile binding. It is not installed or enabled. The
+requires a future live, independently authorized cohort under a later
+machine-authority program and a new environment-attributed profile binding. It
+is not installed or enabled. The
 current Claude candidate.7 lineage now also has bounded input and a fail-closed
 unmaterialized interpreter command, but still loads only exact-hash reviewed
 repository runtime bytes and is not a live v1 carrier implementation. Neither
@@ -204,8 +207,8 @@ The current repository provides:
   build instead of duplicating existing layers.
 
 It does not provide a task runtime, persistent capability installation, or an
-accepted v1.1 live-routing result today. The source-authorized frozen v1.1
-binding carries zero outcome evidence and is not terminal acceptance.
+accepted v1.1 live-routing result today. The revoked v1.1 binding carries zero
+outcome evidence and is not terminal acceptance.
 Candidate.5 has only the frozen,
 bounded v0.2 Codex calibration acceptance described above; it is not the final
 v1.1 profile or a general standard. The adapters are not installed in user
@@ -257,49 +260,23 @@ its project guidance. Historical items are classified as environment-independent
 environment-bound, or invalidated; none inherit outcome credit.
 
 The repository now carries one code-pinned v1.1 profile and paired prospective
-cohort protocol as its frozen normative binding. The first-freeze revision
-`5ce2773`, canonical binding digest, exact source-native enrollment surface,
-activation cursor, cohort key identity/fingerprint, protected-source window,
-retention disposition, and one-time S4U expiry trigger were independently
-authorized and code-validated before any eligible demand. The v1.0 profile,
-protocol, authorization, cohort, registration and ordering state were not
-reused. Each permitted cohort generation's frozen commit binds the exact initial
-source-native ordered enrollment surface, activation cursor, and cohort key
-identity/fingerprint, but does not activate the cohort by itself. Before any
-eligible demand, a named human must authorize that exact revision, complete
-binding digest, source surface, private-evidence boundary, and cleanup
-disposition in an independently verifiable source event; the next commit pins
-the revision, digest, and code-owned authorization validator. That sequence is
-now complete for v1.1. A demand observed between freeze and authorization would
-have stopped the cohort instead of being omitted; the verified source window
-contained none.
-Scenario and environment coverage remain acceptance-owned. The protocol defines
-eligibility, privacy-safe random public task identity plus a fixed private keyed
-source-message binding, first-eligible enrollment, the earliest-prefix stop rule,
-missing-data behavior, distinct natural-demand and measurement-event proof, and
-claim limits without naming future tasks. Every
-later task registration must be unique and descend from that freeze in Git
-history. A source transition preserves the same key and cohort order and must
-prove a source-native cause before destination demand, close the source cursor,
-and verify destination activation; otherwise the cohort stops. Git ancestry
-proves only repository order. Before measured execution, the immutable task
-registration must bind the task-bound validator's code-owned identity,
-committed locator, earlier revision, and digest, and the registration seam
-must execute its preregistration check successfully. Later evidence must
-reuse that exact validator identity. The validator must prove the complete
-source cursor has no omitted earlier eligible demand, the natural-demand event
-occurred before registration, and a distinct measurement event occurred
-afterward. While live source re-verifiability is claimed, the private key and
-private source evidence remain available only under the named human's exact
-privacy, access, retention, expiry, revocation, and cleanup disposition.
-Destroying the key requires an exact receipt and revokes live verifiability; it
-cannot preserve acceptance. A revoked authorized freeze remains immutable
-stopped history. Because the first generation had zero registrations, one
-fresh successor generation may be opened only if a source-verified window also
-shows no eligible demand after revocation. It must use a new activation cursor,
-surface and key identities, private key, and exact independent authorization;
-it inherits no task, result, cursor or ordering state, and cannot be restarted
-again. Commit dates and self-reported timestamps cannot supply chronology proof.
+cohort protocol as a revoked historical normative binding. The first-freeze
+revision `5ce2773`, canonical binding digest, exact source-native enrollment
+surface, activation cursor, cohort key identity/fingerprint, protected-source
+window, retention disposition, and one-time S4U expiry trigger were independently
+authorized and code-validated. The v1.0 profile, protocol, authorization,
+cohort, registration and ordering state were not reused.
+
+The frozen v1.1 protocol correctly required first-eligible enrollment and an
+immutable registration after natural demand but before outcome-bearing work.
+The execution path incorrectly treated real Harness product delivery as mere
+Harness discussion. The first post-activation product demand therefore received
+an outcome before registration, and the complete source window falsified the
+prospective cohort. No task was retrospectively registered, no later task was
+selected, and no O1-O5 credit exists. The binding is revoked, its exact private
+resource and trigger are absent, and v1.1 cannot open a successor or resume.
+Commit dates, self-reported timestamps, tests, and Git history cannot repair
+that chronology failure.
 
 The program froze candidate.5 and its cohort protocol at artifact revision
 `502c4ff`, first-freeze revision `d19d2fb`, and canonical binding digest
@@ -344,15 +321,16 @@ tested host/OS/runtime/virtualization scope, bounded claims, candidate, tag, and
 public release; the predecessor profile/adapter-only scope cannot pass.
 At the v1.0 revision, the terminal-release validator entry remained absent and
 the registry contained only the bounded initial-freeze and successor-freeze
-source validators described above. The current registry contains one active,
-code-pinned v1.1 first-freeze source-authorization validator. It verifies the
-exact revision, binding digest, public activation identities, protected source
-window and cleanup trigger; it is not an outcome validator.
+source validators described above. The current registry retains the code-pinned
+v1.1 first-freeze source-authorization validator as inactive stopped-history
+machinery. It verified the exact revision, binding digest, public activation
+identities, protected source window and cleanup trigger; it is not an outcome
+validator.
 The v1.0 credential and Scheduled Task cleanup entrypoint is not executable from
 the v1.1 module; its historical behavior remains recoverable only from the pinned
-`910ac01` revision. The separate v1.1-only expiry command is bound to the exact
-current protected resource and one-time S4U task, remains unavailable before
-its code-owned deadline, and removes only that resource and trigger when due.
+`910ac01` revision. The separate v1.1-only expiry command remains structurally
+bound to the retired exact identity, but the protected resource and one-time
+S4U task are now absent.
 
 ## What v1.1 requires
 

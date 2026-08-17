@@ -67,8 +67,12 @@ multiple criteria only when each criterion's pre-registration, measures,
 validator, and human authority independently pass; it remains one sample
 within any single criterion.
 
-The current v1.1 program is `ready`, has no active increment, and has one
-source-authorized, code-pinned frozen `normativeProfileBinding`. The
+The current v1.1 program is `stopped` with O1-O5 at 0/5. Its only
+source-authorized, code-pinned `normativeProfileBinding` is revoked after a
+private source-window audit proved that the first post-activation real product
+demand received outcome-bearing assistance before immutable registration. The
+exact protected resource and expiry trigger are absent; v1.1 cannot resume or
+open a successor. The
 [v1.0 profile candidate](DEMAND-TO-CAPABILITY-PROFILE-V1.md) and paired
 [prospective cohort protocol](PROSPECTIVE-COHORT-PROTOCOL-V1.json) remain exact
 historical inputs only. v1.0 froze two independently authorized generations,
@@ -129,16 +133,17 @@ Historical evidence is explicitly environment-independent, environment-bound,
 or invalidated before reuse and never inherits outcome credit.
 
 The tree now contains one code-pinned v1.1 profile and paired cohort protocol as
-the frozen normative binding under that environment contract. Revision
+a revoked historical normative binding under that environment contract. Revision
 `5ce2773`, its canonical digest, public activation identities, protected source
 window, retention disposition and exact S4U expiry task were independently
-authorized and code-validated before any eligible demand. This activation is
-not an outcome or terminal acceptance. Their source-native eligibility,
+authorized and code-validated. Activation was not an outcome or terminal
+acceptance. Their source-native eligibility,
 privacy-preserving task
 identity, first-eligible ordering, chronology, retention and cleanup controls
-must be code-validated before any natural task can enter the cohort. Git dates
-and evidence timestamps remain diagnostic consistency fields, not trusted
-chronology.
+had to be code-validated before any natural task entered the cohort. The first
+post-activation product demand was instead answered before registration, so the
+earliest-prefix rule stopped v1.1 without retrospective evidence. Git dates and
+evidence timestamps remain diagnostic consistency fields, not trusted chronology.
 
 Terminal release is an external-state transition over one immutable candidate,
 not a final mutation inside that candidate. The tree predeclares the semantic
@@ -153,9 +158,9 @@ An annotation's claimed human name and time are not authority proof. Terminal
 acceptance additionally dispatches a code-owned validator for the annotation's
 bound authorization source; that terminal validator remains absent until the
 actual final authorization carrier and trust boundary are known. The only current
-human-authorization registry entry is the active v1.1 first-freeze source
-validator. Its execution-specific anchors are code-pinned, but it cannot
-promote an outcome.
+human-authorization registry entry is the inactive historical v1.1 first-freeze
+source validator. Its execution-specific anchors remain code-pinned, but the
+revoked binding cannot promote an outcome.
 Before a terminal candidate can be valid, it must bind one exact committed
 terminal-authorization validator and a public-source policy. A later tag must
 reuse that validator and may expose only a random public identity plus a keyed
@@ -316,8 +321,8 @@ conversation may still hold source-native bytes required to re-verify a frozen
 cohort authorization. The verifier therefore derives a privacy-safe
 `sourceCarrierRelease` preflight without exposing the carrier path or private
 event: frozen live verification retains the source, invalid or unknown state
-fails closed, and only a valid unbound or revoked binding clears this one
-dependency. The result is necessary but not sufficient for release; topology,
+fails closed, and this valid revoked binding clears that former dependency.
+The result is necessary but not sufficient for release; topology,
 authority, reconciliation and cleanup remain separate. This is a lifecycle
 guard for Agent-owned archive mechanics, not a transcript
 monitor, session store, or conversation runtime.

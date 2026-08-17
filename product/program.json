@@ -6,7 +6,7 @@
   "purpose": "Prove the constitution's terminal product proposition through an environment-attributed finite repeated-natural-task cohort: sustained goal-level delivery, lower user orchestration burden than same-starting-environment source-bound ad-hoc baselines, real demand-driven capability and carrier lifecycles, and live cross-host and cross-operating-system open reference delivery. v0.2 remains an immutable bounded calibration milestone and v1.0 remains an immutable stopped zero-outcome attempt; neither can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
+  "status": "stopped",
   "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
@@ -38,7 +38,7 @@
     "currentAuthority": false
   },
   "normativeProfileBinding": {
-    "state": "frozen",
+    "state": "revoked",
     "profileIdentity": "harness-demand-to-capability-v1.1-candidate.1",
     "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md",
     "sha256": "536096507101be97bd08921b194c6188ca0569bf0dec6a68d0baffc55f0189d0",
@@ -102,6 +102,7 @@
       "authorized-account-connection",
       "authorized-persistent-activation",
       "authorized-private-evidence-materialization",
+      "authorized-private-evidence-cleanup",
       "authorized-publication-execution",
       "authorized-release-execution"
     ]

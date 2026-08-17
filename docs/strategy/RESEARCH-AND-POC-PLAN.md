@@ -19,7 +19,7 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.1 is the ready zero-outcome environment-attributed terminal-product proof;
+v1.1 is a stopped zero-outcome environment-attributed terminal-product attempt;
 O5 now separates premeasurement derivation, per-OS public and task-scoped
 reproduction, and evidence-holder terminal private verification.
 Its outcomes remain 0/5; v0.2 evidence remains immutable bounded calibration
@@ -27,10 +27,10 @@ and v1.0 remains an immutable stopped attempt, neither of which can be
 inherited. A distinct code-pinned v1.1 profile and paired cohort-protocol
 candidate make the adaptive starting-environment, current-source resolution,
 attributed lifecycle and minimal guided human-only-action method reviewable.
-Their exact bytes are now the independently source-authorized frozen normative
-binding at first-freeze revision `5ce2773`; this activates prospective
-enrollment but carries no task, outcome, installation, publication or terminal
-claim.
+Their exact bytes remain an independently source-authorized but revoked
+historical binding at first-freeze revision `5ce2773`. The first
+post-activation real product demand received outcome-bearing assistance before
+registration, so v1.1 stopped without retrospective evidence and cannot resume.
 Further research enters product work only when the current machine
 authority binds one causal increment to a real uncertainty or failure. In particular, the 45-compaction source-task
 carrier failure is O4 counterevidence, not an automatic result or permission to
@@ -91,9 +91,10 @@ prove a stronger sustained cohort, proactive carrier behavior,
 live installed-adapter value, clean-checkout release, or terminal proposition.
 No outcome-bearing A/B task should be manufactured merely to move the program.
 
-Natural-task evidence is required for outcome-bearing experimentation. Its
-absence does not block the nonterminal v1.1 program and does not authorize fabricated
-measurement. Bounded
+Natural-task evidence is required for outcome-bearing experimentation. v1.1
+cannot accept new work after its prospective-order failure; a later program may
+continue only through new machine authority and cannot inherit v1.1 evidence.
+Bounded
 retrospective counterexample analysis, portfolio curation, mechanism-only
 validation, and authority-defect repair remain Agent-owned lanes that do not
 require an invented user task and count as zero O1-O5 progress. Historical
@@ -296,8 +297,8 @@ keep only bounded session-keyed counters under `PLUGIN_DATA`, clean the exact
 state on `SessionEnd`, and never load task-repository code or invoke Git. Its
 checked-in command is an absolute fail-closed sentinel until a trusted runtime
 is materialized under separate activation authority; measured activation also
-requires a currently live, independently authorized cohort generation under
-the new environment-attributed v1.1 profile.
+requires a future live, independently authorized cohort generation under a new
+current machine-authority program; stopped v1.1 cannot supply it.
 The Skill still supplies no MCP, App, runtime, or product authority, and the
 repository itself does not become a plugin.
 
