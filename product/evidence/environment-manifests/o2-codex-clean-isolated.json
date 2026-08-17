@@ -32,7 +32,7 @@
   "cwd-repository-and-project-instruction-chain": {
     "captureCwd": "repository-root-relative",
     "scenarioCwd": "fresh-private-isolated-task-root-outside-the-repository",
-    "repositoryRevisionAtCapture": "1ee0c35cd499533c893386076e509352c1197491",
+    "repositoryRevisionAtCapture": "1ee0c3500e35b2b258c1db35ebd6458ba7a97846",
     "productAuthority": [
       "product/constitution.json",
       "product/program.json",
@@ -80,7 +80,7 @@
   "capture-time-source-identities-fingerprint-and-drift-check": {
     "controlRevision": "9d030d369c1eda620816d4109ed7cbdb5e5f75fd",
     "controlSha256": "4168dfa811590125661df73d589eaa40f2b4dcdf85e523e30f226fe2876869cf",
-    "validatorRevision": "1ee0c35cd499533c893386076e509352c1197491",
+    "validatorRevision": "1ee0c3500e35b2b258c1db35ebd6458ba7a97846",
     "validatorSha256": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e",
     "projectionBuilderRevision": "13ff439f56531149e6f8e429c713059e56c7a26e",
     "projectionBuilderSha256": "3ff9248b637e01f055919ad8d6ca1def0517fc8376c50f3aa76957399271d2bc",
