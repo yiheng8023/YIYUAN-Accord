@@ -19,8 +19,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 
 **当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite` 与 O2 结果中性前置切片，当前
 `increment.v12-o2-codex-reference` 处于 `active`。它仍在测量前阶段：刷新公开安全的隔离
-Codex 环境清单并构造不可变 O2 注册；注册通过前不得安装软件包或执行受控场景。更早的 O2
-机制切片均保留在 Git 历史且已移出当前图。
+Codex 环境清单后，精确注册已在 `7f39911` 成为不可变字节，并由同一先行 O2 validator
+通过仓库预注册缝。下一步才是已授权的隔离安装和四个受控场景；当前尚无 O2 结果。更早的
+O2 机制切片均保留在 Git 历史且已移出当前图。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
 此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、

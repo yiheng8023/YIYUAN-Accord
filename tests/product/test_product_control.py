@@ -1332,9 +1332,12 @@ class ProductControlTests(unittest.TestCase):
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
         )
-        self.assertEqual(live_program["increments"][1]["taskRegistration"], None)
         self.assertEqual(
-            live_program["increments"][1]["acceptanceIds"], ["G2", "G4"]
+            live_program["increments"][1]["taskRegistration"]["sourceRevision"],
+            "7f39911d335a37751eb310e8c58c778982edb60c",
+        )
+        self.assertEqual(
+            live_program["increments"][1]["acceptanceIds"], ["O2", "G2", "G4"]
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(

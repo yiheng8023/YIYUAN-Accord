@@ -70,9 +70,10 @@ measures, validator, evidence class, and human authority independently pass.
 The current v1.2 program is `active` on
 `increment.v12-o2-codex-reference` after completing
 `increment.v12-o1-lifecycle-suite` and the outcome-neutral O2 prerequisites.
-The current stage refreshes the public-safe isolated Codex manifest and builds
-an immutable registration; it cannot install, execute or promote O2 before
-that registration passes. O1-O5 are at 1/5. The immutable public-safe
+Its public-safe O2 registration is immutable at `7f39911` and passes the same
+earlier validator through the repository preregistration seam. Authorized
+isolated installation and four live controlled scenarios follow; O2 remains
+false until their task-bound evidence and cleanup pass. O1-O5 are at 1/5. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and

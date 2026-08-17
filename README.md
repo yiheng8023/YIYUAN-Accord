@@ -15,9 +15,10 @@ result, and cleans up afterward.
 **Current status:** v1.2 is `active` on
 `increment.v12-o2-codex-reference` after completing
 `increment.v12-o1-lifecycle-suite` and the outcome-neutral O2 prerequisite
-slices. The current work is still pre-measurement: it refreshes the public-safe
-isolated Codex manifest and constructs an immutable O2 registration. No package
-installation or controlled scenario may occur until that registration passes.
+slices. Its exact public-safe registration is immutable at `7f39911` and the
+same earlier O2 validator now passes the repository preregistration seam. The
+authorized isolated package installation and four controlled scenarios are the
+next measured operations; none is an accepted result yet.
 Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result

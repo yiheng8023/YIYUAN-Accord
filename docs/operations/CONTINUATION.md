@@ -54,9 +54,10 @@ dependency; exact tested environment identity bounds every host claim.
 
 v1.2 is `active` on `increment.v12-o2-codex-reference`, with O1 at 1/5.
 Outcome-neutral O2 prerequisites are committed. The current pre-measurement
-stage refreshes the public-safe isolated Codex manifest and builds an immutable
-registration; it cannot install or execute before registration passes. Earlier
-O2 mechanism slices are history outside the graph; O2 remains false.
+registration is immutable at `7f39911` and passes the same earlier validator.
+Authorized isolated installation and four controlled scenarios follow; none is
+accepted evidence yet. Earlier O2 mechanism slices are history outside the
+graph; O2 remains false.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
 controlled result; the O1 suite is the only accepted outcome validator.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain

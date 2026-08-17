@@ -177,10 +177,25 @@
       "falsifier": "The manifest or package identity drifts; installation or model execution occurs before a valid immutable registration; a scenario requires Skill, plugin or command syntax from the user; the simple native route gains unnecessary ceremony; the protected deletion occurs before a new exact grant; user configuration or existing credentials are copied or read; rollback or cleanup is incomplete; private locators or events enter public evidence; the validator changes after registration; or the controlled result is promoted beyond the tested Windows Codex suite.",
       "stopCondition": "The refreshed manifest and immutable registration strictly precede installation and execution; the exact package is observed installed and active only in the authorized isolated environment; all four registered scenarios pass the earlier validator, including a separately granted protected deletion; the exact plugin, marketplace and isolated resources are removed; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies and the increment exits the current graph.",
       "acceptanceIds": [
+        "O2",
         "G2",
         "G4"
       ],
-      "taskRegistration": null,
+      "taskRegistration": {
+        "locator": "product/evidence/o2-codex-reference-registration.json",
+        "sha256": "8849773ba4289377f305e61c1567ab0e1f1bdc4547a6a986b3e3bfcdf613d3bd",
+        "sourceRevision": "7f39911d335a37751eb310e8c58c778982edb60c",
+        "measurementNotBefore": "2026-08-18T02:40:18+08:00",
+        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+        "preMeasurementValidator": {
+          "kind": "o2-codex-reference-validator-v1",
+          "version": 1,
+          "locator": "harness/task_validator_o2_codex_reference.py",
+          "revision": "1ee0c3500e35b2b258c1db35ebd6458ba7a97846",
+          "sha256": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e"
+        }
+      },
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
         "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -203,6 +218,7 @@
           "id": "work.v12-o2-codex-reference",
           "state": "active",
           "acceptanceIds": [
+            "O2",
             "G2",
             "G4"
           ],
@@ -212,7 +228,12 @@
             "local-verification",
             "bounded-repository-cleanup",
             "git-commit",
-            "git-push"
+            "git-push",
+            "authorized-capability-installation",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant",
+            "human-only-action-guidance-and-post-verification",
+            "authorized-private-evidence-cleanup"
           ],
           "deliverables": [
             "immutable O2 Codex reference registration",
