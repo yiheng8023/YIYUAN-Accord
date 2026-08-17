@@ -349,10 +349,11 @@ EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
 EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
     "de5dbc42fb1e265a720bb26808a31d03d032e602"
 )
-# The v1.2 candidate is intentionally unbound until a later commit pins these
-# exact candidate.2 bytes and a distinct conformance-binding slice establishes
-# its non-private registration mechanism. None of the stopped natural-task
-# cohort anchors can be inherited.
+# The v1.2 candidate is intentionally unbound until a provisional first-parent
+# commit records the exact public binding and a later commit pins that revision
+# plus its canonical digest. This binding seam carries no cohort activation or
+# private source dependency. None of the stopped natural-task anchors can be
+# inherited.
 EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
@@ -5038,10 +5039,8 @@ def _current_normative_profile_binding_history_valid(
     root: Path,
     current_binding: Mapping[str, Any],
     errors: list[str],
-    *,
-    allow_authorization: bool = True,
 ) -> bool:
-    """Enforce one irreversible current-release generation from its history floor."""
+    """Enforce one irreversible public current-release binding generation."""
 
     before = len(errors)
     inside_worktree = _evidence_git(root, "rev-parse", "--is-inside-work-tree")
@@ -5235,31 +5234,6 @@ def _current_normative_profile_binding_history_valid(
             _error(
                 errors,
                 "initial current frozen binding is not code-pinned to canonical history",
-            )
-        elif not _current_initial_authorization_anchors_valid(
-            first_frozen.get("cohortActivation")
-            if isinstance(first_frozen.get("cohortActivation"), dict)
-            else None,
-            errors,
-        ):
-            pass
-        elif current_state == "frozen" and allow_authorization and not errors:
-            _binding_authorization_valid(
-                root,
-                "current release",
-                f"{CURRENT_RELEASE}-normative-profile-binding-authorization",
-                anchor_revision,
-                anchor_sha256,
-                EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
-                errors,
-                source_window_boundary={
-                    "environmentAttributionContractSha256": (
-                        EXPECTED_ENVIRONMENT_ATTRIBUTION_SHA256
-                    ),
-                    "environmentManifestBoundary": (
-                        EXPECTED_CURRENT_INITIAL_ENVIRONMENT_MANIFEST_BOUNDARY
-                    ),
-                },
             )
     return len(errors) == before
 
@@ -6179,18 +6153,11 @@ def _normative_profile_binding_valid(
         _error(errors, "current normative profile freeze is not enabled")
         return False
     if not _LEGACY_V10_PROFILE_MECHANISM_TEST_ONLY:
-        material_valid = _current_profile_binding_material_valid(root, binding, errors)
-        _current_normative_profile_binding_history_valid(
-            root,
-            binding,
-            errors,
-            allow_authorization=material_valid and not errors,
-        )
+        _current_profile_binding_material_valid(root, binding, errors)
+        _current_normative_profile_binding_history_valid(root, binding, errors)
         if binding_state == "revoked":
             if program.get("status") != "stopped":
                 _error(errors, "revoked current cohort requires a stopped program")
-            _current_initial_authorization_private_resource_absent(errors)
-            _current_initial_expiry_cleanup_trigger_absent(errors)
         elif binding_state == "frozen":
             if program.get("status") == "stopped":
                 _error(errors, "stopped current program requires its only cohort to be revoked")

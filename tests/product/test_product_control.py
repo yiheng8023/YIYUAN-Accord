@@ -2168,11 +2168,12 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
-    def test_v11_freeze_authorization_anchors_match_all_activation_identities(
+    def test_v12_public_freeze_anchor_never_reads_v11_private_authorization(
         self,
     ) -> None:
         floor = self.initialize_fixture_repository()
         binding = self.current_profile_binding()
+        binding["cohortActivation"] = None
         program = self.read_json("product/program.json")
         program["normativeProfileBinding"] = binding
         self.write_json("product/program.json", program)
@@ -2184,7 +2185,7 @@ class ProductControlTests(unittest.TestCase):
             stderr=subprocess.PIPE,
         )
         subprocess.run(
-            ["git", "commit", "--quiet", "-m", "fixture current v1.1 freeze"],
+            ["git", "commit", "--quiet", "-m", "fixture public v1.2 freeze"],
             cwd=self.root,
             check=True,
             stdout=subprocess.PIPE,
@@ -2205,38 +2206,21 @@ class ProductControlTests(unittest.TestCase):
                 separators=(",", ":"),
             ).encode("utf-8")
         ).hexdigest()
-        activation = binding["cohortActivation"]
-        anchors = self.current_authorization_anchors()
-        anchors.update(
-            {
-                "EXPECTED_CURRENT_INITIAL_BINDING_REVISION": freeze_revision,
-                "EXPECTED_CURRENT_INITIAL_BINDING_SHA256": binding_sha256,
-                "EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY": activation[
-                    "surfaceIdentity"
-                ],
-                "EXPECTED_CURRENT_INITIAL_ACTIVATION_CURSOR_COMMITMENT": activation[
-                    "activationCursorCommitment"
-                ],
-                "EXPECTED_CURRENT_INITIAL_KEY_IDENTITY": activation["keyIdentity"],
-                "EXPECTED_CURRENT_INITIAL_AUTHORIZATION_KEY_FINGERPRINT": activation[
-                    "keyFingerprint"
-                ],
-            }
-        )
-        validator_called = False
-
-        def validator(document, root, errors):
-            nonlocal validator_called
-            validator_called = True
-            return True
-
-        with patch.multiple(
-            control,
-            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
-            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
-                control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: validator
-            },
-            **anchors,
+        with (
+            patch.multiple(
+                control,
+                CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
+                EXPECTED_CURRENT_INITIAL_BINDING_REVISION=freeze_revision,
+                EXPECTED_CURRENT_INITIAL_BINDING_SHA256=binding_sha256,
+            ),
+            patch(
+                "harness.control._current_initial_authorization_anchors_valid",
+                side_effect=AssertionError("v1.2 public freeze consulted v1.1 anchors"),
+            ) as private_anchors,
+            patch(
+                "harness.control._binding_authorization_valid",
+                side_effect=AssertionError("v1.2 public freeze consulted private authorizer"),
+            ) as private_authorizer,
         ):
             errors: list[str] = []
             self.assertTrue(
@@ -2247,33 +2231,8 @@ class ProductControlTests(unittest.TestCase):
                 ),
                 errors,
             )
-        self.assertTrue(validator_called)
-
-        validator_called = False
-        anchors["EXPECTED_CURRENT_INITIAL_SURFACE_IDENTITY"] = (
-            "enrollment-surface.public-v1:" + "9" * 32
-        )
-        with patch.multiple(
-            control,
-            CURRENT_NORMATIVE_PROFILE_BINDING_HISTORY_FLOOR_REVISION=floor,
-            SUPPORTED_HUMAN_AUTHORIZATION_VALIDATORS={
-                control.CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: validator
-            },
-            **anchors,
-        ):
-            errors = []
-            self.assertFalse(
-                control._current_normative_profile_binding_history_valid(
-                    self.root,
-                    binding,
-                    errors,
-                )
-            )
-        self.assertEqual(
-            errors,
-            ["current v1.1 binding authorization anchors are unavailable"],
-        )
-        self.assertFalse(validator_called)
+        private_anchors.assert_not_called()
+        private_authorizer.assert_not_called()
 
     def test_v11_revocation_cannot_open_a_successor_generation(self) -> None:
         floor = self.initialize_fixture_repository()
@@ -2347,10 +2306,11 @@ class ProductControlTests(unittest.TestCase):
             errors,
         )
 
-    def test_v11_revoked_state_requires_private_resource_and_trigger_absence(
+    def test_v12_revoked_state_does_not_consult_v11_private_resource_or_trigger(
         self,
     ) -> None:
         binding = self.current_profile_binding()
+        binding["cohortActivation"] = None
         binding["state"] = "revoked"
         program = self.read_json("product/program.json")
         program["status"] = "stopped"
@@ -2367,18 +2327,18 @@ class ProductControlTests(unittest.TestCase):
             return_value=True,
         ), patch(
             "harness.control._current_initial_authorization_private_resource_absent",
-            return_value=True,
+            side_effect=AssertionError("v1.2 revocation consulted v1.1 private resource"),
         ) as private_absent, patch(
             "harness.control._current_initial_expiry_cleanup_trigger_absent",
-            return_value=True,
+            side_effect=AssertionError("v1.2 revocation consulted v1.1 expiry trigger"),
         ) as trigger_absent:
             errors: list[str] = []
             self.assertTrue(
                 control._normative_profile_binding_valid(ROOT, program, errors),
                 errors,
             )
-        private_absent.assert_called_once_with(errors)
-        trigger_absent.assert_called_once_with(errors)
+        private_absent.assert_not_called()
+        trigger_absent.assert_not_called()
 
     def test_v11_profile_candidate_identity_cannot_drift_before_freeze(self) -> None:
         protocol_relative = control.EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR
