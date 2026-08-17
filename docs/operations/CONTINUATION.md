@@ -52,9 +52,10 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 has O1 at 1/5 and one active, outcome-neutral O2 validator-seam increment.
-Its frozen candidate.2 binding and O1 registration precede the accepted 12/12
-controlled result. The O1 suite is the only accepted outcome validator; the O2
+v1.2 is `ready` with O1 at 1/5 after one outcome-neutral O2 seam left the graph.
+Its frozen
+candidate.2 binding and O1 registration precede the accepted 12/12 controlled
+result. The O1 suite is the only accepted outcome validator; the committed O2
 seam fails closed before installation or measurement and cannot promote O2.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain
 their pre-freeze label only as part of the frozen bytes:
