@@ -12,13 +12,14 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 has one active authority-repair increment that separates
+**Current status:** v1.2 is `ready` with no active increment after separating
 finite product delivery from continuing field validation. The repository
-verifier reports `programStatus=active`, `completionState=in-progress`, O1-O5
+verifier reports `programStatus=ready`, `completionState=in-progress`, O1-O5
 `0/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
 turning the shortfall corpus into a feature backlog or requiring a natural-task
-cohort for release. They are still unfrozen subordinate candidates and carry no
+cohort for release. Their exact candidate bytes are code-pinned but the profile
+binding remains unfrozen; they are subordinate candidates and carry no
 outcome credit. No current private source, natural-demand enrollment,
 criterion-scoped result validator, terminal authorization validator, installed
 plugin, or accepted outcome exists. The inactive Codex source still contains

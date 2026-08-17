@@ -52,8 +52,8 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is active with O1-O5 at 0/5 under one authority-repair increment, an
-unfrozen profile binding, and empty current result-validator registries. Its
+v1.2 is ready with no active increment, O1-O5 at 0/5, an unfrozen profile
+binding, and empty current result-validator registries. Its code-pinned
 candidate.2 profile and controlled-conformance protocol are pre-freeze only:
 they separate finite delivery from later field validation and cover the
 collaboration lifecycle through sufficient native behavior, suitable reuse,

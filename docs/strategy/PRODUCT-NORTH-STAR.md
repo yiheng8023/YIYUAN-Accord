@@ -25,12 +25,19 @@ coverage without making the user remember or enumerate the whole system.
 
 ## Observable success
 
-On repeated real tasks entered at the goal level, the Harness should reduce
-material user interventions needed to judge carrier fitness, reconstruct context, discover, select,
-and manage capabilities, choose or operate code and conversation topology,
-recover from drift, merge work or conclusions, verify completion, archive or
-release carriers, and clean resources, without reducing intent fidelity,
-evidence quality, reversibility, or human control.
+Finite release success requires the bounded minimum-quality collaboration
+contract, a usable Codex reference application, controlled lifecycle and
+counterexample evidence, reproducibility, cleanup, and exact human release
+authority. It does not wait for the user to manufacture a natural task.
+
+After release, repeated real tasks entered at the goal level should test whether
+the Harness actually reduces material user interventions needed to judge carrier
+fitness, reconstruct context, discover, select, and manage capabilities, choose
+or operate code and conversation topology, recover from drift, merge work or
+conclusions, verify completion, archive or release carriers, and clean resources,
+without reducing intent fidelity, evidence quality, reversibility, or human
+control. Those observations may strengthen, narrow, or falsify field claims;
+they are not retroactively treated as missing release evidence.
 Technically or authoritatively unavoidable human-only actions remain legitimate,
 but the Agent must detect the need, minimize and guide the exact step, verify it,
 and count it separately from prohibited transfer of Agent-owned work.

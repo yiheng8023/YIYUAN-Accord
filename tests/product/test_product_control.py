@@ -1350,7 +1350,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_active_and_preserves_stopped_history(
+    def test_current_v12_contract_is_valid_ready_and_preserves_stopped_history(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1361,12 +1361,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-delivery-field-validation-separation",
-        )
-        self.assertEqual(len(live_program["increments"]), 1)
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
+        self.assertEqual(live_program["increments"], [])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],
@@ -1582,7 +1579,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("stop-recover-minimal-correct-reverify", protocol["selfCorrectionRule"])
         self.assertNotIn("strata", protocol)
         self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
-        self.assertIsNone(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION)
+        self.assertEqual(
+            control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
+            "de5dbc42fb1e265a720bb26808a31d03d032e602",
+        )
         self.assertEqual(
             control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
             None,
@@ -2129,15 +2129,16 @@ class ProductControlTests(unittest.TestCase):
 
     def test_v12_frozen_material_accepts_only_the_pinned_candidate_revision(self) -> None:
         binding = self.current_profile_binding()
+        binding["cohortActivation"] = None
         errors: list[str] = []
-        self.assertFalse(
-            control._current_profile_binding_material_valid(ROOT, binding, errors)
-        )
-        self.assertIn(
-            "frozen normative profile binding is not the code-owned v1.2 candidate",
+        self.assertTrue(
+            control._current_profile_binding_material_valid(ROOT, binding, errors),
             errors,
         )
-        self.assertIsNone(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION)
+        self.assertEqual(
+            control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
+            "de5dbc42fb1e265a720bb26808a31d03d032e602",
+        )
 
         binding["frozenAtRevision"] = "f" * 40
         errors = []
@@ -2150,6 +2151,7 @@ class ProductControlTests(unittest.TestCase):
         )
 
         binding = self.current_profile_binding()
+        binding["cohortActivation"] = None
         binding["profileIdentity"] = control.EXPECTED_V1_PROFILE_IDENTITY
         errors = []
         self.assertFalse(

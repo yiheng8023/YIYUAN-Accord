@@ -346,7 +346,9 @@ EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR = (
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
     "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303"
 )
-EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = None
+EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
+    "de5dbc42fb1e265a720bb26808a31d03d032e602"
+)
 # The v1.2 candidate is intentionally unbound until a later commit pins these
 # exact candidate.2 bytes and a distinct conformance-binding slice establishes
 # its non-private registration mechanism. None of the stopped natural-task

@@ -67,9 +67,9 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` with O1-O5 at 0/5 under one bounded
-authority-repair increment. Its `normativeProfileBinding` is unfrozen, and the
-tree contains a distinct candidate.2 pre-freeze
+The current v1.2 program is `ready` with no active increment and O1-O5 at 0/5.
+Its `normativeProfileBinding` is unfrozen, and the tree contains a distinct,
+code-pinned candidate.2 pre-freeze
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
 [controlled-conformance protocol](CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json).
 They separate finite delivery from later field validation and cover the

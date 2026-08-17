@@ -19,8 +19,8 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 has one active authority-repair increment and O1-O5 remain 0/5. Its
-profile binding is unfrozen, while a distinct candidate.2 profile and
+v1.2 is ready with no active increment and O1-O5 remain 0/5. Its profile
+binding is unfrozen, while a distinct code-pinned candidate.2 profile and
 controlled-conformance protocol separate finite delivery from later field
 validation, cover the collaboration lifecycle through minimum sufficient
 dispositions, and keep dynamic environment/context adaptation, Agent-owned
