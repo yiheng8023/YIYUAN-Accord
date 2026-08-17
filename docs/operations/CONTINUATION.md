@@ -52,11 +52,10 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is active only on `increment.v12-o1-lifecycle-suite`; O1-O5 remain 0/5.
-The profile binding is frozen by signed revision `3e81686` and canonical digest
-`31dafe95`. The current result-validator registries contain only the exact
-pre-measurement O1 lifecycle-suite validator. Its public-safe registration is
-bound from an exact prior revision for measurement, and no result exists.
+v1.2 has one active O1 increment; O1-O5 remain 0/5. Its signed candidate.2
+binding is frozen. The prior exact registration precedes a 12/12 observation;
+O1 awaits replay and named-human acceptance. The only outcome validator is that
+task-specific O1 suite.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain
 their pre-freeze label only as part of the frozen bytes:
 they separate finite delivery from later field validation and cover the

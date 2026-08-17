@@ -69,8 +69,9 @@ measures, validator, evidence class, and human authority independently pass.
 
 The current v1.2 program is `active` on the single
 `increment.v12-o1-lifecycle-suite` and O1-O5 remain at 0/5. Its first stage
-contains the immutable public-safe O1 registration, and the program now binds
-that exact prior revision for measurement; no scenario result exists.
+contains the immutable public-safe O1 registration, and the program binds that
+exact prior revision. A 12/12 controlled observation is captured; O1 remains
+false until independent replay and named-human result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
 canonical digest `31dafe95`, and the tree contains the distinct, code-pinned candidate.2
 [collaboration profile](DEMAND-TO-CAPABILITY-PROFILE-V1.2.md) and paired
@@ -81,7 +82,7 @@ domain reuse, residual Harness control, or explicit degradation, escalation,
 stop, or claim limitation. They add no authority, threshold, binding, or
 result. The current human-authorization registry is empty; the outcome registries
 contain only the exact pre-measurement O1 lifecycle-suite validator. The exact
-O1 registration is active for measurement, but there is no result. No private
+O1 registration has one controlled observation but no accepted result. No private
 natural-demand cohort is required or active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product
