@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o2-live-observation-validator",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -164,6 +164,57 @@
           "deliverables": [
             "immutable O1 lifecycle-suite registration",
             "content-addressed twelve-slice observation and independently replayed evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o2-live-observation-validator",
+      "state": "active",
+      "correctionClass": "o2-live-observation-replay-implementation",
+      "observedProblem": "The committed O2 seam binds the four required Codex scenario classes and rejects missing observations, but deliberately rejects every otherwise well-formed result because no code-owned replay yet validates bounded public-safe projections derived from Codex JSONL, plugin lifecycle state and task-owned filesystem manifests. It therefore prevents post-hoc evidence but cannot yet support an immutable O2 registration or live controlled execution.",
+      "hypothesis": "A task-specific, bounded parser can validate exact pre-registered goals, exact committed package bytes, and content-addressed public-safe projections from Codex JSONL, plugin-list and filesystem evidence for the four O2 classes, compare before/active/removed state, and prove only the acceptance-owned controlled measures without invoking Codex, installing a plugin, persisting a runtime or trusting normalized booleans.",
+      "falsifier": "The validator trusts an accepted flag or normalized measure without its content-addressed projection and pre-bound source; accepts missing, duplicate, absolute, private, oversized, resource-exhausting, non-JSON, non-Codex, drifted package, substituted human scope or unreconciled lifecycle state; executes a model or installation during verification; becomes a reusable host runtime; weakens O2; or leaves task-created residue.",
+      "stopCondition": "The O2 evidence validator independently parses bounded public-safe projections, validates all four exact scenario measures, exact committed package identity, exact human scope and exact plugin removal or source-bound declared-environment stop, and rejects self-report, drift and residue fixtures; focused tests and canonical verification pass with O1 true and O2 false; no plugin, account, model, private source or consumer configuration is touched.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o2-live-observation-validator",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "task-specific bounded O2 public-observation replay",
+            "fail-closed O2 artifact and lifecycle tests"
           ]
         }
       ]
