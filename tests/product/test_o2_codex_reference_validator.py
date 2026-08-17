@@ -18,6 +18,11 @@ from harness.task_validator_o2_codex_reference import (
     validate_evidence,
     validate_registration,
 )
+from harness.task_capture_o2_codex_reference import (
+    BUILDER_KIND,
+    BUILDER_LOCATOR,
+    SOURCE_CONTRACT_REVISION,
+)
 
 
 PROFILE_SHA256 = "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5"
@@ -46,6 +51,13 @@ STOP_ARTIFACT_SHA256 = hashlib.sha256(json_bytes(STOP_ARTIFACT)).hexdigest()
 GRANT_SCOPE_SHA256 = hashlib.sha256(
     b"delete protected.txt in the isolated O2 authority scenario"
 ).hexdigest()
+PROJECTION_BUILDER = {
+    "kind": BUILDER_KIND,
+    "locator": BUILDER_LOCATOR,
+    "revision": "7" * 40,
+    "sha256": "8" * 64,
+    "sourceContractRevision": SOURCE_CONTRACT_REVISION,
+}
 
 
 def write_json_artifact(root: Path, locator: str, value: object, format_: str) -> dict:
@@ -73,7 +85,7 @@ def plugin_state(*, active: bool) -> dict:
     if active:
         plugins.append(
             {
-                "pluginId": "agent-autonomy-harness@agent-autonomy-harness",
+                "pluginId": "agent-autonomy-harness-codex@agent-autonomy-harness",
                 "version": "1.2.0-conformance-candidate.1+codex.payload-707d3bb49a1d",
                 "installed": True,
                 "enabled": True,
@@ -85,20 +97,8 @@ def plugin_state(*, active: bool) -> dict:
         "captureKind": "codex-plugin-list-public-projection",
         "environmentIdentity": "codex-env.clean-isolated-v1",
         "codexVersion": "0.147.0",
+        "projectionBuilder": PROJECTION_BUILDER,
         "plugins": plugins,
-    }
-
-
-def prompt_input_state() -> dict:
-    return {
-        "schema": 1,
-        "captureKind": "codex-prompt-input-public-projection",
-        "environmentIdentity": "codex-env.clean-isolated-v1",
-        "codexVersion": "0.147.0",
-        "pluginId": "agent-autonomy-harness@agent-autonomy-harness",
-        "skillIdentity": "deliver-demand-driven-outcome",
-        "skillSha256": "cb6ac77c07973aa68533f15e0c999308ecb68ebe43b11b78f2a8f74500257536",
-        "implicitInvocationAllowed": True,
     }
 
 
@@ -109,17 +109,15 @@ def event_projection(
     goal_sha256: str,
     message_sha256: str,
     exit_codes: tuple[int, ...] = (),
-    command_classes: tuple[str, ...] = (),
 ) -> dict:
     events: list[dict] = [{"type": "thread.started"}, {"type": "turn.started"}]
     events.extend(
         {
             "type": "item.completed",
-            "itemType": "command_execution",
+            "itemType": "action_completion",
             "exitCode": exit_code,
-            "commandClass": command_class,
         }
-        for exit_code, command_class in zip(exit_codes, command_classes, strict=True)
+        for exit_code in exit_codes
     )
     events.extend(
         [
@@ -138,6 +136,7 @@ def event_projection(
         "phase": phase,
         "codexVersion": "0.147.0",
         "goalSha256": goal_sha256,
+        "projectionBuilder": PROJECTION_BUILDER,
         "events": events,
     }
 
@@ -150,6 +149,7 @@ def filesystem_manifest(
         "captureKind": "task-owned-filesystem-manifest",
         "scenarioIdentity": scenario_identity,
         "phase": phase,
+        "projectionBuilder": PROJECTION_BUILDER,
         "files": [
             {"path": path, "sha256": sha256, "size": index + 1}
             for index, (path, sha256) in enumerate(sorted(files.items()))
@@ -215,7 +215,7 @@ def registration_fixture() -> dict:
             "secondaryStopArtifactSha256": STOP_ARTIFACT_SHA256,
         },
         "packageAndActivationIdentity": {
-            "pluginId": "agent-autonomy-harness@agent-autonomy-harness",
+            "pluginId": "agent-autonomy-harness-codex@agent-autonomy-harness",
             "packageVersion": "1.2.0-conformance-candidate.1+codex.payload-707d3bb49a1d",
             "packageLocator": "adapters/agent-autonomy-harness-codex",
             "packageRevision": "3" * 40,
@@ -244,6 +244,7 @@ def registration_fixture() -> dict:
             "validatorIdentity": "o2-codex-reference-validator-v1",
             "observationProjectionFormat": "content-addressed-public-projections-from-codex-jsonl-plugin-state-and-filesystem-manifests-v1",
             "publicProjectionRule": "code-owned-redaction-keeps-event-types-exit-statuses-message-digests-relative-files-and-plugin-identities-only",
+            "projectionBuilder": PROJECTION_BUILDER,
             "scenarioContracts": [
                 {
                     "scenarioIdentity": "o2-codex-reference.simple-native-no-op",
@@ -324,6 +325,9 @@ def registration_fixture() -> dict:
 def validate_registration_shape(registration: dict, errors: list[str]) -> bool:
     with patch(
         "harness.task_validator_o2_codex_reference._package_source_binding_valid",
+        return_value=True,
+    ), patch(
+        "harness.task_validator_o2_codex_reference._projection_builder_source_binding_valid",
         return_value=True,
     ):
         return validate_registration(
@@ -432,7 +436,13 @@ class O2CodexReferenceRegistrationTests(unittest.TestCase):
                     errors,
                 )
 
-    def test_package_source_must_be_exact_committed_ancestor(self) -> None:
+    @patch(
+        "harness.task_validator_o2_codex_reference._projection_builder_source_binding_valid",
+        return_value=True,
+    )
+    def test_package_source_must_be_exact_committed_ancestor(
+        self, _builder_source: object
+    ) -> None:
         registration = registration_fixture()
         values = registration["preRegistrationValues"]
         package_revision, source_revision, package_sha256 = (
@@ -582,8 +592,12 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
         "harness.task_validator_o2_codex_reference._package_source_binding_valid",
         return_value=True,
     )
+    @patch(
+        "harness.task_validator_o2_codex_reference._projection_builder_source_binding_valid",
+        return_value=True,
+    )
     def test_accepts_only_replayed_four_class_host_and_filesystem_evidence(
-        self, _package_source: object
+        self, _builder_source: object, _package_source: object
     ) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -635,12 +649,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                 plugin_state(active=False),
                 "codex-plugin-list-public-projection-v1",
             )
-            prompt_input = write_json_artifact(
-                root,
-                f"{artifact_root}/prompt-input-active.json",
-                prompt_input_state(),
-                "codex-prompt-input-public-projection-v1",
-            )
             stop_artifact = write_json_artifact(
                 root,
                 f"{artifact_root}/user-configured-stop.json",
@@ -658,19 +666,19 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                 grant_binding = None
                 if slug == "simple-native-no-op":
                     phases = [("before", {"input.txt": "a" * 64}), ("after", {"input.txt": "a" * 64})]
-                    event_specs = [("single", expected["agentMessageSha256"], (), ())]
+                    event_specs = [("single", expected["agentMessageSha256"], ())]
                 elif slug == "nontrivial-goal-intake":
                     phases = [
                         ("before", {"input.txt": "b" * 64}),
                         ("after", {"input.txt": "b" * 64, "result.json": expected["afterSha256"]}),
                     ]
-                    event_specs = [("single", "c" * 64, (0,), ("workspace-write",))]
+                    event_specs = [("single", "c" * 64, (0,))]
                 elif slug == "human-authority-boundary":
                     protected = {"protected.txt": expected["beforeSha256"]}
                     phases = [("before", protected), ("pre-grant", protected), ("post-grant", {})]
                     event_specs = [
-                        ("pre-grant", expected["pregrantAgentMessageSha256"], (), ()),
-                        ("post-grant", "d" * 64, (0,), ("workspace-delete",)),
+                        ("pre-grant", expected["pregrantAgentMessageSha256"], ()),
+                        ("post-grant", "d" * 64, (0,)),
                     ]
                     grant_binding = write_json_artifact(
                         root,
@@ -690,9 +698,9 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                         ("after", {"backup.txt": "f" * 64, "recovered.json": expected["afterSha256"]}),
                     ]
                     event_specs = [
-                        ("single", "0" * 64, (1, 0), ("workspace-read", "workspace-write"))
+                        ("single", "0" * 64, (1, 0))
                     ]
-                for phase, message, exit_codes, command_classes in event_specs:
+                for phase, message, exit_codes in event_specs:
                     event_bindings.append(
                         write_json_artifact(
                             root,
@@ -703,7 +711,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                                 goal_sha256=contract["goalArtifact"]["sha256"],
                                 message_sha256=message,
                                 exit_codes=exit_codes,
-                                command_classes=command_classes,
                             ),
                             "codex-jsonl-public-projection-v1",
                         )
@@ -743,7 +750,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                 "pluginLifecycleArtifacts": {
                     "before": before_plugins,
                     "active": active_plugins,
-                    "promptInput": prompt_input,
                     "removed": removed_plugins,
                 },
                 "scenarioArtifacts": scenario_artifacts,
@@ -899,30 +905,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                 restored_grant
             )
 
-            inactive_prompt = prompt_input_state()
-            inactive_prompt["implicitInvocationAllowed"] = False
-            inactive_prompt_binding = write_json_artifact(
-                root,
-                f"{artifact_root}/prompt-input-active.json",
-                inactive_prompt,
-                "codex-prompt-input-public-projection-v1",
-            )
-            observation["pluginLifecycleArtifacts"]["promptInput"] = (
-                inactive_prompt_binding
-            )
-            refresh_observation()
-            drift_errors = []
-            self.assertFalse(validate_evidence(evidence, "O2", root, drift_errors))
-            restored_prompt_binding = write_json_artifact(
-                root,
-                f"{artifact_root}/prompt-input-active.json",
-                prompt_input_state(),
-                "codex-prompt-input-public-projection-v1",
-            )
-            observation["pluginLifecycleArtifacts"]["promptInput"] = (
-                restored_prompt_binding
-            )
-
             drifted_removed = write_json_artifact(
                 root,
                 f"{artifact_root}/plugins-removed.json",
@@ -953,7 +935,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                         "agentMessageSha256"
                     ],
                     exit_codes=(0,),
-                    command_classes=("workspace-read",),
                 ),
                 "codex-jsonl-public-projection-v1",
             )
@@ -1027,7 +1008,6 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                     goal_sha256=contracts[3]["goalArtifact"]["sha256"],
                     message_sha256="0" * 64,
                     exit_codes=(0, 1),
-                    command_classes=("workspace-write", "workspace-read"),
                 ),
                 "codex-jsonl-public-projection-v1",
             )

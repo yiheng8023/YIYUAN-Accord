@@ -22,7 +22,8 @@ AUTHORITY_PATHS = (
 )
 PINNED_RUNTIME_SHA256 = {
     "harness/task_validator_o1_lifecycle_suite.py": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a",
-    "harness/task_validator_o2_codex_reference.py": "830f090fe88f2afa4e4825c432a5eed07b4a9c952a939531bd537a1844752366",
+    "harness/task_capture_o2_codex_reference.py": "3ff9248b637e01f055919ad8d6ca1def0517fc8376c50f3aa76957399271d2bc",
+    "harness/task_validator_o2_codex_reference.py": "4f077782ab9cf1feedf516b9cbb0c43f7d97d5694a2ad2075a78a823b8cb3393",
     "harness/control.py": "3616057dfbee5301eff8b5d3cfdc7a8188664ff10f8528ee223d50056fb27b8c",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
@@ -84,6 +85,7 @@ def _load_reference_module(root: Path, sources: dict[str, bytes]) -> ModuleType:
     sys.modules[package_name] = package
     for module in (
         "task_validator_o1_lifecycle_suite",
+        "task_capture_o2_codex_reference",
         "task_validator_o2_codex_reference",
         "control",
         "continuation",

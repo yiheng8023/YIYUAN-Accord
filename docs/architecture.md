@@ -67,10 +67,9 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `ready` after completing
-`increment.v12-o1-lifecycle-suite` and committing then removing the
-outcome-neutral O2 seam and public-observation replay slices from the current
-graph; O1-O5 are at 1/5. The immutable public-safe
+The current v1.2 program has completed `increment.v12-o1-lifecycle-suite` and
+has one active, outcome-neutral O2 native-to-public projection-builder slice
+after the committed seam and replay; O1-O5 are at 1/5. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
@@ -84,7 +83,7 @@ stop, or claim limitation. They add no authority, threshold, binding, or
 result. The current human-authorization registry is empty; the outcome registries
 contain the exact accepted pre-measurement O1 lifecycle-suite validator and a
 committed O2-specific seam and bounded replay of content-addressed public-safe
-projections before any
+projections. The active slice may add only their pure source parser before any
 installation, registration, model call, or measurement. The O1 validator's exact
 registration and accepted controlled result verify O1 only. No private
 natural-demand cohort is required or active. v1.1 remains stopped history: its only

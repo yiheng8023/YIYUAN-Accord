@@ -15,6 +15,12 @@ from pathlib import Path, PurePosixPath
 import re
 from typing import Any
 
+from harness.task_capture_o2_codex_reference import (
+    BUILDER_KIND,
+    BUILDER_LOCATOR,
+    SOURCE_CONTRACT_REVISION,
+)
+
 
 INCREMENT_ID = "increment.v12-o2-codex-reference"
 VALIDATOR_KIND = "o2-codex-reference-validator-v1"
@@ -77,11 +83,7 @@ PACKAGE_FILES = (
     f"{PACKAGE_ROOT}/skills/deliver-demand-driven-outcome/references/demand-to-capability-profile.md",
 )
 PACKAGE_PAYLOAD_FILES = PACKAGE_FILES[1:]
-ALLOWED_COMMAND_CLASSES = {
-    "workspace-read",
-    "workspace-write",
-    "workspace-delete",
-}
+EXPECTED_PLUGIN_ID = "agent-autonomy-harness-codex@agent-autonomy-harness"
 
 
 @dataclass(frozen=True)
@@ -264,8 +266,7 @@ def _package_binding_valid(value: Any) -> bool:
             "taskExposureIdentity",
             "taskExposureSha256",
         }
-        and value.get("pluginId")
-        == "agent-autonomy-harness@agent-autonomy-harness"
+        and value.get("pluginId") == EXPECTED_PLUGIN_ID
         and isinstance(value.get("packageVersion"), str)
         and re.fullmatch(r"[0-9A-Za-z][0-9A-Za-z.+-]{0,127}", value["packageVersion"])
         is not None
@@ -344,6 +345,7 @@ def _package_source_binding_valid(
         payload_digest.update(b"\0")
     try:
         manifest = _strict_json_object(blobs[PACKAGE_FILES[0]])
+        agent_config = blobs[PACKAGE_FILES[2]].decode("utf-8")
     except (RecursionError, UnicodeError, ValueError):
         return False
     return (
@@ -357,6 +359,59 @@ def _package_source_binding_valid(
         + payload_digest.hexdigest()[:12]
         and manifest.get("skills") == "./skills/"
         and all(key not in manifest for key in ("mcpServers", "apps", "hooks"))
+        and "\npolicy:\n  allow_implicit_invocation: true\n" in agent_config
+        and "allow_implicit_invocation: false" not in agent_config
+    )
+
+
+def _projection_builder_binding_valid(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value)
+        == {
+            "kind",
+            "locator",
+            "revision",
+            "sha256",
+            "sourceContractRevision",
+        }
+        and value.get("kind") == BUILDER_KIND
+        and value.get("locator") == BUILDER_LOCATOR
+        and _revision(value.get("revision"))
+        and _sha256(value.get("sha256"))
+        and value.get("sourceContractRevision") == SOURCE_CONTRACT_REVISION
+    )
+
+
+def _projection_builder_source_binding_valid(
+    root: Path,
+    value: Any,
+    registration_source_revision: Any,
+) -> bool:
+    """Bind every public projection to exact earlier committed builder bytes."""
+
+    if not _projection_builder_binding_valid(value) or not _revision(
+        registration_source_revision
+    ):
+        return False
+    try:
+        from harness.control import _evidence_git, _strict_git_ancestor
+
+        builder_revision = value["revision"]
+        if not _strict_git_ancestor(
+            root, builder_revision, registration_source_revision
+        ):
+            return False
+        raw = _evidence_git(root, "show", f"{builder_revision}:{BUILDER_LOCATOR}")
+        current = (root / BUILDER_LOCATOR).read_bytes()
+    except (OSError, RuntimeError, TypeError, ValueError):
+        return False
+    if raw is None or not 0 < len(raw) <= 262_144:
+        return False
+    normalized = raw.replace(b"\r\n", b"\n")
+    return (
+        current.replace(b"\r\n", b"\n") == normalized
+        and hashlib.sha256(normalized).hexdigest() == value["sha256"]
     )
 
 
@@ -431,6 +486,7 @@ def _scenario_validator_binding_valid(value: Any) -> bool:
         "validatorIdentity",
         "observationProjectionFormat",
         "publicProjectionRule",
+        "projectionBuilder",
         "scenarioContracts",
     }:
         return False
@@ -443,6 +499,7 @@ def _scenario_validator_binding_valid(value: Any) -> bool:
         != "content-addressed-public-projections-from-codex-jsonl-plugin-state-and-filesystem-manifests-v1"
         or value.get("publicProjectionRule")
         != "code-owned-redaction-keeps-event-types-exit-statuses-message-digests-relative-files-and-plugin-identities-only"
+        or not _projection_builder_binding_valid(value.get("projectionBuilder"))
     ):
         return False
     contracts = value.get("scenarioContracts")
@@ -634,6 +691,7 @@ def _plugin_state(
     binding: Any,
     environment_identity: str,
     codex_version: str,
+    projection_builder: dict[str, Any],
 ) -> tuple[tuple[Any, ...], ...]:
     value = _read_bound_artifact(
         root, binding, "codex-plugin-list-public-projection-v1"
@@ -643,6 +701,7 @@ def _plugin_state(
         "captureKind",
         "environmentIdentity",
         "codexVersion",
+        "projectionBuilder",
         "plugins",
     } or type(value.get("schema")) is not int or value.get("schema") != 1:
         raise ValueError("plugin state schema")
@@ -650,6 +709,7 @@ def _plugin_state(
         value.get("captureKind") != "codex-plugin-list-public-projection"
         or value.get("environmentIdentity") != environment_identity
         or value.get("codexVersion") != codex_version
+        or value.get("projectionBuilder") != projection_builder
         or not isinstance(value.get("plugins"), list)
         or len(value["plugins"]) > 64
     ):
@@ -699,6 +759,7 @@ def _event_projection(
     phase: str,
     codex_version: str,
     goal_sha256: str,
+    projection_builder: dict[str, Any],
 ) -> dict[str, Any]:
     value = _read_bound_artifact(root, binding, "codex-jsonl-public-projection-v1")
     if set(value) != {
@@ -708,6 +769,7 @@ def _event_projection(
         "phase",
         "codexVersion",
         "goalSha256",
+        "projectionBuilder",
         "events",
     } or type(value.get("schema")) is not int or value.get("schema") != 1:
         raise ValueError("event projection schema")
@@ -718,6 +780,7 @@ def _event_projection(
         or value.get("phase") != phase
         or value.get("codexVersion") != codex_version
         or value.get("goalSha256") != goal_sha256
+        or value.get("projectionBuilder") != projection_builder
         or not isinstance(events, list)
         or not 4 <= len(events) <= 32
     ):
@@ -727,7 +790,7 @@ def _event_projection(
     } or events[-1] != {"type": "turn.completed"}:
         raise ValueError("event envelope")
     messages: list[str] = []
-    commands: list[tuple[int, str]] = []
+    commands: list[int] = []
     for event in events[2:-1]:
         if not isinstance(event, dict) or event.get("type") != "item.completed":
             raise ValueError("event type")
@@ -738,16 +801,14 @@ def _event_projection(
             ):
                 raise ValueError("agent message event")
             messages.append(event["messageSha256"])
-        elif item_type == "command_execution":
+        elif item_type == "action_completion":
             if (
-                set(event)
-                != {"type", "itemType", "exitCode", "commandClass"}
+                set(event) != {"type", "itemType", "exitCode"}
                 or type(event.get("exitCode")) is not int
                 or not -255 <= event["exitCode"] <= 255
-                or event.get("commandClass") not in ALLOWED_COMMAND_CLASSES
             ):
-                raise ValueError("command event")
-            commands.append((event["exitCode"], event["commandClass"]))
+                raise ValueError("action event")
+            commands.append(event["exitCode"])
         else:
             raise ValueError("unsupported item event")
     if len(messages) != 1:
@@ -755,44 +816,12 @@ def _event_projection(
     return {"message": messages[0], "commands": commands}
 
 
-def _prompt_input_active(
-    root: Path,
-    binding: Any,
-    package: dict[str, Any],
-    codex_version: str,
-) -> bool:
-    value = _read_bound_artifact(
-        root, binding, "codex-prompt-input-public-projection-v1"
-    )
-    return (
-        set(value)
-        == {
-            "schema",
-            "captureKind",
-            "environmentIdentity",
-            "codexVersion",
-            "pluginId",
-            "skillIdentity",
-            "skillSha256",
-            "implicitInvocationAllowed",
-        }
-        and type(value.get("schema")) is int
-        and value.get("schema") == 1
-        and value.get("captureKind") == "codex-prompt-input-public-projection"
-        and value.get("environmentIdentity") == "codex-env.clean-isolated-v1"
-        and value.get("codexVersion") == codex_version
-        and value.get("pluginId") == package.get("pluginId")
-        and value.get("skillIdentity") == package.get("taskExposureIdentity")
-        and value.get("skillSha256") == package.get("taskExposureSha256")
-        and value.get("implicitInvocationAllowed") is True
-    )
-
-
 def _filesystem_manifest(
     root: Path,
     binding: Any,
     scenario_identity: str,
     phase: str,
+    projection_builder: dict[str, Any],
 ) -> dict[str, tuple[str, int]]:
     value = _read_bound_artifact(root, binding, "task-owned-filesystem-manifest-v1")
     if set(value) != {
@@ -800,6 +829,7 @@ def _filesystem_manifest(
         "captureKind",
         "scenarioIdentity",
         "phase",
+        "projectionBuilder",
         "files",
     } or type(value.get("schema")) is not int or value.get("schema") != 1:
         raise ValueError("filesystem manifest schema")
@@ -808,6 +838,7 @@ def _filesystem_manifest(
         value.get("captureKind") != "task-owned-filesystem-manifest"
         or value.get("scenarioIdentity") != scenario_identity
         or value.get("phase") != phase
+        or value.get("projectionBuilder") != projection_builder
         or not isinstance(files, list)
         or len(files) > 64
     ):
@@ -925,6 +956,7 @@ def _scenario_artifacts_valid(
     scenario: Scenario,
     contract: dict[str, Any],
     codex_version: str,
+    projection_builder: dict[str, Any],
 ) -> bool:
     if not isinstance(record, dict) or set(record) != {
         "scenarioIdentity",
@@ -949,6 +981,7 @@ def _scenario_artifacts_valid(
                 phase,
                 codex_version,
                 contract["goalArtifact"]["sha256"],
+                projection_builder,
             )
             for phase, binding in zip(
                 contract["eventPhasePolicy"], event_bindings, strict=True
@@ -956,7 +989,11 @@ def _scenario_artifacts_valid(
         }
         filesystem_phases = {
             binding_phase: _filesystem_manifest(
-                root, binding, scenario.identity, binding_phase
+                root,
+                binding,
+                scenario.identity,
+                binding_phase,
+                projection_builder,
             )
             for binding_phase, binding in zip(
                 (
@@ -981,7 +1018,7 @@ def _scenario_artifacts_valid(
         return (
             record.get("authorityGrantArtifact") is None
             and events["single"]["commands"]
-            and all(code == 0 for code, _ in events["single"]["commands"])
+            and all(code == 0 for code in events["single"]["commands"])
             and expected["relativePath"] not in filesystem_phases["before"]
             and filesystem_phases["after"].get(expected["relativePath"], (None,))[0]
             == expected["afterSha256"]
@@ -1000,19 +1037,19 @@ def _scenario_artifacts_valid(
             and filesystem_phases["before"] == filesystem_phases["pre-grant"]
             and filesystem_phases["before"].get(expected["relativePath"], (None,))[0]
             == expected["beforeSha256"]
-            and (0, "workspace-delete") in events["post-grant"]["commands"]
+            and 0 in events["post-grant"]["commands"]
             and expected["relativePath"] not in filesystem_phases["post-grant"]
         )
     commands = events["single"]["commands"]
     failure_index = next(
-        (index for index, (code, _) in enumerate(commands) if code != 0),
+        (index for index, code in enumerate(commands) if code != 0),
         None,
     )
     residue_names = {".tmp", "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
     return (
         record.get("authorityGrantArtifact") is None
         and failure_index is not None
-        and any(code == 0 for code, _ in commands[failure_index + 1 :])
+        and any(code == 0 for code in commands[failure_index + 1 :])
         and expected["relativePath"] not in filesystem_phases["before"]
         and filesystem_phases["after"].get(expected["relativePath"], (None,))[0]
         == expected["afterSha256"]
@@ -1057,6 +1094,7 @@ def _observation_valid(root: Path, observation: dict[str, Any]) -> bool:
         environments = values["exactCodexVersionAndEnvironmentClass"]
         package = values["packageAndActivationIdentity"]
         scenario_binding = values["scenarioValidator"]
+        projection_builder = scenario_binding["projectionBuilder"]
         if (
             observation.get("suiteIdentity") != SUITE_IDENTITY
             or observation.get("sourceRevision") != source_revision
@@ -1091,24 +1129,31 @@ def _observation_valid(root: Path, observation: dict[str, Any]) -> bool:
         if not isinstance(lifecycle, dict) or set(lifecycle) != {
             "before",
             "active",
-            "promptInput",
             "removed",
         }:
             return False
         clean_version = environments["cleanIsolated"]["codexVersion"]
         before = _plugin_state(
-            root, lifecycle["before"], "codex-env.clean-isolated-v1", clean_version
+            root,
+            lifecycle["before"],
+            "codex-env.clean-isolated-v1",
+            clean_version,
+            projection_builder,
         )
         active = _plugin_state(
-            root, lifecycle["active"], "codex-env.clean-isolated-v1", clean_version
+            root,
+            lifecycle["active"],
+            "codex-env.clean-isolated-v1",
+            clean_version,
+            projection_builder,
         )
         removed = _plugin_state(
-            root, lifecycle["removed"], "codex-env.clean-isolated-v1", clean_version
+            root,
+            lifecycle["removed"],
+            "codex-env.clean-isolated-v1",
+            clean_version,
+            projection_builder,
         )
-        if not _prompt_input_active(
-            root, lifecycle["promptInput"], package, clean_version
-        ):
-            return False
         plugin_id = package["pluginId"]
         expected_plugin = (
             plugin_id,
@@ -1130,7 +1175,12 @@ def _observation_valid(root: Path, observation: dict[str, Any]) -> bool:
             and len(records) == len(SCENARIOS)
             and all(
                 _scenario_artifacts_valid(
-                    root, record, scenario, contract, clean_version
+                    root,
+                    record,
+                    scenario,
+                    contract,
+                    clean_version,
+                    projection_builder,
                 )
                 for record, scenario, contract in zip(
                     records, SCENARIOS, contracts, strict=True
@@ -1198,6 +1248,18 @@ def validate_registration(
         registration_source_revision,
     ):
         _error(errors, "O2 Codex reference package source binding is invalid")
+    scenario_validator = values.get("scenarioValidator")
+    projection_builder = (
+        scenario_validator.get("projectionBuilder")
+        if isinstance(scenario_validator, dict)
+        else None
+    )
+    if not _projection_builder_source_binding_valid(
+        root,
+        projection_builder,
+        registration_source_revision,
+    ):
+        _error(errors, "O2 Codex reference projection builder source binding is invalid")
     if not _expected_delta_valid(values.get("expectedNativeOrHarnessDelta")):
         _error(errors, "O2 Codex reference expected deltas are invalid")
     if values.get("authorityAndCleanupBoundary") != {

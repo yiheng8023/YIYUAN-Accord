@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o2-public-projection-builder",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -164,6 +164,57 @@
           "deliverables": [
             "immutable O1 lifecycle-suite registration",
             "content-addressed twelve-slice observation and independently replayed evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o2-public-projection-builder",
+      "state": "active",
+      "correctionClass": "o2-native-public-projection-builder",
+      "observedProblem": "The committed O2 validator replays bounded public-safe projections but no exact code-owned builder yet converts native Codex plugin JSON, exec JSONL and task-owned filesystem state into those projections. Hand-authored projection bytes could therefore satisfy the replay shape without a source parser, so the validator is not ready for immutable registration.",
+      "hypothesis": "One task-specific, pure projection builder can consume bounded pre-existing native Codex JSON or JSONL and an isolated task root, reject unknown or private-bearing input, emit only the exact public schemas already replayed by the O2 validator, and bind its own committed identity without invoking Codex, a model, plugin installation or a persistent runtime.",
+      "falsifier": "The builder launches Codex or a model; installs, removes or configures a plugin; persists native raw events; accepts unknown event or plugin shapes, absolute paths, private identifiers, unbounded input or symlinked task files; emits an unbound or unreplayable schema; becomes a generic host runtime; weakens O2; or leaves task-created residue.",
+      "stopCondition": "The task-specific builder deterministically converts bounded native plugin-list JSON, exec JSONL and isolated filesystem fixtures into the exact public-safe projection schemas; the O2 registration validator requires its strict pre-registration revision and digest; negative tests reject private, unknown, oversized, symlinked and drifted inputs; focused tests and canonical verification pass with O1 true and O2 false; no Codex execution, plugin, account, private source or consumer configuration is touched.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o2-public-projection-builder",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "task-specific native-to-public O2 projection builder",
+            "fail-closed projection and source-bound registration tests"
           ]
         }
       ]
