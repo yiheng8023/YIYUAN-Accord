@@ -15,7 +15,7 @@ from pathlib import Path, PurePosixPath
 import re
 from typing import Any
 
-from harness.task_capture_o2_codex_reference import (
+from .task_capture_o2_codex_reference import (
     BUILDER_KIND,
     BUILDER_LOCATOR,
     SOURCE_CONTRACT_REVISION,

@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_active_o2_builder_with_bounded_o1(
+    def test_current_v12_contract_is_valid_ready_with_bounded_o1_and_o2_builder(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1322,20 +1322,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o2-public-projection-builder",
-        )
-        self.assertEqual(len(live_program["increments"]), 2)
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
+        self.assertEqual(len(live_program["increments"]), 1)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
         )
-        builder = live_program["increments"][1]
-        self.assertEqual(builder["state"], "active")
-        self.assertEqual(builder["acceptanceIds"], ["G2", "G4"])
-        self.assertIsNone(builder["taskRegistration"])
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],

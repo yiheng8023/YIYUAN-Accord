@@ -13,6 +13,7 @@ from unittest.mock import patch
 from harness.task_validator_o2_codex_reference import (
     PACKAGE_FILES,
     SCENARIOS,
+    _projection_builder_source_binding_valid,
     _read_bound_artifact,
     _strict_json_object,
     validate_evidence,
@@ -505,6 +506,83 @@ class O2CodexReferenceRegistrationTests(unittest.TestCase):
             "O2 Codex reference package source binding is invalid",
             lineage_errors,
         )
+
+    def test_projection_builder_must_be_exact_committed_ancestor(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            builder_path = root / BUILDER_LOCATOR
+            builder_path.parent.mkdir(parents=True)
+            raw = (Path.cwd() / BUILDER_LOCATOR).read_bytes().replace(
+                b"\r\n", b"\n"
+            )
+            builder_path.write_bytes(raw)
+            commands = (
+                ("init",),
+                ("config", "user.name", "Harness Test"),
+                ("config", "user.email", "harness-test@example.invalid"),
+                ("add", BUILDER_LOCATOR),
+                ("commit", "-m", "builder"),
+            )
+            for command in commands:
+                subprocess.run(
+                    ["git", *command],
+                    cwd=root,
+                    check=True,
+                    capture_output=True,
+                )
+            builder_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            (root / "registration-boundary.txt").write_text(
+                "strict descendant\n", encoding="utf-8"
+            )
+            subprocess.run(
+                ["git", "add", "registration-boundary.txt"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+            )
+            subprocess.run(
+                ["git", "commit", "-m", "registration boundary"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+            )
+            source_revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            binding = {
+                "kind": BUILDER_KIND,
+                "locator": BUILDER_LOCATOR,
+                "revision": builder_revision,
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "sourceContractRevision": SOURCE_CONTRACT_REVISION,
+            }
+
+            self.assertTrue(
+                _projection_builder_source_binding_valid(
+                    root, binding, source_revision
+                )
+            )
+            drifted = dict(binding, sha256="f" * 64)
+            self.assertFalse(
+                _projection_builder_source_binding_valid(
+                    root, drifted, source_revision
+                )
+            )
+            self.assertFalse(
+                _projection_builder_source_binding_valid(
+                    root, binding, builder_revision
+                )
+            )
 
     def test_public_projection_json_is_resource_bounded(self) -> None:
         raw = ("{\"nested\":" + ("[" * 40) + "0" + ("]" * 40) + "}").encode()

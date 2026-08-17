@@ -12,13 +12,14 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 has completed `increment.v12-o1-lifecycle-suite` and
-has one active, outcome-neutral O2 native-to-public projection-builder slice
-after the committed seam and replay. Its exact prior revision immutably registered
+**Current status:** v1.2 is `ready` after completing
+`increment.v12-o1-lifecycle-suite` and committing then removing the
+outcome-neutral O2 seam, replay and native-to-public projection-builder slices
+from the current graph. Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=active`,
+`programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
@@ -32,8 +33,8 @@ private source, natural-demand enrollment, O2-O5 result evidence,
 terminal authorization validator, installed plugin, or project-level acceptance exists.
 The tree contains a strictly pre-registration O2 seam and bounded replay of
 content-addressed, public-safe projections from Codex JSONL, plugin state and
-filesystem manifests. The active slice may add only their pure source parser;
-it cannot install or execute the candidate and cannot
+filesystem manifests through an exact committed pure source parser. They cannot
+install or execute the candidate and cannot
 promote O2. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
 interpreter, or persistent runtime. Installation, persistent activation,

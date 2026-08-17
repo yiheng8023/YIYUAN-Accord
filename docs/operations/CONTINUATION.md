@@ -52,12 +52,11 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 has O1 at 1/5 and one active, outcome-neutral O2 native-to-public
-projection-builder slice after the committed seam and replay. Its frozen
+v1.2 is `ready` with O1 at 1/5. The O2 seam, replay, and exact native-to-public
+parser are outcome-neutral committed history outside the current graph; O2 is
+false. Its frozen
 candidate.2 binding and O1 registration precede the accepted 12/12 controlled
-result. The O1 suite is the only accepted outcome validator; O2 has a bounded
-public-safe projection replay, while the active slice may add only its pure
-source parser before installation or measurement. O2 remains false.
+result. The O1 suite is the only accepted outcome validator.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain
 their pre-freeze label only as part of the frozen bytes:
 they separate finite delivery from later field validation and cover the
