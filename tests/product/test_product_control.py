@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_active_o2_disposition_repair(
+    def test_current_v12_contract_is_valid_with_active_o2_registration_construction(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1325,7 +1325,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(live_program["status"], "active")
         self.assertEqual(
             live_program["activeIncrementId"],
-            "increment.v12-o2-private-disposition-repair",
+            "increment.v12-o2-codex-reference",
         )
         self.assertEqual(len(live_program["increments"]), 2)
         self.assertEqual(

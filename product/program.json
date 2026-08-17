@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v12-o2-private-disposition-repair",
+  "activeIncrementId": "increment.v12-o2-codex-reference",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -169,13 +169,13 @@
       ]
     },
     {
-      "id": "increment.v12-o2-private-disposition-repair",
+      "id": "increment.v12-o2-codex-reference",
       "state": "active",
-      "correctionClass": "o2-private-resource-disposition-authority-defect-repair",
-      "observedProblem": "The O2 preregistration starting assets are now committed, but the code-owned cleanup seam accepts only historical v1 and v1.1 private-resource dispositions. A future O2 outcome increment therefore cannot truthfully bind the already authorized v1.2 isolated Codex home and task-root lifecycle without either failing G4 or misusing a revoked cohort disposition.",
-      "hypothesis": "One exact public-safe v1.2 O2 disposition can describe only the authorized Windows-current-user isolated Codex environment, bounded suite retention and delete-on-close, withdrawal, expiry or deterministic-failure lifecycle; adding that single literal to the code-owned allowlist and proving exact acceptance plus drift rejection closes the authority defect without exposing a locator or changing any acceptance threshold.",
-      "falsifier": "The repair accepts a near-match, wildcard, private locator, legacy cohort substitution or unrelated resource class; changes frozen profile, protocol or acceptance semantics; reads, deletes or relocates the live isolated resource; installs or executes the plugin; creates outcome evidence; or leaves repository residue.",
-      "stopCondition": "A public validation test fails before the repair, then passes only for the one exact v1.2 O2 disposition while a drifted value remains rejected; canonical verification stays valid with O1 true and O2 false; no private resource is read or changed; the repair is committed and exits the current graph before immutable O2 registration.",
+      "correctionClass": "o2-live-codex-reference-controlled-application",
+      "observedProblem": "O2 has a corrected exact package grant, an authenticated clean isolated Codex home, four committed controlled goals, a source-bound user-configured unavailable stop, an earlier task-specific validator and projection builder, and an exact code-owned private-resource disposition. The control repair materially changed the capture identity, so the observed-native-minimum manifest must be refreshed and an immutable registration must pass before any package installation or scenario execution.",
+      "hypothesis": "A refreshed committed starting manifest followed by one immutable O2 registration can bind the exact Codex version, environment, package digest, four scenario contracts, source-bound unavailable stop, human authority, cleanup lifecycle, earlier validator and projection builder. After a separate activation commit, installing only that package into the isolated home and running the four ordinary goal-level scenarios should demonstrate bounded Codex application, authority stop/resume, recovery, removal and zero residue without touching current user configuration.",
+      "falsifier": "The manifest or package identity drifts; installation or model execution occurs before a valid immutable registration; a scenario requires Skill, plugin or command syntax from the user; the simple native route gains unnecessary ceremony; the protected deletion occurs before a new exact grant; user configuration or existing credentials are copied or read; rollback or cleanup is incomplete; private locators or events enter public evidence; the validator changes after registration; or the controlled result is promoted beyond the tested Windows Codex suite.",
+      "stopCondition": "The refreshed manifest and immutable registration strictly precede installation and execution; the exact package is observed installed and active only in the authorized isolated environment; all four registered scenarios pass the earlier validator, including a separately granted protected deletion; the exact plugin, marketplace and isolated resources are removed; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies and the increment exits the current graph.",
       "acceptanceIds": [
         "G2",
         "G4"
@@ -194,11 +194,13 @@
           "harness/__pycache__",
           "tests/product/__pycache__"
         ],
-        "privateResourceDispositions": []
+        "privateResourceDispositions": [
+          "v1.2-o2-isolated-codex-environment:windows-current-user-private;retain-only-through-authorized-o2-controlled-suite-no-later-than-2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-or-deterministic-validation-failure"
+        ]
       },
       "workItems": [
         {
-          "id": "work.v12-o2-private-disposition-repair",
+          "id": "work.v12-o2-codex-reference",
           "state": "active",
           "acceptanceIds": [
             "G2",
@@ -213,8 +215,8 @@
             "git-push"
           ],
           "deliverables": [
-            "one exact public-safe v1.2 O2 private-resource disposition",
-            "canonical validation seam accepting only that exact lifecycle value and rejecting drift"
+            "immutable O2 Codex reference registration",
+            "four-scenario public-safe Codex observation and bounded O2 evidence"
           ]
         }
       ]

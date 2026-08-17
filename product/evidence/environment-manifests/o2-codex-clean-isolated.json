@@ -2,7 +2,7 @@
   "schema": 1,
   "environmentClass": "observed-native-minimum",
   "treatmentArm": "with-exact-harness",
-  "capturedAt": "2026-08-18T01:14:05.7666150+08:00",
+  "capturedAt": "2026-08-18T02:24:39.5478460+08:00",
   "host-client-and-version": {
     "operatingSystem": "Microsoft Windows 11 Professional 10.0.26200 build 26200 x64",
     "python": "CPython 3.14.6",
@@ -32,7 +32,7 @@
   "cwd-repository-and-project-instruction-chain": {
     "captureCwd": "repository-root-relative",
     "scenarioCwd": "fresh-private-isolated-task-root-outside-the-repository",
-    "repositoryRevisionAtCapture": "dd1e28d0d60348d743738befc2dc5d342a685e92",
+    "repositoryRevisionAtCapture": "9d030d369c1eda620816d4109ed7cbdb5e5f75fd",
     "productAuthority": [
       "product/constitution.json",
       "product/program.json",
@@ -50,7 +50,7 @@
   "rules-skills-plugins-apps-mcp-hooks-memory-and-managers": {
     "rules": "absent-in-isolated-starting-state",
     "skills": "absent-in-isolated-starting-state",
-    "plugins": "native-plugin-list-reported-installed-empty-and-available-empty",
+    "plugins": "native-plugin-list-reported-installed-empty-and-available-empty-at-pre-activation-capture",
     "appsMcpHooksMemoryManagers": "absent-in-isolated-starting-state",
     "userGlobalSurfaces": "not-copied-not-read-not-loaded"
   },
@@ -78,8 +78,8 @@
     "taskExposureSha256": "cb6ac77c07973aa68533f15e0c999308ecb68ebe43b11b78f2a8f74500257536"
   },
   "capture-time-source-identities-fingerprint-and-drift-check": {
-    "controlRevision": "0342ea6f2a6fd2a2982cb9c152dd2b67e883d2ea",
-    "controlSha256": "3616057dfbee5301eff8b5d3cfdc7a8188664ff10f8528ee223d50056fb27b8c",
+    "controlRevision": "9d030d369c1eda620816d4109ed7cbdb5e5f75fd",
+    "controlSha256": "4168dfa811590125661df73d589eaa40f2b4dcdf85e523e30f226fe2876869cf",
     "validatorRevision": "dd1e28d0d60348d743738befc2dc5d342a685e92",
     "validatorSha256": "2767b6657d2c7d25285e549ad0a21d6c972abf7f0c3dff1b181e99cd3a8dac97",
     "projectionBuilderRevision": "13ff439f56531149e6f8e429c713059e56c7a26e",

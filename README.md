@@ -12,13 +12,13 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on the single outcome-neutral
-`increment.v12-o2-private-disposition-repair` after completing
-`increment.v12-o1-lifecycle-suite` and committing the O2 preregistration
-starting assets. Earlier O2 mechanism slices remain committed history outside
-the current graph. The active slice adds only one exact public-safe cleanup
-disposition needed to bind the authorized isolated Codex environment before
-O2 registration; it cannot install or execute the package. Its exact prior revision immutably registered
+**Current status:** v1.2 is `active` on
+`increment.v12-o2-codex-reference` after completing
+`increment.v12-o1-lifecycle-suite` and the outcome-neutral O2 prerequisite
+slices. The current work is still pre-measurement: it refreshes the public-safe
+isolated Codex manifest and constructs an immutable O2 registration. No package
+installation or controlled scenario may occur until that registration passes.
+Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
