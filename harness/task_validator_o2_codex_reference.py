@@ -84,6 +84,16 @@ PACKAGE_FILES = (
 )
 PACKAGE_PAYLOAD_FILES = PACKAGE_FILES[1:]
 EXPECTED_PLUGIN_ID = "agent-autonomy-harness-codex@agent-autonomy-harness"
+REGISTRATION_LOCATOR = "product/evidence/o2-codex-reference-registration.json"
+REGISTRATION_BINDING_FIELDS = {
+    "locator",
+    "sha256",
+    "sourceRevision",
+    "measurementNotBefore",
+    "profileSha256",
+    "cohortProtocolSha256",
+    "preMeasurementValidator",
+}
 
 
 @dataclass(frozen=True)
@@ -686,6 +696,44 @@ def _read_bound_artifact(
     return _strict_json_object(raw)
 
 
+def _read_registration_document(
+    root: Path,
+    binding: Any,
+) -> tuple[dict[str, Any], str]:
+    if not isinstance(binding, dict) or set(binding) != REGISTRATION_BINDING_FIELDS:
+        raise ValueError("registration binding shape")
+    source_revision = binding.get("sourceRevision")
+    validator = binding.get("preMeasurementValidator")
+    if (
+        binding.get("locator") != REGISTRATION_LOCATOR
+        or not _sha256(binding.get("sha256"))
+        or not _revision(source_revision)
+        or binding.get("profileSha256") != PROFILE_SHA256
+        or binding.get("cohortProtocolSha256") != PROTOCOL_SHA256
+        or not isinstance(validator, dict)
+        or set(validator)
+        != {"kind", "version", "locator", "revision", "sha256"}
+        or validator.get("kind") != VALIDATOR_KIND
+        or type(validator.get("version")) is not int
+        or validator.get("version") != 1
+        or validator.get("locator") != VALIDATOR_LOCATOR
+        or not _revision(validator.get("revision"))
+        or not _sha256(validator.get("sha256"))
+    ):
+        raise ValueError("registration binding identity")
+    path = (root / REGISTRATION_LOCATOR).resolve(strict=True)
+    resolved_root = root.resolve(strict=True)
+    if resolved_root not in path.parents or not path.is_file():
+        raise ValueError("registration escapes root")
+    raw = path.read_bytes()
+    if len(raw) > 262_144:
+        raise ValueError("registration byte limit")
+    normalized = raw.replace(b"\r\n", b"\n")
+    if hashlib.sha256(normalized).hexdigest() != binding["sha256"]:
+        raise ValueError("registration digest")
+    return _strict_json_object(normalized), source_revision
+
+
 def _plugin_state(
     root: Path,
     binding: Any,
@@ -1081,15 +1129,15 @@ def _observation_valid(root: Path, observation: dict[str, Any]) -> bool:
             for item in program.get("increments", [])
             if isinstance(item, dict) and item.get("id") == INCREMENT_ID
         )
-        registration = increment.get("taskRegistration")
-        if not isinstance(registration, dict):
-            return False
+        registration, source_revision = _read_registration_document(
+            root,
+            increment.get("taskRegistration"),
+        )
         registration_errors: list[str] = []
         if not validate_registration(
             registration, increment, ("O2",), root, registration_errors
         ):
             return False
-        source_revision = registration.get("sourceRevision")
         values = registration["preRegistrationValues"]
         environments = values["exactCodexVersionAndEnvironmentClass"]
         package = values["packageAndActivationIdentity"]

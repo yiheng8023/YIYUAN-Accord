@@ -691,7 +691,30 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                 path.write_bytes(goal)
 
             source_revision = "6" * 40
-            registration["sourceRevision"] = source_revision
+            registration_locator = (
+                "product/evidence/o2-codex-reference-registration.json"
+            )
+            registration_raw = (
+                json.dumps(registration, ensure_ascii=False, sort_keys=True) + "\n"
+            ).encode()
+            registration_path = root / registration_locator
+            registration_path.parent.mkdir(parents=True, exist_ok=True)
+            registration_path.write_bytes(registration_raw)
+            registration_binding = {
+                "locator": registration_locator,
+                "sha256": hashlib.sha256(registration_raw).hexdigest(),
+                "sourceRevision": source_revision,
+                "measurementNotBefore": "2026-08-18T03:00:00+08:00",
+                "profileSha256": PROFILE_SHA256,
+                "cohortProtocolSha256": PROTOCOL_SHA256,
+                "preMeasurementValidator": {
+                    "kind": "o2-codex-reference-validator-v1",
+                    "version": 1,
+                    "locator": "harness/task_validator_o2_codex_reference.py",
+                    "revision": "7" * 40,
+                    "sha256": "8" * 64,
+                },
+            }
             program_path = root / "product/program.json"
             program_path.parent.mkdir(parents=True, exist_ok=True)
             program_path.write_text(
@@ -700,7 +723,7 @@ class O2CodexReferenceEvidenceTests(unittest.TestCase):
                         "increments": [
                             {
                                 "id": "increment.v12-o2-codex-reference",
-                                "taskRegistration": registration,
+                                "taskRegistration": registration_binding,
                             }
                         ]
                     }

@@ -23,7 +23,7 @@ AUTHORITY_PATHS = (
 PINNED_RUNTIME_SHA256 = {
     "harness/task_validator_o1_lifecycle_suite.py": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a",
     "harness/task_capture_o2_codex_reference.py": "3ff9248b637e01f055919ad8d6ca1def0517fc8376c50f3aa76957399271d2bc",
-    "harness/task_validator_o2_codex_reference.py": "2767b6657d2c7d25285e549ad0a21d6c972abf7f0c3dff1b181e99cd3a8dac97",
+    "harness/task_validator_o2_codex_reference.py": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e",
     "harness/control.py": "4168dfa811590125661df73d589eaa40f2b4dcdf85e523e30f226fe2876869cf",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
