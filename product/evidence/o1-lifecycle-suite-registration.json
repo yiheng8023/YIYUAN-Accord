@@ -1,0 +1,380 @@
+{
+  "schema": 1,
+  "id": "registration.o1-lifecycle-coverage.controlled-v1",
+  "registeredAt": "2026-08-17T20:41:09+08:00",
+  "taskIdentity": "conformance-unit.public-v1:e175334f583bc959a6f92868b881fe2c",
+  "incrementId": "increment.v12-o1-lifecycle-suite",
+  "criterionIds": [
+    "O1"
+  ],
+  "preRegistrationValues": {
+    "normativeProfileIdentity": "harness-demand-to-outcome-v1.2-candidate.2",
+    "cohortProtocolIdentity": "harness-controlled-conformance-v1.2-candidate.2",
+    "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+    "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+    "environmentAttributionBinding": {
+      "contractSha256": "cced19e527dcf9fba59d1bcbbcc3a0ec9bd63abef8c10506df6c75c36e2f720d",
+      "environmentClass": "observed-native-minimum",
+      "treatmentArm": "with-exact-harness",
+      "manifestLocator": "product/evidence/environment-manifests/o1-lifecycle-suite-observed-native-minimum.json",
+      "manifestRevision": "b6ab8be09f84d77c86039f167790f2e6c7d1b62d",
+      "manifestSha256": "7361a2fd31ab6924ddc4ebbc0eb389f553b52e18483945f1c616944b17821d4f",
+      "harnessActivationDelta": {
+        "state": "active",
+        "packageIdentity": "harness-source-modules@fef3d5ab24ede56bdaec3458a679bcd54170dba3",
+        "packageSha256": "a987f30e3a0eb8377cd74dd2df03bf49f069846fa9fc3455ea9e80bf594552fa",
+        "activationIdentity": "python-import:harness.control+task-validator-o1-lifecycle-suite",
+        "activationSha256": "a987f30e3a0eb8377cd74dd2df03bf49f069846fa9fc3455ea9e80bf594552fa",
+        "taskExposureIdentity": "o1-lifecycle-suite-validator-v1@fef3d5ab24ede56bdaec3458a679bcd54170dba3",
+        "taskExposureSha256": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a"
+      }
+    },
+    "sourceCustodyRevisionAndPath": {
+      "revision": "e060a08f05361cb4cc9a67be050236cdbbde1de5",
+      "path": "common/human-ai-collaboration-shortfalls",
+      "manifestBlob": "5b2bb49446c43b5d41bdd14fa6a844abefb7c1cc"
+    },
+    "sourceSliceIdentity": [
+      "SG-01",
+      "SG-02",
+      "SG-03",
+      "SG-04",
+      "SG-05",
+      "SG-06",
+      "SG-07",
+      "SG-08",
+      "SG-09",
+      "SG-10",
+      "SG-11",
+      "SG-12"
+    ],
+    "lifecyclePhaseApplicabilityAndOwner": [
+      {
+        "sourceSliceIdentity": "SG-01",
+        "lifecyclePhase": "intake-and-goal-context-binding",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-02",
+        "lifecyclePhase": "transition-continuity-and-handoff",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-03",
+        "lifecyclePhase": "premise-risk-and-domain-escalation",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-04",
+        "lifecyclePhase": "capability-route-selection-and-retirement",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-05",
+        "lifecyclePhase": "authority-reversibility-and-revocation",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-06",
+        "lifecyclePhase": "evidence-provenance-and-claim-scope",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-07",
+        "lifecyclePhase": "closure-readiness-and-release-transition",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-08",
+        "lifecyclePhase": "human-review-veto-and-accountability",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-09",
+        "lifecyclePhase": "environment-portability-and-evaluation",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-10",
+        "lifecyclePhase": "feedback-correction-and-retirement",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-11",
+        "lifecyclePhase": "governance-privacy-and-projection",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      },
+      {
+        "sourceSliceIdentity": "SG-12",
+        "lifecyclePhase": "proportionality-control-cost-and-subtraction",
+        "productOwner": "agent-autonomy-harness-v1.2",
+        "applicability": "applicable"
+      }
+    ],
+    "nativeOfficialExternalDomainOrResidualRoute": [
+      {
+        "sourceSliceIdentity": "SG-01",
+        "routeClass": "native",
+        "routeIdentity": "native:sg-01-with-task-specific-replace-bound-program-purpose-guard",
+        "sourceBoundJustification": "SG-01 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-01",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-02",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-02-with-task-specific-detach-active-increment-identity-guard",
+        "sourceBoundJustification": "SG-02 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-02",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-03",
+        "routeClass": "accountable-domain",
+        "routeIdentity": "accountable-domain:sg-03-with-task-specific-expand-success-definition-beyond-bound-authority-guard",
+        "sourceBoundJustification": "SG-03 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-03",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-04",
+        "routeClass": "native",
+        "routeIdentity": "native:sg-04-with-task-specific-replace-adaptive-route-with-fixed-router-guard",
+        "sourceBoundJustification": "SG-04 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-04",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-05",
+        "routeClass": "native",
+        "routeIdentity": "native:sg-05-with-task-specific-assign-human-only-operation-to-agent-work-guard",
+        "sourceBoundJustification": "SG-05 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-05",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-06",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-06-with-task-specific-promote-outcome-with-missing-evidence-guard",
+        "sourceBoundJustification": "SG-06 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-06",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-07",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-07-with-task-specific-declare-completion-with-active-work-guard",
+        "sourceBoundJustification": "SG-07 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-07",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-08",
+        "routeClass": "accountable-domain",
+        "routeIdentity": "accountable-domain:sg-08-with-task-specific-remove-accountable-human-acceptance-guard",
+        "sourceBoundJustification": "SG-08 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-08",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-09",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-09-with-task-specific-drift-environment-attribution-contract-guard",
+        "sourceBoundJustification": "SG-09 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-09",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-10",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-10-with-task-specific-repeat-correction-class-guard",
+        "sourceBoundJustification": "SG-10 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-10",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-11",
+        "routeClass": "residual-harness",
+        "routeIdentity": "residual-harness:sg-11-with-task-specific-leave-task-owned-temporary-residue-guard",
+        "sourceBoundJustification": "SG-11 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-11",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      },
+      {
+        "sourceSliceIdentity": "SG-12",
+        "routeClass": "native",
+        "routeIdentity": "native:sg-12-with-task-specific-expand-outcome-neutral-process-budget-guard",
+        "sourceBoundJustification": "SG-12 at e060a08f05361cb4cc9a67be050236cdbbde1de5:common/human-ai-collaboration-shortfalls is exercised by o1-lifecycle-coverage.sg-12",
+        "residualOrUnsupportedBoundary": "controlled verifier effect only; no comparative burden, broad effectiveness, distinct-Agent or untested-platform claim"
+      }
+    ],
+    "claimedControlEffects": [
+      {
+        "sourceSliceIdentity": "SG-01",
+        "effectClasses": [
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects replace-bound-program-purpose with program purpose is invalid"
+      },
+      {
+        "sourceSliceIdentity": "SG-02",
+        "effectClasses": [
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects detach-active-increment-identity with activeIncrementId must identify the active increment"
+      },
+      {
+        "sourceSliceIdentity": "SG-03",
+        "effectClasses": [
+          "detection",
+          "claim-limitation"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects expand-success-definition-beyond-bound-authority with constitution successDefinition is invalid"
+      },
+      {
+        "sourceSliceIdentity": "SG-04",
+        "effectClasses": [
+          "detection",
+          "stop",
+          "claim-limitation"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects replace-adaptive-route-with-fixed-router with program progressionPolicy is invalid"
+      },
+      {
+        "sourceSliceIdentity": "SG-05",
+        "effectClasses": [
+          "prevention",
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects assign-human-only-operation-to-agent-work with contains an unknown operation"
+      },
+      {
+        "sourceSliceIdentity": "SG-06",
+        "effectClasses": [
+          "detection",
+          "stop",
+          "claim-limitation"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects promote-outcome-with-missing-evidence with missing evidence product/evidence/o1-lifecycle-suite-unbound.json"
+      },
+      {
+        "sourceSliceIdentity": "SG-07",
+        "effectClasses": [
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects declare-completion-with-active-work with completed program must have no active increment"
+      },
+      {
+        "sourceSliceIdentity": "SG-08",
+        "effectClasses": [
+          "prevention",
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects remove-accountable-human-acceptance with program userOwns omits a mandatory human authority"
+      },
+      {
+        "sourceSliceIdentity": "SG-09",
+        "effectClasses": [
+          "detection",
+          "stop",
+          "claim-limitation"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects drift-environment-attribution-contract with acceptance environmentAttribution is invalid"
+      },
+      {
+        "sourceSliceIdentity": "SG-10",
+        "effectClasses": [
+          "detection",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects repeat-correction-class with increments repeat correctionClass"
+      },
+      {
+        "sourceSliceIdentity": "SG-11",
+        "effectClasses": [
+          "detection",
+          "recovery",
+          "stop"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects leave-task-owned-temporary-residue with repository cleanup residue remains: .tmp"
+      },
+      {
+        "sourceSliceIdentity": "SG-12",
+        "effectClasses": [
+          "detection",
+          "stop",
+          "claim-limitation"
+        ],
+        "expectedObservableEffect": "canonical verifier rejects expand-outcome-neutral-process-budget with outcome-neutral work budget must be zero or one"
+      }
+    ],
+    "controlledScenarioOrCodeValidator": {
+      "suiteIdentity": "o1-lifecycle-coverage.controlled-v1",
+      "scenarioIdentities": [
+        "o1-lifecycle-coverage.sg-01",
+        "o1-lifecycle-coverage.sg-02",
+        "o1-lifecycle-coverage.sg-03",
+        "o1-lifecycle-coverage.sg-04",
+        "o1-lifecycle-coverage.sg-05",
+        "o1-lifecycle-coverage.sg-06",
+        "o1-lifecycle-coverage.sg-07",
+        "o1-lifecycle-coverage.sg-08",
+        "o1-lifecycle-coverage.sg-09",
+        "o1-lifecycle-coverage.sg-10",
+        "o1-lifecycle-coverage.sg-11",
+        "o1-lifecycle-coverage.sg-12"
+      ],
+      "validatorIdentity": "o1-lifecycle-suite-validator-v1"
+    },
+    "claimLimitAndLifecycle": {
+      "evidenceClass": "controlled-fault-injection",
+      "claimCeiling": "bounded-v1.2-control-detection-stop-recovery-and-claim-limitation-only",
+      "fieldClaimsExcluded": [
+        "comparative-user-burden",
+        "broad-real-world-effectiveness",
+        "distinct-agent-equivalence"
+      ],
+      "retirementRule": "shrink-or-retire-when-sufficient-native-control-is-observed"
+    }
+  },
+  "acceptanceAuthority": {
+    "locator": "product/acceptance.json",
+    "criteriaContractSha256": "c90197006a028f78c6f7be29a7884ccc447e3c6e606c558b6527df465187095b"
+  },
+  "namedHumanAcceptor": "project-maintainer-user",
+  "qualitySafetyEvidenceAndResidueFloors": {
+    "quality": "all twelve slices exactly once",
+    "safety": "no unauthorized or irreversible external effect",
+    "evidence": "observable replay rather than receipt assertion",
+    "residue": "all isolated scenario roots deleted after capture"
+  },
+  "materialInterventionTaxonomy": [
+    "controlled repository fault injection"
+  ],
+  "materialCollaborationLossTaxonomy": [
+    "unsupported claim promotion"
+  ],
+  "scenarioEvidenceAndStopRule": {
+    "evidenceClass": "controlled-fault-injection",
+    "startingTruthBoundBefore": "immutable-registration",
+    "executionStartsAfter": "immutable-registration",
+    "expectedInvariantOrCounterexample": "each SG slice rejects its pre-registered counterexample or retains an explicit unsupported disposition",
+    "failureDisposition": "retain the failed slice and keep O1 unverified",
+    "stopRule": "stop on source drift, validator drift, unexpected side effect, unbounded residue, or any missing slice"
+  },
+  "claimLimits": [
+    "finite controlled v1.2 delivery claim only"
+  ],
+  "preMeasurementValidator": {
+    "kind": "o1-lifecycle-suite-validator-v1",
+    "version": 1,
+    "locator": "harness/task_validator_o1_lifecycle_suite.py",
+    "revision": "fef3d5ab24ede56bdaec3458a679bcd54170dba3",
+    "sha256": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a"
+  }
+}
