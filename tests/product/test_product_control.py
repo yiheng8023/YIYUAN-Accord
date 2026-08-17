@@ -1632,7 +1632,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn("stop-recover-minimal-correct-reverify", protocol["selfCorrectionRule"])
         self.assertNotIn("strata", protocol)
         self.assertIn("current-acceptance-owned", protocol["scenarioCoverageRule"])
-        self.assertEqual(control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION, None)
+        self.assertEqual(
+            control.EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION,
+            "209c1f096939452995de83351bf183b58518bbf0",
+        )
         self.assertEqual(
             control.EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID,
             None,
@@ -2177,17 +2180,25 @@ class ProductControlTests(unittest.TestCase):
             )
         advapi32.CredDeleteW.assert_not_called()
 
-    def test_v12_frozen_material_waits_for_pinned_artifact_revision(self) -> None:
+    def test_v12_frozen_material_accepts_only_the_pinned_candidate_revision(self) -> None:
         binding = self.current_profile_binding()
         errors: list[str] = []
+        self.assertTrue(
+            control._current_profile_binding_material_valid(ROOT, binding, errors),
+            errors,
+        )
+
+        binding["frozenAtRevision"] = "f" * 40
+        errors = []
         self.assertFalse(
             control._current_profile_binding_material_valid(ROOT, binding, errors)
         )
         self.assertIn(
-            "frozen v1.2 normative profile identity or source revision mismatch",
+            "frozen normative profile binding is not the code-owned v1.2 candidate",
             errors,
         )
 
+        binding = self.current_profile_binding()
         binding["profileIdentity"] = control.EXPECTED_V1_PROFILE_IDENTITY
         errors = []
         self.assertFalse(
@@ -2196,6 +2207,14 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             "frozen normative profile binding is not the code-owned v1.2 candidate",
             errors,
+        )
+        self.assertFalse(
+            control._committed_blob(
+                ROOT,
+                None,
+                control.EXPECTED_CURRENT_PROFILE_CANDIDATE_LOCATOR,
+                control.EXPECTED_CURRENT_PROFILE_CANDIDATE_SHA256,
+            )
         )
 
     def test_v11_uncommitted_freeze_and_unpinned_freeze_fail_closed(self) -> None:

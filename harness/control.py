@@ -346,11 +346,13 @@ EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_LOCATOR = (
 EXPECTED_CURRENT_COHORT_PROTOCOL_CANDIDATE_SHA256 = (
     "c80e7265702e9a4962adb0f4f2601829d2096b0c2d142cc5123d82fb97bd2c78"
 )
-EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = None
-# The v1.2 candidate is reviewable but deliberately cannot freeze yet. A later
-# commit must pin the immutable artifact revision, then a distinct source-
-# authorized materialization/freeze slice must pin its own canonical binding
-# and validator. None of the stopped v1.1 anchors can be inherited.
+EXPECTED_CURRENT_PROFILE_ARTIFACT_REVISION: str | None = (
+    "209c1f096939452995de83351bf183b58518bbf0"
+)
+# The v1.2 candidate's immutable artifact revision is code-pinned, but it still
+# cannot freeze. A distinct source-authorized materialization/freeze slice must
+# pin its own canonical binding and validator. None of the stopped v1.1 anchors
+# can be inherited.
 EXPECTED_CURRENT_INITIAL_BINDING_REVISION: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_SHA256: str | None = None
 EXPECTED_CURRENT_INITIAL_BINDING_AUTHORIZATION_VALIDATOR_ID: str | None = None
