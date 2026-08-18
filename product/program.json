@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o4-environment-manifest-refresh",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -310,59 +310,6 @@
           "deliverables": [
             "immutable second-generation O2 permission-profile registration",
             "four-scenario public-safe Codex observation and bounded O2 evidence"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v12-o4-environment-manifest-refresh",
-      "state": "active",
-      "correctionClass": "o4-pre-registration-environment-attribution-refresh",
-      "observedProblem": "The committed O4 observed-native-minimum environment manifest predates the current task-specific validator, controlled goal and fresh-thread carrier route. It binds the superseded copied-history fork route and stale content identities, so it cannot truthfully support an immutable O4 registration against the current clean checkout.",
-      "hypothesis": "Recapturing only the authorized isolated Codex environment and current committed repository identities, while preserving unknown host surfaces and excluding private locators or existing user configuration, will produce a current content-addressed manifest that passes the environment contract and can precede the immutable O4 registration without changing O4 outcome state.",
-      "falsifier": "The refresh reads or copies existing user auth, configuration, AGENTS, Skills, plugins, MCP, Hooks, memory or sessions; exposes a private path, identifier, prompt or credential locator; assumes an unobservable surface absent; retains the copied-history fork as context relief; binds uncommitted or drifting source bytes; changes acceptance; claims O4 credit; or leaves task-created residue.",
-      "stopCondition": "One current public-safe observed-native-minimum manifest binds the exact committed validator, goal, current repository and official Codex source identities plus the fresh-thread route and process-scoped isolation boundary; strict environment and O4 preregistration checks pass; the manifest is committed before registration; the increment exits the current graph with O4 still false and no task-created residue.",
-      "acceptanceIds": [
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": null,
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": [
-          "v1.2-o4-isolated-codex-environment-and-task-threads:windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-or-deterministic-validation-failure"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o4-environment-manifest-refresh",
-          "state": "active",
-          "acceptanceIds": [
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "current committed O4 observed-native-minimum environment manifest",
-            "public-safe environment drift and fresh-thread route attribution"
           ]
         }
       ]
