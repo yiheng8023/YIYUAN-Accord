@@ -1320,7 +1320,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_stopped_o2_counterevidence_and_active_permission_profile_suite(
+    def test_current_v12_contract_is_valid_with_two_stopped_o2_counterexamples(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1331,11 +1331,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o2-codex-reference-permission-profile",
-        )
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
         self.assertEqual(len(live_program["increments"]), 3)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
@@ -1353,7 +1350,7 @@ class ProductControlTests(unittest.TestCase):
             live_program["increments"][1]["workItems"][0]["state"], "stopped"
         )
         permission_profile_suite = live_program["increments"][2]
-        self.assertEqual(permission_profile_suite["state"], "active")
+        self.assertEqual(permission_profile_suite["state"], "stopped")
         self.assertEqual(
             permission_profile_suite["acceptanceIds"], ["O2", "G2", "G4"]
         )
@@ -1376,7 +1373,40 @@ class ProductControlTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            permission_profile_suite["workItems"][0]["state"], "active"
+            permission_profile_suite["workItems"][0]["state"], "stopped"
+        )
+        stopped = json.loads(
+            (
+                ROOT
+                / "product/evidence/o2-codex-reference-permission-profile-stopped.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            stopped["kind"],
+            "controlled-live-codex-permission-profile-stopped-counterevidence",
+        )
+        self.assertIs(stopped["cleanupVerified"], True)
+        self.assertIs(stopped["outcomeCredit"], False)
+        self.assertEqual(
+            [item["state"] for item in stopped["scenarioResults"]],
+            [
+                "passed-no-outcome-credit-after-suite-stop",
+                "stopped-deterministic-host-policy-failure",
+                "not-executed-after-deterministic-stop",
+                "not-executed-after-deterministic-stop",
+            ],
+        )
+        bound_artifacts = list(stopped["pluginLifecycleArtifacts"].values())
+        for scenario in stopped["scenarioResults"]:
+            if "eventArtifact" in scenario:
+                bound_artifacts.append(scenario["eventArtifact"])
+            bound_artifacts.extend(scenario.get("filesystemArtifacts", []))
+        for artifact in bound_artifacts:
+            raw = (ROOT / artifact["locator"]).read_bytes()
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), artifact["sha256"])
+        self.assertEqual(
+            stopped["pluginLifecycleArtifacts"]["before"]["sha256"],
+            stopped["pluginLifecycleArtifacts"]["removed"]["sha256"],
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
@@ -3433,6 +3463,21 @@ class ProductControlTests(unittest.TestCase):
             / "o2-codex-reference-artifacts"
             / "user-configured-unavailable-stop.json",
             ROOT / O2_CODEX_PERMISSION_PROFILE_STOP_LOCATOR,
+            *{
+                evidence_root
+                / "o2-codex-reference-artifacts"
+                / name
+                for name in (
+                    "permission-profile-before-plugins.json",
+                    "permission-profile-active-plugins.json",
+                    "permission-profile-removed-plugins.json",
+                    "permission-profile-simple-before-filesystem.json",
+                    "permission-profile-simple-after-filesystem.json",
+                    "permission-profile-simple-single-events.json",
+                    "permission-profile-nontrivial-before-filesystem.json",
+                    "permission-profile-nontrivial-after-filesystem.json",
+                )
+            },
         }
         for path in sorted(evidence_root.rglob("*")):
             self.assertFalse(control._link_or_reparse(path), path)

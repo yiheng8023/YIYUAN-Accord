@@ -19,8 +19,7 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is active on the single registered
-`increment.v12-o2-codex-reference-permission-profile`, and O1-O5 are 1/5. Its
+v1.2 is ready with no active increment, and O1-O5 are 1/5. Its
 candidate.2 profile binding is frozen without cohort activation. The completed
 O1 lifecycle suite is the only accepted outcome. A first preregistered O2 Codex
 attempt installed the exact candidate only in an isolated environment; the
@@ -37,9 +36,14 @@ same native-Windows `exec` symptom. The closed preparation slice then bound a
 32-cycle four-worker allow-deny probe with zero unexpected result or residue,
 the fresh isolated account, the public-safe starting manifest, and the earlier
 task-specific validator. The immutable second-generation registration at
-`fe119ca` is now bound in the active program. The exact package remains
-uninstalled and no second-generation scenario has executed; installation,
-execution, and protected cleanup remain separate registered gates. The distinct code-pinned candidate.2 profile and
+`fe119ca` then bound the exact package and four scenarios. The package was
+installed only in the fresh isolated environment; the simple no-op passed, but
+the nontrivial goal stopped deterministically when task-root writes were
+rejected as outside the project or disallowed by policy and public projection
+failed closed on the native in-progress item. The remaining authority and
+recovery scenarios were not executed. The exact plugin, marketplace, task roots
+and isolated environment were removed, so the second attempt also retains
+counterevidence with no O2 credit. The distinct code-pinned candidate.2 profile and
 controlled-conformance protocol separate finite delivery from later field
 validation, cover the collaboration lifecycle through minimum sufficient
 dispositions, and keep dynamic environment/context adaptation, Agent-owned

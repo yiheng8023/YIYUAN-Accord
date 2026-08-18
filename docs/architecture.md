@@ -67,23 +67,20 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` on the single registered
-`increment.v12-o2-codex-reference-permission-profile` after completing
-`increment.v12-o1-lifecycle-suite`, stopping the first
-`increment.v12-o2-codex-reference` on live counterevidence, and closing its
-bounded permission-profile preparation slice. The stopped registration at
-`7f39911` retains the first native-Windows `workspace-write` failure with no O2
-credit. The smaller second-generation route uses Codex 0.147.0's official
-built-in `:workspace` profile without legacy sandbox composition. Its fixed
-32-cycle four-worker probe observed 32/32 in-root writes allowed, 32/32
-out-of-root writes denied, no unexpected result, and zero residue. The fresh
-isolated account, public-safe starting manifest, and task-specific validator
-strictly precede the immutable registration at `fe119ca`, which is now bound in
-the active program. The exact package remains uninstalled and no
-second-generation scenario has executed. The private isolated account remains
-under its exact cleanup disposition. O2 remains false, and O1-O5 are at 1/5,
-until all four registered scenarios, rollback, cleanup, replay, and named-human
-bounded acceptance pass; deterministic failure stops and retains the
+The current v1.2 program is `ready` with no active increment after completing
+`increment.v12-o1-lifecycle-suite` and stopping both registered O2 attempts on
+live counterevidence. The second attempt used Codex 0.147.0's official built-in
+`:workspace` profile without legacy sandbox composition. Its fixed 32-cycle
+four-worker probe observed 32/32 in-root writes allowed, 32/32 out-of-root
+writes denied, no unexpected result, and zero residue. After the immutable
+registration at `fe119ca`, the exact package was installed only in the fresh
+isolated environment. The simple no-op passed with zero filesystem delta; the
+registered nontrivial goal then deterministically stopped when task-root writes
+were rejected as outside the project or disallowed by policy and the
+public-safe projection failed closed on the remaining native in-progress item.
+The authority and recovery scenarios were not executed. The exact plugin,
+marketplace, task roots, and isolated account resource were removed. O2 remains
+false, O1-O5 remain at 1/5, and both O2 generations remain bounded append-only
 counterevidence. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.

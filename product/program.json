@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o2-codex-reference-permission-profile",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -242,9 +242,9 @@
     },
     {
       "id": "increment.v12-o2-codex-reference-permission-profile",
-      "state": "active",
+      "state": "stopped",
       "correctionClass": "o2-live-codex-permission-profile-controlled-application",
-      "observedProblem": "The first immutable O2 attempt retained no credit after the legacy workspace-write route rejected the first nontrivial task-root write. The bounded preparation increment then resolved Codex 0.147.0 and the current official permission-profile contract, demonstrated the built-in :workspace route with a fixed 32-cycle four-worker allow-deny pressure probe and zero residue, materialized a fresh isolated officially authenticated account without copying existing user state, committed the exact starting manifest, and committed a second task-specific validator before the immutable registration at fe119ca. The exact package remains uninstalled and no second-generation scenario has executed.",
+      "observedProblem": "The first immutable O2 attempt retained no credit after the legacy workspace-write route rejected the first nontrivial task-root write. The second immutable attempt resolved Codex 0.147.0 and the official built-in :workspace profile without legacy sandbox composition, passed the fixed 32-cycle four-worker allow-deny pressure probe, and installed the exact registered package only in the fresh isolated environment. Its simple native no-op passed with zero filesystem delta, but the registered nontrivial goal then deterministically failed: Codex rejected every task-root write as outside the project or disallowed by policy, and the public projection failed closed on the remaining native in-progress item. The suite stopped before the authority and recovery scenarios, the exact plugin, marketplace, task roots and isolated resource were removed, and the retained public-safe counterevidence carries no O2 credit.",
       "hypothesis": "The immutable second-generation O2 registration binds the official built-in :workspace profile without legacy sandbox composition, the exact Codex version, isolated starting state, package bytes, four ordinary goal-level scenario contracts, source-bound user-configured stop, prior validator and projection builder, separate protected-deletion gate, public-safe evidence projection and exact cleanup lifecycle. Installing only the registered package after this binding and executing those four scenarios should demonstrate bounded usable Codex application, authority stop and resume, recovery, rollback and zero residue without accessing current user configuration or teaching route syntax.",
       "falsifier": "The permission profile, Codex build, manifest, package, validator or projection builder drifts; the legacy sandbox is selected or composed; installation or scenario execution predates the immutable registration; the simple native route gains unnecessary ceremony; any in-root operation is unexpectedly denied or any out-of-root effect is permitted; a scenario requires capability or route syntax from the user; protected deletion occurs before a new exact grant; current user state is copied or read; private locators or events enter public evidence; failure is hidden; rollback or cleanup is incomplete; or the result is promoted beyond the registered native-Windows Codex 0.147.0 suite.",
       "stopCondition": "The exact package is observed installed and active only in the authorized isolated environment after the immutable registration; all four registered scenarios pass the earlier task-specific validator, including a separately granted protected deletion; the exact plugin, marketplace, task roots and isolated resource are removed under their bound disposition; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies without claim expansion; and the increment exits the current graph. Any deterministic failure instead stops the suite, retains the counterevidence, cleans the exact resources and leaves O2 false.",
@@ -288,7 +288,7 @@
       "workItems": [
         {
           "id": "work.v12-o2-codex-reference-permission-profile",
-          "state": "active",
+          "state": "stopped",
           "acceptanceIds": [
             "O2",
             "G2",

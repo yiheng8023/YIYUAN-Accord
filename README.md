@@ -12,28 +12,26 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on the single registered
-`increment.v12-o2-codex-reference-permission-profile` after completing O1,
-stopping the first O2 attempt on live counterevidence, and closing its bounded
-permission-profile preparation slice. The stopped registration at `7f39911`
-retains the earlier native-Windows `workspace-write` failure with no O2 credit.
-The smaller second-generation route resolves Codex 0.147.0's official built-in
-`:workspace` permission profile without legacy sandbox composition. Its fixed
-32-cycle four-worker probe observed 32/32 in-root writes allowed, 32/32
-out-of-root writes denied, no unexpected result, and zero residue. The fresh
-isolated account and public-safe starting manifest plus the task-specific
-validator were committed before the immutable registration at `fe119ca`.
-That registration is now bound in the active program, but the exact package is
-still uninstalled and no second-generation scenario has executed. The isolated
-account resource remains private under its exact cleanup disposition. O2 stays
-false until the four registered live scenarios, rollback, cleanup, replay and
-named-human bounded result acceptance all pass; a deterministic failure stops
-the suite and retains counterevidence instead.
+**Current status:** v1.2 is `ready` with no active increment after completing
+O1 and stopping two preregistered O2 attempts on live counterevidence. The
+second attempt used Codex 0.147.0's official built-in `:workspace` permission
+profile without legacy sandbox composition. Its fixed 32-cycle four-worker
+probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,
+no unexpected result, and zero residue. After the immutable registration at
+`fe119ca`, the exact package was installed only in the fresh isolated
+environment. The simple native no-op passed with zero filesystem delta, but the
+registered nontrivial goal then stopped deterministically: Codex rejected the
+task-root writes as outside the project or disallowed by policy, and the
+public-safe projection failed closed on the remaining native in-progress item.
+The authority and recovery scenarios were not executed. The exact plugin,
+marketplace, task roots, and isolated account resource were removed; the
+public-safe stop record carries no O2 credit. The earlier registration at
+`7f39911` likewise remains append-only stopped counterevidence.
 Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=active`,
+`programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without

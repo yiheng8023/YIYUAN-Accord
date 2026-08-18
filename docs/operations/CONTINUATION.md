@@ -51,20 +51,21 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `active` on the single registered
-`increment.v12-o2-codex-reference-permission-profile`, with O1 at 1/5. The
+v1.2 is `ready` with no active increment and O1 at 1/5. The
 append-only registration at `7f39911` retains the first native-Windows
 `workspace-write` failure with no O2 credit. The closed preparation slice then
 resolved the official built-in `:workspace` profile without legacy sandbox
 composition and passed a fixed 32-cycle four-worker probe: 32 in-root writes
 allowed, 32 out-of-root writes denied, no unexpected result and zero residue.
 The fresh isolated account, public-safe manifest and task-specific validator
-strictly precede the immutable registration at `fe119ca`, which is now bound in
-the active program. The exact package remains uninstalled and no
-second-generation scenario has executed. The private isolated account remains
-under its exact cleanup disposition. O2 stays false until all four registered
-scenarios, rollback, cleanup, replay and named-human bounded acceptance pass;
-deterministic failure stops and retains the counterevidence.
+strictly precede the immutable registration at `fe119ca`. The exact package was
+then installed only in that isolated environment. The simple no-op passed with
+zero filesystem delta, but the nontrivial goal deterministically stopped when
+task-root writes were rejected as outside the project or disallowed by policy
+and public projection failed closed on the remaining native in-progress item.
+The authority and recovery scenarios were not executed. The exact plugin,
+marketplace, task roots and isolated account resource were removed; O2 stays
+false and this second generation also retains bounded counterevidence.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
 controlled result; O1 is the only accepted outcome. The frozen profile and
 protocol separate finite delivery from later field validation and create no
