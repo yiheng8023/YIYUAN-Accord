@@ -647,6 +647,12 @@ V12_O2_ISOLATED_ENVIRONMENT_PROGRAM_DISPOSITION = (
     "2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-"
     "or-deterministic-validation-failure"
 )
+V12_O4_ISOLATED_CARRIER_PROGRAM_DISPOSITION = (
+    "v1.2-o4-isolated-codex-environment-and-task-threads:"
+    "windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;"
+    "delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-"
+    "or-deterministic-validation-failure"
+)
 INITIAL_BINDING_PRIVATE_EVIDENCE_FIELDS = {
     "schema",
     "kind",
@@ -1059,6 +1065,7 @@ ALLOWED_PRIVATE_RESOURCE_DISPOSITIONS = {
     CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
     CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
     V12_O2_ISOLATED_ENVIRONMENT_PROGRAM_DISPOSITION,
+    V12_O4_ISOLATED_CARRIER_PROGRAM_DISPOSITION,
 }
 PROGRAM_STATES = {"active", "ready", "stopped", "completed"}
 INCREMENT_STATES = {"planned", "active", "completed", "cancelled", "stopped"}

@@ -7595,6 +7595,43 @@ class ProductControlTests(unittest.TestCase):
             drift_report["errors"],
         )
 
+    def test_v12_o4_isolated_carrier_disposition_is_exact_and_code_owned(
+        self,
+    ) -> None:
+        expected = (
+            "v1.2-o4-isolated-codex-environment-and-task-threads:"
+            "windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;"
+            "delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-"
+            "or-deterministic-validation-failure"
+        )
+        self.assertEqual(
+            control.V12_O4_ISOLATED_CARRIER_PROGRAM_DISPOSITION,
+            expected,
+        )
+
+        def bind_exact(value: dict) -> None:
+            self.activate_program(value)["cleanupBoundary"][
+                "privateResourceDispositions"
+            ] = [expected]
+
+        self.mutate("product/program.json", bind_exact)
+        exact_report = self.report()
+        self.assertTrue(exact_report["criterionStates"]["G4"], exact_report["errors"])
+
+        def drift(value: dict) -> None:
+            self.activate_program(value)["cleanupBoundary"][
+                "privateResourceDispositions"
+            ] = [expected + "-drift"]
+
+        self.mutate("product/program.json", drift)
+        drift_report = self.report()
+        self.assertFalse(drift_report["criterionStates"]["G4"])
+        self.assertIn(
+            "increment increment.fixture-current requires exact privacy-safe "
+            "private resource dispositions",
+            drift_report["errors"],
+        )
+
     def test_initial_binding_private_source_rejects_boolean_schema_alias(self) -> None:
         private_evidence = {
             "schema": True,
