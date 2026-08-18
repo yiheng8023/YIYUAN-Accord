@@ -51,11 +51,13 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `ready`; O1 is 1/5. Three closed outcome-neutral slices bind the O4 seam
+v1.2 is `ready`; O1 is 1/5. Four closed outcome-neutral slices bind the O4 seam
 to raw Codex host and repository observations plus one exact public controlled
 goal that must remain active across native compaction and a full-history
-deferred-goal fork before registration; they perform no measurement and earn
-no O4 credit. Two immutable O2 attempts retain
+deferred-goal fork before registration. The source goal must then be cleared
+through the native lifecycle before source archive so an older carrier cannot
+resume into the mainline; the slices perform no measurement and earn no O4
+credit. Two immutable O2 attempts retain
 bounded native-Windows counterevidence with no O2 credit. The second used the
 official `:workspace` profile, passed its fixed allow-deny pressure probe, then
 stopped when the nontrivial goal could not write the task root and the public

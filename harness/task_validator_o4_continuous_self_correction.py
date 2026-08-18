@@ -138,7 +138,15 @@ COUNTEREXAMPLE_SOURCES = [
         "scenarioIdentity": CARRIER_SCENARIO_IDENTITIES[1],
         "scenarioClass": "proactive-same-goal-conversation-transition",
         "evidenceClass": "controlled-codex-app-server-host-event-projection",
-        "sourceBinding": CODEX_SOURCE_BINDING,
+        "sourceBinding": {
+            **CODEX_SOURCE_BINDING,
+            "historicalCounterexampleIdentity": (
+                "source-carrier-autoresume-with-active-goal-after-verified-destination-v1"
+            ),
+            "historicalCounterexampleRole": (
+                "private-source-control-regression-input-not-outcome-evidence"
+            ),
+        },
     },
 ]
 
@@ -157,8 +165,8 @@ FAILURE_BINDINGS = [
     },
     {
         "scenarioIdentity": CARRIER_SCENARIO_IDENTITIES[1],
-        "failure": "source-carrier-release-before-destination-authority-and-head-verification",
-        "expectedDiagnostic": "source-release-precedes-verified-destination",
+        "failure": "source-active-goal-retained-or-carrier-released-before-destination-verification",
+        "expectedDiagnostic": "source-goal-or-carrier-release-sequence-is-incomplete",
     },
 ]
 
@@ -180,13 +188,14 @@ CORRECTION_BINDINGS = [
     {
         "scenarioIdentity": CARRIER_SCENARIO_IDENTITIES[1],
         "detection": "reliable-risk-or-explicit-unknown-capacity-rule-observed",
-        "correction": "codex-native-thread-fork-or-equivalent-same-goal-transition",
-        "reverification": "destination-authority-and-git-head-verified-before-source-release",
+        "correction": "codex-native-deferred-goal-fork-then-source-goal-clear-and-archive",
+        "reverification": "destination-authority-and-git-head-verified-before-source-goal-clear-and-archive",
     },
 ]
 
 TRANSITION_AND_CLEANUP_BOUNDARY = {
     "sourceReleaseRule": "destination-authority-and-git-head-verified-before-source-release",
+    "sourceGoalReleaseRule": "source-active-goal-cleared-after-destination-verification-and-before-archive",
     "unknownCapacityRule": "transition-conservatively-at-the-preregistered-material-checkpoint-boundary",
     "userReconstructionEventsAllowed": 0,
     "userTopologyChoiceEventsAllowed": 0,
@@ -318,6 +327,12 @@ TRANSITION_EVENT_SEQUENCE = (
         "source-release-allowed",
         "source",
         "allowed",
+    ),
+    (
+        "codex-app-server-notification",
+        "source-goal-released",
+        "source",
+        "released",
     ),
     (
         "codex-app-server-response",
@@ -945,12 +960,40 @@ def _source_release_preflight_observed(value: Any, *, source_carrier_id: str) ->
         raise ValueError("raw source-release preflight is not release eligible")
 
 
+def _goal_clear_response_observed(value: Any, *, request_id: int) -> None:
+    message = _app_server_record(value)
+    result = message.get("result")
+    if (
+        set(message) != {"id", "result"}
+        or message.get("id") != request_id
+        or not isinstance(result, dict)
+        or set(result) != {"cleared"}
+        or result.get("cleared") is not True
+    ):
+        raise ValueError("raw source goal-clear response is invalid")
+
+
+def _source_goal_cleared_observed(value: Any, *, source_carrier_id: str) -> None:
+    message = _app_server_record(value)
+    params = message.get("params")
+    if (
+        set(message) != {"method", "params"}
+        or message.get("method") != "thread/goal/cleared"
+        or not isinstance(params, dict)
+        or set(params) != {"threadId"}
+        or params.get("threadId") != source_carrier_id
+    ):
+        raise ValueError("raw source goal-clear notification is invalid")
+
+
 def _source_archived_observed(value: Any, *, source_carrier_id: str) -> None:
     message = _app_server_record(value)
     params = message.get("params")
     if (
-        message.get("method") != "thread/archived"
+        set(message) != {"method", "params"}
+        or message.get("method") != "thread/archived"
         or not isinstance(params, dict)
+        or set(params) != {"threadId"}
         or params.get("threadId") != source_carrier_id
     ):
         raise ValueError("raw source carrier archive notification is invalid")
@@ -1040,7 +1083,7 @@ def project_raw_carrier_observations(
             not isinstance(destination_carrier_id, str)
             or not destination_carrier_id
             or destination_carrier_id == source_carrier_id
-            or len(raw_observations) != 14
+            or len(raw_observations) != 17
         ):
             raise ValueError("raw transition carrier identities or count are invalid")
         _carrier_fitness_observed(
@@ -1093,14 +1136,25 @@ def project_raw_carrier_observations(
         _source_release_preflight_observed(
             raw_observations[10], source_carrier_id=source_carrier_id
         )
-        archive_request_id = _request_observed(
+        goal_clear_request_id = _request_observed(
             raw_observations[11],
+            method="thread/goal/clear",
+            carrier_id=source_carrier_id,
+        )
+        _goal_clear_response_observed(
+            raw_observations[12], request_id=goal_clear_request_id
+        )
+        _source_goal_cleared_observed(
+            raw_observations[13], source_carrier_id=source_carrier_id
+        )
+        archive_request_id = _request_observed(
+            raw_observations[14],
             method="thread/archive",
             carrier_id=source_carrier_id,
         )
-        _empty_response_observed(raw_observations[12], request_id=archive_request_id)
+        _empty_response_observed(raw_observations[15], request_id=archive_request_id)
         _source_archived_observed(
-            raw_observations[13], source_carrier_id=source_carrier_id
+            raw_observations[16], source_carrier_id=source_carrier_id
         )
         normalized = [
             {

@@ -54,7 +54,8 @@ def transition_events() -> list[dict[str, object]]:
         event(5, "canonical-verifier-observation", "destination-authority-verified", "destination", "valid"),
         event(6, "git-observation", "destination-head-reconciled", "destination", "matching"),
         event(7, "harness-source-release-preflight", "source-release-allowed", "source", "allowed"),
-        event(8, "codex-app-server-response", "source-carrier-released", "source", "released"),
+        event(8, "codex-app-server-notification", "source-goal-released", "source", "released"),
+        event(9, "codex-app-server-response", "source-carrier-released", "source", "released"),
     ]
 
 
@@ -247,6 +248,20 @@ def raw_transition_observations() -> list[dict[str, object]]:
         },
         app_message(
             {
+                "method": "thread/goal/clear",
+                "id": 20,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        app_message({"id": 20, "result": {"cleared": True}}),
+        app_message(
+            {
+                "method": "thread/goal/cleared",
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        app_message(
+            {
                 "method": "thread/archive",
                 "id": 21,
                 "params": {"threadId": SOURCE_CARRIER_ID},
@@ -347,10 +362,14 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             classes.index("destination-head-reconciled"),
             classes.index("source-carrier-released"),
         )
+        self.assertLess(
+            classes.index("source-goal-released"),
+            classes.index("source-carrier-released"),
+        )
         reordered = transition_events()
-        reordered[5], reordered[8] = reordered[8], reordered[5]
+        reordered[5], reordered[9] = reordered[9], reordered[5]
         reordered[5]["ordinal"] = 5
-        reordered[8]["ordinal"] = 8
+        reordered[9]["ordinal"] = 9
         with self.assertRaisesRegex(ValueError, "chronology"):
             validator.project_carrier_events(
                 validator.CARRIER_SCENARIO_IDENTITIES[1], reordered
@@ -481,6 +500,44 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             validator.project_raw_carrier_observations(
                 validator.CARRIER_SCENARIO_IDENTITIES[1],
                 no_deferred_goal,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        source_goal_retained = raw_transition_observations()
+        source_goal_retained[12]["message"]["result"]["cleared"] = False
+        with self.assertRaisesRegex(ValueError, "goal-clear response"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                source_goal_retained,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        wrong_goal_cleared = raw_transition_observations()
+        wrong_goal_cleared[13]["message"]["params"]["threadId"] = (
+            DESTINATION_CARRIER_ID
+        )
+        with self.assertRaisesRegex(ValueError, "goal-clear notification"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                wrong_goal_cleared,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        archive_before_goal_clear = raw_transition_observations()
+        archive_before_goal_clear[11], archive_before_goal_clear[14] = (
+            archive_before_goal_clear[14],
+            archive_before_goal_clear[11],
+        )
+        with self.assertRaisesRegex(ValueError, "request"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                archive_before_goal_clear,
                 source_carrier_id=SOURCE_CARRIER_ID,
                 destination_carrier_id=DESTINATION_CARRIER_ID,
                 expected_head=SOURCE_REVISION,

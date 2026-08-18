@@ -117,6 +117,12 @@ an invalid authority graph means retain the source carrier and repair or revoke
 the evidence dependency first; never move private source data to bypass the
 guard.
 
+A release-eligible source is not a released goal. After the destination is
+verified and release preflight succeeds, retire or clear the source carrier's
+active goal through supported host mechanics and verify that lifecycle event
+before archive. Never leave an older source goal active where continuation can
+resume it into the current mainline.
+
 Use already-installed, already-authorized, healthy capabilities proactively
 when they materially improve a bound task. Within a bound task or complete
 portfolio-curation contract, the Agent may perform coverage analysis, targeted

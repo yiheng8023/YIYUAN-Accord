@@ -19,11 +19,12 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready, and O1-O5 are 1/5. Three bounded outcome-neutral slices committed
+v1.2 is ready, and O1-O5 are 1/5. Four bounded outcome-neutral slices committed
 the O4-specific validator, bound its public-safe projection directly to raw
 Codex host and repository observations, and required one exact public
 controlled goal to remain active across native compaction and a full-history
-deferred-goal fork before later registration, then exited the graph. None
+deferred-goal fork before later registration. They also require the native
+source-goal clear lifecycle before source archive, then exit the graph. None
 performs O4 measurement or earns outcome credit. Its
 candidate.2 profile binding is frozen without cohort activation. The completed
 O1 lifecycle suite is the only accepted outcome. A first preregistered O2 Codex
