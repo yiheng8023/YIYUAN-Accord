@@ -26,7 +26,8 @@ PINNED_RUNTIME_SHA256 = {
     "harness/task_validator_o2_codex_reference.py": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e",
     "harness/task_validator_o2_codex_reference_permission_profile.py": "f5825805521aa9279882d1505e09bc61ba3e0cc2caa50d3b856b34e2ee1a809f",
     "harness/task_validator_o4_continuous_self_correction.py": "4e08aed6dd4070016e910aac31192af2ff2c78cf2b779da2a04acada20fd8aa1",
-    "harness/control.py": "58b73c8409c268349e6a3e859c8daa9f181e92f0833f68e827fad4b58af47ad1",
+    "harness/task_validator_o4_continuous_self_correction_v2.py": "255ae6df24599572f0d311e5aa6ee7a33dd3b70389b5e96097dde7957d43d367",
+    "harness/control.py": "3f439d3c3dc43089b824c3252e9d65cf437992172d5ee757974fe2d200133ef1",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }
@@ -91,6 +92,7 @@ def _load_reference_module(root: Path, sources: dict[str, bytes]) -> ModuleType:
         "task_validator_o2_codex_reference",
         "task_validator_o2_codex_reference_permission_profile",
         "task_validator_o4_continuous_self_correction",
+        "task_validator_o4_continuous_self_correction_v2",
         "control",
         "continuation",
     ):

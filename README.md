@@ -12,8 +12,7 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on one bounded second-generation O4
-premeasurement-validator repair after completing O1, stopping two
+**Current status:** v1.2 is `ready` after completing O1, stopping two
 preregistered O2 attempts on live counterevidence, and stopping the first
 immutable O4 controlled attempt without O4 credit. Five bounded outcome-neutral
 slices had committed the O4-specific validator, bound its public-safe projection
@@ -24,7 +23,11 @@ O1 evidence-shape gate rejected the fault before the exact preregistered
 task-specific diagnostic could be observed. The remaining checkout scenario,
 native compaction, and fresh zero-inherited-turn same-goal transition were not
 executed. The isolated environment was removed and no task thread had been
-created. This counterevidence carries no O4 credit. The second O2 attempt used
+created. This counterevidence carries no O4 credit. A bounded outcome-neutral
+repair now preserves the frozen v1 validator bytes and adds a distinct v2
+validator, increment, registration and observation path. Its corrected third
+diagnostic passed a disposable-checkout detect/recover/reverify rehearsal, but
+no v2 registration or host measurement exists. The second O2 attempt used
 Codex 0.147.0's official built-in `:workspace` permission
 profile without legacy sandbox composition. Its fixed 32-cycle four-worker
 probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,

@@ -70,6 +70,13 @@ from harness.task_validator_o4_continuous_self_correction import (  # noqa: E402
     validate_evidence as validate_o4_continuous_correction_evidence,
     validate_registration as validate_o4_continuous_correction_registration,
 )
+from harness.task_validator_o4_continuous_self_correction_v2 import (  # noqa: E402
+    INCREMENT_ID as O4_CONTINUOUS_CORRECTION_V2_INCREMENT_ID,
+    VALIDATOR_KIND as O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o4_continuous_correction_v2_evidence,
+    validate_registration as validate_o4_continuous_correction_v2_registration,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -89,6 +96,7 @@ AUTHORITY_FILES = (
     "harness/task_validator_o2_codex_reference.py",
     "harness/task_validator_o2_codex_reference_permission_profile.py",
     "harness/task_validator_o4_continuous_self_correction.py",
+    "harness/task_validator_o4_continuous_self_correction_v2.py",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
@@ -3412,6 +3420,7 @@ class ProductControlTests(unittest.TestCase):
             re.compile(r"(?i)\bmsg_[a-z0-9_-]{8,}\b"),
             re.compile(
                 r"(?i)\b(?:thread|session|message|event)_"
+                r"(?![a-z0-9_:-]*\.(?:rs|py|js|ts|tsx|jsx)\b)"
                 r"[a-z0-9][a-z0-9._:-]{7,}\b"
             ),
             re.compile(
@@ -6614,6 +6623,11 @@ class ProductControlTests(unittest.TestCase):
             frozenset({O4_CONTINUOUS_CORRECTION_INCREMENT_ID}),
             O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
         )
+        o4_v2_expected_prefix = (
+            frozenset({"O4"}),
+            frozenset({O4_CONTINUOUS_CORRECTION_V2_INCREMENT_ID}),
+            O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_LOCATOR,
+        )
         self.assertEqual(
             set(SUPPORTED_EVIDENCE_VALIDATORS),
             {
@@ -6621,6 +6635,7 @@ class ProductControlTests(unittest.TestCase):
                 O2_CODEX_VALIDATOR_KIND,
                 O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
                 O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND,
             },
         )
         self.assertEqual(
@@ -6630,6 +6645,7 @@ class ProductControlTests(unittest.TestCase):
                 O2_CODEX_VALIDATOR_KIND,
                 O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
                 O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND,
             },
         )
         self.assertEqual(
@@ -6707,6 +6723,30 @@ class ProductControlTests(unittest.TestCase):
                 O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND
             ][-1],
             validate_o4_continuous_correction_registration,
+        )
+        self.assertEqual(
+            SUPPORTED_EVIDENCE_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND
+            ][:-1],
+            o4_v2_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_EVIDENCE_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND
+            ][-1],
+            validate_o4_continuous_correction_v2_evidence,
+        )
+        self.assertEqual(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND
+            ][:-1],
+            o4_v2_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_V2_VALIDATOR_KIND
+            ][-1],
+            validate_o4_continuous_correction_v2_registration,
         )
 
     def test_outcome_registration_requires_code_owned_pre_measurement_validator(
