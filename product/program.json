@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v12-o4-registration-preparation",
+  "activeIncrementId": "increment.v12-o4-continuous-self-correction",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -315,18 +315,33 @@
       ]
     },
     {
-      "id": "increment.v12-o4-registration-preparation",
+      "id": "increment.v12-o4-continuous-self-correction",
       "state": "active",
-      "correctionClass": "o4-immutable-registration-and-activation-preparation",
-      "observedProblem": "The current O4 validator, controlled goal and observed-native-minimum environment manifest are committed and verified, but no immutable O4 registration exists and no outcome-bearing O4 increment may execute before that registration is content-addressed and validated.",
-      "hypothesis": "One immutable registration can bind the exact six controlled counterexamples, current frozen profile and cohort protocol, committed environment manifest, task-scoped carrier trigger, fresh-thread transition, worktree lifecycle, earlier validator and public claim ceiling. A following commit that changes only product/program.json can then replace this preparation increment with the exact registered O4 outcome increment and provide the first valid measurement baseline.",
-      "falsifier": "The registration is added after any measurement; omits or duplicates a scenario; binds stale profile, protocol, environment, goal, validator or official host source bytes; permits copied-history fork as load relief, user topology selection, private event publication or unreleased code carriers; the activation commit changes another file, is not the registration commit's single-parent child or does not activate the exact registered increment; or O4 is credited before validated evidence and named-human acceptance.",
-      "stopCondition": "The exact O4 registration is committed as a public-safe artifact after the environment manifest and before execution; its code-owned preregistration callback and core guardrails pass; the immediately following program-only activation commit binds its revision, digest, profile and validator and activates exactly one O4 work item; this preparation increment exits the current graph with no measurement, O4 credit or residue.",
+      "correctionClass": "o4-controlled-continuous-self-correction-and-carrier-validation",
+      "observedProblem": "O4 remains unverified. Historical collaboration losses and the recent stale-carrier regression show repeated corrections, stale instruction takeover, expected-effect mismatch, orphaned code topology, post-compaction drift and unsafe conversation transition are material failure classes. The exact six-scenario suite, frozen method, environment manifest, controlled goal and earlier task validator are now immutably registered, but no controlled measurement or accepted O4 evidence exists.",
+      "hypothesis": "Executing the four registered disposable-checkout counterexamples plus one native Codex compaction recovery and one fresh zero-inherited-turn same-goal transition should demonstrate pre-effect divergence detection, minimum correction, reverification and full code/conversation carrier lifecycle control without user reconstruction, topology selection or cleanup. The task-scoped cadence observation can calibrate this exact controlled route while remaining explicitly non-universal.",
+      "falsifier": "Any scenario is missing, duplicated or passes only by receipt; a bound correction must be restated; material effects continue after divergence; a worktree or temporary checkout remains; native compaction lacks post-event authority and Git reconciliation; the destination inherits turns, lacks the exact goal or is not verified before source goal release and archive; a private path, event or identifier enters public evidence; environment or validator identity drifts; cleanup is incomplete; or the named human does not accept the bounded result.",
+      "stopCondition": "All six registered scenarios replay through the exact earlier validator; public evidence contains only the bounded projections and exact cleanup result; the source and destination task carriers and isolated environment are released at their registered boundary; the named human accepts the bounded Windows Codex 0.147.0 O4 result; canonical verification reports O4 true and the increment exits the current graph. Any deterministic floor failure stops the suite, preserves public-safe counterevidence, cleans exact task resources and leaves O4 false.",
       "acceptanceIds": [
+        "O4",
         "G2",
         "G4"
       ],
-      "taskRegistration": null,
+      "taskRegistration": {
+        "locator": "product/evidence/o4-continuous-self-correction-registration.json",
+        "sha256": "8fcd43f31b977a265c3ec9c87f09d988ffb7051ebb2d28405459c93796946980",
+        "sourceRevision": "9ff75320b551e4493d17d0b467291d00d172f14f",
+        "measurementNotBefore": "2026-08-18T22:32:15+08:00",
+        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+        "preMeasurementValidator": {
+          "kind": "o4-continuous-self-correction-validator-v1",
+          "version": 1,
+          "locator": "harness/task_validator_o4_continuous_self_correction.py",
+          "revision": "ea69f0c7a151be5f20c4bfd9e43bc14e8fe8fde5",
+          "sha256": "4e08aed6dd4070016e910aac31192af2ff2c78cf2b779da2a04acada20fd8aa1"
+        }
+      },
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
         "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -346,9 +361,10 @@
       },
       "workItems": [
         {
-          "id": "work.v12-o4-registration-preparation",
+          "id": "work.v12-o4-controlled-continuous-self-correction",
           "state": "active",
           "acceptanceIds": [
+            "O4",
             "G2",
             "G4"
           ],
@@ -358,11 +374,18 @@
             "local-verification",
             "bounded-repository-cleanup",
             "git-commit",
-            "git-push"
+            "git-push",
+            "installed-authorized-capability-use",
+            "bounded-consumer-configuration-after-explicit-grant",
+            "same-goal-carrier-transition",
+            "authorized-private-evidence-materialization",
+            "authorized-private-evidence-cleanup",
+            "human-only-action-guidance-and-post-verification"
           ],
           "deliverables": [
-            "immutable O4 six-scenario task registration",
-            "program-only registered O4 activation baseline"
+            "six-scenario controlled O4 observation and public-safe replay evidence",
+            "verified native compaction recovery and fresh-thread same-goal transition",
+            "exact task-owned code and conversation carrier cleanup"
           ]
         }
       ]
