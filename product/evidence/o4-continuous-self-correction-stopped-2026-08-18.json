@@ -71,6 +71,9 @@
   "cleanup": {
     "completedScenarioTemporaryRootsRemoved": true,
     "interruptedNextScenarioTemporaryRootRemoved": true,
+    "isolatedEnvironmentRemovedAfterRepositoryStop": true,
+    "taskThreadsCreated": 0,
+    "taskThreadsRemaining": 0,
     "taskOwnedPythonProcessesRemaining": 0,
     "canonicalCheckoutCount": 1,
     "repositoryResidueObserved": false
