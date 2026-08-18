@@ -67,14 +67,24 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `ready` with no active increment after completing
-`increment.v12-o1-lifecycle-suite` and stopping
-`increment.v12-o2-codex-reference` on live counterevidence. Its public-safe O2
+The current v1.2 program is `active` on the single bounded
+`increment.v12-o2-permission-profile-preregistration-readiness` after completing
+`increment.v12-o1-lifecycle-suite` and stopping the first
+`increment.v12-o2-codex-reference` on live counterevidence. Its stopped public-safe O2
 registration is immutable at `7f39911`. The package was activated only in the
 isolated Codex environment; the simple native no-op passed, but Codex 0.147.0
 rejected the next private task-root patch as read-only despite requested
 `workspace-write`. The suite stopped and all exact isolated resources were
-removed. O2 remains false, and O1-O5 are at 1/5. The immutable public-safe
+removed. Code-owned probes on the same host then showed that the official
+built-in `:workspace` permission profile can perform a bounded write; current
+official guidance also says that this beta profile does not compose with the
+legacy sandbox settings. The active outcome-neutral increment therefore permits
+only source-bound route preparation, a bounded allow-deny pressure probe and a
+fresh isolated starting-environment manifest. The exact isolated account
+connection is complete and retained under its private cleanup disposition. A later O2 increment must open
+atomically with its immutable registration before any candidate installation or
+scenario execution. O2 remains false,
+and O1-O5 are at 1/5. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and

@@ -47,33 +47,32 @@ conversation carrier choice, authorized mechanics, recovery, verification,
 release, reconciliation, and cleanup. Human authorization and Agent execution
 must remain distinct.
 
-v0.2 is an immutable bounded calibration milestone only. Its candidate.5
-profile and measured adapters cannot become the v1 product by inheritance or
-byte rewriting. Codex is the first operational reference, not a portable-core
-dependency; exact tested environment identity bounds every host claim.
+v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
+None can be inherited. Codex is the first operational reference, not a
+portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `ready`, with no active increment and O1 at 1/5. The append-only O2
+v1.2 is `active` on the single bounded
+`increment.v12-o2-permission-profile-preregistration-readiness`, with O1 at 1/5. The append-only O2
 registration at `7f39911` is stopped: its no-op passed, but Codex 0.147.0
 rejected the next private-root patch as read-only despite `workspace-write`.
 The exact plugin, marketplace, task roots, and isolated account/config resource
 were removed. The stopped registration remains only as failure history, with no
-active work or O2 credit; transient projections exited the graph.
+O2 credit; transient projections exited the graph. Same-host code-owned probes
+then showed that the official built-in `:workspace` permission profile can
+perform a bounded write, while current official guidance says permission
+profiles do not compose with the legacy sandbox settings. The active
+outcome-neutral increment may prepare only the source-bound route, a bounded
+allow-deny pressure probe and a fresh isolated starting-environment manifest.
+The exact isolated account connection is complete and privately retained.
+A later O2 increment must open atomically with its immutable registration. This
+increment grants no installation, scenario execution,
+protected cleanup, or result acceptance.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
-controlled result; the O1 suite is the only accepted outcome validator.
-Its code-pinned candidate.2 profile and controlled-conformance protocol retain
-their pre-freeze label only as part of the frozen bytes:
-they separate finite delivery from later field validation and cover the
-collaboration lifecycle through sufficient native behavior, suitable reuse,
-smallest residual control, or explicit degradation, escalation, stop, or claim
-limitation. They create no result or proof. The Codex source has been reduced
-to one implicit v1.2 Skill with no Hook, MCP, App, private capture state,
-external interpreter, or persistent runtime; O2 still requires a live,
-controllable installed or task-scoped application.
-v1.1 is stopped at revision `5ae71bb`: its first post-activation demand crossed
-the outcome boundary before registration, so retrospective registration is
-forbidden and its private resource and trigger were deleted. v1.0 is immutable
-stopped history at `910ac01`. v1.2 inherits no binding, task, or evidence from
-either generation.
+controlled result; O1 is the only accepted outcome. The frozen profile and
+protocol separate finite delivery from later field validation and create no
+result themselves. The Codex source is one implicit v1.2 Skill with no Hook,
+MCP, App, private capture, external interpreter or persistent runtime; O2 still
+requires a live installed or task-scoped application.
 
 Every O1-O5 controlled scenario or later field unit binds its exact profile and
 protocol, evidence class, starting environment, initial authority/source

@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_stopped_o2_registration_counterevidence(
+    def test_current_v12_contract_is_valid_with_stopped_o2_counterevidence_and_active_preparation(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1322,9 +1322,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(len(live_program["increments"]), 2)
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-o2-permission-profile-preregistration-readiness",
+        )
+        self.assertEqual(len(live_program["increments"]), 3)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
@@ -1340,6 +1343,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             live_program["increments"][1]["workItems"][0]["state"], "stopped"
         )
+        preparation = live_program["increments"][2]
+        self.assertEqual(preparation["state"], "active")
+        self.assertEqual(preparation["acceptanceIds"], ["G1", "G2", "G4"])
+        self.assertIsNone(preparation["taskRegistration"])
+        self.assertEqual(preparation["workItems"][0]["state"], "active")
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],
