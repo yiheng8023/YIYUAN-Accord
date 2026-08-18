@@ -48,6 +48,7 @@
     "configTomlSha256": "ef474e72e420c9b3d49aaea1fc9eea15eac6de310ff3a95d7a931c70e220c9f9",
     "profiles": "official-built-in-:workspace",
     "legacySandboxSettings": "absent-no-sandbox_mode-no-sandbox_workspace_write-no---sandbox",
+    "physicalPackageStateAtCapture": "not-installed",
     "explicitOverrides": "none-at-capture",
     "otherUserConfiguration": "not-read-not-loaded-not-assumed-absent-outside-the-isolated-boundary"
   },
@@ -76,7 +77,7 @@
     "excluded": "current-user-configuration-mutation-existing-credential-use-full-access-publication-release-and-claims-beyond-the-controlled-Windows-Codex-suite"
   },
   "exact-harness-package-activation-and-exposure-delta": {
-    "state": "not-installed-at-capture-and-permitted-only-after-registration",
+    "state": "active",
     "packageIdentity": "agent-autonomy-harness@9fe1f81a8ba9ce369af1aa3f519c14feae093914",
     "packageSha256": "625c67dc8b3355b93614c7a85321c0ac0514c423ffd6888f7c899cf038f302d5",
     "activationIdentity": "codex-plugin-add-local-marketplace",

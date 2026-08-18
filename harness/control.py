@@ -46,6 +46,13 @@ from .task_validator_o2_codex_reference import (
     validate_evidence as validate_o2_codex_evidence,
     validate_registration as validate_o2_codex_registration,
 )
+from .task_validator_o2_codex_reference_permission_profile import (
+    INCREMENT_ID as O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID,
+    VALIDATOR_KIND as O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o2_codex_permission_profile_evidence,
+    validate_registration as validate_o2_codex_permission_profile_registration,
+)
 
 
 PRODUCT_ID = "agent-autonomy-harness"
@@ -4400,6 +4407,12 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             O2_CODEX_VALIDATOR_LOCATOR,
             validate_o2_codex_evidence,
         ),
+        O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND: (
+            frozenset({"O2"}),
+            frozenset({O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID}),
+            O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
+            validate_o2_codex_permission_profile_evidence,
+        ),
     }
 )
 SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
@@ -4417,6 +4430,12 @@ SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
             frozenset({O2_CODEX_INCREMENT_ID}),
             O2_CODEX_VALIDATOR_LOCATOR,
             validate_o2_codex_registration,
+        ),
+        O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND: (
+            frozenset({"O2"}),
+            frozenset({O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID}),
+            O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
+            validate_o2_codex_permission_profile_registration,
         ),
     }
 )

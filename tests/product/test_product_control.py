@@ -55,6 +55,14 @@ from harness.task_validator_o2_codex_reference import (  # noqa: E402
     validate_evidence as validate_o2_codex_evidence,
     validate_registration as validate_o2_codex_registration,
 )
+from harness.task_validator_o2_codex_reference_permission_profile import (  # noqa: E402
+    INCREMENT_ID as O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID,
+    STOP_LOCATOR as O2_CODEX_PERMISSION_PROFILE_STOP_LOCATOR,
+    VALIDATOR_KIND as O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o2_codex_permission_profile_evidence,
+    validate_registration as validate_o2_codex_permission_profile_registration,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -72,6 +80,7 @@ AUTHORITY_FILES = (
     "harness/task_capture_o2_codex_reference.py",
     "harness/task_validator_o1_lifecycle_suite.py",
     "harness/task_validator_o2_codex_reference.py",
+    "harness/task_validator_o2_codex_reference_permission_profile.py",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
@@ -1689,11 +1698,21 @@ class ProductControlTests(unittest.TestCase):
         live_program = json.loads(
             (ROOT / "product/program.json").read_text(encoding="utf-8")
         )
-        for increment in live_program["increments"]:
-            self.assertEqual(
-                increment["cleanupBoundary"]["privateResourceDispositions"],
-                [],
-            )
+        live_dispositions = {
+            disposition
+            for increment in live_program["increments"]
+            for disposition in increment["cleanupBoundary"][
+                "privateResourceDispositions"
+            ]
+        }
+        self.assertNotIn(
+            control.CURRENT_INITIAL_PRIVATE_RESOURCE_PROGRAM_DISPOSITION,
+            live_dispositions,
+        )
+        self.assertNotIn(
+            control.CURRENT_INITIAL_EXPIRY_TRIGGER_PROGRAM_DISPOSITION,
+            live_dispositions,
+        )
         frozen_program = json.loads(
             subprocess.run(
                 [
@@ -3391,7 +3410,8 @@ class ProductControlTests(unittest.TestCase):
         allowed_o2_support_artifacts = controlled_o2_goal_artifacts | {
             evidence_root
             / "o2-codex-reference-artifacts"
-            / "user-configured-unavailable-stop.json"
+            / "user-configured-unavailable-stop.json",
+            ROOT / O2_CODEX_PERMISSION_PROFILE_STOP_LOCATOR,
         }
         for path in sorted(evidence_root.rglob("*")):
             self.assertFalse(control._link_or_reparse(path), path)
@@ -6459,7 +6479,7 @@ class ProductControlTests(unittest.TestCase):
             report["errors"],
         )
 
-    def test_current_release_has_only_the_pre_measurement_o1_and_o2_validators(self) -> None:
+    def test_current_release_has_only_the_supported_task_specific_validators(self) -> None:
         o1_expected_prefix = (
             frozenset({"O1"}),
             frozenset({O1_LIFECYCLE_INCREMENT_ID}),
@@ -6470,13 +6490,26 @@ class ProductControlTests(unittest.TestCase):
             frozenset({O2_CODEX_INCREMENT_ID}),
             O2_CODEX_VALIDATOR_LOCATOR,
         )
+        o2_permission_profile_expected_prefix = (
+            frozenset({"O2"}),
+            frozenset({O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID}),
+            O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
+        )
         self.assertEqual(
             set(SUPPORTED_EVIDENCE_VALIDATORS),
-            {O1_LIFECYCLE_VALIDATOR_KIND, O2_CODEX_VALIDATOR_KIND},
+            {
+                O1_LIFECYCLE_VALIDATOR_KIND,
+                O2_CODEX_VALIDATOR_KIND,
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+            },
         )
         self.assertEqual(
             set(SUPPORTED_PRE_MEASUREMENT_VALIDATORS),
-            {O1_LIFECYCLE_VALIDATOR_KIND, O2_CODEX_VALIDATOR_KIND},
+            {
+                O1_LIFECYCLE_VALIDATOR_KIND,
+                O2_CODEX_VALIDATOR_KIND,
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+            },
         )
         self.assertEqual(
             SUPPORTED_EVIDENCE_VALIDATORS[O1_LIFECYCLE_VALIDATOR_KIND][:-1],
@@ -6509,6 +6542,30 @@ class ProductControlTests(unittest.TestCase):
         self.assertIs(
             SUPPORTED_PRE_MEASUREMENT_VALIDATORS[O2_CODEX_VALIDATOR_KIND][-1],
             validate_o2_codex_registration,
+        )
+        self.assertEqual(
+            SUPPORTED_EVIDENCE_VALIDATORS[
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND
+            ][:-1],
+            o2_permission_profile_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_EVIDENCE_VALIDATORS[
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND
+            ][-1],
+            validate_o2_codex_permission_profile_evidence,
+        )
+        self.assertEqual(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND
+            ][:-1],
+            o2_permission_profile_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND
+            ][-1],
+            validate_o2_codex_permission_profile_registration,
         )
 
     def test_outcome_registration_requires_code_owned_pre_measurement_validator(
