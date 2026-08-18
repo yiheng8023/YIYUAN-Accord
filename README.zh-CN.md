@@ -17,9 +17,9 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成 O1，并因实时反证停止两次预注册 O2 尝试；当前仅为
-outcome-neutral 的 `increment.v12-o4-validation-seam` 切片而处于 `active`。该切片只能在
-未来注册之前提交 O4 专属验证器与公开安全投影缝，不执行 O4 测量，也不获得结果信用。
+**当前状态：**v1.2 已完成 O1，并因实时反证停止两次预注册 O2 尝试，当前为 `ready`。
+一个有界 outcome-neutral 切片已在未来注册之前提交 O4 专属验证器与公开安全投影缝，
+随后退出当前图；它没有执行 O4 测量，也不获得结果信用。
 第二代路线使用 Codex 0.147.0 官方内置 `:workspace` profile，不与旧
 sandbox 机制混用。固定的 32 轮、4 并发压测得到根内写入 32/32 允许、根外写入 32/32
 拒绝、零异常结果和零残留。`fe119ca` 的不可变注册之后，精确候选包只安装到全新隔离
@@ -30,7 +30,7 @@ item 失败关闭。权限边界与恢复场景未再执行；精确插件、mar
 反证保留。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
+此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
 `completionState=in-progress`、
 O1-O5 为 `1/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的

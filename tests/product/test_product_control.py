@@ -63,6 +63,13 @@ from harness.task_validator_o2_codex_reference_permission_profile import (  # no
     validate_evidence as validate_o2_codex_permission_profile_evidence,
     validate_registration as validate_o2_codex_permission_profile_registration,
 )
+from harness.task_validator_o4_continuous_self_correction import (  # noqa: E402
+    INCREMENT_ID as O4_CONTINUOUS_CORRECTION_INCREMENT_ID,
+    VALIDATOR_KIND as O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o4_continuous_correction_evidence,
+    validate_registration as validate_o4_continuous_correction_registration,
+)
 from harness.__main__ import main as cli_main  # noqa: E402
 
 
@@ -81,6 +88,7 @@ AUTHORITY_FILES = (
     "harness/task_validator_o1_lifecycle_suite.py",
     "harness/task_validator_o2_codex_reference.py",
     "harness/task_validator_o2_codex_reference_permission_profile.py",
+    "harness/task_validator_o4_continuous_self_correction.py",
     "README.md",
     "README.zh-CN.md",
     "AGENTS.md",
@@ -1331,12 +1339,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o4-validation-seam",
-        )
-        self.assertEqual(len(live_program["increments"]), 4)
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
+        self.assertEqual(len(live_program["increments"]), 3)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
@@ -1378,11 +1383,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             permission_profile_suite["workItems"][0]["state"], "stopped"
         )
-        o4_preparation = live_program["increments"][3]
-        self.assertEqual(o4_preparation["id"], live_program["activeIncrementId"])
-        self.assertEqual(o4_preparation["state"], "active")
-        self.assertEqual(o4_preparation["acceptanceIds"], ["G2", "G4"])
-        self.assertIsNone(o4_preparation["taskRegistration"])
+        self.assertNotIn(
+            "increment.v12-o4-validation-seam",
+            {item["id"] for item in live_program["increments"]},
+        )
         stopped = json.loads(
             (
                 ROOT
@@ -6569,12 +6573,18 @@ class ProductControlTests(unittest.TestCase):
             frozenset({O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID}),
             O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
         )
+        o4_expected_prefix = (
+            frozenset({"O4"}),
+            frozenset({O4_CONTINUOUS_CORRECTION_INCREMENT_ID}),
+            O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
+        )
         self.assertEqual(
             set(SUPPORTED_EVIDENCE_VALIDATORS),
             {
                 O1_LIFECYCLE_VALIDATOR_KIND,
                 O2_CODEX_VALIDATOR_KIND,
                 O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+                O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
             },
         )
         self.assertEqual(
@@ -6583,6 +6593,7 @@ class ProductControlTests(unittest.TestCase):
                 O1_LIFECYCLE_VALIDATOR_KIND,
                 O2_CODEX_VALIDATOR_KIND,
                 O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND,
+                O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
             },
         )
         self.assertEqual(
@@ -6640,6 +6651,26 @@ class ProductControlTests(unittest.TestCase):
                 O2_CODEX_PERMISSION_PROFILE_VALIDATOR_KIND
             ][-1],
             validate_o2_codex_permission_profile_registration,
+        )
+        self.assertEqual(
+            SUPPORTED_EVIDENCE_VALIDATORS[O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND][:-1],
+            o4_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_EVIDENCE_VALIDATORS[O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND][-1],
+            validate_o4_continuous_correction_evidence,
+        )
+        self.assertEqual(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND
+            ][:-1],
+            o4_expected_prefix,
+        )
+        self.assertIs(
+            SUPPORTED_PRE_MEASUREMENT_VALIDATORS[
+                O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND
+            ][-1],
+            validate_o4_continuous_correction_registration,
         )
 
     def test_outcome_registration_requires_code_owned_pre_measurement_validator(

@@ -51,8 +51,8 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `active` only for `increment.v12-o4-validation-seam`; O1 is 1/5.
-It performs no measurement or O4 credit. The
+v1.2 is `ready`; O1 is 1/5. The closed outcome-neutral O4 validation-seam
+slice performed no measurement and carries no O4 credit. The
 append-only registration at `7f39911` retains the first native-Windows
 `workspace-write` failure with no O2 credit. The closed preparation slice then
 resolved the official built-in `:workspace` profile without legacy sandbox

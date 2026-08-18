@@ -53,6 +53,13 @@ from .task_validator_o2_codex_reference_permission_profile import (
     validate_evidence as validate_o2_codex_permission_profile_evidence,
     validate_registration as validate_o2_codex_permission_profile_registration,
 )
+from .task_validator_o4_continuous_self_correction import (
+    INCREMENT_ID as O4_CONTINUOUS_CORRECTION_INCREMENT_ID,
+    VALIDATOR_KIND as O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND,
+    VALIDATOR_LOCATOR as O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
+    validate_evidence as validate_o4_continuous_correction_evidence,
+    validate_registration as validate_o4_continuous_correction_registration,
+)
 
 
 PRODUCT_ID = "agent-autonomy-harness"
@@ -4413,6 +4420,12 @@ SUPPORTED_EVIDENCE_VALIDATORS: Mapping[str, EvidenceValidatorSpec] = MappingProx
             O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
             validate_o2_codex_permission_profile_evidence,
         ),
+        O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND: (
+            frozenset({"O4"}),
+            frozenset({O4_CONTINUOUS_CORRECTION_INCREMENT_ID}),
+            O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
+            validate_o4_continuous_correction_evidence,
+        ),
     }
 )
 SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
@@ -4436,6 +4449,12 @@ SUPPORTED_PRE_MEASUREMENT_VALIDATORS: Mapping[
             frozenset({O2_CODEX_PERMISSION_PROFILE_INCREMENT_ID}),
             O2_CODEX_PERMISSION_PROFILE_VALIDATOR_LOCATOR,
             validate_o2_codex_permission_profile_registration,
+        ),
+        O4_CONTINUOUS_CORRECTION_VALIDATOR_KIND: (
+            frozenset({"O4"}),
+            frozenset({O4_CONTINUOUS_CORRECTION_INCREMENT_ID}),
+            O4_CONTINUOUS_CORRECTION_VALIDATOR_LOCATOR,
+            validate_o4_continuous_correction_registration,
         ),
     }
 )

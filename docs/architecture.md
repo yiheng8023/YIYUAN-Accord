@@ -67,12 +67,12 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` only for the outcome-neutral
-`increment.v12-o4-validation-seam` after completing
+The current v1.2 program is `ready` after completing
 `increment.v12-o1-lifecycle-suite` and stopping both registered O2 attempts on
-live counterevidence. The active slice may add only an O4-specific validator
-and public-safe projection seam before later registration; it performs no O4
-measurement and earns no outcome credit. The second O2 attempt used Codex
+live counterevidence. A bounded outcome-neutral slice committed an O4-specific
+validator and public-safe projection seam before later registration, then
+exited the current graph; it performed no O4 measurement and earns no outcome
+credit. The second O2 attempt used Codex
 0.147.0's official built-in
 `:workspace` profile without legacy sandbox composition. Its fixed 32-cycle
 four-worker probe observed 32/32 in-root writes allowed, 32/32 out-of-root
