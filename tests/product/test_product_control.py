@@ -1331,9 +1331,12 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(len(live_program["increments"]), 3)
+        self.assertEqual(live_program["status"], "active")
+        self.assertEqual(
+            live_program["activeIncrementId"],
+            "increment.v12-o4-validation-seam",
+        )
+        self.assertEqual(len(live_program["increments"]), 4)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
@@ -1375,6 +1378,11 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             permission_profile_suite["workItems"][0]["state"], "stopped"
         )
+        o4_preparation = live_program["increments"][3]
+        self.assertEqual(o4_preparation["id"], live_program["activeIncrementId"])
+        self.assertEqual(o4_preparation["state"], "active")
+        self.assertEqual(o4_preparation["acceptanceIds"], ["G2", "G4"])
+        self.assertIsNone(o4_preparation["taskRegistration"])
         stopped = json.loads(
             (
                 ROOT

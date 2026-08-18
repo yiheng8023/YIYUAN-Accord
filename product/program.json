@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o4-validation-seam",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -310,6 +310,57 @@
           "deliverables": [
             "immutable second-generation O2 permission-profile registration",
             "four-scenario public-safe Codex observation and bounded O2 evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o4-validation-seam",
+      "state": "active",
+      "correctionClass": "o4-task-specific-validation-seam",
+      "observedProblem": "O4 names six exact controlled self-correction scenario classes, but the current tree has no O4-specific validator or public-safe host-event projection seam that can be committed before registration. Opening outcome-bearing O4 work now would require a late validator or a prewritten receipt, while reading private compaction or task-transition evidence now would cross an ungranted data boundary.",
+      "hypothesis": "One outcome-neutral implementation slice can add a task-specific validator and precommitted public-safe projection rules for exactly the six acceptance-owned O4 scenario classes. The seam can require real disposable-checkout fault behavior for four scenarios and source-bound host event sequences for compaction recovery and same-goal transition, reject private identifiers and self-reported success booleans, and remain inert until a later immutable registration and any exact data or carrier grant.",
+      "falsifier": "The implementation executes or reads an O4 source event before registration, creates a generic receipt framework, accepts prose or success booleans without source behavior, exposes task or session identifiers, persists a Hook, monitor or runtime, weakens an acceptance threshold, adds a second active work item, requires an ungranted private-data or carrier effect, or leaves repository residue.",
+      "stopCondition": "The exact O4 validator and public-safe projection seam cover only the six acceptance-owned scenario classes, reject receipt-only and private-identifier inputs, pass focused and canonical checks, are committed and pushed as a strictly earlier revision, and the outcome-neutral increment exits the current graph with O1 unchanged, O4 false, no task registration, no source measurement and no residue.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": []
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o4-validation-seam",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "task-specific six-scenario O4 pre-measurement validator",
+            "public-safe O4 host-event projection seam and focused regression tests"
           ]
         }
       ]

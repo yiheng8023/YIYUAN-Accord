@@ -19,7 +19,10 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready with no active increment, and O1-O5 are 1/5. Its
+v1.2 is active only for the outcome-neutral
+`increment.v12-o4-validation-seam`, and O1-O5 are 1/5. The slice may commit an
+O4-specific validator and public-safe projection seam before later
+registration, but it performs no O4 measurement and earns no outcome credit. Its
 candidate.2 profile binding is frozen without cohort activation. The completed
 O1 lifecycle suite is the only accepted outcome. A first preregistered O2 Codex
 attempt installed the exact candidate only in an isolated environment; the

@@ -12,8 +12,11 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` with no active increment after completing
-O1 and stopping two preregistered O2 attempts on live counterevidence. The
+**Current status:** v1.2 is `active` only for the outcome-neutral
+`increment.v12-o4-validation-seam` slice after completing O1 and stopping two
+preregistered O2 attempts on live counterevidence. This slice may commit an
+O4-specific validator and public-safe projection seam before any future
+registration; it performs no O4 measurement and carries no outcome credit. The
 second attempt used Codex 0.147.0's official built-in `:workspace` permission
 profile without legacy sandbox composition. Its fixed 32-cycle four-worker
 probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,
@@ -31,7 +34,7 @@ Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=ready`,
+`programStatus=active`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
