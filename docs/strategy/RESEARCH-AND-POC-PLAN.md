@@ -19,27 +19,27 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is active on the single bounded
-`increment.v12-o2-permission-profile-preregistration-readiness`, and O1-O5 are 1/5. Its candidate.2
-profile binding is frozen without cohort activation. The completed O1 lifecycle
-suite is the only accepted outcome. A preregistered O2 Codex attempt installed
-the exact candidate only in an isolated environment; the simple no-op passed,
-but Codex 0.147.0 rejected the next private task-root patch as read-only despite
-requested `workspace-write`. The suite stopped, all isolated resources were
-removed, and O2 remains false. Same-host code-owned probes then isolated a
-smaller native candidate: the official built-in `:workspace` permission
-profile can perform a bounded write, while the current official
+v1.2 is active on the single registered
+`increment.v12-o2-codex-reference-permission-profile`, and O1-O5 are 1/5. Its
+candidate.2 profile binding is frozen without cohort activation. The completed
+O1 lifecycle suite is the only accepted outcome. A first preregistered O2 Codex
+attempt installed the exact candidate only in an isolated environment; the
+simple no-op passed, but Codex 0.147.0 rejected the next private task-root patch
+as read-only despite requested `workspace-write`. The suite stopped, all
+isolated resources were removed, and O2 remains false. Same-host code-owned
+probes then isolated a smaller native candidate: the official built-in
+`:workspace` permission profile can perform a bounded write, while the current official
 [Codex permission guidance](https://learn.chatgpt.com/docs/permissions),
 resolved on 2026-08-18, says not to compose permission profiles with legacy
 sandbox settings. Open upstream
 [#34961](https://github.com/openai/codex/issues/34961) independently reports the
-same native-Windows `exec` symptom. The active
-outcome-neutral work may prepare only the source-bound route, a bounded
-allow-deny pressure probe and a fresh isolated starting-environment manifest.
-The exact isolated account connection is complete and retained under its
-private cleanup disposition. A later
-O2 increment must open atomically with its immutable registration before the
-separate installation, execution, and protected-cleanup gates. The distinct code-pinned candidate.2 profile and
+same native-Windows `exec` symptom. The closed preparation slice then bound a
+32-cycle four-worker allow-deny probe with zero unexpected result or residue,
+the fresh isolated account, the public-safe starting manifest, and the earlier
+task-specific validator. The immutable second-generation registration at
+`fe119ca` is now bound in the active program. The exact package remains
+uninstalled and no second-generation scenario has executed; installation,
+execution, and protected cleanup remain separate registered gates. The distinct code-pinned candidate.2 profile and
 controlled-conformance protocol separate finite delivery from later field
 validation, cover the collaboration lifecycle through minimum sufficient
 dispositions, and keep dynamic environment/context adaptation, Agent-owned
