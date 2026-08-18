@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o4-registration-baseline-chronology-repair",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -310,6 +310,59 @@
           "deliverables": [
             "immutable second-generation O2 permission-profile registration",
             "four-scenario public-safe Codex observation and bounded O2 evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o4-registration-baseline-chronology-repair",
+      "state": "active",
+      "correctionClass": "o4-registration-measurement-baseline-chronology-repair",
+      "observedProblem": "The pre-measurement O4 validator requires the task-registration source revision to appear inside the registration bytes committed at that same revision, which is an impossible Git self-reference. The four replayed repository faults also require an active O4 increment, but the registration source revision necessarily precedes the later activation commit, so that revision cannot provide the required measurement baseline.",
+      "hypothesis": "Replace the self-referential value with a pre-registered code-owned derivation rule, then require O4 evidence to use the exact first clean single-parent descendant commit that activates the registered increment and changes only product/program.json. This preserves registration-before-execution chronology while giving the replay suite a content-addressed active baseline.",
+      "falsifier": "The registration still requires its own commit identity in its bytes; evidence can select an arbitrary, non-descendant, multi-parent, multi-file, inactive or post-hoc baseline; the replay suite cannot find the active increment; the repair weakens the six-scenario or cleanup claim; or any task-created residue remains.",
+      "stopCondition": "A real Git fixture proves registration can be committed before a separately committed exact activation baseline; negative fixtures reject self-reference substitutes, arbitrary revisions, extra-file or merge activation, inactive state and ancestry drift; the O4 registration validator, canonical verifier and full product tests pass; the increment closes with no O4 credit and no task-created residue.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": [
+          "v1.2-o4-isolated-codex-environment-and-task-threads:windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-or-deterministic-validation-failure"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o4-registration-baseline-chronology-repair",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "reachable O4 preregistration and measurement-baseline chronology",
+            "real-Git positive and negative regression coverage"
           ]
         }
       ]
