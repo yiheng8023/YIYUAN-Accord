@@ -7,7 +7,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "status": "active",
-  "activeIncrementId": "increment.v12-o2-permission-profile-preregistration-readiness",
+  "activeIncrementId": "increment.v12-o2-codex-reference-permission-profile",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -241,19 +241,33 @@
       ]
     },
     {
-      "id": "increment.v12-o2-permission-profile-preregistration-readiness",
+      "id": "increment.v12-o2-codex-reference-permission-profile",
       "state": "active",
-      "correctionClass": "o2-permission-profile-preregistration-readiness",
-      "observedProblem": "The first immutable O2 attempt stopped after Codex 0.147.0 accepted a simple no-op but rejected the nontrivial private task-root patch as read-only even though the legacy exec route requested workspace-write. Fresh code-owned probes on the same native-Windows host show that the official built-in :workspace permission profile can perform a bounded write and that app-server workspaceWrite can expose the intended root. The current official Codex permission guidance at https://learn.chatgpt.com/docs/permissions, resolved on 2026-08-18, states that permission profiles are beta, that they must not be composed with the old sandbox settings, and that an explicit --sandbox selection makes the old mechanism win; open upstream issue https://github.com/openai/codex/issues/34961 independently reports the same native-Windows exec symptom. The prior result therefore identifies a route-specific Codex failure rather than a package result or a general absence of bounded Windows write support.",
-      "hypothesis": "A bounded preregistration slice can re-resolve the current Codex version and official permission-profile semantics, define the built-in :workspace route through default_permissions without --sandbox or sandbox_mode, and use a fixed 32-cycle four-worker allow-deny pressure probe to test route stability and cleanup without a model. After the exact human grant it can also materialize a clean isolated account boundary and commit its fresh starting-environment manifest. That is sufficient preparation for a later atomic O2 increment with an immutable registration, without adding a Harness sandbox, runtime or WSL dependency and without installing the candidate or performing an outcome-bearing scenario in this slice.",
-      "falsifier": "The current Codex build no longer exposes the documented :workspace profile; the effective configuration still selects or composes the legacy sandbox; the declared task roots are not the effective writable roots; any pressure cycle rejects an in-root write, permits an out-of-root write, hangs, crashes or disagrees with another equivalent cycle; the route adds unregistered network or trust; existing user configuration or credentials must be copied or read; the candidate is installed or a scenario is measured in this outcome-neutral slice; a future registration would have to reuse the stopped result as credit; the user must learn route syntax; or the preparation leaves private or repository residue outside its exact retained boundary.",
-      "stopCondition": "The current official Codex permission-profile behavior and exact execution identity are re-resolved and bound; the fixed 32-cycle four-worker in-root allow and out-of-root deny pressure probe passes with zero task residue; after the exact human grant, a clean isolated account boundary is materialized without copying existing user state and its fresh starting-environment manifest is committed; no candidate package is installed and no scenario is measured; the route is either ready for a later atomic O2 registration increment or honestly rejected; every temporary preparation resource is removed and this outcome-neutral increment exits the graph.",
+      "correctionClass": "o2-live-codex-permission-profile-controlled-application",
+      "observedProblem": "The first immutable O2 attempt retained no credit after the legacy workspace-write route rejected the first nontrivial task-root write. The bounded preparation increment then resolved Codex 0.147.0 and the current official permission-profile contract, demonstrated the built-in :workspace route with a fixed 32-cycle four-worker allow-deny pressure probe and zero residue, materialized a fresh isolated officially authenticated account without copying existing user state, committed the exact starting manifest, and committed a second task-specific validator before the immutable registration at fe119ca. The exact package remains uninstalled and no second-generation scenario has executed.",
+      "hypothesis": "The immutable second-generation O2 registration binds the official built-in :workspace profile without legacy sandbox composition, the exact Codex version, isolated starting state, package bytes, four ordinary goal-level scenario contracts, source-bound user-configured stop, prior validator and projection builder, separate protected-deletion gate, public-safe evidence projection and exact cleanup lifecycle. Installing only the registered package after this binding and executing those four scenarios should demonstrate bounded usable Codex application, authority stop and resume, recovery, rollback and zero residue without accessing current user configuration or teaching route syntax.",
+      "falsifier": "The permission profile, Codex build, manifest, package, validator or projection builder drifts; the legacy sandbox is selected or composed; installation or scenario execution predates the immutable registration; the simple native route gains unnecessary ceremony; any in-root operation is unexpectedly denied or any out-of-root effect is permitted; a scenario requires capability or route syntax from the user; protected deletion occurs before a new exact grant; current user state is copied or read; private locators or events enter public evidence; failure is hidden; rollback or cleanup is incomplete; or the result is promoted beyond the registered native-Windows Codex 0.147.0 suite.",
+      "stopCondition": "The exact package is observed installed and active only in the authorized isolated environment after the immutable registration; all four registered scenarios pass the earlier task-specific validator, including a separately granted protected deletion; the exact plugin, marketplace, task roots and isolated resource are removed under their bound disposition; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies without claim expansion; and the increment exits the current graph. Any deterministic failure instead stops the suite, retains the counterevidence, cleans the exact resources and leaves O2 false.",
       "acceptanceIds": [
-        "G1",
+        "O2",
         "G2",
         "G4"
       ],
-      "taskRegistration": null,
+      "taskRegistration": {
+        "locator": "product/evidence/o2-codex-reference-permission-profile-registration.json",
+        "sha256": "2962de37afedbf87c1476d736579feb7be1890ce5f1d7a67f71a3d0a280954f9",
+        "sourceRevision": "fe119ca02029a020e361e5cfebebb3fd143d44b4",
+        "measurementNotBefore": "2026-08-18T12:02:16+08:00",
+        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
+        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
+        "preMeasurementValidator": {
+          "kind": "o2-codex-reference-permission-profile-validator-v1",
+          "version": 1,
+          "locator": "harness/task_validator_o2_codex_reference_permission_profile.py",
+          "revision": "c1ab6c55a507b058044171982721c14a48df429b",
+          "sha256": "f5825805521aa9279882d1505e09bc61ba3e0cc2caa50d3b856b34e2ee1a809f"
+        }
+      },
       "processLossBudget": {
         "maxSameClassUserCorrectionBeforeStop": 1,
         "maxConsecutiveOutcomeNeutralWorkItems": 1,
@@ -273,10 +287,10 @@
       },
       "workItems": [
         {
-          "id": "work.v12-o2-permission-profile-preregistration-readiness",
+          "id": "work.v12-o2-codex-reference-permission-profile",
           "state": "active",
           "acceptanceIds": [
-            "G1",
+            "O2",
             "G2",
             "G4"
           ],
@@ -287,15 +301,15 @@
             "bounded-repository-cleanup",
             "git-commit",
             "git-push",
-            "authorized-account-connection",
+            "authorized-capability-installation",
+            "installed-authorized-capability-use",
             "bounded-consumer-configuration-after-explicit-grant",
             "human-only-action-guidance-and-post-verification",
             "authorized-private-evidence-cleanup"
           ],
           "deliverables": [
-            "source-bound current Codex permission-profile route definition",
-            "bounded permission-profile allow-deny pressure result with zero residue",
-            "fresh isolated O2 starting-environment manifest ready for a later immutable registration"
+            "immutable second-generation O2 permission-profile registration",
+            "four-scenario public-safe Codex observation and bounded O2 evidence"
           ]
         }
       ]

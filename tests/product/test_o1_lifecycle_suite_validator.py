@@ -4,7 +4,6 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
-import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -391,13 +390,15 @@ class O1LifecycleSuiteProbeTests(unittest.TestCase):
 
     def test_real_adapter_faults_and_cleans_an_isolated_checkout(self) -> None:
         root = Path(__file__).resolve().parents[2]
-        revision = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
+        program = json.loads(
+            (root / "product" / "program.json").read_text(encoding="utf-8")
+        )
+        o1_increment = next(
+            increment
+            for increment in program["increments"]
+            if increment["id"] == "increment.v12-o1-lifecycle-suite"
+        )
+        revision = o1_increment["taskRegistration"]["sourceRevision"]
 
         report = execute_scenario(root, revision, SCENARIOS[0])
 

@@ -17,18 +17,16 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite`，因实时反证停止第一代
-`increment.v12-o2-codex-reference`，并在唯一有界的
-`increment.v12-o2-permission-profile-preregistration-readiness` 上处于 `active`。已停止的公开安全
-O2 精确注册已在 `7f39911` 成为不可变字节；候选包只安装到隔离 Codex home，第一个简单
-原生 no-op 场景通过且文件系统无变化。第二个已注册场景没有通过：虽然请求了
-`workspace-write` sandbox，Codex 0.147.0 仍把私密隔离任务根的补丁判为只读并拒绝。套件
-因此在其余场景前停止；精确插件、marketplace、任务根和隔离账号/配置资源均已删除。
-O2 仍为 false，未请求 O2 结果接受。随后，同一宿主上的代码自有探针证明 Codex 官方内置
-`:workspace` 权限 profile 能完成有界写入；当前官方说明同时明确该 profile 不应与旧 sandbox
-设置混用。因此当前增量只准备来源绑定的路线、有界允许/拒绝压测，并且只有另行授权后才建立
-全新的隔离起始环境清单。精确隔离账号连接现已完成，并按私密清理处置保留；这不会打开 O2，
-也不授权候选包安装、场景执行或结果。后续真正的 O2 增量必须与其不可变注册原子开启。
+**当前状态：**v1.2 已完成 O1，因实时反证停止第一代 O2，并关闭有界的权限 profile
+准备切片；当前唯一 active 增量是已注册的
+`increment.v12-o2-codex-reference-permission-profile`。`7f39911` 保留第一代
+native-Windows `workspace-write` 失败且没有 O2 信用。更小的第二代路线使用 Codex 0.147.0
+官方内置 `:workspace` profile，不与旧 sandbox 机制混用。固定的 32 轮、4 并发压测得到
+根内写入 32/32 允许、根外写入 32/32 拒绝、零异常结果和零残留；全新隔离账号、公开安全
+起始清单和任务专属验证器均严格先于 `fe119ca` 的不可变注册。该注册现已绑定当前程序，
+但精确候选包仍未安装，第二代场景尚未执行；隔离账号资源按精确私密清理处置保留。只有四个
+已注册实时场景、回滚、清理、重放和具名人类有界结果接受全部通过，O2 才能为 true；任何
+确定性失败都会停止套件并保留反证。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
 此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、

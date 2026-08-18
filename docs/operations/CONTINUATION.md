@@ -51,22 +51,20 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `active` on the single bounded
-`increment.v12-o2-permission-profile-preregistration-readiness`, with O1 at 1/5. The append-only O2
-registration at `7f39911` is stopped: its no-op passed, but Codex 0.147.0
-rejected the next private-root patch as read-only despite `workspace-write`.
-The exact plugin, marketplace, task roots, and isolated account/config resource
-were removed. The stopped registration remains only as failure history, with no
-O2 credit; transient projections exited the graph. Same-host code-owned probes
-then showed that the official built-in `:workspace` permission profile can
-perform a bounded write, while current official guidance says permission
-profiles do not compose with the legacy sandbox settings. The active
-outcome-neutral increment may prepare only the source-bound route, a bounded
-allow-deny pressure probe and a fresh isolated starting-environment manifest.
-The exact isolated account connection is complete and privately retained.
-A later O2 increment must open atomically with its immutable registration. This
-increment grants no installation, scenario execution,
-protected cleanup, or result acceptance.
+v1.2 is `active` on the single registered
+`increment.v12-o2-codex-reference-permission-profile`, with O1 at 1/5. The
+append-only registration at `7f39911` retains the first native-Windows
+`workspace-write` failure with no O2 credit. The closed preparation slice then
+resolved the official built-in `:workspace` profile without legacy sandbox
+composition and passed a fixed 32-cycle four-worker probe: 32 in-root writes
+allowed, 32 out-of-root writes denied, no unexpected result and zero residue.
+The fresh isolated account, public-safe manifest and task-specific validator
+strictly precede the immutable registration at `fe119ca`, which is now bound in
+the active program. The exact package remains uninstalled and no
+second-generation scenario has executed. The private isolated account remains
+under its exact cleanup disposition. O2 stays false until all four registered
+scenarios, rollback, cleanup, replay and named-human bounded acceptance pass;
+deterministic failure stops and retains the counterevidence.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
 controlled result; O1 is the only accepted outcome. The frozen profile and
 protocol separate finite delivery from later field validation and create no

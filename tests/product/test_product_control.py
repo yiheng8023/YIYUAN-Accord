@@ -1320,7 +1320,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_stopped_o2_counterevidence_and_active_preparation(
+    def test_current_v12_contract_is_valid_with_stopped_o2_counterevidence_and_active_permission_profile_suite(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1334,7 +1334,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(live_program["status"], "active")
         self.assertEqual(
             live_program["activeIncrementId"],
-            "increment.v12-o2-permission-profile-preregistration-readiness",
+            "increment.v12-o2-codex-reference-permission-profile",
         )
         self.assertEqual(len(live_program["increments"]), 3)
         self.assertEqual(
@@ -1352,11 +1352,32 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             live_program["increments"][1]["workItems"][0]["state"], "stopped"
         )
-        preparation = live_program["increments"][2]
-        self.assertEqual(preparation["state"], "active")
-        self.assertEqual(preparation["acceptanceIds"], ["G1", "G2", "G4"])
-        self.assertIsNone(preparation["taskRegistration"])
-        self.assertEqual(preparation["workItems"][0]["state"], "active")
+        permission_profile_suite = live_program["increments"][2]
+        self.assertEqual(permission_profile_suite["state"], "active")
+        self.assertEqual(
+            permission_profile_suite["acceptanceIds"], ["O2", "G2", "G4"]
+        )
+        self.assertEqual(
+            permission_profile_suite["taskRegistration"]["sourceRevision"],
+            "fe119ca02029a020e361e5cfebebb3fd143d44b4",
+        )
+        self.assertEqual(
+            permission_profile_suite["taskRegistration"]["sha256"],
+            "2962de37afedbf87c1476d736579feb7be1890ce5f1d7a67f71a3d0a280954f9",
+        )
+        self.assertEqual(
+            permission_profile_suite["taskRegistration"]["preMeasurementValidator"],
+            {
+                "kind": "o2-codex-reference-permission-profile-validator-v1",
+                "version": 1,
+                "locator": "harness/task_validator_o2_codex_reference_permission_profile.py",
+                "revision": "c1ab6c55a507b058044171982721c14a48df429b",
+                "sha256": "f5825805521aa9279882d1505e09bc61ba3e0cc2caa50d3b856b34e2ee1a809f",
+            },
+        )
+        self.assertEqual(
+            permission_profile_suite["workItems"][0]["state"], "active"
+        )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
             report["sourceCarrierRelease"],

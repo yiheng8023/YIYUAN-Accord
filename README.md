@@ -12,28 +12,23 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on the single bounded
-`increment.v12-o2-permission-profile-preregistration-readiness` after completing
-`increment.v12-o1-lifecycle-suite` and stopping the first
-`increment.v12-o2-codex-reference` on live counterevidence. The stopped exact
-public-safe O2 registration is immutable at `7f39911`; the authorized package
-was installed only in the isolated Codex home, and the simple native no-op
-passed without a filesystem delta. The next registered scenario did not pass:
-Codex 0.147.0 rejected a patch to the private isolated task root as read-only
-despite the requested `workspace-write` sandbox. The suite stopped before the
-remaining scenarios, and the exact plugin, marketplace, task roots, and
-isolated account/configuration resource were removed. O2 remains false and no
-O2 result acceptance was requested. Code-owned probes on the same host then
-showed that Codex's official built-in `:workspace` permission profile can make
-a bounded write, while current official guidance says that permission profiles
-must not be composed with the legacy sandbox settings. The active increment
-therefore prepares the source-bound route, a bounded allow-deny pressure probe,
-and, only after a separate grant, a fresh isolated starting-environment manifest
-for that one smaller native route.
-The exact isolated account connection is now complete and retained under its
-private cleanup disposition. This does not open O2 or authorize package
-installation, scenario execution, or a result; a later O2 increment must begin
-atomically with its immutable registration.
+**Current status:** v1.2 is `active` on the single registered
+`increment.v12-o2-codex-reference-permission-profile` after completing O1,
+stopping the first O2 attempt on live counterevidence, and closing its bounded
+permission-profile preparation slice. The stopped registration at `7f39911`
+retains the earlier native-Windows `workspace-write` failure with no O2 credit.
+The smaller second-generation route resolves Codex 0.147.0's official built-in
+`:workspace` permission profile without legacy sandbox composition. Its fixed
+32-cycle four-worker probe observed 32/32 in-root writes allowed, 32/32
+out-of-root writes denied, no unexpected result, and zero residue. The fresh
+isolated account and public-safe starting manifest plus the task-specific
+validator were committed before the immutable registration at `fe119ca`.
+That registration is now bound in the active program, but the exact package is
+still uninstalled and no second-generation scenario has executed. The isolated
+account resource remains private under its exact cleanup disposition. O2 stays
+false until the four registered live scenarios, rollback, cleanup, replay and
+named-human bounded result acceptance all pass; a deterministic failure stops
+the suite and retains counterevidence instead.
 Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
