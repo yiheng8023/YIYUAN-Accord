@@ -51,14 +51,16 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `ready`; O1 is 1/5. Five closed outcome-neutral slices bind the O4 seam
-to raw Codex host and repository observations plus one exact public controlled
-goal that must remain active across native compaction and a fresh
-zero-inherited-turn same-goal thread. The destination must recover the goal and
-repository authority before the source goal is cleared and the source is
-archived, so an older carrier cannot resume into the mainline. A full-history
-fork is an optional topology branch, not context-load relief. The slices perform
-no measurement and earn no O4 credit. Two immutable O2 attempts retain
+v1.2 is `ready`; O1 is 1/5. The first immutable O4 controlled attempt passed its
+first two disposable-checkout scenarios, then stopped because the third fault
+was rejected by the generic O1 evidence-shape gate before its exact
+preregistered task-specific diagnostic could be observed. The remaining
+checkout, native-compaction and fresh zero-inherited-turn same-goal transition
+scenarios were not executed. Its isolated environment was removed, it created
+no task thread, and it earns no O4 credit. The intended transition still
+requires the destination to recover the exact active goal and repository
+authority before the source goal is cleared and archived; a full-history fork
+remains an optional topology branch, not context-load relief. Two immutable O2 attempts retain
 bounded native-Windows counterevidence with no O2 credit. The second used the
 official `:workspace` profile, passed its fixed allow-deny pressure probe, then
 stopped when the nontrivial goal could not write the task root and the public
