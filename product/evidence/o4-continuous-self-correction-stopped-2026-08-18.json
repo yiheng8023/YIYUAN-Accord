@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "id": "counterevidence.o4-continuous-self-correction.controlled-v1.stopped",
+  "observedAt": "2026-08-18T23:42:08+08:00",
+  "suiteIdentity": "o4-continuous-self-correction.controlled-v1",
+  "registration": {
+    "locator": "product/evidence/o4-continuous-self-correction-registration.json",
+    "revision": "9ff75320b551e4493d17d0b467291d00d172f14f",
+    "sha256": "8fcd43f31b977a265c3ec9c87f09d988ffb7051ebb2d28405459c93796946980"
+  },
+  "measurementBaselineRevision": "620d0b857c624f1b74a06b2ed3e3747142dae594",
+  "status": "stopped",
+  "stopReason": "the third registered scenario detected divergence and recovered cleanly but did not observe its exact pre-registered diagnostic because the generic evidence-shape gate rejected the mutation before the task-specific O1 evidence validator",
+  "scenarioResults": [
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.repeated-user-correction",
+      "status": "passed",
+      "baselineValid": true,
+      "divergenceDetected": true,
+      "expectedDiagnosticObserved": true,
+      "recoveredValid": true,
+      "recoveredHeadMatches": true,
+      "probeCleanupVerified": true,
+      "faultReportSha256": "e55b695b48e5ea5d561a17c29c7d162a73d859ce028cb503287c5b01ba16754d",
+      "recoveryReportSha256": "29f1cd1ad2c8ea84ef385ce1f7ca5c53eb227fef200a7360dc2387275559b9f4"
+    },
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.stale-conflicting-instruction",
+      "status": "passed",
+      "baselineValid": true,
+      "divergenceDetected": true,
+      "expectedDiagnosticObserved": true,
+      "recoveredValid": true,
+      "recoveredHeadMatches": true,
+      "probeCleanupVerified": true,
+      "faultReportSha256": "7e38729f79d6775928d23f02eb942ef578e03e40480100b210f72fd7f4b83bfa",
+      "recoveryReportSha256": "29f1cd1ad2c8ea84ef385ce1f7ca5c53eb227fef200a7360dc2387275559b9f4"
+    },
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.expected-observed-mismatch",
+      "status": "failed-stopped",
+      "baselineValid": true,
+      "divergenceDetected": true,
+      "expectedDiagnosticObserved": false,
+      "recoveredValid": true,
+      "recoveredHeadMatches": true,
+      "probeCleanupVerified": true,
+      "faultReportSha256": "a15d9444b2dd9c9e0f8b212f67da06b9650682b1add310785227570b04eb0c58",
+      "recoveryReportSha256": "29f1cd1ad2c8ea84ef385ce1f7ca5c53eb227fef200a7360dc2387275559b9f4",
+      "diagnosticAnalysis": {
+        "kind": "code-path-analysis-not-substitute-observation",
+        "genericGate": "criterion O1 evidence shape is invalid before task-specific evidence validation when result.accepted is false",
+        "codeLocator": "harness/control.py:8015-8060",
+        "codeRevision": "2fd354cb935d79b25c4374b881dec79c29cfd067",
+        "registeredDiagnosticLocator": "harness/task_validator_o1_lifecycle_suite.py:660-691"
+      }
+    },
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.topology-residue-reconciliation",
+      "status": "not-executed-after-stop"
+    },
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.native-compaction-recovery",
+      "status": "not-executed-after-stop"
+    },
+    {
+      "scenarioIdentity": "o4-continuous-self-correction.proactive-same-goal-transition",
+      "status": "not-executed-after-stop"
+    }
+  ],
+  "cleanup": {
+    "completedScenarioTemporaryRootsRemoved": true,
+    "interruptedNextScenarioTemporaryRootRemoved": true,
+    "taskOwnedPythonProcessesRemaining": 0,
+    "canonicalCheckoutCount": 1,
+    "repositoryResidueObserved": false
+  },
+  "acceptanceEffect": {
+    "o4Credit": false,
+    "namedHumanAcceptanceRequested": false,
+    "completionEffect": "none"
+  },
+  "claimLimits": [
+    "public-safe stopped counterevidence for this exact registered attempt only",
+    "no O4 outcome proof",
+    "no host compaction or fresh-thread behavior was measured",
+    "network or client-upgrade interruption is retained as a separate host variable and is not asserted as the cause of this local deterministic diagnostic mismatch"
+  ]
+}

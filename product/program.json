@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o4-continuous-self-correction",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -316,9 +316,9 @@
     },
     {
       "id": "increment.v12-o4-continuous-self-correction",
-      "state": "active",
+      "state": "stopped",
       "correctionClass": "o4-controlled-continuous-self-correction-and-carrier-validation",
-      "observedProblem": "O4 remains unverified. Historical collaboration losses and the recent stale-carrier regression show repeated corrections, stale instruction takeover, expected-effect mismatch, orphaned code topology, post-compaction drift and unsafe conversation transition are material failure classes. The exact six-scenario suite, frozen method, environment manifest, controlled goal and earlier task validator are now immutably registered, but no controlled measurement or accepted O4 evidence exists.",
+      "observedProblem": "O4 remains unverified. The first immutable controlled attempt passed its first two disposable-checkout counterexamples, then stopped at the third registered scenario because the generic O1 evidence-shape gate rejected the fault before the task-specific diagnostic could be observed. The public-safe stopped counterevidence is product/evidence/o4-continuous-self-correction-stopped-2026-08-18.json; no host compaction or fresh-thread behavior was measured and no O4 credit was retained.",
       "hypothesis": "Executing the four registered disposable-checkout counterexamples plus one native Codex compaction recovery and one fresh zero-inherited-turn same-goal transition should demonstrate pre-effect divergence detection, minimum correction, reverification and full code/conversation carrier lifecycle control without user reconstruction, topology selection or cleanup. The task-scoped cadence observation can calibrate this exact controlled route while remaining explicitly non-universal.",
       "falsifier": "Any scenario is missing, duplicated or passes only by receipt; a bound correction must be restated; material effects continue after divergence; a worktree or temporary checkout remains; native compaction lacks post-event authority and Git reconciliation; the destination inherits turns, lacks the exact goal or is not verified before source goal release and archive; a private path, event or identifier enters public evidence; environment or validator identity drifts; cleanup is incomplete; or the named human does not accept the bounded result.",
       "stopCondition": "All six registered scenarios replay through the exact earlier validator; public evidence contains only the bounded projections and exact cleanup result; the source and destination task carriers and isolated environment are released at their registered boundary; the named human accepts the bounded Windows Codex 0.147.0 O4 result; canonical verification reports O4 true and the increment exits the current graph. Any deterministic floor failure stops the suite, preserves public-safe counterevidence, cleans exact task resources and leaves O4 false.",
@@ -362,7 +362,7 @@
       "workItems": [
         {
           "id": "work.v12-o4-controlled-continuous-self-correction",
-          "state": "active",
+          "state": "stopped",
           "acceptanceIds": [
             "O4",
             "G2",
