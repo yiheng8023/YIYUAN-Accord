@@ -12,7 +12,8 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `ready` after completing O1, stopping two
+**Current status:** v1.2 is `active` on one bounded second-generation O4
+premeasurement-validator repair after completing O1, stopping two
 preregistered O2 attempts on live counterevidence, and stopping the first
 immutable O4 controlled attempt without O4 credit. Five bounded outcome-neutral
 slices had committed the O4-specific validator, bound its public-safe projection

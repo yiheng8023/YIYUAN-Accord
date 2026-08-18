@@ -51,7 +51,8 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `ready`; O1 is 1/5. The first immutable O4 controlled attempt passed its
+v1.2 is `active` on one bounded second-generation O4 premeasurement-validator
+repair; O1 is 1/5. The first immutable O4 controlled attempt passed its
 first two disposable-checkout scenarios, then stopped because the third fault
 was rejected by the generic O1 evidence-shape gate before its exact
 preregistered task-specific diagnostic could be observed. The remaining
