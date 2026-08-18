@@ -69,10 +69,12 @@ measures, validator, evidence class, and human authority independently pass.
 
 The current v1.2 program is `ready` after completing
 `increment.v12-o1-lifecycle-suite` and stopping both registered O2 attempts on
-live counterevidence. Two bounded outcome-neutral slices committed an
-O4-specific validator and bound its public-safe projection to raw Codex host
-and repository observations before later registration, then exited the graph.
-Neither performs O4 measurement or earns outcome credit.
+live counterevidence. Three bounded outcome-neutral slices committed the
+O4-specific validator, bound its public-safe projection to raw Codex host and
+repository observations, and required one exact public controlled goal to
+remain active across native compaction and a full-history deferred-goal fork
+before later registration, then exited the graph. None performs O4 measurement
+or earns outcome credit.
 The second O2 attempt used Codex
 0.147.0's official built-in
 `:workspace` profile without legacy sandbox composition. Its fixed 32-cycle

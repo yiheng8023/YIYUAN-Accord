@@ -3474,7 +3474,12 @@ class ProductControlTests(unittest.TestCase):
                 "failure-recovery-and-cleanup",
             )
         }
-        allowed_o2_support_artifacts = controlled_o2_goal_artifacts | {
+        controlled_public_text_artifacts = controlled_o2_goal_artifacts | {
+            evidence_root
+            / "o4-continuous-self-correction-artifacts"
+            / "carrier-goal.txt"
+        }
+        allowed_support_artifacts = controlled_public_text_artifacts | {
             evidence_root
             / "o2-codex-reference-artifacts"
             / "user-configured-unavailable-stop.json",
@@ -3501,11 +3506,11 @@ class ProductControlTests(unittest.TestCase):
                 continue
             self.assertTrue(
                 path.parent in allowed_evidence_parents
-                or path in allowed_o2_support_artifacts,
+                or path in allowed_support_artifacts,
                 path,
             )
             self.assertTrue(
-                path.suffix == ".json" or path in controlled_o2_goal_artifacts,
+                path.suffix == ".json" or path in controlled_public_text_artifacts,
                 path,
             )
             raw = path.read_bytes()
@@ -3514,7 +3519,7 @@ class ProductControlTests(unittest.TestCase):
             self.assertIsNone(private_key_pattern.search(decoded), path)
             for pattern in path_patterns:
                 self.assertIsNone(pattern.search(decoded), f"{path}: {pattern.pattern}")
-            if path in controlled_o2_goal_artifacts:
+            if path in controlled_public_text_artifacts:
                 continue
 
             def unique_object(pairs: list[tuple[str, object]]) -> dict:

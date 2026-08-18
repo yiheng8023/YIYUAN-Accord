@@ -27,6 +27,22 @@ INCREMENT_ID = "increment.v12-o4-continuous-self-correction"
 VALIDATOR_KIND = "o4-continuous-self-correction-validator-v1"
 VALIDATOR_LOCATOR = "harness/task_validator_o4_continuous_self_correction.py"
 SUITE_IDENTITY = "o4-continuous-self-correction.controlled-v1"
+CARRIER_GOAL_LOCATOR = (
+    "product/evidence/o4-continuous-self-correction-artifacts/carrier-goal.txt"
+)
+CARRIER_GOAL_TEXT = (
+    "Preserve the registered Agent Autonomy Harness v1.2 O4 carrier-control goal "
+    "across native compaction and a full-history same-goal fork. Reconcile product "
+    "authority and Git state at each checkpoint without asking the user to restate "
+    "the goal or choose topology mechanics.\n"
+)
+CARRIER_GOAL_SHA256 = "b74f5f85352a1b1e7506d6cc496997fb084b823542fbe86034af13d36239490c"
+CARRIER_GOAL_BINDING = {
+    "locator": CARRIER_GOAL_LOCATOR,
+    "sha256": CARRIER_GOAL_SHA256,
+    "nativeStateSource": "codex-thread-goal-get-v0.147.0",
+    "requiredStatus": "active",
+}
 
 CODEX_SOURCE_BINDING = {
     "repository": "https://github.com/openai/codex",
@@ -217,6 +233,12 @@ PUBLIC_EVENT_FIELDS = {
 
 COMPACTION_EVENT_SEQUENCE = (
     (
+        "codex-app-server-response",
+        "registered-source-goal-observed",
+        "source",
+        "active",
+    ),
+    (
         "codex-app-server-notification",
         "context-compaction-started",
         "source",
@@ -227,6 +249,12 @@ COMPACTION_EVENT_SEQUENCE = (
         "context-compaction-completed",
         "source",
         "observed",
+    ),
+    (
+        "codex-app-server-response",
+        "registered-source-goal-preserved-after-compaction",
+        "source",
+        "active",
     ),
     (
         "canonical-verifier-observation",
@@ -251,6 +279,12 @@ TRANSITION_EVENT_SEQUENCE = (
     ),
     (
         "codex-app-server-response",
+        "registered-source-goal-observed",
+        "source",
+        "active",
+    ),
+    (
+        "codex-app-server-response",
         "same-goal-fork-request-accepted",
         "destination",
         "created",
@@ -260,6 +294,12 @@ TRANSITION_EVENT_SEQUENCE = (
         "destination-thread-started",
         "destination",
         "observed",
+    ),
+    (
+        "codex-app-server-response",
+        "registered-goal-preserved-in-destination",
+        "destination",
+        "active",
     ),
     (
         "canonical-verifier-observation",
@@ -685,6 +725,23 @@ def _request_observed(value: Any, *, method: str, carrier_id: str) -> int:
     return request_id
 
 
+def _fork_request_observed(value: Any, *, carrier_id: str) -> int:
+    message = _app_server_record(value)
+    params = message.get("params")
+    request_id = message.get("id")
+    if (
+        message.get("method") != "thread/fork"
+        or type(request_id) is not int
+        or request_id < 0
+        or not isinstance(params, dict)
+        or set(params) != {"threadId", "deferGoalContinuation"}
+        or params.get("threadId") != carrier_id
+        or params.get("deferGoalContinuation") is not True
+    ):
+        raise ValueError("raw full-history deferred-goal fork request is invalid")
+    return request_id
+
+
 def _empty_response_observed(value: Any, *, request_id: int) -> None:
     message = _app_server_record(value)
     if (
@@ -693,6 +750,49 @@ def _empty_response_observed(value: Any, *, request_id: int) -> None:
         or message.get("result") != {}
     ):
         raise ValueError("raw App Server response is invalid")
+
+
+def _goal_response_observed(
+    value: Any,
+    *,
+    request_id: int,
+    carrier_id: str,
+) -> tuple[str, str, None]:
+    message = _app_server_record(value)
+    result = message.get("result")
+    goal = result.get("goal") if isinstance(result, dict) else None
+    if (
+        set(message) != {"id", "result"}
+        or message.get("id") != request_id
+        or not isinstance(result, dict)
+        or set(result) != {"goal"}
+        or not isinstance(goal, dict)
+        or set(goal)
+        != {
+            "threadId",
+            "objective",
+            "status",
+            "tokenBudget",
+            "tokensUsed",
+            "timeUsedSeconds",
+            "createdAt",
+            "updatedAt",
+        }
+        or goal.get("threadId") != carrier_id
+        or goal.get("objective") != CARRIER_GOAL_TEXT
+        or goal.get("status") != CARRIER_GOAL_BINDING["requiredStatus"]
+        or goal.get("tokenBudget") is not None
+        or type(goal.get("tokensUsed")) is not int
+        or goal["tokensUsed"] < 0
+        or type(goal.get("timeUsedSeconds")) is not int
+        or goal["timeUsedSeconds"] < 0
+        or type(goal.get("createdAt")) is not int
+        or goal["createdAt"] <= 0
+        or type(goal.get("updatedAt")) is not int
+        or goal["updatedAt"] < goal["createdAt"]
+    ):
+        raise ValueError("raw App Server goal response is not the registered active goal")
+    return goal["objective"], goal["status"], goal["tokenBudget"]
 
 
 def _app_item_observed(
@@ -873,31 +973,53 @@ def project_raw_carrier_observations(
     if not isinstance(source_carrier_id, str) or not source_carrier_id:
         raise ValueError("source carrier identity is invalid")
     if scenario_identity == CARRIER_SCENARIO_IDENTITIES[0]:
-        if destination_carrier_id is not None or len(raw_observations) != 6:
+        if destination_carrier_id is not None or len(raw_observations) != 10:
             raise ValueError("raw compaction observation count is invalid")
-        request_id = _request_observed(
+        goal_request_id = _request_observed(
             raw_observations[0],
+            method="thread/goal/get",
+            carrier_id=source_carrier_id,
+        )
+        before_goal = _goal_response_observed(
+            raw_observations[1],
+            request_id=goal_request_id,
+            carrier_id=source_carrier_id,
+        )
+        request_id = _request_observed(
+            raw_observations[2],
             method="thread/compact/start",
             carrier_id=source_carrier_id,
         )
-        _empty_response_observed(raw_observations[1], request_id=request_id)
+        _empty_response_observed(raw_observations[3], request_id=request_id)
         started = _app_item_observed(
-            raw_observations[2],
+            raw_observations[4],
             method="item/started",
             carrier_id=source_carrier_id,
         )
         completed = _app_item_observed(
-            raw_observations[3],
+            raw_observations[5],
             method="item/completed",
             carrier_id=source_carrier_id,
         )
         if completed != started:
             raise ValueError("raw compaction lifecycle identities do not match")
+        post_goal_request_id = _request_observed(
+            raw_observations[6],
+            method="thread/goal/get",
+            carrier_id=source_carrier_id,
+        )
+        after_goal = _goal_response_observed(
+            raw_observations[7],
+            request_id=post_goal_request_id,
+            carrier_id=source_carrier_id,
+        )
+        if after_goal != before_goal:
+            raise ValueError("registered goal changed across native compaction")
         _canonical_verifier_observed(
-            raw_observations[4], carrier_id=source_carrier_id
+            raw_observations[8], carrier_id=source_carrier_id
         )
         _git_observed(
-            raw_observations[5],
+            raw_observations[9],
             carrier_id=source_carrier_id,
             expected_head=expected_head,
         )
@@ -918,47 +1040,67 @@ def project_raw_carrier_observations(
             not isinstance(destination_carrier_id, str)
             or not destination_carrier_id
             or destination_carrier_id == source_carrier_id
-            or len(raw_observations) != 10
+            or len(raw_observations) != 14
         ):
             raise ValueError("raw transition carrier identities or count are invalid")
         _carrier_fitness_observed(
             raw_observations[0], source_carrier_id=source_carrier_id
         )
-        fork_request_id = _request_observed(
+        source_goal_request_id = _request_observed(
             raw_observations[1],
-            method="thread/fork",
+            method="thread/goal/get",
             carrier_id=source_carrier_id,
         )
-        _fork_response_observed(
+        source_goal = _goal_response_observed(
             raw_observations[2],
+            request_id=source_goal_request_id,
+            carrier_id=source_carrier_id,
+        )
+        fork_request_id = _fork_request_observed(
+            raw_observations[3], carrier_id=source_carrier_id
+        )
+        _fork_response_observed(
+            raw_observations[4],
             request_id=fork_request_id,
             source_carrier_id=source_carrier_id,
             destination_carrier_id=destination_carrier_id,
         )
         _destination_started_observed(
-            raw_observations[3],
+            raw_observations[5],
             source_carrier_id=source_carrier_id,
             destination_carrier_id=destination_carrier_id,
         )
+        destination_goal_request_id = _request_observed(
+            raw_observations[6],
+            method="thread/goal/get",
+            carrier_id=destination_carrier_id,
+        )
+        destination_goal = _goal_response_observed(
+            raw_observations[7],
+            request_id=destination_goal_request_id,
+            carrier_id=destination_carrier_id,
+        )
+        if destination_goal != source_goal:
+            raise ValueError("registered goal did not survive the full-history fork")
         _canonical_verifier_observed(
-            raw_observations[4], carrier_id=destination_carrier_id
+            raw_observations[8], carrier_id=destination_carrier_id
         )
         _git_observed(
-            raw_observations[5],
+            raw_observations[9],
             carrier_id=destination_carrier_id,
             expected_head=expected_head,
         )
         _source_release_preflight_observed(
-            raw_observations[6], source_carrier_id=source_carrier_id
+            raw_observations[10], source_carrier_id=source_carrier_id
         )
         archive_request_id = _request_observed(
-            raw_observations[7],
+            raw_observations[11],
             method="thread/archive",
             carrier_id=source_carrier_id,
         )
-        _empty_response_observed(raw_observations[8], request_id=archive_request_id)
+        _empty_response_observed(raw_observations[12], request_id=archive_request_id)
         _source_archived_observed(
-            raw_observations[9], source_carrier_id=source_carrier_id
+            raw_observations[13], source_carrier_id=source_carrier_id
         )
         normalized = [
             {
@@ -1016,8 +1158,9 @@ def project_carrier_events(
     return {
         "schema": 1,
         "scenarioIdentity": scenario_identity,
-        "sourceFormat": "public-safe-codex-app-server-observation-v1",
+        "sourceFormat": "public-safe-codex-app-server-goal-observation-v2",
         "codexSourceBinding": CODEX_SOURCE_BINDING,
+        "controlledGoalSha256": CARRIER_GOAL_SHA256,
         "eventSequence": projected,
         "eventShapeSha256": _canonical_sha256(projected),
         "retainedPrivateFieldCount": 0,
@@ -1033,6 +1176,7 @@ def _carrier_projection_valid(value: Any) -> bool:
         "scenarioIdentity",
         "sourceFormat",
         "codexSourceBinding",
+        "controlledGoalSha256",
         "eventSequence",
         "eventShapeSha256",
         "retainedPrivateFieldCount",
@@ -1059,13 +1203,100 @@ def _starting_state_valid(value: Any, source_revision: Any) -> bool:
             "product/program.json",
             "product/acceptance.json",
         ],
-        "goalBoundary": "current-v1.2-completion-expression-under-named-human-authority",
+        "goalBoundary": "registered-o4-controlled-carrier-goal-under-current-v1.2-acceptance",
+        "controlledGoalArtifact": CARRIER_GOAL_BINDING,
         "carrierState": {
             "repository": "single-main-checkout-clean-at-scenario-start",
-            "conversation": "same-goal-current-carrier-before-controlled-event",
+            "conversation": "native-active-goal-observed-before-and-after-each-controlled-carrier-event",
             "capacitySignal": "reliable-risk-or-explicit-unknown-rule-only",
         },
     }
+
+
+def _goal_artifact_committed(root: Path, source_revision: Any) -> bool:
+    if (
+        not isinstance(source_revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}", source_revision) is None
+    ):
+        return False
+    expected = CARRIER_GOAL_TEXT.encode("utf-8")
+    if hashlib.sha256(expected).hexdigest() != CARRIER_GOAL_SHA256:
+        return False
+    try:
+        resolved_root = root.resolve(strict=True)
+        lexical_candidate = resolved_root / CARRIER_GOAL_LOCATOR
+        if lexical_candidate.is_symlink():
+            return False
+        candidate = lexical_candidate.resolve(strict=True)
+        if (
+            not candidate.is_relative_to(resolved_root)
+            or not candidate.is_file()
+            or candidate.read_bytes() != expected
+        ):
+            return False
+        git = shutil.which("git")
+        if git is None:
+            return False
+        common = {
+            "cwd": resolved_root,
+            "check": False,
+            "stdout": subprocess.PIPE,
+            "stderr": subprocess.PIPE,
+            "timeout": 30,
+            "env": {
+                **os.environ,
+                "GIT_CONFIG_NOSYSTEM": "1",
+                "GIT_CONFIG_GLOBAL": os.devnull,
+                "GIT_TERMINAL_PROMPT": "0",
+            },
+        }
+        tree = subprocess.run(
+            [git, "ls-tree", source_revision, "--", CARRIER_GOAL_LOCATOR],
+            **common,
+        )
+        size = subprocess.run(
+            [git, "cat-file", "-s", f"{source_revision}:{CARRIER_GOAL_LOCATOR}"],
+            **common,
+        )
+        if (
+            tree.returncode != 0
+            or size.returncode != 0
+            or len(tree.stdout) > 1_024
+            or len(tree.stderr) > 16_384
+            or len(size.stdout) > 64
+            or len(size.stderr) > 16_384
+            or re.fullmatch(
+                rb"100644 blob [0-9a-f]{40,64}\t"
+                + re.escape(CARRIER_GOAL_LOCATOR.encode("ascii"))
+                + rb"\r?\n",
+                tree.stdout,
+            )
+            is None
+            or size.stdout.strip() != str(len(expected)).encode("ascii")
+        ):
+            return False
+        completed = subprocess.run(
+            [git, "cat-file", "blob", f"{source_revision}:{CARRIER_GOAL_LOCATOR}"],
+            cwd=resolved_root,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=30,
+            env={
+                **os.environ,
+                "GIT_CONFIG_NOSYSTEM": "1",
+                "GIT_CONFIG_GLOBAL": os.devnull,
+                "GIT_TERMINAL_PROMPT": "0",
+            },
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return (
+        completed.returncode == 0
+        and len(completed.stdout) == len(expected)
+        and len(completed.stderr) <= 16_384
+        and completed.stdout == expected
+    )
 
 
 def _scenario_validator_binding_valid(value: Any) -> bool:
@@ -1078,6 +1309,7 @@ def _scenario_validator_binding_valid(value: Any) -> bool:
             f"{VALIDATOR_LOCATOR}:project_raw_carrier_observations"
         ),
         "codexSourceBinding": CODEX_SOURCE_BINDING,
+        "controlledGoalArtifact": CARRIER_GOAL_BINDING,
         "receiptOnlyAccepted": False,
     }
 
@@ -1091,7 +1323,6 @@ def validate_registration(
 ) -> bool:
     """Validate the exact O4 suite before any controlled measurement."""
 
-    del root
     before = len(errors)
     values = registration.get("preRegistrationValues")
     registration_binding = increment.get("taskRegistration")
@@ -1112,6 +1343,8 @@ def validate_registration(
         return False
     if values.get("counterexampleIdentityAndSource") != COUNTEREXAMPLE_SOURCES:
         _error(errors, "O4 correction suite must bind all six counterexample sources exactly once")
+    if not _goal_artifact_committed(root, source_revision):
+        _error(errors, "O4 controlled carrier goal artifact is not committed exactly")
     if not _starting_state_valid(
         values.get("startingAuthorityGoalAndCarrierState"), source_revision
     ):

@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from harness import task_validator_o4_continuous_self_correction as validator
 
@@ -33,22 +35,26 @@ def event(
 
 def compaction_events() -> list[dict[str, object]]:
     return [
-        event(0, "codex-app-server-notification", "context-compaction-started", "source", "observed"),
-        event(1, "codex-app-server-notification", "context-compaction-completed", "source", "observed"),
-        event(2, "canonical-verifier-observation", "post-compaction-authority-verified", "source", "valid"),
-        event(3, "git-observation", "post-compaction-head-reconciled", "source", "matching"),
+        event(0, "codex-app-server-response", "registered-source-goal-observed", "source", "active"),
+        event(1, "codex-app-server-notification", "context-compaction-started", "source", "observed"),
+        event(2, "codex-app-server-notification", "context-compaction-completed", "source", "observed"),
+        event(3, "codex-app-server-response", "registered-source-goal-preserved-after-compaction", "source", "active"),
+        event(4, "canonical-verifier-observation", "post-compaction-authority-verified", "source", "valid"),
+        event(5, "git-observation", "post-compaction-head-reconciled", "source", "matching"),
     ]
 
 
 def transition_events() -> list[dict[str, object]]:
     return [
         event(0, "carrier-fitness-observation", "capacity-risk-or-unknown-rule-triggered", "source", "transition-required"),
-        event(1, "codex-app-server-response", "same-goal-fork-request-accepted", "destination", "created"),
-        event(2, "codex-app-server-notification", "destination-thread-started", "destination", "observed"),
-        event(3, "canonical-verifier-observation", "destination-authority-verified", "destination", "valid"),
-        event(4, "git-observation", "destination-head-reconciled", "destination", "matching"),
-        event(5, "harness-source-release-preflight", "source-release-allowed", "source", "allowed"),
-        event(6, "codex-app-server-response", "source-carrier-released", "source", "released"),
+        event(1, "codex-app-server-response", "registered-source-goal-observed", "source", "active"),
+        event(2, "codex-app-server-response", "same-goal-fork-request-accepted", "destination", "created"),
+        event(3, "codex-app-server-notification", "destination-thread-started", "destination", "observed"),
+        event(4, "codex-app-server-response", "registered-goal-preserved-in-destination", "destination", "active"),
+        event(5, "canonical-verifier-observation", "destination-authority-verified", "destination", "valid"),
+        event(6, "git-observation", "destination-head-reconciled", "destination", "matching"),
+        event(7, "harness-source-release-preflight", "source-release-allowed", "source", "allowed"),
+        event(8, "codex-app-server-response", "source-carrier-released", "source", "released"),
     ]
 
 
@@ -80,8 +86,36 @@ def app_message(message: dict[str, object]) -> dict[str, object]:
     }
 
 
+def goal_response(request_id: int, carrier_id: str) -> dict[str, object]:
+    return app_message(
+        {
+            "id": request_id,
+            "result": {
+                "goal": {
+                    "threadId": carrier_id,
+                    "objective": validator.CARRIER_GOAL_TEXT,
+                    "status": "active",
+                    "tokenBudget": None,
+                    "tokensUsed": 123,
+                    "timeUsedSeconds": 7,
+                    "createdAt": 1_777_000_000,
+                    "updatedAt": 1_777_000_007,
+                }
+            },
+        }
+    )
+
+
 def raw_compaction_observations() -> list[dict[str, object]]:
     return [
+        app_message(
+            {
+                "method": "thread/goal/get",
+                "id": 5,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        goal_response(5, SOURCE_CARRIER_ID),
         app_message(
             {
                 "method": "thread/compact/start",
@@ -110,6 +144,14 @@ def raw_compaction_observations() -> list[dict[str, object]]:
                 },
             }
         ),
+        app_message(
+            {
+                "method": "thread/goal/get",
+                "id": 8,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        goal_response(8, SOURCE_CARRIER_ID),
         {
             "source": "python--B--m-harness-verify-json",
             "carrierId": SOURCE_CARRIER_ID,
@@ -139,9 +181,20 @@ def raw_transition_observations() -> list[dict[str, object]]:
         },
         app_message(
             {
+                "method": "thread/goal/get",
+                "id": 10,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        goal_response(10, SOURCE_CARRIER_ID),
+        app_message(
+            {
                 "method": "thread/fork",
                 "id": 12,
-                "params": {"threadId": SOURCE_CARRIER_ID},
+                "params": {
+                    "threadId": SOURCE_CARRIER_ID,
+                    "deferGoalContinuation": True,
+                },
             }
         ),
         app_message(
@@ -167,6 +220,14 @@ def raw_transition_observations() -> list[dict[str, object]]:
                 },
             }
         ),
+        app_message(
+            {
+                "method": "thread/goal/get",
+                "id": 13,
+                "params": {"threadId": DESTINATION_CARRIER_ID},
+            }
+        ),
+        goal_response(13, DESTINATION_CARRIER_ID),
         {
             "source": "python--B--m-harness-verify-json",
             "carrierId": DESTINATION_CARRIER_ID,
@@ -216,10 +277,11 @@ def valid_registration_values() -> dict[str, object]:
                 "product/program.json",
                 "product/acceptance.json",
             ],
-            "goalBoundary": "current-v1.2-completion-expression-under-named-human-authority",
+            "goalBoundary": "registered-o4-controlled-carrier-goal-under-current-v1.2-acceptance",
+            "controlledGoalArtifact": validator.CARRIER_GOAL_BINDING,
             "carrierState": {
                 "repository": "single-main-checkout-clean-at-scenario-start",
-                "conversation": "same-goal-current-carrier-before-controlled-event",
+                "conversation": "native-active-goal-observed-before-and-after-each-controlled-carrier-event",
                 "capacitySignal": "reliable-risk-or-explicit-unknown-rule-only",
             },
         },
@@ -235,12 +297,18 @@ def valid_registration_values() -> dict[str, object]:
                 f"{validator.VALIDATOR_LOCATOR}:project_raw_carrier_observations"
             ),
             "codexSourceBinding": validator.CODEX_SOURCE_BINDING,
+            "controlledGoalArtifact": validator.CARRIER_GOAL_BINDING,
             "receiptOnlyAccepted": False,
         },
     }
 
 
 class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
+    def test_controlled_goal_artifact_matches_code_owned_binding(self) -> None:
+        raw = Path(validator.CARRIER_GOAL_LOCATOR).read_bytes()
+        self.assertEqual(validator.CARRIER_GOAL_TEXT.encode("utf-8"), raw)
+        self.assertEqual(validator.CARRIER_GOAL_SHA256, hashlib.sha256(raw).hexdigest())
+
     def test_six_acceptance_owned_scenarios_are_exact_and_distinct(self) -> None:
         self.assertEqual(6, len(validator.SCENARIO_IDENTITIES))
         self.assertEqual(6, len(set(validator.SCENARIO_IDENTITIES)))
@@ -280,9 +348,9 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             classes.index("source-carrier-released"),
         )
         reordered = transition_events()
-        reordered[3], reordered[6] = reordered[6], reordered[3]
-        reordered[3]["ordinal"] = 3
-        reordered[6]["ordinal"] = 6
+        reordered[5], reordered[8] = reordered[8], reordered[5]
+        reordered[5]["ordinal"] = 5
+        reordered[8]["ordinal"] = 8
         with self.assertRaisesRegex(ValueError, "chronology"):
             validator.project_carrier_events(
                 validator.CARRIER_SCENARIO_IDENTITIES[1], reordered
@@ -325,7 +393,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
         )
 
         mismatched_item = raw_compaction_observations()
-        mismatched_item[3]["message"]["params"]["item"]["id"] = "item_01000002"
+        mismatched_item[5]["message"]["params"]["item"]["id"] = "item_01000002"
         with self.assertRaisesRegex(ValueError, "identities"):
             validator.project_raw_carrier_observations(
                 validator.CARRIER_SCENARIO_IDENTITIES[0],
@@ -335,7 +403,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             )
 
         mismatched_response = raw_compaction_observations()
-        mismatched_response[1]["message"]["id"] = 8
+        mismatched_response[3]["message"]["id"] = 8
         with self.assertRaisesRegex(ValueError, "response"):
             validator.project_raw_carrier_observations(
                 validator.CARRIER_SCENARIO_IDENTITIES[0],
@@ -362,7 +430,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
         )
 
         cross_thread = raw_transition_observations()
-        cross_thread[2]["message"]["result"]["thread"][
+        cross_thread[4]["message"]["result"]["thread"][
             "forkedFromId"
         ] = "thread_01different999"
         with self.assertRaisesRegex(ValueError, "source carrier"):
@@ -375,11 +443,44 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             )
 
         partial_history = raw_transition_observations()
-        partial_history[1]["message"]["params"]["beforeTurnId"] = "turn_01000001"
+        partial_history[3]["message"]["params"]["beforeTurnId"] = "turn_01000001"
         with self.assertRaisesRegex(ValueError, "request"):
             validator.project_raw_carrier_observations(
                 validator.CARRIER_SCENARIO_IDENTITIES[1],
                 partial_history,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        no_goal = raw_transition_observations()
+        no_goal[2]["message"]["result"]["goal"] = None
+        with self.assertRaisesRegex(ValueError, "registered active goal"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                no_goal,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        changed_goal = raw_transition_observations()
+        changed_goal[7]["message"]["result"]["goal"]["objective"] = "different goal"
+        with self.assertRaisesRegex(ValueError, "registered active goal"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                changed_goal,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        no_deferred_goal = raw_transition_observations()
+        del no_deferred_goal[3]["message"]["params"]["deferGoalContinuation"]
+        with self.assertRaisesRegex(ValueError, "deferred-goal"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                no_deferred_goal,
                 source_carrier_id=SOURCE_CARRIER_ID,
                 destination_carrier_id=DESTINATION_CARRIER_ID,
                 expected_head=SOURCE_REVISION,
@@ -394,7 +495,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 expected_head=SOURCE_REVISION,
             )
         reordered = raw_transition_observations()
-        reordered[3], reordered[6] = reordered[6], reordered[3]
+        reordered[5], reordered[10] = reordered[10], reordered[5]
         with self.assertRaises(ValueError):
             validator.project_raw_carrier_observations(
                 validator.CARRIER_SCENARIO_IDENTITIES[1],
@@ -508,22 +609,24 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             },
         }
         errors: list[str] = []
-        self.assertTrue(
-            validator.validate_registration(
-                registration, increment, ("O4",), Path("."), errors
-            ),
-            errors,
-        )
+        with patch.object(validator, "_goal_artifact_committed", return_value=True):
+            self.assertTrue(
+                validator.validate_registration(
+                    registration, increment, ("O4",), Path("."), errors
+                ),
+                errors,
+            )
         receipt = deepcopy(registration)
         receipt["preRegistrationValues"]["scenarioValidator"][
             "receiptOnlyAccepted"
         ] = True
         errors = []
-        self.assertFalse(
-            validator.validate_registration(
-                receipt, increment, ("O4",), Path("."), errors
+        with patch.object(validator, "_goal_artifact_committed", return_value=True):
+            self.assertFalse(
+                validator.validate_registration(
+                    receipt, increment, ("O4",), Path("."), errors
+                )
             )
-        )
         self.assertIn(
             "O4 correction suite validator and projection binding is invalid", errors
         )

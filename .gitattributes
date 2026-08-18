@@ -1,4 +1,5 @@
 * text=auto
+.gitattributes text eol=lf
 *.md text eol=lf
 *.json text eol=lf
 *.py text eol=lf
@@ -7,3 +8,4 @@
 *.sh text eol=lf
 *.allowed_signers text eol=lf
 product/evidence/o2-codex-reference-artifacts/*.txt text eol=lf
+product/evidence/o4-continuous-self-correction-artifacts/*.txt text eol=lf
