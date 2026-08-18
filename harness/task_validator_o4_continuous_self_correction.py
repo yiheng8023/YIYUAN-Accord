@@ -197,7 +197,8 @@ PRIVATE_KEY_NAMES = {
     "auth",
 }
 PRIVATE_TEXT_PATTERNS = (
-    re.compile(r"(?i)(?:[a-z]:[\\/]|\\\\[^\\]+\\|/(?:users|home|private/var/folders|tmp)/)"),
+    re.compile(r"(?i)(?<![a-z0-9])[a-z]:[\\/]"),
+    re.compile(r"(?i)(?:\\\\[^\\]+\\|/(?:users|home|private/var/folders|tmp)/)"),
     re.compile(r"(?i)codex://threads/"),
     re.compile(
         r"(?i)(?:thread|session|turn|message|event|msg)[_:-]"
@@ -288,6 +289,11 @@ TRANSITION_EVENT_SEQUENCE = (
 
 FaultExecutor = Callable[[Path, str, FaultScenario], dict[str, Any]]
 
+MAX_JSON_DEPTH = 32
+MAX_JSON_NODES = 10_000
+MAX_CONTAINER_ITEMS = 256
+MAX_STRING_CHARACTERS = 262_144
+
 
 def _error(errors: list[str], message: str) -> None:
     errors.append(message)
@@ -301,6 +307,38 @@ def _canonical_sha256(value: Any) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
+
+
+def _json_within_limits(value: Any) -> bool:
+    nodes = 0
+    seen_containers: set[int] = set()
+    stack: list[tuple[Any, int]] = [(value, 1)]
+    while stack:
+        current, depth = stack.pop()
+        nodes += 1
+        if nodes > MAX_JSON_NODES or depth > MAX_JSON_DEPTH:
+            return False
+        if isinstance(current, str):
+            if len(current) > MAX_STRING_CHARACTERS:
+                return False
+        elif isinstance(current, dict):
+            identity = id(current)
+            if identity in seen_containers or len(current) > MAX_CONTAINER_ITEMS:
+                return False
+            seen_containers.add(identity)
+            for key, item in current.items():
+                if not isinstance(key, str) or len(key) > MAX_STRING_CHARACTERS:
+                    return False
+                stack.append((item, depth + 1))
+        elif isinstance(current, list):
+            identity = id(current)
+            if identity in seen_containers or len(current) > MAX_CONTAINER_ITEMS:
+                return False
+            seen_containers.add(identity)
+            stack.extend((item, depth + 1) for item in current)
+        elif current is not None and type(current) not in {bool, int, float}:
+            return False
+    return True
 
 
 def _strict_json_object(raw: bytes) -> dict[str, Any]:
@@ -322,7 +360,7 @@ def _strict_json_object(raw: bytes) -> dict[str, Any]:
             ValueError("non-finite JSON value")
         ),
     )
-    if not isinstance(value, dict):
+    if not isinstance(value, dict) or not _json_within_limits(value):
         raise ValueError("JSON value must be an object")
     return value
 
@@ -608,6 +646,340 @@ def run_fault_suite(
     }
 
 
+def _app_server_record(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict) or set(value) != {"source", "message"}:
+        raise ValueError("raw App Server observation envelope is invalid")
+    if value.get("source") != "codex-app-server-json-rpc-v0.147.0":
+        raise ValueError("raw App Server source identity is invalid")
+    message = value.get("message")
+    if not isinstance(message, dict) or not _json_within_limits(message):
+        raise ValueError("raw App Server message is invalid")
+    try:
+        raw = json.dumps(
+            message,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
+    except (RecursionError, TypeError, ValueError) as exc:
+        raise ValueError("raw App Server message is not finite JSON") from exc
+    if len(raw) > 262_144:
+        raise ValueError("raw App Server message exceeds byte limit")
+    return message
+
+
+def _request_observed(value: Any, *, method: str, carrier_id: str) -> int:
+    message = _app_server_record(value)
+    params = message.get("params")
+    request_id = message.get("id")
+    if (
+        message.get("method") != method
+        or type(request_id) is not int
+        or request_id < 0
+        or not isinstance(params, dict)
+        or set(params) != {"threadId"}
+        or params.get("threadId") != carrier_id
+    ):
+        raise ValueError("raw App Server request is invalid")
+    return request_id
+
+
+def _empty_response_observed(value: Any, *, request_id: int) -> None:
+    message = _app_server_record(value)
+    if (
+        set(message) != {"id", "result"}
+        or message.get("id") != request_id
+        or message.get("result") != {}
+    ):
+        raise ValueError("raw App Server response is invalid")
+
+
+def _app_item_observed(
+    value: Any,
+    *,
+    method: str,
+    carrier_id: str,
+) -> tuple[str, str]:
+    message = _app_server_record(value)
+    params = message.get("params")
+    item = params.get("item") if isinstance(params, dict) else None
+    turn_id = params.get("turnId") if isinstance(params, dict) else None
+    if (
+        message.get("method") != method
+        or not isinstance(params, dict)
+        or params.get("threadId") != carrier_id
+        or not isinstance(item, dict)
+        or item.get("type") != "contextCompaction"
+        or not isinstance(turn_id, str)
+        or not turn_id
+        or not isinstance(item.get("id"), str)
+        or not item["id"]
+    ):
+        raise ValueError("raw compaction event is invalid")
+    return turn_id, item["id"]
+
+
+def _fork_response_observed(
+    value: Any,
+    *,
+    request_id: int,
+    source_carrier_id: str,
+    destination_carrier_id: str,
+) -> None:
+    message = _app_server_record(value)
+    result = message.get("result")
+    thread = result.get("thread") if isinstance(result, dict) else None
+    if (
+        message.get("id") != request_id
+        or "error" in message
+        or not isinstance(thread, dict)
+        or thread.get("id") != destination_carrier_id
+        or thread.get("forkedFromId") != source_carrier_id
+    ):
+        raise ValueError("raw fork response is not bound to the source carrier")
+
+
+def _destination_started_observed(
+    value: Any,
+    *,
+    source_carrier_id: str,
+    destination_carrier_id: str,
+) -> None:
+    message = _app_server_record(value)
+    params = message.get("params")
+    thread = params.get("thread") if isinstance(params, dict) else None
+    if (
+        message.get("method") != "thread/started"
+        or not isinstance(thread, dict)
+        or thread.get("id") != destination_carrier_id
+        or thread.get("forkedFromId") != source_carrier_id
+    ):
+        raise ValueError("raw destination start is not bound to the source carrier")
+
+
+def _canonical_verifier_observed(value: Any, *, carrier_id: str) -> None:
+    if not isinstance(value, dict) or set(value) != {
+        "source",
+        "carrierId",
+        "report",
+    }:
+        raise ValueError("raw canonical verifier observation envelope is invalid")
+    report = value.get("report")
+    states = report.get("criterionStates") if isinstance(report, dict) else None
+    if (
+        value.get("source") != "python--B--m-harness-verify-json"
+        or value.get("carrierId") != carrier_id
+        or not isinstance(report, dict)
+        or report.get("valid") is not True
+        or report.get("programStatus") != "active"
+        or report.get("completionState") != "in-progress"
+        or report.get("activeIncrement") != INCREMENT_ID
+        or report.get("errors") != []
+        or not isinstance(states, dict)
+        or any(states.get(item) is not True for item in ("G1", "G2", "G3", "G4"))
+        or states.get("O4") is not False
+    ):
+        raise ValueError("raw canonical verifier observation is invalid")
+
+
+def _git_observed(value: Any, *, carrier_id: str, expected_head: str) -> None:
+    if not isinstance(value, dict) or set(value) != {
+        "source",
+        "carrierId",
+        "head",
+        "expectedHead",
+        "statusPorcelainV1",
+    }:
+        raise ValueError("raw Git observation envelope is invalid")
+    if (
+        value.get("source") != "git-rev-parse-and-status-v1"
+        or value.get("carrierId") != carrier_id
+        or value.get("head") != expected_head
+        or value.get("expectedHead") != expected_head
+        or value.get("statusPorcelainV1") != ""
+        or re.fullmatch(r"[0-9a-f]{40}", expected_head) is None
+    ):
+        raise ValueError("raw Git observation does not match the registered head")
+
+
+def _carrier_fitness_observed(value: Any, *, source_carrier_id: str) -> None:
+    if not isinstance(value, dict) or set(value) != {
+        "source",
+        "carrierId",
+        "remainingCapacityState",
+        "ruleIdentity",
+        "materialCheckpointCount",
+        "transitionTriggered",
+    }:
+        raise ValueError("raw carrier-fitness observation envelope is invalid")
+    count = value.get("materialCheckpointCount")
+    if (
+        value.get("source") != "task-bound-carrier-fitness-observer-v1"
+        or value.get("carrierId") != source_carrier_id
+        or value.get("remainingCapacityState") not in {"reliable-risk", "unknown"}
+        or value.get("ruleIdentity")
+        != TRANSITION_AND_CLEANUP_BOUNDARY["unknownCapacityRule"]
+        or type(count) is not int
+        or count < 0
+        or value.get("transitionTriggered") is not True
+    ):
+        raise ValueError("raw carrier-fitness observation did not trigger the bound rule")
+
+
+def _source_release_preflight_observed(value: Any, *, source_carrier_id: str) -> None:
+    if not isinstance(value, dict) or set(value) != {
+        "source",
+        "carrierId",
+        "report",
+    }:
+        raise ValueError("raw source-release preflight envelope is invalid")
+    report = value.get("report")
+    if (
+        value.get("source") != "harness-source-carrier-release-preflight-v1"
+        or value.get("carrierId") != source_carrier_id
+        or not isinstance(report, dict)
+        or report.get("allowed") is not True
+        or report.get("state") != "release-eligible"
+    ):
+        raise ValueError("raw source-release preflight is not release eligible")
+
+
+def _source_archived_observed(value: Any, *, source_carrier_id: str) -> None:
+    message = _app_server_record(value)
+    params = message.get("params")
+    if (
+        message.get("method") != "thread/archived"
+        or not isinstance(params, dict)
+        or params.get("threadId") != source_carrier_id
+    ):
+        raise ValueError("raw source carrier archive notification is invalid")
+
+
+def project_raw_carrier_observations(
+    scenario_identity: str,
+    raw_observations: list[dict[str, Any]],
+    *,
+    source_carrier_id: str,
+    expected_head: str,
+    destination_carrier_id: str | None = None,
+) -> dict[str, Any]:
+    """Derive the public sequence from raw host and repository observations.
+
+    Private carrier and item identifiers are used only for in-memory relation
+    checks.  They are never copied into the returned projection.
+    """
+
+    if not isinstance(source_carrier_id, str) or not source_carrier_id:
+        raise ValueError("source carrier identity is invalid")
+    if scenario_identity == CARRIER_SCENARIO_IDENTITIES[0]:
+        if destination_carrier_id is not None or len(raw_observations) != 6:
+            raise ValueError("raw compaction observation count is invalid")
+        request_id = _request_observed(
+            raw_observations[0],
+            method="thread/compact/start",
+            carrier_id=source_carrier_id,
+        )
+        _empty_response_observed(raw_observations[1], request_id=request_id)
+        started = _app_item_observed(
+            raw_observations[2],
+            method="item/started",
+            carrier_id=source_carrier_id,
+        )
+        completed = _app_item_observed(
+            raw_observations[3],
+            method="item/completed",
+            carrier_id=source_carrier_id,
+        )
+        if completed != started:
+            raise ValueError("raw compaction lifecycle identities do not match")
+        _canonical_verifier_observed(
+            raw_observations[4], carrier_id=source_carrier_id
+        )
+        _git_observed(
+            raw_observations[5],
+            carrier_id=source_carrier_id,
+            expected_head=expected_head,
+        )
+        normalized = [
+            {
+                "ordinal": ordinal,
+                "sourceClass": source_class,
+                "eventClass": event_class,
+                "carrierRole": carrier_role,
+                "state": state,
+            }
+            for ordinal, (source_class, event_class, carrier_role, state) in enumerate(
+                COMPACTION_EVENT_SEQUENCE
+            )
+        ]
+    elif scenario_identity == CARRIER_SCENARIO_IDENTITIES[1]:
+        if (
+            not isinstance(destination_carrier_id, str)
+            or not destination_carrier_id
+            or destination_carrier_id == source_carrier_id
+            or len(raw_observations) != 10
+        ):
+            raise ValueError("raw transition carrier identities or count are invalid")
+        _carrier_fitness_observed(
+            raw_observations[0], source_carrier_id=source_carrier_id
+        )
+        fork_request_id = _request_observed(
+            raw_observations[1],
+            method="thread/fork",
+            carrier_id=source_carrier_id,
+        )
+        _fork_response_observed(
+            raw_observations[2],
+            request_id=fork_request_id,
+            source_carrier_id=source_carrier_id,
+            destination_carrier_id=destination_carrier_id,
+        )
+        _destination_started_observed(
+            raw_observations[3],
+            source_carrier_id=source_carrier_id,
+            destination_carrier_id=destination_carrier_id,
+        )
+        _canonical_verifier_observed(
+            raw_observations[4], carrier_id=destination_carrier_id
+        )
+        _git_observed(
+            raw_observations[5],
+            carrier_id=destination_carrier_id,
+            expected_head=expected_head,
+        )
+        _source_release_preflight_observed(
+            raw_observations[6], source_carrier_id=source_carrier_id
+        )
+        archive_request_id = _request_observed(
+            raw_observations[7],
+            method="thread/archive",
+            carrier_id=source_carrier_id,
+        )
+        _empty_response_observed(raw_observations[8], request_id=archive_request_id)
+        _source_archived_observed(
+            raw_observations[9], source_carrier_id=source_carrier_id
+        )
+        normalized = [
+            {
+                "ordinal": ordinal,
+                "sourceClass": source_class,
+                "eventClass": event_class,
+                "carrierRole": carrier_role,
+                "state": state,
+            }
+            for ordinal, (source_class, event_class, carrier_role, state) in enumerate(
+                TRANSITION_EVENT_SEQUENCE
+            )
+        ]
+    else:
+        raise ValueError("unsupported O4 raw carrier scenario")
+    projection = project_carrier_events(scenario_identity, normalized)
+    if _contains_private_value(projection):
+        raise ValueError("raw carrier projection retained private material")
+    return projection
+
+
 def project_carrier_events(
     scenario_identity: str,
     source_events: list[dict[str, Any]],
@@ -702,7 +1074,9 @@ def _scenario_validator_binding_valid(value: Any) -> bool:
         "scenarioIdentities": list(SCENARIO_IDENTITIES),
         "validatorIdentity": VALIDATOR_KIND,
         "validatorLocator": VALIDATOR_LOCATOR,
-        "hostProjectionBuilder": f"{VALIDATOR_LOCATOR}:project_carrier_events",
+        "hostProjectionBuilder": (
+            f"{VALIDATOR_LOCATOR}:project_raw_carrier_observations"
+        ),
         "codexSourceBinding": CODEX_SOURCE_BINDING,
         "receiptOnlyAccepted": False,
     }
@@ -878,6 +1252,7 @@ __all__ = [
     "VALIDATOR_KIND",
     "VALIDATOR_LOCATOR",
     "project_carrier_events",
+    "project_raw_carrier_observations",
     "run_fault_suite",
     "validate_evidence",
     "validate_registration",

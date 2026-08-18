@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,6 +11,8 @@ from harness import task_validator_o4_continuous_self_correction as validator
 
 
 SOURCE_REVISION = "a" * 40
+SOURCE_CARRIER_ID = "thread_01source123456"
+DESTINATION_CARRIER_ID = "thread_01destination789"
 
 
 def event(
@@ -49,6 +52,155 @@ def transition_events() -> list[dict[str, object]]:
     ]
 
 
+def canonical_report() -> dict[str, object]:
+    return {
+        "valid": True,
+        "programStatus": "active",
+        "completionState": "in-progress",
+        "activeIncrement": validator.INCREMENT_ID,
+        "criterionStates": {
+            "O1": True,
+            "O2": False,
+            "O3": False,
+            "O4": False,
+            "O5": False,
+            "G1": True,
+            "G2": True,
+            "G3": True,
+            "G4": True,
+        },
+        "errors": [],
+    }
+
+
+def app_message(message: dict[str, object]) -> dict[str, object]:
+    return {
+        "source": "codex-app-server-json-rpc-v0.147.0",
+        "message": message,
+    }
+
+
+def raw_compaction_observations() -> list[dict[str, object]]:
+    return [
+        app_message(
+            {
+                "method": "thread/compact/start",
+                "id": 7,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        app_message({"id": 7, "result": {}}),
+        app_message(
+            {
+                "method": "item/started",
+                "params": {
+                    "threadId": SOURCE_CARRIER_ID,
+                    "turnId": "turn_01000001",
+                    "item": {"type": "contextCompaction", "id": "item_01000001"},
+                },
+            }
+        ),
+        app_message(
+            {
+                "method": "item/completed",
+                "params": {
+                    "threadId": SOURCE_CARRIER_ID,
+                    "turnId": "turn_01000001",
+                    "item": {"type": "contextCompaction", "id": "item_01000001"},
+                },
+            }
+        ),
+        {
+            "source": "python--B--m-harness-verify-json",
+            "carrierId": SOURCE_CARRIER_ID,
+            "report": canonical_report(),
+        },
+        {
+            "source": "git-rev-parse-and-status-v1",
+            "carrierId": SOURCE_CARRIER_ID,
+            "head": SOURCE_REVISION,
+            "expectedHead": SOURCE_REVISION,
+            "statusPorcelainV1": "",
+        },
+    ]
+
+
+def raw_transition_observations() -> list[dict[str, object]]:
+    return [
+        {
+            "source": "task-bound-carrier-fitness-observer-v1",
+            "carrierId": SOURCE_CARRIER_ID,
+            "remainingCapacityState": "unknown",
+            "ruleIdentity": validator.TRANSITION_AND_CLEANUP_BOUNDARY[
+                "unknownCapacityRule"
+            ],
+            "materialCheckpointCount": 7,
+            "transitionTriggered": True,
+        },
+        app_message(
+            {
+                "method": "thread/fork",
+                "id": 12,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        app_message(
+            {
+                "id": 12,
+                "result": {
+                    "thread": {
+                        "id": DESTINATION_CARRIER_ID,
+                        "forkedFromId": SOURCE_CARRIER_ID,
+                        "cwd": "C:\\private\\discarded",
+                    }
+                },
+            }
+        ),
+        app_message(
+            {
+                "method": "thread/started",
+                "params": {
+                    "thread": {
+                        "id": DESTINATION_CARRIER_ID,
+                        "forkedFromId": SOURCE_CARRIER_ID,
+                    }
+                },
+            }
+        ),
+        {
+            "source": "python--B--m-harness-verify-json",
+            "carrierId": DESTINATION_CARRIER_ID,
+            "report": canonical_report(),
+        },
+        {
+            "source": "git-rev-parse-and-status-v1",
+            "carrierId": DESTINATION_CARRIER_ID,
+            "head": SOURCE_REVISION,
+            "expectedHead": SOURCE_REVISION,
+            "statusPorcelainV1": "",
+        },
+        {
+            "source": "harness-source-carrier-release-preflight-v1",
+            "carrierId": SOURCE_CARRIER_ID,
+            "report": {"allowed": True, "state": "release-eligible"},
+        },
+        app_message(
+            {
+                "method": "thread/archive",
+                "id": 21,
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+        app_message({"id": 21, "result": {}}),
+        app_message(
+            {
+                "method": "thread/archived",
+                "params": {"threadId": SOURCE_CARRIER_ID},
+            }
+        ),
+    ]
+
+
 def valid_registration_values() -> dict[str, object]:
     return {
         "normativeProfileIdentity": "bound-by-core",
@@ -80,7 +232,7 @@ def valid_registration_values() -> dict[str, object]:
             "validatorIdentity": validator.VALIDATOR_KIND,
             "validatorLocator": validator.VALIDATOR_LOCATOR,
             "hostProjectionBuilder": (
-                f"{validator.VALIDATOR_LOCATOR}:project_carrier_events"
+                f"{validator.VALIDATOR_LOCATOR}:project_raw_carrier_observations"
             ),
             "codexSourceBinding": validator.CODEX_SOURCE_BINDING,
             "receiptOnlyAccepted": False,
@@ -150,6 +302,108 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 validator.CARRIER_SCENARIO_IDENTITIES[0], private_id
             )
 
+    def test_privacy_scan_does_not_treat_https_url_as_windows_drive_path(self) -> None:
+        self.assertFalse(
+            validator._contains_private_value("https://github.com/openai/codex")
+        )
+        self.assertTrue(validator._contains_private_value("C:/Users/person/source"))
+
+    def test_raw_compaction_projection_derives_events_and_discards_identifiers(self) -> None:
+        projection = validator.project_raw_carrier_observations(
+            validator.CARRIER_SCENARIO_IDENTITIES[0],
+            raw_compaction_observations(),
+            source_carrier_id=SOURCE_CARRIER_ID,
+            expected_head=SOURCE_REVISION,
+        )
+        serialized = json.dumps(projection, sort_keys=True)
+        self.assertNotIn(SOURCE_CARRIER_ID, serialized)
+        self.assertNotIn("turn_01000001", serialized)
+        self.assertNotIn("item_01000001", serialized)
+        self.assertEqual(
+            [item["eventClass"] for item in projection["eventSequence"]],
+            [item[1] for item in validator.COMPACTION_EVENT_SEQUENCE],
+        )
+
+        mismatched_item = raw_compaction_observations()
+        mismatched_item[3]["message"]["params"]["item"]["id"] = "item_01000002"
+        with self.assertRaisesRegex(ValueError, "identities"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[0],
+                mismatched_item,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        mismatched_response = raw_compaction_observations()
+        mismatched_response[1]["message"]["id"] = 8
+        with self.assertRaisesRegex(ValueError, "response"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[0],
+                mismatched_response,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+    def test_raw_transition_binds_fork_destination_and_release_order(self) -> None:
+        projection = validator.project_raw_carrier_observations(
+            validator.CARRIER_SCENARIO_IDENTITIES[1],
+            raw_transition_observations(),
+            source_carrier_id=SOURCE_CARRIER_ID,
+            destination_carrier_id=DESTINATION_CARRIER_ID,
+            expected_head=SOURCE_REVISION,
+        )
+        serialized = json.dumps(projection, sort_keys=True)
+        self.assertNotIn(SOURCE_CARRIER_ID, serialized)
+        self.assertNotIn(DESTINATION_CARRIER_ID, serialized)
+        self.assertNotIn("C:\\\\private", serialized)
+        self.assertEqual(
+            "source-carrier-released",
+            projection["eventSequence"][-1]["eventClass"],
+        )
+
+        cross_thread = raw_transition_observations()
+        cross_thread[2]["message"]["result"]["thread"][
+            "forkedFromId"
+        ] = "thread_01different999"
+        with self.assertRaisesRegex(ValueError, "source carrier"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                cross_thread,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+        partial_history = raw_transition_observations()
+        partial_history[1]["message"]["params"]["beforeTurnId"] = "turn_01000001"
+        with self.assertRaisesRegex(ValueError, "request"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                partial_history,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
+    def test_raw_projector_rejects_normalized_receipt_and_reordered_release(self) -> None:
+        with self.assertRaisesRegex(ValueError, "count|envelope"):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[0],
+                compaction_events(),
+                source_carrier_id=SOURCE_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+        reordered = raw_transition_observations()
+        reordered[3], reordered[6] = reordered[6], reordered[3]
+        with self.assertRaises(ValueError):
+            validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                reordered,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+            )
+
     def test_projection_pressure_is_deterministic_and_fail_closed(self) -> None:
         expected_compaction = validator.project_carrier_events(
             validator.CARRIER_SCENARIO_IDENTITIES[0], compaction_events()
@@ -159,11 +413,18 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
         )["eventShapeSha256"]
 
         def one_cycle(index: int) -> tuple[str, str, bool, bool]:
-            compaction = validator.project_carrier_events(
-                validator.CARRIER_SCENARIO_IDENTITIES[0], compaction_events()
+            compaction = validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[0],
+                raw_compaction_observations(),
+                source_carrier_id=SOURCE_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
             )["eventShapeSha256"]
-            transition = validator.project_carrier_events(
-                validator.CARRIER_SCENARIO_IDENTITIES[1], transition_events()
+            transition = validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                raw_transition_observations(),
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
             )["eventShapeSha256"]
             private = compaction_events()
             private[0]["state"] = f"session_{index:08d}"
@@ -296,6 +557,17 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 validator._strict_json_object(duplicate.read_bytes())
             with self.assertRaisesRegex(ValueError, "non-finite"):
                 validator._strict_json_object(b'{"schema":NaN}')
+
+        nested: dict[str, object] = {"leaf": True}
+        for _ in range(validator.MAX_JSON_DEPTH + 1):
+            nested = {"next": nested}
+        with self.assertRaisesRegex(ValueError, "message"):
+            validator._app_server_record(app_message(nested))
+
+        cyclic: dict[str, object] = {}
+        cyclic["self"] = cyclic
+        with self.assertRaisesRegex(ValueError, "message"):
+            validator._app_server_record(app_message(cyclic))
 
 
 if __name__ == "__main__":

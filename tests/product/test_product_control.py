@@ -1387,6 +1387,10 @@ class ProductControlTests(unittest.TestCase):
             "increment.v12-o4-validation-seam",
             {item["id"] for item in live_program["increments"]},
         )
+        self.assertNotIn(
+            "increment.v12-o4-host-source-binding-repair",
+            {item["id"] for item in live_program["increments"]},
+        )
         stopped = json.loads(
             (
                 ROOT
