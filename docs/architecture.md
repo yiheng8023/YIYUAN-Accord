@@ -69,13 +69,15 @@ measures, validator, evidence class, and human authority independently pass.
 
 The current v1.2 program is `ready` after completing
 `increment.v12-o1-lifecycle-suite` and stopping both registered O2 attempts on
-live counterevidence. Four bounded outcome-neutral slices committed the
+live counterevidence. Five bounded outcome-neutral slices committed the
 O4-specific validator, bound its public-safe projection to raw Codex host and
-repository observations, and required one exact public controlled goal to
-remain active across native compaction and a full-history deferred-goal fork
-before later registration. They also require native source-goal clearing before
-source archive so a stale active goal cannot re-enter the mainline, then exit
-the graph. None performs O4 measurement or earns outcome credit.
+repository observations, and made the registered carrier route reachable. One
+exact public controlled goal must remain active across native compaction and a
+fresh zero-inherited-turn same-goal thread. Destination goal, authority, Git,
+and work state must be verified before native source-goal clearing and source
+archive, so a stale active goal cannot re-enter the mainline. Full-history fork
+is an optional topology branch rather than a context-load transition. None of
+the slices performs O4 measurement or earns outcome credit.
 The second O2 attempt used Codex
 0.147.0's official built-in
 `:workspace` profile without legacy sandbox composition. Its fixed 32-cycle
@@ -370,9 +372,19 @@ size and risk of the remaining work to decide whether the current carrier is
 still safe. A missing reliable host signal remains `unknown` and activates the
 task's conservative pre-declared transition rule; it cannot be treated as
 proof that unlimited continuation is safe. No universal token threshold,
-transcript monitor, Hook, or new task is mandated. O1 can calibrate only the
-exact signals, transition, and task it observes. Repeated reliability and
-cross-host portability remain separate O2-O5 burdens.
+transcript monitor, Hook, or new task is mandated. When the host exposes the
+source, the Agent distinguishes automatic and manual compaction counts and
+relates them to material checkpoints since the last verified transition; the
+task registration binds the applicable trigger rather than turning one
+observed cadence into a Codex-wide default.
+
+A compacted summary or handoff prompt is an untrusted lossy carrier, not the
+truth source. The destination re-derives and verifies the bound goal, current
+authority, causal delta, Git state, completed and pending checks, retained
+human gates, effects and cleanup from their upstream identities. Only that
+handshake permits source release. O4 controlled evidence can calibrate only the
+exact signals, transition and task it observes. Repeated reliability and
+cross-host portability remain separate later burdens.
 
 ### Task topology is a lifecycle, not a user prerequisite
 
@@ -383,6 +395,13 @@ An isolated carrier is justified only by a source-bound need for parallelism,
 isolation, host capacity, or a distinct authority boundary; a routine phase
 change or context growth is not enough.
 
+The primitive must match that cause. A branch represents a logical code delta;
+a worktree provides a concurrently usable isolated filesystem checkout; a
+repository fork crosses an ownership or trust topology; a copied-history
+conversation fork preserves a genuine line of inquiry; and a fresh task carries
+the same goal into a lower-load conversation without copying the source
+transcript. None is interchangeable merely because the host exposes it.
+
 When a split is necessary, the Agent binds the canonical goal and authority,
 carrier identity and owner, synchronization point, merge or conclusion-
 reconciliation route, archive or release condition, and cleanup boundary. It
@@ -391,6 +410,14 @@ goal divergence and new trust, data, cost, destructive, irreversible, release,
 or publication decisions; the user does not decide whether to continue, fork,
 open a new task, merge, archive, or clean when that route is safely discoverable
 inside existing authority.
+
+Creation is only the opening transition. Before closeout, each task-owned
+branch, worktree, repository fork, conversation fork, and fresh task is merged
+or conclusion-reconciled, explicitly abandoned when that is the registered
+result, released or archived, and removed with its metadata and temporary
+resources. Persistence requires a continuing causal need, named ownership, and
+an explicit later release condition; an orphaned carrier is a product failure,
+not a user cleanup instruction.
 
 Destination verification and source release are separate checks. A source
 conversation may still hold source-native bytes required to re-verify a frozen
@@ -662,17 +689,20 @@ The earlier carrier Hook was feasible as a thin host projection, but it is not
 the current candidate. Codex 0.147.0 exposed native `PreCompact`, `PostCompact`,
 `SessionStart`, and `SessionEnd` events with a session identity; compact events
 identify automatic versus manual compaction, plugin Hooks receive a stable
-installed-package root and writable plugin-data root, and the host exposes a
-same-directory thread-fork primitive. These are separate seams and must remain
-separate in the adapter:
+installed-package root and writable plugin-data root, and the host exposes
+fresh-thread, thread-goal, and copied-history fork primitives. These are
+separate seams and must remain separate in the adapter:
 
 - a trusted Hook may observe lifecycle events, maintain only bounded
   session-keyed carrier-risk state, inject the frozen profile and an explicit
   remaining-capacity `unknown` state, and remove its state at session end;
-- the Agent, not the Hook, decides at the predeclared material checkpoint and
-  uses the host-native fork surface to create the destination, continue it,
-  verify recovered goal, authority, Git and work state, and only then archive
-  or release the source;
+- the Agent, not the Hook, decides at the predeclared material checkpoint. It
+  uses native compaction when that remains sufficient; for context-load relief,
+  it starts a fresh persistent thread with zero inherited turns, installs the
+  exact content-addressed goal, verifies recovered authority, Git and work
+  state, and only then clears and archives the source;
+- a full-history fork may isolate a genuine topology branch, but because it
+  copies stored history it cannot be counted as context-load relief;
 - the packaged profile and adapter are trusted installed bytes. An arbitrary
   task repository is untrusted task input, not the source of adapter code or
   product authority, and the adapter must work outside a Harness-shaped
@@ -681,24 +711,28 @@ separate in the adapter:
   app-managed runtime. It must not resolve `python`, `git`, or other executable
   names through an untrusted session working directory, and task-repository
   observation must not execute repository-controlled Git configuration;
-- Hook failure, missing native fork exposure, state overflow, malformed input,
-  or unavailable verification fails closed to an explicit stopped route. It
+- Hook failure, missing required native transition exposure, state overflow,
+  malformed input, or unavailable verification fails closed to an explicit
+  stopped route. It
   cannot silently treat continuation as safe or transfer topology work to the
   user.
 
-The CLI `codex fork` and App Server `thread/fork` API corroborate the native
-host primitive, but Harness does not embed, proxy, or reimplement App Server
-and does not make a Hook launch a second Codex client. The current Codex app
-tool contract additionally proves that an Agent can fork the calling thread in
-the same directory and that only completed history is copied; therefore the
-Agent must transmit and independently verify the active handoff delta before
-source release. The exact conservative risk threshold belongs in the new
-current program-frozen profile before measured work. This feasibility decision
-was mechanism-only: no Hook was accepted as current product behavior and no
-O1-O5 result follows. The current Skill-only candidate deliberately tests the
-smaller native-first route. If controlled compaction or same-goal transition
-scenarios falsify it, the residual design must be rebound to current official
-host facts and added no broader than the observed gap.
+The CLI `codex fork` and App Server `thread/fork` API corroborate a native
+copied-history branch primitive; App Server `thread/start` plus
+`thread/goal/set` provides the smaller fresh-destination handoff seam. Harness
+does not embed, proxy, or reimplement App Server and does not make a Hook launch
+a second Codex client. Compaction, fork, and fresh-thread handoff therefore
+have different evidence meanings: compact replaces live model history, fork
+preserves lineage and copied history, and only the zero-inherited-turn route
+tests context-load transition. In every case the Agent must independently
+verify the active goal, authority, Git and work state before source release.
+The exact conservative risk threshold belongs in the current program-frozen
+profile before measured work. This feasibility decision was mechanism-only:
+no Hook was accepted as current product behavior and no O1-O5 result follows.
+The current Skill-only candidate deliberately tests the smaller native-first
+route. If controlled compaction or same-goal transition scenarios falsify it,
+the residual design must be rebound to current official host facts and added no
+broader than the observed gap.
 
 Historically, an authorized user-layer Hook edit was present and trusted on disk but
 did not refresh the already-running task's Hook runtime before native

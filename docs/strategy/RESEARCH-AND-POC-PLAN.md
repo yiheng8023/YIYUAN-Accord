@@ -19,13 +19,15 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready, and O1-O5 are 1/5. Four bounded outcome-neutral slices committed
+v1.2 is ready, and O1-O5 are 1/5. Five bounded outcome-neutral slices committed
 the O4-specific validator, bound its public-safe projection directly to raw
-Codex host and repository observations, and required one exact public
-controlled goal to remain active across native compaction and a full-history
-deferred-goal fork before later registration. They also require the native
-source-goal clear lifecycle before source archive, then exit the graph. None
-performs O4 measurement or earns outcome credit. Its
+Codex host and repository observations, and made the registered carrier route
+reachable. One exact public controlled goal must remain active across native
+compaction and a fresh zero-inherited-turn same-goal thread. The destination
+must recover the goal and repository authority before native source-goal clear
+and source archive. Full-history fork remains an optional topology branch, not
+context-load relief. The slices then exit the graph; none performs O4
+measurement or earns outcome credit. Its
 candidate.2 profile binding is frozen without cohort activation. The completed
 O1 lifecycle suite is the only accepted outcome. A first preregistered O2 Codex
 attempt installed the exact candidate only in an isolated environment; the
@@ -425,7 +427,7 @@ task:
 | Source slice | Minimum sufficient resolution route in this product | Current v1.2 evidence state and claim boundary |
 | --- | --- | --- |
 | SG-01 intent/source/context | Reuse native intent understanding; apply goal, source, omission, authority, and compound-unit semantics only where the task exposes ambiguity | Contract specified; real-task outcome unverified |
-| SG-02 transition/continuity | Reuse native compaction, fork, handoff, task, and Git primitives; add only thin source-bound fitness and destination-verification projections | Mechanism candidates exist; proactive v1.2 behavior unverified |
+| SG-02 transition/continuity | Reuse native compaction, fresh-thread handoff, optional copied-history fork, task, and Git primitives; add only thin source-bound fitness and destination-verification projections | Mechanism candidates exist; proactive v1.2 behavior unverified |
 | SG-03 premise/risk challenge | Reuse native reasoning plus current source and accountable domain review; escalate or stop when competence or stakes exceed the available lane | No universal challenge algorithm; task behavior unverified |
 | SG-04 capability/routing | Preserve sufficient native tool, model, provider, reasoning-effort, delegation, and lifecycle routing; use official or maintained external capability next; author only for a reproducible residual semantic gap | O3 contract specified; no Harness model router; v1.2 outcome unverified |
 | SG-05 authority/reversibility | Reuse host sandbox, approval, credential, and transaction controls; Harness binds human decision rights, minimum guidance, rollback, revocation, and claim limits | Repository mechanism checks exist; real effects unverified |

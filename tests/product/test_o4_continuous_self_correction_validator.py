@@ -4,7 +4,10 @@ from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 import hashlib
 import json
+import os
 from pathlib import Path
+import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -15,6 +18,7 @@ from harness import task_validator_o4_continuous_self_correction as validator
 SOURCE_REVISION = "a" * 40
 SOURCE_CARRIER_ID = "thread_01source123456"
 DESTINATION_CARRIER_ID = "thread_01destination789"
+TEST_CWD = "C:\\private\\o4-controlled-checkout"
 
 
 def event(
@@ -48,14 +52,15 @@ def transition_events() -> list[dict[str, object]]:
     return [
         event(0, "carrier-fitness-observation", "capacity-risk-or-unknown-rule-triggered", "source", "transition-required"),
         event(1, "codex-app-server-response", "registered-source-goal-observed", "source", "active"),
-        event(2, "codex-app-server-response", "same-goal-fork-request-accepted", "destination", "created"),
+        event(2, "codex-app-server-response", "fresh-destination-thread-created-with-zero-inherited-turns", "destination", "created"),
         event(3, "codex-app-server-notification", "destination-thread-started", "destination", "observed"),
-        event(4, "codex-app-server-response", "registered-goal-preserved-in-destination", "destination", "active"),
-        event(5, "canonical-verifier-observation", "destination-authority-verified", "destination", "valid"),
-        event(6, "git-observation", "destination-head-reconciled", "destination", "matching"),
-        event(7, "harness-source-release-preflight", "source-release-allowed", "source", "allowed"),
-        event(8, "codex-app-server-notification", "source-goal-released", "source", "released"),
-        event(9, "codex-app-server-response", "source-carrier-released", "source", "released"),
+        event(4, "codex-app-server-notification", "registered-goal-installed-in-destination", "destination", "active"),
+        event(5, "codex-app-server-response", "registered-goal-observed-in-destination", "destination", "active"),
+        event(6, "canonical-verifier-observation", "destination-authority-verified", "destination", "valid"),
+        event(7, "git-observation", "destination-head-reconciled", "destination", "matching"),
+        event(8, "harness-source-release-preflight", "source-release-allowed", "source", "allowed"),
+        event(9, "codex-app-server-notification", "source-goal-released", "source", "released"),
+        event(10, "codex-app-server-response", "source-carrier-released", "source", "released"),
     ]
 
 
@@ -87,23 +92,22 @@ def app_message(message: dict[str, object]) -> dict[str, object]:
     }
 
 
+def goal_object(carrier_id: str) -> dict[str, object]:
+    return {
+        "threadId": carrier_id,
+        "objective": validator.CARRIER_GOAL_TEXT,
+        "status": "active",
+        "tokenBudget": None,
+        "tokensUsed": 123,
+        "timeUsedSeconds": 7,
+        "createdAt": 1_777_000_000,
+        "updatedAt": 1_777_000_007,
+    }
+
+
 def goal_response(request_id: int, carrier_id: str) -> dict[str, object]:
     return app_message(
-        {
-            "id": request_id,
-            "result": {
-                "goal": {
-                    "threadId": carrier_id,
-                    "objective": validator.CARRIER_GOAL_TEXT,
-                    "status": "active",
-                    "tokenBudget": None,
-                    "tokensUsed": 123,
-                    "timeUsedSeconds": 7,
-                    "createdAt": 1_777_000_000,
-                    "updatedAt": 1_777_000_007,
-                }
-            },
-        }
+        {"id": request_id, "result": {"goal": goal_object(carrier_id)}}
     )
 
 
@@ -177,7 +181,15 @@ def raw_transition_observations() -> list[dict[str, object]]:
             "ruleIdentity": validator.TRANSITION_AND_CLEANUP_BOUNDARY[
                 "unknownCapacityRule"
             ],
-            "materialCheckpointCount": 7,
+            "signalScope": validator.TRANSITION_AND_CLEANUP_BOUNDARY[
+                "carrierSignalScope"
+            ],
+            "compactionCountsSinceVerifiedTransition": {
+                "automatic": 0,
+                "manual": 1,
+            },
+            "materialCheckpointCountSinceLastCompaction": 7,
+            "materialCheckpointCountSinceVerifiedTransition": 7,
             "transitionTriggered": True,
         },
         app_message(
@@ -190,11 +202,13 @@ def raw_transition_observations() -> list[dict[str, object]]:
         goal_response(10, SOURCE_CARRIER_ID),
         app_message(
             {
-                "method": "thread/fork",
+                "method": "thread/start",
                 "id": 12,
                 "params": {
-                    "threadId": SOURCE_CARRIER_ID,
-                    "deferGoalContinuation": True,
+                    "cwd": TEST_CWD,
+                    "approvalPolicy": "never",
+                    "sandbox": "read-only",
+                    "ephemeral": False,
                 },
             }
         ),
@@ -204,8 +218,10 @@ def raw_transition_observations() -> list[dict[str, object]]:
                 "result": {
                     "thread": {
                         "id": DESTINATION_CARRIER_ID,
-                        "forkedFromId": SOURCE_CARRIER_ID,
-                        "cwd": "C:\\private\\discarded",
+                        "forkedFromId": None,
+                        "turns": [],
+                        "ephemeral": False,
+                        "cwd": TEST_CWD,
                     }
                 },
             }
@@ -216,19 +232,43 @@ def raw_transition_observations() -> list[dict[str, object]]:
                 "params": {
                     "thread": {
                         "id": DESTINATION_CARRIER_ID,
-                        "forkedFromId": SOURCE_CARRIER_ID,
+                        "forkedFromId": None,
+                        "turns": [],
+                        "ephemeral": False,
                     }
                 },
             }
         ),
         app_message(
             {
-                "method": "thread/goal/get",
+                "method": "thread/goal/set",
                 "id": 13,
-                "params": {"threadId": DESTINATION_CARRIER_ID},
+                "params": {
+                    "threadId": DESTINATION_CARRIER_ID,
+                    "objective": validator.CARRIER_GOAL_TEXT,
+                    "tokenBudget": None,
+                },
             }
         ),
         goal_response(13, DESTINATION_CARRIER_ID),
+        app_message(
+            {
+                "method": "thread/goal/updated",
+                "params": {
+                    "threadId": DESTINATION_CARRIER_ID,
+                    "turnId": None,
+                    "goal": goal_object(DESTINATION_CARRIER_ID),
+                },
+            }
+        ),
+        app_message(
+            {
+                "method": "thread/goal/get",
+                "id": 14,
+                "params": {"threadId": DESTINATION_CARRIER_ID},
+            }
+        ),
+        goal_response(14, DESTINATION_CARRIER_ID),
         {
             "source": "python--B--m-harness-verify-json",
             "carrierId": DESTINATION_CARRIER_ID,
@@ -286,7 +326,8 @@ def valid_registration_values() -> dict[str, object]:
         "environmentAttributionBinding": "bound-by-core",
         "counterexampleIdentityAndSource": validator.COUNTEREXAMPLE_SOURCES,
         "startingAuthorityGoalAndCarrierState": {
-            "sourceRevision": SOURCE_REVISION,
+            "registrationRevisionRule": validator.REGISTRATION_REVISION_RULE,
+            "measurementBaselineRevisionRule": validator.MEASUREMENT_BASELINE_REVISION_RULE,
             "authorityPaths": [
                 "product/constitution.json",
                 "product/program.json",
@@ -296,7 +337,8 @@ def valid_registration_values() -> dict[str, object]:
             "controlledGoalArtifact": validator.CARRIER_GOAL_BINDING,
             "carrierState": {
                 "repository": "single-main-checkout-clean-at-scenario-start",
-                "conversation": "native-active-goal-observed-before-and-after-each-controlled-carrier-event",
+                "sourceConversation": "native-active-goal-observed-before-compaction-or-transition-and-cleared-only-after-destination-verification",
+                "destinationConversation": "fresh-thread-started-with-zero-inherited-turns-then-exact-active-goal-installed-from-this-registration",
                 "capacitySignal": "reliable-risk-or-explicit-unknown-rule-only",
             },
         },
@@ -318,6 +360,62 @@ def valid_registration_values() -> dict[str, object]:
     }
 
 
+def run_git(root: Path, *args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=root,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=30,
+        text=True,
+    )
+    return completed.stdout.strip()
+
+
+def write_json(path: Path, value: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
+def initialize_baseline_repository(root: Path) -> str:
+    run_git(root, "init", "--quiet", "--initial-branch=main")
+    run_git(root, "config", "user.name", "O4 Fixture")
+    run_git(root, "config", "user.email", "o4-fixture@example.invalid")
+    run_git(root, "config", "commit.gpgsign", "false")
+    run_git(root, "config", "core.autocrlf", "false")
+    write_json(root / "product" / "program.json", {"status": "ready", "increments": []})
+    write_json(
+        root / "product" / "evidence" / "o4-continuous-self-correction-registration.json",
+        {"schema": 1},
+    )
+    run_git(root, "add", "product/program.json", "product/evidence/o4-continuous-self-correction-registration.json")
+    run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Add registration")
+    return run_git(root, "rev-parse", "HEAD")
+
+
+def active_baseline_program(registration_revision: str) -> dict[str, object]:
+    return {
+        "status": "active",
+        "activeIncrementId": validator.INCREMENT_ID,
+        "increments": [
+            {
+                "id": validator.INCREMENT_ID,
+                "state": "active",
+                "taskRegistration": {
+                    "locator": "product/evidence/o4-continuous-self-correction-registration.json",
+                    "sourceRevision": registration_revision,
+                },
+                "workItems": [{"id": "work.o4", "state": "active"}],
+            }
+        ],
+    }
+
+
 class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
     def test_controlled_goal_artifact_matches_code_owned_binding(self) -> None:
         raw = Path(validator.CARRIER_GOAL_LOCATOR).read_bytes()
@@ -336,6 +434,139 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
             },
             {item.scenario_class for item in validator.FAULT_SCENARIOS},
         )
+
+    def test_measurement_baseline_is_the_first_program_only_activation_commit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            registration_revision = initialize_baseline_repository(root)
+            write_json(
+                root / "product" / "program.json",
+                active_baseline_program(registration_revision),
+            )
+            run_git(root, "add", "product/program.json")
+            run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Activate O4")
+            baseline_revision = run_git(root, "rev-parse", "HEAD")
+            self.assertTrue(
+                validator._measurement_baseline_valid(root, baseline_revision)
+            )
+
+    def test_measurement_baseline_rejects_extra_file_inactive_merge_and_drift(self) -> None:
+        with self.subTest("extra-file"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                registration_revision = initialize_baseline_repository(root)
+                write_json(
+                    root / "product" / "program.json",
+                    active_baseline_program(registration_revision),
+                )
+                (root / "extra.txt").write_text("not activation-only\n", encoding="utf-8")
+                run_git(root, "add", "product/program.json", "extra.txt")
+                run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Broad activation")
+                self.assertFalse(
+                    validator._measurement_baseline_valid(
+                        root, run_git(root, "rev-parse", "HEAD")
+                    )
+                )
+
+        with self.subTest("inactive"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                initialize_baseline_repository(root)
+                write_json(
+                    root / "product" / "program.json",
+                    {"status": "ready", "activeIncrementId": None, "increments": []},
+                )
+                run_git(root, "add", "product/program.json")
+                run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Stay ready")
+                self.assertFalse(
+                    validator._measurement_baseline_valid(
+                        root, run_git(root, "rev-parse", "HEAD")
+                    )
+                )
+
+        with self.subTest("merge"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                registration_revision = initialize_baseline_repository(root)
+                run_git(root, "switch", "--quiet", "-c", "activation")
+                write_json(
+                    root / "product" / "program.json",
+                    active_baseline_program(registration_revision),
+                )
+                run_git(root, "add", "product/program.json")
+                run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Side activation")
+                run_git(root, "switch", "--quiet", "main")
+                run_git(root, "merge", "--quiet", "--no-ff", "--no-gpg-sign", "-m", "Merge activation", "activation")
+                self.assertFalse(
+                    validator._measurement_baseline_valid(
+                        root, run_git(root, "rev-parse", "HEAD")
+                    )
+                )
+
+        with self.subTest("not-head-ancestor"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                registration_revision = initialize_baseline_repository(root)
+                write_json(
+                    root / "product" / "program.json",
+                    active_baseline_program(registration_revision),
+                )
+                run_git(root, "add", "product/program.json")
+                run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Activation A")
+                baseline_revision = run_git(root, "rev-parse", "HEAD")
+                run_git(root, "switch", "--quiet", "--detach", registration_revision)
+                write_json(
+                    root / "product" / "program.json",
+                    active_baseline_program(registration_revision),
+                )
+                run_git(root, "add", "product/program.json")
+                run_git(root, "commit", "--quiet", "--no-gpg-sign", "-m", "Activation B")
+                self.assertFalse(
+                    validator._measurement_baseline_valid(root, baseline_revision)
+                )
+
+    def test_task_owned_worktree_inventory_is_removed_and_pruned(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary_root = Path(directory)
+            root = temporary_root / "primary"
+            root.mkdir()
+            initialize_baseline_repository(root)
+            worktree = temporary_root / "task-owned-worktree"
+            run_git(
+                root,
+                "worktree",
+                "add",
+                "--quiet",
+                "--detach",
+                str(worktree),
+                "HEAD",
+            )
+            git = shutil.which("git")
+            self.assertIsNotNone(git)
+            environment = os.environ.copy()
+            environment.update(
+                {
+                    "GIT_CONFIG_NOSYSTEM": "1",
+                    "GIT_CONFIG_GLOBAL": os.devnull,
+                    "GIT_TERMINAL_PROMPT": "0",
+                }
+            )
+            self.assertEqual(
+                2,
+                validator._git_worktree_count(
+                    root, git=git or "git", environment=environment
+                ),
+            )
+            run_git(root, "worktree", "remove", "--force", str(worktree))
+            run_git(root, "worktree", "prune", "--expire", "now")
+            self.assertEqual(
+                1,
+                validator._git_worktree_count(
+                    root, git=git or "git", environment=environment
+                ),
+            )
+            self.assertFalse(worktree.exists())
+            self.assertEqual("", run_git(root, "status", "--porcelain=v1"))
 
     def test_compaction_projection_requires_authority_and_head_reverification(self) -> None:
         projection = validator.project_carrier_events(
@@ -431,117 +662,100 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 expected_head=SOURCE_REVISION,
             )
 
-    def test_raw_transition_binds_fork_destination_and_release_order(self) -> None:
-        projection = validator.project_raw_carrier_observations(
-            validator.CARRIER_SCENARIO_IDENTITIES[1],
-            raw_transition_observations(),
-            source_carrier_id=SOURCE_CARRIER_ID,
-            destination_carrier_id=DESTINATION_CARRIER_ID,
-            expected_head=SOURCE_REVISION,
-        )
+    def test_raw_transition_binds_fresh_destination_and_release_order(self) -> None:
+        def project(raw: list[dict[str, object]]) -> dict[str, object]:
+            return validator.project_raw_carrier_observations(
+                validator.CARRIER_SCENARIO_IDENTITIES[1],
+                raw,
+                source_carrier_id=SOURCE_CARRIER_ID,
+                destination_carrier_id=DESTINATION_CARRIER_ID,
+                expected_head=SOURCE_REVISION,
+                expected_cwd=TEST_CWD,
+            )
+
+        projection = project(raw_transition_observations())
         serialized = json.dumps(projection, sort_keys=True)
         self.assertNotIn(SOURCE_CARRIER_ID, serialized)
         self.assertNotIn(DESTINATION_CARRIER_ID, serialized)
-        self.assertNotIn("C:\\\\private", serialized)
+        self.assertNotIn(TEST_CWD, serialized)
         self.assertEqual(
             "source-carrier-released",
             projection["eventSequence"][-1]["eventClass"],
         )
 
-        cross_thread = raw_transition_observations()
-        cross_thread[4]["message"]["result"]["thread"][
-            "forkedFromId"
-        ] = "thread_01different999"
-        with self.assertRaisesRegex(ValueError, "source carrier"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                cross_thread,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+        automatic_compaction = raw_transition_observations()
+        automatic_compaction[0]["compactionCountsSinceVerifiedTransition"] = {
+            "automatic": 1,
+            "manual": 0,
+        }
+        project(automatic_compaction)
 
-        partial_history = raw_transition_observations()
-        partial_history[3]["message"]["params"]["beforeTurnId"] = "turn_01000001"
-        with self.assertRaisesRegex(ValueError, "request"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                partial_history,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+        no_compaction = raw_transition_observations()
+        no_compaction[0]["compactionCountsSinceVerifiedTransition"] = {
+            "automatic": 0,
+            "manual": 0,
+        }
+        with self.assertRaisesRegex(ValueError, "bound rule"):
+            project(no_compaction)
+
+        early_transition = raw_transition_observations()
+        early_transition[0]["materialCheckpointCountSinceLastCompaction"] = 6
+        with self.assertRaisesRegex(ValueError, "bound rule"):
+            project(early_transition)
+
+        copied_history = raw_transition_observations()
+        copied_history[4]["message"]["result"]["thread"]["turns"] = [
+            {"id": "turn_01copied"}
+        ]
+        with self.assertRaisesRegex(ValueError, "copied history"):
+            project(copied_history)
+
+        forked_destination = raw_transition_observations()
+        forked_destination[4]["message"]["result"]["thread"]["forkedFromId"] = (
+            SOURCE_CARRIER_ID
+        )
+        with self.assertRaisesRegex(ValueError, "copied history"):
+            project(forked_destination)
+
+        wrong_cwd = raw_transition_observations()
+        wrong_cwd[3]["message"]["params"]["cwd"] = "C:\\different"
+        with self.assertRaisesRegex(ValueError, "thread-start request"):
+            project(wrong_cwd)
 
         no_goal = raw_transition_observations()
         no_goal[2]["message"]["result"]["goal"] = None
         with self.assertRaisesRegex(ValueError, "registered active goal"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                no_goal,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+            project(no_goal)
 
         changed_goal = raw_transition_observations()
         changed_goal[7]["message"]["result"]["goal"]["objective"] = "different goal"
-        with self.assertRaisesRegex(ValueError, "registered active goal"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                changed_goal,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+        with self.assertRaisesRegex(ValueError, "registered active goal|registered goal"):
+            project(changed_goal)
 
-        no_deferred_goal = raw_transition_observations()
-        del no_deferred_goal[3]["message"]["params"]["deferGoalContinuation"]
-        with self.assertRaisesRegex(ValueError, "deferred-goal"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                no_deferred_goal,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+        no_goal_install = raw_transition_observations()
+        no_goal_install[6]["message"]["params"]["objective"] = "different goal"
+        with self.assertRaisesRegex(ValueError, "goal-set request"):
+            project(no_goal_install)
 
         source_goal_retained = raw_transition_observations()
-        source_goal_retained[12]["message"]["result"]["cleared"] = False
+        source_goal_retained[15]["message"]["result"]["cleared"] = False
         with self.assertRaisesRegex(ValueError, "goal-clear response"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                source_goal_retained,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+            project(source_goal_retained)
 
         wrong_goal_cleared = raw_transition_observations()
-        wrong_goal_cleared[13]["message"]["params"]["threadId"] = (
+        wrong_goal_cleared[16]["message"]["params"]["threadId"] = (
             DESTINATION_CARRIER_ID
         )
         with self.assertRaisesRegex(ValueError, "goal-clear notification"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                wrong_goal_cleared,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+            project(wrong_goal_cleared)
 
         archive_before_goal_clear = raw_transition_observations()
-        archive_before_goal_clear[11], archive_before_goal_clear[14] = (
+        archive_before_goal_clear[14], archive_before_goal_clear[17] = (
+            archive_before_goal_clear[17],
             archive_before_goal_clear[14],
-            archive_before_goal_clear[11],
         )
         with self.assertRaisesRegex(ValueError, "request"):
-            validator.project_raw_carrier_observations(
-                validator.CARRIER_SCENARIO_IDENTITIES[1],
-                archive_before_goal_clear,
-                source_carrier_id=SOURCE_CARRIER_ID,
-                destination_carrier_id=DESTINATION_CARRIER_ID,
-                expected_head=SOURCE_REVISION,
-            )
+            project(archive_before_goal_clear)
 
     def test_raw_projector_rejects_normalized_receipt_and_reordered_release(self) -> None:
         with self.assertRaisesRegex(ValueError, "count|envelope"):
@@ -560,6 +774,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 source_carrier_id=SOURCE_CARRIER_ID,
                 destination_carrier_id=DESTINATION_CARRIER_ID,
                 expected_head=SOURCE_REVISION,
+                expected_cwd=TEST_CWD,
             )
 
     def test_projection_pressure_is_deterministic_and_fail_closed(self) -> None:
@@ -583,6 +798,7 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 source_carrier_id=SOURCE_CARRIER_ID,
                 destination_carrier_id=DESTINATION_CARRIER_ID,
                 expected_head=SOURCE_REVISION,
+                expected_cwd=TEST_CWD,
             )["eventShapeSha256"]
             private = compaction_events()
             private[0]["state"] = f"session_{index:08d}"
@@ -673,6 +889,14 @@ class O4ContinuousSelfCorrectionValidatorTests(unittest.TestCase):
                 ),
                 errors,
             )
+        starting = registration["preRegistrationValues"][
+            "startingAuthorityGoalAndCarrierState"
+        ]
+        self.assertNotIn("sourceRevision", starting)
+        self.assertEqual(
+            validator.MEASUREMENT_BASELINE_REVISION_RULE,
+            starting["measurementBaselineRevisionRule"],
+        )
         receipt = deepcopy(registration)
         receipt["preRegistrationValues"]["scenarioValidator"][
             "receiptOnlyAccepted"

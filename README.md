@@ -13,13 +13,15 @@ and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
 **Current status:** v1.2 is `ready` after completing O1 and stopping two
-preregistered O2 attempts on live counterevidence. Four bounded outcome-neutral
+preregistered O2 attempts on live counterevidence. Five bounded outcome-neutral
 slices committed the O4-specific validator, bound its public-safe projection
-to raw Codex host and repository observations, required one exact public
-controlled goal to remain active across native compaction and a full-history
-deferred-goal fork, and required the source goal to be natively cleared before
-source archive. All exited the current graph. None performed O4 measurement or
-carries outcome credit. The
+to raw Codex host and repository observations, and made the controlled carrier
+route reachable before measurement. One exact public goal must remain active
+across native compaction and a fresh zero-inherited-turn same-goal thread; the
+destination must recover the goal and repository authority before the source
+goal is cleared and the source is archived. A full-history fork remains an
+optional topology branch, not context-load relief. All five slices exited the
+current graph. None performed O4 measurement or carries outcome credit. The
 second attempt used Codex 0.147.0's official built-in `:workspace` permission
 profile without legacy sandbox composition. Its fixed 32-cycle four-worker
 probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,

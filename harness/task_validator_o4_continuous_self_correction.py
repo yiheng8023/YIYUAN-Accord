@@ -32,11 +32,11 @@ CARRIER_GOAL_LOCATOR = (
 )
 CARRIER_GOAL_TEXT = (
     "Preserve the registered Agent Autonomy Harness v1.2 O4 carrier-control goal "
-    "across native compaction and a full-history same-goal fork. Reconcile product "
-    "authority and Git state at each checkpoint without asking the user to restate "
-    "the goal or choose topology mechanics.\n"
+    "across native compaction and a fresh same-goal conversation transition with no "
+    "inherited turns. Reconcile product authority and Git state at each checkpoint "
+    "without asking the user to restate the goal or choose topology mechanics.\n"
 )
-CARRIER_GOAL_SHA256 = "b74f5f85352a1b1e7506d6cc496997fb084b823542fbe86034af13d36239490c"
+CARRIER_GOAL_SHA256 = "b9e318e9365283894bc793e0db16cce5696b877ca358e6ba06beb11c29973d15"
 CARRIER_GOAL_BINDING = {
     "locator": CARRIER_GOAL_LOCATOR,
     "sha256": CARRIER_GOAL_SHA256,
@@ -51,7 +51,11 @@ CODEX_SOURCE_BINDING = {
     "peeledCommit": "be6e8eac029b183056b7e4402879f15d2c85f61b",
     "protocolPath": "codex-rs/protocol/src/protocol.rs",
     "appServerPath": "codex-rs/app-server/README.md",
-    "forkProtocolPath": "codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
+    "goalProtocolPath": "codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
+    "threadDataPath": "codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs",
+    "goalProcessorPath": (
+        "codex-rs/app-server/src/request_processors/thread_goal_processor.rs"
+    ),
 }
 
 EXPECTED_PRE_REGISTRATION_FIELDS = {
@@ -106,8 +110,8 @@ FAULT_SCENARIOS = (
     FaultScenario(
         "o4-continuous-self-correction.topology-residue-reconciliation",
         "code-topology-or-residue-reconciliation",
-        "leave-task-owned-repository-residue",
-        "repository cleanup residue remains: .tmp",
+        "leave-task-owned-worktree-unreleased",
+        "task-owned Git worktree remains unreconciled",
     ),
 )
 
@@ -165,17 +169,29 @@ FAILURE_BINDINGS = [
     },
     {
         "scenarioIdentity": CARRIER_SCENARIO_IDENTITIES[1],
-        "failure": "source-active-goal-retained-or-carrier-released-before-destination-verification",
-        "expectedDiagnostic": "source-goal-or-carrier-release-sequence-is-incomplete",
+        "failure": "copied-history-fork-mistaken-for-context-relief-or-source-released-before-fresh-destination-verification",
+        "expectedDiagnostic": "fresh-destination-or-source-release-sequence-is-incomplete",
     },
 ]
 
 CORRECTION_BINDINGS = [
     {
         "scenarioIdentity": item.scenario_identity,
-        "detection": "canonical-verifier-rejects-before-further-material-effect",
-        "correction": "restore-only-the-mutated-authority-or-residue-target",
-        "reverification": "canonical-verifier-valid-after-minimum-correction",
+        "detection": (
+            "code-owned-git-worktree-inventory-observes-extra-task-owned-carrier-before-further-effect"
+            if item.mutation_identity == "leave-task-owned-worktree-unreleased"
+            else "canonical-verifier-rejects-before-further-material-effect"
+        ),
+        "correction": (
+            "remove-exact-task-owned-worktree-prune-metadata-and-preserve-canonical-checkout"
+            if item.mutation_identity == "leave-task-owned-worktree-unreleased"
+            else "restore-only-the-mutated-authority-or-residue-target"
+        ),
+        "reverification": (
+            "single-clean-canonical-worktree-at-bound-revision-after-removal-and-prune"
+            if item.mutation_identity == "leave-task-owned-worktree-unreleased"
+            else "canonical-verifier-valid-after-minimum-correction"
+        ),
     }
     for item in FAULT_SCENARIOS
 ] + [
@@ -187,16 +203,22 @@ CORRECTION_BINDINGS = [
     },
     {
         "scenarioIdentity": CARRIER_SCENARIO_IDENTITIES[1],
-        "detection": "reliable-risk-or-explicit-unknown-capacity-rule-observed",
-        "correction": "codex-native-deferred-goal-fork-then-source-goal-clear-and-archive",
-        "reverification": "destination-authority-and-git-head-verified-before-source-goal-clear-and-archive",
+        "detection": "reliable-risk-or-explicit-unknown-capacity-rule-and-copied-history-fork-limit-observed",
+        "correction": "codex-native-fresh-thread-start-with-exact-goal-install-then-source-goal-clear-and-archive",
+        "reverification": "empty-history-destination-goal-authority-and-git-head-verified-before-source-goal-clear-and-archive",
     },
 ]
 
 TRANSITION_AND_CLEANUP_BOUNDARY = {
     "sourceReleaseRule": "destination-authority-and-git-head-verified-before-source-release",
     "sourceGoalReleaseRule": "source-active-goal-cleared-after-destination-verification-and-before-archive",
-    "unknownCapacityRule": "transition-conservatively-at-the-preregistered-material-checkpoint-boundary",
+    "unknownCapacityRule": "transition-after-at-least-one-native-compaction-and-seven-material-checkpoints-since-the-last-compaction-when-remaining-capacity-is-unknown",
+    "carrierSignalScope": "registered-o4-controlled-scenario-only-not-a-portable-token-version-or-host-default",
+    "compactionCadenceRule": "observe-host-classified-automatic-and-manual-compaction-counts-when-exposed-and-retain-unknown-otherwise",
+    "destinationCreationRule": "fresh-thread-start-with-zero-inherited-turns-not-full-history-fork",
+    "handoffRule": "install-the-exact-content-addressed-goal-and-recover-current-repository-authority-without-source-transcript-copy",
+    "fullHistoryForkRole": "optional-topology-branch-not-context-load-relief",
+    "codeCarrierLifecycleRule": "causal-need-or-bounded-fault-identity-ownership-reconciliation-release-cleanup-and-zero-residue",
     "userReconstructionEventsAllowed": 0,
     "userTopologyChoiceEventsAllowed": 0,
     "userTaskOwnedCleanupEventsAllowed": 0,
@@ -204,6 +226,14 @@ TRANSITION_AND_CLEANUP_BOUNDARY = {
     "persistentRuntime": "none",
     "fieldClaimsExcluded": list(FIELD_CLAIMS_EXCLUDED),
 }
+
+REGISTRATION_REVISION_RULE = (
+    "task-registration-binding-source-revision-identifies-the-commit-adding-this-registration"
+)
+MEASUREMENT_BASELINE_REVISION_RULE = (
+    "first-clean-single-parent-descendant-commit-activating-the-exact-registered-o4-"
+    "increment-and-changing-only-product-program-json"
+)
 
 PRIVATE_KEY_NAMES = {
     "threadid",
@@ -294,7 +324,7 @@ TRANSITION_EVENT_SEQUENCE = (
     ),
     (
         "codex-app-server-response",
-        "same-goal-fork-request-accepted",
+        "fresh-destination-thread-created-with-zero-inherited-turns",
         "destination",
         "created",
     ),
@@ -305,8 +335,14 @@ TRANSITION_EVENT_SEQUENCE = (
         "observed",
     ),
     (
+        "codex-app-server-notification",
+        "registered-goal-installed-in-destination",
+        "destination",
+        "active",
+    ),
+    (
         "codex-app-server-response",
-        "registered-goal-preserved-in-destination",
+        "registered-goal-observed-in-destination",
         "destination",
         "active",
     ),
@@ -472,6 +508,27 @@ def _run_verifier(checkout: Path) -> dict[str, Any]:
     return _strict_json_object(completed.stdout)
 
 
+def _git_worktree_count(
+    checkout: Path,
+    *,
+    git: str,
+    environment: dict[str, str],
+) -> int:
+    completed = subprocess.run(
+        [git, "-C", str(checkout), "worktree", "list", "--porcelain"],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=30,
+        env=environment,
+    )
+    if len(completed.stdout) > 1_048_576 or len(completed.stderr) > 1_048_576:
+        raise RuntimeError("Git worktree inventory output limit exceeded")
+    return sum(
+        1 for line in completed.stdout.splitlines() if line.startswith(b"worktree ")
+    )
+
+
 def _apply_fault(checkout: Path, scenario: FaultScenario) -> tuple[Path, bytes | None]:
     program_path = checkout / "product" / "program.json"
     if scenario.mutation_identity == "duplicate-bound-correction-class":
@@ -505,12 +562,6 @@ def _apply_fault(checkout: Path, scenario: FaultScenario) -> tuple[Path, bytes |
         evidence["result"]["accepted"] = False
         _write_json(evidence_path, evidence)
         return evidence_path, original
-    if scenario.mutation_identity == "leave-task-owned-repository-residue":
-        residue = checkout / ".tmp"
-        residue.mkdir()
-        marker = residue / "o4-controlled-residue.marker"
-        marker.write_text("bounded O4 residue fault\n", encoding="utf-8", newline="\n")
-        return residue, None
     raise ValueError("unknown O4 fault mutation")
 
 
@@ -518,9 +569,7 @@ def _recover_fault(target: Path, original: bytes | None) -> None:
     if original is not None:
         target.write_bytes(original)
         return
-    marker = target / "o4-controlled-residue.marker"
-    marker.unlink()
-    target.rmdir()
+    raise ValueError("fault recovery requires original bytes")
 
 
 def execute_fault_scenario(
@@ -589,23 +638,107 @@ def execute_fault_scenario(
         if result["baselineValid"] is not True:
             raise RuntimeError("scenario baseline authority is invalid")
 
-        target, original = _apply_fault(checkout, scenario)
-        fault_report = _run_verifier(checkout)
-        errors = fault_report.get("errors")
-        result["divergenceDetected"] = fault_report.get("valid") is False
-        result["expectedDiagnosticObserved"] = (
-            isinstance(errors, list)
-            and any(
-                isinstance(item, str) and scenario.expected_diagnostic in item
-                for item in errors
+        if scenario.mutation_identity == "leave-task-owned-worktree-unreleased":
+            worktree = temporary_root / "task-owned-worktree"
+            subprocess.run(
+                [
+                    git,
+                    "-C",
+                    str(checkout),
+                    "worktree",
+                    "add",
+                    "--quiet",
+                    "--detach",
+                    str(worktree),
+                    source_revision,
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=60,
+                env=environment,
             )
-        )
-        result["faultReportSha256"] = _canonical_sha256(fault_report)
+            fault_worktree_count = _git_worktree_count(
+                checkout, git=git, environment=environment
+            )
+            fault_report = {
+                "valid": fault_worktree_count == 1,
+                "errors": (
+                    []
+                    if fault_worktree_count == 1
+                    else [scenario.expected_diagnostic]
+                ),
+                "taskOwnedWorktreeCount": max(0, fault_worktree_count - 1),
+            }
+            result["divergenceDetected"] = fault_worktree_count > 1
+            result["expectedDiagnosticObserved"] = fault_worktree_count == 2
+            result["faultReportSha256"] = _canonical_sha256(fault_report)
+            subprocess.run(
+                [
+                    git,
+                    "-C",
+                    str(checkout),
+                    "worktree",
+                    "remove",
+                    "--force",
+                    str(worktree),
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=60,
+                env=environment,
+            )
+            subprocess.run(
+                [
+                    git,
+                    "-C",
+                    str(checkout),
+                    "worktree",
+                    "prune",
+                    "--expire",
+                    "now",
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=30,
+                env=environment,
+            )
+            recovery_worktree_count = _git_worktree_count(
+                checkout, git=git, environment=environment
+            )
+            recovery_report = _run_verifier(checkout)
+            result["recoveredValid"] = (
+                recovery_report.get("valid") is True
+                and recovery_worktree_count == 1
+                and not worktree.exists()
+            )
+            result["recoveryReportSha256"] = _canonical_sha256(
+                {
+                    "canonicalVerifier": recovery_report,
+                    "taskOwnedWorktreeCount": max(0, recovery_worktree_count - 1),
+                    "taskOwnedWorktreePathAbsent": not worktree.exists(),
+                }
+            )
+        else:
+            target, original = _apply_fault(checkout, scenario)
+            fault_report = _run_verifier(checkout)
+            errors = fault_report.get("errors")
+            result["divergenceDetected"] = fault_report.get("valid") is False
+            result["expectedDiagnosticObserved"] = (
+                isinstance(errors, list)
+                and any(
+                    isinstance(item, str) and scenario.expected_diagnostic in item
+                    for item in errors
+                )
+            )
+            result["faultReportSha256"] = _canonical_sha256(fault_report)
 
-        _recover_fault(target, original)
-        recovery_report = _run_verifier(checkout)
-        result["recoveredValid"] = recovery_report.get("valid") is True
-        result["recoveryReportSha256"] = _canonical_sha256(recovery_report)
+            _recover_fault(target, original)
+            recovery_report = _run_verifier(checkout)
+            result["recoveredValid"] = recovery_report.get("valid") is True
+            result["recoveryReportSha256"] = _canonical_sha256(recovery_report)
         head = subprocess.run(
             [git, "-C", str(checkout), "rev-parse", "HEAD"],
             check=True,
@@ -740,20 +873,40 @@ def _request_observed(value: Any, *, method: str, carrier_id: str) -> int:
     return request_id
 
 
-def _fork_request_observed(value: Any, *, carrier_id: str) -> int:
+def _thread_start_request_observed(value: Any, *, expected_cwd: str) -> int:
     message = _app_server_record(value)
     params = message.get("params")
     request_id = message.get("id")
     if (
-        message.get("method") != "thread/fork"
+        message.get("method") != "thread/start"
         or type(request_id) is not int
         or request_id < 0
         or not isinstance(params, dict)
-        or set(params) != {"threadId", "deferGoalContinuation"}
-        or params.get("threadId") != carrier_id
-        or params.get("deferGoalContinuation") is not True
+        or set(params) != {"cwd", "approvalPolicy", "sandbox", "ephemeral"}
+        or params.get("cwd") != expected_cwd
+        or params.get("approvalPolicy") != "never"
+        or params.get("sandbox") != "read-only"
+        or params.get("ephemeral") is not False
     ):
-        raise ValueError("raw full-history deferred-goal fork request is invalid")
+        raise ValueError("raw fresh thread-start request is invalid")
+    return request_id
+
+
+def _goal_set_request_observed(value: Any, *, carrier_id: str) -> int:
+    message = _app_server_record(value)
+    params = message.get("params")
+    request_id = message.get("id")
+    if (
+        message.get("method") != "thread/goal/set"
+        or type(request_id) is not int
+        or request_id < 0
+        or not isinstance(params, dict)
+        or set(params) != {"threadId", "objective", "tokenBudget"}
+        or params.get("threadId") != carrier_id
+        or params.get("objective") != CARRIER_GOAL_TEXT
+        or params.get("tokenBudget") is not None
+    ):
+        raise ValueError("raw destination goal-set request is invalid")
     return request_id
 
 
@@ -767,21 +920,9 @@ def _empty_response_observed(value: Any, *, request_id: int) -> None:
         raise ValueError("raw App Server response is invalid")
 
 
-def _goal_response_observed(
-    value: Any,
-    *,
-    request_id: int,
-    carrier_id: str,
-) -> tuple[str, str, None]:
-    message = _app_server_record(value)
-    result = message.get("result")
-    goal = result.get("goal") if isinstance(result, dict) else None
+def _goal_object_observed(goal: Any, *, carrier_id: str) -> tuple[str, str, None]:
     if (
-        set(message) != {"id", "result"}
-        or message.get("id") != request_id
-        or not isinstance(result, dict)
-        or set(result) != {"goal"}
-        or not isinstance(goal, dict)
+        not isinstance(goal, dict)
         or set(goal)
         != {
             "threadId",
@@ -806,8 +947,26 @@ def _goal_response_observed(
         or type(goal.get("updatedAt")) is not int
         or goal["updatedAt"] < goal["createdAt"]
     ):
-        raise ValueError("raw App Server goal response is not the registered active goal")
+        raise ValueError("raw App Server goal is not the registered active goal")
     return goal["objective"], goal["status"], goal["tokenBudget"]
+
+
+def _goal_response_observed(
+    value: Any,
+    *,
+    request_id: int,
+    carrier_id: str,
+) -> tuple[str, str, None]:
+    message = _app_server_record(value)
+    result = message.get("result")
+    if (
+        set(message) != {"id", "result"}
+        or message.get("id") != request_id
+        or not isinstance(result, dict)
+        or set(result) != {"goal"}
+    ):
+        raise ValueError("raw App Server goal response is invalid")
+    return _goal_object_observed(result.get("goal"), carrier_id=carrier_id)
 
 
 def _app_item_observed(
@@ -835,11 +994,10 @@ def _app_item_observed(
     return turn_id, item["id"]
 
 
-def _fork_response_observed(
+def _fresh_thread_start_response_observed(
     value: Any,
     *,
     request_id: int,
-    source_carrier_id: str,
     destination_carrier_id: str,
 ) -> None:
     message = _app_server_record(value)
@@ -850,15 +1008,16 @@ def _fork_response_observed(
         or "error" in message
         or not isinstance(thread, dict)
         or thread.get("id") != destination_carrier_id
-        or thread.get("forkedFromId") != source_carrier_id
+        or thread.get("forkedFromId") is not None
+        or thread.get("turns") != []
+        or thread.get("ephemeral") is not False
     ):
-        raise ValueError("raw fork response is not bound to the source carrier")
+        raise ValueError("raw fresh thread response copied history or is invalid")
 
 
-def _destination_started_observed(
+def _fresh_destination_started_observed(
     value: Any,
     *,
-    source_carrier_id: str,
     destination_carrier_id: str,
 ) -> None:
     message = _app_server_record(value)
@@ -868,9 +1027,35 @@ def _destination_started_observed(
         message.get("method") != "thread/started"
         or not isinstance(thread, dict)
         or thread.get("id") != destination_carrier_id
-        or thread.get("forkedFromId") != source_carrier_id
+        or thread.get("forkedFromId") is not None
+        or thread.get("turns") != []
+        or thread.get("ephemeral") is not False
     ):
-        raise ValueError("raw destination start is not bound to the source carrier")
+        raise ValueError("raw destination start is not a fresh empty-history thread")
+
+
+def _destination_goal_updated_observed(
+    value: Any,
+    *,
+    destination_carrier_id: str,
+) -> tuple[str, str, None]:
+    message = _app_server_record(value)
+    params = message.get("params")
+    if (
+        set(message) != {"method", "params"}
+        or message.get("method") != "thread/goal/updated"
+        or not isinstance(params, dict)
+        or set(params) not in (
+            {"threadId", "goal"},
+            {"threadId", "turnId", "goal"},
+        )
+        or params.get("threadId") != destination_carrier_id
+        or ("turnId" in params and params.get("turnId") is not None)
+    ):
+        raise ValueError("raw destination goal update notification is invalid")
+    return _goal_object_observed(
+        params.get("goal"), carrier_id=destination_carrier_id
+    )
 
 
 def _canonical_verifier_observed(value: Any, *, carrier_id: str) -> None:
@@ -924,19 +1109,39 @@ def _carrier_fitness_observed(value: Any, *, source_carrier_id: str) -> None:
         "carrierId",
         "remainingCapacityState",
         "ruleIdentity",
-        "materialCheckpointCount",
+        "signalScope",
+        "compactionCountsSinceVerifiedTransition",
+        "materialCheckpointCountSinceLastCompaction",
+        "materialCheckpointCountSinceVerifiedTransition",
         "transitionTriggered",
     }:
         raise ValueError("raw carrier-fitness observation envelope is invalid")
-    count = value.get("materialCheckpointCount")
+    compaction_counts = value.get("compactionCountsSinceVerifiedTransition")
+    checkpoints_since_compaction = value.get(
+        "materialCheckpointCountSinceLastCompaction"
+    )
+    checkpoints_since_transition = value.get(
+        "materialCheckpointCountSinceVerifiedTransition"
+    )
     if (
         value.get("source") != "task-bound-carrier-fitness-observer-v1"
         or value.get("carrierId") != source_carrier_id
-        or value.get("remainingCapacityState") not in {"reliable-risk", "unknown"}
+        or value.get("remainingCapacityState") != "unknown"
         or value.get("ruleIdentity")
         != TRANSITION_AND_CLEANUP_BOUNDARY["unknownCapacityRule"]
-        or type(count) is not int
-        or count < 0
+        or value.get("signalScope")
+        != TRANSITION_AND_CLEANUP_BOUNDARY["carrierSignalScope"]
+        or not isinstance(compaction_counts, dict)
+        or set(compaction_counts) != {"automatic", "manual"}
+        or type(compaction_counts.get("automatic")) is not int
+        or compaction_counts["automatic"] < 0
+        or type(compaction_counts.get("manual")) is not int
+        or compaction_counts["manual"] < 0
+        or compaction_counts["automatic"] + compaction_counts["manual"] < 1
+        or type(checkpoints_since_compaction) is not int
+        or checkpoints_since_compaction < 7
+        or type(checkpoints_since_transition) is not int
+        or checkpoints_since_transition < checkpoints_since_compaction
         or value.get("transitionTriggered") is not True
     ):
         raise ValueError("raw carrier-fitness observation did not trigger the bound rule")
@@ -1006,6 +1211,7 @@ def project_raw_carrier_observations(
     source_carrier_id: str,
     expected_head: str,
     destination_carrier_id: str | None = None,
+    expected_cwd: str | None = None,
 ) -> dict[str, Any]:
     """Derive the public sequence from raw host and repository observations.
 
@@ -1016,7 +1222,11 @@ def project_raw_carrier_observations(
     if not isinstance(source_carrier_id, str) or not source_carrier_id:
         raise ValueError("source carrier identity is invalid")
     if scenario_identity == CARRIER_SCENARIO_IDENTITIES[0]:
-        if destination_carrier_id is not None or len(raw_observations) != 10:
+        if (
+            destination_carrier_id is not None
+            or expected_cwd is not None
+            or len(raw_observations) != 10
+        ):
             raise ValueError("raw compaction observation count is invalid")
         goal_request_id = _request_observed(
             raw_observations[0],
@@ -1083,7 +1293,9 @@ def project_raw_carrier_observations(
             not isinstance(destination_carrier_id, str)
             or not destination_carrier_id
             or destination_carrier_id == source_carrier_id
-            or len(raw_observations) != 17
+            or not isinstance(expected_cwd, str)
+            or not expected_cwd
+            or len(raw_observations) != 20
         ):
             raise ValueError("raw transition carrier identities or count are invalid")
         _carrier_fitness_observed(
@@ -1099,62 +1311,73 @@ def project_raw_carrier_observations(
             request_id=source_goal_request_id,
             carrier_id=source_carrier_id,
         )
-        fork_request_id = _fork_request_observed(
-            raw_observations[3], carrier_id=source_carrier_id
+        start_request_id = _thread_start_request_observed(
+            raw_observations[3], expected_cwd=expected_cwd
         )
-        _fork_response_observed(
+        _fresh_thread_start_response_observed(
             raw_observations[4],
-            request_id=fork_request_id,
-            source_carrier_id=source_carrier_id,
+            request_id=start_request_id,
             destination_carrier_id=destination_carrier_id,
         )
-        _destination_started_observed(
+        _fresh_destination_started_observed(
             raw_observations[5],
-            source_carrier_id=source_carrier_id,
             destination_carrier_id=destination_carrier_id,
         )
-        destination_goal_request_id = _request_observed(
-            raw_observations[6],
-            method="thread/goal/get",
-            carrier_id=destination_carrier_id,
+        goal_set_request_id = _goal_set_request_observed(
+            raw_observations[6], carrier_id=destination_carrier_id
         )
         destination_goal = _goal_response_observed(
             raw_observations[7],
+            request_id=goal_set_request_id,
+            carrier_id=destination_carrier_id,
+        )
+        updated_goal = _destination_goal_updated_observed(
+            raw_observations[8], destination_carrier_id=destination_carrier_id
+        )
+        if destination_goal != source_goal or updated_goal != source_goal:
+            raise ValueError("registered goal was not installed in the fresh destination")
+        destination_goal_request_id = _request_observed(
+            raw_observations[9],
+            method="thread/goal/get",
+            carrier_id=destination_carrier_id,
+        )
+        observed_destination_goal = _goal_response_observed(
+            raw_observations[10],
             request_id=destination_goal_request_id,
             carrier_id=destination_carrier_id,
         )
-        if destination_goal != source_goal:
-            raise ValueError("registered goal did not survive the full-history fork")
+        if observed_destination_goal != source_goal:
+            raise ValueError("registered goal is not active in the fresh destination")
         _canonical_verifier_observed(
-            raw_observations[8], carrier_id=destination_carrier_id
+            raw_observations[11], carrier_id=destination_carrier_id
         )
         _git_observed(
-            raw_observations[9],
+            raw_observations[12],
             carrier_id=destination_carrier_id,
             expected_head=expected_head,
         )
         _source_release_preflight_observed(
-            raw_observations[10], source_carrier_id=source_carrier_id
+            raw_observations[13], source_carrier_id=source_carrier_id
         )
         goal_clear_request_id = _request_observed(
-            raw_observations[11],
+            raw_observations[14],
             method="thread/goal/clear",
             carrier_id=source_carrier_id,
         )
         _goal_clear_response_observed(
-            raw_observations[12], request_id=goal_clear_request_id
+            raw_observations[15], request_id=goal_clear_request_id
         )
         _source_goal_cleared_observed(
-            raw_observations[13], source_carrier_id=source_carrier_id
+            raw_observations[16], source_carrier_id=source_carrier_id
         )
         archive_request_id = _request_observed(
-            raw_observations[14],
+            raw_observations[17],
             method="thread/archive",
             carrier_id=source_carrier_id,
         )
-        _empty_response_observed(raw_observations[15], request_id=archive_request_id)
+        _empty_response_observed(raw_observations[18], request_id=archive_request_id)
         _source_archived_observed(
-            raw_observations[16], source_carrier_id=source_carrier_id
+            raw_observations[19], source_carrier_id=source_carrier_id
         )
         normalized = [
             {
@@ -1249,9 +1472,10 @@ def _carrier_projection_valid(value: Any) -> bool:
     return value == replay and not _contains_private_value(value)
 
 
-def _starting_state_valid(value: Any, source_revision: Any) -> bool:
+def _starting_state_valid(value: Any) -> bool:
     return value == {
-        "sourceRevision": source_revision,
+        "registrationRevisionRule": REGISTRATION_REVISION_RULE,
+        "measurementBaselineRevisionRule": MEASUREMENT_BASELINE_REVISION_RULE,
         "authorityPaths": [
             "product/constitution.json",
             "product/program.json",
@@ -1261,10 +1485,140 @@ def _starting_state_valid(value: Any, source_revision: Any) -> bool:
         "controlledGoalArtifact": CARRIER_GOAL_BINDING,
         "carrierState": {
             "repository": "single-main-checkout-clean-at-scenario-start",
-            "conversation": "native-active-goal-observed-before-and-after-each-controlled-carrier-event",
+            "sourceConversation": "native-active-goal-observed-before-compaction-or-transition-and-cleared-only-after-destination-verification",
+            "destinationConversation": "fresh-thread-started-with-zero-inherited-turns-then-exact-active-goal-installed-from-this-registration",
             "capacitySignal": "reliable-risk-or-explicit-unknown-rule-only",
         },
     }
+
+
+def _measurement_baseline_valid(root: Path, baseline_revision: Any) -> bool:
+    """Bind replay to the first clean activation commit after registration."""
+
+    if (
+        not isinstance(baseline_revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}", baseline_revision) is None
+    ):
+        return False
+    try:
+        resolved_root = root.resolve(strict=True)
+        git = shutil.which("git")
+        if git is None:
+            return False
+        environment = {
+            **os.environ,
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+        common = {
+            "cwd": resolved_root,
+            "check": False,
+            "stdout": subprocess.PIPE,
+            "stderr": subprocess.PIPE,
+            "timeout": 30,
+            "env": environment,
+        }
+        ancestry = subprocess.run(
+            [git, "rev-list", "--parents", "-n", "1", baseline_revision],
+            **common,
+        )
+        if (
+            ancestry.returncode != 0
+            or len(ancestry.stdout) > 256
+            or len(ancestry.stderr) > 16_384
+        ):
+            return False
+        parts = ancestry.stdout.decode("ascii").strip().split()
+        if len(parts) != 2 or parts[0] != baseline_revision:
+            return False
+        registration_revision = parts[1]
+        head_ancestry = subprocess.run(
+            [git, "merge-base", "--is-ancestor", baseline_revision, "HEAD"],
+            **common,
+        )
+        if (
+            head_ancestry.returncode != 0
+            or head_ancestry.stdout
+            or len(head_ancestry.stderr) > 16_384
+        ):
+            return False
+        changed = subprocess.run(
+            [
+                git,
+                "diff-tree",
+                "--no-commit-id",
+                "--name-only",
+                "-r",
+                baseline_revision,
+            ],
+            **common,
+        )
+        if (
+            changed.returncode != 0
+            or len(changed.stdout) > 4_096
+            or len(changed.stderr) > 16_384
+            or changed.stdout.decode("utf-8").splitlines() != ["product/program.json"]
+        ):
+            return False
+        program_object = f"{baseline_revision}:product/program.json"
+        size = subprocess.run([git, "cat-file", "-s", program_object], **common)
+        if (
+            size.returncode != 0
+            or len(size.stdout) > 32
+            or len(size.stderr) > 16_384
+        ):
+            return False
+        program_size = int(size.stdout.decode("ascii").strip())
+        if program_size <= 0 or program_size > 1_048_576:
+            return False
+        blob = subprocess.run([git, "cat-file", "blob", program_object], **common)
+        if (
+            blob.returncode != 0
+            or len(blob.stdout) != program_size
+            or len(blob.stderr) > 16_384
+        ):
+            return False
+        program = _strict_json_object(blob.stdout)
+    except (
+        OSError,
+        subprocess.SubprocessError,
+        UnicodeError,
+        ValueError,
+    ):
+        return False
+
+    increments = program.get("increments")
+    if not isinstance(increments, list):
+        return False
+    active = [
+        item
+        for item in increments
+        if isinstance(item, dict) and item.get("state") == "active"
+    ]
+    if len(active) != 1 or active[0].get("id") != INCREMENT_ID:
+        return False
+    increment = active[0]
+    registration = increment.get("taskRegistration")
+    work_items = increment.get("workItems")
+    active_work = (
+        [
+            item
+            for item in work_items
+            if isinstance(item, dict) and item.get("state") == "active"
+        ]
+        if isinstance(work_items, list)
+        else []
+    )
+    return (
+        program.get("status") == "active"
+        and program.get("activeIncrementId") == INCREMENT_ID
+        and isinstance(registration, dict)
+        and registration.get("locator")
+        == "product/evidence/o4-continuous-self-correction-registration.json"
+        and registration.get("sourceRevision") == registration_revision
+        and len(active_work) == 1
+    )
 
 
 def _goal_artifact_committed(root: Path, source_revision: Any) -> bool:
@@ -1399,9 +1753,7 @@ def validate_registration(
         _error(errors, "O4 correction suite must bind all six counterexample sources exactly once")
     if not _goal_artifact_committed(root, source_revision):
         _error(errors, "O4 controlled carrier goal artifact is not committed exactly")
-    if not _starting_state_valid(
-        values.get("startingAuthorityGoalAndCarrierState"), source_revision
-    ):
+    if not _starting_state_valid(values.get("startingAuthorityGoalAndCarrierState")):
         _error(errors, "O4 correction suite starting authority and carrier state are invalid")
     if values.get("injectedOrObservedFailure") != FAILURE_BINDINGS:
         _error(errors, "O4 correction suite failure bindings are invalid")
@@ -1450,6 +1802,8 @@ def _observation_valid(
         != "bounded-v1.2-controlled-self-correction-and-carrier-evidence-only"
         or observation.get("cleanupVerified") is not True
     ):
+        return False
+    if not _measurement_baseline_valid(root, source_revision):
         return False
     replay = run_fault_suite(root, source_revision)
     return (
