@@ -1311,7 +1311,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_active_o2_registration_construction(
+    def test_current_v12_contract_is_valid_with_stopped_o2_registration_counterevidence(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1322,11 +1322,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o2-codex-reference",
-        )
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
         self.assertEqual(len(live_program["increments"]), 2)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
@@ -1338,6 +1335,10 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             live_program["increments"][1]["acceptanceIds"], ["O2", "G2", "G4"]
+        )
+        self.assertEqual(live_program["increments"][1]["state"], "stopped")
+        self.assertEqual(
+            live_program["increments"][1]["workItems"][0]["state"], "stopped"
         )
         self.assertEqual(report["completionState"], "in-progress")
         self.assertEqual(
@@ -7155,6 +7156,32 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["valid"], report["errors"])
         self.assertTrue(report["criterionStates"]["O1"])
         self.assertTrue(report["criterionStates"]["G4"])
+
+    def test_ready_program_retains_stopped_registration_without_outcome_credit(self) -> None:
+        self.map_outcome_to_latest_work("O2")
+
+        def stop_registered_attempt(value: dict) -> None:
+            increment = value["increments"][0]
+            increment["state"] = "stopped"
+            increment["workItems"][0]["state"] = "stopped"
+
+        self.mutate("product/program.json", stop_registered_attempt)
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertFalse(report["criterionStates"]["O2"])
+        self.assertTrue(report["criterionStates"]["G4"])
+
+    def test_completed_registration_without_outcome_credit_is_rejected(self) -> None:
+        self.map_outcome_to_latest_work("O2")
+
+        report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertFalse(report["criterionStates"]["O2"])
+        self.assertIn(
+            "completed registered increment requires a validated outcome: "
+            f"{FIXTURE_INCREMENT_ID}",
+            report["errors"],
+        )
 
     def test_cancelled_or_stopped_increment_cannot_retain_outcome_binding(self) -> None:
         self.map_outcome_to_latest_work("O1")

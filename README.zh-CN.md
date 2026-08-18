@@ -17,18 +17,20 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
-**当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite` 与 O2 结果中性前置切片，当前
-`increment.v12-o2-codex-reference` 处于 `active`。它仍在测量前阶段：刷新公开安全的隔离
-Codex 环境清单后，精确注册已在 `7f39911` 成为不可变字节，并由同一先行 O2 validator
-通过仓库预注册缝。下一步才是已授权的隔离安装和四个受控场景；当前尚无 O2 结果。更早的
-O2 机制切片均保留在 Git 历史且已移出当前图。
+**当前状态：**v1.2 已完成 `increment.v12-o1-lifecycle-suite`，并因实时反证停止
+`increment.v12-o2-codex-reference`，现在为 `ready` 且没有 active increment。公开安全的
+O2 精确注册已在 `7f39911` 成为不可变字节；候选包只安装到隔离 Codex home，第一个简单
+原生 no-op 场景通过且文件系统无变化。第二个已注册场景没有通过：虽然请求了
+`workspace-write` sandbox，Codex 0.147.0 仍把私密隔离任务根的补丁判为只读并拒绝。套件
+因此在其余场景前停止；精确插件、marketplace、任务根和隔离账号/配置资源均已删除。
+O2 仍为 false，未请求 O2 结果接受。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
+此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
 `completionState=in-progress`、
 O1-O5 为 `1/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
-精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation。已接受的任务专属 O1 生命周期套件验证器与精确 observed-native-minimum 环境清单均先于公开安全注册提交；当前只有 O1 有界结果信用，没有私密来源、自然需求纳入、O2-O5 结果证据、终态授权验证器、已安装插件或项目级接受。树中的 O2 验证器缝、公开安全投影回放及精确提交的纯来源解析器严格先于任何 O2 注册，不能安装或执行候选，也不能提升 O2。Codex 源码已经缩减为一个隐式 v1.2
+精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation。已接受的任务专属 O1 生命周期套件验证器与精确 observed-native-minimum 环境清单均先于公开安全 O2 注册提交；当前只有 O1 有界结果信用，没有私密来源、自然需求纳入、已接受的 O2-O5 结果证据、终态授权验证器、已安装插件或项目级接受。当前树保留 O2 先行验证缝和 append-only stopped 注册；它没有 active work 或 O2 信用，临时过程投影已退出当前图。Git 历史与公开研究状态保留精确删除及失败时任务根未变化的有界反证。Codex 源码已经缩减为一个隐式 v1.2
 Skill，不含 Hook、MCP、App、私密捕获状态、外部解释器或持久运行时。安装、持久激活、
 公开发布和 release 仍是彼此独立的人类闸门。
 宪章终极命题尚未成立。

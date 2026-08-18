@@ -12,18 +12,22 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on
-`increment.v12-o2-codex-reference` after completing
-`increment.v12-o1-lifecycle-suite` and the outcome-neutral O2 prerequisite
-slices. Its exact public-safe registration is immutable at `7f39911` and the
-same earlier O2 validator now passes the repository preregistration seam. The
-authorized isolated package installation and four controlled scenarios are the
-next measured operations; none is an accepted result yet.
+**Current status:** v1.2 is `ready` with no active increment after completing
+`increment.v12-o1-lifecycle-suite` and stopping
+`increment.v12-o2-codex-reference` on live counterevidence. The exact
+public-safe O2 registration is immutable at `7f39911`; the authorized package
+was installed only in the isolated Codex home, and the simple native no-op
+passed without a filesystem delta. The next registered scenario did not pass:
+Codex 0.147.0 rejected a patch to the private isolated task root as read-only
+despite the requested `workspace-write` sandbox. The suite stopped before the
+remaining scenarios, and the exact plugin, marketplace, task roots, and
+isolated account/configuration resource were removed. O2 remains false and no
+O2 result acceptance was requested.
 Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=active`,
+`programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
@@ -32,14 +36,14 @@ cohort for release. Their exact candidate bytes are code-pinned but the profile
 binding is frozen by the exact signed revision `3e81686` and canonical digest
 `31dafe95`; it carries no cohort activation or outcome credit. One task-specific
 accepted O1 lifecycle-suite validator and exact observed-native-minimum environment
-manifest were committed before the current public-safe registration. No current
-private source, natural-demand enrollment, O2-O5 result evidence,
+manifest were committed before the public-safe O2 registration. No current
+private source, natural-demand enrollment, accepted O2-O5 result evidence,
 terminal authorization validator, installed plugin, or project-level acceptance exists.
-The tree contains a strictly pre-registration O2 seam and bounded replay of
-content-addressed, public-safe projections from Codex JSONL, plugin state and
-filesystem manifests through an exact committed pure source parser. They cannot
-install or execute the candidate and cannot
-promote O2. The Codex source has been reduced to
+The tree retains the strictly earlier O2 seam and stopped append-only
+registration. It has no active work or O2 credit; transient process projections
+exited the graph. Git history and the public research status retain bounded
+counterevidence, including exact plugin removal and an unchanged task root at
+failure. The Codex source has been reduced to
 one implicit v1.2 Skill with no Hook, MCP, App, private capture state, external
 interpreter, or persistent runtime. Installation, persistent activation,
 publication, and release remain separate human gates.

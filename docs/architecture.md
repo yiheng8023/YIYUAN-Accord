@@ -67,13 +67,14 @@ but is neither manufactured nor required for finite delivery. One evidence unit
 may support more than one criterion only when each criterion's registration,
 measures, validator, evidence class, and human authority independently pass.
 
-The current v1.2 program is `active` on
-`increment.v12-o2-codex-reference` after completing
-`increment.v12-o1-lifecycle-suite` and the outcome-neutral O2 prerequisites.
-Its public-safe O2 registration is immutable at `7f39911` and passes the same
-earlier validator through the repository preregistration seam. Authorized
-isolated installation and four live controlled scenarios follow; O2 remains
-false until their task-bound evidence and cleanup pass. O1-O5 are at 1/5. The immutable public-safe
+The current v1.2 program is `ready` with no active increment after completing
+`increment.v12-o1-lifecycle-suite` and stopping
+`increment.v12-o2-codex-reference` on live counterevidence. Its public-safe O2
+registration is immutable at `7f39911`. The package was activated only in the
+isolated Codex environment; the simple native no-op passed, but Codex 0.147.0
+rejected the next private task-root patch as read-only despite requested
+`workspace-write`. The suite stopped and all exact isolated resources were
+removed. O2 remains false, and O1-O5 are at 1/5. The immutable public-safe
 O1 registration strictly precedes its content-addressed 12/12 observation,
 independent replay, cleanup, and named-human bounded result acceptance.
 Its `normativeProfileBinding` is frozen by signed revision `3e81686` and
@@ -89,7 +90,10 @@ contain the exact accepted pre-measurement O1 lifecycle-suite validator and a
 committed O2-specific seam, bounded replay of content-addressed public-safe
 projections and exact pure source parser before any
 installation, registration, model call, or measurement. The O1 validator's exact
-registration and accepted controlled result verify O1 only. No private
+registration and accepted controlled result verify O1 only. The stopped O2
+registration remains append-only with no active work or outcome credit;
+transient process projections exited the graph, while Git history and the
+public research status retain the bounded counterevidence. No private
 natural-demand cohort is required or active. v1.1 remains stopped history: its only
 source-authorized, code-pinned `normativeProfileBinding` was revoked after a
 private source-window audit proved that the first post-activation real product

@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o2-codex-reference",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -170,7 +170,7 @@
     },
     {
       "id": "increment.v12-o2-codex-reference",
-      "state": "active",
+      "state": "stopped",
       "correctionClass": "o2-live-codex-reference-controlled-application",
       "observedProblem": "O2 has a corrected exact package grant, an authenticated clean isolated Codex home, four committed controlled goals, a source-bound user-configured unavailable stop, an earlier task-specific validator and projection builder, and an exact code-owned private-resource disposition. The control repair materially changed the capture identity, so the observed-native-minimum manifest must be refreshed and an immutable registration must pass before any package installation or scenario execution.",
       "hypothesis": "A refreshed committed starting manifest followed by one immutable O2 registration can bind the exact Codex version, environment, package digest, four scenario contracts, source-bound unavailable stop, human authority, cleanup lifecycle, earlier validator and projection builder. After a separate activation commit, installing only that package into the isolated home and running the four ordinary goal-level scenarios should demonstrate bounded Codex application, authority stop/resume, recovery, removal and zero residue without touching current user configuration.",
@@ -209,14 +209,12 @@
           "harness/__pycache__",
           "tests/product/__pycache__"
         ],
-        "privateResourceDispositions": [
-          "v1.2-o2-isolated-codex-environment:windows-current-user-private;retain-only-through-authorized-o2-controlled-suite-no-later-than-2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-or-deterministic-validation-failure"
-        ]
+        "privateResourceDispositions": []
       },
       "workItems": [
         {
           "id": "work.v12-o2-codex-reference",
-          "state": "active",
+          "state": "stopped",
           "acceptanceIds": [
             "O2",
             "G2",

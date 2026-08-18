@@ -52,12 +52,12 @@ profile and measured adapters cannot become the v1 product by inheritance or
 byte rewriting. Codex is the first operational reference, not a portable-core
 dependency; exact tested environment identity bounds every host claim.
 
-v1.2 is `active` on `increment.v12-o2-codex-reference`, with O1 at 1/5.
-Outcome-neutral O2 prerequisites are committed. The current pre-measurement
-registration is immutable at `7f39911` and passes the same earlier validator.
-Authorized isolated installation and four controlled scenarios follow; none is
-accepted evidence yet. Earlier O2 mechanism slices are history outside the
-graph; O2 remains false.
+v1.2 is `ready`, with no active increment and O1 at 1/5. The append-only O2
+registration at `7f39911` is stopped: its no-op passed, but Codex 0.147.0
+rejected the next private-root patch as read-only despite `workspace-write`.
+The exact plugin, marketplace, task roots, and isolated account/config resource
+were removed. The stopped registration remains only as failure history, with no
+active work or O2 credit; transient projections exited the graph.
 The frozen candidate.2 binding and O1 registration precede its accepted 12/12
 controlled result; the O1 suite is the only accepted outcome validator.
 Its code-pinned candidate.2 profile and controlled-conformance protocol retain

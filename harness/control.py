@@ -7775,10 +7775,18 @@ def _process_loss_guardrail(
             _error(errors, f"increment {increment_id} exceeds its outcome-neutral work budget")
         if state in TERMINAL_STATES:
             if not increment_has_validated_outcome:
-                _error(
-                    errors,
-                    f"closed outcome-neutral increment must leave the current graph: {increment_id}",
-                )
+                if increment.get("taskRegistration") is None:
+                    _error(
+                        errors,
+                        "closed outcome-neutral increment must leave the current "
+                        f"graph: {increment_id}",
+                    )
+                elif state == "completed":
+                    _error(
+                        errors,
+                        "completed registered increment requires a validated "
+                        f"outcome: {increment_id}",
+                    )
             elif state != "completed":
                 _error(
                     errors,

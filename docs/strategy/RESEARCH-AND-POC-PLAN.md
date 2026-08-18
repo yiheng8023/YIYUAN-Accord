@@ -19,13 +19,18 @@ interesting paper is not sufficient entry evidence.
 
 ## Current program and historical sequence
 
-v1.2 is ready with no active increment and O1-O5 remain 0/5. Its profile
-binding is unfrozen, while a distinct code-pinned candidate.2 profile and
+v1.2 is ready with no active increment and O1-O5 are 1/5. Its candidate.2
+profile binding is frozen without cohort activation. The completed O1 lifecycle
+suite is the only accepted outcome. A preregistered O2 Codex attempt installed
+the exact candidate only in an isolated environment; the simple no-op passed,
+but Codex 0.147.0 rejected the next private task-root patch as read-only despite
+requested `workspace-write`. The suite stopped, all isolated resources were
+removed, and O2 remains false. The distinct code-pinned candidate.2 profile and
 controlled-conformance protocol separate finite delivery from later field
 validation, cover the collaboration lifecycle through minimum sufficient
 dispositions, and keep dynamic environment/context adaptation, Agent-owned
 continuous correction, and bounded release claims reviewable without creating
-product authority, activation, or outcome credit. They require no private
+extra product authority or unearned outcome credit. They require no private
 natural-demand cohort and inherit no prior authorization, registration, result,
 or outcome. v1.1 is a stopped
 zero-outcome environment-attributed terminal-product attempt; O5 had separated
