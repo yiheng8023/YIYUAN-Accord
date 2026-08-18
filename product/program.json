@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
+  "status": "active",
+  "activeIncrementId": "increment.v12-o4-registration-preparation",
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -310,6 +310,59 @@
           "deliverables": [
             "immutable second-generation O2 permission-profile registration",
             "four-scenario public-safe Codex observation and bounded O2 evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "increment.v12-o4-registration-preparation",
+      "state": "active",
+      "correctionClass": "o4-immutable-registration-and-activation-preparation",
+      "observedProblem": "The current O4 validator, controlled goal and observed-native-minimum environment manifest are committed and verified, but no immutable O4 registration exists and no outcome-bearing O4 increment may execute before that registration is content-addressed and validated.",
+      "hypothesis": "One immutable registration can bind the exact six controlled counterexamples, current frozen profile and cohort protocol, committed environment manifest, task-scoped carrier trigger, fresh-thread transition, worktree lifecycle, earlier validator and public claim ceiling. A following commit that changes only product/program.json can then replace this preparation increment with the exact registered O4 outcome increment and provide the first valid measurement baseline.",
+      "falsifier": "The registration is added after any measurement; omits or duplicates a scenario; binds stale profile, protocol, environment, goal, validator or official host source bytes; permits copied-history fork as load relief, user topology selection, private event publication or unreleased code carriers; the activation commit changes another file, is not the registration commit's single-parent child or does not activate the exact registered increment; or O4 is credited before validated evidence and named-human acceptance.",
+      "stopCondition": "The exact O4 registration is committed as a public-safe artifact after the environment manifest and before execution; its code-owned preregistration callback and core guardrails pass; the immediately following program-only activation commit binds its revision, digest, profile and validator and activates exactly one O4 work item; this preparation increment exits the current graph with no measurement, O4 credit or residue.",
+      "acceptanceIds": [
+        "G2",
+        "G4"
+      ],
+      "taskRegistration": null,
+      "processLossBudget": {
+        "maxSameClassUserCorrectionBeforeStop": 1,
+        "maxConsecutiveOutcomeNeutralWorkItems": 1,
+        "maxProhibitedAgentWorkTransfers": 0,
+        "stopOnAuthorityOrIrreversibleIncident": true,
+        "stopOnUnboundedResidue": true
+      },
+      "cleanupBoundary": {
+        "repositoryTemporaryPaths": [
+          ".tmp",
+          "harness/__pycache__",
+          "tests/product/__pycache__"
+        ],
+        "privateResourceDispositions": [
+          "v1.2-o4-isolated-codex-environment-and-task-threads:windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-or-deterministic-validation-failure"
+        ]
+      },
+      "workItems": [
+        {
+          "id": "work.v12-o4-registration-preparation",
+          "state": "active",
+          "acceptanceIds": [
+            "G2",
+            "G4"
+          ],
+          "operationIds": [
+            "repository-read",
+            "repository-edit",
+            "local-verification",
+            "bounded-repository-cleanup",
+            "git-commit",
+            "git-push"
+          ],
+          "deliverables": [
+            "immutable O4 six-scenario task registration",
+            "program-only registered O4 activation baseline"
           ]
         }
       ]
