@@ -1462,7 +1462,7 @@ class ProductControlTests(unittest.TestCase):
                 current_o4["taskRegistration"]["preMeasurementValidator"],
                 {
                     "kind": "o4-continuous-self-correction-validator-v2",
-                    "version": 2,
+                    "version": 1,
                     "locator": "harness/task_validator_o4_continuous_self_correction_v2.py",
                     "revision": "1a45ba3d05dc694854ff0ea20437361b3c0258c5",
                     "sha256": "255ae6df24599572f0d311e5aa6ee7a33dd3b70389b5e96097dde7957d43d367",
