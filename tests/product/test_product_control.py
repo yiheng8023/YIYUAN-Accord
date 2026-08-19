@@ -1336,7 +1336,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_three_stopped_counterexamples(
+    def test_current_v12_contract_is_valid_during_second_generation_o4_transition(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1347,9 +1347,15 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "ready")
-        self.assertIsNone(live_program["activeIncrementId"])
-        self.assertEqual(len(live_program["increments"]), 4)
+        self.assertEqual(live_program["status"], "active")
+        self.assertIn(
+            live_program["activeIncrementId"],
+            {
+                "increment.v12-o4-second-generation-registration-preparation",
+                "increment.v12-o4-continuous-self-correction-second-generation",
+            },
+        )
+        self.assertEqual(len(live_program["increments"]), 5)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
@@ -1440,6 +1446,28 @@ class ProductControlTests(unittest.TestCase):
             o4_suite["taskRegistration"]["sourceRevision"],
             "9ff75320b551e4493d17d0b467291d00d172f14f",
         )
+        current_o4 = live_program["increments"][4]
+        self.assertEqual(current_o4["id"], live_program["activeIncrementId"])
+        self.assertEqual(current_o4["state"], "active")
+        if current_o4["id"].endswith("registration-preparation"):
+            self.assertEqual(current_o4["acceptanceIds"], ["G2", "G4"])
+            self.assertIsNone(current_o4["taskRegistration"])
+        else:
+            self.assertEqual(current_o4["acceptanceIds"], ["O4", "G2", "G4"])
+            self.assertEqual(
+                current_o4["taskRegistration"]["locator"],
+                "product/evidence/o4-continuous-self-correction-second-generation-registration.json",
+            )
+            self.assertEqual(
+                current_o4["taskRegistration"]["preMeasurementValidator"],
+                {
+                    "kind": "o4-continuous-self-correction-validator-v2",
+                    "version": 2,
+                    "locator": "harness/task_validator_o4_continuous_self_correction_v2.py",
+                    "revision": "1a45ba3d05dc694854ff0ea20437361b3c0258c5",
+                    "sha256": "255ae6df24599572f0d311e5aa6ee7a33dd3b70389b5e96097dde7957d43d367",
+                },
+            )
         o4_stopped = json.loads(
             (
                 ROOT

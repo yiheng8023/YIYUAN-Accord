@@ -18,7 +18,7 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
 
 **当前状态：**v1.2 已完成 O1，并因实时反证停止两次预注册 O2 尝试和第一代不可变 O4
-受控尝试，当前为 `ready`。五个 outcome-neutral 切片曾在测量之前提交 O4 专属验证器，
+受控尝试，当前在有界的 O4 v2 注册与受控执行路径上处于 `active`。五个 outcome-neutral 切片曾在测量之前提交 O4 专属验证器，
 把公开安全投影绑定到 Codex 原始宿主消息和仓库观察，并使受控载体路线在注册后可达。实际
 运行中，前两个一次性 checkout 场景通过；第三个场景因通用 O1 evidence-shape gate 先于
 任务专属验证器拒绝故障，无法观察到预注册的精确诊断，故整套尝试停止。其余 checkout、
@@ -26,7 +26,7 @@ Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的�
 该反证不计 O4 信用。随后完成的有界 outcome-neutral 修复保持第一代验证器冻结字节不变，
 并建立独立的第二代 increment、suite、validator、registration 与 observation 路径；修正后的
 第三场景诊断已通过一次性 checkout 的检测、恢复和复验演练，但尚无第二代注册或宿主测量。
-新的隔离 Codex 登录及已提交的公开安全环境清单已验证；注册仍先于任何线程启动。
+新的隔离 Codex 登录及已提交的公开安全环境清单已验证；不可变注册仍先于任何线程启动。
 第二代路线使用 Codex 0.147.0 官方内置 `:workspace` profile，不与旧
 sandbox 机制混用。固定的 32 轮、4 并发压测得到根内写入 32/32 允许、根外写入 32/32
 拒绝、零异常结果和零残留。`fe119ca` 的不可变注册之后，精确候选包只安装到全新隔离
@@ -37,7 +37,7 @@ item 失败关闭。权限边界与恢复场景未再执行；精确插件、mar
 反证保留。
 十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
 12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
+此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=active`、
 `completionState=in-progress`、
 O1-O5 为 `1/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
 全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
