@@ -1336,7 +1336,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             return render_claude_session_start_context(self.root, payload)
 
-    def test_current_v12_contract_is_valid_with_three_stopped_counterexamples_and_one_neutral_slice(
+    def test_current_v12_contract_is_valid_with_three_stopped_counterexamples(
         self,
     ) -> None:
         report = verify_product(ROOT)
@@ -1347,12 +1347,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(report["release"], "v1.2")
         self.assertEqual(report["programStatus"], live_program["status"])
         self.assertEqual(report["activeIncrement"], live_program["activeIncrementId"])
-        self.assertEqual(live_program["status"], "active")
-        self.assertEqual(
-            live_program["activeIncrementId"],
-            "increment.v12-o4-second-generation-environment-manifest",
-        )
-        self.assertEqual(len(live_program["increments"]), 5)
+        self.assertEqual(live_program["status"], "ready")
+        self.assertIsNone(live_program["activeIncrementId"])
+        self.assertEqual(len(live_program["increments"]), 4)
         self.assertEqual(
             live_program["increments"][0]["taskRegistration"]["sourceRevision"],
             "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
@@ -1443,15 +1440,6 @@ class ProductControlTests(unittest.TestCase):
             o4_suite["taskRegistration"]["sourceRevision"],
             "9ff75320b551e4493d17d0b467291d00d172f14f",
         )
-        environment_slice = live_program["increments"][4]
-        self.assertEqual(
-            environment_slice["id"],
-            "increment.v12-o4-second-generation-environment-manifest",
-        )
-        self.assertEqual(environment_slice["state"], "active")
-        self.assertEqual(environment_slice["acceptanceIds"], ["G2", "G4"])
-        self.assertIsNone(environment_slice["taskRegistration"])
-        self.assertEqual(environment_slice["workItems"][0]["state"], "active")
         o4_stopped = json.loads(
             (
                 ROOT

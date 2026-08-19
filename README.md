@@ -12,8 +12,7 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on one bounded outcome-neutral O4 v2
-environment-attribution slice after completing O1 and stopping two
+**Current status:** v1.2 is `ready` after completing O1 and stopping two
 preregistered O2 attempts on live counterevidence, and stopping the first
 immutable O4 controlled attempt without O4 credit. Five bounded outcome-neutral
 slices had committed the O4-specific validator, bound its public-safe projection
@@ -28,9 +27,9 @@ created. This counterevidence carries no O4 credit. A bounded outcome-neutral
 repair now preserves the frozen v1 validator bytes and adds a distinct v2
 validator, increment, registration and observation path. Its corrected third
 diagnostic passed a disposable-checkout detect/recover/reverify rehearsal, but
-no v2 registration or host measurement exists. A fresh isolated Codex login is
-now authorized and verified, and its public-safe environment manifest is being
-committed before any registration or thread start. The second O2 attempt used
+no v2 registration or host measurement exists. A fresh isolated Codex login
+and its committed public-safe environment manifest are verified; registration
+still precedes any thread start. The second O2 attempt used
 Codex 0.147.0's official built-in `:workspace` permission
 profile without legacy sandbox composition. Its fixed 32-cycle four-worker
 probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,
@@ -48,7 +47,7 @@ Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=active`,
+`programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
