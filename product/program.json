@@ -6,8 +6,8 @@
   "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
-  "activeIncrementId": "increment.v12-o4-continuous-self-correction-second-generation",
+  "status": "ready",
+  "activeIncrementId": null,
   "progressionPolicy": {
     "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
     "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
@@ -392,7 +392,7 @@
     },
     {
       "id": "increment.v12-o4-continuous-self-correction-second-generation",
-      "state": "active",
+      "state": "stopped",
       "correctionClass": "o4-second-generation-controlled-continuous-self-correction-and-carrier-validation",
       "observedProblem": "O4 remains unverified. The first registered attempt is immutable stopped counterevidence because its generic evidence-shape gate prevented the exact third diagnostic and the remaining scenarios were not executed. A distinct v2 validator repairs only that measured seam, and the exact six-scenario suite, frozen method, fresh environment manifest, controlled goal and earlier v2 validator are now immutably registered, but no second-generation measurement or accepted O4 evidence exists.",
       "hypothesis": "Executing the four registered disposable-checkout counterexamples plus one native Codex compaction recovery and one fresh zero-inherited-turn same-goal transition through the v2 path should demonstrate pre-effect divergence detection, minimum correction, reverification and full code/conversation carrier lifecycle control without user reconstruction, topology selection or cleanup. The task-scoped cadence observation can calibrate this exact controlled route while remaining explicitly non-universal.",
@@ -438,7 +438,7 @@
       "workItems": [
         {
           "id": "work.v12-o4-controlled-continuous-self-correction-second-generation",
-          "state": "active",
+          "state": "stopped",
           "acceptanceIds": [
             "O4",
             "G2",

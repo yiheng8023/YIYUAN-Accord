@@ -51,14 +51,12 @@ v0.2 is bounded calibration; v1.0 and v1.1 are stopped zero-outcome history.
 None can be inherited. Codex is the first operational reference, not a
 portable-core dependency; exact tested environments bound every host claim.
 
-v1.2 is `active` on the bounded O4 v2 registration and controlled-execution
-path; O1 is 1/5. The first immutable O4 attempt passed two disposable-checkout
-scenarios, then stopped: the generic O1 evidence-shape gate rejected scenario
-three before its preregistered diagnostic; three scenarios were not run. It
-created no task thread, its isolate was removed, and it earns no O4 credit. A
-neutral repair preserved the frozen v1 validator and added a v2 path whose
-third-diagnostic rehearsal passed. A fresh isolated login and committed
-manifest are verified; registration precedes any thread or measurement.
+v1.2 is `ready`; O1 is 1/5. O4 attempt one passed two checkout scenarios, then
+stopped when the generic O1 shape gate preempted scenario three. A neutral
+repair froze v1 and added v2. Attempt two passed all four checkouts, then stopped
+before App Server when live Codex changed from 0.147.0 to 0.148.0. Neither made
+a host thread, turn, compact or transition; both isolates were removed and O4
+remains false.
 Verify the destination before clearing and archiving the source goal; full-history fork is
 an optional topology branch, not context-load relief. Two immutable O2 attempts retain
 bounded native-Windows counterevidence with no O2 credit. The second used the

@@ -12,10 +12,9 @@ judgment, and grants bounded authority. The Agent chooses a sufficient route
 and task carrier, uses them safely, reconciles any split work, verifies the
 result, and cleans up afterward.
 
-**Current status:** v1.2 is `active` on the bounded O4 v2 registration and
-controlled-execution path after completing O1 and stopping two
-preregistered O2 attempts on live counterevidence, and stopping the first
-immutable O4 controlled attempt without O4 credit. Five bounded outcome-neutral
+**Current status:** v1.2 is `ready` after completing O1, stopping two
+preregistered O2 attempts on live counterevidence, and stopping two immutable
+O4 controlled attempts without O4 credit. Five bounded outcome-neutral
 slices had committed the O4-specific validator, bound its public-safe projection
 to raw Codex host and repository observations, and made the controlled carrier
 route reachable before measurement. In the registered run, the first two
@@ -27,10 +26,13 @@ executed. The isolated environment was removed and no task thread had been
 created. This counterevidence carries no O4 credit. A bounded outcome-neutral
 repair now preserves the frozen v1 validator bytes and adds a distinct v2
 validator, increment, registration and observation path. Its corrected third
-diagnostic passed a disposable-checkout detect/recover/reverify rehearsal, but
-no v2 registration or host measurement exists yet. A fresh isolated Codex
-login and its committed public-safe environment manifest are verified;
-immutable registration still precedes any thread start. The second O2 attempt used
+diagnostic passed a disposable-checkout detect/recover/reverify rehearsal. The
+second O4 generation then registered a fresh isolated Codex 0.147.0
+environment. Its four repository counterexamples passed, including the repaired
+third diagnostic, but the live native binary had updated to 0.148.0 before App
+Server construction. The exact drift gate stopped the suite before any task
+thread, model turn, compaction or transition, removed the isolate, and granted
+no O4 credit. The second O2 attempt used
 Codex 0.147.0's official built-in `:workspace` permission
 profile without legacy sandbox composition. Its fixed 32-cycle four-worker
 probe observed 32/32 in-root writes allowed, 32/32 out-of-root writes denied,
@@ -48,7 +50,7 @@ Its exact prior revision immutably registered
 the accepted twelve-slice controlled O1 design; the content-addressed 12/12
 observation, independent replay, cleanup and named-human bounded result
 acceptance now verify O1. The repository verifier reports
-`programStatus=active`,
+`programStatus=ready`,
 `completionState=in-progress`, O1-O5
 `1/5`, and G1-G4 `4/4`; run it for live truth. The current candidate.2 profile
 and controlled-conformance protocol cover the collaboration lifecycle without
