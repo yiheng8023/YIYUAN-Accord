@@ -19,8 +19,16 @@
   },
   "projectionIdentity": {
     "adapterId": "codex",
+    "manifest": "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    "manifestSha256": "b78649a2e67ade7957fc2d19b5cffe83cc329ff5993d670ac45692f29d3ca05a",
+    "marketplace": ".agents/plugins/marketplace.json",
+    "marketplaceSha256": "07616294a2aeb36d2e223f4cd5123f6cac0ce5d71fa40fd913db7d9928dbb28f",
+    "contract": "plugins/agent-autonomy-harness-codex/adapter.json",
+    "contractSha256": "d61583863ed8225e0ad837a5810b07951450560b87f72906971d1a57f78cb9ed",
+    "skill": "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
     "skillName": "deliver-demand-driven-outcome",
     "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374",
+    "packageSha256": "a02a950295128a7db01f8d9a6bea721ac5dafc7efc47a04c3ddc5325c24886ec",
     "activation": "explicit Skill mention plus task-owned CWD Skill junction"
   },
   "startingState": "The same checkout and goal remain healthy. The client exposes no reliable remaining-capacity signal, compaction summaries are becoming material, and no fixed context or percentage threshold is authoritative.",
@@ -66,6 +74,9 @@
   "decision": {
     "state": "candidate-pass-awaiting-human-review",
     "reason": "The exact response satisfied every predeclared GT-07 behavior and no prohibited behavior occurred. This is one controlled decision response, not proof that the host will autonomously transition a real long-running carrier."
+  },
+  "acceptanceDecisions": {
+    "R3": "pending-human-review"
   },
   "claimLimit": [
     "one-controlled-unknown-capacity-decision",

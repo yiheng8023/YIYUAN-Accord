@@ -45,7 +45,9 @@ K1–K5 之上有两组可执行约束：
   [constitution](product/constitution.json)、
   [program](product/program.json)、
   [acceptance](product/acceptance.json)
-- 一个数据驱动的通用验证器：[harness/control.py](harness/control.py)
+- 一个数据驱动的通用验证命令：`python -B -m harness verify`，实现由
+  [control.py](harness/control.py) 与纯准入护栏
+  [guardrails.py](harness/guardrails.py) 组成
 - 两个无 runtime、无强制 Hook 的薄 Skill 投影：
   [Codex](plugins/agent-autonomy-harness-codex) 与
   [Claude Code](plugins/agent-autonomy-harness-claude)
@@ -74,7 +76,8 @@ v1.2 正在进行一次全局减法重塑。当前目标模式提示词已在
 仓库文件不会假装已经替换宿主生命周期。
 
 有限发布需要 R1–R4 与 Q1–Q4 的确定性和代表性证据，以及具名人类对精确候选、主张上限、
-发布与公开的授权。真实场域效果、广泛人群的负担改善、所有 Agent/宿主等价性和长期组织
+发布与公开的授权。仓库只能记录“已请求”状态，不能自行铸造这项人类授权；发布时的临时
+外部授权输入必须绑定干净的精确 HEAD。真实场域效果、广泛人群的负担改善、所有 Agent/宿主等价性和长期组织
 影响是发布后持续证据通道，不是为了拖延本次有限发布，也不会被本次发布虚构为已证明。
 
 v1.2 的有限代表样本是 GT-01、GT-02 与 GT-07。样本任务失败会阻断精确宿主行为资格；只要

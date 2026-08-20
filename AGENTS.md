@@ -95,5 +95,6 @@ source release; do not make the user operate topology.
 
 At closeout, keep deterministic conformance, representative behavior, field
 effect, cross-host or longitudinal evidence and named-human release authority
-distinct. A finite open-source release may close while explicitly bounded
+distinct. Repository data may request but cannot grant human release authority;
+bind a task-time external authorization to the exact clean candidate. A finite open-source release may close while explicitly bounded
 post-release evidence lanes and calibration continue.

@@ -7,6 +7,19 @@ import re
 import subprocess
 from typing import Any, Iterable
 
+from .guardrails import (
+    criterion_observation_decision,
+    forbidden_path_present,
+    known_task_residue,
+    manifest_shape_errors,
+    marketplace_errors,
+    projection_evidence_binding_errors,
+    repository_release_authorization_errors,
+    repository_relative_path,
+    validate_projection_package,
+    validate_runtime_release_authorization,
+)
+
 
 AUTHORITY_FILES = (
     "product/constitution.json",
@@ -199,8 +212,10 @@ def _validate_constitution(
     else:
         if authority.get("semantic") != list(AUTHORITY_FILES):
             errors.append("constitution.authority.semantic must name the three authority files")
-        if authority.get("executableVerifier") != "harness/control.py":
-            errors.append("constitution.authority.executableVerifier must be harness/control.py")
+        if authority.get("executableVerifier") != "python -B -m harness verify":
+            errors.append(
+                "constitution.authority.executableVerifier must be the public harness command"
+            )
 
     return {
         "kernel": kernel_ids,
@@ -342,12 +357,14 @@ def _validate_complexity(
     if forbidden is None:
         errors.append("program.complexityBudget.forbiddenActivePaths must be a string list")
     else:
-        for locator in forbidden:
-            path = root / Path(locator)
-            contains_file = path.is_dir() and any(
-                item.is_file() or item.is_symlink() for item in path.rglob("*")
-            )
-            if path.is_file() or path.is_symlink() or contains_file:
+        for index, locator in enumerate(forbidden):
+            path = repository_relative_path(root, locator)
+            if path is None:
+                errors.append(
+                    "program.complexityBudget.forbiddenActivePaths"
+                    f"[{index}] is not a repository-relative path"
+                )
+            elif forbidden_path_present(path):
                 errors.append(f"forbidden active path remains: {locator}")
     return metrics
 
@@ -454,6 +471,10 @@ def _validate_program(
             projection.get("marketplace")
         ):
             errors.append(f"hostProjections[{index}].marketplace must be non-empty")
+        if _string_list(projection.get("metadataFiles")) is None:
+            errors.append(
+                f"hostProjections[{index}].metadataFiles must be a string list"
+            )
         forbidden = projection.get("forbiddenPaths")
         if _string_list(forbidden) is None:
             errors.append(f"hostProjections[{index}].forbiddenPaths must be a string list")
@@ -508,6 +529,7 @@ def _validate_acceptance(
     acceptance: dict[str, Any],
     contract_ids: set[str],
     evidence_classes: set[str],
+    runtime_release_authorization: dict[str, Any] | None,
     errors: list[str],
 ) -> tuple[list[str], bool, list[str], list[str]]:
     if acceptance.get("schema") != 2:
@@ -522,6 +544,12 @@ def _validate_acceptance(
 
     criteria = _object_entries(acceptance, "criteria", errors)
     criterion_ids = _entry_ids(criteria, "criteria", errors)
+    golden = _read_json(root, GOLDEN_TASKS_FILE, [])
+    task_mappings = {
+        task.get("id"): set(_string_list(task.get("mapsTo")) or [])
+        for task in golden.get("tasks", [])
+        if isinstance(task, dict) and _nonempty_string(task.get("id"))
+    }
     verified = True
     for index, criterion in enumerate(criteria):
         label = f"criteria[{index}]"
@@ -540,16 +568,33 @@ def _validate_acceptance(
         ):
             errors.append(f"{label}.evidence must be a list of objects")
             evidence = []
+        accepted_decision = False
         for evidence_index, item in enumerate(evidence):
-            _validate_evidence_item(
+            observation = _validate_evidence_item(
                 root,
                 item,
                 f"{label}.evidence[{evidence_index}]",
                 errors,
                 criterion.get("evidenceClass"),
             )
+            if assessment != "verified":
+                continue
+            accepted, decision_errors = criterion_observation_decision(
+                criterion.get("id"),
+                item,
+                observation,
+                task_mappings,
+                f"{label}.evidence[{evidence_index}]",
+            )
+            accepted_decision |= accepted
+            errors.extend(decision_errors)
         if assessment == "verified" and not evidence:
             errors.append(f"{label} is verified without direct evidence")
+        elif assessment == "verified" and not accepted_decision:
+            errors.append(
+                f"{label} verified evidence lacks an accepted "
+                f"{criterion.get('id')} decision"
+            )
         if assessment != "verified":
             verified = False
 
@@ -611,22 +656,15 @@ def _validate_acceptance(
 
     authorization = acceptance.get("releaseAuthorization")
     authorization_valid = False
-    if not isinstance(authorization, dict):
-        errors.append("acceptance.releaseAuthorization must be an object")
-    elif authorization.get("state") == "authorized":
-        authorization_valid = (
-            isinstance(authorization.get("candidateRevision"), str)
-            and REVISION_RE.fullmatch(authorization["candidateRevision"]) is not None
-            and _nonempty_string(authorization.get("namedHuman"))
-            and _nonempty_string(authorization.get("authorizedAt"))
-            and authorization.get("claimCeilingAccepted") is True
-            and authorization.get("publicationAuthorized") is True
-            and authorization.get("releaseAuthorized") is True
+    errors.extend(repository_release_authorization_errors(authorization))
+    if runtime_release_authorization is not None:
+        if isinstance(authorization, dict) and authorization.get("state") != "requested":
+            errors.append(
+                "runtime release authorization requires repository state requested"
+            )
+        authorization_valid = validate_runtime_release_authorization(
+            root, runtime_release_authorization, errors
         )
-        if not authorization_valid:
-            errors.append("authorized releaseAuthorization is incomplete or malformed")
-    elif authorization.get("state") not in {"unrequested", "requested", "declined"}:
-        errors.append("acceptance.releaseAuthorization.state is invalid")
 
     return (
         criterion_ids,
@@ -634,73 +672,6 @@ def _validate_acceptance(
         required_sample_ids,
         post_release_task_ids,
     )
-
-
-def _validate_projection_evidence_bindings(
-    root: Path,
-    acceptance: dict[str, Any],
-    host_reports: dict[str, Any],
-    errors: list[str],
-) -> None:
-    criteria = acceptance.get("criteria")
-    if not isinstance(criteria, list):
-        return
-    for criterion_index, criterion in enumerate(criteria):
-        if not isinstance(criterion, dict):
-            continue
-        evidence = criterion.get("evidence")
-        if not isinstance(evidence, list):
-            continue
-        for evidence_index, item in enumerate(evidence):
-            if not isinstance(item, dict) or "bindsProjection" not in item:
-                continue
-            label = f"criteria[{criterion_index}].evidence[{evidence_index}]"
-            adapter_id = item.get("bindsProjection")
-            if not _nonempty_string(adapter_id) or adapter_id not in host_reports:
-                errors.append(f"{label}.bindsProjection is unknown")
-                continue
-            locator = item.get("locator")
-            if not isinstance(locator, str):
-                continue
-            local_errors: list[str] = []
-            observation = _read_json(root, locator, local_errors)
-            if local_errors:
-                continue
-            observed = observation.get("projection")
-            if not isinstance(observed, dict):
-                observed = observation.get("projectionIdentity")
-            if not isinstance(observed, dict):
-                errors.append(f"{label} lacks projection identity")
-                continue
-            if observed.get("adapterId") != adapter_id:
-                errors.append(f"{label} projection identity mismatch")
-            host_report = host_reports[adapter_id]
-            for locator_field in ("manifest", "marketplace", "contract", "skill"):
-                if (
-                    locator_field in observed
-                    and observed.get(locator_field)
-                    != host_report.get(locator_field)
-                ):
-                    errors.append(
-                        f"{label} {locator_field} locator does not match current "
-                        f"adapter {adapter_id}"
-                    )
-            current = host_report.get("identity")
-            if not isinstance(current, dict):
-                errors.append(f"{label} current projection identity unavailable")
-                continue
-            for field in (
-                "skillSha256",
-                "manifestSha256",
-                "marketplaceSha256",
-                "contractSha256",
-            ):
-                if field == "skillSha256" or field in observed:
-                    if observed.get(field) != current.get(field):
-                        errors.append(
-                            f"{label} {field} does not match current adapter "
-                            f"{adapter_id}"
-                        )
 
 
 def _validate_representative_sample_evidence(
@@ -725,6 +696,7 @@ def _validate_representative_sample_evidence(
         errors.append("acceptance must contain representative criterion R3")
         return
     observed: dict[str, int] = {}
+    nonterminal: list[str] = []
     evidence = representative.get("evidence")
     if not isinstance(evidence, list):
         return
@@ -750,10 +722,20 @@ def _validate_representative_sample_evidence(
                 "projection-bound"
             )
         decision = observation.get("decision")
-        if not isinstance(decision, dict) or not _nonempty_string(
-            decision.get("state")
-        ):
+        state = decision.get("state") if isinstance(decision, dict) else None
+        if state not in {
+            "passed",
+            "failed",
+            "failed-repeated-same-purpose",
+            "candidate-pass-awaiting-human-review",
+        }:
             errors.append(f"R3 evidence[{index}] lacks an explicit task decision")
+        elif (
+            representative.get("assessment") == "verified"
+            and task_id in required_task_ids
+            and state == "candidate-pass-awaiting-human-review"
+        ):
+            nonterminal.append(task_id)
         observed[task_id] = observed.get(task_id, 0) + 1
     missing = sorted(set(required_task_ids) - set(observed))
     if missing:
@@ -769,6 +751,11 @@ def _validate_representative_sample_evidence(
         errors.append(
             f"representative release sample has multiple current observations: "
             f"{ambiguous}"
+        )
+    if nonterminal:
+        errors.append(
+            f"R3 verified sample has nonterminal task decisions: "
+            f"{sorted(nonterminal)}"
         )
 
 
@@ -847,6 +834,7 @@ def _validate_projection(
     marketplace_locator = projection.get("marketplace")
     contract_locator = projection.get("contract")
     skill_locator = projection.get("skill")
+    metadata_locators = _string_list(projection.get("metadataFiles")) or []
     manifest = (
         _read_json(root, manifest_locator, errors)
         if isinstance(manifest_locator, str)
@@ -864,34 +852,19 @@ def _validate_projection(
     )
     if not _nonempty_string(manifest.get("name")):
         errors.append(f"adapter {adapter_id} manifest name must be non-empty")
+    errors.extend(manifest_shape_errors(adapter_id, manifest))
     if isinstance(marketplace_locator, str):
         marketplace = _read_json(root, marketplace_locator, errors)
-        entries = marketplace.get("plugins")
-        matches = (
-            [entry for entry in entries if isinstance(entry, dict) and entry.get("name") == manifest.get("name")]
-            if isinstance(entries, list)
-            else []
+        expected_path = (
+            f"./{Path(manifest_locator).parent.parent.as_posix()}"
+            if isinstance(manifest_locator, str)
+            else None
         )
-        if len(matches) != 1:
-            errors.append(f"adapter {adapter_id} marketplace entry is not unique")
-        else:
-            entry = matches[0]
-            source = entry.get("source")
-            expected_path = (
-                f"./{Path(manifest_locator).parent.parent.as_posix()}"
-                if isinstance(manifest_locator, str)
-                else None
+        errors.extend(
+            marketplace_errors(
+                adapter_id, marketplace, manifest.get("name"), expected_path
             )
-            if not isinstance(source, dict) or source != {
-                "source": "local",
-                "path": expected_path,
-            }:
-                errors.append(f"adapter {adapter_id} marketplace source is invalid")
-            policy = entry.get("policy")
-            if not isinstance(policy, dict) or policy.get("installation") not in {
-                "NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"
-            } or policy.get("authentication") not in {"ON_INSTALL", "ON_USE"}:
-                errors.append(f"adapter {adapter_id} marketplace policy is invalid")
+        )
     if contract.get("schema") != 1:
         errors.append(f"adapter {adapter_id} contract schema must be 1")
     if contract.get("adapterId") != adapter_id:
@@ -948,13 +921,25 @@ def _validate_projection(
             if marker not in skill_text:
                 errors.append(f"adapter {adapter_id} Skill omits marker {marker}")
 
+    package_digest, package_errors = validate_projection_package(
+        root,
+        adapter_id,
+        manifest_locator,
+        contract_locator,
+        skill_locator,
+        metadata_locators,
+    )
+    errors.extend(package_errors)
+
     forbidden = _string_list(projection.get("forbiddenPaths")) or []
-    for locator in forbidden:
-        path = root / locator
-        contains_file = path.is_dir() and any(
-            item.is_file() or item.is_symlink() for item in path.rglob("*")
-        )
-        if path.is_file() or path.is_symlink() or contains_file:
+    for index, locator in enumerate(forbidden):
+        path = repository_relative_path(root, locator)
+        if path is None:
+            errors.append(
+                f"adapter {adapter_id} forbiddenPaths[{index}] is not a "
+                "repository-relative path"
+            )
+        elif forbidden_path_present(path):
             errors.append(f"adapter {adapter_id} forbidden path remains: {locator}")
 
     identity: dict[str, str] = {}
@@ -968,6 +953,8 @@ def _validate_projection(
             path = _safe_file(root, locator, [])
             if path is not None:
                 identity[field] = _hash(path)
+    if package_digest is not None:
+        identity["packageSha256"] = package_digest
     return {
         "id": adapter_id,
         "staticReady": len(errors) == initial_error_count,
@@ -977,6 +964,7 @@ def _validate_projection(
         "marketplace": marketplace_locator,
         "contract": contract_locator,
         "skill": skill_locator,
+        "metadataFiles": metadata_locators,
         "identity": identity,
     }
 
@@ -1001,7 +989,10 @@ def host_check(root: Path, adapter_id: str) -> dict[str, Any]:
     }
 
 
-def verify_product(root: Path) -> dict[str, Any]:
+def verify_product(
+    root: Path,
+    release_authorization: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     root = Path(root)
     errors: list[str] = []
     constitution = _read_json(root, AUTHORITY_FILES[0], errors)
@@ -1029,6 +1020,7 @@ def verify_product(root: Path) -> dict[str, Any]:
         acceptance,
         kernel_host_lesson_ids,
         evidence_classes,
+        release_authorization,
         errors,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
@@ -1063,11 +1055,10 @@ def verify_product(root: Path) -> dict[str, Any]:
                 "errors": local_errors,
             }
 
-    _validate_projection_evidence_bindings(
-        root,
-        acceptance,
-        host_reports,
-        errors,
+    errors.extend(
+        projection_evidence_binding_errors(
+            root, acceptance, host_reports, _read_json
+        )
     )
     _validate_representative_sample_evidence(
         root,
@@ -1078,6 +1069,9 @@ def verify_product(root: Path) -> dict[str, Any]:
     )
 
     complexity = _validate_complexity(root, program, errors)
+    residue = known_task_residue(root)
+    if residue:
+        errors.append(f"known task residue remains: {residue}")
     verified_count = sum(
         1
         for criterion in acceptance.get("criteria", [])

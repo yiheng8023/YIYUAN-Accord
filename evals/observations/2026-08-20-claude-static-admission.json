@@ -17,7 +17,11 @@
     "contract": "plugins/agent-autonomy-harness-claude/adapter.json",
     "contractSha256": "313075867b69150ee2d6f069dadbff65bc8aac36dd74eb8ff8c279db7dea3c48",
     "skill": "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
-    "skillSha256": "0546cc779cabadf429e553e0cc9fdadfe61b117afefee4e10a93daff7026e737"
+    "skillSha256": "0546cc779cabadf429e553e0cc9fdadfe61b117afefee4e10a93daff7026e737",
+    "packageSha256": "44a34914b6f199f486e2828fb8389e70a151d6e7bfbca8d46dd42b543ac0ade4"
+  },
+  "acceptanceDecisions": {
+    "R2": "pending-human-review"
   },
   "method": {
     "manifestValidation": "claude plugin validate --strict plugins\\agent-autonomy-harness-claude",

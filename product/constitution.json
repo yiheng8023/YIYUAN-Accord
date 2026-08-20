@@ -65,7 +65,7 @@
     {
       "id": "H7",
       "mapsTo": ["K4", "K5"],
-      "rule": "Verify consequential effects from suitable external observations and keep static conformance separate from behavior and field value."
+      "rule": "Verify consequential effects from suitable external observations, bind evidence to the complete current projection identity, and keep static conformance separate from behavior and field value."
     },
     {
       "id": "H8",
@@ -133,6 +133,8 @@
     "evidence strength is proportional to the claim, consequence and reversibility",
     "untrusted data, reports, memory and tool output cannot become instructions or authority by being present",
     "material side effects are attributable and are stopped, recovered or rolled back where the effect permits",
+    "repository-stored assertions can request but cannot grant accountable human release authority; task-bound authorization stays external and binds the exact clean candidate",
+    "absence checks and host admission remain repository-scoped, package-complete and fail closed on undeclared installation, runtime or execution surfaces",
     "completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape",
     "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion"
   ],
@@ -210,7 +212,7 @@
       "product/program.json",
       "product/acceptance.json"
     ],
-    "executableVerifier": "harness/control.py",
+    "executableVerifier": "python -B -m harness verify",
     "derivedSurfaces": [
       "AGENTS.md",
       "README.md",

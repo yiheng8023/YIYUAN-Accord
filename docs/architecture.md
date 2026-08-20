@@ -43,14 +43,19 @@ them.
 
 ## One deep verification seam
 
-harness/control.py validates:
+`python -B -m harness verify` is the one public verification seam.
+`harness/control.py` evaluates the product data while `harness/guardrails.py`
+contains pure repository, projection-package and external-authorization checks.
+Together they validate:
 
 - the three authority schemas and their cross-file mappings;
 - one active increment and one active work item;
 - goal-mode prompt coverage;
-- evidence-lane separation and release-authorization shape;
+- evidence-lane separation, criterion-specific acceptance and an external
+  release authorization bound to the exact clean candidate;
 - Golden Task coverage and its refusal to self-certify behavior;
-- projection manifests, Skill budgets and absence of forbidden runtime paths;
+- complete projection identities, exact Skill-only package surfaces,
+  repository-scoped absence paths and non-expansive marketplace policy;
 - the explicit complexity budget and retired proof-generation paths.
 
 The verifier does not contain copies of the product's purpose, criterion

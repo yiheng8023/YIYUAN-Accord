@@ -31,13 +31,14 @@ reshape-and-release increment and one active work item.
 - The replacement goal-mode objective is prepared in program.goalModePrompt.
   The previous host goal is paused; do not claim that repository mutation
   resumed or replaced it.
-- On 2026-08-20, the authenticated Codex CLI account returned zero cloud
-  environments. A later in-app-browser refresh confirmed a Pro login and a
-  reachable Codex Cloud workbench, but no repository or executable environment
-  was visible; the settings route remained blank with frontend/network timeout
-  errors. No cloud task, repository connection or environment mutation
-  occurred. Treat workbench reachability and executable-environment readiness
-  as separate gates and refresh them before a cloud run.
+- On 2026-08-20, ordinary Codex Cloud was exercised through the authenticated
+  account after the in-app browser login was refreshed. A read-only task on the
+  remote `origin/main` baseline `534a77aae9e1d191173e6e05b4327c80d22855d8`
+  ran in a clean temporary `work` branch with Python 3.14.4 and reproduced the
+  canonical verifier as valid, incomplete and 0/8 verified. It created no diff
+  and did not observe the unpublished local candidate. This is an ordinary
+  Cloud execution lane, not Codex Security trusted access; keep remote-baseline
+  evidence distinct from local-candidate or post-push hosted evidence.
 - Claude Code 2.1.237 passed strict plugin and Skill package validation. Its
   native `plugin eval` surface reported early access on this account, so no
   Claude behavior result has been claimed.
@@ -65,8 +66,11 @@ reshape-and-release increment and one active work item.
    claim instead of being erased or forcing an unrelated product failure.
 5. Prepare a clean candidate, security/privacy/residue review and exact claim
    ceiling.
-6. Request named-human authorization for that exact candidate, publication and
-   release. Only then create and verify the release.
+6. Commit the clean candidate with repository authorization state `requested`.
+   Request named-human authorization for that exact HEAD, claim ceiling,
+   publication and release. Supply that decision only as a task-bound external
+   verifier input; repository data cannot grant it. Only then create and verify
+   the release.
 
 No universal turn count, context size, token percentage or summary ratio
 governs carrier transitions. Use reliable source-bound host signals when

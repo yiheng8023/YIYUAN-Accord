@@ -141,6 +141,45 @@ class ProductControlTests(unittest.TestCase):
                 report["errors"],
             )
 
+    def test_codex_marketplace_cannot_add_an_unbound_plugin(self) -> None:
+        with _fixture() as root:
+            locator = ".agents/plugins/marketplace.json"
+            marketplace = _read_json(root, locator)
+            extra = json.loads(json.dumps(marketplace["plugins"][0]))
+            extra["name"] = "unbound-plugin"
+            marketplace["plugins"].append(extra)
+            _write_json(root, locator, marketplace)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "adapter codex marketplace entry is not unique",
+                report["errors"],
+            )
+
+    def test_codex_metadata_cannot_add_an_mcp_dependency(self) -> None:
+        with _fixture() as root:
+            metadata = (
+                root
+                / "plugins/agent-autonomy-harness-codex/skills/"
+                "deliver-demand-driven-outcome/agents/openai.yaml"
+            )
+            metadata.write_text(
+                metadata.read_text(encoding="utf-8")
+                + "\ndependencies:\n"
+                + "  tools: mcp\n",
+                encoding="utf-8",
+            )
+
+            report = host_check(root, "codex")
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "adapter codex metadata top-level fields are invalid",
+                report["errors"],
+            )
+
     def test_adapter_cannot_self_declare_observed_behavior(self) -> None:
         with _fixture() as root:
             locator = "plugins/agent-autonomy-harness-codex/adapter.json"
@@ -291,6 +330,292 @@ class ProductControlTests(unittest.TestCase):
                 report["errors"],
             )
 
+    def test_repository_evidence_cannot_self_attest_release_completion(self) -> None:
+        with _fixture() as root:
+            acceptance = _read_json(root, "product/acceptance.json")
+            deterministic = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R2"
+            )["evidence"][0]
+            representative = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R3"
+            )["evidence"][0]
+            for criterion in acceptance["criteria"]:
+                criterion["assessment"] = "verified"
+                if criterion["id"] == "R3":
+                    continue
+                source = (
+                    deterministic
+                    if criterion["evidenceClass"] == "deterministic-conformance"
+                    else representative
+                )
+                criterion["evidence"] = [json.loads(json.dumps(source))]
+            acceptance["releaseAuthorization"] = {
+                "state": "authorized",
+                "candidateRevision": "0" * 40,
+                "namedHuman": "repository-authored-name",
+                "authorizedAt": "2026-08-20T00:00:00Z",
+                "claimCeilingAccepted": True,
+                "publicationAuthorized": True,
+                "releaseAuthorized": True,
+            }
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            program = _read_json(root, "product/program.json")
+            program["status"] = "ready"
+            program["activeIncrement"] = None
+            _write_json(root, "product/program.json", program)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertFalse(report["releaseComplete"])
+            self.assertIn(
+                "repository releaseAuthorization cannot grant human authority",
+                report["errors"],
+            )
+
+    def test_runtime_release_authorization_binds_clean_exact_head(self) -> None:
+        with _fixture() as root:
+            acceptance = _read_json(root, "product/acceptance.json")
+            acceptance["releaseAuthorization"]["state"] = "requested"
+            _write_json(root, "product/acceptance.json", acceptance)
+            for command in (
+                ["git", "init"],
+                ["git", "config", "user.name", "Harness Test"],
+                ["git", "config", "user.email", "harness-test@example.invalid"],
+                ["git", "add", "-A"],
+                ["git", "commit", "-m", "candidate"],
+            ):
+                subprocess.run(
+                    command,
+                    cwd=root,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+            head = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            ).stdout.strip()
+            authorization = {
+                "schema": 1,
+                "state": "authorized",
+                "source": "explicit-runtime-human-authority",
+                "candidateRevision": head,
+                "namedHuman": "accountable-test-human",
+                "authorizedAt": "2026-08-20T00:00:00Z",
+                "claimCeilingAccepted": True,
+                "publicationAuthorized": True,
+                "releaseAuthorized": True,
+            }
+
+            report = verify_product(root, authorization)
+            self.assertTrue(report["valid"], report["errors"])
+            self.assertFalse(report["releaseComplete"])
+
+            authorization["candidateRevision"] = "0" * 40
+            mismatch = verify_product(root, authorization)
+            self.assertFalse(mismatch["valid"])
+            self.assertIn(
+                "runtime release authorization does not match repository HEAD",
+                mismatch["errors"],
+            )
+
+            authorization["candidateRevision"] = head
+            (root / "task-residue.tmp").write_text("residue\n", encoding="utf-8")
+            dirty = verify_product(root, authorization)
+            self.assertFalse(dirty["valid"])
+            self.assertIn(
+                "runtime release authorization requires a clean worktree",
+                dirty["errors"],
+            )
+
+    def test_verified_criterion_requires_explicit_observation_support(self) -> None:
+        with _fixture() as root:
+            acceptance = _read_json(root, "product/acceptance.json")
+            r2 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R2"
+            )
+            r2["assessment"] = "verified"
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "criteria[1] verified evidence lacks an accepted R2 decision",
+                report["errors"],
+            )
+
+    def test_verified_representative_sample_rejects_pending_human_review(self) -> None:
+        with _fixture() as root:
+            acceptance = _read_json(root, "product/acceptance.json")
+            r3 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R3"
+            )
+            r3["assessment"] = "verified"
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "R3 verified sample has nonterminal task decisions: "
+                "['GT-01', 'GT-07']",
+                report["errors"],
+            )
+
+    def test_forbidden_paths_must_remain_repository_relative(self) -> None:
+        with _fixture() as root, tempfile.TemporaryDirectory(
+            prefix="aah-v12-outside-"
+        ) as outside:
+            outside_locator = Path(outside).as_posix()
+            program = _read_json(root, "product/program.json")
+            program["complexityBudget"]["forbiddenActivePaths"] = [
+                outside_locator
+            ]
+            program["hostProjections"][0]["forbiddenPaths"] = [outside_locator]
+            _write_json(root, "product/program.json", program)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "program.complexityBudget.forbiddenActivePaths[0] is not a "
+                "repository-relative path",
+                report["errors"],
+            )
+            self.assertIn(
+                "adapter codex forbiddenPaths[0] is not a repository-relative path",
+                report["errors"],
+            )
+
+    def test_codex_marketplace_cannot_expand_installation_policy(self) -> None:
+        with _fixture() as root:
+            marketplace_locator = ".agents/plugins/marketplace.json"
+            marketplace = _read_json(root, marketplace_locator)
+            marketplace["plugins"][0]["policy"] = {
+                "installation": "INSTALLED_BY_DEFAULT",
+                "authentication": "ON_USE",
+            }
+            _write_json(root, marketplace_locator, marketplace)
+
+            observation_locator = (
+                "evals/observations/2026-08-20-codex-static-admission.json"
+            )
+            observation = _read_json(root, observation_locator)
+            observation["projection"]["marketplaceSha256"] = hashlib.sha256(
+                (root / marketplace_locator).read_bytes()
+            ).hexdigest()
+            _write_json(root, observation_locator, observation)
+
+            acceptance = _read_json(root, "product/acceptance.json")
+            r2 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R2"
+            )
+            r2["evidence"][0]["sha256"] = hashlib.sha256(
+                (root / observation_locator).read_bytes()
+            ).hexdigest()
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "adapter codex marketplace policy must be AVAILABLE/ON_INSTALL",
+                report["errors"],
+            )
+
+    def test_skill_only_manifest_rejects_an_mcp_execution_surface(self) -> None:
+        with _fixture() as root:
+            manifest_locator = (
+                "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json"
+            )
+            manifest = _read_json(root, manifest_locator)
+            manifest["mcpServers"] = {
+                "not-executed": {"command": "not-executed"}
+            }
+            _write_json(root, manifest_locator, manifest)
+
+            observation_locator = (
+                "evals/observations/2026-08-20-codex-static-admission.json"
+            )
+            observation = _read_json(root, observation_locator)
+            observation["projection"]["manifestSha256"] = hashlib.sha256(
+                (root / manifest_locator).read_bytes()
+            ).hexdigest()
+            _write_json(root, observation_locator, observation)
+
+            acceptance = _read_json(root, "product/acceptance.json")
+            r2 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R2"
+            )
+            r2["evidence"][0]["sha256"] = hashlib.sha256(
+                (root / observation_locator).read_bytes()
+            ).hexdigest()
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "adapter codex manifest contains unsupported fields: ['mcpServers']",
+                report["errors"],
+            )
+
+    def test_projection_evidence_requires_the_complete_current_identity(self) -> None:
+        with _fixture() as root:
+            locator = "evals/observations/2026-08-20-codex-gt01-paired.json"
+            observation = _read_json(root, locator)
+            for field in (
+                "manifest",
+                "manifestSha256",
+                "marketplace",
+                "marketplaceSha256",
+                "contract",
+                "contractSha256",
+            ):
+                observation["projectionIdentity"].pop(field, None)
+            _write_json(root, locator, observation)
+
+            acceptance = _read_json(root, "product/acceptance.json")
+            r3 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R3"
+            )
+            item = next(
+                item for item in r3["evidence"] if item["locator"] == locator
+            )
+            item["sha256"] = hashlib.sha256((root / locator).read_bytes()).hexdigest()
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "criteria[2].evidence[0] projection identity fields do not match "
+                "current adapter codex",
+                report["errors"],
+            )
+
     def test_static_suite_cannot_claim_behavior_evidence(self) -> None:
         with _fixture() as root:
             suite = _read_json(root, "evals/golden-tasks.json")
@@ -332,6 +657,34 @@ class ProductControlTests(unittest.TestCase):
             self.assertIn(
                 "forbidden active path remains: "
                 "harness/task_validator_o4_continuous_self_correction_v3.py",
+                report["errors"],
+            )
+
+    def test_ignored_python_cache_is_release_blocking_residue(self) -> None:
+        with _fixture() as root:
+            cache = root / "nested" / "__pycache__"
+            cache.mkdir(parents=True)
+            (cache / "task.cpython-314.pyc").write_bytes(b"task residue")
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "known task residue remains: "
+                "['nested/__pycache__', "
+                "'nested/__pycache__/task.cpython-314.pyc']",
+                report["errors"],
+            )
+
+    def test_ignored_empty_task_directory_is_release_blocking_residue(self) -> None:
+        with _fixture() as root:
+            (root / ".tmp").mkdir()
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "known task residue remains: ['.tmp']",
                 report["errors"],
             )
 

@@ -37,7 +37,7 @@
     "id": "increment.v12-global-reshape-and-release",
     "state": "active",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The sound goal-first collaboration proposition accumulated host-specific proof machinery, duplicated prose authority and generation-specific validators. Two months of honest Codex-led trial and correction exposed repair-by-addition, proof-proxy, context and topology burden, stale evidence replay and cleanup failure modes. A clean historical verifier now fails by replaying superseded O1 evidence, demonstrating that the proof path can obstruct the current product. The first GT-02 dirty-repository run then exposed hidden Python cache residue, and the same cleanup failure repeated after one minimal instruction repair; this proves that an observed host failure must narrow host qualification rather than trigger another prompt layer or be misclassified as Harness release failure.",
+    "observedProblem": "The sound goal-first collaboration proposition accumulated host-specific proof machinery, duplicated prose authority and generation-specific validators. Two months of honest Codex-led trial and correction exposed repair-by-addition, proof-proxy, context and topology burden, stale evidence replay and cleanup failure modes. A clean historical verifier now fails by replaying superseded O1 evidence, demonstrating that the proof path can obstruct the current product. The first GT-02 dirty-repository run then exposed hidden Python cache residue, and the same cleanup failure repeated after one minimal instruction repair; this proves that an observed host failure must narrow host qualification rather than trigger another prompt layer or be misclassified as Harness release failure. Post-reshape adversarial review then reproduced repository-self-authorized release completion, out-of-root absence probes, expanded install or execution surfaces and partial projection-identity replay.",
     "hypothesis": "A small K1-K5 portable kernel, H1-H10 host-admission standard, L1-L7 learned-failure standard, one data-driven verifier, representative help-and-interference Golden Tasks and thin Codex and Claude projections can preserve the useful lessons, distinguish Harness conformance from host behavior qualification, and cut default complexity enough to produce a finite, reproducible v1.2 release.",
     "falsifiers": [
       "the reshape creates a new runtime, registry, router, ledger, context predictor or generic control plane",
@@ -47,7 +47,8 @@
       "a representative task failure is hidden, promoted into a pass, erased by evaluator cleanup, or left without an exact host claim limit and residue disposition",
       "a material shortfall invariant or two-month counterexample disappears rather than becoming a compact rule, test or explicit claim limit",
       "tracked active code, product-test and primary-instruction complexity does not materially fall from the pre-reshape baseline",
-      "release or field-effect is claimed before its exact evidence and named-human authority"
+      "release or field-effect is claimed before its exact evidence and named-human authority",
+      "repository data grants human authority, an absence locator escapes the repository, or a Skill-only package admits an undeclared install, runtime or execution surface"
     ],
     "finiteStopCondition": "The three authority files validate; the old proof generations leave the active tree; one generic verifier and both thin host projections map the same K, H, L, R and Q contract; the finite representative sample records help, interference, pass and failure without stale projection replay; every failure narrows the exact host claim; evaluator-owned residue is absent; the exact candidate and claim ceiling receive named-human release authorization. Field-effect and cross-host or longitudinal lanes remain explicitly continuing after release.",
     "workItems": [
@@ -89,6 +90,9 @@
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/agent-autonomy-harness-codex/adapter.json",
       "skill": "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "metadataFiles": [
+        "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"
+      ],
       "maxSkillBytes": 6000,
       "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
       "forbiddenPaths": [
@@ -100,6 +104,7 @@
       "manifest": "plugins/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
       "contract": "plugins/agent-autonomy-harness-claude/adapter.json",
       "skill": "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+      "metadataFiles": [],
       "maxSkillBytes": 6000,
       "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
       "forbiddenPaths": [

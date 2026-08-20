@@ -55,7 +55,9 @@ Two compact layers make the trial history immediately testable:
   [constitution](product/constitution.json),
   [program](product/program.json), and
   [acceptance](product/acceptance.json)
-- One generic data-driven verifier: [harness/control.py](harness/control.py)
+- One generic data-driven command, `python -B -m harness verify`, implemented by
+  [control.py](harness/control.py) and the pure admission checks in
+  [guardrails.py](harness/guardrails.py)
 - Two runtime-free, Hook-free thin Skill projections:
   [Codex](plugins/agent-autonomy-harness-codex) and
   [Claude Code](plugins/agent-autonomy-harness-claude)
@@ -89,7 +91,9 @@ host lifecycle state.
 
 A finite release requires direct deterministic and representative evidence for
 R1–R4 and Q1–Q4 plus named-human authorization of the exact candidate, claim
-ceiling, publication and release. Broad field effectiveness, population-level
+ceiling, publication and release. The repository may record that authorization
+was requested, but cannot mint it; task-bound external authorization must match
+the exact clean HEAD. Broad field effectiveness, population-level
 burden reduction, all-host equivalence and longitudinal outcomes remain
 continuing post-release evidence lanes. They neither delay the bounded release
 indefinitely nor become fabricated release claims.
