@@ -67,6 +67,16 @@
     "make-the-user-reconstruct-context": false,
     "release-source-before-destination-verification": false
   },
+  "criterionEvidence": {
+    "R3": {
+      "decision": "accepted",
+      "claim": "One controlled continuity decision used an explicit unknown-capacity fallback, kept topology mechanics with the Agent and rejected a universal context threshold."
+    },
+    "Q4": {
+      "decision": "accepted",
+      "claim": "The observed decision preserved the same goal, treated capacity as unknown and assigned destination preparation, verification, reconciliation and source release to the Agent."
+    }
+  },
   "excludedAttempt": {
     "reason": "The operator added a no-tools constraint that conflicted with explicit host Skill activation, which requires reading SKILL.md. That attempt was not scored and created no persistent residue.",
     "promotedToEvidence": false
@@ -76,7 +86,8 @@
     "reason": "The exact response satisfied every predeclared GT-07 behavior and no prohibited behavior occurred. The accountable project human accepted this bounded task decision; it remains one controlled decision response, not proof that the host will autonomously transition a real long-running carrier."
   },
   "acceptanceDecisions": {
-    "R3": "accepted"
+    "R3": "accepted",
+    "Q4": "accepted"
   },
   "humanReview": {
     "reviewedAt": "2026-08-20T23:34:59+08:00",

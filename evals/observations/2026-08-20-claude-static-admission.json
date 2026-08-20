@@ -20,6 +20,12 @@
     "skillSha256": "0546cc779cabadf429e553e0cc9fdadfe61b117afefee4e10a93daff7026e737",
     "packageSha256": "44a34914b6f199f486e2828fb8389e70a151d6e7bfbca8d46dd42b543ac0ade4"
   },
+  "criterionEvidence": {
+    "R2": {
+      "decision": "accepted",
+      "claim": "The exact Claude Code Skill-only package passes host-native strict manifest and Skill validation without installation, runtime or behavioral claims."
+    }
+  },
   "acceptanceDecisions": {
     "R2": "accepted"
   },

@@ -24,6 +24,12 @@
     "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374",
     "packageSha256": "a02a950295128a7db01f8d9a6bea721ac5dafc7efc47a04c3ddc5325c24886ec"
   },
+  "criterionEvidence": {
+    "R2": {
+      "decision": "accepted",
+      "claim": "The exact Codex Skill package is repository-complete, model-visible on the observed Windows host without installation, and limited to static admission rather than behavior."
+    }
+  },
   "acceptanceDecisions": {
     "R2": "accepted"
   },

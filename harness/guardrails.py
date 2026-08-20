@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -8,30 +7,23 @@ import os
 import re
 import subprocess
 from typing import Any, Callable
-
-
-REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
-RELEASE_AUTHORIZATION_FIELDS = {
-    "schema",
-    "state",
-    "source",
-    "candidateRevision",
-    "namedHuman",
-    "authorizedAt",
-    "claimCeilingAccepted",
-    "publicationAuthorized",
-    "releaseAuthorized",
+from urllib.parse import urlsplit
+_AUTHORITY_DECISION_FIELDS = {
+    "state", "candidateRevision", "namedHuman", "authorizedAt",
+    "claimCeilingAccepted", "publicationAuthorized", "releaseAuthorized",
 }
-REPOSITORY_AUTHORIZATION_FIELDS = {
-    "mode",
-    "state",
-    "candidateRevision",
-    "namedHuman",
-    "authorizedAt",
-    "claimCeilingAccepted",
-    "publicationAuthorized",
-    "releaseAuthorized",
+RELEASE_PROCEDURE_FIELDS = {"orderedGates", "rule"}
+RELEASE_GATE_FIELDS = {
+    "id", "dependsOn", "acceptanceIds", "completionOperand", "condition",
 }
+RELEASE_GATE_SEQUENCE = (
+    ("repository-candidate", None),
+    ("exact-candidate-hosted-verification", "exactCandidateHostedVerification"),
+    ("exact-human-release-authorization", "namedHumanReleaseAuthorization"),
+    ("exact-tagged-public-release", "exactTaggedPublicRelease"),
+    ("release-verification-and-cleanup", "releaseVerificationAndCleanup"),
+)
+REPOSITORY_AUTHORIZATION_FIELDS = _AUTHORITY_DECISION_FIELDS | {"mode"}
 MANIFEST_FIELDS = {
     "codex": {
         "name", "version", "description", "author", "homepage", "repository",
@@ -87,26 +79,6 @@ def repository_relative_path(root: Path, locator: Any) -> Path | None:
     return candidate
 
 
-def parse_runtime_authorization(raw: str) -> dict[str, Any]:
-    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
-        value: dict[str, Any] = {}
-        for key, item in pairs:
-            if key in value:
-                raise ValueError(f"duplicate JSON key: {key}")
-            value[key] = item
-        return value
-
-    def reject_constant(value: str) -> None:
-        raise ValueError(f"non-finite JSON number: {value}")
-
-    parsed = json.loads(
-        raw, object_pairs_hook=unique, parse_constant=reject_constant
-    )
-    if not isinstance(parsed, dict):
-        raise ValueError("top-level JSON value is not an object")
-    return parsed
-
-
 def forbidden_path_present(path: Path) -> bool:
     try:
         if path.is_file() or path.is_symlink():
@@ -149,6 +121,36 @@ def known_task_residue(root: Path) -> list[str]:
             ):
                 residue.append(relative)
     return sorted(set(residue))
+
+
+def clean_git_checkout(root: Path) -> bool:
+    try:
+        top_level = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout.strip()
+        if Path(top_level).resolve(strict=True) != root.resolve(strict=True):
+            return False
+        status = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(root),
+                "status",
+                "--porcelain=v1",
+                "--untracked-files=all",
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+        ).stdout
+    except (OSError, subprocess.SubprocessError, UnicodeError):
+        return False
+    return not status
 
 
 def package_sha256(root: Path, locators: list[str]) -> str:
@@ -412,6 +414,20 @@ def criterion_observation_decision(
     accepted = isinstance(decisions, dict) and decisions.get(criterion_id) == "accepted"
     if not accepted:
         errors.append(f"{label} has no accepted {criterion_id} decision")
+    criterion_evidence = observation.get("criterionEvidence")
+    detail = (
+        criterion_evidence.get(criterion_id)
+        if isinstance(criterion_evidence, dict)
+        else None
+    )
+    if (
+        not isinstance(detail, dict)
+        or detail.get("decision") != "accepted"
+        or not isinstance(detail.get("claim"), str)
+        or not detail["claim"].strip()
+    ):
+        errors.append(f"{label} lacks direct {criterion_id} criterion evidence")
+        accepted = False
     task_id = observation.get("taskId")
     if (
         isinstance(task_id, str)
@@ -472,16 +488,66 @@ def closeout_sequence_errors(
     return errors
 
 
+def release_procedure_errors(
+    procedure: Any, criterion_ids: set[str], goal_prompt: Any
+) -> list[str]:
+    if not isinstance(procedure, dict) or set(procedure) != RELEASE_PROCEDURE_FIELDS:
+        return ["program.releaseProcedure is invalid"]
+    if not isinstance(procedure.get("rule"), str) or not procedure["rule"].strip():
+        return ["program.releaseProcedure.rule must be non-empty"]
+    gates = procedure.get("orderedGates")
+    if not isinstance(gates, list) or len(gates) != len(RELEASE_GATE_SEQUENCE) or any(
+        not isinstance(gate, dict) or set(gate) != RELEASE_GATE_FIELDS
+        for gate in gates
+    ):
+        return ["program.releaseProcedure.orderedGates is invalid"]
+    errors: list[str] = []
+    coverage: set[str] = set()
+    for index, gate in enumerate(gates):
+        label = f"releaseProcedure.orderedGates[{index}]"
+        gate_id = gate.get("id")
+        expected_id, expected_operand = RELEASE_GATE_SEQUENCE[index]
+        if not isinstance(gate_id, str) or not gate_id.strip():
+            errors.append(f"{label}.id must be non-empty")
+        if gate_id != expected_id or gate.get("completionOperand") != expected_operand:
+            errors.append(f"{label} does not match the required release gate sequence")
+        expected_dependency = [] if index == 0 else [gates[index - 1].get("id")]
+        if gate.get("dependsOn") != expected_dependency:
+            errors.append(f"{label}.dependsOn must name only the previous gate")
+        mapped = gate.get("acceptanceIds")
+        if (
+            not isinstance(mapped, list)
+            or not mapped
+            or any(not isinstance(item, str) or item not in criterion_ids for item in mapped)
+        ):
+            errors.append(f"{label}.acceptanceIds is invalid")
+        else:
+            coverage.update(mapped)
+        if not isinstance(gate.get("condition"), str) or not gate["condition"].strip():
+            errors.append(f"{label}.condition must be non-empty")
+    if coverage != criterion_ids:
+        errors.append("program.releaseProcedure must map every criterion")
+    if not isinstance(goal_prompt, dict) or goal_prompt.get("releaseGateIds") != [
+        gate_id for gate_id, _ in RELEASE_GATE_SEQUENCE
+    ]:
+        errors.append("program.goalModePrompt.releaseGateIds must match releaseProcedure")
+    return errors
+
+
 def repository_release_authorization_errors(authorization: Any) -> list[str]:
     if not isinstance(authorization, dict):
         return ["acceptance.releaseAuthorization must be an object"]
     if authorization.get("state") == "authorized":
         return ["repository releaseAuthorization cannot grant human authority"]
-    if authorization.get("state") not in {"unrequested", "requested", "declined"}:
+    if authorization.get("state") not in {
+        "unrequested",
+        "request-prepared",
+        "declined",
+    }:
         return ["acceptance.releaseAuthorization.state is invalid"]
     if (
         set(authorization) != REPOSITORY_AUTHORIZATION_FIELDS
-        or authorization.get("mode") != "external-runtime-human-authority"
+        or authorization.get("mode") != "task-time-human-authority"
     ):
         return ["acceptance.releaseAuthorization mode or fields are invalid"]
     if any(
@@ -499,58 +565,90 @@ def repository_release_authorization_errors(authorization: Any) -> list[str]:
     return []
 
 
-def validate_runtime_release_authorization(
-    root: Path,
-    authorization: dict[str, Any] | None,
-    errors: list[str],
-) -> bool:
-    if authorization is None:
+def _safe_https_locator(value: Any) -> bool:
+    if not isinstance(value, str) or not value:
         return False
-    initial_error_count = len(errors)
-    if not isinstance(authorization, dict) or set(authorization) != RELEASE_AUTHORIZATION_FIELDS:
-        errors.append("runtime release authorization fields are invalid")
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
         return False
+    return (
+        parsed.scheme == "https"
+        and bool(parsed.hostname)
+        and parsed.username is None
+        and parsed.password is None
+        and not parsed.fragment
+    )
+
+
+def external_release_contract_errors(root: Path, acceptance: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    candidate = acceptance.get("candidateVerification")
+    systems = candidate.get("requiredSystems") if isinstance(candidate, dict) else None
     if (
-        authorization.get("schema") != 1
-        or authorization.get("state") != "authorized"
-        or authorization.get("source") != "explicit-runtime-human-authority"
-        or not isinstance(authorization.get("namedHuman"), str)
-        or not authorization["namedHuman"].strip()
-        or authorization.get("claimCeilingAccepted") is not True
-        or authorization.get("publicationAuthorized") is not True
-        or authorization.get("releaseAuthorized") is not True
+        not isinstance(candidate, dict)
+        or set(candidate) != {"mode", "requiredSystems", "rule"}
+        or candidate.get("mode") != "task-time-live-observation"
+        or not isinstance(systems, dict)
+        or not systems
+        or any(
+            not isinstance(system, str)
+            or not system.strip()
+            or not _safe_https_locator(locator)
+            for system, locator in systems.items()
+        )
+        or not isinstance(candidate.get("rule"), str)
+        or not candidate["rule"].strip()
     ):
-        errors.append("runtime release authorization is incomplete or malformed")
-    revision = authorization.get("candidateRevision")
-    if not isinstance(revision, str) or REVISION_RE.fullmatch(revision) is None:
-        errors.append("runtime release authorization candidateRevision is invalid")
-    timestamp = authorization.get("authorizedAt")
-    try:
-        parsed = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-        if parsed.tzinfo is None:
-            raise ValueError("timezone required")
-    except (AttributeError, TypeError, ValueError):
-        errors.append("runtime release authorization authorizedAt is invalid")
-    try:
-        head = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "HEAD"],
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=10,
-        ).stdout.strip()
-        status = subprocess.run(
-            ["git", "-C", str(root), "status", "--porcelain=v1", "--untracked-files=all"],
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=10,
-        ).stdout
-    except (OSError, subprocess.SubprocessError):
-        errors.append("runtime release authorization requires a readable Git checkout")
+        errors.append("acceptance.candidateVerification policy is invalid")
+    errors.extend(
+        repository_release_authorization_errors(acceptance.get("releaseAuthorization"))
+    )
+    public = acceptance.get("publicRelease")
+    public_fields = {
+        "mode", "tag", "releaseLocator", "releaseApi", "tagApi",
+        "releaseNotes", "assetPolicy", "rule",
+    }
+    if (
+        not isinstance(public, dict)
+        or set(public) != public_fields
+        or public.get("mode") != "task-time-live-github-observation"
+        or not isinstance(public.get("tag"), str)
+        or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", public["tag"])
+        is None
+        or any(
+            not _safe_https_locator(public.get(field))
+            for field in ("releaseLocator", "releaseApi", "tagApi")
+        )
+        or not isinstance(public.get("releaseNotes"), str)
+        or not isinstance(public.get("assetPolicy"), str)
+        or not public["assetPolicy"].strip()
+        or not isinstance(public.get("rule"), str)
+        or not public["rule"].strip()
+    ):
+        errors.append("acceptance.publicRelease policy is invalid")
+    ceiling = acceptance.get("claimCeiling")
+    claims: list[str] = []
+    if isinstance(ceiling, dict):
+        for field in ("finiteReleaseClaims", "notImplied"):
+            values = ceiling.get(field)
+            if not isinstance(values, list) or not values or any(
+                not isinstance(value, str) or not value for value in values
+            ):
+                errors.append(f"acceptance.claimCeiling.{field} is invalid")
+            else:
+                claims.extend(values)
     else:
-        if revision != head:
-            errors.append("runtime release authorization does not match repository HEAD")
-        if status:
-            errors.append("runtime release authorization requires a clean worktree")
-    return len(errors) == initial_error_count
+        errors.append("acceptance.claimCeiling is invalid")
+    notes = repository_relative_path(
+        root, public.get("releaseNotes") if isinstance(public, dict) else None
+    )
+    try:
+        if notes is None or notes.is_symlink() or not notes.is_file():
+            raise OSError("release notes are not an owned regular file")
+        text = notes.read_text(encoding="utf-8")
+        if any(f"`{claim}`" not in text for claim in claims):
+            errors.append("release notes do not expose the complete claim ceiling")
+    except (OSError, UnicodeError) as exc:
+        errors.append(f"release notes are invalid: {exc}")
+    return errors

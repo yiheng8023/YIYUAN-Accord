@@ -5,7 +5,7 @@
   "release": "v1.2",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "active",
+  "status": "ready",
   "releaseIntent": "Finish one bounded open-source v1.2 release by reducing the product to its portable collaboration kernel, host-admission standard, representative help-and-interference evaluation and two thin reference projections. Release is a maintained baseline for later field learning, not an assertion of universal or final human-AI collaboration effectiveness.",
   "inputEvidence": [
     {
@@ -33,9 +33,10 @@
       "disposition": "admitted-intermediate-projection-counterevidence-not-current-projection-qualification"
     }
   ],
-  "activeIncrement": {
+  "activeIncrement": null,
+  "completedIncrement": {
     "id": "increment.v12-global-reshape-and-release",
-    "state": "active",
+    "state": "completed-local-candidate",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "observedProblem": "The sound goal-first collaboration proposition accumulated host-specific proof machinery, duplicated prose authority and generation-specific validators. Two months of honest Codex-led trial and correction exposed repair-by-addition, proof-proxy, context and topology burden, stale evidence replay and cleanup failure modes. A clean historical verifier now fails by replaying superseded O1 evidence, demonstrating that the proof path can obstruct the current product. The first GT-02 dirty-repository run then exposed hidden Python cache residue, and the same cleanup failure repeated after one minimal instruction repair; this proves that an observed host failure must narrow host qualification rather than trigger another prompt layer or be misclassified as Harness release failure. Post-reshape adversarial review then reproduced repository-self-authorized release completion, out-of-root absence probes, expanded install or execution surfaces and partial projection-identity replay.",
     "hypothesis": "A small K1-K5 portable kernel, H1-H10 host-admission standard, L1-L7 learned-failure standard, one data-driven verifier, representative help-and-interference Golden Tasks and thin Codex and Claude projections can preserve the useful lessons, distinguish Harness conformance from host behavior qualification, and cut default complexity enough to produce a finite, reproducible v1.2 release.",
@@ -43,18 +44,18 @@
       "the reshape creates a new runtime, registry, router, ledger, context predictor or generic control plane",
       "historical O1-O5 validators or evidence remain on the default verification path",
       "the verifier duplicates product prose or derives success from implementation, tests, receipts, commits or report shape",
-      "the Codex or Claude projection requires a long mandatory profile, fixed host version, universal context threshold or user-operated capability or topology route",
+      "the Codex or Claude projection requires a long mandatory profile, fixed host version, universal context threshold, user-operated capability or topology route, or default activation of a separately governed user-level Skill",
       "a representative task failure is hidden, promoted into a pass, erased by evaluator cleanup, or left without an exact host claim limit and residue disposition",
       "a material shortfall invariant or two-month counterexample disappears rather than becoming a compact rule, test or explicit claim limit",
       "tracked active code, product-test and primary-instruction complexity does not materially fall from the pre-reshape baseline",
       "release or field-effect is claimed before its exact evidence and named-human authority",
       "repository data grants human authority, an absence locator escapes the repository, or a Skill-only package admits an undeclared install, runtime or execution surface"
     ],
-    "finiteStopCondition": "The three authority files validate; the old proof generations leave the active tree; one generic verifier and both thin host projections map the same K, H, L, R and Q contract; the finite representative sample records help, interference, pass and failure without stale projection replay; every failure narrows the exact host claim; evaluator-owned residue is absent; the exact candidate and claim ceiling receive named-human release authorization. Field-effect and cross-host or longitudinal lanes remain explicitly continuing after release.",
+    "finiteStopCondition": "The three authority files validate; the old proof generations leave the active tree; one generic verifier and both thin host projections map the same K, H, L, R and Q contract; the finite representative sample records help, interference, pass and failure without stale projection replay; every failure narrows the exact host claim; all eight repository criteria have direct bounded evidence; evaluator-owned residue is absent; and the repository is a clean local release candidate. Exact-candidate hosted verification, named-human authority, exact tagged public release, live release verification and goal-carrier cleanup remain ordered external gates rather than self-reported increment results.",
     "workItems": [
       {
         "id": "work.v12-authority-interface-and-release-candidate",
-        "state": "active",
+        "state": "completed-local-candidate",
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "deliverables": [
           "three concise semantic authority files",
@@ -72,26 +73,67 @@
             "stopCondition": "The accountable project human accepts the static-admission-only R2 evidence, the bounded GT-01 and GT-07 passes, and the retained GT-02 failure without expanding any claim."
           },
           {
-            "id": "prepare-and-host-verify-candidate",
-            "state": "active",
-            "acceptanceIds": ["R1", "R4", "Q2", "Q3", "Q4"],
-            "stopCondition": "One clean exact candidate passes the canonical verifier, product tests, both host checks, privacy and residue review, is pushed under explicit authority, and receives exact-revision GitHub and ordinary Codex Cloud corroboration without promoting hosted checks into release."
-          },
-          {
-            "id": "exact-human-release-and-closeout",
-            "state": "pending",
-            "acceptanceIds": ["Q1", "R4"],
-            "stopCondition": "The prepared candidate, claim ceiling and remaining limits are presented through a real human veto; an external task-bound authorization matches the clean HEAD before tag or release creation, and release verification plus task-resource cleanup succeed."
+            "id": "prepare-repository-candidate",
+            "state": "completed",
+            "acceptanceIds": ["R1", "R4", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "All repository criteria have direct bounded evidence; the canonical verifier, product tests, both host checks, complexity, privacy and residue checks pass locally; the release path has been exercised on a prior exact pushed revision; and the final exact-HEAD hosted, human, publication and postcondition gates remain external."
           }
         ],
-        "stopCondition": "A clean checkout reproduces all required deterministic checks, the exact finite representative sample and all pass/failure decisions are independently reviewable, failed host behaviors are excluded from the release claim, complexity targets pass, evaluator-owned residue is absent and the candidate waits only for the named human release decision."
+        "stopCondition": "A clean checkout reproduces all required deterministic checks, the finite representative sample and all pass/failure decisions are independently reviewable, failed host behaviors are excluded from the release claim, complexity targets pass, evaluator-owned residue is absent and only the ordered external release procedure remains."
       }
     ]
+  },
+  "releaseProcedure": {
+    "orderedGates": [
+      {
+        "id": "repository-candidate",
+        "dependsOn": [],
+        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "completionOperand": null,
+        "condition": "A single clean local candidate contains the aligned constitution, program, acceptance, goal prompt, evidence and derived documentation; all eight repository criteria are directly evidenced; canonical, host, product, complexity, privacy and residue checks pass; and push authority is already granted."
+      },
+      {
+        "id": "exact-candidate-hosted-verification",
+        "dependsOn": ["repository-candidate"],
+        "acceptanceIds": ["R4", "Q2", "Q3"],
+        "completionOperand": "exactCandidateHostedVerification",
+        "condition": "After the candidate is pushed, the active goal carrier must directly verify the unchanged clean HEAD on GitHub Actions for Linux, Windows and macOS plus ordinary Codex Cloud; limitations remain explicit and no repository write or caller-supplied receipt may chase its own evidence."
+      },
+      {
+        "id": "exact-human-release-authorization",
+        "dependsOn": ["exact-candidate-hosted-verification"],
+        "acceptanceIds": ["R4", "Q1"],
+        "completionOperand": "namedHumanReleaseAuthorization",
+        "condition": "Only after exact hosted verification, present the unchanged SHA, claim ceiling, retained GT-02 failure and continuing evidence lanes to a named accountable human; the task-bound human decision must explicitly authorize publication and release while preserving a real veto and must not be written into the candidate."
+      },
+      {
+        "id": "exact-tagged-public-release",
+        "dependsOn": ["exact-human-release-authorization"],
+        "acceptanceIds": ["R4"],
+        "completionOperand": "exactTaggedPublicRelease",
+        "condition": "Create the lightweight v1.2 tag and public release only after the goal carrier has directly verified the hosted gate and the later named-human decision for the unchanged candidate; do not mutate the authorized candidate, move the tag or add attached assets."
+      },
+      {
+        "id": "release-verification-and-cleanup",
+        "dependsOn": ["exact-tagged-public-release"],
+        "acceptanceIds": ["R4", "Q4"],
+        "completionOperand": "releaseVerificationAndCleanup",
+        "condition": "The active goal carrier directly verifies the live GitHub release, remote and local tag, exact tracked release notes and zero-attached-asset policy against the authorized candidate; it then removes task-created temporary resources, confirms repository and evaluator residue are absent, replays local validation and only then closes the finite goal."
+      }
+    ],
+    "rule": "Execute gates strictly in listed dependency order. A gate may not begin until its predecessor is verified; failure returns to the smallest affected earlier gate, and no plan, test, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，以已确认的 R2、GT-01、GT-07 判断和保留失败的 GT-02 为当前证据边界，将 Agent Autonomy Harness v1.2 收敛为 K1-K5 可移植协作内核、H1-H10 宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影及可复现的帮助与干扰评估；持续校准计划、工序、验收、目标提示词、证据、资源和载体状态，最小纠偏并控制过程损失，完成 R1-R4 与 Q1-Q4、精确干净候选、获授权的推送与托管复验、具名人类最终发布授权和必要发布收尾。不得把报告、计划、代码、测试、提交、推送、转场、局部通过或自填证据称为收官；真实场域、跨宿主和长期效果保持为发布后持续证据通道。遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界时暂停并提出最小接管步骤，验证完成后继续，直至有限 v1.2 真实收官。",
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，以已确认的 R2、GT-01、GT-07 判断和保留失败的 GT-02 为证据边界，将 Agent Autonomy Harness v1.2 收敛为 K1-K5 可移植协作内核、H1-H10 宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影及可复现的帮助与干扰评估；持续对齐并校准计划、严格工序、R1-R4/Q1-Q4 验收、目标提示词、证据、资源和载体状态，最小纠偏并控制过程损失。独立治理的用户级自研 Skill 不属于发行依赖：没有已复现残余缺口时保持未投影，发生投影时只要求共享 K/H/L 语义与生命周期边界，允许宿主要求的名称、清单和元数据差异。按且仅按以下顺序推进：形成单一干净仓库候选；推送后由当前目标任务直接复验同一精确 SHA 的 GitHub Linux/Windows/macOS 与普通 Codex Cloud，不接受仓库自报或调用方票据；再暂停请求具名人类对该 SHA、主张上限、公开与发布作最终决定且不写回候选；授权后创建绑定该 SHA 的轻量 v1.2 tag 和公开 release；最后由当前目标任务直接复验 GitHub 公开 release、远端与本地 tag、精确发布说明和零附加资产策略，清理任务资源并重放本地验证。不得把报告、计划、代码、测试、提交、推送、转场、局部通过、自填证据、托管绿灯或授权本身称为收官；仓库 verifier 只判契约一致性，不判仓库外门；真实场域、跨宿主和长期效果保持为发布后持续证据通道。任何前置门失败都退回最小受影响步骤；只有遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界才暂停并提出最小接管步骤，验证完成后继续，直至有限 v1.2 真实收官。",
+    "releaseGateIds": [
+      "repository-candidate",
+      "exact-candidate-hosted-verification",
+      "exact-human-release-authorization",
+      "exact-tagged-public-release",
+      "release-verification-and-cleanup"
+    ],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "refreshTriggers": [
       "user-correction",
@@ -101,7 +143,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The accountable user explicitly resumed this exact no-budget objective in the current host task on 2026-08-20. The active lifecycle state authorizes continued in-scope mechanics and bounded push verification, but it does not prove any criterion, release or field outcome."
+    "hostLifecycleNote": "The accountable user explicitly resumed this exact no-budget objective in the current host task on 2026-08-20 and authorized all in-scope global consistency updates and pushes. The repository program is ready only for the ordered external gates; the host goal remains active until the current goal carrier directly verifies exact hosted execution, named-human authorization, exact tagged public release, public claims and cleanup. The repository verifier never decides those facts, and this lifecycle state proves no release or field outcome."
   },
   "hostProjections": [
     {

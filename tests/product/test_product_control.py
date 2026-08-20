@@ -27,6 +27,18 @@ def _write_json(root: Path, locator: str, value: dict) -> None:
     )
 
 
+def _activate_completed_increment(program: dict) -> dict:
+    increment = json.loads(json.dumps(program["completedIncrement"]))
+    increment["state"] = "active"
+    work_item = increment["workItems"][0]
+    work_item["state"] = "active"
+    for index, stage in enumerate(work_item["closeoutSequence"]):
+        stage["state"] = "completed" if index == 0 else "active"
+    program["status"] = "active"
+    program["activeIncrement"] = increment
+    return increment
+
+
 @contextmanager
 def _fixture():
     with tempfile.TemporaryDirectory(prefix="aah-v12-test-") as temporary:
@@ -39,6 +51,25 @@ def _fixture():
         yield target
 
 
+def _commit_fixture(root: Path) -> None:
+    commands = (
+        ["git", "init", "--quiet"],
+        ["git", "config", "user.name", "Harness Test"],
+        ["git", "config", "user.email", "harness-test@example.invalid"],
+        ["git", "add", "-A"],
+        ["git", "commit", "--quiet", "-m", "candidate"],
+    )
+    for command in commands:
+        subprocess.run(
+            command,
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+
+
 class ProductControlTests(unittest.TestCase):
     maxDiff = None
 
@@ -47,11 +78,32 @@ class ProductControlTests(unittest.TestCase):
 
         self.assertTrue(report["valid"], report["errors"])
         self.assertTrue(report["contractValid"])
-        self.assertFalse(report["releaseComplete"])
-        self.assertEqual(report["completionState"], "incomplete")
-        self.assertEqual(report["criteria"]["verified"], 2)
+        self.assertEqual(
+            report["repositoryCandidateReady"], report["checkoutClean"]
+        )
+        self.assertNotIn("releaseComplete", report)
+        self.assertEqual(
+            report["completionState"],
+            (
+                "external-gates-required"
+                if report["checkoutClean"]
+                else "repository-incomplete"
+            ),
+        )
+        self.assertEqual(report["criteria"]["verified"], 8)
         self.assertEqual(report["criteria"]["total"], 8)
         self.assertEqual(report["goalModePromptState"], "active-in-host")
+        self.assertEqual(report["programStatus"], "ready")
+        self.assertEqual(
+            report["externalGates"],
+            {
+                "exactCandidateHostedVerification": "not-evaluated-by-verifier",
+                "namedHumanReleaseAuthorization": "not-evaluated-by-verifier",
+                "exactTaggedPublicRelease": "not-evaluated-by-verifier",
+                "releaseVerificationAndCleanup": "not-evaluated-by-verifier",
+            },
+        )
+        self.assertNotIn("releaseEligible", report)
         self.assertEqual(
             report["goldenTasks"]["behaviorEvidence"],
             "not-established-by-static-suite",
@@ -84,8 +136,36 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)
         self.assertTrue(report["valid"])
-        self.assertFalse(report["releaseComplete"])
+        self.assertEqual(
+            report["repositoryCandidateReady"], report["checkoutClean"]
+        )
+        self.assertNotIn("releaseComplete", report)
         self.assertEqual(set(report["hostChecks"]), {"codex", "claude-code"})
+
+    def test_repository_candidate_readiness_requires_a_clean_git_checkout(self) -> None:
+        with _fixture() as root:
+            unavailable = verify_product(root)
+            self.assertTrue(unavailable["valid"], unavailable["errors"])
+            self.assertFalse(unavailable["checkoutClean"])
+            self.assertFalse(unavailable["repositoryCandidateReady"])
+
+            _commit_fixture(root)
+            clean = verify_product(root)
+            self.assertTrue(clean["valid"], clean["errors"])
+            self.assertTrue(clean["checkoutClean"])
+            self.assertTrue(clean["repositoryCandidateReady"])
+            self.assertEqual(clean["completionState"], "external-gates-required")
+
+            readme = root / "README.md"
+            readme.write_text(
+                readme.read_text(encoding="utf-8") + "\n",
+                encoding="utf-8",
+            )
+            dirty = verify_product(root)
+            self.assertTrue(dirty["valid"], dirty["errors"])
+            self.assertFalse(dirty["checkoutClean"])
+            self.assertFalse(dirty["repositoryCandidateReady"])
+            self.assertEqual(dirty["completionState"], "repository-incomplete")
 
     def test_host_check_is_immediate_and_honest_about_behavior(self) -> None:
         for adapter in ("codex", "claude-code"):
@@ -285,7 +365,9 @@ class ProductControlTests(unittest.TestCase):
         with _fixture() as root:
             program = _read_json(root, "product/program.json")
             program["goalModePrompt"]["mapsTo"].remove("Q4")
-            program["activeIncrement"]["acceptanceIds"].remove("R3")
+            program["goalModePrompt"]["releaseGateIds"].pop()
+            increment = _activate_completed_increment(program)
+            increment["acceptanceIds"].remove("R3")
             _write_json(root, "product/program.json", program)
 
             report = verify_product(root)
@@ -296,6 +378,10 @@ class ProductControlTests(unittest.TestCase):
                 report["errors"],
             )
             self.assertIn(
+                "program.goalModePrompt.releaseGateIds must match releaseProcedure",
+                report["errors"],
+            )
+            self.assertIn(
                 "activeIncrement.acceptanceIds must map every criterion exactly",
                 report["errors"],
             )
@@ -303,11 +389,10 @@ class ProductControlTests(unittest.TestCase):
     def test_closeout_sequence_maps_every_criterion_with_one_active_stage(self) -> None:
         with _fixture() as root:
             program = _read_json(root, "product/program.json")
-            sequence = program["activeIncrement"]["workItems"][0][
-                "closeoutSequence"
-            ]
+            increment = _activate_completed_increment(program)
+            sequence = increment["workItems"][0]["closeoutSequence"]
             sequence[-1]["acceptanceIds"].remove("Q1")
-            sequence[-1]["state"] = "active"
+            sequence[0]["state"] = "active"
             _write_json(root, "product/program.json", program)
 
             report = verify_product(root)
@@ -322,12 +407,44 @@ class ProductControlTests(unittest.TestCase):
                 report["errors"],
             )
 
+    def test_release_procedure_is_dependency_ordered_and_maps_every_criterion(self) -> None:
+        with _fixture() as root:
+            program = _read_json(root, "product/program.json")
+            gates = program["releaseProcedure"]["orderedGates"]
+            gates[0]["id"] = ""
+            gates[0]["acceptanceIds"].remove("R1")
+            gates[1]["dependsOn"] = []
+            gates[1]["completionOperand"] = "namedHumanReleaseAuthorization"
+            gates[2]["completionOperand"] = "exactCandidateHostedVerification"
+            _write_json(root, "product/program.json", program)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "releaseProcedure.orderedGates[0].id must be non-empty",
+                report["errors"],
+            )
+            self.assertIn(
+                "releaseProcedure.orderedGates[1].dependsOn must name only the previous gate",
+                report["errors"],
+            )
+            self.assertIn(
+                "program.releaseProcedure must map every criterion",
+                report["errors"],
+            )
+            self.assertIn(
+                "releaseProcedure.orderedGates[1] does not match the required release gate sequence",
+                report["errors"],
+            )
+
     def test_more_than_one_active_work_item_fails(self) -> None:
         with _fixture() as root:
             program = _read_json(root, "product/program.json")
-            duplicate = dict(program["activeIncrement"]["workItems"][0])
+            increment = _activate_completed_increment(program)
+            duplicate = dict(increment["workItems"][0])
             duplicate["id"] = "duplicate-active-work"
-            program["activeIncrement"]["workItems"].append(duplicate)
+            increment["workItems"].append(duplicate)
             _write_json(root, "product/program.json", program)
 
             report = verify_product(root)
@@ -341,7 +458,7 @@ class ProductControlTests(unittest.TestCase):
     def test_criterion_cannot_verify_without_direct_evidence(self) -> None:
         with _fixture() as root:
             acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["criteria"][0]["assessment"] = "verified"
+            acceptance["criteria"][0]["evidence"] = []
             _write_json(root, "product/acceptance.json", acceptance)
 
             report = verify_product(root)
@@ -394,71 +511,63 @@ class ProductControlTests(unittest.TestCase):
             report = verify_product(root)
 
             self.assertFalse(report["valid"])
-            self.assertFalse(report["releaseComplete"])
+            self.assertNotIn("releaseComplete", report)
             self.assertIn(
                 "repository releaseAuthorization cannot grant human authority",
                 report["errors"],
             )
 
-    def test_runtime_release_authorization_binds_clean_exact_head(self) -> None:
+    def test_static_verifier_does_not_adjudicate_external_release_gates(self) -> None:
+        report = verify_product(ROOT)
+        self.assertNotIn("releaseEligible", report)
+        self.assertNotIn("releaseComplete", report)
+        self.assertEqual(
+            set(report["externalGates"].values()), {"not-evaluated-by-verifier"}
+        )
+
         with _fixture() as root:
             acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["releaseAuthorization"]["state"] = "requested"
+            acceptance["candidateVerification"]["requiredSystems"][
+                "github-actions-ubuntu-latest"
+            ] = "http://example.invalid/runs/"
             _write_json(root, "product/acceptance.json", acceptance)
-            for command in (
-                ["git", "init"],
-                ["git", "config", "user.name", "Harness Test"],
-                ["git", "config", "user.email", "harness-test@example.invalid"],
-                ["git", "add", "-A"],
-                ["git", "commit", "-m", "candidate"],
-            ):
-                subprocess.run(
-                    command,
-                    cwd=root,
-                    check=True,
-                    capture_output=True,
-                    text=True,
-                    timeout=30,
-                )
-            head = subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                cwd=root,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            ).stdout.strip()
-            authorization = {
-                "schema": 1,
-                "state": "authorized",
-                "source": "explicit-runtime-human-authority",
-                "candidateRevision": head,
-                "namedHuman": "accountable-test-human",
-                "authorizedAt": "2026-08-20T00:00:00Z",
-                "claimCeilingAccepted": True,
-                "publicationAuthorized": True,
-                "releaseAuthorized": True,
-            }
-
-            report = verify_product(root, authorization)
-            self.assertTrue(report["valid"], report["errors"])
-            self.assertFalse(report["releaseComplete"])
-
-            authorization["candidateRevision"] = "0" * 40
-            mismatch = verify_product(root, authorization)
-            self.assertFalse(mismatch["valid"])
             self.assertIn(
-                "runtime release authorization does not match repository HEAD",
-                mismatch["errors"],
+                "acceptance.candidateVerification policy is invalid",
+                verify_product(root)["errors"],
             )
 
-            authorization["candidateRevision"] = head
-            (root / "task-residue.tmp").write_text("residue\n", encoding="utf-8")
-            dirty = verify_product(root, authorization)
-            self.assertFalse(dirty["valid"])
+        with _fixture() as root:
+            notes = root / "docs/releases/v1.2.md"
+            notes.write_text("# incomplete release notes\n", encoding="utf-8")
             self.assertIn(
-                "runtime release authorization requires a clean worktree",
-                dirty["errors"],
+                "release notes do not expose the complete claim ceiling",
+                verify_product(root)["errors"],
+            )
+
+    def test_criterion_evidence_cannot_be_reused_without_direct_mapping(self) -> None:
+        with _fixture() as root:
+            acceptance = _read_json(root, "product/acceptance.json")
+            r2 = next(
+                criterion
+                for criterion in acceptance["criteria"]
+                if criterion["id"] == "R2"
+            )
+            item = r2["evidence"][0]
+            locator = item["locator"]
+            observation = _read_json(root, locator)
+            observation["criterionEvidence"].pop("R2")
+            _write_json(root, locator, observation)
+            item["sha256"] = hashlib.sha256(
+                (root / locator).read_bytes()
+            ).hexdigest()
+            _write_json(root, "product/acceptance.json", acceptance)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "criteria[1].evidence[0] lacks direct R2 criterion evidence",
+                report["errors"],
             )
 
     def test_verified_criterion_requires_explicit_observation_support(self) -> None:

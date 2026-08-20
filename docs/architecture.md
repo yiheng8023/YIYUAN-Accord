@@ -16,6 +16,12 @@ latest bound user goal and corrections
          \               /
           v             v
      representative Golden Tasks
+                |
+                v
+ exact-HEAD hosted evidence -> named-human authority
+                |
+                v
+ exact tagged release -> live public check + goal-carrier cleanup
 ~~~
 
 The arrows mean dependency, not authority promotion. Reports and observations
@@ -45,14 +51,17 @@ them.
 
 `python -B -m harness verify` is the one public verification seam.
 `harness/control.py` evaluates the product data while `harness/guardrails.py`
-contains pure repository, projection-package and external-authorization checks.
+contains pure repository and projection-package checks.
 Together they validate:
 
 - the three authority schemas and their cross-file mappings;
-- one active increment and one active work item;
+- at most one active increment and one active work item, or no active increment
+  when the exact Git checkout is clean and ready for external gates;
 - goal-mode prompt coverage;
-- evidence-lane separation, criterion-specific acceptance and an external
-  release authorization bound to the exact clean candidate;
+- evidence-lane separation and criterion-specific acceptance;
+- a dependency-ordered release procedure, task-time hosted verification bound
+  to the exact clean candidate, a separate later human authorization, and four
+  external gates that the active goal carrier, not the verifier, must observe;
 - Golden Task coverage and its refusal to self-certify behavior;
 - complete projection identities, exact Skill-only package surfaces,
   repository-scoped absence paths and non-expansive marketplace policy;
@@ -60,8 +69,10 @@ Together they validate:
 
 The verifier does not contain copies of the product's purpose, criterion
 statements or pass rules. It validates the contract supplied by the authority
-files. A valid report means the current contract is internally conformant;
-release completion is a separate computed state.
+files. A valid report means only that the repository candidate is internally
+conformant. Hosted results, human authority, publication and cleanup are live
+task facts; the verifier accepts no caller-supplied receipt and never computes
+release eligibility or completion.
 
 ## Host admission
 
@@ -71,6 +82,13 @@ only fields supported by that host; `adapter.json` carries the machine-readable
 K, H and L mapping used by the generic host check. There is no Harness runtime,
 Hook, state store, MCP, App, private capture protocol or fixed host-version
 dependency.
+
+The two packages are semantic siblings, not byte-identical copies. Their K/H/L
+mapping and lifecycle boundary must agree; host-required names, manifests and
+metadata may differ. Separately governed user-level Skills are outside the
+release package and stay unprojected by default. Their installation or
+visibility is neither a dependency nor evidence for these reference
+projections.
 
 The host-check command is deliberately two-level:
 

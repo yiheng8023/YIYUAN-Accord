@@ -64,6 +64,13 @@ Two compact layers make the trial history immediately testable:
 - Representative [Golden Tasks](evals/golden-tasks.json) that measure both help
   and interference
 
+These two release projections are not copies of separately governed personal
+or user-level governance Skills, and they do not require those Skills to be
+installed or enabled. Consumer packages share the K/H/L semantics and lifecycle
+boundary; host-required names, manifests and metadata intentionally remain
+different. A user-level Skill stays unprojected unless a reproduced residual
+gap and separate lifecycle authority justify it.
+
 ~~~powershell
 python -B -m harness verify --root . --json
 python -B -m harness host-check --adapter codex --root . --json
@@ -84,20 +91,37 @@ failure; evaluator cleanup cannot convert it into a host pass.
 
 ## Status and completion boundary
 
-v1.2 is undergoing one global subtractive reshape. The exact no-budget
-goal-mode objective in [product/program.json](product/program.json) was resumed
-in the current host task on 2026-08-20 after accountable user approval. Active
-goal lifecycle authorizes continued bounded work; it is not criterion, release
-or field-effect evidence.
+The global subtractive reshape defines a repository-ready v1.2 candidate:
+R1–R4 and Q1–Q4 have direct bounded evidence, and readiness additionally
+requires the exact Git checkout to be clean. The no-budget goal-mode objective
+in [product/program.json](product/program.json) remains active through external
+verification, authorization, release and cleanup. A ready repository and an
+active host goal are compatible: neither is release or field-effect evidence.
 
-A finite release requires direct deterministic and representative evidence for
-R1–R4 and Q1–Q4 plus named-human authorization of the exact candidate, claim
-ceiling, publication and release. The repository may record that authorization
-was requested, but cannot mint it; task-bound external authorization must match
-the exact clean HEAD. Broad field effectiveness, population-level
-burden reduction, all-host equivalence and longitudinal outcomes remain
-continuing post-release evidence lanes. They neither delay the bounded release
+A release-eligible candidate requires the active goal carrier to directly
+verify the exact clean HEAD on GitHub Actions (Linux, Windows and macOS) plus
+ordinary Codex Cloud, followed by named-human authorization of that same SHA,
+claim ceiling, publication and release. After publication, the carrier reads
+the public GitHub release and tag, checks the exact tracked release notes and
+zero-attached-asset policy, cleans task resources and replays local validation.
+None of these facts is a verifier input or repository state; the verifier
+cannot mint an external gate. Broad field effectiveness, population-level burden
+reduction, all-host equivalence and longitudinal outcomes remain continuing
+post-release evidence lanes. They neither delay the bounded release
 indefinitely nor become fabricated release claims.
+
+The release procedure is strict and dependency ordered:
+
+1. create and locally verify one clean repository candidate;
+2. push it and directly observe every hosted result for the unchanged SHA;
+3. only then ask the named accountable human for the exact release decision;
+4. create the exact lightweight tag and public release without changing the
+   candidate;
+5. directly verify the live public surface, clean task resources and replay
+   local validation.
+
+No later gate starts early. A failure returns to the smallest affected earlier
+gate; a plan, commit, push, hosted pass or authorization is not a later result.
 
 The v1.2 representative sample is GT-01, GT-02 and GT-07. A failed sample task
 blocks the exact host-behavior qualification, but does not automatically make

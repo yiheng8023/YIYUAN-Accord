@@ -35,5 +35,8 @@ A green verifier proves the current repository contract only. Static
 host-admission does not prove model behavior. Controlled Golden Tasks do not
 prove broad field effectiveness, all-host equivalence, professional domain
 correctness or production deployment safety. Release requires separate
-security/privacy review and named-human authorization of the exact candidate
-and claim ceiling.
+security/privacy review, task-time external hosted verification of the exact
+clean candidate, and then named-human authorization of that same revision and
+claim ceiling. Those task-time observations are outside verifier authority;
+only a later exact tagged release, direct public-source verification and
+goal-carrier cleanup can complete the release.

@@ -90,6 +90,12 @@
     "repositoryTmpEntryCountAfterCleanup": 0,
     "ephemeralThreadArchiveMatchesOutsideCurrentParentLog": 0
   },
+  "criterionEvidence": {
+    "R3": {
+      "decision": "accepted",
+      "claim": "One controlled paired no-op task preserved the direct outcome with zero tool, artifact, topology, persistent-resource or avoidable-human burden in either arm."
+    }
+  },
   "decision": {
     "state": "passed",
     "reason": "Both arms satisfied the exact two-sentence outcome with no material prohibited behavior. The accountable project human accepted this bounded task decision; the single pair does not establish comparative benefit and token or latency differences remain descriptive only."

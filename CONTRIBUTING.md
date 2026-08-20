@@ -17,7 +17,8 @@ Maintainers and their Agents own:
 Typos, broken links and narrow non-semantic fixes need only the exact defect.
 Product or behavior changes need an observed problem, hypothesis, falsifier,
 smallest useful deliverable, authority boundary and retirement condition.
-There is one active increment and at most one active work item.
+There is at most one active increment and at most one active work item. A
+repository candidate that is ready for external release gates may have neither.
 
 Do not add another runtime, registry, router, ledger, general protocol or
 validator generation without a demonstrated residual gap and a subtraction or
@@ -37,7 +38,14 @@ python -B -m unittest discover -s tests/product -v
 Static checks establish only contract and projection conformance. Claims about
 Agent behavior require exact-host Golden Task observations. Field value,
 cross-host equivalence, publication and release require their own evidence and
-human authority.
+human authority. For a release candidate, first push and verify the unchanged
+clean SHA on every declared hosted system; only then request separate
+named-human authorization for that same SHA and claim ceiling. Do not write
+candidate-specific hosted proof or human authority back into the candidate,
+and do not start a later release gate before its predecessor passes. The first
+two external gates are direct task-time observations, not verifier inputs;
+completion also requires the exact tagged public release, direct live
+verification and goal-carrier cleanup.
 
 Do not submit credentials, private memory, account state, restricted material
 or unsanitized host configuration. See [SECURITY.md](SECURITY.md) and

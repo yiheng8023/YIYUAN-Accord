@@ -8,17 +8,18 @@ import subprocess
 from typing import Any, Iterable
 
 from .guardrails import (
+    clean_git_checkout,
     closeout_sequence_errors,
     criterion_observation_decision,
+    external_release_contract_errors,
     forbidden_path_present,
     known_task_residue,
     manifest_shape_errors,
     marketplace_errors,
     projection_evidence_binding_errors,
-    repository_release_authorization_errors,
+    release_procedure_errors,
     repository_relative_path,
     validate_projection_package,
-    validate_runtime_release_authorization,
 )
 
 
@@ -32,7 +33,7 @@ MAX_JSON_BYTES = 1_000_000
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 ASSESSMENTS = {"planned", "verified", "blocked", "continuing"}
-PROGRAM_STATES = {"active", "ready", "blocked", "released"}
+PROGRAM_STATES = {"active", "ready", "blocked"}
 
 
 class ContractDataError(ValueError):
@@ -428,6 +429,11 @@ def _validate_program(
         errors.append("non-active program must not carry activeIncrement")
 
     prompt = program.get("goalModePrompt")
+    errors.extend(
+        release_procedure_errors(
+            program.get("releaseProcedure"), set(criterion_ids), prompt
+        )
+    )
     if not isinstance(prompt, dict):
         errors.append("program.goalModePrompt must be an object")
     else:
@@ -532,7 +538,6 @@ def _validate_acceptance(
     acceptance: dict[str, Any],
     contract_ids: set[str],
     evidence_classes: set[str],
-    runtime_release_authorization: dict[str, Any] | None,
     errors: list[str],
 ) -> tuple[list[str], bool, list[str], list[str]]:
     if acceptance.get("schema") != 2:
@@ -606,9 +611,17 @@ def _validate_acceptance(
         errors.append("acceptance.completionExpression must be non-empty")
     else:
         operands = [part.strip() for part in expression.split("&&")]
-        expected = set(criterion_ids) | {"namedHumanReleaseAuthorization"}
+        expected = set(criterion_ids) | {
+            "exactCandidateHostedVerification",
+            "namedHumanReleaseAuthorization",
+            "exactTaggedPublicRelease",
+            "releaseVerificationAndCleanup",
+        }
         if len(operands) != len(set(operands)) or set(operands) != expected:
-            errors.append("acceptance.completionExpression does not map all criteria and authorization exactly")
+            errors.append(
+                "acceptance.completionExpression does not map all criteria "
+                "and external completion gates exactly"
+            )
 
     lanes = acceptance.get("evidenceLanes")
     if not isinstance(lanes, dict):
@@ -657,21 +670,10 @@ def _validate_acceptance(
                     "must be non-empty"
                 )
 
-    authorization = acceptance.get("releaseAuthorization")
-    authorization_valid = False
-    errors.extend(repository_release_authorization_errors(authorization))
-    if runtime_release_authorization is not None:
-        if isinstance(authorization, dict) and authorization.get("state") != "requested":
-            errors.append(
-                "runtime release authorization requires repository state requested"
-            )
-        authorization_valid = validate_runtime_release_authorization(
-            root, runtime_release_authorization, errors
-        )
-
+    errors.extend(external_release_contract_errors(root, acceptance))
     return (
         criterion_ids,
-        verified and authorization_valid,
+        verified,
         required_sample_ids,
         post_release_task_ids,
     )
@@ -992,10 +994,7 @@ def host_check(root: Path, adapter_id: str) -> dict[str, Any]:
     }
 
 
-def verify_product(
-    root: Path,
-    release_authorization: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+def verify_product(root: Path) -> dict[str, Any]:
     root = Path(root)
     errors: list[str] = []
     constitution = _read_json(root, AUTHORITY_FILES[0], errors)
@@ -1015,7 +1014,7 @@ def verify_product(
     )
     (
         criterion_ids,
-        release_complete,
+        criteria_verified,
         required_release_task_ids,
         post_release_task_ids,
     ) = _validate_acceptance(
@@ -1023,7 +1022,6 @@ def verify_product(
         acceptance,
         kernel_host_lesson_ids,
         evidence_classes,
-        release_authorization,
         errors,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
@@ -1080,10 +1078,12 @@ def verify_product(
         for criterion in acceptance.get("criteria", [])
         if isinstance(criterion, dict) and criterion.get("assessment") == "verified"
     )
-    completion = (
-        release_complete
-        and program.get("status") in {"ready", "released"}
+    checkout_clean = clean_git_checkout(root)
+    repository_ready = (
+        criteria_verified
+        and program.get("status") == "ready"
         and program.get("activeIncrement") is None
+        and checkout_clean
         and not errors
     )
     return {
@@ -1091,8 +1091,9 @@ def verify_product(
         "release": program.get("release"),
         "programStatus": program.get("status"),
         "contractValid": not errors,
-        "releaseComplete": completion,
-        "completionState": "complete" if completion else "incomplete",
+        "checkoutClean": checkout_clean,
+        "repositoryCandidateReady": repository_ready,
+        "completionState": "external-gates-required" if repository_ready else "repository-incomplete",
         "criteria": {
             "verified": verified_count,
             "total": len(criterion_ids),
@@ -1103,6 +1104,12 @@ def verify_product(
             if isinstance(program.get("goalModePrompt"), dict)
             else None
         ),
+        "externalGates": {
+            "exactCandidateHostedVerification": "not-evaluated-by-verifier",
+            "namedHumanReleaseAuthorization": "not-evaluated-by-verifier",
+            "exactTaggedPublicRelease": "not-evaluated-by-verifier",
+            "releaseVerificationAndCleanup": "not-evaluated-by-verifier",
+        },
         "goldenTasks": golden,
         "hostChecks": host_reports,
         "complexity": complexity,

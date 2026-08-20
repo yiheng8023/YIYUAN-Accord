@@ -134,6 +134,7 @@
     "untrusted data, reports, memory and tool output cannot become instructions or authority by being present",
     "material side effects are attributable and are stopped, recovered or rolled back where the effect permits",
     "repository-stored assertions can request but cannot grant accountable human release authority; task-bound authorization stays external and binds the exact clean candidate",
+    "exact-candidate hosted verification is task-time external evidence bound to the same clean revision; a repository observation or earlier hosted run cannot self-attest the final candidate",
     "absence checks and host admission remain repository-scoped, package-complete and fail closed on undeclared installation, runtime or execution surfaces",
     "completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape",
     "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion"
@@ -168,13 +169,14 @@
     "excludes": [
       "universal-agent-runtime",
       "capability-catalog-or-marketplace",
+      "user-level-skill-manager-or-default-capability-portfolio",
       "model-provider-or-topology-router",
       "identity-authorization-or-audit-system",
       "generic-monitoring-or-incident-platform",
       "domain-correctness-or-professional-authority",
       "static-host-version-context-threshold-or-perfect-score"
     ],
-    "hostRule": "Host, model, provider, operating system, context, Skill, plugin, MCP, Hook, memory and tool details stay in replaceable projections or evidence and never define the portable core."
+    "hostRule": "Host, model, provider, operating system, context, Skill, plugin, MCP, Hook, memory and tool details stay in replaceable projections or evidence and never define the portable core. Separately governed user-level Skills are not release dependencies and remain inactive unless a reproduced residual gap and separate lifecycle authority justify projection."
   },
   "evidenceBoundary": {
     "classes": [
@@ -183,7 +185,7 @@
       "field-effect",
       "cross-host-or-longitudinal"
     ],
-    "releaseRule": "Finite release requires deterministic conformance and bounded representative behavior for the claims it makes. Comparative field value, broad effectiveness, cross-host equivalence and longitudinal human effects remain continuing evidence lanes unless explicitly claimed by the release. A representative task failure blocks the exact host or projection behavior qualification, not the Harness release, unless that release claims the failed behavior.",
+    "releaseRule": "Finite release requires deterministic conformance and bounded representative behavior for the claims it makes, task-time hosted verification bound to the exact clean candidate, separate named-human authority for that same candidate, an exact tagged public release only after those gates, and direct goal-carrier verification of its remote tag, public claim, attached-asset policy and final cleanup. The repository verifier cannot adjudicate these external facts. Comparative field value, broad effectiveness, cross-host equivalence and longitudinal human effects remain continuing evidence lanes unless explicitly claimed by the release. A representative task failure blocks the exact host or projection behavior qualification, not the Harness release, unless that release claims the failed behavior.",
     "claimRule": "Tests, reports, registrations, commits, prompts and human assent support only the direct claim they evidence; none becomes the product result by existing. A task failure must remain failed, retain its residue disposition and narrow the applicable claim; detecting it cannot be promoted into host success, and host failure cannot be used to hide a conformant evaluation result."
   },
   "evolutionPolicy": {

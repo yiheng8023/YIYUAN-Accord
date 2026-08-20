@@ -71,7 +71,11 @@ diagnostic hypotheses, not a feature backlog.
 ## Release is not the end
 
 A finite v1.2 release will close only its declared deterministic and
-representative claims. Later field, cross-host and longitudinal evidence may
-add a counterexample, narrow a claim, simplify or retire a projection, or open
-one new bounded increment. It does not reopen settled historical proof or
+representative claims. Its final candidate cannot attest itself: exact-SHA
+hosted verification remains a direct task-time observation and must precede a
+separate named-human release decision for the same unchanged revision. Neither
+is completion: the exact tagged public release, direct live verification and
+goal-carrier cleanup must follow. Later field, cross-host and longitudinal evidence
+may add a counterexample, narrow a claim, simplify or retire a projection, or
+open one new bounded increment. It does not reopen settled historical proof or
 justify permanent accretion by default.

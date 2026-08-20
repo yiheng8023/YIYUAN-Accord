@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "v12-release-surface-2026-08-21",
+  "evidenceClass": "deterministic-conformance",
+  "observedAt": "2026-08-21T01:47:01+08:00",
+  "evidenceAuthority": "Agent-generated bounded factual observation; it can support repository criteria but cannot grant human authority, attest a later HEAD or create a release.",
+  "hostedBaselineRevision": "9f31f2c3a8418ac4b087b64c300e377617da5555",
+  "repositorySurface": {
+    "semanticAuthorityFiles": [
+      "product/constitution.json",
+      "product/program.json",
+      "product/acceptance.json"
+    ],
+    "genericVerifier": "python -B -m harness verify --root . --json",
+    "hostProjectionCount": 2,
+    "goldenTaskCount": 10,
+    "historicalO1O5ProofGenerationsOnActivePath": 0,
+    "repositoryReleaseAuthorityCanSelfGrant": false,
+    "undeclaredSkillInstallRuntimeOrExecutionSurfaceAccepted": false,
+    "separatelyGovernedUserSkillDependencyCount": 0,
+    "referenceProjectionAlignment": "shared K/H/L semantics and lifecycle boundary; host-required names, manifests and metadata intentionally differ"
+  },
+  "currentRepositoryCandidateVerification": {
+    "scope": "The current repository tree is independently recomputed by the canonical verifier; this observation does not bind or attest the later committed SHA or its hosted results.",
+    "canonicalValid": true,
+    "dirtyCheckoutRepositoryCandidateReady": false,
+    "cleanCheckoutReadinessRegressionCovered": true,
+    "productTestsPython314": "35/35 passed on Python 3.14.6",
+    "productTestsPython310": "35/35 passed on Python 3.10.20",
+    "codexHostCheck": "static-ready; behavior-unverified",
+    "claudeHostCheck": "static-ready; behavior-unverified",
+    "gitDiffCheck": "clean",
+    "knownTaskResidue": 0,
+    "privacyOrCredentialPatternMatches": 0,
+    "complexity": {
+      "trackedFiles": 50,
+      "harnessAndProductTestBytes": 106341,
+      "controlBytes": 43918,
+      "primaryInstructionBytes": 12200
+    }
+  },
+  "githubHostedBaseline": {
+    "runId": "32387615663",
+    "url": "https://github.com/yiheng8023/agent-autonomy-harness/actions/runs/32387615663",
+    "headRevision": "9f31f2c3a8418ac4b087b64c300e377617da5555",
+    "conclusion": "success",
+    "systems": ["ubuntu-latest", "windows-latest", "macos-latest"]
+  },
+  "codexCloudHostedBaseline": {
+    "taskId": "task_e_6a87206b8ab8832ba50676f967edf21b",
+    "url": "https://chatgpt.com/codex/tasks/task_e_6a87206b8ab8832ba50676f967edf21b",
+    "headRevision": "9f31f2c3a8418ac4b087b64c300e377617da5555",
+    "python": "3.14.4",
+    "requestedCommands": "4/4 passed",
+    "productTests": "32/32 passed",
+    "initialAndFinalWorktree": "clean",
+    "diff": "none",
+    "limitation": "The Cloud checkout had no Git remote or origin/main ref; it proved the supplied exact SHA, while local git ls-remote and GitHub Actions independently established that SHA as origin/main."
+  },
+  "ordinaryAdversarialReview": {
+    "identifiedAndClosed": [
+      "repository-self-authorized-release-completion",
+      "undeclared-install-runtime-or-execution-surface-admission",
+      "partial-projection-identity-replay",
+      "out-of-repository-absence-probe",
+      "premature-release-completion-before-tag-and-cleanup",
+      "out-of-order-hosted-and-human-release-gates",
+      "unbound-hosted-evidence-locator",
+      "default-user-level-skill-projection-dependency",
+      "dirty-worktree-candidate-readiness"
+    ],
+    "unresolvedP0OrP1KnownAtBaseline": 0,
+    "claim": "Bounded ordinary review and regression tests; not an exhaustive field-security certification."
+  },
+  "criterionEvidence": {
+    "R1": {
+      "decision": "accepted",
+      "claim": "The active repository surface contains one K1-K5/H1-H10/L1-L7 semantic contract, one generic data-driven verifier and no active historical outcome-validator generation."
+    },
+    "R4": {
+      "decision": "accepted",
+      "claim": "The public release surface, bounded evidence, three-system GitHub route and ordinary Codex Cloud route reproduced on one exact pushed baseline; the final unchanged candidate still requires separate task-time external hosted evidence and human authority."
+    },
+    "Q2": {
+      "decision": "accepted",
+      "claim": "The verifier keeps deterministic, representative and continuing lanes distinct, rejects criterion/evidence mismatch and repository release self-authorization, and withholds repositoryCandidateReady from a dirty or unavailable Git checkout despite every green contract command."
+    },
+    "Q3": {
+      "decision": "accepted",
+      "claim": "The retained surface is below every declared complexity ceiling, removes O1-O5 proof generations from the active path, keeps both host packages Skill-only and has no default dependency on separately governed user-level Skills."
+    }
+  },
+  "acceptanceDecisions": {
+    "R1": "accepted",
+    "R4": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted"
+  },
+  "claimLimit": [
+    "hosted-results-bind-only-9f31f2c3a8418ac4b087b64c300e377617da5555",
+    "final-candidate-requires-new-external-exact-head-verification",
+    "no-human-release-authorization",
+    "no-tag-or-release",
+    "no-broad-field-effectiveness",
+    "no-cross-host-behavior-equivalence"
+  ]
+}
