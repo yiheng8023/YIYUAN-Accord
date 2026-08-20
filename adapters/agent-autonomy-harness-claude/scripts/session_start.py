@@ -28,7 +28,7 @@ PINNED_RUNTIME_SHA256 = {
     "harness/task_validator_o4_continuous_self_correction.py": "4e08aed6dd4070016e910aac31192af2ff2c78cf2b779da2a04acada20fd8aa1",
     "harness/task_validator_o4_continuous_self_correction_v2.py": "255ae6df24599572f0d311e5aa6ee7a33dd3b70389b5e96097dde7957d43d367",
     "harness/task_validator_o4_continuous_self_correction_v3.py": "db190c3c930c0624027dcd8556484553361c9da30319af8a3700bd10d2c62dff",
-    "harness/control.py": "c0f9c25b0a280325f2138472597f444e5cdcd1357724f629db0eb99cfac6666a",
+    "harness/control.py": "9ad3f7bd3eef9102a6bb659ec47c0dba68acf141d8a4c48006314cce172955a8",
     "harness/continuation.py": "6e780c3d5a12397e4ba9f82aac66f79386b6dadf06d46320add3ecfd07b73f66",
     "harness/claude_reference.py": "9d70662c5bc33fe0f16a28b7da95123f4277d62933cedfb0caccd5ac147cab2a",
 }

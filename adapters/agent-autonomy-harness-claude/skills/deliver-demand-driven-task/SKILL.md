@@ -1,6 +1,6 @@
 ---
 name: deliver-demand-driven-task
-description: Apply the Agent Autonomy Harness candidate method to nontrivial goal-level tasks that require execution, capability choice, bounded side effects, verification, task or context continuity, or cleanup. Use implicitly when a user states the desired result without a tool route; do not use for simple conversation or a one-step answer that needs no orchestration.
+description: Apply the Agent Autonomy Harness v1.2 candidate method to nontrivial goal-level work involving execution, capability choice, authority, verification, correction, continuity, recovery, or cleanup. Use implicitly when the user states a result without a tool route; do not use for simple conversation or a one-step answer that needs no orchestration.
 ---
 
 # Deliver demand-driven tasks
@@ -11,37 +11,43 @@ topology, conversation-topology, recovery, verification, or cleanup mechanics
 unless the user asks about them.
 
 Before acting on a qualifying task, read
-`references/demand-to-capability-profile.md` completely. Its embedded
-pre-calibration status bytes are frozen; v0.2 accepted only a bounded Codex
-reference-host calibration, and no v1.0 or general-standard claim follows. The latest bound user intent, live task facts,
-host authorization, and any current Agent Autonomy Harness repository authority
-win over it. Never use this Skill or its reference to create product work,
-expand authority, or promote evidence.
+`references/demand-to-capability-profile.md` completely. It is a subordinate
+v1.2 candidate, not product authority or evidence. The latest user intent,
+live facts, host authorization, and current repository authority win. Never let
+this Skill create work, expand authority, or promote a claim.
 
 ## Apply the method lightly
 
-1. Recover the latest goal, facts, target, authority, and settled decisions.
-   For explanation, review, diagnosis, planning, conversation, or agreement,
-   respond without persisting an artifact unless the user asks for one.
-2. Inspect safely discoverable facts. Detect material omissions, assumptions,
-   risks, and expected post-effect state before acting. Ask only when a missing
-   human decision changes the next safe action and cannot be found read-only.
-3. Observe healthy native and already-authorized capability first. Identify a
-   reproducible residual gap before finite, source-bound discovery. Select the
-   smallest route that adds no unnecessary goal, input, deliverable, human
-   round trip, authority, side effect, or acceptance burden.
-4. Keep the healthy current task and checkout. Create or switch code or
-   conversation carriers only for causal necessity. Observe available host and
-   task fitness signals at material boundaries; treat unavailable capacity as
-   unknown, and compact or hand off conservatively before preventable loss.
-   Own synchronization, reconciliation, merge, archive, release, and cleanup.
-5. Execute the bounded task, recover from observable failure, verify at the
-   evidence level the claim requires, release task-scoped exposure, and remove
-   task-owned residue. Do not turn the method into repeated intake or closure
-   ceremony.
-6. Lead with the result. State material risks, unknowns, evidence limits, and
-   remaining human gates on the first useful pass. Never call a local check a
-   live, cross-host, release, production, or human-accepted result.
+1. Recover the current goal and phase, facts, environment, settled corrections,
+   authority and exit condition. Observe model, provider, reasoning,
+   delegation, capabilities, instructions, configuration, operating system,
+   context and topology; retain an unavailable signal as unknown.
+2. Challenge material premises and detect omissions before acting. Ask only
+   when a missing human decision changes the next safe action and cannot be
+   discovered read-only.
+3. Choose the minimum sufficient route and default to no-op: retain healthy native behavior; else
+   reuse a suitable official or maintained layer; else add the smallest
+   repeatable residual; otherwise degrade, escalate, stop, or narrow the claim.
+   Resolve changing sources at decision time and never lock a permanent model,
+   provider, version, context size, catalog, operating system, or topology.
+4. Preview material effects, reversibility, failure signals, recovery,
+   verification, continuity and cleanup. Perform every supported authorized
+   mechanic; guide and post-verify only an unavoidable human-only action.
+5. Execute and reconcile continuously at material checkpoints and after
+   effects: compare goal, correction, authority, expected and observed state,
+   evidence, carrier fitness, resources and phase. On drift, stop further
+   effects, preserve evidence, recover or roll back, correct minimally, and
+   re-verify before resuming.
+6. Preserve a healthy carrier. Use current native compaction, fork, handoff,
+   model, delegation and capability surfaces when sufficient. Treat remaining
+   capacity as unknown when no reliable signal exists and transition
+   conservatively before preventable loss. Verify the destination before
+   releasing the source; never make the user choose topology mechanics.
+7. Verify the semantic effect at the level claimed, release task-scoped
+   exposure, and remove task-owned residue. Lead with the result, risks,
+   unknowns, evidence limits and remaining human gates. Controlled evidence is
+   not natural-task value or cross-Agent proof. Retain a Harness control only
+   while its measured residual value exceeds its coordination and lifecycle cost.
 
 ## Preserve human authority
 

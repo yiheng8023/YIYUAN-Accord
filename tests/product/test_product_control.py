@@ -3144,6 +3144,13 @@ class ProductControlTests(unittest.TestCase):
                 for invariant in constitution["fixedInvariants"]
             )
         )
+        self.assertTrue(
+            any(
+                "no-op and non-interference are required" in invariant
+                and "coordination and lifecycle cost" in invariant
+                for invariant in constitution["fixedInvariants"]
+            )
+        )
         self.assertIn(
             "model-provider-reasoning-effort-and-delegation route",
             constitution["adaptiveSurfaces"],
@@ -4584,7 +4591,7 @@ class ProductControlTests(unittest.TestCase):
             payload_identity.update(b"\0")
         self.assertEqual(
             manifest["version"],
-            "0.2.0-candidate.7+claude.payload-"
+            "1.2.0-conformance-candidate.1+claude.payload-"
             f"{payload_identity.hexdigest()[:12]}",
         )
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
@@ -4605,23 +4612,23 @@ class ProductControlTests(unittest.TestCase):
         self.assertLessEqual(command["timeout"], 5)
         self.assertNotIn(str(ROOT), json.dumps(hooks))
 
-    def test_claude_plugin_skill_preserves_its_exact_historical_method(self) -> None:
+    def test_claude_plugin_skill_uses_the_current_thin_v12_method(self) -> None:
         claude_skill_root = CLAUDE_PLUGIN_ROOT / "skills/deliver-demand-driven-task"
         claude_skill = (claude_skill_root / "SKILL.md").read_text(encoding="utf-8")
 
-        self.assertEqual(
-            hashlib.sha256((claude_skill_root / "SKILL.md").read_bytes()).hexdigest(),
-            "abb5906eeface94100b278e4ac182c39893a6be86a5de52577318164dc77103f",
-        )
+        self.assertLessEqual(len(claude_skill.splitlines()), 60)
         self.assertEqual(
             (
                 claude_skill_root
                 / "references/demand-to-capability-profile.md"
             ).read_bytes(),
-            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE.md").read_bytes(),
+            (ROOT / "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md").read_bytes(),
         )
         self.assertIn("Use implicitly", claude_skill)
         self.assertIn("do not use for simple conversation", claude_skill.lower())
+        self.assertIn("minimum sufficient route and default to no-op", claude_skill)
+        self.assertIn("coordination and lifecycle cost", claude_skill)
+        self.assertNotIn("unaccepted candidate for Codex reference-host", claude_skill)
         self.assertFalse((CLAUDE_PLUGIN_ROOT / ".mcp.json").exists())
         self.assertFalse((CLAUDE_PLUGIN_ROOT / "CLAUDE.md").exists())
 

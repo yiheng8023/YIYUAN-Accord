@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agent-autonomy-harness-claude",
-  "version": "0.2.0-candidate.7+claude.payload-0ab6ca468814",
-  "description": "Thin Claude Code projection for demand-driven task delivery and Harness authority continuity.",
+  "version": "1.2.0-conformance-candidate.1+claude.payload-26c7daa26ae4",
+  "description": "Thin Claude Code v1.2 projection for demand-driven task delivery and Harness authority continuity.",
   "author": {
     "name": "Agent Autonomy Harness contributors"
   },
