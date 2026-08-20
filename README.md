@@ -84,10 +84,11 @@ failure; evaluator cleanup cannot convert it into a host pass.
 
 ## Status and completion boundary
 
-v1.2 is undergoing one global subtractive reshape. The replacement goal-mode
-prompt is prepared in [product/program.json](product/program.json), while the
-old host goal remains paused; repository text does not pretend to have changed
-host lifecycle state.
+v1.2 is undergoing one global subtractive reshape. The exact no-budget
+goal-mode objective in [product/program.json](product/program.json) was resumed
+in the current host task on 2026-08-20 after accountable user approval. Active
+goal lifecycle authorizes continued bounded work; it is not criterion, release
+or field-effect evidence.
 
 A finite release requires direct deterministic and representative evidence for
 R1–R4 and Q1–Q4 plus named-human authorization of the exact candidate, claim

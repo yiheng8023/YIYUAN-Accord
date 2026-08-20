@@ -422,6 +422,56 @@ def criterion_observation_decision(
     return accepted, errors
 
 
+def closeout_sequence_errors(
+    work_item: dict[str, Any], criterion_ids: set[str]
+) -> list[str]:
+    sequence = work_item.get("closeoutSequence")
+    if not isinstance(sequence, list) or not sequence or any(
+        not isinstance(stage, dict) for stage in sequence
+    ):
+        return ["active work item closeoutSequence must be a non-empty object list"]
+    errors: list[str] = []
+    stage_ids: list[str] = []
+    states: list[str] = []
+    coverage: set[str] = set()
+    for index, stage in enumerate(sequence):
+        stage_id = stage.get("id")
+        if not isinstance(stage_id, str) or not stage_id.strip():
+            errors.append(f"closeoutSequence[{index}].id must be non-empty")
+        else:
+            stage_ids.append(stage_id)
+        state = stage.get("state")
+        if state not in {"completed", "active", "pending"}:
+            errors.append(f"closeoutSequence[{index}].state is invalid")
+        else:
+            states.append(state)
+        mapped = stage.get("acceptanceIds")
+        if (
+            not isinstance(mapped, list)
+            or not mapped
+            or any(not isinstance(item, str) or item not in criterion_ids for item in mapped)
+        ):
+            errors.append(f"closeoutSequence[{index}].acceptanceIds is invalid")
+        else:
+            coverage.update(mapped)
+        if not isinstance(stage.get("stopCondition"), str) or not stage[
+            "stopCondition"
+        ].strip():
+            errors.append(f"closeoutSequence[{index}].stopCondition must be non-empty")
+    if len(stage_ids) != len(set(stage_ids)):
+        errors.append("active work item closeoutSequence ids must be unique")
+    if states.count("active") != 1:
+        errors.append("active work item closeoutSequence must contain one active stage")
+    ranks = {"completed": 0, "active": 1, "pending": 2}
+    if states and [ranks[state] for state in states] != sorted(
+        ranks[state] for state in states
+    ):
+        errors.append("active work item closeoutSequence order is invalid")
+    if coverage != criterion_ids:
+        errors.append("active work item closeoutSequence must map every criterion")
+    return errors
+
+
 def repository_release_authorization_errors(authorization: Any) -> list[str]:
     if not isinstance(authorization, dict):
         return ["acceptance.releaseAuthorization must be an object"]

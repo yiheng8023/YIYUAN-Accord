@@ -72,11 +72,17 @@
     "promotedToEvidence": false
   },
   "decision": {
-    "state": "candidate-pass-awaiting-human-review",
-    "reason": "The exact response satisfied every predeclared GT-07 behavior and no prohibited behavior occurred. This is one controlled decision response, not proof that the host will autonomously transition a real long-running carrier."
+    "state": "passed",
+    "reason": "The exact response satisfied every predeclared GT-07 behavior and no prohibited behavior occurred. The accountable project human accepted this bounded task decision; it remains one controlled decision response, not proof that the host will autonomously transition a real long-running carrier."
   },
   "acceptanceDecisions": {
-    "R3": "pending-human-review"
+    "R3": "accepted"
+  },
+  "humanReview": {
+    "reviewedAt": "2026-08-20T23:34:59+08:00",
+    "authority": "bound-accountable-project-human",
+    "decision": "accepted-bounded-task-pass",
+    "claimLimitConfirmed": true
   },
   "claimLimit": [
     "one-controlled-unknown-capacity-decision",

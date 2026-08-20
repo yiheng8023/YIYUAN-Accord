@@ -8,6 +8,7 @@ import subprocess
 from typing import Any, Iterable
 
 from .guardrails import (
+    closeout_sequence_errors,
     criterion_observation_decision,
     forbidden_path_present,
     known_task_residue,
@@ -421,6 +422,8 @@ def _validate_program(
                     errors.append(
                         f"activeIncrement.workItems[{index}].acceptanceIds is invalid"
                     )
+                if item.get("state") == "active":
+                    errors.extend(closeout_sequence_errors(item, set(criterion_ids)))
     elif increment is not None:
         errors.append("non-active program must not carry activeIncrement")
 

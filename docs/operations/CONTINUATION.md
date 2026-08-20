@@ -28,9 +28,10 @@ reshape-and-release increment and one active work item.
 - The project-specific 2026-08-20 audit is preserved under research/reviews.
 - The shared human-AI shortfall corpus remains read-only at
   YIYUAN-CALIBRATION revision e060a08f05361cb4cc9a67be050236cdbbde1de5.
-- The replacement goal-mode objective is prepared in program.goalModePrompt.
-  The previous host goal is paused; do not claim that repository mutation
-  resumed or replaced it.
+- The exact no-budget objective in `program.goalModePrompt` was resumed in the
+  current host task on 2026-08-20 after accountable user approval. Its state is
+  `active-in-host`; this lifecycle event authorizes bounded continuation but
+  does not prove a criterion, release or field outcome.
 - On 2026-08-20, ordinary Codex Cloud was exercised through the authenticated
   account after the in-app browser login was refreshed. A read-only task on the
   remote `origin/main` baseline `534a77aae9e1d191173e6e05b4327c80d22855d8`
@@ -55,22 +56,19 @@ reshape-and-release increment and one active work item.
 
 ## Current release path
 
-1. Finish authority, generic verifier, documentation and projection
-   consistency.
-2. Run static contract, both host-admission checks and product tests.
-3. Review the finite GT-01/GT-02/GT-07 observations and refresh Codex Cloud only
-   if an exact executable environment becomes available. Keep Cloud, local
-   Codex and Claude as distinct exact-host lanes.
-4. Reconcile findings. One same-purpose failure causes replan and subtraction
-   review, not another validator generation; a failed task narrows the host
-   claim instead of being erased or forcing an unrelated product failure.
-5. Prepare a clean candidate, security/privacy/residue review and exact claim
-   ceiling.
-6. Commit the clean candidate with repository authorization state `requested`.
-   Request named-human authorization for that exact HEAD, claim ceiling,
-   publication and release. Supply that decision only as a task-bound external
-   verifier input; repository data cannot grant it. Only then create and verify
-   the release.
+1. **Completed — bounded evidence review (R2/R3):** the accountable project
+   human accepted static admission only, the bounded GT-01 and GT-07 passes,
+   and the retained GT-02 cleanup failure.
+2. **Active — candidate and hosted verification (R1/R4/Q2/Q3/Q4):** keep one
+   clean candidate, run both local Python versions and host checks, perform
+   privacy/residue review, push under the granted authority, then corroborate
+   that exact revision through GitHub and ordinary Codex Cloud. Hosted PASS is
+   evidence, not release.
+3. **Pending — exact human release and closeout (Q1/R4):** reconcile all
+   evidence and limits, set repository authorization state only to `requested`,
+   present the exact clean HEAD and claim ceiling through a real human veto,
+   then supply any grant only as the external verifier input. Create and verify
+   the tag/release only after that grant, and finish task-resource cleanup.
 
 No universal turn count, context size, token percentage or summary ratio
 governs carrier transitions. Use reliable source-bound host signals when

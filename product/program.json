@@ -64,14 +64,34 @@
           "project-audit custody and shared-research revision reference",
           "small public documentation and release-candidate evidence"
         ],
+        "closeoutSequence": [
+          {
+            "id": "review-bounded-evidence",
+            "state": "completed",
+            "acceptanceIds": ["R2", "R3"],
+            "stopCondition": "The accountable project human accepts the static-admission-only R2 evidence, the bounded GT-01 and GT-07 passes, and the retained GT-02 failure without expanding any claim."
+          },
+          {
+            "id": "prepare-and-host-verify-candidate",
+            "state": "active",
+            "acceptanceIds": ["R1", "R4", "Q2", "Q3", "Q4"],
+            "stopCondition": "One clean exact candidate passes the canonical verifier, product tests, both host checks, privacy and residue review, is pushed under explicit authority, and receives exact-revision GitHub and ordinary Codex Cloud corroboration without promoting hosted checks into release."
+          },
+          {
+            "id": "exact-human-release-and-closeout",
+            "state": "pending",
+            "acceptanceIds": ["Q1", "R4"],
+            "stopCondition": "The prepared candidate, claim ceiling and remaining limits are presented through a real human veto; an external task-bound authorization matches the clean HEAD before tag or release creation, and release verification plus task-resource cleanup succeed."
+          }
+        ],
         "stopCondition": "A clean checkout reproduces all required deterministic checks, the exact finite representative sample and all pass/failure decisions are independently reviewable, failed host behaviors are excluded from the release claim, complexity targets pass, evaluator-owned residue is absent and the candidate waits only for the named human release decision."
       }
     ]
   },
   "goalModePrompt": {
-    "state": "prepared-host-goal-paused",
+    "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在当前三份产品权威、项目专项审计和具名的人机协作短板研究约束下，将 Agent Autonomy Harness v1.2 收缩并完成为 K1-K5 可移植协作内核、H1-H10 即时宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影和可复现的帮助与干扰 Golden Tasks；真实完成 R1-R4 与 Q1-Q4 所需的有限开源发布证据和具名人类发布授权，同时把跨宿主、长期场景与真实场域价值保留为发布后持续校准和迭代。不得把报告、计划、提示词、代码、测试、提交、推送、转场、历史证据或局部通过称为收官；不得用加层掩盖重复失败；必须保留可迁移反例、控制过程损失、诚实限制主张并清理任务残留。",
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，以已确认的 R2、GT-01、GT-07 判断和保留失败的 GT-02 为当前证据边界，将 Agent Autonomy Harness v1.2 收敛为 K1-K5 可移植协作内核、H1-H10 宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影及可复现的帮助与干扰评估；持续校准计划、工序、验收、目标提示词、证据、资源和载体状态，最小纠偏并控制过程损失，完成 R1-R4 与 Q1-Q4、精确干净候选、获授权的推送与托管复验、具名人类最终发布授权和必要发布收尾。不得把报告、计划、代码、测试、提交、推送、转场、局部通过或自填证据称为收官；真实场域、跨宿主和长期效果保持为发布后持续证据通道。遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界时暂停并提出最小接管步骤，验证完成后继续，直至有限 v1.2 真实收官。",
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "refreshTriggers": [
       "user-correction",
@@ -81,7 +101,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "This repository value prepares the next exact objective. It does not claim that a paused host goal has been resumed or replaced."
+    "hostLifecycleNote": "The accountable user explicitly resumed this exact no-budget objective in the current host task on 2026-08-20. The active lifecycle state authorizes continued in-scope mechanics and bounded push verification, but it does not prove any criterion, release or field outcome."
   },
   "hostProjections": [
     {

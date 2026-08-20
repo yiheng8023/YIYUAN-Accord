@@ -49,9 +49,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(report["contractValid"])
         self.assertFalse(report["releaseComplete"])
         self.assertEqual(report["completionState"], "incomplete")
-        self.assertEqual(report["criteria"]["verified"], 0)
+        self.assertEqual(report["criteria"]["verified"], 2)
         self.assertEqual(report["criteria"]["total"], 8)
-        self.assertEqual(report["goalModePromptState"], "prepared-host-goal-paused")
+        self.assertEqual(report["goalModePromptState"], "active-in-host")
         self.assertEqual(
             report["goldenTasks"]["behaviorEvidence"],
             "not-established-by-static-suite",
@@ -300,6 +300,28 @@ class ProductControlTests(unittest.TestCase):
                 report["errors"],
             )
 
+    def test_closeout_sequence_maps_every_criterion_with_one_active_stage(self) -> None:
+        with _fixture() as root:
+            program = _read_json(root, "product/program.json")
+            sequence = program["activeIncrement"]["workItems"][0][
+                "closeoutSequence"
+            ]
+            sequence[-1]["acceptanceIds"].remove("Q1")
+            sequence[-1]["state"] = "active"
+            _write_json(root, "product/program.json", program)
+
+            report = verify_product(root)
+
+            self.assertFalse(report["valid"])
+            self.assertIn(
+                "active work item closeoutSequence must contain one active stage",
+                report["errors"],
+            )
+            self.assertIn(
+                "active work item closeoutSequence must map every criterion",
+                report["errors"],
+            )
+
     def test_more_than_one_active_work_item_fails(self) -> None:
         with _fixture() as root:
             program = _read_json(root, "product/program.json")
@@ -447,7 +469,14 @@ class ProductControlTests(unittest.TestCase):
                 for criterion in acceptance["criteria"]
                 if criterion["id"] == "R2"
             )
-            r2["assessment"] = "verified"
+            for item in r2["evidence"]:
+                locator = item["locator"]
+                observation = _read_json(root, locator)
+                observation["acceptanceDecisions"]["R2"] = "pending-human-review"
+                _write_json(root, locator, observation)
+                item["sha256"] = hashlib.sha256(
+                    (root / locator).read_bytes()
+                ).hexdigest()
             _write_json(root, "product/acceptance.json", acceptance)
 
             report = verify_product(root)
@@ -466,7 +495,22 @@ class ProductControlTests(unittest.TestCase):
                 for criterion in acceptance["criteria"]
                 if criterion["id"] == "R3"
             )
-            r3["assessment"] = "verified"
+            for task_id in ("GT-01", "GT-07"):
+                item = next(
+                    evidence
+                    for evidence in r3["evidence"]
+                    if task_id.lower().replace("-", "")
+                    in evidence["locator"].replace("-", "")
+                )
+                locator = item["locator"]
+                observation = _read_json(root, locator)
+                observation["decision"]["state"] = (
+                    "candidate-pass-awaiting-human-review"
+                )
+                _write_json(root, locator, observation)
+                item["sha256"] = hashlib.sha256(
+                    (root / locator).read_bytes()
+                ).hexdigest()
             _write_json(root, "product/acceptance.json", acceptance)
 
             report = verify_product(root)

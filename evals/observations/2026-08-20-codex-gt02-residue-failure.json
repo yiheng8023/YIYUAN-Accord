@@ -107,6 +107,12 @@
   "acceptanceDecisions": {
     "R3": "accepted"
   },
+  "humanReview": {
+    "reviewedAt": "2026-08-20T23:34:59+08:00",
+    "authority": "bound-accountable-project-human",
+    "decision": "accepted-retained-task-failure",
+    "claimLimitConfirmed": true
+  },
   "followUpBoundary": "Permit one minimal projection correction for no-residue verification. Any repeated same-purpose cleanup failure requires replan and subtraction rather than another instruction layer.",
   "claimLimit": [
     "one-task-owned-fixture",

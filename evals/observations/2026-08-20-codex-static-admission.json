@@ -25,7 +25,13 @@
     "packageSha256": "a02a950295128a7db01f8d9a6bea721ac5dafc7efc47a04c3ddc5325c24886ec"
   },
   "acceptanceDecisions": {
-    "R2": "pending-human-review"
+    "R2": "accepted"
+  },
+  "humanReview": {
+    "reviewedAt": "2026-08-20T23:34:59+08:00",
+    "authority": "bound-accountable-project-human",
+    "decision": "accepted-static-admission-only",
+    "claimLimitConfirmed": true
   },
   "method": {
     "commandSurface": "codex debug prompt-input",
