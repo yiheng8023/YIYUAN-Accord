@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "codex-static-admission-2026-08-20",
+  "evidenceClass": "deterministic-conformance",
+  "observedAt": "2026-08-20T21:26:01.3905473+08:00",
+  "host": {
+    "product": "Codex CLI",
+    "version": "0.148.0",
+    "operatingSystem": "Microsoft Windows 11 Pro",
+    "osVersion": "10.0.26200.0",
+    "architecture": "X64",
+    "executableName": "codex.exe",
+    "executableSha256": "2ad2cf8a732da68b8f141634f92db1a03016c5faf533a7225fbc0fb740130410"
+  },
+  "projection": {
+    "adapterId": "codex",
+    "manifest": "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+    "manifestSha256": "b78649a2e67ade7957fc2d19b5cffe83cc329ff5993d670ac45692f29d3ca05a",
+    "marketplace": ".agents/plugins/marketplace.json",
+    "marketplaceSha256": "07616294a2aeb36d2e223f4cd5123f6cac0ce5d71fa40fd913db7d9928dbb28f",
+    "contract": "plugins/agent-autonomy-harness-codex/adapter.json",
+    "contractSha256": "d61583863ed8225e0ad837a5810b07951450560b87f72906971d1a57f78cb9ed",
+    "skill": "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374"
+  },
+  "method": {
+    "commandSurface": "codex debug prompt-input",
+    "discoveryRoute": "task-owned CWD .agents/skills junction to the exact repository Skill directory",
+    "prompt": "Explain briefly why a local passing test is not production acceptance.",
+    "modelCalled": false,
+    "pluginInstalled": false,
+    "userConfigurationMutated": false
+  },
+  "observation": {
+    "skillName": "deliver-demand-driven-outcome",
+    "presentInModelVisibleSkillsList": true,
+    "observedLocator": "C:/Projects/agent-autonomy-harness/.tmp/aah-codex-host-check/.agents/skills/deliver-demand-driven-outcome/SKILL.md",
+    "probeRemoved": true,
+    "repositoryTmpEntryCountAfterCleanup": 0
+  },
+  "claim": "The exact Codex Skill metadata was effectively present in the Codex 0.148.0 model-visible prompt input on this Windows host without installation or model execution.",
+  "notProved": [
+    "implicit-selection",
+    "full-skill-instruction-loading",
+    "model-behavior",
+    "golden-task-result",
+    "cloud-exposure",
+    "field-value",
+    "release"
+  ]
+}

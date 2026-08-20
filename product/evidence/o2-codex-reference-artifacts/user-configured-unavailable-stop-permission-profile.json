@@ -1,8 +1,0 @@
-{
-  "schema": 1,
-  "kind": "source-bound-user-configured-unavailable-stop",
-  "environmentIdentity": "codex-env.user-configured-permission-profile-v2",
-  "sourceKind": "named-human-configuration-boundary",
-  "sourceIdentity": "public-decision:2b1055a8b75a4bb489fb623456b9e475",
-  "reason": "existing-user-configured-environment-excluded-by-exact-second-generation-grant"
-}

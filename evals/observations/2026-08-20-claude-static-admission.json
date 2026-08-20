@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "claude-static-admission-2026-08-20",
+  "evidenceClass": "deterministic-conformance",
+  "observedAt": "2026-08-20T21:26:01.3905473+08:00",
+  "host": {
+    "product": "Claude Code",
+    "version": "2.1.237",
+    "operatingSystem": "Microsoft Windows 11 Pro",
+    "osVersion": "10.0.26200",
+    "architecture": "64-bit"
+  },
+  "projection": {
+    "adapterId": "claude-code",
+    "manifest": "plugins/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+    "manifestSha256": "4cb380ccd10c358c95b4a3b0fbde748b166ce39a5deb154abf6b17b4d51ff66b",
+    "contract": "plugins/agent-autonomy-harness-claude/adapter.json",
+    "contractSha256": "313075867b69150ee2d6f069dadbff65bc8aac36dd74eb8ff8c279db7dea3c48",
+    "skill": "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+    "skillSha256": "0546cc779cabadf429e553e0cc9fdadfe61b117afefee4e10a93daff7026e737"
+  },
+  "method": {
+    "manifestValidation": "claude plugin validate --strict plugins\\agent-autonomy-harness-claude",
+    "skillValidation": "python -X utf8 -B skill-creator/scripts/quick_validate.py plugins\\agent-autonomy-harness-claude\\skills\\deliver-demand-driven-task",
+    "manifestValidationPassed": true,
+    "skillValidationPassed": true,
+    "modelCalled": false,
+    "pluginInstalled": false,
+    "userConfigurationMutated": false
+  },
+  "claim": "The exact Claude Code projection passed the host-native strict manifest validator and the Skill package validator on this Windows host without installation or model execution.",
+  "notProved": [
+    "model-visible-skill-discovery",
+    "implicit-selection",
+    "skill-instruction-loading",
+    "model-behavior",
+    "golden-task-result",
+    "field-value",
+    "release"
+  ]
+}

@@ -1,1 +1,0 @@
-Create result.json containing exactly {"status":"ok"} followed by one newline.

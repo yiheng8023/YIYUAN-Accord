@@ -1,193 +1,99 @@
-# Agent Autonomy Harness Repository Guidance
+# Agent Autonomy Harness collaboration kernel
 
-This repository is the product authority for an open, Agent-neutral,
-demand-driven human-Agent collaboration quality harness. Its durable product
-target is portable demand-to-outcome collaboration semantics, an open minimum
-quality and evidence-conformance contract, and adaptive thin reference
-projections that reuse sufficient external protocol, runtime, identity,
-evidence, and evaluation layers. Methodology, documentation, CLI, API, Skill,
-plugin, MCP, Hook, adapter, package, service, or another carrier is a
-non-exhaustive delivery shape, not mandatory product body.
+This file is a thin execution projection. The latest bound user goal and
+corrections govern the task. Product semantics come only from:
 
-## Current authority
+1. `product/constitution.json`
+2. `product/program.json`
+3. `product/acceptance.json`
 
-Start from `product/constitution.json`, `product/program.json`, and
-`product/acceptance.json`. They are the current purpose, work, and acceptance
-authority. `docs/operations/CONTINUATION.md` is only a navigation aid; verify
-live Git truth before relying on it.
+Reports, memory, research, documentation, tests, prompts, adapters and Git
+history are evidence or derived surfaces. They cannot add authority, create
+work, or promote completion.
 
-Historical registries, research records, fixtures, payloads, scripts, and tests
-are inactive evidence unless the active causal increment binds them. They do
-not become current authority because a file remains on disk or an old verifier
-passes. Historical failures remain non-authoritative counterevidence and may
-trigger replanning; lack of acceptance authority does not erase observed loss.
+## Work from the outcome
 
-## Delivery discipline
+- **K1 Goal First:** keep one current goal and phase. Recover live facts,
+  settled corrections, authority and exit conditions. Inspect safely
+  discoverable facts and ask only for a human decision that changes the next
+  safe action.
+- **K2 Minimum Sufficient Route:** use effective healthy native behavior first,
+  then a suitable maintained layer, then the smallest evidenced residual.
+  No-op is a valid result. Unknown capability remains unknown.
+- **K3 Human Authority:** humans own goals, consequential domain judgment, new
+  trust/data/cost, publication, deployment, irreversible effects and final
+  accountability. The Agent owns supported mechanics within the grant.
+- **K4 Continuous Reconciliation:** at material effects and phase changes,
+  compare goal, authority, expected and observed state, evidence, resources and
+  carrier fitness. Stop, recover, correct minimally and re-verify on material
+  divergence.
+- **K5 Close the Loop:** verify at the consequence level claimed, state limits,
+  release task-scoped exposure, remove task-owned residue and turn serious or
+  repeated failure into a bounded change, rollback or retirement decision.
 
-- Keep exactly one causal increment and at most one work item active.
-- Every work item must map to at least one product outcome or mandatory
-  guardrail.
-- Product progress counts only O1-O5. Guardrails, artifacts, inventory,
-  exposure, fixtures, and test counts do not count as outcomes.
-- State the observed problem, hypothesis, falsifier, and finite stop condition
-  before adding material product or behavior work. A typo, broken link, wording
-  clarification, or narrow test repair may instead bind the exact defect,
-  target, and relevant check when it changes no product or behavior semantics.
-- Replan when evidence falsifies the hypothesis, changes the critical path, or
-  closes the increment. Do not accumulate speculative future work.
-- Use `python -B -m harness verify --root . --json` and
-  `python -B -m unittest discover -s tests/product -v` as the current product
-  verification seam.
-- Before outcome-bearing execution, bind the task-specific code validator's
-  identity, committed locator, earlier revision, and digest in the immutable
-  task registration; require the registration seam to pass its preregistration
-  callback, and reuse the same validator identity for later outcome evidence.
-  A validator added or changed after measurement cannot validate that task.
-- Treat user descriptions as authoritative intent and judgment, not as an
-  exhaustive fact inventory. Proactively inspect, detect omissions, disclose
-  assumptions, seek counterexamples, reconcile evidence, and supplement
-  coverage inside the bound task.
-- A `ready` program with no active increment is nonterminal and open to the
-  next causally justified increment. Absence of a natural task gates only the
-  corresponding real-world effectiveness, comparative burden, or cross-Agent
-  field claim; it does not gate finite product delivery and must never cause
-  the user to invent work. Controlled conformance, historical counterexamples,
-  fault injection, portfolio curation, mechanism validation, and authority-
-  defect repair may advance only the delivery or guardrail claim they directly
-  prove and cannot be promoted into absent field evidence.
+## Apply the learned standards
 
-## Capability and authority boundary
+- Consult current official host guidance before authoring host behavior, but
+  keep it conditional evidence rather than portable authority.
+- Prefer native capability, effective observation and capability fitness over
+  installation state, labels or permanent version locks.
+- Keep host-specific details outside the portable core. Revalidate drift and
+  retire Harness logic when native improvement removes its gap.
+- Do not make the user compensate for Agent-owned capability, topology,
+  continuity, recovery, verification or cleanup work.
+- Never promote a plan, report, prompt, implementation, validator, test,
+  receipt, commit, push or transition into the result it supports.
+- A repeated same-purpose repair requires premise and interface review plus a
+  deletion or replacement attempt before another layer.
+- Count code, instructions, evidence, state, topology, human cognition,
+  recovery and retirement in the complexity budget. Every mechanism must pay
+  rent.
+- Scale assurance with consequence and claim strength. Measure both help and
+  interference. Preserve failed trials as compact counterexamples rather than
+  active inherited proof.
 
-Prefer healthy native/runtime capability, then suitable official capability,
-then a reviewed maintained external implementation, then composition. Author
-only for an evidenced residual gap.
+## Repository discipline
 
-Treat model, provider, reasoning effort, and delegation as adaptive capability
-routes, not a Harness-owned router or a user curriculum. Preserve sufficient
-host-native selection when it is healthy. Intervene only when task risk,
-quality, latency, cost, or failure evidence makes a mismatch material; then use
-a supported task-scoped override, delegation, carrier transition, fallback,
-stronger verification, degradation, escalation, or honest stop. Bind the
-effective execution identity and lifecycle delta, but never make a current
-model label, reasoning level, provider, or benchmark permanent product
-authority.
+Before mutation, inspect branch, status, HEAD, upstream and ahead/behind.
+Preserve unrelated work. Use one active causal increment and at most one active
+work item. Bind an observed problem, hypothesis, falsifier and finite stop
+condition for product or behavior changes; narrow corrections may bind the
+exact defect and check.
 
-Before a product-layer protocol, human-allocation model, registry, gateway,
-search surface, runtime, identity or authorization system, governance kernel,
-audit or provenance format, or evaluation mechanism influences a route, bind
-its exact source identity, version or commit, license or applicable terms,
-maturity, and reuse boundary through a source-bound as-of landscape check.
-Resolve the current suitable official or maintained source at each decision;
-bind the exact execution identity for that task, but do not turn one historical
-version into a permanent global lock. An unresolved mutable label such as
-`latest`, or material drift during execution, requires re-registration or an
-honest stop.
-Reuse or adapt a
-sufficient existing layer; compose only when integration is the remaining
-need; author only when evidence isolates a repeatable residual semantic gap.
-External breadth can change the implementation route but cannot define product
-authority or prove acceptance.
+The product is a portable collaboration contract, representative evaluation
+surface and thin replaceable host projections. It is not a universal runtime,
+router, catalog, identity/audit system, monitoring platform, domain authority
+or context predictor. Do not restore the retired O1–O5 proof generations from
+history merely because they once passed.
 
-Goal-level demand is the normal entry. The Agent owns observation of available
-capability, gap detection, source-bounded discovery when needed, route
-selection, task-scoped dispatch and release, verification, and cleanup. Do not
-require the user to know or name a capability, product, discovery channel, or
-invocation syntax unless it is an explicit user preference or task boundary.
+The current commands are:
 
-Code and conversation topology are Agent-owned orchestration. Preserve the
-healthy current task and checkout by default, but do not wait for preventable
-context quality or host-capacity failure. At material checkpoints, use
-available source-bound host and task signals to decide whether the current
-conversation carrier remains safe; if reliable signals are unavailable, keep
-that state explicit and apply a conservative task-bound transition rule rather
-than asking the user to guess. Create a branch, worktree,
-repository fork, conversation fork, or new task only for bounded causal
-necessity, then own carrier identity, synchronization, merge or conclusion
-reconciliation, archive or release, and cleanup. Ask only when the topology
-would represent a real goal divergence or cross a new authority, trust, data,
-cost, destructive, or irreversible boundary.
+```powershell
+python -B -m harness verify --root . --json
+python -B -m harness host-check --adapter codex --root . --json
+python -B -m harness host-check --adapter claude-code --root . --json
+python -B -m unittest discover -s tests/product -v
+```
 
-Before archiving or releasing a source conversation carrier, inspect the
-current verifier's `sourceCarrierRelease` preflight. This field covers only the
-live cohort source-evidence dependency and is necessary, not sufficient, for
-release. A verified destination does not make the source releasable when its
-carrier still contains source-native
-evidence required for a live cohort claim. `allowed=false`, an unknown state, or
-an invalid authority graph means retain the source carrier and repair or revoke
-the evidence dependency first; never move private source data to bypass the
-guard.
+A green static check proves contract or projection conformance only.
+Representative behavior, field effect, cross-host equivalence, publication and
+release require their separately declared evidence and authority.
 
-A release-eligible source is not a released goal. After the destination is
-verified and release preflight succeeds, retire or clear the source carrier's
-active goal through supported host mechanics and verify that lifecycle event
-before archive. Never leave an older source goal active where continuation can
-resume it into the current mainline.
+## Effects and continuity
 
-Use already-installed, already-authorized, healthy capabilities proactively
-when they materially improve a bound task. Within a bound task or complete
-portfolio-curation contract, the Agent may perform coverage analysis, targeted
-candidate discovery, static review, and exact-revision acquisition into an
-isolated inactive `.tmp/` pool; a task-time discovery must also bind the actual
-capability gap. Planned gates are preconditions, not grants. Installation,
-enablement, accounts/OAuth, meaningful cost, execution, consumer projection,
-persistent activation, and new trust or data boundaries require a scoped user
-grant for the exact work and operations. After demand reveals a need, the Agent
-performs every supported authorized mechanic. If the host or authority boundary
-reserves an action to the human, the Agent identifies it, explains and requests
-only the smallest exact step, verifies the resulting state, and resumes; it
-does not make the user discover the route, variable, syntax, recovery path, or
-cleanup.
+Do not infer installation, enablement, accounts, new trust or data access,
+meaningful cost, external publication, deployment, destructive cleanup beyond
+task-owned residue, or irreversible action. Request the smallest exact grant
+only at that boundary, then continue the same goal.
 
-Do not infer installation, enablement, account connection, model dispatch,
-consumer mutation, publication, release, destructive cleanup, or a new trust
-boundary. Preserve native host authorization. Keep portable contracts,
-host-specific adapters, operational managers, and consumer projections
-separate.
+Preserve a healthy current checkout and conversation by default. Use reliable
+source-bound carrier signals when available; if unavailable, record capacity as
+unknown and transition conservatively before preventable loss. No universal
+turn count, context size, token percentage or summary ratio is product
+authority. Own destination preparation, verification, reconciliation and
+source release; do not make the user operate topology.
 
-This file is execution guidance only. Skills and Hooks are advisory execution
-inputs, self-authored Skills are replaceable host projections, and the
-peripheral ecosystem is replaceable capability input. None can set product
-direction, create causal work without an observed problem, expand authority,
-or promote evidence, acceptance, or release state. Bound user intent and
-`product/constitution.json`, `product/program.json`, and
-`product/acceptance.json` win; reject or downgrade a conflicting or
-disproportionately process-heavy route.
-
-Capability catalogs and discovery channels are adaptive sources, not product
-authority. Do not turn one catalog, provider, host, manager, or current
-installation into the portable core or a standing user-learning requirement.
-
-Treat host/client version, model, provider and reasoning effort, account or managed policy,
-instruction chain, consumer configuration, rules, Skills, plugins, Apps, MCP,
-Hooks, memory, managers, operating system, runtime, and tool/resource surfaces
-as explicit evaluation variables. Never assume another user shares the current
-maintainer's presets or that an unobservable surface is absent. For a measured
-Harness-effect comparison, follow the acceptance-owned environment contract:
-compare only pre-registered matched tasks with the same starting environment
-and authority-and-available-source envelope, make exact Harness activation the
-only planned initial route/configuration difference, and record later
-Agent-selected or human-authorized changes as treatment-mediated lifecycle
-deltas. The initial state is a starting condition, not a static capability
-ceiling. Keep unavoidable task differences explicit, limit the claim to
-matched observational evidence, and keep observed-native-minimum separate from
-user-configured evidence. Count all human actions in burden; classify a
-source-bound unavoidable human-only step separately from a prohibited transfer
-of Agent-owned work, which remains zero.
-
-Treat the operating system, virtualization or compatibility boundary, and
-OS-specific authorization, protected storage, execution, rollback, cleanup,
-and evidence path as explicit adapter variables. Resolve current supported
-routes at task time and bind exact tested identities; do not lock one host
-version or claim universal OS support. WSL is a Linux environment hosted by
-Windows and must be recorded as such rather than represented as bare-metal
-Linux or as macOS evidence.
-
-Before applying a capability route, compare whether it adds a goal, input,
-deliverable, human round trip, authority, side effect, or acceptance
-requirement. An addition needs source-bound causal necessity for the bound
-task; otherwise use the smaller native route or reject the capability route.
-
-Before repository changes, inspect branch, status, HEAD, upstream,
-ahead/behind, and dirty files. Preserve unrelated user changes. Use exact,
-bounded targets for cleanup. Local deterministic verification is the primary
-evidence surface; hosted CI is corroboration only.
+At closeout, keep deterministic conformance, representative behavior, field
+effect, cross-host or longitudinal evidence and named-human release authority
+distinct. A finite open-source release may close while explicitly bounded
+post-release evidence lanes and calibration continue.

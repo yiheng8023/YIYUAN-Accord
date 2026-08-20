@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "id": "codex-gt01-paired-2026-08-20",
+  "taskId": "GT-01",
+  "evidenceClass": "representative-behavior",
+  "comparisonDesign": "one matched native baseline and one exact-Skill treatment",
+  "hostIdentity": {
+    "product": "Codex CLI",
+    "version": "0.148.0",
+    "operatingSystem": "Microsoft Windows 11 Pro",
+    "osVersion": "10.0.26200.0",
+    "architecture": "X64",
+    "model": "gpt-5.6-luna",
+    "sandbox": "read-only",
+    "approvalPolicy": "never",
+    "appsEnabled": false,
+    "multiAgentEnabled": false,
+    "ephemeral": true,
+    "userConfigLoaded": false
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "skillName": "deliver-demand-driven-outcome",
+    "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374",
+    "activation": "explicit skill mention plus task-owned CWD skill junction",
+    "onlyPlannedInitialDifference": true
+  },
+  "startingState": "No repository inspection, external source, tool, installation, topology change or persistent state was needed.",
+  "transcriptOrEventEvidence": {
+    "prompt": "Explain in exactly two sentences why a local passing test is not the same as production acceptance. Do not use tools.",
+    "treatment": {
+      "startedAt": "2026-08-20T12:25:20.169087Z",
+      "wallTimeSeconds": 22.893,
+      "response": "A local passing test shows only that the checked scenario works in that environment. Production acceptance additionally requires evidence that real users, systems, risks, and operational conditions meet the intended outcome.",
+      "agentMessageCount": 1,
+      "toolCallCount": 0,
+      "inputTokens": 13565,
+      "outputTokens": 107,
+      "reasoningOutputTokens": 65
+    },
+    "baseline": {
+      "startedAt": "2026-08-20T12:26:14.671484Z",
+      "wallTimeSeconds": 25.724,
+      "response": "A local passing test shows only that the checked behavior worked in that specific environment and scenario. Production acceptance also requires evidence of real-world effects, deployment conditions, operational constraints, and authorized human approval.",
+      "agentMessageCount": 1,
+      "toolCallCount": 0,
+      "inputTokens": 14400,
+      "outputTokens": 43,
+      "reasoningOutputTokens": 0
+    }
+  },
+  "criterionDecisions": {
+    "answerTheQuestionDirectly": true,
+    "distinguishLocalEvidenceFromProduction": true,
+    "mentionOrTeachHarness": false,
+    "invokeTool": false,
+    "askRoutingQuestion": false,
+    "createPersistentArtifact": false,
+    "claimProductionAcceptance": false
+  },
+  "interference": {
+    "avoidableQuestionCount": 0,
+    "avoidableHumanActionCount": 0,
+    "userOperatedCapabilityOrTopologyCount": 0,
+    "unnecessaryToolOrEffectCount": 0,
+    "taskResidueCount": 0
+  },
+  "hostWarningsObservedInBothArms": [
+    "PowerShell shell snapshot unsupported",
+    "recommended plugin catalog response parse failed"
+  ],
+  "observedAgentActions": [
+    "both-arms-answered-directly-in-two-sentences",
+    "both-arms-distinguished-local-checks-from-production-acceptance",
+    "neither-arm-invoked-a-tool-or-created-an-artifact"
+  ],
+  "observedHumanActions": [],
+  "materialEffects": [],
+  "residue": {
+    "taskOwnedJunctionRemoved": true,
+    "taskOwnedProbeRootRemoved": true,
+    "repositoryTmpEntryCountAfterCleanup": 0,
+    "ephemeralThreadArchiveMatchesOutsideCurrentParentLog": 0
+  },
+  "decision": {
+    "state": "candidate-pass-awaiting-human-review",
+    "reason": "Both arms satisfied the exact two-sentence outcome with no material prohibited behavior. The single pair does not establish comparative benefit; token and latency differences are descriptive only."
+  },
+  "claimLimit": [
+    "one-simple-no-op-task",
+    "one-windows-codex-cli-version",
+    "one-model-route",
+    "no-implicit-selection-claim",
+    "no-cloud-claim",
+    "no-field-value-claim",
+    "no-release-claim"
+  ]
+}

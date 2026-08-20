@@ -1,344 +1,92 @@
 # Agent Autonomy Harness
 
-[English](README.md) | 简体中文
+[English](README.md)
 
-> 你只需说明想要的结果；该用什么、怎么推进，由 Agent 负责。
+Agent Autonomy Harness 是一个开放、Agent 中立的人机协作质量安全网。它从用户真正想要的
+结果出发，只在宿主原生能力不足时补最小缺口，并把人类权威、持续纠偏、后果级验证、恢复
+与清理放在同一条闭环里。
 
-Agent Autonomy Harness 研究的是一种更省心的人机协作：用户提供目标、必要事实、边界
-授权、修正和最终判断；Agent 负责理解意图、补足遗漏，选择最小充分路线，并完成执行、
-恢复、验证和清理。
+它不是通用 Agent runtime、能力市场、模型路由器、身份/审计系统或上下文预测器。它也不
+承诺一次发布解决所有人机协作问题。
 
-任务怎么组织也不该成为用户的功课。默认继续当前对话和代码现场；确有隔离、并行或
-权限需要时，Agent 才分支或分叉，并负责同步、回并、归档与收尾。用户不必先学会
-Codex、工具或 Git 才能提出需求。
+## 为什么重塑
 
-Harness 不是 Agent 运行时、控制平面、Git 或任务管理器。它的耐久成果是开放且不绑定
-单一 Agent 或操作系统的需求到结果协作语义、最低质量与证据符合性契约，以及按宿主和
-任务自适应的薄参考投影。方法论、文档、CLI、API、Skill、插件、MCP、Hook、适配器、
-软件包、服务或未来载体都只是非穷举交付形态，不能反过来定义产品。
+约两个月的真实 Codex 协作试错证明：项目初衷没有问题，但强 Agent 会出现
+repair-by-addition、proof proxy、历史证据反向控制当前产品、上下文与拓扑负担转嫁、以及
+局部通过被误读为收官等系统性偏差。v1.2 不抹去这些失败，而是把它们压缩为可迁移标准和
+Golden Tasks；旧代际验证器退出默认路径，详细事实仍可由 Git 历史复现。
 
-**当前状态：**v1.2 已完成 O1，并因实时反证停止两次预注册 O2 尝试和两代不可变 O4
-受控尝试，当前为 `ready`。五个 outcome-neutral 切片曾在测量之前提交 O4 专属验证器，
-把公开安全投影绑定到 Codex 原始宿主消息和仓库观察，并使受控载体路线在注册后可达。实际
-运行中，前两个一次性 checkout 场景通过；第三个场景因通用 O1 evidence-shape gate 先于
-任务专属验证器拒绝故障，无法观察到预注册的精确诊断，故整套尝试停止。其余 checkout、
-原生压缩和不继承历史的新同目标线程场景均未执行。隔离环境已删除，也没有创建任务线程；
-该反证不计 O4 信用。随后完成的有界 outcome-neutral 修复保持第一代验证器冻结字节不变，
-并建立独立的第二代 increment、suite、validator、registration 与 observation 路径；修正后的
-第三场景诊断已通过一次性 checkout 的检测、恢复和复验演练。第二代随后注册了新的隔离
-Codex 0.147.0 环境，四个仓库反例均通过（包括修复后的第三诊断）；但 App Server 创建前，
-实时原生二进制已更新为 0.148.0。精确漂移闸门在零任务线程、零模型轮次、零 compact、零转场
-时停止整套测量并删除隔离资源，O4 仍不计信用。
-第二次 O2 路线使用 Codex 0.147.0 官方内置 `:workspace` profile，不与旧
-sandbox 机制混用。固定的 32 轮、4 并发压测得到根内写入 32/32 允许、根外写入 32/32
-拒绝、零异常结果和零残留。`fe119ca` 的不可变注册之后，精确候选包只安装到全新隔离
-环境；简单原生 no-op 以零文件系统变化通过，但已注册的非平凡目标随后确定性停止：Codex
-把任务根写入拒绝为越出 project 或不被策略允许，公开安全投影也对残留的原生 in-progress
-item 失败关闭。权限边界与恢复场景未再执行；精确插件、marketplace、任务根和隔离账号
-资源均已移除，公开安全停止记录不计 O2 信用。`7f39911` 的第一代失败也继续作为 append-only
-反证保留。
-十二切片 O1 受控设计先在严格先行 revision 中成为不可变注册，随后完成内容寻址的
-12/12 observation、独立回放、清理和具名人类有界结果接受，现已验证 O1。
-此前已完成“有限产品交付”与“持续 field validation”分离以及 Codex 参考投影减法。仓库验证器报告 `programStatus=ready`、
-`completionState=in-progress`、
-O1-O5 为 `1/5`、G1-G4 为 `4/4`。当前 candidate.2 profile 与受控符合性协议覆盖人机协作
-全生命周期，但不会把短板调研变成功能待办，也不再要求自然任务 cohort 才能发布。两者的
-精确候选字节与 binding 已由签名 revision `3e81686`、canonical digest `31dafe95` 及后续代码 pin 固定；没有 cohort activation。已接受的任务专属 O1 生命周期套件验证器与精确 observed-native-minimum 环境清单均先于公开安全 O2 注册提交；当前只有 O1 有界结果信用，没有私密 cohort 来源、自然需求纳入、已接受的 O2-O5 结果证据、终态授权验证器、已安装插件或项目级接受。当前树保留 O2 先行验证缝和 append-only stopped 注册；旧尝试没有 O2 信用，其临时过程投影已退出当前图。Git 历史与公开研究状态保留精确删除及失败时任务根未变化的有界反证。Codex 源码已经缩减为一个隐式 v1.2
-Skill，不含 Hook、MCP、App、私密捕获状态、外部解释器或持久运行时。安装、持久激活、
-公开发布和 release 仍是彼此独立的人类闸门。
-宪章终极命题尚未成立。
+项目专项审计已保存在
+[2026-08-20 重构与长期演化报告](research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md)。
+共享的人机协作短板研究仍由
+[YIYUAN-CALIBRATION 固定修订](https://github.com/yiheng8023/YIYUAN-CALIBRATION/tree/e060a08f05361cb4cc9a67be050236cdbbde1de5/common/human-ai-collaboration-shortfalls)
+唯一托管，本项目只引用和吸收其结论。
 
-v1.2 binding 不能只靠 Git 内容自行冻结。当前未启用的闸门要求：先由具名人类通过独立的
-精确授权选定一把 SSH key，再提交前置 trust-root commit，固定公开安全的单 key
-allowed-signers 字节与指纹；之后用该 key 签署的 provisional first-parent commit 只能修改
-精确 normative binding，最后再由后续代码固定该 revision 与
-canonical binding digest。签名只证明预先选定 key 的持有与内容完整性，不能制造或替代
-人类授权；在 freeze commit 中才首次引入的 key 会被拒绝。当前精确签名授权、预绑定的
-公开 signer、binding-only 签名 revision 与后续代码 pin 均已通过验证。该冻结不激活
-cohort、不产生结果信用，也不授权安装或 release。
+## 产品内核
 
-v1.1 仍是固定在 revision `5ae71bb` 的不可恢复零结果停止尝试。来源绑定的私密窗口审计证明，
-其激活后的首个真实产品交付需求在不可变注册前已经得到结果型协助；唯一 generation 已撤销，
-精确受保护资源与一次性到期触发器已删除，不能补登记、恢复或继承。v1.0 是固定在 revision
-`910ac01` 的零结果停止尝试，其 profile binding、cohort 状态、授权与结果均不得继承。v0.2 在
-`0dbcb0af34197e5c35c75d69a1aeacf4fd91b404` 仍是不可改写的有界校准里程碑；
-它的 `5/5` 不能继承为重复真实任务自治、主动载体管理、安装后价值、公开发布、生产或
-宪章终极命题已经成立的证据。
-
-当前树不再物化 41 份包含本机与宿主会话元数据的 v0.2 时期原始证据 JSON；固定 v0.2
-修订与有界聚合声明继续保留。按已确认的“不改写历史”隐私处置，公开 Git 历史和历史作者
-邮箱仍可检索，因此这是面向当前树和后续提交的脱敏，不是声称历史字节已被抹除。
-
-当前树保留一份历史 [v1.0 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)
-和[前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，把测量前方法、强制
-底线、基线、载体、跨宿主、隐私/残留和发布语义集中到一起。其精确冻结字节只作为 v1.0
-历史输入保留；另行冻结但现已撤销的 v1.1 binding 没有复用它们。
-两个零任务 v1.0 cohort generation 现均已撤销且没有结果证据。唯一允许的
-successor freeze 位于 revision `8e8e76b`，规范 binding digest 为 `d2cf0cd`，曾获得第二次
-独立精确授权；但后续验证器变更顺序错误，按已授权的确定性失败处置删除了其受保护证据和
-到期任务。该 generation 不能诚实重建或再次重启。
-
-历史 v0.2 的 O1 由公开入口、Codex Skill 源码和 Claude Skill 源码三个已接受结果支持。O2 使用实质不同
-的公开入口、Codex Skill 源码和连续性对账场景，不重复计算相似的宿主包交付。O3 绑定三个
-真实路线决策。O4 只接受 candidate.5 方法与最低质量 profile 在 Codex 0.147.0 Windows
-固定 cohort 上的有界校准，并保留其中诚实停止的反例。
-
-历史 v0.2 的 O5 使用同一个预注册自然任务，分别在 Codex CLI 0.147.0/gpt-5.6-sol 与不同宿主
-Claude Code 2.1.233/DeepSeek-V4-Pro 上执行。两端独立得到同一个有用的 `blocked` 判断：
-目标 Claude 适配器源码标识 2.1.232，而被测载体是 2.1.233。具名人类已接受两端结果、
-归一后唯一 P1 的等价性，以及仅限登记任务、目标、宿主、模型、适配器和日期的声明。
-实际报告的 `deepseek-v4-pro[1m]` 是请求值 `[1M]` 的大小写归一，未观察到回退；一次越出
-登记源目录的 Claude Glob 被拒绝且未暴露数据。临时插件、Hook、凭据链接、进程和文件均由
-Agent 清理，用户没有执行恢复或清理操作。
-
-历史 Codex 与 Claude candidate.7 修订仍只是未启用的薄 Skill-plus-Hook 投影，精确 Git
-修订就是证据边界，实测价值不会转移给后续源码。当前 Codex 树改为一个预发布 v1.2
-投影候选：只有可隐式调用、绑定 candidate.2 方法的 Skill，不新增命令 Hook、提示捕获、
-MCP、App、私密状态、外部解释器或持久运行时；先复用当前 Codex 原生能力、授权、压缩、
-模型、委派和对话拓扑。只有 O2/O4 受控场景证明确有残余缺口，才允许重新引入更小的 Hook。
-它没有安装或启用。当前 Claude candidate.7 血统也已加入有界输入和未物化解释器失败关闭，但仍只会
-装载精确哈希审阅过的仓库运行时代码，并不是已运行的 v1 载体实现。两者都不新增 MCP、
-App、提供方管理器、提示拦截或产品权威。CC Switch 3.19.2
-在本次测量中
-只提供可替换的 DeepSeek 静态设置，其代理运行时未启用；它不是可移植核心或运行时依赖。
-O5 证明的只是这个固定组合上的决策可移植性，不证明 2.1.232 适配器支持 Claude Code
-2.1.233，也不证明同厂模型、Anthropic 模型行为、长上下文一致性、安装后价值、发布、生产、
-模型优越性或全 Agent 普适性。准确状态以仓库验证器为准。
-
-## 目标交互
-
-假设用户只说：
-
-> 审计这个仓库，把它整理到可以公开发布的状态。未经我确认，不要真的发布。
-
-理想状态下，Agent 应该：
-
-1. 理解目标，以及“不得自行发布”的边界；
-2. 先判断健康且已授权的原生能力是否足够，包括宿主原生的模型、提供方、推理等级和子代理
-   调度；
-3. 原生路线足够就保留；只有当前需求、证据和授权确有必要时，才发现、安装、配置、切换、
-   升级、降级、停用、回滚、退役或持久化另一条路线；
-4. 默认继续当前任务和 checkout；只有隔离、并行、宿主容量或权威边界确有必要时，才
-   创建分支、worktree、仓库 fork、对话分叉或新任务；
-5. 主动判断当前对话是否仍是安全载体，在可避免的上下文损失发生前完成原生压缩或
-   经验证的交接，不让用户猜什么时候该换任务；
-6. 任何这类载体的同步、代码合并或结论回并、归档或释放、清理由 Agent 负责；
-7. 只向用户询问缺失事实、关键判断、新增授权或宿主明确保留给人的动作；最后一种情况下
-   给出最小精确步骤并在事后验证，而不是让用户发现工具、设计路线或调用方法；
-8. 完成执行、故障恢复和结果验证，结束任务级能力暴露，并清理任务产生的残留；
-9. 把结果与证据交给用户作最终判断。
-
-这是产品要验证的目标交互，不代表当前已经具备这些运行能力。
-
-一项人机协作短板不会因为报告提到它、仓库映射了它或控制已经实现，就自动变成“已解决”。
-对当前任务有实质影响的风险，Harness 先复用充分的原生、官方、维护中外部或具名领域控制；
-只有可复现残余缺口才补最小机制，并要求任务相关的预防、检测、恢复、降级、升级或声明收窄
-证据。风险仍不可观测或未解决时，必须收窄声明或诚实停止。Harness 不会让每个任务机械跑完
-五十项清单，也不会在宿主已经能充分自适应时另造模型路由器。
-
-## Harness 负责什么
-
-| Harness 自己负责 | Harness 优先复用 | Harness 不会变成 |
-| --- | --- | --- |
-| 可移植的需求到结果协作语义 | Agent 健康可用的原生能力 | 通用 Agent 运行时 |
-| 开放的最低质量与证据符合性契约 | 适用时采用 MCP、A2A、CHAP 等工具或协作协议 | 固定能力目录或能力市场 |
-| 用户负担、结果质量、权威、证据、恢复、上下文载体健康与转场、代码与对话任务拓扑生命周期、资源生命周期和清理的评价要求 | 已有的发现、身份、授权、审计、溯源、评价、Git 和宿主任务原语 | 在没有剩余缺口时另造线协议、上下文监控器、Git 或任务管理器、身份系统或审计格式 |
-| 在真实宿主上检验共同语义的自适应薄参考投影 | 已记录来源、版本、许可或适用条款、成熟度和边界的外部实现 | 人类目标、专业判断、同意权与最终责任的替代者 |
-
-Codex 是第一个参考宿主，因为它适合作为高水平、可落地的试验样本。Codex 专属配置不
-属于可移植核心；在不同的第二 Agent 宿主或运行时上完成证明前，不得宣称跨宿主成立。
-终态 O5 还要求实测 pair 集至少覆盖两类操作系统，并至少有一组 pair 真正跨越 OS family。
-声明只能覆盖实际绑定的宿主、OS/版本、运行时和虚拟化或兼容层；WSL2 可作为由 Windows
-承载的有界 Linux 证据，但不能冒充裸机 Linux 或 macOS 证明。
-
-## 仓库目前有什么
-
-当前仓库提供：
-
-- 描述目的和固定边界的机器可读[产品宪法](product/constitution.json)；
-- 描述当前因果工作状态的[产品工序](product/program.json)；
-- 明确区分“可观测原生最小态”和“用户配置态”、且所有结果仍为 planned 的
-  [v1.2 终态验收标准](product/acceptance.json)；
-- 一份在 v0.2 固定 Codex cohort 中获得有界接受、但其预注册状态字节保持冻结的
-  [candidate.5 方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md)；
-- 一份独立且已冻结的历史 [v1.0 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)和
-  [前瞻 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json)，已作为从属 operand
-  保留，但不携带任何任务或结果证据；
-- 一份独立且由代码固定字节的[v1.1 方法/profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.1.md)
-  与[配套 cohort 协议候选](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.1.json)，保留停止的 v1.1
-  动态环境归因和必要人工干预语义；其精确字节是已撤销的历史规范 binding，仍没有
-  任务、结果、安装或自身权威；
-- 一组独立、当前、由代码所有且已精确冻结的
-  [v1.2 协作 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)与
-  [受控符合性协议候选](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json)，把有限交付与后续
-  field evidence 分开，以最小充分处置覆盖协作全生命周期，并把原生优先动态路由、上下文变量
-  适配、Agent 自主持续纠偏和有界发布声明落到可审阅从属 operand 中，但不增加验收阈值或
-  结果信用；
-- 只依赖 Python 标准库的验证器，用于拒绝无效权威、证据、工作图和仓库残留，并派生隐私安全的
-  `sourceCarrierRelease` 预检，防止 Agent 归档仍承载 live cohort 来源证据的对话；
-- 一个历史的、只依赖 Python 标准库且未启用的 Codex `SessionStart` 仓库内适配缝；它在启动、
-  恢复、清空或压缩后投影当前权威，不读取提示词或 transcript 内容，也不保存会话状态；
-- 一个预发布 Codex 薄插件源码候选：只有一个可隐式调用的 v1.2 任务 Skill，不含 Hook、
-  MCP、App、私密捕获状态、外部解释器或持久运行时；它先复用当前 Codex 原生行为，受控
-  证据仍须证明精确激活、恢复、回滚、移除和清理，只有小路线失败才允许补残余；工作区
-  发现入口目前只将源码候选标为 `AVAILABLE`；
-- 一份历史内容寻址的 Codex 连续性停止结果：精确临时 Hook 实验没有满足原生事件证据
-  底线，随后完整恢复消费者状态；
-- 一个尚未启用的 Claude Code Skill+Hook 薄投影；它复用同一候选方法，把宿主原生
-  `SessionStart` 输入和 stdout 上下文输出翻译为相同的仓库接续语义，并且可只在单个
-  会话内暴露而无需持久安装；
-- 针对公开验证入口的产品测试；
-- 固定来源的外部方案审查，用来缩小自研边界，避免重复造轮子。
-
-仓库目前不提供任务运行时、持久能力安装或已经验收的 v1.2 实时路由结果。已撤销的
-v1.1 binding 没有任何结果证据，也不等于终态验收。candidate.5
-仅有上述 v0.2 Codex 有界校准，不是最终 v1.2 profile 或普适标准。适配器没有安装进
-用户配置；仓库验证通过和历史收据都不能证明终极产品结果。
-
-## 验证仓库
-
-前置条件是 Git 与 Python 3.10 或更高版本；无需安装 Python 包、连接账号或调用外部
-服务。
-
-```powershell
-git clone https://github.com/yiheng8023/agent-autonomy-harness.git
-cd agent-autonomy-harness
-python -B -m harness verify --root . --json
-python -B -m unittest discover -s tests/product -v
-```
-
-JSON 报告是当前机器状态面；工作边界见[接续说明](docs/operations/CONTINUATION.md)。
-
-任何 v1.2 结果型执行开始前，每个受控场景或后续 field 单元都必须绑定验收权威中的环境
-归因契约、精确 profile/协议身份、起始清单、预期不变量或反例、criterion-scoped 验证器、
-生命周期边界和声明上限。两类环境分别是 `observed-native-minimum`（可观测原生最小态）和
-`user-configured`（用户配置态）。只有针对不同预注册故障、配置、生命周期状态、宿主或恢复
-条件，才允许受控重复；不得把它们冒充独立自然任务。机制声明比较预期与实际行为；Harness
-效果或负担声明还需要后续匹配 field evidence，不能从受控场景推断。所谓“最小态”不冒充
-不可知的纯净宿主：可发现的用户全局指令、配置、Skills、
-插件、Apps、MCP、Hooks、rules、memory 和提供方覆盖会被排除；系统、developer、内建、
-账号、托管、管理员及不可观测状态必须明确保留或记为 unknown。它只是起始条件，不是静态
-能力上限；需求暴露缺口后，Agent 可按已注册的授权和生命周期规则动态适配。每次决策都从
-有界 as-of 来源解析当时合适的官方或维护中能力，并在执行前绑定精确版本、commit 或包身份；
-不会把一个历史版本永久锁死给后续任务，也不会直接执行 `latest` 之类未解析的移动目标，
-执行中发生实质漂移则重新注册或诚实停止。Agent 执行所有宿主支持且已授权的操作。在线 AI
-是常规路线；当隐私、可用性、时延、成本、端侧执行或供应商故障使本地/离线成为最小充分
-路线时，Agent 可按需降级，并在恢复在线后完成归因、对账和清理，所有路线变化都维持同一
-质量、安全、证据与人类权威底线。技术或权威上只能由人完成的动作必须最小化、精确引导、事后验证，并在负担中与“把 Agent 工作甩
-给用户”的禁止性事件分开记录。无 Harness 基线不得在
-Harness 仓库中继承项目 AGENTS.md 或适配器。历史证据只能分为环境无关、环境绑定或失效，
-不得继承结果信用。
-
-仓库现在另有一组 v1.2 profile 与受控符合性协议。文件内部的 pre-freeze candidate 标签是
-冻结字节的一部分；`product/program.json` 已通过签名 revision `3e81686` 与 canonical digest
-`31dafe95` 绑定这些精确字节。当前尚未登记场景、产生结果或继承前代状态。其生命周期语义要求 Agent 用
-充分原生能力、合适复用、最小残余控制，或明确降级、升级、停止和声明收窄，覆盖入口、前提
-挑战、路线/权威选择、副作用、证据、纠偏、恢复、转场、收尾、反馈、治理和退役。受控证据
-只能证明这些有界效果；自然任务与跨 Agent field 声明是独立、非交付阻塞的后续证据。
-
-仓库继续保留一组由代码固定字节的 v1.1 profile 与配套前瞻 cohort 协议，作为已撤销的
-历史规范 binding。首冻 revision `5ce2773`、规范 digest、精确来源原生纳入面、激活游标、
-cohort 密钥身份/指纹、受保护来源窗口、保留处置和一次性 S4U 到期任务曾获得独立授权并由
-代码验证；v1.0 的 profile、协议、授权、cohort、注册和顺序状态没有被复用。
-
-冻结的 v1.1 协议正确要求首个合格需求按顺序纳入，并要求自然需求之后、结果型执行之前完成
-不可变注册。但执行路径错误地把真实 Harness 产品交付当成普通 Harness 讨论，导致激活后
-第一个产品需求在注册前已经获得结果。完整来源窗口因此证伪该前瞻 cohort。项目没有补登记、
-没有改挑更晚任务，也没有获得任何 O1-O5 信用。binding 已撤销，精确私密资源与触发器均已
-删除，v1.1 不能再开 successor 或恢复。提交日期、自报时间戳、测试和 Git 历史都不能修复
-这次时序失败。
-
-program 曾把 candidate.5 与 cohort 协议冻结到制品 revision `502c4ff`、首冻 revision
-`d19d2fb` 和规范 binding digest `ee4ba7a`，且具名人类的精确授权已从绑定的 Codex 来源独立验证。
-但在 2026-08-16，一次瞬时来源不可用被错误归类为确定性验证失败；验证器因此按确定性失败授权
-删除并复核了精确受保护资源，当前实时来源可验证性已经撤销。验证器现在会把瞬时
-不可用或并发变化与确定性 binding/内容失败分开：前者只失败关闭、不得删除，后者仍精确删除并
-复核缺失。此前没有任何合格自然任务完成注册，因此没有丢失 O1-O5 结果证据，O1-O5 仍为 0/5；
-已撤销 generation 不能恢复。全新 successor binding 曾使用新的公开来源面、游标和密钥身份，
-其精确 revision、规范 digest 与来源窗口也已获得独立人类授权并由代码固定。但在后续生命周期
-验证器加固时，Agent 在替换旧 Scheduled Task 之前先用新规则验证了它；新规则正确拒绝旧任务
-阻止电池运行的设置，并由此触发既有确定性失败清理。successor 受保护资源和精确任务均已删除，
-所以 v1.0 必须停止，不能静默重启。
-候选文件内部的
-`pre-freeze candidate` 是冻结字节的一部分；当前绑定状态只以 `product/program.json` 为准。
-托管 runner 只能佐证其余契约，不能恢复或证明已撤销的本地授权。
-
-历史 v1.0 原本要求两阶段终态发布：不可变候选树先预声明语义版本 tag、公开 remote 和 O5
-证据集摘要；具名人类授权后，由 Agent 创建注释 tag 并验证公开对象和 peeled commit。
-已停止的 v1.0 cohort 从未到达该闸门，因此现在不能继续推进到 `accepted`；未来发布路径
-必须由下一份当前机器权威重新绑定。
-tag 中自报的人名和时间戳永远不能单独通过；必须由代码所有的验证器独立验证所绑定的
-授权来源。在 v1.0 revision 中，终态发布验证器条目保持为空，注册表只有上述有界首冻与
-successor freeze 来源验证器。当前 v1.2 的人类授权验证器注册表仍为空；结果注册表只含注册前提交的精确 O1 生命周期套件验证器，尚无注册或结果；v1.1 首冻
-来源验证器及其执行锚只存在于已固定的停止 revision，不能提升当前状态。
-未来 clean candidate 必须在 tag 创建前绑定 terminal 验证器的 kind、version、仓库 locator、
-先行 revision 与 digest，以及公开来源政策。公开 tag 只允许随机 public identity 与 keyed
-commitment；私密来源 locator 和原始事件身份只能留在验证器的受保护来源边界内。
-当前终态 annotation 格式还会结构性绑定跨宿主/跨 OS 等价性、可移植协作语义、符合性
-契约、自适应投影、隐私、精确实测宿主/OS/运行时/虚拟化范围、声明上限、候选、tag 与公开
-发布；旧的 profile/adapter 范围不能通过。
-v1.1 模块不再提供可执行的 v1.0 凭据或计划任务清理入口；该历史行为只从已固定的
-`910ac01` revision 恢复。v1.1 专属到期命令仍在结构上绑定已退役的精确身份，但受保护资源
-与一次性 S4U 任务现均不存在。
-
-## v1.2 验收要求
-
-- **O1——全链路协作生命周期覆盖：**当前 SG-01 至 SG-12 需求切片和每个材料协作阶段都有
-  有界处置：保留充分且持续进化的原生能力，复用合适外部或具名领域控制，补充最小 Harness
-  残余控制，或明确降级、升级、停止和声明收窄。所有声称的控制效果都必须被实际演练；映射或
-  代码存在不能单独通过。
-- **O2——可用 Codex 参考应用：**精确候选必须在实时 Codex 受控场景中从普通目标级对话
-  进入；充分原生路径保持安静，人类权威不被越过，失败可恢复，回滚、移除和清理得到验证。
-  源码、mock 或未启用插件不能通过。
-- **O3——自适应路线生命周期：**受控决策覆盖保留原生、受支持的模型/提供方/推理/委派
-  适配、控制不可用或漂移、来源绑定的残余能力、适用时在线/本地降级，以及释放或退役；不得
-  固化通用 router、catalog、版本、提供方、模型或操作系统。
-- **O4——持续纠偏与载体控制：**历史和故障注入反例演练重复纠正检测、指令冲突、副作用
-  偏差、拓扑/残留对账、压缩恢复，以及主动且经验证的同目标转场；不得把恢复或清理交给用户。
-- **O5——开放、可复现、有界发布：**干净 Windows 与 Windows 承载的 WSL Linux checkout
-  复现公开合同和适用包生命周期；托管 macOS CI 只算 CI，除非另行实测；实时 Codex 声明只
-  覆盖精确环境；受控证据不冒充真实任务价值或跨 Agent 证明；P0/P1 和残留为零，具名人类
-  授权后才创建唯一不可变公开 tag。
-
-O5 预测量注册绑定的是确定性的 candidate/tag 推导与无后置修改规则，不是当时尚不可能
-知道的未来 commit；精确 candidate 和 tag 由后续 clean candidate 与具名人类发布闸门固定。
-
-自然任务仍是有价值的后续 field evidence，但不是发布前置条件，也不得为了提高完成分数而
-制造、挑选或事后重建。比较性负担、广泛有效性、不同 Agent 等价和未实测平台声明，在对应
-field evidence 出现前继续保持未验证。
-
-人类权威、零信任证据、精简独立权威和有限过程/资源损失是强制护栏，但不能代替
-产品结果。
-
-## 设计原则
-
-- 从用户目标出发，而不是从工具名或能力目录出发。
-- 默认留在当前健康任务和 checkout；只有确有因果必要才分叉，由 Agent 负责同步、
-  回并、归档、释放和清理。
-- 先观察健康且已授权的现有能力，再决定是否继续寻找。
-- 只有证据表明确有剩余缺口时才增加能力；任务结束后释放任务级暴露。
-- 先复用已有充分协议、运行时与证据层，确有集成或语义缺口才组合或自研。
-- 目标、重大判断、新信任、费用、公开发布和不可逆操作始终由人掌握。
-- 任何声明都不能超过来源明确的证据所能证明的范围。
-
-## 阅读、贡献与反馈
-
-| 你的目的 | 对应文档 |
+| ID | 约束 |
 | --- | --- |
-| 理解产品边界 | [产品北极星](docs/strategy/PRODUCT-NORTH-STAR.md) |
-| 审阅当前未冻结的 v1.2 方法与受控证据契约 | [v1.2 协作 profile](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md)与[受控符合性协议](docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json) |
-| 审阅已停止 v1.0 的冻结方法、底线与 cohort 历史 | [v1.0 profile 候选](docs/DEMAND-TO-CAPABILITY-PROFILE-V1.md)与[前瞻 cohort 协议](docs/PROSPECTIVE-COHORT-PROTOCOL-V1.json) |
-| 应用获得 v0.2 Codex 有界校准、但尚未满足 v1.1 的候选 profile | [需求到能力方法与最低质量 profile](docs/DEMAND-TO-CAPABILITY-PROFILE.md) |
-| 理解技术职责分离 | [架构](docs/architecture.md) |
-| 查看证明顺序与外部复用门槛 | [研究与验证计划](docs/strategy/RESEARCH-AND-POC-PLAN.md) |
-| 接续仓库工作 | [接续说明](docs/operations/CONTINUATION.md) |
-| 了解历史产物为何不是当前权威 | [历史边界](docs/operations/HISTORY.md) |
-| 提议一项聚焦改动 | [贡献指南](CONTRIBUTING.md) |
-| 了解参与规范 | [行为准则](CODE_OF_CONDUCT.md) |
-| 提交非敏感问题 | [支持说明](SUPPORT.zh-CN.md) |
-| 报告敏感漏洞 | [安全策略](SECURITY.md) |
-| 支持项目维护 | [赞助说明](SPONSORING.zh-CN.md) |
+| K1 | Goal First：保持一个当前、可追踪的目标与阶段 |
+| K2 | Minimum Sufficient Route：原生优先，无必要则 no-op |
+| K3 | Human Authority：保留真正的人类判断、授权与否决权 |
+| K4 | Continuous Reconciliation：在材料检查点对照目标、事实、效果与资源 |
+| K5 | Close the Loop：按主张层级验证、恢复、清理并限制结论 |
 
-除非文件另有说明，仓库自有代码和文档使用 Apache-2.0；第三方材料保留原有权利。
-详见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方声明](THIRD_PARTY_NOTICES.md)与
-[许可策略](docs/license-policy.md)。
+K1–K5 之上有两组可执行约束：
+
+- H1–H10 宿主准入标准：官方指引优先但有条件信任、能力而非版本、effective 而非
+  declared、unknown 一等、漂移重验、不让用户补偿 Agent 缺口、宿主改进后退休补丁。
+- L1–L7 试错经验标准：结果高于过程、重复修复先做减法、总复杂度必须付租金、渐进式
+  assurance、同时测帮助和干扰、连续性不绑定通用阈值、失败作为反例而非继承证明。
+
+## 当前交付面
+
+- 三份语义权威：
+  [constitution](product/constitution.json)、
+  [program](product/program.json)、
+  [acceptance](product/acceptance.json)
+- 一个数据驱动的通用验证器：[harness/control.py](harness/control.py)
+- 两个无 runtime、无强制 Hook 的薄 Skill 投影：
+  [Codex](plugins/agent-autonomy-harness-codex) 与
+  [Claude Code](plugins/agent-autonomy-harness-claude)
+- 一组同时度量帮助与干扰的
+  [Golden Tasks](evals/golden-tasks.json)
+
+~~~powershell
+python -B -m harness verify --root . --json
+python -B -m harness host-check --adapter codex --root . --json
+python -B -m harness host-check --adapter claude-code --root . --json
+python -B -m unittest discover -s tests/product -v
+~~~
+
+host-check 只证明投影静态准入；它明确不会把 Skill 可见、插件已安装或 JSON 通过冒充
+宿主行为。真实行为要在精确宿主上运行 Golden Tasks，并保留独立观察。
+
+第一轮 Codex GT-02 已把这一区分变成真实反例：Agent 做出了正确、有界的仓库修复，保留了
+无关 dirty 状态，却留下两个未披露的 Python 缓存文件；在一次同目的提示词修复后，失败仍
+重复。因此该任务和 Codex 清理行为保持失败。Harness 能通过的只是更窄的能力——及时发现、
+保留并限制该失败的主张；评估器事后清理不能把宿主失败改写为通过。
+
+## 状态与收官边界
+
+v1.2 正在进行一次全局减法重塑。当前目标模式提示词已在
+[product/program.json](product/program.json) 中准备，但宿主里的旧目标仍保持暂停；
+仓库文件不会假装已经替换宿主生命周期。
+
+有限发布需要 R1–R4 与 Q1–Q4 的确定性和代表性证据，以及具名人类对精确候选、主张上限、
+发布与公开的授权。真实场域效果、广泛人群的负担改善、所有 Agent/宿主等价性和长期组织
+影响是发布后持续证据通道，不是为了拖延本次有限发布，也不会被本次发布虚构为已证明。
+
+v1.2 的有限代表样本是 GT-01、GT-02 与 GT-07。样本任务失败会阻断精确宿主行为资格；只要
+失败仍被保留、残留处置明确、发布主张排除该行为，它不会自动把“Harness 正确评估并暴露
+失败”误判为产品不合格。
+
+收官是一个可维护开源基线，不是学习终点。后续真实失败可以增加 Golden Task、收窄主张、
+简化或退休投影，或开启一个新的有界增量。
+
+## 参与
+
+直接说明目标、问题或观察即可，不必先学习 Harness 术语、工具或拓扑。维护者和 Agent 负责
+把输入映射到当前权威、选择最小路线、验证并清理。参见
+[CONTRIBUTING.md](CONTRIBUTING.md)、[SECURITY.md](SECURITY.md) 和
+[历史边界](docs/operations/HISTORY.md)。

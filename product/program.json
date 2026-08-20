@@ -1,470 +1,158 @@
 {
-  "schema": 1,
-  "id": "harness-product-program-v1.2",
+  "schema": 2,
+  "id": "harness-product-program-v1.2-reshape",
   "productId": "agent-autonomy-harness",
   "release": "v1.2",
-  "purpose": "Deliver a finite open v1.2 product release that provides bounded minimum-quality coverage across the material human-AI collaboration lifecycle, is actually installable and usable on Codex, preserves dynamic native-first capability and carrier adaptation, fills only evidenced residual gaps, survives controlled historical and adversarial counterexamples, and is reproducible and releasable with explicit human authority. The current shortfall corpus is a requirements and counterexample source rather than a feature backlog; coverage permits sufficient native or external reuse and honest degradation, escalation, stop or claim limitation instead of requiring a bespoke Harness mechanism or static perfect score. Natural-task burden reduction, broad real-world effectiveness, distinct-Agent equivalence, and untested operating-system behavior remain continuing field-validation claims rather than release-completion prerequisites. v0.2 remains an immutable bounded calibration milestone, while v1.0 and v1.1 remain immutable stopped zero-outcome attempts; none can satisfy this program by inheritance.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "status": "ready",
-  "activeIncrementId": null,
-  "progressionPolicy": {
-    "readyState": "nonterminal-empty-graph-open-to-next-causally-justified-increment",
-    "noNaturalTaskDisposition": "not-a-product-delivery-blocker-and-never-a-reason-to-manufacture-demand",
-    "boundProductDeliveryDemandDisposition": "authorized-product-delivery-work-is-registered-as-implementation-or-controlled-conformance-not-mislabeled-natural-demand",
-    "agentOwnedWithoutInventedUserTask": [
-      "retrospective-counterexample-analysis",
-      "bounded-portfolio-curation",
-      "mechanism-only-validation",
-      "authority-defect-repair"
+  "status": "active",
+  "releaseIntent": "Finish one bounded open-source v1.2 release by reducing the product to its portable collaboration kernel, host-admission standard, representative help-and-interference evaluation and two thin reference projections. Release is a maintained baseline for later field learning, not an assertion of universal or final human-AI collaboration effectiveness.",
+  "inputEvidence": [
+    {
+      "id": "project-refactor-audit-2026-08-20",
+      "kind": "project-specific-analysis-and-counterevidence",
+      "repositoryLocator": "research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md",
+      "sourceSha256": "e15d007309afd6e8cf9498c854cb9927244a8aadd3e390338db8d2f42a823a69",
+      "repositorySha256": "4be0b09e6beb30ee019a672edeac07747512edd4ab093a8ed92ca8e5fec87e0e",
+      "disposition": "admitted-high-weight-non-authoritative-input"
+    },
+    {
+      "id": "human-ai-collaboration-shortfalls-2026-07",
+      "kind": "shared-human-ai-research-and-counterevidence",
+      "repository": "https://github.com/yiheng8023/YIYUAN-CALIBRATION",
+      "revision": "e060a08f05361cb4cc9a67be050236cdbbde1de5",
+      "path": "common/human-ai-collaboration-shortfalls",
+      "custody": "reference-only-unique-source-remains-in-yiyuan-calibration",
+      "disposition": "admitted-requirements-and-counterexample-input-not-product-authority"
+    },
+    {
+      "id": "codex-gt02-ineffective-prompt-repair-2026-08-20",
+      "kind": "project-host-behavior-counterevidence",
+      "repositoryLocator": "evals/observations/2026-08-20-codex-gt02-residue-repeat.json",
+      "repositorySha256": "d537f4b97f179f5f08b469467c710fa0fb5d0fbd0767da050540ace040a42646",
+      "disposition": "admitted-intermediate-projection-counterevidence-not-current-projection-qualification"
+    }
+  ],
+  "activeIncrement": {
+    "id": "increment.v12-global-reshape-and-release",
+    "state": "active",
+    "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+    "observedProblem": "The sound goal-first collaboration proposition accumulated host-specific proof machinery, duplicated prose authority and generation-specific validators. Two months of honest Codex-led trial and correction exposed repair-by-addition, proof-proxy, context and topology burden, stale evidence replay and cleanup failure modes. A clean historical verifier now fails by replaying superseded O1 evidence, demonstrating that the proof path can obstruct the current product. The first GT-02 dirty-repository run then exposed hidden Python cache residue, and the same cleanup failure repeated after one minimal instruction repair; this proves that an observed host failure must narrow host qualification rather than trigger another prompt layer or be misclassified as Harness release failure.",
+    "hypothesis": "A small K1-K5 portable kernel, H1-H10 host-admission standard, L1-L7 learned-failure standard, one data-driven verifier, representative help-and-interference Golden Tasks and thin Codex and Claude projections can preserve the useful lessons, distinguish Harness conformance from host behavior qualification, and cut default complexity enough to produce a finite, reproducible v1.2 release.",
+    "falsifiers": [
+      "the reshape creates a new runtime, registry, router, ledger, context predictor or generic control plane",
+      "historical O1-O5 validators or evidence remain on the default verification path",
+      "the verifier duplicates product prose or derives success from implementation, tests, receipts, commits or report shape",
+      "the Codex or Claude projection requires a long mandatory profile, fixed host version, universal context threshold or user-operated capability or topology route",
+      "a representative task failure is hidden, promoted into a pass, erased by evaluator cleanup, or left without an exact host claim limit and residue disposition",
+      "a material shortfall invariant or two-month counterexample disappears rather than becoming a compact rule, test or explicit claim limit",
+      "tracked active code, product-test and primary-instruction complexity does not materially fall from the pre-reshape baseline",
+      "release or field-effect is claimed before its exact evidence and named-human authority"
     ],
-    "naturalTaskRequiredFor": [
-      "real-world-effectiveness-claim",
-      "comparative-user-burden-reduction-claim",
-      "cross-agent-field-equivalence-claim"
-    ],
-    "historicalFailureRole": "counterevidence-and-replanning-input-only",
-    "environmentAttributionDisposition": "acceptance-owned-observed-native-minimum-and-user-configured-conformance-strata-with-exact-starting-environment-and-attributed-runtime-adaptation",
-    "taskTimeAdaptationDisposition": "scenario-or-field-manifest-is-starting-state-agent-executes-supported-authorized-mechanics-and-records-lifecycle-deltas",
-    "shortfallResolutionDisposition": "reference-and-classification-are-not-solutions-native-or-external-first-residual-only-unresolved-risk-narrows-or-stops",
-    "humanOnlyActionDisposition": "agent-detects-minimizes-guides-and-verifies-unavoidable-user-step-while-prohibited-agent-work-transfer-remains-zero",
-    "versionResolutionDisposition": "resolve-current-suitable-source-per-decision-bind-exact-execution-identity-and-stop-on-unresolved-moving-target-or-material-drift",
-    "outcomeClaimBoundary": "O1-O5-prove-finite-product-delivery-only-field-effect-claims-require-later-field-evidence",
-    "userMustNotInventTasks": true
-  },
-  "priorRelease": {
-    "release": "v1.1",
-    "state": "stopped-zero-outcome-missed-enrollment-attempt",
-    "revision": "5ae71bbdd43c0c5dd5a0e120e508bccf9dd9464c",
-    "currentAuthority": false
-  },
-  "normativeProfileBinding": {
-    "state": "frozen",
-    "profileIdentity": "harness-demand-to-outcome-v1.2-candidate.2",
-    "locator": "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
-    "sha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-    "cohortProtocolIdentity": "harness-controlled-conformance-v1.2-candidate.2",
-    "cohortProtocolLocator": "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json",
-    "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-    "frozenAtRevision": "de5dbc42fb1e265a720bb26808a31d03d032e602",
-    "cohortActivation": null
-  },
-  "terminalReleaseBinding": {
-    "state": "unregistered",
-    "tag": null,
-    "publicRemote": null,
-    "annotationFormat": null,
-    "o5EvidenceSetSha256": null,
-    "authorizationValidator": null,
-    "authorizationSourcePolicy": null
-  },
-  "authorityBoundary": {
-    "userOwns": [
-      "product-direction",
-      "domain-judgment",
-      "new-trust",
-      "new-account-or-data-boundary",
-      "new-cost",
-      "capability-installation-authorization",
-      "account-connection-authorization",
-      "persistent-activation-authorization",
-      "publication-authorization",
-      "release-authorization",
-      "accountable-outcome-acceptance",
-      "destructive-or-irreversible-action"
-    ],
-    "agentOwnsWithinBoundedAuthority": [
-      "repository-read",
-      "repository-edit",
-      "causal-planning",
-      "local-verification",
-      "progress-accounting",
-      "bounded-repository-cleanup",
-      "git-commit",
-      "git-push",
-      "installed-authorized-capability-use",
-      "human-only-action-guidance-and-post-verification",
-      "bounded-consumer-configuration-after-explicit-grant",
-      "coverage-analysis",
-      "targeted-capability-discovery",
-      "capability-static-review",
-      "inactive-exact-acquisition",
-      "same-goal-carrier-transition",
-      "authorized-capability-installation",
-      "authorized-account-connection",
-      "authorized-persistent-activation",
-      "authorized-private-evidence-materialization",
-      "authorized-private-evidence-cleanup",
-      "authorized-publication-execution",
-      "authorized-release-execution"
+    "finiteStopCondition": "The three authority files validate; the old proof generations leave the active tree; one generic verifier and both thin host projections map the same K, H, L, R and Q contract; the finite representative sample records help, interference, pass and failure without stale projection replay; every failure narrows the exact host claim; evaluator-owned residue is absent; the exact candidate and claim ceiling receive named-human release authorization. Field-effect and cross-host or longitudinal lanes remain explicitly continuing after release.",
+    "workItems": [
+      {
+        "id": "work.v12-authority-interface-and-release-candidate",
+        "state": "active",
+        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "deliverables": [
+          "three concise semantic authority files",
+          "one generic verifier and instant host-admission command",
+          "two thin progressively disclosed host projections",
+          "representative help-and-interference Golden Tasks",
+          "project-audit custody and shared-research revision reference",
+          "small public documentation and release-candidate evidence"
+        ],
+        "stopCondition": "A clean checkout reproduces all required deterministic checks, the exact finite representative sample and all pass/failure decisions are independently reviewable, failed host behaviors are excluded from the release claim, complexity targets pass, evaluator-owned residue is absent and the candidate waits only for the named human release decision."
+      }
     ]
   },
-  "completionExpression": "O1 && O2 && O3 && O4 && O5",
-  "increments": [
+  "goalModePrompt": {
+    "state": "prepared-host-goal-paused",
+    "authority": "derived-from-current-program-and-acceptance",
+    "objective": "在当前三份产品权威、项目专项审计和具名的人机协作短板研究约束下，将 Agent Autonomy Harness v1.2 收缩并完成为 K1-K5 可移植协作内核、H1-H10 即时宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影和可复现的帮助与干扰 Golden Tasks；真实完成 R1-R4 与 Q1-Q4 所需的有限开源发布证据和具名人类发布授权，同时把跨宿主、长期场景与真实场域价值保留为发布后持续校准和迭代。不得把报告、计划、提示词、代码、测试、提交、推送、转场、历史证据或局部通过称为收官；不得用加层掩盖重复失败；必须保留可迁移反例、控制过程损失、诚实限制主张并清理任务残留。",
+    "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+    "refreshTriggers": [
+      "user-correction",
+      "observed-failure-or-side-effect",
+      "host-or-capability-drift",
+      "evidence-conflict",
+      "phase-or-authority-boundary",
+      "repeated-same-purpose-repair"
+    ],
+    "hostLifecycleNote": "This repository value prepares the next exact objective. It does not claim that a paused host goal has been resumed or replaced."
+  },
+  "hostProjections": [
     {
-      "id": "increment.v12-o1-lifecycle-suite",
-      "state": "completed",
-      "correctionClass": "o1-lifecycle-suite-controlled-coverage",
-      "observedProblem": "O1 requires one non-duplicative disposition for every fixed SG-01 through SG-12 source slice with controlled evidence for each claimed effect. The exact validator and observed-native-minimum environment manifest now strictly precede registration, and the named human has accepted the applicability, accountable-domain boundary and bounded claim ceiling, but no immutable task registration or measured result exists.",
-      "hypothesis": "One immutable pre-measurement registration can bind the accepted twelve-slice mapping, exact source custody, environment, validator, safety floors and claim exclusions before any controlled execution; after a separate activation commit, the same task-specific validator can exercise and independently replay all twelve observable verifier effects without installing a plugin, invoking a model, manufacturing natural demand or creating a generic evidence runtime.",
-      "falsifier": "Registration is post-hoc, does not bind the exact accepted mapping or environment, reclassifies a slice, permits implementation or prose as proof, executes a scenario before the registration binding is valid, fails any controlled effect or independent replay, promotes controlled evidence into comparative burden, broad effectiveness, distinct-Agent or untested-platform claims, requires a new ungranted side effect, or leaves task-created residue.",
-      "stopCondition": "The immutable registration strictly precedes measurement; all twelve registered controlled scenarios and independent replay pass under the exact validator and environment binding; the named human accepts the bounded O1 result; O1 is verified without expanding its claim ceiling; the increment closes and all task-created temporary resources are absent.",
-      "acceptanceIds": [
-        "O1",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/o1-lifecycle-suite-registration.json",
-        "sha256": "49d86c326007ecb4ab0720f4cc0e8309437716c94136268f2120ee8e46a51416",
-        "sourceRevision": "11a2f9ae6eaeabe76042dec50d81a9f82347503e",
-        "measurementNotBefore": "2026-08-17T20:58:17+08:00",
-        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-        "preMeasurementValidator": {
-          "kind": "o1-lifecycle-suite-validator-v1",
-          "version": 1,
-          "locator": "harness/task_validator_o1_lifecycle_suite.py",
-          "revision": "fef3d5ab24ede56bdaec3458a679bcd54170dba3",
-          "sha256": "a9e0d8e74705fd4c7b606c9ace0d3dd0caddce8a44525d86ffb6908ffa96f25a"
-        }
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o1-lifecycle-suite",
-          "state": "completed",
-          "acceptanceIds": [
-            "O1",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push"
-          ],
-          "deliverables": [
-            "immutable O1 lifecycle-suite registration",
-            "content-addressed twelve-slice observation and independently replayed evidence"
-          ]
-        }
+      "id": "codex",
+      "manifest": "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+      "marketplace": ".agents/plugins/marketplace.json",
+      "contract": "plugins/agent-autonomy-harness-codex/adapter.json",
+      "skill": "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "maxSkillBytes": 6000,
+      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
+      "forbiddenPaths": [
+        "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/references"
       ]
     },
     {
-      "id": "increment.v12-o2-codex-reference",
-      "state": "stopped",
-      "correctionClass": "o2-live-codex-reference-controlled-application",
-      "observedProblem": "O2 has a corrected exact package grant, an authenticated clean isolated Codex home, four committed controlled goals, a source-bound user-configured unavailable stop, an earlier task-specific validator and projection builder, and an exact code-owned private-resource disposition. The control repair materially changed the capture identity, so the observed-native-minimum manifest must be refreshed and an immutable registration must pass before any package installation or scenario execution.",
-      "hypothesis": "A refreshed committed starting manifest followed by one immutable O2 registration can bind the exact Codex version, environment, package digest, four scenario contracts, source-bound unavailable stop, human authority, cleanup lifecycle, earlier validator and projection builder. After a separate activation commit, installing only that package into the isolated home and running the four ordinary goal-level scenarios should demonstrate bounded Codex application, authority stop/resume, recovery, removal and zero residue without touching current user configuration.",
-      "falsifier": "The manifest or package identity drifts; installation or model execution occurs before a valid immutable registration; a scenario requires Skill, plugin or command syntax from the user; the simple native route gains unnecessary ceremony; the protected deletion occurs before a new exact grant; user configuration or existing credentials are copied or read; rollback or cleanup is incomplete; private locators or events enter public evidence; the validator changes after registration; or the controlled result is promoted beyond the tested Windows Codex suite.",
-      "stopCondition": "The refreshed manifest and immutable registration strictly precede installation and execution; the exact package is observed installed and active only in the authorized isolated environment; all four registered scenarios pass the earlier validator, including a separately granted protected deletion; the exact plugin, marketplace and isolated resources are removed; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies and the increment exits the current graph.",
-      "acceptanceIds": [
-        "O2",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/o2-codex-reference-registration.json",
-        "sha256": "8849773ba4289377f305e61c1567ab0e1f1bdc4547a6a986b3e3bfcdf613d3bd",
-        "sourceRevision": "7f39911d335a37751eb310e8c58c778982edb60c",
-        "measurementNotBefore": "2026-08-18T02:40:18+08:00",
-        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-        "preMeasurementValidator": {
-          "kind": "o2-codex-reference-validator-v1",
-          "version": 1,
-          "locator": "harness/task_validator_o2_codex_reference.py",
-          "revision": "1ee0c3500e35b2b258c1db35ebd6458ba7a97846",
-          "sha256": "a75b96e16f20ba87e3f76830f052cde5e65e06763ea68124a4dd8917e40d726e"
-        }
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": []
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o2-codex-reference",
-          "state": "stopped",
-          "acceptanceIds": [
-            "O2",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "authorized-capability-installation",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "human-only-action-guidance-and-post-verification",
-            "authorized-private-evidence-cleanup"
-          ],
-          "deliverables": [
-            "immutable O2 Codex reference registration",
-            "four-scenario public-safe Codex observation and bounded O2 evidence"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v12-o2-codex-reference-permission-profile",
-      "state": "stopped",
-      "correctionClass": "o2-live-codex-permission-profile-controlled-application",
-      "observedProblem": "The first immutable O2 attempt retained no credit after the legacy workspace-write route rejected the first nontrivial task-root write. The second immutable attempt resolved Codex 0.147.0 and the official built-in :workspace profile without legacy sandbox composition, passed the fixed 32-cycle four-worker allow-deny pressure probe, and installed the exact registered package only in the fresh isolated environment. Its simple native no-op passed with zero filesystem delta, but the registered nontrivial goal then deterministically failed: Codex rejected every task-root write as outside the project or disallowed by policy, and the public projection failed closed on the remaining native in-progress item. The suite stopped before the authority and recovery scenarios, the exact plugin, marketplace, task roots and isolated resource were removed, and the retained public-safe counterevidence carries no O2 credit.",
-      "hypothesis": "The immutable second-generation O2 registration binds the official built-in :workspace profile without legacy sandbox composition, the exact Codex version, isolated starting state, package bytes, four ordinary goal-level scenario contracts, source-bound user-configured stop, prior validator and projection builder, separate protected-deletion gate, public-safe evidence projection and exact cleanup lifecycle. Installing only the registered package after this binding and executing those four scenarios should demonstrate bounded usable Codex application, authority stop and resume, recovery, rollback and zero residue without accessing current user configuration or teaching route syntax.",
-      "falsifier": "The permission profile, Codex build, manifest, package, validator or projection builder drifts; the legacy sandbox is selected or composed; installation or scenario execution predates the immutable registration; the simple native route gains unnecessary ceremony; any in-root operation is unexpectedly denied or any out-of-root effect is permitted; a scenario requires capability or route syntax from the user; protected deletion occurs before a new exact grant; current user state is copied or read; private locators or events enter public evidence; failure is hidden; rollback or cleanup is incomplete; or the result is promoted beyond the registered native-Windows Codex 0.147.0 suite.",
-      "stopCondition": "The exact package is observed installed and active only in the authorized isolated environment after the immutable registration; all four registered scenarios pass the earlier task-specific validator, including a separately granted protected deletion; the exact plugin, marketplace, task roots and isolated resource are removed under their bound disposition; no repository or external task residue remains; the named human accepts the bounded O2 result; O2 verifies without claim expansion; and the increment exits the current graph. Any deterministic failure instead stops the suite, retains the counterevidence, cleans the exact resources and leaves O2 false.",
-      "acceptanceIds": [
-        "O2",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/o2-codex-reference-permission-profile-registration.json",
-        "sha256": "2962de37afedbf87c1476d736579feb7be1890ce5f1d7a67f71a3d0a280954f9",
-        "sourceRevision": "fe119ca02029a020e361e5cfebebb3fd143d44b4",
-        "measurementNotBefore": "2026-08-18T12:02:16+08:00",
-        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-        "preMeasurementValidator": {
-          "kind": "o2-codex-reference-permission-profile-validator-v1",
-          "version": 1,
-          "locator": "harness/task_validator_o2_codex_reference_permission_profile.py",
-          "revision": "c1ab6c55a507b058044171982721c14a48df429b",
-          "sha256": "f5825805521aa9279882d1505e09bc61ba3e0cc2caa50d3b856b34e2ee1a809f"
-        }
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": [
-          "v1.2-o2-isolated-codex-environment:windows-current-user-private;retain-only-through-authorized-o2-controlled-suite-no-later-than-2026-12-31T23:59:59+08:00;delete-on-suite-close-withdrawal-expiry-or-deterministic-validation-failure"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o2-codex-reference-permission-profile",
-          "state": "stopped",
-          "acceptanceIds": [
-            "O2",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "authorized-capability-installation",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "human-only-action-guidance-and-post-verification",
-            "authorized-private-evidence-cleanup"
-          ],
-          "deliverables": [
-            "immutable second-generation O2 permission-profile registration",
-            "four-scenario public-safe Codex observation and bounded O2 evidence"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v12-o4-continuous-self-correction",
-      "state": "stopped",
-      "correctionClass": "o4-controlled-continuous-self-correction-and-carrier-validation",
-      "observedProblem": "O4 remains unverified. The first immutable controlled attempt passed its first two disposable-checkout counterexamples, then stopped at the third registered scenario because the generic O1 evidence-shape gate rejected the fault before the task-specific diagnostic could be observed. The public-safe stopped counterevidence is product/evidence/o4-continuous-self-correction-stopped-2026-08-18.json; no host compaction or fresh-thread behavior was measured and no O4 credit was retained.",
-      "hypothesis": "Executing the four registered disposable-checkout counterexamples plus one native Codex compaction recovery and one fresh zero-inherited-turn same-goal transition should demonstrate pre-effect divergence detection, minimum correction, reverification and full code/conversation carrier lifecycle control without user reconstruction, topology selection or cleanup. The task-scoped cadence observation can calibrate this exact controlled route while remaining explicitly non-universal.",
-      "falsifier": "Any scenario is missing, duplicated or passes only by receipt; a bound correction must be restated; material effects continue after divergence; a worktree or temporary checkout remains; native compaction lacks post-event authority and Git reconciliation; the destination inherits turns, lacks the exact goal or is not verified before source goal release and archive; a private path, event or identifier enters public evidence; environment or validator identity drifts; cleanup is incomplete; or the named human does not accept the bounded result.",
-      "stopCondition": "All six registered scenarios replay through the exact earlier validator; public evidence contains only the bounded projections and exact cleanup result; the source and destination task carriers and isolated environment are released at their registered boundary; the named human accepts the bounded Windows Codex 0.147.0 O4 result; canonical verification reports O4 true and the increment exits the current graph. Any deterministic floor failure stops the suite, preserves public-safe counterevidence, cleans exact task resources and leaves O4 false.",
-      "acceptanceIds": [
-        "O4",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/o4-continuous-self-correction-registration.json",
-        "sha256": "8fcd43f31b977a265c3ec9c87f09d988ffb7051ebb2d28405459c93796946980",
-        "sourceRevision": "9ff75320b551e4493d17d0b467291d00d172f14f",
-        "measurementNotBefore": "2026-08-18T22:32:15+08:00",
-        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-        "preMeasurementValidator": {
-          "kind": "o4-continuous-self-correction-validator-v1",
-          "version": 1,
-          "locator": "harness/task_validator_o4_continuous_self_correction.py",
-          "revision": "ea69f0c7a151be5f20c4bfd9e43bc14e8fe8fde5",
-          "sha256": "4e08aed6dd4070016e910aac31192af2ff2c78cf2b779da2a04acada20fd8aa1"
-        }
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": [
-          "v1.2-o4-isolated-codex-environment-and-task-threads:windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-or-deterministic-validation-failure"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o4-controlled-continuous-self-correction",
-          "state": "stopped",
-          "acceptanceIds": [
-            "O4",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "same-goal-carrier-transition",
-            "authorized-private-evidence-materialization",
-            "authorized-private-evidence-cleanup",
-            "human-only-action-guidance-and-post-verification"
-          ],
-          "deliverables": [
-            "six-scenario controlled O4 observation and public-safe replay evidence",
-            "verified native compaction recovery and fresh-thread same-goal transition",
-            "exact task-owned code and conversation carrier cleanup"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "increment.v12-o4-continuous-self-correction-second-generation",
-      "state": "stopped",
-      "correctionClass": "o4-second-generation-controlled-continuous-self-correction-and-carrier-validation",
-      "observedProblem": "O4 remains unverified. The first registered attempt is immutable stopped counterevidence because its generic evidence-shape gate prevented the exact third diagnostic and the remaining scenarios were not executed. A distinct v2 validator repairs only that measured seam, and the exact six-scenario suite, frozen method, fresh environment manifest, controlled goal and earlier v2 validator are now immutably registered, but no second-generation measurement or accepted O4 evidence exists.",
-      "hypothesis": "Executing the four registered disposable-checkout counterexamples plus one native Codex compaction recovery and one fresh zero-inherited-turn same-goal transition through the v2 path should demonstrate pre-effect divergence detection, minimum correction, reverification and full code/conversation carrier lifecycle control without user reconstruction, topology selection or cleanup. The task-scoped cadence observation can calibrate this exact controlled route while remaining explicitly non-universal.",
-      "falsifier": "Any scenario is missing, duplicated or passes only by receipt; the corrected third diagnostic is not observed exactly; a bound correction must be restated; material effects continue after divergence; a worktree or temporary checkout remains; native compaction lacks post-event authority and Git reconciliation; the destination inherits turns, lacks the exact goal or is not verified before source goal release and archive; a private path, event or identifier enters public evidence; environment or validator identity drifts; cleanup is incomplete; or the named human does not accept the bounded result.",
-      "stopCondition": "All six registered scenarios replay through the exact earlier v2 validator; public evidence contains only bounded projections and the exact cleanup result; source and destination task carriers and the isolated environment are released at their registered boundary; the named human accepts the bounded Windows Codex 0.147.0 O4 result; canonical verification reports O4 true and this increment exits the current graph. Any deterministic floor failure stops the suite, preserves public-safe counterevidence, cleans exact task resources and leaves O4 false.",
-      "acceptanceIds": [
-        "O4",
-        "G2",
-        "G4"
-      ],
-      "taskRegistration": {
-        "locator": "product/evidence/o4-continuous-self-correction-second-generation-registration.json",
-        "sha256": "7b92cd66e37a456047b78384b16dad03b240667d13dd5c07510581cd9830b7ac",
-        "sourceRevision": "8d3b060f23cf4b374aaa74e91609a853bb017b6d",
-        "measurementNotBefore": "2026-08-19T12:41:27+08:00",
-        "profileSha256": "6b6f134ef49cd3cd161ef961ce2fe9e254f12d552f9e6d31f02c06009196d4f5",
-        "cohortProtocolSha256": "83dc62fc6f749ac18c0136ab066fc63cd667ed5e231dee8d5ebfb00889e78303",
-        "preMeasurementValidator": {
-          "kind": "o4-continuous-self-correction-validator-v2",
-          "version": 1,
-          "locator": "harness/task_validator_o4_continuous_self_correction_v2.py",
-          "revision": "1a45ba3d05dc694854ff0ea20437361b3c0258c5",
-          "sha256": "255ae6df24599572f0d311e5aa6ee7a33dd3b70389b5e96097dde7957d43d367"
-        }
-      },
-      "processLossBudget": {
-        "maxSameClassUserCorrectionBeforeStop": 1,
-        "maxConsecutiveOutcomeNeutralWorkItems": 1,
-        "maxProhibitedAgentWorkTransfers": 0,
-        "stopOnAuthorityOrIrreversibleIncident": true,
-        "stopOnUnboundedResidue": true
-      },
-      "cleanupBoundary": {
-        "repositoryTemporaryPaths": [
-          ".tmp",
-          "harness/__pycache__",
-          "tests/product/__pycache__"
-        ],
-        "privateResourceDispositions": [
-          "v1.2-o4-isolated-codex-environment-and-task-threads:windows-current-user-private;retain-only-through-authorized-o4-controlled-suite;delete-environment-and-archive-threads-on-o4-accepted-o4-stopped-or-deterministic-validation-failure"
-        ]
-      },
-      "workItems": [
-        {
-          "id": "work.v12-o4-controlled-continuous-self-correction-second-generation",
-          "state": "stopped",
-          "acceptanceIds": [
-            "O4",
-            "G2",
-            "G4"
-          ],
-          "operationIds": [
-            "repository-read",
-            "repository-edit",
-            "local-verification",
-            "bounded-repository-cleanup",
-            "git-commit",
-            "git-push",
-            "installed-authorized-capability-use",
-            "bounded-consumer-configuration-after-explicit-grant",
-            "same-goal-carrier-transition",
-            "authorized-private-evidence-materialization",
-            "authorized-private-evidence-cleanup",
-            "human-only-action-guidance-and-post-verification"
-          ],
-          "deliverables": [
-            "six-scenario second-generation controlled O4 observation and public-safe replay evidence",
-            "verified native compaction recovery and fresh-thread same-goal transition",
-            "exact task-owned code and conversation carrier cleanup"
-          ]
-        }
+      "id": "claude-code",
+      "manifest": "plugins/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
+      "contract": "plugins/agent-autonomy-harness-claude/adapter.json",
+      "skill": "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+      "maxSkillBytes": 6000,
+      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
+      "forbiddenPaths": [
+        "plugins/agent-autonomy-harness-claude/hooks",
+        "plugins/agent-autonomy-harness-claude/scripts",
+        "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references"
       ]
     }
-  ]
+  ],
+  "complexityBudget": {
+    "baselineRevision": "534a77aae9e1d191173e6e05b4327c80d22855d8",
+    "baseline": {
+      "trackedFiles": 96,
+      "harnessBytes": 867179,
+      "productTestBytes": 684030,
+      "harnessAndProductTestBytes": 1551209,
+      "controlBytes": 347344,
+      "primaryInstructionBytes": 18940
+    },
+    "targets": {
+      "maxTrackedFiles": 55,
+      "maxHarnessAndProductTestBytes": 120000,
+      "maxControlBytes": 45000,
+      "maxPrimaryInstructionBytes": 26000
+    },
+    "primaryInstructionPaths": [
+      "AGENTS.md",
+      "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md"
+    ],
+    "forbiddenActivePaths": [
+      "harness/task_validator_o1_lifecycle_suite.py",
+      "harness/task_validator_o2_codex_reference.py",
+      "harness/task_validator_o2_codex_reference_permission_profile.py",
+      "harness/task_validator_o4_continuous_self_correction.py",
+      "harness/task_validator_o4_continuous_self_correction_v2.py",
+      "harness/task_validator_o4_continuous_self_correction_v3.py",
+      "harness/task_capture_o2_codex_reference.py",
+      "product/evidence",
+      "product/authorizations",
+      "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
+      "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
+    ],
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier."
+  },
+  "processLossControl": {
+    "maxActiveIncrements": 1,
+    "maxActiveWorkItems": 1,
+    "samePurposeRepairBeforeReplan": 1,
+    "prohibitedAgentWorkTransfer": 0,
+    "taskResidueAtCheckpoint": 0,
+    "carrierRule": "Use current source-bound host signals when reliable; if capacity is unavailable, record unknown and transition conservatively. No universal turn count, context size, token percentage or summary ratio is product authority.",
+    "correctionRule": "A repeated correction or failed same-purpose mechanism pauses further addition until the premise, interface and deletion option are reconsidered.",
+    "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning."
+  }
 }

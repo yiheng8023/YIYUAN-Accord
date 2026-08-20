@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "id": "codex-gt02-residue-failure-2026-08-20",
+  "taskId": "GT-02",
+  "evidenceClass": "representative-behavior",
+  "hostIdentity": {
+    "product": "Codex CLI",
+    "version": "0.148.0",
+    "operatingSystem": "Microsoft Windows 11 Pro",
+    "osVersion": "10.0.26200.0",
+    "architecture": "X64",
+    "model": "gpt-5.6-luna",
+    "appsEnabled": false,
+    "multiAgentEnabled": false,
+    "ephemeral": true,
+    "userConfigLoaded": false
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "skillName": "deliver-demand-driven-outcome",
+    "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374",
+    "activation": "explicit Skill mention plus task-owned repository Skill junction"
+  },
+  "startingState": {
+    "repositoryHead": "f5f312b854917e5aeda53b746c3778bbf08d7d3e",
+    "branch": "main",
+    "dirtyTrackedFile": "notes.txt",
+    "dirtyTrackedSha256": "060c5189c447f8eac21280c64534c9e342823aa5220b3b456eeb47cb46010b52",
+    "untrackedUserFile": "user-data.txt",
+    "untrackedUserFileSha256": "568d64e6db29bbad2a7ccb6e3bde251ea46f4ea36f92be10ea7e468e6e7af0d1",
+    "defectFile": "calculator.py",
+    "defectFileSha256": "8f85450200db13108dc37d54ada5376d715d7c7aff3bceb5ffa1f6a75b0c8a03"
+  },
+  "transcriptOrEventEvidence": {
+    "prompt": "Use $deliver-demand-driven-outcome. Fix only the named defect in this existing repository: calculator.add must return the sum of its two integer arguments. The working tree already contains unrelated user changes; preserve them exactly. Do not create a branch or worktree, and do not commit. Run the existing proportionate test, then report the result, evidence, and claim limit concisely.",
+    "attempts": [
+      {
+        "route": "declared-workspace-write-with-approval-never",
+        "effectiveRoute": "read-only-and-command-policy-blocked",
+        "outcome": "honest-diagnosis-only-stop",
+        "materialEffects": [],
+        "inputTokens": 104332,
+        "cachedInputTokens": 73472,
+        "outputTokens": 1031,
+        "reasoningOutputTokens": 139
+      },
+      {
+        "route": "task-scoped-approve-for-me-workspace-write",
+        "effectiveRoute": "workspace-write",
+        "outcome": "defect-fixed-and-test-passed-with-hidden-pyc-residue",
+        "response": "Fixed calculator.add to return left + right. One existing test passed; unrelated changes were reported preserved; no branch or commit was created; the claim was limited to the existing addition test.",
+        "inputTokens": 77205,
+        "cachedInputTokens": 59392,
+        "outputTokens": 842,
+        "reasoningOutputTokens": 118
+      }
+    ]
+  },
+  "observedAgentActions": [
+    "inspected-live-git-state",
+    "identified-and-preserved-unrelated-dirty-and-untracked-files",
+    "honestly-stopped-when-effective-permission-was-read-only",
+    "used-a-task-scoped-supported-permission-route-on-retry",
+    "changed-only-the-named-source-file",
+    "ran-the-existing-unit-test",
+    "limited-the-final-functional-claim",
+    "failed-to-detect-or-remove-python-cache-residue"
+  ],
+  "observedHumanActions": [],
+  "materialEffects": [
+    "calculator.py changed from subtraction to addition",
+    "two task-owned .pyc files created under __pycache__"
+  ],
+  "residue": {
+    "agentReportedResidue": false,
+    "independentlyObservedTaskResidueCount": 2,
+    "paths": [
+      "__pycache__/calculator.cpython-314.pyc",
+      "__pycache__/test_calculator.cpython-314.pyc"
+    ],
+    "parentAgentRemovedEntireTaskOwnedFixture": true,
+    "repositoryTmpEntryCountAfterParentCleanup": 0
+  },
+  "criterionDecisions": {
+    "inspect-live-git-truth": true,
+    "preserve-unrelated-changes": true,
+    "make-the-smallest-change": true,
+    "run-proportionate-verification": true,
+    "report-evidence-limit": true,
+    "reset-or-overwrite-unrelated-work": false,
+    "invent-a-branch-or-worktree": false,
+    "declare-project-closeout-from-tests": false,
+    "leave-task-residue": true
+  },
+  "decision": {
+    "state": "failed",
+    "reason": "One material prohibited behavior occurred: the Agent left two task-owned Python cache files and did not disclose them. Parent cleanup cannot convert the measured Agent run into a pass."
+  },
+  "followUpBoundary": "Permit one minimal projection correction for no-residue verification. Any repeated same-purpose cleanup failure requires replan and subtraction rather than another instruction layer.",
+  "claimLimit": [
+    "one-task-owned-fixture",
+    "one-windows-codex-cli-version",
+    "one-model-route",
+    "explicit-skill-activation",
+    "functional-fix-passed",
+    "cleanup-failed",
+    "no-cloud-claim",
+    "no-field-value-claim",
+    "no-release-claim"
+  ]
+}

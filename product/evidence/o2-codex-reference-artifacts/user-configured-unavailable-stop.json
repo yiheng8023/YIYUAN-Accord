@@ -1,8 +1,0 @@
-{
-  "schema": 1,
-  "kind": "source-bound-user-configured-unavailable-stop",
-  "environmentIdentity": "codex-env.user-configured-v1",
-  "sourceKind": "named-human-configuration-boundary",
-  "sourceIdentity": "public-decision:43a16abc954b4976a846f0fb2f486ddc",
-  "reason": "persistent-user-configured-installation-not-authorized"
-}

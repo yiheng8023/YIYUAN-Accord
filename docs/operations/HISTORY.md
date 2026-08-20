@@ -1,391 +1,77 @@
-# History Boundary
+# History boundary and learned experience
 
-The current product was reset from repository state
-`c53866726834d79a68c61a5b87b4f7ce90698a2c` on 2026-08-11 after a live audit
-showed that a predecessor program still controlled the plan, acceptance map,
-verifier, tests, and next-work scheduler.
+The current product is intentionally smaller than its history. Git is the
+durable provenance layer for superseded experiments; the current tree retains
+only the standards and counterexamples that affect present decisions.
 
-The exact pre-reset state remains recoverable through Git:
+## Major boundaries
 
-```powershell
-git show c53866726834d79a68c61a5b87b4f7ce90698a2c:<path>
-git worktree add <isolated-path> c53866726834d79a68c61a5b87b4f7ce90698a2c
-```
+- Revision c53866726834d79a68c61a5b87b4f7ce90698a2c is the pre-reset product
+  whose registries, control-plane framing and receipt machinery were removed
+  from current authority.
+- Revision a5a0834 established the later five-outcome reset without claiming
+  that the project was complete.
+- Revision 534a77aae9e1d191173e6e05b4327c80d22855d8 is the immediate
+  pre-reshape v1.2 tree. It contains the historical O1 accepted record, stopped
+  O2 attempts and successive O4 mechanism repairs.
+- The 2026-08-20 global reshape replaces that active proof architecture with
+  K1–K5, H1–H10, L1–L7, R1–R4 and Q1–Q4. It does not rewrite Git history or
+  inherit old outcome credit.
 
-Do not restore an old file into the current product merely because it existed
-or passed its historical verifier. Reuse requires a current acceptance gap, an
-exact source, a causal rationale, a bounded authority and cleanup contract, and
-the current product verifier.
+Use Git to inspect an exact historical file:
 
-The predecessor payload corpus and v0.1 receipt files were removed from the
-current Git index. Git history is their durable provenance authority. This
-keeps raw prompts, machine-local paths, lifecycle incidents, and one-off
-scorecards out of the current public tree without rewriting their history. The
-accepted v0.1 machine state and its event-specific verifier remain reproducible
-at `be498f960c9e0587d355291fb24261c91e75cd77`.
+~~~powershell
+git show 534a77aae9e1d191173e6e05b4327c80d22855d8:<path>
+~~~
 
-The same current-tree privacy boundary now applies to 41 later historical
-evidence JSON files. They contained machine-local paths, host task and session
-identifiers, and credential-reference topology but were neither current v1
-authority nor current outcome evidence, so they were removed from the current
-index. The bounded v0.2 aggregate result, claim ceiling, and immutable revision
-remain recorded in `product/constitution.json` and `product/program.json` at
-`0dbcb0af34197e5c35c75d69a1aeacf4fd91b404`. Public Git history and historical
-author email remain retrievable; preserving that history is an explicit human
-privacy disposition, not a claim of erasure. A bounded current-tree scan found
-no credential value, token, private-key material, or provider secret in the
-removed file class.
+Do not restore an old package or validator merely because it existed or once
+passed. Reuse only the smallest counterexample or rule justified by a current
+gap.
 
-The later user-executed cleanup removed the local ignored `legacy/` quarantine
-plus old bytecode caches; exact receipts preserve encountered PowerShell
-compatibility errors rather than claiming an error-free script run.
+## What the trials established
 
-The reset index retains only the bounded current product surface. It removes
-the unmapped predecessor payloads from the current index and adds one small
-product-control kernel, one product test seam, and one five-outcome acceptance
-authority. Exact file and line counts belong in the reviewed Git diff, not in
-this long-lived boundary statement.
+The project did not fail because its human-AI collaboration objective was
+misconceived or because failure itself is bad. Roughly two months of largely
+Codex-led experimentation exposed reusable Agent and host risks:
 
-The v0.2 causal-authority reset was committed and pushed at `a5a0834`. It
-established the current terminal-proposition contract and smaller
-historical-event-neutral control seam, but deliberately verified none of
-O1-O5. After that stop condition was reached, the program moved to `paused`
-with no active increment rather than inventing a real task or silently opening
-capability work.
+- process artifacts can become proof proxies for outcomes;
+- a strong Agent can repeatedly repair by adding layers instead of revisiting
+  the premise or interface;
+- duplicated prose, validators and registrations can become competing
+  authority;
+- declared or installed host capability can differ from model-effective
+  capability;
+- context and topology recovery can drift back to the user;
+- maximal evidence ceremony can increase interference and cleanup risk;
+- historical success can become stale and fail on the current environment;
+- local tests, commits, pushes and transitions can be mislabeled as completion.
 
-A later outcome-neutral authority repair made the product form explicit: an
-open, Agent-neutral, demand-driven human-Agent capability control plane whose
-durable outputs are a methodology, open standard, and executable reference
-implementation. It bound goal-level demand, Agent-owned capability
-observation, gap detection, adaptive source-bound discovery, task-scoped
-dispatch and release, and Codex-first reference delivery without making Codex,
-a fixed catalog, a provider, or a manager part of the portable core. It also
-generalized O4 from a software-engineering-only standard to the human-Agent
-collaboration core with software engineering as the first reference profile.
-This repaired authority and validation semantics but counted as zero O1-O5
-progress; the program returned to `paused` with an empty current graph.
+The 2026-08-20 GT-02 dirty-repository task supplied a current concrete case.
+Codex made the intended one-line fix, passed the focused test and preserved
+unrelated state, but left two Python cache files without disclosing them. A
+single minimal Skill repair repeated the same failure, so the repair was
+removed and the task stayed failed. This established a reusable distinction:
+the Harness may conform by exposing and limiting a host failure even while the
+host behavior itself remains unqualified.
 
-A later fixed-source substitute audit narrowed that wording again. CHAP already
-occupies the collaboration-wire and auditable-workspace layer; Human Tool
-supplies an empirical Agent-led allocation pattern; Agentlas OS substantially
-overlaps intake, routing, capability lifecycle, receipts, and cross-host
-packaging; established runtimes, identity, audit, provenance, and evaluation
-projects cover adjacent mechanisms. The current product therefore no longer
-claims a new general control plane or open wire standard. Its surviving form is
-a demand-to-capability collaboration methodology, an open minimum quality-
-conformance profile, and thin executable reference adapters. This is an
-authority and route correction, not O1-O5 evidence.
+Those lessons now live in constitution learned-failure standards and
+representative Golden Tasks. The retired code is not required at runtime to
+remember them.
 
-A follow-up global diffusion audit found that the strategic narrowing at
-`4b99e8d` had not reached every public and machine-readable surface. Community
-documents still used the predecessor positioning, the public entry point mixed
-target behavior with current capability, the external-substrate reuse gate was
-incomplete, and O4 could imply Agent-neutral portability before O5. The
-correction made current verifier limits explicit, bound the product-semantic
-supporting set, strengthened exact-source reuse gates, and confined O4 to
-Codex reference-host calibration. It repaired authority and communication
-consistency but proved none of O1-O5.
+## Research custody
 
-A bounded retrospective counterexample audit then showed that zero user tool-
-selection intervention was necessary but insufficient: an Agent could still
-misread conversational mode, omit material issues, reopen settled decisions,
-create unrequested work, over-engineer the process, return residue or context
-recovery to the user, or require correction of a false completion claim. O1
-and O2 now pre-register one fixed material collaboration-loss taxonomy and
-require zero such events rather than allowing those failures to disappear
-behind a successful capability route. The same repair makes paused state
-explicit in the public report and closes the supporting-document set without
-claiming machine understanding of prose. It is acceptance and observability
-repair only, with zero O1-O5 progress.
+The full project-specific diagnosis is preserved at
+research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md.
+The broader human-AI collaboration shortfall packet remains under unique
+custody in YIYUAN-CALIBRATION at revision
+e060a08f05361cb4cc9a67be050236cdbbde1de5. Its seven invariant candidates inform
+the current K/H/L contract; its larger taxonomy and proposed architecture are
+diagnostic hypotheses, not a feature backlog.
 
-A subsequent thin-kernel audit removed the prebuilt generic O1 receipt
-validator. That parser could reject malformed self-reporting, but without a
-bound task or independent source it could not establish naturalness, behavior,
-value, or zero loss. The current tree therefore carries no O1-O5 outcome
-validator: G4 blocks outcome work until a real task binds the smallest
-criterion-scoped validation path. This removal is an authority and false-
-positive repair, not O1-O5 progress.
+## Release is not the end
 
-A later Codex-first attempt bound a task-specific O1 continuity validator to
-the user's real demand to continue one long-running Harness goal without
-operating context recovery. The first observed compaction exposed an incorrect
-Codex output-record assumption and was excluded as calibration. After the
-corrected registration at `525136b`, a native compaction at
-`2026-08-13T12:12:57.198Z` continued the same task without user-supplied
-recovery. The registration admitted the first later same-task compaction, but
-the code validator additionally required the compacted event to carry the
-original demand-turn identity; the real event occurred in a later turn. The
-project stopped the attempt instead of changing the rule after seeing the
-event or opening another measurement to pursue a pass. O1 remained false, the
-task registration and validator left the current tree, and the stopped attempt
-remains counterevidence recoverable from Git history. It proves neither O1 nor
-O4, but it preserves a real failed evaluation case for future bounded use.
-
-The ensuing authority repair separated immutable pre-execution task
-registration from code validation needed before outcome promotion. A natural
-task must still freeze every mapped criterion's required values, source-capture
-eligibility and stop rule, floors, and claim limit before measured execution.
-Previously unknown host serialization may now be implemented in the smallest
-task-bound validator after observation, but the validator must bind the exact
-registration identity and chronology and cannot add or weaken its rules. This
-removes a repeated pre-execution host-schema guessing loop without restoring a
-generic receipt validator or granting any O1-O5 credit.
-
-A critical-path audit then found that O4 required the first eligible accepted
-tasks and stopped case to share one pre-registered methodology, quality
-profile, scorecard, and missing-data rule, but the current tree had no directly
-applicable versioned candidate. The project added
-`harness-demand-to-capability-v0.2-candidate.1` as an explicitly unaccepted
-supporting document before another cohort task. It applies the current
-authority, maps the nine user-reported experience failures to mandatory floors,
-fails on any mandatory or missing-data floor, and requires future task
-registrations to bind its exact Git and content identity. It adds no runtime,
-fourth authority, receipt schema, or O1-O5 credit.
-
-Before any eligible task bound candidate.1, the user's explicit requirement for
-controllable execution and proactive risk prediction exposed a missing
-two-sided control. Candidate.2 now requires a minimal pre-effect check of the
-expected state, human gate, reversibility, failure and recovery signal,
-verification evidence, resource and cleanup effect, and continuity boundary;
-after the effect, the Agent compares observed with expected state and stops or
-replans on a material mismatch. Only a risk that changes accountable judgment
-or authority is returned to the user. This is a mandatory profile floor, not a
-risk runtime, ledger, extra approval system, or O1-O5 result.
-
-A later distinct-host delivery slice found an already-installed Claude Code
-2.1.231 runtime with native SessionStart Hooks and session-scoped plugin
-exposure. The repository extracted the existing bounded authority projection
-into a shared read-only module and added a Hook-only Claude translation edge.
-The fixed host's strict manifest validator and offline parity tests passed
-without a model call, installation, consumer mutation, or residue. This is an
-inactive reference-adapter candidate and counts as zero O1-O5 progress; only a
-separately pre-registered matched real task can test O5.
-
-The next authority-defect repair closed a gap between G4's written
-pre-registration rule and the machine program schema. Outcome-bearing
-increments now content-address one canonical task registration, and the
-verifier derives its required field union from the currently mapped acceptance
-criteria and binds that acceptance-contract identity. Content addressing
-detects current drift; the later task-bound result validator remains
-responsible for proving that the committed binding preceded execution and for
-checking observation chronology. The registration cannot act as product
-authority, result evidence, or an outcome validator. The repair is
-outcome-neutral.
-
-Before the first eligible task bound the revised acceptance contract, the
-user's code-and-conversation topology examples exposed another false-positive
-path. Capability routing and context recovery were Agent obligations, but the
-contract did not explicitly reject asking an inexperienced user to choose or
-operate a branch, worktree, repository fork, conversation continuation,
-conversation fork, new task, synchronization, merge or conclusion
-reconciliation, archive, release, or cleanup. Candidate.4 and the revised O1,
-O2, O4, and O5 semantics make the healthy current task and checkout the default,
-require causal necessity for any isolated carrier, and assign carrier identity,
-synchronization, reconciliation, archive or release, and cleanup to the Agent.
-Human authority over goal divergence, trust, data, cost, release, publication,
-and irreversible effects is unchanged. This is an outcome-neutral contract
-repair, not a Git manager, task manager, wire protocol, or accepted receipt.
-
-## Codex live continuity counterexample
-
-After two candidate.5 tasks had produced accepted O1 receipts, the user's
-seventh-task continuity failure supplied a distinct long-horizon goal: move the
-same product closeout work to a fresh conversation carrier without making the
-user choose, reconstruct, reconcile, archive, or clean it. The immutable task
-registration bound one official temporary Codex plugin install, one exact
-SessionStart Hook trust, and one same-directory child with no code topology.
-
-The host lifecycle materially improved on the earlier direct-file attempt. The
-child received the installed task-facing Skill and the exact authority
-projection at startup, used the Skill as advisory input, recovered live product
-and Git truth without user reconstruction, then received the projection again
-after natural compaction. The child made no repository or consumer mutation.
-
-The result still stopped. Its pre-registered missing-data rule required native
-`HookStarted` and `HookCompleted` chronology, while the available child archive
-and host logs serialized neither event type. The developer projection records
-prove that the context reached the model, but they cannot retroactively replace
-the registered evidence floor. The child was archived, the plugin uninstalled,
-the exact trust entry removed, the empty cache root deleted, and the consumer
-configuration restored to its pre-measurement hash. The task adds no O1-O5
-credit and remains the honest candidate.5 stopped input for a later O4 cohort.
-Its content-addressed result is
-preserved only in public Git history at the fixed v0.2 revision.
-
-## Later Codex dispatch counterexamples
-
-A later O5 source-candidate gate stopped before model execution. The exact
-target, 19-file public source snapshot, candidate.5 Skill/profile bytes,
-supported schema, host binary identities and isolated candidate.6 Codex plugin
-bytes passed their observed preflight portions. A case-insensitive variable
-collision then materialized an authorized credential reference outside the
-task root. The error was disclosed before either model call, credential content
-was never read, and all task-created references and isolated resources were
-removed. The unnecessary cleanup approval and resulting date rollover consumed
-the registration and grant, add zero O1-O5 credit, and remain preserved only in
-public Git history at the fixed v0.2 revision. The next registration retained
-every host, model, profile, schema, equivalence, zero-loss and claim floor while
-adding exact task-root and credential-reference placement checks; it did not
-add a credential manager, runtime or product protocol.
-
-A fixed-source review then showed that an isolated `CODEX_HOME` did not
-isolate user-global Skills. An inapplicable code-review Skill selected
-unregistered parallel topology and the single Codex call timed out. The result
-was stopped, the conditional Claude call was skipped, and all exposure was
-removed. The counterexample remains preserved only in public Git history at the
-fixed v0.2 revision.
-
-The parent dispatch boundary subsequently used Codex's native prompt rendering,
-exact per-invocation Skill configuration, and multi-agent feature control. A
-new closeout-decision task proved that correction effective for its preflight:
-25 visible Skills became the one exact Harness Skill and multi-agent remained
-false. The immutable task still stopped before model generation because its
-structured-output schema used a constant without the explicit property type
-required by the service. No retry, substitution, Claude call, outcome credit,
-or residue followed. The exact result remains preserved only in public Git
-history at the fixed v0.2 revision. This is
-host-compatibility counterevidence, not a reason to add a schema registry,
-runtime, or generic outcome validator.
-
-A materially different context-carrier architecture task then used the
-corrected supported-subset schema and again reduced 25 visible Skills to the
-one Harness Skill with multi-agent false. During its one Codex call, however,
-the built-in `list_mcp_resources` tool remained available and enumerated 46
-ambient App plugin and Skill descriptors. The call crossed its registered
-capability and public-input boundary before producing a final result; the
-parent terminated it, skipped Claude/DeepSeek, and removed all temporary state.
-The exact zero-progress result remains preserved only in public Git history at
-the fixed v0.2 revision.
-This counterexample narrows future parent dispatch: inspect the entire model
-tool and resource surface, not only Skills and topology, and require an official
-stable per-call MCP/App suppression seam before another measured call. It does
-not authorize a generic manager, registry, runtime, or control plane.
-
-One bounded mechanism-only follow-up then used Codex 0.147.0 app-server with an
-isolated home, no credentials, no plugin, no thread or turn, and no model call.
-The documented per-process `apps._default.enabled=false` override was effective:
-the host reported zero installed or callable Apps and zero MCP servers. Skill
-discovery nevertheless returned 39 enabled entries—33 from the shared CC Switch
-root and six Codex system Skills—showing that `CODEX_HOME` isolation is not a
-capability-isolation boundary and that CC Switch is ambient input, not a Harness
-dependency. Because the no-thread probe could not prove the future
-model-visible enumeration primitive or its coexistence with required repository
-tools, the current measured route remains ineligible. The finite result is
-preserved only in public Git history at the fixed v0.2 revision and adds zero
-O1-O5 credit.
-
-## Accepted continuation-reconciliation delivery
-
-The next real product delivery binds the user's repeated context-overflow and
-code/conversation-topology burden to the common read-only reference adapter.
-Its immutable registration was pushed at `19f1893`. Only after that checkpoint
-did the exact active-work baseline measure 6,301 characters against Codex's
-4,096-character Hook limit, confirming that the former projection could be
-truncated precisely when an active increment needed recovery. The registered
-candidate removes long-form prose already available from machine authority and
-adds bounded active-work, task-registration, cleanup, and privacy-minimal Git
-reconciliation facts within a 3,072-character internal budget. It neither
-installs a plugin nor creates a state store, manager, protocol, model call, or
-task carrier. Task-bound validation and yiheng8023's exact judgment accepted it
-as the materially distinct third O2 scenario beside public intake and Codex
-Skill source delivery. The bounded three-scenario claim does not accept O4.
-
-## Accepted Codex reference-host calibration
-
-The immutable O4 registration was committed and pushed at `31d62d4` before
-the fixed cohort was evaluated. Commit `7822314` then preserved the
-machine-eligible result before human judgment: the exact three accepted task
-validators passed, the exact plugin-rollover receipt remained stopped on its
-missing native Hook chronology, registered material user orchestration fell
-from 8 to 0, and two accepted native-compaction crossings recovered without
-user reconstruction. yiheng8023 subsequently accepted the unchanged
-candidate.5 methodology and minimum profile, mixed pass-and-stop calibration,
-applicability limits, and bounded O4 claim. This calibrates only Codex CLI
-0.147.0 on Windows for the registered scenario classes and date. It does not
-accept O5, installed Hook value, general context management, release, or
-production.
-
-## Strategic invalidation audit
-
-The demand-driven control-plane reset also changes how predecessor assets may
-be reused. The following categories at pre-reset revision `c5386672` are
-superseded as current architecture and must not be restored wholesale:
-
-- the fixed `registry/capabilities.json` inventory, curated-skill ownership
-  map, portfolio-wide coverage machinery, and catalog-shaped planning;
-- repository-owned general-purpose Skills and the self-authored three-role
-  chain when treated as mandatory product structure rather than replaceable
-  host projections;
-- CC Switch, Codex app-server, Hook, and manager-specific probes when treated
-  as portable product proof rather than host observations;
-- process-fidelity stage envelopes, lifecycle ledgers, authority receipts,
-  scorecards, and green fixtures when treated as outcome or standard proof;
-- software-engineering-only lifecycle coverage when treated as the universal
-  human-Agent collaboration boundary;
-- predecessor program, acceptance, verifier, scheduler, and queued work as
-  current authority.
-
-Historical incidents, user corrections, source-pinned capability reviews,
-security and provenance failures, recovery cases, evaluation dimensions, and
-scenario ideas remain useful counterevidence or candidate test material. Reuse
-is by the smallest source-bound fragment after a current gap is shown; the old
-package, workflow, membership, pass state, and authority do not travel with the
-fragment.
-
-The 2026-08-13 external landscape checkpoint further invalidates building a
-generic protocol, registry, gateway, tool-search surface, universal runtime,
-authentication broker, governance kernel, or benchmark suite as the Harness's
-distinct product. Existing implementations are replaceable substrate. Only an
-evidenced residual semantic or integration gap can justify new Harness code.
-The fixed-source follow-up additionally invalidates a generic human-tool schema,
-collaboration wire, audit log, or decision-provenance format as product novelty.
-
-## Stopped v1.0 successor cohort
-
-The single permitted v1.0 successor generation was stopped before any O1-O5
-task registration or result. During a mechanism-hardening slice, the Agent
-tightened the code-owned Scheduled Task validator before replacing the already
-installed expiry task. The next canonical verification therefore classified
-the old battery-blocked task definition as a deterministic validation failure
-and executed the user's previously authorized failure disposition: it deleted
-the exact successor protected credential and removed the exact one-time task.
-
-The deleted cohort key was not recoverable from the bounded private task logs.
-Recreating it under the same generation would fabricate continuity, while the
-frozen v1.0 contract permits no second successor. The binding is therefore
-revoked, the current v1.0 program is stopped, and its zero-outcome failure is
-retained as counterevidence. The failure does not alter v0.2's bounded accepted
-milestone and contributes zero O1-O5 progress.
-
-## v1.1 environment-attribution authority
-
-The v1.0 stop exposed a broader causal defect: the proof route had treated one
-maintainer's Codex configuration, global instructions, CC Switch-linked Skills,
-installed plugins, Apps, MCP servers, memory, account/model route, and host
-version as ambient conditions rather than explicit evaluation variables. That
-would make a later green cohort unable to distinguish Harness value from user
-presets and unable to generalize to a user who starts elsewhere.
-
-v1.1 therefore starts at zero with no active increment and an unfrozen profile
-binding. Its acceptance authority separates `observed-native-minimum` from
-`user-configured` and matches each comparison on the pre-task manifest plus
-initial authority-and-available-source envelope. Exact Harness activation is
-the only planned initial route/configuration difference; the starting state is
-not a capability ceiling. Later Agent-selected or human-authorized changes are
-attributed lifecycle deltas, all human actions remain visible in burden, and an
-unavoidable human-only step is distinguished from prohibited transfer of
-Agent-owned work. Current suitable sources are resolved per decision and bound
-to exact execution identities rather than one permanently locked version or an
-unresolved moving target. Unavoidable task differences remain explicit and the
-claim observational; same-host treatment replay merely for measurement remains
-forbidden, and unobservable state remains unknown rather than absent. The stopped v1.0 program and
-acceptance bytes are pinned at revision `910ac01`; no v1.0 profile, cohort,
-authorization, registration, ordering state, result or outcome transfers.
-Protected backup, authentication reuse, user-environment reset/restoration, new
-OS identity and Harness installation remain future exact human gates, not
-implicit effects of this authority migration.
-
-The same migration removes the callable v1.0 private-evidence expiry entrypoint
-and permanently disables its credential and Scheduled Task deletion helpers in
-the v1.1 module. Historical cleanup behavior is retained only by the exact
-`910ac01` revision pin; it is not a current consumer capability.
+A finite v1.2 release will close only its declared deterministic and
+representative claims. Later field, cross-host and longitudinal evidence may
+add a counterexample, narrow a claim, simplify or retire a projection, or open
+one new bounded increment. It does not reopen settled historical proof or
+justify permanent accretion by default.

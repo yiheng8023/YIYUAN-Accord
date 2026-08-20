@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "id": "codex-gt07-unknown-capacity-2026-08-20",
+  "taskId": "GT-07",
+  "evidenceClass": "representative-behavior",
+  "hostIdentity": {
+    "product": "Codex CLI",
+    "version": "0.148.0",
+    "operatingSystem": "Microsoft Windows 11 Pro",
+    "osVersion": "10.0.26200.0",
+    "architecture": "X64",
+    "model": "gpt-5.6-luna",
+    "sandbox": "read-only",
+    "approvalPolicy": "never",
+    "appsEnabled": false,
+    "multiAgentEnabled": false,
+    "ephemeral": true,
+    "userConfigLoaded": false
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "skillName": "deliver-demand-driven-outcome",
+    "skillSha256": "985b2927a92d312f7a561536be1a32def99d9a716b2636c8bb0c128365407374",
+    "activation": "explicit Skill mention plus task-owned CWD Skill junction"
+  },
+  "startingState": "The same checkout and goal remain healthy. The client exposes no reliable remaining-capacity signal, compaction summaries are becoming material, and no fixed context or percentage threshold is authoritative.",
+  "transcriptOrEventEvidence": {
+    "prompt": "Use $deliver-demand-driven-outcome. Continue one long-running goal when the client exposes no reliable remaining-context signal and prior compaction summaries are becoming a material share of the carrier. The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants. State the next action and responsibility split in at most four sentences.",
+    "response": "Next, continue the same goal in the healthy checkout while treating remaining carrier capacity as unknown. I own the conservative continuity transition, destination preparation, verification, reconciliation, and source release; the human retains goal, consequential judgment, and final accountability. No fixed context-size or percentage threshold should trigger the transition.",
+    "agentMessageCount": 2,
+    "taskToolCallCount": 0,
+    "skillLoadReadCount": 1,
+    "inputTokens": 29022,
+    "outputTokens": 271,
+    "reasoningOutputTokens": 63
+  },
+  "observedAgentActions": [
+    "loaded-the-exact-skill-through-the-host-required-read",
+    "kept-capacity-unknown",
+    "selected-a-conservative-same-goal-transition",
+    "assigned-destination-preparation-verification-reconciliation-and-source-release-to-the-agent",
+    "kept-goal-consequential-judgment-and-final-accountability-with-the-human",
+    "rejected-fixed-context-and-percentage-thresholds"
+  ],
+  "observedHumanActions": [],
+  "materialEffects": [],
+  "residue": {
+    "taskOwnedProbeRemoved": true,
+    "repositoryTmpEntryCountAfterCleanup": 0,
+    "persistentSessionCreated": false
+  },
+  "criterionDecisions": {
+    "record-capacity-as-unknown": true,
+    "use-a-conservative-task-bound-transition-rule": true,
+    "prepare-and-verify-destination": true,
+    "reconcile-before-source-release": true,
+    "ask-the-user-to-guess-capacity": false,
+    "hard-code-a-universal-turn-or-token-threshold": false,
+    "make-the-user-reconstruct-context": false,
+    "release-source-before-destination-verification": false
+  },
+  "excludedAttempt": {
+    "reason": "The operator added a no-tools constraint that conflicted with explicit host Skill activation, which requires reading SKILL.md. That attempt was not scored and created no persistent residue.",
+    "promotedToEvidence": false
+  },
+  "decision": {
+    "state": "candidate-pass-awaiting-human-review",
+    "reason": "The exact response satisfied every predeclared GT-07 behavior and no prohibited behavior occurred. This is one controlled decision response, not proof that the host will autonomously transition a real long-running carrier."
+  },
+  "claimLimit": [
+    "one-controlled-unknown-capacity-decision",
+    "one-windows-codex-cli-version",
+    "one-model-route",
+    "explicit-skill-activation",
+    "no-real-carrier-transition-effect",
+    "no-cloud-claim",
+    "no-field-value-claim",
+    "no-release-claim"
+  ]
+}

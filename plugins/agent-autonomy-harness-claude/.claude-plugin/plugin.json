@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "agent-autonomy-harness-claude",
+  "version": "1.2.0-rc.1",
+  "description": "Thin Claude Code Skill projection for the Agent Autonomy Harness portable collaboration contract.",
+  "author": {
+    "name": "Agent Autonomy Harness contributors"
+  },
+  "homepage": "https://github.com/yiheng8023/agent-autonomy-harness",
+  "repository": "https://github.com/yiheng8023/agent-autonomy-harness",
+  "license": "Apache-2.0",
+  "keywords": ["agent-autonomy", "human-ai-collaboration", "non-interference"],
+  "skills": "./skills/"
+}

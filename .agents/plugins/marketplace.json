@@ -8,7 +8,7 @@
       "name": "agent-autonomy-harness-codex",
       "source": {
         "source": "local",
-        "path": "./adapters/agent-autonomy-harness-codex"
+        "path": "./plugins/agent-autonomy-harness-codex"
       },
       "policy": {
         "installation": "AVAILABLE",
