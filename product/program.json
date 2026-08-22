@@ -1,20 +1,34 @@
 {
   "schema": 2,
-  "id": "harness-product-program-v1.2-reshape",
-  "productId": "agent-autonomy-harness",
-  "release": "v1.2",
+  "id": "yiyuan-accord-product-program-v2.0-global-identity",
+  "productId": "yiyuan-accord",
+  "release": "v2.0",
+  "releaseIntent": "Deliver one production-grade, openly reviewable v2.0 candidate under the canonical YIYUAN Accord identity, with fresh behavior evidence and no compatibility alias for the superseded identity.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
+  "maintenancePlan": "CONTRIBUTING.md",
   "status": "ready",
-  "releaseIntent": "Finish one bounded open-source v1.2 release by reducing the product to its portable collaboration kernel, host-admission standard, representative help-and-interference evaluation and two thin reference projections. Release is a maintained baseline for later field learning, not an assertion of universal or final human-AI collaboration effectiveness.",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
       "kind": "project-specific-analysis-and-counterevidence",
-      "repositoryLocator": "research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md",
-      "sourceSha256": "e15d007309afd6e8cf9498c854cb9927244a8aadd3e390338db8d2f42a823a69",
-      "repositorySha256": "4be0b09e6beb30ee019a672edeac07747512edd4ab093a8ed92ca8e5fec87e0e",
+      "repositoryLocator": "research/reviews/2026-08-20-yiyuan-accord-refactor-and-evolution-report.md",
+      "repositorySha256": "eb0259772a2984e465275065308982689ea3d9de1bc43c54488c28cb7a833968",
       "disposition": "admitted-high-weight-non-authoritative-input"
+    },
+    {
+      "id": "positioning-and-lifecycle-framework-2026-08-21",
+      "kind": "user-accepted-positioning-and-evolution-input",
+      "repositoryLocator": "research/reviews/2026-08-21-yiyuan-accord-positioning-and-lifecycle-framework.md",
+      "repositorySha256": "bb86775732e333b667895f562b8e2b4c7d20d26e1336beeab358f08f1aa545f3",
+      "disposition": "admitted-domain-and-lifecycle-input-not-self-authorizing-evidence"
+    },
+    {
+      "id": "refactor-report-adoption-record-2026-08-20",
+      "kind": "bounded-adoption-decision-record",
+      "repositoryLocator": "research/reviews/2026-08-20-yiyuan-accord-refactor-report-adoption-record.md",
+      "repositorySha256": "9b55d1aa0559fcf44591213d178675f818b306ea3844364d7d9d9acd9fd7cfa3",
+      "disposition": "admitted-decision-history-not-product-authority"
     },
     {
       "id": "human-ai-collaboration-shortfalls-2026-07",
@@ -26,185 +40,230 @@
       "disposition": "admitted-requirements-and-counterexample-input-not-product-authority"
     },
     {
-      "id": "codex-gt02-ineffective-prompt-repair-2026-08-20",
-      "kind": "project-host-behavior-counterevidence",
-      "repositoryLocator": "evals/observations/2026-08-20-codex-gt02-residue-repeat.json",
-      "repositorySha256": "d537f4b97f179f5f08b469467c710fa0fb5d0fbd0767da050540ace040a42646",
-      "disposition": "admitted-intermediate-projection-counterevidence-not-current-projection-qualification"
+      "id": "v1.2-release-revision",
+      "kind": "historical-release-and-counterevidence-boundary",
+      "revision": "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
+      "disposition": "immutable-history-not-current-projection-evidence"
     }
   ],
-  "activeIncrement": null,
-  "completedIncrement": {
-    "id": "increment.v12-global-reshape-and-release",
-    "state": "completed-local-candidate",
+  "increment": {
+    "id": "increment.v20-global-identity-and-framework-alignment",
+    "state": "completed",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The sound goal-first collaboration proposition accumulated host-specific proof machinery, duplicated prose authority and generation-specific validators. Two months of honest Codex-led trial and correction exposed repair-by-addition, proof-proxy, context and topology burden, stale evidence replay and cleanup failure modes. A clean historical verifier now fails by replaying superseded O1 evidence, demonstrating that the proof path can obstruct the current product. The first GT-02 dirty-repository run then exposed hidden Python cache residue, and the same cleanup failure repeated after one minimal instruction repair; this proves that an observed host failure must narrow host qualification rather than trigger another prompt layer or be misclassified as Harness release failure. Post-reshape adversarial review then reproduced repository-self-authorized release completion, out-of-root absence probes, expanded install or execution surfaces and partial projection-identity replay.",
-    "hypothesis": "A small K1-K5 portable kernel, H1-H10 host-admission standard, L1-L7 learned-failure standard, one data-driven verifier, representative help-and-interference Golden Tasks and thin Codex and Claude projections can preserve the useful lessons, distinguish Harness conformance from host behavior qualification, and cut default complexity enough to produce a finite, reproducible v1.2 release.",
+    "observedProblem": "The public repository display was renamed while the active module, package identifiers, commands, authority files, documentation and observations still carried a superseded technical identity. Staging aliases would preserve ambiguity, and relabeling v1.2 observations would manufacture evidence for a projection they never exercised. The accepted reports also require a clearer product category, explicit human-AI mission versus current human-Agent scope, tighter lifecycle evaluation and a finite path to closeout.",
+    "hypothesis": "One complete breaking identity migration, a single collaboration reliability domain model, thin runtime-free projections, a generic verifier and fresh current-projection Golden Task observations can restore global consistency without adding a compatibility layer or turning the framework into a runtime, governance platform or universal correctness claim.",
     "falsifiers": [
-      "the reshape creates a new runtime, registry, router, ledger, context predictor or generic control plane",
-      "historical O1-O5 validators or evidence remain on the default verification path",
-      "the verifier duplicates product prose or derives success from implementation, tests, receipts, commits or report shape",
-      "the Codex or Claude projection requires a long mandatory profile, fixed host version, universal context threshold, user-operated capability or topology route, or default activation of a separately governed user-level Skill",
-      "a representative task failure is hidden, promoted into a pass, erased by evaluator cleanup, or left without an exact host claim limit and residue disposition",
-      "a material shortfall invariant or two-month counterexample disappears rather than becoming a compact rule, test or explicit claim limit",
-      "tracked active code, product-test and primary-instruction complexity does not materially fall from the pre-reshape baseline",
-      "release or field-effect is claimed before its exact evidence and named-human authority",
-      "repository data grants human authority, an absence locator escapes the repository, or a Skill-only package admits an undeclared install, runtime or execution surface"
+      "any superseded product name, slug, module, command, package path, repository URL or compatibility alias remains in the active tree",
+      "historical observations are edited or relabeled as current v2.0 evidence",
+      "plan, ordered work, acceptance criteria and goal prompt no longer map the same eight criteria",
+      "the broader human-AI mission is presented as already verified by the current human-Agent product surface",
+      "the rename adds a runtime, Hook, MCP, App, mandatory user-level Skill or undeclared installation authority",
+      "the generic verifier accepts an incomplete identity, stale projection evidence or repository self-authorization",
+      "a required host package no longer satisfies its native manifest shape",
+      "local, GitHub and public release metadata disagree after the candidate is pushed",
+      "an unresolved P0 or P1 finding remains when exact local review completes"
     ],
-    "finiteStopCondition": "The three authority files validate; the old proof generations leave the active tree; one generic verifier and both thin host projections map the same K, H, L, R and Q contract; the finite representative sample records help, interference, pass and failure without stale projection replay; every failure narrows the exact host claim; all eight repository criteria have direct bounded evidence; evaluator-owned residue is absent; and the repository is a clean local release candidate. Exact-candidate hosted verification, named-human authority, exact tagged public release, live release verification and goal-carrier cleanup remain ordered external gates rather than self-reported increment results.",
+    "finiteStopCondition": "Stop this increment when one locally committed clean candidate has the canonical v2.0 identity and domain model aligned across the active tree, the live verifier computes every deterministic lane, every required current-projection Golden Task has substantive fresh evidence without hidden failure, all eight repository criteria are satisfied and no known validation defect or task residue remains. Exact local verification and independent review, push, hosted verification, named-human authorization, publication and post-release cleanup follow only through the ordered task-time gates.",
     "workItems": [
       {
-        "id": "work.v12-authority-interface-and-release-candidate",
-        "state": "completed-local-candidate",
+        "id": "work.v20-global-identity-and-framework-alignment",
+        "state": "completed",
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-        "deliverables": [
-          "three concise semantic authority files",
-          "one generic verifier and instant host-admission command",
-          "two thin progressively disclosed host projections",
-          "representative help-and-interference Golden Tasks",
-          "project-audit custody and shared-research revision reference",
-          "small public documentation and release-candidate evidence"
-        ],
         "closeoutSequence": [
           {
-            "id": "review-bounded-evidence",
+            "id": "canonical-identity-authority-and-projections",
             "state": "completed",
-            "acceptanceIds": ["R2", "R3"],
-            "stopCondition": "The accountable project human accepts the static-admission-only R2 evidence, the bounded GT-01 and GT-07 passes, and the retained GT-02 failure without expanding any claim."
+            "acceptanceIds": ["R1", "R2", "Q2", "Q3", "Q4"],
+            "stopCondition": "[canonical-identity-authority-and-projections] Every active local identity, authority, module, projection, command, document and test uses the canonical v2.0 terms; incompatible old observations are absent from the active tree and no alias remains."
           },
           {
-            "id": "prepare-repository-candidate",
+            "id": "static-conformance-and-adversarial-regressions",
             "state": "completed",
-            "acceptanceIds": ["R1", "R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "All repository criteria have direct bounded evidence; the canonical verifier, product tests, both host checks, complexity, privacy and residue checks pass locally; the release path has been exercised on a prior exact pushed revision; and the final exact-HEAD hosted, human, publication and postcondition gates remain external."
+            "acceptanceIds": ["R1", "R2", "R4", "Q2", "Q3", "Q4"],
+            "stopCondition": "[static-conformance-and-adversarial-regressions] The generic verifier computes deterministic conformance directly; complete projection-package checks, release-surface bindings, full regression tests and residue checks pass without a known validation defect. No repository observation may self-attest these results."
+          },
+          {
+            "id": "fresh-representative-behavior",
+            "state": "completed",
+            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[fresh-representative-behavior] Each required Golden Task has one fresh current-projection observation with independent source evidence, predeclared behavior decisions, human-burden metrics, material effects, cleanup disposition and an explicit claim limit; designated authority, evidence, no-op and subtraction guardrails pass, while any admissible failure remains failed and its exact exclusions are aggregated into the public claim ceiling."
+          },
+          {
+            "id": "repository-candidate-freeze",
+            "state": "completed",
+            "acceptanceIds": ["R4", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[repository-candidate-freeze] All eight repository criteria are satisfied on one clean tree, the release body is time-neutral and reproducible, no known blocker or task residue remains, the increment and work item are retained as completed, and the exact candidate is committed locally for the task-time verification-and-review gate."
           }
-        ],
-        "stopCondition": "A clean checkout reproduces all required deterministic checks, the finite representative sample and all pass/failure decisions are independently reviewable, failed host behaviors are excluded from the release claim, complexity targets pass, evaluator-owned residue is absent and only the ordered external release procedure remains."
+        ]
       }
     ]
   },
   "releaseProcedure": {
+    "candidateVerificationSystems": {
+      "github-actions-ubuntu-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
+      "github-actions-windows-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
+      "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
+      "codex-cloud": "https://chatgpt.com/codex/"
+    },
+    "assetPolicy": "no-attached-assets",
+    "surfaceMarkers": {
+      "README.md": [
+        "git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
+        "restart the desktop app",
+        "Start a new task",
+        "python -B -m yiyuan_accord verify --root . --json",
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude"
+      ],
+      "README.zh-CN.md": [
+        "git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
+        "重启桌面端",
+        "新建任务",
+        "python -B -m yiyuan_accord verify --root . --json",
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude"
+      ],
+      "CONTRIBUTING.md": [
+        "Codex and Claude Code as current reference hosts, not permanent product",
+        "official version, maturity label",
+        "retirement trigger",
+        "exact local verification"
+      ]
+    },
     "orderedGates": [
       {
         "id": "repository-candidate",
         "dependsOn": [],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": null,
-        "condition": "A single clean local candidate contains the aligned constitution, program, acceptance, goal prompt, evidence and derived documentation; all eight repository criteria are directly evidenced; canonical, host, product, complexity, privacy and residue checks pass; and push authority is already granted."
+        "condition": "One locally committed clean candidate aligns the canonical identity, domain model, authority, verifier, reference projections, documentation, tests and fresh representative evidence; all eight repository criteria are satisfied and no known blocker or task residue remains."
+      },
+      {
+        "id": "exact-local-verification-and-review",
+        "dependsOn": ["repository-candidate"],
+        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "completionOperand": "exactLocalVerificationAndReview",
+        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, diff, identity, link, workflow and residue checks plus independent specification and standards-security review; any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
-        "dependsOn": ["repository-candidate"],
+        "dependsOn": ["exact-local-verification-and-review"],
         "acceptanceIds": ["R4", "Q2", "Q3"],
         "completionOperand": "exactCandidateHostedVerification",
-        "condition": "After the candidate is pushed, the active goal carrier must directly verify the unchanged clean HEAD on GitHub Actions for Linux, Windows and macOS plus ordinary Codex Cloud; limitations remain explicit and no repository write or caller-supplied receipt may chase its own evidence."
+        "condition": "After push, the active goal carrier directly verifies the unchanged clean HEAD on GitHub Actions for Linux, Windows and macOS plus ordinary Codex Cloud; repository self-report and earlier revisions are insufficient."
       },
       {
         "id": "exact-human-release-authorization",
         "dependsOn": ["exact-candidate-hosted-verification"],
         "acceptanceIds": ["R4", "Q1"],
         "completionOperand": "namedHumanReleaseAuthorization",
-        "condition": "Only after exact hosted verification, present the unchanged SHA, claim ceiling, retained GT-02 failure and continuing evidence lanes to a named accountable human; the task-bound human decision must explicitly authorize publication and release while preserving a real veto and must not be written into the candidate."
+        "condition": "Only after exact hosted verification, present the unchanged SHA, complete claim ceiling, retained failures and continuing evidence lanes to a named accountable human; the decision must preserve a real veto and is not written into the candidate."
       },
       {
         "id": "exact-tagged-public-release",
         "dependsOn": ["exact-human-release-authorization"],
         "acceptanceIds": ["R4"],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "Create the lightweight v1.2 tag and public release only after the goal carrier has directly verified the hosted gate and the later named-human decision for the unchanged candidate; do not mutate the authorized candidate, move the tag or add attached assets."
+        "condition": "Create the lightweight v2.0 tag and public release only after hosted verification and exact named-human authorization for the unchanged candidate; do not move the tag or attach assets."
       },
       {
         "id": "release-verification-and-cleanup",
         "dependsOn": ["exact-tagged-public-release"],
         "acceptanceIds": ["R4", "Q4"],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The active goal carrier directly verifies the live GitHub release, remote and local tag, exact tracked release notes and zero-attached-asset policy against the authorized candidate; it then removes task-created temporary resources, confirms repository and evaluator residue are absent, replays local validation and only then closes the finite goal."
+        "condition": "The active goal carrier directly verifies the public release, remote and local tag, exact tracked release notes and zero-asset policy; it then removes task-created resources, confirms repository and evaluator residue are absent, and replays local validation."
       }
     ],
-    "rule": "Execute gates strictly in listed dependency order. A gate may not begin until its predecessor is verified; failure returns to the smallest affected earlier gate, and no plan, test, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "Execute gates strictly in listed order. Failure returns to the smallest affected prior gate; no report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，以已确认的 R2、GT-01、GT-07 判断和保留失败的 GT-02 为证据边界，将 Agent Autonomy Harness v1.2 收敛为 K1-K5 可移植协作内核、H1-H10 宿主准入标准、L1-L7 试错经验标准、Codex/Claude 薄投影及可复现的帮助与干扰评估；持续对齐并校准计划、严格工序、R1-R4/Q1-Q4 验收、目标提示词、证据、资源和载体状态，最小纠偏并控制过程损失。独立治理的用户级自研 Skill 不属于发行依赖：没有已复现残余缺口时保持未投影，发生投影时只要求共享 K/H/L 语义与生命周期边界，允许宿主要求的名称、清单和元数据差异。按且仅按以下顺序推进：形成单一干净仓库候选；推送后由当前目标任务直接复验同一精确 SHA 的 GitHub Linux/Windows/macOS 与普通 Codex Cloud，不接受仓库自报或调用方票据；再暂停请求具名人类对该 SHA、主张上限、公开与发布作最终决定且不写回候选；授权后创建绑定该 SHA 的轻量 v1.2 tag 和公开 release；最后由当前目标任务直接复验 GitHub 公开 release、远端与本地 tag、精确发布说明和零附加资产策略，清理任务资源并重放本地验证。不得把报告、计划、代码、测试、提交、推送、转场、局部通过、自填证据、托管绿灯或授权本身称为收官；仓库 verifier 只判契约一致性，不判仓库外门；真实场域、跨宿主和长期效果保持为发布后持续证据通道。任何前置门失败都退回最小受影响步骤；只有遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界才暂停并提出最小接管步骤，验证完成后继续，直至有限 v1.2 真实收官。",
-    "releaseGateIds": [
-      "repository-candidate",
-      "exact-candidate-hosted-verification",
-      "exact-human-release-authorization",
-      "exact-tagged-public-release",
-      "release-verification-and-cleanup"
-    ],
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，将 YIYUAN Accord v2.0 收敛为开放、Agent 中立、可移植的人机协作可靠性契约与评估框架；广义使命面向人类与 AI 协作，当前可验证产品面严格限定为人类与 Agent 协作。持续保持计划、严格工序、R1-R4/Q1-Q4 验收、目标提示词、证据、资源、宿主投影与公开元数据逐项映射；以意图、能力、权限、证据为初始诊断维度，以状态、影响、连续性、生命周期贯穿校准，并区分责任、权限与最终问责。按且仅按以下顺序推进四个工作阶段：canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze。任何允许保留的行为失败都必须聚合进公开主张边界。候选之后严格执行 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。完成无兼容别名的迁移后，由通用验证器现场计算确定性合规；取得当前精确投影的新 Golden Task 行为证据；在不变 SHA 上通过完整本地验证和独立规格、标准安全双轴反审后才推送；再复验 GitHub Linux/Windows/macOS 与普通 Codex Cloud；随后暂停请求具名人类最终决定；授权后创建轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。独立治理的用户级 Skill 不属于发行依赖，除非出现已复现残余缺口并获得单独生命周期授权。不得把报告、计划、代码、测试、提交、推送、转场、局部通过、自填证据、托管绿灯或授权本身称为收官；真实场域、跨宿主、组织与长期效果保持为持续证据通道。任何前置门失败都退回最小受影响步骤；只有遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界才暂停并提出最小接管步骤，完成后继续，直至有限 v2.0 真实收官。",
+    "workStageIds": ["canonical-identity-authority-and-projections", "static-conformance-and-adversarial-regressions", "fresh-representative-behavior", "repository-candidate-freeze"],
+    "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "refreshTriggers": [
-      "user-correction",
-      "observed-failure-or-side-effect",
-      "host-or-capability-drift",
-      "evidence-conflict",
-      "phase-or-authority-boundary",
-      "repeated-same-purpose-repair"
-    ],
-    "hostLifecycleNote": "The accountable user explicitly resumed this exact no-budget objective in the current host task on 2026-08-20 and authorized all in-scope global consistency updates and pushes. The repository program is ready only for the ordered external gates; the host goal remains active until the current goal carrier directly verifies exact hosted execution, named-human authorization, exact tagged public release, public claims and cleanup. The repository verifier never decides those facts, and this lifecycle state proves no release or field outcome."
+    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
+    "hostLifecycleNote": "The accountable user explicitly authorized the complete canonical-identity migration, global consistency updates and push on 2026-08-21. The host goal remains active through the ordered external gates. Repository validity proves no hosted, human, publication, field or completion outcome."
   },
   "hostProjections": [
     {
       "id": "codex",
-      "manifest": "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json",
+      "packageId": "yiyuan-accord-codex",
+      "packageVersion": "2.0.0",
+      "packageSha256": "f826c8bce024bf39c577a8ccdd2c4453951bb3a84397b1075ee2c82f667b3000",
+      "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
-      "contract": "plugins/agent-autonomy-harness-codex/adapter.json",
-      "skill": "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-      "metadataFiles": [
-        "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"
-      ],
+      "contract": "plugins/yiyuan-accord-codex/adapter.json",
+      "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "metadataFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"],
+      "interfaceDefaultPrompt": ["Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."],
       "maxSkillBytes": 6000,
       "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
-      "forbiddenPaths": [
-        "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/references"
-      ]
+      "forbiddenPaths": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references"]
     },
     {
       "id": "claude-code",
-      "manifest": "plugins/agent-autonomy-harness-claude/.claude-plugin/plugin.json",
-      "contract": "plugins/agent-autonomy-harness-claude/adapter.json",
-      "skill": "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md",
+      "packageId": "yiyuan-accord-claude",
+      "packageVersion": "2.0.0",
+      "packageSha256": "7377e5871a0cf5a0c7800cd8cd3ba9a52bc2cb66abba2d7eb3f972093b7e3ae8",
+      "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+      "contract": "plugins/yiyuan-accord-claude/adapter.json",
+      "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
       "metadataFiles": [],
       "maxSkillBytes": 6000,
       "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
-      "forbiddenPaths": [
-        "plugins/agent-autonomy-harness-claude/hooks",
-        "plugins/agent-autonomy-harness-claude/scripts",
-        "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/references"
-      ]
+      "forbiddenPaths": ["plugins/yiyuan-accord-claude/hooks", "plugins/yiyuan-accord-claude/scripts", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/references"]
     }
   ],
   "complexityBudget": {
     "baselineRevision": "534a77aae9e1d191173e6e05b4327c80d22855d8",
     "baseline": {
       "trackedFiles": 96,
-      "harnessBytes": 867179,
+      "productCodeBytes": 867179,
       "productTestBytes": 684030,
-      "harnessAndProductTestBytes": 1551209,
+      "productCodeAndTestBytes": 1551209,
       "controlBytes": 347344,
       "primaryInstructionBytes": 18940
     },
     "targets": {
       "maxTrackedFiles": 55,
-      "maxHarnessAndProductTestBytes": 120000,
+      "maxProductCodeAndTestBytes": 120000,
       "maxControlBytes": 45000,
       "maxPrimaryInstructionBytes": 26000
     },
     "primaryInstructionPaths": [
       "AGENTS.md",
-      "plugins/agent-autonomy-harness-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-      "plugins/agent-autonomy-harness-claude/skills/deliver-demand-driven-task/SKILL.md"
+      "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+      "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
+      "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md"
     ],
+    "requiredTestMarkers": [
+      "class ProductControlTests",
+      "def test_authority_and_static_suite_mutations_fail_closed",
+      "def test_complexity_identity_and_paths_fail_closed",
+      "def test_current_contract_is_valid_and_explicitly_incomplete",
+      "def test_evidence_cannot_self_verify_or_self_authorize",
+      "def test_external_release_contract_is_exact_and_external",
+      "def test_failed_sample_narrows_claim",
+      "def test_plan_process_acceptance_and_release_order_stay_aligned",
+      "def test_projection_evidence_rejects_drift_and_relocation",
+      "def test_projection_package_and_admission_are_fail_closed",
+      "def test_representative_sample_binds_projection_source_and_task",
+      "def test_retired_residue_and_duplicate_json_fail_closed"
+    ],
+    "requiredTestCount": 11,
     "forbiddenActivePaths": [
-      "harness/task_validator_o1_lifecycle_suite.py",
-      "harness/task_validator_o2_codex_reference.py",
-      "harness/task_validator_o2_codex_reference_permission_profile.py",
-      "harness/task_validator_o4_continuous_self_correction.py",
-      "harness/task_validator_o4_continuous_self_correction_v2.py",
-      "harness/task_validator_o4_continuous_self_correction_v3.py",
-      "harness/task_capture_o2_codex_reference.py",
+      "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
+      "yiyuan_accord/task_validator_o2_codex_reference.py",
+      "yiyuan_accord/task_validator_o2_codex_reference_permission_profile.py",
+      "yiyuan_accord/task_validator_o4_continuous_self_correction.py",
+      "yiyuan_accord/task_validator_o4_continuous_self_correction_v2.py",
+      "yiyuan_accord/task_validator_o4_continuous_self_correction_v3.py",
+      "yiyuan_accord/task_capture_o2_codex_reference.py",
       "product/evidence",
       "product/authorizations",
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",

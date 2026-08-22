@@ -31,11 +31,10 @@ jobs:
         with:
           python-version: "3.10"
       - name: Verify current product contract
-        run: python -B -m harness verify --root . --json
-      - name: Verify thin host projections
-        shell: pwsh
-        run: |
-          python -B -m harness host-check --adapter codex --root . --json
-          python -B -m harness host-check --adapter claude-code --root . --json
+        run: python -B -m yiyuan_accord verify --root . --json
+      - name: Verify Codex projection
+        run: python -B -m yiyuan_accord host-check --adapter codex --root . --json
+      - name: Verify Claude Code projection
+        run: python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
       - name: Test current product seam
-        run: python -B -m unittest discover -s tests/product -v
+        run: python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['requiredTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun==e and not r.skipped and not r.expectedFailures))"

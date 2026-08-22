@@ -1,14 +1,14 @@
 {
-  "name": "agent-autonomy-harness",
+  "name": "yiyuan-accord",
   "interface": {
-    "displayName": "Agent Autonomy Harness"
+    "displayName": "YIYUAN Accord"
   },
   "plugins": [
     {
-      "name": "agent-autonomy-harness-codex",
+      "name": "yiyuan-accord-codex",
       "source": {
         "source": "local",
-        "path": "./plugins/agent-autonomy-harness-codex"
+        "path": "./plugins/yiyuan-accord-codex"
       },
       "policy": {
         "installation": "AVAILABLE",

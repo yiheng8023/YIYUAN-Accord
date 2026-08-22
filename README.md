@@ -1,141 +1,125 @@
-# Agent Autonomy Harness
+# YIYUAN Accord
+
+YIYUAN Accord is an open, Agent-neutral collaboration reliability contract and
+evaluation framework. It helps an Agent start from the user's real goal, choose
+the minimum sufficient route, preserve human authority, correct from observed
+effects, and finish with honest verification and cleanup.
+
+The broader mission is human-AI collaboration. The current product surface and
+evidence are deliberately limited to human-Agent collaboration.
 
 [简体中文](README.zh-CN.md)
 
-Agent Autonomy Harness is an open, Agent-neutral quality safety net for
-human-Agent collaboration. It starts from the outcome the user actually wants,
-fills only a demonstrated gap in native host behavior, and keeps human
-authority, continuous correction, consequence-level verification, recovery
-and cleanup in one loop.
+## Start here
 
-It is not a universal Agent runtime, capability marketplace, model router,
-identity or audit system, or context predictor. A release does not claim to
-solve every human-AI collaboration problem.
+Clone the repository and run the product verifier with Python 3.10 or later.
+After v2.0 is published, reproduce that release from its immutable tag:
 
-## Why the project was reshaped
+```powershell
+git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
+```
 
-Roughly two months of real Codex-led trial and correction exposed systematic
-failure modes in long-running Agent work: repair-by-addition, proof proxies,
-historical evidence controlling the current product, topology and context
-burden returning to the user, and local milestones being mistaken for
-completion. v1.2 preserves those failures as portable standards and Golden
-Tasks while removing generation-specific validators from the default path.
-Exact history remains recoverable through Git.
+From the selected checkout, run:
 
-The project-specific audit is preserved as the
-[2026-08-20 refactor and evolution report](research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md).
-The shared collaboration-shortfall research keeps unique custody in the
-[fixed YIYUAN-CALIBRATION revision](https://github.com/yiheng8023/YIYUAN-CALIBRATION/tree/e060a08f05361cb4cc9a67be050236cdbbde1de5/common/human-ai-collaboration-shortfalls);
-this repository references and admits its findings without copying the corpus.
+```powershell
+python -B -m yiyuan_accord verify --root . --json
+```
 
-## Portable kernel
+Check either reference projection statically:
 
-| ID | Commitment |
-| --- | --- |
-| K1 | Goal First: keep one current, traceable goal and phase |
-| K2 | Minimum Sufficient Route: native first and no-op when sufficient |
-| K3 | Human Authority: preserve real judgment, authorization and veto |
-| K4 | Continuous Reconciliation: compare intent, facts, effects and resources |
-| K5 | Close the Loop: verify to the claim, recover, clean up and limit claims |
+```powershell
+python -B -m yiyuan_accord host-check --adapter codex --root . --json
+python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
+```
 
-Two compact layers make the trial history immediately testable:
+These commands validate repository and package conformance. They do not install
+a plugin, enable a Skill, prove host behavior, or authorize a release.
 
-- H1–H10 host-admission standards cover conditional use of official guidance,
-  capability over version, effective over declared behavior, first-class
-  unknowns, drift, consequential verification, no user compensation, host/core
-  separation and retirement.
-- L1–L7 learned-failure standards cover outcome over process, subtraction before
-  repeated repair, total complexity cost, progressive assurance, help and
-  interference, threshold-neutral continuity and counterevidence without
-  inherited proof.
+## Use it in an Agent host
 
-## Current surface
+Cloning is not plugin installation. Codex may read this checkout's `AGENTS.md`
+as project guidance; that does not mean the YIYUAN Accord plugin is installed.
 
-- Three semantic authorities:
-  [constitution](product/constitution.json),
-  [program](product/program.json), and
-  [acceptance](product/acceptance.json)
-- One generic data-driven command, `python -B -m harness verify`, implemented by
-  [control.py](harness/control.py) and the pure admission checks in
-  [guardrails.py](harness/guardrails.py)
-- Two runtime-free, Hook-free thin Skill projections:
-  [Codex](plugins/agent-autonomy-harness-codex) and
-  [Claude Code](plugins/agent-autonomy-harness-claude)
-- Representative [Golden Tasks](evals/golden-tasks.json) that measure both help
-  and interference
+### Codex
 
-These two release projections are not copies of separately governed personal
-or user-level governance Skills, and they do not require those Skills to be
-installed or enabled. Consumer packages share the K/H/L semantics and lifecycle
-boundary; host-required names, manifests and metadata intentionally remain
-different. A user-level Skill stays unprojected unless a reproduced residual
-gap and separate lifecycle authority justify it.
+1. Open this repository in the ChatGPT desktop app or Codex CLI. After cloning
+   or changing the local marketplace, restart the desktop app so it reloads
+   the catalog.
+2. Open **Plugins** (or run `/plugins` in the CLI), refresh the repository's
+   local marketplace, and install `yiyuan-accord-codex`. If local discovery is
+   unavailable in the CLI, a published v2.0 can be added without following
+   future `main` changes: `codex plugin marketplace add
+   yiheng8023/YIYUAN-Accord --ref v2.0`, then `codex plugin add
+   yiyuan-accord-codex@yiyuan-accord`.
+3. Start a new task. Confirm the installed plugin and its
+   `deliver-demand-driven-outcome` Skill appear before relying on them. Select
+   the Skill explicitly when you want a deterministic activation check.
+4. Run the Codex `host-check`, then run fresh Golden Tasks before claiming
+   effective behavior.
 
-~~~powershell
-python -B -m harness verify --root . --json
-python -B -m harness host-check --adapter codex --root . --json
-python -B -m harness host-check --adapter claude-code --root . --json
-python -B -m unittest discover -s tests/product -v
-~~~
+The local catalog is
+[`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json); the
+package is [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex).
+OpenAI's current documentation requires explicit installation and a host
+reload/new task: [package a plugin](https://developers.openai.com/plugins/build/plugins)
+and [use plugins](https://learn.chatgpt.com/docs/plugins).
 
-host-check proves static projection admission only. It deliberately does not
-turn Skill visibility, installation state or valid JSON into host-behavior
-evidence. Exact-host Golden Task observations are required for that claim.
+### Claude Code
 
-The first Codex GT-02 run made the distinction concrete: the Agent produced the
-right bounded repository fix and preserved unrelated dirty state, but left two
-undisclosed Python cache files. The exact task and Codex cleanup behavior remain
-failed, including after one repeated same-purpose prompt repair. The Harness
-passes only the narrower test of detecting, retaining and claim-limiting that
-failure; evaluator cleanup cannot convert it into a host pass.
+From the repository root, load the package for one local session:
 
-## Status and completion boundary
+```powershell
+claude --plugin-dir ./plugins/yiyuan-accord-claude
+```
 
-The global subtractive reshape defines a repository-ready v1.2 candidate:
-R1–R4 and Q1–Q4 have direct bounded evidence, and readiness additionally
-requires the exact Git checkout to be clean. The no-budget goal-mode objective
-in [product/program.json](product/program.json) remains active through external
-verification, authorization, release and cleanup. A ready repository and an
-active host goal are compatible: neither is release or field-effect evidence.
+Then verify the namespaced Skill is present with
+`/yiyuan-accord-claude:deliver-demand-driven-task`. This direct-load route is
+for local use and testing; it does not create a persistent installation.
+See the [official Claude Code plugin guide](https://code.claude.com/docs/en/plugins).
 
-A release-eligible candidate requires the active goal carrier to directly
-verify the exact clean HEAD on GitHub Actions (Linux, Windows and macOS) plus
-ordinary Codex Cloud, followed by named-human authorization of that same SHA,
-claim ceiling, publication and release. After publication, the carrier reads
-the public GitHub release and tag, checks the exact tracked release notes and
-zero-attached-asset policy, cleans task resources and replays local validation.
-None of these facts is a verifier input or repository state; the verifier
-cannot mint an external gate. Broad field effectiveness, population-level burden
-reduction, all-host equivalence and longitudinal outcomes remain continuing
-post-release evidence lanes. They neither delay the bounded release
-indefinitely nor become fabricated release claims.
+If the host does not explicitly list the package or Skill, it is not enabled.
+The project intentionally has no installer, background runtime, Hook, MCP
+server, App, state store, or automatic user-configuration mutation.
 
-The release procedure is strict and dependency ordered:
+## What the product contains
 
-1. create and locally verify one clean repository candidate;
-2. push it and directly observe every hosted result for the unchanged SHA;
-3. only then ask the named accountable human for the exact release decision;
-4. create the exact lightweight tag and public release without changing the
-   candidate;
-5. directly verify the live public surface, clean task resources and replay
-   local validation.
+- The semantic authority:
+  [`constitution.json`](product/constitution.json),
+  [`program.json`](product/program.json), and
+  [`acceptance.json`](product/acceptance.json)
+- The canonical vocabulary and boundary: [`CONTEXT.md`](CONTEXT.md)
+- One generic, data-driven verifier:
+  [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
+- Replaceable, runtime-free Codex and Claude Code Skill projections
+- Representative help-and-interference tasks:
+  [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
-No later gate starts early. A failure returns to the smallest affected earlier
-gate; a plan, commit, push, hosted pass or authorization is not a later result.
+The portable loop is K1–K5: goal first, minimum sufficient route, human
+authority, continuous reconciliation, and loop closure. Host rules H1–H10 and
+learned-failure rules L1–L7 keep host drift and trial history outside the core.
 
-The v1.2 representative sample is GT-01, GT-02 and GT-07. A failed sample task
-blocks the exact host-behavior qualification, but does not automatically make
-the evaluation product nonconformant when the failure remains failed, its
-residue disposition is explicit, and the release claim excludes that behavior.
+## Evidence and release status
 
-Completion is a maintainable open-source baseline, not the end of learning.
-Later evidence can add a Golden Task, narrow a claim, simplify or retire a
-projection, or open one new bounded increment.
+This checkout describes the v2.0 source line; its external state is determined
+from the exact revision and tag, not a branch name. A valid verifier result
+means the checkout conforms to the finite repository contract, including the
+integrity and criterion mapping of accepted representative observations. It
+does not independently replay host behavior or satisfy exact-candidate local
+review, hosted verification, field value, production safety, publication
+authority or project closeout. The exact criteria and gates are in
+[`product/acceptance.json`](product/acceptance.json); finite claims and retained
+behavior exclusions are in [`docs/releases/v2.0.md`](docs/releases/v2.0.md).
 
-## Contributing
+The previous public tag remains immutable history. Its observations are not
+renamed or reused as evidence for the v2.0 identity and projections.
 
-Describe the goal, problem or observation directly; contributors do not need to
-learn Harness terminology, tools or topology first. Maintainers and their
-Agents own mapping, minimum-route selection, verification and cleanup. See
-[CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and the
-[history boundary](docs/operations/HISTORY.md).
+## Learn more only when needed
+
+- Architecture and trust boundaries: [`docs/architecture.md`](docs/architecture.md)
+- Maintainer continuation: [`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md)
+- Development, maintenance and contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Security boundary and reporting: [`SECURITY.md`](SECURITY.md)
+- Project-specific analysis inputs: [`research/reviews`](research/reviews)
+
+YIYUAN Accord is Apache-2.0 licensed. See [`NOTICE`](NOTICE) and
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).

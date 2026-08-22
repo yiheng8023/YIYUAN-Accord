@@ -1,6 +1,6 @@
 # Code of Conduct
 
-Agent Autonomy Harness is a public, Agent-neutral, demand-driven human-Agent
+YIYUAN Accord is a public, Agent-neutral, demand-driven human-Agent
 collaboration quality research project. Participation should stay evidence-based,
 respectful, and focused on bounded, observable human-Agent collaboration.
 

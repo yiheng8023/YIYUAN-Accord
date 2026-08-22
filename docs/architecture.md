@@ -1,6 +1,6 @@
 # Architecture
 
-Agent Autonomy Harness has one small semantic core and replaceable projections.
+YIYUAN Accord has one small semantic core and replaceable projections.
 
 ~~~text
 latest bound user goal and corrections
@@ -18,7 +18,10 @@ latest bound user goal and corrections
      representative Golden Tasks
                 |
                 v
- exact-HEAD hosted evidence -> named-human authority
+ exact local verification + independent review
+                |
+                v
+ push same SHA -> exact-HEAD hosted evidence -> named-human authority
                 |
                 v
  exact tagged release -> live public check + goal-carrier cleanup
@@ -49,19 +52,22 @@ them.
 
 ## One deep verification seam
 
-`python -B -m harness verify` is the one public verification seam.
-`harness/control.py` evaluates the product data while `harness/guardrails.py`
-contains pure repository and projection-package checks.
+`python -B -m yiyuan_accord verify` is the one public verification seam.
+`yiyuan_accord/control.py` coordinates product-data evaluation;
+`yiyuan_accord/identity.py`, `yiyuan_accord/evidence.py` and
+`yiyuan_accord/guardrails.py` contain focused identity, observation,
+repository and projection-package checks.
 Together they validate:
 
 - the three authority schemas and their cross-file mappings;
-- at most one active increment and one active work item, or no active increment
-  when the exact Git checkout is clean and ready for external gates;
+- at most one active increment and one active work item, with the completed
+  increment and work item retained when a clean candidate enters task-time gates;
 - goal-mode prompt coverage;
 - evidence-lane separation and criterion-specific acceptance;
-- a dependency-ordered release procedure, task-time hosted verification bound
-  to the exact clean candidate, a separate later human authorization, and four
-  external gates that the active goal carrier, not the verifier, must observe;
+- a dependency-ordered release procedure, exact local verification and
+  independent review before push, task-time hosted verification bound to the
+  same candidate, a separate later human authorization, and five completion
+  gates that the active goal carrier, not repository evidence, must observe;
 - Golden Task coverage and its refusal to self-certify behavior;
 - complete projection identities, exact Skill-only package surfaces,
   repository-scoped absence paths and non-expansive marketplace policy;
@@ -69,19 +75,23 @@ Together they validate:
 
 The verifier does not contain copies of the product's purpose, criterion
 statements or pass rules. It validates the contract supplied by the authority
-files. A valid report means only that the repository candidate is internally
-conformant. Hosted results, human authority, publication and cleanup are live
-task facts; the verifier accepts no caller-supplied receipt and never computes
+files. A valid report means only that the authority and projections are
+structurally conformant at their current declared lifecycle state. It is not
+evidence that the tree is a candidate. Candidate readiness additionally
+requires all applicable live-computed and representative criteria, a ready
+program, one retained completed increment and a clean checkout. Exact local
+review, hosted results, human authority, publication and cleanup are task-time
+facts; the verifier accepts no caller-supplied receipt and never computes
 release eligibility or completion.
 
 ## Host admission
 
-Each projection consists of one host-native manifest, one small Harness adapter
-contract and one progressively disclosed Skill. The native manifest contains
-only fields supported by that host; `adapter.json` carries the machine-readable
-K, H and L mapping used by the generic host check. There is no Harness runtime,
-Hook, state store, MCP, App, private capture protocol or fixed host-version
-dependency.
+Each projection consists of one host-native manifest, one small YIYUAN Accord
+adapter contract and one progressively disclosed Skill. The native manifest
+contains only fields supported by that host; `adapter.json` carries the
+machine-readable K, H and L mapping used by the generic host check. There is no
+YIYUAN Accord runtime, Hook, state store, MCP, App, private capture protocol or
+fixed host-version dependency.
 
 The two packages are semantic siblings, not byte-identical copies. Their K/H/L
 mapping and lifecycle boundary must agree; host-required names, manifests and
@@ -102,19 +112,42 @@ capability. Current official host guidance is high-weight task-time evidence,
 not permanent core authority. Host drift causes revalidation, and native
 improvement may retire projection logic.
 
+The host capability view is event-triggered and versioned, not an always-on
+catalog: refresh it before release or after a material host, maturity,
+permission, extension, cloud-route or deprecation change. Each review binds an
+official source/date and exact host version to availability, maturity,
+trust/persistence/effect surface, native equivalence, residual gap, a live probe
+and a retirement trigger. Codex and Claude Code are current reference adapters
+and test hosts; neither defines the portable contract or future host scope.
+
 ## Evaluation
 
 evals/golden-tasks.json contains representative help, no-op, authority,
 correction, proof-proxy, continuity, capability, report-handling and cleanup
 cases. A task declares required and prohibited behaviors before execution.
 Observations record Agent actions, human actions, effects, residue and claim
-limits independently of the model's own verdict.
+limits independently of the model's own verdict. Each release observation
+binds the exact Golden Task digest, the evaluation protocol and burden metric
+digest, the current projection identity, a typed host/session identity and a
+complete controlled transcript or host-event record held in a separate source
+bundle. Independence is established by the source record and direct task-time
+observation, not by a boolean written into the observation.
+
+The repository verifier recomputes these digests and rejects stale or partial
+bindings. It does not authenticate a real-world observer or prove that a host
+event happened; that would turn this project into the identity/audit system it
+explicitly excludes. The active goal carrier must directly observe collection,
+and release evidence must come from disposable controlled tasks whose complete
+record is safe to publish. Private memory, account state and unsanitized host
+transcripts are not release evidence.
 
 Task outcome and evaluator conformance are separate decisions. A prohibited
 behavior keeps the exact task failed and blocks that host or projection claim.
-The Harness is conformant only if it preserves the failure, rejects stale
+YIYUAN Accord is conformant only if it preserves the failure, rejects stale
 projection evidence, records residue and recovery, and excludes the failed
-behavior from the release claim. This prevents both proof-by-receipt and the
+behavior from the release claim. Those exclusions are aggregated into the
+public claim ceiling and release body rather than remaining private to an
+observation. This prevents both proof-by-receipt and the
 opposite category error of requiring every evaluated host behavior to pass
 before the evaluation contract itself can ship.
 

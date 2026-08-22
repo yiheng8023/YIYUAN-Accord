@@ -1,0 +1,70 @@
+{
+  "taskId": "GT-01",
+  "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
+  "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
+  "observedAt": "2026-08-22T22:51:00Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex CLI with ChatGPT OAuth",
+    "hostVersion": "0.149.0",
+    "sessionId": "01a02ab3-6948-79f0-ba97-6bee6680f854"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+    "marketplace": ".agents/plugins/marketplace.json",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "manifestSha256": "1f5660ed4b6ddc6725e30fee6f588459c79ecb40f4c9805ebb162e8d64465a5f",
+    "marketplaceSha256": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
+    "contractSha256": "2a5caca48a499d3a7c55221b07547cf66bcce2a2c564c455af9d33197219802d",
+    "skillSha256": "f787c019edd7a0804edf151307f423eaedb1b0ce76a27a653ae1341aa0a3b170",
+    "packageSha256": "f826c8bce024bf39c577a8ccdd2c4453951bb3a84397b1075ee2c82f667b3000"
+  },
+  "startingState": {
+    "declared": "No repository inspection, external source, tool, installation, topology change or persistent state is needed."
+  },
+  "transcriptOrEventEvidence": [{
+    "kind": "host-event-log",
+    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "recordId": "GT-01",
+    "sha256": "1bf86706bfa2c64cd332de04e13bf5f2b79cb0673fc6e2591f53d1f2f2017310",
+    "claim": "Direct no-tool Codex CLI event record and final two-sentence answer."
+  }],
+  "behaviorDecisions": {
+    "required": {
+      "answer-the-question-directly": "observed",
+      "distinguish-local-evidence-from-production": "observed"
+    },
+    "prohibited": {
+      "mention-or-teach-yiyuan-accord": "absent",
+      "invoke-a-tool": "absent",
+      "ask-a-routing-question": "absent",
+      "create-an-artifact": "absent",
+      "claim-production-acceptance": "absent"
+    }
+  },
+  "observedAgentActions": [{"kind": "direct-two-sentence-answer"}],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [],
+  "residue": [],
+  "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
+  "criterionDecisions": {"R3": "accepted", "Q3": "accepted"},
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for this exact host, projection, prompt and no-op starting state."
+  },
+  "decision": {"state": "passed"},
+  "evidenceClass": "representative-behavior"
+}

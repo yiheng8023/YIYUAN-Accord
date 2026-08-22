@@ -1,6 +1,6 @@
 # Security policy
 
-Agent Autonomy Harness v1.2 is a portable collaboration contract, verifier,
+YIYUAN Accord is a portable collaboration reliability contract, verifier,
 representative evaluation suite and two thin reference Skills. It is not a
 sandbox, identity or authorization system, secret store, dependency scanner or
 production runtime.
@@ -19,7 +19,7 @@ unknown.
 ## Report a vulnerability
 
 Use GitHub's
-[private vulnerability reporting](https://github.com/yiheng8023/agent-autonomy-harness/security/advisories/new)
+[private vulnerability reporting](https://github.com/yiheng8023/YIYUAN-Accord/security/advisories/new)
 for secrets, private memory, account state, prompt-injecting material, unsafe
 plugin behavior, supply-chain risk, path traversal, permissions, rollback,
 cleanup or privacy defects. If that form is unavailable, open a non-sensitive
@@ -35,8 +35,9 @@ A green verifier proves the current repository contract only. Static
 host-admission does not prove model behavior. Controlled Golden Tasks do not
 prove broad field effectiveness, all-host equivalence, professional domain
 correctness or production deployment safety. Release requires separate
-security/privacy review, task-time external hosted verification of the exact
-clean candidate, and then named-human authorization of that same revision and
-claim ceiling. Those task-time observations are outside verifier authority;
+security/privacy review and full exact-local verification on one clean
+candidate before push, task-time hosted verification of that unchanged SHA,
+and then named-human authorization of the same revision and claim ceiling.
+Those task-time observations are outside verifier authority;
 only a later exact tagged release, direct public-source verification and
 goal-carrier cleanup can complete the release.

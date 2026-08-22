@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-The current Agent Autonomy Harness product tree contains no active third-party
+The current YIYUAN Accord product tree contains no active third-party
 Skill or capability payload.
 
 Historical adapted and reviewed payloads, source pins, licenses, and audit

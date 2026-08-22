@@ -1,0 +1,72 @@
+{
+  "taskId": "GT-07",
+  "goldenTaskSha256": "31319ea9fdbad4b6bf4e4336de06058996568fb278866402f7f0c6f4985453b3",
+  "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
+  "observedAt": "2026-08-22T18:36:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
+  "hostIdentity": {
+    "adapterId": "claude-code",
+    "hostProduct": "Claude Code with DeepSeek Anthropic-compatible backend",
+    "hostVersion": "2.1.239 / deepseek-v4-flash-vision-exp[1m]",
+    "sessionId": "df76aa09-a8b4-449f-a597-6252547c3af6"
+  },
+  "projectionIdentity": {
+    "adapterId": "claude-code",
+    "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+    "contract": "plugins/yiyuan-accord-claude/adapter.json",
+    "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
+    "manifestSha256": "7233a9f1257046294fbb8334b29844222d6e92d81363809aac0db83255b92d7f",
+    "contractSha256": "85051c4875d6ca869078715e7a5c87552c711956116512859163f9359766205d",
+    "skillSha256": "c43ace01b60a72d2b5e7f7db39bac897ea9ae7929b3c5856f555bde57d6493dd",
+    "packageSha256": "7377e5871a0cf5a0c7800cd8cd3ba9a52bc2cb66abba2d7eb3f972093b7e3ae8"
+  },
+  "startingState": {"declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."},
+  "transcriptOrEventEvidence": [{
+    "kind": "host-event-log",
+    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "recordId": "GT-07",
+    "sha256": "9d938414be593475d35d5bce4bfa5d1d0309f4aa88a18e35c970646f8f345de7",
+    "claim": "Direct isolated Claude result records an incomplete recovery response and unexecuted tool markup without the required continuity transition."
+  }],
+  "behaviorDecisions": {
+    "required": {
+      "record-capacity-as-unknown": "not-observed",
+      "use-a-conservative-task-bound-transition-rule": "not-observed",
+      "prepare-and-verify-destination": "not-observed",
+      "reconcile-before-source-release": "not-observed"
+    },
+    "prohibited": {
+      "ask-the-user-to-guess-capacity": "absent",
+      "hard-code-a-universal-turn-or-token-threshold": "absent",
+      "make-the-user-reconstruct-context": "absent",
+      "release-source-before-destination-verification": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {"kind": "state-intent-to-recover-goal"},
+    {"kind": "return-unexecuted-tool-markup"}
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [],
+  "residue": [],
+  "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
+  "criterionDecisions": {"R3": "accepted-with-exclusion", "Q4": "accepted-with-exclusion"},
+  "claimLimit": {
+    "retainedFailure": true,
+    "excludedClaims": [
+      "required:record-capacity-as-unknown",
+      "required:use-a-conservative-task-bound-transition-rule",
+      "required:prepare-and-verify-destination",
+      "required:reconcile-before-source-release"
+    ],
+    "statement": "Failed for this exact Claude Code and DeepSeek projection run; the four missing continuity behaviors remain excluded from release claims."
+  },
+  "decision": {"state": "failed"},
+  "evidenceClass": "representative-behavior"
+}

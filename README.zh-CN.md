@@ -1,113 +1,106 @@
-# Agent Autonomy Harness
+# YIYUAN Accord
+
+YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评估框架。它帮助 Agent
+从用户真正想要的结果出发，选择最小充分路径，保留人的权限与最终问责，依据真实影响持续
+纠偏，并以诚实验证和清理闭环。
+
+项目的广义使命是改善人与 AI 的协作；当前产品面与证据严格限定为人与 Agent 的协作。
 
 [English](README.md)
 
-Agent Autonomy Harness 是一个开放、Agent 中立的人机协作质量安全网。它从用户真正想要的
-结果出发，只在宿主原生能力不足时补最小缺口，并把人类权威、持续纠偏、后果级验证、恢复
-与清理放在同一条闭环里。
+## 先开始使用
 
-它不是通用 Agent runtime、能力市场、模型路由器、身份/审计系统或上下文预测器。它也不
-承诺一次发布解决所有人机协作问题。
+克隆仓库后，用 Python 3.10 或更高版本运行产品验证器。v2.0 正式发布后，应从不可变 tag
+复现该版本：
 
-## 为什么重塑
+```powershell
+git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
+```
 
-约两个月的真实 Codex 协作试错证明：项目初衷没有问题，但强 Agent 会出现
-repair-by-addition、proof proxy、历史证据反向控制当前产品、上下文与拓扑负担转嫁、以及
-局部通过被误读为收官等系统性偏差。v1.2 不抹去这些失败，而是把它们压缩为可迁移标准和
-Golden Tasks；旧代际验证器退出默认路径，详细事实仍可由 Git 历史复现。
+在选定的 checkout 中运行：
 
-项目专项审计已保存在
-[2026-08-20 重构与长期演化报告](research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md)。
-共享的人机协作短板研究仍由
-[YIYUAN-CALIBRATION 固定修订](https://github.com/yiheng8023/YIYUAN-CALIBRATION/tree/e060a08f05361cb4cc9a67be050236cdbbde1de5/common/human-ai-collaboration-shortfalls)
-唯一托管，本项目只引用和吸收其结论。
+```powershell
+python -B -m yiyuan_accord verify --root . --json
+```
 
-## 产品内核
+静态检查两个参考宿主投影：
 
-| ID | 约束 |
-| --- | --- |
-| K1 | Goal First：保持一个当前、可追踪的目标与阶段 |
-| K2 | Minimum Sufficient Route：原生优先，无必要则 no-op |
-| K3 | Human Authority：保留真正的人类判断、授权与否决权 |
-| K4 | Continuous Reconciliation：在材料检查点对照目标、事实、效果与资源 |
-| K5 | Close the Loop：按主张层级验证、恢复、清理并限制结论 |
+```powershell
+python -B -m yiyuan_accord host-check --adapter codex --root . --json
+python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
+```
 
-K1–K5 之上有两组可执行约束：
+这些命令只验证仓库与投影包的一致性，不会安装插件、启用 Skill、证明宿主行为或授予发布
+权限。
 
-- H1–H10 宿主准入标准：官方指引优先但有条件信任、能力而非版本、effective 而非
-  declared、unknown 一等、漂移重验、不让用户补偿 Agent 缺口、宿主改进后退休补丁。
-- L1–L7 试错经验标准：结果高于过程、重复修复先做减法、总复杂度必须付租金、渐进式
-  assurance、同时测帮助和干扰、连续性不绑定通用阈值、失败作为反例而非继承证明。
+## 在 Agent 宿主中启用
 
-## 当前交付面
+克隆不等于安装插件。Codex 可能把当前 checkout 的 `AGENTS.md` 当作项目说明读取，但这不表示
+YIYUAN Accord 插件已经安装。
 
-- 三份语义权威：
-  [constitution](product/constitution.json)、
-  [program](product/program.json)、
-  [acceptance](product/acceptance.json)
-- 一个数据驱动的通用验证命令：`python -B -m harness verify`，实现由
-  [control.py](harness/control.py) 与纯准入护栏
-  [guardrails.py](harness/guardrails.py) 组成
-- 两个无 runtime、无强制 Hook 的薄 Skill 投影：
-  [Codex](plugins/agent-autonomy-harness-codex) 与
-  [Claude Code](plugins/agent-autonomy-harness-claude)
-- 一组同时度量帮助与干扰的
-  [Golden Tasks](evals/golden-tasks.json)
+### Codex
 
-这两个发行投影不是独立治理的个人或用户级治理 Skill 的副本，也不要求安装或启用那些
-Skill。两个消费包共享 K/H/L 语义和生命周期边界；宿主要求的名称、清单与元数据差异是
-有意保留的。只有真实复现残余缺口并另行取得生命周期权威后，用户级 Skill 才进入投影。
+1. 用 ChatGPT 桌面版或 Codex CLI 打开本仓库。首次克隆或修改本地市场后，重启桌面端以重新
+   加载目录。
+2. 打开 **Plugins**（CLI 中运行 `/plugins`），刷新仓库本地市场并安装
+   `yiyuan-accord-codex`。CLI 无法自动发现时，已发布的 v2.0 可用不会跟随未来 `main`
+   变化的命令接入：`codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0`，再运行
+   `codex plugin add yiyuan-accord-codex@yiyuan-accord`。
+3. 新建任务；确认已安装插件及 `deliver-demand-driven-outcome` Skill 已出现在列表中。需要确定性
+   验证时，显式选择该 Skill。
+4. 运行 Codex `host-check`，再用全新 Golden Tasks 验证实际行为。
 
-~~~powershell
-python -B -m harness verify --root . --json
-python -B -m harness host-check --adapter codex --root . --json
-python -B -m harness host-check --adapter claude-code --root . --json
-python -B -m unittest discover -s tests/product -v
-~~~
+本地市场声明是 [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)，插件包是
+[`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex)。OpenAI 当前官方说明明确要求显式
+安装，并在目录变化后重载宿主、安装后新建任务：见[打包插件](https://developers.openai.com/plugins/build/plugins)
+与[使用插件](https://learn.chatgpt.com/docs/plugins)。
 
-host-check 只证明投影静态准入；它明确不会把 Skill 可见、插件已安装或 JSON 通过冒充
-宿主行为。真实行为要在精确宿主上运行 Golden Tasks，并保留独立观察。
+### Claude Code
 
-第一轮 Codex GT-02 已把这一区分变成真实反例：Agent 做出了正确、有界的仓库修复，保留了
-无关 dirty 状态，却留下两个未披露的 Python 缓存文件；在一次同目的提示词修复后，失败仍
-重复。因此该任务和 Codex 清理行为保持失败。Harness 能通过的只是更窄的能力——及时发现、
-保留并限制该失败的主张；评估器事后清理不能把宿主失败改写为通过。
+在仓库根目录为一个本地会话直接加载插件：
 
-## 状态与收官边界
+```powershell
+claude --plugin-dir ./plugins/yiyuan-accord-claude
+```
 
-全局减法重塑定义了 repository-ready 的 v1.2 候选状态：R1–R4 与 Q1–Q4 均有直接、有界的
-仓库证据，而且精确 Git checkout 必须干净；[product/program.json](product/program.json) 中的
-无 token budget 精确目标则继续保持 active，直到仓库外复验、人类授权、发布、发布后复验与
-清理全部完成。仓库 ready 与宿主目标 active 并不冲突；两者都不是发布或真实场域效果证据。
+随后确认 `/yiyuan-accord-claude:deliver-demand-driven-task` 已出现。该方式用于本地使用与测试，
+不会建立持久安装；参见 [Claude Code 官方插件说明](https://code.claude.com/docs/en/plugins)。
 
-候选要取得可发布资格，必须由当前目标任务直接观察 GitHub Actions（Linux、Windows、
-macOS）和普通 Codex Cloud 对同一个干净精确 HEAD 的结果；通过后，才由具名人类对同一
-SHA、主张上限、公开与发布作最终授权。公开发布后，当前目标任务直接读取 GitHub 公开
-release 与 tag，核对精确发布说明和零附加资产策略，清理任务资源并重放本地验证，才可称为
-收官。这些事实都不是 verifier 输入或仓库状态，仓库不能铸造任一外部门。真实场域效果、广泛人群的负担改善、所有
-Agent/宿主等价性和长期组织影响是发布后持续证据通道，不会被本次发布虚构为已证明。
+宿主没有明确列出插件或 Skill，就不能称为已启用。本项目有意不提供安装器、后台运行时、
+Hook、MCP 服务、App、状态库或自动用户配置写入。
 
-收官工序固定为严格依赖链：
+## 产品包含什么
 
-1. 形成并本地全检一个干净仓库候选；
-2. 推送后直接观察同一 SHA 的全部托管结果；
-3. 只有此时才请求具名人类作精确发布决定；
-4. 才能在不改变候选的前提下创建精确轻量 tag 和公开 release；
-5. 由当前目标任务直接复验公开面、清理任务资源并重放本地验证。
+- 三份语义权威：[`constitution.json`](product/constitution.json)、
+  [`program.json`](product/program.json) 与
+  [`acceptance.json`](product/acceptance.json)
+- 统一术语与边界：[`CONTEXT.md`](CONTEXT.md)
+- 一个数据驱动的通用验证器：
+  [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
+- 可替换、无运行时的 Codex 与 Claude Code Skill 投影
+- 帮助与干扰代表任务：[`evals/golden-tasks.json`](evals/golden-tasks.json)
 
-后续门不得抢跑；失败只退回最小受影响的前置门。计划、提交、推送、托管 PASS 或授权都不能
-冒充其后的结果。
+可移植循环是 K1–K5：目标优先、最小充分路径、人类权限、持续校准与闭环。H1–H10 宿主规则
+和 L1–L7 试错标准把宿主漂移与历史失败留在核心之外。
 
-v1.2 的有限代表样本是 GT-01、GT-02 与 GT-07。样本任务失败会阻断精确宿主行为资格；只要
-失败仍被保留、残留处置明确、发布主张排除该行为，它不会自动把“Harness 正确评估并暴露
-失败”误判为产品不合格。
+## 证据与发布状态
 
-收官是一个可维护开源基线，不是学习终点。后续真实失败可以增加 Golden Task、收窄主张、
-简化或退休投影，或开启一个新的有界增量。
+本 checkout 描述 v2.0 源码线；外部状态由精确 revision 与 tag 决定，而不是由分支名决定。
+验证器通过表示当前 checkout 符合有限仓库契约，其中包括已接纳代表性观察的完整性与验收映射；
+它不会独立重放宿主行为，也不等于精确候选本地复核、托管验证、真实场域价值、生产安全、
+公开授权或项目收官。精确验收条件和外部门见
+[`product/acceptance.json`](product/acceptance.json)，有限主张与保留行为失败见
+[`docs/releases/v2.0.md`](docs/releases/v2.0.md)。
 
-## 参与
+上一公开 tag 保持不可变历史；其观察不会被改名或复用为 v2.0 身份与投影的证据。
 
-直接说明目标、问题或观察即可，不必先学习 Harness 术语、工具或拓扑。维护者和 Agent 负责
-把输入映射到当前权威、选择最小路线、验证并清理。参见
-[CONTRIBUTING.md](CONTRIBUTING.md)、[SECURITY.md](SECURITY.md) 和
-[历史边界](docs/operations/HISTORY.md)。
+## 需要时再深入
+
+- 架构与信任边界：[`docs/architecture.md`](docs/architecture.md)
+- 维护者续接：[`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md)
+- 后续开发、维护与参与贡献：[`CONTRIBUTING.md`](CONTRIBUTING.md)
+- 安全边界与报告：[`SECURITY.md`](SECURITY.md)
+- 项目分析输入：[`research/reviews`](research/reviews)
+
+YIYUAN Accord 采用 Apache-2.0 许可证，另见 [`NOTICE`](NOTICE) 与
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。

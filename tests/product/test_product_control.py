@@ -1,905 +1,311 @@
-from __future__ import annotations
-
 from contextlib import contextmanager
-import hashlib
-import json
+import hashlib, json, re, shutil, tempfile, unittest
 from pathlib import Path
-import shutil
-import subprocess
-import sys
-import tempfile
-import unittest
-
-from harness.control import host_check, verify_product
-
-
+from unittest.mock import patch
+from yiyuan_accord.control import host_check, verify_product
+from yiyuan_accord.evidence import representative_contract_sha256
+from yiyuan_accord.identity import active_tree_errors
 ROOT = Path(__file__).resolve().parents[2]
+(C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
+SOURCE = 'evals/evidence/s.json'
+CRITERIA = ['R1', 'R2', 'R3', 'R4', 'Q1', 'Q2', 'Q3', 'Q4']
 
+def _read(root, locator):
+    return json.loads((root / locator).read_text(encoding='utf-8'))
 
-def _read_json(root: Path, locator: str) -> dict:
-    return json.loads((root / locator).read_text(encoding="utf-8"))
+def _write(root, locator, value):
+    path = root / locator
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, separators=(',', ':')) + '\n', encoding='utf-8')
 
-
-def _write_json(root: Path, locator: str, value: dict) -> None:
-    (root / locator).write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-
-def _activate_completed_increment(program: dict) -> dict:
-    increment = json.loads(json.dumps(program["completedIncrement"]))
-    increment["state"] = "active"
-    work_item = increment["workItems"][0]
-    work_item["state"] = "active"
-    for index, stage in enumerate(work_item["closeoutSequence"]):
-        stage["state"] = "completed" if index == 0 else "active"
-    program["status"] = "active"
-    program["activeIncrement"] = increment
-    return increment
-
+def _digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True,
+                          separators=(',', ':')).encode()).hexdigest()
 
 @contextmanager
 def _fixture():
-    with tempfile.TemporaryDirectory(prefix="aah-v12-test-") as temporary:
-        target = Path(temporary) / "repository"
-        shutil.copytree(
-            ROOT,
-            target,
-            ignore=shutil.ignore_patterns(".git", ".tmp", "__pycache__", "*.pyc"),
-        )
+    with tempfile.TemporaryDirectory(prefix='ya-') as temporary:
+        target = Path(temporary) / 'repository'
+        shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns('.git', '.tmp', '__pycache__', '*.pyc'))
         yield target
 
+def _projection(root, adapter='codex'):
+    report = verify_product(root)['hostChecks'][adapter]
+    locators = {key: report[key] for key in ('manifest', 'marketplace', 'contract', 'skill') if isinstance(report.get(key), str)}
+    return {'adapterId': adapter, **report['identity'], **locators}
 
-def _commit_fixture(root: Path) -> None:
-    commands = (
-        ["git", "init", "--quiet"],
-        ["git", "config", "user.name", "Harness Test"],
-        ["git", "config", "user.email", "harness-test@example.invalid"],
-        ["git", "add", "-A"],
-        ["git", "commit", "--quiet", "-m", "candidate"],
-    )
-    for command in commands:
-        subprocess.run(
-            command,
-            cwd=root,
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
+def _rehash(root, locator):
+    acceptance = _read(root, A)
+    digest = hashlib.sha256((root / locator).read_bytes()).hexdigest()
+    for criterion in acceptance['criteria']:
+        for item in criterion['evidence']:
+            if item['locator'] == locator:
+                item['sha256'] = digest
+    _write(root, A, acceptance)
 
+def _sample(root):
+    (acceptance, golden) = (_read(root, A), _read(root, G))
+    required = set(acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'])
+    projection = _projection(root)
+    host = {'adapterId': 'codex', 'hostProduct': 'h', 'hostVersion': 'v', 'sessionId': 's'}
+    evaluation = representative_contract_sha256(acceptance, golden)
+    source,retained,by_id={'schema':1,'records':{}},[],{x['id']:x for x in acceptance['criteria']}
+    for item in acceptance['criteria']:
+        item['evidence']=[]
+    for task in golden['tasks']:
+        if task['id'] not in required:
+            continue
+        (task_id, failed) = (task['id'], task['id'] == 'GT-02')
+        mapped = {item for item in task['mapsTo'] if re.fullmatch('[RQ][0-9]+', item)}
+        task_digest = _digest(task)
+        common = {'taskId': task_id, 'goldenTaskSha256': task_digest, 'evaluationContractSha256': evaluation, 'hostIdentity': host}
+        record = {**common, 'kind': 'host-event-log', 'capturedAt': '2026-08-20T00:00Z', 'payload': task_id}
+        source['records'][task_id] = record
+        required_status = {item: 'observed' for item in task['required']}
+        failures = []
+        if failed:
+            required_status[task['required'][0]] = 'not-observed'
+            failures = [f"required:{task['required'][0]}"]
+            retained.extend((f'{task_id}:{value}' for value in failures))
+        observation = {
+            **common, 'evidenceClass': 'representative-behavior',
+            'observedAt': '2026-08-20T00:01Z',
+            'observer': {'kind': 'host-event-recorder', 'identity': 'f'},
+            'projectionIdentity': projection, 'startingState': {'declared': task['startingState']},
+            'transcriptOrEventEvidence': [{'kind': 'host-event-log', 'locator': SOURCE,
+                'recordId': task_id, 'sha256': _digest(record), 'claim': 's'}],
+            'behaviorDecisions': {'required': required_status,
+                'prohibited': {item: 'absent' for item in task['prohibited']}},
+            'observedAgentActions': [{'kind': 'a'}], 'observedHumanActions': [],
+            'humanBurden': {item: 0 for item in golden['metrics']['humanBurden']},
+            'materialEffects': [], 'residue': [],
+            'cleanup': {'state': 'verified-clean', 'taskOwnedResidueCount': 0, 'verified': True},
+            'criterionDecisions': {item: 'accepted-with-exclusion' if failed else 'accepted'
+                                   for item in mapped},
+            'claimLimit': {'retainedFailure': failed, 'excludedClaims': failures,
+                           'statement': 'b'},
+            'decision': {'state': 'failed' if failed else 'passed'}}
+        locator = f'evals/observations/current-{task_id.lower()}.json'
+        _write(root, locator, observation)
+        evidence = {'locator': locator, 'sha256': hashlib.sha256((root / locator).read_bytes()).hexdigest(), 'claim': task_id, 'bindsProjection': 'codex'}
+        for criterion_id in mapped:
+            criterion = by_id[criterion_id]
+            if 'representative-behavior' in criterion['requiredEvidenceClasses']:
+                criterion['evidence'].append({**evidence, 'supportsCriterion': criterion_id})
+    for criterion in acceptance['criteria']:
+        if criterion['requiredEvidenceClasses'] == ['representative-behavior']:
+            criterion['assessment'] = 'verified'
+    acceptance['claimCeiling']['retainedBehaviorExclusions'] = sorted(retained)
+    notes = root / acceptance['publicRelease']['releaseNotes']
+    marker = f"`retainedBehaviorExclusions={json.dumps(sorted(retained), separators=(',', ':'))}`"
+    notes.write_text(re.sub('`retainedBehaviorExclusions=.*?`', marker,
+                            notes.read_text(encoding='utf-8')), encoding='utf-8')
+    acceptance['publicRelease']['releaseNotesSha256'] = hashlib.sha256(notes.read_bytes()).hexdigest()
+    _write(root, SOURCE, source)
+    _write(root, A, acceptance)
 
 class ProductControlTests(unittest.TestCase):
-    maxDiff = None
 
-    def test_current_contract_is_valid_but_not_release_complete(self) -> None:
+    def assert_has(self, errors, *fragments):
+        for fragment in fragments:
+            self.assertTrue(any(fragment in error for error in errors), fragment)
+
+    def rejected(self, locator, message, mutate):
+        with _fixture() as root:
+            value = _read(root, locator)
+            mutate(value)
+            _write(root, locator, value)
+            self.assert_has(verify_product(root)['errors'], message)
+
+    def test_current_contract_is_valid_and_explicitly_incomplete(self):
         report = verify_product(ROOT)
+        self.assertTrue(report['valid'], report['errors'])
+        self.assertEqual(report['criteria']['ids'], CRITERIA)
+        if report['programStatus'] == 'active':
+            self.assertLess(report['criteria']['verified'], 8)
+            self.assertFalse(report['repositoryCandidateReady'])
+        else:
+            self.assertEqual(report['programStatus'], 'ready')
+            self.assertEqual(report['criteria']['verified'], 8)
+            self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
+        self.assertTrue(all((host['staticReady'] for host in report['hostChecks'].values())))
 
-        self.assertTrue(report["valid"], report["errors"])
-        self.assertTrue(report["contractValid"])
-        self.assertEqual(
-            report["repositoryCandidateReady"], report["checkoutClean"]
+    def test_authority_and_static_suite_mutations_fail_closed(self):
+        cases = (
+            (C, 'constitution top-level shape', lambda v: v.update(extra=True)),
+            (P, 'program top-level shape', lambda v: v.update(releaseComplete=True)),
+            (A, 'acceptance top-level shape', lambda v: v.update(authorize=True)),
+            (C, 'compatibilityAliases must be empty',
+             lambda v: v['identity'].update(compatibilityAliases=['x'])),
+            (C, 'humanAuthority shape', lambda v: v.pop('humanAuthority')),
+            (G, 'static-suite-as-behavior',
+             lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
+            (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
+            (A, 'finite-release evidence lanes', lambda v: (
+                v['evidenceLanes']['continuingAfterRelease'].append(
+                    v['evidenceLanes']['requiredForFiniteRelease'].pop())))
         )
-        self.assertNotIn("releaseComplete", report)
-        self.assertEqual(
-            report["completionState"],
-            (
-                "external-gates-required"
-                if report["checkoutClean"]
-                else "repository-incomplete"
-            ),
-        )
-        self.assertEqual(report["criteria"]["verified"], 8)
-        self.assertEqual(report["criteria"]["total"], 8)
-        self.assertEqual(report["goalModePromptState"], "active-in-host")
-        self.assertEqual(report["programStatus"], "ready")
-        self.assertEqual(
-            report["externalGates"],
-            {
-                "exactCandidateHostedVerification": "not-evaluated-by-verifier",
-                "namedHumanReleaseAuthorization": "not-evaluated-by-verifier",
-                "exactTaggedPublicRelease": "not-evaluated-by-verifier",
-                "releaseVerificationAndCleanup": "not-evaluated-by-verifier",
-            },
-        )
-        self.assertNotIn("releaseEligible", report)
-        self.assertEqual(
-            report["goldenTasks"]["behaviorEvidence"],
-            "not-established-by-static-suite",
-        )
-        self.assertLessEqual(report["complexity"]["trackedFiles"], 55)
-        self.assertLessEqual(
-            report["complexity"]["harnessAndProductTestBytes"],
-            120_000,
-        )
+        for case in cases:
+            with self.subTest(case=case[:2]):
+                self.rejected(*case)
 
-    def test_public_cli_reports_the_same_contract(self) -> None:
-        result = subprocess.run(
-            [
-                sys.executable,
-                "-B",
-                "-m",
-                "harness",
-                "verify",
-                "--root",
-                str(ROOT),
-                "--json",
-            ],
-            cwd=ROOT,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-
-        self.assertEqual(result.returncode, 0, result.stderr)
-        report = json.loads(result.stdout)
-        self.assertTrue(report["valid"])
-        self.assertEqual(
-            report["repositoryCandidateReady"], report["checkoutClean"]
-        )
-        self.assertNotIn("releaseComplete", report)
-        self.assertEqual(set(report["hostChecks"]), {"codex", "claude-code"})
-
-    def test_repository_candidate_readiness_requires_a_clean_git_checkout(self) -> None:
+    def test_projection_package_and_admission_are_fail_closed(self):
         with _fixture() as root:
-            unavailable = verify_product(root)
-            self.assertTrue(unavailable["valid"], unavailable["errors"])
-            self.assertFalse(unavailable["checkoutClean"])
-            self.assertFalse(unavailable["repositoryCandidateReady"])
+            program = _read(root, P)
+            projection = program['hostProjections'][0]
+            projection['mcpServers'] = {'x': {'command': 'x'}}
+            projection['interfaceDefaultPrompt'] = ['x' * 129]
+            _write(root, P, program)
+            manifest_path = projection['manifest']
+            manifest = _read(root, manifest_path)
+            (manifest['interface']['defaultPrompt'], manifest['mcpServers']) = (projection['interfaceDefaultPrompt'], {})
+            _write(root, manifest_path, manifest)
+            skill = root / projection['skill']
+            skill.write_text(skill.read_text(encoding='utf-8').replace('name: deliver-demand-driven-outcome', 'name: publish-now', 1), encoding='utf-8')
+            market = _read(root, projection['marketplace'])
+            market['plugins'][0]['policy']['installation'] = 'INSTALLED_BY_DEFAULT'
+            _write(root, projection['marketplace'], market)
+            self.assert_has(host_check(root, 'codex')['errors'], 'program projection shape',
+                            'package digest', 'unsupported fields', 'Skill frontmatter identity',
+                            'AVAILABLE/ON_INSTALL', 'interface contract')
 
-            _commit_fixture(root)
-            clean = verify_product(root)
-            self.assertTrue(clean["valid"], clean["errors"])
-            self.assertTrue(clean["checkoutClean"])
-            self.assertTrue(clean["repositoryCandidateReady"])
-            self.assertEqual(clean["completionState"], "external-gates-required")
-
-            readme = root / "README.md"
-            readme.write_text(
-                readme.read_text(encoding="utf-8") + "\n",
-                encoding="utf-8",
-            )
-            dirty = verify_product(root)
-            self.assertTrue(dirty["valid"], dirty["errors"])
-            self.assertFalse(dirty["checkoutClean"])
-            self.assertFalse(dirty["repositoryCandidateReady"])
-            self.assertEqual(dirty["completionState"], "repository-incomplete")
-
-    def test_host_check_is_immediate_and_honest_about_behavior(self) -> None:
-        for adapter in ("codex", "claude-code"):
-            with self.subTest(adapter=adapter):
-                report = host_check(ROOT, adapter)
-                self.assertTrue(report["valid"], report["errors"])
-                self.assertTrue(report["staticReady"])
-                self.assertEqual(report["behaviorEvidenceState"], "unverified")
-                self.assertEqual(
-                    report["claim"],
-                    "static host-admission conformance only",
-                )
-
-        unknown = host_check(ROOT, "not-a-host")
-        self.assertFalse(unknown["valid"])
-        self.assertIn("unknown host projection: not-a-host", unknown["errors"])
-
-    def test_adapter_mapping_drift_fails(self) -> None:
+    def test_projection_evidence_rejects_drift_and_relocation(self):
         with _fixture() as root:
-            locator = "plugins/agent-autonomy-harness-codex/adapter.json"
-            contract = _read_json(root, locator)
-            contract["hostStandardIds"].remove("H10")
-            _write_json(root, locator, contract)
+            _sample(root)
+            locator = 'evals/observations/current-gt-01.json'
+            observation = _read(root, locator)
+            observation['projectionIdentity']['skillSha256'] = '0' * 64
+            _write(root, locator, observation)
+            _rehash(root, locator)
+            self.assert_has(verify_product(root)['errors'], 'skillSha256 does not match')
 
+    def test_representative_sample_binds_projection_source_and_task(self):
+        with _fixture() as root:
+            _sample(root)
+            errors = verify_product(root)['errors']
+            self.assertFalse(any(('representative' in item or 'R3 evidence' in item for item in errors)))
+            acceptance = _read(root, A)
+            acceptance['criteria'][2]['passRule'] += ' Expanded after capture.'
+            _write(root, A, acceptance)
+            self.assert_has(verify_product(root)['errors'], 'evaluation contract digest mismatch')
+            source = _read(root, SOURCE)
+            source['records']['GT-01']['payload'] = 'tampered'
+            _write(root, SOURCE, source)
+            acceptance = _read(root, A)
+            acceptance['criteria'][7]['evidence'].pop()
+            _write(root, A, acceptance)
+            self.assert_has(verify_product(root)['errors'], 'sourceEvidence', 'Q4 representative coverage')
+
+    def test_failed_sample_narrows_claim(self):
+        with _fixture() as root:
+            _sample(root)
+            acceptance = _read(root, A)
+            retained = acceptance['claimCeiling']['retainedBehaviorExclusions']
+            acceptance['claimCeiling']['retainedBehaviorExclusions'] = []
+            _write(root, A, acceptance)
+            self.assert_has(verify_product(root)['errors'], 'retained behavior exclusions')
+            acceptance['claimCeiling']['retainedBehaviorExclusions'] = retained
+            _write(root, A, acceptance)
+            locator = 'evals/observations/current-gt-02.json'
+            observation = _read(root, locator)
+            observation['criterionDecisions']['Q4'] = 'accepted'
+            observation['claimLimit'] = {'retainedFailure': False, 'excludedClaims': [], 'statement': 'all supported'}
+            observation['residue'] = [{'kind': 'task-owned-residue'}]
+            _write(root, locator, observation)
+            _rehash(root, locator)
+            self.assert_has(verify_product(root)['errors'], 'criterionDecisions', 'claimLimit contradicts', 'cleanup contradicts residue')
+            locator = 'evals/observations/current-gt-01.json'
+            observation = _read(root, locator)
+            observation['decision'] = {'state': 'failed'}
+            _write(root, locator, observation)
+            _rehash(root, locator)
+            self.assert_has(verify_product(root)['errors'], 'must-pass tasks')
+
+    def test_plan_process_acceptance_and_release_order_stay_aligned(self):
+        with _fixture() as root:
+            program = _read(root, P)
+            program['goalModePrompt']['mapsTo'].remove('Q4')
+            increment = program['increment']
+            increment['acceptanceIds'].remove('R3')
+            increment['workItems'][0]['acceptanceIds'].remove('Q1')
+            increment['workItems'][0]['closeoutSequence'][0]['state'] = 'active'
+            increment['workItems'][0]['closeoutSequence'][0]['stopCondition'] = 'opposite'
+            program['releaseProcedure']['orderedGates'][0]['id'] = ''
+            program['goalModePrompt']['objective'] = '先推送再审查'
+            program['goalModePrompt']['workStageIds'] = ['wrong']
+            _write(root, P, program)
+            readme = (root / 'README.md').read_text(encoding='utf-8')
+            (root / 'README.md').write_text(readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
+            self.assert_has(verify_product(root)['errors'], 'derived surface markers')
+            (root / 'README.md').write_text(readme, encoding='utf-8')
+            self.assert_has(verify_product(root)['errors'], 'goalModePrompt.mapsTo',
+                            'increment.acceptanceIds', 'workItems[0].acceptanceIds',
+                            'closeoutSequence', 'required release gate sequence',
+                            'release gate order', 'workStageIds')
+
+    def test_evidence_cannot_self_verify_or_self_authorize(self):
+        with _fixture() as root:
+            acceptance = _read(root, A)
+            criterion = acceptance['criteria'][0]
+            criterion['assessment'] = 'verified'
+            locator = 'evals/observations/self-deterministic.json'
+            _write(root, locator, {'evidenceClass': 'deterministic-conformance'})
+            criterion['evidence'] = [
+                {'locator': P, 'sha256': hashlib.sha256((root / P).read_bytes()).hexdigest(),
+                 'claim': 'self claim', 'supportsCriterion': 'R1'},
+                {'locator': locator, 'sha256': hashlib.sha256((root / locator).read_bytes()).hexdigest(),
+                 'claim': 'repository self-attestation', 'supportsCriterion': 'R1'}]
+            acceptance['releaseAuthorization'].update(
+                state='authorized', candidateRevision='0' * 40, namedHuman='repo',
+                authorizedAt='2026-08-21T00:00:00Z', claimCeilingAccepted=True,
+                publicationAuthorized=True, releaseAuthorized=True)
+            _write(root, A, acceptance)
             report = verify_product(root)
+            self.assert_has(report['errors'], 'direct evidence must use', 'deterministic conformance is computed live', 'cannot grant human authority')
+            self.assertNotIn('releaseComplete', report)
 
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex hostStandardIds does not match constitution order",
-                report["errors"],
-            )
-
-    def test_codex_marketplace_must_resolve_current_plugin(self) -> None:
+    def test_external_release_contract_is_exact_and_external(self):
         with _fixture() as root:
-            locator = ".agents/plugins/marketplace.json"
-            marketplace = _read_json(root, locator)
-            self.assertEqual(marketplace["name"], "agent-autonomy-harness")
-            self.assertEqual(
-                marketplace["interface"]["displayName"],
-                "Agent Autonomy Harness",
-            )
-            self.assertEqual(marketplace["plugins"][0]["category"], "Developer Tools")
-            marketplace["plugins"][0]["source"]["path"] = (
-                "./adapters/agent-autonomy-harness-codex"
-            )
-            _write_json(root, locator, marketplace)
+            acceptance = _read(root, A)
+            acceptance['candidateVerification']['requiredSystems'] = {'codex-cloud': 'https://example.invalid'}
+            acceptance['publicRelease']['assetPolicy'] = 'allow-assets'
+            acceptance['claimCeiling']['finiteReleaseClaims'].append(acceptance['claimCeiling']['notImplied'][0])
+            _write(root, A, acceptance)
+            (root / 'docs/releases/v2.0.md').write_text('# expanded\n', encoding='utf-8')
+            self.assert_has(verify_product(root)['errors'], 'systems do not match', 'publicRelease policy', 'release notes digest', 'claims and exclusions overlap')
 
-            report = verify_product(root)
+    def test_complexity_identity_and_paths_fail_closed(self):
+        with _fixture() as root, tempfile.TemporaryDirectory() as outside:
+            program = _read(root, P)
+            program['complexityBudget']['primaryInstructionPaths'] = []
+            program['complexityBudget']['forbiddenActivePaths'] = [Path(outside).as_posix()]
+            _write(root, P, program)
+            constitution = _read(root, C)
+            constitution['identity']['pythonModule'] = 'missing_module'
+            constitution['authority']['executableVerifier'] = 'python -B -m missing_module verify'
+            _write(root, C, constitution)
+            markers = program['complexityBudget']['requiredTestMarkers']
+            body = '\n'.join(f'    {item}(self): pass' for item in markers
+                             if item.startswith('def '))
+            for bad in ("@unittest.skip('x')\n",
+                        'def load_tests(*a): return unittest.TestSuite()\n',
+                        'from os import _exit as stop\nstop(0)\n'):
+                fake = f'import unittest\n{bad}class ProductControlTests(unittest.TestCase):\n{body}'
+                (root / 'tests/product/test_product_control.py').write_text(fake, encoding='utf-8')
+                self.assert_has(verify_product(root)['errors'], 'pythonModule does not match', 'primaryInstructionPaths', 'not a repository-relative path', 'test markers')
 
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex marketplace source is invalid",
-                report["errors"],
-            )
-
-    def test_codex_marketplace_cannot_add_an_unbound_plugin(self) -> None:
+    def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:
-            locator = ".agents/plugins/marketplace.json"
-            marketplace = _read_json(root, locator)
-            extra = json.loads(json.dumps(marketplace["plugins"][0]))
-            extra["name"] = "unbound-plugin"
-            marketplace["plugins"].append(extra)
-            _write_json(root, locator, marketplace)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex marketplace entry is not unique",
-                report["errors"],
-            )
-
-    def test_codex_metadata_cannot_add_an_mcp_dependency(self) -> None:
+            retired = 'yiyuan_accord/task_validator_o4_continuous_self_correction_v3.py'
+            (root / retired).write_text('# retired\n', encoding='utf-8')
+            (root / '.tmp').mkdir()
+            self.assert_has(verify_product(root)['errors'], 'forbidden active path remains', 'known task residue')
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'README.md').write_text('retired-product', encoding='utf-8')
+            old = {'productId': 'retired-product', 'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
+            with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=[json.dumps(old), '# Retired Product\n']):
+                self.assert_has(active_tree_errors(root, ['README.md'], '0' * 40), 'superseded identity remains')
         with _fixture() as root:
-            metadata = (
-                root
-                / "plugins/agent-autonomy-harness-codex/skills/"
-                "deliver-demand-driven-outcome/agents/openai.yaml"
-            )
-            metadata.write_text(
-                metadata.read_text(encoding="utf-8")
-                + "\ndependencies:\n"
-                + "  tools: mcp\n",
-                encoding="utf-8",
-            )
-
-            report = host_check(root, "codex")
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex metadata top-level fields are invalid",
-                report["errors"],
-            )
-
-    def test_adapter_cannot_self_declare_observed_behavior(self) -> None:
-        with _fixture() as root:
-            locator = "plugins/agent-autonomy-harness-codex/adapter.json"
-            contract = _read_json(root, locator)
-            contract["behaviorEvidenceState"] = "observed"
-            _write_json(root, locator, contract)
-
-            report = host_check(root, "codex")
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex observed behavior lacks direct evidence",
-                report["errors"],
-            )
-
-    def test_projection_bound_evidence_cannot_replay_after_skill_drift(self) -> None:
-        with _fixture() as root:
-            skill = root / (
-                "plugins/agent-autonomy-harness-codex/skills/"
-                "deliver-demand-driven-outcome/SKILL.md"
-            )
-            skill.write_text(
-                skill.read_text(encoding="utf-8") + "\nnew behavior\n",
-                encoding="utf-8",
-            )
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[1].evidence[0] skillSha256 does not match "
-                "current adapter codex",
-                report["errors"],
-            )
-
-    def test_static_projection_evidence_cannot_replay_after_relocation(self) -> None:
-        with _fixture() as root:
-            locator = "evals/observations/2026-08-20-codex-static-admission.json"
-            observation = _read_json(root, locator)
-            observation["projection"]["skill"] = (
-                "adapters/agent-autonomy-harness-codex/skills/"
-                "deliver-demand-driven-outcome/SKILL.md"
-            )
-            _write_json(root, locator, observation)
-
-            acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["criteria"][1]["evidence"][0]["sha256"] = hashlib.sha256(
-                (root / locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[1].evidence[0] skill locator does not match current "
-                "adapter codex",
-                report["errors"],
-            )
-
-    def test_required_sample_evidence_must_bind_current_projection(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            representative = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R3"
-            )
-            representative["evidence"][0].pop("bindsProjection")
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "R3 evidence[0] required sample observation is not "
-                "projection-bound",
-                report["errors"],
-            )
-
-    def test_required_sample_observation_must_follow_golden_schema(self) -> None:
-        with _fixture() as root:
-            locator = "evals/observations/2026-08-20-codex-gt01-paired.json"
-            observation = _read_json(root, locator)
-            observation.pop("residue")
-            _write_json(root, locator, observation)
-
-            acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["criteria"][2]["evidence"][0]["sha256"] = hashlib.sha256(
-                (root / locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "R3 evidence[0] omits fields: ['residue']",
-                report["errors"],
-            )
-
-    def test_goal_prompt_and_increment_map_every_criterion(self) -> None:
-        with _fixture() as root:
-            program = _read_json(root, "product/program.json")
-            program["goalModePrompt"]["mapsTo"].remove("Q4")
-            program["goalModePrompt"]["releaseGateIds"].pop()
-            increment = _activate_completed_increment(program)
-            increment["acceptanceIds"].remove("R3")
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "program.goalModePrompt.mapsTo must map every criterion exactly",
-                report["errors"],
-            )
-            self.assertIn(
-                "program.goalModePrompt.releaseGateIds must match releaseProcedure",
-                report["errors"],
-            )
-            self.assertIn(
-                "activeIncrement.acceptanceIds must map every criterion exactly",
-                report["errors"],
-            )
-
-    def test_closeout_sequence_maps_every_criterion_with_one_active_stage(self) -> None:
-        with _fixture() as root:
-            program = _read_json(root, "product/program.json")
-            increment = _activate_completed_increment(program)
-            sequence = increment["workItems"][0]["closeoutSequence"]
-            sequence[-1]["acceptanceIds"].remove("Q1")
-            sequence[0]["state"] = "active"
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "active work item closeoutSequence must contain one active stage",
-                report["errors"],
-            )
-            self.assertIn(
-                "active work item closeoutSequence must map every criterion",
-                report["errors"],
-            )
-
-    def test_release_procedure_is_dependency_ordered_and_maps_every_criterion(self) -> None:
-        with _fixture() as root:
-            program = _read_json(root, "product/program.json")
-            gates = program["releaseProcedure"]["orderedGates"]
-            gates[0]["id"] = ""
-            gates[0]["acceptanceIds"].remove("R1")
-            gates[1]["dependsOn"] = []
-            gates[1]["completionOperand"] = "namedHumanReleaseAuthorization"
-            gates[2]["completionOperand"] = "exactCandidateHostedVerification"
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "releaseProcedure.orderedGates[0].id must be non-empty",
-                report["errors"],
-            )
-            self.assertIn(
-                "releaseProcedure.orderedGates[1].dependsOn must name only the previous gate",
-                report["errors"],
-            )
-            self.assertIn(
-                "program.releaseProcedure must map every criterion",
-                report["errors"],
-            )
-            self.assertIn(
-                "releaseProcedure.orderedGates[1] does not match the required release gate sequence",
-                report["errors"],
-            )
-
-    def test_more_than_one_active_work_item_fails(self) -> None:
-        with _fixture() as root:
-            program = _read_json(root, "product/program.json")
-            increment = _activate_completed_increment(program)
-            duplicate = dict(increment["workItems"][0])
-            duplicate["id"] = "duplicate-active-work"
-            increment["workItems"].append(duplicate)
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "activeIncrement must contain exactly one active work item",
-                report["errors"],
-            )
-
-    def test_criterion_cannot_verify_without_direct_evidence(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["criteria"][0]["evidence"] = []
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[0] is verified without direct evidence",
-                report["errors"],
-            )
-
-    def test_repository_evidence_cannot_self_attest_release_completion(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            deterministic = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R2"
-            )["evidence"][0]
-            representative = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R3"
-            )["evidence"][0]
-            for criterion in acceptance["criteria"]:
-                criterion["assessment"] = "verified"
-                if criterion["id"] == "R3":
-                    continue
-                source = (
-                    deterministic
-                    if criterion["evidenceClass"] == "deterministic-conformance"
-                    else representative
-                )
-                criterion["evidence"] = [json.loads(json.dumps(source))]
-            acceptance["releaseAuthorization"] = {
-                "state": "authorized",
-                "candidateRevision": "0" * 40,
-                "namedHuman": "repository-authored-name",
-                "authorizedAt": "2026-08-20T00:00:00Z",
-                "claimCeilingAccepted": True,
-                "publicationAuthorized": True,
-                "releaseAuthorized": True,
-            }
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            program = _read_json(root, "product/program.json")
-            program["status"] = "ready"
-            program["activeIncrement"] = None
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertNotIn("releaseComplete", report)
-            self.assertIn(
-                "repository releaseAuthorization cannot grant human authority",
-                report["errors"],
-            )
-
-    def test_static_verifier_does_not_adjudicate_external_release_gates(self) -> None:
-        report = verify_product(ROOT)
-        self.assertNotIn("releaseEligible", report)
-        self.assertNotIn("releaseComplete", report)
-        self.assertEqual(
-            set(report["externalGates"].values()), {"not-evaluated-by-verifier"}
-        )
-
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["candidateVerification"]["requiredSystems"][
-                "github-actions-ubuntu-latest"
-            ] = "http://example.invalid/runs/"
-            _write_json(root, "product/acceptance.json", acceptance)
-            self.assertIn(
-                "acceptance.candidateVerification policy is invalid",
-                verify_product(root)["errors"],
-            )
-
-        with _fixture() as root:
-            notes = root / "docs/releases/v1.2.md"
-            notes.write_text("# incomplete release notes\n", encoding="utf-8")
-            self.assertIn(
-                "release notes do not expose the complete claim ceiling",
-                verify_product(root)["errors"],
-            )
-
-    def test_criterion_evidence_cannot_be_reused_without_direct_mapping(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            r2 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R2"
-            )
-            item = r2["evidence"][0]
-            locator = item["locator"]
-            observation = _read_json(root, locator)
-            observation["criterionEvidence"].pop("R2")
-            _write_json(root, locator, observation)
-            item["sha256"] = hashlib.sha256(
-                (root / locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[1].evidence[0] lacks direct R2 criterion evidence",
-                report["errors"],
-            )
-
-    def test_verified_criterion_requires_explicit_observation_support(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            r2 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R2"
-            )
-            for item in r2["evidence"]:
-                locator = item["locator"]
-                observation = _read_json(root, locator)
-                observation["acceptanceDecisions"]["R2"] = "pending-human-review"
-                _write_json(root, locator, observation)
-                item["sha256"] = hashlib.sha256(
-                    (root / locator).read_bytes()
-                ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[1] verified evidence lacks an accepted R2 decision",
-                report["errors"],
-            )
-
-    def test_verified_representative_sample_rejects_pending_human_review(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            r3 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R3"
-            )
-            for task_id in ("GT-01", "GT-07"):
-                item = next(
-                    evidence
-                    for evidence in r3["evidence"]
-                    if task_id.lower().replace("-", "")
-                    in evidence["locator"].replace("-", "")
-                )
-                locator = item["locator"]
-                observation = _read_json(root, locator)
-                observation["decision"]["state"] = (
-                    "candidate-pass-awaiting-human-review"
-                )
-                _write_json(root, locator, observation)
-                item["sha256"] = hashlib.sha256(
-                    (root / locator).read_bytes()
-                ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "R3 verified sample has nonterminal task decisions: "
-                "['GT-01', 'GT-07']",
-                report["errors"],
-            )
-
-    def test_forbidden_paths_must_remain_repository_relative(self) -> None:
-        with _fixture() as root, tempfile.TemporaryDirectory(
-            prefix="aah-v12-outside-"
-        ) as outside:
-            outside_locator = Path(outside).as_posix()
-            program = _read_json(root, "product/program.json")
-            program["complexityBudget"]["forbiddenActivePaths"] = [
-                outside_locator
-            ]
-            program["hostProjections"][0]["forbiddenPaths"] = [outside_locator]
-            _write_json(root, "product/program.json", program)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "program.complexityBudget.forbiddenActivePaths[0] is not a "
-                "repository-relative path",
-                report["errors"],
-            )
-            self.assertIn(
-                "adapter codex forbiddenPaths[0] is not a repository-relative path",
-                report["errors"],
-            )
-
-    def test_codex_marketplace_cannot_expand_installation_policy(self) -> None:
-        with _fixture() as root:
-            marketplace_locator = ".agents/plugins/marketplace.json"
-            marketplace = _read_json(root, marketplace_locator)
-            marketplace["plugins"][0]["policy"] = {
-                "installation": "INSTALLED_BY_DEFAULT",
-                "authentication": "ON_USE",
-            }
-            _write_json(root, marketplace_locator, marketplace)
-
-            observation_locator = (
-                "evals/observations/2026-08-20-codex-static-admission.json"
-            )
-            observation = _read_json(root, observation_locator)
-            observation["projection"]["marketplaceSha256"] = hashlib.sha256(
-                (root / marketplace_locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, observation_locator, observation)
-
-            acceptance = _read_json(root, "product/acceptance.json")
-            r2 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R2"
-            )
-            r2["evidence"][0]["sha256"] = hashlib.sha256(
-                (root / observation_locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex marketplace policy must be AVAILABLE/ON_INSTALL",
-                report["errors"],
-            )
-
-    def test_skill_only_manifest_rejects_an_mcp_execution_surface(self) -> None:
-        with _fixture() as root:
-            manifest_locator = (
-                "plugins/agent-autonomy-harness-codex/.codex-plugin/plugin.json"
-            )
-            manifest = _read_json(root, manifest_locator)
-            manifest["mcpServers"] = {
-                "not-executed": {"command": "not-executed"}
-            }
-            _write_json(root, manifest_locator, manifest)
-
-            observation_locator = (
-                "evals/observations/2026-08-20-codex-static-admission.json"
-            )
-            observation = _read_json(root, observation_locator)
-            observation["projection"]["manifestSha256"] = hashlib.sha256(
-                (root / manifest_locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, observation_locator, observation)
-
-            acceptance = _read_json(root, "product/acceptance.json")
-            r2 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R2"
-            )
-            r2["evidence"][0]["sha256"] = hashlib.sha256(
-                (root / observation_locator).read_bytes()
-            ).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "adapter codex manifest contains unsupported fields: ['mcpServers']",
-                report["errors"],
-            )
-
-    def test_projection_evidence_requires_the_complete_current_identity(self) -> None:
-        with _fixture() as root:
-            locator = "evals/observations/2026-08-20-codex-gt01-paired.json"
-            observation = _read_json(root, locator)
-            for field in (
-                "manifest",
-                "manifestSha256",
-                "marketplace",
-                "marketplaceSha256",
-                "contract",
-                "contractSha256",
-            ):
-                observation["projectionIdentity"].pop(field, None)
-            _write_json(root, locator, observation)
-
-            acceptance = _read_json(root, "product/acceptance.json")
-            r3 = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R3"
-            )
-            item = next(
-                item for item in r3["evidence"] if item["locator"] == locator
-            )
-            item["sha256"] = hashlib.sha256((root / locator).read_bytes()).hexdigest()
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "criteria[2].evidence[0] projection identity fields do not match "
-                "current adapter codex",
-                report["errors"],
-            )
-
-    def test_static_suite_cannot_claim_behavior_evidence(self) -> None:
-        with _fixture() as root:
-            suite = _read_json(root, "evals/golden-tasks.json")
-            suite["evaluationProtocol"]["staticSuiteIsNotBehaviorEvidence"] = False
-            _write_json(root, "evals/golden-tasks.json", suite)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "golden tasks must reject static-suite-as-behavior-evidence",
-                report["errors"],
-            )
-
-    def test_representative_policy_classifies_every_golden_task(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            acceptance["representativeBehaviorPolicy"]["postReleaseTasks"].remove(
-                "GT-10"
-            )
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "representative policy does not classify golden tasks: ['GT-10']",
-                report["errors"],
-            )
-
-    def test_historical_validator_on_active_path_fails(self) -> None:
-        with _fixture() as root:
-            forbidden = root / "harness/task_validator_o4_continuous_self_correction_v3.py"
-            forbidden.write_text("# historical proof generation\n", encoding="utf-8")
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "forbidden active path remains: "
-                "harness/task_validator_o4_continuous_self_correction_v3.py",
-                report["errors"],
-            )
-
-    def test_ignored_python_cache_is_release_blocking_residue(self) -> None:
-        with _fixture() as root:
-            cache = root / "nested" / "__pycache__"
-            cache.mkdir(parents=True)
-            (cache / "task.cpython-314.pyc").write_bytes(b"task residue")
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "known task residue remains: "
-                "['nested/__pycache__', "
-                "'nested/__pycache__/task.cpython-314.pyc']",
-                report["errors"],
-            )
-
-    def test_ignored_empty_task_directory_is_release_blocking_residue(self) -> None:
-        with _fixture() as root:
-            (root / ".tmp").mkdir()
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "known task residue remains: ['.tmp']",
-                report["errors"],
-            )
-
-    def test_project_audit_digest_is_bound(self) -> None:
-        with _fixture() as root:
-            report_path = (
-                root
-                / "research/reviews/"
-                "2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md"
-            )
-            report_path.write_text(
-                report_path.read_text(encoding="utf-8") + "\nchanged\n",
-                encoding="utf-8",
-            )
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "inputEvidence[0] repository digest mismatch",
-                report["errors"],
-            )
-
-    def test_required_representative_sample_keeps_failed_observation(self) -> None:
-        with _fixture() as root:
-            acceptance = _read_json(root, "product/acceptance.json")
-            representative = next(
-                criterion
-                for criterion in acceptance["criteria"]
-                if criterion["id"] == "R3"
-            )
-            representative["evidence"] = [
-                item
-                for item in representative["evidence"]
-                if "gt02" not in item["locator"]
-            ]
-            _write_json(root, "product/acceptance.json", acceptance)
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertIn(
-                "representative release sample missing task observations: "
-                "['GT-02']",
-                report["errors"],
-            )
-
-    def test_duplicate_json_key_fails_closed(self) -> None:
-        with _fixture() as root:
-            path = root / "product/constitution.json"
-            raw = path.read_text(encoding="utf-8")
-            path.write_text(
-                raw.replace('"schema": 2,', '"schema": 2,\n  "schema": 2,', 1),
-                encoding="utf-8",
-            )
-
-            report = verify_product(root)
-
-            self.assertFalse(report["valid"])
-            self.assertTrue(
-                any("duplicate JSON key: schema" in error for error in report["errors"])
-            )
-
-if __name__ == "__main__":
-    unittest.main()
+            (root / P).write_text('{"schema":2,"schema":2}\n', encoding='utf-8')
+            self.assert_has(verify_product(root)['errors'], 'duplicate JSON key')

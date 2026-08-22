@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "yiyuan-accord-claude",
+  "version": "2.0.0",
+  "description": "Thin Claude Code Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
+  "author": {
+    "name": "YIYUAN Accord contributors"
+  },
+  "homepage": "https://github.com/yiheng8023/YIYUAN-Accord",
+  "repository": "https://github.com/yiheng8023/YIYUAN-Accord",
+  "license": "Apache-2.0",
+  "keywords": ["yiyuan-accord", "human-agent-collaboration", "collaboration-reliability"],
+  "skills": "./skills/"
+}

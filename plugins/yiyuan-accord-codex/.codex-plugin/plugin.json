@@ -1,0 +1,25 @@
+{
+  "name": "yiyuan-accord-codex",
+  "version": "2.0.0",
+  "description": "Thin Codex Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
+  "author": {
+    "name": "YIYUAN Accord contributors"
+  },
+  "homepage": "https://github.com/yiheng8023/YIYUAN-Accord",
+  "repository": "https://github.com/yiheng8023/YIYUAN-Accord",
+  "license": "Apache-2.0",
+  "keywords": ["yiyuan-accord", "human-agent-collaboration", "collaboration-reliability"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "YIYUAN Accord for Codex",
+    "shortDescription": "Goal-first collaboration with bounded correction",
+    "longDescription": "One progressively disclosed Skill. It relies on current Codex-native capabilities and adds no runtime, Hook, MCP, App, state store or fixed host-version dependency.",
+    "developerName": "YIYUAN Accord contributors",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Read"],
+    "websiteURL": "https://github.com/yiheng8023/YIYUAN-Accord",
+    "defaultPrompt": [
+      "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
+    ]
+  }
+}

@@ -1,9 +1,25 @@
 {
   "schema": 2,
-  "id": "harness-product-constitution-v2",
-  "productId": "agent-autonomy-harness",
-  "purpose": "Provide a lightweight, open and Agent-neutral human-Agent collaboration contract that starts from the user's goal, uses the minimum sufficient route, preserves accountable human authority, continuously reconciles intent with reality, and closes the result, recovery and cleanup loop without duplicating sufficient host capability.",
-  "successDefinition": "A finite release is successful when its portable kernel and thin reference projections measurably help or preserve outcome quality on representative collaboration tasks, reduce unnecessary human orchestration and recovery burden, remain silent when native behavior is sufficient, and honestly expose unsupported or continuing field claims. The release is a bounded safety net and calibration contract, not a universal runtime or proof that every human-AI collaboration problem is solved. Future host improvement, field evidence and failures may narrow, revise or retire Harness mechanisms after release.",
+  "id": "yiyuan-accord-product-constitution-v1",
+  "productId": "yiyuan-accord",
+  "identity": {
+    "displayName": "YIYUAN Accord",
+    "repository": "https://github.com/yiheng8023/YIYUAN-Accord",
+    "pythonModule": "yiyuan_accord",
+    "pluginIds": ["yiyuan-accord-codex", "yiyuan-accord-claude"],
+    "compatibilityAliases": []
+  },
+  "domainModel": {
+    "missionScope": "human-ai-collaboration",
+    "currentProductScope": "human-agent-collaboration",
+    "productCategory": "portable-collaboration-reliability-contract-and-evaluation-framework",
+    "decisionDimensions": ["intent", "capability", "authority", "evidence"],
+    "crossCuttingObjects": ["state", "effect", "continuity", "lifecycle"],
+    "roleDistinctions": ["actor", "responsibility", "authority", "accountability"],
+    "rule": "The four decision dimensions are an initial diagnostic lens, not an exhaustive ontology. State, effect, continuity and lifecycle cross-cut them; authority, responsibility and accountability remain distinct."
+  },
+  "purpose": "Provide an open, Agent-neutral portable human-Agent collaboration reliability contract and evaluation framework that starts from the user's goal, uses the minimum sufficient route, preserves accountable human authority, continuously reconciles intent, state and observed effects, and closes recovery and cleanup without duplicating sufficient host or domain capability.",
+  "successDefinition": "A finite release is successful when its portable kernel and thin reference projections measurably help or preserve outcome quality on representative human-Agent collaboration tasks, reduce unnecessary orchestration and recovery burden, remain silent when native behavior is sufficient, and honestly expose unsupported or continuing field claims. The broader mission concerns human-AI collaboration, but each release is a bounded contract and evaluation surface rather than a universal runtime, governance platform or proof that every human-AI collaboration problem is solved. Future host improvement, field evidence and failures may narrow, revise or retire YIYUAN Accord mechanisms.",
   "kernel": [
     {
       "id": "K1",
@@ -13,7 +29,7 @@
     {
       "id": "K2",
       "name": "minimum-sufficient-route",
-      "commitment": "Use sufficient healthy native capability first, then suitable maintained capability, and add only the smallest evidenced residual; unknown capability remains unknown and sufficient native behavior produces no Harness intervention."
+      "commitment": "Use sufficient healthy native capability first, then suitable maintained capability, and add only the smallest evidenced residual; unknown capability remains unknown and sufficient native behavior produces no YIYUAN Accord intervention."
     },
     {
       "id": "K3",
@@ -80,7 +96,7 @@
     {
       "id": "H10",
       "mapsTo": ["K2", "K5"],
-      "rule": "Retire Harness-specific host logic when native improvement removes the residual gap."
+      "rule": "Retire YIYUAN Accord host-specific logic when native improvement removes the residual gap."
     }
   ],
   "learnedFailureStandards": [
@@ -185,7 +201,7 @@
       "field-effect",
       "cross-host-or-longitudinal"
     ],
-    "releaseRule": "Finite release requires deterministic conformance and bounded representative behavior for the claims it makes, task-time hosted verification bound to the exact clean candidate, separate named-human authority for that same candidate, an exact tagged public release only after those gates, and direct goal-carrier verification of its remote tag, public claim, attached-asset policy and final cleanup. The repository verifier cannot adjudicate these external facts. Comparative field value, broad effectiveness, cross-host equivalence and longitudinal human effects remain continuing evidence lanes unless explicitly claimed by the release. A representative task failure blocks the exact host or projection behavior qualification, not the Harness release, unless that release claims the failed behavior.",
+    "releaseRule": "Finite release requires live-computed deterministic conformance and bounded representative behavior for the claims it makes, an unchanged local candidate that passes direct complete verification and independent review before the same SHA is pushed, task-time hosted verification of that SHA, separate named-human authority for it, an exact tagged public release only after those gates, and direct goal-carrier verification of its remote tag, public claim, attached-asset policy and final cleanup. Repository observations cannot self-attest deterministic conformance, local review or these external facts. Comparative field value, broad effectiveness, cross-host equivalence and longitudinal human effects remain continuing evidence lanes unless explicitly claimed by the release. A representative task failure blocks the exact host or projection behavior qualification, not a YIYUAN Accord release whose claim excludes the failed behavior.",
     "claimRule": "Tests, reports, registrations, commits, prompts and human assent support only the direct claim they evidence; none becomes the product result by existing. A task failure must remain failed, retain its residue disposition and narrow the applicable claim; detecting it cannot be promoted into host success, and host failure cannot be used to hide a conformant evaluation result."
   },
   "evolutionPolicy": {
@@ -204,9 +220,9 @@
       "owner-and-retirement-trigger"
     ],
     "repairRule": "A second same-purpose repair generation triggers abstraction review and a deletion or replacement attempt before another mechanism is admitted.",
-    "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, the Harness adds no question, instruction, tool, approval, state, topology, validation or persistent resource.",
+    "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, YIYUAN Accord adds no question, instruction, tool, approval, state, topology, validation or persistent resource.",
     "feedbackRule": "Material user correction, observed failure, host change, evidence conflict or phase boundary revalidates the affected plan, acceptance mapping and projection; unrelated accepted truth remains stable.",
-    "retirementRule": "A Harness-specific mechanism is simplified, disabled or removed when its residual benefit is no longer demonstrated."
+    "retirementRule": "A YIYUAN Accord mechanism is simplified, disabled or removed when its residual benefit is no longer demonstrated."
   },
   "authority": {
     "semantic": [
@@ -214,13 +230,17 @@
       "product/program.json",
       "product/acceptance.json"
     ],
-    "executableVerifier": "python -B -m harness verify",
+    "executableVerifier": "python -B -m yiyuan_accord verify",
     "derivedSurfaces": [
       "AGENTS.md",
+      "CONTEXT.md",
       "README.md",
       "README.zh-CN.md",
       "docs/architecture.md",
+      "CONTRIBUTING.md",
       "docs/operations/CONTINUATION.md",
+      "docs/releases/v2.0.md",
+      "evals/golden-tasks.json",
       "plugins/"
     ],
     "historicalAndResearchRole": "non-authoritative counterevidence and evolution input only",

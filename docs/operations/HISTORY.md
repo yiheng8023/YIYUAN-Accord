@@ -51,8 +51,8 @@ Codex made the intended one-line fix, passed the focused test and preserved
 unrelated state, but left two Python cache files without disclosing them. A
 single minimal Skill repair repeated the same failure, so the repair was
 removed and the task stayed failed. This established a reusable distinction:
-the Harness may conform by exposing and limiting a host failure even while the
-host behavior itself remains unqualified.
+the YIYUAN Accord evaluation may conform by exposing and limiting a host
+failure even while the host behavior itself remains unqualified.
 
 Those lessons now live in constitution learned-failure standards and
 representative Golden Tasks. The retired code is not required at runtime to
@@ -61,7 +61,7 @@ remember them.
 ## Research custody
 
 The full project-specific diagnosis is preserved at
-research/reviews/2026-08-20-agent-autonomy-harness-refactor-and-evolution-report.md.
+research/reviews/2026-08-20-yiyuan-accord-refactor-and-evolution-report.md.
 The broader human-AI collaboration shortfall packet remains under unique
 custody in YIYUAN-CALIBRATION at revision
 e060a08f05361cb4cc9a67be050236cdbbde1de5. Its seven invariant candidates inform
@@ -70,10 +70,11 @@ diagnostic hypotheses, not a feature backlog.
 
 ## Release is not the end
 
-A finite v1.2 release will close only its declared deterministic and
+A finite release closes only its declared deterministic and
 representative claims. Its final candidate cannot attest itself: exact-SHA
-hosted verification remains a direct task-time observation and must precede a
-separate named-human release decision for the same unchanged revision. Neither
+local verification and independent review must pass before that SHA is pushed;
+hosted verification of the unchanged push then remains a direct task-time
+observation and must precede a separate named-human release decision. Neither
 is completion: the exact tagged public release, direct live verification and
 goal-carrier cleanup must follow. Later field, cross-host and longitudinal evidence
 may add a counterexample, narrow a claim, simplify or retire a projection, or
