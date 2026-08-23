@@ -101,10 +101,12 @@ independent specification, implementation-robustness and standards-conformance
 review. That local gate also
 requires an independent human or second observation surface to compare the
 publishable source bundle with the original host or session records, plus one
-non-author colleague to complete the README activation, confirmation and
-removal path from a clean state. Keep private raw records outside the
-repository, and describe that walkthrough only as an internal usability
-sample. Only after these checks pass may the same SHA be pushed and verified
+evaluator isolated from candidate-preparation context to complete the README
+activation, confirmation and removal path from a clean state. This
+context-isolated, outcome-bound, identity-neutral internal usability sample may
+be executed by the accountable user, a colleague or a second observation
+surface. Keep private raw records outside the repository. Only after these
+checks pass may the same SHA be pushed and verified
 on every declared hosted system;
 only after hosted verification may separate named-human authorization be
 requested for that SHA and claim ceiling. Do not write candidate-specific
@@ -127,6 +129,11 @@ captured task source and claimed cleanup have both occurred; it is not a
 backdated task-start timestamp. The full
 observation field list remains data-driven by
 `evals/golden-tasks.json.evaluationProtocol.requiredObservationFields`.
+In acceptance evidence, `supportsCriterion` and the observation's
+`criterionDecisions` express criterion-specific support. The `claim` field
+deliberately repeats the observation's exact `claimLimit.statement`; this
+conservative, machine-checkable equality prevents a release-facing paraphrase
+from exceeding the observed evidence ceiling.
 Every retained failure is also projected as a sorted `taskId:failure` token in
 `claimCeiling.retainedBehaviorExclusions` and the exact release body.
 

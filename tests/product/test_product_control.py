@@ -147,8 +147,9 @@ class ProductControlTests(unittest.TestCase):
             self.assert_has(verify_product(root)['errors'], 'sourceEvidence', 'Q4 representative coverage')
 
     def test_failed_sample_narrows_claim(self):
-        self.rejected(A, 'claim must equal observation claimLimit.statement', lambda v:
-                      v['criteria'][2]['evidence'][2].update(claim='overclaim'))
+        self.rejected(A, 'claim must equal claimLimit.statement', lambda v:
+                      ((c := next(c for c in v['criteria'] if c['id'] == 'Q1')).update(assessment='pending'),
+                       next(iter(c['evidence'])).update(claim='overclaim')))
         self.rejected(A, 'retained behavior exclusions', lambda v:
                       v['claimCeiling'].update(retainedBehaviorExclusions=[]))
         with _fixture() as root:

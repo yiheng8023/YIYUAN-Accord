@@ -160,7 +160,8 @@
         "Codex and Claude Code as current reference hosts, not permanent product",
         "official version, maturity label",
         "retirement trigger",
-        "exact local verification"
+        "exact local verification",
+        "context-isolated, outcome-bound, identity-neutral"
       ],
       "docs/operations/CONTINUATION.md": [
         "Determine the first incomplete gate from live Git",

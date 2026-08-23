@@ -541,14 +541,14 @@ def criterion_observation_decision(
     if decision not in {"accepted", "accepted-with-exclusion", "rejected"}:
         errors.append(f"{label} has no explicit {criterion_id} decision")
     claim = item.get("claim")
-    if not isinstance(claim, str) or not claim.strip():
+    if not _nonempty_string(claim):
         errors.append(f"{label} lacks a {criterion_id} evidence claim")
         accepted = False
     elif (
         not isinstance(observation.get("claimLimit"), dict)
         or claim != observation["claimLimit"].get("statement")
     ):
-        errors.append(f"{label} claim must equal observation claimLimit.statement")
+        errors.append(f"{label} claim must equal claimLimit.statement")
         accepted = False
     task_id = observation.get("taskId")
     if (

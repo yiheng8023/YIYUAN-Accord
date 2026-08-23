@@ -517,8 +517,6 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
                 errors,
                 stored_classes,
             )
-            if assessment != "verified":
-                continue
             accepted, decision_errors = criterion_observation_decision(
                 criterion.get("id"),
                 item,
