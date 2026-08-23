@@ -5,7 +5,7 @@
   "release": "v2.0",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "51a0835b36af32e94b1c3556f1d2198daf854adaa82dfc3ade586ab6b45a729a",
+  "canonicalGoalObjectiveSha256": "f1ee85deb5be0934106a8453d259f9920dcab8624d7177a9c6baacb86b3cdda5",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
@@ -234,7 +234,7 @@
       "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "codex-cloud": "https://chatgpt.com/codex/"
     },
-    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one non-author colleague's clean-state README walkthrough covering activation, confirmation and removal; the walkthrough is an internal usability sample, not broad field evidence. Task-time hosted observation must then bind the unchanged HEAD and every required system. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
+    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one clean-state README activation, confirmation and removal walkthrough by an evaluator isolated from candidate-preparation context. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Task-time hosted observation must then bind the unchanged HEAD and every required system. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",

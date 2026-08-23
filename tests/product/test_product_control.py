@@ -70,14 +70,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(all((host['staticReady'] for host in report['hostChecks'].values())))
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
         limit = program['complexityBudget']['targets']['maxProductCodeAndTestBytes']
-        self.assertGreaterEqual(
-            limit - report['complexity']['productCodeAndTestBytes'], (limit + 19) // 20)
+        self.assertGreaterEqual(limit - report['complexity']['productCodeAndTestBytes'], (limit + 19) // 20)
         self.assertNotRegex((ROOT / 'CONTEXT.md').read_text(encoding='utf-8'),
                             r'#/[^`\n]+/[0-9]+(?:/|`)')
         self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
-        local_gate = program['releaseProcedure']['orderedGates'][1]['condition']
-        for marker in ('original host or session records', 'non-author colleague'):
-            self.assertIn(marker, local_gate)
+        gate = program['releaseProcedure']['orderedGates'][1]['condition']
+        for marker in ('original host or session records', 'context-isolated, outcome-bound, identity-neutral'):
+            self.assertIn(marker, gate)
             self.assertIn(marker, acceptance['candidateVerification']['rule'])
 
     def test_authority_and_static_suite_mutations_fail_closed(self):

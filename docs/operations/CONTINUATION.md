@@ -65,8 +65,10 @@ Then read, in order:
    plus independent specification, implementation-robustness and
    standards-conformance review. Independently
    compare the publishable source bundle with original host/session records,
-   and have one non-author colleague complete the README activation,
-   confirmation and removal path from a clean state as an internal usability
+   and have one evaluator isolated from candidate-preparation context complete
+   the README activation, confirmation and removal path from a clean state. The
+   accountable user, a colleague or a second observation surface may execute
+   this context-isolated, outcome-bound, identity-neutral internal usability
    sample. Resolve every P0/P1; only then push the same SHA.
 6. Verify the unchanged pushed SHA on GitHub Actions for Linux, Windows and
    macOS plus ordinary Codex Cloud. Repository data cannot satisfy this gate.

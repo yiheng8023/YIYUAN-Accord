@@ -136,9 +136,11 @@ observation, not by a boolean written into the observation.
 Before the exact local release gate passes, an independent human or second
 observation surface compares the publishable bundle with the original host or
 session records. The raw records remain outside the public repository. One
-non-author colleague also exercises the README activation, confirmation and
-removal path from a clean state; that result is an internal usability sample,
-not population-level field evidence.
+evaluator isolated from candidate-preparation context also exercises the README
+activation, confirmation and removal path from a clean state. The accountable
+user, a colleague or a second observation surface may execute this
+context-isolated, outcome-bound, identity-neutral internal usability sample; it
+is not population-level field evidence.
 
 The repository verifier recomputes these digests and rejects stale or partial
 bindings. It does not authenticate a real-world observer or prove that a host
