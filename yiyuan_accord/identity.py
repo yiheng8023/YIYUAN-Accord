@@ -8,28 +8,32 @@ from urllib.parse import urlsplit
 
 RELEASE_RE = re.compile(r"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:\.(0|[1-9][0-9]*))?$")
 
-CONSTITUTION_FIELDS = {
-    "schema", "id", "productId", "identity", "domainModel", "purpose",
-    "successDefinition", "kernel", "hostAdapterStandard",
-    "learnedFailureStandards", "qualityInvariants", "humanAuthority",
-    "productBoundary", "evidenceBoundary", "evolutionPolicy", "authority",
-}
-PROGRAM_FIELDS = {
-    "schema", "id", "productId", "release", "releaseIntent", "constitution",
-    "acceptance", "maintenancePlan", "status", "inputEvidence",
-    "increment", "releaseProcedure", "goalModePrompt", "hostProjections",
-    "complexityBudget", "processLossControl",
-}
-ACCEPTANCE_FIELDS = {
-    "schema", "id", "productId", "release", "constitution", "program",
-    "completionExpression", "evidenceLanes", "representativeBehaviorPolicy",
-    "criteria", "candidateVerification", "releaseAuthorization",
-    "publicRelease", "claimCeiling",
-}
+CONSTITUTION_FIELDS = set((
+    "schema id productId identity domainModel purpose successDefinition kernel "
+    "hostAdapterStandard learnedFailureStandards qualityInvariants humanAuthority "
+    "productBoundary evidenceBoundary evolutionPolicy authority"
+).split())
+PROGRAM_FIELDS = set((
+    "schema id productId release releaseIntent constitution acceptance maintenancePlan "
+    "status inputEvidence increment releaseProcedure goalModePrompt hostProjections "
+    "complexityBudget processLossControl"
+).split())
+ACCEPTANCE_FIELDS = set((
+    "schema id productId release constitution program completionExpression evidenceLanes "
+    "representativeBehaviorPolicy criteria candidateVerification releaseAuthorization "
+    "publicRelease claimCeiling"
+).split())
 
 
 def _nonempty_string(value):
     return isinstance(value, str) and bool(value.strip())
+
+
+def _exact(value, fields, texts=()):
+    return (
+        isinstance(value, dict) and set(value) == set(fields)
+        and all(_nonempty_string(value.get(field)) for field in texts)
+    )
 
 
 def _string_list(value):
@@ -52,6 +56,10 @@ def _safe_https_locator(value):
     )
 
 
+def _ast_name(node):
+    return getattr(node, "id", getattr(node, "attr", getattr(node, "name", "")))
+
+
 def identity_contract_errors(product_id, identity):
     fields = {
         "displayName",
@@ -60,7 +68,7 @@ def identity_contract_errors(product_id, identity):
         "pluginIds",
         "compatibilityAliases",
     }
-    if not isinstance(identity, dict) or set(identity) != fields:
+    if not _exact(identity, fields):
         return ["constitution.identity shape is invalid"]
 
     errors = []
@@ -101,7 +109,7 @@ def domain_model_errors(domain):
         "roleDistinctions",
         "rule",
     }
-    if not isinstance(domain, dict) or set(domain) != fields:
+    if not _exact(domain, fields):
         return ["constitution.domainModel shape is invalid"]
     errors = []
     for field in ("missionScope", "currentProductScope", "productCategory", "rule"):
@@ -132,7 +140,7 @@ def operating_model_errors(constitution):
     ]
     for label, (list_fields, text_fields) in policies.items():
         value = constitution.get(label)
-        if not isinstance(value, dict) or set(value) != set(list_fields + text_fields):
+        if not _exact(value, list_fields + text_fields):
             errors.append(f"constitution.{label} shape is invalid")
             continue
         for field in list_fields:
@@ -181,11 +189,11 @@ def active_tree_errors(root, locators, historical_revision):
     module_token = module.lower().encode()
     module_context = re.compile(
         rb"(?<![\w.-])(?:(?:python(?:3(?:\.\d+)?)?|py)(?:\s+-\S+)*\s+-m|"
-        rb"(?:from|import)\s+)\s*"
+        rb"from\s+|import(?:\s+[\w.]+(?:\s+as\s+\w+)?\s*,)*\s+)\s*"
         + re.escape(module_token)
         + rb"(?![\w])|(?<![\w.-])"
         + re.escape(module_token)
-        + rb"[\\/]|[\"'](?:pythonmodule|python_module|module)[\"']\s*[:=]\s*[\"']"
+        + rb"(?:[\\/]|\.py(?![\w]))|[\"'](?:pythonmodule|python_module|module)[\"']\s*[:=]\s*[\"']"
         + re.escape(module_token)
         + rb"[\"']"
     )
@@ -209,49 +217,44 @@ def module_layout_errors(root, module, executing, test_markers, minimum_test_cou
     )
     test_file = root / "tests/product/test_product_control.py"
     if not test_file.is_file():
-        errors.append("product control tests are missing")
-    else:
-        try:
-            tree = ast.parse(test_file.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, SyntaxError):
-            tree = ast.Module(body=[], type_ignores=[])
-        markers = test_markers or []
-        classes = [item[6:] for item in markers if item.startswith("class ")]
-        methods = [item[4:] for item in markers if item.startswith("def ")]
-        matches = [node for node in tree.body if isinstance(node, ast.ClassDef)
-                   and node.name in classes]
-        test_class = matches[0] if len(classes) == len(matches) == 1 else None
-        functions = {node.name: node for node in test_class.body
-                     if isinstance(node, ast.FunctionDef)} if test_class else {}
-        reserved = set(classes) | {"load_tests"}
-        assigned = {
-            target.id for node in tree.body if isinstance(node, (ast.Assign, ast.AnnAssign))
-            for target in (node.targets if isinstance(node, ast.Assign) else [node.target])
-            if isinstance(target, ast.Name)
-        }
-        if (
-            not methods or len(markers) != 1 + len(methods) or test_class is None
-            or "TestCase" not in {getattr(base, "attr", getattr(base, "id", ""))
-                                  for base in test_class.bases}
-            or set(methods) - set(functions)
-            or not isinstance(minimum_test_count, int)
-            or isinstance(minimum_test_count, bool)
-            or minimum_test_count <= 0
-            or len({name for name in functions if name.startswith("test_")})
-            < minimum_test_count
-            or test_class.decorator_list
-            or any(functions[name].decorator_list for name in methods if name in functions)
-            or assigned & reserved
-            or any(isinstance(node, ast.FunctionDef) and node.name == "load_tests"
-                   for node in tree.body)
-            or any(getattr(node, "id", getattr(
-                       node, "attr", getattr(node, "name", "")))
-                   in {"_exit", "exit", "quit"} or
-                   isinstance(node, ast.Raise) and
-                   getattr(node.exc, "id", "") == "SystemExit"
-                   for node in ast.walk(tree))
-        ):
-            errors.append("product control test markers are not executable unittest methods")
+        return errors + ["product control tests are missing"]
+    try:
+        tree = ast.parse(test_file.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, SyntaxError):
+        tree = ast.Module(body=[], type_ignores=[])
+    markers = test_markers or []
+    classes = [item[6:] for item in markers if item.startswith("class ")]
+    methods = [item[4:] for item in markers if item.startswith("def ")]
+    matches = [node for node in tree.body if isinstance(node, ast.ClassDef)
+               and node.name in classes]
+    test_class = matches[0] if len(classes) == len(matches) == 1 else None
+    functions = ({node.name: node for node in test_class.body
+                  if isinstance(node, ast.FunctionDef)} if test_class else {})
+    assigned = {
+        target.id for node in tree.body if isinstance(node, (ast.Assign, ast.AnnAssign))
+        for target in getattr(node, "targets", (getattr(node, "target", None),))
+        if isinstance(target, ast.Name)
+    }
+    invalid = (
+        not methods or len(markers) != len(methods) + 1 or test_class is None
+        or "TestCase" not in {_ast_name(node) for node in test_class.bases}
+        or set(methods) - set(functions)
+        or not isinstance(minimum_test_count, int) or isinstance(minimum_test_count, bool)
+        or minimum_test_count <= 0
+        or sum(name.startswith("test_") for name in functions) < minimum_test_count
+        or test_class.decorator_list
+        or any(functions[name].decorator_list for name in methods if name in functions)
+        or assigned & (set(classes) | {"load_tests"})
+        or any(isinstance(node, ast.FunctionDef) and node.name == "load_tests"
+               for node in tree.body)
+        or any(
+            _ast_name(node) in {"_exit", "exit", "quit"}
+            or isinstance(node, ast.Raise) and _ast_name(node.exc) == "SystemExit"
+            for node in ast.walk(tree)
+        )
+    )
+    if invalid:
+        errors.append("product control test markers are not executable unittest methods")
     return errors
 
 
@@ -265,7 +268,7 @@ def authority_contract_errors(
         "historicalAndResearchRole",
         "conflictRule",
     }
-    if not isinstance(authority, dict) or set(authority) != fields:
+    if not _exact(authority, fields):
         return ["constitution.authority shape is invalid"]
     errors = []
     if authority.get("semantic") != list(semantic_files):

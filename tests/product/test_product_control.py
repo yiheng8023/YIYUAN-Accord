@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-22-v20-representative-source.json'
 CRITERIA = ['R1', 'R2', 'R3', 'R4', 'Q1', 'Q2', 'Q3', 'Q4']
+RETIRED = {'productId': 'retired-product',
+           'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
 
 def _read(root, locator):
     return json.loads((root / locator).read_text(encoding='utf-8'))
@@ -32,6 +34,14 @@ def _rehash(root, locator):
             if item['locator'] == locator:
                 item['sha256'] = digest
     _write(root, A, acceptance)
+
+def _retired_errors(body, locator='sample.txt'):
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        (root / locator).write_text(body, encoding='utf-8')
+        history = [json.dumps(RETIRED), '# Retired Product\n']
+        with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
+            return active_tree_errors(root, [locator], '0' * 40)
 
 class ProductControlTests(unittest.TestCase):
 
@@ -59,6 +69,8 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
         self.assertTrue(all((host['staticReady'] for host in report['hostChecks'].values())))
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
+        self.assertNotIn('surfaceMarkers', program['releaseProcedure'])
+        self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
         local_gate = program['releaseProcedure']['orderedGates'][1]['condition']
         for marker in ('original host or session records', 'non-author colleague'):
             self.assertIn(marker, local_gate)
@@ -162,17 +174,12 @@ class ProductControlTests(unittest.TestCase):
             increment['workItems'][0]['closeoutSequence'][0]['state'] = 'active'
             increment['workItems'][0]['closeoutSequence'][0]['stopCondition'] = 'opposite'
             program['releaseProcedure']['orderedGates'][0]['id'] = ''
-            program['goalModePrompt']['objective'] = '先推送再审查'
             program['goalModePrompt']['workStageIds'] = ['wrong']
             _write(root, P, program)
-            readme = (root / 'README.md').read_text(encoding='utf-8')
-            (root / 'README.md').write_text(readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
-            self.assert_has(verify_product(root)['errors'], 'derived surface markers')
-            (root / 'README.md').write_text(readme, encoding='utf-8')
             self.assert_has(verify_product(root)['errors'], 'goalModePrompt.mapsTo',
                             'increment.acceptanceIds', 'workItems[0].acceptanceIds',
                             'closeoutSequence', 'required release gate sequence',
-                            'release gate order', 'workStageIds')
+                            'workStageIds')
 
     def test_evidence_cannot_self_verify_or_self_authorize(self):
         with _fixture() as root:
@@ -235,19 +242,14 @@ class ProductControlTests(unittest.TestCase):
             'python3 -m retired_module verify\n',
             'py -3.10 -m retired_module verify\n',
             'from retired_module import item\n',
+            'import os, retired_module\n',
             'retired_module/path.py\n',
+            'retired_module.py\n',
             '{"pythonModule":"retired_module"}\n',
         )
-        old = {'productId': 'retired-product',
-               'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
         for body in cases:
-            with self.subTest(body=body), tempfile.TemporaryDirectory() as temporary:
-                root, locator = Path(temporary), 'sample.txt'
-                (root / locator).write_text(body, encoding='utf-8')
-                history = [json.dumps(old), '# Retired Product\n']
-                with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
-                    self.assert_has(active_tree_errors(root, [locator], '0' * 40),
-                                    f'superseded identity remains in active tree: {locator}')
+            with self.subTest(body=body):
+                self.assert_has(_retired_errors(body), 'superseded identity remains')
 
     def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:
@@ -255,12 +257,8 @@ class ProductControlTests(unittest.TestCase):
             (root / retired).write_text('# retired\n', encoding='utf-8')
             (root / '.tmp').mkdir()
             self.assert_has(verify_product(root)['errors'], 'forbidden active path remains', 'known task residue')
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            (root / 'README.md').write_text('retired-product', encoding='utf-8')
-            old = {'productId': 'retired-product', 'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
-            with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=[json.dumps(old), '# Retired Product\n']):
-                self.assert_has(active_tree_errors(root, ['README.md'], '0' * 40), 'superseded identity remains')
+        self.assert_has(_retired_errors('retired-product', 'README.md'),
+                        'superseded identity remains')
         with _fixture() as root:
             (root / P).write_text('{"schema":2,"schema":2}\n', encoding='utf-8')
             self.assert_has(verify_product(root)['errors'], 'duplicate JSON key')

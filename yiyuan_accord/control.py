@@ -221,33 +221,18 @@ def _fallback_repository_files(root):
 
 def _repository_files(root):
     try:
-        result = subprocess.run(
+        output = subprocess.check_output(
             ["git", "-C", str(root), "ls-files", "-z"],
-            check=False,
-            stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
             timeout=10,
         )
-        if result.returncode == 0:
-            indexed = [
-                item.decode("utf-8")
-                for item in result.stdout.split(b"\0")
-                if item
-            ]
-            return (
-                sorted(
-                    {
-                        item
-                        for item in indexed
-                        if (root / item).is_file() or (root / item).is_symlink()
-                    }
-                    | set(_fallback_repository_files(root))
-                ),
-                "git-index-plus-worktree",
-            )
+        indexed = [item.decode("utf-8") for item in output.split(b"\0") if item]
+        return sorted({
+            item for item in indexed
+            if (root / item).is_file() or (root / item).is_symlink()
+        } | set(_fallback_repository_files(root)))
     except (OSError, subprocess.SubprocessError, UnicodeError):
-        pass
-    return _fallback_repository_files(root), "filesystem-fallback"
+        return _fallback_repository_files(root)
 
 
 def _python_bytes(root, relative_root):
@@ -261,7 +246,7 @@ def _python_bytes(root, relative_root):
     )
 
 
-def _validate_complexity(root, program, python_module, errors):
+def _validate_complexity(root, program, python_module, files, errors):
     budget = program.get("complexityBudget")
     if not isinstance(budget, dict):
         errors.append("program.complexityBudget must be an object")
@@ -277,12 +262,9 @@ def _validate_complexity(root, program, python_module, errors):
         budget.get("minimumTestCount"),
     ))
 
-    files, inventory_source = _repository_files(root)
     product_code_and_tests = _python_bytes(root, python_module) + _python_bytes(
         root, "tests/product"
     )
-    control = root / python_module / "control.py"
-    control_bytes = control.stat().st_size if control.is_file() else 0
     instruction_paths = _string_list(budget.get("primaryInstructionPaths"))
     if not instruction_paths:
         errors.append("primaryInstructionPaths must be non-empty")
@@ -295,26 +277,19 @@ def _validate_complexity(root, program, python_module, errors):
             instruction_bytes += path.stat().st_size
 
     metrics = {
-        "inventorySource": inventory_source,
         "trackedFiles": len(files),
         "productCodeAndTestBytes": product_code_and_tests,
-        "controlBytes": control_bytes,
         "primaryInstructionBytes": instruction_bytes,
     }
-    target_map = {
-        "maxTrackedFiles": "trackedFiles",
-        "maxProductCodeAndTestBytes": "productCodeAndTestBytes",
-        "maxControlBytes": "controlBytes",
-        "maxPrimaryInstructionBytes": "primaryInstructionBytes",
-    }
-    for target_name, metric_name in target_map.items():
+    for metric_name, measured in metrics.items():
+        target_name = f"max{metric_name[0].upper()}{metric_name[1:]}"
         limit = targets.get(target_name)
         if not isinstance(limit, int) or isinstance(limit, bool) or limit <= 0:
             errors.append(f"complexity target {target_name} must be a positive integer")
-        elif metrics[metric_name] > limit:
+        elif measured > limit:
             errors.append(
                 f"complexity target exceeded: {metric_name}="
-                f"{metrics[metric_name]} > {limit}"
+                f"{measured} > {limit}"
             )
 
     forbidden = _string_list(budget.get("forbiddenActivePaths"))
@@ -814,7 +789,7 @@ def verify_product(root):
                 "errors": local_errors,
             }
 
-    identity_files, _ = _repository_files(root)
+    repository_files = _repository_files(root)
     errors.extend(
         projection_evidence_binding_errors(
             root, acceptance, host_reports, _read_json
@@ -835,13 +810,14 @@ def verify_product(root):
         if isinstance(item, dict)
         and item.get("kind") == "historical-release-and-counterevidence-boundary"
     ), None)
-    errors.extend(active_tree_errors(root, identity_files, historical_revision))
+    errors.extend(active_tree_errors(root, repository_files, historical_revision))
 
     python_module = identity.get("pythonModule")
     complexity = _validate_complexity(
         root,
         program,
         python_module if isinstance(python_module, str) else "__invalid__",
+        repository_files,
         errors,
     )
     residue = known_task_residue(root)

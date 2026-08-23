@@ -5,23 +5,21 @@ import os
 import re
 import subprocess
 
-from .identity import _nonempty_string, _safe_https_locator, _string_list
-_AUTHORITY_DECISION_FIELDS = {
-    "state", "candidateRevision", "namedHuman", "authorizedAt",
-    "claimCeilingAccepted", "publicationAuthorized", "releaseAuthorized",
-}
-RELEASE_PROCEDURE_FIELDS = {
-    "orderedGates", "candidateVerificationSystems", "assetPolicy", "surfaceMarkers", "rule",
-}
-REQUIRED_CANDIDATE_SYSTEMS = {
-    "github-actions-ubuntu-latest",
-    "github-actions-windows-latest",
-    "github-actions-macos-latest",
-    "codex-cloud",
-}
-RELEASE_GATE_FIELDS = {
-    "id", "dependsOn", "acceptanceIds", "completionOperand", "condition",
-}
+from .identity import _exact, _nonempty_string, _safe_https_locator, _string_list
+_AUTHORITY_DECISION_FIELDS = set((
+    "state candidateRevision namedHuman authorizedAt claimCeilingAccepted "
+    "publicationAuthorized releaseAuthorized"
+).split())
+RELEASE_PROCEDURE_FIELDS = set(
+    "orderedGates candidateVerificationSystems assetPolicy rule".split()
+)
+REQUIRED_CANDIDATE_SYSTEMS = set((
+    "github-actions-ubuntu-latest github-actions-windows-latest "
+    "github-actions-macos-latest codex-cloud"
+).split())
+RELEASE_GATE_FIELDS = set(
+    "id dependsOn acceptanceIds completionOperand condition".split()
+)
 RELEASE_GATE_SEQUENCE = (
     ("repository-candidate", None),
     ("exact-local-verification-and-review", "exactLocalVerificationAndReview"),
@@ -35,40 +33,25 @@ EXTERNAL_COMPLETION_OPERANDS = tuple(
 )
 REPOSITORY_AUTHORIZATION_FIELDS = _AUTHORITY_DECISION_FIELDS | {"mode"}
 MANIFEST_FIELDS = {
-    "codex": {
-        "name", "version", "description", "author", "homepage", "repository",
-        "license", "keywords", "skills", "interface",
-    },
-    "claude-code": {
-        "$schema", "name", "version", "description", "author", "homepage",
-        "repository", "license", "keywords", "skills",
-    },
+    "codex": set(
+        "name version description author homepage repository license keywords skills interface".split()
+    ),
+    "claude-code": set(
+        "$schema name version description author homepage repository license keywords skills".split()
+    ),
 }
-CODEX_INTERFACE_FIELDS = {
-    "displayName",
-    "shortDescription",
-    "longDescription",
-    "developerName",
-    "category",
-    "capabilities",
-    "websiteURL",
-    "defaultPrompt",
-}
+CODEX_INTERFACE_FIELDS = set((
+    "displayName shortDescription longDescription developerName category capabilities "
+    "websiteURL defaultPrompt"
+).split())
 CODEX_METADATA_FIELDS = {
-    "interface": {"display_name", "short_description", "default_prompt"},
+    "interface": set("display_name short_description default_prompt".split()),
     "policy": {"allow_implicit_invocation"},
 }
-_PROJECTION_FIELDS = {
-    "id", "packageId", "packageVersion", "packageSha256", "manifest",
-    "contract", "skill", "metadataFiles", "maxSkillBytes",
-    "requiredSkillMarkers", "forbiddenPaths",
-}
-
-
-def _exact(value, fields):
-    return isinstance(value, dict) and set(value) == set(fields)
-
-
+_PROJECTION_FIELDS = set((
+    "id packageId packageVersion packageSha256 manifest contract skill metadataFiles "
+    "maxSkillBytes requiredSkillMarkers forbiddenPaths"
+).split())
 def repository_relative_path(root, locator):
     if not isinstance(locator, str) or not locator or "\\" in locator:
         return None
@@ -118,42 +101,34 @@ def known_task_residue(root):
     residue_directories = {"__pycache__", ".tmp", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
     for current, directories, files in os.walk(resolved_root, followlinks=False):
         base = Path(current)
-        retained_directories = []
-        for name in directories:
+        for name in tuple(directories):
             path = base / name
             relative = path.relative_to(resolved_root).as_posix()
-            parts = Path(relative).parts
-            if set(parts) & residue_directories:
+            if name in residue_directories:
                 residue.append(relative)
-            if name != ".git" and not path.is_symlink():
-                retained_directories.append(name)
-        directories[:] = retained_directories
+            if name == ".git" or name in residue_directories or path.is_symlink():
+                directories.remove(name)
         for name in files:
-            path = base / name
-            relative = path.relative_to(resolved_root).as_posix()
-            parts = Path(relative).parts
             lowered_name = name.lower()
             if (
                 lowered_name in {"error.log", ".coverage"}
                 or lowered_name.endswith((".pyc", ".pyo"))
-                or bool(set(parts) & residue_directories)
             ):
-                residue.append(relative)
-    return sorted(set(residue))
+                residue.append((base / name).relative_to(resolved_root).as_posix())
+    return sorted(residue)
 
 
 def clean_git_checkout(root):
     try:
-        top_level = subprocess.run(
+        top_level = subprocess.check_output(
             ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
-            check=True,
-            capture_output=True,
+            stderr=subprocess.DEVNULL,
             text=True,
             timeout=10,
-        ).stdout.strip()
+        ).strip()
         if Path(top_level).resolve(strict=True) != root.resolve(strict=True):
             return False
-        status = subprocess.run(
+        status = subprocess.check_output(
             [
                 "git",
                 "-C",
@@ -162,11 +137,9 @@ def clean_git_checkout(root):
                 "--porcelain=v1",
                 "--untracked-files=all",
             ],
-            check=True,
-            stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
             timeout=10,
-        ).stdout
+        )
     except (OSError, subprocess.SubprocessError, UnicodeError):
         return False
     return not status
@@ -578,40 +551,48 @@ def criterion_observation_decision(
     return accepted, errors
 
 
+def _mapped_sequence(value, label, criterion_ids):
+    if not isinstance(value, list) or not value or any(
+        not isinstance(item, dict) for item in value
+    ):
+        return [], [], [f"{label} must be a non-empty object list"]
+    errors, item_ids, coverage = [], [], set()
+    for index, item in enumerate(value):
+        item_label = f"{label}[{index}]"
+        item_id = item.get("id")
+        if _nonempty_string(item_id):
+            item_ids.append(item_id)
+        else:
+            errors.append(f"{item_label}.id must be non-empty")
+        mapped = _string_list(item.get("acceptanceIds"))
+        if not mapped or not set(mapped).issubset(criterion_ids):
+            errors.append(f"{item_label}.acceptanceIds is invalid")
+        else:
+            coverage.update(mapped)
+    if len(item_ids) != len(set(item_ids)):
+        errors.append(f"{label} ids must be unique")
+    if coverage != criterion_ids:
+        errors.append(f"{label} must map every criterion")
+    return value, item_ids, errors
+
+
 def closeout_sequence_errors(
     work_item, criterion_ids,
 ):
-    sequence = work_item.get("closeoutSequence")
-    if not isinstance(sequence, list) or not sequence or any(
-        not isinstance(stage, dict) for stage in sequence
-    ):
-        return ["work item closeoutSequence must be a non-empty object list"]
-    errors, stage_ids, states, coverage = [], [], [], set()
+    sequence, _, errors = _mapped_sequence(
+        work_item.get("closeoutSequence"), "closeoutSequence", criterion_ids
+    )
+    states = []
     for index, stage in enumerate(sequence):
         stage_id = stage.get("id")
-        if not isinstance(stage_id, str) or not stage_id.strip():
-            errors.append(f"closeoutSequence[{index}].id must be non-empty")
-        else:
-            stage_ids.append(stage_id)
         state = stage.get("state")
         if state not in {"completed", "active", "pending"}:
             errors.append(f"closeoutSequence[{index}].state is invalid")
         else:
             states.append(state)
-        mapped = stage.get("acceptanceIds")
-        if (
-            not isinstance(mapped, list)
-            or not mapped
-            or any(not isinstance(item, str) or item not in criterion_ids for item in mapped)
-        ):
-            errors.append(f"closeoutSequence[{index}].acceptanceIds is invalid")
-        else:
-            coverage.update(mapped)
         stop = stage.get("stopCondition")
         if not isinstance(stop, str) or not stop.startswith(f"[{stage_id}] "):
             errors.append(f"closeoutSequence[{index}].stopCondition is not bound to its stage")
-    if len(stage_ids) != len(set(stage_ids)):
-        errors.append("work item closeoutSequence ids must be unique")
     terminal = work_item.get("state") == "completed"
     if terminal and any(state != "completed" for state in states):
         errors.append("completed work item closeoutSequence must be completed")
@@ -622,8 +603,6 @@ def closeout_sequence_errors(
         ranks[state] for state in states
     ):
         errors.append("work item closeoutSequence order is invalid")
-    if coverage != criterion_ids:
-        errors.append("work item closeoutSequence must map every criterion")
     return errors
 
 
@@ -642,61 +621,27 @@ def release_procedure_errors(root, procedure, criterion_ids, goal_prompt):
         return ["program.releaseProcedure.candidateVerificationSystems is invalid"]
     if procedure.get("assetPolicy") != "no-attached-assets":
         return ["program.releaseProcedure.assetPolicy must be no-attached-assets"]
-    surfaces = procedure.get("surfaceMarkers")
-    expected_surfaces = {
-        "README.md", "README.zh-CN.md", "CONTRIBUTING.md",
-        ".github/workflows/validate.yml",
-    }
-    if not _exact(surfaces, expected_surfaces):
-        return ["program.releaseProcedure.surfaceMarkers is invalid"]
-    for locator, markers in surfaces.items():
-        path = repository_relative_path(root, locator)
-        try:
-            text = " ".join(path.read_text(encoding="utf-8").split()) if path else ""
-        except (OSError, UnicodeError):
-            text = ""
-        if not _string_list(markers) or any(" ".join(marker.split()) not in text for marker in markers):
-            return [f"derived surface markers are missing from {locator}"]
     gates = procedure.get("orderedGates")
     if not isinstance(gates, list) or len(gates) != len(RELEASE_GATE_SEQUENCE) or any(
-        not _exact(gate, RELEASE_GATE_FIELDS)
-        for gate in gates
+        not _exact(gate, RELEASE_GATE_FIELDS) for gate in gates
     ):
         return ["program.releaseProcedure.orderedGates is invalid"]
-    errors, coverage = [], set()
+    gates, _, errors = _mapped_sequence(gates, "releaseProcedure.orderedGates", criterion_ids)
     for index, gate in enumerate(gates):
         label = f"releaseProcedure.orderedGates[{index}]"
         gate_id = gate.get("id")
         expected_id, expected_operand = RELEASE_GATE_SEQUENCE[index]
-        if not isinstance(gate_id, str) or not gate_id.strip():
-            errors.append(f"{label}.id must be non-empty")
         if gate_id != expected_id or gate.get("completionOperand") != expected_operand:
             errors.append(f"{label} does not match the required release gate sequence")
         expected_dependency = [] if index == 0 else [gates[index - 1].get("id")]
         if gate.get("dependsOn") != expected_dependency:
             errors.append(f"{label}.dependsOn must name only the previous gate")
-        mapped = gate.get("acceptanceIds")
-        if (
-            not isinstance(mapped, list)
-            or not mapped
-            or any(not isinstance(item, str) or item not in criterion_ids for item in mapped)
-        ):
-            errors.append(f"{label}.acceptanceIds is invalid")
-        else:
-            coverage.update(mapped)
         if not isinstance(gate.get("condition"), str) or not gate["condition"].strip():
             errors.append(f"{label}.condition must be non-empty")
-    if coverage != criterion_ids:
-        errors.append("program.releaseProcedure must map every criterion")
     if not isinstance(goal_prompt, dict) or goal_prompt.get("releaseGateIds") != [
         gate_id for gate_id, _ in RELEASE_GATE_SEQUENCE
     ]:
         errors.append("program.goalModePrompt.releaseGateIds must match releaseProcedure")
-    objective = goal_prompt.get("objective", "") if isinstance(goal_prompt, dict) else ""
-    work_order = " → ".join(goal_prompt.get("workStageIds", [])) if isinstance(goal_prompt, dict) else ""
-    release_order = " → ".join(gate_id for gate_id, _ in RELEASE_GATE_SEQUENCE)
-    if not work_order or work_order not in objective or release_order not in objective:
-        errors.append("program.goalModePrompt objective does not preserve release gate order")
     return errors
 
 

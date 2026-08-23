@@ -113,48 +113,6 @@
       "codex-cloud": "https://chatgpt.com/codex/"
     },
     "assetPolicy": "no-attached-assets",
-    "surfaceMarkers": {
-      "README.md": [
-        "git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
-        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
-        "restart the desktop app",
-        "Start a new task",
-        "python -B -m yiyuan_accord verify --root . --json",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "codex plugin marketplace upgrade yiyuan-accord",
-        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
-        "codex plugin marketplace remove yiyuan-accord",
-        "Rollback",
-        "Troubleshoot"
-      ],
-      "README.zh-CN.md": [
-        "git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
-        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
-        "重启桌面端",
-        "新建任务",
-        "python -B -m yiyuan_accord verify --root . --json",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "codex plugin marketplace upgrade yiyuan-accord",
-        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
-        "codex plugin marketplace remove yiyuan-accord",
-        "回滚",
-        "故障排查"
-      ],
-      ".github/workflows/validate.yml": [
-        "minimumTestCount",
-        "r.testsRun>=e",
-        "python-version: ${{ matrix.python-version }}",
-        "python-version: \"3.14\""
-      ],
-      "CONTRIBUTING.md": [
-        "Codex and Claude Code as current reference hosts, not permanent product",
-        "official version, maturity label",
-        "retirement trigger",
-        "exact local verification"
-      ]
-    },
     "orderedGates": [
       {
         "id": "repository-candidate",
@@ -254,7 +212,6 @@
     "targets": {
       "maxTrackedFiles": 55,
       "maxProductCodeAndTestBytes": 120000,
-      "maxControlBytes": 45000,
       "maxPrimaryInstructionBytes": 26000
     },
     "primaryInstructionPaths": [

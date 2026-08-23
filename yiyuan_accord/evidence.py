@@ -3,7 +3,7 @@ from hashlib import sha256
 import json
 import re
 
-from .identity import _nonempty_string as _text
+from .identity import _exact, _nonempty_string as _text
 
 
 STATES = {
@@ -29,15 +29,6 @@ def _digest(value):
     return sha256(json.dumps(
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode()).hexdigest()
-
-
-def _exact(value, fields, texts=()):
-    return (
-        isinstance(value, dict) and set(value) == set(fields)
-        and all(_text(value.get(field)) for field in texts)
-    )
-
-
 def representative_contract_sha256(acceptance, golden):
     semantic_fields = (
         "id", "class", "name", "mapsTo", "statement", "passRule",
