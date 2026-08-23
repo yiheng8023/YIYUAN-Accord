@@ -120,7 +120,10 @@ record has exactly `kind`, `taskId`, `goldenTaskSha256`,
 `transcriptOrEventEvidence` entries with exactly `kind`, `locator`, `recordId`,
 `sha256`, and `claim`. The record ID, task and host must match, the record hash
 must recompute, capture must precede observation, and the payload must be a
-safe, complete, publishable source rather than a synthetic verdict. The full
+safe, complete, publishable source rather than a synthetic verdict.
+`observedAt` is the observation package's finalization time after its
+captured task source and claimed cleanup have both occurred; it is not a
+backdated task-start timestamp. The full
 observation field list remains data-driven by
 `evals/golden-tasks.json.evaluationProtocol.requiredObservationFields`.
 Every retained failure is also projected as a sorted `taskId:failure` token in

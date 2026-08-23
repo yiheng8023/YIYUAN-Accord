@@ -1,8 +1,11 @@
 import ast
+import io
 import json
 from pathlib import Path
 import re
+import shlex
 import subprocess
+import tokenize
 from urllib.parse import urlsplit
 
 
@@ -19,9 +22,9 @@ PROGRAM_FIELDS = set((
     "complexityBudget processLossControl"
 ).split())
 ACCEPTANCE_FIELDS = set((
-    "schema id productId release constitution program completionExpression evidenceLanes "
-    "representativeBehaviorPolicy criteria candidateVerification releaseAuthorization "
-    "publicRelease claimCeiling"
+    "schema id productId release constitution program canonicalGoalObjectiveSha256 "
+    "completionExpression evidenceLanes representativeBehaviorPolicy criteria "
+    "candidateVerification releaseAuthorization publicRelease claimCeiling"
 ).split())
 
 
@@ -158,6 +161,111 @@ def operating_model_errors(constitution):
     return errors
 
 
+_FLAGS = "BbdEiIOPqRsSuvx"
+_COMMAND = re.compile(fr"^-[{_FLAGS}]*([mc])(.*)$")
+_YAML_C = re.compile(
+    fr"(?m)^( *)- *-[{_FLAGS}]*c *(?:#.*)?\r?\n"
+    r"(?: *(?:#.*)?\r?\n)*"
+    r"\1- *[|>][+-]? *(?:#.*)?\r?\n"
+    r"((?:\1 +[^\r\n]*(?:\r?\n|$))+)",
+)
+
+
+def _lex(text):
+    lexer = shlex.shlex(text, posix=True, punctuation_chars="[]{}(),=:")
+    lexer.wordchars += "&*!"
+    return list(lexer)
+
+
+def _command_ref(text, module):
+    name = re.compile(fr"{re.escape(module)}(?=$|[.:;&|<>])")
+    if any(_python_ref(item[2], module) for item in _YAML_C.finditer(text)):
+        return True
+    try:
+        items = _lex(text)
+    except ValueError:
+        items = []
+        for line in text.splitlines():
+            try:
+                items.extend(_lex(line))
+            except ValueError:
+                items.extend(re.findall(r"\S+", line.partition("#")[0]))
+    items = [item for item in items
+             if re.search(r"\w", item) and item[:1] not in "&*!"]
+    for index, (item, following) in enumerate(zip(items, items[1:] + [""])):
+        if option := _COMMAND.fullmatch(item):
+            kind, attached = option.groups()
+            payload = attached or following
+            target = index if attached else index + 1
+            if kind == "m":
+                match = name.match(payload) or any(
+                    name.match(value) for value in items[target + 1:target + 3])
+            else:
+                match = _python_ref(payload, module)
+            if match:
+                return True
+            if kind == "c" and payload:
+                items[target] = ""
+    return any(
+        re.search(r"\s", item) and _command_ref(item, module) for item in items
+    )
+
+
+def _python_ref(source, module):
+    token = re.compile(fr"(?<!\w){re.escape(module)}(?!\w)")
+    tokens = []
+
+    def mentions(value):
+        return token.search(value) or _command_ref(value, module)
+
+    def decoded(value):
+        if isinstance(value, bytes):
+            try:
+                return value.decode()
+            except UnicodeDecodeError:
+                return None
+        return value if isinstance(value, str) else None
+
+    try:
+        for item in tokenize.generate_tokens(io.StringIO(source).readline):
+            if item.type == tokenize.COMMENT:
+                continue
+            tokens.append(item)
+            if item.type == tokenize.NAME and item.string == module:
+                return True
+            elif item.type == tokenize.STRING:
+                try:
+                    value = decoded(ast.literal_eval(item.string))
+                except (SyntaxError, TypeError, ValueError):
+                    value = item.string
+                if value and mentions(value):
+                    return True
+    except IndentationError:
+        normalized = re.sub(r"(?m)^[ \t]+", "", source)
+        return _python_ref(normalized, module) if normalized != source else False
+    except (tokenize.TokenError, UnicodeError):
+        return bool(mentions(tokenize.untokenize(tokens)))
+
+    try:
+        nodes = ast.walk(ast.parse(source))
+    except (SyntaxError, UnicodeError):
+        return False
+
+    def literal(node):
+        if isinstance(node, ast.Constant):
+            return decoded(node.value)
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            left, right = literal(node.left), literal(node.right)
+            return left + right if left is not None and right is not None else None
+        return None
+
+    for node in nodes:
+        value = literal(node)
+        if value and mentions(value):
+            return True
+    return False
+
+
 def active_tree_errors(root, locators, historical_revision):
     locators = list(locators)
     errors = [
@@ -186,23 +294,35 @@ def active_tree_errors(root, locators, historical_revision):
     except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError):
         return errors + ["historical identity boundary is unavailable"]
     exact_tokens = tuple(value.lower().encode() for value in (product_id, title))
-    module_token = module.lower().encode()
-    module_context = re.compile(
-        rb"(?<![\w.-])(?:(?:python(?:3(?:\.\d+)?)?|py)(?:\s+-\S+)*\s+-m|"
-        rb"from\s+|import(?:\s+[\w.]+(?:\s+as\s+\w+)?\s*,)*\s+)\s*"
-        + re.escape(module_token)
-        + rb"(?![\w])|(?<![\w.-])"
-        + re.escape(module_token)
-        + rb"(?:[\\/]|\.py(?![\w]))|[\"'](?:pythonmodule|python_module|module)[\"']\s*[:=]\s*[\"']"
-        + re.escape(module_token)
-        + rb"[\"']"
+    module_re = re.escape(module.lower().encode())
+    context = re.compile(
+        rb"(?<![\w.-])" + module_re
+        + rb"(?:(?:\.[a-z_]\w*)*:[a-z_]\w*|[\\/]|\.pyi?(?![\w]))|(?<![\w])"
+        + rb"[\"']?(?:pythonmodule|python_module|module|entry|entrypoint|entry_point)"
+        rb"[\"']?\s*[:=]\s*[\"']?"
+        + module_re
+        + rb"(?:\.[a-z_]\w*)*(?::[a-z_]\w*)?[\"']?(?![\w.-])"
     )
     for locator in locators:
         try:
-            content = locator.lower().encode() + b"\0" + (root / locator).read_bytes().lower()
+            raw = locator.encode() + b"\0" + (root / locator).read_bytes()
         except OSError:
             continue
-        if any(token in content for token in exact_tokens) or module_context.search(content):
+        content = raw.lower()
+        source = raw.split(b"\0", 1)[1]
+        text = source.decode("utf-8", errors="ignore")
+        is_python = Path(locator).suffix.lower() in {".py", ".pyi"}
+        surface = locator.lower().encode() if is_python else content
+        if (
+            any(token in content for token in exact_tokens)
+            or context.search(re.sub(rb"(?m)#.*$", b"", surface))
+            or not is_python and _command_ref(
+                text, module
+            )
+            or is_python and _python_ref(
+                text, module
+            )
+        ):
             errors.append(f"superseded identity remains in active tree: {locator}")
     return sorted(errors)
 

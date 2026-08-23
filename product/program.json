@@ -113,6 +113,61 @@
       "codex-cloud": "https://chatgpt.com/codex/"
     },
     "assetPolicy": "no-attached-assets",
+    "surfaceMarkers": {
+      "AGENTS.md": [
+        "Treat the user's latest bound goal",
+        "Release task-created resources and residue before closeout"
+      ],
+      "CONTEXT.md": [
+        "YIYUAN Accord is the derived glossary",
+        "without adding semantic authority"
+      ],
+      "README.md": [
+        "python -B -m yiyuan_accord verify --root . --json",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
+        "restart the desktop app",
+        "Start a new task",
+        "Update, disable or remove",
+        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
+        "Rollback and Troubleshoot"
+      ],
+      "README.zh-CN.md": [
+        "python -B -m yiyuan_accord verify --root . --json",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
+        "重启桌面端",
+        "新建任务",
+        "更新、禁用与移除",
+        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
+        "回滚与故障排查"
+      ],
+      ".github/workflows/validate.yml": [
+        "permissions: contents: read",
+        "python-version: \"3.10\"",
+        "python-version: \"3.14\"",
+        "python -B -m yiyuan_accord verify --root . --json",
+        "r.testsRun>=e and not r.skipped and not r.expectedFailures"
+      ],
+      "docs/architecture.md": [
+        "one small semantic core and replaceable projections",
+        "Skill-only package surfaces",
+        "no YIYUAN Accord runtime, Hook, state store, MCP, App"
+      ],
+      "CONTRIBUTING.md": [
+        "Codex and Claude Code as current reference hosts, not permanent product",
+        "official version, maturity label",
+        "retirement trigger",
+        "exact local verification"
+      ],
+      "docs/operations/CONTINUATION.md": [
+        "Determine the first incomplete gate from live Git",
+        "ordinary Codex Cloud",
+        "Do not start a later gate early"
+      ]
+    },
     "orderedGates": [
       {
         "id": "repository-candidate",
@@ -211,7 +266,7 @@
     },
     "targets": {
       "maxTrackedFiles": 55,
-      "maxProductCodeAndTestBytes": 120000,
+      "maxProductCodeAndTestBytes": 130000,
       "maxPrimaryInstructionBytes": 26000
     },
     "primaryInstructionPaths": [
@@ -251,7 +306,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier."
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. The code-and-test cap is therefore 130000 and must retain at least five percent headroom without deleting coverage or compressing readability."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

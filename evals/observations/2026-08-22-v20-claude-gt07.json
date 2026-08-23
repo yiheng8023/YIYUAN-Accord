@@ -2,7 +2,7 @@
   "taskId": "GT-07",
   "goldenTaskSha256": "31319ea9fdbad4b6bf4e4336de06058996568fb278866402f7f0c6f4985453b3",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T18:36:00Z",
+  "observedAt": "2026-08-22T22:51:00Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
   "hostIdentity": {
     "adapterId": "claude-code",

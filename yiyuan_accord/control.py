@@ -308,7 +308,9 @@ def _validate_complexity(root, program, python_module, files, errors):
     return metrics
 
 
-def _validate_program(root, program, criterion_ids, all_contract_ids, identity, errors):
+def _validate_program(
+    root, program, criterion_ids, all_contract_ids, identity, goal_digest, errors,
+):
     if program.get("schema") != 2:
         errors.append("program.schema must be 2")
     _require_texts(program, ("id", "productId", "release", "releaseIntent", "maintenancePlan"),
@@ -349,9 +351,9 @@ def _validate_program(root, program, criterion_ids, all_contract_ids, identity, 
             errors.extend(closeout_sequence_errors(item, set(criterion_ids)))
 
     prompt = program.get("goalModePrompt")
-    errors.extend(
-        release_procedure_errors(root, program.get("releaseProcedure"), set(criterion_ids), prompt)
-    )
+    errors.extend(release_procedure_errors(
+        root, program.get("releaseProcedure"), set(criterion_ids), prompt, goal_digest,
+    ))
     if not isinstance(prompt, dict):
         errors.append("program.goalModePrompt must be an object")
     else:
@@ -742,7 +744,8 @@ def verify_product(root):
         errors,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
-    _validate_program(root, program, criterion_ids, all_ids, identity, errors)
+    _validate_program(root, program, criterion_ids, all_ids, identity,
+                      acceptance.get("canonicalGoalObjectiveSha256"), errors)
     maintenance_plan = program.get("maintenancePlan")
     release_notes = acceptance.get("publicRelease", {}).get("releaseNotes")
     errors.extend(

@@ -5,6 +5,7 @@
   "release": "v2.0",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
+  "canonicalGoalObjectiveSha256": "86c17487248d9606b372762c880ffd11e6c57287f5351c4b423f1668a0af4cec",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
@@ -61,7 +62,7 @@
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt02.json",
-          "sha256": "8b03c741823b42971cbb8a875d9e996690c655fdad7e4e5ac286e68cc241159b",
+          "sha256": "1a8041d0b32386c59b2c123ad1e7384f8a0b292fc5e49792448d2cf8eaf18bec",
           "claim": "GT-02 directly observed bounded repair, preservation and cleanup on the current Codex projection.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
@@ -82,21 +83,21 @@
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt05.json",
-          "sha256": "ccfc95e85d1fd0fcc462d2c8bc91cb4fd0b3d5e8a6c93e80632748600e06d030",
+          "sha256": "efd3d37b2d878df1c264876d7e4f61526ab61389fb3820a44449cef140f0588d",
           "claim": "GT-05 directly observed subtraction and premise replacement after repeated same-purpose failure on the current Codex projection.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-22-v20-claude-gt07.json",
-          "sha256": "2a51ab2c7110d6d01176733fb2cb7e103bb8592818cd799ec53d5c458cf9f2a0",
+          "sha256": "0877cfe5a8bb40f44012ecd6d12485a9704c312ca06b3b185a9eee488c0730cd",
           "claim": "GT-07 preserves direct counterevidence for four unobserved continuity behaviors on the current Claude Code projection.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt08.json",
-          "sha256": "0c2d9fa4e716d91f78456512634245411b8fc342f1b810f47b8a7dd574ba8bcc",
+          "sha256": "9ab025ce45399afd8f7c733a66a9dd1029afd347e69a6ced67bd1b9e69ee2a69",
           "claim": "GT-08 preserves direct counterevidence for unresolved current official guidance while keeping effective capability unknown on the current Codex projection.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
@@ -155,7 +156,7 @@
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt08.json",
-          "sha256": "0c2d9fa4e716d91f78456512634245411b8fc342f1b810f47b8a7dd574ba8bcc",
+          "sha256": "9ab025ce45399afd8f7c733a66a9dd1029afd347e69a6ced67bd1b9e69ee2a69",
           "claim": "GT-08 retained the unresolved official-guidance gap and did not promote installed capability into effective support.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
@@ -184,7 +185,7 @@
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt05.json",
-          "sha256": "ccfc95e85d1fd0fcc462d2c8bc91cb4fd0b3d5e8a6c93e80632748600e06d030",
+          "sha256": "efd3d37b2d878df1c264876d7e4f61526ab61389fb3820a44449cef140f0588d",
           "claim": "GT-05 replaced a faulty premise in the existing generation instead of adding another layer.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
@@ -203,21 +204,21 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt02.json",
-          "sha256": "8b03c741823b42971cbb8a875d9e996690c655fdad7e4e5ac286e68cc241159b",
+          "sha256": "1a8041d0b32386c59b2c123ad1e7384f8a0b292fc5e49792448d2cf8eaf18bec",
           "claim": "GT-02 preserved unrelated user state and closed the bounded task without residue.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-22-v20-codex-gt05.json",
-          "sha256": "ccfc95e85d1fd0fcc462d2c8bc91cb4fd0b3d5e8a6c93e80632748600e06d030",
+          "sha256": "efd3d37b2d878df1c264876d7e4f61526ab61389fb3820a44449cef140f0588d",
           "claim": "GT-05 turned repeated same-purpose failure into bounded premise correction and regression retention.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-22-v20-claude-gt07.json",
-          "sha256": "2a51ab2c7110d6d01176733fb2cb7e103bb8592818cd799ec53d5c458cf9f2a0",
+          "sha256": "0877cfe5a8bb40f44012ecd6d12485a9704c312ca06b3b185a9eee488c0730cd",
           "claim": "GT-07 keeps the incomplete unknown-capacity continuity response as a retained failure rather than a claimed capability.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "Q4"

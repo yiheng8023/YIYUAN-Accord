@@ -5,6 +5,8 @@ YIYUAN Accord is the derived glossary for the domain model defined by
 reliability contract and evaluation framework without adding semantic
 authority. Its broad mission concerns human-AI collaboration; its current
 product surface concerns human-Agent work.
+`_Source_` selectors use stable IDs or exact declared values instead of array
+positions, so reordering authority data cannot silently retarget a definition.
 
 ## Identity and scope
 
@@ -35,7 +37,7 @@ _Avoid_: control plane, workflow engine, infrastructure platform
 
 **Host projection**:
 A thin, replaceable expression of the portable contract in one Agent host.
-_Source_: `product/constitution.json#/productBoundary/includes/3`,
+_Source_: `product/constitution.json#/productBoundary/includes (value: thin-replaceable-host-projections)`,
 `product/constitution.json#/productBoundary/hostRule`
 _Avoid_: runtime, compatibility alias, permanent host integration
 
@@ -43,25 +45,25 @@ _Avoid_: runtime, compatibility alias, permanent host integration
 
 **Intent**:
 The current versioned goal, priority, constraint and phase.
-_Source_: `product/constitution.json#/domainModel/decisionDimensions/0`,
-`product/constitution.json#/kernel/0/commitment`
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: intent)`,
+`product/constitution.json#/kernel (id: K1)`
 _Avoid_: prompt, initial request
 
 **Capability**:
 An actor's observed fitness to perform a bounded part of the current goal.
-_Source_: `product/constitution.json#/domainModel/decisionDimensions/1`,
-`product/constitution.json#/hostAdapterStandard/3/rule`
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: capability)`,
+`product/constitution.json#/hostAdapterStandard (id: H4)`
 _Avoid_: installation, label, theoretical availability
 
 **Authority**:
 The bounded right to decide or act on a named resource and effect.
-_Source_: `product/constitution.json#/domainModel/decisionDimensions/2`,
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: authority)`,
 `product/constitution.json#/humanAuthority`
 _Avoid_: capability, accountability
 
 **Evidence**:
 Information that supports a bounded claim at the consequence level asserted.
-_Source_: `product/constitution.json#/domainModel/decisionDimensions/3`,
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: evidence)`,
 `product/constitution.json#/evidenceBoundary/claimRule`
 _Avoid_: trace, artifact, confidence
 
@@ -69,27 +71,27 @@ _Avoid_: trace, artifact, confidence
 
 **State**:
 The current source-bound facts, resources, constraints and unresolved items.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects/0`,
-`product/constitution.json#/kernel/3/commitment`
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: state)`,
+`product/constitution.json#/kernel (id: K4)`
 _Avoid_: chat history, memory dump
 
 **Effect**:
 An observed material change to a resource, system, person or decision surface.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects/1`,
-`product/constitution.json#/qualityInvariants/4`
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: effect)`,
+`product/constitution.json#/qualityInvariants (value: material side effects are attributable and are stopped, recovered or rolled back where the effect permits)`
 _Avoid_: proposed action, claimed outcome
 
 **Continuity**:
 Preservation and reconciliation of the current goal and state across phases,
 carriers and actors.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects/2`,
-`product/constitution.json#/learnedFailureStandards/5/rule`
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: continuity)`,
+`product/constitution.json#/learnedFailureStandards (id: L6)`
 _Avoid_: copied history, implicit handoff
 
 **Lifecycle**:
 The path from observed gap through admission, operation, evaluation,
 replacement and retirement.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects/3`,
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: lifecycle)`,
 `product/constitution.json#/evolutionPolicy`
 _Avoid_: permanent installation
 
@@ -97,21 +99,21 @@ _Avoid_: permanent installation
 
 **Responsibility**:
 The assigned duty to perform or review a bounded part of the collaboration.
-_Source_: `product/constitution.json#/domainModel/roleDistinctions/1`,
+_Source_: `product/constitution.json#/domainModel/roleDistinctions (value: responsibility)`,
 `product/constitution.json#/humanAuthority`
 _Avoid_: authority, liability
 
 **Accountability**:
 The named ownership of consequential judgment and its accepted residual risk.
-_Source_: `product/constitution.json#/domainModel/roleDistinctions/3`,
-`product/constitution.json#/humanAuthority/humanOwns/5`
+_Source_: `product/constitution.json#/domainModel/roleDistinctions (value: accountability)`,
+`product/constitution.json#/humanAuthority/humanOwns (value: accountable-final-judgment)`
 _Avoid_: approval click, Agent self-assessment
 
 **Residual gap**:
 A consequential collaboration problem not sufficiently covered by healthy
 native, maintained or accountable domain mechanisms.
-_Source_: `product/constitution.json#/kernel/1/commitment`,
-`product/constitution.json#/evolutionPolicy/principles/4`
+_Source_: `product/constitution.json#/kernel (id: K2)`,
+`product/constitution.json#/evolutionPolicy/principles (value: residual-gap-fill)`
 _Avoid_: any inconvenience, missing feature
 
 **Mechanism**:
@@ -124,6 +126,6 @@ _Avoid_: permanent layer, default feature
 **Closure**:
 A state transition supported by consequence-level evidence, reconciled effects
 and explicit residual limits.
-_Source_: `product/constitution.json#/kernel/4/commitment`,
-`product/constitution.json#/qualityInvariants/8`
+_Source_: `product/constitution.json#/kernel (id: K5)`,
+`product/constitution.json#/qualityInvariants (value: completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape)`
 _Avoid_: summary, commit, test pass

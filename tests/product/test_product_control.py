@@ -38,7 +38,7 @@ def _rehash(root, locator):
 def _retired_errors(body, locator='sample.txt'):
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary)
-        (root / locator).write_text(body, encoding='utf-8')
+        (root / locator).write_text(body.replace('@', 'retired_module'), encoding='utf-8')
         history = [json.dumps(RETIRED), '# Retired Product\n']
         with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
             return active_tree_errors(root, [locator], '0' * 40)
@@ -69,7 +69,11 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
         self.assertTrue(all((host['staticReady'] for host in report['hostChecks'].values())))
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
-        self.assertNotIn('surfaceMarkers', program['releaseProcedure'])
+        limit = program['complexityBudget']['targets']['maxProductCodeAndTestBytes']
+        self.assertGreaterEqual(
+            limit - report['complexity']['productCodeAndTestBytes'], (limit + 19) // 20)
+        self.assertNotRegex((ROOT / 'CONTEXT.md').read_text(encoding='utf-8'),
+                            r'#/[^`\n]+/[0-9]+(?:/|`)')
         self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
         local_gate = program['releaseProcedure']['orderedGates'][1]['condition']
         for marker in ('original host or session records', 'non-author colleague'):
@@ -133,6 +137,9 @@ class ProductControlTests(unittest.TestCase):
             _write(root, A, acceptance)
             self.assert_has(verify_product(root)['errors'], 'evaluation contract digest mismatch')
             source = _read(root, SOURCE)
+            capture = json.loads(source['records']['GT-02']['payload'])['capture']
+            self.assertIn('Skill search remained enabled', capture)
+            self.assertNotIn('non-target Skill search disabled', capture)
             source['records']['GT-01']['payload'] = 'tampered'
             _write(root, SOURCE, source)
             acceptance = _read(root, A)
@@ -167,6 +174,11 @@ class ProductControlTests(unittest.TestCase):
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _fixture() as root:
             program = _read(root, P)
+            readme = (root / 'README.md').read_text(encoding='utf-8')
+            (root / 'README.md').write_text(
+                readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
+            self.assert_has(verify_product(root)['errors'], 'derived surface markers')
+            (root / 'README.md').write_text(readme, encoding='utf-8')
             program['goalModePrompt']['mapsTo'].remove('Q4')
             increment = program['increment']
             increment['acceptanceIds'].remove('R3')
@@ -174,12 +186,14 @@ class ProductControlTests(unittest.TestCase):
             increment['workItems'][0]['closeoutSequence'][0]['state'] = 'active'
             increment['workItems'][0]['closeoutSequence'][0]['stopCondition'] = 'opposite'
             program['releaseProcedure']['orderedGates'][0]['id'] = ''
+            program['goalModePrompt']['objective'] = '先推送再审查'
             program['goalModePrompt']['workStageIds'] = ['wrong']
             _write(root, P, program)
             self.assert_has(verify_product(root)['errors'], 'goalModePrompt.mapsTo',
                             'increment.acceptanceIds', 'workItems[0].acceptanceIds',
                             'closeoutSequence', 'required release gate sequence',
-                            'workStageIds')
+                            'workStageIds', 'objective is not the canonical projection',
+                            'objective does not preserve')
 
     def test_evidence_cannot_self_verify_or_self_authorize(self):
         with _fixture() as root:
@@ -236,20 +250,71 @@ class ProductControlTests(unittest.TestCase):
         errors = verify_product(ROOT)['errors']
         self.assertFalse(any('superseded identity' in item for item in errors), errors)
         self.assertFalse(any('test markers' in item for item in errors), errors)
+        for locator, body in (
+            ('sample.py', '# import @\n# python -m @\n# @.py\n# @\nif\n'
+             '@_other = "@_other"\n'),
+            ('sample.toml', 'entry = "@_other"\n'),
+            ('sample.py', 'if True:\n    pass\n  pass\n# @\n'),
+            ('sample.txt', 'python -Xm@\npython -c "print(\'@_other\')"\n'
+             'python -c "# import @"\npython -c "x=1 # @"\n'
+             'python -c "# module=\'@\'"\npython -c "# @.py"\n'),
+        ):
+            self.assertFalse(_retired_errors(body, locator))
 
     def test_retired_module_identity_contexts_are_rejected(self):
-        cases = (
-            'python3 -m retired_module verify\n',
-            'py -3.10 -m retired_module verify\n',
-            'from retired_module import item\n',
-            'import os, retired_module\n',
-            'retired_module/path.py\n',
-            'retired_module.py\n',
-            '{"pythonModule":"retired_module"}\n',
-        )
-        for body in cases:
-            with self.subTest(body=body):
-                self.assert_has(_retired_errors(body), 'superseded identity remains')
+        cases = {
+            'sample.py': (
+                'from @ import item\n', 'import os as @\n',
+                'try: pass\nexcept Exception as @: pass\n', 'global @\n',
+                'match value:\n    case {"key": @}: pass\n',
+                'class Box[@]: pass\n', 'value = b"@"\n',
+                'target = "retired_" + "module"\n__import__(target)\n',
+                'import subprocess\nsubprocess.run("python -m @", shell=True)\n',
+                'import subprocess\nsubprocess.run(["python", "-Im@"])\n',
+                'exec("import @")\n',
+                'from pathlib import Path\nPath("@/__init__.py")\n',
+                'entry = "uvicorn @:app"\n', 'import @\nif\n',
+            ),
+            'sample.txt': (
+                '@/path.py\n', '@.pyi\n', '@.cli:main\n',
+                'python -m@\n', 'python -Im@\n',
+                *(f'python -m pydoc {flag}@\n' for flag in ('', '-w ')),
+            ),
+            'sample.toml': (
+                'entry = "@"\n', 'entry = "@.cli"\n', 'module = "@"\n',
+                'command = "python -m @"\n',
+                'command = [\n  "python",\n  "-m", # module flag\n  "@",\n]\n',
+                'command = ["python", "-c", "__import__(\'@\')"]\n',
+            ),
+            'sample.json': (
+                '{"pythonModule":"@"}\n',
+                '{"command":"python -m @"}\n',
+                '{"scripts":{"verify":"python -m @"}}\n',
+                '{"command":["python","-c","__import__(\'@\')"]}\n',
+            ),
+            'sample.yaml': (
+                'command: "python -m @"\n',
+                'run: "python -m @"\n',
+                'command:\n  - python\n  - -m\n  - &target @\n',
+                "description: don't stop\ncommand: [python, -m, @]\n",
+                'command:\n  - python\n  - -c\n    # code follows\n\n  - |\n'
+                '    import importlib\n'
+                '    importlib.import_module("@")\n',
+            ),
+            'sample.sh': (
+                'python -m \\\n@\n', 'python -c "__import__(\'@\')"\n',
+                'python -c "import runpy; runpy.run_module(\'@\')"\n',
+                "python -c 'import importlib\nimportlib.import_module(\"@\")'\n",
+                *(f'python -c "__import__(\'retired_\'{x}\'module\')"\n'
+                  for x in ('+', ' ')),
+                *(f'python -m @{x}\n' for x in '; |more & >out.txt'.split()),
+            ),
+        }
+        for locator, bodies in cases.items():
+            for body in bodies:
+                with self.subTest(body=body):
+                    self.assert_has(_retired_errors(body, locator),
+                                    'superseded identity remains')
 
     def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:

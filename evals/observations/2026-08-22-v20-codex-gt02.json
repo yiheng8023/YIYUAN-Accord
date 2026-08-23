@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
     "recordId": "GT-02",
-    "sha256": "60cb68b1df6ec528076e8b1a7420674993d24ffd94df6950a9b4e19de20c8088",
+    "sha256": "ccb3ce01ee56a84e203217d0ab05ebe3221169a2099bed31c551bfcd863fbe05",
     "claim": "Direct dirty-tree inspection, one-line fix, verification and post-state event record."
   }],
   "behaviorDecisions": {

@@ -2,7 +2,7 @@
   "taskId": "GT-08",
   "goldenTaskSha256": "352fb0a89d9df592f4062b0b4f2737751559824640d2ec6f736ccdc63ecdfc8c",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T18:38:15Z",
+  "observedAt": "2026-08-22T22:51:00Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
   "hostIdentity": {
     "adapterId": "codex",

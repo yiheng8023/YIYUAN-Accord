@@ -6,21 +6,21 @@ import re
 import subprocess
 
 from .identity import _exact, _nonempty_string, _safe_https_locator, _string_list
-_AUTHORITY_DECISION_FIELDS = set((
+_AUTH_FIELDS = set((
     "state candidateRevision namedHuman authorizedAt claimCeilingAccepted "
     "publicationAuthorized releaseAuthorized"
 ).split())
-RELEASE_PROCEDURE_FIELDS = set(
-    "orderedGates candidateVerificationSystems assetPolicy rule".split()
-)
-REQUIRED_CANDIDATE_SYSTEMS = set((
+PROCEDURE_FIELDS = "orderedGates candidateVerificationSystems assetPolicy surfaceMarkers rule".split()
+CANDIDATE_SYSTEMS = set((
     "github-actions-ubuntu-latest github-actions-windows-latest "
     "github-actions-macos-latest codex-cloud"
 ).split())
-RELEASE_GATE_FIELDS = set(
-    "id dependsOn acceptanceIds completionOperand condition".split()
-)
-RELEASE_GATE_SEQUENCE = (
+RELEASE_SURFACES = (
+    "AGENTS.md CONTEXT.md README.md README.zh-CN.md .github/workflows/validate.yml "
+    "docs/architecture.md CONTRIBUTING.md docs/operations/CONTINUATION.md"
+).split()
+GATE_FIELDS = "id dependsOn acceptanceIds completionOperand condition".split()
+GATE_SEQUENCE = (
     ("repository-candidate", None),
     ("exact-local-verification-and-review", "exactLocalVerificationAndReview"),
     ("exact-candidate-hosted-verification", "exactCandidateHostedVerification"),
@@ -29,9 +29,9 @@ RELEASE_GATE_SEQUENCE = (
     ("release-verification-and-cleanup", "releaseVerificationAndCleanup"),
 )
 EXTERNAL_COMPLETION_OPERANDS = tuple(
-    operand for _, operand in RELEASE_GATE_SEQUENCE if operand
+    operand for _, operand in GATE_SEQUENCE if operand
 )
-REPOSITORY_AUTHORIZATION_FIELDS = _AUTHORITY_DECISION_FIELDS | {"mode"}
+AUTHORIZATION_FIELDS = _AUTH_FIELDS | {"mode"}
 MANIFEST_FIELDS = {
     "codex": set(
         "name version description author homepage repository license keywords skills interface".split()
@@ -606,31 +606,44 @@ def closeout_sequence_errors(
     return errors
 
 
-def release_procedure_errors(root, procedure, criterion_ids, goal_prompt):
-    if not _exact(procedure, RELEASE_PROCEDURE_FIELDS):
+def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest):
+    if not _exact(procedure, PROCEDURE_FIELDS):
         return ["program.releaseProcedure is invalid"]
     if not isinstance(procedure.get("rule"), str) or not procedure["rule"].strip():
         return ["program.releaseProcedure.rule must be non-empty"]
     systems = procedure.get("candidateVerificationSystems")
     if (
         not isinstance(systems, dict)
-        or set(systems) != REQUIRED_CANDIDATE_SYSTEMS
+        or set(systems) != CANDIDATE_SYSTEMS
         or any(not isinstance(name, str) or not name or not _safe_https_locator(locator)
                for name, locator in systems.items())
     ):
         return ["program.releaseProcedure.candidateVerificationSystems is invalid"]
     if procedure.get("assetPolicy") != "no-attached-assets":
         return ["program.releaseProcedure.assetPolicy must be no-attached-assets"]
+    surfaces = procedure.get("surfaceMarkers")
+    if not _exact(surfaces, RELEASE_SURFACES):
+        return ["program.releaseProcedure.surfaceMarkers is invalid"]
+    for locator, markers in surfaces.items():
+        path = repository_relative_path(root, locator)
+        try:
+            text = " ".join(path.read_text(encoding="utf-8").split()) if path else ""
+        except (OSError, UnicodeError):
+            text = ""
+        if not _string_list(markers) or any(
+            " ".join(marker.split()) not in text for marker in markers
+        ):
+            return [f"derived surface markers are missing from {locator}"]
     gates = procedure.get("orderedGates")
-    if not isinstance(gates, list) or len(gates) != len(RELEASE_GATE_SEQUENCE) or any(
-        not _exact(gate, RELEASE_GATE_FIELDS) for gate in gates
+    if not isinstance(gates, list) or len(gates) != len(GATE_SEQUENCE) or any(
+        not _exact(gate, GATE_FIELDS) for gate in gates
     ):
         return ["program.releaseProcedure.orderedGates is invalid"]
     gates, _, errors = _mapped_sequence(gates, "releaseProcedure.orderedGates", criterion_ids)
     for index, gate in enumerate(gates):
         label = f"releaseProcedure.orderedGates[{index}]"
         gate_id = gate.get("id")
-        expected_id, expected_operand = RELEASE_GATE_SEQUENCE[index]
+        expected_id, expected_operand = GATE_SEQUENCE[index]
         if gate_id != expected_id or gate.get("completionOperand") != expected_operand:
             errors.append(f"{label} does not match the required release gate sequence")
         expected_dependency = [] if index == 0 else [gates[index - 1].get("id")]
@@ -638,10 +651,23 @@ def release_procedure_errors(root, procedure, criterion_ids, goal_prompt):
             errors.append(f"{label}.dependsOn must name only the previous gate")
         if not isinstance(gate.get("condition"), str) or not gate["condition"].strip():
             errors.append(f"{label}.condition must be non-empty")
-    if not isinstance(goal_prompt, dict) or goal_prompt.get("releaseGateIds") != [
-        gate_id for gate_id, _ in RELEASE_GATE_SEQUENCE
+    prompt = prompt if isinstance(prompt, dict) else {}
+    if prompt.get("releaseGateIds") != [
+        gate_id for gate_id, _ in GATE_SEQUENCE
     ]:
         errors.append("program.goalModePrompt.releaseGateIds must match releaseProcedure")
+    objective = prompt.get("objective", "")
+    if (
+        not isinstance(objective, str)
+        or not isinstance(goal_digest, str)
+        or not re.fullmatch(r"[0-9a-f]{64}", goal_digest)
+        or sha256(objective.encode("utf-8")).hexdigest() != goal_digest
+    ):
+        errors.append("program.goalModePrompt objective is not the canonical projection")
+    work_order = " → ".join(prompt.get("workStageIds", []))
+    release_order = " → ".join(gate_id for gate_id, _ in GATE_SEQUENCE)
+    if not work_order or work_order not in objective or release_order not in objective:
+        errors.append("program.goalModePrompt objective does not preserve release gate order")
     return errors
 
 
@@ -656,7 +682,7 @@ def repository_release_authorization_errors(authorization):
         "declined",
     }:
         return ["acceptance.releaseAuthorization.state is invalid"]
-    if not _exact(authorization, REPOSITORY_AUTHORIZATION_FIELDS) or authorization.get(
+    if not _exact(authorization, AUTHORIZATION_FIELDS) or authorization.get(
         "mode"
     ) != "task-time-human-authority":
         return ["acceptance.releaseAuthorization mode or fields are invalid"]
