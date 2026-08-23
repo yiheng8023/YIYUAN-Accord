@@ -148,14 +148,11 @@ class ProductControlTests(unittest.TestCase):
             self.assert_has(verify_product(root)['errors'], 'sourceEvidence', 'Q4 representative coverage')
 
     def test_failed_sample_narrows_claim(self):
+        self.rejected(A, 'claim must equal observation claimLimit.statement', lambda v:
+                      v['criteria'][2]['evidence'][2].update(claim='overclaim'))
+        self.rejected(A, 'retained behavior exclusions', lambda v:
+                      v['claimCeiling'].update(retainedBehaviorExclusions=[]))
         with _fixture() as root:
-            acceptance = _read(root, A)
-            retained = acceptance['claimCeiling']['retainedBehaviorExclusions']
-            acceptance['claimCeiling']['retainedBehaviorExclusions'] = []
-            _write(root, A, acceptance)
-            self.assert_has(verify_product(root)['errors'], 'retained behavior exclusions')
-            acceptance['claimCeiling']['retainedBehaviorExclusions'] = retained
-            _write(root, A, acceptance)
             locator = 'evals/observations/2026-08-22-v20-claude-gt07.json'
             observation = _read(root, locator)
             observation['criterionDecisions']['Q4'] = 'accepted'
@@ -336,9 +333,10 @@ class ProductControlTests(unittest.TestCase):
     def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:
             retired = 'yiyuan_accord/task_validator_o4_continuous_self_correction_v3.py'
-            (root / retired).write_text('# retired\n', encoding='utf-8')
+            (root / retired).mkdir()
             (root / '.tmp').mkdir()
-            self.assert_has(verify_product(root)['errors'], 'forbidden active path remains', 'known task residue')
+            self.assert_has(verify_product(root)['errors'],
+                            f'forbidden active path remains: {retired}', 'known task residue')
         self.assert_has(_retired_errors('retired-product', 'README.md'),
                         'superseded identity remains')
         with _fixture() as root:

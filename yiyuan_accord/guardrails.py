@@ -86,11 +86,10 @@ def repository_relative_path(root, locator):
 
 def forbidden_path_present(path):
     try:
-        if path.is_file() or path.is_symlink():
-            return True
-        return path.is_dir() and any(
-            item.is_file() or item.is_symlink() for item in path.rglob("*")
-        )
+        path.lstat()
+        return True
+    except FileNotFoundError:
+        return False
     except OSError:
         return True
 
@@ -541,8 +540,15 @@ def criterion_observation_decision(
     accepted = decision in {"accepted", "accepted-with-exclusion"}
     if decision not in {"accepted", "accepted-with-exclusion", "rejected"}:
         errors.append(f"{label} has no explicit {criterion_id} decision")
-    if not isinstance(item.get("claim"), str) or not item["claim"].strip():
+    claim = item.get("claim")
+    if not isinstance(claim, str) or not claim.strip():
         errors.append(f"{label} lacks a {criterion_id} evidence claim")
+        accepted = False
+    elif (
+        not isinstance(observation.get("claimLimit"), dict)
+        or claim != observation["claimLimit"].get("statement")
+    ):
+        errors.append(f"{label} claim must equal observation claimLimit.statement")
         accepted = False
     task_id = observation.get("taskId")
     if (
