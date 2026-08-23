@@ -2,13 +2,13 @@
   "taskId": "GT-05",
   "goldenTaskSha256": "4d473b07fb0488015c0f8fc8682e40a9a0624c62e83f0109f31711eed053aa27",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T22:51:00Z",
-  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
+  "observedAt": "2026-08-23T21:13:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
     "adapterId": "codex",
-    "hostProduct": "Codex CLI with ChatGPT OAuth",
+    "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)",
     "hostVersion": "0.149.0",
-    "sessionId": "01a02abe-6946-70a1-aa87-3aa6cba75521"
+    "sessionId": "01a0306c-1db6-71a0-b228-038f6beb92bf"
   },
   "projectionIdentity": {
     "adapterId": "codex",
@@ -25,9 +25,9 @@
   "startingState": {"declared": "The latest failure is real and no outcome was accepted."},
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
-    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-05",
-    "sha256": "d28cd9b10ca92132bcd0bb0c7b1ef78158382ba4ee731dee342e9c6e34b2443a",
+    "sha256": "bcb0c24fc69f07bfdfd7816c80da5b19ab139a84f0995a27f0e039b7b388c089",
     "claim": "Direct red-to-green events show premise replacement in the existing generation, no fourth generation and retained regression coverage."
   }],
   "behaviorDecisions": {
@@ -60,7 +60,11 @@
   "residue": [],
   "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
   "criterionDecisions": {"R3": "accepted", "Q3": "accepted", "Q4": "accepted"},
-  "claimLimit": {"retainedFailure": false, "excludedClaims": [], "statement": "Passed only for the supplied disposable same-purpose validator fixture."},
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for the supplied disposable same-purpose validator fixture."
+  },
   "decision": {"state": "passed"},
   "evidenceClass": "representative-behavior"
 }

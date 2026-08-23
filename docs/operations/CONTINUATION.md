@@ -29,9 +29,10 @@ Then read, in order:
 - Active line: v2.0. `program.status` is `ready`; the sole increment, work item
   and four ordered work stages are retained as completed.
 - All R1–R4 and Q1–Q4 assessments are `verified` by the live verifier. The
-  fresh current-projection release sample contains five passes and two retained
-  failures; the exact GT-07 and GT-08 exclusions are public in
-  `docs/releases/v2.0.md`.
+  fresh current-projection release sample contains six passes and one retained
+  GT-07 failure; its exact exclusions are public in `docs/releases/v2.0.md`.
+  The earlier GT-08 failure remains immutable historical counterevidence; the
+  current rerun passed after resolving current official host guidance.
 - Determine the first incomplete gate from live Git, the exact candidate's
   local checks, hosted results, task-time human authority and public release
   state. Never infer a live gate from this navigation file. A ready repository

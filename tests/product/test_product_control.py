@@ -6,7 +6,7 @@ from yiyuan_accord.control import host_check, verify_product
 from yiyuan_accord.identity import active_tree_errors
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
-SOURCE = 'evals/evidence/2026-08-22-v20-representative-source.json'
+SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CRITERIA = ['R1', 'R2', 'R3', 'R4', 'Q1', 'Q2', 'Q3', 'Q4']
 RETIRED = {'productId': 'retired-product',
            'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
@@ -120,7 +120,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         with _fixture() as root:
-            locator = 'evals/observations/2026-08-22-v20-codex-gt01.json'
+            locator = 'evals/observations/2026-08-24-v20-codex-gt01.json'
             observation = _read(root, locator)
             observation['projectionIdentity']['skillSha256'] = '0' * 64
             _write(root, locator, observation)
@@ -139,6 +139,11 @@ class ProductControlTests(unittest.TestCase):
             capture = json.loads(source['records']['GT-02']['payload'])['capture']
             self.assertIn('Skill search remained enabled', capture)
             self.assertNotIn('non-target Skill search disabled', capture)
+            current_gt08 = _read(root, 'evals/observations/2026-08-24-v20-codex-gt08.json')
+            self.assertEqual(current_gt08['decision'], {'state': 'passed'})
+            self.assertEqual(
+                current_gt08['behaviorDecisions']['required']['resolve-current-official-guidance'],
+                'observed')
             source['records']['GT-01']['payload'] = 'tampered'
             _write(root, SOURCE, source)
             acceptance = _read(root, A)
@@ -153,7 +158,7 @@ class ProductControlTests(unittest.TestCase):
         self.rejected(A, 'retained behavior exclusions', lambda v:
                       v['claimCeiling'].update(retainedBehaviorExclusions=[]))
         with _fixture() as root:
-            locator = 'evals/observations/2026-08-22-v20-claude-gt07.json'
+            locator = 'evals/observations/2026-08-24-v20-claude-gt07.json'
             observation = _read(root, locator)
             observation['criterionDecisions']['Q4'] = 'accepted'
             observation['claimLimit'] = {'retainedFailure': False, 'excludedClaims': [], 'statement': 'all supported'}
@@ -161,7 +166,7 @@ class ProductControlTests(unittest.TestCase):
             _write(root, locator, observation)
             _rehash(root, locator)
             self.assert_has(verify_product(root)['errors'], 'criterionDecisions', 'claimLimit contradicts', 'cleanup contradicts residue')
-            locator = 'evals/observations/2026-08-22-v20-codex-gt01.json'
+            locator = 'evals/observations/2026-08-24-v20-codex-gt01.json'
             observation = _read(root, locator)
             observation['decision'] = {'state': 'failed'}
             _write(root, locator, observation)

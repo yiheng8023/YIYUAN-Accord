@@ -2,16 +2,16 @@
   "taskId": "GT-01",
   "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T22:51:00Z",
+  "observedAt": "2026-08-23T21:13:00Z",
   "observer": {
     "kind": "host-event-recorder",
-    "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"
+    "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"
   },
   "hostIdentity": {
     "adapterId": "codex",
-    "hostProduct": "Codex CLI with ChatGPT OAuth",
+    "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)",
     "hostVersion": "0.149.0",
-    "sessionId": "01a02ab3-6948-79f0-ba97-6bee6680f854"
+    "sessionId": "01a0305d-14f9-7681-91b5-aacf73d1ccdf"
   },
   "projectionIdentity": {
     "adapterId": "codex",
@@ -30,9 +30,9 @@
   },
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
-    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-01",
-    "sha256": "1bf86706bfa2c64cd332de04e13bf5f2b79cb0673fc6e2591f53d1f2f2017310",
+    "sha256": "ec4e5fcf7e9c8a79b9b3b57b22faf00d9401a8d7ded58146e03acd7280db120c",
     "claim": "Direct no-tool Codex CLI event record and final two-sentence answer."
   }],
   "behaviorDecisions": {

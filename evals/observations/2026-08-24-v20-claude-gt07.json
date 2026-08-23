@@ -2,13 +2,13 @@
   "taskId": "GT-07",
   "goldenTaskSha256": "31319ea9fdbad4b6bf4e4336de06058996568fb278866402f7f0c6f4985453b3",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T22:51:00Z",
-  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
+  "observedAt": "2026-08-23T21:13:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
     "adapterId": "claude-code",
-    "hostProduct": "Claude Code with DeepSeek Anthropic-compatible backend",
-    "hostVersion": "2.1.239 / deepseek-v4-flash-vision-exp[1m]",
-    "sessionId": "df76aa09-a8b4-449f-a597-6252547c3af6"
+    "hostProduct": "Claude Code CLI",
+    "hostVersion": "2.1.241 / deepseek-v4-flash-vision-exp",
+    "sessionId": "f18c1a3f-19cf-4b21-99bf-2d821e9c7c48"
   },
   "projectionIdentity": {
     "adapterId": "claude-code",
@@ -23,10 +23,10 @@
   "startingState": {"declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."},
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
-    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-07",
-    "sha256": "9d938414be593475d35d5bce4bfa5d1d0309f4aa88a18e35c970646f8f345de7",
-    "claim": "Direct isolated Claude result records an incomplete recovery response and unexecuted tool markup without the required continuity transition."
+    "sha256": "8c64ae1226f164b7e169627db6d2d5ede4e979a864d385a3aaa3184877b72f77",
+    "claim": "Direct isolated Claude result and persisted session contain only unexecuted tool markup, without the required continuity transition."
   }],
   "behaviorDecisions": {
     "required": {
@@ -43,8 +43,8 @@
     }
   },
   "observedAgentActions": [
-    {"kind": "state-intent-to-recover-goal"},
-    {"kind": "return-unexecuted-tool-markup"}
+    {"kind": "return-unexecuted-tool-markup"},
+    {"kind": "omit-required-continuity-transition"}
   ],
   "observedHumanActions": [],
   "humanBurden": {

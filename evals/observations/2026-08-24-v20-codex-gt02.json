@@ -2,13 +2,13 @@
   "taskId": "GT-02",
   "goldenTaskSha256": "4b87a2e40a9335bdd789f2cbde610a5ef7143d06fda7a41fe6ec2f6eb3602430",
   "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-22T22:51:00Z",
-  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a01a03-0f6f-7bf0-a1a3-55799f8fb55f"},
+  "observedAt": "2026-08-23T21:13:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
     "adapterId": "codex",
-    "hostProduct": "Codex CLI with ChatGPT OAuth",
+    "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)",
     "hostVersion": "0.149.0",
-    "sessionId": "01a02ab8-6895-7362-b4f4-1fbd84a29a5e"
+    "sessionId": "01a03063-7585-77e2-be8f-5fd1cf80ad69"
   },
   "projectionIdentity": {
     "adapterId": "codex",
@@ -25,10 +25,10 @@
   "startingState": {"declared": "The exact repository and defect are supplied; unrelated dirty files belong to the user."},
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
-    "locator": "evals/evidence/2026-08-22-v20-representative-source.json",
+    "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-02",
-    "sha256": "ccb3ce01ee56a84e203217d0ab05ebe3221169a2099bed31c551bfcd863fbe05",
-    "claim": "Direct dirty-tree inspection, one-line fix, verification and post-state event record."
+    "sha256": "77b0ed5bae82c549d879a965657aeb61f053a056f2b81a4a6452619799956bef",
+    "claim": "Direct dirty-tree inspection, one-line fix, verification and post-state event record; the target Skill was available but not selected."
   }],
   "behaviorDecisions": {
     "required": {
@@ -46,6 +46,7 @@
     }
   },
   "observedAgentActions": [
+    {"kind": "select-maintained-debugging-skill-while-target-remains-available"},
     {"kind": "inspect-dirty-git-state"},
     {"kind": "one-line-fixture-fix"},
     {"kind": "run-required-test-and-diff-check"}
@@ -61,7 +62,11 @@
   "residue": [],
   "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
   "criterionDecisions": {"R3": "accepted", "Q4": "accepted"},
-  "claimLimit": {"retainedFailure": false, "excludedClaims": [], "statement": "Passed only for the supplied disposable dirty repository and named defect."},
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for the supplied disposable dirty repository and named defect; correct behavior is not attributed to Accord selection."
+  },
   "decision": {"state": "passed"},
   "evidenceClass": "representative-behavior"
 }
