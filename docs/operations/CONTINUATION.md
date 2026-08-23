@@ -32,9 +32,10 @@ Then read, in order:
   fresh current-projection release sample contains five passes and two retained
   failures; the exact GT-07 and GT-08 exclusions are public in
   `docs/releases/v2.0.md`.
-- The next gate is `repository-candidate`: commit the complete authorized WIP
-  and require the same tree to be clean before exact local verification and
-  review. Ready repository state grants no hosted, human or release authority.
+- Determine the first incomplete gate from live Git, the exact candidate's
+  local checks, hosted results, task-time human authority and public release
+  state. Never infer a live gate from this navigation file. A ready repository
+  state grants no hosted, human or release authority.
 - The immutable v1.2 revision is
   `6d857517455b6f3f86a4c9cbd79fc618febbbe00`. Its observations remain in Git
   history and must not be renamed or replayed as current evidence.
@@ -61,8 +62,11 @@ Then read, in order:
    evidence, retain the completed increment, and commit one clean local candidate.
 5. On that unchanged local SHA, directly run the canonical verifier, both host
    checks, full product tests, diff, identity, link, workflow and residue checks
-   plus independent specification and standards-security review. Resolve every
-   P0/P1; only then push the same SHA.
+   plus independent specification and standards-security review. Independently
+   compare the publishable source bundle with original host/session records,
+   and have one non-author colleague complete the README activation,
+   confirmation and removal path from a clean state as an internal usability
+   sample. Resolve every P0/P1; only then push the same SHA.
 6. Verify the unchanged pushed SHA on GitHub Actions for Linux, Windows and
    macOS plus ordinary Codex Cloud. Repository data cannot satisfy this gate.
 7. Only then request a named accountable human decision for that exact SHA and
@@ -91,7 +95,7 @@ The Agent owns destination verification, reconciliation and source release.
 python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
-python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['requiredTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun==e and not r.skipped and not r.expectedFailures))"
+python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
 git diff --check
 ```
 

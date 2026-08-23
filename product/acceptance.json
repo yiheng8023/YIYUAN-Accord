@@ -233,7 +233,7 @@
       "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "codex-cloud": "https://chatgpt.com/codex/"
     },
-    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. Task-time hosted observation must then bind the unchanged HEAD and every required system. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
+    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one non-author colleague's clean-state README walkthrough covering activation, confirmation and removal; the walkthrough is an internal usability sample, not broad field evidence. Task-time hosted observation must then bind the unchanged HEAD and every required system. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",

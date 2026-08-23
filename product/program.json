@@ -24,6 +24,13 @@
       "disposition": "admitted-domain-and-lifecycle-input-not-self-authorizing-evidence"
     },
     {
+      "id": "independent-v20-audit-2026-08-23",
+      "kind": "fixed-sha-independent-analysis-and-counterevidence",
+      "repositoryLocator": "research/reviews/2026-08-23-yiyuan-accord-v2.0-independent-audit.md",
+      "repositorySha256": "389dace66011395994d08568d4a5dc3404450cef8320a52b6436a6723a8ebebf",
+      "disposition": "admitted-high-weight-non-authoritative-input-with-bounded-finding-dispositions"
+    },
+    {
       "id": "refactor-report-adoption-record-2026-08-20",
       "kind": "bounded-adoption-decision-record",
       "repositoryLocator": "research/reviews/2026-08-20-yiyuan-accord-refactor-report-adoption-record.md",
@@ -114,7 +121,12 @@
         "restart the desktop app",
         "Start a new task",
         "python -B -m yiyuan_accord verify --root . --json",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude"
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
+        "codex plugin marketplace upgrade yiyuan-accord",
+        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
+        "codex plugin marketplace remove yiyuan-accord",
+        "Rollback",
+        "Troubleshoot"
       ],
       "README.zh-CN.md": [
         "git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git",
@@ -123,7 +135,18 @@
         "重启桌面端",
         "新建任务",
         "python -B -m yiyuan_accord verify --root . --json",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude"
+        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
+        "codex plugin marketplace upgrade yiyuan-accord",
+        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
+        "codex plugin marketplace remove yiyuan-accord",
+        "回滚",
+        "故障排查"
+      ],
+      ".github/workflows/validate.yml": [
+        "minimumTestCount",
+        "r.testsRun>=e",
+        "python-version: ${{ matrix.python-version }}",
+        "python-version: \"3.14\""
       ],
       "CONTRIBUTING.md": [
         "Codex and Claude Code as current reference hosts, not permanent product",
@@ -145,7 +168,7 @@
         "dependsOn": ["repository-candidate"],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, diff, identity, link, workflow and residue checks plus independent specification and standards-security review; any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
+        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, diff, identity, link, workflow and residue checks plus independent specification and standards-security review. An independent human or second observation surface compares the publishable source bundle with the original host or session records, and one non-author colleague completes a clean-state README activation, confirmation and removal walkthrough; the walkthrough is an internal usability sample only. Any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -181,12 +204,12 @@
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 构成的唯一产品权威下，将 YIYUAN Accord v2.0 收敛为开放、Agent 中立、可移植的人机协作可靠性契约与评估框架；广义使命面向人类与 AI 协作，当前可验证产品面严格限定为人类与 Agent 协作。持续保持计划、严格工序、R1-R4/Q1-Q4 验收、目标提示词、证据、资源、宿主投影与公开元数据逐项映射；以意图、能力、权限、证据为初始诊断维度，以状态、影响、连续性、生命周期贯穿校准，并区分责任、权限与最终问责。按且仅按以下顺序推进四个工作阶段：canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze。任何允许保留的行为失败都必须聚合进公开主张边界。候选之后严格执行 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。完成无兼容别名的迁移后，由通用验证器现场计算确定性合规；取得当前精确投影的新 Golden Task 行为证据；在不变 SHA 上通过完整本地验证和独立规格、标准安全双轴反审后才推送；再复验 GitHub Linux/Windows/macOS 与普通 Codex Cloud；随后暂停请求具名人类最终决定；授权后创建轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。独立治理的用户级 Skill 不属于发行依赖，除非出现已复现残余缺口并获得单独生命周期授权。不得把报告、计划、代码、测试、提交、推送、转场、局部通过、自填证据、托管绿灯或授权本身称为收官；真实场域、跨宿主、组织与长期效果保持为持续证据通道。任何前置门失败都退回最小受影响步骤；只有遇到必须由人类承担的判断、账户、外部信任、发布或不可逆边界才暂停并提出最小接管步骤，完成后继续，直至有限 v2.0 真实收官。",
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，按工业/商业生产级交付标准完成 YIYUAN Accord v2.0 的有限收官；保持开放、Agent 中立、无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前可验证范围仅为人类与 Agent 协作。计划、工序、R1-R4/Q1-Q4 验收、目标提示词、证据、投影和公开面必须持续映射。既有工作阶段保持为 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze；GT-07/GT-08 保持失败并收窄主张。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。精确本地门必须在不变 clean SHA 上完成全量验证、独立规格与标准安全反审、可发布 source bundle 对原始宿主记录的独立对照，以及一名非作者同事从 clean state 完成 README 启用、确认、移除走查；之后才可推送并验证 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的具名人类授权，创建不可移动的轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；真实场域、跨宿主和长期效果继续作为后续证据。前置门失败退回最小受影响步骤；仅在人类判断、账户、外部信任、发布或不可逆边界暂停，接管后继续至有限收官。",
     "workStageIds": ["canonical-identity-authority-and-projections", "static-conformance-and-adversarial-regressions", "fresh-representative-behavior", "repository-candidate-freeze"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "The accountable user explicitly authorized the complete canonical-identity migration, global consistency updates and push on 2026-08-21. The host goal remains active through the ordered external gates. Repository validity proves no hosted, human, publication, field or completion outcome."
+    "hostLifecycleNote": "The accountable user authorized the identity migration, global consistency updates and push on 2026-08-21, then accepted the bounded 2026-08-23 independent-audit recalibration without changing the ordered work stages or release gates. The host goal remains active through those gates. Repository validity proves no hosted, human, publication, field or completion outcome."
   },
   "hostProjections": [
     {
@@ -253,9 +276,11 @@
       "def test_projection_evidence_rejects_drift_and_relocation",
       "def test_projection_package_and_admission_are_fail_closed",
       "def test_representative_sample_binds_projection_source_and_task",
-      "def test_retired_residue_and_duplicate_json_fail_closed"
+      "def test_retired_residue_and_duplicate_json_fail_closed",
+      "def test_legitimate_host_language_and_additional_regressions_are_allowed",
+      "def test_retired_module_identity_contexts_are_rejected"
     ],
-    "requiredTestCount": 11,
+    "minimumTestCount": 13,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",

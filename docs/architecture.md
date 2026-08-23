@@ -133,6 +133,13 @@ complete controlled transcript or host-event record held in a separate source
 bundle. Independence is established by the source record and direct task-time
 observation, not by a boolean written into the observation.
 
+Before the exact local release gate passes, an independent human or second
+observation surface compares the publishable bundle with the original host or
+session records. The raw records remain outside the public repository. One
+non-author colleague also exercises the README activation, confirmation and
+removal path from a clean state; that result is an internal usability sample,
+not population-level field evidence.
+
 The repository verifier recomputes these digests and rejects stale or partial
 bindings. It does not authenticate a real-world observer or prove that a host
 event happened; that would turn this project into the identity/audit system it

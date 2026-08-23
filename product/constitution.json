@@ -236,6 +236,7 @@
       "CONTEXT.md",
       "README.md",
       "README.zh-CN.md",
+      ".github/workflows/validate.yml",
       "docs/architecture.md",
       "CONTRIBUTING.md",
       "docs/operations/CONTINUATION.md",

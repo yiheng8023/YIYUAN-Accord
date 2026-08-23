@@ -274,7 +274,7 @@ def _validate_complexity(root, program, python_module, errors):
     errors.extend(module_layout_errors(
         root, python_module, Path(__file__).resolve().parent.name,
         _string_list(budget.get("requiredTestMarkers")),
-        budget.get("requiredTestCount"),
+        budget.get("minimumTestCount"),
     ))
 
     files, inventory_source = _repository_files(root)

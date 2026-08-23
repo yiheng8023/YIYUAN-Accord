@@ -643,7 +643,10 @@ def release_procedure_errors(root, procedure, criterion_ids, goal_prompt):
     if procedure.get("assetPolicy") != "no-attached-assets":
         return ["program.releaseProcedure.assetPolicy must be no-attached-assets"]
     surfaces = procedure.get("surfaceMarkers")
-    expected_surfaces = {"README.md", "README.zh-CN.md", "CONTRIBUTING.md"}
+    expected_surfaces = {
+        "README.md", "README.zh-CN.md", "CONTRIBUTING.md",
+        ".github/workflows/validate.yml",
+    }
     if not _exact(surfaces, expected_surfaces):
         return ["program.releaseProcedure.surfaceMarkers is invalid"]
     for locator, markers in surfaces.items():

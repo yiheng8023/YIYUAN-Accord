@@ -82,7 +82,7 @@ satisfies mechanism ownership and retirement without adding another registry.
 python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
-python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['requiredTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun==e and not r.skipped and not r.expectedFailures))"
+python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
 ~~~
 
 Static checks establish only contract and projection conformance. Claims about
@@ -97,8 +97,14 @@ cross-host equivalence, publication and release require their own evidence and
 human authority. Deterministic conformance is recomputed by the verifier; a
 repository observation cannot self-attest it. For a release candidate, first
 commit one clean local SHA and directly run the complete local checks plus
-independent specification and standards-security review. Only after that gate
-passes may the same SHA be pushed and verified on every declared hosted system;
+independent specification and standards-security review. That local gate also
+requires an independent human or second observation surface to compare the
+publishable source bundle with the original host or session records, plus one
+non-author colleague to complete the README activation, confirmation and
+removal path from a clean state. Keep private raw records outside the
+repository, and describe that walkthrough only as an internal usability
+sample. Only after these checks pass may the same SHA be pushed and verified
+on every declared hosted system;
 only after hosted verification may separate named-human authorization be
 requested for that SHA and claim ceiling. Do not write candidate-specific
 local-review, hosted or human-authority proof back into the candidate, and do

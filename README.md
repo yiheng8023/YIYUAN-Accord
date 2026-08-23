@@ -12,8 +12,10 @@ evidence are deliberately limited to human-Agent collaboration.
 
 ## Start here
 
-Clone the repository and run the product verifier with Python 3.10 or later.
-After v2.0 is published, reproduce that release from its immutable tag:
+Clone the repository and run the product verifier with Python 3.10–3.14. CI
+tests every supported Python version; the minimum and current versions run on
+Windows, macOS and Linux. After v2.0 is published, reproduce that release from
+its immutable tag:
 
 ```powershell
 git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
@@ -64,6 +66,29 @@ OpenAI's current documentation requires explicit installation and a host
 reload/new task: [package a plugin](https://developers.openai.com/plugins/build/plugins)
 and [use plugins](https://learn.chatgpt.com/docs/plugins).
 
+#### Update, disable or remove
+
+Inspect the effective installation with `codex plugin list --json`. Refresh a
+configured Git marketplace with:
+
+```powershell
+codex plugin marketplace upgrade yiyuan-accord
+```
+
+An immutable release ref does not advance to a later tag. To update or roll
+back, replace `VERSION_TAG` with the intended exact tag, remove the installed
+plugin and marketplace, then install again and start a new task:
+
+```powershell
+codex plugin remove yiyuan-accord-codex@yiyuan-accord
+codex plugin marketplace remove yiyuan-accord
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+Use **Plugins** to disable or re-enable the plugin without changing the
+marketplace. Remove both entries with the first two commands to uninstall it.
+
 ### Claude Code
 
 From the repository root, load the package for one local session:
@@ -77,6 +102,20 @@ Then verify the namespaced Skill is present with
 for local use and testing; it does not create a persistent installation.
 See the [official Claude Code plugin guide](https://code.claude.com/docs/en/plugins).
 
+Changes to that checkout can be loaded with `/reload-plugins`; confirm the
+namespaced Skill in `/help`. To disable or remove a direct-loaded package, end
+the session and omit `--plugin-dir` next time. To roll back, check out the
+intended immutable tag and launch a new session against that tag's package.
+
+### Rollback and Troubleshoot
+
+Rollback always selects an earlier immutable tag; never move an existing tag.
+If activation is unclear, first inspect the host's installed/loaded plugin
+list, then start a new task or session and run the matching `host-check`.
+Absence from the host list means not enabled. A static PASS confirms package
+conformance only; use fresh Golden Tasks before making a behavior claim. For a
+repository defect, include the exact revision and verifier output in a report.
+
 If the host does not explicitly list the package or Skill, it is not enabled.
 The project intentionally has no installer, background runtime, Hook, MCP
 server, App, state store, or automatic user-configuration mutation.
@@ -87,7 +126,7 @@ server, App, state store, or automatic user-configuration mutation.
   [`constitution.json`](product/constitution.json),
   [`program.json`](product/program.json), and
   [`acceptance.json`](product/acceptance.json)
-- The canonical vocabulary and boundary: [`CONTEXT.md`](CONTEXT.md)
+- The derived vocabulary and boundary: [`CONTEXT.md`](CONTEXT.md)
 - One generic, data-driven verifier:
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
 - Replaceable, runtime-free Codex and Claude Code Skill projections

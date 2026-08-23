@@ -1,8 +1,10 @@
 # YIYUAN Accord
 
-YIYUAN Accord is the domain language for an open, Agent-neutral collaboration
-reliability contract and evaluation framework. Its broad mission concerns
-human-AI collaboration; its current product surface concerns human-Agent work.
+YIYUAN Accord is the derived glossary for the domain model defined by
+`product/constitution.json`. It explains an open, Agent-neutral collaboration
+reliability contract and evaluation framework without adding semantic
+authority. Its broad mission concerns human-AI collaboration; its current
+product surface concerns human-Agent work.
 
 ## Identity and scope
 

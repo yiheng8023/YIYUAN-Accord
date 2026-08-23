@@ -1,13 +1,12 @@
 from contextlib import contextmanager
-import hashlib, json, re, shutil, tempfile, unittest
+import hashlib, json, shutil, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
 from yiyuan_accord.control import host_check, verify_product
-from yiyuan_accord.evidence import representative_contract_sha256
 from yiyuan_accord.identity import active_tree_errors
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
-SOURCE = 'evals/evidence/s.json'
+SOURCE = 'evals/evidence/2026-08-22-v20-representative-source.json'
 CRITERIA = ['R1', 'R2', 'R3', 'R4', 'Q1', 'Q2', 'Q3', 'Q4']
 
 def _read(root, locator):
@@ -18,21 +17,12 @@ def _write(root, locator, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, separators=(',', ':')) + '\n', encoding='utf-8')
 
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True,
-                          separators=(',', ':')).encode()).hexdigest()
-
 @contextmanager
 def _fixture():
     with tempfile.TemporaryDirectory(prefix='ya-') as temporary:
         target = Path(temporary) / 'repository'
         shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns('.git', '.tmp', '__pycache__', '*.pyc'))
         yield target
-
-def _projection(root, adapter='codex'):
-    report = verify_product(root)['hostChecks'][adapter]
-    locators = {key: report[key] for key in ('manifest', 'marketplace', 'contract', 'skill') if isinstance(report.get(key), str)}
-    return {'adapterId': adapter, **report['identity'], **locators}
 
 def _rehash(root, locator):
     acceptance = _read(root, A)
@@ -41,67 +31,6 @@ def _rehash(root, locator):
         for item in criterion['evidence']:
             if item['locator'] == locator:
                 item['sha256'] = digest
-    _write(root, A, acceptance)
-
-def _sample(root):
-    (acceptance, golden) = (_read(root, A), _read(root, G))
-    required = set(acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'])
-    projection = _projection(root)
-    host = {'adapterId': 'codex', 'hostProduct': 'h', 'hostVersion': 'v', 'sessionId': 's'}
-    evaluation = representative_contract_sha256(acceptance, golden)
-    source,retained,by_id={'schema':1,'records':{}},[],{x['id']:x for x in acceptance['criteria']}
-    for item in acceptance['criteria']:
-        item['evidence']=[]
-    for task in golden['tasks']:
-        if task['id'] not in required:
-            continue
-        (task_id, failed) = (task['id'], task['id'] == 'GT-02')
-        mapped = {item for item in task['mapsTo'] if re.fullmatch('[RQ][0-9]+', item)}
-        task_digest = _digest(task)
-        common = {'taskId': task_id, 'goldenTaskSha256': task_digest, 'evaluationContractSha256': evaluation, 'hostIdentity': host}
-        record = {**common, 'kind': 'host-event-log', 'capturedAt': '2026-08-20T00:00Z', 'payload': task_id}
-        source['records'][task_id] = record
-        required_status = {item: 'observed' for item in task['required']}
-        failures = []
-        if failed:
-            required_status[task['required'][0]] = 'not-observed'
-            failures = [f"required:{task['required'][0]}"]
-            retained.extend((f'{task_id}:{value}' for value in failures))
-        observation = {
-            **common, 'evidenceClass': 'representative-behavior',
-            'observedAt': '2026-08-20T00:01Z',
-            'observer': {'kind': 'host-event-recorder', 'identity': 'f'},
-            'projectionIdentity': projection, 'startingState': {'declared': task['startingState']},
-            'transcriptOrEventEvidence': [{'kind': 'host-event-log', 'locator': SOURCE,
-                'recordId': task_id, 'sha256': _digest(record), 'claim': 's'}],
-            'behaviorDecisions': {'required': required_status,
-                'prohibited': {item: 'absent' for item in task['prohibited']}},
-            'observedAgentActions': [{'kind': 'a'}], 'observedHumanActions': [],
-            'humanBurden': {item: 0 for item in golden['metrics']['humanBurden']},
-            'materialEffects': [], 'residue': [],
-            'cleanup': {'state': 'verified-clean', 'taskOwnedResidueCount': 0, 'verified': True},
-            'criterionDecisions': {item: 'accepted-with-exclusion' if failed else 'accepted'
-                                   for item in mapped},
-            'claimLimit': {'retainedFailure': failed, 'excludedClaims': failures,
-                           'statement': 'b'},
-            'decision': {'state': 'failed' if failed else 'passed'}}
-        locator = f'evals/observations/current-{task_id.lower()}.json'
-        _write(root, locator, observation)
-        evidence = {'locator': locator, 'sha256': hashlib.sha256((root / locator).read_bytes()).hexdigest(), 'claim': task_id, 'bindsProjection': 'codex'}
-        for criterion_id in mapped:
-            criterion = by_id[criterion_id]
-            if 'representative-behavior' in criterion['requiredEvidenceClasses']:
-                criterion['evidence'].append({**evidence, 'supportsCriterion': criterion_id})
-    for criterion in acceptance['criteria']:
-        if criterion['requiredEvidenceClasses'] == ['representative-behavior']:
-            criterion['assessment'] = 'verified'
-    acceptance['claimCeiling']['retainedBehaviorExclusions'] = sorted(retained)
-    notes = root / acceptance['publicRelease']['releaseNotes']
-    marker = f"`retainedBehaviorExclusions={json.dumps(sorted(retained), separators=(',', ':'))}`"
-    notes.write_text(re.sub('`retainedBehaviorExclusions=.*?`', marker,
-                            notes.read_text(encoding='utf-8')), encoding='utf-8')
-    acceptance['publicRelease']['releaseNotesSha256'] = hashlib.sha256(notes.read_bytes()).hexdigest()
-    _write(root, SOURCE, source)
     _write(root, A, acceptance)
 
 class ProductControlTests(unittest.TestCase):
@@ -129,6 +58,11 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(report['criteria']['verified'], 8)
             self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
         self.assertTrue(all((host['staticReady'] for host in report['hostChecks'].values())))
+        program, acceptance = _read(ROOT, P), _read(ROOT, A)
+        local_gate = program['releaseProcedure']['orderedGates'][1]['condition']
+        for marker in ('original host or session records', 'non-author colleague'):
+            self.assertIn(marker, local_gate)
+            self.assertIn(marker, acceptance['candidateVerification']['rule'])
 
     def test_authority_and_static_suite_mutations_fail_closed(self):
         cases = (
@@ -171,8 +105,7 @@ class ProductControlTests(unittest.TestCase):
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         with _fixture() as root:
-            _sample(root)
-            locator = 'evals/observations/current-gt-01.json'
+            locator = 'evals/observations/2026-08-22-v20-codex-gt01.json'
             observation = _read(root, locator)
             observation['projectionIdentity']['skillSha256'] = '0' * 64
             _write(root, locator, observation)
@@ -181,7 +114,6 @@ class ProductControlTests(unittest.TestCase):
 
     def test_representative_sample_binds_projection_source_and_task(self):
         with _fixture() as root:
-            _sample(root)
             errors = verify_product(root)['errors']
             self.assertFalse(any(('representative' in item or 'R3 evidence' in item for item in errors)))
             acceptance = _read(root, A)
@@ -198,7 +130,6 @@ class ProductControlTests(unittest.TestCase):
 
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:
-            _sample(root)
             acceptance = _read(root, A)
             retained = acceptance['claimCeiling']['retainedBehaviorExclusions']
             acceptance['claimCeiling']['retainedBehaviorExclusions'] = []
@@ -206,7 +137,7 @@ class ProductControlTests(unittest.TestCase):
             self.assert_has(verify_product(root)['errors'], 'retained behavior exclusions')
             acceptance['claimCeiling']['retainedBehaviorExclusions'] = retained
             _write(root, A, acceptance)
-            locator = 'evals/observations/current-gt-02.json'
+            locator = 'evals/observations/2026-08-22-v20-claude-gt07.json'
             observation = _read(root, locator)
             observation['criterionDecisions']['Q4'] = 'accepted'
             observation['claimLimit'] = {'retainedFailure': False, 'excludedClaims': [], 'statement': 'all supported'}
@@ -214,7 +145,7 @@ class ProductControlTests(unittest.TestCase):
             _write(root, locator, observation)
             _rehash(root, locator)
             self.assert_has(verify_product(root)['errors'], 'criterionDecisions', 'claimLimit contradicts', 'cleanup contradicts residue')
-            locator = 'evals/observations/current-gt-01.json'
+            locator = 'evals/observations/2026-08-22-v20-codex-gt01.json'
             observation = _read(root, locator)
             observation['decision'] = {'state': 'failed'}
             _write(root, locator, observation)
@@ -293,6 +224,30 @@ class ProductControlTests(unittest.TestCase):
                 fake = f'import unittest\n{bad}class ProductControlTests(unittest.TestCase):\n{body}'
                 (root / 'tests/product/test_product_control.py').write_text(fake, encoding='utf-8')
                 self.assert_has(verify_product(root)['errors'], 'pythonModule does not match', 'primaryInstructionPaths', 'not a repository-relative path', 'test markers')
+
+    def test_legitimate_host_language_and_additional_regressions_are_allowed(self):
+        errors = verify_product(ROOT)['errors']
+        self.assertFalse(any('superseded identity' in item for item in errors), errors)
+        self.assertFalse(any('test markers' in item for item in errors), errors)
+
+    def test_retired_module_identity_contexts_are_rejected(self):
+        cases = (
+            'python3 -m retired_module verify\n',
+            'py -3.10 -m retired_module verify\n',
+            'from retired_module import item\n',
+            'retired_module/path.py\n',
+            '{"pythonModule":"retired_module"}\n',
+        )
+        old = {'productId': 'retired-product',
+               'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
+        for body in cases:
+            with self.subTest(body=body), tempfile.TemporaryDirectory() as temporary:
+                root, locator = Path(temporary), 'sample.txt'
+                (root / locator).write_text(body, encoding='utf-8')
+                history = [json.dumps(old), '# Retired Product\n']
+                with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
+                    self.assert_has(active_tree_errors(root, [locator], '0' * 40),
+                                    f'superseded identity remains in active tree: {locator}')
 
     def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:

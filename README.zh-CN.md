@@ -10,8 +10,8 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 
 ## 先开始使用
 
-克隆仓库后，用 Python 3.10 或更高版本运行产品验证器。v2.0 正式发布后，应从不可变 tag
-复现该版本：
+克隆仓库后，用 Python 3.10–3.14 运行产品验证器。CI 覆盖每个受支持 Python 版本，其中最低
+与当前版本同时在 Windows、macOS、Linux 运行。v2.0 正式发布后，应从不可变 tag 复现该版本：
 
 ```powershell
 git clone --branch v2.0 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
@@ -55,6 +55,27 @@ YIYUAN Accord 插件已经安装。
 安装，并在目录变化后重载宿主、安装后新建任务：见[打包插件](https://developers.openai.com/plugins/build/plugins)
 与[使用插件](https://learn.chatgpt.com/docs/plugins)。
 
+#### 更新、禁用与移除
+
+用 `codex plugin list --json` 检查实际安装状态；刷新已有 Git 市场：
+
+```powershell
+codex plugin marketplace upgrade yiyuan-accord
+```
+
+不可变发布 ref 不会自动前进到新 tag。更新或回滚时，先把 `VERSION_TAG` 替换为目标精确 tag，
+移除插件与市场，再重新添加，安装后新建任务：
+
+```powershell
+codex plugin remove yiyuan-accord-codex@yiyuan-accord
+codex plugin marketplace remove yiyuan-accord
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+需要保留市场但暂时停用时，在 **Plugins** 中禁用或重新启用。彻底卸载则依次运行上面前两条
+移除命令。
+
 ### Claude Code
 
 在仓库根目录为一个本地会话直接加载插件：
@@ -66,6 +87,17 @@ claude --plugin-dir ./plugins/yiyuan-accord-claude
 随后确认 `/yiyuan-accord-claude:deliver-demand-driven-task` 已出现。该方式用于本地使用与测试，
 不会建立持久安装；参见 [Claude Code 官方插件说明](https://code.claude.com/docs/en/plugins)。
 
+checkout 内容变化后可运行 `/reload-plugins`，并在 `/help` 中确认具名 Skill。要禁用或移除
+这种直接加载，只需结束会话，下次不传 `--plugin-dir`；要回滚，则切到目标不可变 tag，再从
+该 tag 的插件目录启动新会话。
+
+### 回滚与故障排查
+
+回滚只选择更早的不可变 tag，绝不移动已有 tag。启用状态不清楚时，先检查宿主实际安装或
+加载列表，再新建任务或会话并运行对应 `host-check`；宿主列表中没有，就不能称为已启用。
+静态 PASS 只证明投影包一致，实际行为主张仍需全新 Golden Tasks。报告仓库缺陷时请附精确
+revision 与验证器输出。
+
 宿主没有明确列出插件或 Skill，就不能称为已启用。本项目有意不提供安装器、后台运行时、
 Hook、MCP 服务、App、状态库或自动用户配置写入。
 
@@ -74,7 +106,7 @@ Hook、MCP 服务、App、状态库或自动用户配置写入。
 - 三份语义权威：[`constitution.json`](product/constitution.json)、
   [`program.json`](product/program.json) 与
   [`acceptance.json`](product/acceptance.json)
-- 统一术语与边界：[`CONTEXT.md`](CONTEXT.md)
+- 派生术语与边界：[`CONTEXT.md`](CONTEXT.md)
 - 一个数据驱动的通用验证器：
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
 - 可替换、无运行时的 Codex 与 Claude Code Skill 投影

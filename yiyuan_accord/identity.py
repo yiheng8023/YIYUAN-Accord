@@ -168,27 +168,38 @@ def active_tree_errors(root, locators, historical_revision):
         ) for locator in ("product/constitution.json", "README.md")]
         old, readme = json.loads(history[0]), history[1]
         command = old.get("authority", {}).get("executableVerifier", "")
-        tokens = {
-            old.get("productId"),
-            next((line[2:] for line in readme.splitlines() if line.startswith("# ")), None),
-            command.split()[3] if command.startswith("python -B -m ") else None,
-        }
-        encoded = [token.lower().encode() for token in tokens if _nonempty_string(token)]
+        product_id = old.get("productId")
+        title = next(
+            (line[2:] for line in readme.splitlines() if line.startswith("# ")), None
+        )
+        module = command.split()[3] if command.startswith("python -B -m ") else None
+        if not all(_nonempty_string(value) for value in (product_id, title, module)):
+            raise ValueError
     except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError):
         return errors + ["historical identity boundary is unavailable"]
+    exact_tokens = tuple(value.lower().encode() for value in (product_id, title))
+    module_token = module.lower().encode()
+    module_context = re.compile(
+        rb"(?<![\w.-])(?:(?:python(?:3(?:\.\d+)?)?|py)(?:\s+-\S+)*\s+-m|"
+        rb"(?:from|import)\s+)\s*"
+        + re.escape(module_token)
+        + rb"(?![\w])|(?<![\w.-])"
+        + re.escape(module_token)
+        + rb"[\\/]|[\"'](?:pythonmodule|python_module|module)[\"']\s*[:=]\s*[\"']"
+        + re.escape(module_token)
+        + rb"[\"']"
+    )
     for locator in locators:
         try:
             content = locator.lower().encode() + b"\0" + (root / locator).read_bytes().lower()
         except OSError:
             continue
-        if any(token in content for token in encoded):
+        if any(token in content for token in exact_tokens) or module_context.search(content):
             errors.append(f"superseded identity remains in active tree: {locator}")
     return sorted(errors)
 
 
-def module_layout_errors(
-    root, module, executing, test_markers, test_count,
-):
+def module_layout_errors(root, module, executing, test_markers, minimum_test_count):
     errors = [] if module == executing else ["pythonModule does not match executing verifier"]
     base = root / module
     errors.extend(
@@ -223,7 +234,11 @@ def module_layout_errors(
             or "TestCase" not in {getattr(base, "attr", getattr(base, "id", ""))
                                   for base in test_class.bases}
             or set(methods) - set(functions)
-            or len({name for name in functions if name.startswith("test_")}) != test_count
+            or not isinstance(minimum_test_count, int)
+            or isinstance(minimum_test_count, bool)
+            or minimum_test_count <= 0
+            or len({name for name in functions if name.startswith("test_")})
+            < minimum_test_count
             or test_class.decorator_list
             or any(functions[name].decorator_list for name in methods if name in functions)
             or assigned & reserved
@@ -235,8 +250,6 @@ def module_layout_errors(
                    isinstance(node, ast.Raise) and
                    getattr(node.exc, "id", "") == "SystemExit"
                    for node in ast.walk(tree))
-            or not isinstance(test_count, int) or isinstance(test_count, bool)
-            or test_count <= 0
         ):
             errors.append("product control test markers are not executable unittest methods")
     return errors
