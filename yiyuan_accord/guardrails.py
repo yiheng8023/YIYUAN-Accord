@@ -19,6 +19,9 @@ RELEASE_SURFACES = (
     "AGENTS.md CONTEXT.md README.md README.zh-CN.md .github/workflows/validate.yml "
     "docs/architecture.md CONTRIBUTING.md docs/operations/CONTINUATION.md"
 ).split()
+_COMMENT_NORMALIZED_WORKFLOW_SHA256 = (
+    "b0938e16c68a347bc04690df990c9f4b740d9bb781d19b2ba3d3a8d3b8319948"
+)
 GATE_FIELDS = "id dependsOn acceptanceIds completionOperand condition".split()
 GATE_SEQUENCE = (
     ("repository-candidate", None),
@@ -625,15 +628,17 @@ def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest
     if not _exact(surfaces, RELEASE_SURFACES):
         return ["program.releaseProcedure.surfaceMarkers is invalid"]
     for locator, markers in surfaces.items():
-        path = repository_relative_path(root, locator)
         try:
-            text = " ".join(path.read_text(encoding="utf-8").split()) if path else ""
-        except (OSError, UnicodeError):
-            text = ""
-        if not _string_list(markers) or any(
+            raw = repository_relative_path(root, locator).read_text(encoding="utf-8")
+        except (AttributeError, OSError, UnicodeError):
+            raw = ""
+        text = " ".join(raw.split())
+        if (not _string_list(markers) or any(
             " ".join(marker.split()) not in text for marker in markers
-        ):
-            return [f"derived surface markers are missing from {locator}"]
+        ) or locator == ".github/workflows/validate.yml" and sha256(
+            re.sub(r"\s+#.*$", "", raw, flags=re.M).encode()
+        ).hexdigest() != _COMMENT_NORMALIZED_WORKFLOW_SHA256):
+            return [f"derived surface markers or structure are invalid in {locator}"]
     gates = procedure.get("orderedGates")
     if not isinstance(gates, list) or len(gates) != len(GATE_SEQUENCE) or any(
         not _exact(gate, GATE_FIELDS) for gate in gates

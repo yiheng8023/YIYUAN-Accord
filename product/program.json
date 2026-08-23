@@ -181,7 +181,7 @@
         "dependsOn": ["repository-candidate"],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, diff, identity, link, workflow and residue checks plus independent specification and standards-security review. An independent human or second observation surface compares the publishable source bundle with the original host or session records, and one non-author colleague completes a clean-state README activation, confirmation and removal walkthrough; the walkthrough is an internal usability sample only. Any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
+        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, diff, identity, link, workflow and residue checks plus independent specification, implementation-robustness and standards-conformance review. An independent human or second observation surface compares the publishable source bundle with the original host or session records, and one non-author colleague completes a clean-state README activation, confirmation and removal walkthrough; the walkthrough is an internal usability sample only. Any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -217,7 +217,7 @@
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，按工业/商业生产级交付标准完成 YIYUAN Accord v2.0 的有限收官；保持开放、Agent 中立、无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前可验证范围仅为人类与 Agent 协作。计划、工序、R1-R4/Q1-Q4 验收、目标提示词、证据、投影和公开面必须持续映射。既有工作阶段保持为 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze；GT-07/GT-08 保持失败并收窄主张。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。精确本地门必须在不变 clean SHA 上完成全量验证、独立规格与标准安全反审、可发布 source bundle 对原始宿主记录的独立对照，以及一名非作者同事从 clean state 完成 README 启用、确认、移除走查；之后才可推送并验证 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的具名人类授权，创建不可移动的轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；真实场域、跨宿主和长期效果继续作为后续证据。前置门失败退回最小受影响步骤；仅在人类判断、账户、外部信任、发布或不可逆边界暂停，接管后继续至有限收官。",
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，按工业/商业生产级交付标准完成 YIYUAN Accord v2.0 的有限收官；保持开放、Agent 中立、无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前可验证范围仅为人类与 Agent 协作。计划、工序、R1-R4/Q1-Q4 验收、目标提示词、证据、投影和公开面必须持续映射。既有工作阶段保持为 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze；GT-07/GT-08 保持失败并收窄主张。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。精确本地门必须在不变 clean SHA 上完成全量验证、独立规格、实现稳健性与标准符合性反审、可发布 source bundle 对原始宿主记录的独立对照，以及一名非作者同事从 clean state 完成 README 启用、确认、移除走查；之后才可推送并验证 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的具名人类授权，创建不可移动的轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；真实场域、跨宿主和长期效果继续作为后续证据。前置门失败退回最小受影响步骤；仅在人类判断、账户、外部信任、发布或不可逆边界暂停，接管后继续至有限收官。",
     "workStageIds": ["canonical-identity-authority-and-projections", "static-conformance-and-adversarial-regressions", "fresh-representative-behavior", "repository-candidate-freeze"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
@@ -266,7 +266,7 @@
     },
     "targets": {
       "maxTrackedFiles": 55,
-      "maxProductCodeAndTestBytes": 130000,
+      "maxProductCodeAndTestBytes": 131400,
       "maxPrimaryInstructionBytes": 26000
     },
     "primaryInstructionPaths": [
@@ -306,7 +306,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. The code-and-test cap is therefore 130000 and must retain at least five percent headroom without deleting coverage or compressing readability."
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. Bounded linear literal scanning and an exact comment-normalized workflow profile close reproduced robustness gaps; the code-and-test cap is therefore 131400 and must retain at least five percent headroom without deleting coverage or compressing readability."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

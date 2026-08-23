@@ -62,7 +62,8 @@ Then read, in order:
    evidence, retain the completed increment, and commit one clean local candidate.
 5. On that unchanged local SHA, directly run the canonical verifier, both host
    checks, full product tests, diff, identity, link, workflow and residue checks
-   plus independent specification and standards-security review. Independently
+   plus independent specification, implementation-robustness and
+   standards-conformance review. Independently
    compare the publishable source bundle with original host/session records,
    and have one non-author colleague complete the README activation,
    confirmation and removal path from a clean state as an internal usability

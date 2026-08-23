@@ -174,6 +174,18 @@ class ProductControlTests(unittest.TestCase):
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _fixture() as root:
             program = _read(root, P)
+            workflow = root / '.github/workflows/validate.yml'
+            body = workflow.read_text(encoding='utf-8')
+            mutations = (
+                ('permissions:\n  contents: read', 'permissions: write-all\n# permissions: contents: read'),
+                ('run: python -B -m yiyuan_accord verify',
+                 'run: echo disabled # python -B -m yiyuan_accord verify'),
+            )
+            for old, new in mutations:
+                workflow.write_text(body.replace(old, new), encoding='utf-8')
+                self.assert_has(verify_product(root)['errors'],
+                                'derived surface markers or structure')
+            workflow.write_text(body, encoding='utf-8')
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
                 readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
@@ -255,6 +267,8 @@ class ProductControlTests(unittest.TestCase):
              '@_other = "@_other"\n'),
             ('sample.toml', 'entry = "@_other"\n'),
             ('sample.py', 'if True:\n    pass\n  pass\n# @\n'),
+            ('sample.py', 'value=' + "'safe'+" * 999 + "'safe'\n"),
+            ('sample.py', 'value=f"@_other"\nvalue=(\n"safe_"+"module"'),
             ('sample.txt', 'python -Xm@\npython -c "print(\'@_other\')"\n'
              'python -c "# import @"\npython -c "x=1 # @"\n'
              'python -c "# module=\'@\'"\npython -c "# @.py"\n'),
@@ -274,6 +288,9 @@ class ProductControlTests(unittest.TestCase):
                 'exec("import @")\n',
                 'from pathlib import Path\nPath("@/__init__.py")\n',
                 'entry = "uvicorn @:app"\n', 'import @\nif\n',
+                'value=' + "'safe'+" * 999 + "'safe'+' '+'retired_'+'module'\n",
+                'value=' + "'safe'+" * 4096 + "'safe'\n",
+                'value=f"@"\n', 'value=(\n"retired_"+"module"',
             ),
             'sample.txt': (
                 '@/path.py\n', '@.pyi\n', '@.cli:main\n',

@@ -97,7 +97,8 @@ cross-host equivalence, publication and release require their own evidence and
 human authority. Deterministic conformance is recomputed by the verifier; a
 repository observation cannot self-attest it. For a release candidate, first
 commit one clean local SHA and directly run the complete local checks plus
-independent specification and standards-security review. That local gate also
+independent specification, implementation-robustness and standards-conformance
+review. That local gate also
 requires an independent human or second observation surface to compare the
 publishable source bundle with the original host or session records, plus one
 non-author colleague to complete the README activation, confirmation and

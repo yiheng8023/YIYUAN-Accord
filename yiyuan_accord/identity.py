@@ -212,8 +212,10 @@ def _command_ref(text, module):
 
 
 def _python_ref(source, module):
+    if len(source) > 1_000_000:
+        return True
     token = re.compile(fr"(?<!\w){re.escape(module)}(?!\w)")
-    tokens = []
+    tokens, parts, size = [], [], 0
 
     def mentions(value):
         return token.search(value) or _command_ref(value, module)
@@ -240,30 +242,26 @@ def _python_ref(source, module):
                     value = item.string
                 if value and mentions(value):
                     return True
+                if value is not None:
+                    parts.append(value)
+                    size += len(value)
+                    if len(parts) > 4_096 or size > 1_000_000:
+                        return True
+            elif item.type == getattr(tokenize, "FSTRING_MIDDLE", -1):
+                if mentions(item.string):
+                    return True
+            elif not (item.type in (tokenize.INDENT, tokenize.DEDENT, tokenize.NL)
+                      or item.type == tokenize.OP and item.string in "+()"):
+                if parts and mentions("".join(parts)):
+                    return True
+                parts, size = [], 0
     except IndentationError:
         normalized = re.sub(r"(?m)^[ \t]+", "", source)
         return _python_ref(normalized, module) if normalized != source else False
     except (tokenize.TokenError, UnicodeError):
-        return bool(mentions(tokenize.untokenize(tokens)))
-
-    try:
-        nodes = ast.walk(ast.parse(source))
-    except (SyntaxError, UnicodeError):
-        return False
-
-    def literal(node):
-        if isinstance(node, ast.Constant):
-            return decoded(node.value)
-        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
-            left, right = literal(node.left), literal(node.right)
-            return left + right if left is not None and right is not None else None
-        return None
-
-    for node in nodes:
-        value = literal(node)
-        if value and mentions(value):
-            return True
-    return False
+        return bool(parts and mentions("".join(parts))
+                    or mentions(tokenize.untokenize(tokens)))
+    return bool(parts and mentions("".join(parts)))
 
 
 def active_tree_errors(root, locators, historical_revision):

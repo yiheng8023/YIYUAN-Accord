@@ -5,7 +5,7 @@
   "release": "v2.0",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "86c17487248d9606b372762c880ffd11e6c57287f5351c4b423f1668a0af4cec",
+  "canonicalGoalObjectiveSha256": "51a0835b36af32e94b1c3556f1d2198daf854adaa82dfc3ade586ab6b45a729a",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
