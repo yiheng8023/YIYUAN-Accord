@@ -338,6 +338,24 @@ class ProductControlTests(unittest.TestCase):
                                 'sourceEvidence[0] is invalid')
 
     def test_evidence_authority_bindings_and_types_fail_closed(self):
+        tasks = {item['id']: item for item in _read(ROOT, G)['tasks']}
+        bundle = _read(ROOT, SOURCE)
+        record = bundle['records']['GT-07']
+        payload, task = record['payload'], tasks['GT-07']
+        contract = (tasks['GT-02']['postSessionBindingContract']
+                    + task['postSessionBindingContract'])
+        payload['postSessionBindingContract'] = task['postSessionBindingContract'] = contract
+        payload['materialEvents'].append(
+            {'kind': 'independent-poststate', 'sourceBindings': [
+                payload['cleanupEvidence']['observations'][-1]['sourceBindings'][0]
+            ]}
+        )
+        self.assertIsNone(_postcapture_bundle(payload, task, _time(record['capturedAt'])))
+
+        self.assertIsNone(_postcapture_bundle({}, {
+            'required': [], 'prohibited': ['leave-task-residue']
+        }, _time('2026-08-24T00:00:00Z')))
+
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/%2e%2e/x'),

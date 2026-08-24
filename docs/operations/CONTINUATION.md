@@ -30,9 +30,10 @@ Then read, in order:
   and all four repository stages are `completed`. These lifecycle states become
   a repository candidate only on their exact clean committed tree; live Git and
   the canonical verifier decide that fact. The previous candidate was invalidated by the
-  bidirectional historical audit and then by fixed-SHA review that reproduced
-  official-URL path confusion, malformed-enum exceptions and post-session
-  evidence omission or overclaim. The superseded host Goal was cleared on
+  bidirectional historical audit, fixed-SHA review that reproduced official-URL
+  path confusion, malformed-enum exceptions and post-session evidence omission
+  or overclaim, and fixed-diff review that reproduced cross-event locator reuse
+  plus coordinated contract-and-event omission. The superseded host Goal was cleared on
   2026-08-25; the current canonical objective is active after direct Goal API
   creation without a token budget and a character-for-character comparison of
   all 1546 Unicode code points.
@@ -73,9 +74,9 @@ Then read, in order:
   `research/reviews/` are inert exceptions. Current checks must be recomputed
   after every authority or evidence edit; working-tree results do not become
   clean-candidate evidence until the candidate is committed and replayed. The
-  reviewed complexity target is 174000 product code-and-test bytes; the stable
-  working measurement is 163895, leaving 10105 bytes of headroom against the
-  separately required 8700-byte reserve after the recorded deletion review.
+  reviewed complexity target is 178000 product code-and-test bytes; the stable
+  working measurement is 165692, leaving 12308 bytes of headroom against the
+  separately required 8900-byte reserve after the recorded deletion review.
 - For the Codex projection, resolve current official Agent architecture, App Server
   and host documentation as high-weight dynamic evidence before relying on a
   remembered host fact. Reuse official observation surfaces when useful, but do

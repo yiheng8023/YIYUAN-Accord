@@ -161,7 +161,9 @@ completion time and bounded
 claim. That binding makes the later assertion independently locatable; it does
 not convert a task-time failure into a pass or make repository data authentic.
 The Golden Task declares every required post-session event, location and exact
-count of distinct observer-session locators. The
+count of distinct observer-session locators. Behavior semantics that require a
+post-session check also impose a verifier-owned minimum event kind and location,
+and locator uniqueness applies across the complete contract. The
 publishable payload mirrors that contract, and its observation source entry
 hashes the complete selected event set. Omitting the contract, an event, a
 binding or that digest therefore fails closed instead of silently narrowing

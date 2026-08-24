@@ -100,7 +100,8 @@ directly. Post-session checks or cleanup assertions must bind their exact
 completed observer-session output, locator, completion time and claim through
 `sourceBindings`. A task with such a claim declares
 `postSessionBindingContract`, including exact cardinality of distinct event
-locators; its payload
+locators across the complete contract. Behavior semantics that require such a
+check impose a verifier-owned minimum event kind and location; its payload
 mirrors the declaration and the
 observation source binds the complete selection with
 `postSessionBindingsSha256`.
